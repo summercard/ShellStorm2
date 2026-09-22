@@ -26,6 +26,17 @@ const _REGISTRY := {
 	FX02_HEAL_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_heal_number_root_top3d.tscn"),
 }
 
+
+static func create_unpooled(asset_id: StringName) -> VfxEffectBase3D:
+	if not _REGISTRY.has(asset_id):
+		return null
+	var packed: PackedScene = _REGISTRY[asset_id]
+	return packed.instantiate() as VfxEffectBase3D
+
+
+static func has_effect(asset_id: StringName) -> bool:
+	return _REGISTRY.has(asset_id)
+
 @export var max_per_kind: int = 32
 @export var spawn_parent_path: NodePath
 
@@ -55,8 +66,7 @@ func acquire(asset_id: StringName, world_pos: Vector3, color: Color, size: float
 	if not inactive_bucket.is_empty():
 		eff = inactive_bucket.pop_back()
 	else:
-		var packed: PackedScene = _REGISTRY[asset_id]
-		eff = packed.instantiate() as VfxEffectBase3D
+		eff = create_unpooled(asset_id)
 		if eff == null:
 			push_error("VfxPool3D: instantiate failed for '%s'" % asset_id)
 			return null

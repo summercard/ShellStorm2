@@ -16,11 +16,9 @@ static func normalize_loadout(loadout: Dictionary) -> Dictionary:
 
 
 static func get_saved_loadout() -> Dictionary:
-	var data := _get_profile_data()
-	if data == null or not _has_property(data, PROFILE_FIELD):
+	if BaseManager == null:
 		return PlayerAvatar3D.DEFAULT_CUSTOMIZATION.duplicate(true)
-	var stored: Variant = data.get(PROFILE_FIELD)
-	return normalize_loadout(stored as Dictionary if stored is Dictionary else {})
+	return normalize_loadout(BaseManager.get_avatar_customization_snapshot())
 
 
 static func apply_saved_to_player(player: Player3D) -> Dictionary:
@@ -38,29 +36,6 @@ static func persist_from_player(player: Player3D) -> bool:
 
 
 static func persist_loadout(loadout: Dictionary) -> bool:
-	var data := _get_profile_data()
-	if data == null or not _has_property(data, PROFILE_FIELD):
-		push_warning("[AvatarCustomizationPersistence] BaseData is missing avatar_customization")
-		return false
-	var previous: Variant = data.get(PROFILE_FIELD)
-	var previous_copy := (previous as Dictionary).duplicate(true) if previous is Dictionary else {}
-	data.set(PROFILE_FIELD, normalize_loadout(loadout))
-	if BaseManager.save_base("avatar_customization"):
-		return true
-	data.set(PROFILE_FIELD, previous_copy)
-	return false
-
-
-static func _get_profile_data() -> Object:
 	if BaseManager == null:
-		return null
-	if BaseManager.data == null:
-		BaseManager.load_base()
-	return BaseManager.data
-
-
-static func _has_property(target: Object, property_name: String) -> bool:
-	for property in target.get_property_list():
-		if str(property.get("name", "")) == property_name:
-			return true
-	return false
+		return false
+	return BaseManager.commit_avatar_customization(normalize_loadout(loadout))

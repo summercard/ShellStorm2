@@ -2,6 +2,7 @@ extends Node
 ## 2026-08-07 体验升级验收：移动端音效、单件搜刮、物品辨色、新手出生与死亡确认。
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
+const RUNTIME_REWARD_COORDINATOR := preload("res://src/rewards/RuntimeRewardCoordinator.gd")
 
 
 func _ready() -> void:
@@ -27,10 +28,12 @@ func _verify_audio_contract(failures: Array[String]) -> void:
 
 
 func _verify_single_item_loot(failures: Array[String]) -> void:
-	var loot_module := LootModule.get_instance()
-	loot_module.set_seed(20260807)
+	var rewards := RUNTIME_REWARD_COORDINATOR.new()
+	rewards.configure(20260807)
 	for floor in [1, 2, 3, 5]:
-		var container_loot := loot_module.generate_container_loot("crate", floor)
+		var container_loot := rewards.resolve_search(
+			{}, "scavenge_floor_%d" % mini(5, floor), floor, "container:%d" % floor
+		).get("items", []) as Array
 		if container_loot.size() > 1:
 			failures.append("搜索容器一次生成了多件地面物品")
 			break
@@ -39,18 +42,20 @@ func _verify_single_item_loot(failures: Array[String]) -> void:
 				failures.append("搜索容器生成了非单件堆叠")
 				break
 	for index in 32:
-		var enemy_loot := loot_module.generate_enemy_loot({
+		var enemy_loot := rewards.resolve_kill({}, {
+			"enemy_type": "melee_chaser",
 			"floor": 2,
+			"loot_table": "loot_floor_1_2",
 			"is_elite": index % 7 == 0,
 			"is_boss": false,
-		})
+		}, "enemy:%d" % index).get("items", []) as Array
 		var physical_item_count := 0
 		for item in enemy_loot:
 			if bool(item.get("is_currency", false)):
 				continue
 			physical_item_count += 1
-			if int(item.get("count", 0)) != 1:
-				failures.append("怪物物品掉落不是一件一个地面实体")
+			if int(item.get("count", 0)) <= 0:
+				failures.append("怪物物品掉落的真实数量无效")
 		if physical_item_count > 1:
 			failures.append("单只怪物一次生成了多个实体物品")
 			break

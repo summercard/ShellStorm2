@@ -91,17 +91,13 @@ func reserve(elite_id: String, encounter_id: String, floor_number: int) -> bool:
 	var current := str(record.get("reserved_encounter_id", ""))
 	if not current.is_empty() and current != encounter_id:
 		return false
-	var previous := record.duplicate(true)
 	record["reserved_encounter_id"] = encounter_id
 	record["reservation_confirmed"] = false
 	record["last_floor_number"] = floor_number
 	record["last_outcome"] = "reserved"
-	_set_record(elite_id, record)
-	_reservations_by_encounter[encounter_id] = elite_id
-	if not _persist("elite_reserve:%s" % elite_id):
-		_set_record(elite_id, previous)
-		_reservations_by_encounter.erase(encounter_id)
+	if not _commit_record(elite_id, record, "elite_reserve:%s" % elite_id):
 		return false
+	_reservations_by_encounter[encounter_id] = elite_id
 	elite_reserved.emit(elite_id, encounter_id)
 	return true
 
@@ -112,15 +108,12 @@ func confirm_reservation(elite_id: String, encounter_id: String) -> bool:
 		return false
 	if bool(record.get("reservation_confirmed", false)):
 		return true
-	var previous := record.duplicate(true)
 	record["reservation_confirmed"] = true
 	record["encounter_count"] = int(record.get("encounter_count", 0)) + 1
 	record["last_encounter_at_unix"] = int(Time.get_unix_time_from_system())
 	record["last_outcome"] = "active"
-	_set_record(elite_id, record)
-	if _persist("elite_confirm:%s" % elite_id):
+	if _commit_record(elite_id, record, "elite_confirm:%s" % elite_id):
 		return true
-	_set_record(elite_id, previous)
 	return false
 
 
@@ -130,7 +123,6 @@ func settle(elite_id: String, encounter_id: String, outcome: String, context: Di
 	var record := _get_record(elite_id)
 	if str(record.get("reserved_encounter_id", "")) != encounter_id:
 		return false
-	var previous := record.duplicate(true)
 	if outcome == "killed":
 		record["state"] = "Killed"
 		record["death_count"] = int(record.get("death_count", 0)) + 1
@@ -154,12 +146,9 @@ func settle(elite_id: String, encounter_id: String, outcome: String, context: Di
 		history["killed_player_count"] = int(history.get("killed_player_count", 0)) + 1
 	history["last_context"] = _sanitize_context(context)
 	record["history"] = history
-	_set_record(elite_id, record)
-	_reservations_by_encounter.erase(encounter_id)
-	if not _persist("elite_settle:%s:%s" % [elite_id, outcome]):
-		_set_record(elite_id, previous)
-		_reservations_by_encounter[encounter_id] = elite_id
+	if not _commit_record(elite_id, record, "elite_settle:%s:%s" % [elite_id, outcome]):
 		return false
+	_reservations_by_encounter.erase(encounter_id)
 	roster_changed.emit(elite_id, get_record(elite_id))
 	elite_settled.emit(elite_id, outcome, get_record(elite_id))
 	return true
@@ -198,9 +187,9 @@ func apply_archive_to_enemy_config(config: Dictionary, elite_snapshot: Dictionar
 
 
 func reset_roster_for_test() -> void:
-	if BaseManager == null or BaseManager.data == null:
+	if BaseManager == null:
 		return
-	BaseManager.data.elite_archive_records.clear()
+	BaseManager.replace_elite_archive_records_for_test({})
 	_reservations_by_encounter.clear()
 	_ensure_roster()
 
@@ -208,13 +197,11 @@ func reset_roster_for_test() -> void:
 func _ensure_roster() -> void:
 	if BaseManager == null:
 		return
-	BaseManager.call("_ensure_data")
-	if BaseManager.data == null:
-		return
+	var defaults := {}
 	for definition in DEFINITIONS:
 		var elite_id := str(definition["elite_id"])
-		if not BaseManager.data.elite_archive_records.has(elite_id):
-			BaseManager.data.elite_archive_records[elite_id] = _default_record(elite_id)
+		defaults[elite_id] = _default_record(elite_id)
+	BaseManager.ensure_elite_archive_records(defaults)
 
 
 func _default_record(elite_id: String) -> Dictionary:
@@ -233,28 +220,25 @@ func _default_record(elite_id: String) -> Dictionary:
 
 func _get_record(elite_id: String) -> Dictionary:
 	_ensure_roster()
-	if BaseManager == null or BaseManager.data == null:
+	if BaseManager == null:
 		return _default_record(elite_id)
-	return (BaseManager.data.elite_archive_records.get(elite_id, _default_record(elite_id)) as Dictionary).duplicate(true)
+	return BaseManager.get_elite_archive_record(elite_id, _default_record(elite_id))
 
 
-func _set_record(elite_id: String, record: Dictionary) -> void:
-	BaseManager.data.elite_archive_records[elite_id] = record.duplicate(true)
-
-
-func _persist(reason: String) -> bool:
-	return BaseManager != null and BaseManager.save_base(reason)
+func _commit_record(elite_id: String, record: Dictionary, reason: String) -> bool:
+	return BaseManager != null and BaseManager.commit_elite_archive_record(elite_id, record, reason)
 
 
 func _clear_stale_reservations() -> void:
-	if BaseManager == null or BaseManager.data == null:
+	if BaseManager == null:
 		return
 	var active_checkpoint := BaseManager.get_active_run_checkpoint()
 	var active_run_id := str(active_checkpoint.get("checkpoint_id", ""))
 	var changed := false
+	var records := BaseManager.get_elite_archive_records_snapshot()
 	for definition in DEFINITIONS:
 		var elite_id := str(definition["elite_id"])
-		var record := _get_record(elite_id)
+		var record := (records.get(elite_id, _default_record(elite_id)) as Dictionary).duplicate(true)
 		var encounter_id := str(record.get("reserved_encounter_id", ""))
 		if encounter_id.is_empty():
 			continue
@@ -264,10 +248,10 @@ func _clear_stale_reservations() -> void:
 		record["reserved_encounter_id"] = ""
 		record["reservation_confirmed"] = false
 		record["last_outcome"] = "stale_reservation_released"
-		_set_record(elite_id, record)
+		records[elite_id] = record
 		changed = true
 	if changed:
-		_persist("elite_stale_reservation_cleanup")
+		BaseManager.commit_elite_archive_records(records, "elite_stale_reservation_cleanup")
 
 
 func _state_for_growth(level: int, escape_count: int) -> String:

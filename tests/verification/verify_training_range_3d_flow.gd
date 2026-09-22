@@ -14,15 +14,25 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().physics_frame
 	var snapshot := training.get_training_snapshot()
+	var gunbodies := BlueprintRegistry.get_available_gunbodies(99)
+	var bullets := BlueprintRegistry.get_available_bullets(99)
+	var ranged_count := 0
+	var melee_count := 0
+	for gun in gunbodies:
+		if "melee" in (gun.get("tags", []) as Array):
+			melee_count += 1
+		else:
+			ranged_count += 1
+	var expected_combinations := ranged_count * bullets.size() + melee_count
 	if (
-		int(snapshot.get("gun_count", 0)) != 10
-		or int(snapshot.get("ranged_weapon_count", 0)) != 7
-		or int(snapshot.get("melee_weapon_count", 0)) != 3
-		or int(snapshot.get("bullet_count", 0)) != 8
+		int(snapshot.get("gun_count", 0)) != gunbodies.size()
+		or int(snapshot.get("ranged_weapon_count", 0)) != ranged_count
+		or int(snapshot.get("melee_weapon_count", 0)) != melee_count
+		or int(snapshot.get("bullet_count", 0)) != bullets.size()
 	):
-		failures.append("3D training racks do not expose all 7 ranged, 3 melee and 8 bullet entries")
-	if int(snapshot.get("combination_count", 0)) != 59:
-		failures.append("3D training matrix is not 59 valid ranged/melee combinations")
+		failures.append("3D training racks do not match the registered gunbody/bullet catalog")
+	if int(snapshot.get("combination_count", 0)) != expected_combinations:
+		failures.append("3D training matrix does not match the registered ranged/melee combinations")
 	var target_types: Array = snapshot.get("target_types", [])
 	for type_id in ["standard", "armored", "runner"]:
 		if not target_types.has(type_id):
@@ -53,18 +63,18 @@ func _ready() -> void:
 			failures.append("3D training rack has empty or duplicated id: %s" % rack.item_id)
 		rack_ids[rack.item_id] = true
 	var combinations := 0
-	for gun in BlueprintRegistry.get_available_gunbodies(99):
+	for gun in gunbodies:
 		if "melee" in (gun.get("tags", []) as Array):
 			if training.equip_combination_for_test(str(gun["item_id"]), ""):
 				var melee_snapshot := training.player.get_weapon_snapshot()
 				if bool(melee_snapshot.get("melee", false)) and not bool(melee_snapshot.get("uses_ammo", true)):
 					combinations += 1
 			continue
-		for bullet in BlueprintRegistry.get_available_bullets(99):
+		for bullet in bullets:
 			if training.equip_combination_for_test(str(gun["item_id"]), str(bullet["item_id"])):
 				combinations += 1
-	if combinations != 59:
-		failures.append("Not all 59 valid ranged/melee combinations can be equipped in TrainingRange3D")
+	if combinations != expected_combinations:
+		failures.append("Not all registered ranged/melee combinations can be equipped in TrainingRange3D")
 	var standard: TrainingTarget3D
 	var armored: TrainingTarget3D
 	var runner: TrainingTarget3D
@@ -90,12 +100,12 @@ func _ready() -> void:
 		failures.append("TrainingRange3D mutated BaseData")
 	training.queue_free()
 	await get_tree().process_frame
-	_finish(failures, combinations)
+	_finish(failures, combinations, gunbodies.size() + bullets.size())
 
 
-func _finish(failures: Array[String], combinations: int) -> void:
+func _finish(failures: Array[String], combinations: int, rack_count := 0) -> void:
 	if failures.is_empty():
-		print("TRAINING_RANGE_3D_FLOW_OK: 18 racks, 59 valid ranged/melee combinations, three target behaviors, lighting, reset, exit, and BaseData isolation pass (%d combinations)" % combinations)
+		print("TRAINING_RANGE_3D_FLOW_OK: %d registered racks, %d valid ranged/melee combinations, three target behaviors, lighting, reset, exit, and BaseData isolation pass" % [rack_count, combinations])
 		get_tree().quit(0)
 		return
 	for failure in failures:

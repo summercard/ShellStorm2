@@ -118,14 +118,13 @@ func _ready() -> void:
 	if (
 		not bool(moving_after.get("moving_animation_active", false))
 		or is_equal_approx(float(moving_before.get("locomotion_cycle", 0.0)), float(moving_after.get("locomotion_cycle", 0.0)))
-		or (moving_before.get("body_scale", Vector3.ONE) as Vector3).distance_to(moving_after.get("body_scale", Vector3.ONE) as Vector3) < 0.005
+		or str(moving_after.get("authored_motion_clip", "")).is_empty()
 	):
 		failures.append("Player3D moving state has no independent locomotion animation cycle")
 	if (
 		str(moving_after.get("weapon_pose_state", "")) != "sidearm_run"
 		or int(moving_after.get("active_grip_hand_count", 0)) != 1
-		or float(moving_before.get("hand_r_to_socket_global_distance", 999.0)) > 0.36
-		or float(moving_after.get("hand_r_to_socket_global_distance", 999.0)) > 0.36
+		or float(moving_after.get("hand_r_to_socket_global_distance", 999.0)) > 0.207
 	):
 		failures.append("Locomotion animation breaks the pistol's independent right-hand run grip")
 	base_world.player.request_dash()

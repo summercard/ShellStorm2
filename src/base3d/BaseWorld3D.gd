@@ -159,12 +159,12 @@ func _on_player_state_changed(state_id: String, _context: Dictionary) -> void:
 
 
 func _refresh_base_status() -> void:
-	if BaseManager == null or BaseManager.data == null:
+	if BaseManager == null:
 		return
-	var data := BaseManager.data
-	runs_label.text = "总局数: %d" % data.total_runs
-	extraction_label.text = "成功撤离: %d" % data.successful_extractions
-	kills_label.text = "总击杀: %d" % data.total_kills
+	var profile := BaseManager.get_profile_snapshot()
+	runs_label.text = "总局数: %d" % int(profile.get("total_runs", 0))
+	extraction_label.text = "成功撤离: %d" % int(profile.get("successful_extractions", 0))
+	kills_label.text = "总击杀: %d" % int(profile.get("total_kills", 0))
 	points_label.text = "魂: ◈ %d" % BaseManager.get_extraction_points()
 	var loot_count := BaseManager.get_extraction_loot_count()
 	loot_label.text = "待处理战利品: %d" % loot_count

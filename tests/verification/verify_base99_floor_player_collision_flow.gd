@@ -97,9 +97,8 @@ func _tower_visual_surface_y(stage: TowerFloorStage3D) -> float:
 		return INF
 	var bounds := grid.multimesh.mesh.get_aabb()
 	var mesh_top := bounds.position.y + bounds.size.y
-	# Headless RenderingServer不保留MultiMesh实例buffer的回读；塔楼地砖代码
-	# 统一下移半个板厚，所以直接按该稳定构造规则计算可视顶面。
-	return mesh_top - TowerFloorStage3D.FLOOR_THICKNESS * 0.5
+	# 天台正式砖为底面原点，运行时按真实 AABB 顶面对齐承重面；不能再套旧砖的半板厚魔数。
+	return mesh_top + float(stage.call("_floor_visual_origin_y", grid.multimesh.mesh))
 
 
 func _verify_runtime_transform_buffer(

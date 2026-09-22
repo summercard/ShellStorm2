@@ -478,7 +478,7 @@ func _retire() -> void:
 func _spawn_effect(effect_id: StringName, world_position: Vector3, color: Color, size: float, context: Dictionary = {}) -> void:
 	# 已注册 AssetID（FX01-* 战斗反馈）走全局 VfxPool 新体系，按 AssetID 路由。
 	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
-	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D and VfxPool3D._REGISTRY.has(effect_id):
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D and VfxPool3D.has_effect(effect_id):
 		(vfx_pools[0] as VfxPool3D).acquire(effect_id, world_position, color, size, context)
 		return
 	if get_tree().current_scene == null:
@@ -489,9 +489,8 @@ func _spawn_effect(effect_id: StringName, world_position: Vector3, color: Color,
 		(pools[0] as CombatEffectPool3D).acquire(str(effect_id), color, size, world_position)
 		return
 	# VfxPool 不在场（异常态）且该 AssetID 已注册：直接从注册表实例化，保留 AssetID 语义。
-	if VfxPool3D._REGISTRY.has(effect_id):
-		var packed: PackedScene = VfxPool3D._REGISTRY[effect_id]
-		var pooled_effect: VfxEffectBase3D = packed.instantiate() as VfxEffectBase3D
+	var pooled_effect := VfxPool3D.create_unpooled(effect_id)
+	if pooled_effect != null:
 		get_tree().current_scene.add_child(pooled_effect)
 		pooled_effect.activate(world_position, color, size, context)
 		return

@@ -726,6 +726,20 @@ func _update_authored_motion_progress(delta: float) -> void:
 	# 修正任何角色姿势。v021 的节点变换只由 CharacterMotionLibrary3D 采样。
 	_idle_animation_active = _state == "idle"
 	_moving_animation_active = _state == "moving"
+	if _moving_animation_active:
+		var planar_speed := 0.0
+		if _player != null and _player.get("velocity") is Vector3:
+			var player_velocity := _player.get("velocity") as Vector3
+			planar_speed = Vector2(player_velocity.x, player_velocity.z).length()
+		_locomotion_cycle = fmod(
+			_locomotion_cycle + delta * lerpf(7.8, 11.2, clampf(planar_speed / 7.0, 0.0, 1.0)),
+			TAU
+		)
+	# v021 不再执行旧程序姿势函数，因此状态提示环必须在 Blender 动作分支自行维护。
+	lock_ring.visible = _state == "locked"
+	lock_ring.rotation.y += delta * 1.7
+	var low_health := bool(_player.call("is_low_health")) if _player != null and _player.has_method("is_low_health") else false
+	low_health_ring.visible = low_health and _state != "dead"
 	match _state:
 		"dashing":
 			var duration := 0.18

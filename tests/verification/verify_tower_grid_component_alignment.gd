@@ -16,8 +16,8 @@ func _ready() -> void:
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame
-	if not tower.generate_through_floor_for_test(95):
-		failures.append("98—95结构验收准备失败")
+	if not tower.generate_through_floor_for_test(TowerDescent3D.DEEPEST_PLANNED_FLOOR):
+		failures.append("当前发布楼层结构验收准备失败")
 
 	var generation := tower.get_generation_snapshot()
 	var room_by_id := tower.get("_room_by_id") as Dictionary
@@ -72,8 +72,8 @@ func _ready() -> void:
 				and int(connector.get_meta("floor_module_count", -1)) == 5
 				and int(connector.get_meta("wall_module_count", -1)) == 10
 			)
-	if horizontal_count != 62:
-		failures.append("expected 62 generated horizontal component corridors including Boss exit and airlock, got %d" % horizontal_count)
+	if horizontal_count != 15:
+		failures.append("expected 15 generated horizontal component corridors for the published 98F slice, got %d" % horizontal_count)
 	if not entry_hub_dynamic_corridor_verified:
 		failures.append("98F safe-room north corridor is not a complete 25m/5-module passage")
 	if vertical_count <= 0:
@@ -108,7 +108,7 @@ func _ready() -> void:
 	)
 
 	var floor_stages := tower.get_tower_snapshot().get("floor_stages", []) as Array
-	var expected_holes := [1, 1, 1, 1, 1, 1, 0]
+	var expected_holes := [1, 1, 0]
 	for stage_value in floor_stages:
 		var stage := stage_value as Dictionary
 		var index := int(stage.get("floor_index", -1))
@@ -117,9 +117,10 @@ func _ready() -> void:
 		var hole_count := (stage.get("stair_hole_sides", []) as Array).size()
 		if hole_count != expected_holes[index]:
 			failures.append("floor stage %d has %d stair holes; expected %d upper-floor holes" % [index, hole_count, expected_holes[index]])
-		var expected_tiles := 2500 - hole_count * 18
+		var grid_dimensions := stage.get("grid_dimensions", Vector2i.ZERO) as Vector2i
+		var expected_tiles := grid_dimensions.x * grid_dimensions.y - hole_count * 18
 		if index == 0:
-			expected_tiles = 18 * 16 - 18 - 36
+			expected_tiles -= 36
 			if (
 				not bool(stage.get("base_99_100_atrium_enabled", false))
 				or int(stage.get("base_99_100_atrium_tile_count", 0)) != 36

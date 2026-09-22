@@ -112,6 +112,7 @@ var _probe_room: FakeRoom = null
 var _opening_room: FakeRoom = null
 var _spawn_calls: Array = []
 var _finish_reasons: Array[String] = []
+var _granted_items: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -203,6 +204,13 @@ func narrative_spawn_enemies(
 
 func narrative_despawn_enemies(_room_id: String) -> int:
 	return 0
+
+
+func narrative_grant_item(item_id: String, count: int) -> Dictionary:
+	if not ItemRegistry.get_instance().has_item(item_id):
+		return {"success": false, "code": "unknown_item"}
+	_granted_items.append({"item_id": item_id, "count": count})
+	return {"success": true, "item_id": item_id, "count": count}
 
 
 # =========================================================================
@@ -442,6 +450,24 @@ func _phase_b_mechanics() -> void:
 	var diagnostics := NarrativeDirector.diagnostics()
 	_check(_any_contains(diagnostics, "grant.item"), "降级写入诊断（%s）" % str(diagnostics))
 	_check(_any_contains(diagnostics, "player.teleport"), "执行失败写入诊断")
+
+	# B2b 合法物品必须走地牢的统一奖励正门，不能像历史实现那样恒定降级。
+	var grant_ok := NarrativeScript3D.from_dictionary({
+		"narrative_id": "test_grant_item",
+		"schema_version": 1,
+		"cues": [
+			{"at": 0.0, "do": "grant.item", "id": "item_health_potion", "count": 2},
+			{"at": 0.1, "do": "flow.end"},
+		],
+	})
+	NarrativeDirector.register_script_for_test("test_grant_item", grant_ok)
+	_granted_items.clear()
+	_check(NarrativeDirector.play("test_grant_item"), "test_grant_item 开始播放")
+	await _wait_until_finished()
+	_check(
+		_granted_items == [{"item_id": "item_health_potion", "count": 2}],
+		"grant.item 通过地牢统一奖励正门发放（实际 %s）" % str(_granted_items),
+	)
 
 	# B3 暂停冻结：本 autoload 是 PAUSABLE；DialogueUI 是 ALWAYS，靠显式同步
 	var long_run := NarrativeScript3D.from_dictionary({

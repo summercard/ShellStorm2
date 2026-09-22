@@ -63,7 +63,7 @@ const POOLS := {
 		"usage": USAGE_MONSTER, "tier": TIER_ANY,
 		"roll": ROLL_WEIGHTED, "cap": 1,
 		"status": STATUS_ACTIVE, "migration_target": "",
-		"note": "怪物无楼层归口时的兜底池；LootModule.generate_enemy_loot 的默认值",
+		"note": "怪物无楼层归口时的兜底池；由 RuntimeRewardCoordinator 调度",
 	},
 	"loot_floor_1_2": {
 		"name": "浅层掉落池（1-2层）",
@@ -126,7 +126,7 @@ const POOLS := {
 		"usage": USAGE_SEARCH, "tier": TIER_SHALLOW,
 		"roll": ROLL_WEIGHTED, "cap": 1,
 		"status": STATUS_ACTIVE, "migration_target": "",
-		"note": "LootModule.generate_container_loot：scavenge_floor_%d % min(5, floor)",
+		"note": "RuntimeRewardCoordinator.resolve_search：scavenge_floor_%d % min(5, floor)",
 	},
 	"scavenge_floor_2": {
 		"name": "搜索池·第2档",

@@ -856,10 +856,9 @@ func _verify_default_tower(failures: Array[String]) -> void:
 		failures.append("默认塔楼缺少 100F 天台(start)")
 	if not tower._room_by_id.has("facility"):
 		failures.append("默认塔楼缺少 99F 基地(facility)")
-	if not tower._floor_plan_snapshots.has(6):
-		failures.append("默认塔楼缺少 94F 规划（默认规划范围已变）")
-	if not tower._floor_plan_snapshots.has(15):
-		failures.append("默认塔楼缺少 85F 规划（默认规划范围已变）")
+	# 隐藏塔楼当前只发布到 98F；深层设计仍保留，但不能把未发布楼层当运行基线。
+	if tower._floor_plan_snapshots.has(6) or tower._floor_plan_snapshots.has(15):
+		failures.append("默认塔楼意外预生成了当前发布范围外的 94F/85F")
 
 	# 存档路由：远征关卡快照必须回到远征场景；空 map id 的旧塔楼快照不得被路由。
 	var resume_scene := tower.get_runtime_resume_scene_path(_expedition_snapshot)

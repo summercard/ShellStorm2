@@ -323,7 +323,10 @@ static func _validate_count(entry: Dictionary, path: String) -> Array[Dictionary
 	if not entry.has("count"):
 		return []
 	var count = entry["count"]
-	if not (count is int or count is float):
+	# RewardService._eval_amount() supports constants, formulas and ranges.  Keep
+	# the schema gate aligned with the evaluator; rejecting Dictionary here made
+	# every MonsterInjector ammo range structurally invalid at runtime.
+	if not (count is Dictionary or count is int or count is float):
 		return [_err("INVALID_ENTRY", "%s.count" % [path], "count 既不是常量也不是公式对象")]
 	return []
 

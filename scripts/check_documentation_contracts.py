@@ -7,6 +7,7 @@ Run from any directory: python3 scripts/check_documentation_contracts.py
 from pathlib import Path
 import json
 import re
+import subprocess
 from urllib.parse import unquote
 
 
@@ -69,6 +70,26 @@ def check(root: Path) -> dict:
                     issues.append(f"Test scene absent; explicitly mark 仅脚本 in index: {name}")
         if not features:
             issues.append("No feature rows found")
+    registry_check = subprocess.run(
+        ["python3", str(root / "scripts/check_verification_registry.py")],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if registry_check.returncode != 0:
+        detail = (registry_check.stdout + registry_check.stderr).strip()
+        issues.append(f"Verification registry invalid: {detail}")
+    boundary_check = subprocess.run(
+        ["python3", str(root / "scripts/check_domain_boundaries.py")],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if boundary_check.returncode != 0:
+        detail = (boundary_check.stdout + boundary_check.stderr).strip()
+        issues.append(f"Domain boundary invalid: {detail}")
     return {
         "engine_version": version, "documents": len(paths), "local_links": links,
         "features": len(features), "test_references": len(test_references),

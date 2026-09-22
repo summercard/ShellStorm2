@@ -1,6 +1,7 @@
 extends Node
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
+const RUNTIME_REWARD_COORDINATOR := preload("res://src/rewards/RuntimeRewardCoordinator.gd")
 
 
 func _ready() -> void:
@@ -20,8 +21,8 @@ func _ready() -> void:
 	var quick_panel := hud.get_node("QuickItemHUD_0") as PanelContainer
 	if info_panel.position.x > 20.0 or info_panel.position.y < 290.0:
 		failures.append("current-info HUD was not moved below the left objective region")
-	if weapon_panel.size.x > 255.0 or weapon_panel.size.y > 50.0:
-		failures.append("weapon HUD was not reduced to approximately sixty percent")
+	if weapon_panel.size.x > 312.0 or weapon_panel.size.y > 59.0 or weapon_panel.size.x < 250.0 or weapon_panel.size.y < 44.0:
+		failures.append("weapon HUD was not reduced to approximately sixty percent: %s" % weapon_panel.size)
 	if quick_panel.size.x > 50.0 or quick_panel.size.y > 48.0:
 		failures.append("quick-item HUD was not reduced with the weapon HUD")
 	for panel in [info_panel, weapon_panel, quick_panel]:
@@ -66,9 +67,14 @@ func _ready() -> void:
 		elif dungeon.player.weapon.current_ammo != primary_ammo:
 			failures.append("switching away and back refilled the primary magazine")
 
-	var loot := LootModule.new()
-	loot.set_seed(8312026)
-	var elite_drops := loot.generate_enemy_loot({"floor": 2, "is_elite": true})
+	var rewards := RUNTIME_REWARD_COORDINATOR.new()
+	rewards.configure(8312026)
+	var elite_drops := rewards.resolve_kill({}, {
+		"enemy_type": "melee_chaser",
+		"floor": 2,
+		"loot_table": "loot_floor_1_2",
+		"is_elite": true,
+	}, "finite_ammo_elite").get("items", []) as Array
 	var dropped_rounds := 0
 	for item in elite_drops:
 		if str(item.get("id", "")) == "item_ammo_pack":

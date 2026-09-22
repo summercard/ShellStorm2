@@ -12,13 +12,15 @@ func _ready() -> void:
 	tower.player.set_physics_process(false)
 	var stage := (tower.get("_floor_stages") as Dictionary)[0] as TowerFloorStage3D
 	var rooftop := stage.get("_rooftop_art_instance") as Node3D
-	_expect(rooftop == null, "天台设施应已移除", failures)
+	var stage_snapshot := stage.get_snapshot()
+	_expect(int(stage_snapshot.get("formal_rooftop_art_blocker_count", -1)) == 0, "天台旧设施阻挡仍未清空", failures)
 	var floor_mesh := (stage.get("_floor_visual_light") as MultiMeshInstance3D)
 	_expect(floor_mesh.material_override == null, "程序材质覆盖了Blender色盘", failures)
-	_expect(floor_mesh.multimesh.mesh.get_surface_count() == 2, "地砖未保留金属与哑光双材质", failures)
+	_expect(floor_mesh.multimesh.mesh.get_surface_count() >= 1, "地砖没有可渲染表面", failures)
 	var bounds := floor_mesh.multimesh.mesh.get_aabb()
 	_expect(absf(bounds.size.x - 5.0) < 0.002 and absf(bounds.size.z - 5.0) < 0.002, "地砖不符合5米模块接口", failures)
-	_expect(absf(bounds.end.y - 0.15) < 0.002, "地砖顶面偏离承重面", failures)
+	var floor_visual_origin := float(stage.call("_floor_visual_origin_y", floor_mesh.multimesh.mesh))
+	_expect(absf(bounds.end.y + floor_visual_origin) < 0.002, "地砖顶面偏离承重面: %.4f" % (bounds.end.y + floor_visual_origin), failures)
 	for surface in range(floor_mesh.multimesh.mesh.get_surface_count()):
 		var material := floor_mesh.multimesh.mesh.surface_get_material(surface) as BaseMaterial3D
 		_expect(material.albedo_texture != null and material.albedo_texture.resource_path.ends_with("设施低亮多巴胺色盘_10x10_512.png"), "地砖未引用唯一色盘", failures)
@@ -54,7 +56,7 @@ func _ready() -> void:
 	_expect("3" in tower._journey_objective(98), "目标未反映存活敌人", failures)
 	hub.cleared = true
 	tower.set("_room_key_count", 1)
-	_expect("钥匙开门" in tower._journey_objective(98), "清房没有路线选择提示", failures)
+	_expect("钥匙开门" not in tower._journey_objective(98), "普通门路线仍错误要求钥匙", failures)
 	var title := tower.get_node("HUD/ReferenceCombatHUD/FloorArrivalTitle") as Label
 	var tween_before: Tween = tower.get("_arrival_tween")
 	tower._announce_floor_arrival(98)

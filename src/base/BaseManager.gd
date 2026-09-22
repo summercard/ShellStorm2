@@ -1,6 +1,7 @@
 extends Node
 
 signal game_save_reset_completed(result: Dictionary)
+signal blueprint_tier_changed(category_id: String, tier: int, transaction_id: String)
 
 const SAVE_PATH := "user://base_save.json"
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
@@ -8,6 +9,7 @@ const FacilityService = preload("res://src/base/BaseFacilityService.gd")
 const EnergyService = preload("res://src/base/BaseEnergyService.gd")
 const SaveService = preload("res://src/base/ProfileSaveService.gd")
 const ShopService = preload("res://src/base/BaseShopService.gd")
+const BlueprintService = preload("res://src/base/BlueprintUpgradeService.gd")
 const BASE_LOADOUT_CAPACITY := 12
 const BASE_VAULT_CAPACITY := 20
 const RUNTIME_SAVE_DEBOUNCE_SECONDS := 0.45
@@ -105,6 +107,80 @@ func save_base(reason: String = "base_mutation") -> bool:
 	data.last_saved_at_unix = old_time
 	data.last_save_reason = old_reason
 	return false
+
+
+## 只读档案投影。跨域服务不得直接持有或修改 BaseData；需要写入时使用下方
+## 明确的领域命令，由 BaseManager 负责写盘失败回滚。
+func get_profile_snapshot() -> Dictionary:
+	_ensure_data()
+	return data._to_dict().duplicate(true) if data != null else {}
+
+
+func get_avatar_customization_snapshot() -> Dictionary:
+	_ensure_data()
+	return data.avatar_customization.duplicate(true) if data != null else {}
+
+
+func commit_avatar_customization(loadout: Dictionary, reason := "avatar_customization") -> bool:
+	_ensure_data()
+	if data == null:
+		return false
+	var previous := data.avatar_customization.duplicate(true)
+	data.avatar_customization = loadout.duplicate(true)
+	if save_base(reason):
+		return true
+	data.avatar_customization = previous
+	return false
+
+
+func ensure_elite_archive_records(default_records: Dictionary) -> void:
+	_ensure_data()
+	if data == null:
+		return
+	for elite_id_value in default_records.keys():
+		var elite_id := str(elite_id_value)
+		if not data.elite_archive_records.has(elite_id):
+			var record: Variant = default_records[elite_id_value]
+			if record is Dictionary:
+				data.elite_archive_records[elite_id] = (record as Dictionary).duplicate(true)
+
+
+func get_elite_archive_records_snapshot() -> Dictionary:
+	_ensure_data()
+	return data.elite_archive_records.duplicate(true) if data != null else {}
+
+
+func get_elite_archive_record(elite_id: String, fallback: Dictionary = {}) -> Dictionary:
+	_ensure_data()
+	if data == null:
+		return fallback.duplicate(true)
+	return (data.elite_archive_records.get(elite_id, fallback) as Dictionary).duplicate(true)
+
+
+func commit_elite_archive_records(records: Dictionary, reason: String) -> bool:
+	_ensure_data()
+	if data == null:
+		return false
+	var previous := data.elite_archive_records.duplicate(true)
+	data.elite_archive_records = records.duplicate(true)
+	if save_base(reason):
+		return true
+	data.elite_archive_records = previous
+	return false
+
+
+func commit_elite_archive_record(elite_id: String, record: Dictionary, reason: String) -> bool:
+	if elite_id.is_empty() or record.is_empty():
+		return false
+	var records := get_elite_archive_records_snapshot()
+	records[elite_id] = record.duplicate(true)
+	return commit_elite_archive_records(records, reason)
+
+
+func replace_elite_archive_records_for_test(records: Dictionary) -> void:
+	_ensure_data()
+	if data != null:
+		data.elite_archive_records = records.duplicate(true)
 
 
 func _read_disk_revision() -> int:
@@ -764,6 +840,68 @@ func set_blueprint_tier(category_id: String, tier: int) -> void:
 		"bullet": data.blueprint_bullet_tier = tier
 		"attachment": data.blueprint_attachment_tier = tier
 	save_base()
+
+
+func get_blueprint_upgrade_cost(category_id: String, current_tier: int = -1) -> int:
+	var effective_tier := get_blueprint_tier(category_id) if current_tier < 0 else current_tier
+	return BlueprintService.cost_for(category_id, effective_tier)
+
+
+## 工坊升级唯一命令：余额、Tier 与幂等日志只做一次落盘，失败整体回滚。
+func upgrade_blueprint(
+	category_id: String, expected_tier: int, transaction_id: String = ""
+) -> Dictionary:
+	_ensure_data()
+	var effective_transaction_id := transaction_id
+	if effective_transaction_id.is_empty():
+		effective_transaction_id = ShopService.generate_transaction_id("blueprint_%s" % category_id)
+	if ShopService.has_completed(data.completed_transaction_ids, effective_transaction_id):
+		return {
+			"success": true, "duplicate": true,
+			"transaction_id": effective_transaction_id,
+			"tier": get_blueprint_tier(category_id),
+		}
+	var current_tier := get_blueprint_tier(category_id)
+	var plan := BlueprintService.plan(
+		category_id, current_tier, expected_tier, data.extraction_points
+	)
+	if not bool(plan.get("success", false)):
+		plan["transaction_id"] = effective_transaction_id
+		return plan
+	var transaction_data := data
+	var old_points := data.extraction_points
+	var old_transactions := data.completed_transaction_ids.duplicate()
+	data.extraction_points = int(plan["new_points"])
+	_set_blueprint_tier_without_save(category_id, int(plan["new_tier"]))
+	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)
+	if save_base("blueprint_upgrade:%s:%d" % [category_id, int(plan["new_tier"])]):
+		blueprint_tier_changed.emit(category_id, int(plan["new_tier"]), effective_transaction_id)
+		return {
+			"success": true, "duplicate": false,
+			"transaction_id": effective_transaction_id,
+			"category_id": category_id,
+			"old_tier": current_tier,
+			"tier": int(plan["new_tier"]),
+			"cost": int(plan["cost"]),
+			"points": data.extraction_points,
+		}
+	if data == transaction_data:
+		data.extraction_points = old_points
+		_set_blueprint_tier_without_save(category_id, current_tier)
+		data.completed_transaction_ids.assign(old_transactions)
+	return {
+		"success": false, "code": "save_failed",
+		"transaction_id": effective_transaction_id,
+		"current_tier": get_blueprint_tier(category_id),
+		"points": data.extraction_points,
+	}
+
+
+func _set_blueprint_tier_without_save(category_id: String, tier: int) -> void:
+	match category_id:
+		"gunbody": data.blueprint_gunbody_tier = tier
+		"bullet": data.blueprint_bullet_tier = tier
+		"attachment": data.blueprint_attachment_tier = tier
 
 ## — 资源点数系统 —
 func get_extraction_points() -> int:

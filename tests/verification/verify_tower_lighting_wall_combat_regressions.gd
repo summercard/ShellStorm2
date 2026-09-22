@@ -15,11 +15,12 @@ func _ready() -> void:
 	var tower := TOWER_SCENE.instantiate() as TowerDescent3D
 	tower.test_mode = true
 	tower.run_seed_override = 990095
+	tower.force_standard_floor_plan_for_test = true
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame
-	if not tower.generate_through_floor_for_test(95):
-		failures.append("98—95结构验收准备失败")
+	if not tower.generate_through_floor_for_test(TowerDescent3D.DEEPEST_PLANNED_FLOOR):
+		failures.append("当前发布楼层结构验收准备失败")
 	await _validate_light_layers(tower, failures)
 	await _validate_enemy_under_upper_floor_has_no_sunlight(tower, failures)
 	_validate_floor_materials(failures)

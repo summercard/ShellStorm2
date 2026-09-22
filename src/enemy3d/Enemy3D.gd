@@ -1714,9 +1714,8 @@ func _spawn_effect(asset_id: StringName, size: float) -> void:
 		)
 		return
 	# 直接独立实例化作为后备
-	if VfxPool3D._REGISTRY.has(asset_id):
-		var packed: PackedScene = VfxPool3D._REGISTRY[asset_id]
-		var effect: VfxEffectBase3D = packed.instantiate() as VfxEffectBase3D
+	var effect := VfxPool3D.create_unpooled(asset_id)
+	if effect != null:
 		get_tree().current_scene.add_child(effect)
 		effect.activate(world_position, color, size)
 

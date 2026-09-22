@@ -59,15 +59,15 @@ func _ready() -> void:
 
 func _refresh_stats() -> void:
 	# BaseManager 是 Autoload，通过全局名称访问
-	if BaseManager == null or BaseManager.data == null:
+	if BaseManager == null:
 		return
-	var d := BaseManager.data
+	var profile := BaseManager.get_profile_snapshot()
 	if runs_label:
-		runs_label.text = "总局数: %d" % d.total_runs
+		runs_label.text = "总局数: %d" % int(profile.get("total_runs", 0))
 	if extractions_label:
-		extractions_label.text = "成功撤离: %d" % d.successful_extractions
+		extractions_label.text = "成功撤离: %d" % int(profile.get("successful_extractions", 0))
 	if kills_label:
-		kills_label.text = "总击杀: %d" % d.total_kills
+		kills_label.text = "总击杀: %d" % int(profile.get("total_kills", 0))
 	if points_label:
 		points_label.text = "魂: ◈ %d" % BaseManager.get_extraction_points()
 	# 检查撤离战利品

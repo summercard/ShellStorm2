@@ -3,6 +3,7 @@ extends Node
 
 func _ready() -> void:
 	var expected_name := OS.get_environment("SHELLSTORM_VERIFICATION_USER_DIR_NAME")
+	var cache_isolated := OS.get_environment("SHELLSTORM_VERIFICATION_CACHE_ISOLATED")
 	var actual_dir := OS.get_user_data_dir()
 	var failures: Array[String] = []
 	if expected_name.is_empty():
@@ -11,8 +12,10 @@ func _ready() -> void:
 		failures.append("Autoload使用的user://不是runner隔离目录：%s" % actual_dir)
 	if actual_dir.ends_with("/弹壳风暴2"):
 		failures.append("验收仍指向正式玩家数据目录")
+	if cache_isolated != "1":
+		failures.append("统一验收runner没有使用独立.godot导入缓存")
 	if failures.is_empty():
-		print("VERIFICATION_RUNNER_CONTRACT_OK: preflight and autoload use isolated user data")
+		print("VERIFICATION_RUNNER_CONTRACT_OK: preflight, autoload user data and .godot import cache are isolated")
 		get_tree().quit(0)
 		return
 	for failure in failures:

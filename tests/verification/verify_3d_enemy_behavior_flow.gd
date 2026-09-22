@@ -9,6 +9,9 @@ var _summon_count := 0
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	var vfx_pool := get_tree().get_first_node_in_group("vfx_pool_3d") as VfxPool3D
+	if vfx_pool != null:
+		vfx_pool.clear_all()
 	var player := PLAYER_SCENE.instantiate() as Player3D
 	player.start_with_weapon = false
 	player.position = Vector3.ZERO
@@ -310,6 +313,9 @@ func _count_projectiles() -> int:
 
 
 func _count_damage_numbers() -> int:
+	var pool := get_tree().get_first_node_in_group("vfx_pool_3d") as VfxPool3D
+	if pool != null:
+		return pool.active_count(VfxPool3D.FX02_DAMAGE_NUMBER)
 	var count := 0
 	for child in get_children():
 		if child.get_script() == DAMAGE_NUMBER_SCRIPT:

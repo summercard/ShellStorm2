@@ -361,6 +361,17 @@ func _ready() -> void:
 	tower.cancel_airlock_transition()
 	_expect(not bool(tower.get_tower_snapshot().get("airlock_warning_active", true)), "取消后警告或门状态没有复位", failures)
 	_expect(tower.activate_arrival_between_for_test("floor_04_exit", "airlock_95_94"), "第二次隔离门交互失败", failures)
+	var guarded_candidate := tower.get("_pending_airlock_candidate") as Dictionary
+	var guarded_lower_door := guarded_candidate.get("lower_door") as RoomDoor3D
+	BaseManager.force_save_failure_for_test = true
+	_expect(not tower.confirm_airlock_transition(), "隔离门在快照写盘失败时仍然开启", failures)
+	_expect(
+		guarded_lower_door != null and not guarded_lower_door.is_open
+		and str(tower.get("_active_airlock_room_id")).is_empty(),
+		"隔离门写盘失败后没有保持关闭/未提交状态", failures
+	)
+	BaseManager.force_save_failure_for_test = false
+	_expect(tower.activate_arrival_between_for_test("floor_04_exit", "airlock_95_94"), "写盘恢复后隔离门不能重试", failures)
 	_expect(tower.confirm_airlock_transition(), "确认进入隔离间失败", failures)
 	var active_airlock_id := str(tower.get("_active_airlock_room_id"))
 	var active_airlock := (tower.get("_room_by_id") as Dictionary).get(active_airlock_id) as DungeonRoom3D
@@ -369,6 +380,15 @@ func _ready() -> void:
 		tower.player.global_position = active_airlock.global_position + Vector3(0.0, 0.05, 0.0)
 		tower.call("_refresh_physical_location_authority", true)
 	var keys_before_unload := int(tower.get_runtime_snapshot().get("keys", -1))
+	BaseManager.force_save_failure_for_test = true
+	_expect(not bool(tower.call("_try_open_room_door", "floor_05_entry")), "卸载快照写盘失败时前门仍然开启", failures)
+	var failed_unload := tower.get_tower_snapshot()
+	_expect(
+		(failed_unload.get("unloaded_segment_floor_indices", []) as Array).is_empty()
+		and not str(tower.get("_active_airlock_room_id")).is_empty(),
+		"卸载写盘失败后旧段或隔离事务被错误提交", failures
+	)
+	BaseManager.force_save_failure_for_test = false
 	_expect(bool(tower.call("_try_open_room_door", "floor_05_entry")), "隔离间前门无法开启", failures)
 	await get_tree().process_frame
 	var unloaded := tower.get_tower_snapshot()

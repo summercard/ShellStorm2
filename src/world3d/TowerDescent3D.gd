@@ -2132,7 +2132,8 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	if edge == _edge_key("facility", "floor_01_entry") and _current_room_id == "floor_01_entry":
 		return _open_simple_room_edge_door(target_room_id, edge)
 	if _airlock_front_edges.has(edge) and _current_room_id == _active_airlock_room_id:
-		_finalize_airlock_commit(int(_airlock_front_edges[edge]))
+		if not _finalize_airlock_commit(int(_airlock_front_edges[edge])):
+			return false
 	if _boss_descent_gate_edges.has(edge) and not bool(_open_edges.get(edge, false)):
 		if _boss_descent_key_count <= 0:
 			status_label.text = "需要击败本段Boss并取得下行权限"
@@ -3413,6 +3414,11 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 	var bundle_floor_index := int(_floor_seed_gate_edges.get(edge, -1))
 	if bundle_floor_index >= 0 and not _commit_floor_bundle(bundle_floor_index, "arrival_gate"):
 		return true
+	# A generated floor is recoverable scene state; the door is the irreversible
+	# player-facing boundary. Persist the committed bundle before opening it.
+	if bundle_floor_index >= 0 and not _persist_runtime_boundary("arrival_gate:%d" % bundle_floor_index):
+		status_label.text = "楼层已建立但保存失败 · 入口门保持关闭"
+		return false
 	_vertical_arrival_open[edge] = true
 	if not _request_simple_transit_door_open(lower_door):
 		lower_door.set_open(true)
@@ -3882,6 +3888,9 @@ func confirm_airlock_transition() -> bool:
 		return false
 	var floor_index := int(_room_floor_index.get(lower_room.room_id, 0))
 	if not _commit_floor_bundle(floor_index, "boss_airlock_confirm"):
+		return false
+	if not _persist_runtime_boundary("boss_airlock_confirm:%d" % floor_index):
+		status_label.text = "隔离段保存失败 · 下端门保持关闭"
 		return false
 	_vertical_arrival_open[edge] = true
 	lower_door.set_open(true)
@@ -4639,14 +4648,57 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		status_label.text = "Boss已击败 · 获得本段下行权限"
 
 
-func _finalize_airlock_commit(lower_floor_index: int) -> void:
+func _persist_runtime_boundary(reason: String) -> bool:
+	if BaseManager == null:
+		push_warning("[TowerDescent3D] Runtime boundary has no BaseManager: %s" % reason)
+		return false
+	var snapshot := build_runtime_save_snapshot()
+	if snapshot.is_empty() or not BaseManager.set_active_run_checkpoint(snapshot, reason):
+		push_warning("[TowerDescent3D] Runtime boundary save failed: %s" % reason)
+		return false
+	return true
+
+
+func _segment_floor_indices_before(lower_floor_index: int) -> Array[int]:
+	var first_floor := 2 if lower_floor_index == 6 else lower_floor_index - 5
+	var indices: Array[int] = []
+	for floor_index in range(first_floor, lower_floor_index):
+		indices.append(floor_index)
+	return indices
+
+
+func _finalize_airlock_commit(lower_floor_index: int) -> bool:
 	if _active_airlock_room_id.is_empty():
-		return
-	# 双门隔离：先锁后门，再清掉旧段；前门由调用者随后开启。
+		return false
+	# 双门隔离的锁门+卸载是一个不可逆边界。先在内存中构造「已提交」
+	# 快照并落盘，然后才真正删除旧房间；崩溃在两步之间时，读档会消费
+	# unloaded_segment_floor_indices 重放卸载，不会复活已丢失物资。
+	var affected_edges: Array[String] = []
+	var previous_open: Dictionary = {}
+	var previous_arrival: Dictionary = {}
 	for edge_value in _boss_descent_gate_edges.keys():
 		var edge := str(edge_value)
 		if int(_boss_descent_gate_edges[edge]) != lower_floor_index:
 			continue
+		affected_edges.append(edge)
+		previous_open[edge] = bool(_open_edges.get(edge, false))
+		previous_arrival[edge] = bool(_vertical_arrival_open.get(edge, false))
+		_open_edges[edge] = false
+		_vertical_arrival_open[edge] = false
+	var old_unloaded := _unloaded_segment_floor_indices.duplicate()
+	for floor_index in _segment_floor_indices_before(lower_floor_index):
+		if floor_index not in _unloaded_segment_floor_indices:
+			_unloaded_segment_floor_indices.append(floor_index)
+	_unloaded_segment_floor_indices.sort()
+	var saved := _persist_runtime_boundary("airlock_unload:%d" % lower_floor_index)
+	_unloaded_segment_floor_indices.assign(old_unloaded)
+	for edge in affected_edges:
+		_open_edges[edge] = bool(previous_open.get(edge, false))
+		_vertical_arrival_open[edge] = bool(previous_arrival.get(edge, false))
+	if not saved:
+		status_label.text = "隔离提交保存失败 · 旧段与前门均保留"
+		return false
+	for edge in affected_edges:
 		_open_edges[edge] = false
 		_vertical_arrival_open[edge] = false
 		var ids := edge.split("|")
@@ -4657,10 +4709,11 @@ func _finalize_airlock_commit(lower_floor_index: int) -> void:
 	_unload_completed_segment(lower_floor_index)
 	_active_airlock_room_id = ""
 	status_label.text = "旧段已卸载 · 未拾取物永久丢失"
+	return true
 
 
-func commit_active_airlock_for_test(lower_floor_index: int) -> void:
-	_finalize_airlock_commit(lower_floor_index)
+func commit_active_airlock_for_test(lower_floor_index: int) -> bool:
+	return _finalize_airlock_commit(lower_floor_index)
 
 
 func _unload_completed_segment(lower_floor_index: int) -> void:
@@ -5767,6 +5820,30 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 	_initial_loop_gate_armed = bool(world_state.get("initial_loop_gate_armed", false))
 	_initial_loop_gate_sealed = bool(world_state.get("initial_loop_gate_sealed", false))
 	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
+	# Airlock commits persist their post-unload intent before queue_free starts.
+	# Replaying that intent is required when the process died after the save but
+	# before the in-memory unload completed.
+	var unloaded_values := world_state.get("unloaded_segment_floor_indices", []) as Array
+	var unloaded: Array[int] = []
+	for value in unloaded_values:
+		var floor_index := int(value)
+		if floor_index >= 2 and floor_index not in unloaded:
+			unloaded.append(floor_index)
+	unloaded.sort()
+	if not unloaded.is_empty():
+		var lower_boundary := 6
+		var max_unloaded := unloaded[unloaded.size() - 1]
+		while lower_boundary - 1 <= max_unloaded:
+			var expected := _segment_floor_indices_before(lower_boundary)
+			var complete_segment := true
+			for floor_index in expected:
+				if floor_index not in unloaded:
+					complete_segment = false
+					break
+			if complete_segment:
+				_unload_completed_segment(lower_boundary)
+			lower_boundary += 5
+		_unloaded_segment_floor_indices.assign(unloaded)
 	return true
 
 

@@ -22,9 +22,41 @@ isolated_project_root="${verification_tmp_root}/project"
 verification_log_dir="${verification_tmp_root}/logs"
 verification_user_dir_name="ShellStorm2Verification_$$_$(date +%s)"
 mkdir -p "${isolated_project_root}" "${verification_log_dir}"
+
+seed_isolated_import_cache() {
+  local source_cache="${project_root}/.godot"
+  local target_cache="${isolated_project_root}/.godot"
+  local cache_entry
+  [[ -d "${source_cache}/imported" ]] || return 0
+  mkdir -p "${target_cache}"
+  for cache_entry in .gdignore global_script_class_cache.cfg uid_cache.bin imported; do
+    [[ -e "${source_cache}/${cache_entry}" ]] || continue
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+      cp -cR "${source_cache}/${cache_entry}" "${target_cache}/"
+    elif cp -a --reflink=auto "${source_cache}/${cache_entry}" "${target_cache}/" 2>/dev/null; then
+      :
+    else
+      cp -a "${source_cache}/${cache_entry}" "${target_cache}/"
+    fi
+  done
+}
+
 while IFS= read -r entry; do
   ln -s "${entry}" "${isolated_project_root}/$(basename "${entry}")"
-done < <(find "${project_root}" -mindepth 1 -maxdepth 1 ! -name project.godot ! -name .git -print)
+done < <(
+  find "${project_root}" -mindepth 1 -maxdepth 1 \
+    ! -name project.godot \
+    ! -name .git \
+    ! -name .godot \
+    ! -name .codex-tmp \
+    ! -name _scratch \
+    ! -name Godot \
+    -print
+)
+seed_isolated_import_cache
+if [[ "${SHELLSTORM_VERIFICATION_FORCE_COLD_CLASS_CACHE:-0}" == "1" ]]; then
+  rm -f "${isolated_project_root}/.godot/global_script_class_cache.cfg"
+fi
 awk -v isolated_name="${verification_user_dir_name}" '
   /^\[application\]$/ {
     print
@@ -35,6 +67,25 @@ awk -v isolated_name="${verification_user_dir_name}" '
   { print }
 ' "${project_root}/project.godot" > "${isolated_project_root}/project.godot"
 export SHELLSTORM_VERIFICATION_USER_DIR_NAME="${verification_user_dir_name}"
+verification_import_log="${verification_log_dir}/project_import.log"
+if ! "${godot_bin}" --headless --path "${isolated_project_root}" --import \
+  >"${verification_import_log}" 2>&1; then
+  cat "${verification_import_log}"
+  printf 'VERIFICATION_IMPORT_FAILED\n' >&2
+  exit 2
+fi
+if ! python3 "${project_root}/scripts/check_verification_log.py" \
+  "${verification_import_log}" /dev/null; then
+  cat "${verification_import_log}"
+  printf 'VERIFICATION_IMPORT_LOG_FAILED\n' >&2
+  exit 3
+fi
+if [[ ! -d "${isolated_project_root}/.godot" || -L "${isolated_project_root}/.godot" ]]; then
+  printf 'VERIFICATION_CACHE_ISOLATION_FAILED path=%s\n' \
+    "${isolated_project_root}/.godot" >&2
+  exit 2
+fi
+export SHELLSTORM_VERIFICATION_CACHE_ISOLATED="1"
 test_timeout_seconds="${GODOT_TEST_TIMEOUT_SECONDS:-180}"
 if [[ "${suite}" == "soak" && -z "${GODOT_TEST_TIMEOUT_SECONDS+x}" ]]; then
 	test_timeout_seconds=3700
@@ -136,6 +187,7 @@ core_scenes=(
   verify_base_fixture_glow
   verify_base_facility_framework
   verify_base_shop_save_flow
+  verify_workshop_transaction_flow
   verify_extraction_points_spend_transaction
   verify_run_settlement_transaction
   verify_tower_facility_inventory_binding
@@ -159,6 +211,48 @@ core_scenes=(
   verify_gamepad_input_flow
   verify_pause_game_save_reset_flow
   verify_3d_flashlight_charge_flow
+  verify_3d_combat_progression_flow
+  verify_3d_parity_core
+  verify_3d_reload_state_flow
+  verify_3d_vision_input_flow
+  verify_base99_loft_guardrail_collision
+  verify_base99_loft_layout_v021
+  verify_base99_optimized_packages_v021
+  verify_base99_stair_walkable_v021
+  verify_base99_wall_visual_replacement
+  verify_base_facility_interaction_zones
+  verify_base_optional_facilities_removed
+  verify_base_overhaul_flow
+  verify_block00_floor98_assembly
+  verify_character_authoring_bundle
+  verify_door_function_check
+  verify_enemy_stimulus_activation
+  verify_first_elite_deployment_flow
+  verify_first_elite_growth_flow
+  verify_formal_3d_asset_import
+  verify_main_entry_cinematic_flow
+  verify_main_entry_realtime_sun_flow
+  verify_melee_zombie_presentation
+  verify_music_system
+  verify_player3d_diy_flow
+  verify_player3d_head_accessory_flow
+  verify_player3d_idle_animation_flow
+  verify_player3d_lower_body_socket_flow
+  verify_player3d_state_gallery_flow
+  verify_postfx_autopersist
+  verify_requested_experience_upgrade_flow
+  verify_rooftop_32x32_contract
+  verify_rooftop_door
+  verify_rooftop_floor_facade_components
+  verify_rooftop_railing
+  verify_runtime_autosave_flow
+  verify_security_zombie_presentation
+  verify_stair_entry_clearance
+  verify_stair_unified_support
+  verify_state_machine_safety
+  verify_tower_camera_occlusion_flow
+  verify_tower_runtime_restart_restore
+  verify_wardrobe_preview_fill_flow
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.
@@ -185,12 +279,25 @@ visual_scenes=(
   verify_wall_alignment_pure
   verify_wall_alignment_visual
   verify_ai_performance_soak
+  verify_base99_door_visuals_v021
+  verify_first_elite_visual
+  verify_player3d_head_accessory_visual
+  verify_wardrobe_layout_visual
+  verify_formal_3d_asset_gallery_visual
+  verify_formal_asset_placement_visual
+)
+
+# 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
+manual_scenes=(
+  verify_debug_camera_hotkeys
+)
+
+# 退役入口保留显式清单，避免“未注册”与“已退役”混为一谈。
+retired_scenes=(
 )
 
 renderer_scenes=(
   "${visual_scenes[@]}"
-  verify_formal_3d_asset_gallery_visual
-  verify_formal_asset_placement_visual
 )
 
 is_renderer_scene() {
@@ -335,8 +442,19 @@ case "${suite}" in
     fi
     scenes=("${2%.tscn}")
     ;;
+  batch)
+    if [[ $# -lt 2 ]]; then
+      echo "usage: $0 batch verify_scene_name [verify_scene_name ...]" >&2
+      exit 2
+    fi
+    aggregate_mode=true
+    scenes=()
+    for requested_scene in "${@:2}"; do
+      scenes+=("${requested_scene%.tscn}")
+    done
+    ;;
   *)
-    echo "unknown suite: ${suite}; expected smoke, core, aggregate, full, visual, soak, or scene" >&2
+    echo "unknown suite: ${suite}; expected smoke, core, aggregate, full, visual, soak, scene, or batch" >&2
     exit 2
     ;;
 esac

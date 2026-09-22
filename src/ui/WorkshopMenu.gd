@@ -43,19 +43,16 @@ const BLUEPRINT_TIERS := {
 		"label": "枪身蓝图",
 		"desc": "解锁新枪身类型",
 		"max_tier": 3,
-		"unlock_costs": [0, 80, 200, 500]  # Tier 0免费，Tier 1起收费
 	},
 	"bullet": {
 		"label": "弹药蓝图",
 		"desc": "解锁新子弹类型",
 		"max_tier": 3,
-		"unlock_costs": [0, 60, 150, 400]
 	},
 	"attachment": {
 		"label": "配件蓝图",
 		"desc": "解锁新配件类型",
 		"max_tier": 3,
-		"unlock_costs": [0, 50, 120, 350]
 	}
 }
 
@@ -118,7 +115,7 @@ func _make_category_panel(cat_id: String, cat: Dictionary, current_tier: int) ->
 	
 	# 解锁按钮（如果还有Tier可解锁）
 	if current_tier < cat["max_tier"]:
-		var next_cost: int = cat["unlock_costs"][current_tier]
+		var next_cost: int = BaseManager.get_blueprint_upgrade_cost(cat_id, current_tier)
 		var btn := Button.new()
 		btn.text = "解锁下一Tier（消耗 %d 资源）" % next_cost
 		btn.pressed.connect(_on_unlock_pressed.bind(cat_id, current_tier, next_cost))
@@ -152,10 +149,12 @@ func _on_unlock_pressed(category_id: String, current_tier: int, cost: int) -> vo
 		_update_status("资源不足！需要 %d，当前 %d" % [cost, player_points])
 		return
 	
-	# 扣除资源，提升蓝图Tier
-	BaseManager.spend_extraction_points(cost)
-	BaseManager.set_blueprint_tier(category_id, current_tier + 1)
-	_update_status("解锁成功！%s 已升到 Tier %d" % [BLUEPRINT_TIERS[category_id]["label"], current_tier + 1])
+	var result := BaseManager.upgrade_blueprint(category_id, current_tier)
+	if not bool(result.get("success", false)):
+		_update_status("升级失败：%s" % str(result.get("code", "unknown")))
+		_build_blueprint_list()
+		return
+	_update_status("解锁成功！%s 已升到 Tier %d" % [BLUEPRINT_TIERS[category_id]["label"], int(result.get("tier", current_tier + 1))])
 	
 	# 重建列表
 	_build_blueprint_list()

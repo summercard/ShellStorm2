@@ -12,6 +12,7 @@ const _POOLS := preload("res://src/rewards/RewardPoolRegistry.gd")
 const _SPEC := preload("res://src/rewards/RewardSpec.gd")
 const _SERVICE := preload("res://src/rewards/RewardService.gd")
 const _SINK := preload("res://src/rewards/RewardSink.gd")
+const _RUNTIME_COORDINATOR := preload("res://src/rewards/RuntimeRewardCoordinator.gd")
 
 ## 统计样本量。4000 次下加权频率的标准差约 sqrt(p(1-p)/N) ≈ 0.008，
 ## 容差取 0.03 已是 3.7σ 以上，正常随机不会误报。
@@ -33,6 +34,7 @@ func _ready() -> void:
 	_case_truncation()
 	_case_field_conflict()
 	_case_negative_controls()
+	_case_runtime_coordinator()
 
 	if _failures.is_empty():
 		print("REWARD_SERVICE_FLOW_OK: registry gate, reproducibility, four dispatch sources, override chain, rejection paths, weighted/independent math, truncation and negative controls pass")
@@ -41,6 +43,47 @@ func _ready() -> void:
 	for failure in _failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _case_runtime_coordinator() -> void:
+	_reset()
+	var coordinator := _RUNTIME_COORDINATOR.new()
+	coordinator.configure(20260923)
+	var first := coordinator.resolve_search({}, "scavenge_floor_1", 1, "room_a:crate_01")
+	var second := coordinator.resolve_search({}, "scavenge_floor_1", 1, "room_a:crate_01")
+	_expect(bool(first.get("ok", false)), "运行时协调器搜索解析应成功：%s" % str(first.get("errors", [])))
+	_expect(
+		_signature(first.get("grants", [])) == _signature(second.get("grants", [])),
+		"运行时协调器必须按 run seed + event id 确定性解析"
+	)
+	var fixed := coordinator.resolve_fixed_item("item_ammo_pack", 300, "guaranteed_loadout_ammo")
+	_expect(bool(fixed.get("ok", false)), "保底备弹必须走统一规格解析")
+	_expect(
+		int(((fixed.get("items", []) as Array)[0] as Dictionary).get("count", 0)) == 300,
+		"保底备弹统一解析后应保留真实发数"
+	)
+	var kill := coordinator.resolve_kill({}, {
+		"enemy_type": "melee_chaser", "floor": 1, "loot_table": "loot_floor_1_2",
+	}, "room_a:enemy_01")
+	_expect(bool(kill.get("ok", false)), "怪物击杀必须通过统一覆盖链解析：%s" % str(kill.get("errors", [])))
+	_expect(
+		(kill.get("items", []) as Array).any(func(item): return bool((item as Dictionary).get("is_currency", false))),
+		"怪物击杀统一解析必须保留地面魂奖励"
+	)
+	var elite_kill := coordinator.resolve_kill({}, {
+		"enemy_type": "melee_chaser", "floor": 2, "loot_table": "loot_floor_1_2",
+		"is_elite": true, "elite_bounty_currency": 35,
+	}, "room_a:elite_01")
+	var physical_count := 0
+	var currency_count := 0
+	for value in elite_kill.get("items", []):
+		var item := value as Dictionary
+		if bool(item.get("is_currency", false)):
+			currency_count += 1
+		else:
+			physical_count += 1
+	_expect(physical_count == 1, "精英击杀必须保持一个非货币地面实体")
+	_expect(currency_count == 1, "基础魂与精英悬赏必须合并为一个地面魂球")
 
 
 # ---------------------------------------------------------------------------

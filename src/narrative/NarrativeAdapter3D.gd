@@ -1152,9 +1152,15 @@ func _grant_instruction(action: String, params: Dictionary) -> Dictionary:
 			# 本局内存态标记，由导演持有；适配器只回报"这是本系统自建的"。
 			return _ok()
 		"item":
-			return _degraded(
-				"grant.item 尚未接通：剧情还没有拿到背包的稳定入口（见 08 文档 §5.2）。"
-			)
+			var dungeon := dungeon_node()
+			if dungeon == null or not dungeon.has_method("narrative_grant_item"):
+				return _degraded("grant.item：当前场景没有开放奖励发放正门。")
+			var item_id := str(params.get("item_id", params.get("id", "")))
+			var count := maxi(1, int(params.get("count", 1)))
+			var result: Variant = dungeon.call("narrative_grant_item", item_id, count)
+			if result is Dictionary and bool((result as Dictionary).get("success", false)):
+				return _ok()
+			return _degraded("grant.item：物品『%s』发放失败（%s）。" % [item_id, str(result)])
 		"unlock":
 			return _degraded("grant.unlock 尚未接通：依赖具体解锁项（见 08 文档 §5.2）。")
 	return _degraded("grant.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
