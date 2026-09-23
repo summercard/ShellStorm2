@@ -3,6 +3,8 @@
 工程版本：0.1.0。设计、规范与目标见 [设计目录](../design/README.md)；本目录仅保存交付事实。
 
 - [版本开发日志](CHANGELOG.md)：按交付记变更，新增记录使用 [模板](../../templates/development_record.md)。
+- [功能关系与文档对齐计划](2026-09-23_feature_relationship_documentation_plan.md)：37项功能的交接、解耦、文档缺口与统一格式的本次交付事实。
+- [新拉取后的关系复核与冲突处理](2026-09-23_feature_relationship_pull_alignment.md)：合并开发日志冲突，并按剧情刷物、跨局历史、开场落点及410项账本更新关系计划。
 - [P0 运行入口、奖励桥、基地交互与玩家手枪验收修复](2026-09-23_p0_runtime_entry_player_repair.md)：关闭入口编译/挂死、延迟掉落数组类型和全息终端碰撞识别问题；玩家手枪5个逻辑入口与1个真实渲染入口通过，未实现的入口展示设计仍保留红项。
 - [连续爬塔与遗留合同优先级裁决](2026-09-23_hidden_tower_priority_adjudication.md)：确认当前正式版本为远征主线+98F区块00；P0-4/P0-7中的隐藏连续爬塔与旧合同降为低优先级，未来重开时再修。
 - [P2 媒体资产与功能追溯链修复](2026-09-23_p2_media_and_traceability_repair.md)：UI/音效/音乐独立账本和 Skill，37 个功能的机器可追溯注册表与门禁。
