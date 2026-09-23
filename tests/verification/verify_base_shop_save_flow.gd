@@ -379,12 +379,14 @@ func _verify_interface_and_model(failures: Array[String]) -> void:
 	if visible_runtime_items != 2:
 		failures.append("保险柜右栏没有读取I键背包中的两件物品")
 	vault_menu.queue_free()
-	var model_scene := load("res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d.tscn") as PackedScene
+	var model_scene := load("res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d.tscn") as PackedScene
 	var model := model_scene.instantiate() as BaseFacility3D
 	add_child(model)
 	await get_tree().process_frame
-	if model.facility_id != "base_vending" or model.get_node_or_null("Visual/ProductWindow") == null:
-		failures.append("长方体自动贩卖机模型或设施契约缺失")
+	var imported_model := model.get_node_or_null("Visual/ImportedModel")
+	var source_blend := str(model.get_meta("asset_source", ""))
+	if model.facility_id != "base_vending" or imported_model == null or not source_blend.ends_with("prp_base_vending_machine_source_v003.blend"):
+		failures.append("正式自动贩卖机模型或设施契约缺失")
 	model.queue_free()
 	await get_tree().process_frame
 

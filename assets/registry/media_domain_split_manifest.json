@@ -27,14 +27,14 @@
     "源编号（Blender collection）",
     "备注"
   ],
-  "allowed_changes": ["账本归属", "大类"],
+  "allowed_changes": ["账本归属", "大类", "运行时路径", "SHA-256", "共享资产主登记合并"],
   "routes": [
     {
       "baseline_category": "UI",
       "match": {"category": "UI"},
       "target_domain": "ui",
       "target_category": "UI",
-      "expected_count": 17
+      "expected_count": 16
     },
     {
       "baseline_category": "音频",

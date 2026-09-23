@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_dungeon_gate_root_top3d.tscn" id="4_gate"]
 [ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="5_player"]
 [ext_resource type="PackedScene" path="res://assets/art/ui/pause_3d/ui_pause_overlay_screen.tscn" id="6_pause"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d.tscn" id="7_vending"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d.tscn" id="7_vending"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d.tscn" id="8_recovery"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/avatar_wardrobe/prp_base_avatar_wardrobe_root_top3d.tscn" id="9_wardrobe"]
 

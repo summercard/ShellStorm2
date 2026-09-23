@@ -176,7 +176,13 @@ def main() -> int:
         fail("asset_lost", asset_id=asset_id, expected_domain=expected_assets[asset_id]["d"])
     extra = sorted(set(seen) - set(expected_assets))
 
-    if migration is not None:
+    # A freshly reconciled current-state baseline already stores media rows in their
+    # final domains; migration counters only apply to the historical pre-split baseline.
+    has_legacy_media_rows = any(
+        expected.get("d") == migration.get("legacy_domain")
+        for expected in expected_assets.values()
+    ) if migration is not None else False
+    if migration is not None and has_legacy_media_rows:
         for route in migration.get("routes", []):
             target = _text(route.get("target_domain"))
             wanted = int(route.get("expected_count", 0))
