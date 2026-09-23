@@ -19,6 +19,19 @@
     },
     {
       "at": 0.0,
+      "do": "scene.spawn_item",
+      "item_id": "weapon_sprinkler",
+      "count": 1,
+      "point_room": "floor_01_exit",
+      "point_offset": [
+        5.3,
+        0.05,
+        -0.7
+      ],
+      "spread": false
+    },
+    {
+      "at": 0.0,
       "do": "actor.pose",
       "clip": "dead",
       "phase": 1.0,

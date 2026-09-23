@@ -14,6 +14,11 @@ const BASE_LOADOUT_CAPACITY := 12
 const BASE_VAULT_CAPACITY := 20
 const RUNTIME_SAVE_DEBOUNCE_SECONDS := 0.45
 
+## 剧情「完整收口」的三个结果值，口径与 `NarrativeDirector3D._finish()` 的 reason 对齐：
+## 演到 `duration` / 显式 `flow.end` / 玩家 `skip` 算完成；被抢占（`interrupted`）与
+## `abort:<reason>`（死亡·撤离·场景卸载·解析失败）**不算** ⇒ 那类桥段下次仍会触发。
+const COMPLETABLE_NARRATIVE_RESULTS: Array[String] = ["duration", "flow.end", "skip"]
+
 var data: BaseData
 var save_path: String = SAVE_PATH
 var force_save_failure_for_test := false
@@ -181,6 +186,72 @@ func replace_elite_archive_records_for_test(records: Dictionary) -> void:
 	_ensure_data()
 	if data != null:
 		data.elite_archive_records = records.duplicate(true)
+
+
+# =========================================================================
+# 跨局剧情历史（2026-09-23 落地；08 文档 §9 预留的 `BaseData.narrative_history`）
+# =========================================================================
+## 唯一写入权在本类：`NarrativeDirector` 只持有本局内存态，**绝不直写档案**。
+## 裁决 = 本局内存态 ∪ 本档案（见导演 `_try_fire`）：内存管"这一局演过没"，档案管"跨局演过没"。
+
+func get_narrative_history_snapshot() -> Dictionary:
+	_ensure_data()
+	if data == null:
+		return {}
+	return data.narrative_history.duplicate(true)
+
+
+func get_narrative_history(narrative_id: String) -> Dictionary:
+	if narrative_id.is_empty():
+		return {}
+	_ensure_data()
+	if data == null:
+		return {}
+	var record: Variant = data.narrative_history.get(narrative_id, {})
+	return (record as Dictionary).duplicate(true) if record is Dictionary else {}
+
+
+## `once = "run"` 剧本的跨局裁决依据：**完成过**就永远不再播。
+func has_narrative_completed(narrative_id: String) -> bool:
+	if narrative_id.is_empty():
+		return false
+	_ensure_data()
+	if data == null:
+		return false
+	var record: Variant = data.narrative_history.get(narrative_id, null)
+	if not (record is Dictionary):
+		return false
+	return int((record as Dictionary).get("completed_count", 0)) > 0
+
+
+## 记一次「完整收口」。`result` 只收 duration / flow.end / skip（其余一律拒绝，不写）。
+## 写盘失败 ⇒ 内存回滚并返回 false；调用方（导演）此时仍用本局内存态兜住"同局不重播"，
+## 但下次上线可能重播一次 —— 这与"老档没有历史"的代价同一量级，属可接受并留痕。
+func commit_narrative_completion(narrative_id: String, result: String) -> bool:
+	if narrative_id.is_empty() or result not in COMPLETABLE_NARRATIVE_RESULTS:
+		return false
+	_ensure_data()
+	if data == null:
+		return false
+	var previous := data.narrative_history.duplicate(true)
+	var record := get_narrative_history(narrative_id)
+	var now := int(Time.get_unix_time_from_system())
+	record["completed_count"] = int(record.get("completed_count", 0)) + 1
+	record["first_completed_unix"] = int(record.get("first_completed_unix", now))
+	record["last_completed_unix"] = now
+	record["last_result"] = result
+	data.narrative_history[narrative_id] = record
+	if save_base("narrative_completed:%s" % narrative_id):
+		return true
+	data.narrative_history = previous
+	return false
+
+
+## 验收与复位用：只改内存投影，不写盘（与 `replace_elite_archive_records_for_test` 同规格）。
+func replace_narrative_history_for_test(records: Dictionary) -> void:
+	_ensure_data()
+	if data != null:
+		data.narrative_history = records.duplicate(true)
 
 
 func _read_disk_revision() -> int:

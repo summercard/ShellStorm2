@@ -161,6 +161,9 @@ func _on_node_added(node: Node) -> void:
 
 func _bind_dungeon(node: Node) -> void:
 	_dungeon = node
+	# 同步给适配器：它按这份绑定解析房间与正门。适配器自己猜 `current_scene` 在
+	# 验收环境（场景手动 add_child 进 root）会拿到 null ⇒ 所有 scene.* 指令静默降级。
+	_adapter.bind_dungeon(node)
 	if not node.room_entered.is_connected(_on_dungeon_room_entered):
 		node.room_entered.connect(_on_dungeon_room_entered)
 	if node.has_signal("room_cleared") and not node.room_cleared.is_connected(_on_dungeon_room_cleared):
@@ -274,8 +277,13 @@ func _evaluate_manual() -> void:
 func _try_fire(narrative_id: String, entry: Dictionary, context: Dictionary) -> void:
 	var once := str(entry.get("once", NarrativeScript3D.ONCE_RUN))
 	var fired_count := int(entry.get("fired_count", 0))
-	if once == NarrativeScript3D.ONCE_RUN and fired_count > 0:
-		return
+	# `run` 档的裁决 = **本局内存态 ∪ 跨局档案**（2026-09-23）：
+	#   内存 `fired_count` 管「这一局演过没」（防同局内重复）；
+	#   档案 `narrative_history` 管「跨局演过没」（防下线重开又把开场演一遍）。
+	# 只查内存 = 业主报的"下线再上线剧情重播"；只查档案 = 同局内 quit 时机不同结果不一致。
+	if once == NarrativeScript3D.ONCE_RUN:
+		if fired_count > 0 or _history_has(narrative_id):
+			return
 	if once == NarrativeScript3D.ONCE_NEVER:
 		return
 	var cooldown := float(entry.get("cooldown", 0.0))
@@ -525,10 +533,45 @@ func _finish(reason: String) -> void:
 	if _active.is_empty():
 		return
 	var narrative_id := str(_active.get("id", ""))
+	# 先落历史再归还：拿到 id 最保险的时机，且写盘失败也不影响归还路径。
+	_commit_history_if_completed(narrative_id, reason)
 	_release_all(reason)
 	_active = {}
 	_dispatch_log.append("finish:%s" % reason)
 	narrative_finished.emit(narrative_id, reason)
+
+
+## 「完整收口」的三个结果值，与 `BaseManager.COMPLETABLE_NARRATIVE_RESULTS` 同口径。
+## ⚠️ 刻意在本文件再写一份字面量，**不跨模块读 autoload 的常量**：实测通过 autoload 单例
+## 访问常量会让本节点在编译期整体失效（症状是剧情全部不起播、且只有一行 Parse Error）。
+## 两侧一致性由验收断言盯着（`verify_narrative_timeline` 的跨局历史段）。
+const COMPLETABLE_RESULTS: Array[String] = ["duration", "flow.end", "skip"]
+
+
+## 跨局历史的**唯一写入点**（本局内存态由 `_armed.fired_count` 自己管）。
+## 只有「完整收口」才写：`duration` / `flow.end` / `skip`；被抢占（`interrupted`）与
+## `abort:<reason>`（死亡·撤离·场景卸载·解析失败）**不写** —— 这正是"未达成条件的桥段
+## 下次仍会触发"的实现点。只对 `run` 档写：`forever` 不消耗，写它只是白增 IO。
+func _commit_history_if_completed(narrative_id: String, reason: String) -> void:
+	if narrative_id.is_empty() or BaseManager == null:
+		return
+	var entry: Dictionary = _armed.get(narrative_id, {}) as Dictionary
+	if str(entry.get("once", NarrativeScript3D.ONCE_RUN)) != NarrativeScript3D.ONCE_RUN:
+		return
+	if reason not in COMPLETABLE_RESULTS:
+		return
+	if bool(BaseManager.commit_narrative_completion(narrative_id, reason)):
+		return
+	# 写盘失败：内存态仍然记着（本局不会重播），但下次上线可能再播一次 —— 必须留痕。
+	_warn("剧情『%s』的收口历史写盘失败，下次上线可能重播一次。" % narrative_id)
+
+
+## 跨局历史查询。**惰性**：不在 `_ready` 预读档案 —— 按 AGENTS 存档隔离约定，
+## autoload 的 `_ready` 不得触碰 `user://`；`BaseManager` 已在本节点之前 load 完档案。
+func _history_has(narrative_id: String) -> bool:
+	if BaseManager == null:
+		return false
+	return bool(BaseManager.has_narrative_completed(narrative_id))
 
 
 ## 已发生的效果不回滚（音效已响、门已开就保持），只还独占资源（08 文档 §6.4）。

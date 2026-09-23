@@ -2365,6 +2365,41 @@ func narrative_grant_item(item_id: String, count: int) -> Dictionary:
 	return {"success": true, "granted_count": added, "deferred_count": deferred, "errors": []}
 
 
+## 剧情把物品**放到地面**（不是进包 —— 进包走 `grant.item`）。
+## 为什么要有这条：地面道具的归属、贴地校位、可拾取连接都是本系统的私事
+## （`_spawn_loot_items` + `_find_supported_spawn_position`），剧情不该自己 instantiate。
+## `item_id` 的解析复用奖励服务（唯一真源），不在这里另写一张物品表。
+## `spread=false`（默认）时**精确**落在 origin —— 剧本要"转身对着它说"就必须精确。
+func narrative_spawn_item(
+	room_id: String, item_id: String, count: int, origin: Vector3, spread := false
+) -> int:
+	if _reward_coordinator == null or item_id.is_empty() or count <= 0:
+		return 0
+	var report := _reward_coordinator.resolve_fixed_item(
+		item_id, count, "narrative_drop:%s:%d" % [item_id, count],
+		maxi(1, visual_theme.difficulty_rank)
+	)
+	if not bool(report.get("ok", false)):
+		push_warning(
+			"[Dungeon3D] 剧情刷物品：『%s』解析失败（%s）。" % [item_id, str(report.get("errors", []))]
+		)
+		return 0
+	var items := report.get("items", []) as Array
+	return narrative_spawn_loot(room_id, items, origin, spread)
+
+
+## 剧情把**现成的 item 字典**放到地面（不解析、不重造）。
+## 给「把玩家手上那把原样丢下」这类用法：实例身份与已装改造必须保持。
+func narrative_spawn_loot(
+	room_id: String, items: Array, origin: Vector3, spread := false
+) -> int:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or items.is_empty():
+		return 0
+	_spawn_loot_items(room, items, origin, 0.0, spread)
+	return items.size()
+
+
 func _repair_room_progress(room: DungeonRoom3D) -> void:
 	if room == null or room.cleared:
 		return

@@ -74,7 +74,9 @@ const COMBAT_FLOOR_COUNT := 4
 const DEEPEST_PLANNED_FLOOR := 98
 const FLOOR_HEIGHT := TOWER_GEOMETRY.FLOOR_HEIGHT_M
 ## 非行动下线时的固定重生点。数值使用世界坐标，集中在这里供场景微调。
-## 100F保留原天台入口右上侧的安全落点；99F为基地房间中心。
+## ⚠️ 2026-09-23 修正后：**非战局内下线（100F 天台与 99F 基地都算）统一回 99F 基地**
+## `FACILITY_LOGOUT_SPAWN`。`ROOFTOP_LOGOUT_SPAWN` 只剩「教程未完成的新手期出生」这一个
+## 用途（见 `_should_start_on_rooftop_for_entry()`），不再承担"上次在天台就回天台"。
 const ROOFTOP_LOGOUT_SPAWN := Vector3(-17.5, 0.05, 2.5)
 const FACILITY_LOGOUT_SPAWN := Vector3(0.0, -FLOOR_HEIGHT + 0.05, 5.0)
 
@@ -84,8 +86,9 @@ const FACILITY_LOGOUT_SPAWN := Vector3(0.0, -FLOOR_HEIGHT + 0.05, 5.0)
 ## `floor_01_exit`。开场页（MainEntryScreen3D 的 33° 正面近景）因此以这间办公室为背景，
 ## 而不再以天台为背景。
 ##
-## 与「从天台开始」严格互斥，判据复用 `_should_start_on_rooftop_for_entry()`：
-##   · 是全新存档（新手引导未完成，`BaseManager.should_start_on_rooftop()`）；
+## 判据 = **教程未完成（`BaseManager.should_start_on_rooftop()`）且本档没有运行时快照**：
+##   · 只有「全新存档的第一次进场」走这里。2026-09-23 之前它复用「从天台开始」的判据，
+##     于是「在天台边缘下线」也被当成新档（落办公室 + 收走身上的枪），已修正；
 ##   · 不是死亡返城 / 撤离返航 —— 那两个路径显式声明 `SPAWN_BASE_99F`，落 99F 基地；
 ##   · 不是远征单层关卡 —— 远征有自己的 15×15 入口安全房出生点。
 ##
@@ -107,16 +110,19 @@ const NEW_GAME_OPENING_FLOOR_INDEX := 2
 ## `verify_block00_floor98_assembly` K 段（四房足迹承重覆盖）。
 const NEW_GAME_OPENING_SPAWN_OFFSET := Vector3(0.0, 0.05, 0.0)
 
-## —— 新游戏开场的武装口径（2026-09-22 主人要求）——
+## —— 新游戏开场的武装口径（2026-09-22 主人要求；2026-09-23 改由剧情刷枪）——
 ## 玩家**开局身上没有枪**，但**保底备弹照给**（300 发由 `GUARANTEED_LOADOUT_AMMO_ROUNDS`
-## 独立发放，与「有没有枪」无关，所以收回武器碰不到它）。他原本那把枪**放在地上**，
-## 就在办公室东门内侧靠右手边 —— 起身走过去捡起来，正好是自己该有的那把。
+## 独立发放，与「有没有枪」无关，所以收回武器碰不到它）。地上那把枪**由剧情刷出来**：
+## `nar_tower_opening_01_wake` 的 `scene.spawn_item`（`item_id` = 出厂枪），站位就是下面
+## 这个偏移 —— 起身走过去捡起来，正好是自己该有的那把。代码侧只剩「收回身上的枪」
+## （`_clear_new_game_opening_loadout()`）。
 ##
 ## 落点是**房间局部系**偏移（房间节点原点 = 房中心，见 `DungeonRoom3D` 的 ±dimensions/2 约定）。
 ## 2026-09-22 真机实测：办公室局部尺寸 (15, 20)、东门在局部 **(7.5, 0, -2.5)**，
 ## 所以本值 = 「离门 2.2m、出门方向（+x）的右手侧 1.8m」（朝 +x 时右手 = +z）。
-## ⚠️ 剧本 `nar_tower_opening_01_wake` 里 `actor.face` 的 `to_point_offset` 必须是**同一个值**
-## （「对着枪说」得朝它转）；真机验收有**等值断言**，改一处漏一处会变红。
+## ⚠️ 本常量**不再被生产代码消费**，它现在的唯一作用是当**剧本两处偏移的等值基准**：
+## 剧本里 `scene.spawn_item` 的 `point_offset` 与 `actor.face` 的 `to_point_offset`
+## 必须都与它相等（「对着枪说」得朝它转）；真机验收有**等值断言**，改一处漏一处会变红。
 const NEW_GAME_OPENING_DROP_OFFSET := Vector3(5.3, 0.05, -0.7)
 
 ## —— 98↔99 楼梯间门 = 普通门（2026-09-21 主人要求）——
@@ -717,18 +723,33 @@ func _should_start_on_rooftop_for_entry() -> bool:
 	if not test_mode and BaseManager != null:
 		var last_base_snapshot := BaseManager.get_active_run_checkpoint()
 		if RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(last_base_snapshot):
-			# 没有可续局行动时，基地快照只决定100F/99F固定出生点，不恢复旧坐标。
+			# 没有可续局行动时，基地快照只决定固定出生点，不恢复旧坐标。
 			if str(last_base_snapshot.get("scope", "")) == "base":
 				# 独立图与旧塔楼存档按 runtime_map_id 隔离，互不续对方的局。
 				if not _snapshot_matches_runtime_map(last_base_snapshot):
 					return test_mode or BaseManager.should_start_on_rooftop()
-				return str(last_base_snapshot.get("current_room_id", "")) == "start"
+				# 2026-09-23 修正：非战局内下线（100F 天台与 99F 基地都算）一律回 99F 基地
+				# 固定出生点。原实现返回「上次那个房间是不是 start」，会让在 100F 天台边缘
+				# 下线的玩家上线后仍被送回 100F —— 与「非战局内下线统一回基地」的既有设计
+				# 冲突（真机实测：天台下线 ⇒ 落 100F 天台固定点）。教程未完成的档仍走天台，
+				# 保证新手第一段能看见天台。
+				return BaseManager.should_start_on_rooftop()
 	return test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
 
 
 ## 本局是否走「新游戏开场」分支：开局直接站在 98F 主人的办公室里（见
-## NEW_GAME_OPENING_ROOM_ID 的契约注释）。与 `_should_start_on_rooftop_for_entry()`
-## 前两级判据刻意保持一致，只在最后一级分岔 —— 两者互为反面，不会同时成立。
+## NEW_GAME_OPENING_ROOM_ID 的契约注释）。
+##
+## ⚠️ 2026-09-23 修正（真机 bug）：旧实现直接 `return _should_start_on_rooftop_for_entry()`，
+## 而后者在「基地快照 scope=="base" 且 current_room_id=="start"」（= 上次在 100F 天台）
+## 时也为真 ⇒ **每一次「在天台边缘下线」都被当成全新存档**：上线落 98F 办公室，
+## 并被 `_clear_new_game_opening_loadout()` 收走身上的枪。headless 隔离实测复现：
+## 快照 scope=base / room=start ⇒ 落 (−32.5, −23.97, 5.0)、weapon0/1 均为空。
+##
+## 正确的「全新存档」判据 = **教程未完成（新手期）且本档还没有任何运行时快照**。
+## 之所以用「没有快照」而不是新增一个「开过场」标记：零新增存档字段，且复位存档会
+## 清空快照 ⇒ 复位后重新开始仍然看得到开场（与 1848 的归零需求一致）。
+## 从此这两个函数**不再互为反面**：教程未完成但已有快照时，两者可以同时为假。
 func _should_open_new_game_in_master_office() -> bool:
 	if is_expedition():
 		return false
@@ -738,16 +759,21 @@ func _should_open_new_game_in_master_office() -> bool:
 	# 验收钩子：把真机才走的分支搬到 headless 下（见 force_new_game_opening_for_test）。
 	if force_new_game_opening_for_test:
 		return true
-	# test_mode 的既有契约 = 固定从天台开始；`_should_start_on_rooftop_for_entry()`
-	# 因此在 test_mode 下恒为真，这里必须先把它挡掉，否则既有探针出生点全变。
+	# test_mode 的既有契约 = 固定从天台开始；这里必须先挡掉，否则既有探针出生点全变。
 	if test_mode:
 		return false
-	return _should_start_on_rooftop_for_entry()
+	if BaseManager == null:
+		return false
+	if not BaseManager.should_start_on_rooftop():
+		return false
+	return not RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(
+		BaseManager.get_active_run_checkpoint()
+	)
 
 
 ## 把玩家放进 98F 主人的办公室，并走一次完整的「进入房间」事务
-## 落位后立刻按开场口径重武装：收回身上的枪并把那把枪放到地上（见
-## `_reset_new_game_opening_loadout`）。
+## 落位后按开场口径**只收回身上的枪**（见 `_clear_new_game_opening_loadout`）——
+## 地上那把由剧本 `nar_tower_opening_01_wake` 的 `scene.spawn_item` 刷出。
 ## （与远征出生点同一套写法：置位 → 清零速度 → 清当前房 → `_on_room_entered`）。
 ## 返回 false = 房间拿不到（bundle 提交失败或摆位源回退成生成器房表），
 ## 调用方按原路退回天台出生点，绝不把玩家留在半空中。
@@ -762,47 +788,33 @@ func _place_player_at_new_game_opening() -> bool:
 	player.velocity = Vector3.ZERO
 	_current_room_id = ""
 	_on_room_entered(room)
-	_reset_new_game_opening_loadout(room)
+	_clear_new_game_opening_loadout()
 	return true
 
 
-## 新游戏开场的武装口径：**收回玩家的枪 → 把那把枪放到地上**。
-## 为什么是「收回」而不是改 `Player3D.start_with_weapon` 的默认值：
-## 那条 export 同时服务天台出生 / 死亡返城 / 死亡返城直升等路径，那些路径仍然要白送枪；
+## 新游戏开场的武装口径（2026-09-23 起）：**只收回玩家身上的枪**。
+##
+## 地上的那把枪**不再由代码生成** —— 改由剧本 `nar_tower_opening_01_wake` 的
+## `scene.spawn_item` 刷出来（业主：「开场场地的枪要做在剧情里头，刷一把枪出来，
+## 剧情编辑器需要能控制这个」）。于是"刷什么枪、刷在哪、什么时候刷、要不要散布"
+## 全在剧情里可控，代码只剩「开局身上没枪」这一条。
+##
+## 为什么仍是「收回」而不是改 `Player3D.start_with_weapon` 的默认值：
+## 那条 export 同时服务天台出生 / 死亡返城 / 撤离返航等路径，那些路径仍然要白送枪；
 ## 而且 `Player3D._ready()`（子节点先于塔楼 `_ready()`）早就把枪装好了，
 ## 到了开场落位这一步只剩「收回来」这一条路。
-## ⚠️ 收回用的是 `clear_all_equipped_weapons()` 的**返回值**（= 玩家那一把的原样实例，
-## 含已装的命运改造），不是重新造一把 —— 主人要的是「他原本那把枪」躺在地上。
-func _reset_new_game_opening_loadout(room: DungeonRoom3D) -> void:
+##
+## ⚠️ 隐形契约（有断言盯着）：剧本里 `scene.spawn_item` 的 `point_offset` 必须与
+## `actor.face` 的 `to_point_offset` **同值**（= `NEW_GAME_OPENING_DROP_OFFSET`），
+## 否则「对着枪说」会指偏；`verify_opening_script_runtime` 有等值断言，改一处漏一处会红。
+func _clear_new_game_opening_loadout() -> void:
 	if player == null or not player.has_method("clear_all_equipped_weapons"):
 		push_warning("[TowerDescent3D] 开场收回武器失败：玩家没有 clear_all_equipped_weapons()")
 		return
 	var removed: Array = player.call("clear_all_equipped_weapons")
 	if removed.is_empty():
-		# 不静默：地上没枪 = 开场演到「对着枪说」却无枪可指，必须留痕。
-		push_warning("[TowerDescent3D] 开场玩家身上本来就没有枪，地上那把不会生成。")
-		return
-	var items: Array[Dictionary] = []
-	for value in removed:
-		if value is Dictionary:
-			items.append(value as Dictionary)
-	_drop_new_game_opening_weapon(room, items)
-
-
-func _drop_new_game_opening_weapon(room: DungeonRoom3D, items: Array[Dictionary]) -> void:
-	if room == null or not is_instance_valid(room) or items.is_empty():
-		return
-	var requested := room.to_global(NEW_GAME_OPENING_DROP_OFFSET)
-	# 与钥匙/补给同一套贴地口径：拿不到地面就退回房中心，绝不把枪埋进地板里。
-	# `spread = false`：剧本 `actor.face` 的目标点就是这个常量，枪必须**精确**落在它上面
-	# （默认散布会让 index=0 那件偏约 0.70m ⇒ 转身时会指偏）。
-	_spawn_loot_items(
-		room,
-		items,
-		_find_supported_spawn_position(requested, room.global_position),
-		0.0,
-		false
-	)
+		# 不静默：说明 `Player3D.start_with_weapon` 与开场口径已经脱节，应被验收抓到。
+		push_warning("[TowerDescent3D] 开场玩家身上本来就没有枪。")
 
 
 func _process(delta: float) -> void:

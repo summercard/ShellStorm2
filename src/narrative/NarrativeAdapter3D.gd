@@ -132,6 +132,22 @@ func player_node() -> Node3D:
 	return _tree.get_first_node_in_group("player_3d") as Node3D
 
 
+## 由导演在认领场景根时注入（`NarrativeDirector3D._bind_dungeon()`）——
+## 与导演持有的是**同一份绑定**。
+## ⚠️ 为什么不让适配器自己猜 `current_scene`：验收里场景常是手动 `add_child` 进 root 的
+## （`current_scene` 不是它），自猜会**静默降级**（症状是"剧情刷的东西一个都没出现"，
+## 而运行时只有一行降级告警）。2026-09-23 实测踩到。
+func bind_dungeon(node: Node) -> void:
+	if node == null:
+		return
+	# **不抢已有的绑定**：验收会自行把替身（假地牢 / 收集器）注入这里，无条件覆盖会把它
+	# 顶掉 —— 实测症状是首帧两条 `actor.say` 全部丢失（B1「同帧两条按书写顺序执行」变红）。
+	if _dungeon != null and is_instance_valid(_dungeon) and _dungeon != node:
+		return
+	_dungeon = node
+	_room_index_scene = null
+
+
 func dungeon_node() -> Node:
 	if _tree == null:
 		return null
@@ -143,18 +159,21 @@ func dungeon_node() -> Node:
 	return _dungeon
 
 
-## 房间索引：按 `room_id` 属性在场景树里反射式收集，按场景根缓存。
+## 房间索引：按 `room_id` 属性在场景树里反射式收集，按**地牢根**缓存。
 ## 用遍历而不是路径字面量 —— 楼层/房间是运行时生成的，路径本来就不稳定。
+## 收集根优先用已绑定的地牢（见 `bind_dungeon`），拿不到才退回 `current_scene`。
 func room_node(room_id: String) -> Node3D:
 	if room_id.is_empty():
 		return null
-	var scene := _tree.current_scene if _tree != null else null
-	if scene == null:
+	var root: Node = dungeon_node()
+	if root == null:
+		root = _tree.current_scene if _tree != null else null
+	if root == null:
 		return null
-	if _room_index_scene != scene:
-		_room_index_scene = scene
+	if _room_index_scene != root:
+		_room_index_scene = root
 		_room_index = {}
-		_collect_rooms(scene)
+		_collect_rooms(root)
 	return _room_index.get(room_id, null) as Node3D
 
 
@@ -985,6 +1004,8 @@ func _scene_instruction(action: String, params: Dictionary) -> Dictionary:
 			return _scene_light(params)
 		"spawn":
 			return _scene_spawn(params)
+		"spawn_item":
+			return _scene_spawn_item(params)
 		"despawn":
 			return _scene_despawn(params)
 	return _degraded("scene.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
@@ -1128,6 +1149,62 @@ func _spawn_layout(params: Dictionary) -> Dictionary:
 		"stagger": stagger_axis * maxf(0.0, float(params.get("stagger_m", 0.0))),
 	}
 
+
+
+## 剧情**把物品刷到地面**（2026-09-23 新增，业主：「开场场地的枪要做在剧情里头，
+## 刷一把枪出来，剧情编辑器需要能控制这个」）。
+##
+## 与 `scene.spawn`（刷怪）同族、共用同一套锚法；与 `grant.item`（直接进包）的区别是
+## **它落在地上**，玩家要自己走过去捡。
+##
+## 参数：
+##   · `item_id`（必填）—— 物品/武器的内容 id，由奖励服务解析（唯一真源）。
+##   · `count`（默认 1）
+##   · `point_room` + `point_offset`（必填房间相对锚，见 `_item_anchor`）
+##   · `spread`（默认 false）—— false 时**精确**落在锚点上。剧本若还要用
+##     `actor.face` 的 `to_point_offset` 指着它，必须保持 false，否则会差约 0.70m。
+func _scene_spawn_item(params: Dictionary) -> Dictionary:
+	var dungeon := dungeon_node()
+	if dungeon == null:
+		return _degraded(
+			"scene.spawn_item：找不到地牢场景根（current_scene 尚未就绪，或它不是带 room_entered 的场景）。"
+		)
+	if not dungeon.has_method("narrative_spawn_item"):
+		var script_path := "?"
+		var scene_script: Variant = dungeon.get_script()
+		if scene_script is Script:
+			script_path = (scene_script as Script).resource_path
+		return _degraded(
+			"scene.spawn_item：地牢脚本『%s』没有 narrative_spawn_item（脚本未刷新或版本过旧）。"
+			% script_path
+		)
+	var item_id := str(params.get("item_id", params.get("id", "")))
+	if item_id.is_empty():
+		return _failed("scene.spawn_item 缺少 item_id。")
+	var count := maxi(1, int(params.get("count", 1)))
+	var anchor := _item_anchor(params)
+	if anchor.is_empty():
+		return _failed("scene.spawn_item 需要 point_room（地面物品必须挂进某个房间）。")
+	var spawned: Variant = dungeon.call(
+		"narrative_spawn_item", str(anchor["room_id"]), item_id, count,
+		anchor["origin"] as Vector3, bool(params.get("spread", false))
+	)
+	if spawned is int and int(spawned) > 0:
+		return _ok()
+	return _degraded("scene.spawn_item：物品『%s』落地失败（房间或解析不可用）。" % item_id)
+
+
+## 地面物品的落点锚。**必须有 `point_room`**：物品要被 add_child 进房间节点，
+## 才能跟着房间一起流送 / 卸载（挂在场景根上会在离房后变成孤儿）。
+## 位置复用 `_spawn_layout` 的房间相对分支，与刷怪同一套「房间原点 + point_offset」口径。
+func _item_anchor(params: Dictionary) -> Dictionary:
+	var room_id := str(params.get("point_room", ""))
+	if room_id.is_empty():
+		return {}
+	var layout := _spawn_layout(params)
+	if layout.is_empty():
+		return {}
+	return {"room_id": room_id, "origin": layout["origin"]}
 
 
 ## 撤掉本房剧情生成的怪（玩家真的不需要看见它们了时才用）。

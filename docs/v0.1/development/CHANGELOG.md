@@ -1,5 +1,56 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-23｜开场掉枪改由剧情刷 + 剧情进度落档（跨局历史）
+
+**动机（业主）**：「开场场地的枪，要做在剧情里头，刷一把枪出来，剧情编辑器需要能控制这个。然后剧情的桥段跟着存档走就可以了。」
+
+**改动一：`scene.spawn_item` —— 剧情把物品刷到地面**
+- `NarrativeAdapter3D` 新增 `scene.spawn_item`（`item_id` / `count` / `point_room` + `point_offset` / `spread`），与 `scene.spawn`（刷怪）同族、共用同一套房间相对锚法；与 `grant.item`（直接进包）的区别是**它落在地上**。锚点解析抽成 `_item_anchor()`，**强制要求 `point_room`**（地面物品必须挂进房间容器，否则离房即孤儿）。
+- `Dungeon3D` 新增两个正门：`narrative_spawn_item(room_id, item_id, count, origin, spread)`（`item_id` 交奖励服务 `resolve_fixed_item` 解析，唯一真源）与 `narrative_spawn_loot(room_id, items, origin, spread)`（放现成 item 字典，供"把手上的那把原样丢下"）。
+- **剧本 01 `nar_tower_opening_01_wake` 在 `at: 0.0` 用它刷出厂枪**（`weapon_sprinkler`，落点 = 办公室局部 `[5.3, 0.05, -0.7]`，`spread: false` 精确落地以便 `actor.face` 指得准）。
+- `TowerDescent3D`：`_reset_new_game_opening_loadout()` → **`_clear_new_game_opening_loadout()`（只收回身上的枪，不再由代码掉枪）**，`_drop_new_game_opening_weapon()` 删除。`NEW_GAME_OPENING_DROP_OFFSET` 不再被生产代码消费，改为**剧本两处偏移的等值基准**（`verify_opening_script_runtime` 有等值断言）。
+
+**改动二：剧情进度落档（跨局历史）**
+- `BaseData.narrative_history`（照抄 `elite_archive_records` 形状，只放 JSON 安全字段；**不升 `SAVE_VERSION`**，旧档缺字段 = 空历史 ⇒ 已看过的 `run` 剧情重播一次，属既有声明）。
+- `BaseManager`：`commit_narrative_completion(id, result)`（唯一写入权，写盘失败回滚内存）/ `has_narrative_completed` / `get_narrative_history[_snapshot]` / `replace_narrative_history_for_test`；常量 `COMPLETABLE_NARRATIVE_RESULTS = ["duration", "flow.end", "skip"]`。
+- `NarrativeDirector3D`：`_try_fire` 的 `run` 档裁决改为 **本局内存态 ∪ 跨局档案**；`_finish` 新增唯一写入点 `_commit_history_if_completed()` —— **只有完整收口才写**，被抢占与 `abort:<reason>`（死亡/撤离/场景卸载/解析失败）**不写**，这正是"未达成条件的桥段下次仍会触发"的实现点；`forever` 档不写。历史读取**惰性**（autoload 的 `_ready` 不碰 `user://`）。
+- ⚠️ **不跨模块读 autoload 常量**：`_commit_history_if_completed` 最初写 `reason not in BaseManager.COMPLETABLE_NARRATIVE_RESULTS`，实测让导演节点在编译期整体失效（剧情全部不起播）；改为本文件字面量 `COMPLETABLE_RESULTS`，两侧一致性由验收盯着。
+
+**改动三：适配器绑定改为导演注入（顺带修掉的静默降级）**
+- 适配器原先自己猜 `get_tree().current_scene` 找地牢；验收里场景是手动 `add_child` 进 root 的（`current_scene` 不是它）⇒ 所有 `scene.*` 指令**静默降级**（症状：剧情刷的东西一个都没出现 + 一行降级告警）。
+- 新增 `NarrativeAdapter3D.bind_dungeon(node)`，由导演 `_bind_dungeon()` 同步注入；`room_node()` 的收集根也改为已绑定的地牢。
+- ⚠️ 但**不抢已有绑定**：验收会把替身注入适配器，无条件覆盖会让首帧两条 `actor.say` 全部丢失（B1「同帧两条按书写顺序执行」变红，二分定位确认）。
+
+**验证**（隔离 `APPDATA`；每个用例前清 `app_userdata`，因为历史落档会让**跨用例互相污染**）：
+- `verify_opening_script_runtime` **OK/105 项**（含"办公室地上正好一件掉落物"= 剧情刷出的那把枪；等值断言全过）。
+- `verify_narrative_timeline` **OK/110 项**（107 → 110：新增 C4b 两条 + 复位段一条契约），关键三条：**完整收口后必须落档** / **已有档案时不得再触发** / **复位存档后档案必须为空**。
+- `verify_block00_floor98_assembly` **OK checks=230 失败 0**（K2 落点判据段仍绿）。
+- 反向定位：去掉"不抢已有绑定"守卫 ⇒ B1 精确变红；恢复 ⇒ 全绿（逐次还原，`RESTORED=True`）。
+
+**未变更**：未改剧情四档语义（`retry` / `never` 裁定待拍板）、未改内容数据库表格（剧情 sheet 待拍板）、未改资产与台账。
+
+## 2026-09-23｜天台下线被当成「新游戏开场」（落 98F 办公室 + 收走武器）
+
+**动机（业主真机报告）**：「新开存档进入游戏后，完成前期的剧情。来到天台，在天台的边缘下线后。再上线。会回到游戏初始的状态，身上没有武器。」业主的设计是「非战局内下线，上线都回 99F 基地中的固定出生位置」。
+
+**根因（两处缺陷叠加）**：
+- **开场判据复用了「从天台开始」的判据。** `TowerDescent3D._should_open_new_game_in_master_office()` 最后一行直接 `return _should_start_on_rooftop_for_entry()`，而后者在「基地快照 `scope=="base"` **且** `current_room_id=="start"`」（= 上次停在 100F 天台）时为真 ⇒ **每一次「在天台边缘下线」都被判成全新存档**：落 98F `floor_01_exit`，并由 `_reset_new_game_opening_loadout()` 用 `clear_all_equipped_weapons()` 把玩家身上的枪收走。两个函数本是「互为正反面」的假设在此崩塌 —— "上次在天台"是**中途下线的常态**，不是"全新存档"。
+- **开场地上的枪不进存档。** `_drop_new_game_opening_weapon()` 把枪生成成运行时临时掉落物，`Dungeon3D.build_runtime_save_snapshot()` 只记 `equipped_weapon_items` ⇒ 没捡就下线的话，手上（`[{}, {}]`）地上都不会再有枪。
+
+**实测（headless 隔离，快照只写内存）**：注入 `scope=base / current_room_id=start` ⇒ `should_open_master_office=true`、落点 `(−32.5, −23.97, 5.0)`（98F 办公室中心）、`weapon0/1` 均为空、且 `nar_tower_opening_01_wake` 照常起播。真机档核对：`tutorial_completed=true`、`equipped_weapon_items=[{}, {}]`。
+
+**改动**（`src/world3d/TowerDescent3D.gd`）：
+- `_should_open_new_game_in_master_office()` 判据改为 **教程未完成（`BaseManager.should_start_on_rooftop()`）且本档没有任何运行时快照**，不再复用「从天台开始」。选「没有快照」而不是新增「开过场」标记，是为了**零新增存档字段**；复位存档会清空快照 ⇒ 复位后重新开始仍看得到开场（与 `1848` 的归零需求一致）。
+- `_should_start_on_rooftop_for_entry()` 的基地快照分支改为 `return BaseManager.should_start_on_rooftop()`：**非战局内下线（100F 天台与 99F 基地都算）一律回 99F 基地固定出生点**；`ROOFTOP_LOGOUT_SPAWN` 只剩「教程未完成的新手期出生」一个用途。
+- 常量与函数契约注释同步；`docs/v0.1/09` §10.1 出生点口径同步（含废弃说明与原因）；`docs/v0.1/08` §13.8 记录本次修复。
+
+**验证**：
+- `verify_block00_floor98_assembly` 新增 **K2 段**：5 组判据（天台下线 + 教程已完成 / 99F 基地下线 / 塔内续局 / **全新档必须仍走办公室开场** / **教程未完成但已开过场不得重演开场**），`BLOCK00_ASSEMBLY_OK checks=230`、失败 0；`check_verification_log.py` exit 0。
+- **反向对照三组**（每次注入后跑、跑完逐字节还原，`RESTORED_IDENTICAL=True`）：① 只把开场判据改回旧实现 ⇒ **恰好 1 条红**（「教程未完成但已开过场仍会重演开场」）；② 只把落点判据改回旧实现 ⇒ **恰好 1 条红**（「教程完成后天台上线没有回 99F 基地」）；③ 两处同时回旧（= 真机原状）⇒ **恰好 3 条红**（多出「天台上线被判成新游戏开场」）。证明 5 组断言各有分辨力，非假绿。
+- 回归全绿：`verify_game_entry_flow`（OK）、`verify_opening_script_runtime`（OK/105 项）、`verify_pause_game_save_reset_flow`（OK）、`verify_narrative_timeline`（OK/107 项）。
+
+**未变更 / 遗留**：未改剧情语义与触发档位、未改存档 schema（**零新增字段**）、未改资产与台账。**遗留**：开场地上的枪仍不进存档 —— 判据修好后正常玩家不会再被误收枪，但真新档玩家没捡枪就下线仍会丢；三个候选见 `design/2026-09-23_剧情触发语义规范与跨局历史_方案.md` §D.2（推荐把地面枪并入 `active_run_snapshot.world_drops[]`）。
+
 ## 2026-09-23｜P2 媒体资产与功能追溯链
 
 - 将原 UI+音频合并账本拆为 UI 17、音效 48、音乐 9 三本独立账本，同步总目录、迁移清单、3 个专用 Skill 与专项门禁。

@@ -1064,6 +1064,98 @@ func _check_new_game_opening(previous: Node) -> void:
 			"test_mode 反向对照：未落天台出生点 actual=%s expected=%s"
 			% [str(rooftop_player.global_position), str(ROOFTOP_SPAWN_WORLD)]
 		)
+
+	# —— K2. 真机落点判据：天台下线不得被当成「新游戏开场」（2026-09-23 bug）——
+	# 这段必须在 rooftop 还在树上时跑（后面就 remove_child 了），且必须在**关掉 test_mode**
+	# 之后跑 —— 两个判据函数在 test_mode 下各有早退，开着测等于没测。
+	await _check_logout_entry_gate(rooftop)
+
 	remove_child(rooftop)
 	rooftop.queue_free()
 	await _settle()
+
+
+## 运行时快照夹具。`supports_runtime_snapshot()` 只认 valid + schema，其余字段按分支需要给。
+## 只写内存、不落盘：本用例运行在隔离的 user:// 下，且写盘成功与否与本段断言无关。
+func _runtime_snapshot_fixture(scope: String, room_id: String, floor_index: int) -> Dictionary:
+	return {
+		"valid": true,
+		"schema": "runtime_player_state_v2",
+		"checkpoint_id": "runtime_player_state_v2",
+		"layout_id": "runtime_player_state_v2",
+		"scope": scope,
+		"current_room_id": room_id,
+		"current_floor_index": floor_index,
+		"runtime_map_id": "",
+		"run_seed": SEED,
+		"saved_at_unix": 0,
+		"player_position": [],
+	}
+
+
+## 覆盖 2026-09-23 的真机缺陷：`_should_open_new_game_in_master_office()` 曾直接复用
+## `_should_start_on_rooftop_for_entry()`，而后者在「上次在 100F 天台」时为真 ⇒ 每一次
+## 「在天台边缘下线」都被当成全新存档：落 98F 办公室 + `clear_all_equipped_weapons()` 收走枪。
+##
+## 断言面（每条都会在改坏时变红）：
+##   ① 上次在 100F 天台 + 教程已完成 ⇒ **不走开场** 且 **不回天台**（= 回 99F 基地）；
+##   ② 上次在 99F 基地 + 教程已完成 ⇒ 同样回 99F 基地、不走开场；
+##   ③ 上次在塔内（scope=combat）⇒ 不走开场（续局恢复接走）；
+##   ④ 全新存档（教程未完成 + 无快照）⇒ **仍必须走 98F 办公室开场**（原设计不得回归）；
+##   ⑤ 教程未完成但已有快照（已经开过场）⇒ 不再重演开场、不再收一次武器。
+func _check_logout_entry_gate(tower: TowerDescent3D) -> void:
+	print("\n---- K2. 非战局下线落点判据（天台下线 bug） ----")
+	var saved_test_mode: bool = tower.test_mode
+	var saved_snapshot: Dictionary = BaseManager.data.active_run_snapshot
+	var saved_tutorial: bool = BaseManager.data.tutorial_completed
+	tower.test_mode = false
+
+	# ① 上次在 100F 天台下线，教程已完成
+	BaseManager.data.tutorial_completed = true
+	BaseManager.data.active_run_snapshot = _runtime_snapshot_fixture("base", "start", 0)
+	_check(
+		not bool(tower.call("_should_open_new_game_in_master_office")),
+		"天台上线被判成「新游戏开场」——会落 98F 办公室并把玩家的枪收走"
+	)
+	_check(
+		not bool(tower.call("_should_start_on_rooftop_for_entry")),
+		"教程完成后在 100F 天台下线，上线没有回 99F 基地（仍按「上次在天台就回天台」分流）"
+	)
+
+	# ② 上次在 99F 基地下线，教程已完成
+	BaseManager.data.active_run_snapshot = _runtime_snapshot_fixture("base", "facility", 1)
+	_check(
+		not bool(tower.call("_should_start_on_rooftop_for_entry")),
+		"99F 基地下线没有回 99F 基地固定出生点"
+	)
+	_check(
+		not bool(tower.call("_should_open_new_game_in_master_office")),
+		"99F 基地上线被判成「新游戏开场」"
+	)
+
+	# ③ 上次在塔内（可续局行动）
+	BaseManager.data.active_run_snapshot = _runtime_snapshot_fixture("combat", "floor_01_main_02", 2)
+	_check(
+		not bool(tower.call("_should_open_new_game_in_master_office")),
+		"塔内续局被判成「新游戏开场」"
+	)
+
+	# ④ 全新存档：教程未完成 + 没有任何运行时快照 ⇒ 必须仍走 98F 办公室开场
+	BaseManager.data.tutorial_completed = false
+	BaseManager.data.active_run_snapshot = {}
+	_check(
+		bool(tower.call("_should_open_new_game_in_master_office")),
+		"全新存档不再走 98F 办公室开场 —— 原设计被破坏了"
+	)
+
+	# ⑤ 教程未完成但已经开过场（有快照）⇒ 不得重演开场
+	BaseManager.data.active_run_snapshot = _runtime_snapshot_fixture("combat", "floor_01_main_02", 2)
+	_check(
+		not bool(tower.call("_should_open_new_game_in_master_office")),
+		"教程未完成但已开过场，仍会重演开场并再收一次武器"
+	)
+
+	# 还原内存投影：后面的用例与收尾都依赖 BaseManager 的原状。
+	BaseManager.data.tutorial_completed = saved_tutorial
+	BaseManager.data.active_run_snapshot = saved_snapshot
+	tower.test_mode = saved_test_mode

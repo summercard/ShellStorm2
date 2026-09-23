@@ -89,6 +89,12 @@ var active_run_snapshot: Dictionary = {}
 # 当前场景节点与玩家weapon_instance_id不得进入此字典。
 var elite_archive_records: Dictionary = {}
 
+# 跨局剧情历史。键 = 稳定 narrative_id；值只含 JSON 安全字段：
+#   {completed_count:int, first_completed_unix:int, last_completed_unix:int, last_result:String}
+# 「完成」的定义 = 完整收口（演到 duration / flow.end / 玩家 skip）；被抢占或 abort 不算。
+# 本字段是 `once = "run"` 剧本「跨存档只播一次」的唯一依据（08 文档 §9，2026-09-23 落地）。
+var narrative_history: Dictionary = {}
+
 func _to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
@@ -137,6 +143,7 @@ func _to_dict() -> Dictionary:
 		"completed_transaction_ids": completed_transaction_ids,
 		"active_run_snapshot": active_run_snapshot,
 		"elite_archive_records": elite_archive_records,
+		"narrative_history": narrative_history,
 	}
 
 static func from_dict(d: Dictionary) -> BaseData:
@@ -212,6 +219,11 @@ static func from_dict(d: Dictionary) -> BaseData:
 		data.active_run_snapshot = (d["active_run_snapshot"] as Dictionary).duplicate(true)
 	if d.has("elite_archive_records") and d["elite_archive_records"] is Dictionary:
 		data.elite_archive_records = (d["elite_archive_records"] as Dictionary).duplicate(true)
+	# 旧档没有这个字段 = 没有任何剧情播过（会让已看过的 `run` 剧情重播一次，属既有声明）。
+	if d.has("narrative_history") and d["narrative_history"] is Dictionary:
+		data.narrative_history = (d["narrative_history"] as Dictionary).duplicate(true)
+	else:
+		data.narrative_history = {}
 	return data
 
 func record_run(success: bool, kills: int) -> void:

@@ -706,10 +706,34 @@ func _phase_c_real_scripts() -> void:
 	# ---- C5 复位存档 = 新本局：本局内存态归零，冷启动开场剧本必须能重新触发（2026-09-21 真机）
 	# 根因：复位档走 change_scene_to_file、autoload 存活 ⇒ _armed 的 fired_count 不归零 ⇒
 	# once=run 把开场永久挡住。reset_run_state() 由 BaseManager.game_save_reset_completed 驱动。
+	# ---- C4b 跨局历史：完整收口必须落档，落档后不得再触发（2026-09-23 业主「桥段跟着存档走」）----
+	_check(
+		BaseManager.has_narrative_completed(WAKE_ID),
+		"开场剧本完整收口后必须写入跨局历史（否则下线重开又会演一遍）",
+	)
+	NarrativeDirector.reset_run_state()
+	_emit_gameplay_started(OPENING_ROOM_ID)
+	await _wait_frames(2)
+	_check(
+		NarrativeDirector.active_id() != WAKE_ID,
+		"已有跨局历史时不得再触发（实际 active=%s）" % NarrativeDirector.active_id(),
+	)
+	NarrativeDirector.abort("c4b_cleanup")
+	await _wait_frames(1)
+
 	_finish_reasons.clear()
 	# 走**真实信号**（暂停菜单复位存档发的就是这一发），顺带覆盖 _on_game_save_reset_completed；
 	# 不实际写 user://（本用例只验证「信号 → 归零 → 能重触发」这条链）。
+	# ⚠️ 2026-09-23：`once=run` 的裁决现在还看**跨局档案** `BaseData.narrative_history`，
+	# 而真实复位（`BaseManager.reset_game_save()`）会把档案整体换新（`data = BaseData.new()`）。
+	# 这里只发信号 ⇒ 必须**在同一处补上"档案也空"**，否则测的其实是"历史还在"的另一回事：
+	# 开场会被档案挡住、永不重播（本段 3 条断言会一起变红）。
+	BaseManager.replace_narrative_history_for_test({})
 	BaseManager.game_save_reset_completed.emit({"success": true})
+	_check(
+		not BaseManager.has_narrative_completed(WAKE_ID),
+		"复位存档后跨局剧情历史必须为空（否则 once=run 的开场从此永远不再播）",
+	)
 	_check(not NarrativeDirector.is_playing(), "reset_run_state 之后没有在演剧本")
 	_emit_gameplay_started(OPENING_ROOM_ID)
 	await _wait_frames(2)

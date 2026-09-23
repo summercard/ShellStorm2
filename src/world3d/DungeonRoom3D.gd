@@ -12,6 +12,13 @@ signal light_toggled(room: DungeonRoom3D, is_on: bool)
 
 const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn")
 const LIGHT_SWITCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn")
+## 99F基地中央玩法顶灯组的数值真源（业主 2026-09-23 指定）。
+## 颜色、能量、范围、投影、闪烁与灯具外形都写在 prefab 里，可在编辑器中直接调整；
+## 代码只负责实例化、按层高常量定挂位，并把 prefab 内**所有**
+## WastelandLight3D（含后加的子灯）登记进 _room_lights，交给成对墙面开关统一控制。
+const BASE99_MAIN_LIGHT_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_base99_facility_main_light_top3d.tscn"
+)
 const FURNITURE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_furniture_root_top3d.tscn")
 const SEARCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_search_container_root_top3d.tscn")
 const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d.tscn")
@@ -683,24 +690,10 @@ func _ensure_facility_permanent_lighting() -> void:
 	if light_valid and switches_valid:
 		return
 	if not light_valid:
-		# 99F基地只保留一盏中央玩法顶灯。Compatibility默认每个Mesh最多
-		# 接收8盏OmniLight；28m范围覆盖30×30m主体区。
-		_central_light = _create_room_light(
-			"FacilityCeilingLight_Main",
-			Vector3.ZERO,
-			theme.fixture_energy * 3.00,
-			maxf(theme.fixture_range * 3.30, 28.0),
-			room_seed,
-			true
-		)
-		# 基地用接近中性的冷白主光保留真实色盘，青色由设备发光承担。
-		_central_light.configure(
-			Color(0.84, 0.90, 1.0), _central_light.energy,
-			_central_light.light_range, room_seed, true, false, "ceiling"
-		)
-		# 壳体期不在 detail 构建流程中，_add_runtime_detail_child 兜底直挂房间根。
-		if not _room_lights.has(_central_light):
-			_room_lights.append(_central_light)
+		_install_base99_facility_lights()
+		if _room_lights.is_empty():
+			# prefab 装入失败：不建开关（无受控灯的开关交互不成立），留待下次重试。
+			return
 	if not switches_valid:
 		_build_facility_light_switches()
 	elif not light_valid:
@@ -709,6 +702,64 @@ func _ensure_facility_permanent_lighting() -> void:
 		for light_switch in _light_switches:
 			light_switch.configure_group(_room_lights, true)
 		_bind_light_switch_signal()
+
+
+## 从 BASE99_MAIN_LIGHT_SCENE 装入 99F 基地常驻顶灯组。
+##
+## 数值（颜色/能量/范围/投影/闪烁/灯具外形）以 prefab 为唯一真源，本函数只做三件事：
+##   ① 实例化并按层高常量定挂位 —— 位置不写进 prefab，避免层高常量变更后静默错位；
+##   ② 把 prefab 内**所有** WastelandLight3D（含业主后加的子灯、子树任意深度）
+##      登记进 _room_lights，成对墙面开关的 configure_group(_room_lights) 即可
+##      统一控制整组灯（开关只认 WastelandLight3D，故收集按类型而非节点名）；
+##   ③ 加组、以关闭态起步，随后由开关的 4.5s 分段启动序列点亮。
+##
+## 99F基地只保留这一组中央玩法顶灯：Compatibility 默认每个 Mesh 最多接收 8 盏
+## OmniLight；28m 范围覆盖 30×30m 主体区。基地用接近中性的冷白主光保留真实色盘，
+## 青色由设备发光承担 —— 两者现均写在 prefab 里。
+func _install_base99_facility_lights() -> void:
+	var light_root := BASE99_MAIN_LIGHT_SCENE.instantiate() as Node3D
+	if light_root == null:
+		push_error(
+			"99F基地主灯 Prefab 实例化失败：%s" % BASE99_MAIN_LIGHT_SCENE.resource_path
+		)
+		return
+	light_root.name = "FacilityCeilingLight_Main"
+	if light_root is WastelandLight3D:
+		_central_light = light_root
+	light_root.position = Vector3.ZERO
+	if tower_module_shell:
+		# 灯具自身顶装高度 2.72m；整体抬升后与 12m 层高贴合（顶灯世界高度 11.62m）。
+		light_root.position.y = TOWER_GEOMETRY.FLOOR_HEIGHT_M - 2.72
+	var lights := _collect_wasteland_lights(light_root)
+	if lights.is_empty():
+		push_error(
+			"99F基地主灯 Prefab 内没有任何 WastelandLight3D：%s"
+			% BASE99_MAIN_LIGHT_SCENE.resource_path
+		)
+		light_root.queue_free()
+		return
+	# 入树前先落关闭态：子灯的 _ready 会按 light_enabled 建灯，避免先亮一帧。
+	for light in lights:
+		light.set_light_enabled(false)
+	# 壳体期不在 detail 构建流程中，_add_runtime_detail_child 兜底直挂房间根。
+	_add_runtime_detail_child(light_root)
+	for light in lights:
+		light.set_light_enabled(false)
+		if not light.is_in_group("wasteland_light_3d"):
+			light.add_to_group("wasteland_light_3d")
+		# 常驻灯登记，供开关控制、阴影计数与快照读取。
+		if not _room_lights.has(light):
+			_room_lights.append(light)
+
+
+## 收集节点自身与全部后代里的 WastelandLight3D（前序、树上顺序稳定）。
+func _collect_wasteland_lights(root: Node) -> Array[WastelandLight3D]:
+	var found: Array[WastelandLight3D] = []
+	if root is WastelandLight3D:
+		found.append(root)
+	for child in root.get_children():
+		found.append_array(_collect_wasteland_lights(child))
+	return found
 
 
 ## 建齐基地成对开关（西墙→100F、东墙→98F），全部直挂房间根、不走出现流程。

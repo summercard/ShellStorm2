@@ -4,7 +4,9 @@
 ; 业主可直接在这里调整 light_color / energy / light_range / cast_shadow，
 ; 无需改动 DungeonRoom3D.gd 的代码。
 ; 注意：Forward+ 下实际渲染能量 = energy x 3.0（见 WastelandLight3D._get_render_energy）。
-; 挂位由 DungeonRoom3D._create_base99_main_light() 按层高常量推算，不写在本文件。
+; 挂位由 DungeonRoom3D._install_base99_facility_lights() 按层高常量推算，不写在本文件。
+; 在本文件内新增的 WastelandLight3D（子树任意深度）会被自动收集，纳入同一组
+; 墙面开关（东、西墙成对）统一控制，无需改代码。
 
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn" id="1_light"]
 
