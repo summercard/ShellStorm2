@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+; 99F 基地中央玩法主灯（墙面开关控制的那一盏）的数值真源。
+; 业主可直接在这里调整 light_color / energy / light_range / cast_shadow，
+; 无需改动 DungeonRoom3D.gd 的代码。
+; 注意：Forward+ 下实际渲染能量 = energy x 3.0（见 WastelandLight3D._get_render_energy）。
+; 挂位由 DungeonRoom3D._create_base99_main_light() 按层高常量推算，不写在本文件。
+
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn" id="1_light"]
+
+[node name="Base99FacilityMainLight" instance=ExtResource("1_light")]
+light_color = Color(0.84, 0.9, 1, 1)
+energy = 8.1
+light_range = 28.05
+cast_shadow = true
+failing = false
+fixture_style = "ceiling"
