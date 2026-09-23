@@ -202,6 +202,14 @@ P0/P1/P2 修复后，项目的**治理骨架已明显完善**：已建立 19 个
 
 当前15个失败入口：`verify_tower_lighting_wall_combat_regressions`、`verify_full_3d_game_flow`、`verify_arrival_gate_floor_bundle_flow`、`verify_base_world_flow`、`verify_door_passability`、`verify_3d_performance_budget`、`verify_3d_parity_core`、`verify_base99_loft_layout_v021`、`verify_base99_optimized_packages_v021`、`verify_base99_wall_visual_replacement`、`verify_base_optional_facilities_removed`、`verify_base_overhaul_flow`、`verify_main_entry_cinematic_flow`、`verify_main_entry_realtime_sun_flow`、`verify_tower_camera_occlusion_flow`。
 
+### 6.4 P0-4/P0-7产品范围裁决（2026-09-23）
+
+用户确认连续爬塔不再是当前主要玩法。当前最新正式版本是“99F远征情报室→单层远征关卡”主线，加上99F基地和98F区块00；`DEEPEST_PLANNED_FLOOR=98`、97F以下关闭、98↔99门采用普通交通门的现状即为当前批准版本。
+
+- P0-4不再作为当前主线Bug包。`verify_arrival_gate_floor_bundle_flow`中98—95生成、95→94 Boss门/电梯、隔离间、旧首门封闭/撤退等失败降为低优先级，未来连续爬塔重新开放时再修。
+- P0-7采用同一逻辑：只服务隐藏连续爬塔的旧实现、旧资产路径和旧验收合同保留但不立即清零；若同一共享问题能在正式远征主线复现，再按当前Bug提级。
+- 本裁决不删除旧实现和验收，也不把失败写成通过。详细记录见[连续爬塔与遗留合同优先级裁决](../development/2026-09-23_hidden_tower_priority_adjudication.md)。
+
 ## 7. 命名、目录和中心查询
 
 | 主题 | 中心入口/门禁 | 当前评价 |
@@ -264,7 +272,7 @@ P1 已删除 7 份用户快照和 14 个根目录一次性文件，共 **790 个
 | 优先级 | 工作包 | 完成定义 |
 |---|---|---|
 | P0 | 修复阻断级验收问题 | 先处理入口验收编译失败、运行奖励数组类型错误、缺资产/错误路径；所有用例可真实启动 |
-| P0 | 恢复当前主链 core | 剩余15个失败逐项标记“实现回归/契约过期/测试错误”，修复后 aggregate core 退出0 |
+| P0 | 恢复当前正式主线门禁 | 只处理远征主线、99F基地、98F区块00与共享运行时代码的真实回归；隐藏连续爬塔失败不再占用P0 |
 | P0 | 资产账本分域核签 | 230 项按来源逐域处理；禁止批量接受哈希；9 个域分配负责人 |
 | P0 | 玩家手枪动作簇 | 一次修复跑步、换弹、待机、开火和 gallery 五个相关用例，避免逐测试补丁 |
 | P0 | 基地资产/交互簇 | 对照当前正式布局裁决 v021/v002 旧验收、缺路径、情报室碰撞和售货机热区 |
@@ -273,6 +281,7 @@ P1 已删除 7 份用户快照和 14 个根目录一次性文件，共 **790 个
 | P1 | 功能设计独立化 | 为 PostFX、Merchant、Power、Revive 补独立契约与失败语义；共享历史逐步拆为功能日志 |
 | P1 | 运行资产去版本化 | 按既定批次计划消化 289/13/1 债务和 23/93 引用 |
 | P2 | 仓库第二批整理 | 先清 5 个高置信度跟踪文件，再对 1,547 个候选做引用/原始性/证据价值分类 |
+| P3 | 隐藏连续爬塔恢复债务 | 保留98—95/94—90/89—85、Boss门、隔离间、区段卸载和旧资产/验收合同；未来明确重开时统一修复并重新进入发布门禁 |
 
 ## 10. 对原始六个问题的直接回答
 
