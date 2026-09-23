@@ -1,6 +1,6 @@
 # v0.1 功能关系、文档对齐与解耦跟进计划
 
-工程版本：`0.1.0`；计划修订：r3；建立日期：2026-09-23；新拉取基线：`622d6c4a`；适用范围：当前正式远征主线及已登记的 37 个 FeatureID。
+工程版本：`0.1.0`；计划修订：r4；建立日期：2026-09-23；本次更新：2026-09-24；新拉取基线：`622d6c4a`；适用范围：当前正式远征主线及已登记的 37 个 FeatureID。
 
 本计划的逐项执行表是[功能关系与解耦跟踪表](FEATURE_RELATIONSHIP_MATRIX.md)。功能身份、状态 Owner、主设计、开发记录和验收入口仍以[模块索引](MODULE_INDEX.md)及[机器注册表](feature_registry.json)为准；本计划记录关系和待办，不另建平行状态源。
 
@@ -22,8 +22,8 @@
 | 链路 | 当前衔接 | 交接点及主要风险 |
 |---|---|---|
 | 启动与远征 | 新档98F办公室开场/已有档99F基地 → `ENTRY-AVATAR` → `BASE-FACILITY` → `WORLD-ENTRY` → `WORLD-PLAN` → `SAVE-RUN` | 新档判据为教程未完成且无运行时快照；普通基地快照恢复98F世界和携带物、玩家固定回99F；远征交接必须有显式标记，设施ID、关卡ID和`runtime_map_id`继续追踪 |
-| 行动与战斗 | `PLAYER-STATE` / `PLAYER-INTERACT` → `WEAPON-COMBAT` / `ENEMY-AI` → `REWARD-SERVICE` → `WORLD-LOOT` → `INVENTORY-SLOTS` | 战斗事件与奖励 Spec 已集中解析；场景发放仍经旧 item 字典桥 |
-| 构筑与跨局 | `WEAPON-OWNERSHIP` / `INVENTORY-SLOTS` / `FATE-RULES` → `RUN-SETTLE` → `SAVE-PROFILE` → `BASE-SHOP` / `BASE-WORKSHOP` | 武器实例ID、事务ID、资源余额和 Tier；主要事务已有回滚与幂等 |
+| 行动与战斗 | `PLAYER-STATE` / `PLAYER-INTERACT` → `WEAPON-COMBAT` / `ENEMY-AI` → `REWARD-SERVICE` → `WORLD-LOOT` → `INVENTORY-SLOTS` | 奖励报告只保留 `grants[]`；剧情/清房/搜索/击杀通过地面发放结果，旧 item 字典仅在地面实体边界转换；真渲染与逐内容核签另列 |
+| 构筑与跨局 | `WEAPON-OWNERSHIP` / `INVENTORY-SLOTS` / `FATE-RULES` → `RUN-SETTLE` → `SAVE-PROFILE` → `BASE-SHOP` / `BASE-WORKSHOP`；局内购买由 `RUN-MERCHANT` 接行动快照 | 武器实例ID、事务ID、资源余额和 Tier；商人首开及成交同步写盘，未售/已售货架跨重载保持；全局所有权账本另列 |
 | 世界与故事 | 场景事件 → `NARRATIVE-TRIGGER` → `DIALOGUE-UI`；`scene.spawn_item` → `REWARD-SERVICE` → `WORLD-LOOT`；完整收口 → `SAVE-PROFILE` | 导演将地牢绑定注入适配器；`spawn_key`使开场枪落地幂等，房间`ground_items[]`与刷物键进世界快照；`BaseManager`独占`narrative_history`写入，剧情完成历史不充当物品账本 |
 | 时间与表现 | `TIME-DAYNIGHT` → `POWER-SYSTEM` / 太阳；领域快照 → `UI-HUD` / `VFX-POOL` / `AUDIO-MUSIC` / `GRAPHICS-POSTFX` | 时间单位、能源域、表现事件；UI应消费快照而非改写领域事实 |
 | 退出与恢复 | `WORLD-ENTRY` / 战局 → `SAVE-RUN` → `RUN-SETTLE` / `RUN-REVIVE` → `SAVE-PROFILE` → 基地 | 行动ID、结算ID、原子写盘、失败回滚与重载幂等；复活目前只有空策略 |
@@ -47,7 +47,7 @@
 | 批次 | 范围 | 可交付结果 | 完成检查 |
 |---|---|---|---|
 | A：主线交接 | `ENTRY-AVATAR`、`BASE-FACILITY`、`WORLD-ENTRY`、`WORLD-PLAN`、`SAVE-RUN`、`RUN-SETTLE` | 标清新档98F办公室/已有档99F基地、设施ID→关卡ID→行动ID→结算ID；补场景切换和失败恢复交接 | 开场、天台下线、主线专项、重启恢复与结算事务按退出码记录 |
-| B：战斗与经济 | 玩家、武器、背包、敌人、奖励、商店、工坊、命运 | 标清状态写入者、武器实例/掉落ID及交易失败路径；商人补独立验收 | 规则专项与故障注入；旧字典桥及直接 UI 写入列明债务 |
+| B：战斗与经济 | 玩家、武器、背包、敌人、奖励、商店、工坊、命运 | 标清状态写入者、武器实例/掉落ID及交易失败路径；商人补独立验收 | 规则专项与故障注入；地面主链已切流，地面实体内部旧字典桥保留；商人同局货架r3逻辑已验，表现未验 |
 | C：剧情与表现 | 剧情、对话、时间、电力、HUD、VFX、音频、后处理 | 核对`scene.spawn_item`房间归属、剧情完整收口写档与`retry/never`待定提案；补 PostFX 主契约、对话6处差异 | 剧情/开场/存档专项加真实渲染证据；先消除批次间长期档污染，未执行项明示 |
 | D：历史与发布 | 隐藏爬塔、Boss、复活、训练、资产、性能、工具链 | 隐藏玩法保留低优先级；补复活目标规则和发布证据；维护资产与性能基线 | 账本/拆账、命名、文档门禁；真实GPU/移动端/长测另行记录 |
 
@@ -59,7 +59,21 @@
 - 当前可明确独立维护的完整模块为训练场；远征入口是完成的功能级链路。纯楼层计划、换装事务、奖励解析、工坊规则、结算、HUD映射等可局部独立。
 - `TowerDescent3D`、`Dungeon3D`、`Player3D`、`BaseManager` 仍是主要编排/状态聚合点；24 个 Autoload 扩大了全局依赖面。现有跨域门禁只覆盖三类已知私有访问。
 - 资产账本在新拉取的 `622d6c4a` 上复核为 410 项、9 本分账本、完整性问题 0、拆账漂移 0（敌人账本由12增至13）。此前完整复评的 426/230 和拉取前的 409/0 都是各自时点的结果。
-- 当前 `aggregate core` 为 130 项中 15 项失败，较前一份 129/15 基线新增的新档场景通过，失败清单逐项相同；视觉、目标 GPU、移动端和长测不能由 headless 结果代替。
+- 上次完整 `aggregate core` 基线为 130 项中 15 项失败；本次战斗与经济交接又注册商人专项 2 项及地面奖励专项 1 项，尚未重新执行整个聚合套件。已知 `verify_full_3d_game_flow` 节点预算及 `verify_3d_parity_core` 邻房流送/节点预算仍红；视觉、目标 GPU、移动端和长测不能由 headless 结果代替。
 - 前一修订的5场景批跑为4通过、1失败：剧情历史污染后续开场。现Runner已按场景隔离`user://`；剧情→开场→新档交接3场景批次退出码0。旧失败保留在[当时记录](development/2026-09-23_feature_relationship_pull_alignment.md)，不倒写为历史通过。
 
 本计划仅规定追踪与补全顺序；表中“待补”不意味着立即改动玩法或要求全部功能完全解耦。
+
+## 6. 战斗与经济交接后的文档补齐顺序
+
+本节是执行排期，不复制 37 项的完成状态；每行的实际状态仍回写[跟踪表](FEATURE_RELATIONSHIP_MATRIX.md)和`feature_registry.json`。本轮用户允许暂缓表现验收，故真渲染、目标 GPU、移动端和性能预算只登记“未执行/独立红项”，不能写成通过，也不阻挡纯逻辑契约整理。商人同局货架规则已按用户授权采用“首开冻结、成交移除、读档保持”，见[04.1](04.1_玩法系统_局内商人.md) r3。
+
+| 顺序 | 受影响 FeatureID | 主文档与待补内容 | 先决证据/完成判据 |
+|---|---|---|---|
+| D0 交接事实归档 | `REWARD-SERVICE`、`WORLD-LOOT`、`WEAPON-OWNERSHIP`、`INVENTORY-SLOTS`、`RUN-MERCHANT` | 在[04](04_技术施工_战斗与局内成长.md)和[04.1](04.1_玩法系统_局内商人.md)统一 `grant`/地面 item/武器实例/交易快照术语；商人r3已定并接入，继续逐字段核对[09](09_技术施工_存档结算与复活.md)及其余主线数据 | 以正式场景专项、故障注入和读档结果逐字段对照；现有逻辑绿灯不代替整批D0文档完成 |
+| D1 主线资源事务 | `INVENTORY-SLOTS`、`BASE-SHOP`、`RUN-SETTLE`、`SAVE-PROFILE`、`SAVE-RUN` | [04](04_技术施工_战斗与局内成长.md)、[07](07_技术施工_基地设施.md)、[09](09_技术施工_存档结算与复活.md)：补格位/保险/快捷栏唯一写者，商店货品ID与拒绝结果，结算与档案 revision/回滚/通知，行动地面物恢复矩阵 | 正常、容量拒绝、写盘失败、重试、重载各有入口；文档列明确切命令、schema和失败码 |
+| D2 战斗到奖励 | `WEAPON-COMBAT`、`ENEMY-AI`、`WORLD-PLAN`、`PLAYER-INTERACT` | [03](03_技术施工_玩家与操作.md)、[04](04_技术施工_战斗与局内成长.md)、[05](05_技术施工_关卡生成与爬楼.md)、[06A](06A_怪物AI系统完整设计_评审稿.md)：补命中上下文、死亡→奖励事件、感知快照、关卡计划版本及设施交互拒绝码 | 从正式入口跟踪一个事件到奖励/存档；设计与现行实现分栏，塔楼隐藏路线仍低优先级 |
+| D3 剧情和展示契约 | `NARRATIVE-TRIGGER`、`DIALOGUE-UI`、`UI-HUD`、`GRAPHICS-POSTFX`、`TIME-DAYNIGHT` | [08](08_技术施工_剧情触发.md)、[18](18_技术施工_UI与对话系统.md)、[13](13_技术施工_性能优化与热管理.md)、[15](15_技术施工_时间日夜与基地能源.md)：补对话6处差异、HUD只读快照、PostFX独立主契约、时间单位和订阅边界 | 先做代码/场景事实对照；视觉要求保留为未执行，不能用 headless 代签 |
+| D4 维护与发布 | `ASSET-PIPELINE`、`PERFORMANCE-RUNTIME` 及 P2/低优先级项 | 资产映射、性能预算、隐藏爬塔与复活提案按[跟踪表](FEATURE_RELATIONSHIP_MATRIX.md)逐项排期；已关闭玩法的设计不删除 | 保留已有红项/未执行清单，单项补证后才更新实现状态；不为全绿降低阈值 |
+
+每个顺序批次先抽查其主设计是否按统一字段顺序覆盖 Owner、命令/查询/事件、ID/schema、失败/回滚、正式入口与独立验收，再修改缺项；完成后只在对应主设计、跟踪表、注册表和独立开发记录各更新一次。此计划只启动文档补齐工作，不代表 D0–D4 已完成。

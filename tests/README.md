@@ -23,3 +23,7 @@ runner会检查每个场景的完整日志。批次内每个场景使用独立 `
 资源扣款事务使用 `verify_extraction_points_spend_transaction.tscn`：覆盖正常持久化、强制写盘失败回滚、余额/参数拒绝和旧revision实例重新加载权威档案。revision冲突分支会产生一条预期的`Refusing stale save`错误日志，验收记录必须与非预期脚本错误分开。
 
 行动结算事务使用 `verify_run_settlement_transaction.tscn`：覆盖成功撤离与死亡结算的一次提交、强制写盘失败整体回滚、故障解除后重试、同事务重复请求及重新加载后的幂等重放。
+
+局内商人使用 `verify_run_merchant_transaction.tscn`（纯服务故障注入）和 `verify_run_merchant_integration.tscn`（正式3D场景 UI→钱包/背包/货架→交易撤离快照恢复）。覆盖首开写盘失败、购买失败回滚与重试、关窗重开不刷新、未成交货架/已售报价的跨重载保持；正式渲染表现另验。
+
+地面奖励交接使用 `verify_reward_ground_handoff.tscn`：正式场景验证搜索只落一个真实物、击杀延迟掉出实物与房间倍率魂球；错误搜索配置和无效房间必须给出拒绝诊断。此用例不代表真渲染颜色/数量验收。

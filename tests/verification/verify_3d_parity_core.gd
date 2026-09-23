@@ -212,9 +212,9 @@ func _verify_loot_contract(failures: Array[String]) -> void:
 	var boss := injector.generate_enemies({"type": "boss", "floor": 2, "floor_level": RoomData.FloorLevel.DEEP})
 	var rewards := preload("res://src/rewards/RuntimeRewardCoordinator.gd").new()
 	rewards.configure(4242)
-	if elite.is_empty() or (rewards.resolve_kill({}, elite[0], "parity_elite").get("items", []) as Array).is_empty():
+	if elite.is_empty() or (rewards.resolve_kill({}, elite[0], "parity_elite").get("grants", []) as Array).is_empty():
 		failures.append("Elite 3D configuration does not use the unified stable reward table")
-	if boss.is_empty() or (rewards.resolve_kill({}, boss[0], "parity_boss").get("items", []) as Array).is_empty():
+	if boss.is_empty() or (rewards.resolve_kill({}, boss[0], "parity_boss").get("grants", []) as Array).is_empty():
 		failures.append("Boss 3D configuration does not use the unified stable reward table")
 	if not elite.is_empty():
 		EliteRosterService.settle(

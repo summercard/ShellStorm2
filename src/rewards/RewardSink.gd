@@ -27,6 +27,14 @@ const HOST_METHOD_GROUND := "reward_sink_spawn_ground"
 const HOST_METHOD_INVENTORY := "reward_sink_add_to_inventory"
 const HOST_METHOD_WALLET := "reward_sink_add_currency"
 
+class GroundCallbackHost:
+	extends RefCounted
+	var spawn_ground: Callable
+	func reward_sink_spawn_ground(items: Array) -> int:
+		if not spawn_ground.is_valid():
+			return 0
+		return int(spawn_ground.call(items))
+
 
 ## 把解析结果分类到三个出口。纯逻辑，不依赖场景。
 ##
@@ -59,6 +67,37 @@ static func plan(grants: Array, options: Dictionary = {}) -> Dictionary:
 	return out
 
 
+## 唯一旧地面实体适配边界。解析/调度报告只保留 grants[]；房间节点仍消费 item 字典。
+static func materialize_ground_items(grants: Array) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for grant in grants:
+		if not grant is Dictionary:
+			continue
+		var g := grant as Dictionary
+		if str(g.get("kind", "")) == _SPEC.KIND_CURRENCY:
+			out.append({
+				"id": "__currency__", "name": "魂", "type": "currency",
+				"count": maxi(1, int(g.get("amount", 1))), "is_currency": true,
+			})
+			continue
+		if str(g.get("kind", "")) != _SPEC.KIND_ITEM:
+			continue
+		var item := (g.get("item", {}) as Dictionary).duplicate(true)
+		if item.is_empty() or str(item.get("id", "")) != str(g.get("item_id", "")):
+			continue
+		item["count"] = maxi(1, int(g.get("count", 1)))
+		out.append(item)
+	return out
+
+
+## 场景可按一次落点绑定地面宿主，不在 Sink 内缓存房间/坐标。
+## 同 apply() 的结果口径：每个 grant 按实际生成实体数记 granted 或 rejected。
+static func apply_ground(grants: Array, spawn_ground: Callable) -> Dictionary:
+	var host := GroundCallbackHost.new()
+	host.spawn_ground = spawn_ground
+	return apply(host, {SINK_GROUND: grants})
+
+
 ## 执行发放。返回 `DispatchReport { granted[], deferred[], rejected[] }`。
 ##
 ## `host` 需实现本类顶部的三个方法名（`Dungeon3D` / `TowerDescent3D` / 测试替身均可）。
@@ -75,30 +114,43 @@ static func apply(host: Object, classified: Dictionary) -> Dictionary:
 	var wallet: Array = classified.get(SINK_WALLET, [])
 
 	if not ground.is_empty():
-		if _host_has(host, HOST_METHOD_GROUND):
-			host.call(HOST_METHOD_GROUND, _SERVICE.to_legacy_items(ground))
-			report["granted"].append_array(ground)
-		else:
-			report["deferred"].append_array(ground)
+		var delivered := _spawn_ground(host, ground)
+		for index in range(ground.size()):
+			if index < delivered:
+				report["granted"].append(ground[index])
+			else:
+				report["rejected"].append(ground[index])
 
 	if not inventory.is_empty():
 		if _host_has(host, HOST_METHOD_INVENTORY):
-			var accepted: int = int(host.call(HOST_METHOD_INVENTORY, inventory))
+			var accepted: int = clampi(int(host.call(HOST_METHOD_INVENTORY, inventory)), 0, inventory.size())
 			for index in range(inventory.size()):
 				if index < accepted:
 					report["granted"].append(inventory[index])
 				else:
-					# 背包满：已入包的不回滚，其余溢出落地面（SINK_PARTIAL）。
-					report["deferred"].append(inventory[index])
+					var overflow := [inventory[index]]
+					if _spawn_ground(host, overflow) == 1:
+						report["deferred"].append(inventory[index])
+					else:
+						report["rejected"].append(inventory[index])
 		else:
-			report["deferred"].append_array(inventory)
+			var delivered := _spawn_ground(host, inventory)
+			for index in range(inventory.size()):
+				if index < delivered:
+					report["deferred"].append(inventory[index])
+				else:
+					report["rejected"].append(inventory[index])
 
 	if not wallet.is_empty():
 		if _host_has(host, HOST_METHOD_WALLET):
-			host.call(HOST_METHOD_WALLET, wallet)
-			report["granted"].append_array(wallet)
+			var accepted := clampi(int(host.call(HOST_METHOD_WALLET, wallet)), 0, wallet.size())
+			for index in range(wallet.size()):
+				if index < accepted:
+					report["granted"].append(wallet[index])
+				else:
+					report["rejected"].append(wallet[index])
 		else:
-			report["deferred"].append_array(wallet)
+			report["rejected"].append_array(wallet)
 
 	return report
 
@@ -120,3 +172,12 @@ static func dispatch(spec: Dictionary, context: Dictionary, host: Object, option
 
 static func _host_has(host: Object, method_name: String) -> bool:
 	return host != null and host.has_method(method_name)
+
+
+static func _spawn_ground(host: Object, grants: Array) -> int:
+	if not _host_has(host, HOST_METHOD_GROUND):
+		return 0
+	var items := materialize_ground_items(grants)
+	if items.size() != grants.size():
+		return 0
+	return clampi(int(host.call(HOST_METHOD_GROUND, items)), 0, grants.size())

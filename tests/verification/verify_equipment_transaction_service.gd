@@ -112,6 +112,12 @@ func _ready() -> void:
 		"Owner rejection mutated the target equipment slot",
 		failures
 	)
+	var stale_intent := _weapon("weapon_rifle", "verify-other-rifle")
+	var stale_result: Dictionary = EQUIPMENT_TRANSACTION_SERVICE.equip_weapon_from_inventory(
+		inventory, owner, _find_slot(inventory, "verify-rejected"), stale_intent, 1
+	)
+	_expect(str(stale_result.get("code", "")) == "source_slot_changed", "同枪型但不同实例的过期 UI 命令必须拒绝", failures)
+	_expect(inventory.get_slots_snapshot() == inventory_before_rejection, "过期实例命令不得修改背包", failures)
 
 	_finish(failures)
 

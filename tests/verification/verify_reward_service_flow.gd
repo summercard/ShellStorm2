@@ -19,6 +19,18 @@ const _RUNTIME_COORDINATOR := preload("res://src/rewards/RuntimeRewardCoordinato
 const SAMPLES := 4000
 const TOLERANCE := 0.03
 
+class SinkHost:
+	extends RefCounted
+	var ground_limit := 0
+	var inventory_limit := 0
+	var wallet_limit := 0
+	func reward_sink_spawn_ground(items: Array) -> int:
+		return mini(ground_limit, items.size())
+	func reward_sink_add_to_inventory(grants: Array) -> int:
+		return mini(inventory_limit, grants.size())
+	func reward_sink_add_currency(grants: Array) -> int:
+		return mini(wallet_limit, grants.size())
+
 var _failures: Array[String] = []
 
 
@@ -35,6 +47,7 @@ func _ready() -> void:
 	_case_field_conflict()
 	_case_negative_controls()
 	_case_runtime_coordinator()
+	_case_sink_delivery_confirmation()
 
 	if _failures.is_empty():
 		print("REWARD_SERVICE_FLOW_OK: registry gate, reproducibility, four dispatch sources, override chain, rejection paths, weighted/independent math, truncation and negative controls pass")
@@ -59,7 +72,7 @@ func _case_runtime_coordinator() -> void:
 	var fixed := coordinator.resolve_fixed_item("item_ammo_pack", 300, "guaranteed_loadout_ammo")
 	_expect(bool(fixed.get("ok", false)), "保底备弹必须走统一规格解析")
 	_expect(
-		int(((fixed.get("items", []) as Array)[0] as Dictionary).get("count", 0)) == 300,
+		int(((_SINK.materialize_ground_items(fixed.get("grants", [])) as Array)[0] as Dictionary).get("count", 0)) == 300,
 		"保底备弹统一解析后应保留真实发数"
 	)
 	var kill := coordinator.resolve_kill({}, {
@@ -67,7 +80,7 @@ func _case_runtime_coordinator() -> void:
 	}, "room_a:enemy_01")
 	_expect(bool(kill.get("ok", false)), "怪物击杀必须通过统一覆盖链解析：%s" % str(kill.get("errors", [])))
 	_expect(
-		(kill.get("items", []) as Array).any(func(item): return bool((item as Dictionary).get("is_currency", false))),
+		(_SINK.materialize_ground_items(kill.get("grants", [])) as Array).any(func(item): return bool((item as Dictionary).get("is_currency", false))),
 		"怪物击杀统一解析必须保留地面魂奖励"
 	)
 	var elite_kill := coordinator.resolve_kill({}, {
@@ -76,7 +89,7 @@ func _case_runtime_coordinator() -> void:
 	}, "room_a:elite_01")
 	var physical_count := 0
 	var currency_count := 0
-	for value in elite_kill.get("items", []):
+	for value in _SINK.materialize_ground_items(elite_kill.get("grants", [])):
 		var item := value as Dictionary
 		if bool(item.get("is_currency", false)):
 			currency_count += 1
@@ -84,6 +97,39 @@ func _case_runtime_coordinator() -> void:
 			physical_count += 1
 	_expect(physical_count == 1, "精英击杀必须保持一个非货币地面实体")
 	_expect(currency_count == 1, "基础魂与精英悬赏必须合并为一个地面魂球")
+
+
+func _case_sink_delivery_confirmation() -> void:
+	var host := SinkHost.new()
+	var item := ItemRegistry.get_instance().get_item("item_ammo_pack")
+	var weapon := ItemRegistry.get_instance().get_item("weapon_sprinkler")
+	weapon["weapon_instance_id"] = "reward-weapon-instance"
+	weapon = WeaponInstance.ensure_weapon_item(weapon)
+	var ground_weapon := _SINK.materialize_ground_items([{"kind": "item", "item_id": "weapon_sprinkler", "item": weapon, "count": 1}])
+	_expect(ground_weapon.size() == 1 and str(ground_weapon[0].get("weapon_instance_id", "")) == "reward-weapon-instance", "地面转换必须保留完整武器实例身份")
+	var multi_weapon := _SERVICE.resolve({"spec_id": "t_two_weapons", "entries": [{"kind": "item", "item_id": "weapon_sprinkler", "count": 2}]}, {"seed": 17})
+	var weapon_grants := multi_weapon.get("grants", []) as Array
+	var first_weapon_id := ""
+	var second_weapon_id := ""
+	if weapon_grants.size() == 2:
+		first_weapon_id = str(((weapon_grants[0] as Dictionary).get("item", {}) as Dictionary).get("weapon_instance_id", ""))
+		second_weapon_id = str(((weapon_grants[1] as Dictionary).get("item", {}) as Dictionary).get("weapon_instance_id", ""))
+	_expect(weapon_grants.size() == 2 and not first_weapon_id.is_empty() and first_weapon_id != second_weapon_id, "固定奖励 count=2 必须生成两把不同实例的枪")
+	var grants := [
+		{"kind": "item", "item_id": "item_ammo_pack", "item": item, "count": 1, "sink": "ground"},
+		{"kind": "item", "item_id": "item_ammo_pack", "item": item, "count": 1, "sink": "inventory"},
+		{"kind": "currency", "currency_id": "extraction_points", "amount": 10, "sink": "wallet"},
+	]
+	var rejected := _SINK.apply(host, _SINK.plan(grants))
+	_expect((rejected["granted"] as Array).is_empty() and (rejected["deferred"] as Array).is_empty() and (rejected["rejected"] as Array).size() == 3, "宿主返回0不得伪报发放成功")
+	var callback_rejected := _SINK.apply_ground([grants[0]], func(_items: Array) -> int: return 0)
+	_expect((callback_rejected["granted"] as Array).is_empty() and (callback_rejected["rejected"] as Array).size() == 1, "地面专用回调返回0必须报告拒绝")
+	var callback_granted := _SINK.apply_ground([grants[0]], func(items: Array) -> int: return items.size())
+	_expect((callback_granted["granted"] as Array).size() == 1 and (callback_granted["rejected"] as Array).is_empty(), "地面专用回调生成1个实体才报告发放成功")
+	host.ground_limit = 1
+	host.wallet_limit = 1
+	var partial := _SINK.apply(host, _SINK.plan(grants))
+	_expect((partial["granted"] as Array).size() == 2 and (partial["deferred"] as Array).size() == 1 and (partial["rejected"] as Array).is_empty(), "背包拒绝应经地面确认后才计入 deferred")
 
 
 # ---------------------------------------------------------------------------

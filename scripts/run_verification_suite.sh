@@ -144,6 +144,9 @@ core_scenes=(
   verify_floor_plan_generator
   verify_level_plan_design_source
   verify_reward_service_flow
+  verify_reward_ground_handoff
+  verify_run_merchant_transaction
+  verify_run_merchant_integration
   verify_room_graph_persistence_services
   verify_verification_runner_contract
   verify_hud_presenter_3d

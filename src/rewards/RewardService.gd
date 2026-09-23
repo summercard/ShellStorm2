@@ -147,29 +147,6 @@ static func resolve_dispatch(request: Dictionary) -> Dictionary:
 	}, context)
 
 
-## 把解析结果转成**旧口径地面物品字典**（`_spawn_loot_items` / `GroundLootPickup3D` 直接吃）。
-## 过渡期桥梁：step 3 切换消费点后仍沿用，step 4 评估是否改为实体直传。
-static func to_legacy_items(grants: Array) -> Array[Dictionary]:
-	var out: Array[Dictionary] = []
-	for grant in grants:
-		var g: Dictionary = grant
-		if str(g.get("kind", "")) == _SPEC.KIND_CURRENCY:
-			out.append({
-				"id": "__currency__",
-				"name": "魂",
-				"type": "currency",
-				"count": maxi(1, int(g.get("amount", 1))),
-				"is_currency": true,
-			})
-			continue
-		var item: Dictionary = (g.get("item", {}) as Dictionary).duplicate(true)
-		if item.is_empty():
-			continue
-		item["count"] = maxi(1, int(g.get("count", 1)))
-		out.append(item)
-	return out
-
-
 # ---------------------------------------------------------------------------
 # 覆盖链
 # ---------------------------------------------------------------------------
@@ -258,7 +235,19 @@ static func _resolve_item_entry(entry: Dictionary, state: Dictionary, path: Stri
 	var count := _eval_amount(entry.get("count", 1), state, path)
 	if count <= 0:
 		return
-	var item := _WEAPON_INSTANCE.ensure_weapon_item(registry.get_item(item_id))
+	var definition := registry.get_item(item_id)
+	# 枪械 count=N 意味着 N 把不同的真实武器，不能把同一 instance_id
+	# 塞进一个 count=N 的地面字典或背包堆叠。
+	if str(definition.get("type", "")) == "weapon":
+		for index in range(count):
+			_append_grant(state, {
+				"kind": _SPEC.KIND_ITEM, "item_id": item_id, "count": 1,
+				"item": _WEAPON_INSTANCE.ensure_weapon_item(definition),
+				"sink": str(entry.get("sink", "ground")), "pool_id": "",
+				"slot": "%s:%d" % [path, index], "merged": false,
+			}, false)
+		return
+	var item := _WEAPON_INSTANCE.ensure_weapon_item(definition)
 	_append_grant(state, {
 		"kind": _SPEC.KIND_ITEM,
 		"item_id": item_id,

@@ -33,7 +33,7 @@ func _verify_single_item_loot(failures: Array[String]) -> void:
 	for floor in [1, 2, 3, 5]:
 		var container_loot := rewards.resolve_search(
 			{}, "scavenge_floor_%d" % mini(5, floor), floor, "container:%d" % floor
-		).get("items", []) as Array
+		).get("grants", []) as Array
 		if container_loot.size() > 1:
 			failures.append("搜索容器一次生成了多件地面物品")
 			break
@@ -48,10 +48,10 @@ func _verify_single_item_loot(failures: Array[String]) -> void:
 			"loot_table": "loot_floor_1_2",
 			"is_elite": index % 7 == 0,
 			"is_boss": false,
-		}, "enemy:%d" % index).get("items", []) as Array
+		}, "enemy:%d" % index).get("grants", []) as Array
 		var physical_item_count := 0
 		for item in enemy_loot:
-			if bool(item.get("is_currency", false)):
+			if str(item.get("kind", "")) == "currency":
 				continue
 			physical_item_count += 1
 			if int(item.get("count", 0)) <= 0:

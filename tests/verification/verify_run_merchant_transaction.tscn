@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_run_merchant_transaction.gd" id="1"]
+
+[node name="VerifyRunMerchantTransaction" type="Node"]
+script = ExtResource("1")

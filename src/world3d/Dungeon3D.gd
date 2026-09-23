@@ -8,6 +8,8 @@ const ROOM_GRAPH_RUNTIME_SCRIPT = preload("res://src/world3d/RoomGraphRuntime.gd
 const RUN_PERSISTENCE_SERVICE = preload("res://src/world3d/RunPersistenceService.gd")
 const HUD_PRESENTER_SCRIPT = preload("res://src/ui/HUDPresenter3D.gd")
 const RUNTIME_REWARD_COORDINATOR_SCRIPT = preload("res://src/rewards/RuntimeRewardCoordinator.gd")
+const REWARD_SINK_SCRIPT = preload("res://src/rewards/RewardSink.gd")
+const RUN_MERCHANT_SERVICE_SCRIPT = preload("res://src/game/RunMerchantService.gd")
 const AVATAR_CUSTOMIZATION_PERSISTENCE = preload(
 	"res://src/player3d/customization/AvatarCustomizationPersistence.gd"
 )
@@ -130,7 +132,10 @@ var _inventory_ui: InventoryUI
 var _weapon_panel: WeaponAssemblyTreePanel
 var _workbench_panel: WorkbenchPanel
 var _merchant_ui: MerchantUI
+var _merchant_service: RunMerchantService
+var _merchant_stock_restore_failed := false
 var _trade_extraction_unlocked := false
+var _trade_extraction_room_id := ""
 var _enemy_preactivation_accumulator := 0.0
 var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
@@ -419,6 +424,11 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"run_value": _run_value,
 		"kills": _kills,
 		"run_currency": GameManager.currency,
+		"trade_extraction_unlocked": _trade_extraction_unlocked,
+		"trade_extraction_room_id": _trade_extraction_room_id,
+		"merchant_stock": _merchant_service.export_stock_snapshot() if _merchant_service != null else {
+			"schema": "run_merchant_stock_v1", "stocks": {},
+		},
 		"edge_states": _open_edges.duplicate(true),
 		"runtime_map_id": get_runtime_map_id(),
 	}
@@ -487,6 +497,13 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 		snapshot["current_room_id"] = ""
 		snapshot["player_position"] = []
 	_restore_carried_ownership(snapshot)
+	_restore_merchant_stock_from_snapshot(snapshot)
+	_trade_extraction_unlocked = bool(snapshot.get("trade_extraction_unlocked", false))
+	_trade_extraction_room_id = str(snapshot.get("trade_extraction_room_id", ""))
+	if _trade_extraction_unlocked and not _trade_extraction_room_id.is_empty():
+		var trade_room := _room_by_id.get(_trade_extraction_room_id) as DungeonRoom3D
+		if trade_room != null:
+			_ensure_conditional_extraction("TRADE", trade_room, Vector3(-4.0, 0.0, 3.0))
 
 
 func _restore_base_runtime_save_snapshot(snapshot: Dictionary) -> void:
@@ -502,6 +519,18 @@ func _restore_base_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	var safe_position := _base_runtime_restore_position(base_room)
 	restored["player_position"] = [safe_position.x, safe_position.y, safe_position.z]
 	_restore_carried_ownership(restored)
+	_restore_merchant_stock_from_snapshot(snapshot)
+
+
+func _restore_merchant_stock_from_snapshot(snapshot: Dictionary) -> void:
+	_merchant_stock_restore_failed = false
+	_merchant_service = RUN_MERCHANT_SERVICE_SCRIPT.new()
+	if not snapshot.has("merchant_stock"):
+		return # 旧档：本局尚未生成商人货架。
+	var stock_value: Variant = snapshot.get("merchant_stock")
+	if not stock_value is Dictionary or not _merchant_service.restore_stock_snapshot(stock_value as Dictionary):
+		_merchant_stock_restore_failed = true
+		push_warning("[Dungeon3D] Merchant stock snapshot rejected; merchant stays closed")
 
 
 func _base_runtime_restore_position(room: DungeonRoom3D) -> Vector3:
@@ -904,11 +933,14 @@ func _grant_guaranteed_loadout_ammo() -> int:
 	)
 	if not bool(report.get("ok", false)):
 		return 0
-	var items := report.get("items", []) as Array
-	var ammo := (items[0] as Dictionary).duplicate(true) if not items.is_empty() else {}
+	var grants := report.get("grants", []) as Array
+	var ammo_grant := grants[0] as Dictionary if not grants.is_empty() else {}
+	var ammo := (ammo_grant.get("item", {}) as Dictionary).duplicate(true)
 	if ammo.is_empty():
 		return 0
-	var added := _inventory.add_item(ammo, int(ammo.get("count", GUARANTEED_LOADOUT_AMMO_ROUNDS)))
+	var ammo_count := int(ammo_grant.get("count", GUARANTEED_LOADOUT_AMMO_ROUNDS))
+	ammo["count"] = ammo_count
+	var added := _inventory.add_item(ammo, ammo_count)
 	if added > 0:
 		_refresh_loot_label()
 	return added
@@ -2394,22 +2426,35 @@ func narrative_grant_item(item_id: String, count: int) -> Dictionary:
 	)
 	if not bool(report.get("ok", false)):
 		return {"success": false, "granted_count": 0, "deferred_count": count, "errors": report.get("errors", [])}
-	var items := report.get("items", []) as Array
-	if items.is_empty():
+	var grants := report.get("grants", []) as Array
+	if grants.is_empty():
 		return {"success": false, "granted_count": 0, "deferred_count": count, "errors": ["EMPTY_GRANT"]}
-	var item := (items[0] as Dictionary).duplicate(true)
-	var requested := int(item.get("count", count))
-	var added := _inventory.add_item(item, requested)
-	var deferred := maxi(0, requested - added)
-	if deferred > 0:
-		var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-		if room != null:
-			item["count"] = deferred
-			_spawn_loot_items(room, [item], player.global_position + player.aim_direction * 1.2)
-		else:
-			return {"success": false, "granted_count": added, "deferred_count": deferred, "errors": ["NO_GROUND_SINK"]}
+	# 先校验整批再写背包；武器 count=N 在 RewardService 中是 N 条独立实例。
+	for grant_value in grants:
+		var grant := grant_value as Dictionary
+		var item := grant.get("item", {}) as Dictionary
+		if item.is_empty() or str(item.get("id", "")) != str(grant.get("item_id", "")):
+			return {"success": false, "granted_count": 0, "deferred_count": count, "errors": ["INVALID_GRANT_ITEM"]}
+	var granted_total := 0
+	var deferred_total := 0
+	for grant_value in grants:
+		var grant := grant_value as Dictionary
+		var item := (grant.get("item", {}) as Dictionary).duplicate(true)
+		var requested := int(grant.get("count", 1))
+		item["count"] = requested
+		var added := _inventory.add_item(item, requested)
+		granted_total += added
+		var overflow := maxi(0, requested - added)
+		if overflow > 0:
+			var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+			if room == null or player == null:
+				return {"success": false, "granted_count": granted_total, "deferred_count": deferred_total + overflow, "errors": ["NO_GROUND_SINK"]}
+			item["count"] = overflow
+			if _spawn_loot_items(room, [item], player.global_position + player.aim_direction * 1.2) != 1:
+				return {"success": false, "granted_count": granted_total, "deferred_count": deferred_total + overflow, "errors": ["GROUND_SINK_REJECTED"]}
+			deferred_total += overflow
 	_refresh_loot_label()
-	return {"success": true, "granted_count": added, "deferred_count": deferred, "errors": []}
+	return {"success": true, "granted_count": granted_total, "deferred_count": deferred_total, "errors": []}
 
 
 ## 剧情把物品**放到地面**（不是进包 —— 进包走 `grant.item`）。
@@ -2434,8 +2479,11 @@ func narrative_spawn_item(
 			"[Dungeon3D] 剧情刷物品：『%s』解析失败（%s）。" % [item_id, str(report.get("errors", []))]
 		)
 		return 0
-	var items := report.get("items", []) as Array
-	var spawned := narrative_spawn_loot(room_id, items, origin, spread)
+	var delivery := REWARD_SINK_SCRIPT.apply_ground(
+		report.get("grants", []),
+		func(items: Array) -> int: return narrative_spawn_loot(room_id, items, origin, spread)
+	)
+	var spawned := (delivery.get("granted", []) as Array).size()
 	if spawned > 0:
 		if not spawn_key.is_empty():
 			_narrative_spawned_keys[spawn_key] = true
@@ -2451,8 +2499,7 @@ func narrative_spawn_loot(
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or items.is_empty():
 		return 0
-	_spawn_loot_items(room, items, origin, 0.0, spread)
-	return items.size()
+	return _spawn_loot_items(room, items, origin, 0.0, spread)
 
 
 func _repair_room_progress(room: DungeonRoom3D) -> void:
@@ -2617,16 +2664,24 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 		enemy_data,
 		"%s:%s" % [enemy.room_id, enemy.get_persistent_id()]
 	)
-	var drops := reward_report.get("items", []) as Array
+	if not bool(reward_report.get("ok", false)):
+		push_warning("[Dungeon3D] Kill reward resolution failed (%s): %s" % [
+			enemy.get_persistent_id(), str(reward_report.get("errors", []))
+		])
+	var grants := (reward_report.get("grants", []) as Array).duplicate(true)
 	# 房间试炼先写进掉落物；全局黄金潮汐在真正拾取/结算魂时统一应用，避免重复倍率。
 	var currency_multiplier := float(_room_currency_multipliers.get(enemy.room_id, 1.0))
-	for item in drops:
-		if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
-			item["count"] = maxi(1, int(round(float(item.get("count", 1)) * currency_multiplier)))
+	for value in grants:
+		var grant := value as Dictionary
+		if str(grant.get("kind", "")) == "currency":
+			grant["amount"] = maxi(1, int(round(float(grant.get("amount", 1)) * currency_multiplier)))
 	if (bool(enemy_data.get("is_elite", false)) or enemy.enemy_kind == "boss") and player.has_method("on_fate_elite_killed"):
 		player.call("on_fate_elite_killed")
-	if loot_room != null:
-		call_deferred("_spawn_loot_items", loot_room, drops, enemy.global_position)
+	if not grants.is_empty():
+		call_deferred(
+			"_deliver_ground_rewards", loot_room, grants, enemy.global_position,
+			"kill:%s:%s" % [enemy.room_id, enemy.get_persistent_id()]
+		)
 	_resolve_room_enemy_departure(enemy, false, enemy_data)
 
 
@@ -2773,19 +2828,25 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 		reward_floor,
 		event_id
 	)
-	var drops := report.get("items", []) as Array
+	if not bool(report.get("ok", false)):
+		push_warning("[Dungeon3D] Search reward resolution failed (%s): %s" % [
+			event_id, str(report.get("errors", []))
+		])
+		status_label.text = "搜索失败 · 奖励配置无效"
+		return
+	var candidates := _ground_reward_candidates(report.get("grants", []))
 	if _next_chest_quality_boost > 0:
 		var boosted_floor := maxi(1, reward_floor + _next_chest_quality_boost)
 		var boosted_report := _reward_coordinator.resolve_search(
 			{}, "scavenge_floor_%d" % mini(5, boosted_floor), boosted_floor, "%s:boost" % event_id
 		)
-		var boosted := boosted_report.get("items", []) as Array
+		var boosted := _ground_reward_candidates(boosted_report.get("grants", []))
 		if not boosted.is_empty():
-			drops = [boosted[0]]
+			candidates = [boosted[0]]
 		_next_chest_quality_boost = 0
 	if _extra_loot_next_chest_count > 0:
-		var candidates: Array[Dictionary] = []
-		candidates.append_array(drops)
+		var ranked: Array[Dictionary] = []
+		ranked.append_array(candidates)
 		for _extra_index in range(_extra_loot_next_chest_count):
 			var extra_report := _reward_coordinator.resolve_search(
 				room.reward_plan,
@@ -2793,23 +2854,57 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 				reward_floor,
 				"%s:extra:%d" % [event_id, _extra_index]
 			)
-			var extra := extra_report.get("items", []) as Array
+			var extra := _ground_reward_candidates(extra_report.get("grants", []))
 			if not extra.is_empty():
-				candidates.append(extra[0])
-		if not candidates.is_empty():
-			candidates.sort_custom(
+				ranked.append(extra[0])
+		if not ranked.is_empty():
+			ranked.sort_custom(
 				func(a: Dictionary, b: Dictionary) -> bool:
-					return int(a.get("loot_table_tier", 0)) > int(b.get("loot_table_tier", 0))
+					return int((a.get("item", {}) as Dictionary).get("loot_table_tier", 0)) > int((b.get("item", {}) as Dictionary).get("loot_table_tier", 0))
 			)
-			drops = [candidates[0]]
+			candidates = [ranked[0]]
 		_extra_loot_next_chest_count = 0
-	if drops.is_empty():
+	if candidates.is_empty():
 		status_label.text = "容器为空"
 		return
-	var single_drop: Dictionary = (drops[0] as Dictionary).duplicate(true)
-	single_drop["count"] = 1
-	_spawn_loot_items(room, [single_drop], player.global_position + player.aim_direction * 1.2)
-	status_label.text = "搜索完成 · 1 件物资落地"
+	var selected := (candidates[0].get("grant", {}) as Dictionary).duplicate(true)
+	if str(selected.get("kind", "")) == "currency":
+		selected["amount"] = 1
+	else:
+		selected["count"] = 1
+	var delivery := _deliver_ground_rewards(
+		room, [selected], player.global_position + player.aim_direction * 1.2, event_id
+	)
+	status_label.text = (
+		"搜索完成 · 1 件物资落地"
+		if not (delivery.get("granted", []) as Array).is_empty()
+		else "搜索完成 · 物资落地失败"
+	)
+
+
+## 搜索只读同一 grant 的地面展示字段来排序；最终交付仍使用原 grant。
+func _ground_reward_candidates(grants: Array) -> Array[Dictionary]:
+	var candidates: Array[Dictionary] = []
+	for value in grants:
+		if not value is Dictionary:
+			continue
+		var item := REWARD_SINK_SCRIPT.materialize_ground_items([value])
+		if item.size() == 1:
+			candidates.append({"grant": (value as Dictionary).duplicate(true), "item": item[0]})
+	return candidates
+
+
+## 唯一的一次性地面发放回调：场景负责房间/落点，Sink 负责结果账。
+func _deliver_ground_rewards(
+	room: DungeonRoom3D, grants: Array, origin: Vector3, context: String
+) -> Dictionary:
+	var delivery := REWARD_SINK_SCRIPT.apply_ground(
+		grants, func(items: Array) -> int: return _spawn_loot_items(room, items, origin)
+	)
+	var rejected := delivery.get("rejected", []) as Array
+	if not rejected.is_empty():
+		push_warning("[Dungeon3D] Ground reward rejected (%s): %d/%d" % [context, rejected.size(), grants.size()])
+	return delivery
 
 
 ## `spread`：是否按「第几件」做确定性散布（多件掉落才需要，避免叠在一起）。
@@ -2822,7 +2917,10 @@ func _spawn_loot_items(
 	world_position: Vector3,
 	pickup_grace_seconds: float = 0.0,
 	spread: bool = true
-) -> void:
+) -> int:
+	if room == null or not is_instance_valid(room):
+		return 0
+	var spawned := 0
 	for index in range(items.size()):
 		var item_value: Variant = items[index]
 		if not item_value is Dictionary:
@@ -2845,6 +2943,8 @@ func _spawn_loot_items(
 			room.global_position
 		)
 		pickup.pickup_requested.connect(_on_ground_loot_requested)
+		spawned += 1
+	return spawned
 
 
 func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> void:
@@ -2924,7 +3024,7 @@ func _get_minimap_enemy_positions() -> Array[Vector3]:
 func _on_service_activated(_room: DungeonRoom3D, station: ServiceStation3D) -> void:
 	match station.station_type:
 		"merchant":
-			_open_merchant()
+			_open_merchant(_room.room_id if _room != null else "")
 		"upgrade":
 			_open_workbench()
 		"event":
@@ -2964,9 +3064,39 @@ func _open_workbench() -> void:
 	status_label.text = "改造台：7 远程 + 2 近战 · 8 弹药，使用同一装配树"
 
 
-func _open_merchant() -> void:
+func _open_merchant(merchant_id: String = "") -> void:
 	if _merchant_ui != null and is_instance_valid(_merchant_ui):
 		return
+	if _merchant_stock_restore_failed:
+		status_label.text = "商人货架存档无效 · 已暂停交易"
+		return
+	if merchant_id.is_empty():
+		merchant_id = _current_room_id
+	if merchant_id.is_empty():
+		status_label.text = "商人房间身份缺失"
+		return
+	if _merchant_service == null:
+		_merchant_service = RUN_MERCHANT_SERVICE_SCRIPT.new()
+	var was_new_stock := not _merchant_service.has_stock(merchant_id)
+	var stock_before := _merchant_service.export_stock_snapshot()
+	var goods: Array[Dictionary] = []
+	if was_new_stock:
+		goods = _loot_module.generate_merchant_goods(maxi(1, visual_theme.difficulty_rank), 6)
+	var session_id := "%s:merchant:%d" % [_run_id, Time.get_ticks_usec()]
+	var opened := _merchant_service.open_session(session_id, merchant_id, goods)
+	if not bool(opened.get("success", false)):
+		status_label.text = "商人会话无法开启"
+		return
+	if was_new_stock:
+		var persisted := false
+		if _runtime_persistence_active and BaseManager != null:
+			persisted = BaseManager.flush_runtime_checkpoint("run_merchant_stock_opened")
+		elif test_mode:
+			persisted = true
+		if not persisted:
+			_merchant_service.restore_stock_snapshot(stock_before)
+			status_label.text = "商人货架保存失败 · 请重试"
+			return
 	_merchant_ui = MerchantUI.new()
 	_merchant_ui.name = "MerchantUI3D"
 	_merchant_ui.set_anchors_preset(Control.PRESET_CENTER)
@@ -2974,27 +3104,75 @@ func _open_merchant() -> void:
 	_merchant_ui.offset_top = -220
 	_merchant_ui.offset_right = 300
 	_merchant_ui.offset_bottom = 220
-	_merchant_ui.set_inventory(_inventory)
 	_merchant_ui.set_tier(maxi(1, visual_theme.difficulty_rank))
 	_merchant_ui.set_shop_name("%s · 废土拾荒商" % gameplay_theme.display_name)
 	$HUD.add_child(_merchant_ui)
-	_merchant_ui.purchase_requested.connect(_on_merchant_purchase)
+	_merchant_ui.purchase_command_requested.connect(_on_merchant_purchase_command)
 	_merchant_ui.merchant_closed.connect(_on_merchant_closed)
-	var goods := _loot_module.generate_merchant_goods(maxi(1, visual_theme.difficulty_rank), 6)
-	_merchant_ui.show_merchant(goods)
+	_merchant_ui.show_offers(session_id, _merchant_service.get_offers_snapshot())
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	status_label.text = "拾荒商已接入 · 购买会占用真实背包格"
 
 
-func _on_merchant_purchase(item: Dictionary, _slot_index: int) -> void:
-	_trade_extraction_unlocked = true
+func _on_merchant_purchase_command(
+	session_id: String, offer_id: String, weapon_instance_id: String
+) -> void:
+	if _merchant_service == null:
+		return
+	var result := _merchant_service.purchase(
+		session_id, offer_id, weapon_instance_id, _inventory, GameManager,
+		Callable(self, "_commit_merchant_purchase_checkpoint"),
+		Callable(self, "_merchant_weapon_instance_already_owned")
+	)
+	if not bool(result.get("success", false)):
+		status_label.text = "商人交易失败：%s" % str(result.get("code", "unknown"))
+		return
+	var item := result.get("item", {}) as Dictionary
+	if _merchant_ui != null and is_instance_valid(_merchant_ui):
+		_merchant_ui.update_offers(_merchant_service.get_offers_snapshot())
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	_ensure_conditional_extraction("TRADE", room, Vector3(-4.0, 0.0, 3.0))
 	status_label.text = "购入 %s · 交易撤离条件已解锁" % item.get("name", "物品")
 
 
+func _commit_merchant_purchase_checkpoint() -> bool:
+	var was_unlocked := _trade_extraction_unlocked
+	var previous_room_id := _trade_extraction_room_id
+	_trade_extraction_unlocked = true
+	_trade_extraction_room_id = _current_room_id
+	if not _runtime_persistence_active:
+		return true
+	if BaseManager != null and BaseManager.flush_runtime_checkpoint("run_merchant_purchase"):
+		return true
+	_trade_extraction_unlocked = was_unlocked
+	_trade_extraction_room_id = previous_room_id
+	return false
+
+
+func _merchant_weapon_instance_already_owned(instance_id: String) -> bool:
+	if instance_id.is_empty():
+		return false
+	if _inventory != null and _inventory.has_weapon_instance(instance_id):
+		return true
+	if _insurance != null and _insurance.has_weapon_instance(instance_id):
+		return true
+	if _quick_inventory != null and _quick_inventory.has_weapon_instance(instance_id):
+		return true
+	if player != null:
+		for slot_index in range(2):
+			if player.get_equipped_weapon_instance_id_for_slot(slot_index) == instance_id:
+				return true
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and is_ancestor_of(value):
+			if str((value as GroundLootPickup3D).item_data.get("weapon_instance_id", "")) == instance_id:
+				return true
+	return false
+
+
 func _on_merchant_closed() -> void:
+	if _merchant_service != null:
+		_merchant_service.close_session()
 	if _merchant_ui != null and is_instance_valid(_merchant_ui):
 		var closing := _merchant_ui
 		get_tree().create_timer(0.3).timeout.connect(closing.queue_free)
@@ -3207,9 +3385,10 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 			maxi(1, visual_theme.difficulty_rank),
 			"room_clear:%s" % room.room_id
 		)
-		var clear_items := clear_report.get("items", []) as Array
-		if not clear_items.is_empty():
-			_spawn_loot_items(room, clear_items, room.global_position)
+		_deliver_ground_rewards(
+			room, clear_report.get("grants", []), room.global_position,
+			"clear:%s" % room.room_id
+		)
 	if not was_cleared and room.room_type in HOSTILE_ROOM_TYPES and _room_clear_bounty_rooms > 0:
 		_grant_run_currency(_room_clear_bounty_amount)
 		_room_clear_bounty_rooms -= 1
@@ -3256,7 +3435,7 @@ func _spawn_room_key(room: DungeonRoom3D) -> void:
 	var reward_report := _reward_coordinator.resolve_fixed_item(
 		"item_room_key", 1, "room_clear_key:%s" % room.room_id, maxi(1, visual_theme.difficulty_rank)
 	)
-	if not bool(reward_report.get("ok", false)) or (reward_report.get("items", []) as Array).is_empty():
+	if not bool(reward_report.get("ok", false)) or (reward_report.get("grants", []) as Array).is_empty():
 		push_error("Room key reward rejected by RewardService: %s" % str(reward_report.get("errors", [])))
 		return
 	var key := KEY_SCRIPT.new() as RoomKeyPickup3D

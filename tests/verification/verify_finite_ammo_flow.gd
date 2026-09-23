@@ -74,11 +74,11 @@ func _ready() -> void:
 		"floor": 2,
 		"loot_table": "loot_floor_1_2",
 		"is_elite": true,
-	}, "finite_ammo_elite").get("items", []) as Array
+	}, "finite_ammo_elite").get("grants", []) as Array
 	var dropped_rounds := 0
-	for item in elite_drops:
-		if str(item.get("id", "")) == "item_ammo_pack":
-			dropped_rounds += int(item.get("count", 0))
+	for grant in elite_drops:
+		if str(grant.get("item_id", "")) == "item_ammo_pack":
+			dropped_rounds += int(grant.get("count", 0))
 	if dropped_rounds < 8:
 		failures.append("elite enemy did not produce its guaranteed reserve-ammo stack")
 

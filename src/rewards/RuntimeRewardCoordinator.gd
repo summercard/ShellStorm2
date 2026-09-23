@@ -1,6 +1,6 @@
 class_name RuntimeRewardCoordinator
 extends RefCounted
-## 运行时奖励调度边界：场景只提供触发事实，本类负责覆盖链、确定性 seed 与旧地面字典桥接。
+## 运行时奖励调度边界：场景只提供触发事实，本类负责覆盖链与确定性 seed。
 ## 不持有场景节点，不生成表现，不写背包/钱包。
 
 const SERVICE := preload("res://src/rewards/RewardService.gd")
@@ -64,44 +64,43 @@ func resolve_kill(
 			}],
 		}, _context("%s:bounty" % event_id, floor))
 		(report["grants"] as Array).append_array(bounty_report.get("grants", []))
-		(report["items"] as Array).append_array(SERVICE.to_legacy_items(bounty_report.get("grants", [])))
 		(report["errors"] as Array).append_array(bounty_report.get("errors", []))
 		report["ok"] = bool(report.get("ok", false)) and bool(bounty_report.get("ok", false))
 	# Runtime presentation keeps the current one-physical-pickup contract.  A
 	# monster spec can independently hit both its main pool and the ammo rider;
 	# ammo wins that collision so elite/boss guaranteed reserve ammo remains
 	# true. Base currency and elite bounty collapse into one ground orb.
-	_collapse_kill_ground_items(report)
+	_collapse_kill_ground_grants(report)
 	return report
 
 
-func _collapse_kill_ground_items(report: Dictionary) -> void:
-	var items := report.get("items", []) as Array
-	var currency_items: Array = []
-	var physical_items: Array = []
-	for value in items:
-		var item := value as Dictionary
-		if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
-			currency_items.append(item)
+func _collapse_kill_ground_grants(report: Dictionary) -> void:
+	var grants := report.get("grants", []) as Array
+	var currency_grants: Array = []
+	var physical_grants: Array = []
+	for value in grants:
+		var grant := value as Dictionary
+		if str(grant.get("kind", "")) == "currency":
+			currency_grants.append(grant)
 		else:
-			physical_items.append(item)
+			physical_grants.append(grant)
 	var collapsed: Array = []
-	if not physical_items.is_empty():
-		var chosen := physical_items[0] as Dictionary
-		for value in physical_items:
+	if not physical_grants.is_empty():
+		var chosen := physical_grants[0] as Dictionary
+		for value in physical_grants:
 			var candidate := value as Dictionary
-			if str(candidate.get("id", "")) == "item_ammo_pack":
+			if str(candidate.get("item_id", "")) == "item_ammo_pack":
 				chosen = candidate
 				break
 		collapsed.append(chosen)
-	if not currency_items.is_empty():
-		var merged_currency := (currency_items[0] as Dictionary).duplicate(true)
+	if not currency_grants.is_empty():
+		var merged_currency := (currency_grants[0] as Dictionary).duplicate(true)
 		var total_currency := 0
-		for value in currency_items:
-			total_currency += maxi(0, int((value as Dictionary).get("count", 0)))
-		merged_currency["count"] = total_currency
+		for value in currency_grants:
+			total_currency += maxi(0, int((value as Dictionary).get("amount", 0)))
+		merged_currency["amount"] = total_currency
 		collapsed.append(merged_currency)
-	report["items"] = collapsed
+	report["grants"] = collapsed
 
 
 func resolve_fixed_item(item_id: String, count: int, event_id: String, floor := 1) -> Dictionary:
@@ -109,19 +108,18 @@ func resolve_fixed_item(item_id: String, count: int, event_id: String, floor := 
 		"spec_id": "fixed:%s" % event_id,
 		"entries": [{"kind": "item", "item_id": item_id, "count": count}],
 	}, _context(event_id, floor))
-	return _report_with_items(resolution)
+	return _report(resolution)
 
 
 func _resolve_dispatch(request: Dictionary) -> Dictionary:
-	return _report_with_items(SERVICE.resolve_dispatch(request))
+	return _report(SERVICE.resolve_dispatch(request))
 
 
-func _report_with_items(resolution: Dictionary) -> Dictionary:
+func _report(resolution: Dictionary) -> Dictionary:
 	return {
 		"ok": bool(resolution.get("ok", false)),
 		"spec_id": str(resolution.get("spec_id", "")),
 		"grants": (resolution.get("grants", []) as Array).duplicate(true),
-		"items": SERVICE.to_legacy_items(resolution.get("grants", [])),
 		"rejected": (resolution.get("rejected", []) as Array).duplicate(true),
 		"errors": (resolution.get("errors", []) as Array).duplicate(true),
 		"truncated": bool(resolution.get("truncated", false)),

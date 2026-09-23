@@ -26,6 +26,10 @@ static func equip_weapon_from_inventory(
 	var source_item := source_entry.get("item", {}) as Dictionary
 	if source_item.is_empty() or str(source_item.get("id", "")) != str(item.get("id", "")):
 		return _failure("source_slot_changed", "来源背包格内容已变化")
+	# 同枪型不等于同一把枪。UI 快照过期时必须拒绝，而不是把该格后来放入的
+	# 另一把同型武器转走。
+	if str(source_item.get("weapon_instance_id", "")) != str(item.get("weapon_instance_id", "")):
+		return _failure("source_slot_changed", "来源背包格武器实例已变化")
 
 	var incoming := WeaponInstance.ensure_weapon_item(source_item)
 	if str(incoming.get("type", "")) != "weapon":

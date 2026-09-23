@@ -96,6 +96,25 @@ func has_space() -> bool:
 func can_add(num_items: int = 1) -> bool:
 	return get_free_slots() >= num_items
 
+
+## 交易预检：已有堆叠的剩余容量也算可用空间；不改变格位。
+func can_add_item_exact(item: Dictionary, count: int = 1) -> bool:
+	if item.is_empty() or count <= 0 or str(item.get("id", "")).is_empty():
+		return false
+	if str(item.get("type", "")) == "weapon" and count != 1:
+		return false
+	var instance_id := str(item.get("weapon_instance_id", ""))
+	if not instance_id.is_empty() and has_weapon_instance(instance_id):
+		return false
+	var remaining := count
+	var stack_max := maxi(1, int(item.get("stack_max", 1)))
+	for slot in _slots:
+		if not slot.is_empty() and _items_can_stack(slot.item, item):
+			remaining -= maxi(0, stack_max - slot.count)
+			if remaining <= 0:
+				return true
+	return remaining <= get_free_slots() * stack_max
+
 ## 添加物品（自动分配格子）
 ## 返回实际成功添加的数量
 func add_item(item: Dictionary, count: int = 1) -> int:

@@ -4,16 +4,17 @@ class_name MerchantUI
 
 extends Control
 
-signal purchase_requested(item: Dictionary, slot_index: int)
+signal purchase_command_requested(session_id: String, offer_id: String, weapon_instance_id: String)
 signal merchant_closed()
 
 @export var inventory_tier: int = 1
 @export var shop_name: String = "流浪商人"
 
-var _inventory_module: InventoryModule = null
 var _currency: int = 0
 var _slots: Array[Control] = []
 var _items: Array[Dictionary] = []
+var _offers: Array[Dictionary] = []
+var _session_id := ""
 var _affordable_style: StyleBoxFlat
 var _unaffordable_style: StyleBoxFlat
 
@@ -26,10 +27,6 @@ func _ready() -> void:
 	GameManager.currency_changed.connect(_on_currency_changed)
 	UIStyleFactory.apply_tactical_tree(self)
 
-## 设置背包引用
-func set_inventory(inventory: InventoryModule) -> void:
-	_inventory_module = inventory
-
 ## 设置商人层级
 func set_tier(tier: int) -> void:
 	inventory_tier = tier
@@ -41,23 +38,30 @@ func set_shop_name(name: String) -> void:
 var _current_tween: Tween = null
 var _tween_duration: float = 0.25
 
-## 启用面板（商人房进入时调用）
-func show_merchant(goods: Array[Dictionary]) -> void:
+## 正式战局只展示服务快照；所有购买均发命令，不在 UI 写魂或背包。
+func show_offers(session_id: String, offers: Array[Dictionary]) -> void:
+	_session_id = session_id
+	_offers = offers.duplicate(true)
 	_items.clear()
-	for raw_item in goods:
-		_items.append(WeaponInstance.ensure_weapon_item(raw_item))
+	for offer in _offers:
+		_items.append((offer.get("item", {}) as Dictionary).duplicate(true))
 	_build_shop_grid()
 	_refresh_affordability()
 	UIStyleFactory.apply_tactical_tree(self)
-	# 停止旧动画并显示面板（动画版本自动处理打断）
 	_show_panel_animated()
-	# 取初始焦点。只设 focus_mode 是不够的 —— 没有 focus owner，
-	# 十字键导航与 A 键确认都没有派发对象，手柄在这个界面里是死的。
-	if has_node("CloseButton"):
-		var btn: Button = $CloseButton as Button
-		if btn:
-			btn.focus_mode = Control.FOCUS_ALL
-			UiMenuFocus.ensure_focus(self)
+	var close_btn := get_node_or_null("VBox/TitleHBox/CloseButton") as Button
+	if close_btn != null:
+		close_btn.focus_mode = Control.FOCUS_ALL
+	UiMenuFocus.ensure_focus(self)
+
+
+func update_offers(offers: Array[Dictionary]) -> void:
+	_offers = offers.duplicate(true)
+	_items.clear()
+	for offer in _offers:
+		_items.append((offer.get("item", {}) as Dictionary).duplicate(true))
+	_build_shop_grid()
+	_refresh_affordability()
 
 ## 隐藏面板
 func hide_merchant() -> void:
@@ -234,26 +238,14 @@ func _on_shop_slot_input(event: InputEvent, slot_index: int) -> void:
 
 ## 格子点击（购买）
 func _on_slot_clicked(slot_index: int) -> void:
-	if slot_index >= _items.size():
+	if slot_index < 0 or slot_index >= _offers.size():
 		return
-	var item: Dictionary = _items[slot_index]
-	var price: int = item.get("price", 0)
-	if _inventory_module != null and not _inventory_module.has_space():
-		print("[MerchantUI] 背包已满，无法购买: %s" % item.get("name", "?"))
-		return
-	if GameManager.spend_currency(price):
-		if _inventory_module != null:
-			if _inventory_module.add_item(item.duplicate(true), 1) != 1:
-				GameManager.add_currency(price)
-				print("[MerchantUI] 购买事务回滚: 无法转移商品实例")
-				return
-		purchase_requested.emit(item, slot_index)
-		# 商店武器是唯一实例；任何商品成交后都离开本次库存，不能重复购买。
-		_items.remove_at(slot_index)
-		_build_shop_grid()
-		_refresh_affordability()
-	else:
-		print("[MerchantUI] 魂不足，无法购买: %s (需要 %d)" % [item.get("name", "?"), price])
+	var offer := _offers[slot_index]
+	var item := offer.get("item", {}) as Dictionary
+	purchase_command_requested.emit(
+		_session_id, str(offer.get("offer_id", "")),
+		str(item.get("weapon_instance_id", ""))
+	)
 
 ## 货币变化刷新
 func _on_currency_changed(amount: int) -> void:
