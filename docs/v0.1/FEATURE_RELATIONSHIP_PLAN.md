@@ -1,6 +1,6 @@
 # v0.1 功能关系、文档对齐与解耦跟进计划
 
-工程版本：`0.1.0`；计划修订：r2；建立日期：2026-09-23；新拉取基线：`622d6c4a`；适用范围：当前正式远征主线及已登记的 37 个 FeatureID。
+工程版本：`0.1.0`；计划修订：r3；建立日期：2026-09-23；新拉取基线：`622d6c4a`；适用范围：当前正式远征主线及已登记的 37 个 FeatureID。
 
 本计划的逐项执行表是[功能关系与解耦跟踪表](FEATURE_RELATIONSHIP_MATRIX.md)。功能身份、状态 Owner、主设计、开发记录和验收入口仍以[模块索引](MODULE_INDEX.md)及[机器注册表](feature_registry.json)为准；本计划记录关系和待办，不另建平行状态源。
 
@@ -21,10 +21,10 @@
 
 | 链路 | 当前衔接 | 交接点及主要风险 |
 |---|---|---|
-| 启动与远征 | 新档98F办公室开场/已有档99F基地 → `ENTRY-AVATAR` → `BASE-FACILITY` → `WORLD-ENTRY` → `WORLD-PLAN` → `SAVE-RUN` | 新档判据为教程未完成且无运行时快照；非战局天台/基地下线回99F；入口意图、设施ID、关卡ID和`runtime_map_id`仍需追踪 |
+| 启动与远征 | 新档98F办公室开场/已有档99F基地 → `ENTRY-AVATAR` → `BASE-FACILITY` → `WORLD-ENTRY` → `WORLD-PLAN` → `SAVE-RUN` | 新档判据为教程未完成且无运行时快照；普通基地快照恢复98F世界和携带物、玩家固定回99F；远征交接必须有显式标记，设施ID、关卡ID和`runtime_map_id`继续追踪 |
 | 行动与战斗 | `PLAYER-STATE` / `PLAYER-INTERACT` → `WEAPON-COMBAT` / `ENEMY-AI` → `REWARD-SERVICE` → `WORLD-LOOT` → `INVENTORY-SLOTS` | 战斗事件与奖励 Spec 已集中解析；场景发放仍经旧 item 字典桥 |
 | 构筑与跨局 | `WEAPON-OWNERSHIP` / `INVENTORY-SLOTS` / `FATE-RULES` → `RUN-SETTLE` → `SAVE-PROFILE` → `BASE-SHOP` / `BASE-WORKSHOP` | 武器实例ID、事务ID、资源余额和 Tier；主要事务已有回滚与幂等 |
-| 世界与故事 | 场景事件 → `NARRATIVE-TRIGGER` → `DIALOGUE-UI`；`scene.spawn_item` → `REWARD-SERVICE` → `WORLD-LOOT`；完整收口 → `SAVE-PROFILE` | 导演将地牢绑定注入适配器；物品由奖励服务解析、挂入房间；`BaseManager`独占`narrative_history`写入，`run`档本局内存态与跨局历史共同裁决 |
+| 世界与故事 | 场景事件 → `NARRATIVE-TRIGGER` → `DIALOGUE-UI`；`scene.spawn_item` → `REWARD-SERVICE` → `WORLD-LOOT`；完整收口 → `SAVE-PROFILE` | 导演将地牢绑定注入适配器；`spawn_key`使开场枪落地幂等，房间`ground_items[]`与刷物键进世界快照；`BaseManager`独占`narrative_history`写入，剧情完成历史不充当物品账本 |
 | 时间与表现 | `TIME-DAYNIGHT` → `POWER-SYSTEM` / 太阳；领域快照 → `UI-HUD` / `VFX-POOL` / `AUDIO-MUSIC` / `GRAPHICS-POSTFX` | 时间单位、能源域、表现事件；UI应消费快照而非改写领域事实 |
 | 退出与恢复 | `WORLD-ENTRY` / 战局 → `SAVE-RUN` → `RUN-SETTLE` / `RUN-REVIVE` → `SAVE-PROFILE` → 基地 | 行动ID、结算ID、原子写盘、失败回滚与重载幂等；复活目前只有空策略 |
 | 隐藏连续爬塔 | `WORLD-GATE` → `WORLD-SEGMENT` → `SAVE-RUN` / `BOSS-STAGES` | 用户已将连续爬塔降为低优先级；保留设计与红项，未来开放前复核完整链路 |
@@ -59,7 +59,7 @@
 - 当前可明确独立维护的完整模块为训练场；远征入口是完成的功能级链路。纯楼层计划、换装事务、奖励解析、工坊规则、结算、HUD映射等可局部独立。
 - `TowerDescent3D`、`Dungeon3D`、`Player3D`、`BaseManager` 仍是主要编排/状态聚合点；24 个 Autoload 扩大了全局依赖面。现有跨域门禁只覆盖三类已知私有访问。
 - 资产账本在新拉取的 `622d6c4a` 上复核为 410 项、9 本分账本、完整性问题 0、拆账漂移 0（敌人账本由12增至13）。此前完整复评的 426/230 和拉取前的 409/0 都是各自时点的结果。
-- 拉取前最近一次 `aggregate core` 为 129 项中 15 项失败；新拉取后的聚合结果待重跑。视觉、目标 GPU、移动端和长测不能由 headless 结果代替。
-- 新拉取后的5场景批跑为4通过、1失败：`verify_narrative_timeline`先写入开场的跨局历史，后续`verify_opening_script_runtime`在同一隔离用户目录中被该历史挡住；后者单独运行105项通过。当前Runner按批次隔离用户目录，尚未按场景隔离，须在工具链中修正测试前置条件/顺序污染并复跑批次。
+- 当前 `aggregate core` 为 130 项中 15 项失败，较前一份 129/15 基线新增的新档场景通过，失败清单逐项相同；视觉、目标 GPU、移动端和长测不能由 headless 结果代替。
+- 前一修订的5场景批跑为4通过、1失败：剧情历史污染后续开场。现Runner已按场景隔离`user://`；剧情→开场→新档交接3场景批次退出码0。旧失败保留在[当时记录](development/2026-09-23_feature_relationship_pull_alignment.md)，不倒写为历史通过。
 
 本计划仅规定追踪与补全顺序；表中“待补”不意味着立即改动玩法或要求全部功能完全解耦。

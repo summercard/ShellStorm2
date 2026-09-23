@@ -202,6 +202,8 @@ var _hud_run_elapsed := 0.0
 var _hud_last_elapsed_second := -1
 var _minimap_runtime_accumulator := 0.0
 var _runtime_restore_snapshot: Dictionary = {}
+## 基地快照只恢复世界和携带物；玩家仍在基地固定点出生。
+var _runtime_base_restore_snapshot: Dictionary = {}
 ## 独立副本「撤离信号塔成功返航」的所有权交接快照。与 `_runtime_restore_snapshot`
 ## 的区别是只交接玩家携带物，绝不恢复世界布局、房间状态与坐标。
 var _runtime_carry_restore_snapshot: Dictionary = {}
@@ -209,6 +211,7 @@ var _runtime_persistence_active := false
 var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
+var _narrative_spawned_keys: Dictionary = {}
 var _room_graph_runtime: RoomGraphRuntime = ROOM_GRAPH_RUNTIME_SCRIPT.new()
 
 
@@ -235,6 +238,16 @@ func _ready() -> void:
 				# 从关卡场景交接给返航落点（99F）。它绝不是一次可续局行动，
 				# 所以不走上面的 combat 分支，也不改 run_seed / run_id。
 				_runtime_carry_restore_snapshot = candidate
+			elif (
+				RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(candidate)
+				and str(candidate.get("scope", "")) == "base"
+				and _snapshot_matches_runtime_map(candidate)
+				and str((candidate.get("world_state", {}) as Dictionary).get("schema", ""))
+				in ["tower_world_state_v1", "dungeon_world_state_v1"]
+			):
+				_runtime_base_restore_snapshot = candidate
+				run_seed_override = int(candidate.get("run_seed", run_seed_override))
+				_run_id = str(candidate.get("run_id", ""))
 	if gameplay_theme == null:
 		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
 	if visual_theme == null:
@@ -302,6 +315,8 @@ func _activate_runtime_persistence() -> void:
 		return
 	if not _runtime_restore_snapshot.is_empty():
 		_restore_runtime_save_snapshot(_runtime_restore_snapshot)
+	if not _runtime_base_restore_snapshot.is_empty():
+		_restore_base_runtime_save_snapshot(_runtime_base_restore_snapshot)
 	if not _runtime_carry_restore_snapshot.is_empty():
 		# 独立副本成功撤离的交接只认玩家所有权：世界、房间、坐标一律按落点
 		# 场景自己生成，否则会把返航目标改成刚离开的那张关卡地图。
@@ -458,7 +473,8 @@ func _snapshot_matches_runtime_map(snapshot: Dictionary) -> bool:
 func _build_runtime_world_save_snapshot() -> Dictionary:
 	_capture_loaded_runtime_rooms()
 	return RUN_PERSISTENCE_SERVICE.build_world_state(
-		"dungeon_world_state_v1", _segment_runtime_state
+		"dungeon_world_state_v1", _segment_runtime_state,
+		{"narrative_spawned_keys": _narrative_spawned_keys}
 	)
 
 
@@ -471,6 +487,25 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 		snapshot["current_room_id"] = ""
 		snapshot["player_position"] = []
 	_restore_carried_ownership(snapshot)
+
+
+func _restore_base_runtime_save_snapshot(snapshot: Dictionary) -> void:
+	var restored := snapshot.duplicate(true)
+	if not _restore_runtime_world_save_snapshot(snapshot):
+		restored["world_restore_failed"] = true
+	var base_room_id := "facility" if _room_by_id.has("facility") else "start"
+	var base_room := _room_by_id.get(base_room_id) as DungeonRoom3D
+	if base_room == null:
+		push_error("[Dungeon3D] Base snapshot has no safe spawn room")
+		return
+	restored["current_room_id"] = base_room_id
+	var safe_position := _base_runtime_restore_position(base_room)
+	restored["player_position"] = [safe_position.x, safe_position.y, safe_position.z]
+	_restore_carried_ownership(restored)
+
+
+func _base_runtime_restore_position(room: DungeonRoom3D) -> Vector3:
+	return room.global_position + Vector3.UP * 0.05
 
 
 ## 玩家携带物的所有权恢复 —— 世界、房间与坐标不归这里管。
@@ -564,7 +599,19 @@ func _restore_carried_ownership(snapshot: Dictionary) -> void:
 
 func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
+	_restore_narrative_spawned_keys(snapshot)
 	return true
+
+
+func _restore_narrative_spawned_keys(snapshot: Dictionary) -> void:
+	_narrative_spawned_keys.clear()
+	var world_state := snapshot.get("world_state", {}) as Dictionary
+	var saved_keys: Variant = world_state.get("narrative_spawned_keys", {})
+	if saved_keys is Dictionary:
+		for key_value in (saved_keys as Dictionary).keys():
+			var key := str(key_value)
+			if not key.is_empty() and bool((saved_keys as Dictionary)[key_value]):
+				_narrative_spawned_keys[key] = true
 
 
 func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
@@ -2371,8 +2418,11 @@ func narrative_grant_item(item_id: String, count: int) -> Dictionary:
 ## `item_id` 的解析复用奖励服务（唯一真源），不在这里另写一张物品表。
 ## `spread=false`（默认）时**精确**落在 origin —— 剧本要"转身对着它说"就必须精确。
 func narrative_spawn_item(
-	room_id: String, item_id: String, count: int, origin: Vector3, spread := false
+	room_id: String, item_id: String, count: int, origin: Vector3, spread := false,
+	spawn_key: String = ""
 ) -> int:
+	if not spawn_key.is_empty() and _narrative_spawned_keys.has(spawn_key):
+		return 1
 	if _reward_coordinator == null or item_id.is_empty() or count <= 0:
 		return 0
 	var report := _reward_coordinator.resolve_fixed_item(
@@ -2385,7 +2435,12 @@ func narrative_spawn_item(
 		)
 		return 0
 	var items := report.get("items", []) as Array
-	return narrative_spawn_loot(room_id, items, origin, spread)
+	var spawned := narrative_spawn_loot(room_id, items, origin, spread)
+	if spawned > 0:
+		if not spawn_key.is_empty():
+			_narrative_spawned_keys[spawn_key] = true
+		_queue_runtime_autosave("narrative_ground_loot_spawned")
+	return spawned
 
 
 ## 剧情把**现成的 item 字典**放到地面（不解析、不重造）。
@@ -2798,6 +2853,7 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 		if _map_fate_triggers != null:
 			_map_fate_triggers.on_currency_collected(granted)
 		pickup.accept_pickup()
+		_queue_runtime_autosave("ground_loot_picked_up")
 		status_label.text = "取得 %d 魂" % granted
 		_refresh_loot_label()
 		return
@@ -2810,6 +2866,7 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 		pickup.accept_pickup()
 	else:
 		pickup.item_data["count"] = requested - added
+	_queue_runtime_autosave("ground_loot_picked_up")
 	status_label.text = "拾取 %s x%d%s" % [
 		item.get("name", item.get("id", "物资")),
 		added,
@@ -3898,7 +3955,7 @@ func _hibernate_room_entities(room_id: String) -> void:
 	if room == null:
 		return
 	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
-		if value is GroundLootPickup3D and room.is_ancestor_of(value):
+		if value is GroundLootPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion() and not (value as GroundLootPickup3D).is_pickup_accepted():
 			(value as GroundLootPickup3D).queue_free()
 	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
 		if value is RoomKeyPickup3D and room.is_ancestor_of(value):
@@ -3919,7 +3976,7 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		enemy_states.append(enemy.export_runtime_state())
 	var ground_items: Array[Dictionary] = []
 	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
-		if value is GroundLootPickup3D and room.is_ancestor_of(value):
+		if value is GroundLootPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion() and not (value as GroundLootPickup3D).is_pickup_accepted():
 			var pickup := value as GroundLootPickup3D
 			ground_items.append({
 				"item_data": pickup.item_data.duplicate(true),

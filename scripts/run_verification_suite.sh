@@ -21,6 +21,8 @@ fi
 isolated_project_root="${verification_tmp_root}/project"
 verification_log_dir="${verification_tmp_root}/logs"
 verification_user_dir_name="ShellStorm2Verification_$$_$(date +%s)"
+verification_user_dir_names=("${verification_user_dir_name}")
+verification_scene_sequence=0
 mkdir -p "${isolated_project_root}" "${verification_log_dir}"
 
 seed_isolated_import_cache() {
@@ -57,7 +59,9 @@ seed_isolated_import_cache
 if [[ "${SHELLSTORM_VERIFICATION_FORCE_COLD_CLASS_CACHE:-0}" == "1" ]]; then
   rm -f "${isolated_project_root}/.godot/global_script_class_cache.cfg"
 fi
-awk -v isolated_name="${verification_user_dir_name}" '
+write_isolated_project_settings() {
+  local isolated_name="$1"
+  awk -v isolated_name="${isolated_name}" '
   /^\[application\]$/ {
     print
     print "config/use_custom_user_dir=true"
@@ -65,7 +69,9 @@ awk -v isolated_name="${verification_user_dir_name}" '
     next
   }
   { print }
-' "${project_root}/project.godot" > "${isolated_project_root}/project.godot"
+  ' "${project_root}/project.godot" > "${isolated_project_root}/project.godot"
+}
+write_isolated_project_settings "${verification_user_dir_name}"
 export SHELLSTORM_VERIFICATION_USER_DIR_NAME="${verification_user_dir_name}"
 verification_import_log="${verification_log_dir}/project_import.log"
 if ! "${godot_bin}" --headless --path "${isolated_project_root}" --import \
@@ -109,12 +115,15 @@ cleanup_active_test() {
 cleanup_verification_workspace() {
   cleanup_active_test
   rm -rf "${verification_tmp_root}"
-  rm -rf "${HOME}/Library/Application Support/Godot/app_userdata/${verification_user_dir_name}"
-  rm -rf "${HOME}/.local/share/godot/app_userdata/${verification_user_dir_name}"
-  # Windows：Godot 把自定义用户目录落在 %APPDATA%\Godot\app_userdata 下。
-  if [[ -n "${APPDATA:-}" ]]; then
-    rm -rf "${APPDATA}/Godot/app_userdata/${verification_user_dir_name}"
-  fi
+  local isolated_name
+  for isolated_name in "${verification_user_dir_names[@]}"; do
+    rm -rf "${HOME}/Library/Application Support/Godot/app_userdata/${isolated_name}"
+    rm -rf "${HOME}/.local/share/godot/app_userdata/${isolated_name}"
+    # Windows：Godot 把自定义用户目录落在 %APPDATA%\Godot\app_userdata 下。
+    if [[ -n "${APPDATA:-}" ]]; then
+      rm -rf "${APPDATA}/Godot/app_userdata/${isolated_name}"
+    fi
+  done
 }
 
 trap cleanup_verification_workspace EXIT
@@ -143,6 +152,7 @@ core_scenes=(
   verify_dialogue_ui_flow
   verify_narrative_timeline
   verify_opening_script_runtime
+  verify_new_save_handoff
   verify_tower_journey_polish
   verify_arrival_gate_floor_bundle_flow
   verify_common_floor_tile_components_v004
@@ -321,6 +331,13 @@ run_scene() {
   local preflight_log="${verification_log_dir}/${scene_name}.preflight.log"
   local scene_log="${verification_log_dir}/${scene_name}.scene.log"
   local expected_errors="${project_root}/tests/verification/expected_errors/${scene_name}.txt"
+  # 每个场景共用导入缓存，但必须拥有独立 user://；预检与正片共用同一目录。
+  # 这样前一场景写下的长期档案不会改变后一场景的开局条件。
+  verification_scene_sequence=$((verification_scene_sequence + 1))
+  verification_user_dir_name="${verification_user_dir_names[0]}_${verification_scene_sequence}"
+  verification_user_dir_names+=("${verification_user_dir_name}")
+  write_isolated_project_settings "${verification_user_dir_name}"
+  export SHELLSTORM_VERIFICATION_USER_DIR_NAME="${verification_user_dir_name}"
   printf '\n[%s] %s\n' "${suite}" "${scene_name}"
   if ! "${godot_bin}" --headless --path "${isolated_project_root}" \
     --script res://scripts/verify_scene_preflight.gd -- "${scene_path}" >"${preflight_log}" 2>&1; then

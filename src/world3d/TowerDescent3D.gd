@@ -728,12 +728,9 @@ func _should_start_on_rooftop_for_entry() -> bool:
 				# 独立图与旧塔楼存档按 runtime_map_id 隔离，互不续对方的局。
 				if not _snapshot_matches_runtime_map(last_base_snapshot):
 					return test_mode or BaseManager.should_start_on_rooftop()
-				# 2026-09-23 修正：非战局内下线（100F 天台与 99F 基地都算）一律回 99F 基地
-				# 固定出生点。原实现返回「上次那个房间是不是 start」，会让在 100F 天台边缘
-				# 下线的玩家上线后仍被送回 100F —— 与「非战局内下线统一回基地」的既有设计
-				# 冲突（真机实测：天台下线 ⇒ 落 100F 天台固定点）。教程未完成的档仍走天台，
-				# 保证新手第一段能看见天台。
-				return BaseManager.should_start_on_rooftop()
+				# 非战局快照只恢复世界/携带物，玩家固定回 99F；教程是否完成
+				# 不得把已经开过场的新档重新送去天台或 98F。
+				return false
 	return test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
 
 
@@ -5733,6 +5730,10 @@ func _runtime_scope_for_save(floor_index: int, room_id: String) -> String:
 	return "base" if floor_index <= 1 and room_id in ["start", "facility"] else "combat"
 
 
+func _base_runtime_restore_position(_room: DungeonRoom3D) -> Vector3:
+	return FACILITY_LOGOUT_SPAWN
+
+
 func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	super(snapshot)
 	# 兼容旧档中尚未开启的start|facility edge。西侧楼梯现为永久建筑，
@@ -5776,6 +5777,7 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 		"initial_loop_gate_armed": _initial_loop_gate_armed,
 		"initial_loop_gate_sealed": _initial_loop_gate_sealed,
 		"unloaded_segment_floor_indices": _unloaded_segment_floor_indices.duplicate(),
+		"narrative_spawned_keys": _narrative_spawned_keys.duplicate(true),
 		}
 	)
 
@@ -5832,6 +5834,7 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 	_initial_loop_gate_armed = bool(world_state.get("initial_loop_gate_armed", false))
 	_initial_loop_gate_sealed = bool(world_state.get("initial_loop_gate_sealed", false))
 	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
+	_restore_narrative_spawned_keys(snapshot)
 	# Airlock commits persist their post-unload intent before queue_free starts.
 	# Replaying that intent is required when the process died after the save but
 	# before the in-memory unload completed.

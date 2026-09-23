@@ -21,6 +21,7 @@
       "at": 0.0,
       "do": "scene.spawn_item",
       "item_id": "weapon_sprinkler",
+      "spawn_key": "nar_tower_opening_01_wake:starter_weapon",
       "count": 1,
       "point_room": "floor_01_exit",
       "point_offset": [

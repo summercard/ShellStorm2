@@ -18,7 +18,7 @@
 
 新增测试时使用 `verify_<领域>_<行为>.tscn`，避免阶段号、日期和临时修补名。
 
-runner会检查每个场景的完整日志。故障注入确实需要产生`ERROR`时，在`verification/expected_errors/<场景名>.txt`登记最窄可识别正则；未登记脚本错误返回3，资源或ObjectDB泄漏返回4，均不能凭Godot退出0计为通过。`verify_verification_runner_contract`验证预检与Autoload使用隔离用户目录。
+runner会检查每个场景的完整日志。批次内每个场景使用独立 `user://`，预检与该场景正片共享，避免长期档污染后一场景；导入缓存仍由同次套件共享。故障注入确实需要产生`ERROR`时，在`verification/expected_errors/<场景名>.txt`登记最窄可识别正则；未登记脚本错误返回3，资源或ObjectDB泄漏返回4，均不能凭Godot退出0计为通过。`verify_verification_runner_contract`验证预检与Autoload使用隔离用户目录。
 
 资源扣款事务使用 `verify_extraction_points_spend_transaction.tscn`：覆盖正常持久化、强制写盘失败回滚、余额/参数拒绝和旧revision实例重新加载权威档案。revision冲突分支会产生一条预期的`Refusing stale save`错误日志，验收记录必须与非预期脚本错误分开。
 

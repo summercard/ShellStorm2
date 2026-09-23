@@ -73,6 +73,10 @@ func accept_pickup() -> void:
 	scale_tween.tween_callback(queue_free)
 
 
+func is_pickup_accepted() -> bool:
+	return _accepted
+
+
 func _on_body_entered(body: Node3D) -> void:
 	if (
 		_accepted

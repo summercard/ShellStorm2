@@ -1187,7 +1187,8 @@ func _scene_spawn_item(params: Dictionary) -> Dictionary:
 		return _failed("scene.spawn_item 需要 point_room（地面物品必须挂进某个房间）。")
 	var spawned: Variant = dungeon.call(
 		"narrative_spawn_item", str(anchor["room_id"]), item_id, count,
-		anchor["origin"] as Vector3, bool(params.get("spread", false))
+		anchor["origin"] as Vector3, bool(params.get("spread", false)),
+		str(params.get("spawn_key", ""))
 	)
 	if spawned is int and int(spawned) > 0:
 		return _ok()
