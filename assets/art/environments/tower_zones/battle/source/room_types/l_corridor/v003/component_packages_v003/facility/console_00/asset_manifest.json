@@ -1,0 +1,110 @@
+{
+  "package_id": "ENV-BATTLE-LCORRIDOR-CONSOLE_00",
+  "slug": "console_00",
+  "name_zh": "立式访问终端",
+  "category": "facility",
+  "version": "v003",
+  "source_blend": "l_corridor_room_type_v003.blend",
+  "collection": "立式访问终端_资产包",
+  "objects": [
+    {
+      "name": "终端底座",
+      "location_m": [
+        3.0,
+        13.65,
+        0.12
+      ],
+      "dimensions_m": [
+        0.7,
+        0.76,
+        0.24
+      ]
+    },
+    {
+      "name": "终端立柱",
+      "location_m": [
+        3.0,
+        13.65,
+        1.05
+      ],
+      "dimensions_m": [
+        0.53,
+        0.52,
+        1.72
+      ]
+    },
+    {
+      "name": "屏幕倾斜框",
+      "location_m": [
+        3.0,
+        13.36,
+        1.65
+      ],
+      "dimensions_m": [
+        0.6,
+        0.12,
+        0.68
+      ]
+    },
+    {
+      "name": "屏幕玻璃",
+      "location_m": [
+        3.0,
+        13.285,
+        1.67
+      ],
+      "dimensions_m": [
+        0.48,
+        0.014,
+        0.52
+      ]
+    },
+    {
+      "name": "屏幕信息条",
+      "location_m": [
+        3.0,
+        13.27,
+        1.5
+      ],
+      "dimensions_m": [
+        0.35,
+        0.016,
+        0.027
+      ]
+    },
+    {
+      "name": "屏幕信息条.001",
+      "location_m": [
+        3.0,
+        13.27,
+        1.63
+      ],
+      "dimensions_m": [
+        0.35,
+        0.016,
+        0.027
+      ]
+    },
+    {
+      "name": "屏幕信息条.002",
+      "location_m": [
+        3.0,
+        13.27,
+        1.76
+      ],
+      "dimensions_m": [
+        0.35,
+        0.016,
+        0.027
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

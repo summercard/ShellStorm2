@@ -1,0 +1,32 @@
+{
+  "package_id": "ENV-BATTLE-LCORRIDOR-CUTAWAY_WALL_CONTRACT_1",
+  "slug": "cutaway_wall_contract_1",
+  "name_zh": "镜头侧墙完整高度基准_1",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "l_corridor_room_type_v001.blend",
+  "collection": "镜头侧墙完整高度基准_1_资产包",
+  "objects": [
+    {
+      "name": "11点9米墙体基准.007",
+      "location_m": [
+        35.0,
+        -12.5,
+        5.95
+      ],
+      "dimensions_m": [
+        0.3,
+        25.0,
+        11.9
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

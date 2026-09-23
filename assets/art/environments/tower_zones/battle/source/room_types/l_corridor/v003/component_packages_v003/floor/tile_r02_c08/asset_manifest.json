@@ -1,0 +1,189 @@
+{
+  "package_id": "ENV-BATTLE-LCORRIDOR-TILE_R02_C08",
+  "slug": "tile_r02_c08",
+  "name_zh": "地砖_R02_C08",
+  "category": "floor",
+  "version": "v003",
+  "source_blend": "l_corridor_room_type_v003.blend",
+  "collection": "地砖_R02_C08_资产包",
+  "objects": [
+    {
+      "name": "5米结构地砖.025",
+      "location_m": [
+        42.5,
+        -12.5,
+        -0.15
+      ],
+      "dimensions_m": [
+        5.0,
+        5.0,
+        0.3
+      ]
+    },
+    {
+      "name": "侧边钢轨.050",
+      "location_m": [
+        40.23,
+        -12.5,
+        0.072
+      ],
+      "dimensions_m": [
+        0.065,
+        4.54,
+        0.025
+      ]
+    },
+    {
+      "name": "冷光轨.050",
+      "location_m": [
+        40.23,
+        -12.5,
+        0.09
+      ],
+      "dimensions_m": [
+        0.018,
+        3.98,
+        0.012
+      ]
+    },
+    {
+      "name": "侧边钢轨.051",
+      "location_m": [
+        44.77,
+        -12.5,
+        0.072
+      ],
+      "dimensions_m": [
+        0.065,
+        4.54,
+        0.025
+      ]
+    },
+    {
+      "name": "冷光轨.051",
+      "location_m": [
+        44.77,
+        -12.5,
+        0.09
+      ],
+      "dimensions_m": [
+        0.018,
+        3.98,
+        0.012
+      ]
+    },
+    {
+      "name": "端缝金属压条.050",
+      "location_m": [
+        42.5,
+        -14.75,
+        0.075
+      ],
+      "dimensions_m": [
+        4.5,
+        0.055,
+        0.025
+      ]
+    },
+    {
+      "name": "端缝金属压条.051",
+      "location_m": [
+        42.5,
+        -10.25,
+        0.075
+      ],
+      "dimensions_m": [
+        4.5,
+        0.055,
+        0.025
+      ]
+    },
+    {
+      "name": "角部沉头螺栓.100",
+      "location_m": [
+        40.38,
+        -14.62,
+        0.091
+      ],
+      "dimensions_m": [
+        0.07,
+        0.07,
+        0.012
+      ]
+    },
+    {
+      "name": "角部沉头螺栓.101",
+      "location_m": [
+        40.38,
+        -10.38,
+        0.091
+      ],
+      "dimensions_m": [
+        0.07,
+        0.07,
+        0.012
+      ]
+    },
+    {
+      "name": "角部沉头螺栓.102",
+      "location_m": [
+        44.62,
+        -14.62,
+        0.091
+      ],
+      "dimensions_m": [
+        0.07,
+        0.07,
+        0.012
+      ]
+    },
+    {
+      "name": "角部沉头螺栓.103",
+      "location_m": [
+        44.62,
+        -10.38,
+        0.091
+      ],
+      "dimensions_m": [
+        0.07,
+        0.07,
+        0.012
+      ]
+    },
+    {
+      "name": "通用地砖表层_0.025",
+      "location_m": [
+        42.5,
+        -12.5,
+        0.015
+      ],
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ]
+    },
+    {
+      "name": "通用地砖表层_1.025",
+      "location_m": [
+        42.5,
+        -12.5,
+        0.015
+      ],
+      "dimensions_m": [
+        4.765,
+        4.765,
+        0.046
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly",
+  "shared_component_asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+}

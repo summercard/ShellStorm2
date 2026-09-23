@@ -1,0 +1,149 @@
+{
+  "package_id": "ENV-BATTLE-LCORRIDOR-PLANTER_01",
+  "slug": "planter_01",
+  "name_zh": "白色方形固定花槽",
+  "category": "facility",
+  "version": "v001",
+  "source_blend": "l_corridor_room_type_v001.blend",
+  "collection": "白色方形固定花槽_资产包.001",
+  "objects": [
+    {
+      "name": "陶瓷白花槽.001",
+      "location_m": [
+        33.2,
+        8.8,
+        0.47
+      ],
+      "dimensions_m": [
+        0.9,
+        0.9,
+        0.94
+      ]
+    },
+    {
+      "name": "深色泥土.001",
+      "location_m": [
+        33.2,
+        8.8,
+        0.95
+      ],
+      "dimensions_m": [
+        0.74,
+        0.74,
+        0.035
+      ]
+    },
+    {
+      "name": "植物主茎.001",
+      "location_m": [
+        33.2,
+        8.8,
+        1.24
+      ],
+      "dimensions_m": [
+        0.11,
+        0.11,
+        0.57
+      ]
+    },
+    {
+      "name": "叶片.007",
+      "location_m": [
+        33.48,
+        8.8,
+        1.42
+      ],
+      "dimensions_m": [
+        0.12,
+        0.52,
+        0.025
+      ]
+    },
+    {
+      "name": "叶片.008",
+      "location_m": [
+        33.3746,
+        9.0189,
+        1.57
+      ],
+      "dimensions_m": [
+        0.12,
+        0.52,
+        0.025
+      ]
+    },
+    {
+      "name": "叶片.009",
+      "location_m": [
+        33.1377,
+        9.073,
+        1.42
+      ],
+      "dimensions_m": [
+        0.12,
+        0.52,
+        0.025
+      ]
+    },
+    {
+      "name": "叶片.010",
+      "location_m": [
+        32.9477,
+        8.9215,
+        1.57
+      ],
+      "dimensions_m": [
+        0.12,
+        0.52,
+        0.025
+      ]
+    },
+    {
+      "name": "叶片.011",
+      "location_m": [
+        32.9477,
+        8.6785,
+        1.42
+      ],
+      "dimensions_m": [
+        0.12,
+        0.52,
+        0.025
+      ]
+    },
+    {
+      "name": "叶片.012",
+      "location_m": [
+        33.1377,
+        8.527,
+        1.57
+      ],
+      "dimensions_m": [
+        0.12,
+        0.52,
+        0.025
+      ]
+    },
+    {
+      "name": "叶片.013",
+      "location_m": [
+        33.3746,
+        8.5811,
+        1.42
+      ],
+      "dimensions_m": [
+        0.12,
+        0.52,
+        0.025
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

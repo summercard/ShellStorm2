@@ -1,0 +1,110 @@
+{
+  "package_id": "ENV-BATTLE-LCORRIDOR-HIGH_PIPE_EAST_00",
+  "slug": "high_pipe_east_00",
+  "name_zh": "七米高东墙管道跨段_00",
+  "category": "support",
+  "version": "v003",
+  "source_blend": "l_corridor_room_type_v003.blend",
+  "collection": "七米高东墙管道跨段_00_资产包",
+  "objects": [
+    {
+      "name": "高处转角支臂主管",
+      "location_m": [
+        44.61,
+        -22.5,
+        6.78
+      ],
+      "dimensions_m": [
+        0.15,
+        0.15,
+        4.76
+      ]
+    },
+    {
+      "name": "高处转角支臂主管.001",
+      "location_m": [
+        44.61,
+        -22.5,
+        7.07
+      ],
+      "dimensions_m": [
+        0.21,
+        0.21,
+        4.76
+      ]
+    },
+    {
+      "name": "高处转角支臂主管.002",
+      "location_m": [
+        44.61,
+        -22.5,
+        7.35
+      ],
+      "dimensions_m": [
+        0.12,
+        0.12,
+        4.76
+      ]
+    },
+    {
+      "name": "墙体厚管支架.018",
+      "location_m": [
+        44.73,
+        -24.65,
+        7.07
+      ],
+      "dimensions_m": [
+        0.34,
+        0.13,
+        0.9
+      ]
+    },
+    {
+      "name": "琥珀色管卡.018",
+      "location_m": [
+        44.52,
+        -24.65,
+        7.07
+      ],
+      "dimensions_m": [
+        0.07,
+        0.16,
+        0.32
+      ]
+    },
+    {
+      "name": "墙体厚管支架.019",
+      "location_m": [
+        44.73,
+        -20.35,
+        7.07
+      ],
+      "dimensions_m": [
+        0.34,
+        0.13,
+        0.9
+      ]
+    },
+    {
+      "name": "琥珀色管卡.019",
+      "location_m": [
+        44.52,
+        -20.35,
+        7.07
+      ],
+      "dimensions_m": [
+        0.07,
+        0.16,
+        0.32
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

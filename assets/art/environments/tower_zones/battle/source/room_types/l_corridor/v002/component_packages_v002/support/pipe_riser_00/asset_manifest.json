@@ -1,0 +1,97 @@
+{
+  "package_id": "ENV-BATTLE-LCORRIDOR-PIPE_RISER_00",
+  "slug": "pipe_riser_00",
+  "name_zh": "墙面竖向管线_00",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "l_corridor_room_type_v002.blend",
+  "collection": "墙面竖向管线_00_资产包",
+  "objects": [
+    {
+      "name": "竖向粗管",
+      "location_m": [
+        2.415,
+        9.66,
+        2.15
+      ],
+      "dimensions_m": [
+        0.065,
+        0.08,
+        3.65
+      ]
+    },
+    {
+      "name": "竖向粗管.001",
+      "location_m": [
+        2.585,
+        9.66,
+        2.15
+      ],
+      "dimensions_m": [
+        0.065,
+        0.08,
+        3.65
+      ]
+    },
+    {
+      "name": "管卡",
+      "location_m": [
+        2.5,
+        9.61,
+        0.55
+      ],
+      "dimensions_m": [
+        0.38,
+        0.13,
+        0.1
+      ]
+    },
+    {
+      "name": "管卡.001",
+      "location_m": [
+        2.5,
+        9.61,
+        2.0
+      ],
+      "dimensions_m": [
+        0.38,
+        0.13,
+        0.1
+      ]
+    },
+    {
+      "name": "管卡.002",
+      "location_m": [
+        2.5,
+        9.61,
+        3.68
+      ],
+      "dimensions_m": [
+        0.38,
+        0.13,
+        0.1
+      ]
+    },
+    {
+      "name": "橙色检修标记",
+      "location_m": [
+        2.72,
+        9.55,
+        0.55
+      ],
+      "dimensions_m": [
+        0.05,
+        0.02,
+        0.11
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}
