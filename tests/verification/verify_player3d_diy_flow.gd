@@ -17,6 +17,9 @@ func _ready() -> void:
 	add_child(gallery)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	if not gallery.equip_preview_weapon("bp_pistol"):
+		failures.append("Could not equip pistol for the sidearm DIY pose verification")
+	await get_tree().process_frame
 	for control_id in ["DiyNextHat", "DiyNextGlasses", "DiyReset"]:
 		if control_id not in gallery.get_control_ids():
 			failures.append("Missing DIY gallery control: %s" % control_id)

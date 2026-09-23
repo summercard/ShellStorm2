@@ -51,7 +51,7 @@ func _verify_facility(
 		failures.append("缺少设施：%s" % facility_id)
 		return
 	var interaction := facility.get_node_or_null("InteractionShape") as CollisionShape3D
-	var body_node := facility.get_node_or_null("StaticBody3D/CollisionShape3D") as CollisionShape3D
+	var body_node := _find_primary_body_shape(facility)
 	if interaction == null or body_node == null:
 		failures.append("设施缺少交互或实体碰撞：%s" % facility_id)
 		return
@@ -60,11 +60,13 @@ func _verify_facility(
 	if interaction_box == null or body_box == null:
 		failures.append("设施没有使用 BoxShape3D：%s" % facility_id)
 		return
-	if str(interaction.get_meta("front_interaction_profile", "")) != facility_id:
-		failures.append("设施未应用正面交互配置：%s" % facility_id)
+	var authored_locked := facility.has_meta("interaction_shape_locked")
 	var expected_side_multiplier := 1.0
-	if not is_equal_approx(float(interaction.get_meta("front_interaction_side_multiplier", 0.0)), expected_side_multiplier):
-		failures.append("设施热区正面翻转配置错误：%s" % facility_id)
+	if not authored_locked:
+		if str(interaction.get_meta("front_interaction_profile", "")) != facility_id:
+			failures.append("设施未应用正面交互配置：%s" % facility_id)
+		if not is_equal_approx(float(interaction.get_meta("front_interaction_side_multiplier", 0.0)), expected_side_multiplier):
+			failures.append("设施热区正面翻转配置错误：%s" % facility_id)
 	var size_snapshot := facility.get_size_contract_snapshot()
 	var expected_scale := Vector3.ONE * facility.base_size_multiplier
 	if not (size_snapshot.get("interaction_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE):
@@ -76,9 +78,11 @@ func _verify_facility(
 
 	var local_room_center := facility.to_local(facility_room.global_position)
 	var toward_room := Vector2(local_room_center.x, local_room_center.z).normalized()
+	if toward_room.length_squared() <= 0.0001:
+		toward_room = Vector2(0.0, -1.0)
 	var interaction_offset := Vector2(interaction.position.x, interaction.position.z)
 	var expected_front_direction := toward_room * expected_side_multiplier
-	if interaction_offset.dot(expected_front_direction) <= 0.0:
+	if not authored_locked and interaction_offset.dot(expected_front_direction) <= 0.0:
 		failures.append("交互盒没有落在模型正面：%s" % facility_id)
 
 	var axis_is_x := absf(toward_room.x) > absf(toward_room.y)
@@ -87,11 +91,25 @@ func _verify_facility(
 	var offset_depth := absf(interaction.position.x) if axis_is_x else absf(interaction.position.z)
 	var exposed_depth := offset_depth + interaction_depth * 0.5 - body_depth * 0.5
 	var required_depth := 4.0 if facility_id == "base_vending" else 3.4
-	if exposed_depth < required_depth:
+	if not authored_locked and exposed_depth < required_depth:
 		failures.append("设施正面可站立交互距离不足：%s，实际 %.2f 米" % [facility_id, exposed_depth])
 	var interaction_width := interaction_box.size.z if axis_is_x else interaction_box.size.x
-	if facility_id != "base_vending" and interaction_width < 5.2:
+	if not authored_locked and facility_id != "base_vending" and interaction_width < 5.2:
 		failures.append("工作设施正面交互宽度不足：%s" % facility_id)
+	if authored_locked and interaction_box.size.x < 4.0 and interaction_box.size.z < 4.0:
+		failures.append("作者锁定的设施交互范围过小：%s" % facility_id)
+
+
+func _find_primary_body_shape(facility: BaseFacility3D) -> CollisionShape3D:
+	for body_value in facility.find_children("*", "StaticBody3D", true, false):
+		var body := body_value as StaticBody3D
+		if body == null:
+			continue
+		for shape_value in body.find_children("*", "CollisionShape3D", true, false):
+			var shape_node := shape_value as CollisionShape3D
+			if shape_node != null and not shape_node.disabled and shape_node.shape is BoxShape3D:
+				return shape_node
+	return null
 
 
 func _verify_authored_transforms(failures: Array[String]) -> void:

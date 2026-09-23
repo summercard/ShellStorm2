@@ -31,6 +31,7 @@ const PRESENTATION_SOUTH_DIRECTION := Vector3(0.0, 0.0, 1.0)
 @onready var player_status: Label = $Screen/MenuPanel/Margin/Content/PlayerStatus
 @onready var outfit_status: Label = $Screen/MenuPanel/Margin/Content/OutfitStatus
 @onready var start_button: Button = $Screen/MenuPanel/Margin/Content/StartButton
+@onready var settings_button: Button = $Screen/MenuPanel/Margin/Content/SettingsButton
 @onready var transition_hint: Label = $Screen/TransitionHint
 
 var _player: Player3D = null
@@ -53,6 +54,10 @@ var _intro_spotlight: SpotLight3D = null
 var _intro_face_fill: OmniLight3D = null
 var _saved_camera_attributes: CameraAttributes = null
 var _presentation_attributes: CameraAttributesPractical = null
+var _settings: PauseMenu3D = null
+var _settings_original_parent: Node = null
+var _settings_original_index := -1
+var _settings_open := false
 
 
 func _ready() -> void:
@@ -60,6 +65,7 @@ func _ready() -> void:
 	layer = 110
 	screen.visible = false
 	start_button.pressed.connect(start_game)
+	settings_button.pressed.connect(_open_settings)
 	# 启动页的标题、六边形霓虹按钮与菜单壳全部自绘：声明豁免，避免被战术皮肤
 	# 重新套上矩形描边与底色（会在按钮/面板背后露出一圈多余边框）。
 	set_meta("ui_style_exempt", true)
@@ -93,6 +99,10 @@ func _process(delta: float) -> void:
 func present(player: Player3D, gameplay_transform: Transform3D = Transform3D.IDENTITY, gameplay_fov := -1.0) -> bool:
 	if player == null or not is_instance_valid(player) or player.camera == null:
 		return false
+	# 同一展示会话重复 present 必须幂等；否则会把近景镜头误记成玩法镜头，
+	# 结束时无法回到原视角。
+	if _presenting:
+		return _player == player
 	_player = player
 	_camera = player.camera
 	_prepare_gameplay_hud_if_needed()
@@ -120,6 +130,60 @@ func present(player: Player3D, gameplay_transform: Transform3D = Transform3D.IDE
 	start_button.grab_focus()
 	camera_override_changed.emit(true)
 	return true
+
+
+func _open_settings() -> void:
+	if not _presenting or _settings_open:
+		return
+	if _settings == null or not is_instance_valid(_settings):
+		if _gameplay_hud != null:
+			_settings = _gameplay_hud.get_node_or_null("PauseOverlay") as PauseMenu3D
+	if _settings == null:
+		push_warning("[MainEntryScreen3D] PauseOverlay not found for entry settings")
+		return
+	_settings_original_parent = _settings.get_parent()
+	_settings_original_index = _settings.get_index()
+	if not _settings.pause_changed.is_connected(_on_settings_pause_changed):
+		_settings.pause_changed.connect(_on_settings_pause_changed)
+	_settings.reparent(self, true)
+	_settings_open = true
+	_settings.open_entry_settings()
+
+
+func _on_settings_pause_changed(paused: bool) -> void:
+	if not _settings_open or paused:
+		return
+	_settings_open = false
+	if _settings != null and is_instance_valid(_settings):
+		_settings.close_entry_settings()
+	_restore_settings_parent()
+	if settings_button != null and is_instance_valid(settings_button):
+		settings_button.grab_focus()
+
+
+func _close_settings_if_needed() -> void:
+	if _settings_open:
+		_settings_open = false
+		if _settings != null and is_instance_valid(_settings):
+			_settings.close_entry_settings()
+	_restore_settings_parent()
+
+
+func _restore_settings_parent() -> void:
+	if (
+		_settings == null
+		or not is_instance_valid(_settings)
+		or _settings_original_parent == null
+		or not is_instance_valid(_settings_original_parent)
+	):
+		return
+	if _settings.get_parent() != _settings_original_parent:
+		_settings.reparent(_settings_original_parent, true)
+	if _settings_original_index >= 0:
+		_settings_original_parent.move_child(
+			_settings,
+			mini(_settings_original_index, _settings_original_parent.get_child_count() - 1)
+		)
 
 
 func start_game() -> void:
@@ -239,6 +303,7 @@ func _auto_present() -> void:
 
 
 func _finish_transition() -> void:
+	_close_settings_if_needed()
 	if _camera != null and is_instance_valid(_camera):
 		_camera.transform = _gameplay_camera_transform
 		_camera.fov = _gameplay_fov
@@ -261,6 +326,18 @@ func _finish_transition() -> void:
 
 
 func _exit_tree() -> void:
+	_close_settings_if_needed()
+	# queue_free / 场景异常卸载也必须恢复玩法所有权；正常交接已把
+	# _presenting 置 false，因此不会在之后重复覆盖真实玩法状态。
+	if _presenting or _transitioning:
+		if _camera != null and is_instance_valid(_camera):
+			_camera.transform = _gameplay_camera_transform
+			_camera.fov = _gameplay_fov
+		if _player != null and is_instance_valid(_player):
+			_player.set_input_locked(_previous_input_locked)
+			_player.aim_yaw = _saved_aim_yaw
+			if _player.avatar != null and _player.avatar.visual_root != null:
+				_player.avatar.visual_root.rotation = _saved_visual_root_rotation
 	_remove_intro_spotlight()
 	_restore_camera_attributes()
 	_restore_gameplay_hud()

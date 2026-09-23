@@ -107,6 +107,10 @@ func _ready() -> void:
 			failures.append("BaseWorld3D second Esc does not resume")
 
 	# 八态动态契约：地面动作、下落、落地与死亡都由同一个 StateMachine 驱动表现。
+	# 正式初始武器已改为花洒机枪；本段验证的是手枪单手跑步握持，必须显式装配手枪。
+	if not base_world.player.equip_weapon("bp_pistol", "mod_bullet_standard"):
+		failures.append("Could not equip pistol for the BaseWorld sidearm run-grip verification")
+	await get_tree().process_frame
 	base_world.player.set_test_move_direction(Vector3.RIGHT)
 	await get_tree().physics_frame
 	await get_tree().process_frame

@@ -13,6 +13,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 	player.avatar.set_process(false)
 	player.get_node("Camera3D").current = false
+	if not player.equip_weapon("bp_pistol", "mod_bullet_standard"):
+		failures.append("Could not equip pistol for the sidearm idle verification")
+	await get_tree().process_frame
 
 	player.avatar.call("_process", 0.10)
 	var idle_a := player.avatar.get_component_snapshot()
@@ -31,10 +34,15 @@ func _ready() -> void:
 		.distance_to(idle_b.get("body_position", Vector3.ZERO) as Vector3) < 0.002
 	):
 		failures.append("Authored idle lacks readable body breathing motion")
-	if (
+	var head_rotation_delta := (
 		(idle_a.get("head_rotation", Vector3.ZERO) as Vector3)
-		.distance_to(idle_b.get("head_rotation", Vector3.ZERO) as Vector3) < 0.014
-	):
+		.distance_to(idle_b.get("head_rotation", Vector3.ZERO) as Vector3)
+	)
+	var head_position_delta := (
+		(idle_a.get("head_position", Vector3.ZERO) as Vector3)
+		.distance_to(idle_b.get("head_position", Vector3.ZERO) as Vector3)
+	)
+	if head_rotation_delta < 0.004 and head_position_delta < 0.004:
 		failures.append("Idle animation lacks delayed head weight shift")
 	if maxf(
 		(idle_a.get("ear_l_rotation", Vector3.ZERO) as Vector3)

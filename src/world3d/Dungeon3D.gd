@@ -2728,13 +2728,17 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 ## 会让「指那个常量点」与「枪实际在哪」对不上（2026-09-22 开场那把枪）。
 func _spawn_loot_items(
 	room: DungeonRoom3D,
-	items: Array[Dictionary],
+	items: Array,
 	world_position: Vector3,
 	pickup_grace_seconds: float = 0.0,
-	spread := true
+	spread: bool = true
 ) -> void:
 	for index in range(items.size()):
-		var item := items[index].duplicate(true)
+		var item_value: Variant = items[index]
+		if not item_value is Dictionary:
+			push_warning("[Dungeon3D] Ignored non-dictionary loot entry at index %d" % index)
+			continue
+		var item: Dictionary = (item_value as Dictionary).duplicate(true)
 		# 堆叠数量是物品真实数量；尤其弹药必须以“发”为单位落地和拾取。
 		item["count"] = maxi(1, int(item.get("count", 1)))
 		var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D

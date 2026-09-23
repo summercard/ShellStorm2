@@ -65,6 +65,10 @@ func _ready() -> void:
 		player.aim_yaw = 0.0
 		player.avatar.visual_root.rotation.y = 0.0
 		player.get_node("AimCursor").visible = false
+	if not sidearm_player.equip_weapon("bp_pistol", "mod_bullet_standard"):
+		push_error("Cannot equip pistol for Bunny sidearm preview")
+		get_tree().quit(1)
+		return
 	if not rifle_player.equip_weapon("bp_rifle", "mod_bullet_standard"):
 		push_error("Cannot equip rifle for Bunny v006 two-hand preview")
 		get_tree().quit(1)

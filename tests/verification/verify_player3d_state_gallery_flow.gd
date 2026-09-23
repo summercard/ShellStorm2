@@ -18,6 +18,9 @@ func _ready() -> void:
 	add_child(gallery)
 	await get_tree().physics_frame
 	await get_tree().process_frame
+	if not gallery.equip_preview_weapon("bp_pistol"):
+		failures.append("Could not equip pistol for the sidearm gallery verification")
+	await get_tree().process_frame
 
 	var control_ids := gallery.get_control_ids()
 	for control_id in REQUIRED_CONTROLS:

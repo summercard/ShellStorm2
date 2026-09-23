@@ -21,6 +21,7 @@ base_size_multiplier = 1.0
 facility_color = Color(0.15, 0.82, 0.92, 1)
 metadata/interaction_role = "expedition_intelligence_room"
 metadata/interaction_contract = "player_nearby_and_press_E"
+metadata/interaction_shape_locked = true
 metadata/action_path = "res://scenes/RogueMapSelectMenu.tscn"
 metadata/asset_id = "ENV-BASE99-V022::hologram_terminal_platform"
 metadata/asset_version = "v022"

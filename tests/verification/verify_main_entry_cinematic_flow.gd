@@ -5,7 +5,7 @@ var failures: Array[String] = []
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	print("ENTRY_USER_DIR=", OS.get_user_data_dir())
-	if not OS.get_user_data_dir().contains("ShellStorm2-entry-verification"):
+	if not OS.get_user_data_dir().contains("ShellStorm2Verification_"):
 		push_error("Refusing unisolated test")
 		get_tree().quit(2)
 		return
@@ -36,15 +36,19 @@ func _ready() -> void:
 	await get_tree().create_timer(2.0).timeout
 	var snap := entry.get_entry_snapshot()
 	print("ENTRY_SNAPSHOT=", JSON.stringify(snap))
-	_expect(snap.base_backdrop, "real base background", true)
-	_expect(snap.presentation_meshes > 10, "mesh sample sentinel", true)
+	_expect(bool(snap.get("base_backdrop", false)), "real base background", true)
+	_expect(int(snap.get("presentation_meshes", 0)) > 10, "mesh sample sentinel", true)
 	_expect(player.global_position.is_equal_approx(saved_pos), "player position unchanged", true)
 	_expect(player.camera.attributes == attrs and player.camera.environment == env, "gameplay resources untouched", true)
 	_expect(is_equal_approx(player.camera.fov, saved_fov), "gameplay fov untouched", true)
 	_expect(player.camera.transform.is_equal_approx(saved_transform), "gameplay transform untouched", true)
 	_expect(player.camera.cull_mask == saved_player_cull, "gameplay cull mask untouched", true)
 	_expect(entry._camera != player.camera, "dedicated camera is separate instance", true)
-	_expect((entry._camera.cull_mask & entry.PRESENTATION_LAYER) != 0, "presentation layer on camera", true)
+	var entry_script := entry.get_script() as Script
+	var script_constants := entry_script.get_script_constant_map() if entry_script != null else {}
+	var presentation_layer_value: Variant = script_constants.get("PRESENTATION_LAYER", 0)
+	var presentation_layer := int(presentation_layer_value) if presentation_layer_value is int else 0
+	_expect((entry._camera.cull_mask & presentation_layer) != 0, "presentation layer on camera", true)
 	_expect(entry._camera.attributes != attrs, "attributes isolated", true)
 	var cam_attrs := entry._camera.attributes as CameraAttributesPractical
 	_expect(not cam_attrs.dof_blur_near_enabled, "portrait near blur off", true)
@@ -52,12 +56,15 @@ func _ready() -> void:
 	_expect(is_equal_approx(cam_attrs.dof_blur_far_transition, 1.8), "dof far transition", true)
 	_expect(is_equal_approx(cam_attrs.dof_blur_amount, 0.42), "dof far amount strengthened", true)
 	# 近景：真实位置前移、无擅自缩放。
-	_expect(entry._display_avatar != null, "display avatar exists", true)
-	if entry._display_avatar != null:
-		_expect(entry._display_avatar.scale.is_equal_approx(Vector3.ONE), "no auto scale", true)
-		var fg_dist := entry._display_avatar.global_position.distance_to(entry._camera.global_position)
+	var display_avatar := entry.get("_display_avatar") as Node3D if _has_property(entry, "_display_avatar") else null
+	_expect(display_avatar != null, "display avatar exists", true)
+	if display_avatar != null:
+		_expect(display_avatar.scale.is_equal_approx(Vector3.ONE), "no auto scale", true)
+		var fg_dist: float = display_avatar.global_position.distance_to(entry._camera.global_position)
 		_expect(fg_dist > 0.5 and fg_dist < 2.6, "avatar in sharp foreground", true)
-	var projected := entry._camera.unproject_position(entry._stand + Vector3.UP * 0.6) / get_viewport().get_visible_rect().size
+	var stand_value: Variant = entry.get("_stand") if _has_property(entry, "_stand") else Vector3.ZERO
+	var stand := stand_value as Vector3 if stand_value is Vector3 else Vector3.ZERO
+	var projected := entry._camera.unproject_position(stand + Vector3.UP * 0.6) / get_viewport().get_visible_rect().size
 	_expect(projected.x > 0.55 and projected.x < 0.88 and projected.y > 0.15 and projected.y < 0.85, "portrait on screen right", true)
 	# 暗角放屏幕最底层：不盖 UI、不盖过渡黑屏（不改 menu.z_index）。
 	var vignette := entry.screen.find_child("EntryVignette", true, false)
@@ -99,9 +106,10 @@ func _ready() -> void:
 	_expect(restored_ok, "facility/background labels fully restored", true)
 	# Abnormal exit path and repeat calls.
 	entry.present(player)
-	var second_rig := entry._rig
+	var second_rig: Variant = entry.get("_rig") if _has_property(entry, "_rig") else null
 	entry.present(player)
-	_expect(entry._rig == second_rig, "present idempotence", true)
+	var repeated_rig: Variant = entry.get("_rig") if _has_property(entry, "_rig") else null
+	_expect(repeated_rig == second_rig, "present idempotence", true)
 	entry.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -129,6 +137,10 @@ func _accept() -> void:
 	await get_tree().process_frame
 
 func _shot(filename: String) -> void:
+	# 该场景同时承担 core 合同与真实渲染取证；headless 运行没有
+	# frame_post_draw，不能让截图等待把合同验收挂死。
+	if DisplayServer.get_name() == "headless":
+		return
 	await RenderingServer.frame_post_draw
 	var image := get_viewport().get_texture().get_image()
 	image.save_png("I:/工作项目/shellstrom2/outputs/" + filename)
@@ -137,3 +149,10 @@ func _expect(condition: bool, label: String, _expected: bool) -> void:
 	checks += 1
 	if not condition:
 		failures.append(label)
+
+
+func _has_property(target: Object, property_name: String) -> bool:
+	for property in target.get_property_list():
+		if str(property.get("name", "")) == property_name:
+			return true
+	return false

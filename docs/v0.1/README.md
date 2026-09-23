@@ -4,9 +4,9 @@
 适用工程版本:`0.1.0`
 引擎:Godot 4.6.x
 正式入口:`res://scenes/TowerDescent3D.tscn`
-最后结构核对:2026-09-12（审计基线 `31ed360`；不表示所有功能重新验收通过）
+最后结构核对:2026-09-23（复评基线 `a419bc6a`；不表示所有功能重新验收通过）
 
-开发前阅读[文档驱动开发规范](../DOCUMENTATION_STANDARD.md)和[功能契约索引](MODULE_INDEX.md)。[设计目录](design/README.md)与[独立开发记录](development/README.md)分开维护；37 个功能的 Owner/主设计/开发记录/验收映射见[Machine-readable 追溯表](feature_registry.json)；当前实现缺口和回归结果见[工程健康审计](audits/2026-09-12_engineering_audit.md)。
+开发前阅读[文档驱动开发规范](../DOCUMENTATION_STANDARD.md)和[功能契约索引](MODULE_INDEX.md)。[设计目录](design/README.md)与[独立开发记录](development/README.md)分开维护；37 个功能的 Owner/主设计/开发记录/验收映射见[Machine-readable 追溯表](feature_registry.json)；当前实现缺口和回归结果见[2026-09-23 全项目完整复评](audits/2026-09-23_full_project_reassessment.md)。
 
 本文件负责说明《弹壳风暴2》是什么、玩家为何持续游玩、一次行动如何循环,以及七个核心系统分别承担什么职责。它不展开模块内部的代码施工细节;每个系统的技术边界、事件、存档字段与验收方法由对应施工文档负责,内容数值由游戏内容数据库负责。
 
@@ -337,6 +337,7 @@ v0.1 先建立触发框架和验收契约,不在本次文档中擅自重写主�
 - [技术架构总则](02_技术架构总则.md)
 - [全游戏完成度清单](12_全游戏完成度清单.md)
 - [2026-09-22 全项目深度审计](audits/2026-09-22_full_project_deep_audit.md)
+- [2026-09-23 P0/P1/P2 后全项目完整复评](audits/2026-09-23_full_project_reassessment.md)
 - [变更记录](CHANGELOG.md)
 
 ### 七大系统施工文档

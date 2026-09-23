@@ -47,12 +47,19 @@ var _base_size_applied := false
 
 func configure_front_interaction_toward(world_target: Vector3) -> bool:
 	if has_meta("interaction_shape_locked"):
-		return true
+		var locked_interaction := get_node_or_null("InteractionShape") as CollisionShape3D
+		var locked_body := _find_primary_body_shape()
+		return (
+			locked_interaction != null
+			and locked_interaction.shape != null
+			and locked_body != null
+			and locked_body.shape != null
+		)
 	var profile := FRONT_INTERACTION_PROFILES.get(facility_id, {}) as Dictionary
 	if profile.is_empty():
 		return false
 	var interaction_shape := get_node_or_null("InteractionShape") as CollisionShape3D
-	var body_shape_node := get_node_or_null("StaticBody3D/CollisionShape3D") as CollisionShape3D
+	var body_shape_node := _find_primary_body_shape()
 	if interaction_shape == null or body_shape_node == null:
 		push_warning("[BaseFacility3D] Missing interaction/body shape: %s" % facility_id)
 		return false
@@ -75,11 +82,13 @@ func configure_front_interaction_toward(world_target: Vector3) -> bool:
 	if absf(toward_target.x) > absf(toward_target.y):
 		var side := signf(toward_target.x) * front_side_multiplier
 		front_box.size = Vector3(depth, height, width)
-		front_offset.x = side * (body_box.size.x * 0.5 + depth * 0.5 - overlap)
+		front_offset.x = body_shape_node.position.x + side * (body_box.size.x * 0.5 + depth * 0.5 - overlap)
+		front_offset.z = body_shape_node.position.z
 	else:
 		var side := signf(toward_target.y) * front_side_multiplier
 		front_box.size = Vector3(width, height, depth)
-		front_offset.z = side * (body_box.size.z * 0.5 + depth * 0.5 - overlap)
+		front_offset.x = body_shape_node.position.x
+		front_offset.z = body_shape_node.position.z + side * (body_box.size.z * 0.5 + depth * 0.5 - overlap)
 	front_offset.y = height * 0.5
 	interaction_shape.position = front_offset
 	interaction_shape.rotation = Vector3.ZERO
@@ -87,6 +96,23 @@ func configure_front_interaction_toward(world_target: Vector3) -> bool:
 	interaction_shape.set_meta("front_interaction_profile", facility_id)
 	interaction_shape.set_meta("front_interaction_side_multiplier", front_side_multiplier)
 	return true
+
+
+func _find_primary_body_shape() -> CollisionShape3D:
+	# 正式资产允许按美术语义命名 StaticBody3D/CollisionShape3D；运行契约只要求
+	# 「StaticBody3D 下存在启用的 BoxShape3D」，不把玩法绑定到某个旧节点名。
+	var legacy := get_node_or_null("StaticBody3D/CollisionShape3D") as CollisionShape3D
+	if legacy != null and not legacy.disabled and legacy.shape is BoxShape3D:
+		return legacy
+	for body_value in find_children("*", "StaticBody3D", true, false):
+		var body := body_value as StaticBody3D
+		if body == null:
+			continue
+		for shape_value in body.find_children("*", "CollisionShape3D", true, false):
+			var shape_node := shape_value as CollisionShape3D
+			if shape_node != null and not shape_node.disabled and shape_node.shape is BoxShape3D:
+				return shape_node
+	return null
 
 
 func _ready() -> void:
@@ -137,7 +163,8 @@ func _apply_default_base_size() -> void:
 
 func get_size_contract_snapshot() -> Dictionary:
 	var interaction := get_node_or_null("InteractionShape") as CollisionShape3D
-	var body := get_node_or_null("StaticBody3D") as StaticBody3D
+	var body_shape := _find_primary_body_shape()
+	var body := body_shape.get_parent() as StaticBody3D if body_shape != null else null
 	var visual := get_node_or_null("Visual") as Node3D
 	var visual_scale := visual.scale if visual != null else Vector3.ZERO
 	if visual == null:
@@ -150,6 +177,8 @@ func get_size_contract_snapshot() -> Dictionary:
 		"root_scale": scale,
 		"interaction_scale": interaction.scale if interaction != null else Vector3.ZERO,
 		"body_scale": body.scale if body != null else Vector3.ZERO,
+		"body_shape_path": str(body_shape.get_path()) if body_shape != null else "",
+		"interaction_shape_locked": has_meta("interaction_shape_locked"),
 		"visual_scale": visual_scale,
 	}
 

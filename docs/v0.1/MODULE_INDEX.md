@@ -1,7 +1,7 @@
 # v0.1 模块、功能与工程契约索引
 
-工程版本：0.1.0。设计索引修订：r5（2026-09-23）。事实核对基线：`c425b717` + 当前 P1/P2 工作区。
-本表建立追溯入口，不替代各模块设计，也不把现存实现自动认定为设计已批准。当前验收结果见 [全项目深度审计](audits/2026-09-22_full_project_deep_audit.md)；未关闭 P0 仍以该审计及后续开发记录为准。
+工程版本：0.1.0。设计索引修订：r6（2026-09-23）。事实核对基线：`a419bc6a` + 当前复评文档工作区。
+本表建立追溯入口，不替代各模块设计，也不把现存实现自动认定为设计已批准。当前验收结果见 [P0/P1/P2 后全项目完整复评](audits/2026-09-23_full_project_reassessment.md)；未关闭项以该复评及后续开发记录为准。
 
 ## 1. 独立开发判断
 
@@ -26,7 +26,7 @@
 | PRESENTATION | `HUDPresenter3D`快照、公共UI组件；VfxPool/CombatEffectPool、AudioManager、MusicManager | HUD/音乐部分；VFX未收敛 | UI、音效、音乐已有独立账本/Skill/验收链；旧CombatEffectPool兼容链仍在；后处理仍缺独立主设计 |
 | PERFORMANCE | GraphicsSettingsManager、PostfxOverlay、RuntimePerformanceManager→场景/渲染 | 部分 | 调参面板越过画质服务；预算失配、渲染用例归类不全 |
 | TRAINING | `TrainingRange3D`→只读BlueprintRegistry→共用Player3D→训练会话统计 | **测试功能1.0已完成，可独立启动与验收** | 后续伤害分析、靶标编辑和自动压测另升功能版本 |
-| ASSET | XLSX台账→生产源/转移账本→GLB→PackedScene→正式场景 | 有生产标准，验收闭环不足 | 426条登记中231项账本异常；需按域核签来源，禁止批量接受哈希 |
+| ASSET | XLSX台账→生产源/转移账本→GLB→PackedScene→正式场景 | 有生产标准，验收闭环不足 | 426条登记中230项账本异常；需按域核签来源，禁止批量接受哈希 |
 | TOOLING | tests/verification、脚本、src/testing→隔离工程→日志与退出码 | 部分 | 用户目录与 `.godot` 已隔离，冷/热缓存自检通过；156 个验证场景已全部唯一归属；验证注册、跨域边界、37功能追溯和媒体资产门禁已并入文档总门禁 |
 
 ## 2. 功能追溯表
@@ -37,7 +37,7 @@
 
 | 功能ID | 功能 | 主设计 | 正式代码/数据入口 | 验收入口（tests/verification） | 契约与记录现状 |
 |---|---|---|---|---|---|
-| PLAYER-STATE | 八态、移动、受击、冲刺 | [03](03_技术施工_玩家与操作.md) | `src/player3d/Player3D.gd`、`states/` | `verify_player3d_animation_flow` | 有设计与历史；原因码/回放待补 |
+| PLAYER-STATE | 八态、移动、受击、冲刺 | [03](03_技术施工_玩家与操作.md) | `src/player3d/Player3D.gd`、`states/` | `verify_player3d_animation_flow` | 手枪待机/移动/换弹/开火/gallery专项已按显式`bp_pistol`前置恢复并通过；原因码/回放待补 |
 | PLAYER-INTERACT | 门、灯、设施统一仲裁 | [03](03_技术施工_玩家与操作.md) | `PlayerInteractionController3D`→Tower | `verify_unified_player_interaction_flow` | 实现存在；原完成度“未统一”过期 |
 | PLAYER-LIGHT | 手电、电池、光照/可见性 | [03](03_技术施工_玩家与操作.md)、[15.1](15.1_技术施工_电力系统.md) | `PlayerFlashlight3D/PlayerVision3D`→ItemUseHandler | `verify_3d_flashlight_charge_flow` | 当前链已纳入电力系统；基地供电表现仍待完善 |
 | WEAPON-COMBAT | 远程/近战、命中与反馈 | [04](04_技术施工_战斗与局内成长.md) | `src/combat3d/`、`src/player3d/melee/` | `verify_3d_melee_combat_flow`、`verify_3d_melee_feedback_flow` | 有设计与历史；反馈验收未通过 |
@@ -48,12 +48,12 @@
 | WORLD-ENTRY | 关卡入口：基地传送 + 读取界面 + 切换地图进入远征关卡 | [05](05_技术施工_关卡生成与爬楼.md)（§3.0）、[07](07_技术施工_基地设施.md)（§2.2）、[09](09_技术施工_存档结算与复活.md)（§5.1） | `BaseFacilityCatalog(mission_operations, ACTION_MENU)`→`RogueMapSelectMenu`→`ExpeditionLoadingScreen`→`ExpeditionLevel01_3D.tscn`（`expedition_mode`） | `verify_expedition_level01_flow`（已注册进 `core`）、`verify_central_expedition_hologram_facility` | **已完成**：平台交互、菜单、读取界面、场景切换、单层 7 房（15×15 安全房 + room_01…05 各25×25 + 撤离房25×25）、`Blocks/Expedition` 区块、撤离信标、出生点、`runtime_map_id` 存档隔离与 `combat` 作用域、出生安全房「退出战局」弃局离场契约（含关卡内重新上线路径）均已实装 |
 | WORLD-GATE | 到达门、Boss门、楼梯 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D`→FloorBundle→runtime checkpoint→RoomDoor3D | `verify_arrival_gate_floor_bundle_flow` | P1已改为快照写盘成功后才开到达/隔离门；写盘失败保持门关闭且可重试。该旧塔楼综合用例尚有P0非事务级联锁红项，不冒充整场通过 |
 | WORLD-SEGMENT | 隔离间、区段卸载、永久遗失 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D._finalize_airlock_commit`→BaseManager checkpoint→unload | `verify_arrival_gate_floor_bundle_flow`、`verify_three_segment_tower_generation_flow` | 卸载前先持久化“锁后门+已卸载楼层”意图；失败不删节点/不开前门，成功后才删旧段。重启恢复会消费`unloaded_segment_floor_indices`重放卸载 |
-| WORLD-LOOT | 搜索、清房钥匙、掉落与拾取 | [04](04_技术施工_战斗与局内成长.md)、[05](05_技术施工_关卡生成与爬楼.md) | `RuntimeRewardCoordinator`→`RewardService/ItemRegistry`→`GroundLootPickup3D` | `verify_reward_service_flow`、`verify_requested_experience_upgrade_flow`、`verify_finite_ammo_flow` | 解析已统一；场景仍通过legacy item字典桥接地面表现，`RewardSink.apply`尚未成为唯一场景发放口 |
+| WORLD-LOOT | 搜索、清房钥匙、掉落与拾取 | [04](04_技术施工_战斗与局内成长.md)、[05](05_技术施工_关卡生成与爬楼.md) | `RuntimeRewardCoordinator`→`RewardService/ItemRegistry`→`GroundLootPickup3D` | `verify_reward_service_flow`、`verify_requested_experience_upgrade_flow`、`verify_finite_ammo_flow` | 延迟掉落边界已接受非类型化Array并逐项校验Dictionary，运行类型错误关闭；场景仍通过legacy item字典桥接地面表现，`RewardSink.apply`尚未成为唯一场景发放口 |
 | REWARD-SERVICE | 统一奖励与掉落：一份 Spec → 唯一解析器 → 三个发放口（物品/任务/搜索/怪物/清房钥匙/保底备弹/剧情） | [04](04_技术施工_战斗与局内成长.md)（§22）、[05](05_技术施工_关卡生成与爬楼.md)（§11 `reward_slots[]`）、[01](01_内容数据库说明.md)（§5.5/§5.7） | `src/rewards/`：`RuntimeRewardCoordinator`（运行时调度/确定性事件ID）+`RewardPoolRegistry/RewardSpec/RewardService/RewardSink` | `verify_reward_service_flow`、`verify_requested_experience_upgrade_flow`、`verify_finite_ammo_flow`、`verify_narrative_timeline` | **解析消费点已正式切流**：搜索、击杀、清房、钥匙、保底备弹、剧情`grant.item`均经统一服务；`LootModule.generate_container_loot/generate_enemy_loot`已删除，旧测试也迁移。尚未完成：场景发放仍用legacy item桥，7个deprecated死池待裁决，真渲染截图门禁待补 |
 | ENEMY-AI | 感知、导航、攻击、光照 | [06A](06A_怪物AI系统完整设计_评审稿.md)、[06](06_技术施工_怪物精英与Boss.md) | `Enemy3D/MonsterAIManager/MonsterVisionSystem3D` | `verify_monster_ai_system_complete`、`verify_enemy_illumination_states` | 有较完整规范；真实错误日志仍需严查 |
 | ELITE-ROSTER | 唯一名册、预约、跨局成长 | [06](06_技术施工_怪物精英与Boss.md) | `EliteContentCatalog/EliteRosterService`→`BaseManager`档案命令/查询→BaseData | `verify_unique_elite_roster_flow`、`verify_first_elite_growth_flow` | 12名册/1投放；私有档案直写已移除，事务失败回滚；其余11为design_only |
 | BOSS-STAGES | 95/90/85 Boss及下行权限 | [06](06_技术施工_怪物精英与Boss.md) | `BossContentCatalog`→Enemy3D→Tower | `verify_unique_boss_content_flow` | 有规范；钥匙实体契约未完全对齐 |
-| BASE-FACILITY | 设施入口、禁射、常驻和恢复 | [07](07_技术施工_基地设施.md) | `BaseFacilityCatalog/Service`→BaseFacility3D | `verify_base_facility_framework`、`verify_tower_base_facility_persistent_flow` | 设计与历史可定位；资产专项部分失败 |
+| BASE-FACILITY | 设施入口、禁射、常驻和恢复 | [07](07_技术施工_基地设施.md) | `BaseFacilityCatalog/Service`→BaseFacility3D | `verify_base_facility_framework`、`verify_tower_base_facility_persistent_flow` | 全息终端作者锁定交互盒及语义命名StaticBody碰撞已接入，交互区专项通过；其余旧基地资产专项仍待裁决 |
 | BASE-SHOP | 基地购买、出售、保险柜转移 | [07](07_技术施工_基地设施.md)、[09](09_技术施工_存档结算与复活.md) | BaseManager事务→BaseShopService→ItemRegistry | `verify_base_shop_save_flow`、`verify_tower_facility_inventory_binding`、`verify_extraction_points_spend_transaction` | 商店已有幂等/回滚；普通资源扣款已在写盘失败和revision冲突时回滚/拒绝，工坊事务也已收口到BASE-WORKSHOP |
 | BASE-WORKSHOP | 蓝图升级与手电模块 | [07.1](07.1_玩法系统_枪械工坊.md)、[07](07_技术施工_基地设施.md) | `WorkshopMenu`→`BaseManager.upgrade_blueprint`→`BlueprintUpgradeService`→BaseData | `verify_workshop_transaction_flow`（`core`） | **核心事务已完成**：扣魂+Tier+幂等ID一次写盘；成功/余额不足/旧Tier/写盘失败回滚/重试/重载幂等独立验收通过。成本数据外置和工坊详情表现仍待做 |
 | RUN-MERCHANT | 局内商人、消费与回退 | [04.1](04.1_玩法系统_局内商人.md)、[04](04_技术施工_战斗与局内成长.md) | `src/ui/MerchantUI.gd`→GameManager/Inventory | `verify_full_3d_game_flow`（综合） | **开发中**：现行链已记录；会话、货币、背包、撤离条件和快照事务待收口 |
@@ -65,7 +65,7 @@
 | DIALOGUE-UI | 底栏对话框、头顶气泡、打字机与推进 | [18](18_技术施工_UI与对话系统.md) | `src/ui/dialogue/DialogueUI.gd`（autoload）、`src/ui/bubble/`（气泡三件） | `verify_dialogue_ui_flow`、`verify_speech_bubble_3d`（均已注册`core`） | **已实装**：底栏（打字机/推进行/三态outcome）与头顶气泡（不透明管线规避TAA拖影）。可脱离剧情单独验收；**契约与实现有6处差异待收敛**（队列/`skippable`/BBCode/带参命令等） |
 | TIME-DAYNIGHT | 权威时间、日夜与能源恢复时间输入 | [15](15_技术施工_时间日夜与基地能源.md) | WorldTimeDomain/GameTimeManager→太阳/HUD | `verify_main_entry_realtime_sun_flow` | 已与电力玩法拆分；统一数据配置仍待完善 |
 | POWER-SYSTEM | 基地电力、手电电力、恢复舱与未来基地负载 | [15.1](15.1_技术施工_电力系统.md) | BaseEnergyService/BaseManager；PlayerFlashlight3D/ItemUseHandler | `verify_3d_flashlight_charge_flow`、`verify_base_overhaul_flow` | **开发中**：现有两条能源链已记录；基地灯光/设施用电待接入 |
-| ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md) | GameEntryFlow→Tower/MainEntryScreen3D→AvatarCustomizationPersistence | `verify_game_entry_flow`、`verify_avatar_return_persistence_flow` | 有设计/历史；调参面板不应混入角色契约 |
+| ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md) | GameEntryFlow→Tower/MainEntryScreen3D→AvatarCustomizationPersistence | `verify_game_entry_flow`、`verify_avatar_return_persistence_flow` | 设置复用与异常卸载清理已补；入口专项可完整执行但独立展示相机/视觉代理目标仍未满足，保持红项 |
 | UI-HUD | HUD、地图与模态输入 | [04](04_技术施工_战斗与局内成长.md) | HUDPresenter3D/DungeonMinimap3D/InventoryUI | `verify_hud_presenter_3d`、`verify_tactical_inventory_minimap_flow` | Presenter可独立；其他UI仍直接读写多域 |
 | VFX-POOL | Prefab注册、借出、回收 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow` | 近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役 |
 | AUDIO-MUSIC | 音效和场景音乐切换 | [10](10_资产与内容规范.md)、[14.8](14.8_音乐系统与配乐资产.md) | AudioManager/MusicCatalog/MusicManager/MusicTrigger | `verify_music_system`、`verify_requested_experience_upgrade_flow` | UI/音效/音乐已拆独立账本、Skill与验收链；功能层仍保持AudioManager与MusicManager边界，不合并播放生命周期 |

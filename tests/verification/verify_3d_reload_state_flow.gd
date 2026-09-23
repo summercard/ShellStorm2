@@ -15,6 +15,10 @@ func _ready() -> void:
 	player.set_physics_process(false)
 	player.avatar.set_process(false)
 	player.weapon.set_process(false)
+	if not player.equip_weapon("bp_pistol", "mod_bullet_standard"):
+		failures.append("Could not equip pistol for the sidearm reload verification")
+	await get_tree().process_frame
+	player.weapon.set_process(false)
 
 	var progress_samples: Array[float] = []
 	var ended_results: Array[bool] = []
@@ -76,7 +80,15 @@ func _ready() -> void:
 		or mid_right_grip_distance > 0.189
 		or absf(mid_right_grip_distance - base_right_grip_distance) > 0.0615
 	):
-		failures.append("Reload animation detached the pistol's single right grip from the weapon")
+		failures.append(
+			"Reload animation detached the pistol's single right grip from the weapon "
+			+ "(base=%.4f mid=%.4f state=%s class=%s)" % [
+				base_right_grip_distance,
+				mid_right_grip_distance,
+				str(avatar_snapshot.get("weapon_pose_state", "")),
+				str(avatar_snapshot.get("weapon_class", "")),
+			]
+		)
 
 	player.weapon.call("_process", reload_duration)
 	player.avatar.call("_process", 0.2)

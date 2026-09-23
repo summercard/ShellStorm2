@@ -64,7 +64,17 @@ func _verify_structural_prefabs(failures: Array[String]) -> void:
 		add_child(module)
 		await get_tree().process_frame
 		_expect(str(module.get_meta("asset_id", "")) == str(spec[1]), "结构资产ID错误：%s" % spec[1], failures)
-		_expect(is_equal_approx(float(module.get("target_walkable_height_m")), float(spec[2])), "结构目标高度错误：%s" % spec[1], failures)
+		var target_height: Variant = (
+			module.get("target_walkable_height_m")
+			if _has_property(module, "target_walkable_height_m")
+			else null
+		)
+		_expect(
+			target_height is float
+			and is_equal_approx(float(target_height), float(spec[2])),
+			"结构目标高度错误或缺少契约属性：%s" % spec[1],
+			failures
+		)
 		var guard_count := 0
 		var walkable_count := 0
 		for body in module.find_children("*", "StaticBody3D", true, false):
@@ -76,7 +86,9 @@ func _verify_structural_prefabs(failures: Array[String]) -> void:
 		_expect(walkable_count >= 1, "缺少简化连续行走面：%s" % spec[1], failures)
 		if str(spec[1]) == "ENV-BASE99-STAIR-L-Z5":
 			var unified_body := module.get_node_or_null("WalkableCollision/LStairUnifiedWalkable") as StaticBody3D
-			var unified_shapes := unified_body.find_children("*", "CollisionShape3D", true, false) if unified_body != null else []
+			var unified_shapes: Array[Node] = []
+			if unified_body != null:
+				unified_shapes = unified_body.find_children("*", "CollisionShape3D", true, false)
 			var visual_vertex_count := 0
 			for mesh_value in module.find_children("*", "MeshInstance3D", true, false):
 				var mesh_instance := mesh_value as MeshInstance3D
@@ -87,7 +99,12 @@ func _verify_structural_prefabs(failures: Array[String]) -> void:
 					visual_vertex_count += (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
 			_expect(walkable_count == 1, "L型楼梯行走面不是单一StaticBody", failures)
 			_expect(unified_shapes.size() == 3, "L型楼梯单一行走体不是斜坡＋平台＋斜坡三个形状", failures)
-			_expect(str(unified_body.get_meta("collision_model", "")) == "single_body_ramp_landing_ramp", "L型楼梯缺少统一碰撞契约", failures)
+			_expect(
+				unified_body != null
+				and str(unified_body.get_meta("collision_model", "")) == "single_body_ramp_landing_ramp",
+				"L型楼梯缺少统一碰撞契约",
+				failures
+			)
 			_expect(visual_vertex_count >= 500, "L型楼梯视觉主体或踏步缺失", failures)
 		if str(spec[1]) == "ENV-BASE99-STAIR-EXTERIOR-H4":
 			var ramp_shape := module.get_node_or_null("WalkableCollision/ExteriorStairRamp/ExteriorStairRampShape") as CollisionShape3D
@@ -230,7 +247,7 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	_expect(bool(entry_snapshot.get("gameplay_hud_hidden", false)), "主页面显示时玩法HUD没有隐藏", failures)
 	_expect(bool(entry_snapshot.get("presentation_lights_only", false)), "主页面灯光没有限定为展示层专用", failures)
 	# 四盏独立展示灯：检查FaceFill能量与单一展示层，不断言原玩家层或聚光灯。
-	var entry_rig := entry.get("_rig") as Node3D
+	var entry_rig := entry.get("_rig") as Node3D if _has_property(entry, "_rig") else null
 	var face_fill: OmniLight3D = null
 	if entry_rig != null:
 		face_fill = entry_rig.find_child("FaceFill", true, false) as OmniLight3D
@@ -266,7 +283,8 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	await get_tree().process_frame
 	var gameplay_snapshot := entry.get_entry_snapshot()
 	_expect((tower.get_node("HUD") as CanvasLayer).visible, "开始游戏后玩法HUD没有恢复", failures)
-	_expect(entry.get("_rig") == null, "过渡结束后展示rig没有释放", failures)
+	var remaining_entry_rig: Variant = entry.get("_rig") if _has_property(entry, "_rig") else null
+	_expect(remaining_entry_rig == null, "过渡结束后展示rig没有释放", failures)
 	entry.queue_free()
 
 	var wardrobe_scene := load("res://scenes/ui/WardrobeMenu3D.tscn") as PackedScene
@@ -305,6 +323,13 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:
 	if not condition:
 		failures.append(message)
+
+
+func _has_property(target: Object, property_name: String) -> bool:
+	for property in target.get_property_list():
+		if str(property.get("name", "")) == property_name:
+			return true
+	return false
 
 
 func _finish(failures: Array[String]) -> void:
