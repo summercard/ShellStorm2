@@ -90,6 +90,26 @@ def check(root: Path) -> dict:
     if boundary_check.returncode != 0:
         detail = (boundary_check.stdout + boundary_check.stderr).strip()
         issues.append(f"Domain boundary invalid: {detail}")
+    traceability_check = subprocess.run(
+        ["python3", str(root / "scripts/check_feature_traceability.py")],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if traceability_check.returncode != 0:
+        detail = (traceability_check.stdout + traceability_check.stderr).strip()
+        issues.append(f"Feature traceability invalid: {detail}")
+    media_check = subprocess.run(
+        ["python3", str(root / "scripts/check_media_asset_domains.py")],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if media_check.returncode != 0:
+        detail = (media_check.stdout + media_check.stderr).strip()
+        issues.append(f"Media asset domains invalid: {detail}")
     return {
         "engine_version": version, "documents": len(paths), "local_links": links,
         "features": len(features), "test_references": len(test_references),

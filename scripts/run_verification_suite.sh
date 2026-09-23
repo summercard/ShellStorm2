@@ -138,6 +138,7 @@ core_scenes=(
   verify_room_graph_persistence_services
   verify_verification_runner_contract
   verify_hud_presenter_3d
+  verify_postfx_overlay_runtime
   verify_speech_bubble_3d
   verify_dialogue_ui_flow
   verify_narrative_timeline
@@ -190,6 +191,7 @@ core_scenes=(
   verify_workshop_transaction_flow
   verify_extraction_points_spend_transaction
   verify_run_settlement_transaction
+  verify_revival_policy_contract
   verify_tower_facility_inventory_binding
   verify_tower_base_facility_persistent_flow
   verify_tower_extraction_return_flow

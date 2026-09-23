@@ -1,5 +1,7 @@
 # ShellStorm2 全项目深度审计（2026-09-22）
 
+> 后续状态（2026-09-23）：本文是审计时点快照。P2 中的“media Skill 错配”和“37 功能未机器绑定追溯链”已按 [P2 修复记录](../development/2026-09-23_p2_media_and_traceability_repair.md) 关闭；资产负责人、哈希/路径/状态异常及其他 P0/P1 不因此改写。
+
 > 审计基线：Git `380a15abb52c756b7d6c1f199acca80f7e6ca446`；工程版本以 `project.godot` 为准，为 `0.1.0`。
 >
 > 审计范围：设计与开发文档、Godot 代码和场景、资产源/运行资产/资产账本、Skill、验证脚本、Git 跟踪文件与本地生成目录。

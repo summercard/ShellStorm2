@@ -1,0 +1,4 @@
+interface:
+  display_name: "Music Asset Pipeline"
+  short_description: "制作、接入并验收 ShellStorm2 配乐资产"
+  default_prompt: "Use $music-asset-pipeline to create or update a ShellStorm2 music asset."

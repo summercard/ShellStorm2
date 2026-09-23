@@ -1,5 +1,5 @@
 // ⛔ 行号与根目录已过时：`rowNumber = 226 + i` 是**单体账本**坐标；账本已按域拆开
-// （敌人/场景/音频分属三个不同分账本），且本文件原先硬编码了另一台机器的 macOS 根目录。
+// （敌人/场景/音效分属三个不同分账本），且本文件原先硬编码了另一台机器的 macOS 根目录。
 // 路径改为经 assets/registry/ledger_index.json 解析；行号必须改为「按大类路由到归属账本 + 追加到该表末尾」。
 // 在完成该改写前默认拒绝执行，需 --i-know-the-rows-are-stale。
 import fs from "node:fs/promises";
@@ -7,7 +7,7 @@ import { FileBlob, SpreadsheetFile } from "/Users/summercards/.cache/codex-runti
 
 const root = process.cwd();
 const registryIndex = JSON.parse(await fs.readFile(`${root}/assets/registry/ledger_index.json`, "utf8"));
-// 本 payload 覆盖三个域：敌人 / 场景 / 音频（表现资源）。
+// 本 payload 覆盖三个域：敌人 / 场景 / 音效。payload 内旧大类“音频”也必须在重放改造时迁移为“音效”。
 const ledgerPathFor = (category) => {
   const domain = registryIndex.domains.find(d => d.categories.includes(category));
   if (!domain) throw new Error(`账本索引里没有覆盖大类 ${category} 的域`);
@@ -15,7 +15,7 @@ const ledgerPathFor = (category) => {
 };
 if (!process.argv.includes("--i-know-the-rows-are-stale")) {
   throw new Error(
-    "update_v01_completion_registry.mjs 的 rowNumber=226+i 是单体账本坐标，且 payload 跨敌人/场景/音频三个分账本。" +
+    "update_v01_completion_registry.mjs 的 rowNumber=226+i 是单体账本坐标，且 payload 跨敌人/场景/音效三个分账本。" +
     "请先改为按大类路由到 ledgerPathFor(category) 并追加到各表末尾，再加 --i-know-the-rows-are-stale 执行。"
   );
 }

@@ -2,9 +2,8 @@
 
 本目录是项目美术资产的**唯一登记入口**。
 
-自 2026-09-18 起，登记结构从「单体账本」改为「**总目录 + 分账本**」：资产条目按大类拆到 7 个独立账本，
-角色、敌人、场景、道具、武器、特效、表现资源七条生产线可以**并行编辑各自的账本**，不再争抢同一个 xlsx。
-拆分前后资产条目**逐格不变**，由 `ledger_split_baseline.json` 与 `verify_ledger_split.py` 证明。
+自 2026-09-23 起，登记结构为「**总目录 + 9 个分账本**」：角色、敌人、场景、道具、武器、特效、UI、音效、音乐九条生产线可以**并行编辑各自的账本**。
+2026-09-18 的初始拆分由 `ledger_split_baseline.json` 保留；2026-09-23 受控媒体迁移另由 `media_domain_split_manifest.json` 声明，除「账本归属/大类」外不改 AssetID、路径、哈希、状态或授权。
 
 ## 1. 目录结构
 
@@ -17,7 +16,9 @@
 | `ledgers/ShellStorm2_道具账本_v001.xlsx` | 分账本 | 可拾取/可消耗/可交互道具 |
 | `ledgers/ShellStorm2_武器账本_v001.xlsx` | 分账本 | 枪械、近战武器、子弹与配件 |
 | `ledgers/ShellStorm2_特效账本_v001.xlsx` | 分账本 | 可独立实例化的 3D 特效 |
-| `ledgers/ShellStorm2_表现资源账本_v001.xlsx` | 分账本 | UI 与音频（无 Blender/GLB 链路的非模型资源） |
+| `ledgers/ShellStorm2_UI账本_v001.xlsx` | 分账本 | HUD、页面、面板、图标与焦点表现 |
+| `ledgers/ShellStorm2_音效账本_v001.xlsx` | 分账本 | 短时 SFX、事件键、运行 OGG 与源母版 |
+| `ledgers/ShellStorm2_音乐账本_v001.xlsx` | 分账本 | BGM、A/B 曲目、循环与场景触发 |
 | `ledger_index.json` | **单一真源**（机器可读） | 「域 → 文件 → 大类 → AssetID 前缀 → Prefab 分页 → 责任 Skill」的唯一映射 |
 | `ledger_split_baseline.json` | 拆分无损基线 | 拆分前单体账本的逐格快照，供无损证明比对 |
 | `*.xlsx.bak_*` | 备份 | 历史批次与拆分前的快照，只作回溯，不参与任何流程 |
@@ -25,7 +26,7 @@
 每个分账本的资产行**只落在《资产主表》**；`3D-场景通用` / `3D-设施` / `3D-武器` 等分页只是 Prefab 分类视图，
 与《资产主表》用同一个 AssetID 关联。
 
-### 七个分账本
+### 九个分账本
 
 | 域 key | 账本 | 大类 | AssetID 前缀 | 责任 Skill |
 |---|---|---|---|---|
@@ -34,8 +35,10 @@
 | `scenes` | 场景账本 | 场景 / 场景道具 / 基地资产包 | `ART` `ENV` `BPK` `PRP` | `scene-full-pipeline` |
 | `props` | 道具账本 | 道具 | `ITM` `PRP` | `game-prop-model-pipeline` |
 | `weapons` | 武器账本 | 武器 | `WPN` | `game-weapon-model-pipeline` |
-| `vfx` | 特效账本 | 特效 | `VFX` `FX` | `godot-model-asset-import-standard` |
-| `media` | 表现资源账本 | UI / 音频 | `UI` `AUD` | `godot-model-asset-import-standard` |
+| `vfx` | 特效账本 | 特效 | `VFX` `FX` | `vfx-combat-effect-authoring` |
+| `ui` | UI账本 | UI | `UI` | `ui-asset-pipeline` |
+| `audio` | 音效账本 | 音效 | `AUD` | `audio-sfx-asset-pipeline` |
+| `music` | 音乐账本 | 音乐 | `AUD` | `music-asset-pipeline` |
 
 > `PRP` 同时服务场景域与道具域，`ART`/`ENV` 同属场景域 —— **前缀有歧义**，归属一律以《资产主表》的「大类」列为准，
 > 不要靠前缀猜。`LedgerIndex.domain_for_asset_id()` 对歧义前缀会返回 `None`，请改用 `domain_for_category()`。
@@ -110,10 +113,11 @@ python scripts/check_ledger_refs.py --allow-pending                  # 仅报告
 
 ```bash
 python scripts/check_asset_registry.py                     # 全部账本 + 跨文件契约（默认 full）
-python scripts/check_asset_registry.py --scope structure   # 只看结构（历史基线口径 = 38）
+python scripts/check_asset_registry.py --scope structure   # 结构+枚举；当前仍报5条P0「白盒组件」状态债务
 python scripts/check_asset_registry.py --ledger 武器        # 只查一个域
 python scripts/check_asset_registry.py --workbook <xlsx>   # 单文件 legacy 模式（不做跨文件断言）
 python tools/asset_pipeline/verify_ledger_split.py         # 拆分无损证明：并集 / 缺失 / 漂移
+python scripts/check_media_asset_domains.py                 # UI / 音效 / 音乐账本、Skill 和验收入口
 python tools/asset_pipeline/refresh_asset_registry_hashes.py --ledger 场景 --dry-run
 python scripts/classify_asset_repository.py                # 仓库文件 → 账本行对照
 python scripts/check_ledger_refs.py                        # 旧账本引用审计（见 3.3）
@@ -131,7 +135,7 @@ python scripts/check_ledger_refs.py                        # 旧账本引用审�
 
 ```bash
 python tools/asset_pipeline/split_asset_ledger.py --plan          # 只打印拆分计划，不落盘
-python tools/asset_pipeline/split_asset_ledger.py                 # 幂等重建 7 账本 + 总目录（先备份总目录）
+python tools/asset_pipeline/split_asset_ledger.py                 # 幂等重建 9 账本 + 总目录（先备份总目录）
 python tools/asset_pipeline/split_asset_ledger.py --source <单体账本>
 ```
 

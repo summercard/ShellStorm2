@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "migration_id": "P2-MEDIA-DOMAIN-SPLIT-2026-09-23",
+  "date": "2026-09-23",
+  "legacy_domain": "media",
+  "legacy_file": "assets/registry/ledgers/ShellStorm2_表现资源账本_v001.xlsx",
+  "preserved_fields": [
+    "AssetID",
+    "中文名",
+    "逻辑ID/源键",
+    "组件槽",
+    "变体父ID",
+    "视角",
+    "状态/动画",
+    "复用范围",
+    "制作状态",
+    "优先级",
+    "版本",
+    "规格(px)",
+    "文件路径",
+    "源码/策划依据",
+    "关键词/别名",
+    "SHA-256",
+    "负责人",
+    "更新时间",
+    "来源/许可",
+    "源编号（Blender collection）",
+    "备注"
+  ],
+  "allowed_changes": ["账本归属", "大类"],
+  "routes": [
+    {
+      "baseline_category": "UI",
+      "match": {"category": "UI"},
+      "target_domain": "ui",
+      "target_category": "UI",
+      "expected_count": 17
+    },
+    {
+      "baseline_category": "音频",
+      "match": {"subtype": "bgm"},
+      "target_domain": "music",
+      "target_category": "音乐",
+      "expected_count": 9
+    },
+    {
+      "baseline_category": "音频",
+      "match": {"subtype_not": "bgm"},
+      "target_domain": "audio",
+      "target_category": "音效",
+      "expected_count": 48
+    }
+  ],
+  "acceptance": {
+    "ui": ["verify_hud_presenter_3d", "verify_pause_game_save_reset_flow", "verify_gamepad_input_flow"],
+    "audio": ["verify_requested_experience_upgrade_flow", "verify_3d_melee_feedback_flow"],
+    "music": ["verify_music_system"]
+  }
+}

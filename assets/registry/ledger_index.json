@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_by": "tools/asset_pipeline/split_asset_ledger.py",
   "note": "分账本单一真源。域→文件→大类→AssetID前缀→Prefab分页 的映射只在这里定义；门禁、写账本工具、Skill 与文档一律引用本文件，禁止各自硬编码路径。",
   "master": {
@@ -15,7 +15,8 @@
   "version_suffix": "_v001.xlsx",
   "prefix_category_pairs": [
     ["ART", "场景"],
-    ["AUD", "音频"],
+    ["AUD", "音效"],
+    ["AUD", "音乐"],
     ["BPK", "基地资产包"],
     ["CHR", "角色"],
     ["ENM", "敌人"],
@@ -113,18 +114,46 @@
       "scope_note": "可独立实例化的3D战斗、环境与可见性特效。每个特效一个独立 Prefab，遵循 14.6 特效系统与制作规范；制作、修复与验收的流程标准见 skill `vfx-combat-effect-authoring`（2026-09-21 接管本域 primary_skill）。"
     },
     {
-      "key": "media",
-      "name": "表现资源",
-      "file": "ShellStorm2_表现资源账本_v001.xlsx",
-      "categories": ["UI", "音频"],
-      "id_prefixes": ["UI", "AUD"],
+      "key": "ui",
+      "name": "UI",
+      "file": "ShellStorm2_UI账本_v001.xlsx",
+      "categories": ["UI"],
+      "id_prefixes": ["UI"],
       "sheet_scope": [],
       "prefab_pages": [],
       "animation_sheets": [],
-      "primary_skill": "godot-model-asset-import-standard",
+      "primary_skill": "ui-asset-pipeline",
       "supporting_skills": [],
       "owner": "待分配",
-      "scope_note": "UI界面与音频（BGM/SFX）。二者同属非模型表现资源：无 Blender 源与 GLB 链路，登记口径为文件+哈希+事件键。"
+      "scope_note": "HUD、页面、面板、图标、弹窗、输入焦点与跨分辨率界面表现。UI只消费领域命令/查询，不持有玩法或存档规则。"
+    },
+    {
+      "key": "audio",
+      "name": "音效",
+      "file": "ShellStorm2_音效账本_v001.xlsx",
+      "categories": ["音效"],
+      "id_prefixes": ["AUD"],
+      "sheet_scope": [],
+      "prefab_pages": [],
+      "animation_sheets": [],
+      "primary_skill": "audio-sfx-asset-pipeline",
+      "supporting_skills": [],
+      "owner": "待分配",
+      "scope_note": "武器、近战、受击、UI、门、容器、波次、Boss与交互短时音效；事件键由AudioManager持有，运行资产为OGG。"
+    },
+    {
+      "key": "music",
+      "name": "音乐",
+      "file": "ShellStorm2_音乐账本_v001.xlsx",
+      "categories": ["音乐"],
+      "id_prefixes": ["AUD"],
+      "sheet_scope": [],
+      "prefab_pages": [],
+      "animation_sheets": [],
+      "primary_skill": "music-asset-pipeline",
+      "supporting_skills": [],
+      "owner": "待分配",
+      "scope_note": "场景BGM、A/B曲目、循环与Music总线资产；曲目映射由MusicCatalog持有，播放生命周期由MusicManager持有。"
     }
   ]
 }

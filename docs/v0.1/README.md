@@ -6,7 +6,7 @@
 正式入口:`res://scenes/TowerDescent3D.tscn`
 最后结构核对:2026-09-12（审计基线 `31ed360`；不表示所有功能重新验收通过）
 
-开发前阅读[文档驱动开发规范](../DOCUMENTATION_STANDARD.md)和[功能契约索引](MODULE_INDEX.md)。[设计目录](design/README.md)与[独立开发记录](development/README.md)分开维护；当前实现缺口和回归结果见[工程健康审计](audits/2026-09-12_engineering_audit.md)。
+开发前阅读[文档驱动开发规范](../DOCUMENTATION_STANDARD.md)和[功能契约索引](MODULE_INDEX.md)。[设计目录](design/README.md)与[独立开发记录](development/README.md)分开维护；37 个功能的 Owner/主设计/开发记录/验收映射见[Machine-readable 追溯表](feature_registry.json)；当前实现缺口和回归结果见[工程健康审计](audits/2026-09-12_engineering_audit.md)。
 
 本文件负责说明《弹壳风暴2》是什么、玩家为何持续游玩、一次行动如何循环,以及七个核心系统分别承担什么职责。它不展开模块内部的代码施工细节;每个系统的技术边界、事件、存档字段与验收方法由对应施工文档负责,内容数值由游戏内容数据库负责。
 
@@ -353,7 +353,7 @@ v0.1 先建立触发框架和验收契约,不在本次文档中擅自重写主�
 
 - [资产与内容规范](10_资产与内容规范.md)
 - [3D场景美术生产流程](10.1_3D场景美术生产流程.md)：概念稿→白盒规范与组装→顶视风格稿→Blender制作→优化并导入Godot；包含阶段表、生产卡和退回门禁。
-- [美术资产账本入口](../../assets/registry/README.md)：总目录 + 7 个分账本的结构、域/大类/文件映射（`assets/registry/ledger_index.json`）、门禁与校验命令。
+- [美术资产账本入口](../../assets/registry/README.md)：总目录 + 9 个分账本的结构、域/大类/文件映射（`assets/registry/ledger_index.json`）、门禁与校验命令。
 - 3D资产生产使用“Blender 游戏资产制作规范”和“Godot 模型资产导入规范”两个中文 Skill；位置、职责和维护规则见[资产与内容规范的项目生产 Skill 章节](10_资产与内容规范.md#81-项目生产-skill)。
 - [特效系统与制作规范](14.6_特效系统与制作规范.md)（2026-09-11 新增）— 特效按独立 Prefab 原则管理，每个特效为一个独立 `.tscn`；Prefab 是特效的唯一出口
 - [测试与发布](11_测试与发布.md)

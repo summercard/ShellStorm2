@@ -1,6 +1,6 @@
 # v0.1 模块、功能与工程契约索引
 
-工程版本：0.1.0。设计索引修订：r4（2026-09-23）。事实核对基线：`c425b717` + 当前 P1 工作区。
+工程版本：0.1.0。设计索引修订：r5（2026-09-23）。事实核对基线：`c425b717` + 当前 P1/P2 工作区。
 本表建立追溯入口，不替代各模块设计，也不把现存实现自动认定为设计已批准。当前验收结果见 [全项目深度审计](audits/2026-09-22_full_project_deep_audit.md)；未关闭 P0 仍以该审计及后续开发记录为准。
 
 ## 1. 独立开发判断
@@ -23,15 +23,17 @@
 | TIME | `WorldTimeDomain`→`GameTimeManager`→BaseData时间→太阳/HUD/能源恢复输入 | 算法可独立，接入部分 | 规则仍为代码常量；联动、持久化测试需进入明确模块验收集 |
 | POWER | `BaseEnergyService/BaseManager`拥有基地电力；`PlayerFlashlight3D`拥有行动手电电量；恢复舱负责两域转换 | 当前两条链可独立验证，系统开发中 | 基地灯光与设施负载尚未接统一电网服务、事件和真实表现验收 |
 | ENTRY | `GameEntryFlow`一次性入口意图→塔楼主页→玩法；AvatarCustomizationPersistence→BaseData | 部分 | 塔楼仍负责主页与设施UI装配；外观作者包、运行包装、用户装配版本需分别追踪 |
-| PRESENTATION | `HUDPresenter3D`快照、公共UI组件；VfxPool/CombatEffectPool、AudioManager、MusicManager | HUD/音乐部分；VFX未收敛 | 新池生命周期/回收专项已通过且调用者不再读取私有注册表；旧CombatEffectPool兼容链仍在；后处理缺独立设计 |
+| PRESENTATION | `HUDPresenter3D`快照、公共UI组件；VfxPool/CombatEffectPool、AudioManager、MusicManager | HUD/音乐部分；VFX未收敛 | UI、音效、音乐已有独立账本/Skill/验收链；旧CombatEffectPool兼容链仍在；后处理仍缺独立主设计 |
 | PERFORMANCE | GraphicsSettingsManager、PostfxOverlay、RuntimePerformanceManager→场景/渲染 | 部分 | 调参面板越过画质服务；预算失配、渲染用例归类不全 |
 | TRAINING | `TrainingRange3D`→只读BlueprintRegistry→共用Player3D→训练会话统计 | **测试功能1.0已完成，可独立启动与验收** | 后续伤害分析、靶标编辑和自动压测另升功能版本 |
 | ASSET | XLSX台账→生产源/转移账本→GLB→PackedScene→正式场景 | 有生产标准，验收闭环不足 | 426条登记中231项账本异常；需按域核签来源，禁止批量接受哈希 |
-| TOOLING | tests/verification、脚本、src/testing→隔离工程→日志与退出码 | 部分 | 用户目录与 `.godot` 已隔离，冷/热缓存自检通过；154 个验证场景已全部归属 smoke/core/visual/manual/retired；`check_verification_registry.py`和`check_domain_boundaries.py`已并入文档门禁；当前功能红项仍需逐项清零 |
+| TOOLING | tests/verification、脚本、src/testing→隔离工程→日志与退出码 | 部分 | 用户目录与 `.godot` 已隔离，冷/热缓存自检通过；156 个验证场景已全部唯一归属；验证注册、跨域边界、37功能追溯和媒体资产门禁已并入文档总门禁 |
 
 ## 2. 功能追溯表
 
 “设计”指已有主设计入口，完整性另列。“历史定位”不等于本次重新通过；记录缺失必须补实证，不能倒填虚构开发过程。
+
+机器可追溯副本见 [`feature_registry.json`](feature_registry.json)。它为本表 37 个 FeatureID 逐条登记唯一状态 Owner、主设计、开发记录和已注册验收；`python3 scripts/check_feature_traceability.py` 阻止缺项、断链和未注册场景回退。
 
 | 功能ID | 功能 | 主设计 | 正式代码/数据入口 | 验收入口（tests/verification） | 契约与记录现状 |
 |---|---|---|---|---|---|
@@ -58,7 +60,7 @@
 | SAVE-PROFILE | 总档封套、校验、迁移与复位 | [09](09_技术施工_存档结算与复活.md) | `BaseData/ProfileSaveService/AtomicJsonStore` | `verify_pause_game_save_reset_flow`、`verify_base_shop_save_flow`、`verify_extraction_points_spend_transaction` | 普通资源扣款失败回滚已有专项；文件底层失败/备份链仍需补完整故障矩阵 |
 | SAVE-RUN | 行动自动存档、重载恢复 | [09](09_技术施工_存档结算与复活.md) | `RunPersistenceService`→Dungeon/Tower快照 | `verify_runtime_autosave_flow`、`verify_tower_runtime_restart_restore`（均已注册 `core`） | 实现与独立入口存在；本次只完成注册治理，故障恢复是否全绿仍以当前运行结果为准 |
 | RUN-SETTLE | 撤离、死亡、保险返还 | [09](09_技术施工_存档结算与复活.md) | DeathSettlementModule→Dungeon/Tower→`BaseManager.commit_run_settlement` | `verify_run_settlement_transaction`、`verify_death_during_extraction_flow`、`verify_tower_extraction_return_flow` | 成功/死亡结算已一次原子写盘，写盘失败回滚、重试、跨重载幂等已有独立专项；本轮实测`verify_run_settlement_transaction` 通过 |
-| RUN-REVIVE | 复活策略 | [09](09_技术施工_存档结算与复活.md) | 目标`RevivalPolicy`，当前不存在 | 待建立空策略/次数/失败测试 | 仅目标；禁止将返基地当成复活完成 |
+| RUN-REVIVE | 复活策略 | [09](09_技术施工_存档结算与复活.md) | `RevivalPolicy`（v0.1 空策略） | `verify_revival_policy_contract` | **契约已建立、玩法仍未实现**：无复活源时稳定返回`no_revival_source`、无预约与副作用；次数/成本/复活点仍由后续设计决定，不把返基地伪装成复活 |
 | NARRATIVE-TRIGGER | 剧情触发、时间轴编排与调用权限 | [08](08_技术施工_剧情触发.md) | `src/narrative/`、`NarrativeDirector` Autoload、`data/narrative/` | `verify_narrative_timeline`、`verify_opening_script_runtime`（均注册 `core`） | **核心链已实装**：时间轴、位置/事件/脚本触发、八域适配、占用与中止清理、once 和开场内容已有专项；跨局历史与通用条件引擎仍按设计后续推进。作者侧规范见 Skill `10-narrative-timeline-authoring` |
 | DIALOGUE-UI | 底栏对话框、头顶气泡、打字机与推进 | [18](18_技术施工_UI与对话系统.md) | `src/ui/dialogue/DialogueUI.gd`（autoload）、`src/ui/bubble/`（气泡三件） | `verify_dialogue_ui_flow`、`verify_speech_bubble_3d`（均已注册`core`） | **已实装**：底栏（打字机/推进行/三态outcome）与头顶气泡（不透明管线规避TAA拖影）。可脱离剧情单独验收；**契约与实现有6处差异待收敛**（队列/`skippable`/BBCode/带参命令等） |
 | TIME-DAYNIGHT | 权威时间、日夜与能源恢复时间输入 | [15](15_技术施工_时间日夜与基地能源.md) | WorldTimeDomain/GameTimeManager→太阳/HUD | `verify_main_entry_realtime_sun_flow` | 已与电力玩法拆分；统一数据配置仍待完善 |
@@ -66,11 +68,11 @@
 | ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md) | GameEntryFlow→Tower/MainEntryScreen3D→AvatarCustomizationPersistence | `verify_game_entry_flow`、`verify_avatar_return_persistence_flow` | 有设计/历史；调参面板不应混入角色契约 |
 | UI-HUD | HUD、地图与模态输入 | [04](04_技术施工_战斗与局内成长.md) | HUDPresenter3D/DungeonMinimap3D/InventoryUI | `verify_hud_presenter_3d`、`verify_tactical_inventory_minimap_flow` | Presenter可独立；其他UI仍直接读写多域 |
 | VFX-POOL | Prefab注册、借出、回收 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow` | 近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役 |
-| AUDIO-MUSIC | 音效和场景音乐切换 | [10](10_资产与内容规范.md)、[14.8](14.8_音乐系统与配乐资产.md) | AudioManager/MusicCatalog/MusicManager/MusicTrigger | `verify_music_system`、`verify_requested_experience_upgrade_flow` | 有规范/音乐修复历史；音效与新VFX接入需联验 |
-| GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`（仅脚本，缺tscn） | 新后处理缺独立设计和日志关联；7/9项口径失配 |
+| AUDIO-MUSIC | 音效和场景音乐切换 | [10](10_资产与内容规范.md)、[14.8](14.8_音乐系统与配乐资产.md) | AudioManager/MusicCatalog/MusicManager/MusicTrigger | `verify_music_system`、`verify_requested_experience_upgrade_flow` | UI/音效/音乐已拆独立账本、Skill与验收链；功能层仍保持AudioManager与MusicManager边界，不合并播放生命周期 |
+| GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime` | PostFX 已补独立tscn并注册core；仍缺独立主设计，7/9项口径失配不因入口补齐而自动关闭 |
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
 | TRAINING-RANGE | 独立靶场与武器预览 | [11.1](11.1_测试功能_独立训练场.md) | `src/training3d/TrainingRange3D.gd` | `verify_training_range_3d_flow`、`verify_training_range_3d_visual` | **功能版本1.0已完成**：当前注册表 19 架、67 组合，三类靶标、重置/退出、暂停及 BaseData 隔离均由注册表驱动的独立契约覆盖 |
-| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 概念→白盒JSON/顶视图→风格稿→Blend→GLB→PackedScene→XLSX | `scripts/check_asset_registry.py`、资产专项、真实场景渲染 | 楼梯间 v021 美术源保留三个通用组件与七类装饰组件；100→99与99→98两个独立装配体已分别导出为 GLB v002，以共享色盘后处理导入 PackedScene 并替换 `TowerDescent3D` 临时资产。每套运行时合并为3个可视网格，玩法碰撞由1个Walkable和1个EnclosureWall网格生成；组件、流程与真实渲染验收通过；历史哈希漂移未批量签署。主路内容房02机房美术源 v003 已完成82包归类和墙地锁定验收；战局区块通用组件库 v003 精简为23包（标准墙1、地板2）。局内关卡01白模 v003 的19个文件已将长墙拆为固定5m件，并将32个门口改为完整5m门墙槽，地板与房间基线保持不变；尚未接入Godot，见[房间记录](development/2026-09-16_main_room_02_data_room_art_v003.md)、[组件库记录](development/2026-09-16_battle_common_component_library_v003.md)与[白模墙体记录](development/2026-09-16_battle_level01_whitebox_wall_modules_v003.md) |
+| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 概念→白盒JSON/顶视图→风格稿→Blend→GLB→PackedScene→XLSX | `scripts/check_asset_registry.py`、`scripts/check_media_asset_domains.py`、资产专项、真实场景渲染 | 9本分账本中UI/音效/音乐已各自具有独立账本、Skill与验收链；原合并表现资源账本已退役。现有场景制成记录继续有效；历史哈希/状态漂移仍未批量签署，不因媒体拆分而自动关闭 |
 | ASSET-ROOFTOP | 天台参考组件与标准外墙 | [组件契约r2](design/rooftop_component_library.md) | `tower_zones/rooftop/source/reference_components/v002/`的Blend与catalog；Godot入口保留原版 | `qa/validate_rooftop.py`、锁区签名、严格逐面UV、固定镜头渲染 | Blender源44独立包完成；新增7挂藤变体与厚门口；运行天台设施已清空，见[清空记录](development/2026-09-17_rooftop_facilities_removed.md)；外墙主体5×0.30×11.9m；未导出或接入Godot，见[交付记录](development/2026-09-17_rooftop_ivy_thick_door_v002.md) |
 
 ## 3. 开发记录定位
@@ -83,9 +85,10 @@
 - BASE：[基地历史](development/history/07_基地设施_历史记录.md)。
 - PERFORMANCE/TOOLING：[性能历史](development/history/13_性能优化与热管理_历史记录.md)、[测试历史](development/history/11_测试与发布_历史记录.md)。
 - AUDIO/VFX：[音乐修复](development/history/14.8_音乐系统与配乐资产_历史记录.md)、[特效快照](development/history/14.6_特效系统与制作规范_历史记录.md)。
-- WORLD/SAVE/TIME/ENTRY/ASSET：[版本开发日志](development/CHANGELOG.md)及[场景成品化历史](development/history/17_天台至98层成品化验收.md)。这些尚未逐条绑定功能ID，属于追溯债务。
+- WORLD/SAVE/TIME/ENTRY/ASSET：[版本开发日志](development/CHANGELOG.md)及[场景成品化历史](development/history/17_天台至98层成品化验收.md)。逐功能关联已收录到 `feature_registry.json`，不再只依赖本节的人工分组。
+- P2 追溯和媒体资产拆分：[P2修复记录](development/2026-09-23_p2_media_and_traceability_repair.md)。
 - WORLD-ENTRY：[关卡传送入口与远征关卡设计](development/2026-09-18_level_teleport_entry_and_standalone_map.md)、[远征关卡出生安全房退出门契约](development/2026-09-19_standalone_safe_room_exit_contract.md)、[远征关卡01制作记录](development/2026-09-19_expedition_level01_buildout.md)。
-- NARRATIVE：剧情时间轴核心链与对话 UI 均已实装并进入 core；见 `src/narrative/`、`verify_narrative_timeline`、`verify_opening_script_runtime`。玩法事件（`MapFateTriggers`/命运卡）与剧情事件保持区分，不合并。RUN-REVIVE/GRAPHICS-POSTFX仍缺功能级独立契约；RUN-MERCHANT与BASE-WORKSHOP已建立开发中文档。开发中功能不得因文档已建立而提前标成实现完成。
+- NARRATIVE：剧情时间轴核心链与对话 UI 均已实装并进入 core；见 `src/narrative/`、`verify_narrative_timeline`、`verify_opening_script_runtime`。玩法事件（`MapFateTriggers`/命运卡）与剧情事件保持区分，不合并。RUN-REVIVE 已有空策略契约但无实际复活来源；GRAPHICS-POSTFX 已有独立验收入口但仍缺独立主设计；RUN-MERCHANT与BASE-WORKSHOP已建立开发中文档。开发中功能不得因文档已建立而提前标成实现完成。
 
 ## 4. 允许的独立开发方式
 

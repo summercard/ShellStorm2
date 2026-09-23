@@ -14,10 +14,10 @@ description: 解决 git 中二进制 xlsx（台账/表格类）合并冲突。�
 
 ## 分账本结构（2026-09-18 起）
 
-项目资产台账已从单体账本改为「**总目录 + 7 个分账本**」：
+项目资产台账已从单体账本改为「**总目录 + 9 个分账本**」：
 
 - **总目录** `assets/registry/ShellStorm2_美术资产台账_v001.xlsx`：只放跨域契约与分账本索引，**不含资产行**。
-- **分账本** `assets/registry/ledgers/ShellStorm2_{角色,敌人,场景,道具,武器,特效,表现资源}账本_v001.xlsx`：资产条目按大类分域落位。
+- **分账本** `assets/registry/ledgers/ShellStorm2_{角色,敌人,场景,道具,武器,特效,UI,音效,音乐}账本_v001.xlsx`：资产条目按大类分域落位。
 - 映射的**唯一真源**是 `assets/registry/ledger_index.json`（说明见 `assets/registry/README.md`）。
 
 对冲突处理的直接影响：
@@ -81,7 +81,7 @@ LOCAL  vs  更早提交 C   ->  差异行数 = 1（只有行 86）
 真实案例：项目里每次台账升版都留了 `patch_ledger_<用途>.py` / `update_ledger_rows_v00N.py`，它们**幂等**且带「目标行 AssetID 必须与预期一致」的断言。冲突把本地侧 9 行升级整批打回后，按行号顺序重放 3 个脚本即精确恢复了与冲突前逐格一致的内容，远端新增的 45 行毫发无损。逐格重放比手工搬 XML 更快、更可审计，也不依赖"两侧样式索引是否通用"这个前提。
 
 - 先对每个脚本 **dry-run**，确认它仍能定位到目标行（**行号可能已被远端新增行推移**）。
-- ⚠️ **2026-09-18 起账本已分册**（总目录 + `ledgers/` 下 7 个分账本，映射见 `assets/registry/ledger_index.json`）。**拆分之前**写下的批次脚本（`assets/art/**/qa/`、`source/art/**/qa/` 下的 `update_registry.mjs` / `update_ledger_rows_v00N.py` / `register_*_ledger_rows.py` 等，共 21 个）**不能直接重放**：它们既指向旧单体账本，又用单体账本的《资产主表》行号坐标（部分按 `sheet10` / `<x:row r="N">` 做 XML 补丁），而分账本里行号已平移。重放前必须①把目标改成该域分账本，②把行号重定为「按 AssetID 定位」。用 `python scripts/check_ledger_refs.py` 复查待处理清单；新脚本一律走 `scripts/ledger_registry.py` 解析路径。
+- ⚠️ **2026-09-23 起账本为 9 个独立域**（UI/音效/音乐已从旧表现资源账本拆出，映射见 `assets/registry/ledger_index.json`）。**拆分之前**写下的批次脚本**不能直接重放**：它们既指向旧单体/合并账本，又用旧《资产主表》行号坐标。重放前必须①把目标改成该域分账本，②把行号重定为「按 AssetID 定位」。用 `python scripts/check_ledger_refs.py` 复查待处理清单；新脚本一律走 `scripts/ledger_registry.py` 解析路径。
 - **只重放"被打回的那一侧"的改动**，另一侧的新增行原样保留——不要顺手"对齐"。
 - ⚠️ 这类脚本通常自带 `shutil.copy2(src, src + BACKUP_SUFFIX)` 备份，**会覆盖仓库里已被 git 跟踪的既有 `.bak_*`**，平白制造几处无关改动。用一个 driver 先 `importlib` 加载脚本、把 `BACKUP` / `BACKUP_SUFFIX` 重定向到临时目录再调 `main()`；或跑完 `git checkout -- '<dir>/*.bak_*'` 复原。
 - 恢复后额外做两项**语义自洽**检查：① 概览/汇总表的计数缓存**实算一遍**（它引用的是主数据表，两侧的缓存值可能各有陈旧，别默认新的一侧就对）；② 逐格差异闭包必须**恰好等于**预期行集合。

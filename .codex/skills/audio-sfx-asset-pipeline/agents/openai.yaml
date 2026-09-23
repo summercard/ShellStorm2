@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audio SFX Asset Pipeline"
+  short_description: "制作、接入并验收 ShellStorm2 游戏音效资产"
+  default_prompt: "Use $audio-sfx-asset-pipeline to create or update a ShellStorm2 sound effect asset."

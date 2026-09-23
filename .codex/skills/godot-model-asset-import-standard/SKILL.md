@@ -139,7 +139,7 @@ index.domain_for_sheet("3D-<分页>")                 # -> 拥有该分页的域
 index.rewrite_ref("<旧引用>")                       # 旧 master#分页 -> 分账本#分页（幂等）
 ```
 
-- 本 skill 涉及的分账本：按大类路由 —— 场景 / 场景道具 / 基地资产包 → 场景账本；道具 → 道具账本；角色 → 角色账本；敌人 → 敌人账本；武器 → 武器账本；特效 → 特效账本；UI / 音频 → 表现资源账本。
+- 本 skill 只处理需要 Godot 3D 导入的场景 / 场景道具 / 基地资产包等模型资产；UI、短时音效、BGM 分别交给 `ui-asset-pipeline`、`audio-sfx-asset-pipeline`、`music-asset-pipeline`，不再经过表现资源合并账本。
 - 总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放跨域契约与索引，**不得写入资产行**。
 - 旧批次 `asset_manifest.json` / QA 脚本里的 `…美术资产台账_v001.xlsx#3D-<分页>` 是**产出记录**，不要批量重写；`resolve_ref()` 会解析到正确的分账本。
 - 写完必查：`python scripts/check_asset_registry.py --ledger <域>`（结构 + 跨文件契约：每个 AssetID 全库恰好出现一次）。

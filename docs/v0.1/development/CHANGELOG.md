@@ -1,5 +1,12 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-23｜P2 媒体资产与功能追溯链
+
+- 将原 UI+音频合并账本拆为 UI 17、音效 48、音乐 9 三本独立账本，同步总目录、迁移清单、3 个专用 Skill 与专项门禁。
+- 新增 `feature_registry.json` 与 `check_feature_traceability.py`，37 个功能全部具有 Owner、主设计、开发记录和已注册验收。
+- 补 `RevivalPolicy` v0.1 空策略与契约验收；为既有 PostFX 脚本补验收场景并注册进 `core`。
+- 详见 [P2 修复记录](2026-09-23_p2_media_and_traceability_repair.md)。
+
 ## 2026-09-23｜P1架构与事务收口
 
 - 奖励搜索/击杀/清房/钥匙/保底备弹/剧情全部切到`RuntimeRewardCoordinator → RewardService`，删除`LootModule`两个旧抽表入口。

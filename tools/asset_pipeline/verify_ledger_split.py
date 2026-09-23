@@ -8,7 +8,7 @@ asset row is caught against the pre-split truth.
 
 Asserted
 --------
-1. 每个分账本的《资产主表》行全部来自基线，逐格指纹一致（25 列全比）。
+1. 每个分账本的《资产主表》行全部来自基线，除受控迁移清单显式允许的「账本归属/大类」外逐格指纹一致。
 2. 所有分账本的并集 == 基线全集，每个 AssetID 恰好出现一次。
 3. 每行的大类必须属于其所在账本声明的大类集合 —— 防止「资产写错账本」。
 4. 随域迁移的专表（3D-* / 角色组件 / 动画与状态 / 原型角色 / 角色中转记录）逻辑内容逐字节不变。
@@ -63,6 +63,8 @@ def main() -> int:
         raise SystemExit(f"无损基线缺失: {baseline_path}（先跑 tools/asset_pipeline/split_asset_ledger.py）")
     baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
     expected_assets: dict[str, Any] = baseline["assets"]
+    migration_path = root / "assets/registry/media_domain_split_manifest.json"
+    migration = json.loads(migration_path.read_text(encoding="utf-8")) if migration_path.is_file() else None
 
     failures: list[dict[str, Any]] = []
 
@@ -72,6 +74,25 @@ def main() -> int:
     seen: dict[str, str] = {}
     collected: list[tuple[str, tuple[Any, ...]]] = []
     totals: dict[str, int] = {}
+    migration_counts: Counter[str] = Counter()
+
+    def migration_target(expected: dict[str, Any], values: tuple[Any, ...]) -> tuple[str, str] | None:
+        if migration is None or expected.get("d") != migration.get("legacy_domain"):
+            return None
+        baseline_category = expected.get("c")
+        subtype = _text(values[3]).lower()
+        for route in migration.get("routes", []):
+            if route.get("baseline_category") != baseline_category:
+                continue
+            match = route.get("match", {})
+            if "category" in match and baseline_category != match["category"]:
+                continue
+            if "subtype" in match and subtype != _text(match["subtype"]).lower():
+                continue
+            if "subtype_not" in match and subtype == _text(match["subtype_not"]).lower():
+                continue
+            return _text(route["target_domain"]), _text(route["target_category"])
+        return None
 
     for domain in index.domains:
         if not domain.path.is_file():
@@ -93,19 +114,27 @@ def main() -> int:
                 fail("duplicate_asset_id", asset_id=asset_id, first=seen[asset_id], second=domain.key)
                 continue
             seen[asset_id] = domain.key
-            collected.append((asset_id, values))
-
             if category not in domain.categories:
                 fail("category_outside_ledger", asset_id=asset_id, category=category, domain=domain.key)
             expected = expected_assets.get(asset_id)
             if expected is None:
                 fail("asset_not_in_baseline", asset_id=asset_id, domain=domain.key)
+                collected.append((asset_id, values))
                 continue
-            if expected["c"] != category:
-                fail("category_mutated", asset_id=asset_id, baseline=expected["c"], actual=category)
-            if expected["d"] != domain.key:
-                fail("asset_in_wrong_ledger", asset_id=asset_id, expected_domain=expected["d"], actual=domain.key)
-            if expected["v"] != _row_digest(values):
+            migrated = migration_target(expected, values)
+            expected_domain = migrated[0] if migrated else expected["d"]
+            expected_category = migrated[1] if migrated else expected["c"]
+            if expected_category != category:
+                fail("category_mutated", asset_id=asset_id, baseline=expected["c"], expected=expected_category, actual=category)
+            if expected_domain != domain.key:
+                fail("asset_in_wrong_ledger", asset_id=asset_id, expected_domain=expected_domain, actual=domain.key)
+            normalized_values = list(values)
+            if migrated:
+                normalized_values[2] = expected["c"]
+                migration_counts[domain.key] += 1
+            normalized_values = tuple(normalized_values)
+            collected.append((asset_id, normalized_values))
+            if expected["v"] != _row_digest(normalized_values):
                 fail("row_content_mutated", asset_id=asset_id, domain=domain.key,
                      row=list(_text(v) for v in values))
 
@@ -146,6 +175,14 @@ def main() -> int:
     for asset_id in missing:
         fail("asset_lost", asset_id=asset_id, expected_domain=expected_assets[asset_id]["d"])
     extra = sorted(set(seen) - set(expected_assets))
+
+    if migration is not None:
+        for route in migration.get("routes", []):
+            target = _text(route.get("target_domain"))
+            wanted = int(route.get("expected_count", 0))
+            actual = migration_counts[target]
+            if actual != wanted:
+                fail("migration_count_mismatch", domain=target, expected=wanted, actual=actual)
 
     # 列级定位：并集与基线的逐列指纹，用来把「行内容变了」缩小到具体列
     collected.sort(key=lambda item: item[0])
