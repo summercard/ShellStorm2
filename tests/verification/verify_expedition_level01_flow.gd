@@ -627,7 +627,12 @@ func _verify_room_shell_seal(
 			var neighbour := local + Vector2(direction.x, direction.z) * TowerFloorStage3D.GRID_UNIT
 			if cells.has(_cell_key(neighbour)):
 				continue
-			var from := room.global_position + Vector3(local.x, 1.5, local.y)
+			# 探针高度 0.5m（不是 1.5m）：通道桥房的坑沿护栏只有 0.8m 高（业主裁决
+			# 2026-09-25「坑沿加护栏」，与坑壁共用同一件拉伸墙、墙顶露地面 0.8m），
+			# 1.5m 探针会**从护栏上方飞过**，把「坑壁就在那里」误判成「边界没有墙」。
+			# 0.5m 同时满足两条：高于地砖顶面（0.056）、低于门洞下沿（0.3~2.8 门洞的
+			# 下沿是 0.3m ⇒ 0.5m 仍在门洞净空内，不会把门洞当成实墙而假绿）。
+			var from := room.global_position + Vector3(local.x, 0.5, local.y)
 			if not _ray(space, from, from + direction * probe_length).is_empty():
 				continue
 			var face_center := from + direction * face_half

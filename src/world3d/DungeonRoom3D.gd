@@ -1520,6 +1520,7 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	var door_wall_count := 0
 	var tile_count := 0
 	var exclusive_count := 0
+	var multi_level_count := 0
 	var promoted: Array[String] = []
 	var unresolved: Array[String] = []
 	# 墙件台账（side / 沿墙偏移 / 是否门墙）。**在实例循环里精确采集**，不复扫节点树：
@@ -1578,6 +1579,14 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 				# 北墙标识 7.4461m），绝不能像落地件那样把 y 归一到 0，否则全砸在地上。
 				if _spawn_authored_layout_exclusive(art_root, instance):
 					exclusive_count += 1
+				else:
+					unresolved.append(str(instance.get("name", "")))
+			"multi_level_component":
+				# 多层几何件（通道桥房的下沉坑）：坑壁/护栏（part = pit_wall）与坑底地砖
+				# （part = pit_floor_tile）。与专属件一样带完整 Vector3（y = 所在水平面标高），
+				# 且坑壁还要按 scale_y 纵向拉伸到「坑深 + 护栏高」。
+				if _spawn_authored_multi_level(art_root, instance):
+					multi_level_count += 1
 				else:
 					unresolved.append(str(instance.get("name", "")))
 			_:
@@ -1661,6 +1670,7 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	set_meta("authored_layout_door_wall_count", door_wall_count)
 	set_meta("authored_layout_floor_tile_count", tile_count)
 	set_meta("authored_layout_exclusive_count", exclusive_count)
+	set_meta("authored_layout_multi_level_count", multi_level_count)
 	set_meta("authored_layout_promoted_walls", promoted)
 	set_meta("authored_layout_unresolved_instances", unresolved)
 	if not unresolved.is_empty():
@@ -1965,6 +1975,67 @@ func _spawn_authored_layout_exclusive(art_root: Node3D, instance: Dictionary) ->
 	module.set_meta("authored_slot_role", "exclusive_component")
 	module.set_meta("authored_collision_policy", "visual_only")
 	_disable_static_collision_descendants(module)
+	art_root.add_child(module)
+	return true
+
+
+## 授权**多层件**（通道桥房的下沉坑）：坑壁 / 护栏（`part = pit_wall`）与坑底地砖
+## （`part = pit_floor_tile`）。
+##
+## 与另外四类的差别只有两条，两条都必须写死：
+##   ① **y 不归一**：位置是完整 Vector3，y = 该件所在水平面标高（坑底走行面 −12m）。
+##      照 `to_runtime_instances()` 的 y≡0 落地口径处理会把整圈坑壁砸进平台。
+##   ② **可纵向拉伸**：坑壁靠 `scale_y` 把一件 11.9m 标准墙拉到「坑深 12m + 地上护栏 0.8m」，
+##      一件墙同时给出坑壁与护栏，不必新增资产（护栏与坑壁同材质、视觉连贯）。
+##
+## ⚠ **不写 `tower_wall_direction`**：坑壁不是房间外墙。该 meta 是门槽判据
+## （`classify_door_lane` 只吃墙分支采集的 `authored_wall_records`）与塔楼墙验收的索引键，
+## 坑壁写上去会让验收把坑壁当房墙统计 ⇒ 门槽归属与墙数全错。
+func _spawn_authored_multi_level(art_root: Node3D, instance: Dictionary) -> bool:
+	var component_id := str(instance.get("component_id", ""))
+	var prefab := _authored_component_prefab(component_id)
+	if prefab == null:
+		push_error(
+			"DungeonRoom3D: 授权布局 %s 没有多层件 %s 的 prefab 映射（实例 %s）"
+			% [room_id, component_id, str(instance.get("name", ""))]
+		)
+		return false
+	var module := prefab.instantiate() as Node3D
+	if module == null:
+		push_error("DungeonRoom3D: 授权多层件实例化失败（%s）" % component_id)
+		return false
+	module.name = str(instance.get("name", "AuthoredMultiLevel"))
+	var local_position := instance.get("position", Vector3.ZERO) as Vector3
+	module.rotation.y = deg_to_rad(float(instance.get("rotation_y_deg", 0.0)))
+	module.set_meta("authored_component_id", component_id)
+	module.set_meta("authored_slot_role", "multi_level_component")
+	match str(instance.get("part", "")):
+		"pit_wall":
+			# 墙件原点 = 底面中心：position.y 就是墙底标高，wall 高由 scale_y 给出。
+			module.scale = Vector3(1.0, float(instance.get("scale_y", 1.0)), 1.0)
+			module.position = local_position
+			module.set_meta("authored_multi_level_part", "pit_wall")
+			module.set_meta("authored_multi_level_scale_y", module.scale.y)
+			# 坑壁自带碰撞（组件 `collision_owner = self`）承担挡人：玩家在平台上被
+			# 露出的 0.8m 护栏挡住，掉不进坑。这里不关内嵌碰撞。
+			_set_geometry_shadow_casting(module, true)
+			module.set_meta("shadow_policy", "cast_and_receive")
+		"pit_floor_tile":
+			# 地砖原点同为底面中心：把砖顶面抬到 position.y（与上层地砖 position.y = snap 同口径）。
+			var snap_offset := float(module.get_meta("snap_to_walk_plane_offset_m", 0.0))
+			module.position = Vector3(
+				local_position.x, local_position.y + snap_offset, local_position.z
+			)
+			module.set_meta("authored_multi_level_part", "pit_floor_tile")
+			module.set_meta("walk_plane_snap_y", local_position.y + snap_offset)
+			# 坑底不是走行面（不可达纯装饰）：与所有授权地砖同口径关掉内嵌静态碰撞。
+			_disable_static_collision_descendants(module)
+		_:
+			push_error(
+				"DungeonRoom3D: 授权多层件 %s 的 part=%s 未接线"
+				% [module.name, str(instance.get("part", ""))]
+			)
+			return false
 	art_root.add_child(module)
 	return true
 

@@ -925,6 +925,14 @@ static func attach_authored_layout_shell(
 		if key.is_empty() or str(room.get("role", "")) == "stair_entry":
 			continue
 		var center := room.get("center", Vector2.ZERO) as Vector2
+		# 多层几何规划（仅通道桥房有内容）：坑/桥矩形 + 三层几何实例。
+		# 非通道桥房返回空字典 ⇒ 下面的过滤与叠加整段不执行，行为逐字不变。
+		var multi_level := _bridge_multi_level_plan(room, templates)
+		var pit_rect := Rect2()
+		var bridge_rect := Rect2()
+		if not multi_level.is_empty():
+			pit_rect = multi_level.get("pit_rect", Rect2()) as Rect2
+			bridge_rect = multi_level.get("bridge_rect", Rect2()) as Rect2
 		# `to_runtime_instances` 的 y 恒为 0：清单里只有**落地件**（墙/L/地砖），
 		# 悬空件（Boss 房专属组件）走各自布局源的 `position_m`，不从这里投影。
 		var projected := ROOM_SHELL_LAYOUT_BUILDER.to_runtime_instances(
@@ -937,10 +945,22 @@ static func attach_authored_layout_shell(
 			# 生成，带下去只会撞上装配层「未接线的 slot_role」告警。
 			if str(instance.get("slot_role", "")) == "door_leaf_preview":
 				continue
+			# 通道桥房：坑区（桥面那 6 格除外）不铺上层地砖 —— 那里是 12m 深的洞，
+			# 砖落到坑底（见第 6 环 `_bridge_multi_level_plan`）。桥面格保留原砖：
+			# 它本来就在 y=0，只是四周从「平台」变成「悬空桥面」。
+			if not multi_level.is_empty() and str(instance.get("slot_role", "")) == "floor_tile":
+				var cell := instance.get("position", Vector3.ZERO) as Vector3
+				var cell_xy := Vector2(cell.x, cell.z)
+				if pit_rect.has_point(cell_xy) and not bridge_rect.has_point(cell_xy):
+					continue
 			filtered.append(instance)
 		# 专属件（Boss 房 6 件）叠加在通用壳体之上：它们**不是落地件**，坐标直接取摆位源。
 		if str(room.get("role", "")) == "boss":
 			filtered.append_array(_boss_room_exclusive_instances(room, boss_layout))
+		# 多层件（通道桥房坑壁/护栏/坑底砖）同样叠加在通用壳体之上。
+		if not multi_level.is_empty():
+			filtered.append_array(multi_level.get("instances", []) as Array)
+			room["authored_layout_multi_level_room"] = true
 		room["authored_layout_shell"] = true
 		room["authored_layout_asset_id"] = "EXPEDITION-GENERIC-SHELL-%s" % key.to_upper()
 		room["authored_layout_version"] = "runtime_generated"
@@ -1067,6 +1087,221 @@ static func _boss_room_exclusive_instances(room: Dictionary, boss_layout: Dictio
 		return []
 	return instances.duplicate(true)
 
+
+
+## —— 第 6 环（多层几何）：通道桥房的下沉坑 + 跨桥 ——
+##
+## 本关唯一多层几何房型（`bridge_60x50`）：四周 15m 宽上层平台、中央 30×20 下沉坑
+## （深 12m = 一整层层高）、一座 5m 宽桥横跨坑顶。模板已声明 `sunken_pit` / `bridge_span`
+## （坐标口径 = 模板自有 `bbox_nw_x_east_y_south`，与 `variant_footprints` 同源），
+## 但组合器 `build_block()` 的输入契约是「轴对齐矩形 + 四面墙 + 门位 + 单水平面」，
+## 装不下「同一房内的第二个水平面」⇒ 多层件走这条独立通路，与 Boss 房专属件同模式：
+## 叠加在通用壳体之上，**不参与 lane 归属模型**（不占 lane、不进 wall_lanes）。
+##
+## 三层几何（全部落在 5m 格心/格线上，与地砖同模数）：
+##   ① **上层平台**：通用地砖照旧铺满房内，但**扣掉坑区格**；桥面那 6 格保留 ——
+##      它本来就在 y=0，只是四周从「平台」变成「悬空桥面」。
+##   ② **坑壁 + 护栏**：一件标准墙件纵向拉伸到 `坑深 + 护栏高`，沿坑四周与桥两侧各铺一排。
+##      **护栏与坑壁共用同一件墙**（业主裁决 2026-09-25「坑沿加护栏」）：墙顶露在地面上
+##      0.8m 即护栏，与坑壁同材质、视觉连贯，不需要一件新资产。
+##      ⚠ 玩家**没有跳跃能力**（`Player3D` 状态机无 jump 态、InputMap 无跳跃 action）
+##        ⇒ 0.8m 足够挡人 ⇒ 坑区**保留承重**（`TowerFloorStage3D._build_support()`
+##        照旧铺满）。因此本环**不碰承重系统**，玩家客观上也掉不进坑。
+##   ③ **坑底**：通用地砖满铺坑区（30×20 = 6×4 = 24 块）在 `y = −坑深`。
+##      **不可达纯装饰**（裁决「下层下不去、就是装饰」）：不做楼梯/坡道/梯井，
+##      内嵌静态碰撞在装配层照常关掉（承重归上层，坑底不是走行面）。
+##
+## ⚠ **多层墙件不写 `tower_wall_direction`**：坑壁不是房间外墙，写上去会被门槽判据
+##   （`DungeonRoom3D.classify_door_lane`）与塔楼墙验收当成房墙统计 ⇒ 门槽归属与墙数全错。
+##
+## 坐标换算（模板 → 房局部）：`x = vx − size.x/2`、`z = vy − size.y/2`。
+## 与 `_authored_shell_block_room()` 的 `bx = bounds_x_m[0] + vx` 等价
+## （`bounds_x_m[0] = center.x − size.x/2` ⇒ `bx − center.x = vx − size.x/2`，z 同理经
+## `to_runtime_instances` 的 `−(by − cby)` 后同样归到 `vy − size.y/2`）。
+const MULTI_LEVEL_SLOT_ROLE := "multi_level_component"
+const MULTI_LEVEL_PART_PIT_WALL := "pit_wall"
+const MULTI_LEVEL_PART_PIT_FLOOR_TILE := "pit_floor_tile"
+const COMPONENT_WALL_STANDARD_5M := "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+const COMPONENT_FLOOR_TILE_C01 := "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
+const COMPONENT_FLOOR_TILE_C02 := "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
+## 坑深兜底值（模板 `sunken_pit.depth_m` 缺失时用）。= 一整层层高（`FLOOR_HEIGHT_M`）。
+const MULTI_LEVEL_PIT_DEPTH_M := 12.0
+## 标准墙件可视高（`shell_component_catalog.json` 的 `bounds_size_m_godot[1]`）：
+## 坑壁靠**纵向拉伸**一件墙同时拿到「坑深 + 护栏高」。
+const MULTI_LEVEL_WALL_HEIGHT_M := 11.9
+## 坑沿护栏高（业主裁决 2026-09-25）。玩家无跳跃 ⇒ 0.8m 足够挡人。
+const MULTI_LEVEL_RAILING_HEIGHT_M := 0.8
+## 多层墙件的装饰面法向（值 = `rotation_y_deg`）。墙件 `forward_axis = -Z`、装饰面朝局部 −Z，
+## 于是 0° 朝世界 −z、180° 朝 +z、90° 朝 −x、−90° 朝 +x。
+## 与 `RoomShellLayoutBuilder3D.FACE_IN_ROTATION_DEG` 同源（south=0 的墙坐在房南侧、
+## 装饰面朝房内那颗 −z）。
+const MULTI_LEVEL_FACE_NEG_Z := 0.0
+const MULTI_LEVEL_FACE_POS_Z := 180.0
+const MULTI_LEVEL_FACE_NEG_X := 90.0
+const MULTI_LEVEL_FACE_POS_X := -90.0
+
+
+## 通道桥多层几何的规划结果：坑/桥矩形（房局部）＋ 三层几何实例清单。
+## 非通道桥房（模板没有 `sunken_pit`）返回空字典 ⇒ 调用方整段跳过，行为逐字不变。
+static func _bridge_multi_level_plan(room: Dictionary, templates: Dictionary) -> Dictionary:
+	var template_id := str(room.get("template_id", ""))
+	if template_id.is_empty() or templates.is_empty() or not templates.has(template_id):
+		return {}
+	var template := templates[template_id] as Dictionary
+	var pit_value: Variant = template.get("sunken_pit")
+	if not (pit_value is Dictionary):
+		return {}
+	var size := room.get("size", Vector2.ZERO) as Vector2
+	if size.x <= 0.0 or size.y <= 0.0:
+		return {}
+	var depth := float((pit_value as Dictionary).get("depth_m", MULTI_LEVEL_PIT_DEPTH_M))
+	if depth <= 0.0:
+		push_error(
+			"FloorPlanGenerator: 房间 %s 的模板 %s 声明了 sunken_pit 但 depth_m 非法（%s）"
+			% [str(room.get("key", "")), template_id, str(depth)]
+		)
+		return {}
+	var pit_rect := _template_rect_to_local(
+		(pit_value as Dictionary).get("rect_m", {}) as Dictionary, size
+	)
+	if pit_rect.size.x <= 0.0 or pit_rect.size.y <= 0.0:
+		push_error(
+			"FloorPlanGenerator: 房间 %s 的模板 %s 的 sunken_pit.rect_m 非法"
+			% [str(room.get("key", "")), template_id]
+		)
+		return {}
+	var bridge_rect := Rect2()
+	var span_value: Variant = template.get("bridge_span")
+	if span_value is Dictionary:
+		bridge_rect = _template_rect_to_local(
+			(span_value as Dictionary).get("rect_m", {}) as Dictionary, size
+		)
+	return {
+		"pit_rect": pit_rect,
+		"bridge_rect": bridge_rect,
+		"depth_m": depth,
+		"instances": _bridge_multi_level_instances(room, pit_rect, bridge_rect, depth),
+	}
+
+
+## 模板 `rect_m`（`{x: [vx0, vx1], y: [vy0, vy1]}`，`bbox_nw_x_east_y_south` 口径）
+## → 房局部 `Rect2`（x 向东、y 即 z 向南，原点 = 房中心）。口径见上一条头注释。
+static func _template_rect_to_local(rect_m: Dictionary, size: Vector2) -> Rect2:
+	var xs: Variant = rect_m.get("x", [])
+	var ys: Variant = rect_m.get("y", [])
+	if not (xs is Array) or not (ys is Array):
+		return Rect2()
+	if (xs as Array).size() != 2 or (ys as Array).size() != 2:
+		return Rect2()
+	var lx0 := float((xs as Array)[0]) - size.x * 0.5
+	var lx1 := float((xs as Array)[1]) - size.x * 0.5
+	var lz0 := float((ys as Array)[0]) - size.y * 0.5
+	var lz1 := float((ys as Array)[1]) - size.y * 0.5
+	return Rect2(
+		Vector2(minf(lx0, lx1), minf(lz0, lz1)),
+		Vector2(absf(lx1 - lx0), absf(lz1 - lz0))
+	)
+
+
+## 区间（端点落在 5m 格线上）内的 5m 格心列表。与地砖格心同一模数（全局 `5k + 2.5`）。
+static func _multi_level_lane_centers(min_m: float, max_m: float) -> Array[float]:
+	var centers: Array[float] = []
+	var count := int(round((max_m - min_m) / GRID_UNIT_M))
+	for index in range(count):
+		centers.append(min_m + GRID_UNIT_M * (float(index) + 0.5))
+	return centers
+
+
+## 三层几何实例清单（房局部坐标，形状与通用件逐字同构 + 一个 `part` 分派键）。
+## `part = pit_wall` 走墙件语义（自带碰撞、承担阴影、按 `scale_y` 拉伸）；
+## `part = pit_floor_tile` 走地砖语义（关内嵌碰撞、按 `snap_to_walk_plane_offset_m` 吸地）。
+static func _bridge_multi_level_instances(
+	room: Dictionary, pit: Rect2, bridge: Rect2, depth: float
+) -> Array:
+	var tag := str(room.get("key", "")).to_upper()
+	var instances: Array = []
+	var counter := 0
+	# 墙件原点 = 底面中心、可视高 11.9m ⇒ 一条 `scale_y` 就同时给出坑深与地上护栏。
+	var wall_scale_y := (depth + MULTI_LEVEL_RAILING_HEIGHT_M) / MULTI_LEVEL_WALL_HEIGHT_M
+	var pit_x0 := pit.position.x
+	var pit_x1 := pit.position.x + pit.size.x
+	var pit_z0 := pit.position.y
+	var pit_z1 := pit.position.y + pit.size.y
+	var lane_xs := _multi_level_lane_centers(pit_x0, pit_x1)
+	var lane_zs := _multi_level_lane_centers(pit_z0, pit_z1)
+	# ① 坑四周壁。装饰面朝**背离坑心**的一侧（= 玩家所在的平台侧）：玩家在平台上
+	# 平视护栏、俯瞰坑壁，看到的都是这一面 ⇒ 装饰面不浪费。
+	for center_x in lane_xs:
+		counter += 1
+		instances.append(_pit_wall_instance(
+			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(center_x, -depth, pit_z0),
+			MULTI_LEVEL_FACE_NEG_Z, wall_scale_y
+		))
+		counter += 1
+		instances.append(_pit_wall_instance(
+			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(center_x, -depth, pit_z1),
+			MULTI_LEVEL_FACE_POS_Z, wall_scale_y
+		))
+	var has_bridge := bridge.size.x > 0.0 and bridge.size.y > 0.0
+	for center_z in lane_zs:
+		# 桥口：西/东壁在桥跨那一段必须留口，否则玩家从平台走不到桥上。
+		if has_bridge and center_z > bridge.position.y and center_z < bridge.position.y + bridge.size.y:
+			continue
+		counter += 1
+		instances.append(_pit_wall_instance(
+			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(pit_x0, -depth, center_z),
+			MULTI_LEVEL_FACE_NEG_X, wall_scale_y
+		))
+		counter += 1
+		instances.append(_pit_wall_instance(
+			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(pit_x1, -depth, center_z),
+			MULTI_LEVEL_FACE_POS_X, wall_scale_y
+		))
+	# ② 桥两侧壁：同时是桥面护栏与桥的支撑壁（从桥面下延到坑底）。
+	# 朝向朝**桥面内侧**（玩家站在桥上，看到的是这两面）。
+	if has_bridge:
+		var bridge_z0 := bridge.position.y
+		var bridge_z1 := bridge.position.y + bridge.size.y
+		for center_x in lane_xs:
+			counter += 1
+			instances.append(_pit_wall_instance(
+				"PIT_BRIDGE_%s_%02d" % [tag, counter],
+				Vector3(center_x, -depth, bridge_z0), MULTI_LEVEL_FACE_POS_Z, wall_scale_y
+			))
+			counter += 1
+			instances.append(_pit_wall_instance(
+				"PIT_BRIDGE_%s_%02d" % [tag, counter],
+				Vector3(center_x, -depth, bridge_z1), MULTI_LEVEL_FACE_NEG_Z, wall_scale_y
+			))
+	# ③ 坑底地砖（满铺坑区，棋盘格与上层同规则）。
+	for i in range(lane_xs.size()):
+		for j in range(lane_zs.size()):
+			var is_c01 := (i + j) % 2 == 0
+			instances.append({
+				"name": "PIT_FLOOR_%s_R%02d_C%02d" % [tag, j + 1, i + 1],
+				"component_id": COMPONENT_FLOOR_TILE_C01 if is_c01 else COMPONENT_FLOOR_TILE_C02,
+				"slot_role": MULTI_LEVEL_SLOT_ROLE,
+				"part": MULTI_LEVEL_PART_PIT_FLOOR_TILE,
+				# y = 坑底**走行面**标高；装配层再按砖件自己的 `snap_to_walk_plane_offset_m`
+				# 把砖顶面抬到该标高（与上层地砖 `position.y = snap_offset` 同口径）。
+				"position": Vector3(lane_xs[i], -depth, lane_zs[j]),
+				"rotation_y_deg": 0.0,
+			})
+	return instances
+
+
+static func _pit_wall_instance(
+	instance_name: String, position: Vector3, rotation_y_deg: float, scale_y: float
+) -> Dictionary:
+	return {
+		"name": instance_name,
+		"component_id": COMPONENT_WALL_STANDARD_5M,
+		"slot_role": MULTI_LEVEL_SLOT_ROLE,
+		"part": MULTI_LEVEL_PART_PIT_WALL,
+		"position": position,
+		"rotation_y_deg": rotation_y_deg,
+		"scale_y": scale_y,
+	}
 
 
 ## 生成器房间表 → `RoomShellLayoutBuilder3D.build_block()` 的区块输入（公开给验收探针，
