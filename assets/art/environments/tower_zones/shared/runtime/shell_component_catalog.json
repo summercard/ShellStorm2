@@ -1,19 +1,23 @@
 {
   "schema": "shellstorm2.runtime_shell_component_catalog.v001",
-  "purpose": "运行时壳体通用组件注册表：摆位源 layout.json 里的 component_id -> 运行时 PackedScene。",
+  "purpose": "运行时壳体组件注册表：摆位源 layout.json 里的 component_id -> 运行时 PackedScene。含通用件（多房间/多关卡复用）与专属件（只属某一房间种类）。",
   "scope": "shell",
   "single_source": "assets/art/environments/tower_zones/shared/source/common_components/v001/component_catalog.json",
+  "exclusive_single_source": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_catalog.json",
   "consumers": [
-    "src/world3d/DungeonRoom3D.gd::_authored_component_prefab()"
+    "src/world3d/DungeonRoom3D.gd::_authored_component_prefab()",
+    "src/map/FloorPlanGenerator.gd::_load_boss_layout_instances()"
   ],
   "resolution_contract": {
-    "primary_key": "components[].component_id（通用件名，ENV-SHARED-GENERIC-*）",
+    "primary_key": "components[].component_id（通用件名 ENV-SHARED-GENERIC-* / 专属件名 ENV-EXPEDITION-BOSSROOM-*）",
     "aliases": "等价 ID（同一件组件的具体批次号 ENV-BATTLE-COMMON-* / ENV-TOWER-*）。摆位两侧任写其一都必须解析到同一 prefab。",
+    "kind": "generic = 跨房间/跨关卡复用的通用件；exclusive = 只属某一房间种类的专属件（kind 缺省视为 generic）。",
     "unknown_id": "返回 null 并 push_error，绝不静默换成别的组件。",
     "prefab_path": "运行时路径不带版本号；版本事实在 prefab 的 metadata/asset_version 与资产台账。",
-    "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/check_runtime_shell_component_catalog.py 逐件比对。"
+    "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/probe_shell_component_catalog.gd 逐件比对。",
+    "alias_policy": "专属件不设 alias（只属一个房间种类、只有一条来源链）；alias 只用于通用件的批次号兼容。"
   },
-  "component_count": 6,
+  "component_count": 12,
   "components": [
     {
       "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
@@ -104,6 +108,90 @@
       "bounds_size_m_godot": [5.15, 8.9, 5.15],
       "collision_owner": "self",
       "note": "原点 = 角点，长臂沿 +X、短臂沿 -Z，两臂装饰面朝凹象限。corner_l 角色实际由 _spawn_room_corner() 装配（FACILITY 房取 base99 角件）；本条保证该 ID 可解析、可追溯。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+      "kind": "exclusive",
+      "aliases": [],
+      "slug": "base_floor_base",
+      "category": "地板底盘",
+      "slot_role": "exclusive_component",
+      "source_package_id": "base_floor_base",
+      "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/base_floor_base/base_floor_base_root_top3d.tscn",
+      "bounds_size_m_godot": [50.0, 0.26, 40.0],
+      "collision_owner": "TowerFloorStage3D._build_support",
+      "note": "Boss 竞技场承重地板底盘 50x40x0.26；包内 0 碰撞，承重归 TowerFloorStage3D._build_support()（与安全房 floor_base 同判例）。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+      "kind": "exclusive",
+      "aliases": [],
+      "slug": "main_fault_screen",
+      "category": "主屏",
+      "slot_role": "exclusive_component",
+      "source_package_id": "main_fault_screen",
+      "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/main_fault_screen/main_fault_screen_root_top3d.tscn",
+      "bounds_size_m_godot": [21.52, 7.09, 1.575001],
+      "collision_owner": "none",
+      "note": "破损数据库主屏 21.52x1.575x7.09；底面悬于走行面上方 3.805m，够不着，包内 0 碰撞。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+      "kind": "exclusive",
+      "aliases": [],
+      "slug": "heavy_conduits",
+      "category": "支撑管网",
+      "slot_role": "exclusive_component",
+      "source_package_id": "heavy_conduits",
+      "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/heavy_conduits/heavy_conduits_root_top3d.tscn",
+      "bounds_size_m_godot": [47.305603, 3.672169, 32.303619],
+      "collision_owner": "none",
+      "note": "粗重电线管与桥架 47.31x32.30x3.67；实心包络盒会封死整房，不按包络持阻挡，包内 0 碰撞。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+      "kind": "exclusive",
+      "aliases": [],
+      "slug": "north_wall_typography",
+      "category": "墙面标识",
+      "slot_role": "exclusive_component",
+      "source_package_id": "north_wall_typography",
+      "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/north_wall_typography/north_wall_typography_root_top3d.tscn",
+      "bounds_size_m_godot": [35.900246, 2.3201, 0.041998],
+      "collision_owner": "none",
+      "note": "数据库北墙标识 35.90x0.042x2.32；底面离走行面 7.446m，够不着，包内 0 碰撞。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+      "kind": "exclusive",
+      "aliases": [],
+      "slug": "south_floor_marking",
+      "category": "地面标识",
+      "slot_role": "exclusive_component",
+      "source_package_id": "south_floor_marking",
+      "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/south_floor_marking/south_floor_marking_root_top3d.tscn",
+      "bounds_size_m_godot": [3.696866, 0.012, 2.726689],
+      "collision_owner": "none",
+      "note": "入口地砖标识 3.70x2.73x0.012；12mm 地面贴花，属地面装饰不属障碍，包内 0 碰撞。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
+      "kind": "exclusive",
+      "aliases": [],
+      "slug": "debris_00",
+      "category": "固定碎屑",
+      "slot_role": "exclusive_component",
+      "source_package_id": "debris_00",
+      "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/debris_00/debris_00_root_top3d.tscn",
+      "bounds_size_m_godot": [2.425321, 0.2195, 1.988281],
+      "collision_owner": "none",
+      "note": "固定碎屑_00 2.43x1.99x0.22；220mm 地面固定碎屑，属地面装饰不属障碍，包内 0 碰撞。"
     }
   ]
 }

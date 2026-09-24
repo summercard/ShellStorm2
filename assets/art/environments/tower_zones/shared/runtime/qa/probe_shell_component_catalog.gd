@@ -12,7 +12,10 @@ extends SceneTree
 ##      component_id 与 source_package_id 都在注册表里、都可解析 —— 即「挂进共享库
 ##      就等于挂进运行时」，不许出现只登记源、运行时解析不到的孤儿件；
 ##   E. 每件解析出的 prefab 根节点 metadata/asset_id == 注册表声明的 prefab_asset_id；
-##   F. 反向对照：未登记的 ID 一律返回 null（不许悄悄回退成别的组件）。
+##   F. 反向对照：未登记的 ID 一律返回 null（不许悄悄回退成别的组件）；
+##   G. **6 件 Boss 专属件**（ENV-EXPEDITION-BOSSROOM-*，kind=exclusive）：逐件可解析到
+##      expedition/runtime/common_components/<slug>/ 下那个 prefab，且根节点 asset_id 相符。
+##      它们与通用件共用本注册表（同一解析入口），但**不设 alias** —— 只属一个房间种类。
 ##
 ## 打印 SHELL_COMPONENT_CATALOG_OK pass=N fail=0 表示全过；任一失败打印 FAILED。
 ## 运行：godot --headless --path . --script res://<本文件>
@@ -21,7 +24,8 @@ extends SceneTree
 ##   · 把注册表 components[].prefab_path 指向一个不存在的路径 -> E/加载报错并有 fail；
 ##   · 把某个 alias 删掉（例如 ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02）-> B/D 红；
 ##   · 把 schema 字符串改一位 -> A 红（且 _authored_component_prefab 全返回 null）；
-##   · 给两件组件登记同一个 ID -> A 红（重复登记）。
+##   · 给两件组件登记同一个 ID -> A 红（重复登记）；
+##   · 把某件专属件的 component_id 或 prefab_path 改错 -> G 红。
 
 const RUNTIME_CATALOG_PATH := (
 	"res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
@@ -49,6 +53,24 @@ const LEGACY_ID_TO_PREFAB: Dictionary = {
 const NEWLY_ADDED_ID_TO_PREFAB: Dictionary = {
 	"ENV-BATTLE-COMMON-DOOR-5M": "res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn",
 }
+## 6 件 Boss 专属件（Task #40/#42）：只属远征 Boss 竞技场，不设 alias。
+## 逐件比对运行时路径 —— 比「能加载就行」强：换错件会直接红。
+const EXCLUSIVE_ID_TO_PREFAB: Dictionary = {
+	"ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE":
+		"res://assets/art/environments/tower_zones/expedition/runtime/common_components/base_floor_base/base_floor_base_root_top3d.tscn",
+	"ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN":
+		"res://assets/art/environments/tower_zones/expedition/runtime/common_components/main_fault_screen/main_fault_screen_root_top3d.tscn",
+	"ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS":
+		"res://assets/art/environments/tower_zones/expedition/runtime/common_components/heavy_conduits/heavy_conduits_root_top3d.tscn",
+	"ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY":
+		"res://assets/art/environments/tower_zones/expedition/runtime/common_components/north_wall_typography/north_wall_typography_root_top3d.tscn",
+	"ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING":
+		"res://assets/art/environments/tower_zones/expedition/runtime/common_components/south_floor_marking/south_floor_marking_root_top3d.tscn",
+	"ENV-EXPEDITION-BOSSROOM-DEBRIS-00":
+		"res://assets/art/environments/tower_zones/expedition/runtime/common_components/debris_00/debris_00_root_top3d.tscn",
+}
+## 注册表总件数 = 6 通用 + 6 Boss 专属。
+const EXPECTED_COMPONENT_TOTAL := 12
 
 var _pass := 0
 var _fail := 0
@@ -68,6 +90,7 @@ func _initialize() -> void:
 	_expect_primary_ids_resolve(components)
 	_expect_legacy_ids_unchanged()
 	_expect_newly_added_ids()
+	_expect_exclusive_ids(components)
 	_expect_source_catalog_fully_covered()
 	_expect_unknown_ids_null()
 	_report()
@@ -86,7 +109,10 @@ func _expect_decode(catalog: Dictionary) -> void:
 func _expect_decoded_count(catalog: Dictionary, components: Array) -> void:
 	var declared := int(catalog.get("component_count", -1))
 	_expect(declared == components.size(), "component_count %d == components.size() %d" % [declared, components.size()])
-	_expect(components.size() == 6, "注册表恰好登记 6 件壳体件（实得 %d）" % components.size())
+	_expect(
+		components.size() == EXPECTED_COMPONENT_TOTAL,
+		"注册表恰好登记 %d 件壳体件（实得 %d）" % [EXPECTED_COMPONENT_TOTAL, components.size()]
+	)
 
 
 func _expect_unique_ids(components: Array) -> void:
@@ -171,6 +197,37 @@ func _expect_newly_added_ids() -> void:
 		var expected_path := str(NEWLY_ADDED_ID_TO_PREFAB[id])
 		var prefab := DungeonRoom3D._authored_component_prefab(id)
 		_expect(prefab != null and prefab.resource_path == expected_path, "新增可解析 ID %s -> %s" % [id, expected_path])
+
+
+# —— G. 6 件 Boss 专属件（kind=exclusive、不设 alias）——
+
+func _expect_exclusive_ids(components: Array) -> void:
+	for id_value in EXCLUSIVE_ID_TO_PREFAB.keys():
+		var id := str(id_value)
+		var expected_path := str(EXCLUSIVE_ID_TO_PREFAB[id])
+		var prefab := DungeonRoom3D._authored_component_prefab(id)
+		_expect(prefab != null, "专属件 %s 可解析出 PackedScene" % id)
+		if prefab == null:
+			continue
+		_expect(
+			prefab.resource_path == expected_path,
+			"专属件 %s 解析到声明的 prefab（期望 %s，实得 %s）" % [id, expected_path, prefab.resource_path]
+		)
+		var entry := _find_component_entry(components, id)
+		_expect(not entry.is_empty(), "专属件 %s 在注册表 components[] 里有条目" % id)
+		if entry.is_empty():
+			continue
+		_expect(str(entry.get("kind", "")) == "exclusive", "专属件 %s 的 kind == exclusive" % id)
+		_expect((entry.get("aliases", []) as Array).is_empty(), "专属件 %s 不设 alias" % id)
+		_expect_prefab_asset_id(prefab, str(entry.get("prefab_asset_id", "")), id)
+
+
+func _find_component_entry(components: Array, component_id: String) -> Dictionary:
+	for value in components:
+		var entry := value as Dictionary
+		if str(entry.get("component_id", "")) == component_id:
+			return entry
+	return {}
 
 
 # —— D. 共享库无孤儿件 ——
