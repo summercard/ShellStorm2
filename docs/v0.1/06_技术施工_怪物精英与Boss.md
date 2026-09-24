@@ -213,7 +213,7 @@ last_sample_world_position
 
 ### 7.8 独立怪物 AI 管理器与视野系统
 
-当前 `Enemy3D` 内嵌最近玩家搜索、视线、记忆、搜索和追击判定，不属于合格的独立 AI 管理。正式结构调整为：
+原先 `Enemy3D` 内嵌最近玩家搜索、视线、记忆、搜索和追击判定；**当前正式工程已接入** `MonsterAIManager` / `MonsterVisionSystem3D` 作为感知与调度层，`Enemy3D` 仍执行移动、攻击、生命和有限状态切换。下列结构是现行分工与继续收敛的目标，不再把“全无管理器”描述为当前事实：
 
 ```text
 MonsterAIManager（全局登记、错峰调度、感知记录、策略选择）
@@ -264,6 +264,8 @@ decision_age
 
 ### 7.9 AI、视野与光照效果专项验收
 
+下列勾选是原专项的历史核签范围，不代表 2026-09-24 工作区重新执行真渲染或性能长测。
+
 - [x] 黑暗状态保持当前速度、攻击频率与生命，不发生累计数值漂移。
 - [x] 普通灯光状态的最终移动速度与攻击频率均为黑暗基线40%，反复切换后可准确恢复100%。
 - [x] 太阳直射每秒扣最大生命2%，进入投影立刻停止，死亡仍完成掉落与清房事务。
@@ -278,6 +280,12 @@ decision_age
 - [x] 室内大灯开启只触发局部搜索，不泄露未看见玩家的位置；实际看见后才进入追击。
 - [x] Boss 的AI感知、受光削弱和太阳伤害不重置Boss阶段、技能计时和奖励事务。
 - [x] 30只怪物下感知与受光均错峰，视线/灯光射线有固定上限且无每怪新增管理节点。
+
+### 7.10 死亡到奖励的现行交接（ENEMY-AI → REWARD-SERVICE）
+
+`Enemy3D._die()` 在 `dead` 状态幂等守卫后停止碰撞，发 `killed(enemy,get_enemy_data())`；`Dungeon3D` 在房间装配时订阅该信号。场景 `_on_enemy_killed()` 递增本局击杀、移除房间活动引用，以 `enemy.room_id + persistent_id` 构造奖励事件 ID，并把房间 `reward_plan` 与敌人数据交给 `RuntimeRewardCoordinator.resolve_kill()`。返回权威 `grants[]` 后，场景只在 currency grant 上应用房间倍率，再延迟交给 `RewardSink.apply_ground()`；落地失败按报告拒绝，不得当成已发。清房/增援/撤离信标由 `_resolve_room_enemy_departure()` 按剩余敌人和波次继续编排。怪物只报告死亡事实，不直接修改玩家背包或 `BaseData`。
+
+当前 `killed(enemy,loot:Dictionary)` 的第二参数实际承载 `get_enemy_data()`，不是已生成物品；信号名/参数旧命名不可被消费方误解成“掉落已成功”。**未实现的目标**：统一跨远程/近战/敌人攻击的命中上下文，以及一份独立于 `Dungeon3D` 的死亡→奖励命令/结果 schema；目前正式房间与清房流程仍由场景编排。验收应分别检查重复死亡不二次发信号、无效房间奖励被拒绝、真实生成数与UI提示一致；现有 `verify_reward_ground_handoff` 覆盖其中地面交接，不能替代整套 AI 流送与光照验收。
 
 ## 8. 施工阶段
 
