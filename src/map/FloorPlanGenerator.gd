@@ -10,6 +10,9 @@ const LEVEL_PLAN_LOADER := preload("res://src/map/LevelPlanLoader.gd")
 const LEVEL_PLAN_VALIDATOR := preload("res://src/map/LevelPlanValidator.gd")
 ## 显式 preload：净距与门槽口径必须与校验器/加载器同源，不得在本类里重算一遍。
 const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
+## 5m 通用壳体组合器（纯 RefCounted）。第 4 环在这里：本项目**唯一**的
+## 「房间几何 → 5 类通用件实例清单」实现，设计期 dump 脚本与运行时共用同一份。
+const ROOM_SHELL_LAYOUT_BUILDER := preload("res://src/world3d/RoomShellLayoutBuilder3D.gd")
 
 const MAP_SIZE_M := 250.0
 const CORE_SIZE_M := 65.0
@@ -429,7 +432,7 @@ static func _generate_constrained_floor(
 		var placed := _place_constrained_slots(slots, rng)
 		if placed.is_empty():
 			continue
-		return _constrained_floor_from(blueprint, floor_number, placed, slots)
+		return _constrained_floor_from(blueprint, floor_number, placed, slots, policy)
 	return {}
 
 
@@ -807,7 +810,11 @@ static func _constrained_fits(center: Vector2, size: Vector2, rects: Array[Rect2
 
 ## 摆位结果 → 规范化层结构（形状与 LevelPlanLoader.normalize_floor 的返回一致）。
 static func _constrained_floor_from(
-	blueprint: Dictionary, floor_number: int, placed: Array[Dictionary], slots: Array[Dictionary]
+	blueprint: Dictionary,
+	floor_number: int,
+	placed: Array[Dictionary],
+	slots: Array[Dictionary],
+	policy: Dictionary
 ) -> Dictionary:
 	var center_by_key: Dictionary = {}
 	for value in placed:
@@ -840,6 +847,7 @@ static func _constrained_floor_from(
 			"ports_derived": false,
 		})
 	LEVEL_PLAN_LOADER.derive_ports(rooms)
+	attach_authored_layout_shell(rooms, policy)
 	return {
 		"level_id": str(blueprint.get("level_id", "")),
 		"mode": "constrained",
@@ -853,6 +861,125 @@ static func _constrained_floor_from(
 		"main_path": _string_array(blueprint.get("main_path", [])),
 		"edge_policy": _constrained_edge_policy(rooms),
 		"errors": [],
+	}
+
+
+## —— 第 4 环：整房 5m 通用壳体组件清单（`authored_layout_instances`）——
+##
+## 关卡在 `generation_policy.authored_layout_shell = true` 时，本函数把生成器算出的
+## 房间几何翻译成「5 类通用件实例清单」并按房写回 `authored_layout_*` 六个键
+## （由 `room_from_source` → `TowerDescent3D._append_plan_room_record` →
+## `DungeonRoom3D._build_authored_layout_shell` 逐层透传到装配层）。
+## 未开启该开关的关卡**一个字段都不多**：`rooms` 原样返回，程序化壳体行为逐字不变。
+##
+## 为什么由生成器现算，而不是把清单写进 `floors/floor_00.json`：
+## `mode = "constrained"` 会整份替换几何（房型每局按种子重抽、摆位随之变），
+## 写死的实例坐标第二次进图就全错位。设计源只能声明「要做」，做出来的几何必须现算。
+##
+## 坐标换算是本函数唯一的几何知识，口径来自 `RoomShellLayoutBuilder3D` 头注释：
+## 设计源 planar → Blender 世界为 `bx = plan.x`、`by = −plan.y`
+## （设计源 +y 对应世界 +z 即「南」，与 `TowerDescent3D._plan_world_position` 同源）；
+## 门位一律复用 `LevelPlanLoader.derive_ports()` 产出的 `ports[].lane_m`——
+## 它与运行时 `_plan_room_layout()` 同走 `RoomDoorLane`，是门槽的唯一口径，此处不重算。
+##
+## 生成器侧的几何错误（房界不在 5m 格线、门位不在 lane 中心）**不静默吞掉**：
+## 一旦发生就是「清单与门槽对不上」，宁可不接管（保持程序化旧拼装）也不给出错位的壳。
+static func attach_authored_layout_shell(rooms: Array, policy: Dictionary) -> void:
+	if not bool(policy.get("authored_layout_shell", false)):
+		return
+	if rooms.is_empty():
+		return
+	var block := authored_shell_block(rooms)
+	if block.is_empty():
+		return
+	var result := ROOM_SHELL_LAYOUT_BUILDER.build_block(block)
+	var errors := result.get("errors", []) as Array
+	if not errors.is_empty():
+		for error_value in errors:
+			push_warning(
+				"FloorPlanGenerator: 通用壳体清单未生成（%s），本层回退程序化壳体" % str(error_value)
+			)
+		return
+	var instances := result.get("instances", []) as Array
+	for value in rooms:
+		var room := value as Dictionary
+		var key := str(room.get("key", ""))
+		if key.is_empty() or str(room.get("role", "")) == "stair_entry":
+			continue
+		var center := room.get("center", Vector2.ZERO) as Vector2
+		# `to_runtime_instances` 的 y 恒为 0：清单里只有**落地件**（墙/L/地砖），
+		# 悬空件（Boss 房专属组件）走各自布局源的 `position_m`，不从这里投影。
+		var projected := ROOM_SHELL_LAYOUT_BUILDER.to_runtime_instances(
+			instances, key, center.x, -center.y
+		)
+		var filtered: Array = []
+		for instance_value in projected:
+			var instance := instance_value as Dictionary
+			# `door_leaf_preview` 是摆位源的编辑器预览件：运行时门扇由 RoomDoor3D 唯一
+			# 生成，带下去只会撞上装配层「未接线的 slot_role」告警。
+			if str(instance.get("slot_role", "")) == "door_leaf_preview":
+				continue
+			filtered.append(instance)
+		room["authored_layout_shell"] = true
+		room["authored_layout_asset_id"] = "EXPEDITION-GENERIC-SHELL-%s" % key.to_upper()
+		room["authored_layout_version"] = "runtime_generated"
+		room["authored_layout_room_id"] = key
+		room["authored_layout_peaceful"] = false
+		room["authored_layout_instances"] = filtered
+
+
+## 生成器房间表 → `RoomShellLayoutBuilder3D.build_block()` 的区块输入（公开给验收探针，
+## 使「区块级门槽覆盖」可以独立复核，而不必复刻一遍坐标换算）。
+##
+## 入口安全房**不并入区块**：它仍走 v007 正式整房（v004 通用墙/地/门 + 17 个房间包），
+## 已经消费同一批通用件；而且它是本区块**唯一与区块外房间共墙**的房间（15×15 单格，
+## 四邻皆可为内容房）。并进来会让区块 lane 归属与 v007 自带的四面墙互相重叠 ——
+## 收益为零，风险是整房双壳。
+static func authored_shell_block(rooms: Array) -> Array:
+	var block: Array = []
+	for value in rooms:
+		var room := value as Dictionary
+		if str(room.get("role", "")) == "stair_entry":
+			continue
+		var built := _authored_shell_block_room(room)
+		if built.is_empty():
+			continue
+		block.append(built)
+	return block
+
+
+## 单个房间 → `RoomShellLayoutBuilder3D.build_block()` 的输入形状。
+## 房界必须落在 5m 格线上（生成器 `_constrained_fits` 已保证），否则 builder 报
+## `room_bound_off_grid`，由调用方放弃接管。
+static func _authored_shell_block_room(room: Dictionary) -> Dictionary:
+	var key := str(room.get("key", ""))
+	if key.is_empty():
+		return {}
+	var center := room.get("center", Vector2.ZERO) as Vector2
+	var size := room.get("size", Vector2.ZERO) as Vector2
+	if size.x < GRID_UNIT_M or size.y < GRID_UNIT_M:
+		return {}
+	var by_center := -center.y
+	var doors: Dictionary = {}
+	for port_value in room.get("ports", []):
+		if not (port_value is Dictionary):
+			continue
+		var port := port_value as Dictionary
+		var side := str(port.get("side", ""))
+		var lane_m := float(port.get("lane_m", 0.0))
+		if side in ["north", "south"]:
+			# 南北墙的门「沿墙坐标」在 bx 轴上：bx = plan.x，无镜像。
+			doors[side] = center.x + lane_m
+		elif side in ["west", "east"]:
+			# 东西墙的门「沿墙坐标」在 by 轴上：by = −plan.y，故是**减** lane。
+			doors[side] = by_center - lane_m
+	return {
+		"room_id": key,
+		"bounds_x_m": [center.x - size.x * 0.5, center.x + size.x * 0.5],
+		"bounds_y_m": [by_center - size.y * 0.5, by_center + size.y * 0.5],
+		"doors": doors,
+		"exits": {},
+		"use_corner_l": true,
 	}
 
 

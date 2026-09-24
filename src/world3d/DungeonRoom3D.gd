@@ -139,6 +139,9 @@ const SAFE_ROOM_FLOOR_TILE_C02_PREFAB: PackedScene = preload(
 # 在用的批次号**，它们现在只是注册表里的 alias —— 任一侧改名而另一侧没跟上，
 # 注册表查不到 → _authored_component_prefab() 返回 null 并报错，不会静默换件。
 const WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
+# 门墙的**批次号 alias**。现在运行时不再靠它判「这堵墙是不是门墙」（门墙与否由
+# 实例循环里的 uses_door 唯一决定，比读 prefab meta 精确），只作为原批次号留档，
+# 便于与战区摆位源、注册表 alias 表逐字对照。
 const DOOR_WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 const FLOOR_TILE_C01_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 const FLOOR_TILE_C02_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
@@ -149,6 +152,11 @@ const CORNER_L_COMPONENT_ID := "ENV-TOWER-CORNER-L-5M"
 # 会被提升为门墙（_build_authored_layout_shell 的 promoted），那时自带 id 仍是实墙 id，
 # 照它查表会拿回实墙 prefab，门洞就没墙承接了。
 const DOOR_WALL_COMPONENT_ID := "ENV-SHARED-GENERIC-WALL-DOOR-5M"
+# 「门开在实墙上」断言的 lane 粒度容差（米）。授权布局是相邻共墙，门槽 lane 归声明它的
+# 那个房间，邻房那一侧只有别的 lane 的实墙 —— 判据必须按 lane 而不是按 side（见
+# _build_authored_layout_shell 末尾）。0.25m 远小于 5m lane 间距（不会把邻 lane 的墙
+# 误判成占据门槽），又远大于浮点误差（能抓住「离门槽只差十几厘米」的真实错位）。
+const DOOR_LANE_GUARD_TOLERANCE_M := 0.25
 # v007 墙槽位表，逐项源自 source/room_instances/entry_safe_room/v007/qa/slot_table.json。
 # 每项 = [房间局部 x_m, 房间局部 z_m, Godot rotation.y_deg, 是否门墙, 原生方位]。
 # 坐标换算按 Blender Z-up → Godot Y-up：(bx, by, bz) → (bx, bz, -by)，
@@ -1513,6 +1521,10 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	var tile_count := 0
 	var promoted: Array[String] = []
 	var unresolved: Array[String] = []
+	# 墙件台账（side / 沿墙偏移 / 是否门墙）。**在实例循环里精确采集**，不复扫节点树：
+	# 节点树里混着 _add_camera_only_door_wall_proxy() 生成的 camera-only 代理件，
+	# 它带 tower_wall_direction 却不是门墙组件，反扫会把它算成「门槽上坐着实墙」而假红。
+	var authored_wall_records: Array = []
 	for value in authored_layout_instances:
 		var instance := value as Dictionary
 		var role := str(instance.get("slot_role", ""))
@@ -1532,6 +1544,19 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 				if not _spawn_authored_layout_wall(art_root, instance, uses_door):
 					unresolved.append(str(instance.get("name", "")))
 					continue
+				var wall_side := _authored_wall_direction(
+					float(instance.get("rotation_y_deg", 0.0))
+				)
+				# 沿墙偏移：南北向墙取局部 x、东西向墙取局部 z —— 与
+				# _authored_wall_door_side() 读 tower_wall_door_offset_<side> 的坐标系一致。
+				var wall_along := local_position.z
+				if wall_side in ["north", "south"]:
+					wall_along = local_position.x
+				authored_wall_records.append({
+					"side": wall_side,
+					"along": wall_along,
+					"uses_door": uses_door,
+				})
 				if uses_door:
 					door_wall_count += 1
 					if role == "solid_wall":
@@ -1558,37 +1583,45 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	# 每扇门都必须有一条门墙组件承接门洞；缺了就是「门开在实墙上」——
 	# 这是几何/门槽校验都查不出的隐形契约，必须有一条会失败的断言盯住。
 	#
-	# 但授权布局（区块00）的房间之间是**相邻共墙**：摆位源的 lane 归属模型规定
-	# 「同一 lane 全局只出一个实例」，一道共享墙只归声明它的那个房间。于是邻房那一侧
-	# 的门墙不在本房子树里 —— 门洞由持有该墙的邻房提供。所以判据必须分两种，
-	# 不能一律报错（否则共墙布局会稳定假红）：
-	#   · 本房在该侧墙面上有墙件 ⇒ 必须是门墙；是实墙就是「门开在实墙上」，报错；
-	#   · 本房该侧一件墙都没有 ⇒ 墙归邻房，本房不重复建门墙、不报错，
+	# 但授权布局（区块00 / 远征 13 房）的房间之间是**相邻共墙**：摆位源的 lane 归属模型
+	# 规定「同一 lane 全局只出一个实例」，一道共享墙只归声明它的那个房间。于是邻房那一侧
+	# 的门墙不在本房子树里 —— 门洞由持有该墙的邻房提供。
+	#
+	# 所以判据**必须按 lane 粒度，不能按 side 粒度**：本房某一侧完全可能同时存在
+	# 「门槽 lane（那道墙归邻房）＋ 别的 lane 的实墙」。按 side 判会把这侧的合法委派
+	# 误判成「门开在实墙上」—— 远征 13 房实测稳定 4 条假红（room_03.south /
+	# room_04.east / room_06.east / branch_01.north），而区块级探针已证门槽覆盖正确。
+	#   · 本房该侧有墙件正坐在门槽 lane 上 ⇒ 必须是门墙；是实墙就是真「门开在实墙上」，报错；
+	#   · 本房该侧没有任何墙落在门槽 lane 上 ⇒ 墙归邻房，本房不重复建门墙、不报错，
 	#     只把「该门洞已委派给邻房」记成事实，交区块级探针全局核对覆盖。
+	#
+	# 门槽 lane 的唯一口径仍是 _plan_room_layout() 写进本节点的 tower_wall_door_offset_<side>
+	#（与 _authored_wall_door_side() 同源）。墙件位置取 authored_wall_records 里采集的
+	# 局部坐标，不反扫节点树（树里混着 camera-only 代理件，反扫会假红）。
 	var door_wall_sides: Array[String] = []
 	var wall_sides: Array[String] = []
-	for value in art_root.find_children("*", "Node3D", true, false):
-		var module := value as Node3D
-		if module == null:
+	for record_value in authored_wall_records:
+		var record := record_value as Dictionary
+		var record_side := str(record.get("side", ""))
+		if record_side.is_empty():
 			continue
-		var direction := str(module.get_meta("tower_wall_direction", ""))
-		if direction.is_empty():
-			continue
-		if direction not in wall_sides:
-			wall_sides.append(direction)
-		if str(module.get_meta("asset_id", "")) == DOOR_WALL_COMPONENT_ASSET_ID:
-			door_wall_sides.append(direction)
+		if record_side not in wall_sides:
+			wall_sides.append(record_side)
+		if bool(record.get("uses_door", false)) and record_side not in door_wall_sides:
+			door_wall_sides.append(record_side)
 	var delegated_sides: Array[String] = []
 	for direction in doors:
-		if direction in door_wall_sides:
-			continue
-		if direction in wall_sides:
-			push_error(
-				"DungeonRoom3D: 授权布局 %s 的 %s 门没有对应门墙组件（清单里该槽位是实墙或缺失）"
-				% [room_id, direction]
-			)
-		else:
-			delegated_sides.append(direction)
+		var door_offset := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
+		match classify_door_lane(authored_wall_records, direction, door_offset):
+			"door_wall":
+				continue
+			"solid_wall":
+				push_error(
+					"DungeonRoom3D: 授权布局 %s 的 %s 门没有对应门墙组件（门槽 lane 上坐的是实墙）"
+					% [room_id, direction]
+				)
+			_:
+				delegated_sides.append(direction)
 	# 委派出去的门洞不建门扇面板：邻房已经建了一扇，两扇同面重叠会 z-fighting。
 	# 只藏面板 —— 门节点、升降碰撞、交互提示全部保留，两侧都仍能按 E 开启；
 	# 且一条边的两扇门由 _refresh_edge_visuals 同时开合，状态不会分叉。
@@ -1620,6 +1653,37 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 			"DungeonRoom3D: 授权布局 %s 有 %d 件组件无法解析，已跳过"
 			% [room_id, unresolved.size()]
 		)
+
+
+## 门槽 lane 归属判定（**纯函数**，供 _build_authored_layout_shell 与单测共用）。
+## 输入是本房墙件台账（`{side, along, uses_door}`，见 _build_authored_layout_shell 采集处），
+## 返回三态字符串：
+##   · "door_wall"  —— 本房该侧门槽 lane 上坐的是门墙，门洞由本房承接；
+##   · "solid_wall" —— 门槽 lane 上坐的是实墙 ⇒ 真「门开在实墙上」，调用方必须报错；
+##   · ""           —— 本房该侧没有任何墙落在门槽 lane 上 ⇒ 墙归邻房（共墙 lane 唯一归属），
+##                     本房委派该门洞，不建门墙也不报错。
+## ⚠️ 抽成纯函数是为了让「真错位」这条安全网可被单测钉住 —— 它按构造在正常布局下
+## 永不触发（落在门槽上的实墙会被提升成门墙），无法靠跑关卡来验证它还活着。
+static func classify_door_lane(wall_records: Array, side: String, door_offset: float) -> String:
+	var has_door_wall := false
+	var has_solid_wall := false
+	for record_value in wall_records:
+		if not (record_value is Dictionary):
+			continue
+		var record := record_value as Dictionary
+		if str(record.get("side", "")) != side:
+			continue
+		if absf(float(record.get("along", 0.0)) - door_offset) > DOOR_LANE_GUARD_TOLERANCE_M:
+			continue
+		if bool(record.get("uses_door", false)):
+			has_door_wall = true
+		else:
+			has_solid_wall = true
+	if has_door_wall:
+		return "door_wall"
+	if has_solid_wall:
+		return "solid_wall"
+	return ""
 
 
 ## 授权墙件是否正好坐在本房某扇门的位置上（门槽唯一口径 = tower_wall_door_offset_<side>）。

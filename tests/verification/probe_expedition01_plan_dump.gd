@@ -5,7 +5,7 @@ extends Node
 const GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 
 const LEVEL := "expedition_01"
-const SEEDS: Array[int] = [77001199]
+const SEEDS: Array[int] = [77001199, 1001, 1002, 1003, 1004]
 
 
 func _ready() -> void:

@@ -57,6 +57,7 @@
       "bridge_60x50",
       "std_25x25"
     ],
+    "authored_layout_shell": true,
     "runtime_enabled": true
   },
   "provenance": {
