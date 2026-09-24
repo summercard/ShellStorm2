@@ -503,11 +503,10 @@ def build_details():
     # ---- 拐角走廊02 45x40（凹字形折返）
     def c2(X, Y):
         k = KIND["COMMON"]
-        g = [rect(X(0), Y(0), 45 * DS, 40 * DS, "#ffffff", k["stroke"], 1.2, 2)]
-        for pts in ([(0, 0), (45, 0), (45, 15), (0, 15)],
-                    [(30, 15), (45, 15), (45, 25), (30, 25)],
-                    [(0, 25), (45, 25), (45, 40), (0, 40)]):
-            g.append(poly([(X(a), Y(b)) for a, b in pts], k["fill"], k["stroke"], 0.8))
+        # 与 room_templates/corridor_45x40.json 的 variant_footprints.u_turn **逐值一致**
+        # （外轮廓 = 上横臂 45×15 + 右竖 15×10 + 下横臂 45×15 的并集；西侧中部 30×10 是实体）。
+        walk = [(0, 0), (45, 0), (45, 40), (0, 40), (0, 25), (30, 25), (30, 15), (0, 15)]
+        g = [poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.2)]
         g.append(rect(X(0), Y(15), 30 * DS, 10 * DS, "#f1f5f9", k["stroke"], 1.0))
         g.append(label(X, Y, 15, 20, "内墙岛 30 × 10", 9, DIM))
         g.append(label(X, Y, 22.5, 1.6, "上横臂 45 × 15", 9, k["ink"]))
@@ -545,10 +544,14 @@ def build_details():
         return g
     out["extraction"] = ext
 
-    # ---- 数据库房间01 70x50（不规则：南边中段内凹）
+    # ---- 数据库房间01 70x50（不规则：南中段外凸 20×10，居中）
     def db1(X, Y):
         k = KIND["BRANCH"]
-        walk = [(0, 0), (70, 0), (70, 40), (42, 40), (42, 50), (22, 50), (22, 40), (0, 40)]
+        # ⚠️ 顶点必须落 5 m 网格（白盒模数），并与 room_templates/db_70x50.json 的
+        # variant_footprints.db_01 **逐值一致**；改一处必须改另一处（门禁
+        # scripts/check_expedition_room_footprints.py 只校 JSON，图集靠人比对）。
+        # 早期目测顶点 x∈[42,22] 不在网格上且偏西 3 m，已归一居中（20×10 不变）。
+        walk = [(0, 0), (70, 0), (70, 40), (45, 40), (45, 50), (25, 50), (25, 40), (0, 40)]
         g = [poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.2)]
         for i in range(7):
             g.append(rect(X(3), Y(5 + i * 4.2), 3.4, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
@@ -556,8 +559,8 @@ def build_details():
             g.append(rect(X(12 + i * 4.2), Y(3), 3.4, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
         g.append(rect(X(48), Y(6), 18 * DS, 14 * DS, "#ffffff", k["stroke"], 0.7, 2, "4 3"))
         g.append(label(X, Y, 57, 13, "检修工位区", 9, k["ink"]))
-        g.append(label(X, Y, 32, 46.5, "南边中段内凹 20 × 10", 9, DIM))
-        g.append(label(X, Y, 56, 46.5, "70 × 50 m · 不规则", 9, MUTED))
+        g.append(label(X, Y, 35, 43.5, "南中段外凸 20 × 10", 9, DIM))
+        g.append(label(X, Y, 35, 47.5, "70 × 50 m · 不规则", 9, MUTED))
         g.append(label(X, Y, 20, 6.5, "机柜列", 9, k["ink"]))
         return g
     out["room_02"] = db1
@@ -579,19 +582,22 @@ def build_details():
         return g
     out["room_03"] = off
 
-    # ---- 数据库房间02 70x50（不规则：左下 + 右下内凹）
+    # ---- 数据库房间02 70x50（不规则：左下 20×20 + 右下 20×10 双缺角）
     def db2(X, Y):
         k = KIND["BRANCH"]
-        walk = [(0, 0), (70, 0), (70, 38), (52, 38), (52, 50), (18, 50), (18, 32), (0, 32)]
+        # 同上：顶点须落 5 m 网格，并与 room_templates/db_70x50.json 的
+        # variant_footprints.db_02 逐值一致（左下 18×18→20×20、右下 18×12→20×10、
+        # 南中段外凸宽 34→30）。
+        walk = [(0, 0), (70, 0), (70, 40), (50, 40), (50, 50), (20, 50), (20, 30), (0, 30)]
         g = [poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.2)]
         for row in range(4):
             for col in range(6):
                 g.append(rect(X(8 + col * 8.4), Y(9 + row * 5.8), 5.6, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
         g.append(rect(X(2.2), Y(14), 4.4, 7, "#FAC775", "#BA7517", 0.8, 1))
         g.append(label(X, Y, 4.4, 24, "叉车", 8.5, "#633806"))
-        g.append(label(X, Y, 12, 47, "左下内凹 18 × 18", 9, DIM))
-        g.append(label(X, Y, 61, 43.5, "右下内凹 18 × 12", 8.5, DIM))
-        g.append(label(X, Y, 58, 47.5, "70 × 50 m · 不规则", 9, MUTED))
+        g.append(label(X, Y, 10, 40, "左下缺角 20 × 20", 9, DIM))
+        g.append(label(X, Y, 60, 45, "右下缺角 20 × 10", 8.5, DIM))
+        g.append(label(X, Y, 35, 43.5, "70 × 50 m · 不规则", 9, MUTED))
         g.append(label(X, Y, 35, 24, "货架 · 箱体堆场", 10, k["ink"], "middle", "500"))
         return g
     out["room_06"] = db2
