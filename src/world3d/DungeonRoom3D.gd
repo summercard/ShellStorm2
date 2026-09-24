@@ -143,6 +143,12 @@ const DOOR_WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 const FLOOR_TILE_C01_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 const FLOOR_TILE_C02_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 const CORNER_L_COMPONENT_ID := "ENV-TOWER-CORNER-L-5M"
+# 门墙的**通用件名**（注册表 primary_key）。授权布局里「门墙」不再用硬编码 prefab 常量，
+# 而是把槽位解析成这个 ID 再查注册表 —— 与实墙同一条解析路径，prefab 的唯一真源仍在注册表。
+# ⚠️ 为什么不能直接用摆位源实例自带的 component_id：`solid_wall` 实例在「门位落在实墙上」时
+# 会被提升为门墙（_build_authored_layout_shell 的 promoted），那时自带 id 仍是实墙 id，
+# 照它查表会拿回实墙 prefab，门洞就没墙承接了。
+const DOOR_WALL_COMPONENT_ID := "ENV-SHARED-GENERIC-WALL-DOOR-5M"
 # v007 墙槽位表，逐项源自 source/room_instances/entry_safe_room/v007/qa/slot_table.json。
 # 每项 = [房间局部 x_m, 房间局部 z_m, Godot rotation.y_deg, 是否门墙, 原生方位]。
 # 坐标换算按 Blender Z-up → Godot Y-up：(bx, by, bz) → (bx, bz, -by)，
@@ -1748,14 +1754,14 @@ static func _authored_wall_direction(rotation_y_deg: float) -> String:
 
 func _spawn_authored_layout_wall(art_root: Node3D, instance: Dictionary, uses_door: bool) -> bool:
 	var component_id := str(instance.get("component_id", ""))
-	var prefab := (
-		SAFE_ROOM_WALL_DOOR_PREFAB if uses_door
-		else _authored_component_prefab(component_id)
-	)
+	# 门墙与实墙走同一条注册表解析路径（唯一真源壳在注册表，不在代码）：
+	# 门墙按槽位解析成 DOOR_WALL_COMPONENT_ID，实墙用实例自带 id。
+	var resolved_id := DOOR_WALL_COMPONENT_ID if uses_door else component_id
+	var prefab := _authored_component_prefab(resolved_id)
 	if prefab == null:
 		push_error(
 			"DungeonRoom3D: 授权布局 %s 没有组件 %s 的 prefab 映射（实例 %s）"
-			% [room_id, component_id, str(instance.get("name", ""))]
+			% [room_id, resolved_id, str(instance.get("name", ""))]
 		)
 		return false
 	var module := prefab.instantiate() as Node3D
