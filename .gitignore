@@ -2,10 +2,14 @@
 .godot/
 *.import
 # Scene/facility GLB import contracts carry the shared-palette post-import hook.
+# 规则族：**每个组件库分区各一条**（<zone>/components/**/*.glb.import）。新增分区
+# （如 tower_zones/expedition）时必须同步加一条，否则该区 GLB 的 .import 会被上面的
+# *.import 吞掉、不入库 —— 干净克隆重新导入就丢掉共享色盘钩子，模型颜色会静默走样。
 !assets/art/environments/base_facility_3d/components/**/*.glb.import
 !assets/art/environments/tower_descent_3d/components/**/*.glb.import
 !assets/art/props/base_world_3d/components/**/*.glb.import
 !assets/art/environments/tower_zones/battle/components/**/*.glb.import
+!assets/art/environments/tower_zones/expedition/components/**/*.glb.import
 !assets/art/environments/tower_zones/rooftop/components/*.glb.import
 !assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import
 *.translation
@@ -62,3 +66,6 @@ __pycache__/
 # 每批去版本化迁移的临时基线快照 / 中途工作副本（台账补丁前后对照等）
 _scratch/b2_baseline/
 _scratch/b2_work/
+
+# WorkBuddy 会话的临时探查脚本与运行日志（scratch，不入库；记忆与工具仍正常入库）
+.workbuddy/tmp/

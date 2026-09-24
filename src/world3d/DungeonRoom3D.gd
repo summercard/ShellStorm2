@@ -130,11 +130,14 @@ const SAFE_ROOM_FLOOR_TILE_C01_PREFAB: PackedScene = preload(
 const SAFE_ROOM_FLOOR_TILE_C02_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn"
 )
-# —— 授权布局壳体的组件 ID 契约（2026-09-20）——
-# 摆位源（Blender 侧 layout.json）用组件 ID 说话，运行时用 PackedScene 说话；
-# 两侧靠这张表对齐。ID 取自战局通用组件库 v007 的台账名，不另起名。
-# 任一侧改名而另一侧没跟上 → _authored_component_prefab() 返回 null 并报错，
-# 不会静默换成别的组件。
+# —— 授权布局壳体的组件 ID 契约（2026-09-20；2026-09-24 改注册表驱动）——
+# 摆位源（Blender 侧 layout.json）用组件 ID 说话，运行时用 PackedScene 说话。
+# **对齐表不在代码里**：全部来自
+#   res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json
+# 该注册表为每件通用件登记 `component_id`（通用件名 ENV-SHARED-GENERIC-*）+
+# `aliases`（具体批次号）+ `prefab_path`。下面这 5 个常量保留为**既有战区摆位源
+# 在用的批次号**，它们现在只是注册表里的 alias —— 任一侧改名而另一侧没跟上，
+# 注册表查不到 → _authored_component_prefab() 返回 null 并报错，不会静默换件。
 const WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 const DOOR_WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 const FLOOR_TILE_C01_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
@@ -1635,22 +1638,96 @@ func _authored_wall_door_side(local_position: Vector3, half: Vector2) -> String:
 	return ""
 
 
-## 摆位源组件 ID → 运行时 PackedScene。全部复用入口安全房 v007 已经在用的四个组件包，
-## 不新建资产：摆位源引用的就是同一批 5m 通用组件。
+## 摆位源组件 ID → 运行时 PackedScene。**注册表驱动**：ID 与 prefab 路径全部来自
+## res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json，
+## 本函数只做「查表 + 加载」—— 加一件通用件是改 JSON，不是改这里。
+##
+## 四条口径（都是「不静默」）：
+##   ① 注册表缺失 / 空 / 非 JSON 对象 / schema 不符 → 报错并返回空表；
+##   ② 条目缺 prefab_path / ID 重复登记 → 报错并跳过该条（不留半张表）；
+##   ③ 未登记的 ID → 返回 null，调用方报错，**绝不回退成别的组件**；
+##   ④ 登记了路径但文件不在 / 加载不出 PackedScene → 报错并返回 null，不悄悄跳过。
+##
+## 同一件组件有两个 ID：`component_id`（通用件名，ENV-SHARED-GENERIC-*）与
+## `aliases`（具体批次号，ENV-BATTLE-COMMON-* / ENV-TOWER-*）。两侧任写其一都命中，
+## 且命中同一个 prefab —— 战区摆位源可以继续用批次号，新摆位源可以直接用通用件名。
+const SHELL_COMPONENT_CATALOG_PATH := (
+	"res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
+)
+const SHELL_COMPONENT_CATALOG_SCHEMA := "shellstorm2.runtime_shell_component_catalog.v001"
+## 组件 ID → prefab 路径。static 缓存：整局只读一次盘（含失败的那一次，不反复刷屏）。
+static var _shell_component_prefab_paths: Dictionary = {}
+static var _shell_component_catalog_attempted := false
+
+
+static func _load_shell_component_catalog() -> Dictionary:
+	if _shell_component_catalog_attempted:
+		return _shell_component_prefab_paths
+	_shell_component_catalog_attempted = true
+	if not FileAccess.file_exists(SHELL_COMPONENT_CATALOG_PATH):
+		push_error("DungeonRoom3D: 通用壳体组件注册表缺失 %s" % SHELL_COMPONENT_CATALOG_PATH)
+		return _shell_component_prefab_paths
+	var text := FileAccess.get_file_as_string(SHELL_COMPONENT_CATALOG_PATH)
+	if text.is_empty():
+		push_error("DungeonRoom3D: 通用壳体组件注册表为空 %s" % SHELL_COMPONENT_CATALOG_PATH)
+		return _shell_component_prefab_paths
+	var parsed: Variant = JSON.parse_string(text)
+	if not (parsed is Dictionary):
+		push_error("DungeonRoom3D: 通用壳体组件注册表不是 JSON 对象 %s" % SHELL_COMPONENT_CATALOG_PATH)
+		return _shell_component_prefab_paths
+	var catalog := parsed as Dictionary
+	if str(catalog.get("schema", "")) != SHELL_COMPONENT_CATALOG_SCHEMA:
+		push_error(
+			"DungeonRoom3D: 通用壳体组件注册表 schema 不匹配（期望 %s，实得 %s）"
+			% [SHELL_COMPONENT_CATALOG_SCHEMA, str(catalog.get("schema", ""))]
+		)
+		return _shell_component_prefab_paths
+	var entries: Array = catalog.get("components", [])
+	for value in entries:
+		if not (value is Dictionary):
+			push_error("DungeonRoom3D: 通用壳体组件注册表有条目不是 JSON 对象，已跳过")
+			continue
+		var entry := value as Dictionary
+		var component_id := str(entry.get("component_id", ""))
+		var prefab_path := str(entry.get("prefab_path", ""))
+		if prefab_path.is_empty():
+			push_error("DungeonRoom3D: 通用壳体组件注册表条目缺 prefab_path（%s）" % component_id)
+			continue
+		var ids: Array[String] = []
+		ids.append(component_id)
+		var alias_list: Array = entry.get("aliases", [])
+		for alias_value in alias_list:
+			ids.append(str(alias_value))
+		for key in ids:
+			if key.is_empty():
+				push_error("DungeonRoom3D: 通用壳体组件注册表出现空 ID（%s）" % component_id)
+				continue
+			if _shell_component_prefab_paths.has(key):
+				push_error(
+					"DungeonRoom3D: 通用壳体组件注册表 ID 重复登记 %s（同一 ID 只能有一个 prefab）"
+					% key
+				)
+				continue
+			_shell_component_prefab_paths[key] = prefab_path
+	return _shell_component_prefab_paths
+
+
 static func _authored_component_prefab(component_id: String) -> PackedScene:
-	match component_id:
-		WALL_COMPONENT_ASSET_ID:
-			return SAFE_ROOM_WALL_STANDARD_PREFAB
-		DOOR_WALL_COMPONENT_ASSET_ID:
-			return SAFE_ROOM_WALL_DOOR_PREFAB
-		FLOOR_TILE_C01_COMPONENT_ID:
-			return SAFE_ROOM_FLOOR_TILE_C01_PREFAB
-		FLOOR_TILE_C02_COMPONENT_ID:
-			return SAFE_ROOM_FLOOR_TILE_C02_PREFAB
-		CORNER_L_COMPONENT_ID:
-			return TOWER_CORNER_L_PREFAB
-		_:
-			return null
+	var prefab_path := str(_load_shell_component_catalog().get(component_id, ""))
+	if prefab_path.is_empty():
+		return null
+	if not ResourceLoader.exists(prefab_path):
+		push_error(
+			"DungeonRoom3D: 通用壳体组件 %s 的 prefab 文件不在（%s）" % [component_id, prefab_path]
+		)
+		return null
+	var packed := load(prefab_path) as PackedScene
+	if packed == null:
+		push_error(
+			"DungeonRoom3D: 通用壳体组件 %s 的 prefab 无法加载为 PackedScene（%s）"
+			% [component_id, prefab_path]
+		)
+	return packed
 
 
 ## 摆位源 rotation_z_deg → 世界门向。与摆位源 face_in_rotation_deg 互逆：

@@ -1,0 +1,109 @@
+{
+  "schema": "shellstorm2.runtime_shell_component_catalog.v001",
+  "purpose": "运行时壳体通用组件注册表：摆位源 layout.json 里的 component_id -> 运行时 PackedScene。",
+  "scope": "shell",
+  "single_source": "assets/art/environments/tower_zones/shared/source/common_components/v001/component_catalog.json",
+  "consumers": [
+    "src/world3d/DungeonRoom3D.gd::_authored_component_prefab()"
+  ],
+  "resolution_contract": {
+    "primary_key": "components[].component_id（通用件名，ENV-SHARED-GENERIC-*）",
+    "aliases": "等价 ID（同一件组件的具体批次号 ENV-BATTLE-COMMON-* / ENV-TOWER-*）。摆位两侧任写其一都必须解析到同一 prefab。",
+    "unknown_id": "返回 null 并 push_error，绝不静默换成别的组件。",
+    "prefab_path": "运行时路径不带版本号；版本事实在 prefab 的 metadata/asset_version 与资产台账。",
+    "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/check_runtime_shell_component_catalog.py 逐件比对。"
+  },
+  "component_count": 6,
+  "components": [
+    {
+      "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
+      "aliases": [
+        "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
+      ],
+      "slug": "wall_standard_5m",
+      "category": "通用墙",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "prefab_asset_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [5.0, 11.9, 0.467503],
+      "collision_owner": "self",
+      "note": "静态实墙，5m 宽，与网格同宽；装饰面朝局部 -Z（房内）。"
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-WALL-DOOR-5M",
+      "aliases": [
+        "ENV-BATTLE-COMMON-WALL-DOOR-5M"
+      ],
+      "slug": "wall_door_5m",
+      "category": "门墙",
+      "slot_role": "door_wall",
+      "source_package_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "prefab_asset_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [5.0, 11.9, 0.491501],
+      "collision_owner": "self",
+      "note": "左门垛 + 右门垛 + 门楣三块，中间让出 2.2x2.5 门洞；门洞处无碰撞，通行归 RoomDoor3D。"
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-DOOR-5M",
+      "aliases": [
+        "ENV-BATTLE-COMMON-DOOR-5M"
+      ],
+      "slug": "door_5m",
+      "category": "门",
+      "slot_role": "door_leaf_preview",
+      "source_package_id": "ENV-BATTLE-COMMON-DOOR-5M",
+      "prefab_asset_id": "ENV-TOWER-DOOR-LEAF-5M",
+      "prefab_path": "res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn",
+      "bounds_size_m_godot": [2.2, 2.5, 0.18],
+      "collision_owner": "room_door",
+      "note": "运行时门扇统一走塔楼 A 套正式美术（2.2x2.5x0.18，底面中心原点，forward_axis=+Z）；战局 B 套 door_5m_root_top3d.tscn 仅在库里留档，不由运行时消费。door_leaf_preview 角色运行时一律跳过，门扇由 RoomDoor3D 生成。"
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01",
+      "aliases": [
+        "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+      ],
+      "slug": "floor_tile_r01_c01",
+      "category": "地砖",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "prefab_asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn",
+      "bounds_size_m_godot": [4.94, 0.056, 4.94],
+      "collision_owner": "floor_support",
+      "note": "棋盘格角块与中心块；内嵌静态碰撞由房间层关掉，承重归 TowerFloorStage3D._build_support()。"
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02",
+      "aliases": [
+        "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+      ],
+      "slug": "floor_tile_r01_c02",
+      "category": "地砖",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "prefab_asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn",
+      "bounds_size_m_godot": [4.94, 0.0852, 4.94],
+      "collision_owner": "floor_support",
+      "note": "棋盘格边中块（统一取带方形检修盖的一版）；碰撞归属同 c01。"
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-CORNER-L-5M",
+      "aliases": [
+        "ENV-TOWER-CORNER-L-5M"
+      ],
+      "slug": "base_corner_l_5m",
+      "category": "L型转角",
+      "slot_role": "corner_l",
+      "source_package_id": "ENV-TOWER-CORNER-L-5M",
+      "prefab_asset_id": "ENV-TOWER-CORNER-L-5M",
+      "prefab_path": "res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn",
+      "bounds_size_m_godot": [5.15, 8.9, 5.15],
+      "collision_owner": "self",
+      "note": "原点 = 角点，长臂沿 +X、短臂沿 -Z，两臂装饰面朝凹象限。corner_l 角色实际由 _spawn_room_corner() 装配（FACILITY 房取 base99 角件）；本条保证该 ID 可解析、可追溯。"
+    }
+  ]
+}

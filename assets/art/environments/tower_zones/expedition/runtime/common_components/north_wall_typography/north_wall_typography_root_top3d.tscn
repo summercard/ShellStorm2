@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY
+; 远征关卡01 · Boss房通用组件库 v001 · architecture · north_wall_typography
+; 范式 B（自包含可替换组件）：视觉 GLB + 稳定根；摆位与契约写在 metadata。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与战局通用组件库一致。
+; 本件无内嵌玩法阻挡：墙面标识，底面离走行面 7.446m，够不着（与安全房 north_nexus_sign 同判例）
+; 正面轴向：源 Blender -Y → Godot +Z。
+; 源 catalog: assets/art/environments/tower_zones/expedition/source/common_components/v001/component_catalog.json
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/common_components/north_wall_typography/north_wall_typography_visual_top3d.glb" id="1_visual"]
+
+[node name="ExpeditionCommonNorthWallTypography" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY"
+metadata/asset_version = "v001"
+metadata/library_id = "ENV-EXPEDITION-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/expedition"
+metadata/category = "architecture"
+metadata/component = "north_wall_typography"
+metadata/logic_id = "north_wall_typography"
+metadata/display_name_zh = "Boss房数据库墙面标识 35.90×2.32×0.042m（底面离走行面 7.446m）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_wall_typography/north_wall_typography.blend"
+metadata/source_collection = "数据库墙面标识_输出包"
+metadata/source_root_object = "ROOT_north_wall_typography_组件"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/up_axis = "+Y"
+metadata/blender_forward_axis = "-Y"
+metadata/blender_up_axis = "+Z"
+metadata/bounds_size_m = Vector3(35.900246, 2.3201, 0.041998)
+metadata/bounds_note = "bounds_size_m 是组件轴向包络盒（Godot Y-up 系）；源 Blender 尺寸见 catalog 的 bounds_size_m。"
+metadata/preserve_authored_palette = true
+metadata/visual_only = true
+metadata/geometry_ownership = "boss_room_shared_component"
+metadata/replacement_contract = "replaceable visual only; a replacement must keep bounds_size_m; must not change room size, 5m grid, collision or navigation"
+metadata/collision_owner = "none"
+metadata/collision_policy = "no_blocking_by_design"
+metadata/collision_shape_count = 0
+metadata/collision_exclusion_reason = "墙面标识，底面离走行面 7.446m，够不着（与安全房 north_nexus_sign 同判例）"
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

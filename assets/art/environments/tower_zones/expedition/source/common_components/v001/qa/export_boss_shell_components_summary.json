@@ -1,0 +1,526 @@
+{
+  "base_floor_base": {
+    "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+    "category": "floor",
+    "name_zh": "地板_FLOOR_BASE",
+    "glb": "assets/art/environments/tower_zones/expedition/components/common_components/base_floor_base/base_floor_base_visual_top3d.glb",
+    "meshes": [
+      "地板_FLOOR_BASE_输出_部件00"
+    ],
+    "mesh_count": 1,
+    "blender_aabb_min": [
+      -25.0,
+      -20.0,
+      0.0
+    ],
+    "blender_aabb_max": [
+      25.0,
+      20.0,
+      0.26
+    ],
+    "blender_size_xyz": [
+      50.0,
+      40.0,
+      0.26
+    ],
+    "godot_size_xyz": [
+      50.0,
+      0.26,
+      40.0
+    ],
+    "godot_aabb_min": [
+      -25.0,
+      0.0,
+      -20.0
+    ],
+    "godot_aabb_max": [
+      25.0,
+      0.26,
+      20.0
+    ],
+    "source_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_base/base_floor_base.blend",
+    "source_version": "v001",
+    "material_roles": [
+      "02_细腻哑光_青绿大面"
+    ],
+    "emissive_objects": [],
+    "origin_contract": "bottom_center",
+    "godot_front_axis": "+Y",
+    "per_mesh": {
+      "地板_FLOOR_BASE_输出_部件00": {
+        "min": [
+          -25.0,
+          -20.0,
+          0.0
+        ],
+        "max": [
+          25.0,
+          20.0,
+          0.26
+        ]
+      }
+    }
+  },
+  "main_fault_screen": {
+    "component_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+    "category": "facilities",
+    "name_zh": "主屏_破损数据库",
+    "glb": "assets/art/environments/tower_zones/expedition/components/common_components/main_fault_screen/main_fault_screen_visual_top3d.glb",
+    "meshes": [
+      "主屏_破损数据库_输出_自发光",
+      "主屏_破损数据库_输出_自发光.001",
+      "主屏_破损数据库_输出_自发光.002",
+      "主屏_破损数据库_输出_自发光.003",
+      "主屏_破损数据库_输出_部件03",
+      "主屏_破损数据库_输出_部件04",
+      "主屏_破损数据库_输出_部件06"
+    ],
+    "mesh_count": 7,
+    "blender_aabb_min": [
+      -10.76,
+      -0.7875,
+      0.0
+    ],
+    "blender_aabb_max": [
+      10.76,
+      0.7875,
+      7.09
+    ],
+    "blender_size_xyz": [
+      21.52,
+      1.575,
+      7.09
+    ],
+    "godot_size_xyz": [
+      21.52,
+      7.09,
+      1.575
+    ],
+    "godot_aabb_min": [
+      -10.76,
+      0.0,
+      -0.7875
+    ],
+    "godot_aabb_max": [
+      10.76,
+      7.09,
+      0.7875
+    ],
+    "source_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/main_fault_screen/main_fault_screen.blend",
+    "source_version": "v001",
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emissive_objects": [
+      "主屏_破损数据库_输出_自发光",
+      "主屏_破损数据库_输出_自发光.001",
+      "主屏_破损数据库_输出_自发光.002",
+      "主屏_破损数据库_输出_自发光.003"
+    ],
+    "origin_contract": "bottom_center",
+    "godot_front_axis": "+Z",
+    "per_mesh": {
+      "主屏_破损数据库_输出_自发光": {
+        "min": [
+          -3.5575,
+          -0.5685,
+          1.8877
+        ],
+        "max": [
+          3.5956,
+          -0.5665,
+          2.4547
+        ]
+      },
+      "主屏_破损数据库_输出_自发光.001": {
+        "min": [
+          -2.7955,
+          -0.5685,
+          1.0428
+        ],
+        "max": [
+          2.803,
+          -0.5665,
+          1.2108
+        ]
+      },
+      "主屏_破损数据库_输出_自发光.002": {
+        "min": [
+          -0.0815,
+          -0.6085,
+          3.6127
+        ],
+        "max": [
+          0.0829,
+          -0.6065,
+          4.5717
+        ]
+      },
+      "主屏_破损数据库_输出_自发光.003": {
+        "min": [
+          -10.3163,
+          -0.6345,
+          0.5335
+        ],
+        "max": [
+          8.5674,
+          -0.505,
+          6.2115
+        ]
+      },
+      "主屏_破损数据库_输出_部件03": {
+        "min": [
+          -10.76,
+          -0.7875,
+          0.0
+        ],
+        "max": [
+          10.76,
+          0.7875,
+          7.09
+        ]
+      },
+      "主屏_破损数据库_输出_部件04": {
+        "min": [
+          -10.25,
+          -0.4925,
+          0.57
+        ],
+        "max": [
+          10.25,
+          -0.3825,
+          6.52
+        ]
+      },
+      "主屏_破损数据库_输出_部件06": {
+        "min": [
+          9.1496,
+          -0.6925,
+          1.007
+        ],
+        "max": [
+          10.3163,
+          -0.6925,
+          4.9287
+        ]
+      }
+    }
+  },
+  "heavy_conduits": {
+    "component_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+    "category": "support",
+    "name_zh": "粗重电线管与桥架",
+    "glb": "assets/art/environments/tower_zones/expedition/components/common_components/heavy_conduits/heavy_conduits_visual_top3d.glb",
+    "meshes": [
+      "粗重电线管与桥架_输出_部件00"
+    ],
+    "mesh_count": 1,
+    "blender_aabb_min": [
+      -23.6528,
+      -16.1518,
+      0.0
+    ],
+    "blender_aabb_max": [
+      23.6528,
+      16.1518,
+      3.6722
+    ],
+    "blender_size_xyz": [
+      47.3056,
+      32.3036,
+      3.6722
+    ],
+    "godot_size_xyz": [
+      47.3056,
+      3.6722,
+      32.3036
+    ],
+    "godot_aabb_min": [
+      -23.6528,
+      0.0,
+      -16.1518
+    ],
+    "godot_aabb_max": [
+      23.6528,
+      3.6722,
+      16.1518
+    ],
+    "source_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/heavy_conduits/heavy_conduits.blend",
+    "source_version": "v001",
+    "material_roles": [
+      "01_精工金属_紫色骨架"
+    ],
+    "emissive_objects": [],
+    "origin_contract": "bottom_center",
+    "godot_front_axis": "+Z",
+    "per_mesh": {
+      "粗重电线管与桥架_输出_部件00": {
+        "min": [
+          -23.6528,
+          -16.1518,
+          0.0
+        ],
+        "max": [
+          23.6528,
+          16.1518,
+          3.6722
+        ]
+      }
+    }
+  },
+  "north_wall_typography": {
+    "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+    "category": "architecture",
+    "name_zh": "数据库墙面标识",
+    "glb": "assets/art/environments/tower_zones/expedition/components/common_components/north_wall_typography/north_wall_typography_visual_top3d.glb",
+    "meshes": [
+      "数据库墙面标识_输出_部件00",
+      "数据库墙面标识_输出_部件01",
+      "数据库墙面标识_输出_部件02",
+      "数据库墙面标识_输出_部件03"
+    ],
+    "mesh_count": 4,
+    "blender_aabb_min": [
+      -17.9501,
+      -0.021,
+      0.0
+    ],
+    "blender_aabb_max": [
+      17.9501,
+      0.021,
+      2.3201
+    ],
+    "blender_size_xyz": [
+      35.9002,
+      0.042,
+      2.3201
+    ],
+    "godot_size_xyz": [
+      35.9002,
+      2.3201,
+      0.042
+    ],
+    "godot_aabb_min": [
+      -17.9501,
+      0.0,
+      -0.021
+    ],
+    "godot_aabb_max": [
+      17.9501,
+      2.3201,
+      0.021
+    ],
+    "source_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_wall_typography/north_wall_typography.blend",
+    "source_version": "v001",
+    "material_roles": [
+      "02_细腻哑光_青绿大面"
+    ],
+    "emissive_objects": [],
+    "origin_contract": "bottom_center",
+    "godot_front_axis": "+Z",
+    "per_mesh": {
+      "数据库墙面标识_输出_部件00": {
+        "min": [
+          15.7999,
+          0.019,
+          1.9491
+        ],
+        "max": [
+          17.7381,
+          0.021,
+          2.3201
+        ]
+      },
+      "数据库墙面标识_输出_部件01": {
+        "min": [
+          15.9707,
+          0.009,
+          0.5917
+        ],
+        "max": [
+          17.4435,
+          0.011,
+          1.5367
+        ]
+      },
+      "数据库墙面标识_输出_部件02": {
+        "min": [
+          15.5868,
+          0.009,
+          0.0
+        ],
+        "max": [
+          17.9501,
+          0.011,
+          0.301
+        ]
+      },
+      "数据库墙面标识_输出_部件03": {
+        "min": [
+          -17.9501,
+          -0.021,
+          1.9516
+        ],
+        "max": [
+          -13.5144,
+          -0.019,
+          2.1266
+        ]
+      }
+    }
+  },
+  "south_floor_marking": {
+    "component_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+    "category": "support",
+    "name_zh": "入口地砖_标识附件",
+    "glb": "assets/art/environments/tower_zones/expedition/components/common_components/south_floor_marking/south_floor_marking_visual_top3d.glb",
+    "meshes": [
+      "入口地砖_标识附件_输出_部件00",
+      "入口地砖_标识附件_输出_部件01"
+    ],
+    "mesh_count": 2,
+    "blender_aabb_min": [
+      -1.8484,
+      -1.3633,
+      0.0
+    ],
+    "blender_aabb_max": [
+      1.8484,
+      1.3633,
+      0.012
+    ],
+    "blender_size_xyz": [
+      3.6969,
+      2.7267,
+      0.012
+    ],
+    "godot_size_xyz": [
+      3.6969,
+      0.012,
+      2.7267
+    ],
+    "godot_aabb_min": [
+      -1.8484,
+      0.0,
+      -1.3633
+    ],
+    "godot_aabb_max": [
+      1.8484,
+      0.012,
+      1.3633
+    ],
+    "source_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/south_floor_marking/south_floor_marking.blend",
+    "source_version": "v001",
+    "material_roles": [
+      "02_细腻哑光_青绿大面"
+    ],
+    "emissive_objects": [],
+    "origin_contract": "bottom_center",
+    "godot_front_axis": "+Z",
+    "per_mesh": {
+      "入口地砖_标识附件_输出_部件00": {
+        "min": [
+          -1.4276,
+          0.7683,
+          0.003
+        ],
+        "max": [
+          1.4106,
+          1.3633,
+          0.005
+        ]
+      },
+      "入口地砖_标识附件_输出_部件01": {
+        "min": [
+          -1.8484,
+          -1.3633,
+          0.0
+        ],
+        "max": [
+          1.8484,
+          0.3153,
+          0.012
+        ]
+      }
+    }
+  },
+  "debris_00": {
+    "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
+    "category": "support",
+    "name_zh": "固定碎屑_00",
+    "glb": "assets/art/environments/tower_zones/expedition/components/common_components/debris_00/debris_00_visual_top3d.glb",
+    "meshes": [
+      "固定碎屑_00_输出_部件00",
+      "固定碎屑_00_输出_部件01"
+    ],
+    "mesh_count": 2,
+    "blender_aabb_min": [
+      -1.2127,
+      -0.9941,
+      0.0
+    ],
+    "blender_aabb_max": [
+      1.2127,
+      0.9941,
+      0.2195
+    ],
+    "blender_size_xyz": [
+      2.4253,
+      1.9883,
+      0.2195
+    ],
+    "godot_size_xyz": [
+      2.4253,
+      0.2195,
+      1.9883
+    ],
+    "godot_aabb_min": [
+      -1.2127,
+      0.0,
+      -0.9941
+    ],
+    "godot_aabb_max": [
+      1.2127,
+      0.2195,
+      0.9941
+    ],
+    "source_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_00/debris_00.blend",
+    "source_version": "v001",
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面"
+    ],
+    "emissive_objects": [],
+    "origin_contract": "bottom_center",
+    "godot_front_axis": "+Z",
+    "per_mesh": {
+      "固定碎屑_00_输出_部件00": {
+        "min": [
+          0.1865,
+          -0.6722,
+          0.0095
+        ],
+        "max": [
+          1.2127,
+          0.7971,
+          0.2195
+        ]
+      },
+      "固定碎屑_00_输出_部件01": {
+        "min": [
+          -1.2127,
+          -0.9941,
+          0.0
+        ],
+        "max": [
+          0.9543,
+          0.9941,
+          0.009
+        ]
+      }
+    }
+  }
+}
