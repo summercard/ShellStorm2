@@ -1551,11 +1551,14 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 				# 沿墙偏移：南北向墙取局部 x、东西向墙取局部 z —— 与
 				# _authored_wall_door_side() 读 tower_wall_door_offset_<side> 的坐标系一致。
 				var wall_along := local_position.z
+				var wall_depth := local_position.x
 				if wall_side in ["north", "south"]:
 					wall_along = local_position.x
+					wall_depth = local_position.z
 				authored_wall_records.append({
 					"side": wall_side,
 					"along": wall_along,
+					"depth": wall_depth,
 					"uses_door": uses_door,
 				})
 				if uses_door:
@@ -1621,7 +1624,9 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	var delegated_sides: Array[String] = []
 	for direction in doors:
 		var door_offset := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
-		match classify_door_lane(authored_wall_records, direction, door_offset):
+		match classify_door_lane(
+			authored_wall_records, direction, door_offset, door_plane_depth(direction, half)
+		):
 			"door_wall":
 				continue
 			"solid_wall":
@@ -1666,15 +1671,25 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 
 
 ## 门槽 lane 归属判定（**纯函数**，供 _build_authored_layout_shell 与单测共用）。
-## 输入是本房墙件台账（`{side, along, uses_door}`，见 _build_authored_layout_shell 采集处），
+## 输入是本房墙件台账（`{side, along, depth, uses_door}`，见 _build_authored_layout_shell 采集处），
 ## 返回三态字符串：
 ##   · "door_wall"  —— 本房该侧门槽 lane 上坐的是门墙，门洞由本房承接；
 ##   · "solid_wall" —— 门槽 lane 上坐的是实墙 ⇒ 真「门开在实墙上」，调用方必须报错；
 ##   · ""           —— 本房该侧没有任何墙落在门槽 lane 上 ⇒ 墙归邻房（共墙 lane 唯一归属），
 ##                     本房委派该门洞，不建门墙也不报错。
+##
+## `door_depth` 是门槽所在**墙平面**到房间中心的法向距离（南北墙取局部 z、东西墙取局部 x）。
+## 判据必须同时比 `along` 与 `depth`：轮廓房（L 形 / U 形）同一侧会有**多条平行边界段**
+## —— 凹口的内墙与外边墙可能落在同一个沿墙偏移上（实测远征 seed 77001199 的 branch_01：
+## 北侧外边 y=−15 上开门，凹口内墙 y=−40 上有一件实墙，两者局部 x 都 = 0）。
+## 只比 `along` 会把那件凹口实墙当成「门槽上坐着实墙」而假红。
+##
 ## ⚠️ 抽成纯函数是为了让「真错位」这条安全网可被单测钉住 —— 它按构造在正常布局下
 ## 永不触发（落在门槽上的实墙会被提升成门墙），无法靠跑关卡来验证它还活着。
-static func classify_door_lane(wall_records: Array, side: String, door_offset: float) -> String:
+## 判据是 `(side, along, depth)` 三元组，单测 `probe_door_lane_guard` 把三态与边界打全。
+static func classify_door_lane(
+	wall_records: Array, side: String, door_offset: float, door_depth: float
+) -> String:
 	var has_door_wall := false
 	var has_solid_wall := false
 	for record_value in wall_records:
@@ -1685,6 +1700,8 @@ static func classify_door_lane(wall_records: Array, side: String, door_offset: f
 			continue
 		if absf(float(record.get("along", 0.0)) - door_offset) > DOOR_LANE_GUARD_TOLERANCE_M:
 			continue
+		if absf(float(record.get("depth", 0.0)) - door_depth) > DOOR_LANE_GUARD_TOLERANCE_M:
+			continue
 		if bool(record.get("uses_door", false)):
 			has_door_wall = true
 		else:
@@ -1694,6 +1711,22 @@ static func classify_door_lane(wall_records: Array, side: String, door_offset: f
 	if has_solid_wall:
 		return "solid_wall"
 	return ""
+
+
+## 某门向的墙平面法向距离（= 该侧包围盒半宽；门恒开在包围盒外边，见
+## `RoomShellLayoutBuilder3D._room_port_lane_key_sets()`）。
+## ⚠ 第二参数是**半跨度**（调用点传 `dimensions * 0.5`），不是整边长；
+## 返回值与装配台账 `authored_wall_records[].depth` 同一坐标系（南北墙取局部 z、东西墙取局部 x）。
+static func door_plane_depth(side: String, half: Vector2) -> float:
+	match side:
+		"north":
+			return -half.y
+		"south":
+			return half.y
+		"west":
+			return -half.x
+		_:
+			return half.x
 
 
 ## 授权墙件是否正好坐在本房某扇门的位置上（门槽唯一口径 = tower_wall_door_offset_<side>）。

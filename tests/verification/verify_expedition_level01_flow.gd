@@ -539,7 +539,10 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 		failures.append("远征楼面舞台 block_id 不是 expedition：%s" % str(stage.get_meta("block_id", "")))
 
 	var space := tower.get_viewport().world_3d.direct_space_state
-	# 逐房：脚下必须有承重楼面，四向必须撞到本房间墙。
+	# 全关门的真实世界坐标：「这一格是门洞」的判据之一（见 _is_door_face）。
+	# 用 `room_door_world_<side>` meta 而不是现算：它就是走廊/门扇/门墙共用的那一份口径。
+	var door_positions := _collect_tower_door_positions(tower)
+	# 逐房：脚下必须有承重楼面，周界必须封闭。
 	for room_id_value in PLAN_ROOM_IDS:
 		var room_id := str(room_id_value)
 		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
@@ -548,51 +551,7 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 		var center := room.global_position
 		if _ray(space, center + Vector3(0, 3.0, 0), center + Vector3(0, -3.0, 0)).is_empty():
 			failures.append("%s 脚下没有承重楼面，玩家会掉出关卡" % room_id)
-		var dimensions := room.get_dimensions()
-		for side_value in SIDE_DIRECTIONS.keys():
-			var side := str(side_value)
-			# 逐 **5m lane 中心** 打射线，而不是只打房间正中那一根。
-			# 授权壳体（远征 13 房）的门洞正好开在某条 lane 上：门洞跨 [lane−2.5, lane+2.5]，
-			# 相邻实墙从 lane 边界起 ⇒「房间正中」一旦落在门洞边缘的接缝上，射线会从门叶碰撞
-			# 与墙碰撞之间以浮点误差溜过去，被误报成「没有墙体阻挡」（实测 room_03.west /
-			# room_04.north / room_04.south 全是这一形态；定点探针已证这三条侧边的墙件覆盖是满的：
-			# 9 件墙/门墙 + 对角 L 臂 = 整边 50m）。
-			# lane 中心恒为 5k+2.5，与任何 lane 边界都不重合，逐条打即可绕开接缝。
-			# 判据同时比原来更严：**一条侧边最多只允许 1 条 lane 打空** —— 那 1 条就是该侧门洞，
-			# 门洞委派给邻房时门叶面板被隐藏，本来就该是空的；其余 lane 必须全部有墙承接。
-			#
-			# ⚠ 两个跨度不能混用（本判据第一版就在这里翻车：非方房整边假红）：
-			#   length_span = 沿墙方向跨度（东西墙 → dimensions.y，南北墙 → dimensions.x）：决定 lane 数量。
-			#   depth_span  = 房间中心到该侧墙的**法向**距离所属跨度（东西墙 → dimensions.x，
-			#                 南北墙 → dimensions.y）：决定射线要打多远。
-			# 方房两者相等，50×40 / 60×70 这类非方房一旦混用，reach 取短边半宽就会**够不到墙**
-			# ⇒ 整边 lane 全部打空（boss east/west：reach=23 但实距 25）。
-			var length_span := dimensions.x if side in ["north", "south"] else dimensions.y
-			var depth_span := dimensions.y if side in ["north", "south"] else dimensions.x
-			var lane_count := int(round(length_span / TowerFloorStage3D.GRID_UNIT))
-			var reach := depth_span * 0.5 + 3.0
-			var open_lanes := 0
-			for lane_index in range(lane_count):
-				var offset := (
-					-length_span * 0.5 + TowerFloorStage3D.GRID_UNIT * (float(lane_index) + 0.5)
-				)
-				var from := center + Vector3(0, 1.5, 0)
-				if side in ["east", "west"]:
-					from.z += offset
-				else:
-					from.x += offset
-				if _ray(space, from, from + (SIDE_DIRECTIONS[side] as Vector3) * reach).is_empty():
-					open_lanes += 1
-			if open_lanes >= lane_count:
-				failures.append(
-					"%s 的 %s 侧整边没有墙体阻挡（%d 条 lane 全部打空）"
-					% [room_id, side, lane_count]
-				)
-			elif open_lanes > 1:
-				failures.append(
-					"%s 的 %s 侧有 %d 条 lane 打空，该侧最多只允许 1 条门洞 lane"
-					% [room_id, side, open_lanes]
-				)
+		_verify_room_shell_seal(space, room, room_id, door_positions, failures)
 
 	# 走廊：房间之间是 10m 真实间隔，通道必须能提供地面与两侧墙。
 	var restored_edges: Dictionary = (tower._open_edges as Dictionary).duplicate()
@@ -622,6 +581,154 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 	tower._open_edges.clear()
 	tower._open_edges.merge(restored_edges)
 	tower.call("_update_corridor_streaming", str(tower._current_room_id))
+
+
+## —— 房间周界封闭性：逐 **5m 格面** 打物理射线（轮廓感知）——
+##
+## 为什么不再按「包围盒整边遍历 lane」判（本判据第一版就栽在这里）：
+## 轮廓房（`corridor_45x40` 的 L/U 形、`db_70x50` 的凹凸形）在**同一侧有多条平行边界段**，
+## 凹口所在的那两条 lane 本来就没有墙（凹口是房间以外的空地），按整边遍历必然把它们
+## 算成「打空」，于是 branch_01.west 被误报「2 条 lane 打空」。
+##
+## 现在的判据不问轮廓、只问**房间里到底有什么**：
+##   ① 取本房自己的地砖（`authored_layout_instances` 里 `slot_role == floor_tile`）。
+##      地砖是**格心过滤**后铺的 —— 凹口那几格的格心落在多边形外，压根不出砖。
+##   ② 逐砖看四个 5m 邻格：邻格**没有本房地砖** ⇒ 本格与该邻格之间就是房间边界。
+##      轮廓沿 5m 格线切分（builder 的 `normalize_footprint` 校验过），所以
+##      「邻格无砖」⇔「该面落在多边形边界上」，凹口内墙 / 外边墙 / 共墙一视同仁，
+##      不需要把多边形本体搬进验收脚本。
+##   ③ 从砖心（**房间内部**）朝那个面外打 `2.5m(格心到墙面) + 0.5m(墙厚余量)` ⇒ 必须撞到碰撞体。
+##      凹口 lane 因为「格心在外」而根本没有砖 ⇒ 不进遍历，自然不会被误报。
+##
+## 允许打空的唯一情形：该面正好是**门洞**（`_is_door_face()`：本房或任一邻房在这个
+## 世界坐标上声明过门）。门墙留的是 5m 通洞，射线穿过去本来就该是空的。
+##
+## 没有地砖清单的房间（入口安全房走 v007 整房，不并入区块）回落 `_verify_room_shell_seal_rect()`。
+func _verify_room_shell_seal(
+	space: PhysicsDirectSpaceState3D,
+	room: DungeonRoom3D,
+	room_id: String,
+	door_positions: Array,
+	failures: Array[String]
+) -> void:
+	var cells := _authored_floor_tile_cells(room)
+	if cells.is_empty():
+		_verify_room_shell_seal_rect(space, room, room_id, failures)
+		return
+	# 2.5m 到墙面 + 0.5m 余量：够穿墙体碰撞（0.25m 厚、中心落在墙平面上），
+	# 又不足以碰到共墙另一侧邻房的东西（那些至少 5m 外）。
+	var probe_length := TowerFloorStage3D.GRID_UNIT * 0.5 + 0.5
+	var face_half := TowerFloorStage3D.GRID_UNIT * 0.5
+	for cell in cells.values():
+		var local := cell as Vector2
+		for side_value in SIDE_DIRECTIONS.keys():
+			var side := str(side_value)
+			var direction := SIDE_DIRECTIONS[side] as Vector3
+			var neighbour := local + Vector2(direction.x, direction.z) * TowerFloorStage3D.GRID_UNIT
+			if cells.has(_cell_key(neighbour)):
+				continue
+			var from := room.global_position + Vector3(local.x, 1.5, local.y)
+			if not _ray(space, from, from + direction * probe_length).is_empty():
+				continue
+			var face_center := from + direction * face_half
+			if _is_door_face(face_center, door_positions):
+				continue
+			failures.append(
+				"%s 的 %s 侧格心 (%.1f, %.1f) 那面墙没有碰撞体，且不是门洞（轮廓感知判据）"
+				% [room_id, side, local.x, local.y]
+			)
+
+
+## 轮廓房判据的兜底：矩形房（无地砖清单）仍按包围盒整边逐 lane 打射线。
+## 逐 **5m lane 中心** 打，而不是只打房间正中那一根：授权壳体的门洞正好开在某条 lane 上
+## （门洞跨 [lane−2.5, lane+2.5]），相邻实墙从 lane 边界起 ⇒「房间正中」一旦落在门洞边缘
+## 的接缝上，射线会从门叶碰撞与墙碰撞之间以浮点误差溜过去，被误报成「没有墙体阻挡」。
+## 判据同时比原来更严：**一条侧边最多只允许 1 条 lane 打空** —— 那 1 条就是该侧门洞。
+##
+## ⚠ 两个跨度不能混用（本判据第一版就在这里翻车：非方房整边假红）：
+##   length_span = 沿墙方向跨度（东西墙 → dimensions.y，南北墙 → dimensions.x）：决定 lane 数量。
+##   depth_span  = 房间中心到该侧墙的**法向**距离所属跨度（东西墙 → dimensions.x，
+##                 南北墙 → dimensions.y）：决定射线要打多远。
+## 方房两者相等，50×40 / 60×70 这类非方房一旦混用，reach 取短边半宽就会**够不到墙**
+## ⇒ 整边 lane 全部打空（boss east/west：reach=23 但实距 25）。
+func _verify_room_shell_seal_rect(
+	space: PhysicsDirectSpaceState3D, room: DungeonRoom3D, room_id: String,
+	failures: Array[String]
+) -> void:
+	var center := room.global_position
+	var dimensions := room.get_dimensions()
+	for side_value in SIDE_DIRECTIONS.keys():
+		var side := str(side_value)
+		var length_span := dimensions.x if side in ["north", "south"] else dimensions.y
+		var depth_span := dimensions.y if side in ["north", "south"] else dimensions.x
+		var lane_count := int(round(length_span / TowerFloorStage3D.GRID_UNIT))
+		var reach := depth_span * 0.5 + 3.0
+		var open_lanes := 0
+		for lane_index in range(lane_count):
+			var offset := (
+				-length_span * 0.5 + TowerFloorStage3D.GRID_UNIT * (float(lane_index) + 0.5)
+			)
+			var from := center + Vector3(0, 1.5, 0)
+			if side in ["east", "west"]:
+				from.z += offset
+			else:
+				from.x += offset
+			if _ray(space, from, from + (SIDE_DIRECTIONS[side] as Vector3) * reach).is_empty():
+				open_lanes += 1
+		if open_lanes >= lane_count:
+			failures.append(
+				"%s 的 %s 侧整边没有墙体阻挡（%d 条 lane 全部打空）" % [room_id, side, lane_count]
+			)
+		elif open_lanes > 1:
+			failures.append(
+				"%s 的 %s 侧有 %d 条 lane 打空，该侧最多只允许 1 条门洞 lane"
+				% [room_id, side, open_lanes]
+			)
+
+
+## 本房授权壳体清单里的地砖格心（房间局部 `(x, z)`），键 = 格心量化串（供邻格查找）。
+## 空字典 = 本房没有授权壳体（走 v007 整房 / 程序化壳体）⇒ 调用方回落矩形判据。
+func _authored_floor_tile_cells(room: DungeonRoom3D) -> Dictionary:
+	var cells: Dictionary = {}
+	for value in room.authored_layout_instances:
+		var instance := value as Dictionary
+		if str(instance.get("slot_role", "")) != "floor_tile":
+			continue
+		var position := instance.get("position", Vector3.ZERO) as Vector3
+		var local := Vector2(position.x, position.z)
+		cells[_cell_key(local)] = local
+	return cells
+
+
+## 格心量化键：0.01m 量化后取整，避免浮点误差把同格算成两格（格距 5m，量化 1cm 足够）。
+func _cell_key(local: Vector2) -> String:
+	return "%d|%d" % [roundi(local.x * 100.0), roundi(local.y * 100.0)]
+
+
+## 全关门的真实世界坐标（`room_door_world_<side>`，由 `_plan_room_layout()` 统一写入）。
+## 收集**所有房间**的：共墙上的门可能只被邻房那条记录覆盖（门是共享的，两侧都算门洞）。
+func _collect_tower_door_positions(tower: TowerDescent3D) -> Array:
+	var positions: Array = []
+	for room_value in tower._room_by_id.values():
+		var room := room_value as DungeonRoom3D
+		if room == null:
+			continue
+		for side in room.doors:
+			var key := "room_door_world_%s" % str(side)
+			if room.has_meta(key):
+				positions.append(room.get_meta(key) as Vector3)
+	return positions
+
+
+## 这个格面是不是门洞：任一门的世界坐标在水平面上与格面中心重合（容差 0.75m，
+## 小于半个格宽 2.5m，不会把相邻格误判成门）。
+func _is_door_face(face_center: Vector3, door_positions: Array) -> bool:
+	var flat := Vector2(face_center.x, face_center.z)
+	for value in door_positions:
+		var door := value as Vector3
+		if flat.distance_to(Vector2(door.x, door.z)) <= 0.75:
+			return true
+	return false
 
 
 func _ray(space: PhysicsDirectSpaceState3D, from: Vector3, to: Vector3) -> Dictionary:

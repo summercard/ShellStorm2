@@ -1,8 +1,11 @@
-## 临时探针：门槽 lane 归属判定（DungeonRoom3D.classify_door_lane）单元验证。
+## 探针：门槽 lane 归属判定（DungeonRoom3D.classify_door_lane）单元验证。
 ##
 ## 为什么需要它：这条断言按构造在**正常布局下永不触发** —— 坐在门槽 lane 上的实墙会被
 ## 提升成门墙（uses_door=true），所以「门槽上是实墙」只可能出现在真错位时。跑关卡永远
 ## 看不到它开火，只能是「跑过关卡」而不是「安全网还活着」。这里用合成台账把三态打全。
+##
+## 判据是 `(side, along, depth)` 三元组：轮廓房同一侧有多条平行边界段，只比 `along`
+## 会把凹口内墙误判成门槽上的实墙（见 ⑩ 组）。
 extends Node
 
 const ROOM := preload("res://src/world3d/DungeonRoom3D.gd")
@@ -19,12 +22,14 @@ func _check(condition: bool, label: String) -> void:
 		print("FAIL  ", label)
 
 
-func _record(side: String, along: float, uses_door: bool) -> Dictionary:
-	return {"side": side, "along": along, "uses_door": uses_door}
+func _record(side: String, along: float, uses_door: bool, depth: float = 0.0) -> Dictionary:
+	return {"side": side, "along": along, "depth": depth, "uses_door": uses_door}
 
 
-func _classify(records: Array, side: String, door_offset: float) -> String:
-	return str(ROOM.classify_door_lane(records, side, door_offset))
+func _classify(
+	records: Array, side: String, door_offset: float, door_depth: float = 0.0
+) -> String:
+	return str(ROOM.classify_door_lane(records, side, door_offset, door_depth))
 
 
 func _ready() -> void:
@@ -90,6 +95,44 @@ func _ready() -> void:
 	_check(
 		_classify([null, _record("south", 2.5, true)], "south", 2.5) == "door_wall",
 		"⑨ 台账混入非法项时应跳过而非崩溃"
+	)
+
+	# ⑩ 轮廓房（远征 seed 77001199 branch_01）：门开在北侧**外边**（z=−20），凹口内墙
+	# 在 z=5 上、沿墙偏移相同 ⇒ 不得把那件凹口实墙当成「门槽上坐着实墙」。
+	_check(
+		_classify(
+			[_record("north", 0.0, false, 5.0)], "north", 0.0, -20.0
+		) == "",
+		"⑩ 同一沿墙偏移但不同墙平面（凹口内墙）不得算作占据门槽"
+	)
+
+	# ⑩b 反向：外边墙上同 offset 的实墙仍必须开火（安全网没被 ⑩ 关掉）。
+	_check(
+		_classify(
+			[_record("north", 0.0, false, -20.0)], "north", 0.0, -20.0
+		) == "solid_wall",
+		"⑩b 外边墙上同 offset 的实墙仍判 solid_wall"
+	)
+
+	# ⑩c 外边墙的门墙优先于凹口实墙（两件都在台账里时仍判 door_wall）。
+	_check(
+		_classify(
+			[_record("north", 0.0, true, -20.0), _record("north", 0.0, false, 5.0)],
+			"north", 0.0, -20.0
+		) == "door_wall",
+		"⑩c 外边门墙与凹口实墙并存时应判 door_wall"
+	)
+
+	# ⑪ 门平面法向距离表必须与「门开在包围盒外边」同源。
+	# ⚠ 第二个参数是**半跨度**，与调用点 `_build_authored_layout_shell` 的
+	# `door_plane_depth(direction, dimensions * 0.5)` 同口径 —— 别把整边长传进来。
+	var half := Vector2(45.0, 40.0) * 0.5
+	_check(
+		ROOM.door_plane_depth("north", half) == -20.0
+		and ROOM.door_plane_depth("south", half) == 20.0
+		and ROOM.door_plane_depth("west", half) == -22.5
+		and ROOM.door_plane_depth("east", half) == 22.5,
+		"⑪ 门平面法向距离表应为 ±half（45×40 房 → 南北 ∓20、东西 ∓22.5）"
 	)
 
 	print("-- 断言数 = %d，失败数 = %d" % [_checks, _failures])

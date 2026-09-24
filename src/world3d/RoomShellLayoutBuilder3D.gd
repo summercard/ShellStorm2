@@ -26,12 +26,20 @@ extends RefCounted
 ##     被顶掉的角件记进 `corners_dropped`。**被顶掉的角件不预留 lane** ——
 ##     它的臂根本不存在（区块00 办公室 NE 被会议室 NW 顶掉后，
 ##     办公室北墙 x=−27.5 那道臂位就空出来放了实墙）。
+##     ①.5 **门让位于角件**（轮廓房新增）：L 件是 5m 实体件，若它的某条 arm lane 上
+##     正好开门（门洞跨 [lane−2.5, lane+2.5]），两者物理重叠。**门位是运行时契约
+##     （`derive_ports` → `_plan_room_layout`），不能动**，所以让**角件**整件让位：
+##     记进 `corners_dropped`（`provided_by = "door_lane"`），不放 L 件。
+##     判据是**全区块**的门/出口 lane（邻房的臂占掉本房门 lane 时同样让位）。
+##     该角的两条墙随后由各自 lane 上的普通墙/门墙补齐（被顶掉的角件不预留 lane，
+##     规则同 ①），角落不会留缺口 —— 只是门紧贴角落。
 ##  ② **L 臂 lane 预留居中**：只按**留下的**角件预留。每个角件占 2 个 lane，
 ##     各是「紧邻角点的那一个」（角点 ±2.5）；被臂占掉的 lane 谁都不能放墙。
 ##     邻房的臂也会占掉本房的 lane（区块00 走廊西墙 y=−2.5 / 7.5 两个 lane 无墙，
 ##     因为那两段是会议室 SE / NE 的臂）。
 ##  ③ **共面 lane 归属在后**：同一 `(常量轴, 常量坐标, lane_key)` 全局只出一个实例，
 ##     先声明者拥有；任一侧声明了门/出口则该 lane 是门洞（覆盖实墙）。
+##     门/出口**只认该侧包围盒外边那一段**（见 `_room_port_lane_key_sets` 头注释）。
 ## 地砖按 `(i + j) % 2` 交替取 c01 / c02（棋盘格），与区块00 摆位源 49 块里
 ## c01=25 / c02=24 的实测计数一致。命名 `R` = y 索引 + 1、`C` = x 索引 + 1（行 / 列）。
 ##
@@ -40,10 +48,29 @@ extends RefCounted
 ## `rotation.y = rotation_z_deg`（同号）。`position_m` 直接给 Blender 世界坐标，运行时只做
 ## `local = (bx − cx, y, −(by − cy))` —— 见 `to_runtime_instances()`。
 ## 边界命名：south = bounds_y 小端、north = 大端、west = bounds_x 小端、east = 大端。
+##
+## —— 非矩形外轮廓（可选，2026-09-25 加）——
+## 房间可带 `footprint_vertices_m`（模板 `variant_footprints.<variant>.vertices_m`），
+## **口径是模板自有坐标系** `frame = "bbox_nw_x_east_y_south"`：
+## 顶点以**包围盒西北角**为原点、x 向东为正、y 向**南**为正。换算到 Blender 世界：
+##   `bx = bounds_x_m[0] + vx`、`by = bounds_y_m[1] − vy`
+## 缺省（矩形房）= 包围盒本身。带轮廓时：
+##   · **墙**：不再沿包围盒四边铺，而是沿多边形**边界**逐边铺 —— 凹口处的包围盒边
+##     本来就不是房间边界（那里没有墙），凹口自身的两条边则新增为墙。
+##   · **L 角件**：只放**凸角**（单象限占位）；凹角两侧的墙自然相接，不放 L 件
+##     （通用件里没有内角件）。
+##   · **地砖**：只铺**格心落在多边形内**的格子（凹口不铺砖）—— 与墙同源，
+##     所以「墙跟着地面走」在矩形房上是恒等式，在轮廓房上才是有内容的约束。
+## 三条全局规则、lane 归属模型、坐标换算全部**不变**；矩形房的输出逐字节不变
+## （缺省轮廓的顶点序取 SW → SE → NE → NW，与旧 `_corner_records` 的迭代序一致）。
 
 const GRID_UNIT_M := 5.0
 ## 门位与 lane 中心的容差。门位必须**正好落在某个可用 lane 中心**上，否则报错。
 const DOOR_OFFSET_TOLERANCE_M := 0.01
+## 外轮廓真源坐标系的唯一合法值（见头注释「非矩形外轮廓」）。
+const FOOTPRINT_FRAME := "bbox_nw_x_east_y_south"
+## 凸/凹判定与「房内在哪一侧」的探针距离。所有边界段都 ≥5m，1m 偏移恒落在严格内/外。
+const PROBE_OFFSET_M := 1.0
 
 ## 摆位源 rotation_z_deg → 世界门向，与 DungeonRoom3D._authored_wall_direction() 互逆。
 const FACE_IN_ROTATION_DEG := {"south": 0.0, "north": 180.0, "west": -90.0, "east": 90.0}
@@ -121,6 +148,8 @@ static func lane_count_for(span_m: float) -> int:
 ##   "doors": {side: offset_m},            # 有门扇的门；offset 是**沿该边轴的绝对坐标**
 ##   "exits": {side: offset_m},            # 只留门洞、不挂门扇（区块00 的 entry/exit）
 ##   "use_corner_l": bool,                 # 默认 true；单 lane 宽的窄房应置 false
+##   "footprint_vertices_m": [[vx, vy]],   # 可选：非矩形外轮廓，模板坐标系（口径见头注释）
+##   "footprint_frame": String,            # 可选：必须等于 FOOTPRINT_FRAME
 ## }
 ##
 ## 返回：
@@ -190,6 +219,35 @@ static func build_block(rooms: Array) -> Dictionary:
 		corner_owner[point_key] = record
 		kept_corners.append(record)
 
+	# ①.5 门让位于角件（轮廓房必须；矩形房无此情形则逐字节不变）：
+	# 门位是运行时契约（`derive_ports` → `_plan_room_layout`），不能动；
+	# L 件是 5m 实体件，臂与本房/邻房的门洞物理重叠 ⇒ 让**角件**整件让位。
+	# 全局判据：角件任一条臂的 lane 落在**任一房**的门/出口 lane 上即 drop
+	# （邻房的臂也会占掉本房的 lane，所以不能只看本房）。
+	# 被顶掉的角件不预留 lane（规则同 ①），该 lane 由门墙/普墙照常补齐。
+	var door_lane_keys := port_lane_key_set(normalized)
+	var surviving_corners: Array = []
+	for value in kept_corners:
+		var record := value as Dictionary
+		var conflicted := false
+		for arm_value in record["arms"]:
+			var arm := arm_value as Dictionary
+			if door_lane_keys.has(_lane_key_str(
+				str(arm["axis"]), float(arm["line_m"]), int(arm["lane_key"])
+			)):
+				conflicted = true
+				break
+		if not conflicted:
+			surviving_corners.append(record)
+			continue
+		dropped_corners.append({
+			"room_id": str(record["room_id"]),
+			"corner_id": str(record["corner_id"]),
+			"point_m": [float(record["point_x"]), float(record["point_y"])],
+			"provided_by": "door_lane",
+		})
+	kept_corners = surviving_corners
+
 	# ② 只按**留下的**角件预留两条臂的 lane。
 	var corner_reservations: Dictionary = {}
 	for value in kept_corners:
@@ -203,70 +261,76 @@ static func build_block(rooms: Array) -> Dictionary:
 			if not corner_reservations.has(lane_str):
 				corner_reservations[lane_str] = owner_label
 
-	# ③ 逐房逐边声明 lane 归属（含门/出口标记），全局按 lane 合并去重。
+	# ③ 逐房逐**轮廓边界段**声明 lane 归属（含门/出口标记），全局按 lane 合并去重。
+	# 矩形房每条侧边恰好一段（与旧「四边」写法逐字节等价）；轮廓房可能一段、多段或零段
+	# （零段 = 该侧整条包围盒边都在凹口里，本来就没有墙）。
+	# 门位按**侧**判「有没有落上」（不是按段）：同一侧可能有多段，门落在其中一段上即合法。
 	var lane_claims: Dictionary = {}
 	for room in normalized:
 		var room_id := str(room["room_id"])
-		var doors: Dictionary = room["doors"]
-		var exits: Dictionary = room["exits"]
+		var edges_by_side: Dictionary = room["_boundary_edges_by_side"]
+		# 门/出口的合法 lane **只认该侧包围盒外边段**（轮廓房同一侧可能有凹口段/内墙段，
+		# 同一个门偏移会在多段上同时命中 ⇒ lane 被重复计入、共享墙翻倍）。
+		# 凹口恒在包围盒内部 ⇒ 那里没有任何邻房 ⇒ 门落上去就是开向虚空，必须拒绝。
+		var port_sets := _room_port_lane_key_sets(room)
+		var door_lane_set: Dictionary = port_sets["door"]
+		var exit_lane_set: Dictionary = port_sets["exit"]
 		for side in SIDE_ORDER:
-			var edge := edge_geometry(side, room)
-			var line_m := float(edge["line_m"])
-			var keys := edge_lane_keys(float(edge["span_min_m"]), float(edge["span_max_m"]))
-			var door_offset: Variant = doors.get(side, null)
-			var exit_offset: Variant = exits.get(side, null)
+			var door_offset: Variant = room["doors"].get(side, null)
+			var exit_offset: Variant = room["exits"].get(side, null)
 			var door_found := false
 			var exit_found := false
-			for lane_key in keys:
-				var center := lane_center_of(lane_key)
-				var lane_str := _lane_key_str(str(edge["axis"]), line_m, lane_key)
-				var is_door := (
-					door_offset != null
-					and absf(center - float(door_offset)) <= DOOR_OFFSET_TOLERANCE_M
-				)
-				var is_exit := (
-					exit_offset != null
-					and absf(center - float(exit_offset)) <= DOOR_OFFSET_TOLERANCE_M
-				)
-				if is_door:
-					door_found = true
-				if is_exit:
-					exit_found = true
-				if corner_reservations.has(lane_str):
-					# 该 lane 已被某件 L 臂占满。若本房在这里声明了门，就是「门开在 L 臂下」。
-					if is_door or is_exit:
-						errors.append("door_under_corner_arm:%s.%s@lane=%d by %s" % [
-							room_id, side, lane_key, str(corner_reservations[lane_str])
-						])
-					continue
-				var role := "solid"
-				if is_door:
-					role = "door"
-				elif is_exit:
-					role = "exit"
-				if not lane_claims.has(lane_str):
-					lane_claims[lane_str] = {
-						"axis": str(edge["axis"]),
-						"line_m": line_m,
-						"lane_key": lane_key,
-						"center_m": center,
-						"role": role,
-						"owner_room": room_id,
-						"rotation_z_deg": float(FACE_IN_ROTATION_DEG[side]),
-						"sides": [side],
-						"rooms": [room_id],
-					}
-					continue
-				var record := lane_claims[lane_str] as Dictionary
-				# 先声明者保留 owner；门/出口优先于实墙（共享墙任一侧有门即开门洞）。
-				if role in ["door", "exit"] and str(record["role"]) == "solid":
-					record["role"] = role
-				var rooms_list: Array = record["rooms"]
-				if room_id not in rooms_list:
-					rooms_list.append(room_id)
-				var sides_list: Array = record["sides"]
-				if side not in sides_list:
-					sides_list.append(side)
+			for edge_value in edges_by_side.get(side, []):
+				var edge := edge_value as Dictionary
+				var line_m := float(edge["line_m"])
+				var keys := edge_lane_keys(float(edge["span_min_m"]), float(edge["span_max_m"]))
+				for lane_key in keys:
+					var center := lane_center_of(lane_key)
+					var lane_str := _lane_key_str(str(edge["axis"]), line_m, lane_key)
+					var is_door := door_lane_set.has(lane_str)
+					var is_exit := exit_lane_set.has(lane_str)
+					if is_door:
+						door_found = true
+					if is_exit:
+						exit_found = true
+					if corner_reservations.has(lane_str):
+						# 该 lane 已被某件 L 臂占满。若本房在这里声明了门，就是「门开在 L 臂下」。
+						if is_door or is_exit:
+							errors.append("door_under_corner_arm:%s.%s@lane=%d by %s" % [
+								room_id, side, lane_key, str(corner_reservations[lane_str])
+							])
+						continue
+					var role := "solid"
+					if is_door:
+						role = "door"
+					elif is_exit:
+						role = "exit"
+					if not lane_claims.has(lane_str):
+						lane_claims[lane_str] = {
+							"axis": str(edge["axis"]),
+							"line_m": line_m,
+							"lane_key": lane_key,
+							"center_m": center,
+							"role": role,
+							"owner_room": room_id,
+							"rotation_z_deg": float(edge["rotation_z_deg"]),
+							"sides": [side],
+							"rooms": [room_id],
+						}
+						continue
+					var record := lane_claims[lane_str] as Dictionary
+					# 先声明者保留 owner；门/出口优先于实墙（共享墙任一侧有门即开门洞）。
+					if role in ["door", "exit"] and str(record["role"]) == "solid":
+						record["role"] = role
+					var rooms_list: Array = record["rooms"]
+					if room_id not in rooms_list:
+						rooms_list.append(room_id)
+					var sides_list: Array = record["sides"]
+					if side not in sides_list:
+						sides_list.append(side)
+			# 门位必须落在本侧**某一段边界**的 lane 上。轮廓房里门位正好开在凹口上时，
+			# 本侧一段都没扫到它 ⇒ door_found 仍是 false ⇒ 在这里报错，
+			# 由调用方放弃接管（宁可不给轮廓壳，也不给一扇开在空处的门）。
 			if door_offset != null and not door_found:
 				errors.append("door_offset_off_lane:%s.%s=%s" % [room_id, side, str(door_offset)])
 			if exit_offset != null and not exit_found:
@@ -274,12 +338,21 @@ static func build_block(rooms: Array) -> Dictionary:
 
 	# ④ 出实例。
 	var instances: Array = []
+	var corner_id_uses: Dictionary = {}
 	for value in kept_corners:
 		var record := value as Dictionary
 		var room_id := str(record["room_id"])
 		var corner_id := str(record["corner_id"])
+		# 轮廓房里同一房可能有两处凸角映射到同一个四向 id（如 L 形走廊的 SE 出现两次）：
+		# 加后缀保 instance_id 唯一；矩形房恒不冲突 ⇒ id 逐字节不变。
+		var base_id := "CORNER_%s_%s" % [room_id.to_upper(), corner_id]
+		var instance_id := base_id
+		var use_index := int(corner_id_uses.get(base_id, 0))
+		corner_id_uses[base_id] = use_index + 1
+		if use_index > 0:
+			instance_id = "%s_%d" % [base_id, use_index + 1]
 		instances.append({
-			"instance_id": "CORNER_%s_%s" % [room_id.to_upper(), corner_id],
+			"instance_id": instance_id,
 			"package": PACKAGE_CORNER_L,
 			"position_m": [float(record["point_x"]), float(record["point_y"]), 0.0],
 			"rotation_z_deg": float(record["rotation_z_deg"]),
@@ -355,17 +428,21 @@ static func build_block(rooms: Array) -> Dictionary:
 			})
 	for room in normalized:
 		var room_id := str(room["room_id"])
+		var polygon: PackedVector2Array = room["footprint_m"]
 		for i in range(int(room["lanes_x"])):
 			for j in range(int(room["lanes_y"])):
+				var cell_center := Vector2(
+					lane_center_of(int(room["lane_key_x_min"]) + i),
+					lane_center_of(int(room["lane_key_y_min"]) + j)
+				)
+				# 轮廓房：凹口不铺砖（格心落在多边形外）。矩形房恒为真 ⇒ 逐字节不变。
+				if not point_in_polygon(cell_center, polygon):
+					continue
 				var is_c01 := (i + j) % 2 == 0
 				instances.append({
 					"instance_id": "FLOOR_%s_R%02d_C%02d" % [room_id.to_upper(), j + 1, i + 1],
 					"package": PACKAGE_FLOOR_TILE_C01 if is_c01 else PACKAGE_FLOOR_TILE_C02,
-					"position_m": [
-						lane_center_of(int(room["lane_key_x_min"]) + i),
-						lane_center_of(int(room["lane_key_y_min"]) + j),
-						0.0,
-					],
+					"position_m": [cell_center.x, cell_center.y, 0.0],
 					"rotation_z_deg": 0.0,
 					"scale": [1.0, 1.0, 1.0],
 					"enabled": true,
@@ -479,35 +556,388 @@ static func edge_geometry(side: String, room: Dictionary) -> Dictionary:
 			}
 
 
-## 每个（房间, 角位）一条记录，含它若成立会占掉的两条 lane。
+## 某侧**包围盒外边**所在的常量轴坐标（门/出口的唯一合法墙平面）。
+## 矩形房四边就是这个值；轮廓房凹口段/内墙段的 line 不等于它。
+static func _side_bound_line(room: Dictionary, side: String) -> float:
+	var bounds_x := room["bounds_x_m"] as Array
+	var bounds_y := room["bounds_y_m"] as Array
+	match side:
+		"south":
+			return float(bounds_y[0])
+		"north":
+			return float(bounds_y[1])
+		"west":
+			return float(bounds_x[0])
+		_:
+			return float(bounds_x[1])
+
+
+## 某房某侧的包围盒外边**边界段**；该侧外边整条都在凹口里时返回 `null`。
+static func _bound_outer_edge(room: Dictionary, side: String) -> Variant:
+	var line := _side_bound_line(room, side)
+	var segments: Array = (room["_boundary_edges_by_side"] as Dictionary).get(side, [])
+	for edge_value in segments:
+		var edge := edge_value as Dictionary
+		if is_equal_approx(float(edge["line_m"]), line):
+			return edge
+	return null
+
+
+## 某房**包围盒外边段**上真正存在的门 / 出口 lane：
+## `{"door": {lane_str: true}, "exit": {lane_str: true}}`。
+## 这是「门/出口合法落点」的**唯一判据**，build_block() 与生成器的轮廓兼容性检查共用它。
+##
+## 为什么只认包围盒外边段：轮廓房的凹口**恒在包围盒内部**，而房间按包围盒摆放、
+## 互不重叠 ⇒ 凹口区域里不可能有邻房、也不可能在别的房间内部 ⇒ 恒为空洞。
+## 门落在凹口段（或凹口对面的内墙段）上就是开向虚空。同一侧多条平行段上
+## 同一个门偏移会同时命中 ⇒ lane 被重复计入、共享墙翻倍（实测 14 件门墙 vs 12 条边）。
+static func _room_port_lane_key_sets(room: Dictionary) -> Dictionary:
+	var sets := {"door": {}, "exit": {}}
+	for side in SIDE_ORDER:
+		var edge_value: Variant = _bound_outer_edge(room, side)
+		if edge_value == null:
+			continue
+		var edge := edge_value as Dictionary
+		for kind in ["door", "exit"]:
+			var offset: Variant = (room["%ss" % kind] as Dictionary).get(side, null)
+			if offset == null:
+				continue
+			var lane_keys := edge_lane_keys(float(edge["span_min_m"]), float(edge["span_max_m"]))
+			for lane_key in lane_keys:
+				if absf(lane_center_of(lane_key) - float(offset)) <= DOOR_OFFSET_TOLERANCE_M:
+					(sets[kind] as Dictionary)[_lane_key_str(
+						str(edge["axis"]), float(edge["line_m"]), lane_key
+					)] = true
+	return sets
+
+
+## 全区块的门/出口 lane 集合（`lane_str → true`）。「①.5 门让位于角件」的判据，
+## 以及生成器「轮廓与门位是否兼容」的判据，都取自它。
+static func port_lane_key_set(rooms: Array) -> Dictionary:
+	var keys: Dictionary = {}
+	for value in rooms:
+		if not (value is Dictionary):
+			continue
+		var sets := _room_port_lane_key_sets(value as Dictionary)
+		for kind in ["door", "exit"]:
+			for lane_key in (sets[kind] as Dictionary).keys():
+				keys[lane_key] = true
+	return keys
+
+
+## 该外轮廓能否承接这些门 / 出口（生成器侧判据：不兼容就换变体 / 退矩形）。
+##
+## `true` 的条件与 `build_block()` 完全同源 —— 每个有门/出口的侧，其偏移都必须落在
+## 该侧**包围盒外边段**上某个 lane 的中心（同一条 lane 公式、同一个容差）。
+## 轮廓非法（越界 / 不在 5m 格线 / 自交）时同样返回 `false`。
+##
+## 为什么由生成器先筛、而不是让 build_block() 报错：一处不兼容会让**整层**放弃接管
+## （回到程序化壳体），那是把局部冲突放大成全图回退。生成器有模板池，可以换个变体。
+static func footprint_accepts_ports(
+	footprint_vertices_m: Array,
+	footprint_frame: String,
+	bounds_x_m: Array,
+	bounds_y_m: Array,
+	doors: Dictionary,
+	exits: Dictionary
+) -> bool:
+	var errors: Array[String] = []
+	var x0 := minf(float(bounds_x_m[0]), float(bounds_x_m[1]))
+	var x1 := maxf(float(bounds_x_m[0]), float(bounds_x_m[1]))
+	var y0 := minf(float(bounds_y_m[0]), float(bounds_y_m[1]))
+	var y1 := maxf(float(bounds_y_m[0]), float(bounds_y_m[1]))
+	var polygon := normalize_footprint(
+		{
+			"footprint_vertices_m": footprint_vertices_m,
+			"footprint_frame": footprint_frame,
+		},
+		x0, x1, y0, y1, "footprint_probe", errors
+	)
+	if polygon.is_empty():
+		return false
+	var probe_room := {
+		"bounds_x_m": [x0, x1],
+		"bounds_y_m": [y0, y1],
+		"doors": doors,
+		"exits": exits,
+		"_boundary_edges_by_side": boundary_edges(polygon),
+	}
+	for kind in ["door", "exit"]:
+		for side in (probe_room["%ss" % kind] as Dictionary).keys():
+			if not _side_has_port_lane(probe_room, kind, str(side)):
+				return false
+	return true
+
+
+## 该侧的门（或出口）是否找到了合法 lane。
+static func _side_has_port_lane(probe_room: Dictionary, kind: String, side: String) -> bool:
+	var ports: Dictionary = probe_room["%ss" % kind]
+	if not ports.has(side):
+		return false
+	var edge_value: Variant = _bound_outer_edge(probe_room, side)
+	if edge_value == null:
+		return false
+	var offset := float(ports[side])
+	var edge := edge_value as Dictionary
+	for lane_key in edge_lane_keys(float(edge["span_min_m"]), float(edge["span_max_m"])):
+		if absf(lane_center_of(lane_key) - offset) <= DOOR_OFFSET_TOLERANCE_M:
+			return true
+	return false
+
+
+## —— 非矩形外轮廓的几何原语（纯函数，公开给探针独立复核）——
+
+## 多边形有向面积（鞋带公式）。>0 = 逆时针（在 `bx` 东 / `by` 北 的右手系里）。
+static func polygon_signed_area(polygon: PackedVector2Array) -> float:
+	var total := 0.0
+	var count := polygon.size()
+	if count < 3:
+		return 0.0
+	for index in range(count):
+		var a := polygon[index]
+		var b := polygon[(index + 1) % count]
+		total += a.x * b.y - b.x * a.y
+	return total * 0.5
+
+
+## 点在多边形内（奇偶射线法）。只用于**严格内/外**的探针点与格心，
+## 边界上的点不在契约内（房界恒落格线，格心与探针都恒不在边界上）。
+static func point_in_polygon(point: Vector2, polygon: PackedVector2Array) -> bool:
+	var count := polygon.size()
+	if count < 3:
+		return false
+	var inside := false
+	var previous := count - 1
+	for index in range(count):
+		var a := polygon[index]
+		var b := polygon[previous]
+		if (a.y > point.y) != (b.y > point.y):
+			var ratio := (point.y - a.y) / (b.y - a.y)
+			if point.x < a.x + ratio * (b.x - a.x):
+				inside = not inside
+		previous = index
+	return inside
+
+
+## 多边形外轮廓 → 边界段，**按 SIDE_ORDER 分组的字典** `{side: [edge...]}`，
+## 组内按 `span_min_m` 升序。每段：`{axis, line_m, span_min_m, span_max_m, side, rotation_z_deg}`。
+##
+## `side` 由「房内在墙的哪一侧」定出（探针法），**不是按包围盒猜**：
+##   竖直段 x = X：房内在 +x ⇒ 该墙是房间的 west 侧；在 −x ⇒ east。
+##   水平段 y = Y：房内在 +y ⇒ south；在 −y ⇒ north。
+## 矩形房上这与旧 `edge_geometry()` 的四边口径逐字一致；轮廓房上凹口两侧的边
+## 会被正确地判成「房间在凹口对面」，于是墙朝向也跟着对。
+static func boundary_edges(polygon: PackedVector2Array) -> Dictionary:
+	var by_side: Dictionary = {}
+	for side in SIDE_ORDER:
+		by_side[side] = []
+	var count := polygon.size()
+	for index in range(count):
+		var a := polygon[index]
+		var b := polygon[(index + 1) % count]
+		var edge: Dictionary = {}
+		var probe_minus: Vector2 = Vector2.ZERO
+		var probe_plus: Vector2 = Vector2.ZERO
+		if is_equal_approx(a.x, b.x):
+			edge = {
+				"axis": "x", "line_m": a.x,
+				"span_min_m": minf(a.y, b.y), "span_max_m": maxf(a.y, b.y),
+			}
+			probe_minus = Vector2(a.x - PROBE_OFFSET_M, (a.y + b.y) * 0.5)
+			probe_plus = Vector2(a.x + PROBE_OFFSET_M, (a.y + b.y) * 0.5)
+		elif is_equal_approx(a.y, b.y):
+			edge = {
+				"axis": "y", "line_m": a.y,
+				"span_min_m": minf(a.x, b.x), "span_max_m": maxf(a.x, b.x),
+			}
+			probe_minus = Vector2((a.x + b.x) * 0.5, a.y - PROBE_OFFSET_M)
+			probe_plus = Vector2((a.x + b.x) * 0.5, a.y + PROBE_OFFSET_M)
+		else:
+			continue
+		var side := ""
+		if point_in_polygon(probe_minus, polygon):
+			side = "east" if str(edge["axis"]) == "x" else "north"
+		elif point_in_polygon(probe_plus, polygon):
+			side = "west" if str(edge["axis"]) == "x" else "south"
+		if side.is_empty():
+			continue
+		edge["side"] = side
+		edge["rotation_z_deg"] = float(FACE_IN_ROTATION_DEG[side])
+		(by_side[side] as Array).append(edge)
+	for side in SIDE_ORDER:
+		var segments := by_side[side] as Array
+		segments.sort_custom(_boundary_edge_sort_less)
+	return by_side
+
+
+static func _boundary_edge_sort_less(a: Variant, b: Variant) -> bool:
+	return float((a as Dictionary)["span_min_m"]) < float((b as Dictionary)["span_min_m"])
+
+
+## 把 `{side: [edge...]}` 摊平成 SIDE_ORDER 顺序的列表（`_side_for_room` 用）。
+static func flatten_boundary_edges(by_side: Dictionary) -> Array:
+	var flat: Array = []
+	for side in SIDE_ORDER:
+		flat.append_array(by_side.get(side, []))
+	return flat
+
+
+## 显式外轮廓（模板坐标系）→ Blender 世界多边形；缺省 = 包围盒矩形。
+## 校验不通过时 append 到 `errors` 并返回空 `PackedVector2Array` ⇒ `_normalize_room()`
+## 返回空 ⇒ `build_block()` 报错 ⇒ 调用方放弃接管（不静默给半个壳）。
+static func normalize_footprint(
+	room: Dictionary, x0: float, x1: float, y0: float, y1: float,
+	room_id: String, errors: Array[String]
+) -> PackedVector2Array:
+	var width := x1 - x0
+	var depth := y1 - y0
+	var polygon := PackedVector2Array()
+	var raw: Variant = room.get("footprint_vertices_m", null)
+	if raw == null:
+		polygon.append(Vector2(x0, y0))
+		polygon.append(Vector2(x1, y0))
+		polygon.append(Vector2(x1, y1))
+		polygon.append(Vector2(x0, y1))
+		return polygon
+	var frame := str(room.get("footprint_frame", FOOTPRINT_FRAME))
+	if frame != FOOTPRINT_FRAME:
+		errors.append("footprint_unknown_frame:%s:%s" % [room_id, frame])
+		return PackedVector2Array()
+	if not (raw is Array):
+		errors.append("footprint_malformed:%s" % room_id)
+		return PackedVector2Array()
+	var vertices := raw as Array
+	if vertices.size() < 4:
+		errors.append("footprint_too_few_vertices:%s" % room_id)
+		return PackedVector2Array()
+	for index in range(vertices.size()):
+		var pair_value: Variant = vertices[index]
+		if not (pair_value is Array) or (pair_value as Array).size() != 2:
+			errors.append("footprint_malformed:%s:%d" % [room_id, index])
+			return PackedVector2Array()
+		var pair := pair_value as Array
+		var vx := float(pair[0])
+		var vy := float(pair[1])
+		if vx < -DOOR_OFFSET_TOLERANCE_M or vx > width + DOOR_OFFSET_TOLERANCE_M:
+			errors.append("footprint_vertex_outside_bounds:%s:%d" % [room_id, index])
+			return PackedVector2Array()
+		if vy < -DOOR_OFFSET_TOLERANCE_M or vy > depth + DOOR_OFFSET_TOLERANCE_M:
+			errors.append("footprint_vertex_outside_bounds:%s:%d" % [room_id, index])
+			return PackedVector2Array()
+		# 模板坐标系（y 向南）→ Blender 世界（X 东 / Y 北）：`bx = x0 + vx`、`by = y1 − vy`。
+		var bx := x0 + vx
+		var by := y1 - vy
+		for coordinate in [bx, by]:
+			if not is_zero_approx(fmod(absf(coordinate), GRID_UNIT_M)):
+				errors.append("footprint_vertex_off_grid:%s:%d" % [room_id, index])
+				return PackedVector2Array()
+		polygon.append(Vector2(bx, by))
+	if not _footprint_shape_valid(polygon, room_id, errors):
+		return PackedVector2Array()
+	return polygon
+
+
+## 轴对齐 + 边不为零长 + 面积非零 + 不自交（含相触/捏点）。
+static func _footprint_shape_valid(
+	polygon: PackedVector2Array, room_id: String, errors: Array[String]
+) -> bool:
+	var count := polygon.size()
+	for index in range(count):
+		var a := polygon[index]
+		var b := polygon[(index + 1) % count]
+		if is_equal_approx(a.x, b.x) and is_equal_approx(a.y, b.y):
+			errors.append("footprint_zero_length_edge:%s:%d" % [room_id, index])
+			return false
+		if not (is_equal_approx(a.x, b.x) or is_equal_approx(a.y, b.y)):
+			errors.append("footprint_edge_not_axis_aligned:%s:%d" % [room_id, index])
+			return false
+	if is_zero_approx(polygon_signed_area(polygon)):
+		errors.append("footprint_zero_area:%s" % room_id)
+		return false
+	for first in range(count):
+		for second in range(first + 1, count):
+			if (
+				(second + 1) % count == first
+				or (first + 1) % count == second
+			):
+				continue
+			if _axis_aligned_segments_touch(
+				polygon[first], polygon[(first + 1) % count],
+				polygon[second], polygon[(second + 1) % count]
+			):
+				errors.append("footprint_self_intersection:%s:%d,%d" % [room_id, first, second])
+				return false
+	return true
+
+
+## 轴对齐线段是否相触（AABB 相交判据在两个轴向上同时成立即相触）。
+static func _axis_aligned_segments_touch(
+	a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2
+) -> bool:
+	return (
+		minf(a1.x, a2.x) <= maxf(b1.x, b2.x)
+		and minf(b1.x, b2.x) <= maxf(a1.x, a2.x)
+		and minf(a1.y, a2.y) <= maxf(b1.y, b2.y)
+		and minf(b1.y, b2.y) <= maxf(a1.y, a2.y)
+	)
+
+
+## 每个（房间, **凸角**）一条记录，含它若成立会占掉的两条 lane。
+## 轮廓房按多边形顶点迭代：顶点序即遍历序，矩形房的缺省轮廓顶点序取 SW → SE → NE → NW，
+## 与旧实现（CORNER_IDS 表序）逐字节一致。
+## 凹角**不出记录** —— 两条墙自身相接，不需要 L 件（通用件里没有内角件），
+## 也不预留 lane（否则会误占邻房在同一个 lane 上的合法墙）。
 static func _corner_records(rooms: Array) -> Array:
 	var records: Array = []
 	for room in rooms:
 		if not bool(room["use_corner_l"]):
 			continue
 		var room_id := str(room["room_id"])
-		for corner_id in CORNER_IDS:
-			var sign_x := -1.0 if corner_id.ends_with("W") else 1.0
-			var sign_y := -1.0 if corner_id.begins_with("S") else 1.0
-			var point_x := (
-				float(room["bounds_x_m"][0]) if sign_x < 0.0 else float(room["bounds_x_m"][1])
-			)
-			var point_y := (
-				float(room["bounds_y_m"][0]) if sign_y < 0.0 else float(room["bounds_y_m"][1])
-			)
-			# 臂 1：平面 x = point_x，沿 y 朝房内，占「紧邻角点的那一个 lane」。
-			var arm_y_key := lane_key_of(point_y - sign_y * GRID_UNIT_M * 0.5)
-			# 臂 2：平面 y = point_y，沿 x 朝房内，占「紧邻角点的那一个 lane」。
-			var arm_x_key := lane_key_of(point_x - sign_x * GRID_UNIT_M * 0.5)
+		var polygon: PackedVector2Array = room["footprint_m"]
+		var count := polygon.size()
+		var area_sign := signf(polygon_signed_area(polygon))
+		for index in range(count):
+			var previous := polygon[(index + count - 1) % count]
+			var point := polygon[index]
+			var following := polygon[(index + 1) % count]
+			var e_in := point - previous
+			var e_out := following - point
+			if e_in.x * e_out.y - e_in.y * e_out.x == 0.0:
+				continue
+			# 房内在哪一个象限：**恰好一个**候选探针落在多边形内才是凸角。
+			# 0 个象限 ⇒ 退化构型；**≥2 个象限 ⇒ 凹角**（内角 270°，三个象限在内）。
+			# 两者都不放 L 件、也不预留 lane —— 通用件里没有内角件，硬放会得到
+			# 一个朝向错误的 L 件，并且把凹口两侧的合法墙 lane 全部占掉。
+			var inside_count := 0
+			var dir_x := 0.0
+			var dir_y := 0.0
+			for sign_x in [-1.0, 1.0]:
+				for sign_y in [-1.0, 1.0]:
+					var probe := point + Vector2(sign_x, sign_y) * PROBE_OFFSET_M
+					if point_in_polygon(probe, polygon):
+						inside_count += 1
+						dir_x = sign_x
+						dir_y = sign_y
+			if inside_count != 1:
+				continue
+			var corner_id := "SW"
+			if dir_x < 0.0:
+				corner_id = "SE" if dir_y > 0.0 else "NE"
+			elif dir_y < 0.0:
+				corner_id = "NW"
+			# 臂 1：平面 x = point.x，沿 y 朝房内，占「紧邻角点的那一个 lane」。
+			var arm_y_key := lane_key_of(point.y + dir_y * GRID_UNIT_M * 0.5)
+			# 臂 2：平面 y = point.y，沿 x 朝房内，占「紧邻角点的那一个 lane」。
+			var arm_x_key := lane_key_of(point.x + dir_x * GRID_UNIT_M * 0.5)
 			records.append({
 				"room_id": room_id,
 				"corner_id": corner_id,
-				"point_x": point_x,
-				"point_y": point_y,
+				"point_x": point.x,
+				"point_y": point.y,
 				"rotation_z_deg": float(CORNER_ROTATION_DEG[corner_id]),
 				"arms": [
-					{"axis": "x", "line_m": point_x, "lane_key": arm_y_key},
-					{"axis": "y", "line_m": point_y, "lane_key": arm_x_key},
+					{"axis": "x", "line_m": point.x, "lane_key": arm_y_key},
+					{"axis": "y", "line_m": point.y, "lane_key": arm_x_key},
 				],
 			})
 	return records
@@ -569,18 +999,20 @@ static func _lane_sort_less(a: Variant, b: Variant) -> bool:
 
 
 ## 某房间在某个墙平面上的边名（用于 claims 记录）。
+## 与 `boundary_edges()` 同源：矩形房每个平面恰一段（结果与旧「按四边比」一致），
+## 轮廓房同一平面可能有多段、也可能一段都没有。
 static func _side_for_room(axis: String, line_m: float, room_id: String, rooms: Array) -> String:
 	for value in rooms:
 		var room := value as Dictionary
 		if str(room["room_id"]) != room_id:
 			continue
-		for side in SIDE_ORDER:
-			var edge := edge_geometry(side, room)
+		for edge_value in room["_boundary_edges"]:
+			var edge := edge_value as Dictionary
 			if (
 				str(edge["axis"]) == axis
 				and is_equal_approx(float(edge["line_m"]), line_m)
 			):
-				return side
+				return str(edge["side"])
 	return ""
 
 
@@ -617,6 +1049,10 @@ static func _normalize_room(room: Dictionary, errors: Array[String]) -> Dictiona
 	for side_value in exits.keys():
 		if str(side_value) not in FACE_IN_ROTATION_DEG:
 			errors.append("unknown_exit_side:%s.%s" % [room_id, str(side_value)])
+	var polygon := normalize_footprint(room, x0, x1, y0, y1, room_id, errors)
+	if polygon.is_empty():
+		return {}
+	var edges_by_side := boundary_edges(polygon)
 	return {
 		"room_id": room_id,
 		"bounds_x_m": [x0, x1],
@@ -629,4 +1065,8 @@ static func _normalize_room(room: Dictionary, errors: Array[String]) -> Dictiona
 		"doors": doors.duplicate(),
 		"exits": exits.duplicate(),
 		"use_corner_l": bool(room.get("use_corner_l", true)),
+		"footprint_m": polygon,
+		"footprint_is_rect": polygon.size() == 4,
+		"_boundary_edges_by_side": edges_by_side,
+		"_boundary_edges": flatten_boundary_edges(edges_by_side),
 	}

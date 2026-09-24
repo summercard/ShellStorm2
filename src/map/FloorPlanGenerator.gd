@@ -438,7 +438,7 @@ static func _generate_constrained_floor(
 		var placed := _place_constrained_slots(slots, rng)
 		if placed.is_empty():
 			continue
-		return _constrained_floor_from(blueprint, floor_number, placed, slots, policy)
+		return _constrained_floor_from(blueprint, floor_number, placed, slots, policy, templates)
 	return {}
 
 
@@ -820,7 +820,8 @@ static func _constrained_floor_from(
 	floor_number: int,
 	placed: Array[Dictionary],
 	slots: Array[Dictionary],
-	policy: Dictionary
+	policy: Dictionary,
+	templates: Dictionary
 ) -> Dictionary:
 	var center_by_key: Dictionary = {}
 	for value in placed:
@@ -853,7 +854,7 @@ static func _constrained_floor_from(
 			"ports_derived": false,
 		})
 	LEVEL_PLAN_LOADER.derive_ports(rooms)
-	attach_authored_layout_shell(rooms, policy)
+	attach_authored_layout_shell(rooms, policy, templates)
 	return {
 		"level_id": str(blueprint.get("level_id", "")),
 		"mode": "constrained",
@@ -888,14 +889,19 @@ static func _constrained_floor_from(
 ## 门位一律复用 `LevelPlanLoader.derive_ports()` 产出的 `ports[].lane_m`——
 ## 它与运行时 `_plan_room_layout()` 同走 `RoomDoorLane`，是门槽的唯一口径，此处不重算。
 ##
-## 生成器侧的几何错误（房界不在 5m 格线、门位不在 lane 中心）**不静默吞掉**：
+## 生成器侧的几何错误（房界不在 5m 格线、门位不在 lane 中心、门位落在轮廓凹口上）**不静默吞掉**：
 ## 一旦发生就是「清单与门槽对不上」，宁可不接管（保持程序化旧拼装）也不给出错位的壳。
-static func attach_authored_layout_shell(rooms: Array, policy: Dictionary) -> void:
+##
+## `templates` 是 `LevelPlanLoader.load_room_templates(level_id)` 的原样结果，本函数只用它取
+## `variant_footprints`（非矩形外轮廓）。取不到 = 该房按矩形处理，不是错误。
+static func attach_authored_layout_shell(
+	rooms: Array, policy: Dictionary, templates: Dictionary = {}
+) -> void:
 	if not bool(policy.get("authored_layout_shell", false)):
 		return
 	if rooms.is_empty():
 		return
-	var block := authored_shell_block(rooms)
+	var block := authored_shell_block(rooms, templates)
 	if block.is_empty():
 		return
 	var result := ROOM_SHELL_LAYOUT_BUILDER.build_block(block)
@@ -1070,13 +1076,13 @@ static func _boss_room_exclusive_instances(room: Dictionary, boss_layout: Dictio
 ## 已经消费同一批通用件；而且它是本区块**唯一与区块外房间共墙**的房间（15×15 单格，
 ## 四邻皆可为内容房）。并进来会让区块 lane 归属与 v007 自带的四面墙互相重叠 ——
 ## 收益为零，风险是整房双壳。
-static func authored_shell_block(rooms: Array) -> Array:
+static func authored_shell_block(rooms: Array, templates: Dictionary = {}) -> Array:
 	var block: Array = []
 	for value in rooms:
 		var room := value as Dictionary
 		if str(room.get("role", "")) == "stair_entry":
 			continue
-		var built := _authored_shell_block_room(room)
+		var built := _authored_shell_block_room(room, templates)
 		if built.is_empty():
 			continue
 		block.append(built)
@@ -1086,7 +1092,14 @@ static func authored_shell_block(rooms: Array) -> Array:
 ## 单个房间 → `RoomShellLayoutBuilder3D.build_block()` 的输入形状。
 ## 房界必须落在 5m 格线上（生成器 `_constrained_fits` 已保证），否则 builder 报
 ## `room_bound_off_grid`，由调用方放弃接管。
-static func _authored_shell_block_room(room: Dictionary) -> Dictionary:
+##
+## 非矩形轮廓从模板取：`room.template_id` + `room.template_variant` → 模板的
+## `variant_footprints.<variant>`（**模板坐标系**，口径见 `RoomShellLayoutBuilder3D` 头注释）。
+## 两条护栏：
+##   · 模板未声明该变体的轮廓 ⇒ 按矩形处理（不是错误，多数模板就是矩形）；
+##   · 模板的 `size_m` 与房间实算尺寸不符 ⇒ 只告警、**不挂轮廓**（挂了必然越界，
+##     那会让 builder 报错并让整层退回程序化壳体，把一处不一致放大成整层回退）。
+static func _authored_shell_block_room(room: Dictionary, templates: Dictionary = {}) -> Dictionary:
 	var key := str(room.get("key", ""))
 	if key.is_empty():
 		return {}
@@ -1108,7 +1121,7 @@ static func _authored_shell_block_room(room: Dictionary) -> Dictionary:
 		elif side in ["west", "east"]:
 			# 东西墙的门「沿墙坐标」在 by 轴上：by = −plan.y，故是**减** lane。
 			doors[side] = by_center - lane_m
-	return {
+	var built := {
 		"room_id": key,
 		"bounds_x_m": [center.x - size.x * 0.5, center.x + size.x * 0.5],
 		"bounds_y_m": [by_center - size.y * 0.5, by_center + size.y * 0.5],
@@ -1116,6 +1129,98 @@ static func _authored_shell_block_room(room: Dictionary) -> Dictionary:
 		"exits": {},
 		"use_corner_l": true,
 	}
+	var footprint := _room_variant_footprint(
+		room, size, built["doors"] as Dictionary, built["bounds_x_m"] as Array,
+		built["bounds_y_m"] as Array, templates
+	)
+	if not footprint.is_empty():
+		var variant := str(footprint.get("variant", str(room.get("template_variant", ""))))
+		built["footprint_vertices_m"] = footprint.get("vertices_m", [])
+		built["footprint_frame"] = str(
+			footprint.get("frame", ROOM_SHELL_LAYOUT_BUILDER.FOOTPRINT_FRAME)
+		)
+		built["footprint_variant"] = variant
+		# 声明变体的凹口压在本房门位上时换成了别的变体（尺寸不变，只换外轮廓）。
+		# 回写让 `template_variant` 与实际外轮廓一致，否则日志/取证里会看到一个没被用上的变体。
+		if variant != str(room.get("template_variant", "")):
+			room["template_variant"] = variant
+			room["template_variant_reconciled"] = true
+	return built
+
+
+## 取本房（模板 + 变体）的非矩形外轮廓；矩形房 / 不兼容返回空字典。
+##
+## 为什么还要**按门位筛选变体**：房型（含变体）是按种子从模板池抽的，抽到哪个变体
+## 与房间落位无关 ⇒ 一个 L 形 / U 形轮廓的凹口很容易正好压在**本房的门位**上。
+## 凹口恒在包围盒内部、房间按包围盒摆放互不重叠 ⇒ 凹口里不可能有邻房 ⇒ 门落在凹口上
+## 就是开向虚空。builder 会因此报 `door_offset_off_lane`，而那是**整层**放弃接管的粒度
+## （回到程序化壳体）—— 把一处局部冲突放大成全图回退，不可接受。
+## 所以在这里按「声明变体优先 → 模板 variants 顺序」筛出第一个能承接全部门/出口的变体；
+## 一个都不行才退矩形（矩形房的门位恒落在包围盒外边上，永远兼容）。
+##
+## 判据与 `build_block()` 同源：`RoomShellLayoutBuilder3D.footprint_accepts_ports()`。
+static func _room_variant_footprint(
+	room: Dictionary,
+	size: Vector2,
+	doors: Dictionary,
+	bounds_x_m: Array,
+	bounds_y_m: Array,
+	templates: Dictionary
+) -> Dictionary:
+	var template_id := str(room.get("template_id", ""))
+	if template_id.is_empty() or templates.is_empty() or not templates.has(template_id):
+		return {}
+	var template := templates[template_id] as Dictionary
+	var variants: Variant = template.get("variant_footprints", {})
+	if not (variants is Dictionary) or (variants as Dictionary).is_empty():
+		return {}
+	var declared := _vec2(template.get("size_m", []))
+	if (
+		not is_equal_approx(declared.x, size.x)
+		or not is_equal_approx(declared.y, size.y)
+	):
+		push_warning(
+			"FloorPlanGenerator: 房间 %s 的实算尺寸 %s 与模板 %s 的 size_m %s 不符，"
+			% [str(room.get("key", "")), str(size), template_id, str(declared)]
+			+ "本次按矩形处理（非矩形轮廓不挂）"
+		)
+		return {}
+	var by_variant := variants as Dictionary
+	for variant in _variant_candidate_order(template, by_variant, str(room.get("template_variant", ""))):
+		var entry: Variant = by_variant[variant]
+		if not (entry is Dictionary):
+			continue
+		var outline := entry as Dictionary
+		if not ROOM_SHELL_LAYOUT_BUILDER.footprint_accepts_ports(
+			outline.get("vertices_m", []) as Array,
+			str(outline.get("frame", ROOM_SHELL_LAYOUT_BUILDER.FOOTPRINT_FRAME)),
+			bounds_x_m, bounds_y_m, doors, {}
+		):
+			continue
+		var accepted := outline.duplicate()
+		accepted["variant"] = variant
+		return accepted
+	return {}
+
+
+## 变体候选顺序：**声明的那一个优先**（保留本局随机性），其后按模板 `variants`
+## 的声明顺序，最后补上 `variant_footprints` 里有、但 `variants` 没列出的键。
+## 所有遍历都取声明顺序 ⇒ 同一 seed 的结果可复现（不依赖 Dictionary 的哈希序）。
+static func _variant_candidate_order(
+	template: Dictionary, by_variant: Dictionary, preferred: String
+) -> Array[String]:
+	var order: Array[String] = []
+	if by_variant.has(preferred):
+		order.append(preferred)
+	for value in template.get("variants", []) as Array:
+		var variant := str(value)
+		if by_variant.has(variant) and variant not in order:
+			order.append(variant)
+	for value in by_variant.keys():
+		var variant := str(value)
+		if variant not in order:
+			order.append(variant)
+	return order
 
 
 ## 墙贴墙的父子边要显式进白名单，否则校验器按 corridor_too_short 报红；反过来
