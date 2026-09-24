@@ -25,6 +25,11 @@
 - **(a) 门墙走注册表**：统一走 `shell_component_catalog.json`（区块00 `_spawn_authored_layout_wall` 的
   硬编码 `SAFE_ROOM_WALL_DOOR_PREFAB` 正是该注册表里的 `ENV-SHARED-GENERIC-WALL-DOOR-5M` 同路径）。
   改后须跑区块00 回归守 `checks=230`。
+  → **已落地**（提交 `878affb3`）：新增 `DOOR_WALL_COMPONENT_ID`，门墙按**槽位**解析
+  （`resolved_id = DOOR_WALL_COMPONENT_ID if uses_door else component_id`）。
+  ⚠️ 不能直接用实例自带 `component_id` 取门墙 —— `solid_wall` 实例在门位落在实墙上时会被
+  **提升**为门墙，那时自带 id 仍是实墙 id，照它查表会拿回实墙 prefab 把门洞堵死。
+  实测 `BLOCK00_ASSEMBLY_OK checks=230`（失败 0）、`check_verification_log.py` exit 0。
 - **(b) Boss 房门位**：**不约束**，按生成结果（设计页 §4.4「门位由 RoomDoorLane 算、不手填」
   ＋「以生成结果为准再裁决」）。manifest `ports` 的「南进西出」是来源竞技场语义，不是本关版图口径。
 - **(c) 通道桥坑深/桥宽/下层动线**：仍待定，**不阻塞** —— 本轮内部件不摆设，壳体只由外轮廓决定。
