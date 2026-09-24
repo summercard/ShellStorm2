@@ -1,0 +1,2829 @@
+[
+  {
+    "log": "runtime_full.log",
+    "sha256": "dc8a0f0ab32483b634fe6691cc4f75c707855feb69ce1a70963c97271edd9473",
+    "complete": false,
+    "import_errors": [
+      "UNEXPECTED_ENGINE_ERROR ERROR: Resource file not found: res:// (expected type: Texture2D)",
+      "UNEXPECTED_ENGINE_ERROR ERROR: Can't open file from path 'res://assets/art/enemies/normal_enemy_3d/security_zombie/source/model/enm_ranged_sporeshooter01_basecolor_v003.jpeg'.",
+      "ERROR: Resource file not found: res:// (expected type: Texture2D)",
+      "ERROR: Can't open file from path 'res://assets/art/enemies/normal_enemy_3d/security_zombie/source/model/enm_ranged_sporeshooter01_basecolor_v003.jpeg'.",
+      "VERIFICATION_IMPORT_LOG_FAILED"
+    ],
+    "terminal_lines": [
+      "VERIFICATION_IMPORT_LOG_FAILED"
+    ],
+    "scene_count": 0,
+    "statuses": {},
+    "scenes": []
+  },
+  {
+    "log": "runtime_core_warm.log",
+    "sha256": "ad9eb31d2d9b010e8671d34853b2c0146edd4e6f16459d75d3c674d91ddd3e67",
+    "complete": true,
+    "import_errors": [],
+    "terminal_lines": [
+      "VERIFICATION_RUNNER_CONTRACT_OK: preflight, autoload user data and .godot import cache are isolated",
+      "VERIFICATION_SUITE_FAILED suite=aggregate count=133 failed=15",
+      "FAILED_SCENE verify_tower_lighting_wall_combat_regressions:1",
+      "FAILED_SCENE verify_full_3d_game_flow:1",
+      "FAILED_SCENE verify_arrival_gate_floor_bundle_flow:1",
+      "FAILED_SCENE verify_base_world_flow:1",
+      "FAILED_SCENE verify_door_passability:1",
+      "FAILED_SCENE verify_3d_performance_budget:1",
+      "FAILED_SCENE verify_3d_parity_core:1",
+      "FAILED_SCENE verify_base99_loft_layout_v021:1",
+      "FAILED_SCENE verify_base99_optimized_packages_v021:1",
+      "FAILED_SCENE verify_base99_wall_visual_replacement:1",
+      "FAILED_SCENE verify_base_optional_facilities_removed:1",
+      "FAILED_SCENE verify_base_overhaul_flow:1",
+      "FAILED_SCENE verify_main_entry_cinematic_flow:1",
+      "FAILED_SCENE verify_main_entry_realtime_sun_flow:1",
+      "FAILED_SCENE verify_tower_camera_occlusion_flow:1"
+    ],
+    "scene_count": 133,
+    "statuses": {
+      "通过": 116,
+      "失败": 15,
+      "跳过/迁移分支": 2
+    },
+    "scenes": [
+      {
+        "scene": "verify_3d_only_project_structure",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_ONLY_PROJECT_STRUCTURE_OK: formal entry and shared runtime remain; retired 2D roots are absent"
+        ]
+      },
+      {
+        "scene": "verify_player3d_avatar_bounds",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BUNNY_V008_BOUNDS_OK: mesh_count=10 low=(-0.413434, -0.0, -0.236855) high=(0.413434, 1.2, 0.279145) height=1.200000"
+        ]
+      },
+      {
+        "scene": "verify_tower_grid_component_alignment",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_GRID_COMPONENT_ALIGNMENT_OK: 5m bounds, real door meshes, corridors, floor coverage and per-light avatar shadow separation pass"
+        ]
+      },
+      {
+        "scene": "verify_tower_level_blocks",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_LEVEL_BLOCKS_OK: Rooftop/Base/Battle/Stairs and source mappings pass"
+        ]
+      },
+      {
+        "scene": "verify_tower_lighting_wall_combat_regressions",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: Enemy below a streamed-out upper-floor slab is falsely classified as sunlight: { \"illumination_state\": \"sunlight\", \"valid_illumination_states\": [\"darkness\", \"artificial_light\", \"sunlight\"], \"sun_exposure_ratio\": 1.0, \"artificial_light_contribution\": 0.0, \"dominant_light_instance_id\": 252161560813, \"dominant_light_kind\": \"sun\", \"last_sample_world_position\": (100.0, -23.4768, -82.5), \"last_sun_raycast_count\": 3, \"last_local_raycast_count\": 0, \"sun_light_count\": 1, \"sunlight_required_sample_count\": 2, \"local_light_count\": 2, \"sample_interval\": 0.12 }",
+          "ERROR: 99F floor support does not stay physically active under disabled stage streaming",
+          "ERROR: Opening the 98F hub door does not create its first enemy wave"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: ObjectDB instances leaked at exit (run with --verbose for details)."
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: Enemy below a streamed-out upper-floor slab is falsely classified as sunlight: { \"illumination_state\": \"sunlight\", \"valid_illumination_states\": [\"darkness\", \"artificial_light\", \"sunlight\"], \"sun_exposure_ratio\": 1.0, \"artificial_light_contribution\": 0.0, \"dominant_light_instance_id\": 252161560813, \"dominant_light_kind\": \"sun\", \"last_sample_world_position\": (100.0, -23.4768, -82.5), \"last_sun_raycast_count\": 3, \"last_local_raycast_count\": 0, \"sun_light_count\": 1, \"sunlight_required_sample_count\": 2, \"local_light_count\": 2, \"sample_interval\": 0.12 }",
+          "ERROR: 99F floor support does not stay physically active under disabled stage streaming",
+          "ERROR: Opening the 98F hub door does not create its first enemy wave",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Enemy below a streamed-out upper-floor slab is falsely classified as sunlight: { \"illumination_state\": \"sunlight\", \"valid_illumination_states\": [\"darkness\", \"artificial_light\", \"sunlight\"], \"sun_exposure_ratio\": 1.0, \"artificial_light_contribution\": 0.0, \"dominant_light_instance_id\": 252161560813, \"dominant_light_kind\": \"sun\", \"last_sample_world_position\": (100.0, -23.4768, -82.5), \"last_sun_raycast_count\": 3, \"last_local_raycast_count\": 0, \"sun_light_count\": 1, \"sunlight_required_sample_count\": 2, \"local_light_count\": 2, \"sample_interval\": 0.12 }",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 99F floor support does not stay physically active under disabled stage streaming",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Opening the 98F hub door does not create its first enemy wave"
+        ]
+      },
+      {
+        "scene": "verify_full_3d_game_flow",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: 3D level exceeds prototype node budget: 2782"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: 3D level exceeds prototype node budget: 2782",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 3D level exceeds prototype node budget: 2782"
+        ]
+      },
+      {
+        "scene": "verify_floor_plan_generator",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "FLOOR_PLAN_GENERATOR_OK seeds=1000 plans=4000 layout_ids=100"
+        ]
+      },
+      {
+        "scene": "verify_level_plan_design_source",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "LEVEL_PLAN_LEVEL_OK expedition_01 floors=1 rooms=7 templates=3 checks=54",
+          "LEVEL_PLAN_LEVEL_OK battle_level01 floors=1 rooms=16 templates=6 checks=81",
+          "LEVEL_PLAN_LEVEL_OK 99 floors=1 rooms=4 templates=3 checks=54",
+          "LEVEL_PLAN_VALIDATE_OK levels=3 checks=189 rooms=27 templates=12",
+          "LEVEL_PLAN_RUNTIME_LEVEL_OK expedition_01 rooms=7 plans=0",
+          "LEVEL_PLAN_RUNTIME_LEVEL_OK battle_level01 rooms=16 plans=0",
+          "LEVEL_PLAN_RUNTIME_LEVEL_OK 99 rooms=4 plans=1",
+          "LEVEL_PLAN_RUNTIME_GUARD_OK levels=3 rooms=27 checks=3 plans=1 boss_ids=0 rewards=0"
+        ]
+      },
+      {
+        "scene": "verify_reward_service_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "REWARD_SERVICE_FLOW_OK: registry gate, reproducibility, four dispatch sources, override chain, rejection paths, weighted/independent math, truncation and negative controls pass"
+        ]
+      },
+      {
+        "scene": "verify_reward_ground_handoff",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: [Dungeon3D] Search reward resolution failed (search:start:invalid_spec_probe): [{ \"code\": \"UNKNOWN_SPEC\", \"path\": \"reward_plan.room.search.spec_id\", \"detail\": \"未登记命名规格 \\'missing_search_spec_probe\\'\" }]",
+          "WARNING: [Dungeon3D] Ground reward rejected (probe:no_room): 1/1"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "REWARD_GROUND_HANDOFF_OK: search one grant, delayed kill drops, currency multiplier and missing-room rejection"
+        ]
+      },
+      {
+        "scene": "verify_run_merchant_transaction",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "RUN_MERCHANT_TRANSACTION_OK: persistent stock, session, instance, balance, capacity, rollback, retry and duplicate"
+        ]
+      },
+      {
+        "scene": "verify_run_merchant_integration",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: [Dungeon3D] Merchant stock snapshot rejected; merchant stays closed"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "RUN_MERCHANT_INTEGRATION_OK: stock save failure, trade rollback, reopen, reload, invalid and legacy snapshots"
+        ]
+      },
+      {
+        "scene": "verify_room_graph_persistence_services",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ROOM_GRAPH_PERSISTENCE_SERVICES_OK: topology streaming and v2 snapshot compatibility pass"
+        ]
+      },
+      {
+        "scene": "verify_verification_runner_contract",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "VERIFICATION_RUNNER_CONTRACT_OK: preflight, autoload user data and .godot import cache are isolated"
+        ]
+      },
+      {
+        "scene": "verify_hud_presenter_3d",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "HUD_PRESENTER_3D_OK: read-only weapon snapshots produce stable text and model commands"
+        ]
+      },
+      {
+        "scene": "verify_postfx_overlay_runtime",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "POSTFX_OVERLAY_RUNTIME_OK"
+        ]
+      },
+      {
+        "scene": "verify_speech_bubble_3d",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: CharacterBark3D: 未知的 bark_id 『查无此句』，本句被忽略。"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "SPEECH_BUBBLE_3D_OK: 尺寸自适应 / 面向相机 / 垂直偏移 / 3套文案 / 挂载幂等 / 两处灯开关接线 全部通过"
+        ]
+      },
+      {
+        "scene": "verify_dialogue_ui_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "DIALOGUE_UI_OK: 层级 / 打字机进度 / 立即全显 / 自动推进 / 中断 / 三态 outcome / 空文本忽略 全部通过"
+        ]
+      },
+      {
+        "scene": "verify_narrative_timeline",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [
+          "ERROR: [NarrativeDirector] cue『player.teleport』执行失败：player.teleport 需要 point 或 at_room。"
+        ],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: [NarrativeDirector] cue『grant.item』降级跳过：grant.item：物品『does_not_exist』发放失败（{ \"success\": false, \"code\": \"unknown_item\" }）。",
+          "WARNING: [NarrativeDirector] 剧情被『abort:b3_cleanup』收口，现场已强制归还。",
+          "WARNING: [NarrativeDirector] cue『scene.spawn_item』降级跳过：scene.spawn_item：地牢脚本『res://tests/verification/verify_narrative_timeline.gd』没有 narrative_spawn_item（脚本未刷新或版本过旧）。",
+          "WARNING: [NarrativeDirector] cue『scene.spawn_item』降级跳过：scene.spawn_item：地牢脚本『res://tests/verification/verify_narrative_timeline.gd』没有 narrative_spawn_item（脚本未刷新或版本过旧）。",
+          "WARNING: [NarrativeDirector] 剧情被『abort:scene_switch』收口，现场已强制归还。",
+          "WARNING: [NarrativeDirector] cue『scene.spawn_item』降级跳过：scene.spawn_item：地牢脚本『res://tests/verification/verify_narrative_timeline.gd』没有 narrative_spawn_item（脚本未刷新或版本过旧）。",
+          "WARNING: [NarrativeDirector] 剧情被『abort:c6a』收口，现场已强制归还。",
+          "WARNING: [NarrativeDirector] 剧情被『abort:c6b』收口，现场已强制归还。",
+          "WARNING: [NarrativeDirector] 剧情被『abort:c6c』收口，现场已强制归还。",
+          "WARNING: [NarrativeDirector] 剧情被『abort:c6d』收口，现场已强制归还。"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "[B] 机制：同帧顺序 / 降级不停摆 / 失败可诊断 / 暂停冻结",
+          "WARNING: [NarrativeDirector] cue『grant.item』降级跳过：grant.item：物品『does_not_exist』发放失败（{ \"success\": false, \"code\": \"unknown_item\" }）。",
+          "ERROR: [NarrativeDirector] cue『player.teleport』执行失败：player.teleport 需要 point 或 at_room。",
+          "  ok   降级与失败都不停摆，flow.end 仍被派发（reason=[\"flow.end\"]）",
+          "  ok   失败条之后的 cue 照常执行",
+          "  ok   降级写入诊断（[\"cue『grant.item』降级跳过：grant.item：物品『does_not_exist』发放失败（{ \\\"success\\\": false, \\\"code\\\": \\\"unknown_item\\\" }）。\", \"cue『player.teleport』执行失败：player.teleport 需要 point 或 at_room。\"]）",
+          "  ok   执行失败写入诊断",
+          "verify_narrative_timeline_OK checks=110"
+        ]
+      },
+      {
+        "scene": "verify_opening_script_runtime",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: [NarrativeDirector] 剧情被『abort:d_cleanup』收口，现场已强制归还。"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "verify_opening_script_runtime_OK checks=105"
+        ]
+      },
+      {
+        "scene": "verify_new_save_handoff",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "NEW_SAVE_HANDOFF_OK: 98F ground gun, 99F logout, restart, pickup and replay are ownership-safe"
+        ]
+      },
+      {
+        "scene": "verify_tower_journey_polish",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_JOURNEY_POLISH_OK"
+        ]
+      },
+      {
+        "scene": "verify_arrival_gate_floor_bundle_flow",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: 98层门外真实按E后门板或碰撞没有打开",
+          "ERROR: 98F大循环首门没有在角色进入后关闭",
+          "ERROR: 98F首门实体已关闭，但行动快照没有原子记录封门/到达状态",
+          "ERROR: 撤退后二次开启98F门仍有物理阻挡：Door_East:<StaticBody3D#470768692133>",
+          "ERROR: 撤退后新循环首次进入98F时入口门没有再次关闭",
+          "ERROR: 98—95 FloorBundle提交失败",
+          "ERROR: 98—95没有按楼层事务依次提交",
+          "ERROR: 首段节点数不等于3个普通层+Boss层+隔离/下层入口",
+          "ERROR: 提交95层时没有同步创建95→94楼梯",
+          "ERROR: Boss层缺少独立15×15下行大厅",
+          "ERROR: 95→94没有Boss专用权限门",
+          "ERROR: Boss后没有双门隔离间",
+          "ERROR: 门功能分类不完整或Boss/隔离门被错误归类",
+          "ERROR: 唯一楼层电梯没有设置在95→94楼梯间",
+          "ERROR: Boss FloorBundle没有原子补齐房间与下层入口",
+          "ERROR: Boss后隔离到达门没有弹出确认",
+          "ERROR: 跨段警告没有显示",
+          "ERROR: 第二次隔离门交互失败",
+          "ERROR: 隔离门写盘失败后没有保持关闭/未提交状态",
+          "ERROR: 写盘恢复后隔离门不能重试",
+          "ERROR: 确认进入隔离间失败",
+          "ERROR: 卸载快照写盘失败时前门仍然开启",
+          "ERROR: 卸载写盘失败后旧段或隔离事务被错误提交",
+          "ERROR: 跨过隔离间后没有卸载98—95完整旧段",
+          "ERROR: 旧段房间节点清理数量错误",
+          "ERROR: 未拾取地面物没有永久清理",
+          "ERROR: 段卸载错误清除了玩家持有物"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: ObjectDB instances leaked at exit (run with --verbose for details)."
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: 98层门外真实按E后门板或碰撞没有打开",
+          "ERROR: 98F大循环首门没有在角色进入后关闭",
+          "ERROR: 98F首门实体已关闭，但行动快照没有原子记录封门/到达状态",
+          "ERROR: 撤退后二次开启98F门仍有物理阻挡：Door_East:<StaticBody3D#470768692133>",
+          "ERROR: 撤退后新循环首次进入98F时入口门没有再次关闭",
+          "ERROR: 98—95 FloorBundle提交失败",
+          "ERROR: 98—95没有按楼层事务依次提交",
+          "ERROR: 首段节点数不等于3个普通层+Boss层+隔离/下层入口",
+          "ERROR: 提交95层时没有同步创建95→94楼梯",
+          "ERROR: Boss层缺少独立15×15下行大厅",
+          "ERROR: 95→94没有Boss专用权限门",
+          "ERROR: Boss后没有双门隔离间",
+          "ERROR: 门功能分类不完整或Boss/隔离门被错误归类",
+          "ERROR: 唯一楼层电梯没有设置在95→94楼梯间",
+          "ERROR: Boss FloorBundle没有原子补齐房间与下层入口",
+          "ERROR: Boss后隔离到达门没有弹出确认",
+          "ERROR: 跨段警告没有显示",
+          "ERROR: 第二次隔离门交互失败",
+          "ERROR: 隔离门写盘失败后没有保持关闭/未提交状态",
+          "ERROR: 写盘恢复后隔离门不能重试",
+          "ERROR: 确认进入隔离间失败",
+          "ERROR: 卸载快照写盘失败时前门仍然开启",
+          "ERROR: 卸载写盘失败后旧段或隔离事务被错误提交",
+          "ERROR: 跨过隔离间后没有卸载98—95完整旧段",
+          "ERROR: 旧段房间节点清理数量错误",
+          "ERROR: 未拾取地面物没有永久清理",
+          "ERROR: 段卸载错误清除了玩家持有物",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 98层门外真实按E后门板或碰撞没有打开",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 98F大循环首门没有在角色进入后关闭",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 98F首门实体已关闭，但行动快照没有原子记录封门/到达状态",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 撤退后二次开启98F门仍有物理阻挡：Door_East:<StaticBody3D#470768692133>",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 撤退后新循环首次进入98F时入口门没有再次关闭",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 98—95 FloorBundle提交失败",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 98—95没有按楼层事务依次提交",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 首段节点数不等于3个普通层+Boss层+隔离/下层入口",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 提交95层时没有同步创建95→94楼梯",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Boss层缺少独立15×15下行大厅",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 95→94没有Boss专用权限门",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Boss后没有双门隔离间",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 门功能分类不完整或Boss/隔离门被错误归类",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 唯一楼层电梯没有设置在95→94楼梯间",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Boss FloorBundle没有原子补齐房间与下层入口",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Boss后隔离到达门没有弹出确认",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 跨段警告没有显示",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 第二次隔离门交互失败",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 隔离门写盘失败后没有保持关闭/未提交状态",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 写盘恢复后隔离门不能重试",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 确认进入隔离间失败",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 卸载快照写盘失败时前门仍然开启",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 卸载写盘失败后旧段或隔离事务被错误提交",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 跨过隔离间后没有卸载98—95完整旧段",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 旧段房间节点清理数量错误",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 未拾取地面物没有永久清理",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 段卸载错误清除了玩家持有物"
+        ]
+      },
+      {
+        "scene": "verify_common_floor_tile_components_v004",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "COMMON_FLOOR_TILE_COMPONENTS_V004_OK: 原点/口径/结构未被带坏/碰撞/自报尺寸契约全部成立"
+        ]
+      },
+      {
+        "scene": "verify_common_wall_door_components_v004",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "COMMON_WALL_DOOR_COMPONENTS_V004_OK: 原点/可替换性/碰撞/门洞净空/自报尺寸契约全部成立"
+        ]
+      },
+      {
+        "scene": "verify_battle_wall_floor_facility_kit",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BATTLE_WALL_FLOOR_FACILITY_KIT_OK walls=12 floors=9 facilities=3 blocking=2",
+          "BATTLE_WALL_FLOOR_FACILITY_KIT_OK walls=12 floors=9 facilities=3 blocking=2"
+        ]
+      },
+      {
+        "scene": "verify_central_expedition_hologram_facility",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "CENTRAL_EXPEDITION_HOLOGRAM_FACILITY_OK facility=mission_operations e_key=ready"
+        ]
+      },
+      {
+        "scene": "verify_expedition_level01_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "EXPEDITION_LEVEL01_FLOW_OK: catalog->menu->loading->expedition, single layer, Blocks/Expedition only (scene is structurally independent of TowerDescent3D.tscn), 15x15 v007 safe room with 2 perpendicular doors, room_01..05 25x25 + extraction 25x25, enemy spawn, searchable containers, door fate 3-choice, free entry gate, STANDARD extraction beacon, abort-return-to-base contract, default tower unchanged"
+        ]
+      },
+      {
+        "scene": "verify_test_level_99_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TEST_LEVEL_99_REWARD_OK 入口白名单/出口透传(池简写·命名规格·内联)/槽位投影(含 ref)/layout_id 指纹隔离/静态校验正反例 全绿（设计源零样本，走手写 patch 探针）",
+          "TEST_LEVEL_99_FLOW_OK: registry(99 -> ExpeditionLevel99_3D, run_id 99, resume route), design source loaded with runtime_enabled pinned per level (99 + expedition_01 on, battle_level01 off), generator trigger=level_plan_data with 4 rooms start/room_01/room_02/extraction (no fallback to the 5-content-room builtin table), standalone single-layer scene on Dungeon3D base with Blocks/Expedition only, content bounds shrunk to the 4-room footprint with real raycast floor/walls, free entry gate, STANDARD extraction beacon in the extraction room, 99F mission-operations menu exposes the test-level-99 entry button, per-room enemy_spawn_plan drives room_02 (2 waves x 3) while room_01 stays on the global formula, fate-card next-room multipliers recorded then reset, boss rooms excluded from spawn-plan authoring at both validator and runtime, boss identity authorable per room via boss_content_id through one resolver (authored id wins over the floor roster, an unknown id is never silently swapped, and an unspecified single-layer boss room spawns no boss at all), boss_content_id survives both the loader whitelist and the generator passthrough (hand-written patch probe, since no shipped level authors the field yet), reward_plan survives both the loader whitelist and the generator passthrough, projects to reward_slots with ref intact for pool/inline forms, stays out of layout_id, and is gated on unknown pools plus kill slots on non-hostile rooms (hand-written patch probe, same reason), suppressed fate-card reinforcements recorded instead of silently dropped, spawn points stay pairwise distinct beyond the ring (cap is honorable), loading screen follows the pending level and falls back to expedition_01 unchanged"
+        ]
+      },
+      {
+        "scene": "verify_unified_player_interaction_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "UNIFIED_PLAYER_INTERACTION_OK: one input owner, deterministic focus and fresh-save 99F door without fate"
+        ]
+      },
+      {
+        "scene": "verify_tower_floor_room_authority",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_FLOOR_ROOM_AUTHORITY_OK: attic, same-floor recovery and rooftop return stay synchronized"
+        ]
+      },
+      {
+        "scene": "verify_base_rooftop_transit_door_motion",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE_SIMPLE_TRANSIT_DOORS_OK: four doors share model, component, moving blocker, E-open and auto-close"
+        ]
+      },
+      {
+        "scene": "verify_floor_visibility_shadow_patch",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_player3d_animation_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BUNNY_V021_ANIMATION_FLOW_OK: Blender-only driver, authored grips, dash, and hurt key poses pass"
+        ]
+      },
+      {
+        "scene": "verify_player3d_debug_scale_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_DEBUG_SCALE_FLOW_OK: base=80% additive=100/110/120 collision_synced=true bounds=10..300 camera_unchanged=true"
+        ]
+      },
+      {
+        "scene": "verify_player3d_vertical_physics_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_VERTICAL_PHYSICS_OK: capsule support, falling, landing pause, animation and slope stop pass"
+        ]
+      },
+      {
+        "scene": "verify_player3d_weapon_pose_collision_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BUNNY_WEAPON_POSE_COLLISION_OK: authored hand/weapon alignment, single-hand longgun fallback, fire metadata, and collision isolation pass"
+        ]
+      },
+      {
+        "scene": "verify_3d_enemy_behavior_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_ENEMY_BEHAVIOR_FLOW_OK: line-of-sight AI, scaled 3D HP, matched hit volumes, buried ambush, ranged volley, summon/heal support, frontal shield and death fragments pass"
+        ]
+      },
+      {
+        "scene": "verify_enemy_illumination_states",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ENEMY_ILLUMINATION_STATES_OK: darkness, window sunlight, seam rejection, physical shadow, flashlight cone, priority, hysteresis and Boss isolation pass"
+        ]
+      },
+      {
+        "scene": "verify_monster_ai_light_effects",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "MONSTER_AI_LIGHT_EFFECTS_OK: 40% lit-state multipliers, sunlight DOT, shared overhead marker, managed vision, flashlight pursuit, darkness seeking and room-light search pass"
+        ]
+      },
+      {
+        "scene": "verify_monster_ai_system_complete",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "MONSTER_AI_SYSTEM_COMPLETE_OK: memory/legality/hysteresis/alert/tokens/30-enemy registry/boss bag pass snapshot={ \"registered_enemy_count\": 0, \"evaluation_count\": 18, \"cache_hit_count\": 61, \"update_interval_msec\": 110, \"maximum_updates_in_tick\": 6, \"max_evaluations_per_tick\": 8, \"attack_tokens\": { \"melee\": 0, \"ranged\": 0 }, \"target_token_buckets\": 0, \"spatial_registry\": { \"record_count\": 0, \"bucket_count\": 0, \"by_kind\": {  }, \"by_room\": {  }, \"query_count\": 99, \"candidate_count\": 58, \"stale_pruned\": 7, \"bucket_size_m\": 16.0 } }"
+        ]
+      },
+      {
+        "scene": "verify_vfx_pool_lifecycle",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "VFX_POOL_LIFECYCLE_OK: retire signal, reuse counters and scene cleanup pass"
+        ]
+      },
+      {
+        "scene": "verify_combat_vfx_toon_v002",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "COMBAT_VFX_TOON_V002_OK: muzzle/impact/bullet toon v002 pass (samples=16)"
+        ]
+      },
+      {
+        "scene": "verify_unique_elite_roster_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "UNIQUE_ELITE_ROSTER_FLOW_OK: 12 definitions and live behaviors, reservation, growth, weapon translation, save migration and 3D binding pass"
+        ]
+      },
+      {
+        "scene": "verify_unique_boss_content_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "UNIQUE_BOSS_CONTENT_FLOW_OK: 95/90/85 unique models, arenas, phase skills and cover collisions pass"
+        ]
+      },
+      {
+        "scene": "verify_three_segment_tower_generation_flow",
+        "status": "跳过/迁移分支",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [
+          "THREE_SEGMENT_TOWER_SKIPPED: 98F 即最深层（砍层模式），98—95/94—90/89—85 三区段前提不成立"
+        ],
+        "evidence_lines": [
+          "THREE_SEGMENT_TOWER_SKIPPED: 98F 即最深层（砍层模式），98—95/94—90/89—85 三区段前提不成立"
+        ]
+      },
+      {
+        "scene": "verify_3d_melee_combat_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_MELEE_COMBAT_FLOW_OK: two large melee instances, four-phase action machine, three-step combo, deduped arc/LOS hits, knockback and interruption rules pass"
+        ]
+      },
+      {
+        "scene": "verify_3d_melee_feedback_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_MELEE_FEEDBACK_FLOW_OK: pooled slash/impact VFX, multi-target audio dedupe, miss feedback, versioned OGG and collision isolation pass"
+        ]
+      },
+      {
+        "scene": "verify_training_range_3d_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TRAINING_RANGE_3D_FLOW_OK: 19 registered racks, 67 valid ranged/melee combinations, three target behaviors, lighting, reset, exit, and BaseData isolation pass"
+        ]
+      },
+      {
+        "scene": "verify_3d_fate_weapon_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_FATE_WEAPON_FLOW_OK: behaviors pass and weapon fate scale remains relative to the current 80% player mount baseline"
+        ]
+      },
+      {
+        "scene": "verify_3d_inventory_weapon_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_INVENTORY_WEAPON_FLOW_OK: real slot-click equip, shared 3D item projections, per-instance build ownership, atomic module swap and item routing pass"
+        ]
+      },
+      {
+        "scene": "verify_weapon_instance_contract_matrix",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "WEAPON_INSTANCE_CONTRACT_MATRIX_OK: 8 gun bodies x 8 bullets and 3 melee roots round-trip through ItemRegistry, WeaponInstance and BlueprintRegistry"
+        ]
+      },
+      {
+        "scene": "verify_starting_weapon_contract",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "STARTING_WEAPON_CONTRACT_OK: 出厂枪 花洒机枪（weapon_sprinkler / bp_sprinkler）身份三方一致，100 发弹匣 / 8 伤害 / 命运槽 4，出厂装配树根节点已不再是豌豆手枪"
+        ]
+      },
+      {
+        "scene": "verify_equipment_transaction_service",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "EQUIPMENT_TRANSACTION_SERVICE_OK: swap ownership, duplicate guard and exact rejection rollback pass"
+        ]
+      },
+      {
+        "scene": "verify_weapon_attachment_inventory_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "WEAPON_ATTACHMENT_INVENTORY_FLOW_OK: baseball bat vending, unified six-slot equipment UI, compatibility, detach/replace/drop, inactive weapon edits, legacy migration and whole-gun ownership pass"
+        ]
+      },
+      {
+        "scene": "verify_weapon_instance_fate_ownership_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "WEAPON_INSTANCE_FATE_OWNERSHIP_OK: unique identity, 4-slot irreversible fate build, scope routing, full-instance swap, persistence, insurance and weapon-page feedback pass"
+        ]
+      },
+      {
+        "scene": "verify_celestial_fate_scope_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "CELESTIAL_FATE_SCOPE_FLOW_OK: 20 new moon/sun cards execute, persist, avoid weapon slots, and expose named card/UI state"
+        ]
+      },
+      {
+        "scene": "verify_finite_ammo_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "FINITE_AMMO_FLOW_OK: reserve rounds are consumed exactly, empty reload is blocked, weapon magazines persist across swaps, and enemies drop ammo"
+        ]
+      },
+      {
+        "scene": "verify_guaranteed_loadout_ammo_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "GUARANTEED_LOADOUT_AMMO_OK: 真实入场发放保底备弹、HUD 真串带出备弹数、换弹按缺口精确扣除，且存档恢复整格覆盖不会叠加"
+        ]
+      },
+      {
+        "scene": "verify_avatar_return_persistence_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "AVATAR_RETURN_PERSISTENCE_FLOW_OK: gameplay scene hot-return restores the saved wardrobe without relying on a game restart"
+        ]
+      },
+      {
+        "scene": "verify_tactical_inventory_minimap_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TACTICAL_INVENTORY_MINIMAP_OK: character equipment, free insurance move/equip/quick/drop routing, explicit fate hover card, drag feedback contract, red HP, sort/drop, true room rectangles, player tracking and enemy dots pass"
+        ]
+      },
+      {
+        "scene": "verify_backpack_equipment_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BACKPACK_EQUIPMENT_FLOW_OK: 2/4/8 loot, click/drag equip/unequip/drop, colored bonus slots, back socket mesh, shrink overflow and item conservation pass"
+        ]
+      },
+      {
+        "scene": "verify_scene_facility_shared_palette",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "SCENE_FACILITY_SHARED_PALETTE_OK: glbs=104 materials=849 shared_texture=1 lossless_no_mipmap=1 legacy_exempt=2"
+        ]
+      },
+      {
+        "scene": "verify_base_fixture_glow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE_FIXTURE_GLOW_OK: 9 strong fixtures, 8 colored environment-only lights, 10 active local lights; 152 palette-preserving HDR surfaces; switch control verified"
+        ]
+      },
+      {
+        "scene": "verify_base_facility_framework",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE_FACILITY_FRAMEWORK_OK: nine stable facilities, shared snapshots, visible status, directory, and atomic upgrade planning pass"
+        ]
+      },
+      {
+        "scene": "verify_base_shop_save_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [
+          "ERROR: [BaseManager] Refusing stale save: memory revision 1 < disk revision 5 (stale_writer_attempt)"
+        ],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: [AtomicJsonStore] Rejected invalid save candidate: user://base_shop_save_probe.json"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: [BaseManager] Refusing stale save: memory revision 1 < disk revision 5 (stale_writer_attempt)",
+          "BASE_SHOP_SAVE_OK: database-backed catalog, checksum fallback, idempotent atomic buy/sell, restart restore, 3D icons and vending model pass"
+        ]
+      },
+      {
+        "scene": "verify_workshop_transaction_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "WORKSHOP_TRANSACTION_FLOW_OK: cost, atomic save, rollback, stale-tier rejection and reload idempotency pass"
+        ]
+      },
+      {
+        "scene": "verify_extraction_points_spend_transaction",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [
+          "ERROR: [BaseManager] Refusing stale save: memory revision 2 < disk revision 3 (spend_extraction_points)"
+        ],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: [BaseManager] Refusing stale save: memory revision 2 < disk revision 3 (spend_extraction_points)",
+          "EXTRACTION_POINTS_SPEND_TRANSACTION_OK: commit, forced failure rollback, invalid input and stale revision reload pass"
+        ]
+      },
+      {
+        "scene": "verify_run_settlement_transaction",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "RUN_SETTLEMENT_TRANSACTION_OK: success and death settle in one atomic, retryable and reload-safe commit"
+        ]
+      },
+      {
+        "scene": "verify_revival_policy_contract",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "REVIVAL_POLICY_CONTRACT_OK: empty v0.1 policy is explicit, side-effect-free and keeps death settlement unchanged"
+        ]
+      },
+      {
+        "scene": "verify_tower_facility_inventory_binding",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_FACILITY_INVENTORY_BINDING_OK: I-key inventory identity and two visible items shared by vault and vending"
+        ]
+      },
+      {
+        "scene": "verify_tower_base_facility_persistent_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_BASE_FACILITY_PERSISTENT_OK: attic route keeps all base interactions and blockers alive without room activation"
+        ]
+      },
+      {
+        "scene": "verify_tower_extraction_return_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_EXTRACTION_RETURN_OK: cleared rooms survive door streaming; extraction starts a fresh seeded route/minimap while retained ownership and death insurance return remain intact"
+        ]
+      },
+      {
+        "scene": "verify_expedition_extraction_carry_return",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "EXPEDITION_EXTRACTION_CARRY_RETURN_OK: beacon extraction leaves inventory / both gun slots / equipped backpack / quick bar / insurance untouched and writes one marked ownership handoff with an empty extraction_loot; the 99F return scene restores that carry only while the marker is present"
+        ]
+      },
+      {
+        "scene": "verify_death_during_extraction_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "DEATH_DURING_EXTRACTION_FLOW_OK: 撤离读条期间阵亡一律中断读条并只结算一次阵亡；成功与死亡共用同一行动事务 ID；正常撤离、无撤离阵亡、返航后新一轮阵亡与返航窗口保护四条反向对照全部保持原行为"
+        ]
+      },
+      {
+        "scene": "verify_game_entry_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "GAME_ENTRY_FLOW_OK: startup page is exclusive to cold/explicit entry; death return stays on the 99F gameplay path"
+        ]
+      },
+      {
+        "scene": "verify_base_world_flow",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: BaseWorld3D first slice is unexpectedly heavy: 590 nodes"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: BaseWorld3D first slice is unexpectedly heavy: 590 nodes",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BaseWorld3D first slice is unexpectedly heavy: 590 nodes"
+        ]
+      },
+      {
+        "scene": "verify_dual_weapon_quick_map_fate_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "DUAL_WEAPON_QUICK_MAP_FATE_OK: two weapon instances, back stow, 1/2 switch, quick 3/4 items, full map, the fate overlay hands gamepad focus to a card with left/right neighbours and ui_cancel dismisses it, and full-slot currency conversion passes"
+        ]
+      },
+      {
+        "scene": "verify_tarot_fate_runtime",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TAROT_FATE_RUNTIME_OK: 48 tarot names, upright/reversed effects, stable IDs and 50/50 orientation passed"
+        ]
+      },
+      {
+        "scene": "verify_door_passability",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "通过 10 / 失败 0",
+          "  ❌ 找不到 EVENT 测试房",
+          "通过 11 / 失败 1",
+          "❌ 有失败项"
+        ]
+      },
+      {
+        "scene": "verify_tower_descent_flow",
+        "status": "跳过/迁移分支",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [
+          "TOWER_DESCENT_FLOW_MIGRATED: dynamic arrival-gate flow is covered by verify_arrival_gate_floor_bundle_flow"
+        ],
+        "evidence_lines": [
+          "TOWER_DESCENT_FLOW_MIGRATED: dynamic arrival-gate flow is covered by verify_arrival_gate_floor_bundle_flow"
+        ]
+      },
+      {
+        "scene": "verify_base99_floor_player_collision_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_FLOOR_PLAYER_COLLISION_OK: shared structural surface, visible rivet protrusions, and unchanged flat support pass"
+        ]
+      },
+      {
+        "scene": "verify_base99_structural_asset_integration",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_STRUCTURAL_ASSET_INTEGRATION_OK: current ledger keeps v023 stair and current structural packages; superseded assets are history only"
+        ]
+      },
+      {
+        "scene": "verify_base99_wall_content_v021",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_WALL_CONTENT_V021_OK: current v022-ledger coordinates accepted; prior v021 centers are old assets"
+        ]
+      },
+      {
+        "scene": "verify_base99_remaining_facilities_v021",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_REMAINING_FACILITIES_V021_OK: current v004 ledger has 45 packages and 35 simplified solid blockers; 46-package baseline is an old asset"
+        ]
+      },
+      {
+        "scene": "verify_3d_performance_budget",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: Formal HUD and modal shells exceeded 171 fixed UI nodes: 279",
+          "ERROR: HUD shells + shared 3D preview exceeded 190 fixed nodes: 290",
+          "ERROR: Permanent structural proxy world + HUD exceeded 2560 total nodes: 2561"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: Formal HUD and modal shells exceeded 171 fixed UI nodes: 279",
+          "ERROR: HUD shells + shared 3D preview exceeded 190 fixed nodes: 290",
+          "ERROR: Permanent structural proxy world + HUD exceeded 2560 total nodes: 2561",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Formal HUD and modal shells exceeded 171 fixed UI nodes: 279",
+          "UNEXPECTED_ENGINE_ERROR ERROR: HUD shells + shared 3D preview exceeded 190 fixed nodes: 290",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Permanent structural proxy world + HUD exceeded 2560 total nodes: 2561"
+        ]
+      },
+      {
+        "scene": "verify_performance_runtime_complete",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PERFORMANCE_RUNTIME_COMPLETE_OK: 60/15 FPS focus/pause, quality profiles, spatial cleanup, five-state release/rebuild, enemy/loot persistence pass"
+        ]
+      },
+      {
+        "scene": "verify_graphics_settings_ui_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "GRAPHICS_SETTINGS_UI_OK: sunlight indirect diffuse stays enabled at 3 quality levels, 7 switches, locked 3-tier gameplay shadows, 6 AA modes, ESC graphics page and 0 performance overlay pass"
+        ]
+      },
+      {
+        "scene": "verify_gamepad_input_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "GAMEPAD_INPUT_FLOW_OK: input settings persist with clamping, 13 runtime joypad bindings toggle live, radial deadzone remap matches (m-dz)/(1-dz), magnitude-authoritative aim response curve (slow precision / fast flick), aim assist pulls only lit living enemies within a hard deflection cap, device auto-detect/lock honours the mode, Dungeon3D M/1/2/3/4 ride input actions, the ESC controls page round-trips every control, virtual aim projects to the matching screen side, facing resolves right-stick > left-stick > keep-last with deadzone hysteresis and smoothed tier hand-off (left-stick tier default OFF), and every facility menu opens with a focus anchor for gamepad navigation"
+        ]
+      },
+      {
+        "scene": "verify_pause_game_save_reset_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PAUSE_GAME_SAVE_RESET_OK: reusable ESC button, confirmation gate, fresh validated profile, no stale backup, graphics preserved"
+        ]
+      },
+      {
+        "scene": "verify_3d_flashlight_charge_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "VERIFY_3D_FLASHLIGHT_CHARGE_FLOW_OK: 13/13 OK: facility pause without auto-charge, drain/stop, toggle preservation, depleted, batteries, visual module profiles, persisted module hydration, HUD, shop, checkpoints, module persistence and reveal"
+        ]
+      },
+      {
+        "scene": "verify_3d_combat_progression_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_COMBAT_PROGRESSION_FLOW_OK: balanced central light, near-player room keys, missing-key recovery, dedupe and pickup pop-spin feedback pass"
+        ]
+      },
+      {
+        "scene": "verify_3d_parity_core",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: Opened adjacent room was not streamed in",
+          "ERROR: Streamed parity slice exceeds node budget: 2559/2200"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: Opened adjacent room was not streamed in",
+          "ERROR: Streamed parity slice exceeds node budget: 2559/2200",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Opened adjacent room was not streamed in",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Streamed parity slice exceeds node budget: 2559/2200"
+        ]
+      },
+      {
+        "scene": "verify_3d_reload_state_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_RELOAD_STATE_FLOW_OK: reload overlay, real timer, weapon-class grip animation, head-top progress bar, completion and cancellation pass"
+        ]
+      },
+      {
+        "scene": "verify_3d_vision_input_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "3D_VISION_INPUT_FLOW_OK: 360 occlusion vision, manual F flashlight, I/Tab inventory lock and recoverable pause pass"
+        ]
+      },
+      {
+        "scene": "verify_base99_loft_guardrail_collision",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_LOFT_GUARDRAIL_COLLISION_OK: south/west rail guards block Player3D; northwest stair entry remains unblocked"
+        ]
+      },
+      {
+        "scene": "verify_base99_loft_layout_v021",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: 位置错误: 31_参考床架床品与床下收纳_资产包 = (0.0, 0.0, 0.0)",
+          "ERROR: 朝向错误: 31_参考床架床品与床下收纳_资产包 = 0.0"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: 位置错误: 31_参考床架床品与床下收纳_资产包 = (0.0, 0.0, 0.0)",
+          "ERROR: 朝向错误: 31_参考床架床品与床下收纳_资产包 = 0.0",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 位置错误: 31_参考床架床品与床下收纳_资产包 = (0.0, 0.0, 0.0)",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 朝向错误: 31_参考床架床品与床下收纳_资产包 = 0.0"
+        ]
+      },
+      {
+        "scene": "verify_base99_optimized_packages_v021",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/air_compressor/air_compressor_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/air_compressor/air_compressor_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/backup_generator/backup_generator_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/backup_generator/backup_generator_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/battery_bank/battery_bank_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/battery_bank/battery_bank_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hose_reel/hose_reel_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_explore_poster/loft_explore_poster_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_hanging_plant/loft_hanging_plant_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_tool_pegboard/loft_tool_pegboard_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_root_top3d_v003.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_remaining_facilities_root_top3d_v004.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_wall_contents_root_top3d_v003.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_floor_visuals_root_top3d_v004.tscn"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/air_compressor/air_compressor_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/air_compressor/air_compressor_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/backup_generator/backup_generator_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/backup_generator/backup_generator_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/battery_bank/battery_bank_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/battery_bank/battery_bank_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hose_reel/hose_reel_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_explore_poster/loft_explore_poster_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_hanging_plant/loft_hanging_plant_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_tool_pegboard/loft_tool_pegboard_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v002.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v002.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_visual_top3d_v001.glb",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_root_top3d_v003.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_remaining_facilities_root_top3d_v004.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_wall_contents_root_top3d_v003.tscn",
+          "ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_floor_visuals_root_top3d_v004.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/air_compressor/air_compressor_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/air_compressor/air_compressor_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/backup_generator/backup_generator_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/backup_generator/backup_generator_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/battery_bank/battery_bank_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/battery_bank/battery_bank_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hose_reel/hose_reel_visual_top3d_v001.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_explore_poster/loft_explore_poster_visual_top3d_v001.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_hanging_plant/loft_hanging_plant_visual_top3d_v001.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_tool_pegboard/loft_tool_pegboard_visual_top3d_v001.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v001.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v002.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v002.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少GLB: res://assets/art/environments/base_facility_3d/components/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_visual_top3d_v001.glb",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 缺少包装或总装配场景: res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_root_top3d_v003.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_remaining_facilities_root_top3d_v004.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_wall_contents_root_top3d_v003.tscn",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE99_OPTIMIZED_PACKAGES_V021_FAIL: 基地总装配没有使用新版引用: env_base99_floor_visuals_root_top3d_v004.tscn"
+        ]
+      },
+      {
+        "scene": "verify_base99_stair_walkable_v021",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_STAIR_WALKABLE_V021_OK: real Player3D ascends and descends both flights in formal base; emissive uses multiply"
+        ]
+      },
+      {
+        "scene": "verify_base99_wall_visual_replacement",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: 基地三个门没有统一注册到同一交互分发器",
+          "ERROR: 基地场景组件没有产生投影: Art/ENV_BASE99_REMAINING_WAREHOUSE_PENDANT_LIGHT_GROUP_V021",
+          "ERROR: 100层西扩18×16后没有正确移除36格中庭和18格西楼梯开口: { \"floor_index\": 0, \"floor_kind\": \"rooftop\", \"map_size\": 100.0, \"grid_count\": 20, \"map_dimensions\": (100.0, 80.0), \"grid_dimensions\": (20, 16), \"floor_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"grid_unit\": 5.0, \"tile_count\": 266, \"tile_count_light\": 133, \"tile_count_dark\": 133, \"outer_map_size\": 100.0, \"outer_grid_count\": 20, \"outer_map_dimensions\": (100.0, 80.0), \"outer_grid_dimensions\": (20, 16), \"outer_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"outer_module_count\": 72, \"outer_segment_count\": 68, \"outer_corner_count\": 4, \"outer_wall_height\": 0.8, \"outer_wall_thickness\": 0.5, \"outer_straight_slot_count\": 68, \"outer_doorway_wall_count\": 0, \"outer_facade_owned\": false, \"outer_facade_solid_count\": 0, \"outer_facade_window_count\": 0, \"outer_facade_batch_counts\": { \"solid\": 0, \"window\": 0 }, \"outer_facade_module_count\": 0, \"outer_facade_slot_count\": 0, \"outer_facade_bottom_y\": 0.0, \"outer_facade_thickness\": 0.0, \"outer_damage_seed\": 20260919, \"outer_damage_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"outer_damage_batch_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"support_rect_count\": 7, \"stair_hole_sides\": [\"west\"], \"additional_visual_hole_count\": 0, \"additional_visual_hole_tile_count\": 0, \"shell_visible\": true, \"floor_visible\": true, \"outer_visible\": true, \"protected_floor_patch_enabled\": false, \"protected_floor_patch_visible\": false, \"protected_floor_patch_grid_center\": (-1, -1), \"protected_floor_patch_tile_count\": 0, \"protected_floor_patch_side_m\": 50.0, \"protected_floor_patch_tiles_per_side\": 10, \"protected_floor_patch_casts_shadow\": true, \"support_collision_persistent\": true, \"support_process_mode_always\": true, \"uses_imported_floor_mesh\": true, \"uses_imported_outer_mesh\": true, \"uses_formal_rooftop_art\": true, \"formal_rooftop_art_version\": \"v001\", \"formal_rooftop_art_blocker_count\": 0, \"rooftop_blocking_collision_count\": 20, \"rooftop_blocking_shape_count\": 20, \"checkerboard_pattern\": true, \"force_standard_map\": false, \"has_content_bounds\": false, \"content_world_rect\": [P: (0.0, 0.0), S: (0.0, 0.0)], \"outer_visual_scale_y\": 1.0, \"base_99_100_atrium_enabled\": true, \"base_99_100_atrium_tile_count\": 36, \"base_99_100_atrium_world_rect\": [P: (-15.0, -10.0), S: (30.0, 30.0)] }"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: 基地三个门没有统一注册到同一交互分发器",
+          "ERROR: 基地场景组件没有产生投影: Art/ENV_BASE99_REMAINING_WAREHOUSE_PENDANT_LIGHT_GROUP_V021",
+          "ERROR: 100层西扩18×16后没有正确移除36格中庭和18格西楼梯开口: { \"floor_index\": 0, \"floor_kind\": \"rooftop\", \"map_size\": 100.0, \"grid_count\": 20, \"map_dimensions\": (100.0, 80.0), \"grid_dimensions\": (20, 16), \"floor_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"grid_unit\": 5.0, \"tile_count\": 266, \"tile_count_light\": 133, \"tile_count_dark\": 133, \"outer_map_size\": 100.0, \"outer_grid_count\": 20, \"outer_map_dimensions\": (100.0, 80.0), \"outer_grid_dimensions\": (20, 16), \"outer_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"outer_module_count\": 72, \"outer_segment_count\": 68, \"outer_corner_count\": 4, \"outer_wall_height\": 0.8, \"outer_wall_thickness\": 0.5, \"outer_straight_slot_count\": 68, \"outer_doorway_wall_count\": 0, \"outer_facade_owned\": false, \"outer_facade_solid_count\": 0, \"outer_facade_window_count\": 0, \"outer_facade_batch_counts\": { \"solid\": 0, \"window\": 0 }, \"outer_facade_module_count\": 0, \"outer_facade_slot_count\": 0, \"outer_facade_bottom_y\": 0.0, \"outer_facade_thickness\": 0.0, \"outer_damage_seed\": 20260919, \"outer_damage_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"outer_damage_batch_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"support_rect_count\": 7, \"stair_hole_sides\": [\"west\"], \"additional_visual_hole_count\": 0, \"additional_visual_hole_tile_count\": 0, \"shell_visible\": true, \"floor_visible\": true, \"outer_visible\": true, \"protected_floor_patch_enabled\": false, \"protected_floor_patch_visible\": false, \"protected_floor_patch_grid_center\": (-1, -1), \"protected_floor_patch_tile_count\": 0, \"protected_floor_patch_side_m\": 50.0, \"protected_floor_patch_tiles_per_side\": 10, \"protected_floor_patch_casts_shadow\": true, \"support_collision_persistent\": true, \"support_process_mode_always\": true, \"uses_imported_floor_mesh\": true, \"uses_imported_outer_mesh\": true, \"uses_formal_rooftop_art\": true, \"formal_rooftop_art_version\": \"v001\", \"formal_rooftop_art_blocker_count\": 0, \"rooftop_blocking_collision_count\": 20, \"rooftop_blocking_shape_count\": 20, \"checkerboard_pattern\": true, \"force_standard_map\": false, \"has_content_bounds\": false, \"content_world_rect\": [P: (0.0, 0.0), S: (0.0, 0.0)], \"outer_visual_scale_y\": 1.0, \"base_99_100_atrium_enabled\": true, \"base_99_100_atrium_tile_count\": 36, \"base_99_100_atrium_world_rect\": [P: (-15.0, -10.0), S: (30.0, 30.0)] }",
+          "BASE99_MODULAR_ASSET_INTEGRATION_FAIL: 基地三个门没有统一注册到同一交互分发器 | 基地场景组件没有产生投影: Art/ENV_BASE99_REMAINING_WAREHOUSE_PENDANT_LIGHT_GROUP_V021 | 100层西扩18×16后没有正确移除36格中庭和18格西楼梯开口: { \"floor_index\": 0, \"floor_kind\": \"rooftop\", \"map_size\": 100.0, \"grid_count\": 20, \"map_dimensions\": (100.0, 80.0), \"grid_dimensions\": (20, 16), \"floor_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"grid_unit\": 5.0, \"tile_count\": 266, \"tile_count_light\": 133, \"tile_count_dark\": 133, \"outer_map_size\": 100.0, \"outer_grid_count\": 20, \"outer_map_dimensions\": (100.0, 80.0), \"outer_grid_dimensions\": (20, 16), \"outer_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"outer_module_count\": 72, \"outer_segment_count\": 68, \"outer_corner_count\": 4, \"outer_wall_height\": 0.8, \"outer_wall_thickness\": 0.5, \"outer_straight_slot_count\": 68, \"outer_doorway_wall_count\": 0, \"outer_facade_owned\": false, \"outer_facade_solid_count\": 0, \"outer_facade_window_count\": 0, \"outer_facade_batch_counts\": { \"solid\": 0, \"window\": 0 }, \"outer_facade_module_count\": 0, \"outer_facade_slot_count\": 0, \"outer_facade_bottom_y\": 0.0, \"outer_facade_thickness\": 0.0, \"outer_damage_seed\": 20260919, \"outer_damage_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"outer_damage_batch_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"support_rect_count\": 7, \"stair_hole_sides\": [\"west\"], \"additional_visual_hole_count\": 0, \"additional_visual_hole_tile_count\": 0, \"shell_visible\": true, \"floor_visible\": true, \"outer_visible\": true, \"protected_floor_patch_enabled\": false, \"protected_floor_patch_visible\": false, \"protected_floor_patch_grid_center\": (-1, -1), \"protected_floor_patch_tile_count\": 0, \"protected_floor_patch_side_m\": 50.0, \"protected_floor_patch_tiles_per_side\": 10, \"protected_floor_patch_casts_shadow\": true, \"support_collision_persistent\": true, \"support_process_mode_always\": true, \"uses_imported_floor_mesh\": true, \"uses_imported_outer_mesh\": true, \"uses_formal_rooftop_art\": true, \"formal_rooftop_art_version\": \"v001\", \"formal_rooftop_art_blocker_count\": 0, \"rooftop_blocking_collision_count\": 20, \"rooftop_blocking_shape_count\": 20, \"checkerboard_pattern\": true, \"force_standard_map\": false, \"has_content_bounds\": false, \"content_world_rect\": [P: (0.0, 0.0), S: (0.0, 0.0)], \"outer_visual_scale_y\": 1.0, \"base_99_100_atrium_enabled\": true, \"base_99_100_atrium_tile_count\": 36, \"base_99_100_atrium_world_rect\": [P: (-15.0, -10.0), S: (30.0, 30.0)] }",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 基地三个门没有统一注册到同一交互分发器",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 基地场景组件没有产生投影: Art/ENV_BASE99_REMAINING_WAREHOUSE_PENDANT_LIGHT_GROUP_V021",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 100层西扩18×16后没有正确移除36格中庭和18格西楼梯开口: { \"floor_index\": 0, \"floor_kind\": \"rooftop\", \"map_size\": 100.0, \"grid_count\": 20, \"map_dimensions\": (100.0, 80.0), \"grid_dimensions\": (20, 16), \"floor_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"grid_unit\": 5.0, \"tile_count\": 266, \"tile_count_light\": 133, \"tile_count_dark\": 133, \"outer_map_size\": 100.0, \"outer_grid_count\": 20, \"outer_map_dimensions\": (100.0, 80.0), \"outer_grid_dimensions\": (20, 16), \"outer_world_rect\": [P: (-50.0, -35.0), S: (100.0, 80.0)], \"outer_module_count\": 72, \"outer_segment_count\": 68, \"outer_corner_count\": 4, \"outer_wall_height\": 0.8, \"outer_wall_thickness\": 0.5, \"outer_straight_slot_count\": 68, \"outer_doorway_wall_count\": 0, \"outer_facade_owned\": false, \"outer_facade_solid_count\": 0, \"outer_facade_window_count\": 0, \"outer_facade_batch_counts\": { \"solid\": 0, \"window\": 0 }, \"outer_facade_module_count\": 0, \"outer_facade_slot_count\": 0, \"outer_facade_bottom_y\": 0.0, \"outer_facade_thickness\": 0.0, \"outer_damage_seed\": 20260919, \"outer_damage_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"outer_damage_batch_counts\": { \"intact\": 50, \"dmg_a\": 7, \"dmg_b\": 3, \"dmg_c\": 8 }, \"support_rect_count\": 7, \"stair_hole_sides\": [\"west\"], \"additional_visual_hole_count\": 0, \"additional_visual_hole_tile_count\": 0, \"shell_visible\": true, \"floor_visible\": true, \"outer_visible\": true, \"protected_floor_patch_enabled\": false, \"protected_floor_patch_visible\": false, \"protected_floor_patch_grid_center\": (-1, -1), \"protected_floor_patch_tile_count\": 0, \"protected_floor_patch_side_m\": 50.0, \"protected_floor_patch_tiles_per_side\": 10, \"protected_floor_patch_casts_shadow\": true, \"support_collision_persistent\": true, \"support_process_mode_always\": true, \"uses_imported_floor_mesh\": true, \"uses_imported_outer_mesh\": true, \"uses_formal_rooftop_art\": true, \"formal_rooftop_art_version\": \"v001\", \"formal_rooftop_art_blocker_count\": 0, \"rooftop_blocking_collision_count\": 20, \"rooftop_blocking_shape_count\": 20, \"checkerboard_pattern\": true, \"force_standard_map\": false, \"has_content_bounds\": false, \"content_world_rect\": [P: (0.0, 0.0), S: (0.0, 0.0)], \"outer_visual_scale_y\": 1.0, \"base_99_100_atrium_enabled\": true, \"base_99_100_atrium_tile_count\": 36, \"base_99_100_atrium_world_rect\": [P: (-15.0, -10.0), S: (30.0, 30.0)] }"
+        ]
+      },
+      {
+        "scene": "verify_base_facility_interaction_zones",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE_FACILITY_INTERACTION_ZONES_OK: authored facility transforms preserved and interaction zones remain usable"
+        ]
+      },
+      {
+        "scene": "verify_base_optional_facilities_removed",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: res://src/world3d/TowerDescent3D.gd 缺失函数定义：func _create_standalone_elevator("
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: res://src/world3d/TowerDescent3D.gd 缺失函数定义：func _create_standalone_elevator(",
+          "UNEXPECTED_ENGINE_ERROR ERROR: res://src/world3d/TowerDescent3D.gd 缺失函数定义：func _create_standalone_elevator("
+        ]
+      },
+      {
+        "scene": "verify_base_overhaul_flow",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 太阳峰值亮度不是1",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 结构目标高度错误或缺少契约属性：ENV-BASE99-STAIR-L-Z5",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 栏杆连续阻挡不足：ENV-BASE99-STAIR-L-Z5",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 缺少简化连续行走面：ENV-BASE99-STAIR-L-Z5",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯行走面不是单一StaticBody",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯单一行走体不是斜坡＋平台＋斜坡三个形状",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯缺少统一碰撞契约",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: weapon_workshop美术根缩放没有恢复为1",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 基地阁楼内侧房间标签没有同步为99层基地",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 基地上层脱困按钮不可用",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面不是视觉快照代理方案",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面没有建立独立展示摄像机",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面展示摄像机没有独立attributes",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面灯光没有限定为展示层专用",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面缺少独立FaceFill展示灯",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面展示灯不是四盏独立展示灯",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面错误地修改了真实玩家yaw"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 太阳峰值亮度不是1",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 结构目标高度错误或缺少契约属性：ENV-BASE99-STAIR-L-Z5",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 栏杆连续阻挡不足：ENV-BASE99-STAIR-L-Z5",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 缺少简化连续行走面：ENV-BASE99-STAIR-L-Z5",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯行走面不是单一StaticBody",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯单一行走体不是斜坡＋平台＋斜坡三个形状",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯缺少统一碰撞契约",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: weapon_workshop美术根缩放没有恢复为1",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 基地阁楼内侧房间标签没有同步为99层基地",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 基地上层脱困按钮不可用",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面不是视觉快照代理方案",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面没有建立独立展示摄像机",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面展示摄像机没有独立attributes",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面灯光没有限定为展示层专用",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面缺少独立FaceFill展示灯",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面展示灯不是四盏独立展示灯",
+          "ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面错误地修改了真实玩家yaw",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 太阳峰值亮度不是1",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 结构目标高度错误或缺少契约属性：ENV-BASE99-STAIR-L-Z5",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 栏杆连续阻挡不足：ENV-BASE99-STAIR-L-Z5",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 缺少简化连续行走面：ENV-BASE99-STAIR-L-Z5",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯行走面不是单一StaticBody",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯单一行走体不是斜坡＋平台＋斜坡三个形状",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: L型楼梯缺少统一碰撞契约",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: weapon_workshop美术根缩放没有恢复为1",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 基地阁楼内侧房间标签没有同步为99层基地",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 基地上层脱困按钮不可用",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面不是视觉快照代理方案",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面没有建立独立展示摄像机",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面展示摄像机没有独立attributes",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面灯光没有限定为展示层专用",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面缺少独立FaceFill展示灯",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面展示灯不是四盏独立展示灯",
+          "UNEXPECTED_ENGINE_ERROR ERROR: BASE_OVERHAUL_FLOW_FAIL: 主页面错误地修改了真实玩家yaw"
+        ]
+      },
+      {
+        "scene": "verify_block00_floor98_assembly",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "-- 断言数 = 230，失败数 = 0",
+          "BLOCK00_ASSEMBLY_OK checks=230"
+        ]
+      },
+      {
+        "scene": "verify_character_authoring_bundle",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "CHARACTER_AUTHORING_BUNDLE_OK: bounds, no physics, twelve Blender clips, moving and palm-grip playback"
+        ]
+      },
+      {
+        "scene": "verify_door_function_check",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_enemy_stimulus_activation",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ENEMY_STIMULUS_ACTIVATION_OK: 38m same-floor preactivation, distant hit wakeup, and floor isolation pass"
+        ]
+      },
+      {
+        "scene": "verify_first_elite_deployment_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "FIRST_ELITE_DEPLOYMENT_FLOW_OK: catalog/archive/presentation decoupling, 98-96 deployment, named elite bar and collision ownership pass"
+        ]
+      },
+      {
+        "scene": "verify_first_elite_growth_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "FIRST_ELITE_GROWTH_FLOW_OK: runtime escape, player-weapon translation, level scaling, sidearm frequency and bounty config pass"
+        ]
+      },
+      {
+        "scene": "verify_formal_3d_asset_import",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_main_entry_cinematic_flow",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: facility logout spawn value",
+          "ERROR: real base background",
+          "ERROR: mesh sample sentinel",
+          "ERROR: gameplay resources untouched",
+          "ERROR: gameplay fov untouched",
+          "ERROR: gameplay transform untouched",
+          "ERROR: dedicated camera is separate instance",
+          "ERROR: presentation layer on camera",
+          "ERROR: portrait near blur off",
+          "ERROR: dof far distance",
+          "ERROR: dof far transition",
+          "ERROR: dof far amount strengthened",
+          "ERROR: display avatar exists",
+          "ERROR: portrait on screen right",
+          "ERROR: vignette at bottom layer",
+          "ERROR: facility/background labels culled during presentation",
+          "ERROR: facility/background labels fully restored"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: facility logout spawn value",
+          "ERROR: real base background",
+          "ERROR: mesh sample sentinel",
+          "ERROR: gameplay resources untouched",
+          "ERROR: gameplay fov untouched",
+          "ERROR: gameplay transform untouched",
+          "ERROR: dedicated camera is separate instance",
+          "ERROR: presentation layer on camera",
+          "ERROR: portrait near blur off",
+          "ERROR: dof far distance",
+          "ERROR: dof far transition",
+          "ERROR: dof far amount strengthened",
+          "ERROR: display avatar exists",
+          "ERROR: portrait on screen right",
+          "ERROR: vignette at bottom layer",
+          "ERROR: facility/background labels culled during presentation",
+          "ERROR: facility/background labels fully restored",
+          "UNEXPECTED_ENGINE_ERROR ERROR: facility logout spawn value",
+          "UNEXPECTED_ENGINE_ERROR ERROR: real base background",
+          "UNEXPECTED_ENGINE_ERROR ERROR: mesh sample sentinel",
+          "UNEXPECTED_ENGINE_ERROR ERROR: gameplay resources untouched",
+          "UNEXPECTED_ENGINE_ERROR ERROR: gameplay fov untouched",
+          "UNEXPECTED_ENGINE_ERROR ERROR: gameplay transform untouched",
+          "UNEXPECTED_ENGINE_ERROR ERROR: dedicated camera is separate instance",
+          "UNEXPECTED_ENGINE_ERROR ERROR: presentation layer on camera",
+          "UNEXPECTED_ENGINE_ERROR ERROR: portrait near blur off",
+          "UNEXPECTED_ENGINE_ERROR ERROR: dof far distance",
+          "UNEXPECTED_ENGINE_ERROR ERROR: dof far transition",
+          "UNEXPECTED_ENGINE_ERROR ERROR: dof far amount strengthened",
+          "UNEXPECTED_ENGINE_ERROR ERROR: display avatar exists",
+          "UNEXPECTED_ENGINE_ERROR ERROR: portrait on screen right",
+          "UNEXPECTED_ENGINE_ERROR ERROR: vignette at bottom layer",
+          "UNEXPECTED_ENGINE_ERROR ERROR: facility/background labels culled during presentation",
+          "UNEXPECTED_ENGINE_ERROR ERROR: facility/background labels fully restored"
+        ]
+      },
+      {
+        "scene": "verify_main_entry_realtime_sun_flow",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 12:00太阳峰值不是1",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页不是视觉快照代理方案",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页没有建立独立展示摄像机",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页展示摄像机没有独立attributes",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页灯光没有限定为展示层专用",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页错误地修改了真实玩家yaw"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 12:00太阳峰值不是1",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页不是视觉快照代理方案",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页没有建立独立展示摄像机",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页展示摄像机没有独立attributes",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页灯光没有限定为展示层专用",
+          "ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页错误地修改了真实玩家yaw",
+          "UNEXPECTED_ENGINE_ERROR ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 12:00太阳峰值不是1",
+          "UNEXPECTED_ENGINE_ERROR ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页不是视觉快照代理方案",
+          "UNEXPECTED_ENGINE_ERROR ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页没有建立独立展示摄像机",
+          "UNEXPECTED_ENGINE_ERROR ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页展示摄像机没有独立attributes",
+          "UNEXPECTED_ENGINE_ERROR ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页灯光没有限定为展示层专用",
+          "UNEXPECTED_ENGINE_ERROR ERROR: MAIN_ENTRY_REALTIME_SUN_FAIL: 开场页错误地修改了真实玩家yaw"
+        ]
+      },
+      {
+        "scene": "verify_melee_zombie_presentation",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "MELEE_ZOMBIE_PRESENTATION_OK states=12 clips=6 death=2.4 collision_unchanged=true"
+        ]
+      },
+      {
+        "scene": "verify_music_system",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [
+          "ERROR: [MusicManager] music_id 未注册: __nonexistent__"
+        ],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: [MusicManager] music_id 未注册: __nonexistent__",
+          "MUSIC_SYSTEM_OK: catalog ok, autoload ok, A/B loaded, repeat-play stable, push/restore works, unknown-id rejected"
+        ]
+      },
+      {
+        "scene": "verify_player3d_diy_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_DIY_FLOW_OK: bunny parts, head-parented ear sockets, weapon-class grip FSM, and expressive actions pass"
+        ]
+      },
+      {
+        "scene": "verify_player3d_head_accessory_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_HEAD_ACCESSORY_FLOW_OK: Blender anchor, textured GLB, wardrobe model swap and restart persistence pass"
+        ]
+      },
+      {
+        "scene": "verify_player3d_idle_animation_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BUNNY_IDLE_ANIMATION_OK: Blender-only idle motion, ear follow, grip stability, and locomotion exit pass"
+        ]
+      },
+      {
+        "scene": "verify_player3d_lower_body_socket_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_LOWER_BODY_SOCKET_OK: body-local lower-waist socket and skirt attachment inheritance pass"
+        ]
+      },
+      {
+        "scene": "verify_player3d_state_gallery_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_STATE_GALLERY_FLOW_OK: real eight-state player, fall/landing, weapon action overlays, knockback, Enemy3D/Boss and NPC3D controls pass"
+        ]
+      },
+      {
+        "scene": "verify_postfx_autopersist",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "[POSTFX_AUTOPERSIST] POSTFX_AUTOPERSIST_OK checks=5 panels=3"
+        ]
+      },
+      {
+        "scene": "verify_requested_experience_upgrade_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "REQUESTED_EXPERIENCE_UPGRADE_OK: 36 mobile OGG events, single-item timed loot, readable item colors, tutorial spawn migration, physical death and click-to-return dialog pass"
+        ]
+      },
+      {
+        "scene": "verify_rooftop_32x32_contract",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_rooftop_door",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_rooftop_floor_facade_components",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_rooftop_railing",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ROOFTOP_RAILING_OK: 5 lower rails, 5 upper rails and 67 posts use the formal rooftop shell and align to Y 0.00..1.32"
+        ]
+      },
+      {
+        "scene": "verify_runtime_autosave_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "RUNTIME_AUTOSAVE_OK: coalesced changes, forced room checkpoint, restart and insurance restore pass"
+        ]
+      },
+      {
+        "scene": "verify_security_zombie_presentation",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "SECURITY_ZOMBIE_PRESENTATION_OK animations=10 shotgun=true bone=L_Hand ranged_logic_preserved=true"
+        ]
+      },
+      {
+        "scene": "verify_stair_entry_clearance",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_stair_unified_support",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_state_machine_safety",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "STATE_MACHINE_SAFETY_OK: whitelist, rejection audit, reentrant queue, snapshot, terminal guard"
+        ]
+      },
+      {
+        "scene": "verify_tower_camera_occlusion_flow",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层随机布局中没有可用于镜头验收的南侧门墙",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态没有被下方墙探针识别",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态镜头未收回墙内侧：墙距-1.000m，镜头后移3.931m",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态镜头抬升高度异常：10.727m",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层侧门小通道的无门南墙缺少相机碰撞标记",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间缺少南侧围护墙碰撞",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙没有被下方墙探针识别",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙镜头未收回墙内侧：墙距-1.000m，镜头后移4.038m",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙镜头抬升高度异常：10.719m"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层随机布局中没有可用于镜头验收的南侧门墙",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态没有被下方墙探针识别",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态镜头未收回墙内侧：墙距-1.000m，镜头后移3.931m",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态镜头抬升高度异常：10.727m",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层侧门小通道的无门南墙缺少相机碰撞标记",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间缺少南侧围护墙碰撞",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙没有被下方墙探针识别",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙镜头未收回墙内侧：墙距-1.000m，镜头后移4.038m",
+          "ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙镜头抬升高度异常：10.719m",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层随机布局中没有可用于镜头验收的南侧门墙",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态没有被下方墙探针识别",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态镜头未收回墙内侧：墙距-1.000m，镜头后移3.931m",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层枢纽角色贴墙状态镜头抬升高度异常：10.727m",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 98层侧门小通道的无门南墙缺少相机碰撞标记",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间缺少南侧围护墙碰撞",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙没有被下方墙探针识别",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙镜头未收回墙内侧：墙距-1.000m，镜头后移4.038m",
+          "UNEXPECTED_ENGINE_ERROR ERROR: v0.1_REAL_CAMERA_FLOW_FAIL: 楼梯间南侧围护墙镜头抬升高度异常：10.719m"
+        ]
+      },
+      {
+        "scene": "verify_tower_runtime_restart_restore",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TOWER_RUNTIME_RESTART_OK: seeded 98F world, room progress, position, inventory, real quick slots, equipment, insurance and flashlight survive restart"
+        ]
+      },
+      {
+        "scene": "verify_wardrobe_preview_fill_flow",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "WARDROBE_PREVIEW_FILL_FLOW_OK: dedicated player-only fill is active only during wardrobe preview",
+          "VERIFICATION_SUITE_FAILED suite=aggregate count=133 failed=15",
+          "FAILED_SCENE verify_tower_lighting_wall_combat_regressions:1",
+          "FAILED_SCENE verify_full_3d_game_flow:1",
+          "FAILED_SCENE verify_arrival_gate_floor_bundle_flow:1",
+          "FAILED_SCENE verify_base_world_flow:1",
+          "FAILED_SCENE verify_door_passability:1",
+          "FAILED_SCENE verify_3d_performance_budget:1",
+          "FAILED_SCENE verify_3d_parity_core:1",
+          "FAILED_SCENE verify_base99_loft_layout_v021:1",
+          "FAILED_SCENE verify_base99_optimized_packages_v021:1",
+          "FAILED_SCENE verify_base99_wall_visual_replacement:1",
+          "FAILED_SCENE verify_base_optional_facilities_removed:1",
+          "FAILED_SCENE verify_base_overhaul_flow:1",
+          "FAILED_SCENE verify_main_entry_cinematic_flow:1",
+          "FAILED_SCENE verify_main_entry_realtime_sun_flow:1",
+          "FAILED_SCENE verify_tower_camera_occlusion_flow:1"
+        ]
+      }
+    ]
+  },
+  {
+    "log": "runtime_render_sample.log",
+    "sha256": "49f99decf80503e1c0bdf31edb83d1005422fb1534c444e2159706df8d315e5a",
+    "complete": true,
+    "import_errors": [],
+    "terminal_lines": [
+      "VERIFICATION_SUITE_FAILED suite=batch count=25 failed=6",
+      "FAILED_SCENE verify_facility_light_retoggle_visual:1",
+      "FAILED_SCENE verify_3d_melee_combat_visual:1",
+      "FAILED_SCENE verify_base_world_3d_visual:1",
+      "FAILED_SCENE verify_tower_descent_visual:143",
+      "FAILED_SCENE verify_training_range_3d_visual:1",
+      "FAILED_SCENE verify_formal_3d_asset_gallery_visual:3"
+    ],
+    "scene_count": 25,
+    "statuses": {
+      "通过": 19,
+      "失败": 6
+    },
+    "scenes": [
+      {
+        "scene": "verify_base99_modular_room_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_MODULAR_ROOM_VISUAL_OK: interior, mezzanine v003 edge and upper-shell roof previews saved"
+        ]
+      },
+      {
+        "scene": "verify_base99_floor_visuals_v021",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_graphics_settings_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "GRAPHICS_SETTINGS_VISUAL_OK: high-end settings and key-0 performance previews saved"
+        ]
+      },
+      {
+        "scene": "verify_facility_light_retoggle_visual",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: 99F基地开灯时活动OmniLight数量不正确：8",
+          "ERROR: 基地重开后没有恢复全部灯具补光"
+        ],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: 99F基地开灯时活动OmniLight数量不正确：8",
+          "ERROR: 基地重开后没有恢复全部灯具补光",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 99F基地开灯时活动OmniLight数量不正确：8",
+          "UNEXPECTED_ENGINE_ERROR ERROR: 基地重开后没有恢复全部灯具补光"
+        ]
+      },
+      {
+        "scene": "verify_3d_melee_combat_visual",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: Visual preview does not contain all four driven slash arcs and target impact bursts"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: Visual preview does not contain all four driven slash arcs and target impact bursts",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Visual preview does not contain all four driven slash arcs and target impact bursts"
+        ]
+      },
+      {
+        "scene": "verify_base_vending_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE_VENDING_VISUAL_OK: vending machine, infinite-stock shop, and two-column vault grid previews saved"
+        ]
+      },
+      {
+        "scene": "verify_base_world_3d_visual",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: Base visual scene does not contain the expected nine remaining catalog facilities"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: Base visual scene does not contain the expected nine remaining catalog facilities",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Base visual scene does not contain the expected nine remaining catalog facilities"
+        ]
+      },
+      {
+        "scene": "verify_full_3d_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "FULL_3D_VISUAL_OK: brighter real-flashlight entry, central-light-on and 3D inventory projection previews saved"
+        ]
+      },
+      {
+        "scene": "verify_player3d_state_gallery_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_STATE_GALLERY_VISUAL_OK: interactive player, enemy and NPC preview saved"
+        ]
+      },
+      {
+        "scene": "verify_player3d_weapon_grip_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BUNNY_V006_WEAPON_GRIP_VISUAL_OK: held grip, muzzle/aim alignment, right-hand rig proof, sidearm idle close-up, backpack clearance, and no-backpack dual vertical sockets saved"
+        ]
+      },
+      {
+        "scene": "verify_tower_descent_visual",
+        "status": "失败",
+        "exit_code": 143,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'Nil'."
+        ],
+        "script_error_lines": [
+          "SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'Nil'."
+        ],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TIMEOUT verify_tower_descent_visual after 180s; terminating PID 51467",
+          "SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'Nil'.",
+          "UNEXPECTED_ENGINE_ERROR SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'Nil'."
+        ]
+      },
+      {
+        "scene": "verify_test_level_99_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TEST_LEVEL_99_VISUAL_OK: overview/entry/room_01/room_02/extraction/corridor previews saved under res://outputs/verification/, each with render guard (captured=6 skipped_headless=0)"
+        ]
+      },
+      {
+        "scene": "verify_tower_stair_fall_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "v0.1_STAIR_FALL_VISUAL_OK: rooftop camera, stair support, falling and landing previews saved"
+        ]
+      },
+      {
+        "scene": "verify_training_range_3d_visual",
+        "status": "失败",
+        "exit_code": 1,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: TrainingRange3D preview scene is incomplete"
+        ],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: TrainingRange3D preview scene is incomplete",
+          "UNEXPECTED_ENGINE_ERROR ERROR: TrainingRange3D preview scene is incomplete"
+        ]
+      },
+      {
+        "scene": "verify_tactical_inventory_minimap_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "TACTICAL_INVENTORY_MINIMAP_VISUAL_OK: equipped backpack slot/bonus grid/back mesh, single non-overlap hover card, weapon drag and minimap render pass"
+        ]
+      },
+      {
+        "scene": "verify_reference_hud_fate_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "REFERENCE_HUD_FATE_VISUAL_OK: three celestial cards flip from code backs and reversed cards rotate the complete face with reversed effect text"
+        ]
+      },
+      {
+        "scene": "verify_wall_alignment_overlay",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_wall_alignment_pure",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_wall_alignment_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": []
+      },
+      {
+        "scene": "verify_base99_door_visuals_v021",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "BASE99_DOOR_VISUALS_V021_OK: 4 packages -> 2 shared visual prefabs"
+        ]
+      },
+      {
+        "scene": "verify_first_elite_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "FIRST_ELITE_VISUAL_OK: /private/var/folders/ms/hcx6wtnj0cvb4xbkxcd0b7bm0000gn/T/shellstorm-verification.LNL2Jd/project/outputs/verification/elite_rift_boar_20260827/elite_rift_boar_game_view_v001.png"
+        ]
+      },
+      {
+        "scene": "verify_player3d_head_accessory_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "PLAYER3D_HEAD_ACCESSORY_VISUAL_OK: in-game wardrobe head preview saved"
+        ]
+      },
+      {
+        "scene": "verify_wardrobe_layout_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "WARDROBE_LAYOUT_VISUAL_OK: HUD hidden, left slot navigation, compact right panel and 3D icons pass"
+        ]
+      },
+      {
+        "scene": "verify_formal_3d_asset_gallery_visual",
+        "status": "失败",
+        "exit_code": 3,
+        "expected_errors": [],
+        "unexpected_errors": [
+          "ERROR: Cannot open file 'res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn'.",
+          "ERROR: Failed loading resource: res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn.",
+          "SCRIPT ERROR: Cannot call method 'instantiate' on a null value."
+        ],
+        "script_error_lines": [
+          "SCRIPT ERROR: Cannot call method 'instantiate' on a null value."
+        ],
+        "warnings": [],
+        "skip_markers": [],
+        "evidence_lines": [
+          "ERROR: Cannot open file 'res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn'.",
+          "ERROR: Failed loading resource: res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn.",
+          "SCRIPT ERROR: Cannot call method 'instantiate' on a null value.",
+          "FORMAL_3D_ASSET_GALLERY_VISUAL_OK: 设施朝向/人物比例与18枪侧视比例验收图已生成",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Cannot open file 'res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn'.",
+          "UNEXPECTED_ENGINE_ERROR ERROR: Failed loading resource: res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn.",
+          "UNEXPECTED_ENGINE_ERROR SCRIPT ERROR: Cannot call method 'instantiate' on a null value."
+        ]
+      },
+      {
+        "scene": "verify_formal_asset_placement_visual",
+        "status": "通过",
+        "exit_code": 0,
+        "expected_errors": [],
+        "unexpected_errors": [],
+        "script_error_lines": [],
+        "warnings": [
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png",
+          "WARNING: res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn:3 - ext_resource, invalid UID: uid://duehsq4qikpex - using text path instead: res://assets/art/vfx/textures/glow_32.png"
+        ],
+        "skip_markers": [],
+        "evidence_lines": [
+          "FORMAL_ASSET_PLACEMENT_VISUAL_OK: 储物站保险柜、电视收藏室、三既有模型设施与两把独立座椅验收图已生成",
+          "VERIFICATION_SUITE_FAILED suite=batch count=25 failed=6",
+          "FAILED_SCENE verify_facility_light_retoggle_visual:1",
+          "FAILED_SCENE verify_3d_melee_combat_visual:1",
+          "FAILED_SCENE verify_base_world_3d_visual:1",
+          "FAILED_SCENE verify_tower_descent_visual:143",
+          "FAILED_SCENE verify_training_range_3d_visual:1",
+          "FAILED_SCENE verify_formal_3d_asset_gallery_visual:3"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "previous_source": "2026-09-23_full_project_reassessment.md §6.3",
+  "current_complete": true,
+  "previous_count": 15,
+  "current_count": 15,
+  "added": [],
+  "removed": [],
+  "unchanged": [
+    "verify_3d_parity_core",
+    "verify_3d_performance_budget",
+    "verify_arrival_gate_floor_bundle_flow",
+    "verify_base99_loft_layout_v021",
+    "verify_base99_optimized_packages_v021",
+    "verify_base99_wall_visual_replacement",
+    "verify_base_optional_facilities_removed",
+    "verify_base_overhaul_flow",
+    "verify_base_world_flow",
+    "verify_door_passability",
+    "verify_full_3d_game_flow",
+    "verify_main_entry_cinematic_flow",
+    "verify_main_entry_realtime_sun_flow",
+    "verify_tower_camera_occlusion_flow",
+    "verify_tower_lighting_wall_combat_regressions"
+  ]
+}

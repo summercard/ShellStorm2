@@ -7,7 +7,7 @@
 1. [文档驱动开发规范](DOCUMENTATION_STANDARD.md)：如何先确定设计，再实施、验证、记账。
 2. [当前功能与契约索引](v0.1/MODULE_INDEX.md)：确定模块所有者、设计依据、数据、接入和验收入口。
 3. [游戏设计](v0.1/README.md)及[功能设计目录](v0.1/design/README.md)：先确认目标玩法，再读索引列出的技术施工与当前差距。
-4. [全项目完整复评](v0.1/audits/2026-09-23_full_project_reassessment.md)：P0/P1/P2 后的当前缺口、实跑证据与整改顺序。
+4. [2026-09-24全局验收](v0.1/audits/2026-09-24_global_acceptance.md)及[37项逐项验收表](v0.1/audits/2026-09-24_global_feature_matrix.md)：当前工作区的架构、设计、资产、运行验收与磁盘情况；[9月23日复评](v0.1/audits/2026-09-23_full_project_reassessment.md)保留原时点证据。
 
 功能之间的输入、状态Owner、交接与文档补全顺序见[功能关系计划](v0.1/FEATURE_RELATIONSHIP_PLAN.md)和[37项跟踪表](v0.1/FEATURE_RELATIONSHIP_MATRIX.md)。完整复评保留原时点结果；后续实测以开发记录及跟踪表为准。
 

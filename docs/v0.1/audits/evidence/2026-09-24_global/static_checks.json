@@ -1,0 +1,62 @@
+[
+  {
+    "command": "python3 scripts/check_documentation_contracts.py",
+    "exit_code": 0,
+    "stdout": "{\n  \"engine_version\": \"0.1.0\",\n  \"documents\": 136,\n  \"local_links\": 850,\n  \"features\": 37,\n  \"test_references\": 67,\n  \"issues\": [],\n  \"limits\": \"Does not validate design semantics, Markdown anchors, runtime behavior, or test results. Not installed as a CI/hook gate.\"\n}\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 scripts/check_feature_traceability.py",
+    "exit_code": 0,
+    "stdout": "{\n  \"module_index_features\": 37,\n  \"registry_features\": 37,\n  \"scene_links\": 75,\n  \"command_links\": 3,\n  \"issues\": []\n}\nFEATURE_TRACEABILITY_OK features=37\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 scripts/check_domain_boundaries.py",
+    "exit_code": 0,
+    "stdout": "{\n  \"checked_root\": \"src\",\n  \"violations\": []\n}\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 scripts/check_verification_registry.py",
+    "exit_code": 0,
+    "stdout": "VERIFICATION_REGISTRY_OK scenes=160 categories={'smoke': 6, 'core': 127, 'visual': 26, 'manual': 1, 'retired': 0}\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 scripts/check_asset_runtime_naming.py",
+    "exit_code": 0,
+    "stdout": "ASSET_RUNTIME_NAMING_OK 剩余欠账：文件 289 / 目录 13 / 备份 1；带版本引用 gd=23 tscn=93\n（快照 scripts/asset_runtime_naming_debt.json；欠账未清零前本门禁只拦新增，清零后删除快照与豁免）\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 scripts/check_asset_registry.py --scope full",
+    "exit_code": 1,
+    "stdout": "{\n  \"project_root\": \"/Users/summercards/ShellStorm2\",\n  \"scope\": \"full\",\n  \"master\": {\n    \"exists\": true,\n    \"sheets\": [\n      \"总览\",\n      \"分账本索引\",\n      \"分类与编码\",\n      \"命名与查重\",\n      \"版本记录\",\n      \"3D Prefab总控\",\n      \"Skill清单\"\n    ],\n    \"index_rows\": 9,\n    \"prefab_pages\": 9\n  },\n  \"ledger_index\": {\n    \"domains\": [\n      \"characters\",\n      \"enemies\",\n      \"scenes\",\n      \"props\",\n      \"weapons\",\n      \"vfx\",\n      \"ui\",\n      \"audio\",\n      \"music\"\n    ],\n    \"categories\": [\n      \"UI\",\n      \"场景\",\n      \"场景道具\",\n      \"基地资产包\",\n      \"敌人\",\n      \"武器\",\n      \"特效\",\n      \"角色\",\n      \"道具\",\n      \"音乐\",\n      \"音效\"\n    ],\n    \"prefix_pairs\": [\n      \"ART/场景\",\n      \"AUD/音乐\",\n      \"AUD/音效\",\n      \"BPK/基地资产包\",\n      \"CHR/角色\",\n      \"ENM/敌人\",\n      \"ENV/场景\",\n      \"ITM/道具\",\n      \"PRP/场景道具\",\n      \"PRP/道具\",\n      \"UI/UI\",\n      \"VFX/特效\",\n      \"WPN/武器\"\n    ]\n  },\n  \"ledgers\": {\n    \"characters\": \"assets/registry/ledgers/ShellStorm2_角色账本_v001.xlsx\",\n    \"enemies\": \"assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx\",\n    \"scenes\": \"assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx\",\n    \"props\": \"assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx\",\n    \"weapons\": \"assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx\",\n    \"vfx\": \"assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx\",\n    \"ui\": \"assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx\",\n    \"audio\": \"assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx\",\n    \"music\": \"assets/registry/ledgers/ShellStorm2_音乐账本_v001.xlsx\"\n  },\n  \"ledger_totals\": {\n    \"characters\": 16,\n    \"enemies\": 13,\n    \"scenes\": 236,\n    \"props\": 20,\n    \"weapons\": 36,\n    \"vfx\": 16,\n    \"ui\": 16,\n    \"audio\": 48,\n    \"music\": 9\n  },\n  \"asset_count\": 410,\n  \"issue_counts\": {\n    \"sha_mismatch\": 1\n  },\n  \"issues\": {\n    \"sha_mismatch\": [\n      {\n        \"ledger\": \"props\",\n        \"row\": 11,\n        \"asset_id\": \"ITM-PICKUP-BASE-GROUND-ITEM\",\n        \"path\": \"/Users/summercards/ShellStorm2/src/world3d/GroundLootPickup3D.gd\",\n        \"recorded\": \"14eca357cf5198a232d95231ccbf07e15b67a1428f7d27bf2f32222e59bcb29d\",\n        \"actual\": \"5ebef3f65878f983107e584a60b2077c183f55dbd9e134302a6602acc6cbaad5\"\n      }\n    ]\n  }\n}\n",
+    "stderr": "ASSET_REGISTRY_CHECK_FAILED scope=full issues=1\n"
+  },
+  {
+    "command": "python3 scripts/check_media_asset_domains.py",
+    "exit_code": 0,
+    "stdout": "{\n  \"domains\": [\n    \"ui\",\n    \"audio\",\n    \"music\"\n  ],\n  \"ledger_totals\": {\n    \"ui\": 16,\n    \"audio\": 48,\n    \"music\": 9\n  },\n  \"asset_count\": 73,\n  \"registered_acceptance_tests\": [\n    \"verify_3d_melee_feedback_flow\",\n    \"verify_gamepad_input_flow\",\n    \"verify_hud_presenter_3d\",\n    \"verify_music_system\",\n    \"verify_pause_game_save_reset_flow\",\n    \"verify_requested_experience_upgrade_flow\"\n  ],\n  \"issues\": []\n}\nMEDIA_ASSET_DOMAINS_OK domains=3 assets=73\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 tools/asset_pipeline/verify_ledger_split.py",
+    "exit_code": 0,
+    "stdout": "{\n  \"baseline_assets\": 410,\n  \"baseline_captured_at\": \"2026-09-23\",\n  \"ledger_totals\": {\n    \"characters\": 16,\n    \"enemies\": 13,\n    \"scenes\": 236,\n    \"props\": 20,\n    \"weapons\": 36,\n    \"vfx\": 16,\n    \"ui\": 16,\n    \"audio\": 48,\n    \"music\": 9\n  },\n  \"union_assets\": 410,\n  \"missing_assets\": [],\n  \"extra_assets\": [],\n  \"column_digest_drift\": [],\n  \"failure_count\": 0,\n  \"failures\": []\n}\nLEDGER_SPLIT_VERIFY_OK assets=410 ledgers=9 baseline=2026-09-23\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 scripts/check_ledger_refs.py",
+    "exit_code": 1,
+    "stdout": "待处理脚本（会读写旧单体账本）: 21\n    assets/art/environments/tower_zones/battle/source/common_components/v001/qa/update_registry.mjs\n    assets/art/environments/tower_zones/battle/source/common_components/v001/qa/verify_registry.py\n    assets/art/environments/tower_zones/battle/source/common_components/v002/qa/update_registry.mjs\n    assets/art/environments/tower_zones/battle/source/common_components/v002/qa/verify_registry.py\n    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/register_floor_tile_ledger_rows.py\n    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/register_wall_door_ledger_rows.py\n    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/update_registry.mjs\n    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/verify_registry.py\n    assets/art/environments/tower_zones/battle/source/common_components/v004/qa/update_ledger_rows_v004.py\n    assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/qa/update_ledger.mjs\n    assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/qa/verify_ledger.py\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v001/qa/update_registry.mjs\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v001/qa/verify_registry.py\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/finalize_registry_layout.mjs\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/sync_final_hash.mjs\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/update_registry.mjs\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/verify_registry.py\n    source/art/whitebox/tower_zones/battle_level01/v003/qa/fix_registry_row_style.mjs\n    source/art/whitebox/tower_zones/battle_level01/v003/qa/inspect_registry.mjs\n    source/art/whitebox/tower_zones/battle_level01/v003/qa/update_registry.mjs\n    source/art/whitebox/tower_zones/battle_level01/v003/qa/verify_registry.py\n\n设计允许（注册表工具）: 2\n    tools/asset_pipeline/split_asset_ledger.py\n    tools/asset_pipeline/update_v01_completion_registry.mjs\n\n指向不存在的账本文件（历史遗留，文件部分不可信）: 49\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_corner/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_edge/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_full/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_half/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']\n    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_inner/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']\n    … 其余 44 条见 --json-output\n\n历史产出记录 / 文档引用（保持原样）: 176 个 json + 14 个文本\n    （明细见 --json-output，或直接 grep）\n\nLEDGER_REFS_NEED_REBASE pending=21（重放前须重定向到分账本并重定行号；见文件头说明）\n",
+    "stderr": ""
+  },
+  {
+    "command": "python3 scripts/check_classname_unique.py",
+    "exit_code": 0,
+    "stdout": "CLASSNAME_UNIQUE_CHECK_OK classes=171 duplicates=0\n",
+    "stderr": ""
+  }
+]

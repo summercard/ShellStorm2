@@ -1,0 +1,74 @@
+[
+  {
+    "path": "assets",
+    "files": 4894,
+    "bytes": 2008559751,
+    "tracked": 3890
+  },
+  {
+    "path": "source",
+    "files": 797,
+    "bytes": 448008658,
+    "tracked": 797
+  },
+  {
+    "path": "src",
+    "files": 539,
+    "bytes": 4893827,
+    "tracked": 466
+  },
+  {
+    "path": "scenes",
+    "files": 37,
+    "bytes": 85350,
+    "tracked": 37
+  },
+  {
+    "path": "data",
+    "files": 6,
+    "bytes": 10883,
+    "tracked": 6
+  },
+  {
+    "path": "tools",
+    "files": 2361,
+    "bytes": 142064399,
+    "tracked": 608
+  },
+  {
+    "path": "docs",
+    "files": 204,
+    "bytes": 6068045,
+    "tracked": 173
+  },
+  {
+    "path": "_scratch",
+    "files": 2154,
+    "bytes": 160874810,
+    "tracked": 1468
+  },
+  {
+    "path": "output",
+    "files": 105,
+    "bytes": 56612183,
+    "tracked": 80
+  },
+  {
+    "path": "Godot",
+    "files": 7,
+    "bytes": 11603717,
+    "tracked": 5
+  },
+  {
+    "path": ".godot",
+    "files": 7207,
+    "bytes": 2648026268,
+    "tracked": 0
+  },
+  {
+    "path": "outputs",
+    "files": 89,
+    "bytes": 19436349,
+    "tracked": 1
+  }
+]

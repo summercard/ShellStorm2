@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-09-24T18:09:13.744753+08:00",
+  "commit": "bda2c82883091501e57b21d7343e02b0d0d7297b",
+  "feature_states": {
+    "partial": 31,
+    "complete": 2,
+    "contract_only": 1,
+    "development": 2,
+    "source_only": 1
+  },
+  "maintainability": {
+    "局部独立": 22,
+    "链路清楚": 4,
+    "关系待收口": 9,
+    "独立": 1,
+    "源端独立": 1
+  },
+  "assets": 410
+}

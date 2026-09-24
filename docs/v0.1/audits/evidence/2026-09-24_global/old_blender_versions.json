@@ -1,0 +1,734 @@
+[
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/source/animation/chr_bunny01_animation_v009.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 4762608,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/source/animation/chr_bunny01_animation_v010.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 10947368,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/source/animation/chr_bunny01_animation_v011.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 10947744,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v012/source/animation/chr_bunny01_animation_v012.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 11990192,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v013/source/animation/chr_bunny01_animation_v013.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 15647920,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v014/source/animation/chr_bunny01_animation_v014.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 15907420,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v015/source/animation/chr_bunny01_animation_v015.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 15907420,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v016/source/animation/chr_bunny01_animation_v016.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 15907420,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v017/source/animation/chr_bunny01_animation_v017.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 15907420,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v018/source/animation/chr_bunny01_animation_v018.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 15907420,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/animation/chr_bunny01_animation_v019.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 30055996,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v020/source/animation/chr_bunny01_animation_v020.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+    "bytes": 37574256,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/source/model/chr_bunny01_model_v009.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 11344197,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v010/source/model/chr_bunny01_model_v010.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 11338152,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/source/model/chr_bunny01_model_v011.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 11338552,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v012/source/model/chr_bunny01_model_v012.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v013/source/model/chr_bunny01_model_v013.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v014/source/model/chr_bunny01_model_v014.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v015/source/model/chr_bunny01_model_v015.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v016/source/model/chr_bunny01_model_v016.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v017/source/model/chr_bunny01_model_v017.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v018/source/model/chr_bunny01_model_v018.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/model/chr_bunny01_model_v019.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v020/source/model/chr_bunny01_model_v020.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+    "bytes": 10282728,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v006.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v008.blend",
+    "bytes": 5920352,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v007.blend",
+    "newest_by_number": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/chr_player_capsule01_bunny01_top3d_v008.blend",
+    "bytes": 11498258,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v002.blend",
+    "newest_by_number": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v005.blend",
+    "bytes": 8368082,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend",
+    "newest_by_number": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v005.blend",
+    "bytes": 8367802,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v001.blend",
+    "newest_by_number": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v007.blend",
+    "bytes": 1910290,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend",
+    "newest_by_number": "assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v007.blend",
+    "bytes": 1910010,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v001.blend",
+    "newest_by_number": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v003.blend",
+    "bytes": 182482,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v002.blend",
+    "newest_by_number": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v003.blend",
+    "bytes": 173550,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend",
+    "newest_by_number": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
+    "bytes": 201165,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend",
+    "newest_by_number": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
+    "bytes": 206854,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend",
+    "newest_by_number": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
+    "bytes": 229230,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend",
+    "newest_by_number": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
+    "bytes": 234878,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_descent_3d/source/floor_tile_5m/env_tower_floor_tile_5m_source_v002.blend",
+    "newest_by_number": "assets/art/environments/tower_descent_3d/source/floor_tile_5m/env_tower_floor_tile_5m_source_v003.blend",
+    "bytes": 675320,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/env_tower_stairwell_art_source_v019.blend",
+    "newest_by_number": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v020/env_tower_stairwell_art_source_v020.blend",
+    "bytes": 6750112,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_descent_3d/source/wall_height12/env_tower_wall_door_5m_source_v003.blend",
+    "newest_by_number": "assets/art/environments/tower_descent_3d/source/wall_height12/env_tower_wall_door_5m_source_v005.blend",
+    "bytes": 1039680,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/battle/source/common_components/v001/战局区块_通用组件库_v001.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/battle/source/common_components/v005/战局区块_通用组件库_v005.blend",
+    "bytes": 2309576,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/battle/source/common_components/v002/战局区块_通用组件库_v002.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/battle/source/common_components/v005/战局区块_通用组件库_v005.blend",
+    "bytes": 2937530,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/battle/source/common_components/v005/战局区块_通用组件库_v005.blend",
+    "bytes": 832902,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/battle/source/common_components/v005/战局区块_通用组件库_v005.blend",
+    "bytes": 976846,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/battle/source/common_components/v007/env_battle_common_components_source_v007.blend",
+    "bytes": 1483887,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/battle/source/room_types/l_corridor/v001/l_corridor_room_type_v001.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/battle/source/room_types/l_corridor/v003/l_corridor_room_type_v003.blend",
+    "bytes": 7042236,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/battle/source/room_types/l_corridor/v002/l_corridor_room_type_v002.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/battle/source/room_types/l_corridor/v003/l_corridor_room_type_v003.blend",
+    "bytes": 8782068,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+    "bytes": 15324750,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "newest_by_number": "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+    "bytes": 1193369,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v001.blend",
+    "newest_by_number": "assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v003.blend",
+    "bytes": 167931,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/props/base_world_3d/source/mission_operations/prp_base_mission_operations_source_v003.blend",
+    "newest_by_number": "assets/art/props/base_world_3d/source/mission_operations/prp_base_mission_operations_source_v005.blend",
+    "bytes": 627707,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/props/base_world_3d/source/vending_machine/prp_base_vending_machine_source_v001.blend",
+    "newest_by_number": "assets/art/props/base_world_3d/source/vending_machine/prp_base_vending_machine_source_v003.blend",
+    "bytes": 1747413,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/props/base_world_3d/source/weapon_workshop/prp_base_weapon_workshop_source_v003.blend",
+    "newest_by_number": "assets/art/props/base_world_3d/source/weapon_workshop/prp_base_weapon_workshop_source_v005.blend",
+    "bytes": 976980,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v001.blend",
+    "newest_by_number": "assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v003.blend",
+    "bytes": 185044,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/broom_rifle/wpn_broom_rifle_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/broom_rifle/wpn_broom_rifle_source_v003.blend",
+    "bytes": 254803,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/camera_blaster/wpn_camera_blaster_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/camera_blaster/wpn_camera_blaster_source_v003.blend",
+    "bytes": 195014,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/candy_sniper/wpn_candy_sniper_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/candy_sniper/wpn_candy_sniper_source_v003.blend",
+    "bytes": 194230,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/crocodile_cannon/wpn_crocodile_cannon_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/crocodile_cannon/wpn_crocodile_cannon_source_v003.blend",
+    "bytes": 169329,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/double_barrel_cannon/wpn_double_barrel_cannon_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/double_barrel_cannon/wpn_double_barrel_cannon_source_v003.blend",
+    "bytes": 179902,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/fan_blaster/wpn_fan_blaster_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/fan_blaster/wpn_fan_blaster_source_v003.blend",
+    "bytes": 261103,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/frying_pan_cannon/wpn_frying_pan_cannon_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/frying_pan_cannon/wpn_frying_pan_cannon_source_v003.blend",
+    "bytes": 285187,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/guitar_blaster/wpn_guitar_blaster_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/guitar_blaster/wpn_guitar_blaster_source_v003.blend",
+    "bytes": 256998,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/gumball_cannon/wpn_gumball_cannon_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/gumball_cannon/wpn_gumball_cannon_source_v003.blend",
+    "bytes": 440069,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/megaphone_cannon/wpn_megaphone_cannon_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/megaphone_cannon/wpn_megaphone_cannon_source_v003.blend",
+    "bytes": 240780,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/popcorn_blaster/wpn_popcorn_blaster_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/popcorn_blaster/wpn_popcorn_blaster_source_v003.blend",
+    "bytes": 361575,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/scope_cannon/wpn_scope_cannon_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/scope_cannon/wpn_scope_cannon_source_v003.blend",
+    "bytes": 287332,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/soda_straw_blaster/wpn_soda_straw_blaster_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/soda_straw_blaster/wpn_soda_straw_blaster_source_v003.blend",
+    "bytes": 302427,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/spatula_rifle/wpn_spatula_rifle_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/spatula_rifle/wpn_spatula_rifle_source_v003.blend",
+    "bytes": 193976,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/tissue_box_cannon/wpn_tissue_box_cannon_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/tissue_box_cannon/wpn_tissue_box_cannon_source_v003.blend",
+    "bytes": 279573,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/toaster_launcher/wpn_toaster_launcher_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/toaster_launcher/wpn_toaster_launcher_source_v003.blend",
+    "bytes": 160506,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "assets/art/weapons/weapon_3d/source/water_tank_blaster/wpn_water_tank_blaster_source_v001.blend",
+    "newest_by_number": "assets/art/weapons/weapon_3d/source/water_tank_blaster/wpn_water_tank_blaster_source_v003.blend",
+    "bytes": 224462,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 11891049,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 12204838,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 12639524,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 13042153,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 13217377,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 13281910,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v023.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 13281192,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 13272780,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
+    "newest_by_number": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+    "bytes": 13281606,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/blender/master_office_layout/source/block_00_master_office_layout_v001.blend",
+    "newest_by_number": "source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.blend",
+    "bytes": 583644,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_Boss竞技场_190x90m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_Boss竞技场_190x90m_v003.blend",
+    "bytes": 6747267,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_Boss竞技场_190x90m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_Boss竞技场_190x90m_v003.blend",
+    "bytes": 11711357,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_01_hub_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_01_hub_30x25m_v003.blend",
+    "bytes": 817143,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_01_hub_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_01_hub_30x25m_v003.blend",
+    "bytes": 1096985,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_02_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_02_30x25m_v003.blend",
+    "bytes": 817136,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_02_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_02_30x25m_v003.blend",
+    "bytes": 1096513,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_03_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_03_30x25m_v003.blend",
+    "bytes": 829639,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_03_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_03_30x25m_v003.blend",
+    "bytes": 1123927,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_04_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_04_30x25m_v003.blend",
+    "bytes": 817142,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_04_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_04_30x25m_v003.blend",
+    "bytes": 1096521,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_05_30x40m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_05_30x40m_v003.blend",
+    "bytes": 980348,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_05_30x40m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_05_30x40m_v003.blend",
+    "bytes": 1388787,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_06_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_06_30x25m_v003.blend",
+    "bytes": 817141,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_06_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_06_30x25m_v003.blend",
+    "bytes": 1096517,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_07_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_07_30x25m_v003.blend",
+    "bytes": 817140,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_07_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_07_30x25m_v003.blend",
+    "bytes": 1096513,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_08_35x30m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_08_35x30m_v003.blend",
+    "bytes": 925944,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_08_35x30m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_08_35x30m_v003.blend",
+    "bytes": 1291357,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_09_40x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_09_40x25m_v003.blend",
+    "bytes": 920308,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_09_40x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_09_40x25m_v003.blend",
+    "bytes": 1286293,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_主路内容房_10_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_10_30x25m_v003.blend",
+    "bytes": 817139,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_10_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_10_30x25m_v003.blend",
+    "bytes": 1096521,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_入口安全房_15x15m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_入口安全房_15x15m_v003.blend",
+    "bytes": 614233,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_入口安全房_15x15m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_入口安全房_15x15m_v003.blend",
+    "bytes": 728038,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_出口安全房_15x15m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_出口安全房_15x15m_v003.blend",
+    "bytes": 614236,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_出口安全房_15x15m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_出口安全房_15x15m_v003.blend",
+    "bytes": 727990,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_支路内容房_01_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_01_30x25m_v003.blend",
+    "bytes": 817145,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_01_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_01_30x25m_v003.blend",
+    "bytes": 1096751,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_支路内容房_02_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_02_30x25m_v003.blend",
+    "bytes": 804649,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_02_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_02_30x25m_v003.blend",
+    "bytes": 1069329,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_支路内容房_03_40x35m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_03_40x35m_v003.blend",
+    "bytes": 1052886,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_03_40x35m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_03_40x35m_v003.blend",
+    "bytes": 1519065,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_支路内容房_04_30x25m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_04_30x25m_v003.blend",
+    "bytes": 804649,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_04_30x25m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_04_30x25m_v003.blend",
+    "bytes": 1069329,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_走廊地砖_5x5x0.3m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_走廊地砖_5x5x0.3m_v003.blend",
+    "bytes": 541823,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_走廊地砖_5x5x0.3m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_走廊地砖_5x5x0.3m_v003.blend",
+    "bytes": 581196,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v001.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v003.blend",
+    "bytes": 492289,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v002.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v003.blend",
+    "bytes": 517892,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "source/art/whitebox/tower_zones/stairs/v013/blender/whitebox_tower_stairs_v013.blend",
+    "newest_by_number": "source/art/whitebox/tower_zones/stairs/v015/blender/whitebox_tower_stairs_v015.blend",
+    "bytes": 1743900,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v016/whitebox_tower_stairs_v016.blend",
+    "newest_by_number": "tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v019/whitebox_tower_stairs_v019.blend",
+    "bytes": 3680172,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v017/whitebox_tower_stairs_v017.blend",
+    "newest_by_number": "tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v019/whitebox_tower_stairs_v019.blend",
+    "bytes": 6544584,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  },
+  {
+    "path": "tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v018/whitebox_tower_stairs_v018.blend",
+    "newest_by_number": "tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v019/whitebox_tower_stairs_v019.blend",
+    "bytes": 6682400,
+    "decision": "版本号候选；须按资产引用和正式源逐项裁决，不自动删除"
+  }
+]

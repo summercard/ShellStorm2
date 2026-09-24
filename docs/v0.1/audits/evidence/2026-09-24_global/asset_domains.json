@@ -1,0 +1,198 @@
+[
+  {
+    "domain": "characters",
+    "name": "角色",
+    "ledger": "assets/registry/ledgers/ShellStorm2_角色账本_v001.xlsx",
+    "count": 16,
+    "skill": "game-character-model-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "原型已接入": 9,
+      "弃用": 6,
+      "已完成": 1
+    },
+    "blend_source_refs": 25,
+    "missing_blend_source_refs": []
+  },
+  {
+    "domain": "enemies",
+    "name": "敌人",
+    "ledger": "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx",
+    "count": 13,
+    "skill": "game-character-model-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "已完成": 6,
+      "程序占位": 5,
+      "原型已接入": 1,
+      "待制作": 1
+    },
+    "blend_source_refs": 8,
+    "missing_blend_source_refs": []
+  },
+  {
+    "domain": "scenes",
+    "name": "关卡场景",
+    "ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+    "count": 236,
+    "skill": "scene-full-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "程序占位": 65,
+      "已完成": 21,
+      "原型已接入": 24,
+      "正式美术已接入": 46,
+      "弃用": 1,
+      "旧资产已从正式基地移除": 4,
+      "已优化并正式接入": 5,
+      "Blender源已完成": 68,
+      "已导入；优化完成": 2
+    },
+    "blend_source_refs": 151,
+    "missing_blend_source_refs": [
+      {
+        "asset_id": "ENV-BASE99-FLOOR-DETAILS-V017",
+        "cell": "P32",
+        "path": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+      },
+      {
+        "asset_id": "ENV-BASE99-LOFT-FLOOR-FINISH-V017",
+        "cell": "P33",
+        "path": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+      },
+      {
+        "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+        "cell": "P34",
+        "path": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+      },
+      {
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER",
+        "cell": "P233",
+        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+      },
+      {
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-MID",
+        "cell": "P234",
+        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+      },
+      {
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER",
+        "cell": "P235",
+        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+      },
+      {
+        "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+        "cell": "P236",
+        "path": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend"
+      }
+    ]
+  },
+  {
+    "domain": "props",
+    "name": "道具",
+    "ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+    "count": 20,
+    "skill": "game-prop-model-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "程序占位": 5,
+      "原型已接入": 2,
+      "已完成": 7,
+      "正式美术已接入": 6
+    },
+    "blend_source_refs": 7,
+    "missing_blend_source_refs": []
+  },
+  {
+    "domain": "weapons",
+    "name": "武器",
+    "ledger": "assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx",
+    "count": 36,
+    "skill": "game-weapon-model-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "已完成": 18,
+      "程序占位": 17,
+      "原型已接入": 1
+    },
+    "blend_source_refs": 18,
+    "missing_blend_source_refs": []
+  },
+  {
+    "domain": "vfx",
+    "name": "特效",
+    "ledger": "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+    "count": 16,
+    "skill": "vfx-combat-effect-authoring",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "弃用": 4,
+      "程序占位": 7,
+      "原型已接入": 4,
+      "已完成": 1
+    },
+    "blend_source_refs": 0,
+    "missing_blend_source_refs": []
+  },
+  {
+    "domain": "ui",
+    "name": "UI",
+    "ledger": "assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx",
+    "count": 16,
+    "skill": "ui-asset-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "原型已接入": 4,
+      "程序占位": 11,
+      "已完成": 1
+    },
+    "blend_source_refs": 0,
+    "missing_blend_source_refs": []
+  },
+  {
+    "domain": "audio",
+    "name": "音效",
+    "ledger": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+    "count": 48,
+    "skill": "audio-sfx-asset-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "待制作": 12,
+      "已完成": 36
+    },
+    "blend_source_refs": 0,
+    "missing_blend_source_refs": []
+  },
+  {
+    "domain": "music",
+    "name": "音乐",
+    "ledger": "assets/registry/ledgers/ShellStorm2_音乐账本_v001.xlsx",
+    "count": 9,
+    "skill": "music-asset-pipeline",
+    "skill_exists": true,
+    "skill_acceptance_mentions": true,
+    "registry_resolver_mentioned": true,
+    "production_states": {
+      "待制作": 1,
+      "原型已接入": 8
+    },
+    "blend_source_refs": 0,
+    "missing_blend_source_refs": []
+  }
+]
