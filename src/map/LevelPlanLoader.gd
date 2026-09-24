@@ -158,6 +158,13 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw_reward_plan: Variant = raw.get("reward_plan", {})
 		if raw_reward_plan is Dictionary:
 			reward_plan = (raw_reward_plan as Dictionary).duplicate(true)
+		# 授权布局壳体（区块00 / 远征01）：整房 5m 组件清单随房表下传。本层只做
+		# 类型守卫 + 深拷贝，几何语义（lane 归属、门位顶替）由消费方 DungeonRoom3D 负责。
+		# 与 enemy_spawn_plan 同样「只透传不解释」—— 但**必须在此登记**，否则被静默丢弃。
+		var authored_instances: Array = []
+		var raw_authored_instances: Variant = raw.get("authored_layout_instances", [])
+		if raw_authored_instances is Array:
+			authored_instances = (raw_authored_instances as Array).duplicate(true)
 		var room := {
 			"key": str(raw.get("key", "")),
 			"room_id": str(raw.get("room_id", "")),
@@ -177,6 +184,14 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"declared_ports": raw.get("ports", []),
 			"ports": [],
 			"ports_derived": false,
+			# 授权布局壳体：房表声明了才落字段，未接管的房间一个字段都不多
+			# （TowerDescent3D._append_plan_room_record 同样按这个布尔判透传）。
+			"authored_layout_shell": bool(raw.get("authored_layout_shell", false)),
+			"authored_layout_asset_id": str(raw.get("authored_layout_asset_id", "")),
+			"authored_layout_version": str(raw.get("authored_layout_version", "")),
+			"authored_layout_room_id": str(raw.get("authored_layout_room_id", "")),
+			"authored_layout_peaceful": bool(raw.get("authored_layout_peaceful", false)),
+			"authored_layout_instances": authored_instances,
 		}
 		if str(room["key"]).is_empty():
 			errors.append("room_key_empty")

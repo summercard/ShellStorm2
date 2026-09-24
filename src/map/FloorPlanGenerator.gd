@@ -121,7 +121,8 @@ static func generate_expedition(request: Dictionary) -> Dictionary:
 ## —— 单间房的「设计源 → 运行时计划」透传（唯一登记点）——
 ##
 ## 房间级**可选**字段只在此处登记一次：`enemy_spawn_plan`（刷怪计划）、
-## `boss_content_id`（首领指派）、`reward_plan`（统一掉落计划）。两处消费方
+## `boss_content_id`（首领指派）、`reward_plan`（统一掉落计划）、
+## `authored_layout_*`（授权布局壳体，区块00 / 远征01）。两处消费方
 ## （`generate_from_level_plan` 与验收脚本）都走本函数，禁止各自复刻字段表。
 ##
 ## 为什么抽成独立函数：这些字段**当前没有任何关卡在数据里写**，端到端断言
@@ -160,6 +161,19 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		# 空字典 = 本房在该 trigger 上不覆盖，逐级回退。**不进 layout_id**：
 		# 掉落是内容不是几何，改它不得让既有存档的房间进度失配。
 		"reward_plan": (src.get("reward_plan", {}) as Dictionary).duplicate(true),
+		# —— 授权布局壳体（区块00 / 远征01）——
+		# 整房 5m 组件实例清单（房间局部坐标）。与上列字段一样「设计源钉死优先」：
+		# 本层只透传，不解释 slot_role、不重算门位。声明点只在房表；
+		# 消费方 DungeonRoom3D._build_authored_layout_shell() 按 slot_role 分派。
+		# 缺省 false ⇒ 未接管的房间一个字段都不多，行为逐字不变。
+		"authored_layout_shell": bool(src.get("authored_layout_shell", false)),
+		"authored_layout_asset_id": str(src.get("authored_layout_asset_id", "")),
+		"authored_layout_version": str(src.get("authored_layout_version", "")),
+		"authored_layout_room_id": str(src.get("authored_layout_room_id", "")),
+		"authored_layout_peaceful": bool(src.get("authored_layout_peaceful", false)),
+		"authored_layout_instances": (
+			src.get("authored_layout_instances", []) as Array
+		).duplicate(true),
 	}
 
 
