@@ -1,0 +1,123 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-DOOR_WEST",
+  "slug": "door_west",
+  "name_zh": "数据库安全门",
+  "category": "facility",
+  "version": "v002",
+  "source_blend": "L型走廊种类_数据连廊_45x35m_v002.blend",
+  "collection": "数据库安全门_资产包",
+  "objects": [
+    {
+      "name": "加厚门框",
+      "location_m": [
+        7.5,
+        9.7,
+        1.75
+      ],
+      "dimensions_m": [
+        3.15,
+        0.22,
+        3.5
+      ]
+    },
+    {
+      "name": "门叶",
+      "location_m": [
+        7.5,
+        9.54,
+        1.56
+      ],
+      "dimensions_m": [
+        2.62,
+        0.13,
+        2.97
+      ]
+    },
+    {
+      "name": "门叶纵筋",
+      "location_m": [
+        6.36,
+        9.45,
+        1.6
+      ],
+      "dimensions_m": [
+        0.075,
+        0.05,
+        2.8
+      ]
+    },
+    {
+      "name": "门叶纵筋.001",
+      "location_m": [
+        8.64,
+        9.45,
+        1.6
+      ],
+      "dimensions_m": [
+        0.075,
+        0.05,
+        2.8
+      ]
+    },
+    {
+      "name": "上门楣灯带",
+      "location_m": [
+        7.5,
+        9.52,
+        3.33
+      ],
+      "dimensions_m": [
+        2.45,
+        0.11,
+        0.12
+      ]
+    },
+    {
+      "name": "门槛冷光",
+      "location_m": [
+        7.5,
+        9.48,
+        0.11
+      ],
+      "dimensions_m": [
+        2.72,
+        0.05,
+        0.035
+      ]
+    },
+    {
+      "name": "读卡器外壳",
+      "location_m": [
+        9.33,
+        9.62,
+        1.45
+      ],
+      "dimensions_m": [
+        0.4,
+        0.26,
+        0.64
+      ]
+    },
+    {
+      "name": "读卡器屏",
+      "location_m": [
+        9.33,
+        9.47,
+        1.56
+      ],
+      "dimensions_m": [
+        0.25,
+        0.02,
+        0.31
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

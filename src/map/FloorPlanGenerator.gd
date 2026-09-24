@@ -8,6 +8,8 @@ const LEVEL_PLAN_LOADER := preload("res://src/map/LevelPlanLoader.gd")
 ## 显式 preload 而非依赖 class_name 全局：新增脚本在 global_script_class_cache.cfg
 ## 刷新前用全局名会直接 parse error（headless 门禁会静默红掉）。
 const LEVEL_PLAN_VALIDATOR := preload("res://src/map/LevelPlanValidator.gd")
+## 显式 preload：净距与门槽口径必须与校验器/加载器同源，不得在本类里重算一遍。
+const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
 
 const MAP_SIZE_M := 250.0
 const CORE_SIZE_M := 65.0
@@ -226,22 +228,38 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 		return {}
 	var policy := level_plan.get("generation_policy", {}) as Dictionary
 	var templates := LEVEL_PLAN_LOADER.load_room_templates(level_id)
-	var errors := LEVEL_PLAN_VALIDATOR.validate_floor(level_id, floor_number, policy, templates)
 	var mode := str(normalized.get("mode", "authored"))
+	# —— mode = "constrained"：几何由「蓝图（L2 的房表/主路/支线挂法）+ 种子」现算 ——
+	# L2 里存的那一份房表此时只承担两件事：拓扑蓝图（key / role / parent_key）与
+	# 「生成失败时的兜底样例」。这样做的理由见 `_generate_constrained_floor` 头注释。
+	var used_fallback := false
+	var floor_source := normalized
+	if mode == "constrained":
+		var generated := _generate_constrained_floor(
+			level_id, floor_number, run_seed, normalized, policy, templates
+		)
+		if generated.is_empty():
+			used_fallback = true
+		else:
+			floor_source = generated
+	# 校验必须打在「真正会用到的几何」上：constrained 时是生成结果，不是文件里的样例。
+	var errors := LEVEL_PLAN_VALIDATOR.validate_normalized(
+		level_id, floor_number, floor_source, policy, templates
+	)
 	var boss_floor := false
-	for value in normalized.get("rooms", []):
+	for value in floor_source.get("rooms", []):
 		var src := value as Dictionary
 		if str(src.get("role", "")) == "boss":
 			boss_floor = true
 	var rooms: Array[Dictionary] = []
-	for value in normalized.get("rooms", []):
+	for value in floor_source.get("rooms", []):
 		rooms.append(room_from_source(value as Dictionary))
 	var rng := RandomNumberGenerator.new()
 	# abci/absi 返回 int：^ 的左右操作数必须都是 int，absf 会让此处 parse error。
 	rng.seed = run_seed ^ absi(str(level_id).hash()) ^ (floor_number << 17)
 	_assign_content_types_data_driven(rooms, rng, boss_floor, policy)
 	var main_path: Array[String] = []
-	for value in normalized.get("main_path", []):
+	for value in floor_source.get("main_path", []):
 		main_path.append(str(value))
 	var branch_count := 0
 	var branch_room_count := 0
@@ -271,19 +289,19 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 	for room in rooms:
 		var dimensions := room["dimensions"] as Vector2
 		catalog[_size_catalog_key(dimensions)] = dimensions
-	var entry_side := str(normalized.get("entry_side", "east"))
+	var entry_side := str(floor_source.get("entry_side", "east"))
 	var plan := {
-		"layout_id": _data_driven_layout_id(level_id, floor_number, normalized, mode, run_seed),
+		"layout_id": _data_driven_layout_id(level_id, floor_number, floor_source, mode, run_seed),
 		"run_seed": run_seed,
 		"level_id": level_id,
 		"mode": mode,
-		"floor_number": int(normalized.get("floor_number", floor_number)),
-		"floor_index": int(normalized.get("floor_index", 0)),
-		"sequence_index": int(normalized.get("sequence_index", 0)),
+		"floor_number": int(floor_source.get("floor_number", floor_number)),
+		"floor_index": int(floor_source.get("floor_index", 0)),
+		"sequence_index": int(floor_source.get("sequence_index", 0)),
 		"boss_floor": boss_floor,
 		"entry_side": entry_side,
-		"exit_side": str(normalized.get("exit_side", _opposite_side(entry_side))),
-		"layout_variant": "data_driven_%s" % str(normalized.get("mode", "authored")),
+		"exit_side": str(floor_source.get("exit_side", _opposite_side(entry_side))),
+		"layout_variant": "data_driven_%s" % mode,
 		"trigger": "level_plan_data",
 		"rooms": rooms,
 		"main_path_keys": main_path,
@@ -291,7 +309,7 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 		"branch_count": branch_count,
 		"branch_room_count": branch_room_count,
 		"content_room_count": content_room_count,
-		"area_budget": _calculate_area_budget(rooms),
+		"area_budget": _calculate_area_budget(rooms, policy),
 		"room_size_catalog": catalog,
 		"terminal_mode": terminal_mode,
 		# 掉落调度投影（05 §11）。本路径的设计源房间可写 reward_plan，投影出真槽位。
@@ -300,7 +318,7 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 	plan["valid"] = errors.is_empty()
 	plan["validation_errors"] = errors
 	plan["attempt_count"] = 1
-	plan["used_fallback"] = false
+	plan["used_fallback"] = used_fallback
 	return plan
 
 
@@ -343,6 +361,563 @@ static func _data_driven_layout_id(
 	if mode == "constrained":
 		canonical["run_seed"] = run_seed
 	return "f%02d_%s" % [floor_number, JSON.stringify(canonical, "", true).sha256_text().substr(0, 16)]
+
+
+## —— mode = "constrained"：按种子现算几何（远征关卡01）——
+##
+## 为什么需要：远征是肉鸽式单层行动，**每局的版图应当不一样**（主路 6 间内容房的
+## 房型顺序随机、4 间支线随机选型），但随机只能发生在硬约束之内 —— 门槽、5m 模数、
+## 父子共轴、房间互斥这些一条都不能破。故这里不写"自由布局"，而写一个
+## **贪心自避走（self-avoiding walk）**：
+##   · 主路一线到底：safe → room_01…room_06 → boss → extraction；
+##   · 每间新房**贴着父房**摆（4 个方向里挑第一个不撞的）⇒ 父子边恒为墙贴墙
+##     （净距 0，逐条进 `edge_policy` 白名单），不需要过渡走廊；
+##   · 支线 4 间挂在主路中间那 4 间上，同样贴墙（房表里的 `parent_key` 决定挂法）；
+##   · 贴墙位移 = 两边半尺寸之和，从已吸附的原点累加 ⇒ 尺寸/中心天然落在 5m 模数上。
+## 摆不下（越界 / 撞满 / 包围盒超 250）就换一份房型重试；重试全败则由调用方回退到
+## L2 里存的那份样例（`used_fallback = true`），保证任何种子都能进图。
+## 生成重试上限：每次重试换一份「房型抽取」再摆一次。
+## 摆位已改为带回溯的搜索（见 `_place_constrained_slots`），单次尝试成功率≈100%，
+## 故本值只作极端兜底，取小值以免个别种子把时间吃光。
+const CONSTRAINED_MAX_ATTEMPTS := 12
+## 单次尝试内回溯搜索的节点预算。DFS 一旦找到解立刻返回，正常情形只需百来个节点；
+## 打满预算意味着「这份房型组合真的摆不下」，及早放弃、换一份房型重抽更划算。
+const CONSTRAINED_SEARCH_BUDGET := 3000
+## 每层最多展开几个候选位。**必须截断**：同一面墙常有多个横向候选，若不截断，
+## 分支因子会到十几，失败时 DFS 的搜索空间呈指数爆炸（实测：不截断时平均耗时
+## 542 ms、最慢 2.98 s —— 进图会明显卡顿）。截断后好候选仍在最前（按「正对优先、
+## 离场地中心近优先」排序），成功率不受影响。
+const CONSTRAINED_BRANCH_LIMIT := 6
+const CONSTRAINED_EPS := 0.01
+
+
+static func _generate_constrained_floor(
+	level_id: String,
+	floor_number: int,
+	run_seed: int,
+	blueprint: Dictionary,
+	policy: Dictionary,
+	templates: Dictionary
+) -> Dictionary:
+	if (blueprint.get("rooms", []) as Array).is_empty() or templates.is_empty():
+		return {}
+	for attempt in range(CONSTRAINED_MAX_ATTEMPTS):
+		var rng := RandomNumberGenerator.new()
+		rng.seed = (
+			run_seed
+			^ absi(str(level_id).hash())
+			^ (floor_number << 17)
+			^ (attempt * 2654435761)
+		)
+		var slots := _constrained_slots(blueprint, policy, templates, rng)
+		if slots.is_empty():
+			continue
+		var placed := _place_constrained_slots(slots, rng)
+		if placed.is_empty():
+			continue
+		return _constrained_floor_from(blueprint, floor_number, placed, slots)
+	return {}
+
+
+## 蓝图 + 模板池 → 有序「槽位表」。每项 = 一间房用哪个模板、多大、挂谁。
+## 拓扑（key / role / parent_key / 主路顺序）完全照抄 L2 蓝图，本函数只决定**房型**。
+static func _constrained_slots(
+	blueprint: Dictionary, policy: Dictionary, templates: Dictionary, rng: RandomNumberGenerator
+) -> Array[Dictionary]:
+	var raw_rooms := blueprint.get("rooms", []) as Array
+	var by_key: Dictionary = {}
+	for value in raw_rooms:
+		var raw := value as Dictionary
+		by_key[str(raw.get("key", ""))] = raw
+	if by_key.is_empty():
+		return []
+	# —— 主路顺序：入口 → main_path → Boss → 撤离 ——
+	var chain: Array[String] = []
+	var entry_key := _first_key_with_role(raw_rooms, "stair_entry")
+	if not entry_key.is_empty():
+		chain.append(entry_key)
+	for value in blueprint.get("main_path", []):
+		var key := str(value)
+		if by_key.has(key) and not chain.has(key):
+			chain.append(key)
+	for role in ["boss", "extraction"]:
+		var key := _first_key_with_role(raw_rooms, role)
+		if not key.is_empty() and not chain.has(key):
+			chain.append(key)
+	# —— 支线：按 L2 房表顺序（挂法由 L2 的 parent_key 决定）——
+	var branch_keys: Array[String] = []
+	for value in raw_rooms:
+		var raw := value as Dictionary
+		var key := str(raw.get("key", ""))
+		if str(raw.get("role", "")) == "branch" and not branch_keys.has(key):
+			branch_keys.append(key)
+	# —— 内容房模板池：优先读 policy，缺省取「全部 COMMON_ROOM 模板」——
+	var pool: Array[String] = []
+	for value in policy.get("content_template_pool", []):
+		var template_id := str(value)
+		if templates.has(template_id):
+			pool.append(template_id)
+	if pool.is_empty():
+		for template_id in templates.keys():
+			var template := templates[template_id] as Dictionary
+			if str(template.get("room_type", "")) == "COMMON_ROOM":
+				pool.append(str(template_id))
+	if pool.is_empty():
+		return []
+	var main_keys: Array[String] = []
+	for key in chain:
+		if str((by_key[key] as Dictionary).get("role", "")) == "main":
+			main_keys.append(key)
+	var content_count := main_keys.size() + branch_keys.size()
+	var draws := _constrained_template_draws(content_count, pool, rng)
+	# 支线按「父键」归组，父房落到槽位表后**立即跟随**摆放 —— 越早摆可选面越多。
+	# 若把 4 条支线全部堆到最后再摆，主路房四周早被后续主路房占满（实测：那样做
+	# 300 个种子只有 46 个能摆下，成功率 15%）。就近插入后主路房刚落位、周边最空。
+	var branches_by_parent: Dictionary = {}
+	for key in branch_keys:
+		var raw := by_key[key] as Dictionary
+		var parent_key := str(raw.get("parent_key", ""))
+		if not branches_by_parent.has(parent_key):
+			branches_by_parent[parent_key] = []
+		(branches_by_parent[parent_key] as Array).append(key)
+	var slots: Array[Dictionary] = []
+	var content_index := 0
+	for key in chain:
+		var raw := by_key[key] as Dictionary
+		var template_id := str(raw.get("template_id", ""))
+		var variant := str(raw.get("template_variant", ""))
+		if str(raw.get("role", "")) == "main":
+			# 内容房：房型按种子洗牌（含变体），尺寸随之改 —— 这正是"每局不同"的来源。
+			template_id = draws[content_index]
+			content_index += 1
+			variant = _pick_template_variant(templates, template_id, rng)
+		if not templates.has(template_id):
+			return []
+		slots.append(_constrained_slot(key, raw, templates, template_id, variant))
+		for branch_key in (branches_by_parent.get(key, []) as Array):
+			var branch_raw := by_key[str(branch_key)] as Dictionary
+			var branch_template := draws[content_index]
+			content_index += 1
+			slots.append(_constrained_slot(
+				str(branch_key), branch_raw, templates, branch_template,
+				_pick_template_variant(templates, branch_template, rng)
+			))
+	return slots
+
+
+## 每间内容房的房型抽取：**先保证每个房型族至少出现一次**，再补足其余槽位后整体洗牌。
+## 为什么不让纯随机：10 个槽位纯随机很容易整局只出 2~3 种房（含"全标准房"），
+## 玩法上等于没有版图差异；先铺一轮族再洗牌，既保证 9 房型都被用到，又保持全随机顺序。
+static func _constrained_template_draws(
+	count: int, pool: Array[String], rng: RandomNumberGenerator
+) -> Array[String]:
+	var draws: Array[String] = []
+	for index in range(count):
+		if index < pool.size():
+			draws.append(pool[index])
+		else:
+			draws.append(pool[rng.randi_range(0, pool.size() - 1)])
+	for index in range(draws.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var held := draws[index]
+		draws[index] = draws[swap_index]
+		draws[swap_index] = held
+	return draws
+
+
+static func _pick_template_variant(
+	templates: Dictionary, template_id: String, rng: RandomNumberGenerator
+) -> String:
+	var template := templates.get(template_id, {}) as Dictionary
+	var variants := template.get("variants", []) as Array
+	if variants.is_empty():
+		return ""
+	return str(variants[rng.randi_range(0, variants.size() - 1)])
+
+
+static func _constrained_slot(
+	key: String, raw: Dictionary, templates: Dictionary, template_id: String, variant: String
+) -> Dictionary:
+	var template := templates[template_id] as Dictionary
+	return {
+		"key": key,
+		"room_id": str(raw.get("room_id", "")),
+		"legacy_room_id": str(raw.get("legacy_room_id", "")),
+		"room_type": str(raw.get("room_type", "")),
+		"role": str(raw.get("role", "")),
+		"parent_key": str(raw.get("parent_key", "")),
+		"template_id": template_id,
+		"template_variant": variant,
+		"size": _vec2(template.get("size_m", [])),
+	}
+
+
+## 按槽位顺序贴墙摆放，**带回溯**。全部分配成功返回按槽位序的摆放表，否则返回空。
+##
+## 为什么必须回溯：单遍贪心在「大房把场地切成碎片」时只能整份作废重抽房型，
+## 实测含大房的内容房池成功率只有 ~33%（且与尺寸强相关：只放 25×25 时 100%）。
+## 回溯的代价很低 —— 每间房最多十来个候选位，而绝大多数情况第一个候选就成立。
+##
+## 首房锚在「与该尺寸同相位的场地原点」上（15×15 → (2.5,2.5)，即场地正中），
+## 全场再在 `_constrained_fits` 的边界约束内蛇形展开 ⇒ 产出天然落在场地内，
+## 无需事后整体平移（平移反而可能把已经贴边的房间推出边界）。
+static func _place_constrained_slots(
+	slots: Array[Dictionary], rng: RandomNumberGenerator
+) -> Array[Dictionary]:
+	var placed: Array[Dictionary] = []
+	var state := {"nodes": 0}
+	if _place_recursive(slots, 0, placed, rng, state):
+		return placed
+	return []
+
+
+## 递归摆第 `index` 个槽位。摆不进就回退上一间房换位置；节点预算耗尽即放弃本次尝试
+## （交由外层重抽房型），避免个别种子把时间吃光。
+static func _place_recursive(
+	slots: Array[Dictionary],
+	index: int,
+	placed: Array[Dictionary],
+	rng: RandomNumberGenerator,
+	state: Dictionary
+) -> bool:
+	if index >= slots.size():
+		return true
+	state["nodes"] = int(state["nodes"]) + 1
+	if int(state["nodes"]) > CONSTRAINED_SEARCH_BUDGET:
+		return false
+	var slot := slots[index]
+	var size := slot["size"] as Vector2
+	if size.x <= 0.0 or size.y <= 0.0:
+		return false
+	for candidate in _placement_candidates(slot, placed, rng):
+		var center := candidate as Vector2
+		placed.append({
+			"key": str(slot["key"]),
+			"center": center,
+			"size": size,
+			"dir": _direction_from_delta(center - _parent_center(slot, placed)),
+		})
+		if _place_recursive(slots, index + 1, placed, rng, state):
+			return true
+		placed.pop_back()
+	return false
+
+
+## 第 `index` 个槽位当前可用的全部落位坐标（已通过吸附 + 场地 + 不重叠三重检查），
+## 按「好位置优先」排序。首房/无父房只有一个候选（场地原点）。
+static func _placement_candidates(
+	slot: Dictionary, placed: Array[Dictionary], rng: RandomNumberGenerator
+) -> Array:
+	var size := slot["size"] as Vector2
+	var parent_key := str(slot.get("parent_key", ""))
+	if placed.is_empty() or parent_key.is_empty():
+		var origin := _snapped_origin_for(size)
+		if _constrained_fits(origin, size, _placed_rects(placed)):
+			return [origin]
+		return []
+	var parent_index := _placed_index_by_key(placed, parent_key)
+	if parent_index < 0:
+		return []
+	var parent_center := placed[parent_index]["center"] as Vector2
+	var parent_size := placed[parent_index]["size"] as Vector2
+	var rects := _placed_rects(placed)
+	# 先按方向收集每个方向的候选（各自已按「横向离父房近 → 远」排好）。
+	var per_direction: Array = []
+	for direction_value in _direction_trial_order(
+		str(slot.get("role", "")), _incoming_dir(placed, parent_index), rng
+	):
+		var direction := str(direction_value)
+		var along_x := direction == "east" or direction == "west"
+		var parent_cross := parent_center.y if along_x else parent_center.x
+		var child_cross_size := size.y if along_x else size.x
+		var row: Array = []
+		for cross in _lateral_candidates(parent_cross, child_cross_size):
+			var center := _touching_center(parent_center, parent_size, size, direction, cross)
+			if _constrained_fits(center, size, rects):
+				row.append(center)
+		per_direction.append(row)
+	# 再**按横向名次轮转**跨方向取：先各方向的第 1 候选，再各方向的第 2 候选……
+	# 这样截断到 `CONSTRAINED_BRANCH_LIMIT` 个后，仍能覆盖多个方向，
+	# 不至于只把「首选方向」的候选全试完、其它方向一个都没轮到。
+	var result: Array = []
+	var rank := 0
+	var progressed := true
+	while progressed and result.size() < CONSTRAINED_BRANCH_LIMIT:
+		progressed = false
+		for row_value in per_direction:
+			var row := row_value as Array
+			if rank < row.size():
+				result.append(row[rank])
+				progressed = true
+				if result.size() >= CONSTRAINED_BRANCH_LIMIT:
+					break
+		rank += 1
+	return result
+
+
+## 已落位房间的矩形表（回溯时不能缓存 —— placed 会被反复 pop/push）。
+static func _placed_rects(placed: Array[Dictionary]) -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	for value in placed:
+		var room := value as Dictionary
+		rects.append(_rect_at(room["center"] as Vector2, room["size"] as Vector2))
+	return rects
+
+
+## 已落位房间相对它自己父房的朝向（主路房用它延续直行、支线房用它取侧向）。
+static func _incoming_dir(placed: Array[Dictionary], index: int) -> String:
+	var stored := str((placed[index] as Dictionary).get("dir", ""))
+	return stored if not stored.is_empty() else "east"
+
+
+static func _parent_center(slot: Dictionary, placed: Array[Dictionary]) -> Vector2:
+	var parent_key := str(slot.get("parent_key", ""))
+	var parent_index := _placed_index_by_key(placed, parent_key)
+	if parent_index < 0:
+		return Vector2.ZERO
+	return placed[parent_index]["center"] as Vector2
+
+
+## 某面墙上子房可以取的横向坐标（按「离父房中心近 → 远」排序）。
+##
+## 取值必须是**子房的合法相位**（`size/2 mod 5` 的等价类），否则中心吸附校验会红；
+## 同时相对父房中心的偏移不得超过同轴容差 5.01 m，否则 `corridor_not_colinear`。
+## 相位与父房一致时得 0 / ±5；差 2.5 m 时只能得 ±2.5。
+static func _lateral_candidates(parent_axis: float, child_cross_size: float) -> Array[float]:
+	var base := _snap_axis(parent_axis, child_cross_size)
+	var limit := ROOM_DOOR_LANE.LATERAL_TOLERANCE_M - CONSTRAINED_EPS
+	var result: Array[float] = []
+	# base ± 2 格足以覆盖容差窗口（窗口半宽 5.01 < 2×5）。
+	for step in range(-2, 3):
+		var value: float = base + float(step) * GRID_UNIT_M
+		if absf(value - parent_axis) <= limit:
+			result.append(value)
+	result.sort_custom(func(a, b): return absf(a - parent_axis) < absf(b - parent_axis))
+	return result
+
+
+## 新房试探方向的优先序。
+##
+## 主路房：**先延续父房的来向**（成走廊感），堵了再走其余方向。
+## 支线房：**先走垂直于来向的两个侧面**，绝不与主路下一间抢同一个来向。
+##   这一条是硬需求：支线若也优先直行，就会占掉主路下一间唯一想去的方向，
+##   主路被迫改道、再往下越走越挤（实测：支线沿用直行序时 300 个种子只成功 6 个）。
+##
+## 末尾的三个兜底方向**按种子打乱**：同一份房型下，不同尝试要能有不同摆法，
+## 否则 128 次重试其实只等价于 1 次（实测：兜底序固定时成功率约 33%）。
+static func _direction_trial_order(role: String, preferred: String, rng: RandomNumberGenerator) -> Array:
+	var directions: Array = []
+	if role == "branch":
+		directions = _perpendicular_dirs(preferred)
+	else:
+		directions = [preferred]
+	var rest: Array = []
+	for direction_value in ["east", "west", "north", "south"]:
+		if not directions.has(direction_value):
+			rest.append(direction_value)
+	for index in range(rest.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var held: Variant = rest[index]
+		rest[index] = rest[swap_index]
+		rest[swap_index] = held
+	for direction_value in rest:
+		directions.append(direction_value)
+	return directions
+
+
+## 与给定方向垂直的两个方向（先给「主轴不同侧」的那个，保持确定性顺序）。
+static func _perpendicular_dirs(direction: String) -> Array:
+	if direction == "east" or direction == "west":
+		return ["north", "south"]
+	return ["east", "west"]
+
+
+## 贴着父房某个面时的子房中心：主轴位移 = 两侧半尺寸之和（净距恰为 0）。
+##
+## `cross_axis` 是横轴（垂直于贴墙法线的那个轴）的绝对坐标，由
+## `_lateral_candidates` 给出 —— **必须**取子房自己的合法相位，绝不能直接沿用
+## 父房中心：奇数格宽房（15/25/45）中心落 `5k+2.5`、偶数格宽（40/50/60/70）落 `5k`，
+## 两者相差 2.5 m。沿用父房中心会让偶数高的子房横轴偏 2.5 m，
+## `room_center_not_snapped` 判红，而主轴又已是 0 净距 ⇒ 该尝试必废
+## （实测：不吸附时 300/300 个种子全部回退）。
+static func _touching_center(
+	parent_center: Vector2,
+	parent_size: Vector2,
+	child_size: Vector2,
+	direction: String,
+	cross_axis: float
+) -> Vector2:
+	match direction:
+		"east":
+			return Vector2(parent_center.x + (parent_size.x + child_size.x) * 0.5, cross_axis)
+		"west":
+			return Vector2(parent_center.x - (parent_size.x + child_size.x) * 0.5, cross_axis)
+		"north":
+			return Vector2(cross_axis, parent_center.y - (parent_size.y + child_size.y) * 0.5)
+		_:
+			return Vector2(cross_axis, parent_center.y + (parent_size.y + child_size.y) * 0.5)
+
+
+## 把某个横轴坐标吸附到「该尺寸的合法中心相位」上，取离原值最近的那个。
+## 与校验器 `_snap_component_axis` 同一公式：`snappedf(center - size/2, 5) + size/2`。
+static func _snap_axis(value: float, size: float) -> float:
+	return snappedf(value - size * 0.5, GRID_UNIT_M) + size * 0.5
+
+
+static func _snapped_origin_for(size: Vector2) -> Vector2:
+	return Vector2(fposmod(size.x * 0.5, GRID_UNIT_M), fposmod(size.y * 0.5, GRID_UNIT_M))
+
+
+## 位置合法性三连：在场地内、中心吸附在 5m 模数上、与已摆房间不重叠（相切允许）。
+##
+## 场地边界这条**必须保留**，它不是「顺手多判一下」—— 它是逼路径拐弯的唯一机制。
+## `_first_adjacent_center` 的优先序是「先延续来向（成走廊感）」，而开阔场地里永远
+## 不会撞到别的房，于是若不在边界处逼停，主路会一路直走：8 间主路房（含入口与 Boss）
+## 沿单一轴的半尺寸之和约 415 m，远超 250 m 场地 ⇒ 每个种子都越界、100% 回退
+## （实测：删掉本检查后 300/300 个种子全部回退）。留边界后蛇形自动折返。
+static func _constrained_fits(center: Vector2, size: Vector2, rects: Array[Rect2]) -> bool:
+	var rect := _rect_at(center, size)
+	if not _rect_contains_rect(_map_rect(), rect):
+		return false
+	var snapped := Vector2(
+		snappedf(center.x - size.x * 0.5, GRID_UNIT_M) + size.x * 0.5,
+		snappedf(center.y - size.y * 0.5, GRID_UNIT_M) + size.y * 0.5
+	)
+	if absf(snapped.x - center.x) > CONSTRAINED_EPS or absf(snapped.y - center.y) > CONSTRAINED_EPS:
+		return false
+	for other in rects:
+		if rect.intersection(other).get_area() > CONSTRAINED_EPS:
+			return false
+	return true
+
+
+## 摆位结果 → 规范化层结构（形状与 LevelPlanLoader.normalize_floor 的返回一致）。
+static func _constrained_floor_from(
+	blueprint: Dictionary, floor_number: int, placed: Array[Dictionary], slots: Array[Dictionary]
+) -> Dictionary:
+	var center_by_key: Dictionary = {}
+	for value in placed:
+		var room := value as Dictionary
+		center_by_key[str(room["key"])] = room["center"]
+	var rooms: Array[Dictionary] = []
+	for value in slots:
+		var slot := value as Dictionary
+		var key := str(slot["key"])
+		if not center_by_key.has(key):
+			return {}
+		rooms.append({
+			"key": key,
+			"room_id": str(slot.get("room_id", "")),
+			"legacy_room_id": str(slot.get("legacy_room_id", "")),
+			"room_type": str(slot.get("room_type", "")),
+			"role": str(slot.get("role", "")),
+			"parent_key": str(slot.get("parent_key", "")),
+			"template_id": str(slot.get("template_id", "")),
+			"template_variant": str(slot.get("template_variant", "")),
+			"center": center_by_key[key],
+			"size": slot["size"],
+			"rotation_deg": 0.0,
+			"content_type": "",
+			"boss_content_id": "",
+			"enemy_spawn_plan": {},
+			"reward_plan": {},
+			"declared_ports": [],
+			"ports": [],
+			"ports_derived": false,
+		})
+	LEVEL_PLAN_LOADER.derive_ports(rooms)
+	return {
+		"level_id": str(blueprint.get("level_id", "")),
+		"mode": "constrained",
+		"floor_number": int(blueprint.get("floor_number", floor_number)),
+		"floor_index": int(blueprint.get("floor_index", 0)),
+		"sequence_index": int(blueprint.get("sequence_index", 0)),
+		"entry_side": str(blueprint.get("entry_side", "east")),
+		"exit_side": str(blueprint.get("exit_side", "west")),
+		"reservations": blueprint.get("reservations", []),
+		"rooms": rooms,
+		"main_path": _string_array(blueprint.get("main_path", [])),
+		"edge_policy": _constrained_edge_policy(rooms),
+		"errors": [],
+	}
+
+
+## 墙贴墙的父子边要显式进白名单，否则校验器按 corridor_too_short 报红；反过来
+## 净距 > 0 的边**不能**进白名单（会报 edge_policy_stale）。故按实算净距逐条取舍。
+static func _constrained_edge_policy(rooms: Array) -> Array:
+	var by_key: Dictionary = {}
+	for value in rooms:
+		by_key[str((value as Dictionary).get("key", ""))] = value
+	var policy: Array = []
+	for value in rooms:
+		var room := value as Dictionary
+		var key := str(room.get("key", ""))
+		var parent_key := str(room.get("parent_key", ""))
+		if parent_key.is_empty() or not by_key.has(parent_key):
+			continue
+		var parent := by_key[parent_key] as Dictionary
+		var clear := ROOM_DOOR_LANE.corridor_clear(
+			parent.get("center", Vector2.ZERO) as Vector2,
+			parent.get("size", Vector2.ZERO) as Vector2,
+			room.get("center", Vector2.ZERO) as Vector2,
+			room.get("size", Vector2.ZERO) as Vector2
+		)
+		if clear <= CONSTRAINED_EPS:
+			policy.append({
+				"a": parent_key,
+				"b": key,
+				"allow_zero_length": true,
+				"note": "程序化生成：墙贴墙",
+			})
+	return policy
+
+
+static func _first_key_with_role(rooms: Array, role: String) -> String:
+	for value in rooms:
+		var room := value as Dictionary
+		if str(room.get("role", "")) == role:
+			return str(room.get("key", ""))
+	return ""
+
+
+static func _placed_index_by_key(placed: Array[Dictionary], key: String) -> int:
+	for index in range(placed.size()):
+		if str((placed[index] as Dictionary).get("key", "")) == key:
+			return index
+	return -1
+
+
+static func _direction_from_delta(delta: Vector2) -> String:
+	if absf(delta.x) >= absf(delta.y):
+		return "east" if delta.x >= 0.0 else "west"
+	return "south" if delta.y >= 0.0 else "north"
+
+
+static func _rect_at(center: Vector2, size: Vector2) -> Rect2:
+	return Rect2(center - size * 0.5, size)
+
+
+static func _map_rect() -> Rect2:
+	return Rect2(
+		Vector2(-MAP_SIZE_M * 0.5, -MAP_SIZE_M * 0.5),
+		Vector2(MAP_SIZE_M, MAP_SIZE_M)
+	)
+
+
+static func _vec2(value: Variant) -> Vector2:
+	if value is Array:
+		var array := value as Array
+		if array.size() >= 2:
+			return Vector2(float(array[0]), float(array[1]))
+	return Vector2.ZERO
+
+
+static func _string_array(value: Variant) -> Array[String]:
+	var out: Array[String] = []
+	if value is Array:
+		for item in (value as Array):
+			out.append(str(item))
+	return out
 
 
 ## 远征关卡专用校验：不使用塔楼的 10 房/2-5 支线/30×25 最小内容房口径。
@@ -836,10 +1411,10 @@ static func _shuffle_content_types(rooms: Array[Dictionary], rng: RandomNumberGe
 				room["type"] = "ELITE"
 
 
-static func _calculate_area_budget(rooms: Array[Dictionary]) -> Dictionary:
+static func _calculate_area_budget(rooms: Array[Dictionary], policy: Dictionary = {}) -> Dictionary:
 	# 公式已抽到 LevelAreaBudget 唯一实现（校验器与加载路径共用，避免第三份）。
-	# 本处保留同名转发，调用点与返回键完全不变。
-	return LEVEL_AREA_BUDGET.calculate(rooms)
+	# 本处保留同名转发，调用点与返回键完全不变（policy 缺省 = 塔楼口径）。
+	return LEVEL_AREA_BUDGET.calculate(rooms, policy)
 
 
 static func _corridor_length(parent: Dictionary, child: Dictionary) -> float:

@@ -29,7 +29,11 @@ def check(root: Path) -> dict:
         path = root / relative
         if path.is_file() and version not in path.read_text(encoding="utf-8"):
             issues.append(f"Missing engine version {version}: {relative}")
-    paths = sorted(set((root / "docs").glob("*.md")) | set((root / "docs/v0.1").rglob("*.md")))
+    paths = sorted(
+        set((root / "docs").glob("*.md"))
+        | set((root / "docs/v0.1").rglob("*.md"))
+        | set((root / "docs/v0.2").rglob("*.md"))
+    )
     links = 0
     for path in paths:
         in_fence = False

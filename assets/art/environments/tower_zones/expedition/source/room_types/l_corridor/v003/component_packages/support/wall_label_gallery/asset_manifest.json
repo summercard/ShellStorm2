@@ -1,0 +1,58 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY",
+  "slug": "wall_label_gallery",
+  "name_zh": "三角墙面警示标识",
+  "category": "support",
+  "version": "v003",
+  "source_blend": "L型走廊种类_数据连廊_45x40m_v003.blend",
+  "collection": "三角墙面警示标识_资产包",
+  "objects": [
+    {
+      "name": "发光警告标识底板",
+      "location_m": [
+        31.0,
+        14.46,
+        2.55
+      ],
+      "dimensions_m": [
+        0.63,
+        0.04,
+        0.51
+      ]
+    },
+    {
+      "name": "小型白色警告条",
+      "location_m": [
+        31.0,
+        14.42,
+        2.63
+      ],
+      "dimensions_m": [
+        0.37,
+        0.015,
+        0.055
+      ]
+    },
+    {
+      "name": "小型黄色警告条",
+      "location_m": [
+        31.0,
+        14.42,
+        2.47
+      ],
+      "dimensions_m": [
+        0.28,
+        0.015,
+        0.035
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

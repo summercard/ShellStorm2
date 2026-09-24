@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "bridge_60x50",
+  "room_type": "COMMON_ROOM",
+  "size_m": [60.0, 50.0],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": ["north", "south", "east", "west"],
+  "wall_lane_table": {
+    "north": [-22.5, -17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5, 22.5],
+    "south": [-22.5, -17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5, 22.5],
+    "east": [-17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5],
+    "west": [-17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5]
+  },
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "ENV-EXPEDITION-L01-ROOM-BRIDGE-60X50",
+    "components": []
+  },
+  "note": "远征关卡通道桥房间。**本关唯一多层几何房型**：四周 15 m 宽上层平台通道，中央下沉坑（约 30×20 m），一座桥横跨坑顶，坑内有管线/支架/设备与下层平台。白盒契约只钉外轮廓与门槽；坑深/桥宽/下层动线待定（见设计页 §3.3）。"
+}

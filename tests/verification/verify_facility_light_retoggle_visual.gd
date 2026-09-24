@@ -51,6 +51,13 @@ func _ready() -> void:
 	_inspection_camera.look_at(facility.to_global(Vector3.ZERO), Vector3.FORWARD)
 	_inspection_camera.current = true
 	await _settle()
+	# 关卡刚载入时大气与体积雾尚未收敛：实测不做任何操作静置 15 秒，九点亮度会从
+	# 0.3428 自行降到 0.3186（与开灯后的稳态值逐位相同），与开关无关。
+	# 若不等待，下面 initial ↔ reopened 的 ±0.025 比较就退化成「载入瞬间 vs 稳态」
+	# 的时间差比较，会随帧率在阈值上下抖动（2026-09-24 实测 0.0267 越界）。
+	# 断言口径不变，只让两帧都取自稳态。
+	await get_tree().create_timer(15.0).timeout
+	await _settle()
 
 	var room_snapshot := facility.get_room_snapshot()
 	if (

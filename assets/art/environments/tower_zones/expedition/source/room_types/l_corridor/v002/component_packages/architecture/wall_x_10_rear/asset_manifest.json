@@ -1,0 +1,136 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR",
+  "slug": "wall_x_10_rear",
+  "name_zh": "后墙_10米",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "L型走廊种类_数据连廊_45x35m_v002.blend",
+  "collection": "后墙_10米_资产包",
+  "objects": [
+    {
+      "name": "标准5米墙体.001",
+      "location_m": [
+        12.5,
+        10.0,
+        5.95
+      ],
+      "dimensions_m": [
+        5.0,
+        0.3,
+        11.9
+      ]
+    },
+    {
+      "name": "墙脚踢脚板.002",
+      "location_m": [
+        12.5,
+        9.81,
+        0.28
+      ],
+      "dimensions_m": [
+        4.9,
+        0.1,
+        0.55
+      ]
+    },
+    {
+      "name": "墙体水平分仓线.004",
+      "location_m": [
+        12.5,
+        9.815,
+        4.05
+      ],
+      "dimensions_m": [
+        4.86,
+        0.025,
+        0.035
+      ]
+    },
+    {
+      "name": "墙体水平分仓线.005",
+      "location_m": [
+        12.5,
+        9.815,
+        7.85
+      ],
+      "dimensions_m": [
+        4.86,
+        0.025,
+        0.035
+      ]
+    },
+    {
+      "name": "竖向结构边筋.004",
+      "location_m": [
+        10.15,
+        9.79,
+        5.75
+      ],
+      "dimensions_m": [
+        0.075,
+        0.08,
+        11.3
+      ]
+    },
+    {
+      "name": "竖向结构边筋.005",
+      "location_m": [
+        14.85,
+        9.79,
+        5.75
+      ],
+      "dimensions_m": [
+        0.075,
+        0.08,
+        11.3
+      ]
+    },
+    {
+      "name": "上沿管线桥架.002",
+      "location_m": [
+        12.5,
+        9.72,
+        4.14
+      ],
+      "dimensions_m": [
+        4.8,
+        0.11,
+        0.14
+      ]
+    },
+    {
+      "name": "上沿细蓝光导线.002",
+      "location_m": [
+        12.5,
+        9.645,
+        4.13
+      ],
+      "dimensions_m": [
+        4.7,
+        0.012,
+        0.025
+      ]
+    },
+    {
+      "name": "冷蓝墙灯.002",
+      "location_m": [
+        12.5,
+        9.73,
+        4.0
+      ],
+      "dimensions_m": [
+        2.0,
+        0.13,
+        0.1
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

@@ -32,7 +32,9 @@ def _module_rows(index_path: Path, root: Path) -> tuple[dict[str, set[str]], lis
                 continue
             resolved = (index_path.parent / target).resolve()
             try:
-                design_paths.add(str(resolved.relative_to(root)))
+                # Windows 上 relative_to() 给的是反斜杠，而 feature_registry.json 里一律写正斜杠；
+                # 不归一会让下面 index_design - set(design_docs) 恒不相等 ⇒ 37 项恒红、约束失效。
+                design_paths.add(str(resolved.relative_to(root)).replace("\\", "/"))
             except ValueError:
                 issues.append(f"Design path escapes repository at line {line_number}: {target}")
         rows[feature_id] = design_paths

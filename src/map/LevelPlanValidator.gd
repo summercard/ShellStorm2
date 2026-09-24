@@ -88,18 +88,36 @@ static func validate_level(level_id: String) -> Dictionary:
 	}
 
 
-## 校验单层。
+## 校验单层（自行从设计源读文件）。
 static func validate_floor(
 	level_id: String,
 	floor_number: int,
 	policy: Dictionary = {},
 	templates: Dictionary = {}
 ) -> Array[String]:
-	var errors: Array[String] = []
 	var normalized := LOADER.normalize_floor(level_id, floor_number)
 	if normalized.is_empty():
 		return ["floor_plan_missing:%s:%d" % [level_id, floor_number]]
-	# normalize_floor 的 schema 层错误是非类型化数组，逐条收进强类型结果。
+	return validate_normalized(level_id, floor_number, normalized, policy, templates)
+
+
+## 校验一份**已规范化**的层结构。
+##
+## 与 `validate_floor` 的区别只有取数方式：后者自己去读 L2 文件，本函数接受调用方
+## 产出的结构。存在的理由是 `mode = "constrained"` 的关卡 —— 它的几何由生成器按
+## 种子算出，L2 文件里存的那一份只是「样例 / 兜底」。此时静态门禁若只校验文件里的
+## 样例，真正的运行时几何就完全没有闸；故生成器把产出交给本函数。
+##
+## 校验规则与 validate_floor 逐条一致（同一份实现，禁止分叉）。
+static func validate_normalized(
+	level_id: String,
+	floor_number: int,
+	normalized: Dictionary,
+	policy: Dictionary = {},
+	templates: Dictionary = {}
+) -> Array[String]:
+	var errors: Array[String] = []
+	# normalize_floor（或生成器）的 schema 层错误是非类型化数组，逐条收进强类型结果。
 	for schema_error in normalized.get("errors", []):
 		errors.append(str(schema_error))
 	var mode := str(normalized.get("mode", "authored"))
@@ -208,11 +226,15 @@ static func validate_floor(
 				% [branch_count, int(branch_range[0]), int(branch_range[1])]
 			)
 	# —— 面积预算 ——
-	var budget := AREA_BUDGET.calculate(rooms)
-	var used := float(budget.get("estimated_used_area_m2", 0.0))
-	var target := float(budget.get("target_usable_area_m2", 0.0))
-	if used > target:
-		errors.append("area_budget_exceeded:used=%.1f target=%.1f" % [used, target])
+	# 缺省按塔楼口径判定（used > target 即报错）。单层独立关卡可在 L1 generation_policy
+	# 写 `enforce_area_budget: false` 放开总面积约束（远征01，见设计页 §4.7）——
+	# 开关只关「判定」，数字仍照算并落进 area_budget，供文档与验收读。
+	var budget := AREA_BUDGET.calculate(rooms, policy)
+	if bool(budget.get("area_budget_enforced", true)):
+		var used := float(budget.get("estimated_used_area_m2", 0.0))
+		var target := float(budget.get("target_usable_area_m2", 0.0))
+		if used > target:
+			errors.append("area_budget_exceeded:used=%.1f target=%.1f" % [used, target])
 	# —— Boss 层规则 ——
 	var has_boss := false
 	var exit_parent := ""

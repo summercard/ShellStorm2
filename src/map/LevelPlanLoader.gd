@@ -181,19 +181,42 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		if str(room["key"]).is_empty():
 			errors.append("room_key_empty")
 		rooms.append(room)
+	derive_ports(rooms)
+	return {
+		"level_id": level_id,
+		"mode": str(floor_plan.get("mode", "authored")),
+		"floor_number": int(floor_plan.get("floor_number", floor_number)),
+		"floor_index": int(floor_plan.get("floor_index", 0)),
+		"sequence_index": int(floor_plan.get("sequence_index", 0)),
+		"entry_side": str(floor_plan.get("entry_side", "east")),
+		"exit_side": str(floor_plan.get("exit_side", "west")),
+		"reservations": floor_plan.get("reservations", []),
+		"rooms": rooms,
+		"main_path": _string_array(floor_plan.get("main_path", [])),
+		"edge_policy": floor_plan.get("edge_policy", []),
+		"errors": errors,
+	}
+
+
+## 门槽（ports）派生：把 `rooms` 的父子几何翻译成每面墙上的门槽，就地写回三个键。
+##
+## 05.2 §3.3 第 1 条：`ports[].lane_m` 是**数据不是算法**，运行时只校验不推导。
+## 因此设计源写了就原样采信（`declared_ports`）；只有在缺失时才由几何派生并标记
+## `ports_derived`。两者是否一致由 LevelPlanValidator 的 `port_derivation_mismatch`
+## 断言盯住 —— 本处绝不静默用派生值覆盖设计值（历史病根：S1 导出的 N/S 门侧曾整体
+## 反向而无人发现）。
+##
+## 为什么抽成独立静态函数：`mode = "constrained"` 的关卡几何由 FloorPlanGenerator
+## 按种子产出，它同样需要派生门槽。抽出来两边共用，避免第二份门槽实现。
+static func derive_ports(rooms: Array) -> void:
 	var center_by_key := {}
 	var size_by_key := {}
 	for room in rooms:
 		var key := str(room["key"])
 		center_by_key[key] = room["center"]
 		size_by_key[key] = room["size"]
-	# —— 门槽（ports）——
-	# 05.2 §3.3 第 1 条：`ports[].lane_m` 是**数据不是算法**，运行时只校验不推导。
-	# 因此设计源写了就原样采信；只有在缺失时才由几何派生，并标记 ports_derived。
-	# 两者是否一致由 LevelPlanValidator 的 `port_derivation_mismatch` 断言盯住 ——
-	# 本处绝不静默用派生值覆盖设计值（历史病根：S1 导出的 N/S 门侧曾整体反向而无人发现）。
 	for room in rooms:
-		var declared: Variant = room["declared_ports"]
+		var declared: Variant = room.get("declared_ports", [])
 		if declared is Array and not (declared as Array).is_empty():
 			var declared_ports: Array[Dictionary] = []
 			for port_value in (declared as Array):
@@ -251,23 +274,9 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			})
 		# 派生值始终产出，供校验器比对；只有设计源没写端口时才回填给消费方。
 		room["derived_ports"] = derived
-		if (room["ports"] as Array).is_empty():
+		if (room.get("ports", []) as Array).is_empty():
 			room["ports"] = derived
 			room["ports_derived"] = true
-	return {
-		"level_id": level_id,
-		"mode": str(floor_plan.get("mode", "authored")),
-		"floor_number": int(floor_plan.get("floor_number", floor_number)),
-		"floor_index": int(floor_plan.get("floor_index", 0)),
-		"sequence_index": int(floor_plan.get("sequence_index", 0)),
-		"entry_side": str(floor_plan.get("entry_side", "east")),
-		"exit_side": str(floor_plan.get("exit_side", "west")),
-		"reservations": floor_plan.get("reservations", []),
-		"rooms": rooms,
-		"main_path": _string_array(floor_plan.get("main_path", [])),
-		"edge_policy": floor_plan.get("edge_policy", []),
-		"errors": errors,
-	}
 
 
 static func _vec2(value: Variant) -> Vector2:

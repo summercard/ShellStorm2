@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "corridor_45x40",
+  "room_type": "COMMON_ROOM",
+  "size_m": [45.0, 40.0],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": ["north", "south", "east", "west"],
+  "wall_lane_table": {
+    "north": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0],
+    "south": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0],
+    "east": [-12.5, -7.5, -2.5, 2.5, 7.5, 12.5],
+    "west": [-12.5, -7.5, -2.5, 2.5, 7.5, 12.5]
+  },
+  "slots": [],
+  "variants": ["l_turn", "u_turn"],
+  "asset_ids": {
+    "room": "ENV-EXPEDITION-L01-L-CORRIDOR",
+    "components": []
+  },
+  "note": "远征关卡拐角走廊。45×40 足印由两种内部造型复用同一白盒契约：`l_turn` = 拐角走廊01（单折 L 形，横臂 45×15 + 竖臂 15×25）、`u_turn` = 拐角走廊02（三折凹字形）。两者尺寸与门槽表完全一致，仅内部构件不同 ⇒ 共用本模板，按 `template_variant` 区分。"
+}

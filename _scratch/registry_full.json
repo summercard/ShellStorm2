@@ -1,0 +1,409 @@
+{
+  "project_root": "I:\\工作项目\\shellstrom2\\ShellStorm2",
+  "scope": "full",
+  "master": {
+    "exists": true,
+    "sheets": [
+      "总览",
+      "分账本索引",
+      "分类与编码",
+      "命名与查重",
+      "版本记录",
+      "3D Prefab总控",
+      "Skill清单"
+    ],
+    "index_rows": 9,
+    "prefab_pages": 9
+  },
+  "ledger_index": {
+    "domains": [
+      "characters",
+      "enemies",
+      "scenes",
+      "props",
+      "weapons",
+      "vfx",
+      "ui",
+      "audio",
+      "music"
+    ],
+    "categories": [
+      "UI",
+      "场景",
+      "场景道具",
+      "基地资产包",
+      "敌人",
+      "武器",
+      "特效",
+      "角色",
+      "道具",
+      "音乐",
+      "音效"
+    ],
+    "prefix_pairs": [
+      "ART/场景",
+      "AUD/音乐",
+      "AUD/音效",
+      "BPK/基地资产包",
+      "CHR/角色",
+      "ENM/敌人",
+      "ENV/场景",
+      "ITM/道具",
+      "PRP/场景道具",
+      "PRP/道具",
+      "UI/UI",
+      "VFX/特效",
+      "WPN/武器"
+    ]
+  },
+  "ledgers": {
+    "characters": "assets/registry/ledgers/ShellStorm2_角色账本_v001.xlsx",
+    "enemies": "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx",
+    "scenes": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+    "props": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+    "weapons": "assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx",
+    "vfx": "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+    "ui": "assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx",
+    "audio": "assets/registry/ledgers/ShellStorm2_音效账本_v001.xlsx",
+    "music": "assets/registry/ledgers/ShellStorm2_音乐账本_v001.xlsx"
+  },
+  "ledger_totals": {
+    "characters": 16,
+    "enemies": 13,
+    "scenes": 237,
+    "props": 20,
+    "weapons": 36,
+    "vfx": 16,
+    "ui": 16,
+    "audio": 48,
+    "music": 9
+  },
+  "asset_count": 411,
+  "issue_counts": {
+    "sha_mismatch": 204
+  },
+  "issues": {
+    "sha_mismatch": [
+      {
+        "ledger": "characters",
+        "row": 6,
+        "asset_id": "CHR-PLY-CAPSULE01",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\characters\\player\\chr_player_capsule01_3d\\chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec",
+        "actual": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0"
+      },
+      {
+        "ledger": "characters",
+        "row": 13,
+        "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\characters\\player\\chr_player_capsule01_3d\\variants\\bunny01\\production\\v021\\runtime\\chr_bunny01_root_v021.tscn",
+        "recorded": "c571c093bab22f38361fabb0317d30602035d8e5187b7bf7279aec5b14a370ea",
+        "actual": "e9cac2738d9fa586eed9f2e97a93ff220cab52b60d89f53f4cd80e38ebc9b6c4"
+      },
+      {
+        "ledger": "characters",
+        "row": 21,
+        "asset_id": "CHR-PLY-BUNNY01-HEAD-CHIBI-ANIME-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\characters\\player\\chr_player_capsule01_3d\\variants\\bunny01\\production\\v021\\runtime\\chr_bunny01_chibi_anime_root_v021.tscn",
+        "recorded": "09dac92ea794b1c42c9c4c1e23db83d3d057216f2ac11fa53624a6951bc1e284",
+        "actual": "7f01db18d3f93d33567589bdf93f3b966930df9221a571dea8cf99d0ca005d9c"
+      },
+      {
+        "ledger": "enemies",
+        "row": 6,
+        "asset_id": "ENM-MELEE-FUNGBOAR01",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\runtime\\enm_melee_fungboar01_root_top3d.tscn",
+        "recorded": "04167459feffd18fa2dfd581ff8def82f58377e13909093a1b599c75080732f0",
+        "actual": "6a007c3c220ecbd78bb697f58bf2ba073b3ac8828d283e7d0a81f69f53d57884"
+      },
+      {
+        "ledger": "enemies",
+        "row": 7,
+        "asset_id": "ENM-RANGED-SPORESHOOTER01",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\ranged_caster\\runtime\\enm_ranged_sporeshooter01_root_top3d.tscn",
+        "recorded": "6ef48eb029670062dde23f413badea4a39cd27635f0365aa8bc1e2c9998173d4",
+        "actual": "09eca9c05e4c83e2994f0e2a888cf1f685e511f882b6005f8a3d282bdeb7365b"
+      },
+      {
+        "ledger": "enemies",
+        "row": 13,
+        "asset_id": "ENM-ECOSYSTEM-KIT-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\enemy_3d\\enm_ecosystem_kit_root_top3d_v001.tscn",
+        "recorded": "d9d8a49bed3fdcb863bad72f60be1f774309c7dda52753f5efb3d4e56159c12d",
+        "actual": "901fb3e339fca1127138a6da85ff7e69cf93a56bb8b0e840e7124a1216198149"
+      },
+      {
+        "ledger": "enemies",
+        "row": 17,
+        "asset_id": "ENM-ELITE-RIFT-BOAR-ARMED-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\elite_3d\\rift_boar_armed\\runtime\\enm_elite_rift_boar_armed_root_top3d_v001.tscn",
+        "recorded": "b5b187474a58aebe1f5e7c2522b2e4a4db609f103365dca6e7bd8c082a08b496",
+        "actual": "ec19ed6bda41e2a5d9ace78f28150ccdb1a646e0bd0bb9051e61ed374579e6e8"
+      },
+      {
+        "ledger": "scenes",
+        "row": 32,
+        "asset_id": "ENV-BASE99-FLOOR-DETAILS-V017",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_full_replacement\\env_base99_floor_full_replacement_root_top3d.tscn",
+        "recorded": "e0c6ff0eae3b248affa941ed793ac8cfe7c681995e3eb514ebd686f5a91d6944",
+        "actual": "7369d29754bc4f844a281e8d62908e04d3112282fe4925b9c51d434ae45152ff"
+      },
+      {
+        "ledger": "scenes",
+        "row": 33,
+        "asset_id": "ENV-BASE99-LOFT-FLOOR-FINISH-V017",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_loft_floor_finish\\env_base99_loft_floor_finish_root_top3d.tscn",
+        "recorded": "6fa73686f671683d08dfdbaadc315b996874404341318cbab806bbcfa7631a65",
+        "actual": "4c1c5520e5aabde635073c93d2aafbf4975211c5bbfcb2d330c65ebdf9690527"
+      },
+      {
+        "ledger": "scenes",
+        "row": 34,
+        "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_visuals\\env_base99_floor_visuals_root_top3d.tscn",
+        "recorded": "0627bed9c921913e241bedcbd0265cffa173f32f3bd1e9a716045fb7441a9719",
+        "actual": "6986011c1aaa90ed30d409a8ff7e4d07db3ca2a75e11fd06ba2b53f121672b16"
+      },
+      {
+        "ledger": "scenes",
+        "row": 35,
+        "asset_id": "ENV-BASE-WORLD-KIT-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_world_3d\\env_base_world_kit_top3d.tscn",
+        "recorded": "63c840d59bcecefab946690136474c9ca7b70408fb7b6bcc264819f9b66f14a5",
+        "actual": "b9040926e7d2e7d09a25d072d30a815f7bb5e35a4aa1c824c0c27a73de1b6e71"
+      },
+      {
+        "ledger": "scenes",
+        "row": 36,
+        "asset_id": "PRP-BASE-FACILITY-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\base_world_3d\\prp_base_facility_root_top3d.tscn",
+        "recorded": "391cad1c83f33586ba70d208dca713c52c05e62c6c8100801a615c84d2d7c719",
+        "actual": "0c12134edcce24dab43e3364e1f09a75d4c41d0721edfb40fc4720a8aad6c3a1"
+      },
+      {
+        "ledger": "scenes",
+        "row": 37,
+        "asset_id": "PRP-DUNGEON-GATE-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\base_world_3d\\prp_dungeon_gate_root_top3d.tscn",
+        "recorded": "1fc802ceb8caef1ce77a54958a8b5e82a0fcae37459106fee970c8941146ba8f",
+        "actual": "67f42bca67d541f83b244a4ed6a8ae23495b22d7cbf3aa9b32656339e59cfa0d"
+      },
+      {
+        "ledger": "scenes",
+        "row": 39,
+        "asset_id": "ENV-DUNGEON-RUNTIME-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_dungeon_runtime_kit_top3d.tscn",
+        "recorded": "fc33ac084150c3e3cbba89505b3e04f35712abbceaa5cec297c94fe4d7dcc2f3",
+        "actual": "e4e7472285a1f2d89f18c5d8a11e414c475adabeed98584cd9d10d4e5d793b76"
+      },
+      {
+        "ledger": "scenes",
+        "row": 40,
+        "asset_id": "ENV-DUNGEON-IRON-FRONTIER-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_iron_frontier_kit_top3d_v001.tres",
+        "recorded": "a3c6e7e5433928b790e1fa0fe5124beaeb5ab579f2d376aa35a1be25b6736b58",
+        "actual": "f8b3ab02d3613a2e6c739e9d3013adce091dff82c76e6198eb13a816e144b00c"
+      },
+      {
+        "ledger": "scenes",
+        "row": 41,
+        "asset_id": "ENV-DUNGEON-RUST-FOUNDRY-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_rust_foundry_kit_top3d_v001.tres",
+        "recorded": "0c14c1dd5a5b8edcb51fa5bb024666d845611bfd87c3c4ee0ded56c4614010a8",
+        "actual": "acc115574ec882b7bc3f74acb8da788151a6ce810b4b99ee4bedc96357d3d5b8"
+      },
+      {
+        "ledger": "scenes",
+        "row": 42,
+        "asset_id": "ENV-DUNGEON-SPORE-DEPTHS-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_spore_depths_kit_top3d_v001.tres",
+        "recorded": "bbd5cc04028e3962ce9eb8ea04c1c06157d128b5dbad1cea64bed7b4a02e7689",
+        "actual": "50b5a344a474a866d2065a8979bac564170ba8422bb610418ac8082d24db91dc"
+      },
+      {
+        "ledger": "scenes",
+        "row": 43,
+        "asset_id": "ENV-DUNGEON-ABYSS-ARCHIVE-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_abyss_archive_kit_top3d_v001.tres",
+        "recorded": "fb276fb1586de1b69d306ff894800f51da600b8dfb2780cf8bc8d22695ad3a52",
+        "actual": "93b2f606618b202fd51513e3eb2b039c0db2d26f328d1f71dd0ef4df196939e5"
+      },
+      {
+        "ledger": "scenes",
+        "row": 44,
+        "asset_id": "PRP-WASTELAND-LIGHT-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_wasteland_light_root_top3d.tscn",
+        "recorded": "0a6ec0add8b6e01b83f4dbaae421ff0dc69ed08648d304bac061f540af27d99b",
+        "actual": "0b6eee3dde59911854d2a062aaab55672c6d1fa4c705155f7a217faf46394e00"
+      },
+      {
+        "ledger": "scenes",
+        "row": 45,
+        "asset_id": "PRP-ROOM-FURNITURE-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_room_furniture_root_top3d.tscn",
+        "recorded": "a78a7eaac02ce39add97d8a57754cc86ea34e740e24e0e901f4e037198a086e9",
+        "actual": "b98c316a9634111506783e11ada7d6558cebd85f136ec1d2fb6bfb325b0f46c3"
+      },
+      {
+        "ledger": "scenes",
+        "row": 46,
+        "asset_id": "PRP-SEARCH-CONTAINER-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_search_container_root_top3d.tscn",
+        "recorded": "2c0852d86e7c0e635e76197ff8d2f6a030daa186f760dfb339d3fdeddf3c192d",
+        "actual": "c9a836df320181589c748ffc3aa57dc45a403bc148dec9972013b105795c40f5"
+      },
+      {
+        "ledger": "scenes",
+        "row": 47,
+        "asset_id": "PRP-SERVICE-STATION-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_service_station_root_top3d.tscn",
+        "recorded": "da288e4a8ffc005053741d2eda3bbcbf2f6ad34c32c6657e35d0ddf62b837be4",
+        "actual": "8d2ccf3e8714a237d0096d7e44beaa824ca2acd13e5c5a20b8cb22ba5ef38e78"
+      },
+      {
+        "ledger": "scenes",
+        "row": 48,
+        "asset_id": "PRP-EXTRACTION-BEACON-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_extraction_beacon_root_top3d.tscn",
+        "recorded": "f2638fdaca3f9542e918a56750bda04a5828b18a763569eb16a36619e9e336b4",
+        "actual": "26922cc2f1d9640f0b237f0876d6d549f1f323d20ac4f916ca789b3893bc6aa3"
+      },
+      {
+        "ledger": "scenes",
+        "row": 49,
+        "asset_id": "ENV-TRAINING-RANGE-KIT-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\training_range_3d\\env_training_range_kit_top3d.tscn",
+        "recorded": "4d1153bc736fab0790300f171beef8435002670f3789d6434e966bca0a79d28e",
+        "actual": "e3a0ef2fb72576117c4f6faa6528c46f11bec8470b2ddec0eac2d1beb0bdc356"
+      },
+      {
+        "ledger": "scenes",
+        "row": 52,
+        "asset_id": "PRP-ROOM-LIGHT-SWITCH-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_room_light_switch_root_top3d.tscn",
+        "recorded": "7802bc3a71d892072e43962875e26b60443d19de35bcc77fe0cbedcfa6dd5d94",
+        "actual": "56accc731cf04c9d11aaa105e3012f5e4aeecc34f96616dd8a20de5929929555"
+      },
+      {
+        "ledger": "scenes",
+        "row": 54,
+        "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_descent_3d\\runtime\\floor_tile_5m\\env_tower_floor_tile_5m_root_top3d.tscn",
+        "recorded": "97e44015f71bd2c180aa5b51a937f57a543e14d40138ac8c44e0d9b34c025cea",
+        "actual": "3eb08fd277af14d56a25f55f3bb7e714c9855e21cd549596969686591b389cf6"
+      },
+      {
+        "ledger": "scenes",
+        "row": 64,
+        "asset_id": "ENV-BASE99-WALL-PLAIN-5X12",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_wall_plain_5x12\\env_base99_wall_plain_5x12_root_top3d.tscn",
+        "recorded": "6394e2a471b5bd0feac0a3390c5fbeb4a6cbd1c9d2576a4ad67c4a1dd487a817",
+        "actual": "f5b57f98b47024ccd8bddb583e6d3bd6096c621606be0d591e0db257ba4b5b73"
+      },
+      {
+        "ledger": "scenes",
+        "row": 65,
+        "asset_id": "ENV-BASE99-WALL-DOOR-5X12",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_wall_door_5x12\\env_base99_wall_door_5x12_root_top3d.tscn",
+        "recorded": "f64d8aa2f7e39a5250aba1344ffe3ca3a3f4b0bbfd53d5e17a8e44dbb4caa4ab",
+        "actual": "d26ccbd73a9aea16e6b705b77e4821168a546994fa3c02aa0f481bbbe0f998ac"
+      },
+      {
+        "ledger": "scenes",
+        "row": 66,
+        "asset_id": "ENV-BASE99-FLOOR-PLAIN-5M",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_plain_5m\\env_base99_floor_plain_5m_root_top3d.tscn",
+        "recorded": "79fb968ac36150a07be25dabb1b9a01cf0fb687e641d1c97c54dd97f9c63ee06",
+        "actual": "92c91fb4bc1348bb4d754e1be99459267b4c3ae79af84622d0be0e5ab5d7db15"
+      },
+      {
+        "ledger": "scenes",
+        "row": 67,
+        "asset_id": "ENV-BASE99-FLOOR-RIVET-5M",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_rivet_5m\\env_base99_floor_rivet_5m_root_top3d.tscn",
+        "recorded": "85845249e764b1062d9f884b5e388dea99f5edeb46015c65d5b3da68cfbf19e3",
+        "actual": "cea934e69812d75f995b8ec0cc5b2c963a900e74f637a6e28ae3af4bdf25adc6"
+      },
+      {
+        "ledger": "scenes",
+        "row": 68,
+        "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\base\\runtime\\zone_base.tscn",
+        "recorded": "4ef886885f5f9cd3e8d3e586d4112e27ddea4001acf18162cc58236f9be94ceb",
+        "actual": "af804d1df3aeda60f3ccd048934ce62fa782e79dfd6cbc04089ff7b714b0ebd3"
+      },
+      {
+        "ledger": "scenes",
+        "row": 103,
+        "asset_id": "ENV-BASE99-WALL-WINDOW-5X12",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_wall_window_5x12\\env_base99_wall_window_5x12_root_top3d.tscn",
+        "recorded": "46509ec8d77fcbf932aea8423b79491493ad6c45bf9ce69bf8ef8a47843e4819",
+        "actual": "5a6a113915c283eda1488810f6fb03422fbecc27bf175918784a0a54880b8b23"
+      },
+      {
+        "ledger": "scenes",
+        "row": 104,
+        "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z7",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_mezzanine_20x10_z7\\env_base99_mezzanine_20x10_z7_root_top3d.tscn",
+        "recorded": "a2b79c57713b56dbb3f28f54a80cd815d580c851b717e2bc990f29e14c77ba93",
+        "actual": "1933a3ec61ce9acb510716b3b897d236ce615f80ec745f335f7e94432c848539"
+      },
+      {
+        "ledger": "scenes",
+        "row": 105,
+        "asset_id": "ENV-BASE99-STAIR-L-Z7",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_l_z7\\env_base99_stair_l_z7_root_top3d.tscn",
+        "recorded": "9845ca083904ad09d288083c7b8d6ec208b01f656617fe61f7a47b3dcb250e00",
+        "actual": "91bf771aef3dc8df55ffe7b97f2d0813e4d3b763469b167e7595e9d8a76e1c95"
+      },
+      {
+        "ledger": "scenes",
+        "row": 106,
+        "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H2",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_exterior_h2\\env_base99_stair_exterior_h2_root_top3d.tscn",
+        "recorded": "c167dece5133153c8d0e7051b71b5a04c49b67fdbc9486b54496293d010f3dfc",
+        "actual": "2c3c3fc5d543abe8f985edde34fd7387502c77bb962e52d029896f9d97b6e994"
+      },
+      {
+        "ledger": "scenes",
+        "row": 107,
+        "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_door_lift_2p2x2p5\\env_base99_door_lift_2p2x2p5_root_top3d.tscn",
+        "recorded": "bb04261088a56ca585dfaf989115101584b649dfcd0fda79540eaf885cb5ebee",
+        "actual": "49b17fbc77236afc3a9cdd295ba03c94d6ba7361959158213657497d89231013"
+      },
+      {
+        "ledger": "scenes",
+        "row": 108,
+        "asset_id": "ENV-BASE100-UPPER-SHELL-30X30-H12",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base100_upper_shell_30x30_h12\\env_base100_upper_shell_30x30_h12_root_top3d.tscn",
+        "recorded": "f5c89dbaefec93a423dbb19dfb657807621caa1a4467cb8ffb7d67ebcf47bd48",
+        "actual": "97144dc883c564235abeb60b19585bbfded8041523e2ffa8c99be6d01b39154e"
+      },
+      {
+        "ledger": "scenes",
+        "row": 109,
+        "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_mezzanine_20x10_z5\\env_base99_mezzanine_20x10_z5_root_top3d.tscn",
+        "recorded": "b085eba36a776736563266f208689486f9e051bf2531b6a3ea7bb8f4cd05beeb",
+        "actual": "21f11d2ff3aa61e615180ca25c85ff195d5018cdca64b2a3c201c5b4d0657d7c"
+      },
+      {
+        "ledger": "scenes",
+        "row": 110,
+        "asset_id": "ENV-BASE99-STAIR-L-Z5",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_l_z5\\env_base99_stair_l_z5_root_top3d.tscn",
+        "recorded": "890f14cbcafb384ff7f1c2d121ff6bdffe481431a0f22deac652262d09424ee7",
+        "actual": "60412ac98b264d931c8eaf37696b35e68899f5f909d713db6ffbe1aa78b37b5d"
+      },
+      {
+        "ledger": "scenes",
+        "row": 111,
+        "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H4",
+        "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_exterior_h4\\env_base99_stair_exterior_h4_root_top3d.tscn",
+        "recorded": "b0ab04f5776982e613aca30d9ef5fd2a1c2b382835069660096696d5acc0d4db",
+        "actual": "f5bd7711f3ff73b28e430aefabc9c8d6f2724c5d528810d64d2ec5a2dce90432"
+      }
+    ]
+  }
+}

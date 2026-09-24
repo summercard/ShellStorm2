@@ -1,0 +1,162 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_REAR",
+  "slug": "wall_x_05_rear",
+  "name_zh": "后墙_05米",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "L型走廊种类_数据连廊_45x35m_v001.blend",
+  "collection": "后墙_05米_资产包",
+  "objects": [
+    {
+      "name": "门侧结构墙",
+      "location_m": [
+        5.58,
+        10.0,
+        5.95
+      ],
+      "dimensions_m": [
+        0.95,
+        0.3,
+        11.9
+      ]
+    },
+    {
+      "name": "门侧结构墙.001",
+      "location_m": [
+        9.42,
+        10.0,
+        5.95
+      ],
+      "dimensions_m": [
+        0.95,
+        0.3,
+        11.9
+      ]
+    },
+    {
+      "name": "门楣",
+      "location_m": [
+        7.5,
+        10.0,
+        7.625
+      ],
+      "dimensions_m": [
+        2.9,
+        0.3,
+        8.55
+      ]
+    },
+    {
+      "name": "墙脚踢脚板.001",
+      "location_m": [
+        7.5,
+        9.81,
+        0.28
+      ],
+      "dimensions_m": [
+        4.9,
+        0.1,
+        0.55
+      ]
+    },
+    {
+      "name": "墙体水平分仓线.002",
+      "location_m": [
+        7.5,
+        9.815,
+        4.05
+      ],
+      "dimensions_m": [
+        4.86,
+        0.025,
+        0.035
+      ]
+    },
+    {
+      "name": "墙体水平分仓线.003",
+      "location_m": [
+        7.5,
+        9.815,
+        7.85
+      ],
+      "dimensions_m": [
+        4.86,
+        0.025,
+        0.035
+      ]
+    },
+    {
+      "name": "竖向结构边筋.002",
+      "location_m": [
+        5.15,
+        9.79,
+        5.75
+      ],
+      "dimensions_m": [
+        0.075,
+        0.08,
+        11.3
+      ]
+    },
+    {
+      "name": "竖向结构边筋.003",
+      "location_m": [
+        9.85,
+        9.79,
+        5.75
+      ],
+      "dimensions_m": [
+        0.075,
+        0.08,
+        11.3
+      ]
+    },
+    {
+      "name": "上沿管线桥架.001",
+      "location_m": [
+        7.5,
+        9.72,
+        4.14
+      ],
+      "dimensions_m": [
+        4.8,
+        0.11,
+        0.14
+      ]
+    },
+    {
+      "name": "上沿细蓝光导线.001",
+      "location_m": [
+        7.5,
+        9.645,
+        4.13
+      ],
+      "dimensions_m": [
+        4.7,
+        0.012,
+        0.025
+      ]
+    },
+    {
+      "name": "冷蓝墙灯.001",
+      "location_m": [
+        7.5,
+        9.73,
+        4.0
+      ],
+      "dimensions_m": [
+        2.0,
+        0.13,
+        0.1
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

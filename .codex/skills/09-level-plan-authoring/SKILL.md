@@ -50,6 +50,16 @@ L2 每个房间还有两个**可选**字段：
 **可填的设计表：** `docs/v0.1/design/新关卡设计表.md`（六个部分：要你填的 / 可以改的 /
 固定的 / 工具自动算的 / 硬规则 / 填完之后。**没有样例，用户明确要求过不要范例**）。
 
+**设计页（在 L1/L2/L3 之上，不参与校验，但改一张已有版图前要先看）：**
+`docs/v0.1/design/<关卡>设计.md` —— 用给人读的话记「这一关应该是什么样」：关卡身份与进出路径、
+玩法循环、房间构成与摆位规则、内容分配、随机性边界、明确不做什么、以及**待裁决的席位空缺**。
+它和设计表的分工是：**设计页说意图，设计表说几何**。
+
+- 用户说「先从设计文档出发 / 先补设计文档」时走这条：先把设计页补齐（意图与边界），再用本 Skill
+  的填表流程改几何。设计页里写的「待裁决」项没拍板前，**不要动任何设计源**。
+- 已有设计页：`docs/v0.1/design/远征关卡01设计.md`（单层独立关卡，含 Boss 房与走廊两处席位空缺）
+- 同族已填完的设计表实例：`docs/v0.1/design/新关卡设计表_测试关卡99.md`
+
 ---
 
 ## 1. 动手前的必读（按顺序，不要跳）
@@ -186,11 +196,11 @@ L2 每个房间还有两个**可选**字段：
 
 **落地要有两道闸（缺一即等于没接通）：**
 
-1. `LEVEL_PLAN_RUNTIME_GUARD_OK ... plans=N boss_ids=N` —— 末尾的 `plans` 是这个校验器
-   **真找到并逐值比对**过的刷怪计划条数，`boss_ids` 是首领指派条数。填了几间房就该是几。
-   **出现 `plans=0` / `boss_ids=0` 而设计源里确实写了，就是字段半路被吞了**（见坑 18），
-   不是「没问题」。注意：当前所有关卡都没写 `boss_content_id`，所以门禁会额外打一行
-   `LEVEL_PLAN_RUNTIME_NOTE` 说明该字段暂无可比样本 —— 这个字段的透传改由专属门禁的手写
+1. `LEVEL_PLAN_RUNTIME_GUARD_OK ... plans=N boss_ids=B rewards=W` —— 末尾三个数是这个校验器
+   **真找到并逐值比对**过的刷怪计划条数 / 首领指派条数 / 掉落**槽位数**（一个 trigger 算一条）。
+   填了几间房 / 几条槽就该是几。**出现 `plans=0` / `boss_ids=0` / `rewards=0` 而设计源里确实写了，
+   就是字段半路被吞了**（见坑 18），不是「没问题」。任一计数为 0 时门禁会额外打一行
+   `LEVEL_PLAN_RUNTIME_NOTE` 说明该字段暂无可比样本 —— 这些字段的透传改由专属门禁的手写
    patch 探针覆盖，别把「没样本」当成「已验证」。
 2. 专属门禁里真调一次刷怪入口，逐值断言波次数 / 每波数量 / 总敌数。
    范本：`tests/verification/verify_test_level_99_flow.gd` 的 `_verify_enemy_spawn_plan`
@@ -248,6 +258,73 @@ L2 每个房间还有两个**可选**字段：
 `tests/verification/verify_test_level_99_flow.gd` 的 `_verify_boss_identity`。
 透传侧（设计源 → 运行时计划）另有一条手写 patch 探针，因为至今没有关卡在数据里写这个字段，
 纯读现成关卡会让这条断言退化成 0 样本空跑。
+
+### 第 2 步补充三 · 房间级掉落计划 `reward_plan`（可选）
+
+**什么时候填：** 只有用户明确要求「**这一间房固定掉什么**」时才填。不填 = 逐级回退到默认
+（房间 > 关卡 > 怪物表 > 全局公式），这是推荐做法。**不要主动替用户填。**
+
+**位置：** L2 `floors/floor_<NN>.json` 的 `rooms[]` 里，与 `content_type` 同级。键是**触发点**，
+值是该触发的**槽位引用**：
+
+```json
+{ "key": "room_02", "role": "main", "content_type": "COMBAT",
+  "reward_plan": {
+    "clear":  { "pool_id": "loot_floor_3_4" },
+    "search": { "spec_id": "exp01_room_02_search" },
+    "kill":   { "entries": [ { "kind": "currency", "currency_id": "extraction_points", "amount": 3 } ] }
+  } }
+```
+
+**三个触发点**（`RewardSpec.TRIGGERS`，只能填这三个）：
+
+| 触发 | 生效时机 | 写在什么房上有意义 | 填错了会怎样 |
+|---|---|---|---|
+| `clear` | 房间被打通、门锁解开 | 会刷怪的房 | 不拦截（可能永不触发） |
+| `search` | 玩家搜完一个容器 | 会有容器的房 | 不拦截（可能永不触发） |
+| `kill` | 本房每只怪被打死 | 会刷怪的房 | **报错退回**（Boss 房 / 安全房 / 撤离房写 `kill` 一律退回） |
+
+**「会有容器的房」的口径（别照抄旧文档的「只限拾荒/仓库」）：** 容器与家具是**每间房各 50% 随机**
+生成，拾荒 / 仓库 / 地下室**多给 2 个**；只有**天生不放道具的房**永远没有容器 —— 设施房、
+楼梯厅、Boss 房、天台。写在那几种房上不会报错，但那个 `search` 槽永远等不到触发。
+
+**槽位引用的三种写法（同一槽位只能选一种，混写报 `reward_plan_slot_ambiguous`）：**
+
+| 写法 | 写什么 | 什么时候用 |
+|---|---|---|
+| 池简写 | `{ "pool_id": "loot_common", "draws": 2 }` | 想直接引用一张已登记的《掉落池》表。`draws` / `chance` 可选 |
+| 命名规格 | `{ "spec_id": "<已登记的 spec_id>" }` | 关卡侧已登记命名规格时 |
+| 内联 | `{ "entries": [ { "kind": ..., ... } ] }`（可带 `fallback`） | 只此一处的临时组合。`kind` 取 `item` / `pool` / `monster` / `currency` 四选一 |
+
+**校验错误码：**
+
+| 错误 | 含义 |
+|---|---|
+| `reward_plan_not_object` | `reward_plan` 不是对象 |
+| `reward_plan_unknown_trigger` | 键不是 `clear` / `search` / `kill` |
+| `reward_plan_slot_not_object` / `_slot_empty` | 槽位不是对象 / 是空对象 |
+| `reward_plan_slot_ambiguous` | 一个槽位同时写了两种写法（或一种都没写） |
+| `reward_plan_unknown_pool` | 池名没在《掉落池》表里登记过 —— **不要现造新池名** |
+| `reward_plan_deprecated_pool` | 池已弃用，不得被新内容引用 |
+| `reward_plan_pool_id_empty` | `pool_id` 写空 |
+| `reward_plan_spec_id_empty` | `spec_id` 写空 |
+| `reward_plan_kill_on_boss_room` / `_on_non_hostile_room` | `kill` 槽写在了不刷怪的房上 |
+| `reward_plan_entries_not_array` / `_fallback_not_array` / `_entry_not_object` | 内联写法结构错 |
+
+**落地要有两道闸（缺一即等于没接通）：**
+
+1. `LEVEL_PLAN_RUNTIME_GUARD_OK ... rewards=W` —— `W` 是**真的带到运行时**的槽位数。
+   填了几条就该是几；写了却是 `rewards=0` 就是被吞了。
+2. 专属门禁里的**手写 patch 探针**（当前没有任何关卡在数据里写 `reward_plan`，纯读现成关卡会
+   退化成 0 样本空跑）。范本：`tests/verification/verify_test_level_99_flow.gd` 的
+   `_verify_reward_plan`（判据 `TEST_LEVEL_99_REWARD_OK`），它一次钉住五件事 ——
+   ① Loader 白名单没漏登记；② 出口 `room_from_source` 三种写法都原样透传；
+   ③ `reward_slots_from_rooms` 投影出 `ref`；④ **`reward_plan` 不进 `layout_id`**（掉落是内容
+   不是几何，改它不得让既有存档失配）；⑤ 静态校验正反例。
+
+**写 `reward_plan` 不会改存档指纹**：它刻意不在 `FloorPlanGenerator._data_driven_layout_id`
+的字段白名单里。若哪天有人把它加进去，`layout_id` 会变 ⇒ 玩家存档的房间进度全部失配，
+所以探针里专门有一条断言盯着这件事。
 
 ### 第 3 步 · 取门槽数据（禁止手算）
 
@@ -477,6 +554,15 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
    塔楼侧的 `start` 兼容位全是空。**只有真装配一次场景才看得见** → 见 §2 第 6.4 / 6.5 步。
 
    另外：新关卡一律把 `legacy_room_id` 留空（那是给已上线关卡迁移旧档用的）。
+
+   ⚠️ **2026-09-24 按代码收窄**：上面「主路恒取 `room_01…room_0N`」说的是**编号只用这一串**，
+   但真正的硬依赖**只有两个 key 字面量** —— 入口必 `start`（`src/world3d/TowerDescent3D.gd`
+   L508 `_room_by_id.get("start")`）、撤离必 `extraction`。**Boss 房的 key 不被硬取**
+   （它靠 `role="boss"` 或 `content_type="BOSS"` 判，走 `GameDesignConfig.is_boss_room()`），
+   **主路首房也不靠 `room_01` 这个名字**（靠 `role="main"` + 数量 = `EXPEDITION_ROOM_COUNT`）。
+   所以「主路内容房必须编号 `room_01…`」是**可读性/序号理由**，不是运行时取房理由；
+   Boss 与其它功能房的 key 名可以自定。精确契约表见设计页
+   `docs/v0.1/design/远征关卡01设计.md` §7.1（§7.2 = 验收脚本层另有写死清单，§7.3 = 编号理由）。
 13. **`peek_/consume_pending_*` 永远不返回空串。** 它们刻意做了「空则回退默认值」，
    所以拿返回值判「已清空」会永远失败 —— 要判清空得直接看静态量本身。
    同理，验收脚本里**不要**为了测「未登记关卡被拒绝」去调 `select_expedition_level(坏 id)`：
@@ -550,8 +636,23 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
      端到端断言就是 **0 样本空跑**、照样绿。必须另加**手写 patch 探针**直接驱动
      第 2 关的函数（`FloorPlanGenerator.room_from_source`），范本见
      `verify_test_level_99_flow.gd._verify_boss_identity` 尾段。
-     同理，门禁末尾的样本计数（`plans=` / `boss_ids=`）要打出来并**当判据读**：
-     写了字段却仍是 0，就是被吞了；本就没有样本，则要打一行 `*_NOTE` 声明而非静默通过。
+    同理，门禁末尾的样本计数（`plans=` / `boss_ids=`）要打出来并**当判据读**：
+    写了字段却仍是 0，就是被吞了；本就没有样本，则要打一行 `*_NOTE` 声明而非静默通过。
+20. **给图纸写图注时，「方向 / 走向」类描述必须由坐标反算，不能凭印象。**
+    2026-09-24 实测踩中：给远征01 总平面图写图注时凭印象写了「主路一路向北再折返」，
+    而按 §4.2 坐标表反算是**三行蛇形**（北行自西向东 → 折向南、中行自东向西 →
+    再折向南、南行自西向东）。图本身画得没错（箭头由脚本按坐标算），
+    **错的是图注**，而图注没人验。纪律：
+    - 涉及「向东/向西/向北/向南、几行、第几折」的句子，**逐间取相邻两房的 `中心 (x, y)`
+      作差**再写：`Δx` 定东西、`Δy` 定南北（本仓库 +y = 南 = 画面向下）。
+    - 图注里凡有方向词，交付前把这条链**原样写进图注**（「北行自西向东①②③ → …」），
+      这样业主一眼能核，也避免下次又被改错。
+    - 脚本能算的结论别手工描述：能由 `ROOMS` / `LINKS` 推出的就打印出来当图注来源。
+21. **把生成的 SVG 内联进设计页前后，先确认图表脚本的「解析范围」。**
+    这类脚本多为**文档即数据源**（解析某几个指定小节），所以：① 在小节**之外**加正文/图注
+    是安全的，不会改变出图；② 但**别去改它解析的那几个小节的结构**（列数、表头字样、
+    小节标题），改了直接 `SystemExit`，不会出半张图。
+    内联后按纪律复跑脚本并比对 sha256：产物**逐文件一致**才证明文档改动没污染数据源。
 
 ---
 

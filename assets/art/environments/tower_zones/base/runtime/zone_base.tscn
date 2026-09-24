@@ -140,7 +140,7 @@ metadata/placement_role = "远征情报终端配套独立座椅"
 metadata/interactive = false
 
 [node name="基地美术灯光_可编辑" type="Node3D" parent="."]
-metadata/usage = "可调整颜色、能量、范围、阴影；不要改塔楼全局环境"
+metadata/usage = "可调整颜色、能量、范围、阴影；不要改塔楼全局环境。本节点下手工摆放的原生 OmniLight3D 由东西墙那对开关统一控制：各自的 visible 表示是否参与，开关只决定此刻亮不亮（BaseFixtureGlow3D._collect_authored_art_lights）"
 
 [node name="中央冷色主灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
 visible = false

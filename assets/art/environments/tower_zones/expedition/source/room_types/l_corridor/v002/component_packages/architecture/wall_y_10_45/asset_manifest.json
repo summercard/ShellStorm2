@@ -1,0 +1,97 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45",
+  "slug": "wall_y_10_45",
+  "name_zh": "侧墙_-15米_45米",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "L型走廊种类_数据连廊_45x35m_v002.blend",
+  "collection": "侧墙_-15米_45米_资产包",
+  "objects": [
+    {
+      "name": "标准5米墙体.022",
+      "location_m": [
+        45.0,
+        -12.5,
+        5.95
+      ],
+      "dimensions_m": [
+        0.3,
+        5.0,
+        11.9
+      ]
+    },
+    {
+      "name": "墙脚踢脚板.025",
+      "location_m": [
+        44.81,
+        -12.5,
+        0.28
+      ],
+      "dimensions_m": [
+        0.1,
+        4.9,
+        0.55
+      ]
+    },
+    {
+      "name": "水平结构线.004",
+      "location_m": [
+        44.8,
+        -12.5,
+        4.05
+      ],
+      "dimensions_m": [
+        0.04,
+        4.9,
+        0.055
+      ]
+    },
+    {
+      "name": "纵向桥架.004",
+      "location_m": [
+        44.69,
+        -12.5,
+        4.18
+      ],
+      "dimensions_m": [
+        0.1,
+        4.75,
+        0.1
+      ]
+    },
+    {
+      "name": "蓝色细光缆.004",
+      "location_m": [
+        44.63,
+        -12.5,
+        4.18
+      ],
+      "dimensions_m": [
+        0.012,
+        4.65,
+        0.028
+      ]
+    },
+    {
+      "name": "墙面灯条.002",
+      "location_m": [
+        44.75,
+        -12.5,
+        3.7
+      ],
+      "dimensions_m": [
+        0.12,
+        2.2,
+        0.1
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

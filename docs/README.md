@@ -11,6 +11,8 @@
 
 功能之间的输入、状态Owner、交接与文档补全顺序见[功能关系计划](v0.1/FEATURE_RELATIONSHIP_PLAN.md)和[37项跟踪表](v0.1/FEATURE_RELATIONSHIP_MATRIX.md)。完整复评保留原时点结果；后续实测以开发记录及跟踪表为准。
 
+0.2 的修改登记入口见[0.2 版本计划·变更登记册](v0.2/PLAN.md)：按模块归属追加记录，只登记、不定稿，不提升 `project.godot` 版本号。
+
 旧主题文件路径继续保留以免旧链接失效，但已建立功能设计页的规则主源在 `design/`；未迁移功能在跟踪表标记。开发记录已实际迁入 [development](v0.1/development/README.md)；原变更日志、推送摘要、成品化验收页只保留导航。
 
 `archive/` 仅供回溯。`docs/art/` 保存具体资产批次的验收证据，不能覆盖版本设计。`outputs/` 是可删除的临时产物；必须长期追溯的审计摘要放入版本的 `audits/`。

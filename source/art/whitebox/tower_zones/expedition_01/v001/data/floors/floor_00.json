@@ -2,7 +2,7 @@
   "schema": "shellstorm2.battle.floor_plan_whitebox",
   "schema_version": 1,
   "level_id": "expedition_01",
-  "mode": "authored",
+  "mode": "constrained",
   "floor_number": 0,
   "floor_index": 0,
   "sequence_index": 0,
@@ -19,24 +19,9 @@
       "parent_key": "",
       "template_id": "safe_15x15",
       "template_variant": "",
-      "center_m": [
-        2.5,
-        2.5
-      ],
-      "size_m": [
-        15.0,
-        15.0
-      ],
+      "center_m": [-17.5, 2.5],
+      "size_m": [15.0, 15.0],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "room_01",
-          "side": "north",
-          "lane_m": 0.0,
-          "wall_length_m": 15.0
-        }
-      ],
       "content_type": ""
     },
     {
@@ -46,33 +31,11 @@
       "room_type": "COMMON_ROOM",
       "role": "main",
       "parent_key": "entry",
-      "template_id": "std_25x25",
-      "template_variant": "",
-      "center_m": [
-        2.5,
-        -32.5
-      ],
-      "size_m": [
-        25.0,
-        25.0
-      ],
+      "template_id": "corridor_45x40",
+      "template_variant": "l_turn",
+      "center_m": [12.5, 0.0],
+      "size_m": [45.0, 40.0],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "entry",
-          "side": "south",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        },
-        {
-          "port_id": "P2",
-          "target": "room_02",
-          "side": "east",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        }
-      ],
       "content_type": ""
     },
     {
@@ -82,33 +45,11 @@
       "room_type": "COMMON_ROOM",
       "role": "main",
       "parent_key": "room_01",
-      "template_id": "std_25x25",
-      "template_variant": "",
-      "center_m": [
-        37.5,
-        -32.5
-      ],
-      "size_m": [
-        25.0,
-        25.0
-      ],
+      "template_id": "db_70x50",
+      "template_variant": "db_01",
+      "center_m": [10.0, 45.0],
+      "size_m": [70.0, 50.0],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "room_01",
-          "side": "west",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        },
-        {
-          "port_id": "P2",
-          "target": "room_03",
-          "side": "north",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        }
-      ],
       "content_type": ""
     },
     {
@@ -118,33 +59,11 @@
       "room_type": "COMMON_ROOM",
       "role": "main",
       "parent_key": "room_02",
-      "template_id": "std_25x25",
+      "template_id": "office_60x70",
       "template_variant": "",
-      "center_m": [
-        37.5,
-        -67.5
-      ],
-      "size_m": [
-        25.0,
-        25.0
-      ],
+      "center_m": [-55.0, 50.0],
+      "size_m": [60.0, 70.0],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "room_02",
-          "side": "south",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        },
-        {
-          "port_id": "P2",
-          "target": "room_04",
-          "side": "west",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        }
-      ],
       "content_type": ""
     },
     {
@@ -154,33 +73,11 @@
       "room_type": "COMMON_ROOM",
       "role": "main",
       "parent_key": "room_03",
-      "template_id": "std_25x25",
-      "template_variant": "",
-      "center_m": [
-        2.5,
-        -67.5
-      ],
-      "size_m": [
-        25.0,
-        25.0
-      ],
+      "template_id": "corridor_45x40",
+      "template_variant": "u_turn",
+      "center_m": [-52.5, -5.0],
+      "size_m": [45.0, 40.0],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "room_03",
-          "side": "east",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        },
-        {
-          "port_id": "P2",
-          "target": "room_05",
-          "side": "north",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        }
-      ],
       "content_type": ""
     },
     {
@@ -190,34 +87,40 @@
       "room_type": "COMMON_ROOM",
       "role": "main",
       "parent_key": "room_04",
-      "template_id": "std_25x25",
+      "template_id": "bridge_60x50",
       "template_variant": "",
-      "center_m": [
-        2.5,
-        -102.5
-      ],
-      "size_m": [
-        25.0,
-        25.0
-      ],
+      "center_m": [-55.0, -50.0],
+      "size_m": [60.0, 50.0],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "extraction",
-          "side": "east",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        },
-        {
-          "port_id": "P2",
-          "target": "room_04",
-          "side": "south",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        }
-      ],
       "content_type": ""
+    },
+    {
+      "key": "room_06",
+      "room_id": "f00_room_06",
+      "legacy_room_id": "room_06",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "room_05",
+      "template_id": "db_70x50",
+      "template_variant": "db_02",
+      "center_m": [10.0, -50.0],
+      "size_m": [70.0, 50.0],
+      "template_rotation_deg": 0,
+      "content_type": ""
+    },
+    {
+      "key": "boss",
+      "room_id": "f00_boss",
+      "legacy_room_id": "boss",
+      "room_type": "BOSS_ROOM",
+      "role": "boss",
+      "parent_key": "room_06",
+      "template_id": "boss_50x40",
+      "template_variant": "",
+      "center_m": [70.0, -50.0],
+      "size_m": [50.0, 40.0],
+      "template_rotation_deg": 0,
+      "content_type": "BOSS"
     },
     {
       "key": "extraction",
@@ -225,36 +128,84 @@
       "legacy_room_id": "extraction",
       "room_type": "EXTRACTION_ROOM",
       "role": "extraction",
-      "parent_key": "room_05",
+      "parent_key": "boss",
       "template_id": "extraction_25x25",
       "template_variant": "",
-      "center_m": [
-        37.5,
-        -102.5
-      ],
-      "size_m": [
-        25.0,
-        25.0
-      ],
+      "center_m": [72.5, -17.5],
+      "size_m": [25.0, 25.0],
       "template_rotation_deg": 0,
-      "ports": [
-        {
-          "port_id": "P1",
-          "target": "room_05",
-          "side": "west",
-          "lane_m": 0.0,
-          "wall_length_m": 25.0
-        }
-      ],
+      "content_type": ""
+    },
+    {
+      "key": "branch_01",
+      "room_id": "f00_branch_01",
+      "legacy_room_id": "branch_01",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_02",
+      "template_id": "db_70x50",
+      "template_variant": "db_01",
+      "center_m": [10.0, 95.0],
+      "size_m": [70.0, 50.0],
+      "template_rotation_deg": 0,
+      "content_type": ""
+    },
+    {
+      "key": "branch_02",
+      "room_id": "f00_branch_02",
+      "legacy_room_id": "branch_02",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_03",
+      "template_id": "std_25x25",
+      "template_variant": "",
+      "center_m": [-52.5, 97.5],
+      "size_m": [25.0, 25.0],
+      "template_rotation_deg": 0,
+      "content_type": ""
+    },
+    {
+      "key": "branch_03",
+      "room_id": "f00_branch_03",
+      "legacy_room_id": "branch_03",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_04",
+      "template_id": "std_25x25",
+      "template_variant": "",
+      "center_m": [-87.5, -7.5],
+      "size_m": [25.0, 25.0],
+      "template_rotation_deg": 0,
+      "content_type": ""
+    },
+    {
+      "key": "branch_04",
+      "room_id": "f00_branch_04",
+      "legacy_room_id": "branch_04",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "room_05",
+      "template_id": "bridge_60x50",
+      "template_variant": "",
+      "center_m": [-55.0, -100.0],
+      "size_m": [60.0, 50.0],
+      "template_rotation_deg": 0,
       "content_type": ""
     }
   ],
-  "main_path": [
-    "room_01",
-    "room_02",
-    "room_03",
-    "room_04",
-    "room_05"
-  ],
-  "edge_policy": []
+  "main_path": ["room_01", "room_02", "room_03", "room_04", "room_05", "room_06"],
+  "edge_policy": [
+    {"a": "entry", "b": "room_01", "allow_zero_length": true, "note": "主路：安全屋 → 主路第 1 房，墙贴墙"},
+    {"a": "room_01", "b": "room_02", "allow_zero_length": true, "note": "主路：第 1 → 第 2 房，墙贴墙"},
+    {"a": "room_02", "b": "room_03", "allow_zero_length": true, "note": "主路：第 2 → 第 3 房，墙贴墙"},
+    {"a": "room_03", "b": "room_04", "allow_zero_length": true, "note": "主路：第 3 → 第 4 房，墙贴墙"},
+    {"a": "room_04", "b": "room_05", "allow_zero_length": true, "note": "主路：第 4 → 第 5 房，墙贴墙"},
+    {"a": "room_05", "b": "room_06", "allow_zero_length": true, "note": "主路：第 5 → 第 6 房，墙贴墙"},
+    {"a": "room_06", "b": "boss", "allow_zero_length": true, "note": "主路：第 6 房 → Boss竞技场，墙贴墙"},
+    {"a": "boss", "b": "extraction", "allow_zero_length": true, "note": "主路：Boss竞技场 → 撤离屋，墙贴墙"},
+    {"a": "room_02", "b": "branch_01", "allow_zero_length": true, "note": "支线：挂主路第 2 房，墙贴墙"},
+    {"a": "room_03", "b": "branch_02", "allow_zero_length": true, "note": "支线：挂主路第 3 房，墙贴墙"},
+    {"a": "room_04", "b": "branch_03", "allow_zero_length": true, "note": "支线：挂主路第 4 房，墙贴墙"},
+    {"a": "room_05", "b": "branch_04", "allow_zero_length": true, "note": "支线：挂主路第 5 房，墙贴墙"}
+  ]
 }

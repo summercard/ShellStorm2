@@ -1,0 +1,136 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A",
+  "slug": "hanging_cable_gallery_a",
+  "name_zh": "高处下垂粗电缆",
+  "category": "support",
+  "version": "v003",
+  "source_blend": "L型走廊种类_数据连廊_45x40m_v003.blend",
+  "collection": "高处下垂粗电缆_资产包",
+  "objects": [
+    {
+      "name": "黑色包胶粗电线",
+      "location_m": [
+        29.225,
+        14.44,
+        6.835
+      ],
+      "dimensions_m": [
+        0.1852,
+        0.19,
+        0.637
+      ]
+    },
+    {
+      "name": "黑色包胶粗电线.001",
+      "location_m": [
+        29.385,
+        14.15,
+        6.225
+      ],
+      "dimensions_m": [
+        0.1852,
+        0.19,
+        0.7651
+      ]
+    },
+    {
+      "name": "黑色包胶粗电线.002",
+      "location_m": [
+        29.635,
+        14.02,
+        5.6
+      ],
+      "dimensions_m": [
+        0.1852,
+        0.19,
+        0.6438
+      ]
+    },
+    {
+      "name": "黑色包胶粗电线.003",
+      "location_m": [
+        29.725,
+        14.17,
+        4.825
+      ],
+      "dimensions_m": [
+        0.1852,
+        0.19,
+        0.9862
+      ]
+    },
+    {
+      "name": "黑色包胶粗电线.004",
+      "location_m": [
+        29.7,
+        14.385,
+        3.925
+      ],
+      "dimensions_m": [
+        0.1852,
+        0.19,
+        0.8668
+      ]
+    },
+    {
+      "name": "电缆接头压环",
+      "location_m": [
+        29.2,
+        14.58,
+        7.12
+      ],
+      "dimensions_m": [
+        0.28,
+        0.28,
+        0.13
+      ]
+    },
+    {
+      "name": "电缆接头压环.001",
+      "location_m": [
+        29.7,
+        14.47,
+        3.5
+      ],
+      "dimensions_m": [
+        0.28,
+        0.28,
+        0.13
+      ]
+    },
+    {
+      "name": "扎带标识",
+      "location_m": [
+        29.385,
+        14.15,
+        6.225
+      ],
+      "dimensions_m": [
+        0.214,
+        0.214,
+        0.07
+      ]
+    },
+    {
+      "name": "扎带标识.001",
+      "location_m": [
+        29.725,
+        14.17,
+        4.825
+      ],
+      "dimensions_m": [
+        0.214,
+        0.214,
+        0.07
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

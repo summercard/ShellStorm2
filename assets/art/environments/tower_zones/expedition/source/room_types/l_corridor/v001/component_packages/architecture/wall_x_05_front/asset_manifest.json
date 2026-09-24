@@ -1,0 +1,45 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT",
+  "slug": "wall_x_05_front",
+  "name_zh": "前墙_05米",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "L型走廊种类_数据连廊_45x35m_v001.blend",
+  "collection": "前墙_05米_资产包",
+  "objects": [
+    {
+      "name": "标准5米墙体.008",
+      "location_m": [
+        7.5,
+        0.0,
+        0.675
+      ],
+      "dimensions_m": [
+        5.0,
+        0.3,
+        1.35
+      ]
+    },
+    {
+      "name": "墙脚踢脚板.010",
+      "location_m": [
+        7.5,
+        -0.19,
+        0.28
+      ],
+      "dimensions_m": [
+        4.9,
+        0.1,
+        0.55
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

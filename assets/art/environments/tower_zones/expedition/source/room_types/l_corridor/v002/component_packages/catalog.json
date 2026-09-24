@@ -1,0 +1,557 @@
+[
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00",
+    "path": "component_packages/floor/tile_r05_c00",
+    "object_count": 31
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00",
+    "path": "component_packages/floor/tile_r06_c00",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01",
+    "path": "component_packages/floor/tile_r05_c01",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C01",
+    "path": "component_packages/floor/tile_r06_c01",
+    "object_count": 21
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C02",
+    "path": "component_packages/floor/tile_r05_c02",
+    "object_count": 21
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02",
+    "path": "component_packages/floor/tile_r06_c02",
+    "object_count": 23
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03",
+    "path": "component_packages/floor/tile_r05_c03",
+    "object_count": 22
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C03",
+    "path": "component_packages/floor/tile_r06_c03",
+    "object_count": 21
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04",
+    "path": "component_packages/floor/tile_r05_c04",
+    "object_count": 22
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C04",
+    "path": "component_packages/floor/tile_r06_c04",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C05",
+    "path": "component_packages/floor/tile_r05_c05",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05",
+    "path": "component_packages/floor/tile_r06_c05",
+    "object_count": 30
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06",
+    "path": "component_packages/floor/tile_r05_c06",
+    "object_count": 30
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06",
+    "path": "component_packages/floor/tile_r06_c06",
+    "object_count": 14
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C07",
+    "path": "component_packages/floor/tile_r05_c07",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C07",
+    "path": "component_packages/floor/tile_r06_c07",
+    "object_count": 21
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08",
+    "path": "component_packages/floor/tile_r05_c08",
+    "object_count": 22
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08",
+    "path": "component_packages/floor/tile_r06_c08",
+    "object_count": 22
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07",
+    "path": "component_packages/floor/tile_r00_c07",
+    "object_count": 21
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07",
+    "path": "component_packages/floor/tile_r01_c07",
+    "object_count": 22
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C07",
+    "path": "component_packages/floor/tile_r02_c07",
+    "object_count": 21
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C07",
+    "path": "component_packages/floor/tile_r03_c07",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07",
+    "path": "component_packages/floor/tile_r04_c07",
+    "object_count": 30
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08",
+    "path": "component_packages/floor/tile_r00_c08",
+    "object_count": 22
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08",
+    "path": "component_packages/floor/tile_r01_c08",
+    "object_count": 22
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08",
+    "path": "component_packages/floor/tile_r02_c08",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08",
+    "path": "component_packages/floor/tile_r03_c08",
+    "object_count": 31
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C08",
+    "path": "component_packages/floor/tile_r04_c08",
+    "object_count": 13
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR",
+    "path": "component_packages/architecture/wall_x_00_rear",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_REAR",
+    "path": "component_packages/architecture/wall_x_05_rear",
+    "object_count": 11
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR",
+    "path": "component_packages/architecture/wall_x_10_rear",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_REAR",
+    "path": "component_packages/architecture/wall_x_15_rear",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_REAR",
+    "path": "component_packages/architecture/wall_x_20_rear",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_REAR",
+    "path": "component_packages/architecture/wall_x_25_rear",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_REAR",
+    "path": "component_packages/architecture/wall_x_30_rear",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_REAR",
+    "path": "component_packages/architecture/wall_x_35_rear",
+    "object_count": 11
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_REAR",
+    "path": "component_packages/architecture/wall_x_40_rear",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT",
+    "path": "component_packages/architecture/wall_x_00_front",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT",
+    "path": "component_packages/architecture/wall_x_05_front",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT",
+    "path": "component_packages/architecture/wall_x_10_front",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT",
+    "path": "component_packages/architecture/wall_x_15_front",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT",
+    "path": "component_packages/architecture/wall_x_20_front",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT",
+    "path": "component_packages/architecture/wall_x_25_front",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_FRONT",
+    "path": "component_packages/architecture/wall_x_30_front",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_FRONT",
+    "path": "component_packages/architecture/wall_x_35_front",
+    "object_count": 11
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT",
+    "path": "component_packages/architecture/wall_x_40_front",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00",
+    "path": "component_packages/architecture/wall_y_25_00",
+    "object_count": 5
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_00",
+    "path": "component_packages/architecture/wall_y_30_00",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35",
+    "path": "component_packages/architecture/wall_y_00_35",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45",
+    "path": "component_packages/architecture/wall_y_00_45",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35",
+    "path": "component_packages/architecture/wall_y_05_35",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45",
+    "path": "component_packages/architecture/wall_y_05_45",
+    "object_count": 5
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35",
+    "path": "component_packages/architecture/wall_y_10_35",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45",
+    "path": "component_packages/architecture/wall_y_10_45",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35",
+    "path": "component_packages/architecture/wall_y_15_35",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_45",
+    "path": "component_packages/architecture/wall_y_15_45",
+    "object_count": 5
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35",
+    "path": "component_packages/architecture/wall_y_20_35",
+    "object_count": 2
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_45",
+    "path": "component_packages/architecture/wall_y_20_45",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_45",
+    "path": "component_packages/architecture/wall_y_25_45",
+    "object_count": 5
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45",
+    "path": "component_packages/architecture/wall_y_30_45",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-DOOR_WEST",
+    "path": "component_packages/facilities/door_west",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-DOOR_EAST",
+    "path": "component_packages/facilities/door_east",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-DOOR_SOUTH",
+    "path": "component_packages/facilities/door_south",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+    "path": "component_packages/facilities/server_00",
+    "object_count": 29
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_01",
+    "path": "component_packages/facilities/server_01",
+    "object_count": 29
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_02",
+    "path": "component_packages/facilities/server_02",
+    "object_count": 29
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_03",
+    "path": "component_packages/facilities/server_03",
+    "object_count": 29
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_04",
+    "path": "component_packages/facilities/server_04",
+    "object_count": 29
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY",
+    "path": "component_packages/facilities/server_gallery",
+    "object_count": 40
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00",
+    "path": "component_packages/support/pipe_riser_00",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_01",
+    "path": "component_packages/support/pipe_riser_01",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_02",
+    "path": "component_packages/support/pipe_riser_02",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_03",
+    "path": "component_packages/support/pipe_riser_03",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_04",
+    "path": "component_packages/support/pipe_riser_04",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_05",
+    "path": "component_packages/support/pipe_riser_05",
+    "object_count": 6
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00",
+    "path": "component_packages/facilities/console_00",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01",
+    "path": "component_packages/facilities/console_01",
+    "object_count": 25
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+    "path": "component_packages/facilities/console_02",
+    "object_count": 25
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_00",
+    "path": "component_packages/facilities/crate_00",
+    "object_count": 4
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_01",
+    "path": "component_packages/facilities/crate_01",
+    "object_count": 4
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_04",
+    "path": "component_packages/facilities/crate_04",
+    "object_count": 4
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00",
+    "path": "component_packages/facilities/planter_00",
+    "object_count": 10
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_01",
+    "path": "component_packages/facilities/planter_01",
+    "object_count": 10
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_02",
+    "path": "component_packages/facilities/planter_02",
+    "object_count": 10
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0",
+    "path": "component_packages/architecture/cutaway_wall_contract_0",
+    "object_count": 1
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1",
+    "path": "component_packages/architecture/cutaway_wall_contract_1",
+    "object_count": 1
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY",
+    "path": "component_packages/facilities/service_cart_gallery",
+    "object_count": 50
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH",
+    "path": "component_packages/facilities/service_cart_south",
+    "object_count": 50
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00",
+    "path": "component_packages/support/high_pipe_rear_00",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01",
+    "path": "component_packages/support/high_pipe_rear_01",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_02",
+    "path": "component_packages/support/high_pipe_rear_02",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_03",
+    "path": "component_packages/support/high_pipe_rear_03",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_04",
+    "path": "component_packages/support/high_pipe_rear_04",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_05",
+    "path": "component_packages/support/high_pipe_rear_05",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_06",
+    "path": "component_packages/support/high_pipe_rear_06",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_07",
+    "path": "component_packages/support/high_pipe_rear_07",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_08",
+    "path": "component_packages/support/high_pipe_rear_08",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00",
+    "path": "component_packages/support/high_pipe_east_00",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_01",
+    "path": "component_packages/support/high_pipe_east_01",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_02",
+    "path": "component_packages/support/high_pipe_east_02",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_03",
+    "path": "component_packages/support/high_pipe_east_03",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_04",
+    "path": "component_packages/support/high_pipe_east_04",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_05",
+    "path": "component_packages/support/high_pipe_east_05",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_06",
+    "path": "component_packages/support/high_pipe_east_06",
+    "object_count": 7
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A",
+    "path": "component_packages/support/hanging_cable_gallery_a",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B",
+    "path": "component_packages/support/hanging_cable_gallery_b",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN",
+    "path": "component_packages/support/hanging_cable_turn",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A",
+    "path": "component_packages/support/hanging_cable_south_a",
+    "object_count": 9
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B",
+    "path": "component_packages/support/hanging_cable_south_b",
+    "object_count": 8
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY",
+    "path": "component_packages/support/wall_label_gallery",
+    "object_count": 3
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_SOUTH",
+    "path": "component_packages/support/wall_label_south",
+    "object_count": 3
+  }
+]

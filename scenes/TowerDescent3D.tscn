@@ -22,6 +22,12 @@ fog_density = 0.04
 
 [node name="TowerDescent3D" unique_id=1708992133 instance=ExtResource("1_base")]
 script = ExtResource("2_tower")
+expedition_mode = false
+expedition_run_id = ""
+expedition_plan_id = ""
+force_standard_floor_plan_for_test = false
+force_new_game_opening_for_test = false
+force_extraction_settlement_for_test = false
 gameplay_theme = ExtResource("3_gameplay")
 visual_theme = ExtResource("4_visual")
 return_scene_path = "res://scenes/TowerDescent3D.tscn"
@@ -84,7 +90,7 @@ layout_mode = 3
 metadata/naming_contract = "WORLD-BLOCKS-r1"
 metadata/runtime_owner = "TowerDescent3D"
 
-[node name="Rooftop" type="Node3D" parent="Blocks" index="0"]
+[node name="Rooftop" type="Node3D" parent="Blocks" index="0" unique_id=1497301531]
 metadata/block_id = "rooftop"
 metadata/display_name = "天台区"
 metadata/floor_range = "100F"
@@ -93,7 +99,7 @@ metadata/facility_art_state = "removed_by_user"
 metadata/runtime_owner = "TowerDescent3D"
 metadata/source_blends = Array[String]([])
 
-[node name="Base" type="Node3D" parent="Blocks" index="1"]
+[node name="Base" type="Node3D" parent="Blocks" index="1" unique_id=931883670]
 metadata/block_id = "base"
 metadata/display_name = "基地区"
 metadata/floor_range = "99F"
@@ -115,17 +121,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.04, 0)
 [node name="东墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.04, 0)
 
-[node name="枪械工坊" parent="Blocks/Base/Art/设施交互节点_可移动旋转" index="1"]
+[node name="V026西北L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="0"]
+transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, -15, 0, -15)
+
+[node name="V026东北L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="1"]
+transform = Transform3D(-1, 0, -3.2584137e-07, 0, 1, 0, 3.2584137e-07, 0, -1, 15, 0, -15)
+
+[node name="V026西南L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 15)
+
+[node name="V026东南L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="3"]
+transform = Transform3D(3.1391647e-07, 0, 1, 0, 1, 0, -1, 0, 3.1391647e-07, 15, 0, 15)
+
+[node name="枪械工坊" parent="Blocks/Base/Art/设施交互节点_可移动旋转" index="0"]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 2.8696804, 0, -31.346287)
 
-[node name="维修圆凳_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="0"]
+[node name="维修圆凳_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="2"]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.3827412, 0, -2.6486073)
 
-[node name="战术指挥椅_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="1"]
+[node name="战术指挥椅_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="3"]
 transform = Transform3D(0.47313932, 0, 0.5158868, 0, 0.7, 0, -0.5158868, 0, 0.47313932, 7.459879, 0, -1.9208963)
 
 [node name="中央冷色主灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.273571, 0)
+visible = true
+light_color = Color(0.6439318, 0.3917458, 0.07696823, 1)
+light_energy = 16.0
+light_indirect_energy = 7.112
+light_volumetric_fog_energy = 9.629
+light_size = 0.084
 
 [node name="西北紫色轮廓灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 3.4, -8.5)
@@ -148,7 +172,7 @@ metadata/runtime_owner = "TowerDescent3D"
 metadata/source_blends = Array[String](["source/art/whitebox/tower_zones/stairs/v011/blender/whitebox_tower_battle_stairs_v011.blend"])
 metadata/production_stage = "whitebox"
 
-[node name="Stairs" type="Node3D" parent="Blocks" index="3"]
+[node name="Stairs" type="Node3D" parent="Blocks" index="3" unique_id=64635438]
 metadata/block_id = "stairs"
 metadata/display_name = "楼梯区"
 metadata/floor_range = "100F-99F;99F-98F"

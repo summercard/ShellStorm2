@@ -8,8 +8,9 @@ extends Node
 ##      并把关卡路径指向远征关卡场景（本场景不入树，避免 headless 直接切场景）；
 ##   4) 远征关卡场景：单层、独立区块 Blocks/Expedition、无天台/基地/楼梯/电梯，
 ##      且场景本身**不继承塔楼关卡场景**（只搭公共关卡基座 Dungeon3D.tscn）；
-##   5) 版图：入口安全屋 15×15（v007 双门美术）+ room_01…room_05 各 25×25 + 撤离房 25×25；
-##   6) 房型池按种子洗牌且必含 2 战斗房与 1 搜索房；
+##   5) 版图（数据驱动 13 房）：入口安全屋 15×15（v007 双门美术）+ 主路 room_01…room_06
+##      + Boss 房 + 撤离房 + 4 间支线房；内容房尺寸按种子从 8 个房型模板里抽，每局变；
+##   6) 内容池按种子洗牌（10 间内容房吃 10 项内容池，必含战斗房与可搜索房）；
 ##   7) 玩法接线：刷怪、搜索容器、过门命运卡三选一、终点 STANDARD 撤离信标；
 ##   8) 门策略：入口门免费通行；01 之后的门恢复清房/钥匙/命运卡；
 ##   9) 退出战局：清空随身物品并按独立副本结算返回正式基地；
@@ -28,11 +29,66 @@ const SAFE_ROOM_ART_VERSION := "v007"
 ## 家具碰撞盒必须覆盖「走行面以上这一段身位」才算真的挡住。用带宽而不是精确身高，
 ## 是因为判据只要求「盒子的竖直区间与玩家身位区间有交」，避免绑死角色尺寸。
 const FACILITY_BLOCK_BAND_MAX_Y := 1.0
-const MAIN_ROOM_IDS: Array[String] = ["room_01", "room_02", "room_03", "room_04", "room_05"]
-const EXPECTED_ROOM_IDS: Array[String] = [
+
+# —— 内置回退路径（generate_expedition）：设计源缺失时的兜底，本关实际不走 ——
+# 版图收敛为 13 房之后，这条路径的旧 7 房期望值**必须原样保留**：它是「设计源读不到」
+# 时的降级行为基线，跟着一起改等于把兜底路径的契约也一并改掉、失去旁证价值。
+## 内置回退路径的主路房：5 间内容房（无 Boss 房、无支线 —— 这条路径的版图口径停在收敛前）。
+const BUILTIN_MAIN_ROOM_IDS: Array[String] = ["room_01", "room_02", "room_03", "room_04", "room_05"]
+## 内置回退路径全房序：start + 主路 5 间 + extraction（共 7 房）。
+## ⚠️ 必须写字面量：GDScript 的 `const` **不接受数组拼接表达式**
+## （`["start"] + BUILTIN_MAIN_ROOM_IDS + ["extraction"]` 会报
+## "Assigned value for constant ... isn't a constant expression"，整个脚本加载失败）。
+const BUILTIN_ROOM_IDS: Array[String] = [
 	"start", "room_01", "room_02", "room_03", "room_04", "room_05", "extraction",
 ]
-const ROOM_TYPE_POOL: Array[String] = ["COMBAT", "COMBAT", "SCAVENGE", "STORAGE", "EVENT"]
+const BUILTIN_ROOM_TYPE_POOL: Array[String] = ["COMBAT", "COMBAT", "SCAVENGE", "STORAGE", "EVENT"]
+
+# —— 数据驱动路径（generate_from_level_plan）：本关 runtime_enabled=true 实际走这条 ——
+# mode = constrained ⇒ 房间清单与主路拓扑固定（来自 L2 蓝图），但**每间房用哪个房型、
+# 摆在哪个方向**每局按运行种子现算 ⇒ 只能断言「集合 + 拓扑 + 池子多重集」，
+# 不能钉死某一间的尺寸（见设计页 §4.6）。
+const PLAN_MAIN_ROOM_IDS: Array[String] = [
+	"room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
+]
+## 13 房全集（含入口 start / Boss / 撤离 / 4 间支线）。比对时按**排序后的集合**比：
+## constrained 生成器把支线紧跟父房插入（实测顺序 start, room_01, room_02, branch_01, …），
+## 而生成失败回退到 L2 样例时是文件序 ⇒ 顺序不是契约，集合才是。
+const PLAN_ROOM_IDS: Array[String] = [
+	"start", "room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
+	"boss", "extraction", "branch_01", "branch_02", "branch_03", "branch_04",
+]
+## 内容房 = 吃 content_type_pool 的 10 间（主路 6 + 支线 4）；入口 / Boss / 撤离房不参与。
+const PLAN_CONTENT_ROOM_IDS: Array[String] = [
+	"room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
+	"branch_01", "branch_02", "branch_03", "branch_04",
+]
+## 内容池 10 项（5 战斗 + 3 搜刮 + 1 储藏 + 1 事件），与 10 间内容房一一对应。
+const PLAN_CONTENT_TYPE_POOL: Array[String] = [
+	"COMBAT", "COMBAT", "COMBAT", "COMBAT", "COMBAT",
+	"SCAVENGE", "SCAVENGE", "SCAVENGE", "STORAGE", "EVENT",
+]
+## 4 条支线的挂法（由 L2 的 parent_key 决定；运行时不校验，但改了就是改设计意图）。
+const PLAN_BRANCH_PARENT := {
+	"branch_01": "room_02",
+	"branch_02": "room_03",
+	"branch_03": "room_04",
+	"branch_04": "room_05",
+}
+## 撤离房挂在 Boss 之后（主路 01—06 → boss → extraction），**不是**挂在最后一间主路房上。
+const PLAN_EXTRACTION_PARENT := "boss"
+## 8 个房型模板的尺寸集合：constrained 下内容房的尺寸必在其中（哪间取哪寸每局变）。
+const PLAN_TEMPLATE_SIZES: Array[Vector2] = [
+	Vector2(15.0, 15.0),  # safe_15x15（入口）
+	Vector2(45.0, 40.0),  # corridor_45x40
+	Vector2(70.0, 50.0),  # db_70x50
+	Vector2(60.0, 70.0),  # office_60x70
+	Vector2(60.0, 50.0),  # bridge_60x50
+	Vector2(50.0, 40.0),  # boss_50x40（Boss 房固定）
+	Vector2(25.0, 25.0),  # extraction_25x25 / std_25x25
+]
+## Boss 房与撤离房的房型不参与内容池洗牌，尺寸固定。
+const BOSS_ROOM_SIZE := Vector2(50.0, 40.0)
 const SIDE_DIRECTIONS := {
 	"north": Vector3(0.0, 0.0, -1.0),
 	"south": Vector3(0.0, 0.0, 1.0),
@@ -48,14 +104,16 @@ func _ready() -> void:
 	await _verify_catalog_and_menu(failures)
 	await _verify_loading_screen(failures)
 	_verify_plan_generator_seeds(failures)
+	_verify_constrained_generation_seeds(failures)
 	await _verify_expedition_level(failures)
 	await _verify_default_tower(failures)
 	await _verify_expedition_exit_contract(failures)
 	_report(failures)
 
 
-## 规划器多种子扫描：远征关卡只有「整图旋转/镜像」与「房型洗牌」两个随机量，
-## 两者都必须保持可建造（门间净距 ≥5m、房间不越界、不重叠）。
+## 规划器多种子扫描（**内置回退路径** generate_expedition）：该路径只有「整图旋转/镜像」
+## 与「房型洗牌」两个随机量，两者都必须保持可建造（门间净距 ≥5m、房间不越界、不重叠）。
+## 数据驱动路径的对应扫描见 `_verify_constrained_generation_seeds`。
 func _verify_plan_generator_seeds(failures: Array[String]) -> void:
 	var layouts: Dictionary = {}
 	for seed_value in range(1, 97):
@@ -75,10 +133,10 @@ func _verify_plan_generator_seeds(failures: Array[String]) -> void:
 			ids.append(str(spec.get("id", "")))
 			if str(spec.get("role", "")) == "main":
 				types.append(str(spec.get("type", "")))
-		if ids != EXPECTED_ROOM_IDS:
+		if ids != BUILTIN_ROOM_IDS:
 			failures.append("种子 %d 房间清单不正确：%s" % [seed_value, [ids]])
 		var sorted_types := types.duplicate()
-		var expected_types := ROOM_TYPE_POOL.duplicate()
+		var expected_types := BUILTIN_ROOM_TYPE_POOL.duplicate()
 		sorted_types.sort()
 		expected_types.sort()
 		if sorted_types != expected_types:
@@ -86,6 +144,60 @@ func _verify_plan_generator_seeds(failures: Array[String]) -> void:
 	# 旋转 0/90/180/270 与镜像都必须真实出现过，否则「随机」是假的。
 	if layouts.size() < 4:
 		failures.append("远征关卡版图变体过少（随机未生效）：%s" % [layouts.keys()])
+
+
+## 数据驱动路径（constrained）的多种子扫描 —— 内置扫描的对应物。
+##
+## 为什么必须单独扫一遍：`mode = constrained` 的生成器一旦整体失效会**静默回退**到 L2 里
+## 存的那份样例坐标。回退后房间清单、尺寸、内容池**全都仍然正确**，单点断言完全看不出来，
+## 但「每局版图不一样」这件事已经没了。故这里逐种子断言 `used_fallback == false`。
+func _verify_constrained_generation_seeds(failures: Array[String]) -> void:
+	for index in range(16):
+		var seed_value := 700000 + index * 7919
+		var plan := FloorPlanGenerator.generate_from_level_plan(EXPEDITION_LEVEL_ID, 0, seed_value)
+		if plan.is_empty():
+			failures.append("数据驱动种子 %d 规划为空（设计源没读到）" % seed_value)
+			continue
+		if not bool(plan.get("valid", false)):
+			failures.append("数据驱动种子 %d 规划不可建造：%s" % [
+				seed_value, str(plan.get("validation_errors", [])),
+			])
+			continue
+		if bool(plan.get("used_fallback", false)):
+			failures.append("数据驱动种子 %d 回退到了 L2 样例（constrained 生成失效）" % seed_value)
+		if str(plan.get("trigger", "")) != "level_plan_data":
+			failures.append("数据驱动种子 %d 触发标记不是 level_plan_data：%s" % [
+				seed_value, str(plan.get("trigger", "")),
+			])
+		var main_keys := plan.get("main_path_keys", []) as Array
+		if main_keys != PLAN_MAIN_ROOM_IDS:
+			failures.append("数据驱动种子 %d 主路不正确：%s" % [seed_value, [main_keys]])
+		var ids: Array[String] = []
+		var content_types: Array[String] = []
+		var off_template: Array[String] = []
+		for room_value in plan.get("rooms", []):
+			var room := room_value as Dictionary
+			var room_id := str(room.get("id", ""))
+			var role := str(room.get("role", ""))
+			ids.append(room_id)
+			if role not in ["stair_entry", "stair_exit", "extraction", "boss", "boss_prep"]:
+				content_types.append(str(room.get("type", "")))
+			if not _is_template_size(room.get("dimensions", Vector2.ZERO) as Vector2):
+				off_template.append(room_id)
+		var sorted_ids := ids.duplicate()
+		var sorted_expected := PLAN_ROOM_IDS.duplicate()
+		sorted_ids.sort()
+		sorted_expected.sort()
+		if sorted_ids != sorted_expected:
+			failures.append("数据驱动种子 %d 房间集合不正确：%s" % [seed_value, sorted_ids])
+		var sorted_types := content_types.duplicate()
+		var sorted_pool := PLAN_CONTENT_TYPE_POOL.duplicate()
+		sorted_types.sort()
+		sorted_pool.sort()
+		if sorted_types != sorted_pool:
+			failures.append("数据驱动种子 %d 内容池不是池子的一个排列：%s" % [seed_value, content_types])
+		if not off_template.is_empty():
+			failures.append("数据驱动种子 %d 有房间尺寸不在模板集合内：%s" % [seed_value, off_template])
 
 
 # —— 1) 基地目录动作 + 菜单冒烟 ——
@@ -394,8 +506,8 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 		failures.append("远征楼面世界矩形与内容外框不一致：%s vs %s" % [
 			str(stage_snapshot.get("floor_world_rect")), str(content_rect),
 		])
-	# 全部 7 个房间都必须完整落在内容外框内，否则房间会悬空。
-	for room_id_value in EXPECTED_ROOM_IDS:
+	# 全部 13 个房间都必须完整落在内容外框内，否则房间会悬空。
+	for room_id_value in PLAN_ROOM_IDS:
 		var room_id := str(room_id_value)
 		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
 		if room == null:
@@ -428,7 +540,7 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 
 	var space := tower.get_viewport().world_3d.direct_space_state
 	# 逐房：脚下必须有承重楼面，四向必须撞到本房间墙。
-	for room_id_value in EXPECTED_ROOM_IDS:
+	for room_id_value in PLAN_ROOM_IDS:
 		var room_id := str(room_id_value)
 		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
 		if room == null:
@@ -481,10 +593,18 @@ func _ray(space: PhysicsDirectSpaceState3D, from: Vector3, to: Vector3) -> Dicti
 
 
 func _verify_expedition_rooms(tower: TowerDescent3D, failures: Array[String]) -> void:
-	var ids := tower.get_expedition_room_ids()
-	if ids != EXPECTED_ROOM_IDS:
-		failures.append("远征关卡房间清单不正确：%s" % [ids])
-	for room_id_value in EXPECTED_ROOM_IDS:
+	# 房间清单按**排序后的集合**比：constrained 生成路径把支线紧跟父房插入，
+	# 与「生成失败回退样例」的文件序不同 ⇒ 顺序不是契约（见 PLAN_ROOM_IDS 注释）。
+	var ids: Array[String] = []
+	for value in tower.get_expedition_room_ids():
+		ids.append(str(value))
+	var sorted_ids := ids.duplicate()
+	var sorted_expected := PLAN_ROOM_IDS.duplicate()
+	sorted_ids.sort()
+	sorted_expected.sort()
+	if sorted_ids != sorted_expected:
+		failures.append("远征关卡房间清单不正确：%s（期望 %s）" % [sorted_ids, sorted_expected])
+	for room_id_value in PLAN_ROOM_IDS:
 		var room_id := str(room_id_value)
 		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
 		if room == null:
@@ -499,9 +619,20 @@ func _verify_expedition_rooms(tower: TowerDescent3D, failures: Array[String]) ->
 			failures.append("%s 的 block_id 元数据不是 expedition：%s" % [
 				room_id, str(room.get_meta("block_id", "")),
 			])
-		var expected_size := SAFE_ROOM_SIZE if room_id == "start" else EXPEDITION_ROOM_SIZE
-		if not room.get_dimensions().is_equal_approx(expected_size):
-			failures.append("%s 尺寸不是 %s：%s" % [room_id, expected_size, room.get_dimensions()])
+		# 尺寸：入口 / Boss / 撤离三间房型固定（不参与内容池洗牌）；其余 10 间内容房
+		# 的房型每局按种子抽 ⇒ 只断言「尺寸落在 8 个模板的尺寸集合里」。
+		var dimensions := room.get_dimensions()
+		if room_id == "start":
+			if not dimensions.is_equal_approx(SAFE_ROOM_SIZE):
+				failures.append("入口安全屋尺寸不是 15×15：%s" % dimensions)
+		elif room_id == "boss":
+			if not dimensions.is_equal_approx(BOSS_ROOM_SIZE):
+				failures.append("Boss 房尺寸不是 50×40：%s" % dimensions)
+		elif room_id == "extraction":
+			if not dimensions.is_equal_approx(EXPEDITION_ROOM_SIZE):
+				failures.append("撤离房尺寸不是 25×25：%s" % dimensions)
+		elif not _is_template_size(dimensions):
+			failures.append("%s 尺寸不在 8 个房型模板内：%s" % [room_id, dimensions])
 	if not tower.get_first_safe_room_dimensions().is_equal_approx(SAFE_ROOM_SIZE):
 		failures.append("远征关卡首间安全房尺寸不是 15×15：%s" % tower.get_first_safe_room_dimensions())
 
@@ -532,33 +663,55 @@ func _verify_expedition_plan(tower: TowerDescent3D, failures: Array[String]) -> 
 		failures.append(
 			"远征关卡未声明 runtime_enabled，规划却不是内置远征口径：mode=%s" % plan_mode
 		)
+	# 本局必须真的现算出来，而不是回退到 L2 样例 —— 回退后清单/尺寸/内容池全对，
+	# 单看几何断言看不出来，但「每局版图不同」已经失效（见 _verify_constrained_generation_seeds）。
+	if plan_mode == "constrained" and bool(plan.get("used_fallback", false)):
+		failures.append("远征关卡 constrained 生成回退到了 L2 样例（随机化失效）")
 	if str(plan.get("terminal_mode", "")) != "extraction_room":
 		failures.append("远征关卡终局模式不是撤离房：%s" % str(plan.get("terminal_mode", "")))
+	# 主路 01—06（数据驱动路径）。内置回退路径是 01—05，那份期望值由种子扫描单独守。
 	var main_keys := plan.get("main_path_keys", []) as Array
-	var expected_main: Array = MAIN_ROOM_IDS.duplicate()
+	var expected_main: Array = PLAN_MAIN_ROOM_IDS.duplicate()
 	if main_keys != expected_main:
-		failures.append("远征关卡主通道不是 01—05 号房：%s" % [main_keys])
-	# 撤离房必须挂在最后一间主通道房之后。
+		failures.append("远征关卡主通道不是 01—06 号房：%s" % [main_keys])
+	# 拓扑计数：10 间内容房（主路 6 + 支线 4）、4 条顶级支线、4 间支线房。
+	if int(plan.get("content_room_count", -1)) != PLAN_CONTENT_ROOM_IDS.size():
+		failures.append("远征关卡内容房不是 10 间：%d" % int(plan.get("content_room_count", -1)))
+	if int(plan.get("branch_count", -1)) != PLAN_BRANCH_PARENT.size():
+		failures.append("远征关卡顶级支线不是 4 条：%d" % int(plan.get("branch_count", -1)))
+	if int(plan.get("branch_room_count", -1)) != PLAN_BRANCH_PARENT.size():
+		failures.append("远征关卡支线房不是 4 间：%d" % int(plan.get("branch_room_count", -1)))
+	# 支线挂法与撤离房父房：都是拓扑，不随种子变。
 	for room_value in plan.get("rooms", []):
 		var spec := room_value as Dictionary
-		if str(spec.get("key", "")) != "extraction":
+		var key := str(spec.get("key", ""))
+		if PLAN_BRANCH_PARENT.has(key):
+			var expected_parent := str(PLAN_BRANCH_PARENT[key])
+			if str(spec.get("parent_key", "")) != expected_parent:
+				failures.append("支线 %s 应挂 %s，实际挂 %s" % [
+					key, expected_parent, str(spec.get("parent_key", "")),
+				])
+		if key != "extraction":
 			continue
-		if str(spec.get("parent_key", "")) != "room_05":
-			failures.append("撤离房父房不是 05 号房：%s" % str(spec.get("parent_key", "")))
+		# 撤离房必须挂在 Boss 之后 —— 主路最后一间是 room_06，Boss 才是它的父房。
+		if str(spec.get("parent_key", "")) != PLAN_EXTRACTION_PARENT:
+			failures.append("撤离房父房不是 %s：%s" % [
+				PLAN_EXTRACTION_PARENT, str(spec.get("parent_key", "")),
+			])
 		if not (spec.get("dimensions", Vector2.ZERO) as Vector2).is_equal_approx(EXPEDITION_ROOM_SIZE):
 			failures.append("撤离房不是 25×25：%s" % str(spec.get("dimensions", Vector2.ZERO)))
-	# 房型池按种子洗牌，但必须稳定包含 2 间战斗房与 1 间可搜索房。
+	# 内容池：10 间内容房按种子洗牌，但 10 项对 10 间 ⇒ 多重集恒等于池子。
 	var actual_types: Array[String] = []
-	for room_id in MAIN_ROOM_IDS:
+	for room_id in PLAN_CONTENT_ROOM_IDS:
 		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
 		if room != null:
 			actual_types.append(room.room_type)
 	var sorted_actual := actual_types.duplicate()
-	var sorted_expected := ROOM_TYPE_POOL.duplicate()
+	var sorted_expected := PLAN_CONTENT_TYPE_POOL.duplicate()
 	sorted_actual.sort()
 	sorted_expected.sort()
 	if sorted_actual != sorted_expected:
-		failures.append("远征关卡房型池不正确：%s（期望 %s）" % [actual_types, ROOM_TYPE_POOL])
+		failures.append("远征关卡内容池不正确：%s（期望 %s）" % [actual_types, PLAN_CONTENT_TYPE_POOL])
 	if actual_types.count("COMBAT") < 2:
 		failures.append("远征关卡战斗房不足 2 间，无法保证刷怪：%s" % [actual_types])
 	var has_search_room := actual_types.has("SCAVENGE") or actual_types.has("STORAGE")
@@ -712,10 +865,10 @@ func _verify_door_policies(tower: TowerDescent3D, failures: Array[String]) -> vo
 	for key in ["requires_clear", "requires_key", "triggers_fate"]:
 		if bool(entry_policy.get(key, true)):
 			failures.append("安全屋→01 号房入口门应为免费通行：%s" % entry_policy)
-	# 01 之后恢复默认清房 / 钥匙 / 命运卡。
-	for edge_index in range(MAIN_ROOM_IDS.size() - 1):
-		var from_id := MAIN_ROOM_IDS[edge_index]
-		var to_id := MAIN_ROOM_IDS[edge_index + 1]
+	# 01 之后恢复默认清房 / 钥匙 / 命运卡（含 room_05→room_06 这一段）。
+	for edge_index in range(PLAN_MAIN_ROOM_IDS.size() - 1):
+		var from_id := PLAN_MAIN_ROOM_IDS[edge_index]
+		var to_id := PLAN_MAIN_ROOM_IDS[edge_index + 1]
 		var policy := tower._door_policy_for_edge(from_id, to_id)
 		for key in ["requires_clear", "requires_key", "triggers_fate"]:
 			if not bool(policy.get(key, false)):
@@ -749,7 +902,7 @@ func _verify_extraction(tower: TowerDescent3D, failures: Array[String]) -> void:
 func _verify_spawn_and_search(tower: TowerDescent3D, failures: Array[String]) -> void:
 	# 刷怪：进入第一间战斗房后必须出现敌人。
 	var combat_id := ""
-	for room_id in MAIN_ROOM_IDS:
+	for room_id in PLAN_CONTENT_ROOM_IDS:
 		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
 		if room == null:
 			continue
@@ -772,7 +925,7 @@ func _verify_spawn_and_search(tower: TowerDescent3D, failures: Array[String]) ->
 	var search_room_id := ""
 	var searchable_total := 0
 	var wired_searchable := 0
-	for room_id in MAIN_ROOM_IDS:
+	for room_id in PLAN_CONTENT_ROOM_IDS:
 		var room := tower._room_by_id.get(room_id) as DungeonRoom3D
 		if room == null:
 			continue
@@ -964,6 +1117,14 @@ func _verify_expedition_exit_contract(failures: Array[String]) -> void:
 
 # —— 工具 ——
 
+## 尺寸是否落在 8 个房型模板的尺寸集合里（constrained 路径下内容房尺寸的唯一合法域）。
+func _is_template_size(dimensions: Vector2) -> bool:
+	for candidate in PLAN_TEMPLATE_SIZES:
+		if dimensions.is_equal_approx(candidate):
+			return true
+	return false
+
+
 func _script_constants(node: Node) -> Dictionary:
 	var script := node.get_script() as Script
 	if script == null:
@@ -998,7 +1159,8 @@ func _report(failures: Array[String]) -> void:
 			"EXPEDITION_LEVEL01_FLOW_OK: "
 			+ "catalog->menu->loading->expedition, single layer, Blocks/Expedition only "
 			+ "(scene is structurally independent of TowerDescent3D.tscn), "
-			+ "15x15 v007 safe room with 2 perpendicular doors, room_01..05 25x25 + extraction 25x25, "
+			+ "13 rooms (entry + room_01..06 + boss + extraction + branch_01..04, "
+			+ "constrained per-seed room types), 15x15 v007 safe room with 2 perpendicular doors, "
 			+ "enemy spawn, searchable containers, door fate 3-choice, free entry gate, "
 			+ "STANDARD extraction beacon, abort-return-to-base contract, default tower unchanged"
 		)

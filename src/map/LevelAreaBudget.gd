@@ -23,7 +23,12 @@ const CONTENT_ROOM_TARGET_CLAMP := Vector2i(14, 16)
 
 
 ## rooms 为 plan 房间数组（需含 position / dimensions / parent_key）。
-static func calculate(rooms: Array) -> Dictionary:
+## policy 为 L1 generation_policy（可选，缺省 = 塔楼口径，行为与加形参前逐位一致）：
+##   - `target_occupancy_ratio`：覆盖占用率上限（缺省 TARGET_OCCUPANCY_RATIO）。
+##   - `enforce_area_budget`：false 时**只算不判**（返回值里 `area_budget_enforced=false`），
+##     供单层独立关卡放开总面积约束（远征01，见设计页 §4.7）；缺省 true。
+## 本函数只产出数字与两个开关的读值，**判定落在 LevelPlanValidator**（单一落点）。
+static func calculate(rooms: Array, policy: Dictionary = {}) -> Dictionary:
 	var total_floor_area := MAP_SIZE_M * MAP_SIZE_M
 	var outer_wall_area := MAP_SIZE_M * 4.0 * WALL_THICKNESS_M
 	var core_area := CORE_SIZE_M * CORE_SIZE_M
@@ -56,15 +61,22 @@ static func calculate(rooms: Array) -> Dictionary:
 			* CORRIDOR_WIDTH_M
 		)
 	var estimated_used := room_area + interior_wall_area + corridor_area
-	var target_usable_area := available_area * TARGET_OCCUPANCY_RATIO
+	# 占用率可被 L1 政策覆盖；越界值（<=0 或 >1）落回常量，绝不因此产出非法 target。
+	var occupancy_ratio := float(policy.get("target_occupancy_ratio", TARGET_OCCUPANCY_RATIO))
+	if occupancy_ratio <= 0.0 or occupancy_ratio > 1.0:
+		occupancy_ratio = TARGET_OCCUPANCY_RATIO
+	var target_usable_area := available_area * occupancy_ratio
+	# 放开开关：只影响**是否判定**，不影响上面任何计算值 —— 数字照出，供文档与验收读。
+	var enforce_area_budget := bool(policy.get("enforce_area_budget", true))
 	return {
 		"total_floor_area_m2": total_floor_area,
 		"outer_wall_area_m2": outer_wall_area,
 		"core_area_m2": core_area,
 		"stair_corridor_utility_reserve_m2": STAIR_AND_UTILITY_RESERVE_M2,
 		"available_area_m2": available_area,
-		"target_occupancy_ratio": TARGET_OCCUPANCY_RATIO,
+		"target_occupancy_ratio": occupancy_ratio,
 		"target_usable_area_m2": target_usable_area,
+		"area_budget_enforced": enforce_area_budget,
 		"reference_content_room_cost_m2": REFERENCE_CONTENT_ROOM_COST_M2,
 		"calculated_content_room_target": clampi(
 			int(floor(target_usable_area / REFERENCE_CONTENT_ROOM_COST_M2)),

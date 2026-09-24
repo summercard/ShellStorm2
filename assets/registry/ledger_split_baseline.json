@@ -1,2145 +1,2150 @@
 {
- "schema_version": 1,
- "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-09-23",
- "sheet": "资产主表",
- "columns": [
-  "AssetID",
-  "中文名",
-  "大类",
-  "子类",
-  "逻辑ID/源键",
-  "组件槽",
-  "变体父ID",
-  "视角",
-  "状态/动画",
-  "复用范围",
-  "制作状态",
-  "优先级",
-  "版本",
-  "规格(px)",
-  "文件路径",
-  "源码/策划依据",
-  "关键词/别名",
-  "查重键",
-  "查重结果",
-  "SHA-256",
-  "负责人",
-  "更新时间",
-  "来源/许可",
-  "源编号（Blender collection）",
-  "备注"
- ],
- "derived_columns": [
-  18,
-  19
- ],
- "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 410,
- "assets": {
-  "CHR-PLY-CAPSULE01": {
-   "v": "7bf0d42ae9bfeb342131234de92035f3c7f0d3f340a7b6a149a117610c028924",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-HEAD-SIDE": {
-   "v": "a8c920f26fa2d8fccff7017ca11cb742d1b9c147b15bc5dbd44ec79cc358ced2",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-BODY-SIDE": {
-   "v": "9ee14fa9c33794b7cf5d35a90c0c086c7a74b0b7ffd89cdb116f86e5b7ac01aa",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-HAND-L-SIDE": {
-   "v": "6a7311014ebb559af608f8e7e339eff136ef0770f27b5bf206be45cddbc737db",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-HAND-R-SIDE": {
-   "v": "09dec9dc73720edf0d1bee750d5f85660adb66b4fc6fe2313e321b22093356ce",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-SCARF-SIDE": {
-   "v": "18338e52d3aeff152422b8bad2d1f4d7d7ea62931bdba0a8bc43501c2fcf8373",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-PREVIEW-STATES": {
-   "v": "27700aa18c3757838b789accc0116ad1edc9f0728347ba094804df23c87e60c4",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-3D-BUNNY01": {
-   "v": "926e377d08ab59824310219c17f4ca7728cc2ec404d4eac71d2ffefb15f9af12",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-3D-BUNNY01-BODY": {
-   "v": "6589623660cf2a088fec445d6a2c966894d3492f00d6b86cf2e7afec0dc2dbfd",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-3D-BUNNY01-HEAD": {
-   "v": "d9a3e9f58e8bad4e4367b0ab08306e4516a5116d096c60d1a26466bf63ab7ad6",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-3D-BUNNY01-EARS": {
-   "v": "fa317a2b4b77f3c0b674dc30e0feed081417df046eae891f37f67b4554feca2c",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-3D-BUNNY01-HAND": {
-   "v": "b7459104e8e13cb03a93d7ff548216a8e18360a8399266232dd9363696ab19e9",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-L": {
-   "v": "b398f8d8d9bbeccd8b9763ee04e8577796153db349246fe719b7cc82903f069f",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-R": {
-   "v": "f75c208489cc03a6138be002674afd6b54b4038e5ffab1c5b0a6b47f468dceb8",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLAYER-AVATAR-TEMPLATE-001": {
-   "v": "b0eda195d72d5b3ed20f557df348b06482f3678de81b0f85c1093b8c6e2e76c9",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-HEAD-CHIBI-ANIME-3D": {
-   "v": "20639b786089747b5641e228f8e8ceee5ee27b25fd6ed505b4c29e2bf389b3e6",
-   "c": "角色",
-   "d": "characters"
-  },
-  "ENM-MELEE-FUNGBOAR01": {
-   "v": "f04b1051a35705d602a0a2a970d8d9efe1e5f1d11d19f2415a175d2d60570a72",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-RANGED-SPORESHOOTER01": {
-   "v": "41eea201642971224e0010b5698c24cf03ba8766767ae60f984f7d60481f3ce1",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-SUMMON-HIVE01": {
-   "v": "97dc88bff0b36b387dfa89b5942a83c231b8b3bfe9a4e0b1c6251b1216e9c1f7",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-TANK-SHELLGUARD01": {
-   "v": "0402f1c32d053cc6b5339884cdae8a50f70508492e729b57fb49640f4764b030",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-BOMBER-FRUIT01": {
-   "v": "88d32a459dcc18086bf2ed73561922f08a680e3c865efcf2e829e848240775ff",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-TRAP-SPIKEWORM01": {
-   "v": "dc5737f885ebe57cbd3964aec42e52d5ac8551c7ee0ed4cda23f1dd6c3224f72",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-BOSS-ABYSS01": {
-   "v": "6d745cf0bbd53ec4d5fc7998c5766bb3b531de8655df84e1c4739c6e8f404f5a",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-ECOSYSTEM-KIT-3D": {
-   "v": "94d450dedfc7bf7811835e418e495e677bb6426cb74a0d2f4a97ed87e4db09ac",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-BOSS-ARCHIVIST-95": {
-   "v": "2b4f4dd28e1c369efe75600fb2178abeffcd81227381a3073358ad009e7b646f",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-BOSS-FURNACE-WARDEN-90": {
-   "v": "b6f5dacad03828b3151b9304b5ee2f5186b44f1fe2f2f073613d7703b884e1c6",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-BOSS-HOLLOW-CHOIR-85": {
-   "v": "6c6fee82fbba857e2f1eb7e5cf72b85eaca502218b620438348788e53cd13e89",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENM-ELITE-RIFT-BOAR-ARMED-3D": {
-   "v": "ff70fa93f6c49e0edbd295cf78960c85dc25de3d5e1b2f138d08c3085de66ef1",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENV-BASE-WORLD-KIT": {
-   "v": "7d75b50f9d212e7cd58163c1fd840ab1c00098753ab1e170fc0b87cad2b75e85",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-IRON-FRONTIER-KIT": {
-   "v": "56d23156a332aa7db8adf7ce9587668e8d5097d7d8d034ca2dd585ac5655d565",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-RUST-FOUNDRY-KIT": {
-   "v": "8f4f3fe1a4463e45a52f7f1be157c75a53228cd6f82b1276357c4fb05f6d1a1a",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-SPORE-DEPTHS-KIT": {
-   "v": "b11c205d2ba0aa6847049f0c68a9db47ab30824ce53ae20074d2efc0c543a48a",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ABYSS-ARCHIVE-KIT": {
-   "v": "5e48964f6aa2cac2f8f494de10e010b8162029bda17354e6e0cd78cff2ffd545",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TRAINING-RANGE-KIT": {
-   "v": "4a31dfb7bb0f84248ca8b6ce64e49916431be206123d61e4d3675a4a673af8a9",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-COMBAT-DRESSING": {
-   "v": "cd955df537d195bb2ca9d718896dc5b661312f82c875f5ebdcf2e960455c6838",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-ELITE-DRESSING": {
-   "v": "357b2ace3f61d09e51c77698f019a5d10475f24a9e8ed68ebc04d148ad6d85db",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-BOSS-DRESSING": {
-   "v": "325c4f894321d36a9a5901b7fbf35af84ef706c40714fcbb0d0aae5f20d8c53a",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-EVENT-DRESSING": {
-   "v": "fe39f0585e15d2af97dd447461b6547978472394bd04b1e9b6f33f5d58b6fc0d",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-EXTRACTION-DRESSING": {
-   "v": "44c4e66c9841b33a6d2adc32f0940fc66a94ae317af28ebe51006d2b022b8401",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-MERCHANT-DRESSING": {
-   "v": "f838082a6ec169569bd492e0bdcc11e7726a1912041817ce4c241c1e448bb721",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-SCAVENGE-DRESSING": {
-   "v": "df6fb2858e8617b3d33d687a7f78ee29a34483f38791623f7df8864d7680989c",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-STORAGE-DRESSING": {
-   "v": "31ed6c97a2d28928d1d43c3f393201689355e9a14530a7690f8500c34cb2769a",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-TRAP-DRESSING": {
-   "v": "ede27bf456443ab857d2e34fd07b29c1869a199388123ffaa0c83d588e34accf",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-UPGRADE-DRESSING": {
-   "v": "c970f7d97d1e97db7cffeb3ddcc62085f57563a4f0d2f79d42a75cbedcba1583",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-SPAWN-DRESSING": {
-   "v": "d3c7da93ae56edde552233a9188922407371d42031b9d470da59bf1d39e9e0d6",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOM-STAIRS-DRESSING": {
-   "v": "1a2c8966af99ee10c9778ee93d6553347386e8b11602328a044eae7fd81025c6",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-BASE-DIVINATION": {
-   "v": "136de9e9b7b948079375ca1efab3ca71662e0986d5af7512c416939e0b3b0fc2",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-BASE-VAULT": {
-   "v": "01fc30bd8ad1f27a999a0ab400944eb45f21f3fe19f612442c6486682578b922",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-BASE-MONSTER-ARCHIVE": {
-   "v": "b22df6239421380e06a5d183ad9d1a55037e957258fa982b45a153a5d3282b53",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-BASE-CARD-COLLECTION": {
-   "v": "b81c7f591fbe0925ed15360b3a28d690a29830bddaa6efd2769b754654c770ca",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-BASE-TERMINAL": {
-   "v": "5f612a08c38650f66701e9b3a8a72108f6d68c9d7602357947c8d6b77cc11a34",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-DUNGEON-GATE": {
-   "v": "71e1cd91c9cbf8f41f36adc6916ad18122a36a08d26c8ea64836abb59481d43f",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-WORKBENCH": {
-   "v": "1a6d944774802402af0d67a23bffc491d7d38140d1b7a0249035fd370ff13233",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-DOOR": {
-   "v": "7c8a52709bf2cb6680dcff6b7242df828593690788090284eed0bd1f8ed03e28",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "ENV-BASE99-FLOOR-DETAILS-V017": {
-   "v": "6978d63ecdd437c050414189f421c852f69a2079deec2677f25b35b05d400dcf",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-LOFT-FLOOR-FINISH-V017": {
-   "v": "745a8496dd895263343104333e4689ecf341d912b2c04a7ff1827b7eceda065f",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017": {
-   "v": "fc37e4de8a70019357b08b0def18490f73163809440d77c19217ae314b56329b",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE-WORLD-KIT-3D": {
-   "v": "3dd1bfaeeaec240ddb452e127862948b5288d0acbfb26616515a171e83341781",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-BASE-FACILITY-3D": {
-   "v": "1d202f99eee046dbfd0dd950df5af94668c3cb43548dde6793ebe4997d2ff714",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-DUNGEON-GATE-3D": {
-   "v": "64f50f5e2b9bb59238ea7ce158097047e14438e41f0c16c44a5c868c25ba1f7b",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "ENV-BASE-WORLD-3D-PREVIEW": {
-   "v": "40a9bbef20debd215df0f22e2344aa254a8d8a5435224a99a0f1f57bf92c708c",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-RUNTIME-3D": {
-   "v": "5162e15b34504a875eee4dff9db40bb6d6d187909a8f5676dca0f7b993055244",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-IRON-FRONTIER-3D": {
-   "v": "3f97c19a28ec9fcce04bf20548f70a6089e2cb90928b87d7915f4fc5b4d72d2e",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-RUST-FOUNDRY-3D": {
-   "v": "01f12c45210fd5e0b7545f54d27bbdb6220d759eae1a5919386f996798383d82",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-SPORE-DEPTHS-3D": {
-   "v": "4fa0d7b3a52be203121362d38d23e93d341bb98882a7e270237bf4bc27d0bdd2",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ABYSS-ARCHIVE-3D": {
-   "v": "7860037f34bf7116af0eba174b8591b4c160083b1d94c1c7a59ff14e01699c99",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-WASTELAND-LIGHT-3D": {
-   "v": "fd026ef543c480fb9cb97be043adada5f7a033f3df8cb93e4d8ff8082ee0b217",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-ROOM-FURNITURE-3D": {
-   "v": "82784f2a39edfdad226f67b5a3b778e4a8bf7361bd5e8a1f6a30a76ac92df263",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-SEARCH-CONTAINER-3D": {
-   "v": "bb11c015f4fa283154b1ee74560c827a7a5e3c53fcf0a60401d1ecea4d0a4129",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-SERVICE-STATION-3D": {
-   "v": "739158522880b91bcb56fe0c4dd88b074b1ed3b65cdc65d8a25bb051331e9789",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-EXTRACTION-BEACON-3D": {
-   "v": "478dd06d0bba5a16692ef3b7ac21d0440afcdadc0e3191a5e6e24b929c7be38b",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "ENV-TRAINING-RANGE-KIT-3D": {
-   "v": "4959068e4b1bd328007b4cc64faf685a67ca806155fc964c97fbc085c0be82d2",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-RUNTIME-3D-PREVIEW": {
-   "v": "9b23ee6b283b77ffd6de5d1577397d6812b73d052acabc5718c642ae61d92950",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TRAINING-RANGE-3D-PREVIEW": {
-   "v": "b28fda2b0235b8a9743aba1d4ae00869e859c138cec3bc1a5c1cf218623b0482",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-ROOM-LIGHT-SWITCH-3D": {
-   "v": "7bc9c9e04fee9975e774130084d7e5dc020e2e87b41109e9615c7ddf8efc282b",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "ENV-TOWER-DESCENT-KIT-3D": {
-   "v": "d1a42e1e8d261de55e40ce66c263d818ce4959daa6bb85b12d2f0af1fa0afb80",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-FLOOR-TILE-5M": {
-   "v": "85f4a469202f9b3dc53c2a8478b02522a21ad25b268c9f8ca04b1d2b2cf10951",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-WALL-SOLID-5M": {
-   "v": "38883d0244596f7c0e99c43c5b6c0440da2b0671ccf06ae1499ba5d48c9000e4",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-WALL-PARAPET-5M": {
-   "v": "f09faeab2516abc0325bad9490734b78545f16b7120bb3b8ee00c310868de5d0",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-WALL-DOOR-5M": {
-   "v": "46fbe6d6910451ec633c298f73d674bdbbf4fd050e7f2caa4d4ab557e3a6f7a7",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-STAIRWELL-GENERIC-12M": {
-   "v": "7eed01f6539f2c97d4403ae1662555ee30789dd13e18b228f1d8ffdf9382aff9",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-STAIRWELL-ROOFTOP-12M": {
-   "v": "5a4445d04b5d751025f9108a3303fe80a775878ba23e7367ee7b026ceada77b1",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BOSS-ARENA-ARCHIVE-95": {
-   "v": "ccea79058f183b585f57d89cb78aa1fe457356987ca704ecc7aee43f53ff1fb2",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BOSS-ARENA-FURNACE-90": {
-   "v": "2089ce9c9dd82a3cb65b4b01bf302d3f0d49e3bda9c4b4829768d6ee55177e02",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BOSS-ARENA-CHOIR-85": {
-   "v": "2075d94409eb9b87c6434e69664cb6f74efadd9bbbb035bfbdac35c7d76e6483",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-MODULAR-KIT-3D": {
-   "v": "334ebda036781384af8c52739fd9bf2c223db134a5c8e0f2ebf11f5bed8899e1",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-WALL-PLAIN-5X12": {
-   "v": "266514acdaa69bd73d42817bd6a5830cd87ed439b4e10931a1f5beb05fb4a798",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-WALL-DOOR-5X12": {
-   "v": "36ca3ca285a41f38627569ec6ae98137cf79b20be502a37c8160cca70e913627",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-FLOOR-PLAIN-5M": {
-   "v": "41aa08089c3491f0f6c67c3b6d8cf2109f2f0bf81aa5796def95666053c747b7",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-FLOOR-RIVET-5M": {
-   "v": "12d27a55ebfb7752bd3aed3e7d0a069b2016ca6172fd804cac159e0edc7fe739",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-ART-LAYOUT-3D": {
-   "v": "878fdc64da16ab9355946a8262d82c05bec335d8a5b6bb95d7c1216d7c591ca4",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-CORNER-L-5M": {
-   "v": "fab5e14109d7cff3fa2353a016b4a5f33ef33c311ca2e435167fc47903016a98",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-CORNER-L-PARAPET-5M": {
-   "v": "0ed7da1700ee766f139bcbbb73dd8cd9b111713901ff2fdee509ff8ae5749e19",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-CORNER-T-5M": {
-   "v": "c03cbb6483b4cd9381b4a8f4256a768b79621cb06273d230ec15398117590c12",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-CORNER-X-5M": {
-   "v": "4d1020fc184989e355a4586a7bcb81d2238097e6e0a1033c4580b0e94a3291de",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-CORRIDOR-CEILING-SEGMENT": {
-   "v": "1e7c1b592f74d218c0cfb9075b222eb8a340da84aad824b3e399c7ba2befff31",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-CORRIDOR-FLOOR-SEGMENT": {
-   "v": "0b8ed138b7b66d08a9cd2f7637b7a247265d354aaa7fcc55e6a38e672cc58a61",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-CORRIDOR-STAIR-TREAD": {
-   "v": "82d105eea23d8c7ef9140817e95362bff1e15e61e320e16aafb4b75fe668b6e6",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-CORRIDOR-WALL-SEGMENT": {
-   "v": "660dafa34f1d7633f28f28fde172515f40b40dea0feaef6700d0653286fb9f61",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-ACCESS-STEP": {
-   "v": "75b199c34a3865631dde6a0ada97371ab591df79ceacc77a20ec14b96f1fc284",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-CORNER-POST": {
-   "v": "8242ea368052141f19ce3cf318a0838fe81aef902184461d2434e2c3f9dd52e2",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-DOOR-LINTEL": {
-   "v": "45661624b2defed32e97db1486f44343102d6ae4f3606f77224b05214a29ad20",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-FACILITY-WALL-DOOR-SIDE": {
-   "v": "294adb7f97c7739a00f60a93575cd83454a089fd80797c27ee657391d88ac50a",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-FACILITY-WALL-LINTEL": {
-   "v": "b5530c8a589e3e7b631aed1cbad61cf72740fb513fdd1f39659dae5f8906bfa1",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-FACILITY-WALL": {
-   "v": "06f30ce764b86078fb04c53b34db7eacacbf186405bbe54ea3b7f0cd1b1ceae5",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-FLOOR-INSET": {
-   "v": "4d0505e17773429abd7437dada50eeac63874dc56c74b45b4f60d1da6689bc8f",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-FLOOR-PARTITION-H": {
-   "v": "1a1d28a4a14c87a43bacd37ac191be4a28591c975da3f5ef9898aa7f4370fce8",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-FLOOR-PARTITION-V": {
-   "v": "864dbcd9dd078986943557c0c44d7e2da29caa42d0b12cd3077230c6040debf7",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-FLOOR-SEAM": {
-   "v": "a51860e57175b1c272458b811ca4c5138717649979b6e7432f3b3ffb13377093",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-FLOOR": {
-   "v": "4e041fd671fec0486d49d59246e359fd0a665ef4bf392c108140f41b6f6cf7a6",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-DESCENT-MARKER": {
-   "v": "6d7f7116db85c46634cc2caf7faad13327405b9e27fa60e86ce89e80c18cf885",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-FACADE-BAND": {
-   "v": "c54dafaacf1aa7c967a00038d31ce4ba237e0798b8dd16f393c46438ee3d7a5c",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-FACADE": {
-   "v": "0e988b2e062dd40e2a2c8faef09f6ee1b920cb16a05a9e325db2b0a360da7108",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-RAIL-POST": {
-   "v": "875c629ad915d29cdc0bacd43183bd727dc838ca85caa43386f182cde02135ca",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-RAILING-LOWER": {
-   "v": "9f1839daf2f12acd9b19f5419c181057ff3a047fc5fe9155c5dd860c14e920dd",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-RAILING-UPPER": {
-   "v": "946d115d9afe352a107a92a9a7091110ac6c15fbf06856b50b9b60d8d4ae2563",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-STAIR-FRAME-LINTEL": {
-   "v": "e12f62203a172684879b722aafabbbca217b21d0eb2a3408b3574cb53fa51bdb",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-ROOFTOP-STAIR-FRAME-POST": {
-   "v": "54122385e6e103ba6b925ef63f8db3abc00e9603a53ffd1a874920d8bb27979e",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-STAIR-LOBBY-ROUTE-GUIDE": {
-   "v": "9cd50c556da80131fb934c5503aac3749fb1ebc59a582d36714972186b8d09ae",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-STAIR-LOBBY-THRESHOLD-GUIDE": {
-   "v": "7cd7969c29894ad2b79311be09a71034d109d5ad79cf4730f286942157747077",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-VERTICAL-ACCESS-MARKER": {
-   "v": "4691dd7d1c40c03f7cd592dafe589b75eb5a82cf2354228ffe9bbfe621d5fb90",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-WALL-DOOR-SEGMENT": {
-   "v": "0e6417710ab556706da868f730f219bdc98ab509311697cc1cd66e97bba0eae3",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-DUNGEON-ROOM-WALL-SEGMENT": {
-   "v": "58586fc9e4ff93d5043758c243e9f6e094eb3c4577b765caf149d0a63958a800",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-WALL-PARAPET-DOOR-5M": {
-   "v": "9caee8c30776401c189cea892353b515a2e5787a57a37a8c373e33153f794040",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-BASE-FACILITY-LIGHT-GRID-3D": {
-   "v": "91ec2a618a71e5e18427c11f78dc559b6e472e472020bc6e4307ee14ab54db56",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "ENV-BASE99-WALL-WINDOW-5X12": {
-   "v": "172a94519e5cd2c0276f7215e5cddfe4386a11c68cceb8d1d58fe340027b0f02",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-MEZZANINE-20X10-Z7": {
-   "v": "a8b8d7087c949a9b01406b66cfec96cb0291453fc8edac5aa6b5ab5d1b2f3f41",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-STAIR-L-Z7": {
-   "v": "562f204e6051908f8bd4ada7fb6a103820444c2fb02599ffc90c471e567e469f",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-STAIR-EXTERIOR-H2": {
-   "v": "25dec80d09f38221c61987466dcaa47176de1781752871d85b4277fafac6991b",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-DOOR-LIFT-22X25": {
-   "v": "03756e977196c77ebf0b4accb61bbd97eeaa6fac3ede91e038ad992bcee58a90",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE100-UPPER-SHELL-30X30-H12": {
-   "v": "9a3d3d140140967e9ad4049c2a64e602ce27c042ca403d21367b43d6e8401e6f",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-MEZZANINE-20X10-Z5": {
-   "v": "8de3ec2db463464b031ed9d0c585f53dc8fd925a70ea6064b403569f76a646e3",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-STAIR-L-Z5": {
-   "v": "633879400a793a36f53353b435051924c2ecee46dd26e2a6ebd27cd31386eaad",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-STAIR-EXTERIOR-H4": {
-   "v": "a7828656afc9eeb04b912ec1fbdee047e2863cac31572c5a4e1fffbb24385310",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER": {
-   "v": "791c10ab5d6e0084406b2234ceae7af3d0f3b060b2a75c9bf9723a095345c5ca",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-BASE-AVATAR-WARDROBE-001": {
-   "v": "dc324f966c038844a211517d296fcc0f2ab02082870b216390f733e3b86f2e4f",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
-   "v": "1d441c35ed1b2bc15d15a858b776c192f312dc0039ec1fb90d1a40c7462d88b9",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-BASE-RECOVERY-STATION-3D": {
-   "v": "96a43f14c189081b4012149300acaca0e716858da94d78e339d9744fa66fe287",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "PRP-TOWER-ROOM-DOOR-3D": {
-   "v": "cb3dabab2586c9dd8c41d7638fbb21b959c135bb9647965a0c2b40c4c7c5d4ba",
-   "c": "场景道具",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-MEZZANINE-STRUCTURE": {
-   "v": "1d119094a71794b3572f9102477d0111ec81167eea8c7cc633e3da81c8fd3453",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR": {
-   "v": "587026bcc74f44a49daeb7535b051d126f71edee82aae38e8aa541aa78d57008",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-NORTHWEST-L-STAIR": {
-   "v": "e211069301fc9c4aa26e96d685160cc166e212616b959a8bccb6092be2fb6223",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-RETAINED-WALL-SYSTEM": {
-   "v": "30e3b06a6a3837e3539ec67a4cde9c51f1ac26b696dbb70db756d397d0d72484",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-UNDERDECK-SHEET-BLOCKER": {
-   "v": "e0ffb3f2d4894508d7d2ee59498e9be8c350508b23588221b5aa557034f343a8",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-FLAMMABLE-BIN": {
-   "v": "3ca6ed9d8916cdbabfe6aa4621bcf7ce3e538d087f28b47940fd9961cccc1737",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-INDUSTRIAL-PIPELINE-SYSTEM": {
-   "v": "d6baa424245994fb9c1fa5ff59e15e5c2f87b2b13729660ce0ee644a0ed6b177",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-LOW-STORAGE-BENCH": {
-   "v": "3bad36599ac70b53d051e3853f9d9a597228bbc46139faa2622eeb6d3ed751ec",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-MAINTENANCE-WORKSTATION": {
-   "v": "3c8725ae0cf5eab799c4c204660276fa3996f97b3bb40de1b97d8568522276b4",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-PERSONNEL-SECURITY-DOOR": {
-   "v": "133f445179fa54126ef87244288745954dab54639d912a15bd496c6cf23f67e3",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-PLANT-GROUP": {
-   "v": "87525e5023b446b0c729b7f52b06dd41949e05bb36953612d677677c8fe11f61",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-POWER-DISTRIBUTION": {
-   "v": "981abffe6e2321e024a6d106f79b162ef740a86d7bfff55400227b81c3f2e9c4",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-RECYCLE-BIN": {
-   "v": "4b5e8dc209f7950daccd0c5fbe37f53473ceec375b02e2bd181ca9276fd76232",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-ROUND-PENDANT-LIGHT": {
-   "v": "b3ffa51ca038898ef6ca87e030b00aa3fb459f8e5086cccacfa7e64bb771b6cc",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-SMALL-SAFETY-DEVICES": {
-   "v": "919daf30a7ca7267cd2718866a8f3d16f3fdc32000e808c9ba129cbd35337863",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-SUPPLY-24H-STATION": {
-   "v": "641d24c3c2afdb5caa8dbdf1f5c70d2b9d4b62ec2d6dd5a73436c3a21d81ab14",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-WASTE-BIN": {
-   "v": "0cfb60a98813f066fa7427b0071f699c54262730d3b9ab01e3f3f371dbcd952b",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-WORK-TOGETHER-POSTER": {
-   "v": "a4d1bc2ccae02992f1ead21dec42ece0943b3ff85930c2993cbf74f45781c00a",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R01-C01": {
-   "v": "0cb5e15cc8282c6df4aeac63bc2f1ff6575f74b09db13a750ec8f785b203a357",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R01-C02": {
-   "v": "6fddb234034a120cad3f06c7b0789b3a1bdc4ce487ee72beae0b211cd6590022",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R01-C03": {
-   "v": "7496ce37e96e0810e523e87ea958ec26679c0a294b10007cd3b56e4f314fd645",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R01-C04": {
-   "v": "3c00cea4b7358cc6b75e642997ba3e3d993c2cb71b65760689aa5e164c7cf6cd",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R01-C05": {
-   "v": "2e67fec56b70123d98a075a88ca10b206f022dcd3cc1de5fe3a3542d40b36c2c",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R01-C06": {
-   "v": "e5437e848ec4a5f56bc893db19d52662428542099e9fbb93f01bf2ec4e860ccb",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R02-C01": {
-   "v": "826144d964594ca9e5c7b081f86cb573b6d80a93faed69ccb8e8a45a14dcb6ee",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R02-C02": {
-   "v": "d726ce73445af21c782721f122c5c534ac9ef25d8f63a7a086e2d1ca736b6c89",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R02-C03": {
-   "v": "13424de335cfd4dd25945ea1ee0a4b97e8aac1f2f6fb15e5d6524f1433daffa4",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R02-C04": {
-   "v": "8b1d15c543b38fa7f8c4044745f73595ce365244e4337af98aa810b5b0d205c1",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R02-C05": {
-   "v": "07087c606f1c1474634d8b5c70a2ab5ccaf04acff2dc3cb0290e84d4f0329677",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R02-C06": {
-   "v": "c89a3f17ac8ccfc0214b7059a7642188413d98e3dfde5055debf514a83eeb83c",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R03-C01": {
-   "v": "5ee440185ccc93725a79ab5cf4efe227f51b4b302d613772c6a7648028a49711",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R03-C02": {
-   "v": "fd7132ff1194a82366b6c38aef0f72e2a4fab720bd5cfac3a17444435c9d431a",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R03-C03": {
-   "v": "040d582651cb7ed746fceb960980d7d8cea88457962d7c6fb718096c67ed26fc",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R03-C04": {
-   "v": "55984351d6e8c7fff9cb219a62ba3926d1f069cb9a1952c960d48d48342e4cbf",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R03-C05": {
-   "v": "91caf866ec912bed1f8e8da549cc7a2d8c70117b22b9b419de7dbb76cafaa2b5",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R03-C06": {
-   "v": "ddcd422cfb2979473019fa5a2ccaea25aca981f3a81f722863cf8baaaf18f39d",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R04-C01": {
-   "v": "212b0951ed34e8db1fa5893c44b2f5b4011f3e6c5233cd8f59d92cbdcbff148d",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R04-C02": {
-   "v": "1feebb3260ea65a2f1ca9830a40bc731f07a507a942fb8af3220b0b091d443f1",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R04-C03": {
-   "v": "820ddbd385f50da42771081daf8c14516617b933ea0522576d4c66495b5b2629",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R04-C04": {
-   "v": "76b36e7f04d8b85b5e8dda98bc6d03804dd0bb71ca31528ee3c2b96f3184d6e8",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R04-C05": {
-   "v": "df53a58cd21ab1b1703bc17f282f2145b3ffa7fd23284fbd2382afbcd1869209",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R04-C06": {
-   "v": "20dc296d7efae116e36cde8b481c72bb4eae5de211ea19eabd91ede417dea0f0",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R05-C01": {
-   "v": "cf1e5569fcc09e100e0afe4ebae50a021d6638fdb531678a425610273c39e204",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R05-C02": {
-   "v": "691f0247c501ddd91fe5155be9513fcdb857a245521d3cc1fa1e54a4127f2516",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R05-C03": {
-   "v": "546e3960d2ff1603f8b28f299ea6f49abcd5734f50b7041129ae623f582056ad",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R05-C04": {
-   "v": "a65ba0316c3d4d96035831ae5a86c639f86577e88d1916afe20f994af6d43c7d",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R05-C05": {
-   "v": "c258a99a7e2ec484fbe25c7cdeea14858802fb300d218e9c284ed79d8a2c7b90",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R05-C06": {
-   "v": "cd39bc8177598ae1052a39bbed9f3b0d76f0146504c9723d3c02b3676e8a21a8",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R06-C01": {
-   "v": "7cfaf3e104cbfe4a5ab5880c4ff4782dacefe7c4b3368a8cc86944240ecfdc1b",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R06-C02": {
-   "v": "7303e26281ff2b7f61b1a15ec119a5a30894d8572775a8ab2a334ea372fc750e",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R06-C03": {
-   "v": "9b26dc615802796af49bd347a65096863c65bbff38a6c653865bc0a124efa154",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R06-C04": {
-   "v": "50504f83526ecac94638e9601bcb2a2d71bfc49045dd254094624a0029ca7f3b",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R06-C05": {
-   "v": "919c58830a493a37943516b57114d31b5ae6de53a5fd04a6a50c0cf544754ee1",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TILE-R06-C06": {
-   "v": "a1fba6d396e2f97ef7a2978a30e5cbb09d4888d37b69f4eb7681533bf32eac2d",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-BACKWALL-FUNCTION-PANEL-SYSTEM": {
-   "v": "47f78b7ff53edba5b87d2a2d2db452e0e8bc8b7d4cb2628168c7d1528dade483",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-BACKWALL-SERVICES": {
-   "v": "ede72207f632bf9991da82423cdbfc2150a85544e22c335bbc4df38961e829b1",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-BATTERY-CABINET": {
-   "v": "813e8737fba5d30499386984f79231eb2eb7e89982c58f61e648fa0ec5baf3e2",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-BED-AND-BEDDING": {
-   "v": "ce6bfa4231fa9a9f363210084e0369627c7f22a00b1c4f26f4bf413b663929fd",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-BEDSIDE-LAMP": {
-   "v": "2c95bede9beaaaf0ebbdfc8b39d003f76bd72c5b4dcd789e2e0b60a0a828e731",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-BEDSIDE-RUG": {
-   "v": "405d15c7fc8020453837dd0a4eeef04604b1c49e1deb9908348e512841e5b6d6",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-COFFEE-TABLE": {
-   "v": "c5019b7437a734c3f57b9c40a68fbbcfd0c6159632673816c3aad16ba7e46576",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-COMPUTER-WORKSTATION": {
-   "v": "ace6e01859e8d1cc0ecbb490af2a04c111a2e9f621fdad4f5e1b844bf5680bcb",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-EXPLORE-POSTER": {
-   "v": "9781c4e145bfd66eed8d8988bfcc8afda981a765fb2dc2fa3ea8459b253de584",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-FOOD-CABINET": {
-   "v": "5e3b45e81820cc743de4ed6a9f2d9e3c1ee9dd55c6b917ba92552d992b37eeab",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-GOOD-VIBES-NEON": {
-   "v": "d396bf216dd974379213856efefb5e2d268f462de6966d1b4e046da9bf363a4d",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-HANGING-PLANT": {
-   "v": "c462340c067eb7b7a6f03eeb1f328fa9dee0d8eb55c32df3111a85e9fdad725f",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-LOUNGE-RUG": {
-   "v": "9042b3e59a08b11e7067d7fbb26008c722f04e28578c0f546a5086022430988e",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-LOUNGE-SOFA": {
-   "v": "5bdc1ebc3a8e4196921f8188eee8473b952702c5ebcbb02a8da3b7d5a19a3877",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-MEDICAL-CABINET": {
-   "v": "d3e5fdf5eee7cbb660b8d8d54dad9ee6e5d8235346579a594e26991025ea12ee",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-NIGHTSTAND": {
-   "v": "1aa3529712d5b09c217f0cdee4db6c0284d04b3050a643ca70b0f15ac3e1a6ac",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-OFFICE-CHAIR": {
-   "v": "9a37772a40747071d74a2d1e22ded921f631f21d91b16860cddd9bfaab93d7f6",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-POUF-01": {
-   "v": "d6ca533bfc34f6da6ede6e548376792660411fb216a46d4cfee551093503681c",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-POUF-02": {
-   "v": "9a6cd4bdcc1473e5f91bea0b097647b93a6b29fda2be2b50843b388a92b89f6e",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-SIDE-TABLE": {
-   "v": "e7971c4e8051d9cd3eec0177956703cccb8370bf3dc89da80c73caadc7acbf48",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-STAY-CURIOUS-NEON": {
-   "v": "0ac8007cc504cd59a4b87db2092680d0a2bd1fc89b91521e7d87a286798b49d1",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-STRIPED-PRIVACY-CURTAIN": {
-   "v": "8d727b7be9d05cba116e30a51225f1ed5e8061514de3e95489cdb9ffb813bf7a",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-TOOL-PEGBOARD": {
-   "v": "f4d1f3e51fb2822f7fd97303552b3872ab0c52d38264b81c052fb2a75c2e25b9",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-CORRIDOR-EMERGENCY-LIGHT-GROUP": {
-   "v": "e1cf8e0b880418472d332dc3b5b8ab84d387a1f40e9f87256b4b02110a201a2f",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-LIGHTING-SUPPORT": {
-   "v": "b44d1fce67a4f5059e3942506678328a7377bbe910f249f4f1d14bb3a55a11cf",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-VOLUMETRIC-DUST-FX": {
-   "v": "726703f5b6c3662384f7f13bc4510443f67ef56fddec49233c0a51f9ac1740fb",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-WAREHOUSE-PENDANT-LIGHT-GROUP": {
-   "v": "344786524a7ca056c09c1602ebdd059b695e1a6f931ed1c05de4cedb97d06757",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-ACCESS-TERMINAL": {
-   "v": "1504972b341525df033557dbace34267d86a2c2b9f2eb206f8d6452bc6426658",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-BASE-CAMP-NEON-SIGN": {
-   "v": "589823d348084891b4268dd1718267768c99d8a2640fc2658b9dcb62918524fa",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-BASE-CAMP-ROLLUP-MAIN-DOOR": {
-   "v": "d1781604c2275c31cab852e7bba60d280ccc90dfb8f44c07cd9b07f2523348f8",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-BASE-STATUS-TERMINAL": {
-   "v": "1ed5b1fdd1c602813a0653a88f2caeb5ec5f9a49b50a29d6f6aad5e069a703fc",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-HOLOGRAM-TERMINAL-PLATFORM": {
-   "v": "ca8fd820617956ab2e687a2dedba8dde65dd7ed8dfeccaad3075c1ba427f883b",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-MAIN-DOOR-LOW-STORAGE-CABINET": {
-   "v": "3b7254eaf0a1caa006a2dc259d8fb7cc5b4fe329ce31c677b01ae9288ac3f70f",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-MEDICAL-CABINET": {
-   "v": "0f09cb78b065879eb109bf50988c67e06c483b2692f96fcaaa671a007f742b21",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-NARROW-BATTERY-CABINET": {
-   "v": "fba7d8d163c4d16c7df549cf390a8ea11269b8691e20ef7f847179e459f01d5c",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-NARROW-EMERGENCY-CABINET": {
-   "v": "a821d667641a5783cf97cb330ae8c90f3e45976cd9c1243b544d5860473ffea3",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-SOUTH-INDUSTRIAL-WALL-DETAILS": {
-   "v": "b1aabf6236157f3313b7d4897275b4e6969f285ab994fd69b770b56616dff5e7",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-SOUTH-UPPER-RAILING-DETAILS": {
-   "v": "c032ca31b4f8e92915bd8739ab903f3e60287bdabf9ab26025c3d6e21cf30094",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-SOUTH-WALL-PIPELINE-SYSTEM": {
-   "v": "c329137a8495420f760935e73f93170169ca8cc0d690fb512b9122cfaa357d29",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-STORAGE-TERMINAL": {
-   "v": "0d3bb92ef0ee08c8e77d8cd8d9f78b0f74d29f9ec4ead84a08174f17aa7a2791",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-TOOLS-CABINET": {
-   "v": "abee79353afe0bb9490d7bafe6fa5b5ec596ad264f98fcd6a43f5377bb095969",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-UNDERSTAIR-BULLETIN-BOARD": {
-   "v": "8c62457026b4894d9c1908c6125736cd8ac17ad3002711d595d9b1c9db7ef5ea",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-UNDERSTAIR-EQUIPMENT-CABINET": {
-   "v": "05f9d438f9e35c75573556e0ecf38ce6f1195d724c7806bf1e114af4c95da39a",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-UNDERSTAIR-GREEN-BENCH": {
-   "v": "05b7fd16d6414ccdd952563b1035717eacc02d7aff08739b9dff84028f5fc62e",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-UNDERSTAIR-LIGHTING-LIVING-SUPPORT": {
-   "v": "e8c00e9aad29c5437e0bb92d98130259f4e5ec6c34896950ae67519cadd4401a",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-UNDERSTAIR-STORAGE-SHELF": {
-   "v": "6d87a959a92a8ae8d72f2caf083d0a54e780ebdfe93174e324f85a6fd980b25f",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-WEAPON-WORKSHOP-STATION": {
-   "v": "2d30edb6ff7b7c7c5a6d75f32c38f541eea00733fce1b0b36b72e36442769b27",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-AIR-COMPRESSOR": {
-   "v": "5f5c6fc6c544630672e7abe18fdf5d285e0533b8d32e6957fb510cb2850c347f",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-BACKUP-GENERATOR": {
-   "v": "0a6c4e34312770ddba55e5bb691ffa182a32120dd085c003a99926747cb1f577",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-BATTERY-BANK": {
-   "v": "28a6e3d7c4be9eef2fa7b51d48a2efd358703836537ff925acdde707eaadc460",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-HEAVY-SUPPLY-SHELF": {
-   "v": "46045b3c55d42d5ad166f4f07f24bd0aa09c895a4efb068695bc2955cdfa8255",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-HOSE-REEL": {
-   "v": "4aba6983ca77650a45749b02f2642ec397ce5db5eff0e334028280698909ca57",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-INDUSTRIAL-WATER-TANK": {
-   "v": "894ffcab1ebf55bc991546341d41067f769ef00bd7e40a6efbde4699d2d01b0f",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-SOUTH-WALL-INFORMATION-BOARDS": {
-   "v": "b8d074e7c860500240ffc3609a11f39c22eefcb484561634b362e73338292da3",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-WATER-PURIFIER": {
-   "v": "ab81358e85a751a2eaed9b520479ba30bf4af5af227026c0407ceea773bff27e",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-DOOR-ACCESS-CONTROL": {
-   "v": "c86461d98738bb69960b6dfffb6b671c12c18b300b4c2df0dd4d5e7dbad63d6b",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-EAST-DOOR-WALL-MODULE": {
-   "v": "38ed15b7870277d18184c523bbf0d1de5538cb61d9fbc3e054929ea48611fbd1",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-WEST-DOOR-WALL-MODULE": {
-   "v": "378027018268768030b67a513d73f0d8899f4679983de54baa180c26f4644c7c",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-WEST-DOOR-LIFT-INSTANCE": {
-   "v": "7f2ff748d84d899ee13be6ea44208fd154783d48781cdf0151c10180c512853c",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "BPK-BASE99-LOFT-FLOOR-FINISH": {
-   "v": "638b0544118e47cfc506d7e4c8695292b18e34035a01088feeb642bf63214a5a",
-   "c": "基地资产包",
-   "d": "scenes"
-  },
-  "ENV-BASE99-WALL-CONTENTS-V021": {
-   "v": "a5d9299427ba9d7f3c4661aead264fa7f797d5873bd703342316768cf462fb6e",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-BASE99-REMAINING-FACILITIES-V021": {
-   "v": "007b0f2bf180a086b9a6ab4f94b2dd79dfefd5b1393c276728708b6412b60791",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-STAIR-FLOOR-LOWER": {
-   "v": "58352a96dfc6f523030d4b3c46e8c1ebd86f9c9bf456e55ec7c4b2d1be19edac",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-STAIR-FLOOR-MID": {
-   "v": "baeb5c51087ff38013b2f88629f9772eaf85703e1a0f871ccda7340ae11206bd",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-STAIR-FLOOR-UPPER": {
-   "v": "af846103a58cf8cdb3ac454eeb32af985b69574b6af54ecfa6c9a7435a9085b2",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE": {
-   "v": "3efbf31e27152d5b6220f5747cf82f3b619bcfd58947773967857c2f88204338",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-CORNER-COLUMN-05M": {
-   "v": "dc430f8ac5dcadf97c29b7bb29df52761155f1a62d40573b91f85e39f52df87b",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY": {
-   "v": "76fa9d61818f42b47523ff11349ef52f581ecfbf5aaf5126398d2cc7f87c120a",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-TOWER-DOOR-LEAF-5M": {
-   "v": "d0cd4ebdecf790eb2107452d6b1d42eeabeaf750c85fd2590a9aa04a64f68c84",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-ROOFTOP-DECOR-LAYOUT-100F": {
-   "v": "c08e15c568e1a4db0e1a9747ed30d7c3314f3d75fb9c25cdf318f77aab6aa2c1",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-EXPEDITION-L01-BOSS-ARENA": {
-   "v": "621a1f3ce5d4ad1deb3adb6611f7329e1d637a1a8189a04c27ecd84159908605",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ITM-CONSUMABLE-ITEM-BEACON": {
-   "v": "9176f3065a31ab33abe89c3f3c2e70a74b40164b18e912fff547276d6d18fa33",
-   "c": "道具",
-   "d": "props"
-  },
-  "ITM-KEY-ITEM-ROOM-KEY": {
-   "v": "a6896919119d6036058f833a4ce884846a36fdd6293cb13cd0f52f2108e1d17b",
-   "c": "道具",
-   "d": "props"
-  },
-  "ITM-PICKUP-SOUL-ORB": {
-   "v": "1b60308f5d9368637d69371144bdce2dfa8717eebafefe22c15377524aacaf02",
-   "c": "道具",
-   "d": "props"
-  },
-  "ITM-CONTAINER-CONTAINER": {
-   "v": "a9907cbbce6c4f21b290d0011725c36aa289d8d5d5acddcd438bbce5e5c9be4b",
-   "c": "道具",
-   "d": "props"
-  },
-  "ITM-PICKUP-ROOM-KEY-PICKUP": {
-   "v": "e1114361cd9850c8a5eee0a5372c32840254ff325ee3b85997e065264320a490",
-   "c": "道具",
-   "d": "props"
-  },
-  "ITM-PICKUP-BASE-GROUND-ITEM": {
-   "v": "c39edf85234cbfc86638be16f90336020277a22304a940d422b609408b2299b8",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE-BRIEFING": {
-   "v": "40266deaadcb7b301512cf626a552e4a68d2c4d83cf3b9e2bd393912a3c0e34a",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE-WORKSHOP": {
-   "v": "62ca6b04120169fdd3a685a5892a3e05f676ab536b4a39931ffc71c352ac395b",
-   "c": "道具",
-   "d": "props"
-  },
-  "ITM-EQUIPMENT-BACKPACK-3D": {
-   "v": "42cd34e2df696800255a2da5e5a0e697864aaa6e7f71e1260658b44b98f4e60b",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE-VENDING-MACHINE-3D": {
-   "v": "80948c72c5697455f20c59d83544a1df939044df1da6d404d84b829293266c35",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE-LOCKER-STATION-3D": {
-   "v": "51f858a4e4ce463a8f25fac181a7bdece8082806ef8c1341f7438e8a000c6d30",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE-RETRO-TV-STATION-3D": {
-   "v": "e5d35f57998acaaf398ce975f3ec62314d3751360959363b2f6b771a77eae083",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE-WORKSHOP-STOOL-3D": {
-   "v": "c9f05e6d475ba84e61065dfd6c9c16b10dc72b14ae487b1ec8f419b9c60a3352",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE-MISSION-COMMAND-CHAIR-3D": {
-   "v": "bda25d1cd06ef8552a59fd70b91f21918f05219f91c3dca0f728150c8ec77dcc",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE99-EAST-SUPPLY-24H-STATION-FACILITY-3D": {
-   "v": "a4344c3123ad7dddc56fc1acd4a0702b2bd72cc9e83505ab554521923a4c5715",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE99-NARROW-BATTERY-CABINET-FACILITY-3D": {
-   "v": "ce84e6a74a6500fbffab8f0d55d179d890ad3a716e30ee6f0861a69c998ce555",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE99-WEAPON-WORKSHOP-STATION-FACILITY-3D": {
-   "v": "fa871309aaa68d692b87af698ba608e80b675e451bbbb33075f7f95e3b872e60",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE99-LOFT-COMPUTER-WORKSTATION-FACILITY-3D": {
-   "v": "61348bf55d9c638e2d8eebf5421f993f2a06e9314f181f10b99b76246daeb625",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE99-MEDICAL-CABINET-FACILITY-3D": {
-   "v": "a5b0c75b75c39cfb556bd8b81b3175b4ace648162e8b2dfaadddce8fe9288bdd",
-   "c": "道具",
-   "d": "props"
-  },
-  "PRP-BASE99-LOFT-LOUNGE-SOFA-FACILITY-3D": {
-   "v": "87652181500496cb4d4c28afb24acacaec8de68a7501209d1b3f68fbb665d8ea",
-   "c": "道具",
-   "d": "props"
-  },
-  "WPN-GUN-BP-PISTOL": {
-   "v": "4f00c00972ad4163d04086a5db6a747107a21479cb5e69ea531386ed5eca2a53",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-BP-SHOTGUN": {
-   "v": "5cd5a7940a628172952523507f449d7b77a528fd2112d13c466bf9fe69c27aa7",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-BP-RIFLE": {
-   "v": "7905280f6c764c98c467f0bd8c058c5d914c81c5bee8f57c37cbdcd613f31d9d",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-BP-MACHINEGUN": {
-   "v": "295afc60524812a618ed51e2f0bbbd628032539dda685fd41369a00a5dea68d0",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-BP-SNIPER": {
-   "v": "dd1e271a45dd25a9913cd5bed308ad11d9813236bbda5f0f1873ac4edf026bcc",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-BP-LAUNCHER": {
-   "v": "d47d7ccc0a98eafae052baa18f145b36763724518ac3452dfd4eaab8337898dd",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-BP-CHARGE": {
-   "v": "f5f9efc6dac1aa3328e6377741529ae8fa465c4402e5bbdfa825f268b33b234d",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-STANDARD": {
-   "v": "639fb09838dca1b05c008605ce230c92e66d60a14d441c0a458e88b6d96315c6",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-STICKY": {
-   "v": "36571d87b0c3eb886da3b35afcf278b7280bfa365cd6da66443c00361a5a2076",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-BOUNCE": {
-   "v": "a3ea0c028762688cacd7613ff65a798e581d750677a0c992120e3dc7b697f2ad",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-PIERCING": {
-   "v": "d05a07bb16370a0ce3ed489cdcd467fc8c50d5306ef9c176560d7cef1d9450af",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-EXPLOSIVE": {
-   "v": "ae6cb42902d202ceec9b3ce21b1b871139cf6eea87539e342a9085a209cc0bd0",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-HOMING": {
-   "v": "66ebe299bad10a3cbcd225c1fa50cb82b0a33a5a093fadaff036ad1f7b14fe67",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-BLACKHOLE": {
-   "v": "31b2f322a4d83546fa4cd0abdd7befda1a7325d4fdc0065677b8b8406f98989c",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-BUL-MOD-BULLET-BALLOON": {
-   "v": "de23213b4fbda64d1036103622b604ebf458525b8bfadbb59e18b2021fc76891",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-ATT-ATTACH-TRIPLE-MUZZLE": {
-   "v": "195028440d8b953fc70c6dcec0971dc8d9400dd7b80ea53899a4b67509f1a81c",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-ATT-ATTACH-RUBBER-STOCK": {
-   "v": "ed407305a265ad1d467350e42a73fede9954c7a769a0292dce62cfb98cde04dd",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-ATT-ATTACH-SCOPE": {
-   "v": "5d9fe3655c179dfad702aa1a777bd99b2c36d3787c4352bd60c1e93e60907343",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-ATT-ATTACH-BIG-MAG": {
-   "v": "92fe1f47396ec1d90a7a11a778da3c2d6cbccfdec8e6704e591fc80413530ba8",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-ATT-ATTACH-FAN": {
-   "v": "9127c4ba2abdb7bbb242d41adac0e740851d4c25b84b065c91e359ed5c808e58",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-ATT-ATTACH-COPY-STICKER": {
-   "v": "c1229e023580ee4de0eb212ca8867589f39441a0ab7268ae11de1294afb91416",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-KIT-3D": {
-   "v": "d64676f81b6f64b740891f9208dd7ebcbd3962dbd5a16b6f26b7caf5985401a1",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-MELEE-BP-GREATBLADE": {
-   "v": "996cd27b966036c9416693299c415dadf5fbc8992c6e1119cca2fd9c6fb0a474",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-MELEE-BP-WARAXE": {
-   "v": "52c5198059af420512521e40dae2d25c905ad7107e3deab6ae0cd268fb5d7f87",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-MELEE-BP-BASEBALL-BAT": {
-   "v": "1dc52cba0e49eebda93c8464479e7afe2198fb5652b5b7b47f715995f59e0579",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-MEGAPHONE-CANNON-3D": {
-   "v": "2972230049221d5efaf1f9bfb789e690adbae97839e7d78b888dd66d30adbc89",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-GUITAR-BLASTER-3D": {
-   "v": "580f7b1aa35acac271dfee56ff0b46b077fd1b213e1c570bc8dec59f3f2cd8b4",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-SPATULA-RIFLE-3D": {
-   "v": "c2a8168f5d51fd8d4a439281aaaa5f7f0a73a90f2cc8744a3a4158bbb69809d5",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-FRYING-PAN-CANNON-3D": {
-   "v": "84d952a102802b5881c30677ee525ef2fc3e63cacd981e8fd7821bd37f70736c",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-SCOPE-CANNON-3D": {
-   "v": "551e3eff90c8e094e42a8e0c09fd6ce12f1b2903e04a68873505e40b95f57bd0",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-POPCORN-BLASTER-3D": {
-   "v": "75250c75b33f22be3cc818cf754a9d84ea1a65adc86b400ef71168fd69183543",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-SODA-STRAW-BLASTER-3D": {
-   "v": "bd78a44b2e24ced3f80d520b3cdcf6aba85a75a42252d795c12c6bef844b6ebb",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-CROCODILE-CANNON-3D": {
-   "v": "4bcc143de68c65ed92ee152cb01b33dbc04e6f1669889198e9c371a063cf74ed",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-CAMERA-BLASTER-3D": {
-   "v": "ab4c3e891ed6479558af0d8265be027eed3057fbe97176f1b1162daf618933f9",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-TISSUE-BOX-CANNON-3D": {
-   "v": "e10a4c3fab40f0f24845ab7ee174d3ded7c143580f2ae690cea47dd29a976a5d",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "WPN-GUN-FUTURE-FAN-BLASTER-3D": {
-   "v": "57444b126dc14ae0815c5a7ea5a0073c3f48633756a9c7aa791edc41d1274099",
-   "c": "武器",
-   "d": "weapons"
-  },
-  "VFX-PLY-DASH-TRAIL": {
-   "v": "76fe18d2ff1fc2d3efaffae1cc68ac5c85d0de1224fb284482e0c94ffabd8c49",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-PLY-HURT-FLASH": {
-   "v": "0f39fb418ad2a1bfd64e6a97956489deb9bce50f7d9e54b51c5ad6f40070e798",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-PLY-LOWHP-RING": {
-   "v": "0082ffaa02e91e5e3045fe7cfdb27238a578a0e2b9e46aa1d103ae061c011dbc",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-PLY-SILENCED-RING": {
-   "v": "2b613856a7e5e388dd4304d0710a175e0564fe25d8d51f7be8c9d249a3141624",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-EXPLOSION": {
-   "v": "01c67fb73d99e2c2ce48cb3eb256b50a44f0f06382fab30fe9f3f979f4278c1c",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-MUZZLE-FLASH": {
-   "v": "97dd6644ef889246caca860bf529512d29723663da8a03542f4389ab9e5e1c0c",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-DAMAGE-NUMBER": {
-   "v": "716c2e8ba4b0069f61b62441c892ae33e097418c2189547b30cb049ab11a5973",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-SPARK": {
-   "v": "6d8b42f3df9334937eabc5abebf3fc556404b36650aed11573d76363425c54d4",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-ROOM-TRANSITION": {
-   "v": "46e0226e0dd7c5b68e1bfe248b82979587b7c3129b8a592ee5f6474f5c455522",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-VISIBILITY-LIGHT": {
-   "v": "b2e9c56f72ab1b9d240d36cb3829d0abc8cdf1eac8188b9bae49da713545192c",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-EXTRACTION-BEACON": {
-   "v": "6d7db19f375b899a4e74651269995da00ac6c387c18c98a4b80aee3991476c3b",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-HAZARD-FIELD-3D": {
-   "v": "b3b96f0ea0dec6a64c1533cb69fa7227a7c9205522a06f9e35155fe6605b1fcc",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-COMBAT-KIT-3D": {
-   "v": "40cf76f3e1e73dda0d5882a5889e77281d64c2c9f3fa2b3a6fe6c3f84be2c601",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-VISIBILITY-FIELD-3D": {
-   "v": "5b9bc7846c05d08fbaf9e0cd6b55373e746a43d40a5084015c9294a7747bc35d",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-PLAYER-FLASHLIGHT-3D": {
-   "v": "a0b88516a2c19fdc1c8892ead05c58b855518d689eaf1653a9df57c3ebc52d6e",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "VFX-SHELL-CASING-3D": {
-   "v": "c7a2afc0b588e20c7e3afba3375d1dad5f2742eae37e563e21a6f34765e66be9",
-   "c": "特效",
-   "d": "vfx"
-  },
-  "UI-SCREEN-HUD": {
-   "v": "325e4612cfa30ca13869035379fe12a646e21e76bf1e81f833e755c309cf52b3",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-MERCHANT": {
-   "v": "a5413e3b7e5991c5fded3fd290932534fc19aa8c2563f4507096e3d1871a4dce",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-WORKSHOP": {
-   "v": "58e4cfeb761ca809d680f5713759b8061beca18da44940482807e9eb5f95480c",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-WORKBENCH": {
-   "v": "55aac39416c05d67643a1033db1d49dd1f0ec833fad59c550ad9b5beda796e7a",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-WEAPON-TREE": {
-   "v": "45e7a3488c08fc67a61164fdacbdcf72dacc67c0b164f6b61f085c3a6cd97ea6",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-FATE-SELECT": {
-   "v": "3f1e5797ae53d08d7fa5555531e98621e5e25b3472c15816b993f408e6a0c88f",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-FATE-COLLECTION": {
-   "v": "e0027ab7f134c43afe262cf50ee22bf138572eb868e6822154bdc02ef6de6deb",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-LEVEL-SELECT": {
-   "v": "57131477f226fc2f584688694cedc20f7dae1a1e84cd2c541760f176e2ef7972",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-VAULT": {
-   "v": "9eb851e4c7175b351971e6b1558baecfe20765ae358a9bf541b2b1c6fda8a13c",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-MONSTER-ARCHIVE": {
-   "v": "5f95e89b7dfaff89c5b5344a47fa14133cc6ccb0af70500ac3ee579aec98524d",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-BASE-MENU": {
-   "v": "c132b4d0ed0ee46e9aef8782da6dd8949e32bd60585fa1d207b75b294d03e41c",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-MOBILE-CONTROLS": {
-   "v": "2f6b83568362a71ba8489f6088edee11ca542491a55888a4642e5af59c9562ff",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-INVENTORY-3D": {
-   "v": "88b828fc679278d163244f6cabd1d0d15b712c6149ce740e83200b8eec71eadf",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-PAUSE-3D": {
-   "v": "87be337810bd02ec977741a35a473b5aa5f0bada7ef5d788ef044ac2446564aa",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-ICON-ITEM-MODEL-3D": {
-   "v": "d70d8a1fcc2dee810643efb3823d1338441fc65f4e3fd13dac90863459f79ea0",
-   "c": "UI",
-   "d": "ui"
-  },
-  "UI-SCREEN-BASE-VENDING": {
-   "v": "f4b2bb41440df2a3a6b436e4256b617ec9240c6f84e9c184b7a2069927855089",
-   "c": "UI",
-   "d": "ui"
-  },
-  "AUD-PISTOL-FIRE": {
-   "v": "22d0a8200094948e28e480fc4a6f0d6444b35e36cad241f464aa53dfa4d6cf7f",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-RIFLE-FIRE": {
-   "v": "d5305c34d7836432903715078c41d936b9aabbf26ce1fbd131a5bf1a79d2774f",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SHOTGUN-FIRE": {
-   "v": "de73733ae1ff552b74ab2d080f52fc97c48871e9401eaa444e10aabe432e6e3e",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SMG-FIRE": {
-   "v": "199c7aa2439b7fda1f6d9c78b1871242b37e45f9dae0327dd041749c2e3b5e69",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SNIPER-FIRE": {
-   "v": "b364b03a024c633c2d29511f14eb192b338abaf144976d1fa042a5aa909cf73e",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-PLAYER-HIT": {
-   "v": "ec2872ad90d6fb44a7127d2137e9a3d39a27ce6cefbdd29910b5da8fc9b97e49",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-PLAYER-DASH": {
-   "v": "e9d8d85da5ad2e082417557623d09acc3286f571eb64e897ee52d895c5822987",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-ENEMY-HIT": {
-   "v": "d9b82952c3c8d2abd28e5e1c11148dcd35e7467cefd9a977337063c26af78b19",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-ENEMY-DIE": {
-   "v": "630e4e16fb463c020950c3fa39cca3d560a664c4c55b8065ac273d13b8f034cd",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-RELOAD": {
-   "v": "d23d2100445c08657d90ca9a6b595b7b5392bfab72c714ebed350cc6faa1fd85",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-EXTRACTION-START": {
-   "v": "c0fc6a7ee3635300255006eca859acee7e3227ba2b5d09938ed6eb2913fa5d15",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-EXTRACTION-DONE": {
-   "v": "784d85473ea4ae782eefb0932db96fe77e2da73797fe5ac57f5d8eeef5859a67",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-AMMO-EMPTY": {
-   "v": "c7d917efce8709e18f6f10fd09bc764c15b59acf4bf5d5d76852d24c7b0c5c29",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-BOSS-DEFEAT": {
-   "v": "ebc16fa3b0db4909140d38cdd1544de312626d8de0af8094885d2b122d6abce3",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-BOSS-INTRO": {
-   "v": "ff16d27b21fcd84266ce82793e1dc9d484a22ca47f1ae3ebf38c308a936831d4",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-BOSS-PHASE": {
-   "v": "4c88eda032fccc58f0214a89b5b885ad531781d313661a10293e315ef275bf9d",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-CONTAINER-OPEN": {
-   "v": "e1b56034aeed64067b366b77882c79a14175e61d101dfc6d5e783e444dfa154d",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-CRIT-HIT": {
-   "v": "24a1d1480db2a04087d0fb73b6ab46144d66bfbc28e8a74616b6aba7aec971e5",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-DOOR-LOCKED": {
-   "v": "c26646bffec6343b7a47aa50f28ad0ceccdae27ff0a9a614eb56b37991b19335",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-DOOR-OPEN": {
-   "v": "9ee7abf1c235efe40192d6cd965f5e6d0b16a26e472a7aa05eb1048db6906700",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-ENEMY-DIE": {
-   "v": "2eef8943d7aa19e9d9330e1f480b78e7e6e5c57ea3fb8e65b8fbedfd69d85cf7",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-ENEMY-HIT": {
-   "v": "fe97b6130a4b342f82e958623230b2ee4e3969f6ae37d835469c6d36786cdb59",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-EXTRACTION-ABORT": {
-   "v": "b91f789eba0d86428c1af3aabee7fcfa56bdcd3e106b817a5eefda723ce53350",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-EXTRACTION-DONE": {
-   "v": "96525d03d860d75709604f8b6e93b5f219750b878423405958cfaebdd52545dd",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-EXTRACTION-START": {
-   "v": "53f75608bed5badf86caff32e65bfdac777bbc636b9bc05dbcac6ccc6b43f47f",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-FATE-CARD": {
-   "v": "e7e5a9c43e725b63f8f440580f86e305f5e09be67c2c4dc37635fe94ab955597",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-ITEM-PICKUP": {
-   "v": "32fa1836670c51f2486088ec54fe85d85330ef302a0b4e60e5bb9c92f8f8ac18",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-LASER-FIRE": {
-   "v": "3dd1b16f5c2c4e25eee2c802e871d564a9833240d2a46dfe55205866a6c35f09",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-MERCHANT-PURCHASE": {
-   "v": "6e2b052a6b06a0353011566fa1bc3d10a0e063e8685ff955099065742d7a1c5a",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-PISTOL-FIRE": {
-   "v": "75c5a4616af6244e5fffeeab5cf56eeb8d1178910fc621b1a361ad1b358a8785",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-PLAYER-DASH": {
-   "v": "6d04b96f724ae0ecc580129b77d56f5261043940856b02cdd22e73f0688d370b",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-PLAYER-HIT": {
-   "v": "72058e6443a4cea931b2497fa9c2072823e6c8fb3d43d0ca6069caebbf883e39",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-RELOAD": {
-   "v": "686dd9cb28eabce8660c3c9089baae6e46ff85b6a8ea8d3f1ca0ced5513473f1",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-RIFLE-FIRE": {
-   "v": "67ab8635d6466858b55f14bb05bbb33134c0715e891446509fb8429c4442052d",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-SHOTGUN-FIRE": {
-   "v": "292ecc65647418ff147b4537ab4018b89005ec931636387e10d4cfa9039fdc70",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-SMG-FIRE": {
-   "v": "f915737a5b8b4057c295c0dc5d1612c67d3395691f24cb2ef887c9fb04729318",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-SNIPER-FIRE": {
-   "v": "ada7a6582b1a5eba822caf646866086ac0c7f216ab0619e3d8f26ee78ce752de",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-SOUL-PICKUP": {
-   "v": "1196dd7a0f6c96aebc16849f4ecd03b818f37b25bcdf97ca9ea3f148dec1d825",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-UI-CLICK": {
-   "v": "866518e55657bd43f45c9337ffb76cd31f053dcd55f714d4ebfbfd3b6f1d8fd6",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-UI-ERROR": {
-   "v": "e2842fe9231be590d2d7728a874911a3a9b8fa8980c3b71e841da208943541f7",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-UI-HOVER": {
-   "v": "b1cbb60e9177618f530ac669423e732c441ef5208848d5969c546c19e3670dc0",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-WAVE-CLEAR": {
-   "v": "fbf32782aa48df2abcdda9ae670cc5df9eef25b82669a5608a341f011dbd802c",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-WAVE-START": {
-   "v": "397087af8f62964e2db7fb890d5cb5a5085cb6f0922f9bb3466a9844384ac34d",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-MELEE-IMPACT": {
-   "v": "a1c99afee5391d4747b21aa43463335e405d2312981efe7d78d7a8e757d63a27",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-MELEE-SWING": {
-   "v": "c417069088f333d382f132e65921d7f2ccdb54e6184d40028a4d70c963d65fa6",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-FLASHLIGHT-CHARGE-UP": {
-   "v": "4e264f3375922056a400deea9086539206e5c2b974d0ca0b16d2eb9dd0cce74b",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-FLASHLIGHT-DEPLETED": {
-   "v": "bda3b6411cebda9a4209ac88b8f873c459d7e2afdea0ea4e1ec97b463b06fb90",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-SFX-FLASHLIGHT-LOW-BATTERY": {
-   "v": "619103217d97e6bfa3405eead0d1d96bf2bba3a7187678962d8b7227c15b6c30",
-   "c": "音效",
-   "d": "audio"
-  },
-  "AUD-BGM-WASTELAND": {
-   "v": "c9c37e444acf5d98cf06428443659839b73cbdf22ac1de703d6cdf0c0254e24d",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-BASE-PASSION-A": {
-   "v": "95492e4479f02b4f0a81e8b98169094b038ef54a18f2e3e53a454e60fdca7286",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-BASE-PASSION-B": {
-   "v": "832662bcc04033f040df28ce260c2709a77312e84a4c1f2b2da8f50877c5ee27",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-ROOFTOP-RELAX-A": {
-   "v": "b000a6438f69a63cec3a9349ab311a8cac43e70c78226d2726cd97c513fd0d08",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-ROOFTOP-RELAX-B": {
-   "v": "a690cf952752c9aee91cd1bb6459e1f780314e399b8d2cc7d5b08ab694de4559",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-DESCENT-SUSPENSE-A": {
-   "v": "fc91ee4607ae65b4bf4f040b46ee7e7d009147543d9d0ad74d76762c43d20bcd",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-DESCENT-SUSPENSE-B": {
-   "v": "55e95eceaf03da823ff10fb5430648c8cf3bfc486d9c335b34da92ba5eefb481",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-BOSS-INTENSE-A": {
-   "v": "e13ef150c3246b8a9b1c486efce49b0c947e30be7891e2ae3ac6342133b51590",
-   "c": "音乐",
-   "d": "music"
-  },
-  "AUD-BGM-BOSS-INTENSE-B": {
-   "v": "a18f017e15dd358d9c3ab7133c75b3301867a672c077941baec8dbc4f075cb21",
-   "c": "音乐",
-   "d": "music"
-  },
-  "ENM-BEAST-SPIKESHELL01": {
-   "v": "e48f94a192d7666992c95b01a18c9d6838d04b9ee555e9f232e87e7ffff7ee82",
-   "c": "敌人",
-   "d": "enemies"
+  "schema_version": 1,
+  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
+  "captured_at": "2026-09-23",
+  "sheet": "资产主表",
+  "columns": [
+    "AssetID",
+    "中文名",
+    "大类",
+    "子类",
+    "逻辑ID/源键",
+    "组件槽",
+    "变体父ID",
+    "视角",
+    "状态/动画",
+    "复用范围",
+    "制作状态",
+    "优先级",
+    "版本",
+    "规格(px)",
+    "文件路径",
+    "源码/策划依据",
+    "关键词/别名",
+    "查重键",
+    "查重结果",
+    "SHA-256",
+    "负责人",
+    "更新时间",
+    "来源/许可",
+    "源编号（Blender collection）",
+    "备注"
+  ],
+  "derived_columns": [
+    18,
+    19
+  ],
+  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
+  "asset_count": 411,
+  "assets": {
+    "CHR-PLY-CAPSULE01": {
+      "v": "7bf0d42ae9bfeb342131234de92035f3c7f0d3f340a7b6a149a117610c028924",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-HEAD-SIDE": {
+      "v": "a8c920f26fa2d8fccff7017ca11cb742d1b9c147b15bc5dbd44ec79cc358ced2",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-BODY-SIDE": {
+      "v": "9ee14fa9c33794b7cf5d35a90c0c086c7a74b0b7ffd89cdb116f86e5b7ac01aa",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-HAND-L-SIDE": {
+      "v": "6a7311014ebb559af608f8e7e339eff136ef0770f27b5bf206be45cddbc737db",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-HAND-R-SIDE": {
+      "v": "09dec9dc73720edf0d1bee750d5f85660adb66b4fc6fe2313e321b22093356ce",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-SCARF-SIDE": {
+      "v": "18338e52d3aeff152422b8bad2d1f4d7d7ea62931bdba0a8bc43501c2fcf8373",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-PREVIEW-STATES": {
+      "v": "27700aa18c3757838b789accc0116ad1edc9f0728347ba094804df23c87e60c4",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-3D-BUNNY01": {
+      "v": "926e377d08ab59824310219c17f4ca7728cc2ec404d4eac71d2ffefb15f9af12",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-3D-BUNNY01-BODY": {
+      "v": "6589623660cf2a088fec445d6a2c966894d3492f00d6b86cf2e7afec0dc2dbfd",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-3D-BUNNY01-HEAD": {
+      "v": "d9a3e9f58e8bad4e4367b0ab08306e4516a5116d096c60d1a26466bf63ab7ad6",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-3D-BUNNY01-EARS": {
+      "v": "fa317a2b4b77f3c0b674dc30e0feed081417df046eae891f37f67b4554feca2c",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-3D-BUNNY01-HAND": {
+      "v": "b7459104e8e13cb03a93d7ff548216a8e18360a8399266232dd9363696ab19e9",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-L": {
+      "v": "b398f8d8d9bbeccd8b9763ee04e8577796153db349246fe719b7cc82903f069f",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-CAPSULE01-3D-BUNNY01-FOOT-R": {
+      "v": "f75c208489cc03a6138be002674afd6b54b4038e5ffab1c5b0a6b47f468dceb8",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLAYER-AVATAR-TEMPLATE-001": {
+      "v": "b0eda195d72d5b3ed20f557df348b06482f3678de81b0f85c1093b8c6e2e76c9",
+      "c": "角色",
+      "d": "characters"
+    },
+    "CHR-PLY-BUNNY01-HEAD-CHIBI-ANIME-3D": {
+      "v": "20639b786089747b5641e228f8e8ceee5ee27b25fd6ed505b4c29e2bf389b3e6",
+      "c": "角色",
+      "d": "characters"
+    },
+    "ENM-MELEE-FUNGBOAR01": {
+      "v": "f04b1051a35705d602a0a2a970d8d9efe1e5f1d11d19f2415a175d2d60570a72",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-RANGED-SPORESHOOTER01": {
+      "v": "41eea201642971224e0010b5698c24cf03ba8766767ae60f984f7d60481f3ce1",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-SUMMON-HIVE01": {
+      "v": "97dc88bff0b36b387dfa89b5942a83c231b8b3bfe9a4e0b1c6251b1216e9c1f7",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-TANK-SHELLGUARD01": {
+      "v": "0402f1c32d053cc6b5339884cdae8a50f70508492e729b57fb49640f4764b030",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-BOMBER-FRUIT01": {
+      "v": "88d32a459dcc18086bf2ed73561922f08a680e3c865efcf2e829e848240775ff",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-TRAP-SPIKEWORM01": {
+      "v": "dc5737f885ebe57cbd3964aec42e52d5ac8551c7ee0ed4cda23f1dd6c3224f72",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-BOSS-ABYSS01": {
+      "v": "6d745cf0bbd53ec4d5fc7998c5766bb3b531de8655df84e1c4739c6e8f404f5a",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-ECOSYSTEM-KIT-3D": {
+      "v": "94d450dedfc7bf7811835e418e495e677bb6426cb74a0d2f4a97ed87e4db09ac",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-BOSS-ARCHIVIST-95": {
+      "v": "2b4f4dd28e1c369efe75600fb2178abeffcd81227381a3073358ad009e7b646f",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-BOSS-FURNACE-WARDEN-90": {
+      "v": "b6f5dacad03828b3151b9304b5ee2f5186b44f1fe2f2f073613d7703b884e1c6",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-BOSS-HOLLOW-CHOIR-85": {
+      "v": "6c6fee82fbba857e2f1eb7e5cf72b85eaca502218b620438348788e53cd13e89",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENM-ELITE-RIFT-BOAR-ARMED-3D": {
+      "v": "ff70fa93f6c49e0edbd295cf78960c85dc25de3d5e1b2f138d08c3085de66ef1",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENV-BASE-WORLD-KIT": {
+      "v": "7d75b50f9d212e7cd58163c1fd840ab1c00098753ab1e170fc0b87cad2b75e85",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-IRON-FRONTIER-KIT": {
+      "v": "56d23156a332aa7db8adf7ce9587668e8d5097d7d8d034ca2dd585ac5655d565",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-RUST-FOUNDRY-KIT": {
+      "v": "8f4f3fe1a4463e45a52f7f1be157c75a53228cd6f82b1276357c4fb05f6d1a1a",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-SPORE-DEPTHS-KIT": {
+      "v": "b11c205d2ba0aa6847049f0c68a9db47ab30824ce53ae20074d2efc0c543a48a",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ABYSS-ARCHIVE-KIT": {
+      "v": "5e48964f6aa2cac2f8f494de10e010b8162029bda17354e6e0cd78cff2ffd545",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TRAINING-RANGE-KIT": {
+      "v": "4a31dfb7bb0f84248ca8b6ce64e49916431be206123d61e4d3675a4a673af8a9",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-COMBAT-DRESSING": {
+      "v": "cd955df537d195bb2ca9d718896dc5b661312f82c875f5ebdcf2e960455c6838",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-ELITE-DRESSING": {
+      "v": "357b2ace3f61d09e51c77698f019a5d10475f24a9e8ed68ebc04d148ad6d85db",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-BOSS-DRESSING": {
+      "v": "325c4f894321d36a9a5901b7fbf35af84ef706c40714fcbb0d0aae5f20d8c53a",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-EVENT-DRESSING": {
+      "v": "fe39f0585e15d2af97dd447461b6547978472394bd04b1e9b6f33f5d58b6fc0d",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-EXTRACTION-DRESSING": {
+      "v": "44c4e66c9841b33a6d2adc32f0940fc66a94ae317af28ebe51006d2b022b8401",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-MERCHANT-DRESSING": {
+      "v": "f838082a6ec169569bd492e0bdcc11e7726a1912041817ce4c241c1e448bb721",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-SCAVENGE-DRESSING": {
+      "v": "df6fb2858e8617b3d33d687a7f78ee29a34483f38791623f7df8864d7680989c",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-STORAGE-DRESSING": {
+      "v": "31ed6c97a2d28928d1d43c3f393201689355e9a14530a7690f8500c34cb2769a",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-TRAP-DRESSING": {
+      "v": "ede27bf456443ab857d2e34fd07b29c1869a199388123ffaa0c83d588e34accf",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-UPGRADE-DRESSING": {
+      "v": "c970f7d97d1e97db7cffeb3ddcc62085f57563a4f0d2f79d42a75cbedcba1583",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-SPAWN-DRESSING": {
+      "v": "d3c7da93ae56edde552233a9188922407371d42031b9d470da59bf1d39e9e0d6",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOM-STAIRS-DRESSING": {
+      "v": "1a2c8966af99ee10c9778ee93d6553347386e8b11602328a044eae7fd81025c6",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "PRP-BASE-DIVINATION": {
+      "v": "136de9e9b7b948079375ca1efab3ca71662e0986d5af7512c416939e0b3b0fc2",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-BASE-VAULT": {
+      "v": "01fc30bd8ad1f27a999a0ab400944eb45f21f3fe19f612442c6486682578b922",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-BASE-MONSTER-ARCHIVE": {
+      "v": "b22df6239421380e06a5d183ad9d1a55037e957258fa982b45a153a5d3282b53",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-BASE-CARD-COLLECTION": {
+      "v": "b81c7f591fbe0925ed15360b3a28d690a29830bddaa6efd2769b754654c770ca",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-BASE-TERMINAL": {
+      "v": "5f612a08c38650f66701e9b3a8a72108f6d68c9d7602357947c8d6b77cc11a34",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-DUNGEON-GATE": {
+      "v": "71e1cd91c9cbf8f41f36adc6916ad18122a36a08d26c8ea64836abb59481d43f",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-WORKBENCH": {
+      "v": "1a6d944774802402af0d67a23bffc491d7d38140d1b7a0249035fd370ff13233",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-DOOR": {
+      "v": "7c8a52709bf2cb6680dcff6b7242df828593690788090284eed0bd1f8ed03e28",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "ENV-BASE99-FLOOR-DETAILS-V017": {
+      "v": "6978d63ecdd437c050414189f421c852f69a2079deec2677f25b35b05d400dcf",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-LOFT-FLOOR-FINISH-V017": {
+      "v": "745a8496dd895263343104333e4689ecf341d912b2c04a7ff1827b7eceda065f",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017": {
+      "v": "fc37e4de8a70019357b08b0def18490f73163809440d77c19217ae314b56329b",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE-WORLD-KIT-3D": {
+      "v": "3dd1bfaeeaec240ddb452e127862948b5288d0acbfb26616515a171e83341781",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "PRP-BASE-FACILITY-3D": {
+      "v": "1d202f99eee046dbfd0dd950df5af94668c3cb43548dde6793ebe4997d2ff714",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-DUNGEON-GATE-3D": {
+      "v": "64f50f5e2b9bb59238ea7ce158097047e14438e41f0c16c44a5c868c25ba1f7b",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "ENV-BASE-WORLD-3D-PREVIEW": {
+      "v": "40a9bbef20debd215df0f22e2344aa254a8d8a5435224a99a0f1f57bf92c708c",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-RUNTIME-3D": {
+      "v": "5162e15b34504a875eee4dff9db40bb6d6d187909a8f5676dca0f7b993055244",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-IRON-FRONTIER-3D": {
+      "v": "3f97c19a28ec9fcce04bf20548f70a6089e2cb90928b87d7915f4fc5b4d72d2e",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-RUST-FOUNDRY-3D": {
+      "v": "01f12c45210fd5e0b7545f54d27bbdb6220d759eae1a5919386f996798383d82",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-SPORE-DEPTHS-3D": {
+      "v": "4fa0d7b3a52be203121362d38d23e93d341bb98882a7e270237bf4bc27d0bdd2",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ABYSS-ARCHIVE-3D": {
+      "v": "7860037f34bf7116af0eba174b8591b4c160083b1d94c1c7a59ff14e01699c99",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "PRP-WASTELAND-LIGHT-3D": {
+      "v": "fd026ef543c480fb9cb97be043adada5f7a033f3df8cb93e4d8ff8082ee0b217",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-ROOM-FURNITURE-3D": {
+      "v": "82784f2a39edfdad226f67b5a3b778e4a8bf7361bd5e8a1f6a30a76ac92df263",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-SEARCH-CONTAINER-3D": {
+      "v": "bb11c015f4fa283154b1ee74560c827a7a5e3c53fcf0a60401d1ecea4d0a4129",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-SERVICE-STATION-3D": {
+      "v": "739158522880b91bcb56fe0c4dd88b074b1ed3b65cdc65d8a25bb051331e9789",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-EXTRACTION-BEACON-3D": {
+      "v": "478dd06d0bba5a16692ef3b7ac21d0440afcdadc0e3191a5e6e24b929c7be38b",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "ENV-TRAINING-RANGE-KIT-3D": {
+      "v": "4959068e4b1bd328007b4cc64faf685a67ca806155fc964c97fbc085c0be82d2",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-RUNTIME-3D-PREVIEW": {
+      "v": "9b23ee6b283b77ffd6de5d1577397d6812b73d052acabc5718c642ae61d92950",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TRAINING-RANGE-3D-PREVIEW": {
+      "v": "b28fda2b0235b8a9743aba1d4ae00869e859c138cec3bc1a5c1cf218623b0482",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "PRP-ROOM-LIGHT-SWITCH-3D": {
+      "v": "7bc9c9e04fee9975e774130084d7e5dc020e2e87b41109e9615c7ddf8efc282b",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "ENV-TOWER-DESCENT-KIT-3D": {
+      "v": "d1a42e1e8d261de55e40ce66c263d818ce4959daa6bb85b12d2f0af1fa0afb80",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-FLOOR-TILE-5M": {
+      "v": "85f4a469202f9b3dc53c2a8478b02522a21ad25b268c9f8ca04b1d2b2cf10951",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-WALL-SOLID-5M": {
+      "v": "38883d0244596f7c0e99c43c5b6c0440da2b0671ccf06ae1499ba5d48c9000e4",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-WALL-PARAPET-5M": {
+      "v": "f09faeab2516abc0325bad9490734b78545f16b7120bb3b8ee00c310868de5d0",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-WALL-DOOR-5M": {
+      "v": "46fbe6d6910451ec633c298f73d674bdbbf4fd050e7f2caa4d4ab557e3a6f7a7",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-STAIRWELL-GENERIC-12M": {
+      "v": "7eed01f6539f2c97d4403ae1662555ee30789dd13e18b228f1d8ffdf9382aff9",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-STAIRWELL-ROOFTOP-12M": {
+      "v": "5a4445d04b5d751025f9108a3303fe80a775878ba23e7367ee7b026ceada77b1",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BOSS-ARENA-ARCHIVE-95": {
+      "v": "ccea79058f183b585f57d89cb78aa1fe457356987ca704ecc7aee43f53ff1fb2",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BOSS-ARENA-FURNACE-90": {
+      "v": "2089ce9c9dd82a3cb65b4b01bf302d3f0d49e3bda9c4b4829768d6ee55177e02",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BOSS-ARENA-CHOIR-85": {
+      "v": "2075d94409eb9b87c6434e69664cb6f74efadd9bbbb035bfbdac35c7d76e6483",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-MODULAR-KIT-3D": {
+      "v": "334ebda036781384af8c52739fd9bf2c223db134a5c8e0f2ebf11f5bed8899e1",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-WALL-PLAIN-5X12": {
+      "v": "266514acdaa69bd73d42817bd6a5830cd87ed439b4e10931a1f5beb05fb4a798",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-WALL-DOOR-5X12": {
+      "v": "36ca3ca285a41f38627569ec6ae98137cf79b20be502a37c8160cca70e913627",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-FLOOR-PLAIN-5M": {
+      "v": "41aa08089c3491f0f6c67c3b6d8cf2109f2f0bf81aa5796def95666053c747b7",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-FLOOR-RIVET-5M": {
+      "v": "12d27a55ebfb7752bd3aed3e7d0a069b2016ca6172fd804cac159e0edc7fe739",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-ART-LAYOUT-3D": {
+      "v": "878fdc64da16ab9355946a8262d82c05bec335d8a5b6bb95d7c1216d7c591ca4",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-CORNER-L-5M": {
+      "v": "fab5e14109d7cff3fa2353a016b4a5f33ef33c311ca2e435167fc47903016a98",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-CORNER-L-PARAPET-5M": {
+      "v": "0ed7da1700ee766f139bcbbb73dd8cd9b111713901ff2fdee509ff8ae5749e19",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-CORNER-T-5M": {
+      "v": "c03cbb6483b4cd9381b4a8f4256a768b79621cb06273d230ec15398117590c12",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-CORNER-X-5M": {
+      "v": "4d1020fc184989e355a4586a7bcb81d2238097e6e0a1033c4580b0e94a3291de",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-CORRIDOR-CEILING-SEGMENT": {
+      "v": "1e7c1b592f74d218c0cfb9075b222eb8a340da84aad824b3e399c7ba2befff31",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-CORRIDOR-FLOOR-SEGMENT": {
+      "v": "0b8ed138b7b66d08a9cd2f7637b7a247265d354aaa7fcc55e6a38e672cc58a61",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-CORRIDOR-STAIR-TREAD": {
+      "v": "82d105eea23d8c7ef9140817e95362bff1e15e61e320e16aafb4b75fe668b6e6",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-CORRIDOR-WALL-SEGMENT": {
+      "v": "660dafa34f1d7633f28f28fde172515f40b40dea0feaef6700d0653286fb9f61",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-ACCESS-STEP": {
+      "v": "75b199c34a3865631dde6a0ada97371ab591df79ceacc77a20ec14b96f1fc284",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-CORNER-POST": {
+      "v": "8242ea368052141f19ce3cf318a0838fe81aef902184461d2434e2c3f9dd52e2",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-DOOR-LINTEL": {
+      "v": "45661624b2defed32e97db1486f44343102d6ae4f3606f77224b05214a29ad20",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-FACILITY-WALL-DOOR-SIDE": {
+      "v": "294adb7f97c7739a00f60a93575cd83454a089fd80797c27ee657391d88ac50a",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-FACILITY-WALL-LINTEL": {
+      "v": "b5530c8a589e3e7b631aed1cbad61cf72740fb513fdd1f39659dae5f8906bfa1",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-FACILITY-WALL": {
+      "v": "06f30ce764b86078fb04c53b34db7eacacbf186405bbe54ea3b7f0cd1b1ceae5",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-FLOOR-INSET": {
+      "v": "4d0505e17773429abd7437dada50eeac63874dc56c74b45b4f60d1da6689bc8f",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-FLOOR-PARTITION-H": {
+      "v": "1a1d28a4a14c87a43bacd37ac191be4a28591c975da3f5ef9898aa7f4370fce8",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-FLOOR-PARTITION-V": {
+      "v": "864dbcd9dd078986943557c0c44d7e2da29caa42d0b12cd3077230c6040debf7",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-FLOOR-SEAM": {
+      "v": "a51860e57175b1c272458b811ca4c5138717649979b6e7432f3b3ffb13377093",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-FLOOR": {
+      "v": "4e041fd671fec0486d49d59246e359fd0a665ef4bf392c108140f41b6f6cf7a6",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-DESCENT-MARKER": {
+      "v": "6d7f7116db85c46634cc2caf7faad13327405b9e27fa60e86ce89e80c18cf885",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-FACADE-BAND": {
+      "v": "c54dafaacf1aa7c967a00038d31ce4ba237e0798b8dd16f393c46438ee3d7a5c",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-FACADE": {
+      "v": "0e988b2e062dd40e2a2c8faef09f6ee1b920cb16a05a9e325db2b0a360da7108",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-RAIL-POST": {
+      "v": "875c629ad915d29cdc0bacd43183bd727dc838ca85caa43386f182cde02135ca",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-RAILING-LOWER": {
+      "v": "9f1839daf2f12acd9b19f5419c181057ff3a047fc5fe9155c5dd860c14e920dd",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-RAILING-UPPER": {
+      "v": "946d115d9afe352a107a92a9a7091110ac6c15fbf06856b50b9b60d8d4ae2563",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-STAIR-FRAME-LINTEL": {
+      "v": "e12f62203a172684879b722aafabbbca217b21d0eb2a3408b3574cb53fa51bdb",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-ROOFTOP-STAIR-FRAME-POST": {
+      "v": "54122385e6e103ba6b925ef63f8db3abc00e9603a53ffd1a874920d8bb27979e",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-STAIR-LOBBY-ROUTE-GUIDE": {
+      "v": "9cd50c556da80131fb934c5503aac3749fb1ebc59a582d36714972186b8d09ae",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-STAIR-LOBBY-THRESHOLD-GUIDE": {
+      "v": "7cd7969c29894ad2b79311be09a71034d109d5ad79cf4730f286942157747077",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-VERTICAL-ACCESS-MARKER": {
+      "v": "4691dd7d1c40c03f7cd592dafe589b75eb5a82cf2354228ffe9bbfe621d5fb90",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-WALL-DOOR-SEGMENT": {
+      "v": "0e6417710ab556706da868f730f219bdc98ab509311697cc1cd66e97bba0eae3",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-DUNGEON-ROOM-WALL-SEGMENT": {
+      "v": "58586fc9e4ff93d5043758c243e9f6e094eb3c4577b765caf149d0a63958a800",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-WALL-PARAPET-DOOR-5M": {
+      "v": "9caee8c30776401c189cea892353b515a2e5787a57a37a8c373e33153f794040",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "PRP-BASE-FACILITY-LIGHT-GRID-3D": {
+      "v": "91ec2a618a71e5e18427c11f78dc559b6e472e472020bc6e4307ee14ab54db56",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "ENV-BASE99-WALL-WINDOW-5X12": {
+      "v": "172a94519e5cd2c0276f7215e5cddfe4386a11c68cceb8d1d58fe340027b0f02",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-MEZZANINE-20X10-Z7": {
+      "v": "a8b8d7087c949a9b01406b66cfec96cb0291453fc8edac5aa6b5ab5d1b2f3f41",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-STAIR-L-Z7": {
+      "v": "562f204e6051908f8bd4ada7fb6a103820444c2fb02599ffc90c471e567e469f",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-STAIR-EXTERIOR-H2": {
+      "v": "25dec80d09f38221c61987466dcaa47176de1781752871d85b4277fafac6991b",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-DOOR-LIFT-22X25": {
+      "v": "03756e977196c77ebf0b4accb61bbd97eeaa6fac3ede91e038ad992bcee58a90",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE100-UPPER-SHELL-30X30-H12": {
+      "v": "9a3d3d140140967e9ad4049c2a64e602ce27c042ca403d21367b43d6e8401e6f",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-MEZZANINE-20X10-Z5": {
+      "v": "8de3ec2db463464b031ed9d0c585f53dc8fd925a70ea6064b403569f76a646e3",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-STAIR-L-Z5": {
+      "v": "633879400a793a36f53353b435051924c2ecee46dd26e2a6ebd27cd31386eaad",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-STAIR-EXTERIOR-H4": {
+      "v": "a7828656afc9eeb04b912ec1fbdee047e2863cac31572c5a4e1fffbb24385310",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER": {
+      "v": "791c10ab5d6e0084406b2234ceae7af3d0f3b060b2a75c9bf9723a095345c5ca",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "PRP-BASE-AVATAR-WARDROBE-001": {
+      "v": "dc324f966c038844a211517d296fcc0f2ab02082870b216390f733e3b86f2e4f",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
+      "v": "1d441c35ed1b2bc15d15a858b776c192f312dc0039ec1fb90d1a40c7462d88b9",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "PRP-BASE-RECOVERY-STATION-3D": {
+      "v": "96a43f14c189081b4012149300acaca0e716858da94d78e339d9744fa66fe287",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "PRP-TOWER-ROOM-DOOR-3D": {
+      "v": "cb3dabab2586c9dd8c41d7638fbb21b959c135bb9647965a0c2b40c4c7c5d4ba",
+      "c": "场景道具",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-MEZZANINE-STRUCTURE": {
+      "v": "1d119094a71794b3572f9102477d0111ec81167eea8c7cc633e3da81c8fd3453",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR": {
+      "v": "587026bcc74f44a49daeb7535b051d126f71edee82aae38e8aa541aa78d57008",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-NORTHWEST-L-STAIR": {
+      "v": "e211069301fc9c4aa26e96d685160cc166e212616b959a8bccb6092be2fb6223",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-RETAINED-WALL-SYSTEM": {
+      "v": "30e3b06a6a3837e3539ec67a4cde9c51f1ac26b696dbb70db756d397d0d72484",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-UNDERDECK-SHEET-BLOCKER": {
+      "v": "e0ffb3f2d4894508d7d2ee59498e9be8c350508b23588221b5aa557034f343a8",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-FLAMMABLE-BIN": {
+      "v": "3ca6ed9d8916cdbabfe6aa4621bcf7ce3e538d087f28b47940fd9961cccc1737",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-INDUSTRIAL-PIPELINE-SYSTEM": {
+      "v": "d6baa424245994fb9c1fa5ff59e15e5c2f87b2b13729660ce0ee644a0ed6b177",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-LOW-STORAGE-BENCH": {
+      "v": "3bad36599ac70b53d051e3853f9d9a597228bbc46139faa2622eeb6d3ed751ec",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-MAINTENANCE-WORKSTATION": {
+      "v": "3c8725ae0cf5eab799c4c204660276fa3996f97b3bb40de1b97d8568522276b4",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-PERSONNEL-SECURITY-DOOR": {
+      "v": "133f445179fa54126ef87244288745954dab54639d912a15bd496c6cf23f67e3",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-PLANT-GROUP": {
+      "v": "87525e5023b446b0c729b7f52b06dd41949e05bb36953612d677677c8fe11f61",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-POWER-DISTRIBUTION": {
+      "v": "981abffe6e2321e024a6d106f79b162ef740a86d7bfff55400227b81c3f2e9c4",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-RECYCLE-BIN": {
+      "v": "4b5e8dc209f7950daccd0c5fbe37f53473ceec375b02e2bd181ca9276fd76232",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-ROUND-PENDANT-LIGHT": {
+      "v": "b3ffa51ca038898ef6ca87e030b00aa3fb459f8e5086cccacfa7e64bb771b6cc",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-SMALL-SAFETY-DEVICES": {
+      "v": "919daf30a7ca7267cd2718866a8f3d16f3fdc32000e808c9ba129cbd35337863",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-SUPPLY-24H-STATION": {
+      "v": "641d24c3c2afdb5caa8dbdf1f5c70d2b9d4b62ec2d6dd5a73436c3a21d81ab14",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-WASTE-BIN": {
+      "v": "0cfb60a98813f066fa7427b0071f699c54262730d3b9ab01e3f3f371dbcd952b",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-WORK-TOGETHER-POSTER": {
+      "v": "a4d1bc2ccae02992f1ead21dec42ece0943b3ff85930c2993cbf74f45781c00a",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R01-C01": {
+      "v": "0cb5e15cc8282c6df4aeac63bc2f1ff6575f74b09db13a750ec8f785b203a357",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R01-C02": {
+      "v": "6fddb234034a120cad3f06c7b0789b3a1bdc4ce487ee72beae0b211cd6590022",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R01-C03": {
+      "v": "7496ce37e96e0810e523e87ea958ec26679c0a294b10007cd3b56e4f314fd645",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R01-C04": {
+      "v": "3c00cea4b7358cc6b75e642997ba3e3d993c2cb71b65760689aa5e164c7cf6cd",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R01-C05": {
+      "v": "2e67fec56b70123d98a075a88ca10b206f022dcd3cc1de5fe3a3542d40b36c2c",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R01-C06": {
+      "v": "e5437e848ec4a5f56bc893db19d52662428542099e9fbb93f01bf2ec4e860ccb",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R02-C01": {
+      "v": "826144d964594ca9e5c7b081f86cb573b6d80a93faed69ccb8e8a45a14dcb6ee",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R02-C02": {
+      "v": "d726ce73445af21c782721f122c5c534ac9ef25d8f63a7a086e2d1ca736b6c89",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R02-C03": {
+      "v": "13424de335cfd4dd25945ea1ee0a4b97e8aac1f2f6fb15e5d6524f1433daffa4",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R02-C04": {
+      "v": "8b1d15c543b38fa7f8c4044745f73595ce365244e4337af98aa810b5b0d205c1",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R02-C05": {
+      "v": "07087c606f1c1474634d8b5c70a2ab5ccaf04acff2dc3cb0290e84d4f0329677",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R02-C06": {
+      "v": "c89a3f17ac8ccfc0214b7059a7642188413d98e3dfde5055debf514a83eeb83c",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R03-C01": {
+      "v": "5ee440185ccc93725a79ab5cf4efe227f51b4b302d613772c6a7648028a49711",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R03-C02": {
+      "v": "fd7132ff1194a82366b6c38aef0f72e2a4fab720bd5cfac3a17444435c9d431a",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R03-C03": {
+      "v": "040d582651cb7ed746fceb960980d7d8cea88457962d7c6fb718096c67ed26fc",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R03-C04": {
+      "v": "55984351d6e8c7fff9cb219a62ba3926d1f069cb9a1952c960d48d48342e4cbf",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R03-C05": {
+      "v": "91caf866ec912bed1f8e8da549cc7a2d8c70117b22b9b419de7dbb76cafaa2b5",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R03-C06": {
+      "v": "ddcd422cfb2979473019fa5a2ccaea25aca981f3a81f722863cf8baaaf18f39d",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R04-C01": {
+      "v": "212b0951ed34e8db1fa5893c44b2f5b4011f3e6c5233cd8f59d92cbdcbff148d",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R04-C02": {
+      "v": "1feebb3260ea65a2f1ca9830a40bc731f07a507a942fb8af3220b0b091d443f1",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R04-C03": {
+      "v": "820ddbd385f50da42771081daf8c14516617b933ea0522576d4c66495b5b2629",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R04-C04": {
+      "v": "76b36e7f04d8b85b5e8dda98bc6d03804dd0bb71ca31528ee3c2b96f3184d6e8",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R04-C05": {
+      "v": "df53a58cd21ab1b1703bc17f282f2145b3ffa7fd23284fbd2382afbcd1869209",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R04-C06": {
+      "v": "20dc296d7efae116e36cde8b481c72bb4eae5de211ea19eabd91ede417dea0f0",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R05-C01": {
+      "v": "cf1e5569fcc09e100e0afe4ebae50a021d6638fdb531678a425610273c39e204",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R05-C02": {
+      "v": "691f0247c501ddd91fe5155be9513fcdb857a245521d3cc1fa1e54a4127f2516",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R05-C03": {
+      "v": "546e3960d2ff1603f8b28f299ea6f49abcd5734f50b7041129ae623f582056ad",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R05-C04": {
+      "v": "a65ba0316c3d4d96035831ae5a86c639f86577e88d1916afe20f994af6d43c7d",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R05-C05": {
+      "v": "c258a99a7e2ec484fbe25c7cdeea14858802fb300d218e9c284ed79d8a2c7b90",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R05-C06": {
+      "v": "cd39bc8177598ae1052a39bbed9f3b0d76f0146504c9723d3c02b3676e8a21a8",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R06-C01": {
+      "v": "7cfaf3e104cbfe4a5ab5880c4ff4782dacefe7c4b3368a8cc86944240ecfdc1b",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R06-C02": {
+      "v": "7303e26281ff2b7f61b1a15ec119a5a30894d8572775a8ab2a334ea372fc750e",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R06-C03": {
+      "v": "9b26dc615802796af49bd347a65096863c65bbff38a6c653865bc0a124efa154",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R06-C04": {
+      "v": "50504f83526ecac94638e9601bcb2a2d71bfc49045dd254094624a0029ca7f3b",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R06-C05": {
+      "v": "919c58830a493a37943516b57114d31b5ae6de53a5fd04a6a50c0cf544754ee1",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TILE-R06-C06": {
+      "v": "a1fba6d396e2f97ef7a2978a30e5cbb09d4888d37b69f4eb7681533bf32eac2d",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-BACKWALL-FUNCTION-PANEL-SYSTEM": {
+      "v": "47f78b7ff53edba5b87d2a2d2db452e0e8bc8b7d4cb2628168c7d1528dade483",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-BACKWALL-SERVICES": {
+      "v": "ede72207f632bf9991da82423cdbfc2150a85544e22c335bbc4df38961e829b1",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-BATTERY-CABINET": {
+      "v": "813e8737fba5d30499386984f79231eb2eb7e89982c58f61e648fa0ec5baf3e2",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-BED-AND-BEDDING": {
+      "v": "ce6bfa4231fa9a9f363210084e0369627c7f22a00b1c4f26f4bf413b663929fd",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-BEDSIDE-LAMP": {
+      "v": "2c95bede9beaaaf0ebbdfc8b39d003f76bd72c5b4dcd789e2e0b60a0a828e731",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-BEDSIDE-RUG": {
+      "v": "405d15c7fc8020453837dd0a4eeef04604b1c49e1deb9908348e512841e5b6d6",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-COFFEE-TABLE": {
+      "v": "c5019b7437a734c3f57b9c40a68fbbcfd0c6159632673816c3aad16ba7e46576",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-COMPUTER-WORKSTATION": {
+      "v": "ace6e01859e8d1cc0ecbb490af2a04c111a2e9f621fdad4f5e1b844bf5680bcb",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-EXPLORE-POSTER": {
+      "v": "9781c4e145bfd66eed8d8988bfcc8afda981a765fb2dc2fa3ea8459b253de584",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-FOOD-CABINET": {
+      "v": "5e3b45e81820cc743de4ed6a9f2d9e3c1ee9dd55c6b917ba92552d992b37eeab",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-GOOD-VIBES-NEON": {
+      "v": "d396bf216dd974379213856efefb5e2d268f462de6966d1b4e046da9bf363a4d",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-HANGING-PLANT": {
+      "v": "c462340c067eb7b7a6f03eeb1f328fa9dee0d8eb55c32df3111a85e9fdad725f",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-LOUNGE-RUG": {
+      "v": "9042b3e59a08b11e7067d7fbb26008c722f04e28578c0f546a5086022430988e",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-LOUNGE-SOFA": {
+      "v": "5bdc1ebc3a8e4196921f8188eee8473b952702c5ebcbb02a8da3b7d5a19a3877",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-MEDICAL-CABINET": {
+      "v": "d3e5fdf5eee7cbb660b8d8d54dad9ee6e5d8235346579a594e26991025ea12ee",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-NIGHTSTAND": {
+      "v": "1aa3529712d5b09c217f0cdee4db6c0284d04b3050a643ca70b0f15ac3e1a6ac",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-OFFICE-CHAIR": {
+      "v": "9a37772a40747071d74a2d1e22ded921f631f21d91b16860cddd9bfaab93d7f6",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-POUF-01": {
+      "v": "d6ca533bfc34f6da6ede6e548376792660411fb216a46d4cfee551093503681c",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-POUF-02": {
+      "v": "9a6cd4bdcc1473e5f91bea0b097647b93a6b29fda2be2b50843b388a92b89f6e",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-SIDE-TABLE": {
+      "v": "e7971c4e8051d9cd3eec0177956703cccb8370bf3dc89da80c73caadc7acbf48",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-STAY-CURIOUS-NEON": {
+      "v": "0ac8007cc504cd59a4b87db2092680d0a2bd1fc89b91521e7d87a286798b49d1",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-STRIPED-PRIVACY-CURTAIN": {
+      "v": "8d727b7be9d05cba116e30a51225f1ed5e8061514de3e95489cdb9ffb813bf7a",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-TOOL-PEGBOARD": {
+      "v": "f4d1f3e51fb2822f7fd97303552b3872ab0c52d38264b81c052fb2a75c2e25b9",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-CORRIDOR-EMERGENCY-LIGHT-GROUP": {
+      "v": "e1cf8e0b880418472d332dc3b5b8ab84d387a1f40e9f87256b4b02110a201a2f",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-LIGHTING-SUPPORT": {
+      "v": "b44d1fce67a4f5059e3942506678328a7377bbe910f249f4f1d14bb3a55a11cf",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-VOLUMETRIC-DUST-FX": {
+      "v": "726703f5b6c3662384f7f13bc4510443f67ef56fddec49233c0a51f9ac1740fb",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-WAREHOUSE-PENDANT-LIGHT-GROUP": {
+      "v": "344786524a7ca056c09c1602ebdd059b695e1a6f931ed1c05de4cedb97d06757",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-ACCESS-TERMINAL": {
+      "v": "1504972b341525df033557dbace34267d86a2c2b9f2eb206f8d6452bc6426658",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-BASE-CAMP-NEON-SIGN": {
+      "v": "589823d348084891b4268dd1718267768c99d8a2640fc2658b9dcb62918524fa",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-BASE-CAMP-ROLLUP-MAIN-DOOR": {
+      "v": "d1781604c2275c31cab852e7bba60d280ccc90dfb8f44c07cd9b07f2523348f8",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-BASE-STATUS-TERMINAL": {
+      "v": "1ed5b1fdd1c602813a0653a88f2caeb5ec5f9a49b50a29d6f6aad5e069a703fc",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-HOLOGRAM-TERMINAL-PLATFORM": {
+      "v": "ca8fd820617956ab2e687a2dedba8dde65dd7ed8dfeccaad3075c1ba427f883b",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-MAIN-DOOR-LOW-STORAGE-CABINET": {
+      "v": "3b7254eaf0a1caa006a2dc259d8fb7cc5b4fe329ce31c677b01ae9288ac3f70f",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-MEDICAL-CABINET": {
+      "v": "0f09cb78b065879eb109bf50988c67e06c483b2692f96fcaaa671a007f742b21",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-NARROW-BATTERY-CABINET": {
+      "v": "fba7d8d163c4d16c7df549cf390a8ea11269b8691e20ef7f847179e459f01d5c",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-NARROW-EMERGENCY-CABINET": {
+      "v": "a821d667641a5783cf97cb330ae8c90f3e45976cd9c1243b544d5860473ffea3",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-SOUTH-INDUSTRIAL-WALL-DETAILS": {
+      "v": "b1aabf6236157f3313b7d4897275b4e6969f285ab994fd69b770b56616dff5e7",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-SOUTH-UPPER-RAILING-DETAILS": {
+      "v": "c032ca31b4f8e92915bd8739ab903f3e60287bdabf9ab26025c3d6e21cf30094",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-SOUTH-WALL-PIPELINE-SYSTEM": {
+      "v": "c329137a8495420f760935e73f93170169ca8cc0d690fb512b9122cfaa357d29",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-STORAGE-TERMINAL": {
+      "v": "0d3bb92ef0ee08c8e77d8cd8d9f78b0f74d29f9ec4ead84a08174f17aa7a2791",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-TOOLS-CABINET": {
+      "v": "abee79353afe0bb9490d7bafe6fa5b5ec596ad264f98fcd6a43f5377bb095969",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-UNDERSTAIR-BULLETIN-BOARD": {
+      "v": "8c62457026b4894d9c1908c6125736cd8ac17ad3002711d595d9b1c9db7ef5ea",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-UNDERSTAIR-EQUIPMENT-CABINET": {
+      "v": "05f9d438f9e35c75573556e0ecf38ce6f1195d724c7806bf1e114af4c95da39a",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-UNDERSTAIR-GREEN-BENCH": {
+      "v": "05b7fd16d6414ccdd952563b1035717eacc02d7aff08739b9dff84028f5fc62e",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-UNDERSTAIR-LIGHTING-LIVING-SUPPORT": {
+      "v": "e8c00e9aad29c5437e0bb92d98130259f4e5ec6c34896950ae67519cadd4401a",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-UNDERSTAIR-STORAGE-SHELF": {
+      "v": "6d87a959a92a8ae8d72f2caf083d0a54e780ebdfe93174e324f85a6fd980b25f",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-WEAPON-WORKSHOP-STATION": {
+      "v": "2d30edb6ff7b7c7c5a6d75f32c38f541eea00733fce1b0b36b72e36442769b27",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-AIR-COMPRESSOR": {
+      "v": "5f5c6fc6c544630672e7abe18fdf5d285e0533b8d32e6957fb510cb2850c347f",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-BACKUP-GENERATOR": {
+      "v": "0a6c4e34312770ddba55e5bb691ffa182a32120dd085c003a99926747cb1f577",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-BATTERY-BANK": {
+      "v": "28a6e3d7c4be9eef2fa7b51d48a2efd358703836537ff925acdde707eaadc460",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-HEAVY-SUPPLY-SHELF": {
+      "v": "46045b3c55d42d5ad166f4f07f24bd0aa09c895a4efb068695bc2955cdfa8255",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-HOSE-REEL": {
+      "v": "4aba6983ca77650a45749b02f2642ec397ce5db5eff0e334028280698909ca57",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-INDUSTRIAL-WATER-TANK": {
+      "v": "894ffcab1ebf55bc991546341d41067f769ef00bd7e40a6efbde4699d2d01b0f",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-SOUTH-WALL-INFORMATION-BOARDS": {
+      "v": "b8d074e7c860500240ffc3609a11f39c22eefcb484561634b362e73338292da3",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-WATER-PURIFIER": {
+      "v": "ab81358e85a751a2eaed9b520479ba30bf4af5af227026c0407ceea773bff27e",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-DOOR-ACCESS-CONTROL": {
+      "v": "c86461d98738bb69960b6dfffb6b671c12c18b300b4c2df0dd4d5e7dbad63d6b",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-EAST-DOOR-WALL-MODULE": {
+      "v": "38ed15b7870277d18184c523bbf0d1de5538cb61d9fbc3e054929ea48611fbd1",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-WEST-DOOR-WALL-MODULE": {
+      "v": "378027018268768030b67a513d73f0d8899f4679983de54baa180c26f4644c7c",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-WEST-DOOR-LIFT-INSTANCE": {
+      "v": "7f2ff748d84d899ee13be6ea44208fd154783d48781cdf0151c10180c512853c",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "BPK-BASE99-LOFT-FLOOR-FINISH": {
+      "v": "638b0544118e47cfc506d7e4c8695292b18e34035a01088feeb642bf63214a5a",
+      "c": "基地资产包",
+      "d": "scenes"
+    },
+    "ENV-BASE99-WALL-CONTENTS-V021": {
+      "v": "a5d9299427ba9d7f3c4661aead264fa7f797d5873bd703342316768cf462fb6e",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-BASE99-REMAINING-FACILITIES-V021": {
+      "v": "007b0f2bf180a086b9a6ab4f94b2dd79dfefd5b1393c276728708b6412b60791",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-STAIR-FLOOR-LOWER": {
+      "v": "58352a96dfc6f523030d4b3c46e8c1ebd86f9c9bf456e55ec7c4b2d1be19edac",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-STAIR-FLOOR-MID": {
+      "v": "baeb5c51087ff38013b2f88629f9772eaf85703e1a0f871ccda7340ae11206bd",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-STAIR-FLOOR-UPPER": {
+      "v": "af846103a58cf8cdb3ac454eeb32af985b69574b6af54ecfa6c9a7435a9085b2",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE": {
+      "v": "3efbf31e27152d5b6220f5747cf82f3b619bcfd58947773967857c2f88204338",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-CORNER-COLUMN-05M": {
+      "v": "dc430f8ac5dcadf97c29b7bb29df52761155f1a62d40573b91f85e39f52df87b",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY": {
+      "v": "76fa9d61818f42b47523ff11349ef52f581ecfbf5aaf5126398d2cc7f87c120a",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-TOWER-DOOR-LEAF-5M": {
+      "v": "d0cd4ebdecf790eb2107452d6b1d42eeabeaf750c85fd2590a9aa04a64f68c84",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-ROOFTOP-DECOR-LAYOUT-100F": {
+      "v": "c08e15c568e1a4db0e1a9747ed30d7c3314f3d75fb9c25cdf318f77aab6aa2c1",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ENV-EXPEDITION-L01-BOSS-ARENA": {
+      "v": "621a1f3ce5d4ad1deb3adb6611f7329e1d637a1a8189a04c27ecd84159908605",
+      "c": "场景",
+      "d": "scenes"
+    },
+    "ITM-CONSUMABLE-ITEM-BEACON": {
+      "v": "9176f3065a31ab33abe89c3f3c2e70a74b40164b18e912fff547276d6d18fa33",
+      "c": "道具",
+      "d": "props"
+    },
+    "ITM-KEY-ITEM-ROOM-KEY": {
+      "v": "a6896919119d6036058f833a4ce884846a36fdd6293cb13cd0f52f2108e1d17b",
+      "c": "道具",
+      "d": "props"
+    },
+    "ITM-PICKUP-SOUL-ORB": {
+      "v": "1b60308f5d9368637d69371144bdce2dfa8717eebafefe22c15377524aacaf02",
+      "c": "道具",
+      "d": "props"
+    },
+    "ITM-CONTAINER-CONTAINER": {
+      "v": "a9907cbbce6c4f21b290d0011725c36aa289d8d5d5acddcd438bbce5e5c9be4b",
+      "c": "道具",
+      "d": "props"
+    },
+    "ITM-PICKUP-ROOM-KEY-PICKUP": {
+      "v": "e1114361cd9850c8a5eee0a5372c32840254ff325ee3b85997e065264320a490",
+      "c": "道具",
+      "d": "props"
+    },
+    "ITM-PICKUP-BASE-GROUND-ITEM": {
+      "v": "c39edf85234cbfc86638be16f90336020277a22304a940d422b609408b2299b8",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE-BRIEFING": {
+      "v": "40266deaadcb7b301512cf626a552e4a68d2c4d83cf3b9e2bd393912a3c0e34a",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE-WORKSHOP": {
+      "v": "62ca6b04120169fdd3a685a5892a3e05f676ab536b4a39931ffc71c352ac395b",
+      "c": "道具",
+      "d": "props"
+    },
+    "ITM-EQUIPMENT-BACKPACK-3D": {
+      "v": "42cd34e2df696800255a2da5e5a0e697864aaa6e7f71e1260658b44b98f4e60b",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE-VENDING-MACHINE-3D": {
+      "v": "80948c72c5697455f20c59d83544a1df939044df1da6d404d84b829293266c35",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE-LOCKER-STATION-3D": {
+      "v": "51f858a4e4ce463a8f25fac181a7bdece8082806ef8c1341f7438e8a000c6d30",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE-RETRO-TV-STATION-3D": {
+      "v": "e5d35f57998acaaf398ce975f3ec62314d3751360959363b2f6b771a77eae083",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE-WORKSHOP-STOOL-3D": {
+      "v": "c9f05e6d475ba84e61065dfd6c9c16b10dc72b14ae487b1ec8f419b9c60a3352",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE-MISSION-COMMAND-CHAIR-3D": {
+      "v": "bda25d1cd06ef8552a59fd70b91f21918f05219f91c3dca0f728150c8ec77dcc",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE99-EAST-SUPPLY-24H-STATION-FACILITY-3D": {
+      "v": "a4344c3123ad7dddc56fc1acd4a0702b2bd72cc9e83505ab554521923a4c5715",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE99-NARROW-BATTERY-CABINET-FACILITY-3D": {
+      "v": "ce84e6a74a6500fbffab8f0d55d179d890ad3a716e30ee6f0861a69c998ce555",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE99-WEAPON-WORKSHOP-STATION-FACILITY-3D": {
+      "v": "fa871309aaa68d692b87af698ba608e80b675e451bbbb33075f7f95e3b872e60",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE99-LOFT-COMPUTER-WORKSTATION-FACILITY-3D": {
+      "v": "61348bf55d9c638e2d8eebf5421f993f2a06e9314f181f10b99b76246daeb625",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE99-MEDICAL-CABINET-FACILITY-3D": {
+      "v": "a5b0c75b75c39cfb556bd8b81b3175b4ace648162e8b2dfaadddce8fe9288bdd",
+      "c": "道具",
+      "d": "props"
+    },
+    "PRP-BASE99-LOFT-LOUNGE-SOFA-FACILITY-3D": {
+      "v": "87652181500496cb4d4c28afb24acacaec8de68a7501209d1b3f68fbb665d8ea",
+      "c": "道具",
+      "d": "props"
+    },
+    "WPN-GUN-BP-PISTOL": {
+      "v": "4f00c00972ad4163d04086a5db6a747107a21479cb5e69ea531386ed5eca2a53",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-BP-SHOTGUN": {
+      "v": "5cd5a7940a628172952523507f449d7b77a528fd2112d13c466bf9fe69c27aa7",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-BP-RIFLE": {
+      "v": "7905280f6c764c98c467f0bd8c058c5d914c81c5bee8f57c37cbdcd613f31d9d",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-BP-MACHINEGUN": {
+      "v": "295afc60524812a618ed51e2f0bbbd628032539dda685fd41369a00a5dea68d0",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-BP-SNIPER": {
+      "v": "dd1e271a45dd25a9913cd5bed308ad11d9813236bbda5f0f1873ac4edf026bcc",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-BP-LAUNCHER": {
+      "v": "d47d7ccc0a98eafae052baa18f145b36763724518ac3452dfd4eaab8337898dd",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-BP-CHARGE": {
+      "v": "f5f9efc6dac1aa3328e6377741529ae8fa465c4402e5bbdfa825f268b33b234d",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-STANDARD": {
+      "v": "639fb09838dca1b05c008605ce230c92e66d60a14d441c0a458e88b6d96315c6",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-STICKY": {
+      "v": "36571d87b0c3eb886da3b35afcf278b7280bfa365cd6da66443c00361a5a2076",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-BOUNCE": {
+      "v": "a3ea0c028762688cacd7613ff65a798e581d750677a0c992120e3dc7b697f2ad",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-PIERCING": {
+      "v": "d05a07bb16370a0ce3ed489cdcd467fc8c50d5306ef9c176560d7cef1d9450af",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-EXPLOSIVE": {
+      "v": "ae6cb42902d202ceec9b3ce21b1b871139cf6eea87539e342a9085a209cc0bd0",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-HOMING": {
+      "v": "66ebe299bad10a3cbcd225c1fa50cb82b0a33a5a093fadaff036ad1f7b14fe67",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-BLACKHOLE": {
+      "v": "31b2f322a4d83546fa4cd0abdd7befda1a7325d4fdc0065677b8b8406f98989c",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-BUL-MOD-BULLET-BALLOON": {
+      "v": "de23213b4fbda64d1036103622b604ebf458525b8bfadbb59e18b2021fc76891",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-ATT-ATTACH-TRIPLE-MUZZLE": {
+      "v": "195028440d8b953fc70c6dcec0971dc8d9400dd7b80ea53899a4b67509f1a81c",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-ATT-ATTACH-RUBBER-STOCK": {
+      "v": "ed407305a265ad1d467350e42a73fede9954c7a769a0292dce62cfb98cde04dd",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-ATT-ATTACH-SCOPE": {
+      "v": "5d9fe3655c179dfad702aa1a777bd99b2c36d3787c4352bd60c1e93e60907343",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-ATT-ATTACH-BIG-MAG": {
+      "v": "92fe1f47396ec1d90a7a11a778da3c2d6cbccfdec8e6704e591fc80413530ba8",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-ATT-ATTACH-FAN": {
+      "v": "9127c4ba2abdb7bbb242d41adac0e740851d4c25b84b065c91e359ed5c808e58",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-ATT-ATTACH-COPY-STICKER": {
+      "v": "c1229e023580ee4de0eb212ca8867589f39441a0ab7268ae11de1294afb91416",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-KIT-3D": {
+      "v": "d64676f81b6f64b740891f9208dd7ebcbd3962dbd5a16b6f26b7caf5985401a1",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-MELEE-BP-GREATBLADE": {
+      "v": "996cd27b966036c9416693299c415dadf5fbc8992c6e1119cca2fd9c6fb0a474",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-MELEE-BP-WARAXE": {
+      "v": "52c5198059af420512521e40dae2d25c905ad7107e3deab6ae0cd268fb5d7f87",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-MELEE-BP-BASEBALL-BAT": {
+      "v": "1dc52cba0e49eebda93c8464479e7afe2198fb5652b5b7b47f715995f59e0579",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-MEGAPHONE-CANNON-3D": {
+      "v": "2972230049221d5efaf1f9bfb789e690adbae97839e7d78b888dd66d30adbc89",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-GUITAR-BLASTER-3D": {
+      "v": "580f7b1aa35acac271dfee56ff0b46b077fd1b213e1c570bc8dec59f3f2cd8b4",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-SPATULA-RIFLE-3D": {
+      "v": "c2a8168f5d51fd8d4a439281aaaa5f7f0a73a90f2cc8744a3a4158bbb69809d5",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-FRYING-PAN-CANNON-3D": {
+      "v": "84d952a102802b5881c30677ee525ef2fc3e63cacd981e8fd7821bd37f70736c",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-SCOPE-CANNON-3D": {
+      "v": "551e3eff90c8e094e42a8e0c09fd6ce12f1b2903e04a68873505e40b95f57bd0",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-POPCORN-BLASTER-3D": {
+      "v": "75250c75b33f22be3cc818cf754a9d84ea1a65adc86b400ef71168fd69183543",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-SODA-STRAW-BLASTER-3D": {
+      "v": "bd78a44b2e24ced3f80d520b3cdcf6aba85a75a42252d795c12c6bef844b6ebb",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-CROCODILE-CANNON-3D": {
+      "v": "4bcc143de68c65ed92ee152cb01b33dbc04e6f1669889198e9c371a063cf74ed",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-CAMERA-BLASTER-3D": {
+      "v": "ab4c3e891ed6479558af0d8265be027eed3057fbe97176f1b1162daf618933f9",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-TISSUE-BOX-CANNON-3D": {
+      "v": "e10a4c3fab40f0f24845ab7ee174d3ded7c143580f2ae690cea47dd29a976a5d",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "WPN-GUN-FUTURE-FAN-BLASTER-3D": {
+      "v": "57444b126dc14ae0815c5a7ea5a0073c3f48633756a9c7aa791edc41d1274099",
+      "c": "武器",
+      "d": "weapons"
+    },
+    "VFX-PLY-DASH-TRAIL": {
+      "v": "76fe18d2ff1fc2d3efaffae1cc68ac5c85d0de1224fb284482e0c94ffabd8c49",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-PLY-HURT-FLASH": {
+      "v": "0f39fb418ad2a1bfd64e6a97956489deb9bce50f7d9e54b51c5ad6f40070e798",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-PLY-LOWHP-RING": {
+      "v": "0082ffaa02e91e5e3045fe7cfdb27238a578a0e2b9e46aa1d103ae061c011dbc",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-PLY-SILENCED-RING": {
+      "v": "2b613856a7e5e388dd4304d0710a175e0564fe25d8d51f7be8c9d249a3141624",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-EXPLOSION": {
+      "v": "01c67fb73d99e2c2ce48cb3eb256b50a44f0f06382fab30fe9f3f979f4278c1c",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-MUZZLE-FLASH": {
+      "v": "97dd6644ef889246caca860bf529512d29723663da8a03542f4389ab9e5e1c0c",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-DAMAGE-NUMBER": {
+      "v": "716c2e8ba4b0069f61b62441c892ae33e097418c2189547b30cb049ab11a5973",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-SPARK": {
+      "v": "6d8b42f3df9334937eabc5abebf3fc556404b36650aed11573d76363425c54d4",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-ROOM-TRANSITION": {
+      "v": "46e0226e0dd7c5b68e1bfe248b82979587b7c3129b8a592ee5f6474f5c455522",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-VISIBILITY-LIGHT": {
+      "v": "b2e9c56f72ab1b9d240d36cb3829d0abc8cdf1eac8188b9bae49da713545192c",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-EXTRACTION-BEACON": {
+      "v": "6d7db19f375b899a4e74651269995da00ac6c387c18c98a4b80aee3991476c3b",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-HAZARD-FIELD-3D": {
+      "v": "b3b96f0ea0dec6a64c1533cb69fa7227a7c9205522a06f9e35155fe6605b1fcc",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-COMBAT-KIT-3D": {
+      "v": "40cf76f3e1e73dda0d5882a5889e77281d64c2c9f3fa2b3a6fe6c3f84be2c601",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-VISIBILITY-FIELD-3D": {
+      "v": "5b9bc7846c05d08fbaf9e0cd6b55373e746a43d40a5084015c9294a7747bc35d",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-PLAYER-FLASHLIGHT-3D": {
+      "v": "a0b88516a2c19fdc1c8892ead05c58b855518d689eaf1653a9df57c3ebc52d6e",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "VFX-SHELL-CASING-3D": {
+      "v": "c7a2afc0b588e20c7e3afba3375d1dad5f2742eae37e563e21a6f34765e66be9",
+      "c": "特效",
+      "d": "vfx"
+    },
+    "UI-SCREEN-HUD": {
+      "v": "325e4612cfa30ca13869035379fe12a646e21e76bf1e81f833e755c309cf52b3",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-MERCHANT": {
+      "v": "a5413e3b7e5991c5fded3fd290932534fc19aa8c2563f4507096e3d1871a4dce",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-WORKSHOP": {
+      "v": "58e4cfeb761ca809d680f5713759b8061beca18da44940482807e9eb5f95480c",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-WORKBENCH": {
+      "v": "55aac39416c05d67643a1033db1d49dd1f0ec833fad59c550ad9b5beda796e7a",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-WEAPON-TREE": {
+      "v": "45e7a3488c08fc67a61164fdacbdcf72dacc67c0b164f6b61f085c3a6cd97ea6",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-FATE-SELECT": {
+      "v": "3f1e5797ae53d08d7fa5555531e98621e5e25b3472c15816b993f408e6a0c88f",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-FATE-COLLECTION": {
+      "v": "e0027ab7f134c43afe262cf50ee22bf138572eb868e6822154bdc02ef6de6deb",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-LEVEL-SELECT": {
+      "v": "57131477f226fc2f584688694cedc20f7dae1a1e84cd2c541760f176e2ef7972",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-VAULT": {
+      "v": "9eb851e4c7175b351971e6b1558baecfe20765ae358a9bf541b2b1c6fda8a13c",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-MONSTER-ARCHIVE": {
+      "v": "5f95e89b7dfaff89c5b5344a47fa14133cc6ccb0af70500ac3ee579aec98524d",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-BASE-MENU": {
+      "v": "c132b4d0ed0ee46e9aef8782da6dd8949e32bd60585fa1d207b75b294d03e41c",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-MOBILE-CONTROLS": {
+      "v": "2f6b83568362a71ba8489f6088edee11ca542491a55888a4642e5af59c9562ff",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-INVENTORY-3D": {
+      "v": "88b828fc679278d163244f6cabd1d0d15b712c6149ce740e83200b8eec71eadf",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-PAUSE-3D": {
+      "v": "87be337810bd02ec977741a35a473b5aa5f0bada7ef5d788ef044ac2446564aa",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-ICON-ITEM-MODEL-3D": {
+      "v": "d70d8a1fcc2dee810643efb3823d1338441fc65f4e3fd13dac90863459f79ea0",
+      "c": "UI",
+      "d": "ui"
+    },
+    "UI-SCREEN-BASE-VENDING": {
+      "v": "f4b2bb41440df2a3a6b436e4256b617ec9240c6f84e9c184b7a2069927855089",
+      "c": "UI",
+      "d": "ui"
+    },
+    "AUD-PISTOL-FIRE": {
+      "v": "22d0a8200094948e28e480fc4a6f0d6444b35e36cad241f464aa53dfa4d6cf7f",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-RIFLE-FIRE": {
+      "v": "d5305c34d7836432903715078c41d936b9aabbf26ce1fbd131a5bf1a79d2774f",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SHOTGUN-FIRE": {
+      "v": "de73733ae1ff552b74ab2d080f52fc97c48871e9401eaa444e10aabe432e6e3e",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SMG-FIRE": {
+      "v": "199c7aa2439b7fda1f6d9c78b1871242b37e45f9dae0327dd041749c2e3b5e69",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SNIPER-FIRE": {
+      "v": "b364b03a024c633c2d29511f14eb192b338abaf144976d1fa042a5aa909cf73e",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-PLAYER-HIT": {
+      "v": "ec2872ad90d6fb44a7127d2137e9a3d39a27ce6cefbdd29910b5da8fc9b97e49",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-PLAYER-DASH": {
+      "v": "e9d8d85da5ad2e082417557623d09acc3286f571eb64e897ee52d895c5822987",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-ENEMY-HIT": {
+      "v": "d9b82952c3c8d2abd28e5e1c11148dcd35e7467cefd9a977337063c26af78b19",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-ENEMY-DIE": {
+      "v": "630e4e16fb463c020950c3fa39cca3d560a664c4c55b8065ac273d13b8f034cd",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-RELOAD": {
+      "v": "d23d2100445c08657d90ca9a6b595b7b5392bfab72c714ebed350cc6faa1fd85",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-EXTRACTION-START": {
+      "v": "c0fc6a7ee3635300255006eca859acee7e3227ba2b5d09938ed6eb2913fa5d15",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-EXTRACTION-DONE": {
+      "v": "784d85473ea4ae782eefb0932db96fe77e2da73797fe5ac57f5d8eeef5859a67",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-AMMO-EMPTY": {
+      "v": "c7d917efce8709e18f6f10fd09bc764c15b59acf4bf5d5d76852d24c7b0c5c29",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-BOSS-DEFEAT": {
+      "v": "ebc16fa3b0db4909140d38cdd1544de312626d8de0af8094885d2b122d6abce3",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-BOSS-INTRO": {
+      "v": "ff16d27b21fcd84266ce82793e1dc9d484a22ca47f1ae3ebf38c308a936831d4",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-BOSS-PHASE": {
+      "v": "4c88eda032fccc58f0214a89b5b885ad531781d313661a10293e315ef275bf9d",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-CONTAINER-OPEN": {
+      "v": "e1b56034aeed64067b366b77882c79a14175e61d101dfc6d5e783e444dfa154d",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-CRIT-HIT": {
+      "v": "24a1d1480db2a04087d0fb73b6ab46144d66bfbc28e8a74616b6aba7aec971e5",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-DOOR-LOCKED": {
+      "v": "c26646bffec6343b7a47aa50f28ad0ceccdae27ff0a9a614eb56b37991b19335",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-DOOR-OPEN": {
+      "v": "9ee7abf1c235efe40192d6cd965f5e6d0b16a26e472a7aa05eb1048db6906700",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-ENEMY-DIE": {
+      "v": "2eef8943d7aa19e9d9330e1f480b78e7e6e5c57ea3fb8e65b8fbedfd69d85cf7",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-ENEMY-HIT": {
+      "v": "fe97b6130a4b342f82e958623230b2ee4e3969f6ae37d835469c6d36786cdb59",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-EXTRACTION-ABORT": {
+      "v": "b91f789eba0d86428c1af3aabee7fcfa56bdcd3e106b817a5eefda723ce53350",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-EXTRACTION-DONE": {
+      "v": "96525d03d860d75709604f8b6e93b5f219750b878423405958cfaebdd52545dd",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-EXTRACTION-START": {
+      "v": "53f75608bed5badf86caff32e65bfdac777bbc636b9bc05dbcac6ccc6b43f47f",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-FATE-CARD": {
+      "v": "e7e5a9c43e725b63f8f440580f86e305f5e09be67c2c4dc37635fe94ab955597",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-ITEM-PICKUP": {
+      "v": "32fa1836670c51f2486088ec54fe85d85330ef302a0b4e60e5bb9c92f8f8ac18",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-LASER-FIRE": {
+      "v": "3dd1b16f5c2c4e25eee2c802e871d564a9833240d2a46dfe55205866a6c35f09",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-MERCHANT-PURCHASE": {
+      "v": "6e2b052a6b06a0353011566fa1bc3d10a0e063e8685ff955099065742d7a1c5a",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-PISTOL-FIRE": {
+      "v": "75c5a4616af6244e5fffeeab5cf56eeb8d1178910fc621b1a361ad1b358a8785",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-PLAYER-DASH": {
+      "v": "6d04b96f724ae0ecc580129b77d56f5261043940856b02cdd22e73f0688d370b",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-PLAYER-HIT": {
+      "v": "72058e6443a4cea931b2497fa9c2072823e6c8fb3d43d0ca6069caebbf883e39",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-RELOAD": {
+      "v": "686dd9cb28eabce8660c3c9089baae6e46ff85b6a8ea8d3f1ca0ced5513473f1",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-RIFLE-FIRE": {
+      "v": "67ab8635d6466858b55f14bb05bbb33134c0715e891446509fb8429c4442052d",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-SHOTGUN-FIRE": {
+      "v": "292ecc65647418ff147b4537ab4018b89005ec931636387e10d4cfa9039fdc70",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-SMG-FIRE": {
+      "v": "f915737a5b8b4057c295c0dc5d1612c67d3395691f24cb2ef887c9fb04729318",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-SNIPER-FIRE": {
+      "v": "ada7a6582b1a5eba822caf646866086ac0c7f216ab0619e3d8f26ee78ce752de",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-SOUL-PICKUP": {
+      "v": "1196dd7a0f6c96aebc16849f4ecd03b818f37b25bcdf97ca9ea3f148dec1d825",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-UI-CLICK": {
+      "v": "866518e55657bd43f45c9337ffb76cd31f053dcd55f714d4ebfbfd3b6f1d8fd6",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-UI-ERROR": {
+      "v": "e2842fe9231be590d2d7728a874911a3a9b8fa8980c3b71e841da208943541f7",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-UI-HOVER": {
+      "v": "b1cbb60e9177618f530ac669423e732c441ef5208848d5969c546c19e3670dc0",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-WAVE-CLEAR": {
+      "v": "fbf32782aa48df2abcdda9ae670cc5df9eef25b82669a5608a341f011dbd802c",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-WAVE-START": {
+      "v": "397087af8f62964e2db7fb890d5cb5a5085cb6f0922f9bb3466a9844384ac34d",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-MELEE-IMPACT": {
+      "v": "a1c99afee5391d4747b21aa43463335e405d2312981efe7d78d7a8e757d63a27",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-MELEE-SWING": {
+      "v": "c417069088f333d382f132e65921d7f2ccdb54e6184d40028a4d70c963d65fa6",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-FLASHLIGHT-CHARGE-UP": {
+      "v": "4e264f3375922056a400deea9086539206e5c2b974d0ca0b16d2eb9dd0cce74b",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-FLASHLIGHT-DEPLETED": {
+      "v": "bda3b6411cebda9a4209ac88b8f873c459d7e2afdea0ea4e1ec97b463b06fb90",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-SFX-FLASHLIGHT-LOW-BATTERY": {
+      "v": "619103217d97e6bfa3405eead0d1d96bf2bba3a7187678962d8b7227c15b6c30",
+      "c": "音效",
+      "d": "audio"
+    },
+    "AUD-BGM-WASTELAND": {
+      "v": "c9c37e444acf5d98cf06428443659839b73cbdf22ac1de703d6cdf0c0254e24d",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-BASE-PASSION-A": {
+      "v": "95492e4479f02b4f0a81e8b98169094b038ef54a18f2e3e53a454e60fdca7286",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-BASE-PASSION-B": {
+      "v": "832662bcc04033f040df28ce260c2709a77312e84a4c1f2b2da8f50877c5ee27",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-ROOFTOP-RELAX-A": {
+      "v": "b000a6438f69a63cec3a9349ab311a8cac43e70c78226d2726cd97c513fd0d08",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-ROOFTOP-RELAX-B": {
+      "v": "a690cf952752c9aee91cd1bb6459e1f780314e399b8d2cc7d5b08ab694de4559",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-DESCENT-SUSPENSE-A": {
+      "v": "fc91ee4607ae65b4bf4f040b46ee7e7d009147543d9d0ad74d76762c43d20bcd",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-DESCENT-SUSPENSE-B": {
+      "v": "55e95eceaf03da823ff10fb5430648c8cf3bfc486d9c335b34da92ba5eefb481",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-BOSS-INTENSE-A": {
+      "v": "e13ef150c3246b8a9b1c486efce49b0c947e30be7891e2ae3ac6342133b51590",
+      "c": "音乐",
+      "d": "music"
+    },
+    "AUD-BGM-BOSS-INTENSE-B": {
+      "v": "a18f017e15dd358d9c3ab7133c75b3301867a672c077941baec8dbc4f075cb21",
+      "c": "音乐",
+      "d": "music"
+    },
+    "ENM-BEAST-SPIKESHELL01": {
+      "v": "e48f94a192d7666992c95b01a18c9d6838d04b9ee555e9f232e87e7ffff7ee82",
+      "c": "敌人",
+      "d": "enemies"
+    },
+    "ENV-EXPEDITION-L01-L-CORRIDOR": {
+      "v": "4e270a5eb84914e30fb6d97c44b6da18d5181e1014a55b5bb01608d2c21a76e6",
+      "c": "场景",
+      "d": "scenes"
+    }
+  },
+  "column_digests": {
+    "1": "73fc04192c57802c5b0886ac4007433dcee4fc6c188b6023e4ca7c568061bf78",
+    "2": "0105615c53fa9156efd914d91bdb6aa893e379cac73b446cc53a6d0f1a9d0f92",
+    "3": "7ec9946e658d5b91438be228516bfc7b00d553e2eebb05cda7e0a35ff1a8e4b5",
+    "4": "60121ea48b1c09ffd1a613475c76ebabda2364685bf639df6d32127f158371c1",
+    "5": "86af7cd415061fc36eb0ba8f08b8c5b56e2f9f5bea9da2041bf77dd236435176",
+    "6": "55f57419e97675207012ed578603fcd57410c105076e9b9f02354d11e3f4f3d5",
+    "7": "2c997712326e740503d540c273ab5963e6967de893298f2b21c8d71a2f98593f",
+    "8": "c034bfc43b92b59ddae3a1a9068389d1e008927ac3898755c5d6dcf65e1e2350",
+    "9": "60a77a0f0eed250c0e7732e068d73e2c562505a7fd35efc4656ba34d7ed1e221",
+    "10": "bd1a7368e37f1237440c5ba58f87726531ba0bb0c56da88121d105a69d4a83eb",
+    "11": "5cfdc3e07b18f252d48ae31f38f986d77430b14cbf85b994ec456b66e341fc5e",
+    "12": "4a5bb0ba9d65e65398163d9a089ff04d4358e041a917be9964c71a8dfa6936d3",
+    "13": "7c5218935b1670eca89b5c686634cdb885f6ec7bed5ceaa4fb2a5e7421aa930c",
+    "14": "b1320d58c9eae182c0fcd51b74a9b9c8087bb9903083b0ddf37ca53dcad3a254",
+    "15": "ec1cf5cca07274a91e4b1c8a479bc992fabad9b22dcec1d0e558c7e1b955f3e7",
+    "16": "de5f889ea04d98a34734e36fb9a15a87f52265a4b0bf4dda37d5ba4fb3e18fb8",
+    "17": "2936b7e1f39ae3eac0ac4cc498e0e45078ecac5dc3c0340368b7ce198a66b0a2",
+    "20": "78ae603e2301329f5e8bde4e3fd2d3457c9e18a0d2516b51c0fb48bbdba79185",
+    "21": "ff7f02ab54af17c1aea081bea962fef2a6a8c7933dc632b13bd0ee2aedfaaf99",
+    "22": "0b0484ffde88b15cc9ea7507dbf6c6bdb96fa21aeb6d649dd58ba4eb4f523235",
+    "23": "dd15f65800dec03aa3d3e9256444971032136d524d215e18fe2721aec9c12bae",
+    "24": "806b3d34aaf220441138a3b4b0f42a1254545d09522dc89b4d89c7499a0d7481",
+    "25": "ffaeeae419941041cb43e0aa818fd525806aa0d03e5463d3b93e81aa7eda005d"
+  },
+  "sheet_digests": {
+    "角色组件": "fde07b2eb0b88997799b009adeb26d82daf2081427a92f0b103b26fb1b636253",
+    "动画与状态": "47cc97d561d138b1cd85a70ca057180aabba260afbc94f7d8947401acea17b13",
+    "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
+    "角色中转记录": "822e7cac33d7a67a4e1c3d31848cadc62e11749cb999b8e19f8032499060695d",
+    "3D-角色": "ceaa33a6e9161585e1ccd2037e093d60c4ce00a8bbcebf8fe66ffd26e930fdf2",
+    "敌人动画与状态": "ca3c6b9e5f39351a2b2347da22020a02fe4976bf6c481c748b80d3a706ddb84c",
+    "3D-敌人": "b46116597f4a71d271b9b96a8c6a859d2547d0f86eeb1f8d42922d256a81a7b2",
+    "3D-场景通用": "59c2476a58f5a843efb8298a6152b04e6f3c0db31a867c429cd7fddb94d5494d",
+    "3D-设施": "1dfd2cd7f359a0ebeadaf04c00af843003cf221b9806daf832c6673f9fc25546",
+    "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
+    "3D-道具": "5f8dc97e69ce2fc033f5e870acef6bc0236e454cdf06fa31a96f614d0a970bd8",
+    "3D-物品": "212b1502b45f70f56e7a2bf0c9e68a2e2b8114d8e87a2322953745c048e1d9bc",
+    "3D-武器": "0ed7c67c14253417622d401d958ac8a4ed51e9aba0db25935010ac3811fec21d",
+    "3D-特效": "90f8f00cec8499d54b4222e11bb03e6c971b05fd2d06ff7924702fbf3d453ae4"
+  },
+  "category_counts": {
+    "UI": 16,
+    "场景": 103,
+    "场景道具": 20,
+    "基地资产包": 114,
+    "敌人": 13,
+    "武器": 36,
+    "特效": 16,
+    "角色": 16,
+    "道具": 20,
+    "音乐": 9,
+    "音效": 48
   }
- },
- "column_digests": {
-  "1": "7636a8160a50716b037279cec1a4f4a8a1ab12fa63d7fa4d8ead06cec618cbc5",
-  "2": "aa68c53a37fc9f26823441f71b4b77332bb10117dbbdb11df955600b92dd5787",
-  "3": "b1de697da70f0b179eb05475ad688aae6253de5b8d9202849e8f9a8f42104621",
-  "4": "afb167a0d88a76f19f5d3b7da4deb0dac0069e0e350cdebc3d608a76eb01547b",
-  "5": "cd166def3f92edadc00976a81e0824c5a06733f946c7553ff27a781655b7b507",
-  "6": "9fbe56eade305d63d7545fe8fe06154c54bd231d6011b04bc665d79a5977579e",
-  "7": "6b327efe45aa5892c46174463bbb289020476c750f38dab9aba565acf2e964e9",
-  "8": "78e0bf878923feec7849061930a6c82afe0c3eeedb499e840c7d629a9ca02722",
-  "9": "bee827815400f8fb8bcabcfc3c349f3f1cade69f60da6588e1c691406b9d1498",
-  "10": "affb6be8b8c15cd9ecdc82623892ae518ba6f4344cd168e672c236f5e5f32c15",
-  "11": "7ee69319bf13069e041d6e790a586c1bc51af4759513316d0eb3f8fad413e25e",
-  "12": "4a4530a209e88f126c3be49cf8871648a414aaf85ee67cca5b0c8c548a1a3df8",
-  "13": "a05cc1cf2be4976c1ed4419c4a6e6b8368f1927b7d60525355e11830a66e6bc8",
-  "14": "44cc2b4f9e374efab53020abe444e61007b455c584df6801e0585e5d1d08ce5e",
-  "15": "6f307c78440d48bfc4230a0279c26efac63e11afdb158b65f0f205ea52f087c8",
-  "16": "52a836c33de6ea59b68acb3458f324bbe6c55ffb4b5f15782638f6b5fbfdb50e",
-  "17": "4103a6fcfdb0c0b33cfc5aee2b6c892648c5229ebd840c4b23d1492202997a53",
-  "20": "370b4ff966b4134b8535f61f1bb0cdbf1e437dae6c4a65586bc2c6a7f161bde7",
-  "21": "6ae87145cfaf11c3a8a1b0f841e7c4a2b34d44e8013d78a24dd602c143ef3de9",
-  "22": "0f837ce5162ff279d306eb8bb5bec6d6d07fadd07aad5a767f13b1a34df9bab8",
-  "23": "1ffdf94e9b5fea0f0612158774a7491b5c134ae5344e7aef40ea1d3bf61654d7",
-  "24": "f0548c6020c657acee90399ddf2459154720d9a3826b39eb0f75149063ada621",
-  "25": "cb851c5191510d4d2e7cb5e07f53fa5a4ac97c58165ccaae6bfa8b4bd636b7fa"
- },
- "sheet_digests": {
-  "角色组件": "fde07b2eb0b88997799b009adeb26d82daf2081427a92f0b103b26fb1b636253",
-  "动画与状态": "47cc97d561d138b1cd85a70ca057180aabba260afbc94f7d8947401acea17b13",
-  "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
-  "角色中转记录": "822e7cac33d7a67a4e1c3d31848cadc62e11749cb999b8e19f8032499060695d",
-  "3D-角色": "ceaa33a6e9161585e1ccd2037e093d60c4ce00a8bbcebf8fe66ffd26e930fdf2",
-  "敌人动画与状态": "ca3c6b9e5f39351a2b2347da22020a02fe4976bf6c481c748b80d3a706ddb84c",
-  "3D-敌人": "b46116597f4a71d271b9b96a8c6a859d2547d0f86eeb1f8d42922d256a81a7b2",
-  "3D-场景通用": "89407d37ed8b75505a64e8fc6e67e543f79ec925d40a89d22302322afb5c761c",
-  "3D-设施": "1dfd2cd7f359a0ebeadaf04c00af843003cf221b9806daf832c6673f9fc25546",
-  "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
-  "3D-道具": "5f8dc97e69ce2fc033f5e870acef6bc0236e454cdf06fa31a96f614d0a970bd8",
-  "3D-物品": "212b1502b45f70f56e7a2bf0c9e68a2e2b8114d8e87a2322953745c048e1d9bc",
-  "3D-武器": "0ed7c67c14253417622d401d958ac8a4ed51e9aba0db25935010ac3811fec21d",
-  "3D-特效": "90f8f00cec8499d54b4222e11bb03e6c971b05fd2d06ff7924702fbf3d453ae4"
- },
- "category_counts": {
-  "UI": 16,
-  "场景": 102,
-  "场景道具": 20,
-  "基地资产包": 114,
-  "敌人": 13,
-  "武器": 36,
-  "特效": 16,
-  "角色": 16,
-  "道具": 20,
-  "音乐": 9,
-  "音效": 48
- }
 }

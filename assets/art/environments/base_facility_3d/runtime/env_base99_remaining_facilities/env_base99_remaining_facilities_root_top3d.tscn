@@ -197,6 +197,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.85, 1.63, -4.425)
 [node name="场景特效_光束尘埃粒子" parent="." unique_id=1258450276 instance=ExtResource("42_volumetric_dust_fx")]
 
 [node name="61_仓库防爆吊灯组_资产包" parent="." unique_id=1615478383 instance=ExtResource("43_warehouse_pendant_light_group")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13332176, 1.9192867, 2.6754494)
 
 [node name="57_净水器_资产包" parent="." unique_id=1063207972 instance=ExtResource("44_water_purifier")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08383751, 0, -1.1006985)

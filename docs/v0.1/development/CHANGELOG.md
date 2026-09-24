@@ -1,5 +1,19 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-24｜远征关卡01 设计页补齐
+
+- 新增[远征关卡01 设计](../design/远征关卡01设计.md)：把原先散落在 05.1 §3.0、05.2 §7.4/§7.5、`GameDesignConfig` 与设计源里的本关设计收敛成一份关卡设计页 —— 关卡身份与进入/离开路径、玩法循环（含三条出口语义）、7 房版图与摆位规则、模板与内容池、随机性边界、设计边界、配套资产现状。
+- 明确列出两处**待业主裁决**的席位空缺：Boss 房（竞技场白模与 Boss 房种类美术已产出，版图无席位）与 L 型走廊（已归属本关区块，版图无席位），各自给出代价与选项；未拍板前不改任何设计源。
+- 写明「改这一关的版图必须走 `09-level-plan-authoring`」：先填《新关卡设计表》第一部分，再由技能产出 L1/L2/L3 并跑双判据校验；禁止手改 `floor_00.json`（手填几何量是规范 §1.1 认定的漂移根因）。
+- 不改玩法代码、不改编图数据、不改版本。
+
+## 2026-09-24｜远征01 L 型走廊归属迁移
+
+- 业主裁决 L 型走廊归属远征关卡01：整目录由 `tower_zones/battle/source/room_types/l_corridor/` 迁至 `tower_zones/expedition/source/room_types/l_corridor/`，battle 侧不留副本；资产 ID 由 `ENV-BATTLE-L-CORRIDOR-TYPE` 改为 `ENV-EXPEDITION-L01-L-CORRIDOR`。
+- 随迁统一内部结构与命名：`component_packages_vNNN`→`component_packages`、`facility`→`facilities`、渲染图收进 `renders/`、源改名 `L型走廊种类_数据连廊_<尺寸>m_vNNN.blend`；共享件引用由过期的 `ENV-BATTLE-COMMON-*` 更正为 shared 库现有 `ENV-SHARED-GENERIC-*`。
+- 登记场景账本《资产主表》第242行、《3D-场景通用》第148行、《域变更日志》v0.1.13，并同步无损基线；顺带修正《资产主表》DV 此前未覆盖第241行的遗留。
+- 不动走廊几何、材质、门位与任何玩法代码；未导 GLB、未接 Godot。零代码引用，迁移无运行时风险。详见[独立开发记录](2026-09-24_expedition01_l_corridor_ownership_migration.md)。
+
 ## 2026-09-24｜设计源与技术施工分层纠正
 
 - 更正上一条“设计契约”口径：施工事实不等于未来玩法主设计。新增四份功能设计页，覆盖14个FeatureID，注册表与索引改为先设计、后施工；其余23项保留独立设计待补/待审。

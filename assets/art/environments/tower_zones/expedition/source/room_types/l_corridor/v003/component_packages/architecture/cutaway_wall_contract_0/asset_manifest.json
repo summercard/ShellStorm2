@@ -1,0 +1,32 @@
+{
+  "package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0",
+  "slug": "cutaway_wall_contract_0",
+  "name_zh": "镜头侧墙完整高度基准_0",
+  "category": "architecture",
+  "version": "v003",
+  "source_blend": "L型走廊种类_数据连廊_45x40m_v003.blend",
+  "collection": "镜头侧墙完整高度基准_0_资产包",
+  "objects": [
+    {
+      "name": "11点9米墙体基准.006",
+      "location_m": [
+        15.0,
+        -0.0,
+        5.95
+      ],
+      "dimensions_m": [
+        30.0,
+        0.3,
+        11.9
+      ]
+    }
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "pending Godot assembly"
+}

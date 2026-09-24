@@ -1,0 +1,28 @@
+{
+  "status": "pass",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/l_corridor/v001/L型走廊种类_数据连廊_45x35m_v001.blend",
+  "mesh_objects": 1070,
+  "packages": 88,
+  "floor_tile_packages": 28,
+  "faces_total": 6880,
+  "faces_valid_palette_uv": 6880,
+  "materials": 4,
+  "wall_visual_height_m": 11.9,
+  "wall_logic_height_m": 12,
+  "door_centers_m": [
+    [
+      7.5,
+      10
+    ],
+    [
+      37.5,
+      10
+    ],
+    [
+      37.5,
+      -25
+    ]
+  ],
+  "scope_lock": "new source, no previous asset to compare",
+  "issues": []
+}

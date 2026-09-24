@@ -848,6 +848,17 @@ func _bind_facility_presentation_light_control(starts_on: bool) -> void:
 	art_layout.call("set_presentation_lighting_enabled", starts_on)
 
 
+## 成对常驻开关「此刻是否点着灯」，供 detail 重建时把美术表现恢复到开关的当前状态
+## （不能写死 true）。开关尚未建好、或开关没有受控灯时返回 true，
+## 保持既有「detail 重建默认点亮」的行为。
+func _facility_lights_currently_on() -> bool:
+	for light_switch in _all_room_light_switches():
+		if int(light_switch.get_snapshot().get("controlled_light_count", 0)) == 0:
+			continue
+		return light_switch.is_light_on()
+	return true
+
+
 ## 本房全部墙面开关。FACILITY 返回成对常驻开关；其他房型沿用单开关。
 func _all_room_light_switches() -> Array[RoomLightSwitch3D]:
 	var result: Array[RoomLightSwitch3D] = []
@@ -2823,7 +2834,10 @@ func _build_content() -> void:
 	if size_class != "rooftop" and room_type == "FACILITY":
 		# FACILITY 的开关已随壳体常驻；detail 重建只需把美术灯控
 		# （Art 节点此时已由 _install_facilities 装入）重新绑回开关。
-		_bind_facility_presentation_light_control(true)
+		# 🔴 必须跟随开关的**当前**状态，不能写死 true：开关自身状态在重建前后
+		# 不变 ⇒ _apply_pending_detail_runtime_state 不会发 light_toggled 纠正，
+		# 玩家关灯后离开再回来会看到美术灯（含手摆 OmniLight）自己亮回来。
+		_bind_facility_presentation_light_control(_facility_lights_currently_on())
 		_bind_light_switch_signal()
 	elif size_class != "rooftop":
 		_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
