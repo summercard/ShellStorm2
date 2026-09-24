@@ -1,0 +1,270 @@
+{
+  "schema": "shellstorm2.battle.room_instance_layout",
+  "schema_version": 1,
+  "scene_id": "expedition_01_boss_room",
+  "block_id": "expedition",
+  "display_name_zh": "远征关卡01 · Boss竞技场（故障数据库 50×40）· 专属件摆位源",
+  "level_kind": "procedural_expedition_room",
+  "layout_version": "v002",
+  "scope": "exclusive_only",
+  "scope_note": "本摆位源只登记 6 件专属件。墙体 / L拐角 / 地砖 / 门扇 / 门墙由区块级 5m 通用件组合器 RoomShellLayoutBuilder3D 在运行时按房间尺寸与门位现算（门位随每局 constrained 版图变），不写死在本文件。",
+  "floor_anchor": "远征关卡01 单层（floor_index 0；房间席位由 constrained 版图每局现算）",
+  "source_room_type_manifest": "res://assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/room_type_manifest.json",
+  "component_library": "res://assets/art/environments/tower_zones/expedition/source/common_components/v001/component_catalog.json",
+  "runtime_prefab_root": "res://assets/art/environments/tower_zones/expedition/runtime/common_components",
+  "grid_unit_m": 5.0,
+  "wall_structure_half_thickness_m": 0.15,
+  "visible_wall_height_m": 11.9,
+  "floor_top_m": 0.3,
+  "coordinate_contract": {
+    "axis": "Blender Z-up；X=东、Y=北；Blender(x,y,z) --export_yup--> Godot(x, z, -y)",
+    "runtime_position": "position_m = 该件 GLB 原点（底面中心）在源房间世界系的坐标；房间中心 = 源世界原点",
+    "room_local": "Godot 房间局部 = (bx - cbx, bz, -(by - cby))；cbx/cby = 本文件 rooms[].bounds 中心",
+    "rotation": "rotation_z_deg 为 Blender 绕 Z 旋转；与 Godot rotation.y 同值（同号）。本房 6 件全 0",
+    "origin_contract": "每件 GLB 原点 = 底面中心（XY 居中、底面 z=0）；导出仅平移、不改朝向",
+    "derived_local_position_godot": "instances[].derived_local_position_godot 是 position_m 按上式现算的派生值，仅供审阅与探针比对，不是真源；真源是 position_m。"
+  },
+  "placement_model": "房间先按 constrained 版图定席位与门位 → 5m 通用件组合器出壳体实例 → 本文件 6 件专属件按房间局部坐标叠加。专属件全部 visual_only、包内 0 碰撞，不参与阻挡与导航。",
+  "rooms": [
+    {
+      "room_id": "boss",
+      "name_zh": "Boss竞技场（故障数据库）",
+      "bounds_x_m": [
+        -25.0,
+        25.0
+      ],
+      "bounds_y_m": [
+        -20.0,
+        20.0
+      ],
+      "size_m": [
+        50.0,
+        40.0
+      ],
+      "exclusive_only": true
+    }
+  ],
+  "instances": [
+    {
+      "instance_id": "EXCL_BASE_FLOOR_BASE",
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+      "slot_role": "exclusive_component",
+      "category": "floor",
+      "room_id": "boss",
+      "position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "prefab": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/base_floor_base/base_floor_base_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        50.0,
+        0.26,
+        40.0
+      ],
+      "forward_axis_godot": "+Y",
+      "collision_owner": "TowerFloorStage3D._build_support",
+      "note": "地板_FLOOR_BASE；底面离走行面 0.0m；导出包络 Blender [-25.0, -20.0, 0.0]..[25.0, 20.0, 0.26]",
+      "derived_local_position_godot": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "instance_id": "EXCL_MAIN_FAULT_SCREEN",
+      "component_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+      "slot_role": "exclusive_component",
+      "category": "facilities",
+      "room_id": "boss",
+      "position_m": [
+        1.0,
+        18.7575,
+        3.805
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "prefab": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/main_fault_screen/main_fault_screen_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        21.52,
+        7.09,
+        1.575
+      ],
+      "forward_axis_godot": "+Z",
+      "collision_owner": "none",
+      "note": "主屏_破损数据库；底面离走行面 3.805m；导出包络 Blender [-10.76, -0.7875, 0.0]..[10.76, 0.7875, 7.09]",
+      "derived_local_position_godot": [
+        1.0,
+        3.805,
+        -18.7575
+      ]
+    },
+    {
+      "instance_id": "EXCL_HEAVY_CONDUITS",
+      "component_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+      "slot_role": "exclusive_component",
+      "category": "support",
+      "room_id": "boss",
+      "position_m": [
+        0.4935,
+        1.9818,
+        0.18
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "prefab": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/heavy_conduits/heavy_conduits_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        47.3056,
+        3.6722,
+        32.3036
+      ],
+      "forward_axis_godot": "+Z",
+      "collision_owner": "none",
+      "note": "粗重电线管与桥架；底面离走行面 0.18m；导出包络 Blender [-23.6528, -16.1518, 0.0]..[23.6528, 16.1518, 3.6722]",
+      "derived_local_position_godot": [
+        0.4935,
+        0.18,
+        -1.9818
+      ]
+    },
+    {
+      "instance_id": "EXCL_NORTH_WALL_TYPOGRAPHY",
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+      "slot_role": "exclusive_component",
+      "category": "architecture",
+      "room_id": "boss",
+      "position_m": [
+        -0.2584,
+        19.45,
+        7.4461
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "prefab": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/north_wall_typography/north_wall_typography_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        35.9002,
+        2.3201,
+        0.042
+      ],
+      "forward_axis_godot": "+Z",
+      "collision_owner": "none",
+      "note": "数据库墙面标识；底面离走行面 7.4461m；导出包络 Blender [-17.9501, -0.021, 0.0]..[17.9501, 0.021, 2.3201]",
+      "derived_local_position_godot": [
+        -0.2584,
+        7.4461,
+        -19.45
+      ]
+    },
+    {
+      "instance_id": "EXCL_SOUTH_FLOOR_MARKING",
+      "component_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+      "slot_role": "exclusive_component",
+      "category": "support",
+      "room_id": "boss",
+      "position_m": [
+        2.5,
+        -17.176,
+        0.334
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "prefab": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/south_floor_marking/south_floor_marking_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.6969,
+        0.012,
+        2.7267
+      ],
+      "forward_axis_godot": "+Z",
+      "collision_owner": "none",
+      "note": "入口地砖_标识附件；底面离走行面 0.334m；导出包络 Blender [-1.8484, -1.3633, 0.0]..[1.8484, 1.3633, 0.012]",
+      "derived_local_position_godot": [
+        2.5,
+        0.334,
+        17.176
+      ]
+    },
+    {
+      "instance_id": "EXCL_DEBRIS_00",
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
+      "slot_role": "exclusive_component",
+      "category": "support",
+      "room_id": "boss",
+      "position_m": [
+        -10.9585,
+        15.628,
+        0.3305
+      ],
+      "rotation_z_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "prefab": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/debris_00/debris_00_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.4253,
+        0.2195,
+        1.9883
+      ],
+      "forward_axis_godot": "+Z",
+      "collision_owner": "none",
+      "note": "固定碎屑_00；底面离走行面 0.3305m；导出包络 Blender [-1.2127, -0.9941, 0.0]..[1.2127, 0.9941, 0.2195]",
+      "derived_local_position_godot": [
+        -10.9585,
+        0.3305,
+        -15.628
+      ]
+    }
+  ],
+  "notes": [
+    "base_floor_base 厚 0.26m，房间 manifest 的 floor_top_m = 0.3m，差 0.04m；本轮只登记事实不裁决，落地以 TowerFloorStage3D 支撑顶面为准。",
+    "source_room_type_manifest.ports 记的是来源竞技场的语义门位（南进西出），不是本关版图门位；本关门位由 RoomDoorLane 从邻接几何推，本文件不含门。"
+  ],
+  "validation": {
+    "instance_count": 6,
+    "slot_role_counts": {
+      "exclusive_component": 6
+    },
+    "exclusive_component_ids": [
+      "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+      "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+      "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+      "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+      "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+      "ENV-EXPEDITION-BOSSROOM-DEBRIS-00"
+    ],
+    "room_owned_geometry": false,
+    "non_unit_scale_count": 0,
+    "illegal_rotation_count": 0,
+    "missing_components": [],
+    "centered_export_aabb": true
+  }
+}
