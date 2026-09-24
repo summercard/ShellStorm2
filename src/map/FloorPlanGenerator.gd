@@ -13,6 +13,12 @@ const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
 ## 5m 通用壳体组合器（纯 RefCounted）。第 4 环在这里：本项目**唯一**的
 ## 「房间几何 → 5 类通用件实例清单」实现，设计期 dump 脚本与运行时共用同一份。
 const ROOM_SHELL_LAYOUT_BUILDER := preload("res://src/world3d/RoomShellLayoutBuilder3D.gd")
+## Boss 房 6 件专属件的摆位源（真源）。通用壳体件由组合器按每局现算的几何产出，
+## 这 6 件是**设计死件**：在源竞技场里相对房间中心定死、与版图无关，只有坐标搬运。
+const BOSS_LAYOUT_SOURCE_PATH := (
+	"res://assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/"
+	+ "boss_room_50x40_v002.layout.json"
+)
 
 const MAP_SIZE_M := 250.0
 const CORE_SIZE_M := 65.0
@@ -901,6 +907,12 @@ static func attach_authored_layout_shell(rooms: Array, policy: Dictionary) -> vo
 			)
 		return
 	var instances := result.get("instances", []) as Array
+	# Boss 房专属件摆位源：只有本层真有 Boss 房时才读盘（远征 01 有，塔楼普通层没有）。
+	var boss_layout: Dictionary = {}
+	for value in rooms:
+		if str((value as Dictionary).get("role", "")) == "boss":
+			boss_layout = _load_boss_layout_instances()
+			break
 	for value in rooms:
 		var room := value as Dictionary
 		var key := str(room.get("key", ""))
@@ -920,12 +932,135 @@ static func attach_authored_layout_shell(rooms: Array, policy: Dictionary) -> vo
 			if str(instance.get("slot_role", "")) == "door_leaf_preview":
 				continue
 			filtered.append(instance)
+		# 专属件（Boss 房 6 件）叠加在通用壳体之上：它们**不是落地件**，坐标直接取摆位源。
+		if str(room.get("role", "")) == "boss":
+			filtered.append_array(_boss_room_exclusive_instances(room, boss_layout))
 		room["authored_layout_shell"] = true
 		room["authored_layout_asset_id"] = "EXPEDITION-GENERIC-SHELL-%s" % key.to_upper()
 		room["authored_layout_version"] = "runtime_generated"
 		room["authored_layout_room_id"] = key
 		room["authored_layout_peaceful"] = false
 		room["authored_layout_instances"] = filtered
+
+
+## —— 第 5 环（专属件）：Boss 房 6 件专属件摆位源 ——
+##
+## 与通用壳体件的关键差别：组合器 `build_block()` 的输入契约是「轴对齐矩形 + 四面墙 + 门位」，
+## 且 `to_runtime_instances()` 的 y **硬编码 0.0**，只对**落地件**（墙 / L 角件 / 地砖）成立。
+## 专属件里有**悬空件**（主屏底面 3.805m、北墙标识 7.4461m），塞进组合器会被压回地面，
+## 所以它们走这条独立通路：真源是摆位源 JSON，运行时只做坐标搬运。
+##
+## 坐标换算口径来自摆位源自带的 `coordinate_contract.room_local`：
+## `Godot 房间局部 = (bx − cbx, bz, −(by − cby))`，cbx/cby = 本房 bounds 中心。
+##   · Godot **y 取 bz**（该件底面离走行面的悬空高度）—— 不是 0，这是本函数存在的理由；
+##   · Godot z 取 `−(by − cby)`，与 `RoomShellLayoutBuilder3D` 的 `by = −plan.y` 同源。
+## 输出形状与通用件逐字同构（`{name, component_id, slot_role, position, rotation_y_deg}`），
+## 因此装配层只需多一个 `slot_role` 分支，不需要新的房间级字段。
+static func _load_boss_layout_instances() -> Dictionary:
+	if not FileAccess.file_exists(BOSS_LAYOUT_SOURCE_PATH):
+		push_error("FloorPlanGenerator: Boss 房专属件摆位源缺失 %s" % BOSS_LAYOUT_SOURCE_PATH)
+		return {}
+	var text := FileAccess.get_file_as_string(BOSS_LAYOUT_SOURCE_PATH)
+	if text.is_empty():
+		push_error("FloorPlanGenerator: Boss 房专属件摆位源为空 %s" % BOSS_LAYOUT_SOURCE_PATH)
+		return {}
+	var parsed: Variant = JSON.parse_string(text)
+	if not (parsed is Dictionary):
+		push_error("FloorPlanGenerator: Boss 房专属件摆位源不是 JSON 对象 %s" % BOSS_LAYOUT_SOURCE_PATH)
+		return {}
+	var source := parsed as Dictionary
+	var result: Dictionary = {}
+	for room_value in source.get("rooms", []):
+		if not (room_value is Dictionary):
+			push_error("FloorPlanGenerator: Boss 房摆位源 rooms[] 有条目不是 JSON 对象，已跳过")
+			continue
+		var room := room_value as Dictionary
+		var room_id := str(room.get("room_id", ""))
+		if room_id.is_empty():
+			push_error("FloorPlanGenerator: Boss 房摆位源有房间缺 room_id，已跳过")
+			continue
+		var bounds_x := _vec2(room.get("bounds_x_m", []))
+		var bounds_y := _vec2(room.get("bounds_y_m", []))
+		if is_zero_approx(bounds_x.y - bounds_x.x) or is_zero_approx(bounds_y.y - bounds_y.x):
+			push_error("FloorPlanGenerator: Boss 房摆位源房间 %s 的 bounds 非法" % room_id)
+			continue
+		var cbx := (bounds_x.x + bounds_x.y) * 0.5
+		var cby := (bounds_y.x + bounds_y.y) * 0.5
+		var instances: Array = []
+		for instance_value in source.get("instances", []):
+			if not (instance_value is Dictionary):
+				push_error("FloorPlanGenerator: Boss 房专属件摆位源 instances[] 有条目不是 JSON 对象，已跳过")
+				continue
+			var instance := instance_value as Dictionary
+			if str(instance.get("room_id", "")) != room_id:
+				continue
+			if not bool(instance.get("enabled", true)):
+				continue
+			var raw: Variant = instance.get("position_m", [])
+			if not (raw is Array) or (raw as Array).size() != 3:
+				push_error(
+					"FloorPlanGenerator: Boss 房专属件 %s 的 position_m 不是三元组，已跳过"
+					% str(instance.get("instance_id", ""))
+				)
+				continue
+			var position_m := raw as Array
+			var component_id := str(instance.get("component_id", ""))
+			if component_id.is_empty():
+				push_error(
+					"FloorPlanGenerator: Boss 房专属件 %s 缺 component_id，已跳过"
+					% str(instance.get("instance_id", ""))
+				)
+				continue
+			instances.append({
+				"name": str(instance.get("instance_id", "ExclusiveComponent")),
+				"component_id": component_id,
+				"slot_role": "exclusive_component",
+				"position": Vector3(
+					float(position_m[0]) - cbx,
+					# ⚠️ bz（高度）不是 0：悬空件靠这一项挂在半空。
+					float(position_m[2]),
+					-(float(position_m[1]) - cby)
+				),
+				"rotation_y_deg": float(instance.get("rotation_z_deg", 0.0)),
+			})
+		result[room_id] = {
+			"size": _vec2(room.get("size_m", [])),
+			"instances": instances,
+		}
+	return result
+
+
+## 取某间 Boss 房应叠加的专属件。匹配顺序：`key` → `legacy_room_id` → `room_id`
+##（摆位源的 `room_id` 是**设计源 key**，运行时 key 由 constrained 版图定，两侧不保证同名）。
+##
+## **房型不符直接不挂**：这 6 件的包络跨满 50×40（主屏 21.52m、北墙标识 35.9m），
+## 落到别的尺寸就是穿墙或悬在墙外 —— 与其交出穿墙的壳，不如报错退化成通用壳体。
+static func _boss_room_exclusive_instances(room: Dictionary, boss_layout: Dictionary) -> Array:
+	if boss_layout.is_empty():
+		return []
+	var matched := ""
+	for candidate in [
+		str(room.get("key", "")),
+		str(room.get("legacy_room_id", "")),
+		str(room.get("room_id", "")),
+	]:
+		if not candidate.is_empty() and boss_layout.has(candidate):
+			matched = candidate
+			break
+	if matched.is_empty():
+		return []
+	var entry := boss_layout[matched] as Dictionary
+	var instances := entry.get("instances", []) as Array
+	var want := entry.get("size", Vector2.ZERO) as Vector2
+	var got := room.get("size", Vector2.ZERO) as Vector2
+	if absf(want.x - got.x) > CONSTRAINED_EPS or absf(want.y - got.y) > CONSTRAINED_EPS:
+		push_error(
+			"FloorPlanGenerator: Boss 房 %s 尺寸 %s 与专属件摆位源声明的 %s 不符，%d 件专属件已跳过"
+			% [str(room.get("key", "")), str(got), str(want), instances.size()]
+		)
+		return []
+	return instances.duplicate(true)
+
 
 
 ## 生成器房间表 → `RoomShellLayoutBuilder3D.build_block()` 的区块输入（公开给验收探针，

@@ -69,6 +69,8 @@ const COMBAT_FLOOR_COUNT := 4
 ##      `_commit_floor_bundle()` 的 `plan.boss_floor` 分支；普通层一个都没有。
 ##      若把终止层设到非 boss 层，塔内将没有任何撤离信标 —— 回基地只能靠
 ##      98↔99 楼梯间那扇普通门（`INITIAL_LOOP_GATE_SEAL_ENABLED = false`）。
+##      **远征关卡豁免**：远征的 boss 房是「路上的一战」，不是塔楼的 boss 层 ⇒
+##      `plan.boss_floor` 虽为 true 也不长 BOSS_KILL 信标，只有撤离房里的 STANDARD。
 ##   2. **存档**：`_restore_runtime_world_save_snapshot()` 按 `committed_floor_indices`
 ##      逐层比对 `floor_layout_ids`，旧档若已提交过被砍掉的层会整档恢复失败。
 const DEEPEST_PLANNED_FLOOR := 98
@@ -4482,7 +4484,13 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 	_ensure_floor_generated(floor_index, reason)
 	_last_bundle_room_count = _rooms.size() - before_rooms
 	_last_bundle_corridor_count = _corridor_by_edge.size() - before_corridors
-	if bool(plan.get("boss_floor", false)) and _extraction == null:
+	# ⚠️ 远征豁免：远征关卡的设计源里也有一间 role=="boss" 的房（13 房版主路含 Boss），
+	# 于是 `plan.boss_floor` 会是 true。但远征的终点契约是**撤离房里的 STANDARD 信标**，
+	# 不是塔楼的「Boss 层打完开撤离」。若这里不排除远征，BOSS_KILL 信标会先把
+	# `_extraction` 占住 ⇒ 下面 4492 行的 `is_expedition() and _extraction == null`
+	# 永远为假 ⇒ STANDARD 信标从不生成 ⇒ `has_expedition_extraction()` 恒假
+	# （内置回退 7 房没有 boss 房才不会踩到，13 房数据驱动版必踩）。
+	if not is_expedition() and bool(plan.get("boss_floor", false)) and _extraction == null:
 		var boss_room := _room_by_id.get(str(ids_by_key.get("boss", ""))) as DungeonRoom3D
 		if boss_room != null:
 			_extraction = _create_extraction_beacon(boss_room, "BOSS_KILL", 30.0, true, Vector3.ZERO)

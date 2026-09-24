@@ -1519,6 +1519,7 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	var solid_count := 0
 	var door_wall_count := 0
 	var tile_count := 0
+	var exclusive_count := 0
 	var promoted: Array[String] = []
 	var unresolved: Array[String] = []
 	# 墙件台账（side / 沿墙偏移 / 是否门墙）。**在实例循环里精确采集**，不复扫节点树：
@@ -1566,6 +1567,14 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 			"floor_tile":
 				if _spawn_authored_layout_floor_tile(art_root, instance):
 					tile_count += 1
+				else:
+					unresolved.append(str(instance.get("name", "")))
+			"exclusive_component":
+				# Boss 房专属件（地板底板 / 主屏 / 粗重桥架 / 北墙标识 / 南地标附件 / 碎屑）。
+				# 与前三类的根本差别：坐标是**完整的 Vector3**，y 是设计悬空高度（主屏 3.805m、
+				# 北墙标识 7.4461m），绝不能像落地件那样把 y 归一到 0，否则全砸在地上。
+				if _spawn_authored_layout_exclusive(art_root, instance):
+					exclusive_count += 1
 				else:
 					unresolved.append(str(instance.get("name", "")))
 			_:
@@ -1646,6 +1655,7 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	set_meta("authored_layout_solid_wall_count", solid_count)
 	set_meta("authored_layout_door_wall_count", door_wall_count)
 	set_meta("authored_layout_floor_tile_count", tile_count)
+	set_meta("authored_layout_exclusive_count", exclusive_count)
 	set_meta("authored_layout_promoted_walls", promoted)
 	set_meta("authored_layout_unresolved_instances", unresolved)
 	if not unresolved.is_empty():
@@ -1886,6 +1896,43 @@ func _spawn_authored_layout_floor_tile(art_root: Node3D, instance: Dictionary) -
 	# 承重归 TowerFloorStage3D._build_support()，这里必须把内嵌静态碰撞关掉。
 	_disable_static_collision_descendants(tile)
 	art_root.add_child(tile)
+	return true
+
+
+## 授权**专属件**（Boss 房 6 件：地板底板 / 主屏 / 粗重桥架 / 北墙标识 / 南地标附件 / 碎屑）。
+##
+## 与另外三类（角件 / 墙 / 地砖）的差别只有两条，但两条都必须写死：
+##   ① **y 不归一**：清单给的是完整 Vector3，y = 该件底面离走行面的设计悬空高度
+##      （主屏 3.805m、北墙标识 7.4461m）。前三类走 `to_runtime_instances()`，那里 y 恒 0
+##      只对落地件成立 —— 照抄会把主屏砸到地上。所以这里直接取清单的 position。
+##   ② **朝向独立**：不接 `_authored_wall_direction()`（那是四向墙的语义），只按
+##      rotation_y_deg 原样转，专属件可以出现非 90° 倍数角。
+##
+## shadow 一律不动（沿用 prefab 自带设置）：与 `_spawn_authored_layout_floor_tile()` 同口径，
+## 只有墙体承担 `cast_and_receive` 契约。碰撞按摆位源声明全部 visual_only（
+## `collision_owner: none`，`base_floor_base` 的承重归 `TowerFloorStage3D._build_support()`），
+## 这里显式再关一次内嵌静态碰撞，保证将来某件补了碰撞也不会挡人。
+func _spawn_authored_layout_exclusive(art_root: Node3D, instance: Dictionary) -> bool:
+	var component_id := str(instance.get("component_id", ""))
+	var prefab := _authored_component_prefab(component_id)
+	if prefab == null:
+		push_error(
+			"DungeonRoom3D: 授权布局 %s 没有专属件 %s 的 prefab 映射（实例 %s）"
+			% [room_id, component_id, str(instance.get("name", ""))]
+		)
+		return false
+	var module := prefab.instantiate() as Node3D
+	if module == null:
+		push_error("DungeonRoom3D: 授权专属件实例化失败（%s）" % component_id)
+		return false
+	module.name = str(instance.get("name", "AuthoredExclusive"))
+	module.position = instance.get("position", Vector3.ZERO) as Vector3
+	module.rotation.y = deg_to_rad(float(instance.get("rotation_y_deg", 0.0)))
+	module.set_meta("authored_component_id", component_id)
+	module.set_meta("authored_slot_role", "exclusive_component")
+	module.set_meta("authored_collision_policy", "visual_only")
+	_disable_static_collision_descendants(module)
+	art_root.add_child(module)
 	return true
 
 

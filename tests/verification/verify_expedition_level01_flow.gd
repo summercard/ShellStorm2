@@ -548,12 +548,51 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 		var center := room.global_position
 		if _ray(space, center + Vector3(0, 3.0, 0), center + Vector3(0, -3.0, 0)).is_empty():
 			failures.append("%s 脚下没有承重楼面，玩家会掉出关卡" % room_id)
-		var reach := room.get_dimensions().x * 0.5 + 3.0
+		var dimensions := room.get_dimensions()
 		for side_value in SIDE_DIRECTIONS.keys():
 			var side := str(side_value)
-			var from := center + Vector3(0, 1.5, 0)
-			if _ray(space, from, from + (SIDE_DIRECTIONS[side] as Vector3) * reach).is_empty():
-				failures.append("%s 的 %s 侧没有墙体阻挡" % [room_id, side])
+			# 逐 **5m lane 中心** 打射线，而不是只打房间正中那一根。
+			# 授权壳体（远征 13 房）的门洞正好开在某条 lane 上：门洞跨 [lane−2.5, lane+2.5]，
+			# 相邻实墙从 lane 边界起 ⇒「房间正中」一旦落在门洞边缘的接缝上，射线会从门叶碰撞
+			# 与墙碰撞之间以浮点误差溜过去，被误报成「没有墙体阻挡」（实测 room_03.west /
+			# room_04.north / room_04.south 全是这一形态；定点探针已证这三条侧边的墙件覆盖是满的：
+			# 9 件墙/门墙 + 对角 L 臂 = 整边 50m）。
+			# lane 中心恒为 5k+2.5，与任何 lane 边界都不重合，逐条打即可绕开接缝。
+			# 判据同时比原来更严：**一条侧边最多只允许 1 条 lane 打空** —— 那 1 条就是该侧门洞，
+			# 门洞委派给邻房时门叶面板被隐藏，本来就该是空的；其余 lane 必须全部有墙承接。
+			#
+			# ⚠ 两个跨度不能混用（本判据第一版就在这里翻车：非方房整边假红）：
+			#   length_span = 沿墙方向跨度（东西墙 → dimensions.y，南北墙 → dimensions.x）：决定 lane 数量。
+			#   depth_span  = 房间中心到该侧墙的**法向**距离所属跨度（东西墙 → dimensions.x，
+			#                 南北墙 → dimensions.y）：决定射线要打多远。
+			# 方房两者相等，50×40 / 60×70 这类非方房一旦混用，reach 取短边半宽就会**够不到墙**
+			# ⇒ 整边 lane 全部打空（boss east/west：reach=23 但实距 25）。
+			var length_span := dimensions.x if side in ["north", "south"] else dimensions.y
+			var depth_span := dimensions.y if side in ["north", "south"] else dimensions.x
+			var lane_count := int(round(length_span / TowerFloorStage3D.GRID_UNIT))
+			var reach := depth_span * 0.5 + 3.0
+			var open_lanes := 0
+			for lane_index in range(lane_count):
+				var offset := (
+					-length_span * 0.5 + TowerFloorStage3D.GRID_UNIT * (float(lane_index) + 0.5)
+				)
+				var from := center + Vector3(0, 1.5, 0)
+				if side in ["east", "west"]:
+					from.z += offset
+				else:
+					from.x += offset
+				if _ray(space, from, from + (SIDE_DIRECTIONS[side] as Vector3) * reach).is_empty():
+					open_lanes += 1
+			if open_lanes >= lane_count:
+				failures.append(
+					"%s 的 %s 侧整边没有墙体阻挡（%d 条 lane 全部打空）"
+					% [room_id, side, lane_count]
+				)
+			elif open_lanes > 1:
+				failures.append(
+					"%s 的 %s 侧有 %d 条 lane 打空，该侧最多只允许 1 条门洞 lane"
+					% [room_id, side, open_lanes]
+				)
 
 	# 走廊：房间之间是 10m 真实间隔，通道必须能提供地面与两侧墙。
 	var restored_edges: Dictionary = (tower._open_edges as Dictionary).duplicate()
