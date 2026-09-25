@@ -324,6 +324,13 @@ const ROOM_OWNERSHIP_MAX_LOCAL_Y_M := 2.50
 const SPAWN_POINT_LAYER_ANGLE_STEP := 0.37
 const SPAWN_POINT_LAYER_RADIUS_STEP := 0.17
 const SPAWN_POINT_MIN_RADIUS_SCALE := 0.12
+# 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
+# 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源：
+#   · `_build_spawn_points()` 只从这里取候选落点（凹口方向自然少点，不会再刷到墙外）；
+#   · `contains_world_position()` 额外要求点落在某个真砖格上（凹口不算房内）。
+# 没有地砖清单的房（v007 安全房 / 塔楼程序化房 / 旧房表）两条路都不启用，行为逐字不变。
+const AUTHORED_TILE_HALF_M := 2.5
+const AUTHORED_TILE_HIT_TOLERANCE_M := 0.01
 
 var room_id := "room_00"
 var room_type := "COMBAT"
@@ -394,6 +401,10 @@ var authored_layout_peaceful := false
 ## 本房**初始灯就亮**（不经玩家按开关、不播启动序列）。给「开局第一间房」用 ——
 ## 玩家一睁眼不该是黑的。默认 false = 老行为（只有 STAIR_LOBBY / BOSS 默认亮）。
 var authored_room_light_on := false
+## 区块壳体的**地砖格心**（房间局部坐标，y 恒 0）。由 `_build_spawn_points()` 从
+## `authored_layout_instances` 的 `floor_tile` 提取。空数组 = 本房没有通用壳体清单
+## ⇒ 落点与「是否在房内」两条判据都回退到旧的包围盒口径，行为逐字不变。
+var _authored_tile_cells: Array[Vector3] = []
 
 
 func configure(config: Dictionary) -> void:
@@ -932,12 +943,29 @@ func contains_world_position(
 	var dimensions := get_dimensions()
 	var half_x := maxf(0.0, dimensions.x * 0.5 - ROOM_OWNERSHIP_BOUNDARY_INSET_M)
 	var half_z := maxf(0.0, dimensions.y * 0.5 - ROOM_OWNERSHIP_BOUNDARY_INSET_M)
-	return (
-		absf(local_position.x) < half_x
-		and absf(local_position.z) < half_z
-		and local_position.y >= min_local_y
-		and local_position.y <= max_local_y
-	)
+	if (
+		not (absf(local_position.x) < half_x and absf(local_position.z) < half_z)
+		or local_position.y < min_local_y
+		or local_position.y > max_local_y
+	):
+		return false
+	# 非矩形房：包围盒矩形会连凹口一起判成「房内」，而凹口是房外。额外要求点落在
+	# 某个**真砖格**上。没有地砖清单的房（矩形房 / 程序化房 / v007 安全房）跳过本判据。
+	return _inside_authored_footprint(local_position)
+
+
+## 非矩形房的「真在房内」判据：点必须落在某个已铺地砖的 5m 格内（凹口没有砖）。
+## 没有地砖清单时恒真 —— 旧行为逐字不变。
+func _inside_authored_footprint(local_position: Vector3) -> bool:
+	if _authored_tile_cells.is_empty():
+		return true
+	for cell in _authored_tile_cells:
+		if (
+			absf(local_position.x - cell.x) <= AUTHORED_TILE_HALF_M + AUTHORED_TILE_HIT_TOLERANCE_M
+			and absf(local_position.z - cell.z) <= AUTHORED_TILE_HALF_M + AUTHORED_TILE_HIT_TOLERANCE_M
+		):
+			return true
+	return false
 
 
 func get_nearest_door(player_position: Vector3, max_distance := 3.4) -> Dictionary:
@@ -3417,7 +3445,15 @@ func _build_trigger() -> void:
 	area.body_entered.connect(_on_room_body_entered)
 
 
+## 本房刷怪落点。优先级（2026-09-25 起）：
+##   ① 区块壳体地砖格心 —— 非矩形房（L 形走廊 / U 形数据库 / 工字型桥房）的凹口在摆位
+##      阶段就被 `point_in_polygon` 剔除砖，**没有砖的位置就是房外**，故格心集合天然是
+##      「房内可用点」；旧实现按包围盒椭圆环布点，凹口方向的落点会落在墙里 / 房外 / 邻房。
+##   ② 取不到清单（v007 安全房 / 塔楼程序化房 / 旧房表）时回退**包围盒椭圆环**，
+##      与引入本机制前逐字节一致（矩形房两条路等价）。
 func _build_spawn_points() -> void:
+	enemy_spawn_points.clear()
+	_authored_tile_cells.clear()
 	var dimensions := get_dimensions()
 	var count := (
 		4 if size_class == "tower_cell"
@@ -3426,9 +3462,42 @@ func _build_spawn_points() -> void:
 		else 7 if size_class == "large"
 		else 9
 	)
+	for value in authored_layout_instances:
+		var instance := value as Dictionary
+		if str(instance.get("slot_role", "")) != "floor_tile":
+			continue
+		var cell := instance.get("position", Vector3.ZERO) as Vector3
+		_authored_tile_cells.append(Vector3(cell.x, 0.0, cell.z))
+	if _authored_tile_cells.size() >= count:
+		enemy_spawn_points.assign(_pick_ring_spawn_points(_authored_tile_cells, count))
+		return
 	for index in range(count):
 		var angle := TAU * float(index) / float(count) + _rng.randf_range(-0.24, 0.24)
 		enemy_spawn_points.append(global_position + Vector3(cos(angle) * dimensions.x * 0.23, 0.0, sin(angle) * dimensions.y * 0.23))
+
+
+## 从地砖格心里挑 count 个落点：按极角均分 count 个扇区，每扇区取**离房心最远**的格心。
+## 为什么这样挑：与原「环状等角」同形（怪贴房间外圈出现、彼此不重叠），但候选全部来自
+## 「真有砖」的格 —— 凹口方向没有砖，该扇区自然少一个落点，不会再落到墙外或邻房。
+## 入参是房间局部坐标，返回世界坐标。
+func _pick_ring_spawn_points(cells: Array[Vector3], count: int) -> Array[Vector3]:
+	var chosen: Array[Vector3] = []
+	var chosen_distance: Array[float] = []
+	for _index in range(count):
+		chosen.append(Vector3.ZERO)
+		chosen_distance.append(-1.0)
+	for cell in cells:
+		var angle := atan2(cell.z, cell.x)
+		var sector := clampi(int(floor((angle + PI) / TAU * float(count))), 0, count - 1)
+		var distance := Vector2(cell.x, cell.z).length()
+		if distance > chosen_distance[sector]:
+			chosen_distance[sector] = distance
+			chosen[sector] = cell
+	var result: Array[Vector3] = []
+	for index in range(count):
+		if chosen_distance[index] >= 0.0:
+			result.append(global_position + chosen[index])
+	return result
 
 
 ## 取第 index 个落点 —— 数量超过环形点位时**必须仍然互不重合**。

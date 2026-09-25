@@ -2215,7 +2215,15 @@ func _authored_spawn_waves(room: DungeonRoom3D, floor: int, floor_level: int) ->
 		return []
 	if not GameDesignConfig.is_spawn_plan_authorable_room(room.room_type):
 		return []
-	return _monster_injector.build_waves_from_plan(room.enemy_spawn_plan, floor, floor_level)
+	return _monster_injector.build_waves_from_plan(
+		room.enemy_spawn_plan,
+		floor,
+		floor_level,
+		# 「半钉死」波次的抽取种子：run_seed + 房 id 派生 ⇒ 同一局同一房每次调用结果一致
+		#（补刷兜底重调 `_spawn_room_enemies` 时不会换成另一份编成），不同局 / 不同房则不同。
+		# 逐值固定写法不使用它，故老关卡（99F）行为逐字不变。
+		run_seed + room.room_id.hash()
+	)
 
 
 ## 把已分好的波次提交为本房的刷怪队列，并立刻刷出第一波。

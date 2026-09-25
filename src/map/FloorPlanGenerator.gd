@@ -714,6 +714,15 @@ static func _constrained_slot(
 		"short_edge_locked": short_edge_locked,
 		"rotated_size": _transposed_size(size) if short_edge_locked else Vector2.ZERO,
 		"size": size,
+		# —— 设计源房间级字段（与 `room_from_source` 的出口白名单同名）——
+		# 槽位必须把这四项带到 `_constrained_floor_from`：那里产出的 rooms 会被
+		# `generate_from_level_plan` 经 `room_from_source` 转成运行时房表，按
+		# `content_type` / `boss_content_id` / `enemy_spawn_plan` / `reward_plan` 逐项取用。
+		# 槽位漏带 = 设计源写了也被静默丢弃（2026-09-25 人报「刷怪批次与设计不符」的根因）。
+		"content_type": str(raw.get("content_type", "")),
+		"boss_content_id": str(raw.get("boss_content_id", "")),
+		"enemy_spawn_plan": (raw.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
+		"reward_plan": (raw.get("reward_plan", {}) as Dictionary).duplicate(true),
 	}
 
 
@@ -1132,10 +1141,13 @@ static func _constrained_floor_from(
 			# 转置姿态（同一张模板旋转 90°）由落位阶段定，必须带回房间记录 ——
 			# 校验器 `expected_size_for_rotation` 靠它把转置尺寸认成合法。
 			"rotation_deg": float(placed_room.get("rotation_deg", 0.0)),
-			"content_type": "",
-			"boss_content_id": "",
-			"enemy_spawn_plan": {},
-			"reward_plan": {},
+			# 设计源房间级字段从槽位透传（槽位由 `_constrained_slot` 从 L2 房表带出）。
+			# 口径与 `room_from_source` 的出口白名单一致：本层只搬运、不解释。
+			# 这四项曾被硬写空 ⇒ 设计源即便声明了也被静默丢弃，运行时恒回退公式波次。
+			"content_type": str(slot.get("content_type", "")),
+			"boss_content_id": str(slot.get("boss_content_id", "")),
+			"enemy_spawn_plan": (slot.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
+			"reward_plan": (slot.get("reward_plan", {}) as Dictionary).duplicate(true),
 			"declared_ports": [],
 			"ports": [],
 			"ports_derived": false,

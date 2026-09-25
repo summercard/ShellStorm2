@@ -275,13 +275,25 @@ func _verify_spawn_plan_carried(
 	return errors
 
 
-## 刷怪计划的紧凑签名：`波次数|每波数量,每波数量`。用于比对"填的"与"到的"是否一致。
+## 刷怪计划的紧凑签名：`波次数|每波签名,每波签名`。用于比对"填的"与"到的"是否一致。
+## 两种写法各有签名形态（签名只需**对同一份数据稳定**，不必表达抽取结果）：
+##   · 逐值固定（monsters）→ 该波数量之和（如 `3`）；
+##   · 半钉死（pool）      → `p<种类数下界>-<上界>:<数量下界>-<上界>`（抽前无法定值，用声明区间）。
 func _spawn_plan_signature(plan: Dictionary) -> String:
 	var waves: Array = plan.get("waves", []) as Array
 	var parts: Array[String] = []
 	for wave_value in waves:
+		var wave := wave_value as Dictionary
+		if wave.has("pool"):
+			var kinds := wave.get("kinds", {}) as Dictionary
+			var count := wave.get("count", {}) as Dictionary
+			parts.append("p%d-%d:%d-%d" % [
+				int(kinds.get("min", -1)), int(kinds.get("max", -1)),
+				int(count.get("min", 0)), int(count.get("max", 0)),
+			])
+			continue
 		var wave_total := 0
-		for monster_value in ((wave_value as Dictionary).get("monsters", []) as Array):
+		for monster_value in (wave.get("monsters", []) as Array):
 			wave_total += int((monster_value as Dictionary).get("count", 0))
 		parts.append(str(wave_total))
 	return "%d|%s" % [waves.size(), ",".join(parts)]

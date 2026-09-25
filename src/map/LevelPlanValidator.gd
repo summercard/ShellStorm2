@@ -458,10 +458,13 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 
 
 ## 校验房间级刷怪计划 enemy_spawn_plan。
-## 结构：{"waves": [ {"monsters": [ {"type": "<种类>", "count": <正整数>} ]} ]}
-##   waves 长度        = 波次数
-##   一波内 count 之和 = 该波数量
-##   monsters 列表     = 该波的怪物组成
+## 结构：`{"waves": [ <波次> ]}`；`waves` 长度 = 波次数（**钉死**）。
+## 每波两种写法，**互斥**：
+##   ① 逐值固定：`{"monsters": [ {"type": "<种类>", "count": <正整数>} ]}`
+##   ② 半钉死：  `{"pool": [<种类>...], "kinds": {"min": <n>, "max": <n>},
+##                "count": {"min": <n>, "max": <n>}}`
+##      —— 从 pool 无重复抽 `kinds` 种（缺省 = 全池），总数量落 `count` 区间；
+##         数量下限必须 ≥ `kinds.max`，否则「抽中的每种至少 1 只」兑现不了。
 ## 允许留空/不写（回退全局公式）；但一旦写了就必须完全合法 ——
 ## 运行时的 build_waves_from_plan 对非法输入是「整份丢弃并回退」，
 ## 若不在这里拦住，"写错了"会表现为"没生效"，很难查。
@@ -507,7 +510,21 @@ static func _validate_enemy_spawn_plan(room: Dictionary) -> Array[String]:
 		if not (wave_value is Dictionary):
 			errors.append("enemy_spawn_plan_wave_not_object:%s:%d" % [key, wave_index])
 			continue
-		var raw_monsters: Variant = (wave_value as Dictionary).get("monsters", [])
+		var wave := wave_value as Dictionary
+		# 两种写法互斥：`pool`（半钉死）或 `monsters`（逐值固定）。同时写 = 歧义，
+		# 都不写 = 空波次。运行时按 `has("pool")` 分派，故此处必须与它同判据。
+		var has_pool := wave.has("pool")
+		var has_monsters := wave.has("monsters")
+		if has_pool and has_monsters:
+			errors.append("enemy_spawn_plan_wave_ambiguous:%s:%d" % [key, wave_index])
+			continue
+		if has_pool:
+			total += maxi(0, _validate_pool_wave(key, wave_index, wave, errors))
+			continue
+		if not has_monsters:
+			errors.append("enemy_spawn_plan_wave_empty:%s:%d" % [key, wave_index])
+			continue
+		var raw_monsters: Variant = wave.get("monsters", [])
 		if not (raw_monsters is Array) or (raw_monsters as Array).is_empty():
 			errors.append(
 				"enemy_spawn_plan_wave_monsters_empty:%s:%d" % [key, wave_index]
@@ -550,6 +567,83 @@ static func _validate_enemy_spawn_plan(room: Dictionary) -> Array[String]:
 			"enemy_spawn_plan_total_too_large:%s:%d>%d" % [key, total, SPAWN_PLAN_MAX_TOTAL]
 		)
 	return errors
+
+
+## 校验「半钉死」波次：`pool` + 可选 `kinds{min,max}` + `count{min,max}`。
+## 返回该波的**最坏总数量**（= `count.max`）；返回 0 表示这一波非法（错误已写进 `errors`）。
+##
+## 为什么必须静态拦住：运行时 `_roll_pool_wave` 对非法输入是「整份丢弃并回退」，
+## 放在这里才查得动 —— 否则「池里写了 boss」这种错会表现为「这间房忽然不刷怪了」。
+static func _validate_pool_wave(
+	key: String, wave_index: int, wave: Dictionary, errors: Array[String]
+) -> int:
+	var raw_pool: Variant = wave.get("pool", [])
+	if not (raw_pool is Array) or (raw_pool as Array).is_empty():
+		errors.append("enemy_spawn_plan_pool_empty:%s:%d" % [key, wave_index])
+		return 0
+	var pool := raw_pool as Array
+	for type_value in pool:
+		var type_id := str(type_value)
+		if not MONSTER_INJECTOR.BASE_ENEMY_TYPES.has(type_id):
+			errors.append(
+				"enemy_spawn_plan_unknown_monster:%s:%d:%s" % [key, wave_index, type_id]
+			)
+		elif not MONSTER_INJECTOR.is_authorable_enemy_type(type_id):
+			# 与 monsters 写法同口径：Boss 走独立出场路径，塞进池里会绕过它。
+			errors.append(
+				"enemy_spawn_plan_monster_not_authorable:%s:%d:%s"
+				% [key, wave_index, type_id]
+			)
+	# `kinds` 可选：缺省 = 池里每种都出（等价于 kinds = {池长度, 池长度}）。
+	var kinds_min := pool.size()
+	var kinds_max := pool.size()
+	var raw_kinds: Variant = wave.get("kinds", null)
+	if raw_kinds != null:
+		if not (raw_kinds is Dictionary):
+			errors.append("enemy_spawn_plan_kinds_not_object:%s:%d" % [key, wave_index])
+			return 0
+		var kinds := raw_kinds as Dictionary
+		kinds_min = int(kinds.get("min", pool.size()))
+		kinds_max = int(kinds.get("max", pool.size()))
+		if kinds_min < 1 or kinds_max < kinds_min:
+			errors.append(
+				"enemy_spawn_plan_kinds_invalid:%s:%d:%d-%d"
+				% [key, wave_index, kinds_min, kinds_max]
+			)
+			return 0
+		if kinds_max > pool.size():
+			errors.append(
+				"enemy_spawn_plan_kinds_exceeds_pool:%s:%d:%d>%d"
+				% [key, wave_index, kinds_max, pool.size()]
+			)
+			return 0
+	# `count` 必填：本波**总数量**区间。
+	var raw_count: Variant = wave.get("count", null)
+	if not (raw_count is Dictionary):
+		errors.append("enemy_spawn_plan_count_missing:%s:%d" % [key, wave_index])
+		return 0
+	var count_data := raw_count as Dictionary
+	var count_min := int(count_data.get("min", 0))
+	var count_max := int(count_data.get("max", 0))
+	if count_min <= 0 or count_max < count_min:
+		errors.append(
+			"enemy_spawn_plan_count_invalid:%s:%d:%d-%d"
+			% [key, wave_index, count_min, count_max]
+		)
+		return 0
+	# 总数量至少够「抽中的每一种各 1 只」—— 即不低于 `kinds_max`（缺省 kinds 时 = 池长度）。
+	if count_min < kinds_max:
+		errors.append(
+			"enemy_spawn_plan_count_below_kinds:%s:%d:%d<%d"
+			% [key, wave_index, count_min, kinds_max]
+		)
+		return 0
+	if count_max > SPAWN_PLAN_MAX_PER_WAVE:
+		errors.append(
+			"enemy_spawn_plan_wave_too_large:%s:%d:%d>%d"
+			% [key, wave_index, count_max, SPAWN_PLAN_MAX_PER_WAVE]
+		)
+	return count_max
 
 
 ## 校验房间级统一掉落计划 `reward_plan`（可选字段，04 §22.7 / 05 §11 `reward_slots[]`）。

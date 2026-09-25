@@ -90,41 +90,116 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 	return enemies
 
 ## 设计源覆盖：按关卡设计源给定的波次计划生成敌人。
-## plan 形如 {"waves": [{"monsters": [{"type": "melee_chaser", "count": 2}]}]}，
-## 外层每项 = 一波，monsters 里每项 = 该波的怪物组成与数量。
+## 外层每项 = 一波（**波次数钉死**），每波有两种写法，**互斥**：
+##   ① 逐值固定：`{"monsters": [{"type": "melee_chaser", "count": 2}]}`
+##   ② 半钉死：  `{"pool": ["melee_chaser","ambusher"], "kinds": {"min":1,"max":2},
+##                "count": {"min":2,"max":4}}`
+##      —— 从 pool 抽 `kinds` 种、总数量落 `count` 区间（每局按 `variant_seed` 抽）。
 ##
 ## 只覆盖**编成**（波次数 / 每波数量 / 怪物种类），不覆盖**数值**：每只怪仍走
 ## `_generate_basic_enemy`，因此主题倍率与楼层缩放照常生效，避免设计源与全局数值
 ## 出现两套真源。返回 Array[Array[Dictionary]]（每波一个配置数组）；
 ## 计划缺失或非法时返回空数组，由调用方回退全局公式 —— 绝不产出半截波次。
-func build_waves_from_plan(plan: Dictionary, floor: int, floor_level: int) -> Array:
+func build_waves_from_plan(
+	plan: Dictionary, floor: int, floor_level: int, variant_seed: int = 0
+) -> Array:
 	var waves: Array = []
 	if plan.is_empty():
 		return waves
 	var raw_waves: Variant = plan.get("waves", [])
 	if not (raw_waves is Array) or (raw_waves as Array).is_empty():
 		return waves
+	# 「半钉死」波次的抽取源。**必须是本函数私有的 rng**：本实例的 `_rng` 被
+	# boss / elite / 公式路径共用，若在此消耗，抽取结果会依赖「谁先调用」而无法复现。
+	# 由调用方传入 `variant_seed`（Dungeon3D 传 run_seed + 房 id 派生）⇒ 同局同房恒定、
+	# 不同局/不同房不同。固定写法（monsters）不使用它，故老关卡行为逐字不变。
+	var rng := RandomNumberGenerator.new()
+	rng.seed = variant_seed
 	for wave_value in (raw_waves as Array):
 		if not (wave_value is Dictionary):
 			return []
-		var raw_monsters: Variant = (wave_value as Dictionary).get("monsters", [])
-		if not (raw_monsters is Array) or (raw_monsters as Array).is_empty():
-			return []
+		var wave := wave_value as Dictionary
+		var composition: Array = []
+		if wave.has("pool"):
+			composition = _roll_pool_wave(wave, rng)
+			if composition.is_empty():
+				return []
+		else:
+			var raw_monsters: Variant = wave.get("monsters", [])
+			if not (raw_monsters is Array) or (raw_monsters as Array).is_empty():
+				return []
+			for monster_value in (raw_monsters as Array):
+				if not (monster_value is Dictionary):
+					return []
+				var monster := monster_value as Dictionary
+				var type_id := str(monster.get("type", ""))
+				var count := int(monster.get("count", 0))
+				if not is_authorable_enemy_type(type_id) or count <= 0:
+					return []
+				composition.append({ "type": type_id, "count": count })
 		var batch: Array[Dictionary] = []
-		for monster_value in (raw_monsters as Array):
-			if not (monster_value is Dictionary):
-				return []
-			var monster := monster_value as Dictionary
-			var type_id := str(monster.get("type", ""))
-			var count := int(monster.get("count", 0))
-			if not is_authorable_enemy_type(type_id) or count <= 0:
-				return []
-			for _index in range(count):
-				batch.append(_generate_basic_enemy(type_id, floor, floor_level))
+		for entry_value in composition:
+			var entry := entry_value as Dictionary
+			var entry_type := str(entry.get("type", ""))
+			for _index in range(int(entry.get("count", 0))):
+				batch.append(_generate_basic_enemy(entry_type, floor, floor_level))
 		if batch.is_empty():
 			return []
 		waves.append(batch)
 	return waves
+
+
+## 「半钉死」波次：从 `pool` 里**无重复**抽 `kinds` 种怪，总数量落在 `count` 区间内。
+## 波次数由 `waves` 数组长度**钉死**；种类与数量每局按 rng 抽（同 rng 恒定）。
+## 返回 `Array[{type, count}]`；输入非法返回空数组（调用方按契约整份丢弃）。
+##
+## 分配口径：总数量尽量**均分**给抽中的种类，余数给靠前的种类（每种至少 1 只）。
+## `count.min` 若不小于抽中的种类数，均分必然成立；校验器另在静态层要求
+## `count.min >= kinds.max`，本处的 `maxi` 只是运行时的最后一道兜底。
+func _roll_pool_wave(wave: Dictionary, rng: RandomNumberGenerator) -> Array:
+	var raw_pool: Variant = wave.get("pool", [])
+	if not (raw_pool is Array) or (raw_pool as Array).is_empty():
+		return []
+	var pool: Array[String] = []
+	for type_value in (raw_pool as Array):
+		var type_id := str(type_value)
+		if not is_authorable_enemy_type(type_id):
+			return []
+		pool.append(type_id)
+	var kinds_min := pool.size()
+	var kinds_max := pool.size()
+	var raw_kinds: Variant = wave.get("kinds", {})
+	if raw_kinds is Dictionary:
+		kinds_min = int((raw_kinds as Dictionary).get("min", pool.size()))
+		kinds_max = int((raw_kinds as Dictionary).get("max", pool.size()))
+	kinds_min = clampi(kinds_min, 1, pool.size())
+	kinds_max = clampi(kinds_max, kinds_min, pool.size())
+	var raw_count: Variant = wave.get("count", null)
+	if not (raw_count is Dictionary):
+		return []
+	var count_data := raw_count as Dictionary
+	var count_min := int(count_data.get("min", 0))
+	var count_max := int(count_data.get("max", 0))
+	if count_min <= 0 or count_max < count_min:
+		return []
+	# 抽种类：先洗牌 pool，再取前 kind_count 个（等价于无重复抽样）。
+	var shuffled := pool.duplicate() as Array[String]
+	for index in range(shuffled.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var held := shuffled[index]
+		shuffled[index] = shuffled[swap_index]
+		shuffled[swap_index] = held
+	var kind_count := rng.randi_range(kinds_min, kinds_max)
+	var total := maxi(rng.randi_range(count_min, count_max), kind_count)
+	var base := int(total / kind_count)
+	var remainder := total % kind_count
+	var out: Array = []
+	for index in range(kind_count):
+		out.append({
+			"type": shuffled[index],
+			"count": base + (1 if index < remainder else 0),
+		})
+	return out
 
 
 ## 该怪物种类能否由设计源直接指定。Boss 不在内：Boss 房有自己的出场/结算路径，

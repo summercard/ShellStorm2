@@ -48,7 +48,16 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "COMBAT",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["melee_chaser", "ambusher"],
+            "kinds": { "min": 1, "max": 1 },
+            "count": { "min": 2, "max": 4 }
+          }
+        ]
+      }
     },
     {
       "key": "room_02",
@@ -68,7 +77,16 @@
         30.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "SCAVENGE",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["melee_chaser", "ranged_caster", "ambusher"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 2, "max": 4 }
+          }
+        ]
+      }
     },
     {
       "key": "room_03",
@@ -88,7 +106,21 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "COMBAT",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["melee_chaser", "ranged_caster", "ambusher"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 3, "max": 5 }
+          },
+          {
+            "pool": ["shielded", "ranged_caster", "summoner"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 3, "max": 5 }
+          }
+        ]
+      }
     },
     {
       "key": "room_04",
@@ -108,7 +140,21 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "COMBAT",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["ambusher", "exploder", "melee_chaser"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 3, "max": 5 }
+          },
+          {
+            "pool": ["melee_chaser", "ambusher"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 3, "max": 5 }
+          }
+        ]
+      }
     },
     {
       "key": "room_05",
@@ -128,7 +174,21 @@
         60.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "COMBAT",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["shielded", "ranged_caster", "melee_chaser"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 3, "max": 5 }
+          },
+          {
+            "pool": ["summoner", "melee_chaser", "exploder", "ranged_caster"],
+            "kinds": { "min": 2, "max": 3 },
+            "count": { "min": 5, "max": 8 }
+          }
+        ]
+      }
     },
     {
       "key": "room_06",
@@ -148,7 +208,16 @@
         30.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "SCAVENGE",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["melee_chaser", "ambusher", "ranged_caster"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 2, "max": 4 }
+          }
+        ]
+      }
     },
     {
       "key": "room_07",
@@ -168,7 +237,16 @@
         25.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "STORAGE",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["shielded", "melee_chaser", "ambusher"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 2, "max": 4 }
+          }
+        ]
+      }
     },
     {
       "key": "room_08",
@@ -188,7 +266,21 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "COMBAT",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["ranged_caster", "melee_chaser", "ambusher"],
+            "kinds": { "min": 2, "max": 3 },
+            "count": { "min": 5, "max": 7 }
+          },
+          {
+            "pool": ["ambusher", "exploder", "shielded"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 3, "max": 5 }
+          }
+        ]
+      }
     },
     {
       "key": "room_09",
@@ -208,7 +300,7 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "EVENT"
     },
     {
       "key": "room_10",
@@ -228,7 +320,16 @@
         30.0
       ],
       "template_rotation_deg": 0,
-      "content_type": ""
+      "content_type": "SCAVENGE",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "pool": ["melee_chaser", "ranged_caster", "shielded"],
+            "kinds": { "min": 1, "max": 2 },
+            "count": { "min": 3, "max": 5 }
+          }
+        ]
+      }
     },
     {
       "key": "boss",
