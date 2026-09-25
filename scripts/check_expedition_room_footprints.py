@@ -23,6 +23,9 @@
   4. sunken_pit（若声明）：rect_m 在包围盒内、size_m 与 rect_m 一致、depth_m > 0。
   5. bridge_span（若声明）：rect_m 在包围盒内、被 sunken_pit 的 rect_m 覆盖、
      width_m == 跨矩形的**窄边**宽、跨向与坑长轴同向且与坑同长。
+     ⚠ 坑为**正方形**（两轴等长）时无「长轴」可言 ⇒ 只要求桥长边 == 坑边长、
+     桥可沿任一轴跨 —— 工字型通道桥（30×60）正是「中间整段 30×30 下沉区
+     ＋ 中央 10×30 跨桥」，桥把正方形坑分成东西两半。
   6. 取向唯一表达（跨模板）：**任何模板都不许声明 `axis_pose_of`**。转置姿态只用
      `template_rotation_deg: 90` 表达（业主裁定 2026-09-25「不要两批代号」，见 05.2 §3.4）
      —— 同一间房在模板目录里只许有一个 id。
@@ -393,23 +396,34 @@ def check_template(name: str, template: dict, errors: list[str], warnings: list[
                             f"{narrow}（x 跨 {sx_span} / y 跨 {sy_span}）"
                         )
                     # 跨向必须与坑的长轴同向，且与坑同长（桥横跨整个坑顶）。
+                    # ⚠ 例外：坑为**正方形**（两轴等长）时没有「长轴」可言，桥可沿任一轴跨 ——
+                    #   工字型通道桥（30×60）正是「中间整段 30×30 下沉区 + 中央 10×30 跨桥」，
+                    #   桥把正方形坑分成东西两半。此时只要求桥的长边 == 坑的边长。
                     span_long_x = sx_span >= sy_span
                     pit_x_span = float(xr[1]) - float(xr[0])
                     pit_y_span = float(yr[1]) - float(yr[0])
-                    pit_long_x = pit_x_span >= pit_y_span
-                    if span_long_x != pit_long_x:
-                        errors.append(
-                            f"{name}: bridge_span 的跨向必须与 sunken_pit 的长轴同向"
-                            f"（跨 x 跨 {sx_span}/y 跨 {sy_span}，"
-                            f"坑 x 跨 {pit_x_span}/y 跨 {pit_y_span}）"
-                        )
-                    else:
-                        pit_long = pit_x_span if pit_long_x else pit_y_span
-                        if not _close(max(sx_span, sy_span), pit_long):
+                    if _close(pit_x_span, pit_y_span):
+                        if not _close(max(sx_span, sy_span), pit_x_span):
                             errors.append(
                                 f"{name}: bridge_span 长边 {max(sx_span, sy_span)} "
-                                f"必须与坑同长 {pit_long}"
+                                f"必须与正方形坑的边长 {pit_x_span} 相等"
+                                f"（坑两轴等长 {pit_x_span}×{pit_y_span}，桥可沿任一轴跨）"
                             )
+                    else:
+                        pit_long_x = pit_x_span >= pit_y_span
+                        if span_long_x != pit_long_x:
+                            errors.append(
+                                f"{name}: bridge_span 的跨向必须与 sunken_pit 的长轴同向"
+                                f"（跨 x 跨 {sx_span}/y 跨 {sy_span}，"
+                                f"坑 x 跨 {pit_x_span}/y 跨 {pit_y_span}）"
+                            )
+                        else:
+                            pit_long = pit_x_span if pit_long_x else pit_y_span
+                            if not _close(max(sx_span, sy_span), pit_long):
+                                errors.append(
+                                    f"{name}: bridge_span 长边 {max(sx_span, sy_span)} "
+                                    f"必须与坑同长 {pit_long}"
+                                )
     return report
 
 

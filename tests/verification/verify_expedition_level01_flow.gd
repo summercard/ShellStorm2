@@ -8,8 +8,8 @@ extends Node
 ##      并把关卡路径指向远征关卡场景（本场景不入树，避免 headless 直接切场景）；
 ##   4) 远征关卡场景：单层、独立区块 Blocks/Expedition、无天台/基地/楼梯/电梯，
 ##      且场景本身**不继承塔楼关卡场景**（只搭公共关卡基座 Dungeon3D.tscn）；
-##   5) 版图（数据驱动 13 房）：入口安全屋 15×15（v007 双门美术）+ 主路 room_01…room_06
-##      + Boss 房 + 撤离房 + 4 间支线房；内容房尺寸按种子从 8 个房型模板里抽，每局变；
+##   5) 版图（数据驱动 13 房）：入口安全屋 15×15（v007 双门美术）+ 主路 room_01…room_10
+##      + Boss 房 + 撤离房（13 房一线到底，支线已取消）；内容房尺寸按种子从 8 个房型模板里抽，每局变；
 ##   6) 内容池按种子洗牌（10 间内容房吃 10 项内容池，必含战斗房与可搜索房）；
 ##   7) 玩法接线：刷怪、搜索容器、过门命运卡三选一、终点 STANDARD 撤离信标；
 ##   8) 门策略：入口门免费通行；01 之后的门恢复清房/钥匙/命运卡；
@@ -50,45 +50,42 @@ const BUILTIN_ROOM_TYPE_POOL: Array[String] = ["COMBAT", "COMBAT", "SCAVENGE", "
 # 不能钉死某一间的尺寸（见设计页 §4.6）。
 const PLAN_MAIN_ROOM_IDS: Array[String] = [
 	"room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
+	"room_07", "room_08", "room_09", "room_10",
 ]
-## 13 房全集（含入口 start / Boss / 撤离 / 4 间支线）。比对时按**排序后的集合**比：
-## constrained 生成器把支线紧跟父房插入（实测顺序 start, room_01, room_02, branch_01, …），
-## 而生成失败回退到 L2 样例时是文件序 ⇒ 顺序不是契约，集合才是。
+## 13 房全集（入口 start + 主路 room_01…room_10 + Boss + 撤离；支线已取消）。
+## 比对时按**排序后的集合**比：constrained 生成器按拓扑顺序插入房间
+## （实测顺序 start, room_01, room_02, …），而生成失败回退到 L2 样例时是文件序
+## ⇒ 顺序不是契约，集合才是。
 const PLAN_ROOM_IDS: Array[String] = [
 	"start", "room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
-	"boss", "extraction", "branch_01", "branch_02", "branch_03", "branch_04",
+	"room_07", "room_08", "room_09", "room_10", "boss", "extraction",
 ]
-## 内容房 = 吃 content_type_pool 的 10 间（主路 6 + 支线 4）；入口 / Boss / 撤离房不参与。
+## 内容房 = 吃 content_type_pool 的 10 间（全部在主路 room_01…room_10）；
+## 入口 / Boss / 撤离房不参与。
 const PLAN_CONTENT_ROOM_IDS: Array[String] = [
 	"room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
-	"branch_01", "branch_02", "branch_03", "branch_04",
+	"room_07", "room_08", "room_09", "room_10",
 ]
 ## 内容池 10 项（5 战斗 + 3 搜刮 + 1 储藏 + 1 事件），与 10 间内容房一一对应。
 const PLAN_CONTENT_TYPE_POOL: Array[String] = [
 	"COMBAT", "COMBAT", "COMBAT", "COMBAT", "COMBAT",
 	"SCAVENGE", "SCAVENGE", "SCAVENGE", "STORAGE", "EVENT",
 ]
-## 4 条支线的挂法（由 L2 的 parent_key 决定；运行时不校验，但改了就是改设计意图）。
-const PLAN_BRANCH_PARENT := {
-	"branch_01": "room_02",
-	"branch_02": "room_03",
-	"branch_03": "room_04",
-	## room_05 是通道桥房：桥中央下沉坑、坑顶横桥 ⇒ 门只能开在桥跨向两端墙（短边），
-	## 最多 2 条连接且必须同轴 ⇒ **不能挂支线**。故 branch_04 移到 room_06（业主裁定 2026-09-25）。
-	"branch_04": "room_06",
-}
-## 撤离房挂在 Boss 之后（主路 01—06 → boss → extraction），**不是**挂在最后一间主路房上。
+## 支线已于 2026-09-25 裁定取消：主路 13 房一线到底，不含任何 branch 房。
+## 撤离房挂在 Boss 之后（主路 01—10 → boss → extraction），**不是**挂在最后一间主路房上。
 const PLAN_EXTRACTION_PARENT := "boss"
-## 8 个房型模板的尺寸集合（含桥房转置姿态的占位 50×60）：constrained 下内容房的尺寸必在其中
-## （哪间取哪寸每局变）。注意 50×60 是 `bridge_60x50` 旋转 90° 后的占位，**不是**第二个模板 id
+## 8 个房型模板的尺寸集合（含桥房转置姿态的占位 60×30）：constrained 下内容房的尺寸必在其中
+## （哪间取哪寸每局变）。注意 60×30 是 `bridge_60x50` 旋转 90° 后的占位，**不是**第二个模板 id
 ## —— 转置只靠 `template_rotation_deg: 90` 表达（业主裁定 2026-09-25，见 05.2 §3.4）。
+## 缩尺口径（2026-09-25，按设计页 §3.1.1 / §3.4 实跑）：db_70x50 → 40×30、
+## office_60x70 → 30×40；通道桥房 → 30×60 工字型（坑沿 y 跨 ⇒ 本体 30×60、转置 60×30）。
 const PLAN_TEMPLATE_SIZES: Array[Vector2] = [
 	Vector2(15.0, 15.0),  # safe_15x15（入口）
 	Vector2(45.0, 40.0),  # corridor_45x40
-	Vector2(70.0, 50.0),  # db_70x50
-	Vector2(60.0, 70.0),  # office_60x70
-	Vector2(60.0, 50.0),  # bridge_60x50（通道桥房本体，长轴沿 x）
-	Vector2(50.0, 60.0),  # bridge_60x50 旋转 90°（同一模板的转置姿态，长轴沿 y）
+	Vector2(40.0, 30.0),  # db_70x50（缩尺后 40×30）
+	Vector2(30.0, 40.0),  # office_60x70（缩尺后 30×40）
+	Vector2(30.0, 60.0),  # bridge_60x50（通道桥房本体，工字型，坑沿 y 跨）
+	Vector2(60.0, 30.0),  # bridge_60x50 旋转 90°（同一模板的转置姿态，坑沿 x 跨）
 	Vector2(50.0, 40.0),  # boss_50x40（Boss 房固定）
 	Vector2(25.0, 25.0),  # extraction_25x25 / std_25x25
 ]
@@ -593,7 +590,7 @@ func _verify_level_enclosure(tower: TowerDescent3D, failures: Array[String]) -> 
 ## 为什么不再按「包围盒整边遍历 lane」判（本判据第一版就栽在这里）：
 ## 轮廓房（`corridor_45x40` 的 L/U 形、`db_70x50` 的凹凸形）在**同一侧有多条平行边界段**，
 ## 凹口所在的那两条 lane 本来就没有墙（凹口是房间以外的空地），按整边遍历必然把它们
-## 算成「打空」，于是 branch_01.west 被误报「2 条 lane 打空」。
+## 算成「打空」，于是轮廓房的某个侧面被误报「2 条 lane 打空」。
 ##
 ## 现在的判据不问轮廓、只问**房间里到底有什么**：
 ##   ① 取本房自己的地砖（`authored_layout_instances` 里 `slot_role == floor_tile`）。
@@ -659,7 +656,7 @@ func _verify_room_shell_seal(
 ##   length_span = 沿墙方向跨度（东西墙 → dimensions.y，南北墙 → dimensions.x）：决定 lane 数量。
 ##   depth_span  = 房间中心到该侧墙的**法向**距离所属跨度（东西墙 → dimensions.x，
 ##                 南北墙 → dimensions.y）：决定射线要打多远。
-## 方房两者相等，50×40 / 60×70 这类非方房一旦混用，reach 取短边半宽就会**够不到墙**
+## 方房两者相等，50×40 / 45×40 这类非方房一旦混用，reach 取短边半宽就会**够不到墙**
 ## ⇒ 整边 lane 全部打空（boss east/west：reach=23 但实距 25）。
 func _verify_room_shell_seal_rect(
 	space: PhysicsDirectSpaceState3D, room: DungeonRoom3D, room_id: String,
@@ -749,7 +746,7 @@ func _ray(space: PhysicsDirectSpaceState3D, from: Vector3, to: Vector3) -> Dicti
 
 
 func _verify_expedition_rooms(tower: TowerDescent3D, failures: Array[String]) -> void:
-	# 房间清单按**排序后的集合**比：constrained 生成路径把支线紧跟父房插入，
+	# 房间清单按**排序后的集合**比：constrained 生成路径按拓扑顺序插入房间，
 	# 与「生成失败回退样例」的文件序不同 ⇒ 顺序不是契约（见 PLAN_ROOM_IDS 注释）。
 	var ids: Array[String] = []
 	for value in tower.get_expedition_room_ids():
@@ -825,31 +822,25 @@ func _verify_expedition_plan(tower: TowerDescent3D, failures: Array[String]) -> 
 		failures.append("远征关卡 constrained 生成回退到了 L2 样例（随机化失效）")
 	if str(plan.get("terminal_mode", "")) != "extraction_room":
 		failures.append("远征关卡终局模式不是撤离房：%s" % str(plan.get("terminal_mode", "")))
-	# 主路 01—06（数据驱动路径）。内置回退路径是 01—05，那份期望值由种子扫描单独守。
+	# 主路 01—10（数据驱动路径）。内置回退路径是 01—05，那份期望值由种子扫描单独守。
 	var main_keys := plan.get("main_path_keys", []) as Array
 	var expected_main: Array = PLAN_MAIN_ROOM_IDS.duplicate()
 	if main_keys != expected_main:
-		failures.append("远征关卡主通道不是 01—06 号房：%s" % [main_keys])
-	# 拓扑计数：10 间内容房（主路 6 + 支线 4）、4 条顶级支线、4 间支线房。
+		failures.append("远征关卡主通道不是 01—10 号房：%s" % [main_keys])
+	# 拓扑计数：10 间内容房（全部在主路 room_01…room_10）、支线已取消（0 条）。
 	if int(plan.get("content_room_count", -1)) != PLAN_CONTENT_ROOM_IDS.size():
 		failures.append("远征关卡内容房不是 10 间：%d" % int(plan.get("content_room_count", -1)))
-	if int(plan.get("branch_count", -1)) != PLAN_BRANCH_PARENT.size():
-		failures.append("远征关卡顶级支线不是 4 条：%d" % int(plan.get("branch_count", -1)))
-	if int(plan.get("branch_room_count", -1)) != PLAN_BRANCH_PARENT.size():
-		failures.append("远征关卡支线房不是 4 间：%d" % int(plan.get("branch_room_count", -1)))
-	# 支线挂法与撤离房父房：都是拓扑，不随种子变。
+	if int(plan.get("branch_count", -1)) != 0:
+		failures.append("远征关卡支线已取消，顶级支线应为 0 条：%d" % int(plan.get("branch_count", -1)))
+	if int(plan.get("branch_room_count", -1)) != 0:
+		failures.append("远征关卡支线已取消，支线房应为 0 间：%d" % int(plan.get("branch_room_count", -1)))
+	# 撤离房父房：是拓扑，不随种子变。
 	for room_value in plan.get("rooms", []):
 		var spec := room_value as Dictionary
 		var key := str(spec.get("key", ""))
-		if PLAN_BRANCH_PARENT.has(key):
-			var expected_parent := str(PLAN_BRANCH_PARENT[key])
-			if str(spec.get("parent_key", "")) != expected_parent:
-				failures.append("支线 %s 应挂 %s，实际挂 %s" % [
-					key, expected_parent, str(spec.get("parent_key", "")),
-				])
 		if key != "extraction":
 			continue
-		# 撤离房必须挂在 Boss 之后 —— 主路最后一间是 room_06，Boss 才是它的父房。
+		# 撤离房必须挂在 Boss 之后 —— 主路最后一间是 room_10，Boss 才是它的父房。
 		if str(spec.get("parent_key", "")) != PLAN_EXTRACTION_PARENT:
 			failures.append("撤离房父房不是 %s：%s" % [
 				PLAN_EXTRACTION_PARENT, str(spec.get("parent_key", "")),
@@ -1021,7 +1012,7 @@ func _verify_door_policies(tower: TowerDescent3D, failures: Array[String]) -> vo
 	for key in ["requires_clear", "requires_key", "triggers_fate"]:
 		if bool(entry_policy.get(key, true)):
 			failures.append("安全屋→01 号房入口门应为免费通行：%s" % entry_policy)
-	# 01 之后恢复默认清房 / 钥匙 / 命运卡（含 room_05→room_06 这一段）。
+	# 01 之后恢复默认清房 / 钥匙 / 命运卡（含通道桥房 room_05→room_06 这一段）。
 	for edge_index in range(PLAN_MAIN_ROOM_IDS.size() - 1):
 		var from_id := PLAN_MAIN_ROOM_IDS[edge_index]
 		var to_id := PLAN_MAIN_ROOM_IDS[edge_index + 1]
@@ -1315,7 +1306,7 @@ func _report(failures: Array[String]) -> void:
 			"EXPEDITION_LEVEL01_FLOW_OK: "
 			+ "catalog->menu->loading->expedition, single layer, Blocks/Expedition only "
 			+ "(scene is structurally independent of TowerDescent3D.tscn), "
-			+ "13 rooms (entry + room_01..06 + boss + extraction + branch_01..04, "
+			+ "13 rooms (entry + room_01..10 + boss + extraction, "
 			+ "constrained per-seed room types), 15x15 v007 safe room with 2 perpendicular doors, "
 			+ "enemy spawn, searchable containers, door fate 3-choice, free entry gate, "
 			+ "STANDARD extraction beacon, abort-return-to-base contract, default tower unchanged"

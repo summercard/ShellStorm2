@@ -2,7 +2,7 @@
 """自测：check_expedition_room_footprints.py 必须真的会对「轮廓 / 多层几何 / 取向唯一表达 /
 level_plan 契约」不一致报红。
 
-一个对照组 + 11 类不一致，每类各报红一次。用真实模板目录的**临时副本**改坏，
+一个对照组 + 12 类不一致，每类各报红一次。用真实模板目录的**临时副本**改坏，
 仓库文件只读（自测绝不改真源）。
 """
 import json
@@ -46,10 +46,10 @@ def noop(_work: Path) -> None:
 assert run(noop) == 0, "原样模板被误判为不一致"
 
 
-# 1｜顶点掉出 5 m 网格
+# 1｜顶点掉出 5 m 网格（1 号顶点落在轮廓内，但 x=12 不在 5 m 网格上）
 def break_grid(work: Path) -> None:
     def edit(data):
-        data["variant_footprints"]["db_01"]["vertices_m"][3] = [42, 40]
+        data["variant_footprints"]["db_01"]["vertices_m"][1] = [12, 0]
 
     patch(work / DB, edit)
 
@@ -57,11 +57,11 @@ def break_grid(work: Path) -> None:
 assert run(break_grid) == 1, "1 类（顶点不在 5 m 网格）没有报红"
 
 
-# 2｜轮廓自交（南中段外凸的两个顶点前后颠倒 ⇒ 边穿越）
+# 2｜轮廓自交（尺寸仍是 40×30，但 v3→v4 竖边拉到 x=20 ⇒ 与 y=25 的横边交叉）
 def break_self_intersect(work: Path) -> None:
     def edit(data):
         data["variant_footprints"]["db_01"]["vertices_m"] = [
-            [0, 0], [70, 0], [70, 40], [45, 50], [45, 40], [25, 50], [25, 40], [0, 40],
+            [0, 0], [40, 0], [40, 30], [20, 30], [20, 10], [30, 10], [30, 25], [0, 25],
         ]
 
     patch(work / DB, edit)
@@ -115,11 +115,11 @@ assert run(break_pit_accessible) == 1, "6 类（下层可达）没有报红"
 
 
 # 7｜openable_walls 声明的某向在轮廓上没有任何可开槽
-#    南边界只留 x∈[0,5]，与最西槽区间 [5,10] 恰好不重叠；包围盒仍 = size_m。
+#    南边界只留 x∈[0,5]，与最西槽区间 [5,10] 恰好不重叠；包围盒仍 = size_m（40×30）。
 def break_no_openable(work: Path) -> None:
     def edit(data):
         data["variant_footprints"]["db_01"]["vertices_m"] = [
-            [0, 0], [70, 0], [70, 40], [5, 40], [5, 50], [0, 50],
+            [0, 0], [40, 0], [40, 25], [5, 25], [5, 30], [0, 30],
         ]
 
     patch(work / DB, edit)
@@ -185,4 +185,15 @@ def break_unregistered_template(work: Path) -> None:
 
 assert run(break_unregistered_template) == 1, "11 类（room_templates 未登记模板文件）没有报红"
 
-print("EXPEDITION_FOOTPRINT_CHECKER_OK: 对照 + 11 类不一致均按预期判定")
+# 12｜正方形坑（工字型桥房 30×30 下沉区）上，桥长边必须等于坑边长
+#     坑两轴等长 ⇒ 无「长轴」可言、桥可沿任一轴跨；但桥长边 25 ≠ 坑边 30 仍必须报红。
+def break_square_pit_bridge_short(work: Path) -> None:
+    def edit(data):
+        data["bridge_span"]["rect_m"]["y"] = [15.0, 40.0]
+
+    patch(work / BRIDGE, edit)
+
+
+assert run(break_square_pit_bridge_short) == 1, "12 类（正方形坑上桥长边 ≠ 坑边长）没有报红"
+
+print("EXPEDITION_FOOTPRINT_CHECKER_OK: 对照 + 12 类不一致均按预期判定")

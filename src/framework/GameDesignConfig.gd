@@ -24,8 +24,8 @@ const EXPEDITION_LEVELS: Array[Dictionary] = [
 		"run_id": "expedition_01",
 		"display_name": "远征关卡01",
 		"setting_name": "远征前哨站",
-		"subtitle": "单层独立行动 · 入口安全屋 → 01—05 号房 → 撤离点",
-		"objective_line": "肃清 01—05 号房，穿过命运之门，抵达终点撤离点。",
+		"subtitle": "单层独立行动 · 入口安全屋 → 01—10 号房 → 撤离点",
+		"objective_line": "肃清 01—10 号房，穿过命运之门，抵达终点撤离点。",
 		"scene_3d": "res://scenes/ExpeditionLevel01_3D.tscn",
 	},
 	{

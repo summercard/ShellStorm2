@@ -6,9 +6,8 @@
 ## 也就是说「区块级探针」天生看不到它。没有本探针，这层几何写错了整层照样绿。
 ##
 ## ⚠ **两种取向都必须测**：桥房只有**一张模板** `bridge_60x50`，取向是同一张模板的两种旋转 ——
-## `0°` 本体（桥沿 x 跨）／`90°` 转置（桥沿 z 跨，占位 50×60）。
-## 生成器按连接方向自动选姿态，实测 324 种子 391 个桥房实例里 235 个是转置姿态
-## ⇒ 只测本体等于漏掉 60% 的实例。
+## `0°` 本体 30×60 工字型（桥沿 z 跨）／`90°` 转置（桥沿 x 跨，占位 60×30）。
+## 生成器按连接方向自动选姿态 ⇒ 只测本体等于漏掉一半的实例。
 ## 历史缺陷（本探针扩到两取向时抓出）：坑壁开口与桥侧护栏曾按「桥沿 x 跨」写死 ——
 ## 转置姿态下南北壁不留口（玩家上不了桥）、东西壁被整片删掉、护栏横在桥两端堵死桥。
 ##
@@ -33,27 +32,28 @@ const LEVEL := "expedition_01"
 ## 桥房唯一的模板 id。两种取向**不是**两个 id，而是同一张模板的两种旋转
 ## （业主裁定 2026-09-25「不要两批代号」，见 05.2 §3.4/§3.6）。
 const BRIDGE_TEMPLATE := "bridge_60x50"
-## 取向：0° ＝ 本体（桥沿 x 跨）／90° ＝ 转置（桥沿 z 跨）。
+## 取向：0° ＝ 本体 30×60 工字型（桥沿 z 跨）／90° ＝ 转置（桥沿 x 跨，占位 60×30）。
 const BRIDGE_ROTATION_NATIVE := 0
 const BRIDGE_ROTATION_POSE := 90
 const GRID := 5.0
-## 本体 60×50：坑 30×20 于 x∈[-15,15] z∈[-10,10]；桥 30×5 于 x∈[-15,15] z∈[-5,0]。
-const NATIVE_SIZE := Vector2(60.0, 50.0)
-const NATIVE_PIT := Rect2(-15.0, -10.0, 30.0, 20.0)
-const NATIVE_BRIDGE := Rect2(-15.0, -5.0, 30.0, 5.0)
-## 转置姿态 50×60：坑 20×30 于 x∈[-10,10] z∈[-15,15]；桥 5×30 于 x∈[-5,0] z∈[-15,15]。
-const POSE_SIZE := Vector2(50.0, 60.0)
-const POSE_PIT := Rect2(-10.0, -15.0, 20.0, 30.0)
-const POSE_BRIDGE := Rect2(-5.0, -15.0, 5.0, 30.0)
+## 本体 30×60（工字型）：下沉区 = 中间整段 30×30 于 x∈[-15,15] z∈[-15,15]；
+## 跨桥 10×30 于 x∈[-5,5] z∈[-15,15]（沿 z 跨、把正方形坑分成东西两半）。
+const NATIVE_SIZE := Vector2(30.0, 60.0)
+const NATIVE_PIT := Rect2(-15.0, -15.0, 30.0, 30.0)
+const NATIVE_BRIDGE := Rect2(-5.0, -15.0, 10.0, 30.0)
+## 转置姿态 60×30：坑仍 30×30 于 x∈[-15,15] z∈[-15,15]；桥 30×10 于 x∈[-15,15] z∈[-5,5]。
+const POSE_SIZE := Vector2(60.0, 30.0)
+const POSE_PIT := Rect2(-15.0, -15.0, 30.0, 30.0)
+const POSE_BRIDGE := Rect2(-15.0, -5.0, 30.0, 10.0)
 ## 深度由模板 `sunken_pit.depth_m` 推出（两取向同）。
 const EXPECTED_DEPTH := 12.0
-## 坑壁 + 护栏件数（**两种取向同数**：坑周长 100m 同、桥长 30m 同）：
-## ① 坑壁 18 件（四周铺满，其中 2 格让给桥口）＋ ② 桥侧护栏 12 件（沿桥长轴 6 格 × 2 面）。
-const EXPECTED_PIT_WALLS := 30
-## 坑底地砖：两取向的坑都是 6×4 = 24 格。
-const EXPECTED_PIT_TILES := 24
-## 坑区 24 格里有桥面那条 6 格保留原砖 ⇒ 上层地砖比满铺少 18 块（两取向同）。
-const EXPECTED_PLATFORM_TILES_DROPPED := 18
+## 坑壁 + 护栏件数（**两种取向同数**：正方形坑周长 120m 同、桥长 30m 同）：
+## ① 坑壁 20 件（四周各 6 格铺满 = 24，其中 4 格让给桥口）＋ ② 桥侧护栏 12 件（沿桥长轴 6 格 × 2 面）。
+const EXPECTED_PIT_WALLS := 32
+## 坑底地砖：两取向的坑都是 6×6 = 36 格。
+const EXPECTED_PIT_TILES := 36
+## 坑区 36 格里有桥面那条 12 格保留原砖 ⇒ 上层地砖比满铺少 24 块（两取向同）。
+const EXPECTED_PLATFORM_TILES_DROPPED := 24
 ## 一件标准墙 11.9m 拉到「坑深 12m + 地面护栏 0.8m」。
 const EXPECTED_WALL_SCALE_Y := 12.8 / 11.9
 const EPS := 0.01
@@ -146,7 +146,7 @@ func _check_plan(
 		"size": room_size,
 		"center": Vector2.ZERO,
 		"rotation_deg": float(
-			BRIDGE_ROTATION_POSE if room_size.x < room_size.y else BRIDGE_ROTATION_NATIVE
+			BRIDGE_ROTATION_NATIVE if room_size.x < room_size.y else BRIDGE_ROTATION_POSE
 		),
 	}
 	var plan := GENERATOR._bridge_multi_level_plan(room, templates)
