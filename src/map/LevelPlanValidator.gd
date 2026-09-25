@@ -142,8 +142,9 @@ static func validate_normalized(
 	# 这是盯住「跨语言门槽镜像」的那条会失败的断言：设计源写了 ports 就必须与
 	# RoomDoorLane 的推导逐字段一致，不一致直接报错，绝不静默采信任何一侧。
 	errors.append_array(_validate_port_derivation(rooms))
-	# —— 房间矩形互斥与出界 ——
-	var map_rect := Rect2(Vector2(-125.0, -125.0), Vector2(250.0, 250.0))
+	# —— 房间矩形互斥 ——
+	# 场地外边界自 2026-09-25 起**不再是判据**（主人裁定，见 05.2 §3.7）：拼接不再考虑
+	# 是否超出 250×250，MAP_SIZE_M 退出摆位剪枝与校验判定，只作坐标原点与美术参照保留。
 	var core_rect := Rect2(Vector2(2.5, 2.5) - Vector2.ONE * 32.5, Vector2.ONE * 65.0)
 	# 核心区排除是「塔楼口径」：塔楼有电梯核心筒。单层独立关卡（如远征）无核心筒，
 	# 由 L1 generation_policy.enforce_core_exclusion = false 关闭，避免对既有关卡误报。
@@ -152,8 +153,6 @@ static func validate_normalized(
 	for first_index in range(keys.size()):
 		var first_key := str(keys[first_index])
 		var first_rect := _room_rect(first_key, center_by_key, size_by_key)
-		if not _rect_inside(map_rect, first_rect):
-			errors.append("outside_floor_bounds:%s" % first_key)
 		var first_role := _role_of(rooms, first_key)
 		if (
 			enforce_core
@@ -203,7 +202,9 @@ static func validate_normalized(
 		elif clear < ROOM_DOOR_LANE.MIN_CORRIDOR_CLEAR_M - EPS:
 			errors.append("corridor_too_short:%s:%s:clear=%.2f" % [parent_key, key, clear])
 		elif absf(round(clear / ROOM_DOOR_LANE.GRID_UNIT_M) - clear / ROOM_DOOR_LANE.GRID_UNIT_M) > EPS:
-			errors.append("corridor_not_integer_segments:%s:%s:clear=%.3f" % [parent_key, key, clear])
+				errors.append("corridor_not_integer_segments:%s:%s:clear=%.3f" % [parent_key, key, clear])
+	# —— 通道桥房「长边不连」——
+	errors.append_array(_validate_short_edge_links(rooms, center_by_key, size_by_key, templates))
 	# —— 主路与支线 ——
 	var main_path := normalized.get("main_path", []) as Array
 	for main_key in main_path:
@@ -225,16 +226,11 @@ static func validate_normalized(
 				"branch_count_out_of_range:%d not in [%d,%d]"
 				% [branch_count, int(branch_range[0]), int(branch_range[1])]
 			)
-	# —— 面积预算 ——
-	# 缺省按塔楼口径判定（used > target 即报错）。单层独立关卡可在 L1 generation_policy
-	# 写 `enforce_area_budget: false` 放开总面积约束（远征01，见设计页 §4.7）——
-	# 开关只关「判定」，数字仍照算并落进 area_budget，供文档与验收读。
-	var budget := AREA_BUDGET.calculate(rooms, policy)
-	if bool(budget.get("area_budget_enforced", true)):
-		var used := float(budget.get("estimated_used_area_m2", 0.0))
-		var target := float(budget.get("target_usable_area_m2", 0.0))
-		if used > target:
-			errors.append("area_budget_exceeded:used=%.1f target=%.1f" % [used, target])
+	# —— 面积预算（只算不判）——
+	# 面积自 2026-09-25 起**只报数据、不设上限**（主人裁定，见 05.2 §3.7）：数字照算并
+	# 落进 area_budget 供文档与验收读，但不再报 `area_budget_exceeded`。`enforce_area_budget`
+	# 键保留读取以免旧数据报未知键，降级为「是否按超限口径打印」的日志开关，不影响准入。
+	var _budget := AREA_BUDGET.calculate(rooms, policy)
 	# —— Boss 层规则 ——
 	var has_boss := false
 	var exit_parent := ""
@@ -301,6 +297,94 @@ static func _validate_port_derivation(rooms: Array) -> Array[String]:
 	return errors
 
 
+## 通道桥房「长边不连」门禁（业主硬口径）。
+##
+## 桥房跨坑而建：基坑 30×20 占掉房心，只有**一对短边**（相对长轴的两面墙）的
+## 端头有实体平台可开门；两条长边全程封在平台侧壁上，门口会直接开在坑的投影里
+## —— 实测（24 种子）所有门位沿长轴偏移 ≤ 5.01m，即全部落在坑投影内（见
+## `probe_expedition01_bridge_short_edge` 的门位分布）。故长边**不许**出现在任何
+## 一条连接上。
+##
+## 判据取 `RoomDoorLane.port_pair()` 的 `a_wall_length`（本侧墙长）—— 与生成器、
+## 白盒导出共用同一份门槽实现，本处不另立几何推导。桥房短边墙长 == min(宽,高)，
+## 墙长大于它即说明门开在长边上。
+##
+## 覆盖两类几何：
+##   ① `mode = "constrained"` 关卡的运行时生成几何（生成器把产出交本函数校验）；
+##   ② L2 文件里写死的样例 / 兜底版图（兜底路径不经生成器，只能靠本函数拦）。
+## 桥房判据取模板 `sunken_pit` —— 与 `FloorPlanGenerator._requires_short_edge_links`
+## 同口径，禁止在本处复刻桥房模板 id 列表。
+static func _validate_short_edge_links(
+	rooms: Array, center_by_key: Dictionary, size_by_key: Dictionary, templates: Dictionary
+) -> Array[String]:
+	var errors: Array[String] = []
+	if templates.is_empty():
+		return errors
+	# 短边墙长 = 该房两条边长里较短的一条。
+	var short_span_by_key := {}
+	for value in rooms:
+		var room := value as Dictionary
+		var key := str(room.get("key", ""))
+		var template_id := str(room.get("template_id", ""))
+		if template_id.is_empty() or not templates.has(template_id):
+			continue
+		if not (templates[template_id] as Dictionary).has("sunken_pit"):
+			continue
+		if not size_by_key.has(key):
+			continue
+		var size := size_by_key[key] as Vector2
+		short_span_by_key[key] = minf(size.x, size.y)
+	# 邻居表：父 + 子。支线与主路一视同仁 —— 规则只认几何，不认链路语义。
+	var children_by_parent := {}
+	for value in rooms:
+		var room := value as Dictionary
+		var key := str(room.get("key", ""))
+		var parent_key := str(room.get("parent_key", ""))
+		if parent_key.is_empty() or parent_key == key:
+			continue
+		if not children_by_parent.has(parent_key):
+			children_by_parent[parent_key] = []
+		(children_by_parent[parent_key] as Array).append(key)
+	for bridge_value in short_span_by_key.keys():
+		var bridge_key := str(bridge_value)
+		var short_span := float(short_span_by_key[bridge_key])
+		var links: Array = []
+		var parent_key := str(_room_by_key(rooms, bridge_key).get("parent_key", ""))
+		if not parent_key.is_empty() and center_by_key.has(parent_key):
+			links.append(parent_key)
+		for child_value in (children_by_parent.get(bridge_key, []) as Array):
+			links.append(str(child_value))
+		for link_index in range(links.size()):
+			var neighbor_key := str(links[link_index])
+			if not center_by_key.has(neighbor_key):
+				continue
+			var port := ROOM_DOOR_LANE.port_pair(
+				center_by_key[bridge_key] as Vector2,
+				size_by_key[bridge_key] as Vector2,
+				center_by_key[neighbor_key] as Vector2,
+				size_by_key[neighbor_key] as Vector2
+			)
+			var wall_length := float(port.get("a_wall_length", 0.0))
+			# 正方形桥房（无长边概念）时条件恒假，不误报。
+			if wall_length > short_span + EPS:
+				errors.append(
+					"bridge_long_edge_link:%s:%s:side=%s:wall=%.1f>short=%.1f"
+					% [bridge_key, neighbor_key, str(port.get("a_side", "")), wall_length, short_span]
+				)
+	return errors
+
+
+## 房间按其 `template_rotation_deg` 解析出的**期望占位尺寸**。
+## 奇数步（90 / 270）旋转交换两个分量 —— 这是「同一模板转置姿态」的唯一表达
+## （2026-09-25 主人裁定，见 05.2 §3.6 第 4 条）：模板 id 集合锁定，转置不另建模板。
+static func expected_size_for_rotation(template_size: Vector2, room: Dictionary) -> Vector2:
+	var rotation_deg := float(room.get("rotation_deg", room.get("template_rotation_deg", 0.0)))
+	var quarter_turns := int(round(rotation_deg / 90.0))
+	if posmod(quarter_turns, 4) % 2 != 0:
+		return Vector2(template_size.y, template_size.x)
+	return template_size
+
+
 ## 单房间字段校验。
 static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[String]:
 	var errors: Array[String] = []
@@ -336,10 +420,14 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 		else:
 			var template := templates[template_id] as Dictionary
 			var template_size := _vec2(template.get("size_m", []))
-			if not size.is_equal_approx(template_size):
+			# 转置姿态（奇数步旋转）下 L2 写的是**交换后**的尺寸（05.2 §3.6 第 4 条）：
+			# 「同一模板换个朝向」只能用 `template_rotation_deg` 表达，不另建模板 id，
+			# 所以这里必须按旋转后的期望尺寸比对，否则合法转置会被误报成尺寸不符。
+			var expected_size := expected_size_for_rotation(template_size, room)
+			if not size.is_equal_approx(expected_size):
 				errors.append(
 					"room_size_differs_from_template:%s:%s vs %s"
-					% [key, str(size), str(template_size)]
+					% [key, str(size), str(expected_size)]
 				)
 			# 门位必须落在该墙的合法槽上（走唯一实现）。
 			var lane_table := template.get("wall_lane_table", {}) as Dictionary
@@ -715,13 +803,6 @@ static func _room_rect(key: String, center_by_key: Dictionary, size_by_key: Dict
 	return Rect2(center - size * 0.5, size)
 
 
-static func _rect_inside(container: Rect2, child: Rect2) -> bool:
-	return (
-		child.position.x >= container.position.x - EPS
-		and child.position.y >= container.position.y - EPS
-		and child.end.x <= container.end.x + EPS
-		and child.end.y <= container.end.y + EPS
-	)
 
 
 static func _wall_length_for(size: Vector2, side: String) -> float:

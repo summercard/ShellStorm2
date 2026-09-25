@@ -73,17 +73,22 @@ const PLAN_BRANCH_PARENT := {
 	"branch_01": "room_02",
 	"branch_02": "room_03",
 	"branch_03": "room_04",
-	"branch_04": "room_05",
+	## room_05 是通道桥房：桥中央下沉坑、坑顶横桥 ⇒ 门只能开在桥跨向两端墙（短边），
+	## 最多 2 条连接且必须同轴 ⇒ **不能挂支线**。故 branch_04 移到 room_06（业主裁定 2026-09-25）。
+	"branch_04": "room_06",
 }
 ## 撤离房挂在 Boss 之后（主路 01—06 → boss → extraction），**不是**挂在最后一间主路房上。
 const PLAN_EXTRACTION_PARENT := "boss"
-## 8 个房型模板的尺寸集合：constrained 下内容房的尺寸必在其中（哪间取哪寸每局变）。
+## 8 个房型模板的尺寸集合（含桥房转置姿态的占位 50×60）：constrained 下内容房的尺寸必在其中
+## （哪间取哪寸每局变）。注意 50×60 是 `bridge_60x50` 旋转 90° 后的占位，**不是**第二个模板 id
+## —— 转置只靠 `template_rotation_deg: 90` 表达（业主裁定 2026-09-25，见 05.2 §3.4）。
 const PLAN_TEMPLATE_SIZES: Array[Vector2] = [
 	Vector2(15.0, 15.0),  # safe_15x15（入口）
 	Vector2(45.0, 40.0),  # corridor_45x40
 	Vector2(70.0, 50.0),  # db_70x50
 	Vector2(60.0, 70.0),  # office_60x70
-	Vector2(60.0, 50.0),  # bridge_60x50
+	Vector2(60.0, 50.0),  # bridge_60x50（通道桥房本体，长轴沿 x）
+	Vector2(50.0, 60.0),  # bridge_60x50 旋转 90°（同一模板的转置姿态，长轴沿 y）
 	Vector2(50.0, 40.0),  # boss_50x40（Boss 房固定）
 	Vector2(25.0, 25.0),  # extraction_25x25 / std_25x25
 ]

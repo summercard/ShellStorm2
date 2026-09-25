@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/probe_expedition01_bridge_short_edge.gd" id="1_probe"]
+
+[node name="ProbeExpedition01BridgeShortEdge" type="Node"]
+script = ExtResource("1_probe")

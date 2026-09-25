@@ -19,7 +19,7 @@
       "parent_key": "",
       "template_id": "safe_15x15",
       "template_variant": "",
-      "center_m": [-17.5, 2.5],
+      "center_m": [-152.5, 12.5],
       "size_m": [15.0, 15.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -33,7 +33,7 @@
       "parent_key": "entry",
       "template_id": "corridor_45x40",
       "template_variant": "l_turn",
-      "center_m": [12.5, 0.0],
+      "center_m": [-122.5, 10.0],
       "size_m": [45.0, 40.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -47,7 +47,7 @@
       "parent_key": "room_01",
       "template_id": "db_70x50",
       "template_variant": "db_01",
-      "center_m": [10.0, 45.0],
+      "center_m": [-120.0, 55.0],
       "size_m": [70.0, 50.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -61,7 +61,7 @@
       "parent_key": "room_02",
       "template_id": "office_60x70",
       "template_variant": "",
-      "center_m": [-55.0, 50.0],
+      "center_m": [-55.0, 55.0],
       "size_m": [60.0, 70.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -75,7 +75,7 @@
       "parent_key": "room_03",
       "template_id": "corridor_45x40",
       "template_variant": "u_turn",
-      "center_m": [-52.5, -5.0],
+      "center_m": [-57.5, 0.0],
       "size_m": [45.0, 40.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -90,8 +90,8 @@
       "template_id": "bridge_60x50",
       "template_variant": "",
       "center_m": [-55.0, -50.0],
-      "size_m": [60.0, 50.0],
-      "template_rotation_deg": 0,
+      "size_m": [50.0, 60.0],
+      "template_rotation_deg": 90,
       "content_type": ""
     },
     {
@@ -103,7 +103,7 @@
       "parent_key": "room_05",
       "template_id": "db_70x50",
       "template_variant": "db_02",
-      "center_m": [10.0, -50.0],
+      "center_m": [-55.0, -105.0],
       "size_m": [70.0, 50.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -117,7 +117,7 @@
       "parent_key": "room_06",
       "template_id": "boss_50x40",
       "template_variant": "",
-      "center_m": [70.0, -50.0],
+      "center_m": [5.0, -105.0],
       "size_m": [50.0, 40.0],
       "template_rotation_deg": 0,
       "content_type": "BOSS"
@@ -131,7 +131,7 @@
       "parent_key": "boss",
       "template_id": "extraction_25x25",
       "template_variant": "",
-      "center_m": [72.5, -17.5],
+      "center_m": [7.5, -137.5],
       "size_m": [25.0, 25.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -145,7 +145,7 @@
       "parent_key": "room_02",
       "template_id": "db_70x50",
       "template_variant": "db_01",
-      "center_m": [10.0, 95.0],
+      "center_m": [-120.0, 105.0],
       "size_m": [70.0, 50.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -159,7 +159,7 @@
       "parent_key": "room_03",
       "template_id": "std_25x25",
       "template_variant": "",
-      "center_m": [-52.5, 97.5],
+      "center_m": [-52.5, 102.5],
       "size_m": [25.0, 25.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -173,7 +173,7 @@
       "parent_key": "room_04",
       "template_id": "std_25x25",
       "template_variant": "",
-      "center_m": [-87.5, -7.5],
+      "center_m": [-22.5, -2.5],
       "size_m": [25.0, 25.0],
       "template_rotation_deg": 0,
       "content_type": ""
@@ -184,12 +184,12 @@
       "legacy_room_id": "branch_04",
       "room_type": "COMMON_ROOM",
       "role": "branch",
-      "parent_key": "room_05",
+      "parent_key": "room_06",
       "template_id": "bridge_60x50",
       "template_variant": "",
-      "center_m": [-55.0, -100.0],
-      "size_m": [60.0, 50.0],
-      "template_rotation_deg": 0,
+      "center_m": [-55.0, -160.0],
+      "size_m": [50.0, 60.0],
+      "template_rotation_deg": 90,
       "content_type": ""
     }
   ],
@@ -199,13 +199,13 @@
     {"a": "room_01", "b": "room_02", "allow_zero_length": true, "note": "主路：第 1 → 第 2 房，墙贴墙"},
     {"a": "room_02", "b": "room_03", "allow_zero_length": true, "note": "主路：第 2 → 第 3 房，墙贴墙"},
     {"a": "room_03", "b": "room_04", "allow_zero_length": true, "note": "主路：第 3 → 第 4 房，墙贴墙"},
-    {"a": "room_04", "b": "room_05", "allow_zero_length": true, "note": "主路：第 4 → 第 5 房，墙贴墙"},
-    {"a": "room_05", "b": "room_06", "allow_zero_length": true, "note": "主路：第 5 → 第 6 房，墙贴墙"},
+    {"a": "room_04", "b": "room_05", "allow_zero_length": true, "note": "主路：第 4 → 第 5 房（通道桥房，转置 90° 使短边对齐南北轴），墙贴墙"},
+    {"a": "room_05", "b": "room_06", "allow_zero_length": true, "note": "主路：第 5 → 第 6 房（通道桥房出口，短边），墙贴墙"},
     {"a": "room_06", "b": "boss", "allow_zero_length": true, "note": "主路：第 6 房 → Boss竞技场，墙贴墙"},
     {"a": "boss", "b": "extraction", "allow_zero_length": true, "note": "主路：Boss竞技场 → 撤离屋，墙贴墙"},
     {"a": "room_02", "b": "branch_01", "allow_zero_length": true, "note": "支线：挂主路第 2 房，墙贴墙"},
     {"a": "room_03", "b": "branch_02", "allow_zero_length": true, "note": "支线：挂主路第 3 房，墙贴墙"},
     {"a": "room_04", "b": "branch_03", "allow_zero_length": true, "note": "支线：挂主路第 4 房，墙贴墙"},
-    {"a": "room_05", "b": "branch_04", "allow_zero_length": true, "note": "支线：挂主路第 5 房，墙贴墙"}
+    {"a": "room_06", "b": "branch_04", "allow_zero_length": true, "note": "支线：挂主路第 6 房（通道桥房挂在末端支座，转置 90°，只 1 门）"}
   ]
 }

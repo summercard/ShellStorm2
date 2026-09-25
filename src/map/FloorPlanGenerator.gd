@@ -20,7 +20,6 @@ const BOSS_LAYOUT_SOURCE_PATH := (
 	+ "boss_room_50x40_v002.layout.json"
 )
 
-const MAP_SIZE_M := 250.0
 const CORE_SIZE_M := 65.0
 const CORE_CENTER := Vector2(2.5, 2.5)
 const GRID_UNIT_M := 5.0
@@ -491,8 +490,6 @@ static func _constrained_slots(
 	for key in chain:
 		if str((by_key[key] as Dictionary).get("role", "")) == "main":
 			main_keys.append(key)
-	var content_count := main_keys.size() + branch_keys.size()
-	var draws := _constrained_template_draws(content_count, pool, rng)
 	# 支线按「父键」归组，父房落到槽位表后**立即跟随**摆放 —— 越早摆可选面越多。
 	# 若把 4 条支线全部堆到最后再摆，主路房四周早被后续主路房占满（实测：那样做
 	# 300 个种子只有 46 个能摆下，成功率 15%）。就近插入后主路房刚落位、周边最空。
@@ -503,6 +500,15 @@ static func _constrained_slots(
 		if not branches_by_parent.has(parent_key):
 			branches_by_parent[parent_key] = []
 		(branches_by_parent[parent_key] as Array).append(key)
+	# 取向不在这里定，也不靠第二个模板 id：每个槽位自带本模板的**转置尺寸**
+	# （见 `_constrained_slot`），落位阶段按连接方向二选一（见 `_placement_candidates`）。
+	var content_count := main_keys.size() + branch_keys.size()
+	var draws := _constrained_template_draws(content_count, pool, rng)
+	# 短边受限房型（通道桥房）只许抽进「连接数 ≤ 2」的槽位 —— 抽中多连接槽位时与
+	# 一个「连接数 ≤ 2」的槽位对调。见 `_relieve_short_edge_slots` 的完整推导。
+	_relieve_short_edge_slots(
+		draws, _draw_slot_descriptors(chain, by_key, branches_by_parent), templates
+	)
 	var slots: Array[Dictionary] = []
 	var content_index := 0
 	for key in chain:
@@ -548,6 +554,120 @@ static func _constrained_template_draws(
 	return draws
 
 
+## —— 短边受限房型（通道桥房）的落位资格 ——
+##
+## 通道桥房的业主口径是「长边不连、只在短边开门」，而「短边」是**一对相向的墙**
+## （长轴沿 x ⇒ 东/西；沿 y ⇒ 南/北）。两墙里各只能挂一间子房 —— 门槽的横向容差
+## `RoomDoorLane.LATERAL_TOLERANCE_M = 5.01 m` 决定了子房中心相对父房中心沿横轴的偏移
+## 不超过 5 m，同一面墙上挂两间必然相互重叠。
+## ⇒ **桥房（不论取哪种取向）最多只有 2 条连接**（一个连接面一条）。
+##
+## 而本关拓扑里「带支线的主路房」有 3 条连接（父 + 子 + 支线），4 间中段主路房
+## （room_02…room_05）各有 1 条支线 ⇒ 这 4 个槽位结构上**摆不下桥房**
+## （实测：不设限时 324 个种子回落 165 个，51%；把搜索预算抬到 40000 只降到 43%
+## ⇒ 是结构无解，不是搜索不够）。
+##
+## 故在抽取阶段就把桥房挡在多连接槽位之外：把它和一个「连接数 ≤ 2」的槽位**对调**。
+## 只换位、不动族出现次数（`_constrained_template_draws` 的「每族至少一次」不受影响），
+## 也不动 L2 蓝图的 `parent_key` ⇒ 支线挂法、房间 id、内容类型分配逐字不变。
+##
+## 每个「抽取槽位」的落位画像，顺序与 `_constrained_template_draws` 的 draws 完全一致：
+## 沿 chain 走，主路房记「前 + 后 + 支线数」，紧随其后的每条支线各记 1。
+## 非主路的 chain 房（入口/Boss/撤离）模板固定、不参与抽取，故不记；挂在其上的支线照记。
+##
+## `main` 区分「主路房槽位」与「支线槽位」—— `_relieve_short_edge_slots` 靠它排序：
+## 桥房放在主路端位是**直通过道**（父在一短边、子在对侧短边，取向自适应）⇒ 与普通房同样好摆；
+## 放在支线位则是「垂直挂出的大房」⇒ 要凭空多出 60m 垂向净空，几乎必败。两者难度天差地别。
+static func _draw_slot_descriptors(
+	chain: Array[String], by_key: Dictionary, branches_by_parent: Dictionary
+) -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for index in range(chain.size()):
+		var key := str(chain[index])
+		var raw := by_key[key] as Dictionary
+		var branches := branches_by_parent.get(key, []) as Array
+		if str(raw.get("role", "")) == "main":
+			var links := branches.size()
+			if index > 0:
+				links += 1
+			if index < chain.size() - 1:
+				links += 1
+			rows.append({"links": links, "main": true})
+		for _branch_value in branches:
+			rows.append({"links": 1, "main": false})
+	return rows
+
+
+## 把「短边受限房型抽到多连接槽位」的错配就地纠正：与一个「非短边受限、且连接数 ≤ 2」的
+## 槽位对调。**目标槽位按「桥房摆得下的难度」排序**，主路端位优先，其中**后段端位又先于前段**：
+##
+##   · 主路端位是天然位置 —— 桥房在这里是直通过道：父房在一侧短边、子房在对侧短边，
+##     取向随方向自适应，摆位难度与普通房没有区别。
+##   · **但前段端位（`room_01`）与前段的「子房」一起会越界**。入口锚在场地正中，
+##     `entry(15)` 东墙在 x=10，桥房 60 长 ⇒ 到 x=70；而 `room_01` 的子房是 `room_02`，
+##     被短边锁钉在同一轴、还可能是 70×50 / 60×70 的大房 ⇒ 需要 x 到 130~140，
+##     而场地只到 125。**实测：桥房落在 `room_01` 时，`room_02` 必然无位可放**
+##     （回落轨迹里反复出现 `已放 entry + room_01(bridge_60x50)` 后卡在 `room_02`）。
+##   · **后段端位（`room_06`）的子房是 Boss 房（`boss_50x40`，全场最小之一）**
+##     ⇒ 同一个 60 m 桥房之后只需再让出 25 m，稳得多。
+##   · 支线位排最后：桥房垂直挂出需要凭空多出 60 m 垂向净空，成功率最低。
+##
+## 贪心即可 —— 桥房抽中次数（池 5 族 × 10 槽 ⇒ 期望 2 次、上界 6 次）不大于可放槽位数。
+## 真到无可对调位时保留原状并告警，交由落位阶段与回落兜底。
+static func _relieve_short_edge_slots(
+	draws: Array, descriptors: Array[Dictionary], templates: Dictionary
+) -> void:
+	var main_targets: Array[int] = []
+	var branch_targets: Array[int] = []
+	for index in range(draws.size()):
+		if _requires_short_edge_links(templates, str(draws[index])):
+			continue
+		if int(descriptors[index]["links"]) > 2:
+			continue
+		if bool(descriptors[index]["main"]):
+			main_targets.append(index)
+		else:
+			branch_targets.append(index)
+	# 主路端位**后段优先**（见上方推导：前段端位的子房紧邻场地中心，越界风险最高）。
+	var ordered_main: Array[int] = []
+	for offset in range(main_targets.size() - 1, -1, -1):
+		ordered_main.append(main_targets[offset])
+	var targets: Array[int] = []
+	targets.append_array(ordered_main)
+	targets.append_array(branch_targets)
+	var used: Dictionary = {}
+	for index in range(draws.size()):
+		if not _requires_short_edge_links(templates, str(draws[index])):
+			continue
+		if int(descriptors[index]["links"]) <= 2:
+			continue
+		var chosen := -1
+		for target in targets:
+			if not used.has(target):
+				chosen = target
+				break
+		if chosen < 0:
+			push_warning(
+				"FloorPlanGenerator: 短边受限房型 %s 落在连接数 %d 的槽位，且无可对调位"
+				% [str(draws[index]), int(descriptors[index]["links"])]
+			)
+			continue
+		used[chosen] = true
+		var held: Variant = draws[index]
+		draws[index] = draws[chosen]
+		draws[chosen] = held
+
+
+## 该模板是否「连接面被限死在一对相向短墙」⇒ 最多 2 条连接。
+## 判据取模板是否声明 `sunken_pit` —— 与 `_bridge_multi_level_plan`、验收探针
+## `probe_expedition01_bridge_short_edge` 同一口径（通道桥房是本关唯一带下沉坑的房型）。
+static func _requires_short_edge_links(templates: Dictionary, template_id: String) -> bool:
+	var template := templates.get(template_id, {}) as Dictionary
+	if template.is_empty():
+		return false
+	return template.has("sunken_pit")
+
+
 static func _pick_template_variant(
 	templates: Dictionary, template_id: String, rng: RandomNumberGenerator
 ) -> String:
@@ -558,10 +678,30 @@ static func _pick_template_variant(
 	return str(variants[rng.randi_range(0, variants.size() - 1)])
 
 
+## 单间内容房 → 槽位。槽位自带本模板的**转置尺寸**（`rotated_size`）：供落位阶段
+## 按连接方向二选一（见 `_placement_candidates`）。
+##
+## ⚠ 转置姿态**不是**一个独立房型 id（业主裁定 2026-09-25，见 05.2 §3.4/§3.6）：
+## 它就是同一份模板绕竖轴转 90°，占位尺寸两分量互换。曾经的做法是在模板目录里再建
+## 一个 `bridge_50x60` 并用 `axis_pose_of` 指回本体 —— 那会造出「两批代号」，同一间房
+## 在两份文档里叫两个名字，管理必乱。现已撤销，全项目统一用 `template_rotation_deg`。
+##
+## ⚠ 「可取向」不等于「有短边封锁」，两者**必须分开判**（本轮踩过的坑）：
+##   · 旧实现里「有取向」靠「模板声明了 `axis_pose_of` 配对」识别，恰好只有桥房有配对，
+##     于是 `orientable` 一个字段兼职了两件事：可转置 + 长边封锁。
+##   · 配对机制撤销后，若把「非正方形」当可取向，全体内容房（`db_70x50` / `office_60x70`
+##     / `corridor_45x40` …）都会拿到 `orientable = true`，而该字段又驱动「父房的长边
+##     封锁子房」⇒ 每条主路都被迫反复换轴，实测 300/300 个种子全部回落。
+##   · 故本关只用桥房的**唯一功能判据** `sunken_pit`（= `_requires_short_edge_links`）
+##     决定「可转置且长边封锁」，其余房型一律无取向，行为与改动前逐字相同。
+##
+## `rotated_size` 为 `Vector2.ZERO` 表示**本模板无取向** ⇒ 落位阶段不会为它做取向选择。
 static func _constrained_slot(
 	key: String, raw: Dictionary, templates: Dictionary, template_id: String, variant: String
 ) -> Dictionary:
 	var template := templates[template_id] as Dictionary
+	var size := _vec2(template.get("size_m", []))
+	var short_edge_locked := _requires_short_edge_links(templates, template_id)
 	return {
 		"key": key,
 		"room_id": str(raw.get("room_id", "")),
@@ -571,8 +711,62 @@ static func _constrained_slot(
 		"parent_key": str(raw.get("parent_key", "")),
 		"template_id": template_id,
 		"template_variant": variant,
-		"size": _vec2(template.get("size_m", [])),
+		"short_edge_locked": short_edge_locked,
+		"rotated_size": _transposed_size(size) if short_edge_locked else Vector2.ZERO,
+		"size": size,
 	}
+
+
+## —— 桥房族：取向随连接方向 ——
+##
+## 通道桥房（模板声明了 `sunken_pit`）带一条业主口径的**硬约束**：长边不连、只在短边开门。
+## 长轴方向一并钉死「哪两面墙是短墙」⇒ 桥房的父边与全部子边都必须落在那对短墙上。
+## 只许一种取向（长轴恒沿 x）时，「父—桥—子」被迫排成同一条水平线；而首房锚在正中，
+## 单侧只剩约 122.5 m，`entry(15)+桥(60)+db(70)=145` 这类组合必然越界
+## —— 实测 24 个种子回落 18 个（75%，见 `memory/0112`）。
+##
+## 解法（业主裁决 2026-09-25）：**取向不是房型属性，是落位属性** ——
+## 连东/西用「长轴沿 x」的取向，连南/北用「长轴沿 y」的取向。门因此永远落在短边上，
+## 而桥房族可以在水平 / 垂直两种排列间自由选择，不再被单一轴钉死。
+##
+## ⚠ 取向的载体只有**一份模板文件**：转置姿态就是同一张模板绕竖轴转 90°
+## （设计源写法 `template_rotation_deg: 90`），占位尺寸由本函数现算。
+## 曾短暂存在过「再建一个转置模板 id（`bridge_50x60`）+ `axis_pose_of` 指回本体」的做法，
+## 已被业主裁定撤销 —— 同一间房在两份文档里叫两个名字必生混乱（「不要两批代号」），
+## 全项目统一用旋转表达。房型池 `content_template_pool` 里因此只出现族代表（本体）。
+static func _transposed_size(size: Vector2) -> Vector2:
+	if size.x <= 0.0 or size.y <= 0.0:
+		return Vector2.ZERO
+	if is_equal_approx(size.x, size.y):
+		return Vector2.ZERO
+	return Vector2(size.y, size.x)
+
+
+## 取向选择：**短边法向 = 长轴方向** ⇒ 连东/西要「长轴沿 x」的那个取向，连南/北要「长轴沿 y」的。
+## 无取向（`rotated_size` 为零：正方形或尺寸缺失）时恒返回本体尺寸，调用方不必再分支。
+static func _axised_size_for(along_x: bool, base_size: Vector2, rotated_size: Vector2) -> Vector2:
+	if rotated_size.x <= 0.0 or rotated_size.y <= 0.0:
+		return base_size
+	var base_long_x := base_size.x > base_size.y
+	return base_size if along_x == base_long_x else rotated_size
+
+
+## 桥房（可取向房）的**短边法向**两个方向：长轴沿 x ⇒ 短边是东/西墙 ⇒ {east, west}；
+## 长轴沿 y ⇒ {north, south}。桥房的长边是「过道那一侧」，按业主口径不连任何房，
+## 因此它的子房只许落在这两个方向里。
+##
+## 入参 `preferred` 是原本的方向试探序；本函数**保留其中属于允许集的顺序**
+## （子房仍优先延续直行），再把允许集里剩下的补进末尾 —— 保证至少有一个方向可试。
+static func _short_edge_directions(parent_size: Vector2, preferred: Array) -> Array:
+	var allowed := ["east", "west"] if parent_size.x > parent_size.y else ["north", "south"]
+	var ordered: Array = []
+	for direction_value in preferred:
+		if allowed.has(direction_value) and not ordered.has(direction_value):
+			ordered.append(direction_value)
+	for direction_value in allowed:
+		if not ordered.has(direction_value):
+			ordered.append(direction_value)
+	return ordered
 
 
 ## 按槽位顺序贴墙摆放，**带回溯**。全部分配成功返回按槽位序的摆放表，否则返回空。
@@ -581,9 +775,10 @@ static func _constrained_slot(
 ## 实测含大房的内容房池成功率只有 ~33%（且与尺寸强相关：只放 25×25 时 100%）。
 ## 回溯的代价很低 —— 每间房最多十来个候选位，而绝大多数情况第一个候选就成立。
 ##
-## 首房锚在「与该尺寸同相位的场地原点」上（15×15 → (2.5,2.5)，即场地正中），
-## 全场再在 `_constrained_fits` 的边界约束内蛇形展开 ⇒ 产出天然落在场地内，
-## 无需事后整体平移（平移反而可能把已经贴边的房间推出边界）。
+## 首房锚在「与该尺寸同相位的原点」上（15×15 → (2.5,2.5)），全场再靠
+## `_placement_candidates` 的**锚点软引导**蛇形展开 ⇒ 版图自然收拢，
+## 不需要事后整体平移（平移反而会破坏贴墙净距为 0 的关系）。
+## 这里**没有**场地边界约束 —— 见 `_constrained_fits` 的头注释。
 static func _place_constrained_slots(
 	slots: Array[Dictionary], rng: RandomNumberGenerator
 ) -> Array[Dictionary]:
@@ -612,12 +807,18 @@ static func _place_recursive(
 	var size := slot["size"] as Vector2
 	if size.x <= 0.0 or size.y <= 0.0:
 		return false
-	for candidate in _placement_candidates(slot, placed, rng):
-		var center := candidate as Vector2
+	for candidate_value in _placement_candidates(slot, placed, rng):
+		var candidate := candidate_value as Dictionary
+		var center := candidate["center"] as Vector2
 		placed.append({
 			"key": str(slot["key"]),
 			"center": center,
-			"size": size,
+			# 桥房族的实际落位尺寸由**连接方向**决定（本体 / 转置），不等于槽位尺寸。
+			"size": candidate["size"],
+			"template_id": str(candidate.get("template_id", "")),
+			"template_variant": str(candidate.get("template_variant", "")),
+			"short_edge_locked": bool(candidate.get("short_edge_locked", false)),
+			"rotation_deg": float(candidate.get("rotation_deg", 0.0)),
 			"dir": _direction_from_delta(center - _parent_center(slot, placed)),
 		})
 		if _place_recursive(slots, index + 1, placed, rng, state):
@@ -626,8 +827,66 @@ static func _place_recursive(
 	return false
 
 
-## 第 `index` 个槽位当前可用的全部落位坐标（已通过吸附 + 场地 + 不重叠三重检查），
-## 按「好位置优先」排序。首房/无父房只有一个候选（场地原点）。
+## 一个候选落位点。带**实际尺寸与旋转角** —— 桥房族的尺寸由连接方向决定（本体 / 转置），
+## 与槽位里存的本体不同，所以不能只留在槽位里。模板 id 不跟着换（转置只是旋转，
+## 不是另一个房型），尺寸差异由 `rotation_deg` 解释。
+static func _placement_candidate(
+	center: Vector2, size: Vector2, slot: Dictionary, rotation_deg: float = 0.0
+) -> Dictionary:
+	return {
+		"center": center,
+		"size": size,
+		"template_id": str(slot.get("template_id", "")),
+		"template_variant": str(slot.get("template_variant", "")),
+		"short_edge_locked": bool(slot.get("short_edge_locked", false)),
+		"rotation_deg": rotation_deg,
+	}
+
+
+## —— 蛇形折返：方向序的锚点软引导 ——
+##
+## 主路房的候选方向按「该方向候选位离入口锚点的最近距离」升序重排 ⇒ 版图自然拐回来。
+##
+## 为什么要它：主路房的方向试探序以「延续来向」打头（成走廊感），而场地边界已退出
+## 摆位剪枝（05.2 §3.7，2026-09-25 业主裁定 —— 任何位置只要不重叠就合法），
+## 于是开阔场地里永远走得通、主路会一路直走出去（8 间主路房的半尺寸之和约 415 m）。
+## 这是**软引导不是硬边界**：距离远的候选仍留在序里，关卡想长多大就长多大。
+static func _anchored_direction_order(per_direction: Array, anchor: Vector2) -> Array:
+	var order: Array[int] = []
+	for index in range(per_direction.size()):
+		order.append(index)
+	# 距离相同时以原索引做确定性 tie-break（`sort_custom` 本身不稳定，
+	# 只比距离会让同一份输入产出两种版图）。
+	order.sort_custom(func(a: int, b: int) -> bool:
+		var distance_a := _direction_anchor_distance(per_direction[a] as Array, anchor)
+		var distance_b := _direction_anchor_distance(per_direction[b] as Array, anchor)
+		if not is_equal_approx(distance_a, distance_b):
+			return distance_a < distance_b
+		return a < b
+	)
+	var out: Array = []
+	for index in order:
+		out.append(per_direction[index])
+	return out
+
+
+## 某个方向的候选行离锚点的最近距离；无候选时给 INF（排到最后）。
+static func _direction_anchor_distance(row: Array, anchor: Vector2) -> float:
+	var best := INF
+	for candidate_value in row:
+		var center := (candidate_value as Dictionary)["center"] as Vector2
+		best = minf(best, center.distance_to(anchor))
+	return best
+
+
+## 第 `index` 个槽位当前可用的全部落位候选（已通过吸附 + 不重叠二连检查），
+## 按「好位置优先」排序。首房/无父房只有一个候选（尺寸同相位的原点）。
+##
+## 桥房族在这里定**取向**：同一个方向枚举里，连东/西用长轴沿 x 的取向、连南/北用长轴沿 y 的，
+## 门因此永远落在短墙上。父房是桥房时反向收窄 —— 子房只许落在父房的短边法向那一对上
+## （桥房的长边按业主口径不连任何房）。
+##
+## 主路房另叠一层蛇形折返软引导，见 `_anchored_direction_order`。
 static func _placement_candidates(
 	slot: Dictionary, placed: Array[Dictionary], rng: RandomNumberGenerator
 ) -> Array:
@@ -636,29 +895,48 @@ static func _placement_candidates(
 	if placed.is_empty() or parent_key.is_empty():
 		var origin := _snapped_origin_for(size)
 		if _constrained_fits(origin, size, _placed_rects(placed)):
-			return [origin]
+			return [_placement_candidate(origin, size, slot)]
 		return []
 	var parent_index := _placed_index_by_key(placed, parent_key)
 	if parent_index < 0:
 		return []
-	var parent_center := placed[parent_index]["center"] as Vector2
-	var parent_size := placed[parent_index]["size"] as Vector2
+	var parent_room := placed[parent_index] as Dictionary
+	var parent_center := parent_room["center"] as Vector2
+	var parent_size := parent_room["size"] as Vector2
 	var rects := _placed_rects(placed)
+	# 桥房族：长轴方向由落位方向定，短边随之固定；槽位里带着本模板的转置尺寸。
+	var rotated_size := slot.get("rotated_size", Vector2.ZERO) as Vector2
+	var directions := _direction_trial_order(
+		str(slot.get("role", "")), _incoming_dir(placed, parent_index), rng
+	)
+	# 父房是桥房 ⇒ **长边封锁**：子房只许贴在它那对短墙上。
+	# 判据用 `short_edge_locked`（= 模板声明 `sunken_pit`），**不是**「父房可转置」——
+	# 两者在本关恰好同义，但混用会误伤：见 `_constrained_slot` 头注释里的踩坑记录。
+	if bool(parent_room.get("short_edge_locked", false)):
+		directions = _short_edge_directions(parent_size, directions)
 	# 先按方向收集每个方向的候选（各自已按「横向离父房近 → 远」排好）。
 	var per_direction: Array = []
-	for direction_value in _direction_trial_order(
-		str(slot.get("role", "")), _incoming_dir(placed, parent_index), rng
-	):
+	for direction_value in directions:
 		var direction := str(direction_value)
 		var along_x := direction == "east" or direction == "west"
+		var child_size := _axised_size_for(along_x, size, rotated_size)
+		var rotation_deg := 0.0
+		if not child_size.is_equal_approx(size):
+			# 转置姿态 = 同一张模板转 90°（不是另一个房型 id）。校验器按
+			# `template_rotation_deg` 解析期望尺寸 ⇒ 尺寸换了就必须把角度写上，
+			# 否则 `room_size_differs_from_template` 必红。
+			rotation_deg = 90.0
 		var parent_cross := parent_center.y if along_x else parent_center.x
-		var child_cross_size := size.y if along_x else size.x
+		var child_cross_size := child_size.y if along_x else child_size.x
 		var row: Array = []
 		for cross in _lateral_candidates(parent_cross, child_cross_size):
-			var center := _touching_center(parent_center, parent_size, size, direction, cross)
-			if _constrained_fits(center, size, rects):
-				row.append(center)
+			var center := _touching_center(parent_center, parent_size, child_size, direction, cross)
+			if _constrained_fits(center, child_size, rects):
+				row.append(_placement_candidate(center, child_size, slot, rotation_deg))
 		per_direction.append(row)
+	# 主路房走锚点软引导（折返），支线房保持「先垂直侧向」的原序不动。
+	if str(slot.get("role", "")) != "branch":
+		per_direction = _anchored_direction_order(per_direction, placed[0]["center"] as Vector2)
 	# 再**按横向名次轮转**跨方向取：先各方向的第 1 候选，再各方向的第 2 候选……
 	# 这样截断到 `CONSTRAINED_BRANCH_LIMIT` 个后，仍能覆盖多个方向，
 	# 不至于只把「首选方向」的候选全试完、其它方向一个都没轮到。
@@ -791,17 +1069,19 @@ static func _snapped_origin_for(size: Vector2) -> Vector2:
 	return Vector2(fposmod(size.x * 0.5, GRID_UNIT_M), fposmod(size.y * 0.5, GRID_UNIT_M))
 
 
-## 位置合法性三连：在场地内、中心吸附在 5m 模数上、与已摆房间不重叠（相切允许）。
+## 位置合法性二连：中心吸附在 5m 模数上、与已摆房间不重叠（相切允许）。
 ##
-## 场地边界这条**必须保留**，它不是「顺手多判一下」—— 它是逼路径拐弯的唯一机制。
-## `_first_adjacent_center` 的优先序是「先延续来向（成走廊感）」，而开阔场地里永远
-## 不会撞到别的房，于是若不在边界处逼停，主路会一路直走：8 间主路房（含入口与 Boss）
-## 沿单一轴的半尺寸之和约 415 m，远超 250 m 场地 ⇒ 每个种子都越界、100% 回退
-## （实测：删掉本检查后 300/300 个种子全部回退）。留边界后蛇形自动折返。
+## **场地边界自 2026-09-25 起不再是判据**（业主裁定，全项目适用）：摆位不再拒绝
+## 「超出 250×250 场地」的位置，`MAP_SIZE_M` 退出本类。理由见 05.2 §3.7 ——
+## 单层独立关卡没有边界预算，面积只报数字、不设上限。
+##
+## ⚠ 但旧实现里那条边界检查**同时兼任了「逼路径拐弯」的职责**：主路房的试探序以
+## 「延续来向」打头（成走廊感），开阔场地里永远不撞别的房 ⇒ 没有边界逼停就会一路直走
+## （8 间主路房的半尺寸之和约 415 m）。折返职责**已迁到 `_placement_candidates` 的
+## 锚点距离软引导**（按「候选位离入口锚点的距离」排方向），那里不设任何硬上限 ——
+## 版图该多大就多大，只是自然会拐回来。
 static func _constrained_fits(center: Vector2, size: Vector2, rects: Array[Rect2]) -> bool:
 	var rect := _rect_at(center, size)
-	if not _rect_contains_rect(_map_rect(), rect):
-		return false
 	var snapped := Vector2(
 		snappedf(center.x - size.x * 0.5, GRID_UNIT_M) + size.x * 0.5,
 		snappedf(center.y - size.y * 0.5, GRID_UNIT_M) + size.y * 0.5
@@ -823,16 +1103,19 @@ static func _constrained_floor_from(
 	policy: Dictionary,
 	templates: Dictionary
 ) -> Dictionary:
-	var center_by_key: Dictionary = {}
+	var placed_by_key: Dictionary = {}
 	for value in placed:
-		var room := value as Dictionary
-		center_by_key[str(room["key"])] = room["center"]
+		var placed_room := value as Dictionary
+		placed_by_key[str(placed_room["key"])] = placed_room
 	var rooms: Array[Dictionary] = []
 	for value in slots:
 		var slot := value as Dictionary
 		var key := str(slot["key"])
-		if not center_by_key.has(key):
+		if not placed_by_key.has(key):
 			return {}
+		# 房型与尺寸都以**落位结果**为准：桥房族的 template_id / size 由落位方向决定
+		# （本体或转置姿态），槽位里存的是本体，落位时才可能被换成转置。
+		var placed_room := placed_by_key[key] as Dictionary
 		rooms.append({
 			"key": key,
 			"room_id": str(slot.get("room_id", "")),
@@ -840,11 +1123,15 @@ static func _constrained_floor_from(
 			"room_type": str(slot.get("room_type", "")),
 			"role": str(slot.get("role", "")),
 			"parent_key": str(slot.get("parent_key", "")),
-			"template_id": str(slot.get("template_id", "")),
-			"template_variant": str(slot.get("template_variant", "")),
-			"center": center_by_key[key],
-			"size": slot["size"],
-			"rotation_deg": 0.0,
+			"template_id": str(placed_room.get("template_id", slot.get("template_id", ""))),
+			"template_variant": str(
+				placed_room.get("template_variant", slot.get("template_variant", ""))
+			),
+			"center": placed_room["center"],
+			"size": placed_room["size"],
+			# 转置姿态（同一张模板旋转 90°）由落位阶段定，必须带回房间记录 ——
+			# 校验器 `expected_size_for_rotation` 靠它把转置尺寸认成合法。
+			"rotation_deg": float(placed_room.get("rotation_deg", 0.0)),
 			"content_type": "",
 			"boss_content_id": "",
 			"enemy_spawn_plan": {},
@@ -1091,17 +1378,25 @@ static func _boss_room_exclusive_instances(room: Dictionary, boss_layout: Dictio
 
 ## —— 第 6 环（多层几何）：通道桥房的下沉坑 + 跨桥 ——
 ##
-## 本关唯一多层几何房型（`bridge_60x50`）：四周 15m 宽上层平台、中央 30×20 下沉坑
+## 本关唯一多层几何房型（桥块族 `bridge_60x50`，只有这一张模板；取向不是第二个 id，
+## 而是**同一张模板旋转 90°** `template_rotation_deg: 90` —— 桥沿 x 跨 / 桥沿 z 跨，
+## 尺寸与坑/桥矩形同时互转）：
+## 四周 15m 宽上层平台、中央 30×20 下沉坑
 ## （深 12m = 一整层层高）、一座 5m 宽桥横跨坑顶。模板已声明 `sunken_pit` / `bridge_span`
 ## （坐标口径 = 模板自有 `bbox_nw_x_east_y_south`，与 `variant_footprints` 同源），
 ## 但组合器 `build_block()` 的输入契约是「轴对齐矩形 + 四面墙 + 门位 + 单水平面」，
 ## 装不下「同一房内的第二个水平面」⇒ 多层件走这条独立通路，与 Boss 房专属件同模式：
 ## 叠加在通用壳体之上，**不参与 lane 归属模型**（不占 lane、不进 wall_lanes）。
 ##
+## ⚠ **两种取向都必须通**：坑壁开口与桥侧护栏按轴解算（`_bridge_pit_edge_open()`），
+## 任何一轴写死都会让另一种取向的桥不通（详见该函数头注释）。
+##
 ## 三层几何（全部落在 5m 格心/格线上，与地砖同模数）：
 ##   ① **上层平台**：通用地砖照旧铺满房内，但**扣掉坑区格**；桥面那 6 格保留 ——
 ##      它本来就在 y=0，只是四周从「平台」变成「悬空桥面」。
 ##   ② **坑壁 + 护栏**：一件标准墙件纵向拉伸到 `坑深 + 护栏高`，沿坑四周与桥两侧各铺一排。
+##      坑壁在**桥实际贴到的那两条坑沿**上留口；桥侧护栏沿**桥的长轴**排在桥的两条长边上
+##      （本体 → 开口在东西壁、护栏沿 x；转置姿态 → 开口在南北壁、护栏沿 z）。
 ##      **护栏与坑壁共用同一件墙**（业主裁决 2026-09-25「坑沿加护栏」）：墙顶露在地面上
 ##      0.8m 即护栏，与坑壁同材质、视觉连贯，不需要一件新资产。
 ##      ⚠ 玩家**没有跳跃能力**（`Player3D` 状态机无 jump 态、InputMap 无跳跃 action）
@@ -1139,6 +1434,8 @@ const MULTI_LEVEL_FACE_NEG_Z := 0.0
 const MULTI_LEVEL_FACE_POS_Z := 180.0
 const MULTI_LEVEL_FACE_NEG_X := 90.0
 const MULTI_LEVEL_FACE_POS_X := -90.0
+## 「桥边贴合坑沿 / 桥长轴分派」的坐标容差（两端都是 5m 模数算出来的数，取 0.01 足够）。
+const MULTI_LEVEL_EPS := 0.01
 
 
 ## 通道桥多层几何的规划结果：坑/桥矩形（房局部）＋ 三层几何实例清单。
@@ -1154,6 +1451,9 @@ static func _bridge_multi_level_plan(room: Dictionary, templates: Dictionary) ->
 	var size := room.get("size", Vector2.ZERO) as Vector2
 	if size.x <= 0.0 or size.y <= 0.0:
 		return {}
+	# 转置姿态（同模板旋转 90°）：模板的 `sunken_pit` / `bridge_span` 矩形是按**本体**
+	# 坐标声明的，转置房里必须把两侧互换后再换算 —— 否则坑与桥会落到错的位置。
+	var rotated := _is_rotated_size(size, _vec2(template.get("size_m", [])))
 	var depth := float((pit_value as Dictionary).get("depth_m", MULTI_LEVEL_PIT_DEPTH_M))
 	if depth <= 0.0:
 		push_error(
@@ -1162,7 +1462,7 @@ static func _bridge_multi_level_plan(room: Dictionary, templates: Dictionary) ->
 		)
 		return {}
 	var pit_rect := _template_rect_to_local(
-		(pit_value as Dictionary).get("rect_m", {}) as Dictionary, size
+		(pit_value as Dictionary).get("rect_m", {}) as Dictionary, size, rotated
 	)
 	if pit_rect.size.x <= 0.0 or pit_rect.size.y <= 0.0:
 		push_error(
@@ -1174,7 +1474,7 @@ static func _bridge_multi_level_plan(room: Dictionary, templates: Dictionary) ->
 	var span_value: Variant = template.get("bridge_span")
 	if span_value is Dictionary:
 		bridge_rect = _template_rect_to_local(
-			(span_value as Dictionary).get("rect_m", {}) as Dictionary, size
+			(span_value as Dictionary).get("rect_m", {}) as Dictionary, size, rotated
 		)
 	return {
 		"pit_rect": pit_rect,
@@ -1184,19 +1484,45 @@ static func _bridge_multi_level_plan(room: Dictionary, templates: Dictionary) ->
 	}
 
 
+## 房记录里的尺寸是否是模板的「转置姿态」：非正方形、且两分量互换。
+## 与校验器 `LevelPlanValidator.expected_size_for_rotation` 同一判据 —— 那边读
+## `rotation_deg`，这边从尺寸反推。两侧必须一致，否则生成器摆出来的坑位与校验器
+## 认的房尺寸会互相打架。
+static func _is_rotated_size(size: Vector2, template_size: Vector2) -> bool:
+	if template_size.x <= 0.0 or template_size.y <= 0.0:
+		return false
+	if is_equal_approx(template_size.x, template_size.y):
+		return false
+	return (
+		is_equal_approx(size.x, template_size.y)
+		and is_equal_approx(size.y, template_size.x)
+	)
+
+
 ## 模板 `rect_m`（`{x: [vx0, vx1], y: [vy0, vy1]}`，`bbox_nw_x_east_y_south` 口径）
 ## → 房局部 `Rect2`（x 向东、y 即 z 向南，原点 = 房中心）。口径见上一条头注释。
-static func _template_rect_to_local(rect_m: Dictionary, size: Vector2) -> Rect2:
+##
+## `rotated = true`（转置姿态）时模板的 `(vx, vy)` 对应房局部的 `(vy, vx)`：
+## 两侧互换即可沿用同一套公式 —— 调用方传进来的 `size` 已经是转置后的尺寸
+## （宽 = 模板高），故不需要再改公式本身。
+static func _template_rect_to_local(
+	rect_m: Dictionary, size: Vector2, rotated: bool = false
+) -> Rect2:
 	var xs: Variant = rect_m.get("x", [])
 	var ys: Variant = rect_m.get("y", [])
 	if not (xs is Array) or not (ys is Array):
 		return Rect2()
 	if (xs as Array).size() != 2 or (ys as Array).size() != 2:
 		return Rect2()
-	var lx0 := float((xs as Array)[0]) - size.x * 0.5
-	var lx1 := float((xs as Array)[1]) - size.x * 0.5
-	var lz0 := float((ys as Array)[0]) - size.y * 0.5
-	var lz1 := float((ys as Array)[1]) - size.y * 0.5
+	var x_values := xs as Array
+	var y_values := ys as Array
+	if rotated:
+		x_values = ys as Array
+		y_values = xs as Array
+	var lx0 := float(x_values[0]) - size.x * 0.5
+	var lx1 := float(x_values[1]) - size.x * 0.5
+	var lz0 := float(y_values[0]) - size.y * 0.5
+	var lz1 := float(y_values[1]) - size.y * 0.5
 	return Rect2(
 		Vector2(minf(lx0, lx1), minf(lz0, lz1)),
 		Vector2(absf(lx1 - lx0), absf(lz1 - lz0))
@@ -1212,9 +1538,35 @@ static func _multi_level_lane_centers(min_m: float, max_m: float) -> Array[float
 	return centers
 
 
+## 桥跨是否在这条坑沿上开了口。
+##
+## `along_x = true` 表示这条坑沿**沿 x 走向**（即 z = `edge_m` 的南/北壁），此时判
+## 桥矩形的 z 边是否贴到它；`false` 表示沿 z 走向（x = `edge_m` 的东西壁），判 x 边。
+## 为什么要这个判据：桥块族有**两种取向**（本体桥沿 x 跨、`template_rotation_deg: 90`
+## 转置后桥沿 z 跨），桥口必须开在**桥实际贴到的那两条坑沿**上。
+## 旧实现把「桥口开在东西壁、护栏排在 z=z0/z1」写死了 —— 那只对本体成立；转置姿态下
+## 南北壁不留口（玩家上不了桥）、东西壁被整片删掉（坑少两面壁）、护栏还会横在桥两端
+## 把桥堵死。故本判据与 `_bridge_multi_level_instances()` 的护栏分派一起按轴解算。
+static func _bridge_pit_edge_open(bridge: Rect2, along_x: bool, edge_m: float) -> bool:
+	if bridge.size.x <= 0.0 or bridge.size.y <= 0.0:
+		return false
+	if along_x:
+		return (
+			absf(bridge.position.y - edge_m) <= MULTI_LEVEL_EPS
+			or absf(bridge.position.y + bridge.size.y - edge_m) <= MULTI_LEVEL_EPS
+		)
+	return (
+		absf(bridge.position.x - edge_m) <= MULTI_LEVEL_EPS
+		or absf(bridge.position.x + bridge.size.x - edge_m) <= MULTI_LEVEL_EPS
+	)
+
+
 ## 三层几何实例清单（房局部坐标，形状与通用件逐字同构 + 一个 `part` 分派键）。
 ## `part = pit_wall` 走墙件语义（自带碰撞、承担阴影、按 `scale_y` 拉伸）；
 ## `part = pit_floor_tile` 走地砖语义（关内嵌碰撞、按 `snap_to_walk_plane_offset_m` 吸地）。
+##
+## ⚠ 坑壁与桥侧护栏**都必须按轴解算**（见 `_bridge_pit_edge_open` 头注释）：桥块族两种
+## 取向的坑长轴互转，写死任何一轴都会让另一种取向的桥不通。
 static func _bridge_multi_level_instances(
 	room: Dictionary, pit: Rect2, bridge: Rect2, depth: float
 ) -> Array:
@@ -1229,50 +1581,75 @@ static func _bridge_multi_level_instances(
 	var pit_z1 := pit.position.y + pit.size.y
 	var lane_xs := _multi_level_lane_centers(pit_x0, pit_x1)
 	var lane_zs := _multi_level_lane_centers(pit_z0, pit_z1)
+	var has_bridge := bridge.size.x > 0.0 and bridge.size.y > 0.0
+	var bridge_x0 := bridge.position.x
+	var bridge_x1 := bridge.position.x + bridge.size.x
+	var bridge_z0 := bridge.position.y
+	var bridge_z1 := bridge.position.y + bridge.size.y
+	# 四条坑沿各自是否被桥跨开口。
+	var open_north := _bridge_pit_edge_open(bridge, true, pit_z0)
+	var open_south := _bridge_pit_edge_open(bridge, true, pit_z1)
+	var open_west := _bridge_pit_edge_open(bridge, false, pit_x0)
+	var open_east := _bridge_pit_edge_open(bridge, false, pit_x1)
 	# ① 坑四周壁。装饰面朝**背离坑心**的一侧（= 玩家所在的平台侧）：玩家在平台上
 	# 平视护栏、俯瞰坑壁，看到的都是这一面 ⇒ 装饰面不浪费。
+	# 开口判据与旧实现同口径：格心**严格落在桥跨区间内**才算（桥跨恰与坑同长时，
+	# 端点那一格不算开口）。
 	for center_x in lane_xs:
-		counter += 1
-		instances.append(_pit_wall_instance(
-			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(center_x, -depth, pit_z0),
-			MULTI_LEVEL_FACE_NEG_Z, wall_scale_y
-		))
-		counter += 1
-		instances.append(_pit_wall_instance(
-			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(center_x, -depth, pit_z1),
-			MULTI_LEVEL_FACE_POS_Z, wall_scale_y
-		))
-	var has_bridge := bridge.size.x > 0.0 and bridge.size.y > 0.0
+		if not (open_north and center_x > bridge_x0 and center_x < bridge_x1):
+			counter += 1
+			instances.append(_pit_wall_instance(
+				"PIT_WALL_%s_%02d" % [tag, counter], Vector3(center_x, -depth, pit_z0),
+				MULTI_LEVEL_FACE_NEG_Z, wall_scale_y
+			))
+		if not (open_south and center_x > bridge_x0 and center_x < bridge_x1):
+			counter += 1
+			instances.append(_pit_wall_instance(
+				"PIT_WALL_%s_%02d" % [tag, counter], Vector3(center_x, -depth, pit_z1),
+				MULTI_LEVEL_FACE_POS_Z, wall_scale_y
+			))
 	for center_z in lane_zs:
-		# 桥口：西/东壁在桥跨那一段必须留口，否则玩家从平台走不到桥上。
-		if has_bridge and center_z > bridge.position.y and center_z < bridge.position.y + bridge.size.y:
-			continue
-		counter += 1
-		instances.append(_pit_wall_instance(
-			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(pit_x0, -depth, center_z),
-			MULTI_LEVEL_FACE_NEG_X, wall_scale_y
-		))
-		counter += 1
-		instances.append(_pit_wall_instance(
-			"PIT_WALL_%s_%02d" % [tag, counter], Vector3(pit_x1, -depth, center_z),
-			MULTI_LEVEL_FACE_POS_X, wall_scale_y
-		))
+		if not (open_west and center_z > bridge_z0 and center_z < bridge_z1):
+			counter += 1
+			instances.append(_pit_wall_instance(
+				"PIT_WALL_%s_%02d" % [tag, counter], Vector3(pit_x0, -depth, center_z),
+				MULTI_LEVEL_FACE_NEG_X, wall_scale_y
+			))
+		if not (open_east and center_z > bridge_z0 and center_z < bridge_z1):
+			counter += 1
+			instances.append(_pit_wall_instance(
+				"PIT_WALL_%s_%02d" % [tag, counter], Vector3(pit_x1, -depth, center_z),
+				MULTI_LEVEL_FACE_POS_X, wall_scale_y
+			))
 	# ② 桥两侧壁：同时是桥面护栏与桥的支撑壁（从桥面下延到坑底）。
-	# 朝向朝**桥面内侧**（玩家站在桥上，看到的是这两面）。
+	# 护栏沿**桥的长轴**排、坐在桥的两条长边上，朝向朝**桥面内侧**（玩家站在桥上，
+	# 看到的是这两面）。长轴判据用 `>=`：桥恰好正方形时按 x 向处理（坑本身不是正方形，
+	# 不会走到这一支）。
 	if has_bridge:
-		var bridge_z0 := bridge.position.y
-		var bridge_z1 := bridge.position.y + bridge.size.y
-		for center_x in lane_xs:
-			counter += 1
-			instances.append(_pit_wall_instance(
-				"PIT_BRIDGE_%s_%02d" % [tag, counter],
-				Vector3(center_x, -depth, bridge_z0), MULTI_LEVEL_FACE_POS_Z, wall_scale_y
-			))
-			counter += 1
-			instances.append(_pit_wall_instance(
-				"PIT_BRIDGE_%s_%02d" % [tag, counter],
-				Vector3(center_x, -depth, bridge_z1), MULTI_LEVEL_FACE_NEG_Z, wall_scale_y
-			))
+		if bridge.size.x >= bridge.size.y:
+			for center_x in _multi_level_lane_centers(bridge_x0, bridge_x1):
+				counter += 1
+				instances.append(_pit_wall_instance(
+					"PIT_BRIDGE_%s_%02d" % [tag, counter],
+					Vector3(center_x, -depth, bridge_z0), MULTI_LEVEL_FACE_POS_Z, wall_scale_y
+				))
+				counter += 1
+				instances.append(_pit_wall_instance(
+					"PIT_BRIDGE_%s_%02d" % [tag, counter],
+					Vector3(center_x, -depth, bridge_z1), MULTI_LEVEL_FACE_NEG_Z, wall_scale_y
+				))
+		else:
+			for center_z in _multi_level_lane_centers(bridge_z0, bridge_z1):
+				counter += 1
+				instances.append(_pit_wall_instance(
+					"PIT_BRIDGE_%s_%02d" % [tag, counter],
+					Vector3(bridge_x0, -depth, center_z), MULTI_LEVEL_FACE_POS_X, wall_scale_y
+				))
+				counter += 1
+				instances.append(_pit_wall_instance(
+					"PIT_BRIDGE_%s_%02d" % [tag, counter],
+					Vector3(bridge_x1, -depth, center_z), MULTI_LEVEL_FACE_NEG_X, wall_scale_y
+				))
 	# ③ 坑底地砖（满铺坑区，棋盘格与上层同规则）。
 	for i in range(lane_xs.size()):
 		for j in range(lane_zs.size()):
@@ -1513,13 +1890,6 @@ static func _rect_at(center: Vector2, size: Vector2) -> Rect2:
 	return Rect2(center - size * 0.5, size)
 
 
-static func _map_rect() -> Rect2:
-	return Rect2(
-		Vector2(-MAP_SIZE_M * 0.5, -MAP_SIZE_M * 0.5),
-		Vector2(MAP_SIZE_M, MAP_SIZE_M)
-	)
-
-
 static func _vec2(value: Variant) -> Vector2:
 	if value is Array:
 		var array := value as Array
@@ -1541,10 +1911,8 @@ static func validate_expedition(plan: Dictionary) -> Array[String]:
 	var errors: Array[String] = []
 	var rooms := plan.get("rooms", []) as Array
 	var room_by_key: Dictionary = {}
-	var map_rect := Rect2(
-		Vector2(-MAP_SIZE_M * 0.5, -MAP_SIZE_M * 0.5),
-		Vector2(MAP_SIZE_M, MAP_SIZE_M)
-	)
+	# 场地边界不再是判据（2026-09-25 业主裁定，全项目适用）：此处不检查
+	# `outside_floor_bounds`，也不再有 `map_rect`。面积只报数字、不设上限。
 	for room_value in rooms:
 		var room := room_value as Dictionary
 		var key := str(room.get("key", ""))
@@ -1557,8 +1925,6 @@ static func validate_expedition(plan: Dictionary) -> Array[String]:
 		var expected := SAFE_ROOM_SIZE if role == "stair_entry" else EXPEDITION_ROOM_SIZE
 		if not dimensions.is_equal_approx(expected):
 			errors.append("expedition_room_size:%s:%s" % [key, dimensions])
-		if not _rect_contains_rect(map_rect, _room_rect(room)):
-			errors.append("outside_floor_bounds:%s" % key)
 	for first_index in range(rooms.size()):
 		var first := rooms[first_index] as Dictionary
 		for second_index in range(first_index + 1, rooms.size()):
@@ -1680,10 +2046,9 @@ static func validate(plan: Dictionary) -> Array[String]:
 	var errors: Array[String] = []
 	var rooms := plan.get("rooms", []) as Array
 	var room_by_key: Dictionary = {}
-	var map_rect := Rect2(
-		Vector2(-MAP_SIZE_M * 0.5, -MAP_SIZE_M * 0.5),
-		Vector2(MAP_SIZE_M, MAP_SIZE_M)
-	)
+	# 场地边界不再是判据（2026-09-25 业主裁定，全项目适用）：本函数不检查
+	# `outside_floor_bounds`。核区排斥（`occupies_core`）与楼梯厅预留仍照判 ——
+	# 它们约束的是「谁占了谁的位置」，不是「谁超了场地」。
 	var core_rect := Rect2(
 		CORE_CENTER - Vector2.ONE * CORE_SIZE_M * 0.5,
 		Vector2.ONE * CORE_SIZE_M
@@ -1703,8 +2068,6 @@ static func validate(plan: Dictionary) -> Array[String]:
 		elif role != "boss" and (maxf(dimensions.x, dimensions.y) < 30.0 or minf(dimensions.x, dimensions.y) < 25.0):
 			errors.append("content_room_too_small:%s" % key)
 		var room_rect := _room_rect(room)
-		if not _rect_contains_rect(map_rect, room_rect):
-			errors.append("outside_floor_bounds:%s" % key)
 		if role not in ["stair_entry", "stair_exit"] and room_rect.intersection(core_rect).get_area() > 0.01:
 			errors.append("occupies_core:%s" % key)
 	for first_index in range(rooms.size()):
@@ -1743,8 +2106,8 @@ static func validate(plan: Dictionary) -> Array[String]:
 	var branch_count := int(plan.get("branch_count", 0))
 	if branch_count < MIN_BRANCH_COUNT or branch_count > MAX_BRANCH_COUNT:
 		errors.append("branch_count:%d" % branch_count)
-	if float((plan.get("area_budget", {}) as Dictionary).get("estimated_used_area_m2", INF)) > float((plan.get("area_budget", {}) as Dictionary).get("target_usable_area_m2", 0.0)):
-		errors.append("area_budget_exceeded")
+	# 面积不再是判据（2026-09-25 业主裁定）：`area_budget` 只作为数据留在 plan 里
+	# 供报告与诊断读取，本函数不再报 `area_budget_exceeded`。
 	return errors
 
 
@@ -2064,14 +2427,6 @@ static func _edge_is_buildable(parent: Dictionary, child: Dictionary) -> bool:
 static func _room_rect(room: Dictionary) -> Rect2:
 	var dimensions := room.get("dimensions", Vector2.ZERO) as Vector2
 	return Rect2((room.get("position", Vector2.ZERO) as Vector2) - dimensions * 0.5, dimensions)
-
-
-static func _rect_contains_rect(container: Rect2, child: Rect2) -> bool:
-	return (
-		container.has_point(child.position)
-		and child.end.x <= container.end.x + 0.01
-		and child.end.y <= container.end.y + 0.01
-	)
 
 
 static func _stair_reservation_rect(side: String) -> Rect2:

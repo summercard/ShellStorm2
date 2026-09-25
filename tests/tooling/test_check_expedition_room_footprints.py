@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""自测：check_expedition_room_footprints.py 必须真的会对「轮廓 / 多层几何」不一致报红。
+"""自测：check_expedition_room_footprints.py 必须真的会对「轮廓 / 多层几何 / 取向唯一表达 /
+level_plan 契约」不一致报红。
 
-一个对照组 + 7 类不一致，每类各报红一次。用真实模板目录的**临时副本**改坏，
+一个对照组 + 11 类不一致，每类各报红一次。用真实模板目录的**临时副本**改坏，
 仓库文件只读（自测绝不改真源）。
 """
 import json
@@ -126,4 +127,62 @@ def break_no_openable(work: Path) -> None:
 
 assert run(break_no_openable) == 1, "7 类（openable_walls 某向无可开槽）没有报红"
 
-print("EXPEDITION_FOOTPRINT_CHECKER_OK: 对照 + 7 类不一致均按预期判定")
+
+# ----------------------------------------------------------------- 8~11：取向唯一表达 + level_plan 契约
+
+ALL_TEMPLATES = [
+    "boss_50x40", "bridge_60x50", "corridor_45x40", "db_70x50",
+    "extraction_25x25", "office_60x70", "safe_15x15", "std_25x25",
+]
+
+
+def write_plan(work: Path, pool, registered) -> None:
+    (work.parent / "level_plan.json").write_text(
+        json.dumps(
+            {"generation_policy": {"content_template_pool": pool}, "room_templates": registered},
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+
+# 8｜任何模板声明 `axis_pose_of` 都报红（转置姿态只许用 template_rotation_deg 表达）
+#     业主裁定 2026-09-25：「不要两批代号」—— 同一房型在模板目录里只能有一个 id。
+#     这条专防有人把第二个 id（如曾经的 bridge_50x60）加回来。
+def break_axis_alias(work: Path) -> None:
+    def edit(data):
+        data["axis_pose_of"] = "bridge_50x60"
+
+    patch(work / BRIDGE, edit)
+
+
+assert run(break_axis_alias) == 1, "8 类（模板声明 axis_pose_of）没有报红"
+
+
+# 9｜桥跨宽写成 y 跨（30）而不是窄边宽（5）
+def break_span_width(work: Path) -> None:
+    def edit(data):
+        data["bridge_span"]["width_m"] = 30.0
+
+    patch(work / BRIDGE, edit)
+
+
+assert run(break_span_width) == 1, "9 类（桥跨宽未取窄边）没有报红"
+
+
+# 10｜level_plan 的房型池引用了不存在的模板
+def break_pool_missing_template(work: Path) -> None:
+    write_plan(work, ["bridge_999x999"], ALL_TEMPLATES)
+
+
+assert run(break_pool_missing_template) == 1, "10 类（池引用不存在模板）没有报红"
+
+
+# 11｜level_plan.room_templates 漏登记模板文件（未登记 ⇒ 门槽表不被加载）
+def break_unregistered_template(work: Path) -> None:
+    write_plan(work, ["bridge_60x50"], ["bridge_60x50"])
+
+
+assert run(break_unregistered_template) == 1, "11 类（room_templates 未登记模板文件）没有报红"
+
+print("EXPEDITION_FOOTPRINT_CHECKER_OK: 对照 + 11 类不一致均按预期判定")

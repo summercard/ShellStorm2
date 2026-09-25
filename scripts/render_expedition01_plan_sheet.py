@@ -82,9 +82,12 @@ def line(x1, y1, x2, y2, stroke="#334155", sw=0.5, dash=None, marker=None):
     return a + "/>"
 
 
-def text(x, y, s, size=12, anchor="middle", fill="#0f172a", weight="400", base="middle"):
+def text(x, y, s, size=12, anchor="middle", fill="#0f172a", weight="400", base="middle",
+         outline=False):
+    """outline=True 时给文字加白色描边 —— 窄房的名字会溢出到相邻房间上，靠描边保证可读。"""
+    extra = ' paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"' if outline else ""
     return (f'<text x="{n(x)}" y="{n(y)}" font-size="{n(size)}" font-weight="{weight}" '
-            f'text-anchor="{anchor}" dominant-baseline="{base}" fill="{fill}">{esc(s)}</text>')
+            f'text-anchor="{anchor}" dominant-baseline="{base}" fill="{fill}"{extra}>{esc(s)}</text>')
 
 
 def circle(cx, cy, r, fill="#ffffff", stroke="#334155", sw=0.5):
@@ -114,6 +117,9 @@ KIND = {
 INK = "#0f172a"
 MUTED = "#64748b"
 DIM = "#475569"
+# 多层房型的「下沉区」专用色：**比上层平台明显更深**（深 = 低）。
+# 别用 #dbeafe 这类跟 COMMON 平台色（#E6F1FB）只差一点点的蓝 —— 屏幕上分不出哪块是能走的、哪块是掉的。
+SUNKEN = dict(fill="#BFD6F2", stroke="#2A6BB5", ink="#14417A")
 GRID_C = "#e6ebf2"
 CONNECT = "#B8B5A9"
 ROUTE = "#185FA5"
@@ -125,6 +131,13 @@ KIND_BY_ROOM_TYPE = {
     "EXTRACTION_ROOM": "EXTRACT",
 }
 KEY_WHEN_NO_CODE = {"SAFE_ROOM": "start", "BOSS_ROOM": "boss", "EXTRACTION_ROOM": "extraction"}
+
+# 业主 2026-09-25 裁定：**支线整体取消** —— 本关不再有 branch_01..04，图纸只画主路 9 房。
+# 设计页的支线设计已作废（§2 顶部裁定 / §3.3 / §5.1），主路目标口径加深到 13 房
+# （10 间内容房），新房型分配与坐标待实际制作时重排。
+# 这个开关现在已无支线可过滤（设计页 §3.1 总表里不再有「定位 = 支线」的行），
+# 保留是为了其它关卡 / 将来复用；总平面图、详图、明细表、面积条都会一起过滤 BRANCH。
+SHOW_BRANCH_ROOMS = False
 
 # ---------------------------------------------------------------- 数据（从设计页解析）
 #
@@ -229,10 +242,15 @@ def parse_design_rooms():
 
     for i, r in enumerate(rows, 1):
         r["i"] = i
+        r["parent"] = parents.get(r["key"])
         if r["key"] not in centres:
+            # 支线房不需要坐标（设计页 §4.2 的支线行已移除）；保留该分支是为将来
+            # 其它关卡 / 复用场景 —— 支线不绘制时不给它算区域。
+            if r["kind"] == "BRANCH" and not SHOW_BRANCH_ROOMS:
+                r["cx"] = r["cy"] = r["x0"] = r["x1"] = r["y0"] = r["y1"] = None
+                continue
             raise SystemExit("§4.2 坐标草案里找不到房间「%s」的中心坐标" % r["key"])
         r["cx"], r["cy"] = centres[r["key"]]
-        r["parent"] = parents.get(r["key"])
         r["x0"] = r["cx"] - r["w"] / 2.0
         r["x1"] = r["cx"] + r["w"] / 2.0
         r["y0"] = r["cy"] - r["d"] / 2.0
@@ -247,10 +265,15 @@ def parse_design_rooms():
 
 
 ROOMS = parse_design_rooms()
+
+# 绘制集合：默认剔掉支线房（见 SHOW_BRANCH_ROOMS 的说明；本关已无支线行 ⇒ 恒等于全集）。
+# 序号 r["i"] 按 §3.1 总表原始序（本关 1..9 即主路）。
+DRAWN_ROOMS = [r for r in ROOMS if SHOW_BRANCH_ROOMS or r["kind"] != "BRANCH"]
+DRAWN_KEYS = {r["key"] for r in DRAWN_ROOMS}
 BY_KEY = {r["key"]: r for r in ROOMS}
 
-# 父子连接（A -> B；方向由坐标决定）
-LINKS = [(r["parent"], r["key"]) for r in ROOMS if r["parent"]]
+# 父子连接（A -> B；方向由坐标决定）—— 只收绘制集合内的边
+LINKS = [(r["parent"], r["key"]) for r in DRAWN_ROOMS if r["parent"]]
 
 # 主路顺序：入口 → 主路内容房 → 首领 → 撤离
 ENTRY_KEY = next((r["key"] for r in ROOMS if r["room_type"] == "SAFE_ROOM"), "start")
@@ -259,13 +282,61 @@ EXIT_KEY = next((r["key"] for r in ROOMS if r["room_type"] == "EXTRACTION_ROOM")
 MAIN_SEQUENCE = ([ENTRY_KEY]
                  + [r["key"] for r in ROOMS if r["placement"] == "主路"]
                  + [BOSS_KEY, EXIT_KEY])
-BRANCH_KEYS = [r["key"] for r in ROOMS if r["kind"] == "BRANCH"]
+BRANCH_KEYS = [r["key"] for r in DRAWN_ROOMS if r["kind"] == "BRANCH"]
 
-# 子房索引
+# 子房索引（只收绘制集合内的，图纸不给未绘制的房间留门位）
 CHILDREN = {}
-for _r in ROOMS:
+for _r in DRAWN_ROOMS:
     if _r["parent"]:
         CHILDREN.setdefault(_r["parent"], []).append(_r["key"])
+
+# ---------------------------------------------------------------- 非矩形轮廓
+#
+# 局部坐标（原点 = 房间西北角，+x 向东、+y 向南），顶点一律落 5 m 网格。
+# 总平面图与详图**共用这套顶点**，避免两处各写一份对不上。
+# ⚠️ 2026-09-25：`room_02` / `room_05` / `room_06` 的尺寸按业主指示改画，
+# 与 `room_templates/*.json` 的 `variant_footprints` **暂不一致**（本轮只动图纸）；
+# 落实跑口径时两处要一起改（门禁 `check_expedition_room_footprints.py` 校 JSON）。
+OUTLINES = {
+    # 拐角走廊 L 形：横臂 45×15 + 竖臂 15×25
+    "room_01": [(0, 0), (45, 0), (45, 15), (15, 15), (15, 40), (0, 40)],
+    # 拐角走廊 凹字形折返：上下横臂 45×15 + 右侧竖 15×10
+    "room_04": [(0, 0), (45, 0), (45, 40), (0, 40), (0, 25), (30, 25), (30, 15), (0, 15)],
+    # 数据库房间01 40×30：主体 40×25 + 南侧中段外凸 10×5
+    "room_02": [(0, 0), (40, 0), (40, 25), (25, 25), (25, 30), (15, 30), (15, 25), (0, 25)],
+    # 数据库房间02 50×30：主体 50×25 + 南中段外凸 20×5；左下缺 15×10、右下缺 15×5
+    "room_06": [(0, 0), (50, 0), (50, 25), (35, 25), (35, 30), (15, 30), (15, 20), (0, 20)],
+    # 通道桥房间 30×60 工字型：南北两端 30×15 上层平台 + 中间 10 m 宽跨桥（x 10~20）
+    "room_05": [(0, 0), (30, 0), (30, 15), (20, 15), (20, 45),
+                (30, 45), (30, 60), (0, 60), (0, 45), (10, 45), (10, 15), (0, 15)],
+}
+
+
+def poly_area(pts):
+    """鞋带公式算多边形面积（绝对值为正；顶点须按序给出）。"""
+    s = 0.0
+    for i in range(len(pts)):
+        x1, y1 = pts[i]
+        x2, y2 = pts[(i + 1) % len(pts)]
+        s += x1 * y2 - x2 * y1
+    return abs(s) / 2.0
+
+
+for _r in DRAWN_ROOMS:
+    _pts = OUTLINES.get(_r["key"])
+    _r["outline"] = _pts
+    _r["area_outline"] = poly_area(_pts) if _pts else _r["w"] * _r["d"]
+
+# 轮廓房的标签锚点（局部坐标）—— 不能用包围盒中心：L 形 / 凹字形 / 工字形的包围盒
+# 中心往往落在**缺口或窄腰**上，文字会溢出到房间外。这里给每间轮廓房挑一块**实心且够宽**
+# 的区域放文字（room_01 取横臂、room_04 取上横臂、room_05 取北端平台、room_06 取满宽带）。
+OUTLINE_LABEL = {
+    "room_01": (22.5, 7.5),
+    "room_04": (22.5, 7.5),
+    "room_02": (20.0, 12.5),
+    "room_06": (25.0, 10.0),
+    "room_05": (15.0, 7.5),
+}
 
 
 def neighbor_side(r, other):
@@ -289,29 +360,57 @@ def doors_for(r):
 
 
 # ---------------------------------------------------------------- 总平面图
+#
+# 画幅按「实际房间包络 ∪ 场地参考框」自动适配，**不再钉死 250×250**：
+# 场地外边界自 2026-09-25 起退出判据（05.2 §3.7），房间可以整块探出场地框，
+# 若仍按场地定比例就会把探出的房间裁掉（曾发生：包络 190×320 被裁到只剩中段）。
+PAD = 40.0
+# 图例盒固定占左下角；顶部另留标题带（房间可能顶到最北边，标题不能与它同高）。
+TOP_BAND = 56.0
+LEGEND_W, LEGEND_H = 250.0, 140.0
+# 画幅装进「房间包络 ∪ 场地参考框」：场地框已不是判据（05.2 §3.7），但仍作坐标
+# 参照画出来 —— 装进来才不会出现「只露一个角」的半截框（那反而像画错了）。
+# 画幅取竖长方形，贴合本关「主路沿 y 铺开」的长链形状。
+OVERVIEW_MARGIN = 0.0
 
-PAD = 30.0
-S = 620.0 / SITE_S          # 2.48 px/m
-VW, VH = 680.0, 680.0
+
+def _overview_bounds():
+    """返回需要装进画幅的矩形 (x0, y0, x1, y1)：房间包络 ∪ 场地参考框。"""
+    x0 = min(SITE_X0, min(r["x0"] for r in DRAWN_ROOMS)) - OVERVIEW_MARGIN
+    y0 = min(SITE_Y0, min(r["y0"] for r in DRAWN_ROOMS)) - OVERVIEW_MARGIN
+    x1 = max(SITE_X1, max(r["x1"] for r in DRAWN_ROOMS)) + OVERVIEW_MARGIN
+    y1 = max(SITE_Y1, max(r["y1"] for r in DRAWN_ROOMS)) + OVERVIEW_MARGIN
+    return x0, y0, x1, y1
+
+
+BX0, BY0, BX1, BY1 = _overview_bounds()
+# 画幅的可用像素区（左右各 PAD，顶部让出标题带，底部让出图例盒）。
+# 画幅取「竖长方形」—— 本关主路是一条沿 y 铺开的长链，竖向多给的像素能直接换成
+# 更大的房间和更清楚的字（方画幅下高度是唯一瓶颈，横向留白白白浪费）。
+_FIT_W = 620.0
+_FIT_H = 700.0
+S = min(_FIT_W / max(BX1 - BX0, 1e-6), _FIT_H / max(BY1 - BY0, 1e-6))
+VW = (BX1 - BX0) * S + PAD * 2
+VH = (BY1 - BY0) * S + PAD * 2 + TOP_BAND + LEGEND_H + 10.0
 
 
 def gx(x):
-    return PAD + S * (x - SITE_X0)
+    return PAD + S * (x - BX0)
 
 
 def gy(y):
-    return PAD + S * (y - SITE_Y0)
+    return PAD + TOP_BAND + S * (y - BY0)
 
 
 def build_overview(with_grid=True):
     o = [f'<svg viewBox="0 0 {n(VW)} {n(VH)}" width="100%" xmlns="http://www.w3.org/2000/svg" '
          f'role="img" font-family="system-ui, -apple-system, Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">',
          '<title>远征关卡01 总平面图</title>',
-         f'<desc>主路 {len(MAIN_SEQUENCE)} 房墙贴墙 + {len(BRANCH_KEYS)} 间支线房（各挂主路中间 4 房之一）的平面示意，含场地边界、5 米网格与房间连接。</desc>',
+         f'<desc>主路 {len(MAIN_SEQUENCE)} 房墙贴墙的平面示意（支线已取消、无支线房），含场地参考框、25 米网格、房间真实轮廓与主路行进方向箭头。</desc>',
          ARROW_DEFS]
 
-    # 场地
-    o.append(rect(gx(SITE_X0), gy(SITE_Y0), S * SITE_S, S * SITE_S, "#fbfcfe", "#94a3b8", 0.5, 3))
+    # 场地（细实线框，只作坐标参照，不作判据）
+    o.append(rect(gx(SITE_X0), gy(SITE_Y0), S * SITE_S, S * SITE_S, "#fbfcfe", "#94a3b8", 0.6, 3))
     if with_grid:
         step = 25.0
         v = SITE_X0
@@ -328,13 +427,15 @@ def build_overview(with_grid=True):
                 continue
             o.append(line(gx(SITE_X0), gy(v), gx(SITE_X1), gy(v), GRID_C, 0.5))
             v += step
-    # 核心区（65x65 居中 2.5,2.5），仅参考
+    # 核心区（65x65 居中 2.5,2.5），仅参考。文字放到框**右侧**（该处为空）——
+    # 本关核心框内压着 room_04，框内或框上都会与房间文字打架。
     cx0, cy0 = 2.5 - 32.5, 2.5 - 32.5
     o.append(rect(gx(cx0), gy(cy0), S * 65, S * 65, "none", "#c7b9e8", 0.6, 0, "5 3"))
-    o.append(text(gx(2.5), gy(2.5), "核心区 65×65", 10, "middle", "#7F77DD", "500"))
-    o.append(text(gx(2.5), gy(2.5) + 13, "本关不避让（enforce_core_exclusion = false）", 9, "middle", "#9a8fd0"))
+    o.append(text(gx(cx0 + 65) + 6, gy(cy0 + 32.5) - 3, "核心区 65×65", 10, "start", "#7F77DD", "500"))
+    o.append(text(gx(cx0 + 65) + 6, gy(cy0 + 32.5) + 10, "（本关不避让）", 9, "start", "#9a8fd0"))
 
-    # 支线连接（先画，压在房间下）：父房中心 -> 子房中心 的灰色虚线
+    # 非主路连接（先画，压在房间下）：父房中心 -> 子房中心 的灰色虚线
+    # 本关支线已取消 ⇒ 本循环无命中（主路自己走蓝色实线）
     for a, b in LINKS:
         ra, rb = BY_KEY[a], BY_KEY[b]
         if a == ENTRY_KEY or b in MAIN_SEQUENCE:
@@ -342,67 +443,84 @@ def build_overview(with_grid=True):
         o.append(line(gx(ra["cx"]), gy(ra["cy"]), gx(rb["cx"]), gy(rb["cy"]),
                       CONNECT, 1.0, "5 4"))
 
-    # 主路方向（蓝色实线 + 每段中点一个箭头）
-    pts = [(gx(BY_KEY[k]["cx"]), gy(BY_KEY[k]["cy"])) for k in MAIN_SEQUENCE]
-    o.append(pline(pts, ROUTE, 1.8))
-    for i in range(len(pts) - 1):
-        (x1, y1), (x2, y2) = pts[i], pts[i + 1]
-        mx, my = (x1 + x2) / 2.0, (y1 + y2) / 2.0
-        length = math.hypot(x2 - x1, y2 - y1)
-        if length < 1e-6:
+    # 主路行进方向：**不画穿房长线**（墙贴墙时房间之间没有缝隙，线要么被盖住、
+    # 要么压在房间名上）。改为在**每对相邻房的接缝处**画一个横向箭头 ——
+    # 箭头位置正是门上沿，一眼能看出「从这面墙穿过去」，也不与房内文字打架。
+    for i in range(len(MAIN_SEQUENCE) - 1):
+        ra, rb = BY_KEY[MAIN_SEQUENCE[i]], BY_KEY[MAIN_SEQUENCE[i + 1]]
+        mx_px = (gx(ra["cx"]) + gx(rb["cx"])) / 2.0
+        my_px = (gy(ra["cy"]) + gy(rb["cy"])) / 2.0
+        dx_px, dy_px = gx(rb["cx"]) - gx(ra["cx"]), gy(rb["cy"]) - gy(ra["cy"])
+        ln = math.hypot(dx_px, dy_px)
+        if ln < 1e-6:
             continue
-        ux, uy = (x2 - x1) / length, (y2 - y1) / length
-        o.append(line(mx - ux * 7, my - uy * 7, mx + ux * 7, my + uy * 7,
-                      ROUTE, 1.8, None, "ar"))
+        ux, uy = dx_px / ln, dy_px / ln
+        o.append(line(mx_px - ux * 9, my_px - uy * 9, mx_px + ux * 9, my_px + uy * 9,
+                      ROUTE, 2.4, None, "ar"))
 
-    # 房间
-    for r in ROOMS:
+    # 房间（矩形或真实轮廓 + 文字 + 序号角标）
+    for r in DRAWN_ROOMS:
         k = KIND[r["kind"]]
-        o.append(rect(gx(r["x0"]), gy(r["y0"]), S * r["w"], S * r["d"], k["fill"], k["stroke"], 1.2, 2))
+        if r["outline"]:
+            o.append(poly([(gx(r["x0"] + vx), gy(r["y0"] + vy)) for vx, vy in r["outline"]],
+                          k["fill"], k["stroke"], 1.2))
+        else:
+            o.append(rect(gx(r["x0"]), gy(r["y0"]), S * r["w"], S * r["d"], k["fill"], k["stroke"], 1.2, 2))
         px_w = S * r["w"]
         px_h = S * r["d"]
-        cx, cy = gx(r["cx"]), gy(r["cy"])
-        if px_w >= 70 and px_h >= 40:
-            o.append(text(cx, cy - 9, r["name"], 12.5, "middle", k["ink"], "500"))
-            o.append(text(cx, cy + 6, f'{n(r["w"])} × {n(r["d"])} m', 10.5, "middle", k["ink"]))
-            o.append(text(cx, cy + 20, f'{r["key"]} · {n(r["w"] * r["d"])} m²', 9.5, "middle", k["ink"]))
+        if r["key"] in OUTLINE_LABEL:
+            lx_v, ly_v = OUTLINE_LABEL[r["key"]]
+            cx, cy = gx(r["x0"] + lx_v), gy(r["y0"] + ly_v)
         else:
-            o.append(text(cx, cy - 3, r["name"], 10.5, "middle", k["ink"], "500"))
-            o.append(text(cx, cy + 11, f'{n(r["w"])}×{n(r["d"])}', 9.5, "middle", k["ink"]))
-        # 序号角标（窄房放到框外，避免压住房名）
+            cx, cy = gx(r["cx"]), gy(r["cy"])
+        # 三行文字（名字 / 尺寸 / key·面积）。窄房只给两行，避免第三行溢到房间外。
+        o.append(text(cx, cy - 8, r["name"], 11.5, "middle", k["ink"], "500", "middle", True))
+        o.append(text(cx, cy + 6, f'{n(r["w"])} × {n(r["d"])} m', 9.5, "middle", k["ink"], "400", "middle", True))
+        if px_w >= 105:
+            _a = (f'轮廓 {n(r["area_outline"])} m²' if r["outline"] else f'{n(r["w"] * r["d"])} m²')
+            o.append(text(cx, cy + 19, f'{r["key"]} · {_a}', 8.5, "middle", k["ink"], "400", "middle", True))
+        # 序号角标（窄房放到框外；无论内外都不许越进顶部标题带）
+        floor_y = PAD + TOP_BAND + 8
         if px_w >= 75:
             bx, by = gx(r["x0"]) + 9, gy(r["y0"]) + 9
         else:
             bx, by = gx(r["x0"]) - 9, gy(r["y0"]) - 9
+        by = max(by, floor_y)
         o.append(circle(bx, by, 8, "#ffffff", k["stroke"], 0.8))
         o.append(text(bx, by + 0.5, str(r["i"]), 9.5, "middle", k["ink"], "500"))
 
-    # 标题
-    o.append(text(gx(SITE_X0) + 8, gy(SITE_Y0) + 14, "远征关卡01 · 总平面图（示意）", 12, "start", INK, "500"))
-    o.append(text(gx(SITE_X0) + 8, gy(SITE_Y0) + 29,
-                  f'场地 250×250 m ｜ 5 m 网格 ｜ 层高 12 m ｜ 主路 {len(MAIN_SEQUENCE)} 房墙贴墙 + {len(BRANCH_KEYS)} 支线房（示例版图）',
+    # 标题（画幅顶部标题带 —— 与房间区物理隔开）
+    o.append(text(PAD, PAD + 12, "远征关卡01 · 总平面图（示意）", 12, "start", INK, "500"))
+    o.append(text(PAD, PAD + 29,
+                  f'示例版图 ｜ 5 m 网格 ｜ 主路 {len(MAIN_SEQUENCE)} 房墙贴墙'
+                  + (f' + {len(BRANCH_KEYS)} 支线房' if BRANCH_KEYS else '（无支线）'),
                   10, "start", MUTED))
 
-    # 指北针（+y = 南 = 画面向下 ⇒ 北在画面向上）
-    nx, ny = gx(SITE_X1) - 26, gy(SITE_Y0) + 30
+    # 指北针（画幅右上角标题带内）
+    nx, ny = VW - PAD - 14, PAD + 20
     o.append(line(nx, ny + 14, nx, ny - 8, INK, 1.2, None, "ar"))
     o.append(text(nx, ny + 24, "北", 10, "middle", INK, "500"))
 
-    # 图例
-    lx, ly = gx(SITE_X0) + 8, gy(SITE_Y1) - 80
-    o.append(rect(lx, ly, 250, 74, "#ffffff", "#cbd5e1", 0.5, 6, None, 0.9))
+    # 图例（画幅左下角，与房间区之间已预留 LEGEND_H 高度）
+    lx, ly = PAD + 4, VH - LEGEND_H - 6
+    o.append(rect(lx, ly, LEGEND_W, LEGEND_H, "#ffffff", "#cbd5e1", 0.5, 6, None, 0.9))
     o.append(text(lx + 8, ly + 14, "图例", 10.5, "start", INK, "500"))
-    order = ["SAFE", "COMMON", "BRANCH", "BOSS", "EXTRACT"]
+    # 只列**本图画到的**房类：支线已取消 ⇒ 图例里不该出现支线色块（KIND["BRANCH"] 仅备用）。
+    order = [k for k in ["SAFE", "COMMON", "BRANCH", "BOSS", "EXTRACT"]
+             if k != "BRANCH" or BRANCH_KEYS]
     for i, kk in enumerate(order):
         k = KIND[kk]
         px = lx + 8 + (i % 2) * 120
         py = ly + 30 + (i // 2) * 18
         o.append(rect(px, py - 5, 11, 10, k["fill"], k["stroke"], 0.8, 2))
         o.append(text(px + 16, py, k["label"], 9.5, "start", DIM))
-    o.append(line(lx + 8, ly + 30 + 3 * 18 - 5, lx + 30, ly + 30 + 3 * 18 - 5, ROUTE, 1.8))
-    o.append(text(lx + 34, ly + 30 + 3 * 18, "主路", 9.5, "start", DIM))
-    o.append(line(lx + 8, ly + 30 + 3 * 18 + 13, lx + 30, ly + 30 + 3 * 18 + 13, CONNECT, 1.0, "5 4"))
-    o.append(text(lx + 34, ly + 30 + 3 * 18 + 18, "支线", 9.5, "start", DIM))
+    o.append(line(lx + 8, ly + 84, lx + 30, ly + 84, ROUTE, 2.4, None, "ar"))
+    o.append(text(lx + 34, ly + 84, "主路行进方向（①→⑨ 穿墙）", 9.5, "start", DIM))
+    # 场地参考框（浅色细框，只作坐标参考，不作判据）
+    o.append(rect(lx + 8, ly + 97, 22, 11, "#fbfcfe", "#94a3b8", 0.6, 1))
+    o.append(text(lx + 34, ly + 103, "场地参考框 250×250（不作判据）", 9.5, "start", DIM))
+    o.append(line(lx + 8, ly + 118, lx + 30, ly + 118, "#c7b9e8", 0.9, "5 3"))
+    o.append(text(lx + 34, ly + 118, "核心区 65×65（本关不避让）", 9.5, "start", DIM))
 
     o.append("</svg>")
     return "".join(o)
@@ -411,7 +529,7 @@ def build_overview(with_grid=True):
 # ---------------------------------------------------------------- 详图
 
 DS = 6.0          # 详图比例 px/m（各图统一，可直接比大小）
-DPAD = 24.0
+DPAD = 34.0       # 四周留白（底部要放一行说明文字，太窄会贴边）
 
 
 def door_marker(X, Y, r, side, off, width=4.4):
@@ -429,12 +547,18 @@ def door_marker(X, Y, r, side, off, width=4.4):
 
 def detail_svg(r, inner, doors):
     """r: 房间 dict；inner(X, Y) -> 局部坐标绘制片段；doors: [(side, off)]"""
-    cw = r["w"] * DS + DPAD * 2
     ch = r["d"] * DS + DPAD * 2
     k = KIND[r["kind"]]
 
+    # 先空跑一次 inner：只为拿到它登记在图外的说明行文本，好把画幅加宽到装得下最宽那一行。
+    # 窄房（如 30 m 宽的桥房）按房宽定的画幅装不下「尺寸 · 形态」那一行，会被裁字。
+    del _FOOT[:]
+    inner(lambda vx: DPAD + vx * DS, lambda vy: DPAD + vy * DS)
+    cw = max(r["w"] * DS + DPAD * 2, max([_text_px(s) for s in _FOOT] or [0.0]) + 18.0)
+    x0 = (cw - r["w"] * DS) / 2.0          # 画幅加宽后房体仍居中
+
     def X(vx):
-        return DPAD + vx * DS
+        return x0 + vx * DS
 
     def Y(vy):
         return DPAD + vy * DS
@@ -468,20 +592,51 @@ def label(X, Y, x, y, s, size=10, fill=DIM, anchor="middle", weight="400"):
     return text(X(x), Y(y), s, size, anchor, fill, weight)
 
 
+_FOOT = []         # 当前详图登记在图外（房体下方）的说明行，供 detail_svg 定画幅宽度
+
+
+def _text_px(s, size=9.0):
+    """粗估一串文字在 SVG 里的像素宽（全角按 size、其余按 0.56 × size）。"""
+    w = 0.0
+    for ch in s or "":
+        w += size * (1.0 if ord(ch) > 0x2000 else 0.56)
+    return w
+
+
+def foot_label(X, Y, r, s, size=9, fill=MUTED):
+    """房体**下方外侧**的统一说明行（尺寸 + 形态）。放框内会压住轮廓边线与设施。"""
+    _FOOT.append(s)
+    return label(X, Y, r["w"] / 2.0, r["d"] + 4.6, s, size, fill)
+
+
+def foot_note(X, Y, r, s, size=8.5, dy=1.6, fill=MUTED):
+    """说明行之上再加一行（房体下方外侧）。同样登记进 _FOOT，画幅才会为它让出宽度。"""
+    _FOOT.append(s)
+    return label(X, Y, r["w"] / 2.0, r["d"] + 4.6 - dy, s, size, fill)
+
+
 def build_details():
-    """返回 key -> inner(X, Y) 绘制函数（只画房体与内部设施；门由 detail_svg 统一画）。"""
+    """返回 key -> inner(X, Y) 绘制函数（只画房体与内部设施；门由 detail_svg 统一画）。
+
+    ⚠️ **详图配色按「房型类别」定，不按「主路 / 支线」定。**
+    支线曾是**一条边的属性**、不是房型的属性 —— `content_template_pool` 里那 5 个内容房型
+    （`corridor_45x40` / `db_70x50` / `office_60x70` / `bridge_60x50` / `std_25x25`）
+    既可能落在主路上、也可能被抽去当支线房，同一个详图因此必须只有一种颜色。
+    所以这里**一律不出现 `KIND["BRANCH"]`**（该色块只保留在配色表里备用）。
+    注：支线已于 2026-09-25 取消，本关已无支线房；这条规则对将来复用该脚本的关卡仍成立。
+    """
     out = {}
 
     # ---- 安全屋 15x15
     def safe(X, Y):
         k = KIND["SAFE"]
         g = [rect(X(0), Y(0), 15 * DS, 15 * DS, k["fill"], k["stroke"], 1.2, 2)]
-        g.append(circle(X(7.5), Y(9), 5, "#ffffff", k["stroke"], 0.8))
-        g.append(label(X, Y, 7.5, 9, "抵达", 8, k["ink"]))
+        g.append(circle(X(7.5), Y(8.6), 4.4, "#ffffff", k["stroke"], 0.8))
+        g.append(label(X, Y, 7.5, 8.6, "抵达", 8, k["ink"]))
         g.append(line(X(2.2), Y(15), X(9.2), Y(15), "#ffffff", 3.6))     # 弃局门（南墙，示意）
         g.append(line(X(2.2), Y(15), X(9.2), Y(15), DIM, 0.9, "3 2"))
-        g.append(label(X, Y, 7.5, 10.8, "15 × 15 m · 双门互垂", 9, MUTED))
-        g.append(label(X, Y, 5.7, 13.6, "弃局门", 8.5, k["ink"]))
+        g.append(label(X, Y, 5.7, 13.4, "弃局门", 8.5, k["ink"]))
+        g.append(foot_label(X, Y, dict(w=15, d=15), "15 × 15 m · 双门互垂"))
         return g
     out["entry"] = safe
 
@@ -494,9 +649,9 @@ def build_details():
         for i in range(4):
             g.append(rect(X(21 + i * 5.4), Y(0.8), 3.4 * DS * 0.55, 2.2 * DS * 0.55, "#cfe3f7", k["stroke"], 0.6, 1))
         g.append(rect(X(1.2), Y(28), 3.6, 7, "#cfe3f7", k["stroke"], 0.6, 1))
-        g.append(label(X, Y, 7.5, 20, "竖臂 15 × 25", 9, k["ink"]))
-        g.append(label(X, Y, 29, 7.5, "横臂 45 × 15 · 净宽 15 m", 9, k["ink"]))
-        g.append(label(X, Y, 22.5, 38.2, "45 × 40 m · 单拐角 L 形", 9, MUTED))
+        g.append(label(X, Y, 7.5, 29, "竖臂 15 × 25", 9, k["ink"]))
+        g.append(label(X, Y, 22.5, 7.5, "横臂 45 × 15 · 净宽 15 m", 9, k["ink"]))
+        g.append(foot_label(X, Y, dict(w=45, d=40), "45 × 40 m · 单拐角 L 形"))
         return g
     out["room_01"] = c1
 
@@ -509,10 +664,10 @@ def build_details():
         g = [poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.2)]
         g.append(rect(X(0), Y(15), 30 * DS, 10 * DS, "#f1f5f9", k["stroke"], 1.0))
         g.append(label(X, Y, 15, 20, "内墙岛 30 × 10", 9, DIM))
-        g.append(label(X, Y, 22.5, 1.6, "上横臂 45 × 15", 9, k["ink"]))
+        g.append(label(X, Y, 22.5, 7.5, "上横臂 45 × 15", 9, k["ink"]))
         g.append(label(X, Y, 37.5, 20, "竖 15×10", 8.5, k["ink"]))
         g.append(label(X, Y, 22.5, 33, "下横臂 45 × 15", 9, k["ink"]))
-        g.append(label(X, Y, 22.5, 38.4, "45 × 40 m · 凹字形折返", 9, MUTED))
+        g.append(foot_label(X, Y, dict(w=45, d=40), "45 × 40 m · 凹字形折返"))
         return g
     out["room_04"] = c2
 
@@ -528,8 +683,8 @@ def build_details():
             g.append(rect(X(32 + i * 5.6), Y(24), 3.6, 6, "#f2d3d3", k["stroke"], 0.6, 1))
         g.append(rect(X(20), Y(30), 10 * DS, 5 * DS, "#ffffff", k["stroke"], 0.7, 1))
         g.append(label(X, Y, 25, 32.5, "工作站", 9, k["ink"]))
-        g.append(label(X, Y, 25, 19.5, "50 × 40 m · 四墙房间", 10, MUTED))
-        g.append(label(X, Y, 25, 7.5, "机柜成组", 9, k["ink"]))
+        g.append(label(X, Y, 25, 19.5, "机柜成组", 10, k["ink"]))
+        g.append(foot_label(X, Y, dict(w=50, d=40), "50 × 40 m · 四墙房间（终局战斗）"))
         return g
     out["boss"] = boss
 
@@ -539,97 +694,113 @@ def build_details():
         g = [rect(X(0), Y(0), 25 * DS, 25 * DS, k["fill"], k["stroke"], 1.2, 2)]
         g.append(circle(X(12.5), Y(12.5), 6, "#ffffff", k["stroke"], 1.0))
         g.append(circle(X(12.5), Y(12.5), 2.4, "#EF9F27", k["stroke"], 0.8))
-        g.append(label(X, Y, 12.5, 19.6, "撤离信标", 9, k["ink"]))
-        g.append(label(X, Y, 12.5, 23.4, "25 × 25 m · 空房 · 不刷怪", 8.5, MUTED))
+        g.append(label(X, Y, 12.5, 19.8, "撤离信标", 9, k["ink"]))
+        g.append(foot_label(X, Y, dict(w=25, d=25), "25 × 25 m · 空房 · 不刷怪"))
         return g
     out["extraction"] = ext
 
-    # ---- 数据库房间01 70x50（不规则：南中段外凸 20×10，居中）
+    # ---- 数据库房间01 40×30（不规则：主体 40×25 + 南侧中段外凸 10×5，**无缺角**）
+    # ⚠️ 2026-09-25 按业主指示改画（原 db_01 的包围盒是 70×50）——轮廓顶点全部落 5 m 网格。
+    # ⚠️ db_01 **不是缺角形态**：原模板是「主体 70×40 + 南中段外凸 20×10（x∈[25,45] 居中）」，
+    #    四个角都是直角；别照着 db_02（缺角）去写它的说明。room_templates/db_70x50.json 的
+    #    variant_footprints **尚未同步本尺寸**（本轮只动图纸），落实跑口径时要一起改。
     def db1(X, Y):
-        k = KIND["BRANCH"]
-        # ⚠️ 顶点必须落 5 m 网格（白盒模数），并与 room_templates/db_70x50.json 的
-        # variant_footprints.db_01 **逐值一致**；改一处必须改另一处（门禁
-        # scripts/check_expedition_room_footprints.py 只校 JSON，图集靠人比对）。
-        # 早期目测顶点 x∈[42,22] 不在网格上且偏西 3 m，已归一居中（20×10 不变）。
-        walk = [(0, 0), (70, 0), (70, 40), (45, 40), (45, 50), (25, 50), (25, 40), (0, 40)]
+        k = KIND["COMMON"]
+        walk = [(0, 0), (40, 0), (40, 25), (25, 25), (25, 30), (15, 30), (15, 25), (0, 25)]
         g = [poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.2)]
-        for i in range(7):
-            g.append(rect(X(3), Y(5 + i * 4.2), 3.4, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
-        for i in range(7):
-            g.append(rect(X(12 + i * 4.2), Y(3), 3.4, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
-        g.append(rect(X(48), Y(6), 18 * DS, 14 * DS, "#ffffff", k["stroke"], 0.7, 2, "4 3"))
-        g.append(label(X, Y, 57, 13, "检修工位区", 9, k["ink"]))
-        g.append(label(X, Y, 35, 43.5, "南中段外凸 20 × 10", 9, DIM))
-        g.append(label(X, Y, 35, 47.5, "70 × 50 m · 不规则", 9, MUTED))
-        g.append(label(X, Y, 20, 6.5, "机柜列", 9, k["ink"]))
+        for i in range(5):                       # 西墙机柜列
+            g.append(rect(X(3), Y(4 + i * 4.4), 3.4, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
+        for i in range(6):                       # 北墙机柜列
+            g.append(rect(X(10 + i * 4.4), Y(3), 3.4, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
+        g.append(rect(X(28), Y(9), 10 * DS, 8 * DS, "#ffffff", k["stroke"], 0.7, 2, "4 3"))
+        g.append(label(X, Y, 33, 13, "检修工位", 8.5, k["ink"]))
+        g.append(label(X, Y, 12.5, 7, "机柜列", 8.5, k["ink"]))
+        g.append(foot_label(X, Y, dict(w=40, d=30), "40 × 30 m · 不规则（南中段外凸 10 × 5）"))
         return g
     out["room_02"] = db1
-    out["branch_01"] = db1
 
-    # ---- 办公室01 60x70
+    # ---- 办公室01 30x40（方厅，无内墙）
     def off(X, Y):
-        k = KIND["BRANCH"]
-        g = [rect(X(0), Y(0), 60 * DS, 70 * DS, k["fill"], k["stroke"], 1.2, 2)]
-        spots = [(11, 12), (33, 11), (50, 16), (16, 34), (42, 33), (27, 55)]
+        k = KIND["COMMON"]
+        g = [rect(X(0), Y(0), 30 * DS, 40 * DS, k["fill"], k["stroke"], 1.2, 2)]
+        spots = [(8.5, 11), (21.5, 11), (8.5, 25), (21.5, 25)]
         for tx, ty in spots:
-            g.append(rect(X(tx - 3.5), Y(ty - 2), 7 * DS, 2.4 * DS, "#ffffff", k["stroke"], 0.7, 1))
-            g.append(circle(X(tx), Y(ty + 2.1), 2.6, "#ffffff", k["stroke"], 0.7))
-        for i in range(5):
-            g.append(rect(X(50 + i * 1.8), Y(58 + (i % 2)), 1.5 * DS, 6 * DS * 0.5, "#dbe9f8", k["stroke"], 0.6, 1))
-        g.append(rect(X(1), Y(6), 1.8 * DS, 14 * DS * 0.5, "#dbe9f8", k["stroke"], 0.6, 1))
-        g.append(label(X, Y, 30, 66.5, "60 × 70 m · 无内墙（最大单间 4200 m²）", 9, MUTED))
-        g.append(label(X, Y, 30, 4.2, "工位 6 组", 9, DIM))
+            g.append(rect(X(tx - 3.2), Y(ty - 1.8), 6.4 * DS, 2.2 * DS, "#ffffff", k["stroke"], 0.7, 1))
+            g.append(circle(X(tx), Y(ty + 2), 2.4, "#ffffff", k["stroke"], 0.7))
+        for i in range(4):                       # 西墙文件柜
+            g.append(rect(X(1), Y(4 + i * 2.2), 1.8 * DS, 5 * DS * 0.5, "#dbe9f8", k["stroke"], 0.6, 1))
+        g.append(label(X, Y, 15, 6, "工位 4 组", 8.5, DIM))
+        g.append(foot_label(X, Y, dict(w=30, d=40), "30 × 40 m · 无内墙（开放办公）"))
         return g
     out["room_03"] = off
 
-    # ---- 数据库房间02 70x50（不规则：左下 20×20 + 右下 20×10 双缺角）
+    # ---- 数据库房间02 50x30（不规则：左下缺 15×10 + 右下缺 15×5，南中段外凸 20×5）
+    # ⚠️ 2026-09-25 按业主指示改画（原 db_02 是 70×50），同上：轮廓是等比缩小版、
+    # 顶点落 5 m 网格，模板 JSON 尚未同步。
     def db2(X, Y):
-        k = KIND["BRANCH"]
-        # 同上：顶点须落 5 m 网格，并与 room_templates/db_70x50.json 的
-        # variant_footprints.db_02 逐值一致（左下 18×18→20×20、右下 18×12→20×10、
-        # 南中段外凸宽 34→30）。
-        walk = [(0, 0), (70, 0), (70, 40), (50, 40), (50, 50), (20, 50), (20, 30), (0, 30)]
+        k = KIND["COMMON"]
+        walk = [(0, 0), (50, 0), (50, 25), (35, 25), (35, 30), (15, 30), (15, 20), (0, 20)]
         g = [poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.2)]
-        for row in range(4):
-            for col in range(6):
-                g.append(rect(X(8 + col * 8.4), Y(9 + row * 5.8), 5.6, 3.4, "#cbdcf0", k["stroke"], 0.6, 1))
-        g.append(rect(X(2.2), Y(14), 4.4, 7, "#FAC775", "#BA7517", 0.8, 1))
-        g.append(label(X, Y, 4.4, 24, "叉车", 8.5, "#633806"))
-        g.append(label(X, Y, 10, 40, "左下缺角 20 × 20", 9, DIM))
-        g.append(label(X, Y, 60, 45, "右下缺角 20 × 10", 8.5, DIM))
-        g.append(label(X, Y, 35, 43.5, "70 × 50 m · 不规则", 9, MUTED))
-        g.append(label(X, Y, 35, 24, "货架 · 箱体堆场", 10, k["ink"], "middle", "500"))
+        for row in range(3):
+            for col in range(5):
+                g.append(rect(X(6 + col * 8.6), Y(4 + row * 6.2), 5.4, 3.2, "#cbdcf0", k["stroke"], 0.6, 1))
+        g.append(rect(X(1.2), Y(9), 3.6, 6, "#FAC775", "#BA7517", 0.8, 1))
+        g.append(label(X, Y, 3, 17, "叉车", 8, "#633806"))
+        g.append(label(X, Y, 25, 11, "货架 · 箱体堆场", 9.5, k["ink"], "middle", "500"))
+        g.append(foot_label(X, Y, dict(w=50, d=30),
+                            "50 × 30 m · 不规则（左缺 15×10 · 右缺 15×5 · 南中段外凸 20×5）"))
         return g
     out["room_06"] = db2
 
-    # ---- 通道桥房间 60x50（含下沉坑与桥）
+    # ---- 通道桥房间 30x60 工字型（南北两端上层平台 + 中央跨桥，桥两侧为下层）
+    # ⚠️ 2026-09-25 按业主指示改画：上层平台俯视呈「工」字 ——
+    #   北端 30×15 平台（y 0~15）＋ 中间 10 m 宽跨桥（x 10~20，y 15~45）＋ 南端 30×15 平台（y 45~60）；
+    #   桥东西两侧各 10×30（x 0~10 / 20~30，y 15~45）是**下层**（下沉，画成蓝色）。
+    #   整块轮廓面积 = 30×15 + 10×30 + 30×15 = 1200 m²（占位包围盒 30×60 = 1800 m²）。
+    #   门只开在南北两块短板（桥跨向两端，进出同轴）⇒ 没有第三个门位。
+    # 原 bridge_60x50 的 60×50 本体与 50×60 转置姿态都不再用；模板 JSON 尚未同步本形态。
     def bridge(X, Y):
-        k = KIND["BRANCH"]
-        g = [rect(X(0), Y(0), 60 * DS, 50 * DS, k["fill"], k["stroke"], 1.2, 2)]
-        g.append(rect(X(15), Y(15), 30 * DS, 20 * DS, "#e2e8f0", "#94a3b8", 1.0, 0, "5 3"))
-        g.append(label(X, Y, 30, 22, "下沉坑 30 × 20", 9, DIM))
-        g.append(label(X, Y, 30, 27.5, "层高内高差（下层内容）", 8.5, DIM))
-        g.append(rect(X(15), Y(20), 30 * DS, 5 * DS, "#cfe3f7", k["stroke"], 0.9))
-        g.append(label(X, Y, 30, 17.4, "跨桥 5 m", 8.5, k["ink"]))
-        for i in range(4):
-            g.append(rect(X(17 + i * 7), Y(31), 2.6, 2.6, "#cbd5e1", "#94a3b8", 0.5, 1))
-        g.append(line(X(15), Y(14), X(45), Y(14), "#94a3b8", 0.5, "3 2"))
-        g.append(label(X, Y, 30, 47.6, "60 × 50 m · 上层通道净宽 15 m（唯一多层房型）", 9, MUTED))
-        g.append(label(X, Y, 30, 4.1, "上层平台 · 通道", 9, k["ink"]))
+        k = KIND["COMMON"]
+        g = []
+        for _lx in (0, 20):                      # 下层（先铺底）
+            g.append(rect(X(_lx), Y(15), 10 * DS, 30 * DS, SUNKEN["fill"], SUNKEN["stroke"], 1.1))
+            # 斜线填充：图纸惯例的「下沉 / 非通行面」记号，让它一眼区别于上层平台
+            for _i in range(9):
+                _yy = 16.5 + _i * 3.4
+                g.append(line(X(_lx + 0.6), Y(_yy), X(_lx + 9.4), Y(_yy + 2.6),
+                              "#8fb6e0", 0.6))
+            for _i in range(2):                  # 下层设备示意
+                g.append(rect(X(_lx + 3.4), Y(21 + _i * 8.0), 3.2, 3.0,
+                              "#e2e8f0", "#94a3b8", 0.6, 1))
+        # 上层平台（工字外轮廓）
+        walk = [(0, 0), (30, 0), (30, 15), (20, 15), (20, 45),
+                (30, 45), (30, 60), (0, 60), (0, 45), (10, 45), (10, 15), (0, 15)]
+        g.append(poly([(X(a), Y(b)) for a, b in walk], k["fill"], k["stroke"], 1.3))
+        for _i in range(5):                      # 桥面纹理
+            g.append(line(X(10.8), Y(19 + _i * 5.5), X(19.2), Y(19 + _i * 5.5), "#94a3b8", 0.5, "3 2"))
+        g.append(label(X, Y, 15, 6.4, "上层平台 · 通道", 9, k["ink"]))
+        g.append(label(X, Y, 15, 11.4, "30 × 15", 8.5, k["ink"]))
+        g.append(label(X, Y, 15, 26.5, "跨桥（上层）", 8.5, k["ink"]))
+        g.append(label(X, Y, 15, 31.5, "10 m 宽", 8.5, k["ink"]))
+        g.append(label(X, Y, 15, 36.5, "沿 y 跨", 8, k["ink"]))
+        for _lx, _cx in ((0, 5), (20, 25)):
+            g.append(label(X, Y, _cx, 24.0, "下 层", 8.5, SUNKEN["ink"], "middle", "500"))
+            g.append(label(X, Y, _cx, 29.0, "（下沉）", 8, SUNKEN["ink"]))
+            g.append(label(X, Y, _cx, 34.0, "10 × 30", 8, SUNKEN["ink"]))
+        g.append(label(X, Y, 15, 49, "上层平台 · 通道", 9, k["ink"]))
+        g.append(label(X, Y, 15, 54, "30 × 15", 8.5, k["ink"]))
+        # 两层读法：进门在水平方向上是同一位置，差别只在高度 ⇒ 单独给一行图注
+        g.append(foot_note(X, Y, dict(w=30, d=60),
+                           "浅色 = 上层可通行　深色斜纹 = 下层（下沉，掉落区）"))
+        g.append(foot_label(X, Y, dict(w=30, d=60),
+                            "30 × 60 m · 工字型上层平台 · 门只开短板（北 / 南墙）· 唯一多层房型"))
         return g
-    out["room_05"] = bridge
-    out["branch_04"] = bridge
 
-    # ---- 标准房间 25x25（空房，内容由 RuntimeDetail 流送）
-    def std(X, Y):
-        k = KIND["BRANCH"]
-        g = [rect(X(0), Y(0), 25 * DS, 25 * DS, k["fill"], k["stroke"], 1.2, 2)]
-        g.append(label(X, Y, 12.5, 12.5, "空房", 10, DIM))
-        g.append(label(X, Y, 12.5, 22.4, "25 × 25 m · 四墙平房", 8.5, MUTED))
-        g.append(label(X, Y, 12.5, 3.2, "内容由 RuntimeDetail 流送", 8, DIM))
-        return g
-    out["branch_02"] = std
-    out["branch_03"] = std
+    # room_05 是本关唯一的桥房实例。
+    out["room_05"] = bridge
+
+    # 注：`std_25x25`（标准房间）曾是支线房的专用详图（已随支线取消移除）；
+    #     它仍是 §3.4 房型池的候选，若将来主路抽到它，需要在这里补回一份绘制函数。
 
     return out
 
@@ -700,7 +871,7 @@ def build_html():
 
     # 明细表
     rows = []
-    for r in ROOMS:
+    for r in DRAWN_ROOMS:
         k = KIND[r["kind"]]
         rows.append(
             f'<tr><td class="num">{r["i"]}</td><td>{esc(r["name"])}</td><td><code>{r["key"]}</code></td>'
@@ -713,8 +884,8 @@ def build_html():
              "<th>占地 x 区间</th><th>占地 y 区间</th></tr></thead><tbody>" + "".join(rows) + "</tbody></table>")
 
     # 面积条
-    tot = sum(r["w"] * r["d"] for r in ROOMS)
-    wall = sum((r["w"] + r["d"]) * 2.0 * WALL_T for r in ROOMS)
+    tot = sum(r["w"] * r["d"] for r in DRAWN_ROOMS)
+    wall = sum((r["w"] + r["d"]) * 2.0 * WALL_T for r in DRAWN_ROOMS)
     corridor = 0.0
     for a, b in LINKS:
         ra, rb = BY_KEY[a], BY_KEY[b]
@@ -724,9 +895,9 @@ def build_html():
         corridor += clear * CORRIDOR_W
     used = tot + wall + corridor
     avail = SITE_S * SITE_S - SITE_S * 4.0 * WALL_T
-    mx = max(r["w"] * r["d"] for r in ROOMS)
+    mx = max(r["w"] * r["d"] for r in DRAWN_ROOMS)
     bars = []
-    for r in sorted(ROOMS, key=lambda z: -z["w"] * z["d"]):
+    for r in sorted(DRAWN_ROOMS, key=lambda z: -z["w"] * z["d"]):
         cls = {"BOSS": "b-boss", "SAFE": "b-safe", "EXTRACT": "b-ext", "BRANCH": "b-branch"}.get(r["kind"], "")
         bars.append(f'<div class="bar-row"><span>{esc(r["name"])}</span>'
                     f'<div class="bar"><i class="{cls}" style="width:{r["w"]*r["d"]/mx*100:.1f}%"></i></div>'
@@ -741,34 +912,20 @@ def build_html():
         flow_items.append(f'<li><b>{esc(BY_KEY[key]["name"])}</b></li>')
     flow_html = '<ol class="flow">' + "".join(flow_items) + '</ol>'
 
-    # 支线表
-    b_rows = []
-    for r in ROOMS:
-        if r["kind"] != "BRANCH":
-            continue
-        b_rows.append(f'<tr><td>{r["i"]}</td><td>{esc(r["name"])}</td><td><code>{r["key"]}</code></td>'
-                      f'<td><code>{r["parent"]}</code></td><td class="num">{n(r["w"])} × {n(r["d"])}</td></tr>')
-    branch_html = ("<table><thead><tr><th class='num'>#</th><th>支线房</th><th>key</th><th>挂在哪</th>"
-                   "<th class='num'>尺寸 (m)</th></tr></thead><tbody>" + "".join(b_rows) + "</tbody></table>")
-
     # 详图卡片
     cards = []
-    for r in ROOMS:
+    for r in DRAWN_ROOMS:
         extra = {
             "entry": "特殊房 · 沿用塔楼 v007 安全房壳体",
-            "room_01": "主路房 1 · 房型 拐角走廊（房间种类美术已有 121 包）",
-            "room_02": "主路房 2 · 房型 数据库房间01 · 支线岔口",
-            "room_03": "主路房 3 · 房型 办公室 · 支线岔口 · 最大单间",
-            "room_04": "主路房 4 · 房型 拐角走廊 · 支线岔口",
-            "room_05": "主路房 5 · 房型 通道桥房间 · 支线岔口 · 唯一多层几何",
-            "room_06": "主路房 6 · 房型 数据库房间02 · 主路最后一间内容房",
+            "room_01": "主路房 1 · 房型 拐角走廊 L 形（房间种类美术已有 121 包）",
+            "room_02": "主路房 2 · 房型 数据库房间01（40 × 30 改版，南中段外凸 10 × 5）",
+            "room_03": "主路房 3 · 房型 办公室（30 × 40 改版，无内墙）",
+            "room_04": "主路房 4 · 房型 拐角走廊 凹字折返",
+            "room_05": "主路房 5 · 房型 通道桥房间（30 × 60 工字型，本版改画）· 两扇门是桥的两端 · 唯一多层几何",
+            "room_06": "主路房 6 · 房型 数据库房间02（50 × 30 缺角改版）· 示例版图最后一间内容房",
             "boss": "特殊房 · 白模 + 房间种类美术已有（214 包）",
             "extraction": "特殊房 · 无美术（信标为运行时）",
-            "branch_01": "支线房 · 房型 数据库房间01（复用）· 挂主路第 2 房",
-            "branch_02": "支线房 · 房型 标准房间 · 挂主路第 3 房",
-            "branch_03": "支线房 · 房型 标准房间 · 挂主路第 4 房",
-            "branch_04": "支线房 · 房型 通道桥房间 · 唯一多层几何 · 挂主路第 5 房",
-        }.get(r["key"], "支线房")
+        }.get(r["key"], "主路内容房")
         cards.append(room_card(r, detail_svg(r, dets[r["key"]], doors_for(r)), extra))
     cards_html = "<h2>各房型平面示意</h2><p class='lede'>每张图按同一比例（1 m = 6 px）绘制，可直接横向比较大小。虚线开口表示门位（门槽实际位置由工具计算，不手填）。</p>" + \
                  '<div class="grid2">' + "".join(cards) + "</div>"
@@ -780,61 +937,62 @@ def build_html():
 <style>{CSS}</style></head><body><div class="wrap">
 
 <h1>远征关卡01 平面图集</h1>
-<p class="lede">按《远征关卡01 设计》§3 房型库与 §4 坐标草案绘制的示意图。用于核对房型尺寸、布局、主路与支线连接 —— <b>它不是可施工的几何源</b>，几何真源是设计源 <code>floor_00.json</code>。</p>
+<p class="lede">按《远征关卡01 设计》§3 房型库与 §4 坐标草案绘制的示意图。用于核对房型尺寸、布局与主路连接 —— <b>它不是可施工的几何源</b>，几何真源是设计源 <code>floor_00.json</code>。</p>
 
 <div class="meta">
 <span><b>关卡</b> expedition_01 · 远征前哨站</span>
-<span><b>场地</b> 250 × 250 m（中心 2.5, 2.5）</span>
+<span><b>场地</b> 250 × 250 m（中心 2.5, 2.5）· 仅作坐标参照</span>
 <span><b>网格</b> 5 m · 层高 12 m</span>
-<span><b>结构</b> 单层 · {len(ROOMS)} 房间 · 主路 {len(MAIN_SEQUENCE)} 房墙贴墙 + {len(BRANCH_KEYS)} 支线房</span>
-<span><b>包络</b> {n(max(r["x1"] for r in ROOMS) - min(r["x0"] for r in ROOMS))} × {n(max(r["y1"] for r in ROOMS) - min(r["y0"] for r in ROOMS))} m</span>
-<span><b>房间面积</b> {n(tot)} m²</span>
-<span><b>估算占用</b> {n(used)} m²（单层可用区 {n(avail)} m² 的 {used / avail * 100:.1f}%）</span>
+<span><b>结构</b> 单层 · 主路 {len(MAIN_SEQUENCE)} 房墙贴墙（支线已取消，无支线房）</span>
+<span><b>包络</b> {n(max(r["x1"] for r in DRAWN_ROOMS) - min(r["x0"] for r in DRAWN_ROOMS))} × {n(max(r["y1"] for r in DRAWN_ROOMS) - min(r["y0"] for r in DRAWN_ROOMS))} m</span>
+<span><b>房间面积</b> {n(tot)} m² <i>（只报数据，不设上限）</i></span>
+<span><b>估算占用</b> {n(used)} m² <i>（含内墙，仅供对照）</i></span>
 </div>
 
 <h2>1. 总平面图</h2>
-<p class="lede">主路：{' → '.join(BY_KEY[k]["name"] for k in MAIN_SEQUENCE)}。八段衔接<b>全部墙贴墙</b>（净距 0 = 共墙），不再插过渡走廊模块。{len(BRANCH_KEYS)} 间支线房<b>直接挂在主路中间 4 间内容房</b>上（每条支线只有一段、链不再加深）。画面向上为北（平面 +y = 世界 +z = 南）。</p>
-<div class="card">{ov}<p class="cap">总平面图 · 含场地边界、25 m 网格、核心区参考框与图例。核心区（65×65 居中）本关 <code>enforce_core_exclusion=false</code>，不避让。蓝色实线 = 主路方向，灰色虚线 = 支线。</p></div>
+<p class="lede">主路：{' → '.join(BY_KEY[k]["name"] for k in MAIN_SEQUENCE)}。八段衔接<b>全部墙贴墙</b>（净距 0 = 共墙），不再插过渡走廊模块。<b>支线已取消</b>（业主 2026-09-25 裁定）—— 场上不再有支线房，图纸只画这条主路；主路目标口径为 13 房（10 间内容房），新房型分配与坐标待实际制作时重排（设计页 §2 顶部裁定）。画面向上为北（平面 +y = 世界 +z = 南）。</p>
+<div class="card">{ov}<p class="cap">总平面图 · 含场地参考框（250×250，<b>不再是判据</b>）、25 m 网格、核心区参考框与图例。核心区（65×65 居中）本关 <code>enforce_core_exclusion=false</code>，不避让。蓝色实线 = 主路方向，箭头 = 行进方向。</p></div>
 
-<h2>2. 主路与支线</h2>
+<h2>2. 主路与门数</h2>
 {flow_html}
-<p class="lede" style="margin-top:14px">主路 {len(MAIN_SEQUENCE) - 1} 段衔接全部为 <b>墙贴墙（净距 0）</b>；每段走廊的过渡由共享墙上的门洞完成，不再有独立的走廊模块。门数：入口安全屋 <b>2</b>（前门 + 弃局门）；主路中间 4 间（示例版图里是 数据库房间01 / 办公室01 / 拐角走廊02 / 通道桥房间）各 <b>3</b>（进 + 出 + 1 条支线）；主路两端 2 间（示例版图里是 拐角走廊01 / 数据库房间02）各 <b>2</b>；Boss 竞技场 <b>2</b>；撤离屋 <b>1</b>；每间支线房 <b>1</b>。</p>
-<h3 style="margin-top:18px">支线房（{len(BRANCH_KEYS)} 间，各挂主路中间 4 房之一）</h3>
-{branch_html}
+<p class="lede" style="margin-top:14px">主路 {len(MAIN_SEQUENCE) - 1} 段衔接全部为 <b>墙贴墙（净距 0）</b>、共轴偏移最大 <b>2.5 m</b>；每段走廊的过渡由共享墙上的门洞完成，不再有独立的走廊模块。门数：入口安全屋 <b>2</b>（前门 + 弃局门）；<b>主路内容房每间 2</b>（进 + 出）—— 支线取消后本关不再有 3 门房；Boss 竞技场 <b>2</b>；撤离屋 <b>1</b>。图上只标每条主路边的门位。</p>
 
 <h2>3. 房间明细</h2>
 {table}
-<p class="cap" style="margin-top:8px;color:var(--muted);font-size:12px">中心坐标与区间为世界平面坐标（米）。运行时 key 是代码硬依赖：入口房 id 必为 <code>start</code>、首领房靠 <code>role="boss"</code>（key 名不受限）、撤离房 key 必为 <code>extraction</code>；支线房 <code>role="branch"</code>，其余 key 名只被验收脚本按名断言。</p>
+<p class="cap" style="margin-top:8px;color:var(--muted);font-size:12px">中心坐标与区间为世界平面坐标（米）。运行时 key 是代码硬依赖：入口房 id 必为 <code>start</code>、首领房靠 <code>role="boss"</code>（key 名不受限）、撤离房 key 必为 <code>extraction</code>；其余 key 名只被验收脚本按名断言。</p>
 
 <h2>4. 面积构成</h2>
 {bars_html}
-<p class="cap" style="margin-top:10px;color:var(--muted);font-size:12px">房间面积 {n(tot)} m² ｜ 内墙估算 {n(wall)} m² ｜ 走廊估算 {n(corridor)} m²（墙贴墙 ⇒ 0）｜ 估算占用 <b>{n(used)} m²</b> ｜ 单层可用区 {n(avail)} m²（250² − 外墙）｜ 占用率 <b>{used / avail * 100:.1f}%</b>（门禁口径见设计页 §4.7）。</p>
+<p class="cap" style="margin-top:10px;color:var(--muted);font-size:12px">房间面积 {n(tot)} m² ｜ 内墙估算 {n(wall)} m² ｜ 走廊估算 {n(corridor)} m²（墙贴墙 ⇒ 0）｜ 估算占用 <b>{n(used)} m²</b>。上列为<b>主路 9 房</b>的数字（支线已取消，场上无支线房）。<b>面积自 2026-09-25 起全项目只报数据、不设上限</b>（场地外边界同时退出判据）—— 这些数字仅供对照，不参与准入判定，见设计页 §4.7。</p>
 
 {cards_html}
 
 <h2>5. 绘制口径与待确认项</h2>
 <div class="warn"><b>需要你确认或留意的地方：</b>
 <ul style="margin:8px 0 0;padding-left:20px">
-<li><b>本图画的是「示例版图」。</b>实跑时每间内容房的房型按种子从池子里抽取（设计页 §3.4），尺寸与整张版图随之改变；<b>不变的是</b>：主路 9 房的存在与顺序、支线 4 间各挂中间 4 房之一、8 个模板的尺寸。</li>
-<li><b>Boss 房门位由生成算法定。</b>墙贴墙摆位会给 Boss 房两个贴合方向（进 / 出），美术源的门洞须与生成结果对齐；设计页 §3.3 / §6 记的旧门位（南进西出）以生成结果为准再裁决。</li>
-<li><b>通道桥房间的坑尺寸有出入。</b>设计页 §3.3 写"坑约 6 × 6 格"（30 × 30 m），但 60 × 50 m 的房型四边留 15 m 通道后，中央只剩 <b>30 × 20 m</b>（6 × 4 格）。本图按几何自洽的 30 × 20 绘制，建议回头修设计页那句。</li>
-<li><b>墙贴墙要靠 <code>edge_policy</code> 放行。</b>{len(LINKS)} 条父子边净距全为 0，校验器默认会报 <code>corridor_too_short</code>；落地时每条边都要写进 <code>floor_00.json</code> 的 <code>edge_policy.allow_zero_length</code>（见设计页 §4.1 / §7 第 6 条）。constrained 路径下生成器会按实算净距自动写这份白名单。</li>
+<li><b>本图画的是「示例版图」。</b>实跑时每间内容房的房型按种子从池子里抽取（设计页 §3.4），尺寸与整张版图随之改变；<b>不变的是</b>：主路房的存在与顺序、8 个模板的尺寸、门数规则（主路内容房各 2 门）。</li>
+<li><b>⚠️ 本版尺寸是「图纸先行」。</b>`room_02` / `room_03` / `room_05` / `room_06` 四间的尺寸与形态（含桥房工字型）按业主指示改画，<b>房型模板 JSON（<code>room_templates/*.json</code>）与 <code>floor_00.json</code> 尚未同步</b> —— 实跑口径要等模板与设计源同轮改完才生效。</li>
+<li><b>通道桥房改成 30 × 60 工字型、只在短边开门。</b>南北两端各 15 m 是上层平台（通道），中间 30 m 段中央留 10 m 宽跨桥（沿 y 跨），桥两侧各 10 m 宽 × 30 m 进深是下层。门只能开在桥跨向两端墙（30 m 短板），最多 2 个连接且必须同轴。主路在 <code>room_05</code> 处正是「北进南出」的一根竖轴（设计页 §3.2 / §4.4、05.2 §3.6 第 8 条）。</li>
+<li><b>Boss 房门位由生成算法定。</b>墙贴墙摆位会给 Boss 房两个贴合方向（进 / 出）；本图按坐标草案记的是<b>西进南出</b>（西接数据库房间02、南接撤离屋），美术源的门洞须与生成结果对齐。</li>
+<li><b>墙贴墙要靠 <code>edge_policy</code> 放行。</b>主路 {len(LINKS)} 条父子边净距全为 0，校验器默认会报 <code>corridor_too_short</code>；落地时每条边都要写进 <code>floor_00.json</code> 的 <code>edge_policy.allow_zero_length</code>（见设计页 §4.1 / §7 第 6 条）。constrained 路径下生成器会按实算净距自动写这份白名单。</li>
 <li><b>安全屋的两扇门方向要对一次。</b>设计源记的是 <code>entry_side = "east"</code> / <code>exit_side = "west"</code>，落设计源时先确认这两个字段在单层关卡里的实际语义。</li>
 </ul></div>
-<p class="cap" style="color:var(--muted);font-size:12px">图纸为<b>示意</b>：房间形态按参考图判读还原（L 形、凹字形、内凹轮廓、下沉坑与桥），门位只标"在哪面墙"，门槽的精确位置由工具按版图规范算；设施（工位、机柜、货架、叉车、工作站）为数量与分区的示意摆放，不是最终美术摆位。</p>
+<p class="cap" style="color:var(--muted);font-size:12px">图纸为<b>示意</b>：房间形态按参考图判读还原（L 形、凹字形、缺角轮廓、工字型平台与跨桥），门位只标"在哪面墙"，门槽的精确位置由工具按版图规范算；设施（工位、机柜、货架、叉车、工作站）为数量与分区的示意摆放，不是最终美术摆位。</p>
 
 <div class="foot">
 来源：<code>docs/v0.1/design/远征关卡01设计.md</code>（房型库 §3 / 坐标草案 §4）·
 <code>source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json</code> ·
 <code>floor_00.json</code>。参考图见 <code>refs/expedition01/</code>。<br>
-生成于 2026-09-24 · 示意图集（画的是<b>示例版图</b>；实跑版图由 <code>FloorPlanGenerator</code> 按种子现算）。
+生成于 2026-09-25 · 示意图集（画的是<b>示例版图</b>；实跑版图由 <code>FloorPlanGenerator</code> 按种子现算）。本版：四房缩尺 + 桥房改工字型 + 支线取消（图纸只画主路）。
 </div>
 
 </div></body></html>"""
     return html
 
 
-XML_HEAD = '<?xml version="1.0" encoding="UTF-8"?>\r\n'
+# ⚠️ 本文件的 XML 声明用 **\n** 收尾，不要写成 \r\n —— write_text(newline="\r\n") 会把 \n 再换成 \r\n，
+#    拼出 \r\r\n（CRCRLF）。旧版就是这么来的，10 张图各带 1 处，肉眼看不出来、只在字节级核验里现形。
+XML_HEAD = '<?xml version="1.0" encoding="UTF-8"?>\n'
 
 
 def main():
@@ -857,7 +1015,7 @@ def main():
     written.append(pv)
 
     dets = build_details()
-    for r in ROOMS:
+    for r in DRAWN_ROOMS:
         p = PLANDIR / ("%02d-%s.svg" % (r["i"], r["name"]))
         p.write_text(XML_HEAD + detail_svg(r, dets[r["key"]], doors_for(r)), encoding="utf-8", newline="\r\n")
         written.append(p)
@@ -875,22 +1033,31 @@ def main():
         old.unlink()
         print("removed stale: %s" % old.relative_to(ROOT))
 
+    eol_bad = []
     for p in written:
         b = p.read_bytes()
         crlf = b.count(b"\r\n")
         lf = b.count(b"\n") - crlf
-        print("written: %-56s %7.1f KB  CRLF=%d LF-only=%d"
-              % (p.relative_to(ROOT), len(b) / 1024, crlf, lf))
+        cr = b.count(b"\r") - crlf          # 孤立 CR：多为 CRCRLF 的前半个，肉眼看不出
+        if lf or cr:
+            eol_bad.append((p, lf, cr))
+        print("written: %-56s %7.1f KB  CRLF=%d LF-only=%d CR-only=%d"
+              % (p.relative_to(ROOT), len(b) / 1024, crlf, lf, cr))
+    if eol_bad:
+        print("\n!! 行尾不纯（应为全 CRLF、无 BOM）：")
+        for p, lf, cr in eol_bad:
+            print("   %s  LF-only=%d  CR-only=%d" % (p.relative_to(ROOT), lf, cr))
+        raise SystemExit(1)
 
     # 自检
-    tot = sum(r["w"] * r["d"] for r in ROOMS)
-    wall = sum((r["w"] + r["d"]) * 2.0 * WALL_T for r in ROOMS)
+    tot = sum(r["w"] * r["d"] for r in DRAWN_ROOMS)
+    wall = sum((r["w"] + r["d"]) * 2.0 * WALL_T for r in DRAWN_ROOMS)
     used = tot + wall
     avail = SITE_S * SITE_S - SITE_S * 4.0 * WALL_T
     print("rooms=%d main=%d branch=%d total=%g m2 used=%g avail=%g ratio=%.3f"
-          % (len(ROOMS), len(MAIN_SEQUENCE), len(BRANCH_KEYS), tot, used, avail, used / avail))
-    xs = [r["x0"] for r in ROOMS] + [r["x1"] for r in ROOMS]
-    ys = [r["y0"] for r in ROOMS] + [r["y1"] for r in ROOMS]
+          % (len(DRAWN_ROOMS), len(MAIN_SEQUENCE), len(BRANCH_KEYS), tot, used, avail, used / avail))
+    xs = [r["x0"] for r in DRAWN_ROOMS] + [r["x1"] for r in DRAWN_ROOMS]
+    ys = [r["y0"] for r in DRAWN_ROOMS] + [r["y1"] for r in DRAWN_ROOMS]
     print("envelope x=[%g,%g] y=[%g,%g]  (%g x %g m)  site x=[%g,%g] y=[%g,%g]"
           % (min(xs), max(xs), min(ys), max(ys), max(xs) - min(xs), max(ys) - min(ys),
              SITE_X0, SITE_X1, SITE_Y0, SITE_Y1))

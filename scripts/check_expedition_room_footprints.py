@@ -21,7 +21,14 @@
      缺口处的槽单独列出（运行时裁切与放置约束要消费这份清单）。
      openable_walls 里声明的每一向至少要有 1 个可开门槽。
   4. sunken_pit（若声明）：rect_m 在包围盒内、size_m 与 rect_m 一致、depth_m > 0。
-  5. bridge_span（若声明）：rect_m 在包围盒内、且被 sunken_pit 的 rect_m 覆盖。
+  5. bridge_span（若声明）：rect_m 在包围盒内、被 sunken_pit 的 rect_m 覆盖、
+     width_m == 跨矩形的**窄边**宽、跨向与坑长轴同向且与坑同长。
+  6. 取向唯一表达（跨模板）：**任何模板都不许声明 `axis_pose_of`**。转置姿态只用
+     `template_rotation_deg: 90` 表达（业主裁定 2026-09-25「不要两批代号」，见 05.2 §3.4）
+     —— 同一间房在模板目录里只许有一个 id。
+  7. level_plan 契约（仅当 templates_dir 旁真有 level_plan.json 时检查）：
+     content_template_pool 里只许出现本体（替身由生成器按连接方向自动选用）；
+     room_templates 与目录内模板文件一一对应。
 
 用法：
   python scripts/check_expedition_room_footprints.py           # 校验并打印槽表
@@ -374,13 +381,98 @@ def check_template(name: str, template: dict, errors: list[str], warnings: list[
                         errors.append(
                             f"{name}: bridge_span.rect_m x{sx} y{sy} 必须落在 sunken_pit 范围内"
                         )
+                    sx_span = float(sx[1]) - float(sx[0])
+                    sy_span = float(sy[1]) - float(sy[0])
                     width = span.get("width_m")
-                    if isinstance(width, (int, float)) and not _close(float(width), float(sy[1]) - float(sy[0])):
+                    # 桥宽 = 跨矩形的**窄边**。早期只按 y 跨判，在 90° 转置姿态上必红
+                    # （转置后长轴沿 y ⇒ y 跨 30 / x 跨 5，而桥宽恒 5）。
+                    narrow = min(sx_span, sy_span)
+                    if isinstance(width, (int, float)) and not _close(float(width), narrow):
                         errors.append(
-                            f"{name}: bridge_span.width_m {width} 与 rect_m 的 y 跨 "
-                            f"{float(sy[1]) - float(sy[0])} 不一致"
+                            f"{name}: bridge_span.width_m {width} 必须是跨矩形的窄边宽 "
+                            f"{narrow}（x 跨 {sx_span} / y 跨 {sy_span}）"
                         )
+                    # 跨向必须与坑的长轴同向，且与坑同长（桥横跨整个坑顶）。
+                    span_long_x = sx_span >= sy_span
+                    pit_x_span = float(xr[1]) - float(xr[0])
+                    pit_y_span = float(yr[1]) - float(yr[0])
+                    pit_long_x = pit_x_span >= pit_y_span
+                    if span_long_x != pit_long_x:
+                        errors.append(
+                            f"{name}: bridge_span 的跨向必须与 sunken_pit 的长轴同向"
+                            f"（跨 x 跨 {sx_span}/y 跨 {sy_span}，"
+                            f"坑 x 跨 {pit_x_span}/y 跨 {pit_y_span}）"
+                        )
+                    else:
+                        pit_long = pit_x_span if pit_long_x else pit_y_span
+                        if not _close(max(sx_span, sy_span), pit_long):
+                            errors.append(
+                                f"{name}: bridge_span 长边 {max(sx_span, sy_span)} "
+                                f"必须与坑同长 {pit_long}"
+                            )
     return report
+
+
+# ----------------------------------------------------------------- 取向唯一表达（跨模板）
+
+
+def check_no_axis_pose_aliases(
+    templates: dict[str, dict], errors: list[str]
+) -> list[tuple[str, str]]:
+    """跨模板判据：**任何模板都不许声明 `axis_pose_of`**。
+
+    转置姿态（同一房型换个朝向）只用设计源写法 `template_rotation_deg: 90` 表达，
+    落位时的占位尺寸由生成器 `_transposed_size()` 现算。
+
+    为什么必须挡在这里：曾经的做法是在模板目录里再建一个 `bridge_50x60` 并用
+    `axis_pose_of` 指回本体 —— 那会造出「两批代号」：同一间房在模板目录、设计页、
+    账本表里各叫一个名字，管理必乱。业主 2026-09-25 裁定撤销该做法（见 05.2 §3.4/§3.6）。
+    本判据是那条裁定的**可失败断言**：谁把第二个 id 加回来，这里就红。
+
+    返回空列表（保持调用点返回值形状不变；本判据不产出配对）。
+    """
+    for name in sorted(templates):
+        alias = str(templates[name].get("axis_pose_of", "") or "")
+        if alias:
+            errors.append(
+                f"{name}: 不许声明 axis_pose_of={alias}"
+                "（转置姿态只许用 template_rotation_deg 表达，同一房型只能有一个 id）"
+            )
+    return []
+
+def check_pool_excludes_poses(
+    templates_dir: Path, templates: dict[str, dict], errors: list[str]
+) -> None:
+    """房型池与 `room_templates` 的契约：池里只能引真实存在的模板，登记必须一一对应。
+
+    「池里不许放取向替身」这条自 2026-09-25 起由 `check_no_axis_pose_aliases` 从根上覆盖
+    （任何模板都不许声明 `axis_pose_of`，也就没有替身可放）。这里保留池引用存在性
+    与 `room_templates` 的**双向**一一对应核验。
+    仅在 `templates_dir` 旁边真有 `level_plan.json` 时检查（自测用临时副本 ⇒ 自动跳过）。
+    """
+    plan_path = templates_dir.parent / "level_plan.json"
+    if not plan_path.is_file():
+        return
+    try:
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f"{plan_path.name}: JSON 解析失败：{exc}")
+        return
+    policy = plan.get("generation_policy") or {}
+    pool = policy.get("content_template_pool") or []
+    for template_id in pool:
+        if templates.get(str(template_id)) is None:
+            errors.append(f"level_plan.content_template_pool 引用了不存在的模板 {template_id}")
+    registered = plan.get("room_templates") or []
+    unregistered = [name for name in sorted(templates) if name not in registered]
+    if unregistered:
+        errors.append(
+            f"level_plan.room_templates 未登记模板文件：{unregistered}"
+            "（未登记 ⇒ 门槽表不被加载，运行时必红）"
+        )
+    missing = [str(t) for t in registered if str(t) not in templates]
+    if missing:
+        errors.append(f"level_plan.room_templates 引用了不存在的模板文件：{missing}")
 
 
 def main() -> int:
@@ -402,13 +494,18 @@ def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
     reports: list[dict] = []
+    templates_by_id: dict[str, dict] = {}
     for path in files:
         try:
             template = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
             errors.append(f"{path.stem}: JSON 解析失败：{exc}")
             continue
+        templates_by_id[path.stem] = template
         reports.append(check_template(path.stem, template, errors, warnings))
+
+    axis_aliases = check_no_axis_pose_aliases(templates_by_id, errors)
+    check_pool_excludes_poses(templates_dir, templates_by_id, errors)
 
     contour_count = sum(len(r["contours"]) for r in reports)
     pit_count = sum(1 for r in reports if r["pit"])
@@ -447,7 +544,7 @@ def main() -> int:
         return 1
     print(
         f"\nEXPEDITION_FOOTPRINTS_OK templates={len(files)} contours={contour_count} "
-        f"pit_templates={pit_count} frame={FRAME_ID}"
+        f"pit_templates={pit_count} axis_aliases={len(axis_aliases)} frame={FRAME_ID}"
     )
     return 0
 

@@ -446,7 +446,7 @@
 		},
 		"base_energy_capacity": 100.0,
 		"base_energy_current": 100.0,
-		"base_energy_last_synced_game_seconds": 82907.6361359469,
+		"base_energy_last_synced_game_seconds": 87228.9599519362,
 		"blackmarket_level": 0.0,
 		"blackmarket_unlocked": false,
 		"blueprint_attachment_tier": 0.0,
@@ -743,13 +743,16 @@
 		"greenhouse_level": 0.0,
 		"greenhouse_unlocked": false,
 		"last_save_reason": "world_time_interval",
-		"last_saved_at_unix": 1790006895.0,
+		"last_saved_at_unix": 1790298892.0,
+		"narrative_history": {
+
+		},
 		"pending_fate_card": {
 
 		},
 		"pending_insurance_slots": [],
 		"pending_loadout_items": [],
-		"save_revision": 121.0,
+		"save_revision": 127.0,
 		"save_version": "2.0",
 		"scrapyard_level": 0.0,
 		"scrapyard_unlocked": false,
@@ -763,13 +766,13 @@
 		"vault_unlocked": false,
 		"workshop_level": 0.0,
 		"workshop_unlocked": false,
-		"world_time_elapsed_game_seconds": 82907.6361359469,
+		"world_time_elapsed_game_seconds": 87228.9599519362,
 		"zero_load_extraction": false
 	},
-	"payload_checksum": "9c1cd5299d52d91f5e6ecbd9ade3d0431e1c729e3a404690a679bfeaf6c56e58",
+	"payload_checksum": "d2423a4db300bdf2d5927f8f826a497762ac61b29c769ded8fe7b4f9a9147e78",
 	"payload_checksum_algorithm": "canonical_json_v3",
 	"profile_schema": "2.0",
 	"reason": "world_time_interval",
-	"revision": 121,
-	"saved_at_unix": 1790006895
+	"revision": 127,
+	"saved_at_unix": 1790298892
 }
