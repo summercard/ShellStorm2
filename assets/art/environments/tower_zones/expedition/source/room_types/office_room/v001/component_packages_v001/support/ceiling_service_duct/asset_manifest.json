@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+  "slug": "ceiling_service_duct",
+  "name_zh": "顶部通风管与风口",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "顶部通风管与风口_资产包",
+  "objects": [
+    "顶部通风管与风口_主体"
+  ],
+  "world_origin_m": [
+    0.0,
+    0.0,
+    10.4425
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "n/a",
+  "world_bounds_m": [
+    [
+      -0.654,
+      -18.9,
+      10.4425
+    ],
+    [
+      0.654,
+      18.9,
+      11.3
+    ]
+  ],
+  "dimensions_m": [
+    1.308,
+    37.8,
+    0.8575
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 63,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE_1_-4.8",
+  "slug": "longitudinal_tie_1_-4.8",
+  "name_zh": "下层纵向腰梁_1_-4.8",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "下层纵向腰梁_1_-4.8_资产包",
+  "objects": [
+    "下层纵向腰梁_1_-4.8_主体"
+  ],
+  "world_origin_m": [
+    6.0,
+    0.0,
+    -5.05
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      5.775,
+      -14.5,
+      -5.05
+    ],
+    [
+      6.225,
+      14.5,
+      -4.55
+    ]
+  ],
+  "dimensions_m": [
+    0.45,
+    29.0,
+    0.5
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 1,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

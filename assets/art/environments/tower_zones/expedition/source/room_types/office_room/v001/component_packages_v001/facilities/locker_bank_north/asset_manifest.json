@@ -1,0 +1,51 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK_NORTH",
+  "slug": "locker_bank_north",
+  "name_zh": "北墙储物柜组",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "北墙储物柜组_资产包",
+  "objects": [
+    "北墙储物柜组_主体",
+    "北墙储物柜组_自发光"
+  ],
+  "world_origin_m": [
+    12.5,
+    19.095,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "n/a",
+  "world_bounds_m": [
+    [
+      11.45,
+      18.69,
+      0.0
+    ],
+    [
+      13.55,
+      19.5,
+      2.56
+    ]
+  ],
+  "dimensions_m": [
+    2.1,
+    0.81,
+    2.56
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 21,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

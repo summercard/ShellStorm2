@@ -227,6 +227,7 @@ core_scenes=(
   verify_pause_game_save_reset_flow
   verify_3d_flashlight_charge_flow
   verify_3d_combat_progression_flow
+  verify_dungeon_wave_intermission
   verify_3d_parity_core
   verify_3d_reload_state_flow
   verify_3d_vision_input_flow

@@ -283,7 +283,7 @@ decision_age
 
 ### 7.10 死亡到奖励的现行交接（ENEMY-AI → REWARD-SERVICE）
 
-`Enemy3D._die()` 在 `dead` 状态幂等守卫后停止碰撞，发 `killed(enemy,get_enemy_data())`；`Dungeon3D` 在房间装配时订阅该信号。场景 `_on_enemy_killed()` 递增本局击杀、移除房间活动引用，以 `enemy.room_id + persistent_id` 构造奖励事件 ID，并把房间 `reward_plan` 与敌人数据交给 `RuntimeRewardCoordinator.resolve_kill()`。返回权威 `grants[]` 后，场景只在 currency grant 上应用房间倍率，再延迟交给 `RewardSink.apply_ground()`；落地失败按报告拒绝，不得当成已发。清房/增援/撤离信标由 `_resolve_room_enemy_departure()` 按剩余敌人和波次继续编排。怪物只报告死亡事实，不直接修改玩家背包或 `BaseData`。
+`Enemy3D._die()` 在 `dead` 状态幂等守卫后停止碰撞，发 `killed(enemy,get_enemy_data())`；`Dungeon3D` 在房间装配时订阅该信号。场景 `_on_enemy_killed()` 先通过已登记实例成员资格幂等提交离场（移除引用、扣存活数），再递增本局击杀并发布事件；逃脱共用同一离场事务，避免同步订阅者重入修复时重复扣数。以 `enemy.room_id + persistent_id` 构造奖励事件 ID，并把房间 `reward_plan` 与敌人数据交给 `RuntimeRewardCoordinator.resolve_kill()`。返回权威 `grants[]` 后，场景只在 currency grant 上应用房间倍率，再延迟交给 `RewardSink.apply_ground()`；落地失败按报告拒绝，不得当成已发。清房/增援/撤离信标由 `_resolve_room_enemy_departure()` 按剩余敌人和波次继续编排。怪物只报告死亡事实，不直接修改玩家背包或 `BaseData`。
 
 当前 `killed(enemy,loot:Dictionary)` 的第二参数实际承载 `get_enemy_data()`，不是已生成物品；信号名/参数旧命名不可被消费方误解成“掉落已成功”。**未实现的目标**：统一跨远程/近战/敌人攻击的命中上下文，以及一份独立于 `Dungeon3D` 的死亡→奖励命令/结果 schema；目前正式房间与清房流程仍由场景编排。验收应分别检查重复死亡不二次发信号、无效房间奖励被拒绝、真实生成数与UI提示一致；现有 `verify_reward_ground_handoff` 覆盖其中地面交接，不能替代整套 AI 流送与光照验收。
 

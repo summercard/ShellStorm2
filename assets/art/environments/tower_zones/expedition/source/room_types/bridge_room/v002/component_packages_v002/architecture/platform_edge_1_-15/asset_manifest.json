@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE_1_-15",
+  "slug": "platform_edge_1_-15",
+  "name_zh": "上层平台坑沿护栏_1_-15",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "上层平台坑沿护栏_1_-15_资产包",
+  "objects": [
+    "上层平台坑沿护栏_1_-15_主体",
+    "上层平台坑沿护栏_1_-15_自发光"
+  ],
+  "world_origin_m": [
+    9.9925,
+    -15.0,
+    -1.33
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      4.985,
+      -15.325,
+      -1.33
+    ],
+    [
+      15.0,
+      -14.675,
+      1.87
+    ]
+  ],
+  "dimensions_m": [
+    10.015,
+    0.65,
+    3.2
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 35,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

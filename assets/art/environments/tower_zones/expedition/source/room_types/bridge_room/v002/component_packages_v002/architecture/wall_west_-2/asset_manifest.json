@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_WEST_-2",
+  "slug": "wall_west_-2",
+  "name_zh": "west_墙体_-2",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "west_墙体_-2_资产包",
+  "objects": [
+    "west_墙体_-2_主体",
+    "west_墙体_-2_自发光"
+  ],
+  "world_origin_m": [
+    -14.76,
+    -7.5,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      -15.15,
+      -10.0,
+      0.0
+    ],
+    [
+      -14.37,
+      -5.0,
+      11.9
+    ]
+  ],
+  "dimensions_m": [
+    0.78,
+    5.0,
+    11.9
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 30,
+  "reference_cutaway_hidden": true,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

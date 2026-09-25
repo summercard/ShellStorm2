@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_-1",
+  "slug": "end_crate_-1",
+  "name_zh": "固定维护箱_end_crate_-1",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "固定维护箱_end_crate_-1_资产包",
+  "objects": [
+    "固定维护箱_end_crate_-1_主体"
+  ],
+  "world_origin_m": [
+    3.0,
+    -27.512500000000003,
+    -0.035
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      1.925,
+      -28.35,
+      -0.035
+    ],
+    [
+      4.075,
+      -26.675,
+      1.52
+    ]
+  ],
+  "dimensions_m": [
+    2.15,
+    1.675,
+    1.555
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 14,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": true,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

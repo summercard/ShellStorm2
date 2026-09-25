@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_1_0",
+  "slug": "low_platform_1_0",
+  "name_zh": "错层钢格栅检修平台_low_platform_1_0",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "错层钢格栅检修平台_low_platform_1_0_资产包",
+  "objects": [
+    "错层钢格栅检修平台_low_platform_1_0_主体",
+    "错层钢格栅检修平台_low_platform_1_0_自发光"
+  ],
+  "world_origin_m": [
+    9.649999999999999,
+    -10.0,
+    -12.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      6.635,
+      -12.16,
+      -12.0
+    ],
+    [
+      12.665,
+      -7.84,
+      -5.995
+    ]
+  ],
+  "dimensions_m": [
+    6.03,
+    4.32,
+    6.005
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 98,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": true,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

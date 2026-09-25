@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES_1_0",
+  "slug": "deep_cables_1_0",
+  "name_zh": "跨层下垂电缆_1_0",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "跨层下垂电缆_1_0_资产包",
+  "objects": [
+    "跨层下垂电缆_1_0_主体"
+  ],
+  "world_origin_m": [
+    8.231135,
+    -9.0,
+    -8.05
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      7.08227,
+      -11.06905,
+      -8.05
+    ],
+    [
+      9.38,
+      -6.93095,
+      -0.27748
+    ]
+  ],
+  "dimensions_m": [
+    2.29773,
+    4.1381,
+    7.77252
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 5,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

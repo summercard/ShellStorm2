@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-TOOL_CART_YELLOW",
+  "slug": "tool_cart_yellow",
+  "name_zh": "黄色工具推车与圆凳",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "黄色工具推车与圆凳_资产包",
+  "objects": [
+    "黄色工具推车与圆凳_主体"
+  ],
+  "world_origin_m": [
+    1.0134999999999996,
+    2.15,
+    -0.00944
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -15.615,
+      -7.12732,
+      -0.00944
+    ],
+    [
+      17.642,
+      11.42732,
+      1.455
+    ]
+  ],
+  "dimensions_m": [
+    33.257,
+    18.55464,
+    1.46444
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 98,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

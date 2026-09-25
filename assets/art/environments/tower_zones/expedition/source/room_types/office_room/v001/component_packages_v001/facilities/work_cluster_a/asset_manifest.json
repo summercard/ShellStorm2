@@ -1,0 +1,51 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_A",
+  "slug": "work_cluster_a",
+  "name_zh": "工位_a",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "工位_a_资产包",
+  "objects": [
+    "工位_a_主体",
+    "工位_a_自发光"
+  ],
+  "world_origin_m": [
+    -6.5,
+    -9.29,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "n/a",
+  "world_bounds_m": [
+    [
+      -9.4,
+      -10.51,
+      0.0
+    ],
+    [
+      -3.6,
+      -8.07,
+      1.67
+    ]
+  ],
+  "dimensions_m": [
+    5.8,
+    2.44,
+    1.67
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 174,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

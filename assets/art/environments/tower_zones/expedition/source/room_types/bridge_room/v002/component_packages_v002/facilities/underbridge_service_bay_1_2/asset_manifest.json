@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY_1_2",
+  "slug": "underbridge_service_bay_1_2",
+  "name_zh": "桥下竖井设备背板_1_2",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "桥下竖井设备背板_1_2_资产包",
+  "objects": [
+    "桥下竖井设备背板_1_2_主体",
+    "桥下竖井设备背板_1_2_自发光"
+  ],
+  "world_origin_m": [
+    4.57125,
+    10.0,
+    -11.3
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      4.075,
+      6.85,
+      -11.3
+    ],
+    [
+      5.0675,
+      13.15,
+      -1.9
+    ]
+  ],
+  "dimensions_m": [
+    0.9925,
+    6.3,
+    9.4
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 35,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

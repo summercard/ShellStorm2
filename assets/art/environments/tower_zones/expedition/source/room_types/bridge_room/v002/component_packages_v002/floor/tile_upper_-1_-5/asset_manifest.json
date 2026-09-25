@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER_-1_-5",
+  "slug": "tile_upper_-1_-5",
+  "name_zh": "地砖_上_-1_-5",
+  "category": "floor",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "地砖_上_-1_-5_资产包",
+  "objects": [
+    "地砖_上_-1_-5_主体"
+  ],
+  "world_origin_m": [
+    -2.5,
+    -22.5,
+    -0.32
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      -5.0,
+      -25.0,
+      -0.32
+    ],
+    [
+      0.0,
+      -20.0,
+      0.1035
+    ]
+  ],
+  "dimensions_m": [
+    5.0,
+    5.0,
+    0.4235
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 43,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

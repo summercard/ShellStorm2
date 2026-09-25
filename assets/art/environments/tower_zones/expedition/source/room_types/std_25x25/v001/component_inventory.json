@@ -1,0 +1,6040 @@
+[
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-4",
+    "slug": "tile_-3_-4",
+    "name_zh": "地砖_-3_-4",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-3_-4_资产包",
+    "objects": [
+      "地砖_-3_-4_主体",
+      "地砖_-3_-4_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      -17.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -15.0,
+        -20.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        -15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-2_-2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -10.0,
+          -10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-3",
+    "slug": "tile_-3_-3",
+    "name_zh": "地砖_-3_-3",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-3_-3_资产包",
+    "objects": [
+      "地砖_-3_-3_主体",
+      "地砖_-3_-3_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      -12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -15.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        -10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-2_-1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -10.0,
+          -5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-2",
+    "slug": "tile_-3_-2",
+    "name_zh": "地砖_-3_-2",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-3_-2_资产包",
+    "objects": [
+      "地砖_-3_-2_主体",
+      "地砖_-3_-2_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -15.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-2_0"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -10.0,
+          0.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-1",
+    "slug": "tile_-3_-1",
+    "name_zh": "地砖_-3_-1",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-3_-1_资产包",
+    "objects": [
+      "地砖_-3_-1_主体",
+      "地砖_-3_-1_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -15.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        0.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-2_1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -10.0,
+          5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_0",
+    "slug": "tile_-3_0",
+    "name_zh": "地砖_-3_0",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-3_0_资产包",
+    "objects": [
+      "地砖_-3_0_主体",
+      "地砖_-3_0_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -15.0,
+        0.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-2_2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -10.0,
+          10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-4",
+    "slug": "tile_-2_-4",
+    "name_zh": "地砖_-2_-4",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-2_-4_资产包",
+    "objects": [
+      "地砖_-2_-4_主体",
+      "地砖_-2_-4_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      -17.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -10.0,
+        -20.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        -15.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-1_-2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -5.0,
+          -10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-3",
+    "slug": "tile_-2_-3",
+    "name_zh": "地砖_-2_-3",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-2_-3_资产包",
+    "objects": [
+      "地砖_-2_-3_主体",
+      "地砖_-2_-3_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      -12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -10.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        -10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-1_-1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -5.0,
+          -5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-2",
+    "slug": "tile_-2_-2",
+    "name_zh": "地砖_-2_-2",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-2_-2_资产包",
+    "objects": [
+      "地砖_-2_-2_主体",
+      "地砖_-2_-2_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -10.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-1_0"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -5.0,
+          0.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-1",
+    "slug": "tile_-2_-1",
+    "name_zh": "地砖_-2_-1",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-2_-1_资产包",
+    "objects": [
+      "地砖_-2_-1_主体",
+      "地砖_-2_-1_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -10.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        0.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-1_1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -5.0,
+          5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_0",
+    "slug": "tile_-2_0",
+    "name_zh": "地砖_-2_0",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-2_0_资产包",
+    "objects": [
+      "地砖_-2_0_主体",
+      "地砖_-2_0_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -10.0,
+        0.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_-1_2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          -5.0,
+          10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-4",
+    "slug": "tile_-1_-4",
+    "name_zh": "地砖_-1_-4",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-1_-4_资产包",
+    "objects": [
+      "地砖_-1_-4_主体",
+      "地砖_-1_-4_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -17.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -20.0,
+        -0.32
+      ],
+      [
+        0.0,
+        -15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_0_-2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          0.0,
+          -10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-3",
+    "slug": "tile_-1_-3",
+    "name_zh": "地砖_-1_-3",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-1_-3_资产包",
+    "objects": [
+      "地砖_-1_-3_主体",
+      "地砖_-1_-3_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        0.0,
+        -10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_0_-1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          0.0,
+          -5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-2",
+    "slug": "tile_-1_-2",
+    "name_zh": "地砖_-1_-2",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-1_-2_资产包",
+    "objects": [
+      "地砖_-1_-2_主体",
+      "地砖_-1_-2_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        0.0,
+        -5.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_0_0"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          0.0,
+          0.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-1",
+    "slug": "tile_-1_-1",
+    "name_zh": "地砖_-1_-1",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-1_-1_资产包",
+    "objects": [
+      "地砖_-1_-1_主体",
+      "地砖_-1_-1_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        0.0,
+        0.0,
+        0.1145
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.4345
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 58,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_0_1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          0.0,
+          5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_0",
+    "slug": "tile_-1_0",
+    "name_zh": "地砖_-1_0",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_-1_0_资产包",
+    "objects": [
+      "地砖_-1_0_主体",
+      "地砖_-1_0_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -5.0,
+        0.0,
+        -0.32
+      ],
+      [
+        0.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_0_2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          0.0,
+          10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-4",
+    "slug": "tile_0_-4",
+    "name_zh": "地砖_0_-4",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_0_-4_资产包",
+    "objects": [
+      "地砖_0_-4_主体",
+      "地砖_0_-4_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      -17.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        0.0,
+        -20.0,
+        -0.32
+      ],
+      [
+        5.0,
+        -15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_1_-2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          -10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-3",
+    "slug": "tile_0_-3",
+    "name_zh": "地砖_0_-3",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_0_-3_资产包",
+    "objects": [
+      "地砖_0_-3_主体",
+      "地砖_0_-3_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      -12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        0.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        5.0,
+        -10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_1_-1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          -5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-2",
+    "slug": "tile_0_-2",
+    "name_zh": "地砖_0_-2",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_0_-2_资产包",
+    "objects": [
+      "地砖_0_-2_主体",
+      "地砖_0_-2_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        0.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        5.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_1_0"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          0.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-1",
+    "slug": "tile_0_-1",
+    "name_zh": "地砖_0_-1",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_0_-1_资产包",
+    "objects": [
+      "地砖_0_-1_主体",
+      "地砖_0_-1_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        0.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        5.0,
+        0.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_1_1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_0",
+    "slug": "tile_0_0",
+    "name_zh": "地砖_0_0",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_0_0_资产包",
+    "objects": [
+      "地砖_0_0_主体",
+      "地砖_0_0_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        0.0,
+        0.0,
+        -0.32
+      ],
+      [
+        5.0,
+        5.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_1_2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-4",
+    "slug": "tile_1_-4",
+    "name_zh": "地砖_1_-4",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_1_-4_资产包",
+    "objects": [
+      "地砖_1_-4_主体",
+      "地砖_1_-4_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      -17.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        5.0,
+        -20.0,
+        -0.32
+      ],
+      [
+        10.0,
+        -15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_2_-2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          -10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-3",
+    "slug": "tile_1_-3",
+    "name_zh": "地砖_1_-3",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_1_-3_资产包",
+    "objects": [
+      "地砖_1_-3_主体",
+      "地砖_1_-3_自发光"
+    ],
+    "world_origin_m": [
+      7.538585,
+      -12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        5.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        10.07717,
+        -10.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.07717,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_2_-1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          -5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-2",
+    "slug": "tile_1_-2",
+    "name_zh": "地砖_1_-2",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_1_-2_资产包",
+    "objects": [
+      "地砖_1_-2_主体",
+      "地砖_1_-2_自发光"
+    ],
+    "world_origin_m": [
+      7.4888200000000005,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        4.97764,
+        -10.0,
+        -0.32
+      ],
+      [
+        10.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.02236,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_2_0"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          0.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-1",
+    "slug": "tile_1_-1",
+    "name_zh": "地砖_1_-1",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_1_-1_资产包",
+    "objects": [
+      "地砖_1_-1_主体",
+      "地砖_1_-1_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        5.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        10.0,
+        0.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 46,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_2_1"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          5.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_0",
+    "slug": "tile_1_0",
+    "name_zh": "地砖_1_0",
+    "category": "floor",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "地砖_1_0_资产包",
+    "objects": [
+      "地砖_1_0_主体",
+      "地砖_1_0_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        5.0,
+        0.0,
+        -0.32
+      ],
+      [
+        10.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 36,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "TILE_2_2"
+      ],
+      "slot_roles": [
+        "floor_tile"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          10.0,
+          -0.32
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-3",
+    "slug": "wall_north_-3",
+    "name_zh": "north_墙体_-3",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "north_墙体_-3_资产包",
+    "objects": [
+      "north_墙体_-3_主体",
+      "north_墙体_-3_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      19.8325,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-Y",
+    "world_bounds_m": [
+      [
+        -15.0,
+        19.515,
+        0.0
+      ],
+      [
+        -10.0,
+        20.15,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.635,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 74,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_NORTH_-2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -10.0,
+          12.3325,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-2",
+    "slug": "wall_north_-2",
+    "name_zh": "north_墙体_-2",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "north_墙体_-2_资产包",
+    "objects": [
+      "north_墙体_-2_主体",
+      "north_墙体_-2_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      19.8425,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-Y",
+    "world_bounds_m": [
+      [
+        -10.0,
+        19.535,
+        0.0
+      ],
+      [
+        -5.0,
+        20.15,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.615,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_NORTH_-1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -5.0,
+          12.3425,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-1",
+    "slug": "wall_north_-1",
+    "name_zh": "north_墙体_-1",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "north_墙体_-1_资产包",
+    "objects": [
+      "north_墙体_-1_主体",
+      "north_墙体_-1_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      19.8325,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-Y",
+    "world_bounds_m": [
+      [
+        -5.0,
+        19.515,
+        0.0
+      ],
+      [
+        0.0,
+        20.15,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.635,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 62,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_NORTH_0"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          0.0,
+          12.3325,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_1",
+    "slug": "wall_north_1",
+    "name_zh": "north_墙体_1",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "north_墙体_1_资产包",
+    "objects": [
+      "north_墙体_1_主体",
+      "north_墙体_1_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      19.8325,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-Y",
+    "world_bounds_m": [
+      [
+        5.0,
+        19.515,
+        0.0
+      ],
+      [
+        10.0,
+        20.15,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.635,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 62,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_NORTH_1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          12.3325,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_2",
+    "slug": "wall_north_2",
+    "name_zh": "north_墙体_2",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "north_墙体_2_资产包",
+    "objects": [
+      "north_墙体_2_主体",
+      "north_墙体_2_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      19.8325,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-Y",
+    "world_bounds_m": [
+      [
+        10.0,
+        19.515,
+        0.0
+      ],
+      [
+        15.0,
+        20.15,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.635,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 68,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_NORTH_2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          12.3325,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-3",
+    "slug": "wall_south_-3",
+    "name_zh": "south_墙体_-3",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "south_墙体_-3_资产包",
+    "objects": [
+      "south_墙体_-3_主体",
+      "south_墙体_-3_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      -19.595,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+Y",
+    "world_bounds_m": [
+      [
+        -15.0,
+        -20.15,
+        0.0
+      ],
+      [
+        -10.0,
+        -19.04,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      1.11,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 83,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_SOUTH_-2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -10.0,
+          -12.095,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-2",
+    "slug": "wall_south_-2",
+    "name_zh": "south_墙体_-2",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "south_墙体_-2_资产包",
+    "objects": [
+      "south_墙体_-2_主体",
+      "south_墙体_-2_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      -19.8425,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+Y",
+    "world_bounds_m": [
+      [
+        -10.0,
+        -20.15,
+        0.0
+      ],
+      [
+        -5.0,
+        -19.535,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.615,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_SOUTH_-1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -5.0,
+          -12.3425,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-1",
+    "slug": "wall_south_-1",
+    "name_zh": "south_墙体_-1",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "south_墙体_-1_资产包",
+    "objects": [
+      "south_墙体_-1_主体",
+      "south_墙体_-1_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -19.8325,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+Y",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -20.15,
+        0.0
+      ],
+      [
+        0.0,
+        -19.515,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.635,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 62,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_SOUTH_0"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          0.0,
+          -12.3325,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_1",
+    "slug": "wall_south_1",
+    "name_zh": "south_墙体_1",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "south_墙体_1_资产包",
+    "objects": [
+      "south_墙体_1_主体",
+      "south_墙体_1_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      -19.8325,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+Y",
+    "world_bounds_m": [
+      [
+        5.0,
+        -20.15,
+        0.0
+      ],
+      [
+        10.0,
+        -19.515,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.635,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 62,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_SOUTH_1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          -12.3325,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_2",
+    "slug": "wall_south_2",
+    "name_zh": "south_墙体_2",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "south_墙体_2_资产包",
+    "objects": [
+      "south_墙体_2_主体",
+      "south_墙体_2_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      -19.665,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+Y",
+    "world_bounds_m": [
+      [
+        10.0,
+        -20.15,
+        0.0
+      ],
+      [
+        15.0,
+        -19.18,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.97,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 64,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+Y",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_SOUTH_2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          -12.165,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-4",
+    "slug": "wall_west_-4",
+    "name_zh": "west_墙体_-4",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "west_墙体_-4_资产包",
+    "objects": [
+      "west_墙体_-4_主体",
+      "west_墙体_-4_自发光"
+    ],
+    "world_origin_m": [
+      -14.842500000000001,
+      -17.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+X",
+    "world_bounds_m": [
+      [
+        -15.15,
+        -20.0,
+        0.0
+      ],
+      [
+        -14.535,
+        -15.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.615,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 68,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_WEST_-2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -12.3425,
+          -10.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-3",
+    "slug": "wall_west_-3",
+    "name_zh": "west_墙体_-3",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "west_墙体_-3_资产包",
+    "objects": [
+      "west_墙体_-3_主体",
+      "west_墙体_-3_自发光"
+    ],
+    "world_origin_m": [
+      -14.8325,
+      -12.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+X",
+    "world_bounds_m": [
+      [
+        -15.15,
+        -15.0,
+        0.0
+      ],
+      [
+        -14.515,
+        -10.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.635,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 64,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_WEST_-1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -12.3325,
+          -5.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_2",
+    "slug": "wall_west_2",
+    "name_zh": "west_墙体_2",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "west_墙体_2_资产包",
+    "objects": [
+      "west_墙体_2_主体",
+      "west_墙体_2_自发光"
+    ],
+    "world_origin_m": [
+      -14.842500000000001,
+      12.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+X",
+    "world_bounds_m": [
+      [
+        -15.15,
+        10.0,
+        0.0
+      ],
+      [
+        -14.535,
+        15.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.615,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_WEST_1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -12.3425,
+          5.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_3",
+    "slug": "wall_west_3",
+    "name_zh": "west_墙体_3",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "west_墙体_3_资产包",
+    "objects": [
+      "west_墙体_3_主体",
+      "west_墙体_3_自发光"
+    ],
+    "world_origin_m": [
+      -14.8325,
+      17.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=+X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "+X",
+    "world_bounds_m": [
+      [
+        -15.15,
+        15.0,
+        0.0
+      ],
+      [
+        -14.515,
+        20.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.635,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 76,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "+X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_WEST_2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          -12.3325,
+          10.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-4",
+    "slug": "wall_east_-4",
+    "name_zh": "east_墙体_-4",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "east_墙体_-4_资产包",
+    "objects": [
+      "east_墙体_-4_主体",
+      "east_墙体_-4_自发光"
+    ],
+    "world_origin_m": [
+      14.835,
+      -17.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-X",
+    "world_bounds_m": [
+      [
+        14.52,
+        -20.0,
+        0.0
+      ],
+      [
+        15.15,
+        -15.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.63,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 64,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_EAST_-2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          12.335,
+          -10.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-3",
+    "slug": "wall_east_-3",
+    "name_zh": "east_墙体_-3",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "east_墙体_-3_资产包",
+    "objects": [
+      "east_墙体_-3_主体",
+      "east_墙体_-3_自发光"
+    ],
+    "world_origin_m": [
+      14.8325,
+      -12.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-X",
+    "world_bounds_m": [
+      [
+        14.515,
+        -15.0,
+        0.0
+      ],
+      [
+        15.15,
+        -10.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.635,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 64,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_EAST_-1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          12.3325,
+          -5.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_2",
+    "slug": "wall_east_2",
+    "name_zh": "east_墙体_2",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "east_墙体_2_资产包",
+    "objects": [
+      "east_墙体_2_主体",
+      "east_墙体_2_自发光"
+    ],
+    "world_origin_m": [
+      14.842500000000001,
+      12.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-X",
+    "world_bounds_m": [
+      [
+        14.535,
+        10.0,
+        0.0
+      ],
+      [
+        15.15,
+        15.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.615,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_EAST_1"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          12.3425,
+          5.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_3",
+    "slug": "wall_east_3",
+    "name_zh": "east_墙体_3",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "east_墙体_3_资产包",
+    "objects": [
+      "east_墙体_3_主体",
+      "east_墙体_3_自发光"
+    ],
+    "world_origin_m": [
+      14.8325,
+      17.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-X",
+    "world_bounds_m": [
+      [
+        14.515,
+        15.0,
+        0.0
+      ],
+      [
+        15.15,
+        20.0,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      0.635,
+      5.0,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 72,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-X",
+      "door_opening": false
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "WALL_EAST_2"
+      ],
+      "slot_roles": [
+        "solid_wall"
+      ],
+      "positions_m": [
+        [
+          12.3325,
+          10.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+    "slug": "door_wall",
+    "name_zh": "门洞墙件_可复用",
+    "category": "architecture",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "门洞墙件_可复用_资产包",
+    "objects": [
+      "门洞墙件_可复用_主体",
+      "门洞墙件_可复用_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      19.8425,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=-Y (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "-Y",
+    "world_bounds_m": [
+      [
+        0.0,
+        19.535,
+        0.0
+      ],
+      [
+        5.0,
+        20.15,
+        11.9
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      0.615,
+      11.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 65,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "wall_piece_contract": {
+      "geometry_wdh_m": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "grid_unit_m": 5.0,
+      "visual_height_m": 11.9,
+      "origin": "bottom_center",
+      "armor_protrusion_m": 0.12,
+      "inward_normal_world": "-Y",
+      "door_opening": true
+    },
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 2,
+      "instance_ids": [
+        "DOOR_WALL_WEST",
+        "DOOR_WALL_EAST"
+      ],
+      "slot_roles": [
+        "door_wall"
+      ],
+      "positions_m": [
+        [
+          -12.3425,
+          0.0,
+          0.0
+        ],
+        [
+          12.3425,
+          0.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        90.0,
+        270.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_A",
+    "slug": "work_cluster_a",
+    "name_zh": "工位_a",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "工位_a_资产包",
+    "objects": [
+      "工位_a_主体",
+      "工位_a_自发光"
+    ],
+    "world_origin_m": [
+      -6.5,
+      -9.29,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -9.4,
+        -10.51,
+        0.0
+      ],
+      [
+        -3.6,
+        -8.07,
+        1.67
+      ]
+    ],
+    "dimensions_m": [
+      5.8,
+      2.44,
+      1.67
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 174,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_WORK_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -8.0,
+          6.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_B",
+    "slug": "work_cluster_b",
+    "name_zh": "工位_b",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "工位_b_资产包",
+    "objects": [
+      "工位_b_主体",
+      "工位_b_自发光"
+    ],
+    "world_origin_m": [
+      6.5,
+      -10.11,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        3.6,
+        -11.33,
+        0.0
+      ],
+      [
+        9.4,
+        -8.89,
+        1.67
+      ]
+    ],
+    "dimensions_m": [
+      5.8,
+      2.44,
+      1.67
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 174,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_WORK_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -8.0,
+          9.1,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_C",
+    "slug": "work_cluster_c",
+    "name_zh": "工位_c",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "工位_c_资产包",
+    "objects": [
+      "工位_c_主体",
+      "工位_c_自发光"
+    ],
+    "world_origin_m": [
+      -6.5,
+      4.71,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -9.4,
+        3.49,
+        0.0
+      ],
+      [
+        -3.6,
+        5.93,
+        1.67
+      ]
+    ],
+    "dimensions_m": [
+      5.8,
+      2.44,
+      1.67
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 174,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_WORK_C"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -1.5,
+          6.0,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_D",
+    "slug": "work_cluster_d",
+    "name_zh": "工位_d",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "工位_d_资产包",
+    "objects": [
+      "工位_d_主体",
+      "工位_d_自发光"
+    ],
+    "world_origin_m": [
+      6.5,
+      3.89,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        3.6,
+        2.67,
+        0.0
+      ],
+      [
+        9.4,
+        5.11,
+        1.67
+      ]
+    ],
+    "dimensions_m": [
+      5.8,
+      2.44,
+      1.67
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 174,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_WORK_D"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -1.5,
+          9.1,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+    "slug": "totem_column",
+    "name_zh": "图腾立柱",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "图腾立柱_资产包",
+    "objects": [
+      "图腾立柱_主体",
+      "图腾立柱_自发光"
+    ],
+    "world_origin_m": [
+      -11.6,
+      17.2,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -12.03,
+        16.77,
+        0.0
+      ],
+      [
+        -11.17,
+        17.63,
+        2.98
+      ]
+    ],
+    "dimensions_m": [
+      0.86,
+      0.86,
+      2.98
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 13,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_TOTEM"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          3.0,
+          8.5,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK_NORTH",
+    "slug": "locker_bank_north",
+    "name_zh": "北墙储物柜组",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "北墙储物柜组_资产包",
+    "objects": [
+      "北墙储物柜组_主体",
+      "北墙储物柜组_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      19.095,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        11.45,
+        18.69,
+        0.0
+      ],
+      [
+        13.55,
+        19.5,
+        2.56
+      ]
+    ],
+    "dimensions_m": [
+      2.1,
+      0.81,
+      2.56
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 21,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_LOCKER"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          5.0,
+          11.5,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+    "slug": "printer_station",
+    "name_zh": "打印机与耗材位",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "打印机与耗材位_资产包",
+    "objects": [
+      "打印机与耗材位_主体",
+      "打印机与耗材位_自发光"
+    ],
+    "world_origin_m": [
+      -10.97,
+      -19.1475,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        -11.8,
+        -19.63,
+        0.0
+      ],
+      [
+        -10.14,
+        -18.665,
+        2.39
+      ]
+    ],
+    "dimensions_m": [
+      1.66,
+      0.965,
+      2.39
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 13,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_PRINTER"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          2.6,
+          11.5,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING_SOUTH",
+    "slug": "shelving_south",
+    "name_zh": "置物架",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "置物架_资产包",
+    "objects": [
+      "置物架_主体"
+    ],
+    "world_origin_m": [
+      12.5,
+      -19.2,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        11.6,
+        -19.5,
+        0.0
+      ],
+      [
+        13.4,
+        -18.9,
+        2.68
+      ]
+    ],
+    "dimensions_m": [
+      1.8,
+      0.6,
+      2.68
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 47,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_SHELVING"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          7.1,
+          11.7,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+    "slug": "water_and_supply_corner",
+    "name_zh": "饮水与箱货区",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "饮水与箱货区_资产包",
+    "objects": [
+      "饮水与箱货区_主体"
+    ],
+    "world_origin_m": [
+      12.309999999999999,
+      15.879999999999999,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        10.5,
+        14.2,
+        0.0
+      ],
+      [
+        14.12,
+        17.56,
+        1.88
+      ]
+    ],
+    "dimensions_m": [
+      3.62,
+      3.36,
+      1.88
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 19,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_WATER"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          9.9,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH_EAST",
+    "slug": "prep_bench_east",
+    "name_zh": "东墙整备台",
+    "category": "facilities",
+    "version": "v001",
+    "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+    "collection": "东墙整备台_资产包",
+    "objects": [
+      "东墙整备台_主体",
+      "东墙整备台_自发光"
+    ],
+    "world_origin_m": [
+      14.07,
+      -17.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+    "inward_normal_world": "n/a",
+    "world_bounds_m": [
+      [
+        13.62,
+        -19.2,
+        0.0
+      ],
+      [
+        14.52,
+        -15.8,
+        1.91
+      ]
+    ],
+    "dimensions_m": [
+      0.9,
+      3.4,
+      1.91
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 27,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "office_room/v001",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "FAC_PREP"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          11.5,
+          4.6,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_-1",
+    "slug": "near_server_-1",
+    "name_zh": "机房设备_near_server_-1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_near_server_-1_资产包",
+    "objects": [
+      "机房设备_near_server_-1_主体",
+      "机房设备_near_server_-1_自发光"
+    ],
+    "world_origin_m": [
+      -12.7975,
+      -19.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -13.555,
+        -20.84,
+        0.0
+      ],
+      [
+        -12.04,
+        -18.16,
+        5.05
+      ]
+    ],
+    "dimensions_m": [
+      1.515,
+      2.68,
+      5.05
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 121,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_SERVER_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -11.0,
+          -4.4,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_1",
+    "slug": "near_server_1",
+    "name_zh": "机房设备_near_server_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_near_server_1_资产包",
+    "objects": [
+      "机房设备_near_server_1_主体",
+      "机房设备_near_server_1_自发光"
+    ],
+    "world_origin_m": [
+      -12.7975,
+      19.5,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -13.555,
+        18.16,
+        0.0
+      ],
+      [
+        -12.04,
+        20.84,
+        5.05
+      ]
+    ],
+    "dimensions_m": [
+      1.515,
+      2.68,
+      5.05
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 121,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_SERVER_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -9.2,
+          -4.4,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_-1",
+    "slug": "end_power_-1",
+    "name_zh": "机房设备_end_power_-1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_end_power_-1_资产包",
+    "objects": [
+      "机房设备_end_power_-1_主体"
+    ],
+    "world_origin_m": [
+      5.9,
+      -28.1875,
+      -0.0075
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        4.51,
+        -28.955,
+        -0.0075
+      ],
+      [
+        7.29,
+        -27.42,
+        5.25
+      ]
+    ],
+    "dimensions_m": [
+      2.78,
+      1.535,
+      5.2575
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 43,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_POWER_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -5.8,
+          -4.3,
+          -0.0075
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_1",
+    "slug": "end_power_1",
+    "name_zh": "机房设备_end_power_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_end_power_1_资产包",
+    "objects": [
+      "机房设备_end_power_1_主体"
+    ],
+    "world_origin_m": [
+      5.9,
+      28.1875,
+      -0.0075
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        4.51,
+        27.42,
+        -0.0075
+      ],
+      [
+        7.29,
+        28.955,
+        5.25
+      ]
+    ],
+    "dimensions_m": [
+      2.78,
+      1.535,
+      5.2575
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 43,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_POWER_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -2.7,
+          -4.3,
+          -0.0075
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_1",
+    "slug": "upper_bank_-1_1",
+    "name_zh": "机房设备_upper_bank_-1_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_upper_bank_-1_1_资产包",
+    "objects": [
+      "机房设备_upper_bank_-1_1_主体",
+      "机房设备_upper_bank_-1_1_自发光"
+    ],
+    "world_origin_m": [
+      12.7975,
+      -22.0,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.04,
+        -23.315,
+        0.0
+      ],
+      [
+        13.555,
+        -20.685,
+        5.45
+      ]
+    ],
+    "dimensions_m": [
+      1.515,
+      2.63,
+      5.45
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 130,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BANK_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          0.3,
+          -4.4,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_1_1",
+    "slug": "upper_bank_1_1",
+    "name_zh": "机房设备_upper_bank_1_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_upper_bank_1_1_资产包",
+    "objects": [
+      "机房设备_upper_bank_1_1_主体",
+      "机房设备_upper_bank_1_1_自发光"
+    ],
+    "world_origin_m": [
+      12.7975,
+      22.0,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.04,
+        20.685,
+        0.0
+      ],
+      [
+        13.555,
+        23.315,
+        5.45
+      ]
+    ],
+    "dimensions_m": [
+      1.515,
+      2.63,
+      5.45
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 130,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BANK_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          2.1,
+          -4.4,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_-1",
+    "slug": "upper_console_-1",
+    "name_zh": "机房操作站_upper_console_-1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房操作站_upper_console_-1_资产包",
+    "objects": [
+      "机房操作站_upper_console_-1_主体",
+      "机房操作站_upper_console_-1_自发光"
+    ],
+    "world_origin_m": [
+      10.372499999999999,
+      -26.700000000000003,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        9.795,
+        -27.26,
+        0.0
+      ],
+      [
+        10.95,
+        -26.14,
+        2.48455
+      ]
+    ],
+    "dimensions_m": [
+      1.155,
+      1.12,
+      2.48455
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 20,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CONSOLE_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          4.2,
+          -4.3,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_-1",
+    "slug": "end_crate_-1",
+    "name_zh": "固定维护箱_end_crate_-1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_end_crate_-1_资产包",
+    "objects": [
+      "固定维护箱_end_crate_-1_主体"
+    ],
+    "world_origin_m": [
+      3.0,
+      -27.512500000000003,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        1.925,
+        -28.35,
+        -0.035
+      ],
+      [
+        4.075,
+        -26.675,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      2.15,
+      1.675,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CRATE_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          6.5,
+          -4.3,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE_-1",
+    "slug": "near_crate_-1",
+    "name_zh": "固定维护箱_near_crate_-1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_near_crate_-1_资产包",
+    "objects": [
+      "固定维护箱_near_crate_-1_主体"
+    ],
+    "world_origin_m": [
+      -10.0,
+      -25.034615000000002,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -11.30622,
+        -25.93024,
+        -0.035
+      ],
+      [
+        -8.69378,
+        -24.13899,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      2.61244,
+      1.79125,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CRATE_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          10.0,
+          -4.4,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION_-1",
+    "slug": "half_partition_-1",
+    "name_zh": "机房设备隔断_-1",
+    "category": "architecture",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备隔断_-1_资产包",
+    "objects": [
+      "机房设备隔断_-1_主体"
+    ],
+    "world_origin_m": [
+      -10.0,
+      -17.7,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -14.4,
+        -18.0,
+        0.0
+      ],
+      [
+        -5.6,
+        -17.4,
+        2.19
+      ]
+    ],
+    "dimensions_m": [
+      8.8,
+      0.6,
+      2.19
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 7,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_PART_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -6.4,
+          -7.2,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION_1",
+    "slug": "half_partition_1",
+    "name_zh": "机房设备隔断_1",
+    "category": "architecture",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备隔断_1_资产包",
+    "objects": [
+      "机房设备隔断_1_主体"
+    ],
+    "world_origin_m": [
+      -10.0,
+      17.7,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -14.4,
+        17.4,
+        0.0
+      ],
+      [
+        -5.6,
+        18.0,
+        2.19
+      ]
+    ],
+    "dimensions_m": [
+      8.8,
+      0.6,
+      2.19
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 7,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_PART_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          5.3,
+          -7.2,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_2",
+    "slug": "upper_bank_-1_2",
+    "name_zh": "机房设备_upper_bank_-1_2",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_upper_bank_-1_2_资产包",
+    "objects": [
+      "机房设备_upper_bank_-1_2_主体",
+      "机房设备_upper_bank_-1_2_自发光"
+    ],
+    "world_origin_m": [
+      12.7975,
+      -19.25,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.04,
+        -20.565,
+        0.0
+      ],
+      [
+        13.555,
+        -17.935,
+        5.45
+      ]
+    ],
+    "dimensions_m": [
+      1.515,
+      2.63,
+      5.45
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 130,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BANK_C"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -11.0,
+          -9.3,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_1_2",
+    "slug": "upper_bank_1_2",
+    "name_zh": "机房设备_upper_bank_1_2",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_upper_bank_1_2_资产包",
+    "objects": [
+      "机房设备_upper_bank_1_2_主体",
+      "机房设备_upper_bank_1_2_自发光"
+    ],
+    "world_origin_m": [
+      12.7975,
+      24.75,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.04,
+        23.435,
+        0.0
+      ],
+      [
+        13.555,
+        26.065,
+        5.45
+      ]
+    ],
+    "dimensions_m": [
+      1.515,
+      2.63,
+      5.45
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 130,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BANK_D"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -9.0,
+          -9.3,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_1",
+    "slug": "end_crate_1",
+    "name_zh": "固定维护箱_end_crate_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_end_crate_1_资产包",
+    "objects": [
+      "固定维护箱_end_crate_1_主体"
+    ],
+    "world_origin_m": [
+      3.0,
+      27.487499999999997,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        1.925,
+        26.65,
+        -0.035
+      ],
+      [
+        4.075,
+        28.325,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      2.15,
+      1.675,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CRATE_C"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -6.4,
+          -9.3,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_0",
+    "slug": "upper_bank_-1_0",
+    "name_zh": "机房设备_upper_bank_-1_0",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_upper_bank_-1_0_资产包",
+    "objects": [
+      "机房设备_upper_bank_-1_0_主体"
+    ],
+    "world_origin_m": [
+      12.7875,
+      -24.75,
+      -0.1475
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.02,
+        -26.065,
+        -0.1475
+      ],
+      [
+        13.555,
+        -23.435,
+        6.05
+      ]
+    ],
+    "dimensions_m": [
+      1.535,
+      2.63,
+      6.1975
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 43,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BANK_E"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -3.7,
+          -9.2,
+          -0.1475
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_1_0",
+    "slug": "upper_bank_1_0",
+    "name_zh": "机房设备_upper_bank_1_0",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房设备_upper_bank_1_0_资产包",
+    "objects": [
+      "机房设备_upper_bank_1_0_主体"
+    ],
+    "world_origin_m": [
+      12.7875,
+      19.25,
+      -0.1475
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.02,
+        17.935,
+        -0.1475
+      ],
+      [
+        13.555,
+        20.565,
+        6.05
+      ]
+    ],
+    "dimensions_m": [
+      1.535,
+      2.63,
+      6.1975
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 43,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BANK_F"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -1.6,
+          -9.2,
+          -0.1475
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX_-1",
+    "slug": "partition_box_-1",
+    "name_zh": "固定维护箱_partition_box_-1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_partition_box_-1_资产包",
+    "objects": [
+      "固定维护箱_partition_box_-1_主体"
+    ],
+    "world_origin_m": [
+      -6.8,
+      -20.2125,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -7.625,
+        -21.05,
+        -0.035
+      ],
+      [
+        -5.975,
+        -19.375,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      1.65,
+      1.675,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BOX_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          0.5,
+          -9.3,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX_1",
+    "slug": "partition_box_1",
+    "name_zh": "固定维护箱_partition_box_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_partition_box_1_资产包",
+    "objects": [
+      "固定维护箱_partition_box_1_主体"
+    ],
+    "world_origin_m": [
+      -6.8,
+      20.1875,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -7.625,
+        19.35,
+        -0.035
+      ],
+      [
+        -5.975,
+        21.025,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      1.65,
+      1.675,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_BOX_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          2.4,
+          -9.3,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_1",
+    "slug": "upper_console_1",
+    "name_zh": "机房操作站_upper_console_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "机房操作站_upper_console_1_资产包",
+    "objects": [
+      "机房操作站_upper_console_1_主体",
+      "机房操作站_upper_console_1_自发光"
+    ],
+    "world_origin_m": [
+      10.372499999999999,
+      17.299999999999997,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        9.795,
+        16.74,
+        0.0
+      ],
+      [
+        10.95,
+        17.86,
+        2.48455
+      ]
+    ],
+    "dimensions_m": [
+      1.155,
+      1.12,
+      2.48455
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 20,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CONSOLE_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          4.2,
+          -9.3,
+          0.0
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE_-1_0",
+    "slug": "bank_crate_-1_0",
+    "name_zh": "固定维护箱_bank_crate_-1_0",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_bank_crate_-1_0_资产包",
+    "objects": [
+      "固定维护箱_bank_crate_-1_0_主体"
+    ],
+    "world_origin_m": [
+      11.399999999999999,
+      -18.012500000000003,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        10.6,
+        -18.85,
+        -0.035
+      ],
+      [
+        12.2,
+        -17.175,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      1.6,
+      1.675,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CRATE_D"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          6.3,
+          -9.3,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE_1_0",
+    "slug": "bank_crate_1_0",
+    "name_zh": "固定维护箱_bank_crate_1_0",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_bank_crate_1_0_资产包",
+    "objects": [
+      "固定维护箱_bank_crate_1_0_主体"
+    ],
+    "world_origin_m": [
+      11.399999999999999,
+      25.987499999999997,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        10.6,
+        25.15,
+        -0.035
+      ],
+      [
+        12.2,
+        26.825,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      1.6,
+      1.675,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CRATE_E"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          8.1,
+          -9.3,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE_1",
+    "slug": "near_crate_1",
+    "name_zh": "固定维护箱_near_crate_1",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "固定维护箱_near_crate_1_资产包",
+    "objects": [
+      "固定维护箱_near_crate_1_主体"
+    ],
+    "world_origin_m": [
+      -10.0,
+      24.965384999999998,
+      -0.035
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -11.30622,
+        24.06976,
+        -0.035
+      ],
+      [
+        -8.69378,
+        25.86101,
+        1.52
+      ]
+    ],
+    "dimensions_m": [
+      2.61244,
+      1.79125,
+      1.555
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": true,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_CRATE_F"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          10.3,
+          -9.2,
+          -0.035
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_1_0",
+    "slug": "header_cables_1_0",
+    "name_zh": "架空垂落电缆束_1_0",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "架空垂落电缆束_1_0_资产包",
+    "objects": [
+      "架空垂落电缆束_1_0_主体"
+    ],
+    "world_origin_m": [
+      12.685,
+      -9.8,
+      4.355
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.285,
+        -13.07664,
+        4.355
+      ],
+      [
+        13.085,
+        -6.52336,
+        8.74784
+      ]
+    ],
+    "dimensions_m": [
+      0.8,
+      6.55328,
+      4.39284
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 7,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_HEADER_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          11.6,
+          8.0,
+          4.355
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_1_2",
+    "slug": "header_cables_1_2",
+    "name_zh": "架空垂落电缆束_1_2",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "架空垂落电缆束_1_2_资产包",
+    "objects": [
+      "架空垂落电缆束_1_2_主体"
+    ],
+    "world_origin_m": [
+      12.685,
+      8.2,
+      4.355
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        12.285,
+        4.92336,
+        4.355
+      ],
+      [
+        13.085,
+        11.47664,
+        8.74784
+      ]
+    ],
+    "dimensions_m": [
+      0.8,
+      6.55328,
+      4.39284
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 7,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_HEADER_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          11.6,
+          -7.0,
+          4.355
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_-1_0",
+    "slug": "header_cables_-1_0",
+    "name_zh": "架空垂落电缆束_-1_0",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "架空垂落电缆束_-1_0_资产包",
+    "objects": [
+      "架空垂落电缆束_-1_0_主体"
+    ],
+    "world_origin_m": [
+      -12.685,
+      -9.8,
+      4.355
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -13.085,
+        -13.07664,
+        4.355
+      ],
+      [
+        -12.285,
+        -6.52336,
+        8.74784
+      ]
+    ],
+    "dimensions_m": [
+      0.8,
+      6.55328,
+      4.39284
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 7,
+    "reference_cutaway_hidden": true,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_HEADER_C"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -11.6,
+          7.0,
+          4.355
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER_1_0",
+    "slug": "torn_header_1_0",
+    "name_zh": "破损管廊护板_1_0",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "破损管廊护板_1_0_资产包",
+    "objects": [
+      "破损管廊护板_1_0_主体"
+    ],
+    "world_origin_m": [
+      13.54,
+      -10.100000000000001,
+      6.4
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        13.5,
+        -12.3,
+        6.4
+      ],
+      [
+        13.58,
+        -7.9,
+        10.7
+      ]
+    ],
+    "dimensions_m": [
+      0.08,
+      4.4,
+      4.3
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 1,
+    "reference_cutaway_hidden": false,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_TORN_A"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          11.95,
+          1.0,
+          6.4
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER_-1_0",
+    "slug": "torn_header_-1_0",
+    "name_zh": "破损管廊护板_-1_0",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+    "collection": "破损管廊护板_-1_0_资产包",
+    "objects": [
+      "破损管廊护板_-1_0_主体"
+    ],
+    "world_origin_m": [
+      -13.46,
+      -10.100000000000001,
+      6.4
+    ],
+    "local_origin": "bottom_center",
+    "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+    "world_bounds_m": [
+      [
+        -13.5,
+        -12.3,
+        6.4
+      ],
+      [
+        -13.42,
+        -7.9,
+        10.7
+      ]
+    ],
+    "dimensions_m": [
+      0.08,
+      4.4,
+      4.3
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 1,
+    "reference_cutaway_hidden": true,
+    "lower_decor_only": false,
+    "fixed_display_attachment": false,
+    "collision_status": "not_exported",
+    "exported": false,
+    "dependencies": [],
+    "source_room_type": "bridge_room/v002",
+    "source_manifest": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/room_type_manifest.json",
+    "usage_in_std_25x25": {
+      "instance_count": 1,
+      "instance_ids": [
+        "BRG_TORN_B"
+      ],
+      "slot_roles": [
+        "facility"
+      ],
+      "positions_m": [
+        [
+          -11.95,
+          -7.0,
+          6.4
+        ]
+      ],
+      "rotations_z_deg": [
+        0.0
+      ]
+    }
+  }
+]

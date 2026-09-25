@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+  "slug": "ceiling_service_duct",
+  "name_zh": "顶部通风管与风口",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "顶部通风管与风口_资产包",
+  "objects": [
+    "顶部通风管与风口_主体"
+  ],
+  "world_origin_m": [
+    3.6,
+    1.5,
+    10.3825
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      2.886,
+      -10.5,
+      10.3825
+    ],
+    [
+      4.314,
+      13.5,
+      11.24
+    ]
+  ],
+  "dimensions_m": [
+    1.428,
+    24.0,
+    0.8575
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 41,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

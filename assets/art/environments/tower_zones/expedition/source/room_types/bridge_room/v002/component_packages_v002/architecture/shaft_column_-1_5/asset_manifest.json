@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN_-1_5",
+  "slug": "shaft_column_-1_5",
+  "name_zh": "贯穿层间主柱_-1_5",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "贯穿层间主柱_-1_5_资产包",
+  "objects": [
+    "贯穿层间主柱_-1_5_主体",
+    "贯穿层间主柱_-1_5_自发光"
+  ],
+  "world_origin_m": [
+    -6.0,
+    5.0,
+    -12.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      -6.9,
+      4.1,
+      -12.0
+    ],
+    [
+      -5.1,
+      5.9,
+      0.0
+    ]
+  ],
+  "dimensions_m": [
+    1.8,
+    1.8,
+    12.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 10,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

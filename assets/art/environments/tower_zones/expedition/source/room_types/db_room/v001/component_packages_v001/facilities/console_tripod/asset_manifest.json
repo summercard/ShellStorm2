@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-CONSOLE_TRIPOD",
+  "slug": "console_tripod",
+  "name_zh": "落地仪器三脚架",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "落地仪器三脚架_资产包",
+  "objects": [
+    "落地仪器三脚架_主体",
+    "落地仪器三脚架_自发光"
+  ],
+  "world_origin_m": [
+    -1.0265199999999997,
+    5.728595,
+    0.01111
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -10.13858,
+      3.77519,
+      0.01111
+    ],
+    [
+      8.08554,
+      7.682,
+      1.27
+    ]
+  ],
+  "dimensions_m": [
+    18.22412,
+    3.90681,
+    1.25889
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 20,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

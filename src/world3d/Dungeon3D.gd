@@ -40,6 +40,7 @@ const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
 const ENEMY_PREACTIVATION_RANGE := 38.0
 const ENEMY_PREACTIVATION_INTERVAL := 0.12
+const ROOM_WAVE_INTERMISSION_SECONDS := 2.0
 const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTILES
 const ENEMY_FILL_ATTEMPT_LIMIT := 4
 const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
@@ -120,6 +121,10 @@ var _room_wave_queues: Dictionary = {}
 var _room_wave_numbers: Dictionary = {}
 var _room_wave_totals: Dictionary = {}
 var _wave_spawn_pending: Dictionary = {}
+var _room_wave_intermission_tokens: Dictionary = {}
+var _reserved_room_spawns: Dictionary = {}
+var _room_fate_wave_queued: Dictionary = {}
+var _room_spawn_blocked: Dictionary = {}
 var _loot_module: LootModule
 var _reward_coordinator: RuntimeRewardCoordinator
 var _monster_injector: MonsterInjector
@@ -203,6 +208,7 @@ var _full_map_overlay: Control = null
 var _full_map_control: DungeonMinimap3D = null
 var _hud_floor_label: Label = null
 var _hud_timer_label: Label = null
+var _hud_wave_label: Label = null
 var _hud_run_elapsed := 0.0
 var _hud_last_elapsed_second := -1
 var _minimap_runtime_accumulator := 0.0
@@ -310,6 +316,8 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	for room_id in _wave_spawn_pending.keys():
+		_cancel_room_wave_intermission(str(room_id))
 	if not test_mode and BaseManager != null and _runtime_persistence_active:
 		BaseManager.unregister_runtime_checkpoint_provider(self, true)
 	_runtime_persistence_active = false
@@ -1023,6 +1031,10 @@ func _build_reference_main_hud() -> void:
 	room_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_anchor_control(room_label, 0.5, 0.0, 0.5, 0.0, -220, 14, 220, 38)
 	_reference_hud_root.add_child(room_label)
+	_hud_wave_label = _make_hud_label("波次 —", 14, Color(0.98, 0.78, 0.32))
+	_hud_wave_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_anchor_control(_hud_wave_label, 0.5, 0.0, 0.5, 0.0, -220, 40, 220, 62)
+	_reference_hud_root.add_child(_hud_wave_label)
 
 	var player_panel := _make_hud_panel(cyan, Color(0.006, 0.018, 0.030, 0.88))
 	player_panel.name = "PlayerStatusBlock"
@@ -2039,6 +2051,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		if previous_room != null:
 			previous_room.hide_door_prompts()
 	if not previous_runtime_room_id.is_empty() and previous_runtime_room_id != room.room_id:
+		_cancel_room_wave_intermission(previous_runtime_room_id)
 		_capture_room_runtime_state(previous_runtime_room_id)
 	_current_room_id = room.room_id
 	room_entered.emit(room)
@@ -2047,13 +2060,15 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	minimap.set_current_room(room.room_id)
 	_update_room_streaming(room.room_id)
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
+	_update_wave_hud(room.room_id)
 	var first_visit := not _spawned_rooms.has(room.room_id)
 	if first_visit and player.has_method("on_fate_room_entered"):
 		player.call("on_fate_room_entered")
 	if _spawned_rooms.has(room.room_id):
 		_ensure_room_key_reward(room)
 		_repair_room_progress(room)
-		status_label.text = _return_room_status(room)
+		if not _wave_spawn_pending.has(room.room_id):
+			status_label.text = _return_room_status(room)
 		return
 	_spawned_rooms[room.room_id] = true
 	if room.room_type == "START":
@@ -2234,11 +2249,18 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 		return false
 	var wave_count := waves.size()
 	var first_wave: Array[Dictionary] = waves.pop_front() as Array[Dictionary]
+	_cancel_room_wave_intermission(room.room_id)
 	_room_wave_queues[room.room_id] = waves
 	_room_wave_numbers[room.room_id] = 1
 	_room_wave_totals[room.room_id] = wave_count
 	_enemy_nodes_by_room[room.room_id] = []
 	var spawned := _spawn_enemy_batch(room, first_wave, false)
+	if spawned < 0:
+		waves.push_front(first_wave)
+		_room_wave_numbers[room.room_id] = 0
+		_alive_by_room[room.room_id] = 0
+		_update_wave_hud(room.room_id)
+		return false
 	if spawned <= 0:
 		push_error("Hostile room %s failed to instantiate its first wave; unlocking room" % room.room_id)
 		_room_wave_queues[room.room_id] = []
@@ -2246,6 +2268,7 @@ func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 		status_label.text = "敌群载入失败，房间已安全解锁"
 		return false
 	status_label.text = "区域警戒：波次 1/%d · %d 个敌对信号" % [wave_count, spawned]
+	_update_wave_hud(room.room_id)
 	return true
 
 
@@ -2286,6 +2309,22 @@ func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:
 func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = []) -> int:
 	if room == null or enemy_configs.is_empty():
 		return 0
+	if _room_spawn_blocked.has(room.room_id):
+		return -1
+	# 整批预检先于实例化，任何非法点都不能形成半波或写入实体transform。
+	var spawn_positions: Array[Vector3] = []
+	for index in enemy_configs.size():
+		var point: Vector3 = positions[index] as Vector3 if index < positions.size() else room.spawn_point_for_index(index)
+		if not point.is_finite():
+			_room_spawn_blocked[room.room_id] = true
+			_cancel_room_wave_intermission(room.room_id)
+			_update_wave_hud(room.room_id)
+			if room.room_id == _current_room_id:
+				status_label.text = "刷怪暂停：无合法落点，波次保留"
+			return -1
+		spawn_positions.append(point)
+	_cancel_room_wave_intermission(room.room_id)
+	_update_wave_hud(room.room_id)
 	if not _enemy_nodes_by_room.has(room.room_id):
 		_enemy_nodes_by_room[room.room_id] = []
 	var spawned_count := 0
@@ -2314,14 +2353,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		var damage_multiplier := float(_room_enemy_damage_multipliers.get(room.room_id, 1.0))
 		if not is_equal_approx(damage_multiplier, 1.0):
 			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))
-		# 逐只取落点，而不是 points[index % size]：布局房只有 4 个环形点，而设计源的房间级
-		# 刷怪计划允许一波 24 只 —— 取模会让超出的敌人逐只叠在同一坐标（看起来只有一只）。
-		# 唯一落点算法在 DungeonRoom3D.spawn_point_for_index，公式路径与设计源路径共用。
-		# 剧情可以在指定站位刷怪（剧本 scene.spawn）；未给站位时沿用房间环形落点。
-		enemy.global_position = (
-			positions[index] as Vector3 if index < positions.size()
-			else room.spawn_point_for_index(index)
-		)
+		enemy.global_position = spawn_positions[index]
 		enemy.killed.connect(_on_enemy_killed)
 		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)
@@ -2398,7 +2430,7 @@ func narrative_spawn_enemies(
 			origin + flat_axis * ((float(index) - row) * spread) + lateral_stagger
 		)
 	# additive=true：剧情刷的怪**加**在房间原有敌人之上，不覆盖存活账。
-	return _spawn_enemy_batch(room, configs, true, false, positions)
+	return maxi(0, _spawn_enemy_batch(room, configs, true, false, positions))
 
 
 ## 剧情撤怪：清掉本房**剧情生成**的怪。按 `narrative_spawned` 元数据认领，
@@ -2561,41 +2593,126 @@ func _repair_hostile_room_progress(room: DungeonRoom3D, allow_event_combat := fa
 		or (room.room_type not in HOSTILE_ROOM_TYPES and not allow_event_combat)
 	):
 		return
-	var live_count := 0
+	# DATA_ONLY 的空节点表是流送卸载，不是死亡；预约生成也属于本波存活账。
+	if not room.is_streamed() or _room_spawn_blocked.has(room.room_id):
+		return
+	var live_count := _reserved_spawn_count(room.room_id)
 	var live_references: Array = []
 	for value in _enemy_nodes_by_room.get(room.room_id, []):
+		if not is_instance_valid(value):
+			continue
 		var enemy := value as Enemy3D
-		if enemy == null or not is_instance_valid(enemy) or enemy.ai_state == "dead":
+		if enemy == null or enemy.is_queued_for_deletion():
 			continue
 		live_references.append(enemy)
 		live_count += 1
 	_enemy_nodes_by_room[room.room_id] = live_references
+	_alive_by_room[room.room_id] = live_count
 	if live_count > 0:
-		_alive_by_room[room.room_id] = live_count
-		return
-	_alive_by_room[room.room_id] = 0
-	if _wave_spawn_pending.has(room.room_id):
+		_cancel_room_wave_intermission(room.room_id)
+		_update_wave_hud(room.room_id)
 		return
 	var pending_waves := _room_wave_queues.get(room.room_id, []) as Array
 	if not pending_waves.is_empty():
-		_spawn_next_room_wave(room.room_id)
+		# 到这里已确认本波全清；重进房/流送修复也必须走完整间歇。
+		_schedule_room_wave_intermission(room.room_id)
 		return
-	# 已记录“访问过”但没有任何活体/待刷波次时，重新建立该房战斗；
-	# 若配置仍然失败，_spawn_room_enemies 会主动清房，绝不永久锁门。
+	if _room_wave_totals.has(room.room_id):
+		# 已建立过波次的房间没有待发队列时，只能是终波已处理或失败兜底；
+		# 不得重新调用 _spawn_room_enemies 形成无限刷怪。
+		_mark_room_cleared(room, true)
+		return
+	# 尚未建立过波次的旧存档/事件战斗仍沿用原有修复入口。
 	_spawn_room_enemies(room)
 
 
-func _spawn_next_room_wave(room_id: String) -> void:
+func _can_advance_room_wave(room_id: String) -> bool:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	return (
+		is_inside_tree() and not _completed and _current_room_id == room_id
+		and is_instance_valid(room) and room.is_streamed() and not room.cleared
+		and not _room_spawn_blocked.has(room_id)
+		and int(_alive_by_room.get(room_id, 0)) == 0
+		and _reserved_spawn_count(room_id) == 0
+		and (_enemy_nodes_by_room.get(room_id, []) as Array).is_empty()
+	)
+
+
+func _schedule_room_wave_intermission(room_id: String) -> void:
+	if not _can_advance_room_wave(room_id):
+		return
+	var queue := _room_wave_queues.get(room_id, []) as Array
+	if queue.is_empty() or _wave_spawn_pending.has(room_id):
+		return
+	var token := int(_room_wave_intermission_tokens.get(room_id, 0)) + 1
+	_room_wave_intermission_tokens[room_id] = token
+	_wave_spawn_pending[room_id] = token
+	var wave_number := int(_room_wave_numbers.get(room_id, 1))
+	var total := int(_room_wave_totals.get(room_id, 1))
+	status_label.text = "波次 %d/%d 已清空 · 2秒后生成下一整波" % [wave_number, total]
+	_update_wave_hud(room_id, "间歇中 · 2秒后下一波")
+	get_tree().create_timer(ROOM_WAVE_INTERMISSION_SECONDS, false).timeout.connect(
+		_on_room_wave_intermission_timeout.bind(room_id, token)
+	)
+
+
+func _cancel_room_wave_intermission(room_id: String) -> void:
+	if room_id.is_empty():
+		return
+	_room_wave_intermission_tokens[room_id] = int(_room_wave_intermission_tokens.get(room_id, 0)) + 1
 	_wave_spawn_pending.erase(room_id)
-	if _completed or not _room_wave_queues.has(room_id):
+
+
+func _on_room_wave_intermission_timeout(room_id: String, token: int) -> void:
+	if int(_room_wave_intermission_tokens.get(room_id, 0)) != token:
+		return
+	if int(_wave_spawn_pending.get(room_id, -1)) != token:
+		return
+	_spawn_next_room_wave(room_id, token)
+
+
+func _update_wave_hud(room_id: String, suffix := "") -> void:
+	if _hud_wave_label == null or room_id != _current_room_id:
+		return
+	if _room_spawn_blocked.has(room_id):
+		_hud_wave_label.text = "波次 %d/%d · 无合法落点，刷怪暂停" % [int(_room_wave_numbers.get(room_id, 0)), int(_room_wave_totals.get(room_id, 0))]
+		return
+	if suffix.is_empty():
+		var room := _room_by_id.get(room_id) as DungeonRoom3D
+		if room != null and room.cleared:
+			suffix = "房间肃清"
+		elif _wave_spawn_pending.has(room_id):
+			suffix = "间歇中 · 2秒后下一波"
+	var current := int(_room_wave_numbers.get(room_id, 0))
+	var total := int(_room_wave_totals.get(room_id, 0))
+	if current <= 0 or total <= 0:
+		_hud_wave_label.text = "波次 —"
+		return
+	_hud_wave_label.text = "波次 %d/%d" % [current, total]
+	if not suffix.is_empty():
+		_hud_wave_label.text += " · %s" % suffix
+
+
+func _spawn_next_room_wave(room_id: String, token := -1) -> void:
+	if token < 0 or int(_wave_spawn_pending.get(room_id, -1)) != token:
+		return
+	_cancel_room_wave_intermission(room_id)
+	if not _can_advance_room_wave(room_id) or not _room_wave_queues.has(room_id):
 		return
 	var queue := _room_wave_queues[room_id] as Array
 	if queue.is_empty():
 		return
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
-	var batch: Array[Dictionary] = queue.pop_front() as Array[Dictionary]
-	_room_wave_numbers[room_id] = int(_room_wave_numbers.get(room_id, 1)) + 1
+	var batch: Array[Dictionary] = []
+	batch.assign(queue[0])
+	var previous_wave := int(_room_wave_numbers.get(room_id, 1))
+	_room_wave_numbers[room_id] = previous_wave + 1
 	var spawned := _spawn_enemy_batch(room, batch, false)
+	if spawned < 0:
+		_room_wave_numbers[room_id] = previous_wave
+		_update_wave_hud(room_id)
+		return
+	queue.pop_front()
 	if spawned <= 0:
 		push_error("Hostile room %s failed to instantiate a later wave; unlocking room" % room_id)
 		_room_wave_queues[room_id] = []
@@ -2603,10 +2720,12 @@ func _spawn_next_room_wave(room_id: String) -> void:
 		if room != null:
 			_mark_room_cleared(room, true)
 		status_label.text = "增援载入失败，房间已安全解锁"
+		_update_wave_hud(room_id, "生成失败 · 房间已解锁")
 		return
 	status_label.text = "增援抵达：波次 %d/%d · %d 个敌对信号" % [
 		int(_room_wave_numbers[room_id]), int(_room_wave_totals.get(room_id, 1)), spawned,
 	]
+	_update_wave_hud(room_id)
 	if AudioManager != null:
 		AudioManager.play_sfx("wave_start", -3.0)
 
@@ -2617,7 +2736,7 @@ func _record_index(room_id: String) -> int:
 
 
 func _on_summon_requested(source: Enemy3D, count: int) -> void:
-	if not _alive_by_room.has(source.room_id):
+	if _completed or not is_instance_valid(source) or not (_enemy_nodes_by_room.get(source.room_id, []) as Array).has(source):
 		return
 	if source.ai_state == "dead" and source.elite_modifier_id != "Elite.SpawnOnDeath":
 		return
@@ -2628,42 +2747,70 @@ func _on_summon_requested(source: Enemy3D, count: int) -> void:
 	var reserved_count := mini(mini(3, count), maxi(0, 8 - live_count))
 	if reserved_count <= 0:
 		return
-	_alive_by_room[source.room_id] = int(_alive_by_room[source.room_id]) + reserved_count
-	call_deferred("_spawn_summoned_minions", source.room_id, source.global_position, reserved_count)
-
-
-func _spawn_summoned_minions(room_id: String, origin: Vector3, count: int) -> void:
-	if _completed or not _alive_by_room.has(room_id):
-		return
-	for index in range(count):
-		var enemy := ENEMY_SCENE.instantiate() as Enemy3D
-		enemy.room_id = room_id
-		$ActiveEnemies.add_child(enemy)
+	var configs: Array[Dictionary] = []
+	var positions: Array = []
+	for index in range(reserved_count):
 		var minion_data: Array[Dictionary] = _monster_injector.generate_enemies({"type": "minion", "floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 1})
-		if not minion_data.is_empty():
-			var spawn_data := minion_data[index % minion_data.size()].duplicate(true)
-			spawn_data["spawn_index"] = index
-			spawn_data["persistent_id"] = "%s:summon_%d:%d" % [room_id, Time.get_ticks_msec(), index]
-			enemy.configure_from_enemy_data(spawn_data)
-		enemy.global_position = origin + Vector3(cos(index * TAU / maxf(1.0, count)) * 1.8, 0, sin(index * TAU / maxf(1.0, count)) * 1.8)
-		enemy.killed.connect(_on_enemy_killed)
-		enemy.escaped.connect(_on_enemy_escaped)
-		enemy.summon_requested.connect(_on_summon_requested)
-		enemy.boss_phase_changed.connect(_on_boss_phase_changed)
-		enemy.health_changed.connect(_on_enemy_health_changed)
-		if not _enemy_nodes_by_room.has(room_id):
-			_enemy_nodes_by_room[room_id] = []
-		(_enemy_nodes_by_room[room_id] as Array).append(enemy)
-		enemy.set_runtime_active(room_id == _current_room_id)
+		if minion_data.is_empty():
+			continue
+		var spawn_data := minion_data[index % minion_data.size()].duplicate(true)
+		spawn_data["spawn_index"] = index
+		spawn_data["persistent_id"] = "%s:summon_%d:%d:%d" % [source.room_id, Time.get_ticks_usec(), source.get_instance_id(), index]
+		configs.append(spawn_data)
+		positions.append(source.global_position + Vector3(cos(index * TAU / reserved_count) * 1.8, 0, sin(index * TAU / reserved_count) * 1.8))
+	_reserve_room_spawn(source.room_id, configs, positions)
+
+
+func _reserved_spawn_count(room_id: String) -> int:
+	var count := 0
+	for request in _reserved_room_spawns.get(room_id, []):
+		count += (request.get("configs", []) as Array).size()
+	return count
+
+
+func _reserve_room_spawn(room_id: String, configs: Array[Dictionary], positions: Array = []) -> void:
+	if configs.is_empty():
+		return
+	_cancel_room_wave_intermission(room_id)
+	if not _reserved_room_spawns.has(room_id):
+		_reserved_room_spawns[room_id] = []
+	var saved_positions: Array = []
+	for position_value in positions:
+		var point := position_value as Vector3
+		saved_positions.append([point.x, point.y, point.z])
+	(_reserved_room_spawns[room_id] as Array).append({"configs": configs, "positions": saved_positions})
+	_alive_by_room[room_id] = int(_alive_by_room.get(room_id, 0)) + configs.size()
+	_update_wave_hud(room_id)
+	call_deferred("_flush_reserved_room_spawns", room_id)
+
+
+func _flush_reserved_room_spawns(room_id: String) -> void:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if _completed or not is_instance_valid(room) or not room.is_streamed():
+		return
+	var requests := _reserved_room_spawns.get(room_id, []) as Array
+	if _room_spawn_blocked.has(room_id):
+		return
+	while not requests.is_empty():
+		var request := requests[0] as Dictionary
+		var configs: Array[Dictionary] = []
+		configs.assign(request.get("configs", []))
+		var positions: Array = []
+		for point in request.get("positions", []):
+			positions.append(Vector3(float(point[0]), float(point[1]), float(point[2])))
+		if _spawn_enemy_batch(room, configs, true, true, positions) < 0:
+			return
+		requests.pop_front()
+	_reserved_room_spawns.erase(room_id)
 
 
 func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
+	if not _claim_enemy_departure(enemy):
+		return
 	_kills += 1
 	var weapon_tree := player.get_weapon_tree() if player != null else null
 	if weapon_tree != null:
 		weapon_tree.add_crit_on_kill_stack(1)
-	if _enemy_nodes_by_room.has(enemy.room_id):
-		(_enemy_nodes_by_room[enemy.room_id] as Array).erase(enemy)
 	last_killed_enemy_data = enemy_data.duplicate(true)
 	kill_recorded.emit()
 	var loot_room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
@@ -2694,24 +2841,32 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 
 
 func _on_enemy_escaped(enemy: Enemy3D, _context: Dictionary) -> void:
-	if _enemy_nodes_by_room.has(enemy.room_id):
-		(_enemy_nodes_by_room[enemy.room_id] as Array).erase(enemy)
+	if not _claim_enemy_departure(enemy):
+		return
 	_resolve_room_enemy_departure(enemy, true, enemy.get_enemy_data())
 
 
+func _claim_enemy_departure(enemy: Enemy3D) -> bool:
+	if enemy == null or not is_instance_valid(enemy):
+		return false
+	var members := _enemy_nodes_by_room.get(enemy.room_id, []) as Array
+	if not members.has(enemy) or enemy.is_queued_for_deletion():
+		return false
+	# 先原子提交成员与计数，再发布击杀事件；同步订阅者可能重入房间修复。
+	members.erase(enemy)
+	_alive_by_room[enemy.room_id] = maxi(0, int(_alive_by_room.get(enemy.room_id, 0)) - 1)
+	return true
+
+
 func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data: Dictionary) -> void:
-	if not _alive_by_room.has(enemy.room_id):
+	if not _alive_by_room.has(enemy.room_id) or _room_spawn_blocked.has(enemy.room_id):
 		return
-	_alive_by_room[enemy.room_id] = maxi(0, int(_alive_by_room[enemy.room_id]) - 1)
 	if int(_alive_by_room[enemy.room_id]) > 0:
 		status_label.text = "残余敌对信号：%d" % int(_alive_by_room[enemy.room_id])
 		return
 	var pending_waves := _room_wave_queues.get(enemy.room_id, []) as Array
 	if not pending_waves.is_empty():
-		if not _wave_spawn_pending.has(enemy.room_id):
-			_wave_spawn_pending[enemy.room_id] = true
-			status_label.text = "本波肃清 · 1.2 秒后敌方增援抵达"
-			get_tree().create_timer(1.2).timeout.connect(_spawn_next_room_wave.bind(enemy.room_id))
+		_schedule_room_wave_intermission(enemy.room_id)
 		return
 	var room: DungeonRoom3D = _room_by_id.get(enemy.room_id) as DungeonRoom3D
 	if _extraction_defense_active and enemy.room_id == _current_room_id:
@@ -3266,16 +3421,26 @@ func _reveal_nearby_rooms(origin_id: String, depth: int) -> void:
 
 func trigger_extra_wave() -> void:
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	if room == null or room.room_type in ["START", "MERCHANT", "UPGRADE"]:
+	if (
+		_completed or room == null or room.cleared
+		or room.room_type not in HOSTILE_ROOM_TYPES
+		or not _room_wave_totals.has(room.room_id)
+		or _room_fate_wave_queued.has(room.room_id)
+	):
 		return
 	var configs: Array[Dictionary] = _monster_injector.generate_enemies({
 		"type": "ambush", "count": 3, "floor": maxi(1, visual_theme.difficulty_rank),
 		"floor_level": clampi(_record_index(room.room_id) / 3, 0, 3),
 	})
-	room.cleared = false
-	_alive_by_room[room.room_id] = int(_alive_by_room.get(room.room_id, 0)) + configs.size()
-	call_deferred("_spawn_enemy_batch", room, configs, true, true)
-	status_label.text = "命运增援：波次外出现 %d 个敌对信号" % configs.size()
+	if configs.is_empty():
+		return
+	# 击杀阈值会反复触发；每房只接受一次，并走同一整波队列，不能边杀边补。
+	_room_fate_wave_queued[room.room_id] = true
+	(_room_wave_queues[room.room_id] as Array).append(configs)
+	_room_wave_totals[room.room_id] = int(_room_wave_totals[room.room_id]) + 1
+	_update_wave_hud(room.room_id)
+	_schedule_room_wave_intermission(room.room_id)
+	status_label.text = "命运增援已排队 · 本房最多追加一波"
 
 
 func set_next_chest_quality_boost(boost: int) -> void:
@@ -3386,6 +3551,8 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		return
 	var was_cleared := room.cleared
 	room.cleared = true
+	_cancel_room_wave_intermission(room.room_id)
+	_update_wave_hud(room.room_id)
 	if not was_cleared:
 		room_cleared.emit(room)
 		var clear_report := _reward_coordinator.resolve_clear(
@@ -4129,6 +4296,7 @@ func _update_room_streaming(current_id: String) -> void:
 
 
 func _hibernate_room_entities(room_id: String) -> void:
+	_cancel_room_wave_intermission(room_id)
 	_capture_room_runtime_state(room_id)
 	for value in _enemy_nodes_by_room.get(room_id, []):
 		if not is_instance_valid(value) or not value is Enemy3D:
@@ -4191,6 +4359,9 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		"room_keys": room_keys,
 		"containers": container_states,
 		"alive_count": int(_alive_by_room.get(room_id, enemy_states.size())),
+		"spawn_blocked": _room_spawn_blocked.has(room_id),
+		"fate_wave_queued": _room_fate_wave_queued.has(room_id),
+		"reserved_spawns": (_reserved_room_spawns.get(room_id, []) as Array).duplicate(true),
 		"wave_queue": (_room_wave_queues.get(room_id, []) as Array).duplicate(true),
 		"wave_number": int(_room_wave_numbers.get(room_id, 1)),
 		"wave_total": int(_room_wave_totals.get(room_id, 1)),
@@ -4204,12 +4375,18 @@ func _restore_room_runtime_state(room_id: String) -> void:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or not is_instance_valid(room):
 		return
+	_cancel_room_wave_intermission(room_id)
 	var state := _segment_runtime_state[room_id] as Dictionary
+	if bool(state.get("spawn_blocked", false)):
+		_room_spawn_blocked[room_id] = true
+	if bool(state.get("fate_wave_queued", false)):
+		_room_fate_wave_queued[room_id] = true
+	_reserved_room_spawns[room_id] = (state.get("reserved_spawns", []) as Array).duplicate(true)
 	room.visited = bool(state.get("visited", room.visited))
 	room.cleared = bool(state.get("cleared", room.cleared))
 	_alive_by_room[room_id] = maxi(0, int(state.get("alive_count", _alive_by_room.get(room_id, 0))))
 	_room_wave_queues[room_id] = (state.get("wave_queue", []) as Array).duplicate(true)
-	_room_wave_numbers[room_id] = maxi(1, int(state.get("wave_number", 1)))
+	_room_wave_numbers[room_id] = maxi(0, int(state.get("wave_number", 1)))
 	_room_wave_totals[room_id] = maxi(1, int(state.get("wave_total", 1)))
 	room.apply_runtime_detail_state({
 		"room_light_on": bool(state.get("room_light_on", false)),
@@ -4251,6 +4428,11 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			if enemy.enemy_kind == "boss":
 				_show_boss_hud(enemy)
 	_enemy_nodes_by_room[room_id] = live_enemies
+	_alive_by_room[room_id] = live_enemies.size() + _reserved_spawn_count(room_id)
+	call_deferred("_flush_reserved_room_spawns", room_id)
+	if room_id == _current_room_id and not room.cleared:
+		_schedule_room_wave_intermission(room_id)
+	_update_wave_hud(room_id)
 	# 地面掉落只在当前 ACTIVE 房创建；邻房安全壳不承担可拾取物和预览模型成本。
 	if room_id != _current_room_id:
 		return
@@ -5511,6 +5693,8 @@ func _finish_run(success: bool) -> void:
 	if _completed:
 		return
 	_completed = true
+	for room_id in _wave_spawn_pending.keys():
+		_cancel_room_wave_intermission(str(room_id))
 	var inventory_before := _inventory.get_slots_snapshot()
 	var insurance_before := _insurance.get_slots_snapshot()
 	var quick_before := _quick_inventory.get_slots_snapshot()

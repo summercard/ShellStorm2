@@ -1,0 +1,66 @@
+{
+ "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\bridge_room\\v001\\通道桥房间种类_工字型_30x60m_v001.blend",
+ "images": [
+  {
+   "name": "设施低亮多巴胺色盘_10x10_512.png",
+   "filepath": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+   "is_relative": false,
+   "resolved": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+   "exists_on_disk": true,
+   "packed": false,
+   "size_after_reload": [
+    512,
+    512
+   ],
+   "reload_ok": true,
+   "pixels_readable": true
+  }
+ ],
+ "materials": [
+  {
+   "name": "01_精工金属_紫色骨架",
+   "image_nodes": 1,
+   "all_images_bound": true,
+   "interpolation": [
+    "Closest"
+   ],
+   "uv_map": [
+    "PaletteUV"
+   ]
+  },
+  {
+   "name": "02_细腻哑光_青绿大面",
+   "image_nodes": 1,
+   "all_images_bound": true,
+   "interpolation": [
+    "Closest"
+   ],
+   "uv_map": [
+    "PaletteUV"
+   ]
+  },
+  {
+   "name": "03_清漆反光_紫粉点缀",
+   "image_nodes": 1,
+   "all_images_bound": true,
+   "interpolation": [
+    "Closest"
+   ],
+   "uv_map": [
+    "PaletteUV"
+   ]
+  },
+  {
+   "name": "04_柔和自发光_UI灯光",
+   "image_nodes": 1,
+   "all_images_bound": true,
+   "interpolation": [
+    "Closest"
+   ],
+   "uv_map": [
+    "PaletteUV"
+   ]
+  }
+ ],
+ "load_ok": true
+}

@@ -1,0 +1,51 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_0",
+  "slug": "tile_1_0",
+  "name_zh": "地砖_1_0",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "地砖_1_0_资产包",
+  "objects": [
+    "地砖_1_0_主体",
+    "地砖_1_0_自发光"
+  ],
+  "world_origin_m": [
+    7.5,
+    2.5,
+    -0.32
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "n/a",
+  "world_bounds_m": [
+    [
+      5.0,
+      0.0,
+      -0.32
+    ],
+    [
+      10.0,
+      5.0,
+      0.087
+    ]
+  ],
+  "dimensions_m": [
+    5.0,
+    5.0,
+    0.407
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 36,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

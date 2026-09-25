@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+  "slug": "ceiling_service_cable_tray",
+  "name_zh": "顶部电缆桥架与线缆",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "顶部电缆桥架与线缆_资产包",
+  "objects": [
+    "顶部电缆桥架与线缆_主体"
+  ],
+  "world_origin_m": [
+    0.0,
+    1.0,
+    10.195
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -18.0,
+      -12.0,
+      10.195
+    ],
+    [
+      18.0,
+      14.0,
+      11.55
+    ]
+  ],
+  "dimensions_m": [
+    36.0,
+    26.0,
+    1.355
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 43,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

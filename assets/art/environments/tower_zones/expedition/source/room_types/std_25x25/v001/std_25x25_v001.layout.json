@@ -1,0 +1,2006 @@
+{
+ "schema": "shellstorm2.battle.room_instance_layout",
+ "schema_version": 1,
+ "scene_id": "expedition_01_std_room",
+ "block_id": "expedition",
+ "display_name_zh": "远征关卡01 · 标准房间（四墙平房 25×25）· 组件拼装摆位源",
+ "level_kind": "procedural_expedition_room",
+ "scope": "room_type_source_composed_from_linked_components",
+ "scope_note": "本房型源**不自持任何几何**：25 块地砖 / 18 件实墙 / 2 扇门墙 / 37 件陈设全部 Library Link 自 office_room/v001 与 bridge_room/v002 两批已验收资产包，只写摆位。门位的墙件替换与开关扇仍由运行时拥有。",
+ "room_type_id": "std_25x25",
+ "room_type": "COMMON_ROOM",
+ "layout_version": "v001",
+ "template_id": "std_25x25",
+ "asset_id": "ENV-EXPEDITION-L01-ROOM-STD-25X25",
+ "whitebox_source": "source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/std_25x25.json",
+ "source_room_type_manifest": "res://assets/art/environments/tower_zones/expedition/source/room_types/std_25x25/v001/room_type_manifest.json",
+ "dimensions_m": [
+  25.0,
+  25.0
+ ],
+ "grid_unit_m": 5.0,
+ "wall_height_m": 11.9,
+ "wall_structure_half_thickness_m": 0.15,
+ "visible_wall_height_m": 11.9,
+ "floor_top_m": 0.087,
+ "door_contract": {
+  "width_m": 2.2,
+  "height_m": 2.5,
+  "bottom_z_m": 0.3,
+  "lintel_bottom_z_m": 2.8
+ },
+ "door_lanes": {
+  "west": [
+   0.0
+  ],
+  "east": [
+   0.0
+  ],
+  "openable_lanes_all_walls": [
+   -5.0,
+   0.0,
+   5.0
+  ]
+ },
+ "coordinate_contract": {
+  "axis": "Blender Z-up；X=东、Y=北；Blender(x,y,z) --export_yup--> Godot(x, z, −y)",
+  "origin": "房中心为原点；Z=0 为房界地面（地砖顶面 0.087、砖底 −0.32）",
+  "runtime_position": "position_m = 组件根原点（底面中心）在源房间世界系的坐标；房间中心 = 源世界原点",
+  "room_local": "Godot 房间局部 = (bx − cbx, bz, −(by − cby))，cbx=cby=0",
+  "rotation": "rotation_z_deg 为 Blender 绕 Z 旋转，与 Godot rotation.y 同值（同号）",
+  "z_rule": "z 照抄源 origin z（两批源共用同一地面基准，无需换算）",
+  "instance_pivot_rule": "组件包内对象带源房间世界坐标 ⇒ 集合实例空物体必须写 L = desired − R·origin_src，绕组件自身原点旋转（直设 location=desired 会整体错位）"
+ },
+ "component_sources": [
+  {
+   "source_room_type": "office_room/v001",
+   "blend": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/办公室房间种类_开放办公_30x40m_v001.blend",
+   "inventory": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/component_inventory.json",
+   "packages_available": 106,
+   "packages_used": 54
+  },
+  {
+   "source_room_type": "bridge_room/v002",
+   "blend": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/通道桥房间种类_工字型_30x60m_v002.blend",
+   "inventory": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/component_inventory.json",
+   "packages_available": 242,
+   "packages_used": 27
+  }
+ ],
+ "composition": {
+  "concept": "中央东西向主通道对穿（西进东出）+ 北半办公区（office 家具）+ 南半机械管廊区（bridge 上层件）",
+  "counts": {
+   "floor_tile": 25,
+   "solid_wall": 18,
+   "door_wall": 2,
+   "facility": 37,
+   "total": 82
+  }
+ },
+ "cross_source_slug_collisions": [
+  "wall_east_-1",
+  "wall_east_-2",
+  "wall_east_-3",
+  "wall_east_-4",
+  "wall_east_0",
+  "wall_east_1",
+  "wall_east_2",
+  "wall_east_3",
+  "wall_north_-1",
+  "wall_north_-2",
+  "wall_north_-3",
+  "wall_north_1",
+  "wall_north_2",
+  "wall_south_-1",
+  "wall_south_-2",
+  "wall_south_-3",
+  "wall_south_0",
+  "wall_south_1",
+  "wall_south_2",
+  "wall_west_-1",
+  "wall_west_-2",
+  "wall_west_-3",
+  "wall_west_-4",
+  "wall_west_0",
+  "wall_west_1",
+  "wall_west_2",
+  "wall_west_3"
+ ],
+ "notes": [
+  "两批源有 27 处同名 slug（四墙 wall_*_k 全部重名）；本方案一律按来源取值，墙件全部取自 office_room/v001（bridge 墙件无 wall_piece_contract 且尺寸为 30×60 另一套）。"
+ ],
+ "instances": [
+  {
+   "instance_id": "TILE_-2_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-4",
+   "slug": "tile_-3_-4",
+   "category": "floor",
+   "collection": "地砖_-3_-4_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -10.0,
+    -10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-3_-4 → 槽 (-2,-2)"
+  },
+  {
+   "instance_id": "TILE_-2_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-3",
+   "slug": "tile_-3_-3",
+   "category": "floor",
+   "collection": "地砖_-3_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -10.0,
+    -5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-3_-3 → 槽 (-2,-1)"
+  },
+  {
+   "instance_id": "TILE_-2_0",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-2",
+   "slug": "tile_-3_-2",
+   "category": "floor",
+   "collection": "地砖_-3_-2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -10.0,
+    0.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-3_-2 → 槽 (-2,0)"
+  },
+  {
+   "instance_id": "TILE_-2_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-1",
+   "slug": "tile_-3_-1",
+   "category": "floor",
+   "collection": "地砖_-3_-1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -10.0,
+    5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-3_-1 → 槽 (-2,1)"
+  },
+  {
+   "instance_id": "TILE_-2_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_0",
+   "slug": "tile_-3_0",
+   "category": "floor",
+   "collection": "地砖_-3_0_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -10.0,
+    10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-3_0 → 槽 (-2,2)"
+  },
+  {
+   "instance_id": "TILE_-1_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-4",
+   "slug": "tile_-2_-4",
+   "category": "floor",
+   "collection": "地砖_-2_-4_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -5.0,
+    -10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-2_-4 → 槽 (-1,-2)"
+  },
+  {
+   "instance_id": "TILE_-1_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-3",
+   "slug": "tile_-2_-3",
+   "category": "floor",
+   "collection": "地砖_-2_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -5.0,
+    -5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-2_-3 → 槽 (-1,-1)"
+  },
+  {
+   "instance_id": "TILE_-1_0",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-2",
+   "slug": "tile_-2_-2",
+   "category": "floor",
+   "collection": "地砖_-2_-2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -5.0,
+    0.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-2_-2 → 槽 (-1,0)"
+  },
+  {
+   "instance_id": "TILE_-1_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-1",
+   "slug": "tile_-2_-1",
+   "category": "floor",
+   "collection": "地砖_-2_-1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -5.0,
+    5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-2_-1 → 槽 (-1,1)"
+  },
+  {
+   "instance_id": "TILE_-1_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_0",
+   "slug": "tile_-2_0",
+   "category": "floor",
+   "collection": "地砖_-2_0_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    -5.0,
+    10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-2_0 → 槽 (-1,2)"
+  },
+  {
+   "instance_id": "TILE_0_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-4",
+   "slug": "tile_-1_-4",
+   "category": "floor",
+   "collection": "地砖_-1_-4_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    0.0,
+    -10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-1_-4 → 槽 (0,-2)"
+  },
+  {
+   "instance_id": "TILE_0_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-3",
+   "slug": "tile_-1_-3",
+   "category": "floor",
+   "collection": "地砖_-1_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    0.0,
+    -5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-1_-3 → 槽 (0,-1)"
+  },
+  {
+   "instance_id": "TILE_0_0",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-2",
+   "slug": "tile_-1_-2",
+   "category": "floor",
+   "collection": "地砖_-1_-2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    0.0,
+    0.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-1_-2 → 槽 (0,0)"
+  },
+  {
+   "instance_id": "TILE_0_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-1",
+   "slug": "tile_-1_-1",
+   "category": "floor",
+   "collection": "地砖_-1_-1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    0.0,
+    5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-1_-1 → 槽 (0,1)"
+  },
+  {
+   "instance_id": "TILE_0_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_0",
+   "slug": "tile_-1_0",
+   "category": "floor",
+   "collection": "地砖_-1_0_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    0.0,
+    10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_-1_0 → 槽 (0,2)"
+  },
+  {
+   "instance_id": "TILE_1_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-4",
+   "slug": "tile_0_-4",
+   "category": "floor",
+   "collection": "地砖_0_-4_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    5.0,
+    -10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_0_-4 → 槽 (1,-2)"
+  },
+  {
+   "instance_id": "TILE_1_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-3",
+   "slug": "tile_0_-3",
+   "category": "floor",
+   "collection": "地砖_0_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    5.0,
+    -5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_0_-3 → 槽 (1,-1)"
+  },
+  {
+   "instance_id": "TILE_1_0",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-2",
+   "slug": "tile_0_-2",
+   "category": "floor",
+   "collection": "地砖_0_-2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    5.0,
+    0.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_0_-2 → 槽 (1,0)"
+  },
+  {
+   "instance_id": "TILE_1_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-1",
+   "slug": "tile_0_-1",
+   "category": "floor",
+   "collection": "地砖_0_-1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    5.0,
+    5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_0_-1 → 槽 (1,1)"
+  },
+  {
+   "instance_id": "TILE_1_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_0",
+   "slug": "tile_0_0",
+   "category": "floor",
+   "collection": "地砖_0_0_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    5.0,
+    10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_0_0 → 槽 (1,2)"
+  },
+  {
+   "instance_id": "TILE_2_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-4",
+   "slug": "tile_1_-4",
+   "category": "floor",
+   "collection": "地砖_1_-4_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    10.0,
+    -10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_1_-4 → 槽 (2,-2)"
+  },
+  {
+   "instance_id": "TILE_2_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-3",
+   "slug": "tile_1_-3",
+   "category": "floor",
+   "collection": "地砖_1_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    10.0,
+    -5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_1_-3 → 槽 (2,-1)"
+  },
+  {
+   "instance_id": "TILE_2_0",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-2",
+   "slug": "tile_1_-2",
+   "category": "floor",
+   "collection": "地砖_1_-2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    10.0,
+    0.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_1_-2 → 槽 (2,0)"
+  },
+  {
+   "instance_id": "TILE_2_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-1",
+   "slug": "tile_1_-1",
+   "category": "floor",
+   "collection": "地砖_1_-1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    10.0,
+    5.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_1_-1 → 槽 (2,1)"
+  },
+  {
+   "instance_id": "TILE_2_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_0",
+   "slug": "tile_1_0",
+   "category": "floor",
+   "collection": "地砖_1_0_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "floor_tile",
+   "position_m": [
+    10.0,
+    10.0,
+    -0.32
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "office tile_1_0 → 槽 (2,2)"
+  },
+  {
+   "instance_id": "WALL_NORTH_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-3",
+   "slug": "wall_north_-3",
+   "category": "architecture",
+   "collection": "north_墙体_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -10.0,
+    12.3325,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_NORTH_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-2",
+   "slug": "wall_north_-2",
+   "category": "architecture",
+   "collection": "north_墙体_-2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -5.0,
+    12.3425,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1575（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_NORTH_0",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-1",
+   "slug": "wall_north_-1",
+   "category": "architecture",
+   "collection": "north_墙体_-1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    0.0,
+    12.3325,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_NORTH_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_1",
+   "slug": "wall_north_1",
+   "category": "architecture",
+   "collection": "north_墙体_1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    5.0,
+    12.3325,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_NORTH_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_2",
+   "slug": "wall_north_2",
+   "category": "architecture",
+   "collection": "north_墙体_2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    10.0,
+    12.3325,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_SOUTH_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-3",
+   "slug": "wall_south_-3",
+   "category": "architecture",
+   "collection": "south_墙体_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -10.0,
+    -12.095,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.4050（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_SOUTH_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-2",
+   "slug": "wall_south_-2",
+   "category": "architecture",
+   "collection": "south_墙体_-2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -5.0,
+    -12.3425,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1575（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_SOUTH_0",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-1",
+   "slug": "wall_south_-1",
+   "category": "architecture",
+   "collection": "south_墙体_-1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    0.0,
+    -12.3325,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_SOUTH_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_1",
+   "slug": "wall_south_1",
+   "category": "architecture",
+   "collection": "south_墙体_1_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    5.0,
+    -12.3325,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_SOUTH_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_2",
+   "slug": "wall_south_2",
+   "category": "architecture",
+   "collection": "south_墙体_2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    10.0,
+    -12.165,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.3350（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_WEST_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-4",
+   "slug": "wall_west_-4",
+   "category": "architecture",
+   "collection": "west_墙体_-4_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -12.3425,
+    -10.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1575（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_WEST_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-3",
+   "slug": "wall_west_-3",
+   "category": "architecture",
+   "collection": "west_墙体_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -12.3325,
+    -5.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_WEST_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_2",
+   "slug": "wall_west_2",
+   "category": "architecture",
+   "collection": "west_墙体_2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -12.3425,
+    5.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1575（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_WEST_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_3",
+   "slug": "wall_west_3",
+   "category": "architecture",
+   "collection": "west_墙体_3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    -12.3325,
+    10.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_EAST_-2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-4",
+   "slug": "wall_east_-4",
+   "category": "architecture",
+   "collection": "east_墙体_-4_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    12.335,
+    -10.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1650（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_EAST_-1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-3",
+   "slug": "wall_east_-3",
+   "category": "architecture",
+   "collection": "east_墙体_-3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    12.3325,
+    -5.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_EAST_1",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_2",
+   "slug": "wall_east_2",
+   "category": "architecture",
+   "collection": "east_墙体_2_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    12.3425,
+    5.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1575（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "WALL_EAST_2",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_3",
+   "slug": "wall_east_3",
+   "category": "architecture",
+   "collection": "east_墙体_3_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "solid_wall",
+   "position_m": [
+    12.3325,
+    10.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "照抄 office 房界偏移 0.1675（沿墙向槽心 5k 重排）"
+  },
+  {
+   "instance_id": "DOOR_WALL_WEST",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+   "slug": "door_wall",
+   "category": "architecture",
+   "collection": "门洞墙件_可复用_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "door_wall",
+   "position_m": [
+    -12.3425,
+    0.0,
+    0.0
+   ],
+   "rotation_z_deg": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "门槽 lane 0（房局部 y=0）；rot 90° 使门洞面朝房内 +X"
+  },
+  {
+   "instance_id": "DOOR_WALL_EAST",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+   "slug": "door_wall",
+   "category": "architecture",
+   "collection": "门洞墙件_可复用_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "door_wall",
+   "position_m": [
+    12.3425,
+    0.0,
+    0.0
+   ],
+   "rotation_z_deg": 270.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": "同轴出户门；rot 270° 使门洞面朝房内 −X"
+  },
+  {
+   "instance_id": "FAC_WORK_A",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_A",
+   "slug": "work_cluster_a",
+   "category": "facilities",
+   "collection": "工位_a_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -8.0,
+    6.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_WORK_B",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_B",
+   "slug": "work_cluster_b",
+   "category": "facilities",
+   "collection": "工位_b_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -8.0,
+    9.1,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_WORK_C",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_C",
+   "slug": "work_cluster_c",
+   "category": "facilities",
+   "collection": "工位_c_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -1.5,
+    6.0,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_WORK_D",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_D",
+   "slug": "work_cluster_d",
+   "category": "facilities",
+   "collection": "工位_d_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -1.5,
+    9.1,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_TOTEM",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+   "slug": "totem_column",
+   "category": "facilities",
+   "collection": "图腾立柱_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    3.0,
+    8.5,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_LOCKER",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK_NORTH",
+   "slug": "locker_bank_north",
+   "category": "facilities",
+   "collection": "北墙储物柜组_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    5.0,
+    11.5,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_PRINTER",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+   "slug": "printer_station",
+   "category": "facilities",
+   "collection": "打印机与耗材位_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    2.6,
+    11.5,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_SHELVING",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING_SOUTH",
+   "slug": "shelving_south",
+   "category": "facilities",
+   "collection": "置物架_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    7.1,
+    11.7,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_WATER",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+   "slug": "water_and_supply_corner",
+   "category": "facilities",
+   "collection": "饮水与箱货区_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    10.0,
+    9.9,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "FAC_PREP",
+   "component_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH_EAST",
+   "slug": "prep_bench_east",
+   "category": "facilities",
+   "collection": "东墙整备台_资产包",
+   "source_room_type": "office_room/v001",
+   "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+   "slot_role": "facility",
+   "position_m": [
+    11.5,
+    4.6,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_SERVER_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_-1",
+   "slug": "near_server_-1",
+   "category": "facilities",
+   "collection": "机房设备_near_server_-1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -11.0,
+    -4.4,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_SERVER_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_1",
+   "slug": "near_server_1",
+   "category": "facilities",
+   "collection": "机房设备_near_server_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -9.2,
+    -4.4,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_POWER_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_-1",
+   "slug": "end_power_-1",
+   "category": "facilities",
+   "collection": "机房设备_end_power_-1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -5.8,
+    -4.3,
+    -0.0075
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_POWER_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_1",
+   "slug": "end_power_1",
+   "category": "facilities",
+   "collection": "机房设备_end_power_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -2.7,
+    -4.3,
+    -0.0075
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BANK_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_1",
+   "slug": "upper_bank_-1_1",
+   "category": "facilities",
+   "collection": "机房设备_upper_bank_-1_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    0.3,
+    -4.4,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BANK_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_1_1",
+   "slug": "upper_bank_1_1",
+   "category": "facilities",
+   "collection": "机房设备_upper_bank_1_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    2.1,
+    -4.4,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CONSOLE_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_-1",
+   "slug": "upper_console_-1",
+   "category": "facilities",
+   "collection": "机房操作站_upper_console_-1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    4.2,
+    -4.3,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CRATE_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_-1",
+   "slug": "end_crate_-1",
+   "category": "facilities",
+   "collection": "固定维护箱_end_crate_-1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    6.5,
+    -4.3,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CRATE_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE_-1",
+   "slug": "near_crate_-1",
+   "category": "facilities",
+   "collection": "固定维护箱_near_crate_-1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    10.0,
+    -4.4,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_PART_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION_-1",
+   "slug": "half_partition_-1",
+   "category": "architecture",
+   "collection": "机房设备隔断_-1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -6.4,
+    -7.2,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_PART_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION_1",
+   "slug": "half_partition_1",
+   "category": "architecture",
+   "collection": "机房设备隔断_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    5.3,
+    -7.2,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BANK_C",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_2",
+   "slug": "upper_bank_-1_2",
+   "category": "facilities",
+   "collection": "机房设备_upper_bank_-1_2_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -11.0,
+    -9.3,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BANK_D",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_1_2",
+   "slug": "upper_bank_1_2",
+   "category": "facilities",
+   "collection": "机房设备_upper_bank_1_2_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -9.0,
+    -9.3,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CRATE_C",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_1",
+   "slug": "end_crate_1",
+   "category": "facilities",
+   "collection": "固定维护箱_end_crate_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -6.4,
+    -9.3,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BANK_E",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_0",
+   "slug": "upper_bank_-1_0",
+   "category": "facilities",
+   "collection": "机房设备_upper_bank_-1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -3.7,
+    -9.2,
+    -0.1475
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BANK_F",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_1_0",
+   "slug": "upper_bank_1_0",
+   "category": "facilities",
+   "collection": "机房设备_upper_bank_1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -1.6,
+    -9.2,
+    -0.1475
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BOX_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX_-1",
+   "slug": "partition_box_-1",
+   "category": "facilities",
+   "collection": "固定维护箱_partition_box_-1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    0.5,
+    -9.3,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_BOX_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX_1",
+   "slug": "partition_box_1",
+   "category": "facilities",
+   "collection": "固定维护箱_partition_box_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    2.4,
+    -9.3,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CONSOLE_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_1",
+   "slug": "upper_console_1",
+   "category": "facilities",
+   "collection": "机房操作站_upper_console_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    4.2,
+    -9.3,
+    0.0
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CRATE_D",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE_-1_0",
+   "slug": "bank_crate_-1_0",
+   "category": "facilities",
+   "collection": "固定维护箱_bank_crate_-1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    6.3,
+    -9.3,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CRATE_E",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE_1_0",
+   "slug": "bank_crate_1_0",
+   "category": "facilities",
+   "collection": "固定维护箱_bank_crate_1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    8.1,
+    -9.3,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_CRATE_F",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE_1",
+   "slug": "near_crate_1",
+   "category": "facilities",
+   "collection": "固定维护箱_near_crate_1_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    10.3,
+    -9.2,
+    -0.035
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_HEADER_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_1_0",
+   "slug": "header_cables_1_0",
+   "category": "support",
+   "collection": "架空垂落电缆束_1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    11.6,
+    8.0,
+    4.355
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_HEADER_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_1_2",
+   "slug": "header_cables_1_2",
+   "category": "support",
+   "collection": "架空垂落电缆束_1_2_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    11.6,
+    -7.0,
+    4.355
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_HEADER_C",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_-1_0",
+   "slug": "header_cables_-1_0",
+   "category": "support",
+   "collection": "架空垂落电缆束_-1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -11.6,
+    7.0,
+    4.355
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_TORN_A",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER_1_0",
+   "slug": "torn_header_1_0",
+   "category": "support",
+   "collection": "破损管廊护板_1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    11.95,
+    1.0,
+    6.4
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  },
+  {
+   "instance_id": "BRG_TORN_B",
+   "component_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER_-1_0",
+   "slug": "torn_header_-1_0",
+   "category": "support",
+   "collection": "破损管廊护板_-1_0_资产包",
+   "source_room_type": "bridge_room/v002",
+   "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+   "slot_role": "facility",
+   "position_m": [
+    -11.95,
+    -7.0,
+    6.4
+   ],
+   "rotation_z_deg": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "enabled": true,
+   "note": ""
+  }
+ ],
+ "validation": {
+  "room_owned_geometry": false,
+  "non_unit_scale_count": 0,
+  "room_owned_components_created": 0,
+  "failures": []
+ }
+}

@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE_-1_-1",
+  "slug": "pit_side_-1_-1",
+  "name_zh": "坑壁_-1_-1",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "坑壁_-1_-1_资产包",
+  "objects": [
+    "坑壁_-1_-1_主体"
+  ],
+  "world_origin_m": [
+    -14.8,
+    -2.5,
+    -12.125
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      -15.15,
+      -5.0,
+      -12.125
+    ],
+    [
+      -14.45,
+      0.0,
+      0.0
+    ]
+  ],
+  "dimensions_m": [
+    0.7,
+    5.0,
+    12.125
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 7,
+  "reference_cutaway_hidden": true,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

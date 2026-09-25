@@ -1,0 +1,1434 @@
+{
+  "schema": "shellstorm2.room_type_linked_components",
+  "schema_version": 1,
+  "source_room_type": "office_room/v001",
+  "source_blend": "assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\office_room\\v001\\办公室房间种类_开放办公_30x40m_v001.blend",
+  "distinct_packages": 52,
+  "instances": 70,
+  "packages": [
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-1_-1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-1_-2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-1_-3",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-1_0",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-1_1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-1_2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-2_-1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-2_-2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-2_0",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-2_1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-2_2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-3_-1",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-3_-2",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-3_0",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-3_1",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_-3_2",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_0_-1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_0_-2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_0_-3",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_0_0",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_0_1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_0_2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_1_-1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_1_-2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_1_0",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_1_1",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_1_2",
+      "instance_count": 1
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_2_-1",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_2_-2",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_2_0",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_2_1",
+      "instance_count": 2
+    },
+    {
+      "kind": "floor_tile",
+      "linked_slug": "tile_2_2",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "door_wall",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "east_墙体_-1",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "east_墙体_-2",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "east_墙体_-3",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "east_墙体_0",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "east_墙体_1",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "east_墙体_2",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "north_墙体_-1",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "north_墙体_-2",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "north_墙体_1",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "south_墙体_-1",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "south_墙体_-2",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "south_墙体_0",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "south_墙体_1",
+      "instance_count": 2
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "west_墙体_-1",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "west_墙体_-2",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "west_墙体_-3",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "west_墙体_0",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "west_墙体_1",
+      "instance_count": 1
+    },
+    {
+      "kind": "wall_bay",
+      "linked_slug": "west_墙体_2",
+      "instance_count": 1
+    }
+  ],
+  "instances_detail": [
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "north_墙体_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "north_墙体_-2",
+      "target_side": "north",
+      "target_lane_m": -17.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -17.5,
+        14.8425,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_-2",
+      "target_side": "north",
+      "target_lane_m": -12.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        -12.5,
+        14.8425,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "north_墙体_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "north_墙体_-1",
+      "target_side": "north",
+      "target_lane_m": -7.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -7.5,
+        14.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_-1",
+      "target_side": "north",
+      "target_lane_m": -2.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        -2.5,
+        14.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "north_墙体_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "north_墙体_1",
+      "target_side": "north",
+      "target_lane_m": 2.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        2.5,
+        14.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_0",
+      "target_side": "north",
+      "target_lane_m": 7.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        7.5,
+        14.8425,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "east_墙体_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "east_墙体_-2",
+      "target_side": "north",
+      "target_lane_m": 12.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 270.0,
+      "dst_origin_m": [
+        12.5,
+        14.8425,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_1",
+      "target_side": "north",
+      "target_lane_m": 17.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        17.5,
+        14.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_-2",
+      "target_side": "south_w",
+      "target_lane_m": -17.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -17.5,
+        -9.8425,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "north_墙体_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "north_墙体_-2",
+      "target_side": "south_w",
+      "target_lane_m": -12.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        -12.5,
+        -9.8425,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_-1",
+      "target_side": "south_w",
+      "target_lane_m": -7.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -7.5,
+        -9.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_0",
+      "target_side": "south_e",
+      "target_lane_m": 7.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        7.5,
+        -9.8425,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "north_墙体_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "north_墙体_-1",
+      "target_side": "south_e",
+      "target_lane_m": 12.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        12.5,
+        -9.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "south_墙体_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "south_墙体_1",
+      "target_side": "south_e",
+      "target_lane_m": 17.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        17.5,
+        -9.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "north_墙体_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "north_墙体_1",
+      "target_side": "tab_s",
+      "target_lane_m": -2.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        -2.5,
+        -14.8325,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "门洞墙件_可复用_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "door_wall",
+      "target_side": "tab_s",
+      "target_lane_m": 2.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 180.0,
+      "dst_origin_m": [
+        2.5,
+        -14.8425,
+        0.0
+      ],
+      "is_door_wall": true
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "west_墙体_-3_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "west_墙体_-3",
+      "target_side": "tab_w",
+      "target_lane_m": -12.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -4.8325,
+        -12.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "east_墙体_-3_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "east_墙体_-3",
+      "target_side": "tab_e",
+      "target_lane_m": -12.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        4.8325,
+        -12.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "east_墙体_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "east_墙体_-2",
+      "target_side": "east",
+      "target_lane_m": -7.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        19.8425,
+        -7.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "east_墙体_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "east_墙体_-1",
+      "target_side": "east",
+      "target_lane_m": -2.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        19.8325,
+        -2.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "east_墙体_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "east_墙体_0",
+      "target_side": "east",
+      "target_lane_m": 2.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        19.8425,
+        2.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "east_墙体_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "east_墙体_1",
+      "target_side": "east",
+      "target_lane_m": 7.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        19.8325,
+        7.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "east_墙体_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "east_墙体_2",
+      "target_side": "east",
+      "target_lane_m": 12.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        19.8425,
+        12.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "west_墙体_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "west_墙体_-2",
+      "target_side": "west",
+      "target_lane_m": -7.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -19.8425,
+        -7.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "west_墙体_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "west_墙体_-1",
+      "target_side": "west",
+      "target_lane_m": -2.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -19.8325,
+        -2.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "west_墙体_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "west_墙体_0",
+      "target_side": "west",
+      "target_lane_m": 2.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -19.8425,
+        2.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "west_墙体_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "west_墙体_1",
+      "target_side": "west",
+      "target_lane_m": 7.5,
+      "src_origin_offset_m": 0.1675,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -19.8325,
+        7.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "wall_bay",
+      "source_package_collection": "west_墙体_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "west_墙体_2",
+      "target_side": "west",
+      "target_lane_m": 12.5,
+      "src_origin_offset_m": 0.1575,
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -19.8425,
+        12.5,
+        0.0
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-1_-3_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-1_-3",
+      "target_grid": [
+        -1,
+        -3
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -2.5,
+        -12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_0_-3_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_0_-3",
+      "target_grid": [
+        0,
+        -3
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        2.5,
+        -12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_-2",
+      "target_grid": [
+        -4,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -17.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_-2",
+      "target_grid": [
+        -3,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -12.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-2_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-2_-2",
+      "target_grid": [
+        -2,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -7.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-1_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-1_-2",
+      "target_grid": [
+        -1,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -2.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_0_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_0_-2",
+      "target_grid": [
+        0,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        2.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_1_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_1_-2",
+      "target_grid": [
+        1,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        7.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_-2",
+      "target_grid": [
+        2,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        12.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_-2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_-2",
+      "target_grid": [
+        3,
+        -2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        17.5,
+        -7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_-1",
+      "target_grid": [
+        -4,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -17.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_-1",
+      "target_grid": [
+        -3,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -12.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-2_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-2_-1",
+      "target_grid": [
+        -2,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -7.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-1_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-1_-1",
+      "target_grid": [
+        -1,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -2.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_0_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_0_-1",
+      "target_grid": [
+        0,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        2.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_1_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_1_-1",
+      "target_grid": [
+        1,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        7.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_-1",
+      "target_grid": [
+        2,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        12.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_-1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_-1",
+      "target_grid": [
+        3,
+        -1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        17.5,
+        -2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_0",
+      "target_grid": [
+        -4,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -17.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_0",
+      "target_grid": [
+        -3,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -12.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-2_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-2_0",
+      "target_grid": [
+        -2,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -7.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-1_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-1_0",
+      "target_grid": [
+        -1,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -2.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_0_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_0_0",
+      "target_grid": [
+        0,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        2.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_1_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_1_0",
+      "target_grid": [
+        1,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        7.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_0",
+      "target_grid": [
+        2,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        12.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_0_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_0",
+      "target_grid": [
+        3,
+        0
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        17.5,
+        2.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_1",
+      "target_grid": [
+        -4,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -17.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_1",
+      "target_grid": [
+        -3,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -12.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-2_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-2_1",
+      "target_grid": [
+        -2,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -7.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-1_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-1_1",
+      "target_grid": [
+        -1,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -2.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_0_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_0_1",
+      "target_grid": [
+        0,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        2.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_1_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_1_1",
+      "target_grid": [
+        1,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        7.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_1",
+      "target_grid": [
+        2,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        12.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_1_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_1",
+      "target_grid": [
+        3,
+        1
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        17.5,
+        7.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_2",
+      "target_grid": [
+        -4,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -17.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_2",
+      "target_grid": [
+        -3,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -12.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-2_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-2_2",
+      "target_grid": [
+        -2,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -7.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-1_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-1_2",
+      "target_grid": [
+        -1,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        -2.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_0_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_0_2",
+      "target_grid": [
+        0,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        2.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_1_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_1_2",
+      "target_grid": [
+        1,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        7.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_2_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_2_2",
+      "target_grid": [
+        2,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        12.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    },
+    {
+      "kind": "floor_tile",
+      "source_package_collection": "地砖_-3_2_资产包",
+      "source_room_type": "office_room/v001",
+      "linked_slug": "tile_-3_2",
+      "target_grid": [
+        3,
+        2
+      ],
+      "rotation_deg": 0.0,
+      "dst_origin_m": [
+        17.5,
+        12.5,
+        -0.32
+      ],
+      "is_door_wall": false
+    }
+  ]
+}

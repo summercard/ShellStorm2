@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "source_signature": "d6a6ace67474d8ba6a89daca34059eb0da10ac7396202701d8d61ececbe2c2db",
+  "checks": {
+    "outer_bounds_m": [
+      30.0,
+      60.0
+    ],
+    "upper_platforms_and_bridge_grid": true,
+    "pit_30x30_m": true,
+    "pit_depth_m": 12.0,
+    "bridge_width_m": 10.0,
+    "bridge_span_m": 30.0,
+    "lower_accessible": false,
+    "door_contract_m": [
+      2.2,
+      2.5
+    ],
+    "door_geometry_in_source": false,
+    "material_role_count": 4,
+    "palette_path_exists": true,
+    "package_count": 181,
+    "mesh_object_count": 1376,
+    "preview_renders": [
+      "renders/reference_full.png",
+      "renders/top_plan.png",
+      "renders/detail_bridge_pipes.png"
+    ]
+  },
+  "warnings": [
+    "具体运行时门槽由布局数据决定；本源仅保留南北短边门位预留包。",
+    "Blender源未导出GLB/PackedScene，交由后续组件拆解与Godot导入阶段。"
+  ]
+}

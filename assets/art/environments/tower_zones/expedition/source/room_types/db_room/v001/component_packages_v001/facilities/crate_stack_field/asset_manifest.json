@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-CRATE_STACK_FIELD",
+  "slug": "crate_stack_field",
+  "name_zh": "货箱与周转箱堆场",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "货箱与周转箱堆场_资产包",
+  "objects": [
+    "货箱与周转箱堆场_主体"
+  ],
+  "world_origin_m": [
+    0.6749999999999989,
+    1.5774999999999997,
+    -0.19
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -15.96,
+      -8.945,
+      -0.19
+    ],
+    [
+      17.31,
+      12.1,
+      2.2725
+    ]
+  ],
+  "dimensions_m": [
+    33.27,
+    21.045,
+    2.4625
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 147,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

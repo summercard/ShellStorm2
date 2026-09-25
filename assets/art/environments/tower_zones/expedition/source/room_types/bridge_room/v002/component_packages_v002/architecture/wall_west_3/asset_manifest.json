@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_WEST_3",
+  "slug": "wall_west_3",
+  "name_zh": "west_墙体_3",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "west_墙体_3_资产包",
+  "objects": [
+    "west_墙体_3_主体"
+  ],
+  "world_origin_m": [
+    -14.815000000000001,
+    17.5,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      -15.15,
+      15.0,
+      0.0
+    ],
+    [
+      -14.48,
+      20.0,
+      11.9
+    ]
+  ],
+  "dimensions_m": [
+    0.67,
+    5.0,
+    11.9
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 27,
+  "reference_cutaway_hidden": true,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

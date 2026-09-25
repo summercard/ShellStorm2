@@ -1,0 +1,64 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_2",
+  "slug": "wall_east_2",
+  "name_zh": "east_墙体_2",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "east_墙体_2_资产包",
+  "objects": [
+    "east_墙体_2_主体",
+    "east_墙体_2_自发光"
+  ],
+  "world_origin_m": [
+    14.842500000000001,
+    12.5,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=-X (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "-X",
+  "world_bounds_m": [
+    [
+      14.535,
+      10.0,
+      0.0
+    ],
+    [
+      15.15,
+      15.0,
+      11.9
+    ]
+  ],
+  "dimensions_m": [
+    0.615,
+    5.0,
+    11.9
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 56,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": [],
+  "wall_piece_contract": {
+    "geometry_wdh_m": [
+      5.0,
+      11.9,
+      0.3
+    ],
+    "grid_unit_m": 5.0,
+    "visual_height_m": 11.9,
+    "origin": "bottom_center",
+    "armor_protrusion_m": 0.12,
+    "inward_normal_world": "-X",
+    "door_opening": false
+  }
+}

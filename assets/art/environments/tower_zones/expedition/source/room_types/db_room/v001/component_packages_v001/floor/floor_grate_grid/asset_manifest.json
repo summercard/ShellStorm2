@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-FLOOR_GRATE_GRID",
+  "slug": "floor_grate_grid",
+  "name_zh": "地面格栅与检修口",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "地面格栅与检修口_资产包",
+  "objects": [
+    "地面格栅与检修口_主体"
+  ],
+  "world_origin_m": [
+    1.5524999999999993,
+    -0.9199999999999999,
+    0.049
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -14.505,
+      -8.11,
+      0.049
+    ],
+    [
+      17.61,
+      6.27,
+      0.131
+    ]
+  ],
+  "dimensions_m": [
+    32.115,
+    14.38,
+    0.082
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 102,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "visual_only",
+  "visual_only": true,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

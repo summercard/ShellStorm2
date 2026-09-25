@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT_1_1",
+  "slug": "coolant_1_1",
+  "name_zh": "下层粗管弯头_coolant_1_1",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "下层粗管弯头_coolant_1_1_资产包",
+  "objects": [
+    "下层粗管弯头_coolant_1_1_主体"
+  ],
+  "world_origin_m": [
+    7.0,
+    -0.88,
+    -9.6
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      6.53,
+      -3.56,
+      -9.6
+    ],
+    [
+      7.47,
+      1.8,
+      -7.13
+    ]
+  ],
+  "dimensions_m": [
+    0.94,
+    5.36,
+    2.47
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 46,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_1_1",
+  "slug": "header_cables_1_1",
+  "name_zh": "架空垂落电缆束_1_1",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "架空垂落电缆束_1_1_资产包",
+  "objects": [
+    "架空垂落电缆束_1_1_主体"
+  ],
+  "world_origin_m": [
+    12.685,
+    -0.8,
+    4.355
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      12.285,
+      -4.07664,
+      4.355
+    ],
+    [
+      13.085,
+      2.47664,
+      8.74784
+    ]
+  ],
+  "dimensions_m": [
+    0.8,
+    6.55328,
+    4.39284
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 7,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

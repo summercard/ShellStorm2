@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
+  "slug": "cross_gantry_-1",
+  "name_zh": "错层钢格栅检修平台_cross_gantry_-1",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "错层钢格栅检修平台_cross_gantry_-1_资产包",
+  "objects": [
+    "错层钢格栅检修平台_cross_gantry_-1_主体",
+    "错层钢格栅检修平台_cross_gantry_-1_自发光"
+  ],
+  "world_origin_m": [
+    -9.5,
+    -3.8,
+    -12.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      -13.865,
+      -4.785,
+      -12.0
+    ],
+    [
+      -5.135,
+      -2.815,
+      -4.295
+    ]
+  ],
+  "dimensions_m": [
+    8.73,
+    1.97,
+    7.705
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 118,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": true,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

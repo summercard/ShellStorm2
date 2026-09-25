@@ -103,7 +103,7 @@ cd "I:/工作项目/shellstrom2/_scratch/ledger_gate_cwd"       # ASCII cwd，�
 R="I:/工作项目/shellstrom2/ShellStorm2"
 
 "$PY" "$R/scripts/check_asset_registry.py" --project-root "$R" --scope structure   # 期望 ASSET_REGISTRY_CHECK_OK
-"$PY" "$R/scripts/check_asset_registry.py" --project-root "$R" --scope full --ledger 敌人
+"$PY" "$R/scripts/check_asset_registry.py" --project-root "$R" --scope full --ledger enemies
 "$PY" "$R/tools/asset_pipeline/verify_ledger_split.py" --project-root "$R"          # 期望 LEDGER_SPLIT_VERIFY_OK
 "$PY" "$R/scripts/check_asset_runtime_naming.py"                                    # 注意：**不接受 --project-root**
 ```
@@ -112,7 +112,25 @@ R="I:/工作项目/shellstrom2/ShellStorm2"
 - `--scope full` 会报**既有红项**（敌人域实测 4 条 `sha_mismatch`，落在 r6/r7/r13/r17）
   —— 那是账本记录哈希与磁盘 tscn 早已不符，与你的改动无关。**必须做反向对照**：
   比对该列**改前/改后逐格相同** + `git status --porcelain <资产目录>` 为空，才能说「非本次引入」。
-- 敌人域的 `check_asset_registry` 走 `--ledger 敌人`；不带 `--ledger` 是 structure 全量。
+- 🔴 **`--ledger` 只认域 `key` 或域 `name`，⛔ 不认「大类/category」**（`ledger_registry.py::domain_for_key`：`domain.key == key or domain.name == _norm(key)`）。三套名字容易混：
+
+  | key | 域 name（`--ledger` 可用） | 大类 / category（**不可用**） |
+  |---|---|---|
+  | `scenes` | `关卡场景` | `场景` / `场景道具` / `基地资产包` |
+  | `enemies` | `敌人` | `敌人` |
+  | `props` | `道具` | `道具` |
+
+  ⇒ 场景域写 `--ledger scenes`（或 `--ledger 关卡场景`）；写 `--ledger 场景` 会 `LedgerIndexError: unknown ledger domain: '场景'`。
+- 不带 `--ledger` 是 structure 全量。
+
+**其余脚本的 CLI 口径（踩过的坑）**
+
+| 脚本 | 口径 |
+|---|---|
+| `check_asset_runtime_naming.py` | ⛔ **不接受 `--project-root`**（用 `--quiet` / `--json` / `--update-debt`） |
+| `check_expedition_room_asset_status.py` | ⛔ **不接受 `--project-root`**（传了 `SystemExit(2)`）；只给测试用的 `--doc` |
+| `check_documentation_contracts.py` | ⛔ 同上，无 `--project-root` |
+| `check_ledger_refs.py` | ✅ 接受 `--project-root`；**`pending=21` 是既有红项**（exit 1 `LEDGER_REFS_NEED_REBASE`），21 条全是 `_scratch` 外的 battle / rooftop / whitebox 历史 QA 脚本、`git status` 均未修改 ⇒ 报红与你无关。**自证方法**：`grep -l xlsx <你新增的目录>` 应为空（你的 manifest / 构建脚本只许写 `系统账本::3D-场景通用` 这类**分账本**路径，别写旧单体 `美术资产台账`） |
 
 ### 文档侧状态表 × 账本：同步门禁
 

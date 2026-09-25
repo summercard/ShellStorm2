@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+  "slug": "planting_perimeter",
+  "name_zh": "周圈绿植",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "周圈绿植_资产包",
+  "objects": [
+    "周圈绿植_主体"
+  ],
+  "world_origin_m": [
+    0.7501300000000004,
+    1.7481799999999996,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "n/a",
+  "world_bounds_m": [
+    [
+      -13.35267,
+      -16.05102,
+      0.0
+    ],
+    [
+      14.85293,
+      19.54738,
+      1.34
+    ]
+  ],
+  "dimensions_m": [
+    28.2056,
+    35.5984,
+    1.34
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 130,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

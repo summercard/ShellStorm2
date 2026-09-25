@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+  "slug": "ceiling_ring_beam",
+  "name_zh": "吊顶周圈圈梁",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "吊顶周圈圈梁_资产包",
+  "objects": [
+    "吊顶周圈圈梁_主体"
+  ],
+  "world_origin_m": [
+    0.0,
+    0.0,
+    11.15
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -20.0,
+      -15.35,
+      11.15
+    ],
+    [
+      20.0,
+      15.35,
+      11.75
+    ]
+  ],
+  "dimensions_m": [
+    40.0,
+    30.7,
+    0.6
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 7,
+  "reference_cutaway_hidden": true,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

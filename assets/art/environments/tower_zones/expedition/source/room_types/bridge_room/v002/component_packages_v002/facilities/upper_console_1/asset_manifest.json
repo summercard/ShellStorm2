@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_1",
+  "slug": "upper_console_1",
+  "name_zh": "机房操作站_upper_console_1",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "机房操作站_upper_console_1_资产包",
+  "objects": [
+    "机房操作站_upper_console_1_主体",
+    "机房操作站_upper_console_1_自发光"
+  ],
+  "world_origin_m": [
+    10.372499999999999,
+    17.299999999999997,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      9.795,
+      16.74,
+      0.0
+    ],
+    [
+      10.95,
+      17.86,
+      2.48455
+    ]
+  ],
+  "dimensions_m": [
+    1.155,
+    1.12,
+    2.48455
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 20,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

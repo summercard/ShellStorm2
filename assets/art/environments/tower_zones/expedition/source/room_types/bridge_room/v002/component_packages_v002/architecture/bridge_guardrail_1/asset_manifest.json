@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL_1",
+  "slug": "bridge_guardrail_1",
+  "name_zh": "桥面完整护栏_1",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "桥面完整护栏_1_资产包",
+  "objects": [
+    "桥面完整护栏_1_主体",
+    "桥面完整护栏_1_自发光"
+  ],
+  "world_origin_m": [
+    4.86,
+    0.0,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      4.65,
+      -15.16,
+      0.0
+    ],
+    [
+      5.07,
+      15.16,
+      1.87
+    ]
+  ],
+  "dimensions_m": [
+    0.42,
+    30.32,
+    1.87
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 54,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

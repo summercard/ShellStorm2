@@ -203,7 +203,44 @@ for fi in [2, 3, 4, 5]:
 | 抽 mesh + MultiMesh | ⚠️ 仅在无 `material_override` 且单 mesh 时 | ❌ 碰撞由代码按常量建，与资产无关 |
 | 纯程序化 | ❌ 根本没有资产可改 | ❌ 全部代码生成 |
 
-通用结论：**尺寸、位置、碰撞由代码常量决定，不由资产决定。** 改资产只可能换外观。若新资产原点契约或尺寸与老的差一点，会静默错位——必须加 AABB 断言，不能靠肉眼验收。
+通用结论：**尺寸、位置由代码常量决定，不由资产决定**；**碰撞归谁所有则随承载路径而变**（见下条）——别一概而论。改资产主要换外观。若新资产原点契约或尺寸与老的差一点，会静默错位——必须加 AABB 断言，不能靠肉眼验收。
+
+### 换资产前必查第三条：碰撞归属（`collision_owner` / `visual_only`）＋ 承载路径有没有兜底（2026-09-25 实测）
+
+「改一行 prefab 路径就换掉外观」这个想法有一个**静默致命**的前提：**新资产的碰撞归属必须与承载路径的兜底机制匹配**。两件事分开查，缺一不可。
+
+**① 看两件 prefab 的 meta，不看目录名、不看家族名：**
+
+| meta | 含义 | 换过去会发生什么 |
+|---|---|---|
+| `collision_owner = "self"`（包内自带 StaticBody3D） | 挡人靠 prefab 自己 | 承载路径**不**代生成代理时才安全 |
+| `visual_only = true` / `collision_owner = "<脚本名>"`（包内 **0** 碰撞） | 挡人靠某条代码路径按常量生成代理 | 承载路径**必须**有那条代理生成代码，否则**整片区域直接没有挡人碰撞** |
+
+**② 再查承载路径有没有调用代理生成器 —— 这一步最容易漏。**
+
+实测案例：`DungeonRoom3D` 有两条装配路径 ——
+- **程序化路径**（`_build_tower_wall_run()`）会调 `_add_tower_wall_collision()` / `_add_tower_solid_run_collision()` 补 0.30m 代理；
+- **授权布局路径**（`_build_authored_layout_shell()`，读摆位源实例清单的那条）**一次都没调用这两个函数**。
+
+于是同一个 `ENV-TOWER-WALL-SOLID-5M`（`visual_only=true`）：走程序化路径有代理、正常；若把走授权布局的那批墙换成它，**12 个房间的墙体全部失去挡人碰撞、玩家可穿墙出界**，而**编辑器与几何校验都不会报错**。
+
+排查手法（三条，都是只读）：
+
+```bash
+# 1) 代理生成器到底被谁调用（别只看定义存在）
+grep -n "_add_tower_wall_collision\|_add_tower_solid_run_collision\|TowerWallCollision" src/world3d/DungeonRoom3D.gd
+#    → 若全部调用点都在你不关心的那条路径里，就是「这条路径没兜底」
+
+# 2) 写个 headless 探针逐件清点：按 prefab 根 meta 归组，数 collision_layer==1 的实体
+#    输出「实体碰撞体合计」+「按 asset_id 汇总」+「全房 layer=1 总数 vs 墙件归属数」三张表
+#    判据：body.collision_layer == <物理墙层> 才算实体；其余层（camera-only 等）不算挡人
+
+# 3) 换前三方对齐：battle 件贡献的挡人碰撞数 = 换后必须 ≥ 的底线
+```
+
+**③ 家族标签不可信，逐件看 meta。** 实测反例：`ENV-TOWER-CORNER-L-5M` 同属「tower A 套」，却**自带**两个 StaticBody3D（`visual_only=false`，且节点名是镜头下压契约），而同套的直墙/门墙六件里五件 `visual_only=true`。**同一套美术家族里碰撞归属并不统一**——按家族批量判断会直接踩雷。
+
+**④ 顺带记一条连带面：换组件往往要连「门墙 / 坑壁 / 支线件」一起切。** 案例里直墙的 `component_id` 还被 `FloorPlanGenerator._pit_wall_instance()` 复用给桥房下沉坑壁（靠 `module.scale.y` 纵向拉伸），换之前得先验新件能不能吃非等比纵向缩放（纹路会不会拉变形）。
 
 ### 第五条关键陷阱：`--headless` 下 `MultiMesh.instance_transform` 回读**不可信**
 

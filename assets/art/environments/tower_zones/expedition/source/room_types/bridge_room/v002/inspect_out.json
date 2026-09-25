@@ -1,0 +1,75 @@
+{
+ "blend": "I:\\宸ヤ綔椤圭洰\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\bridge_room\\v002\\閫氶亾妗ユ埧闂寸绫籣宸ュ瓧鍨媉30x60m_v002.blend",
+ "images": [
+  {
+   "name": "璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png",
+   "filepath": "//..\\..\\..\\..\\..\\..\\..\\shared\\palette\\璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png",
+   "abspath": "I:\\宸ヤ綔椤圭洰\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\bridge_room\\v002\\..\\..\\..\\..\\..\\..\\..\\shared\\palette\\璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png",
+   "packed": false,
+   "exists": true,
+   "size": [
+    512,
+    512
+   ],
+   "has_data": true
+  }
+ ],
+ "materials": [
+  {
+   "name": "01_绮惧伐閲戝睘_绱壊楠ㄦ灦",
+   "use_nodes": true,
+   "img_nodes": [
+    {
+     "node": "Image Texture",
+     "image": "璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png",
+     "interpolation": "Closest"
+    }
+   ],
+   "uv_nodes": [
+    "PaletteUV"
+   ]
+  },
+  {
+   "name": "02_缁嗚吇鍝戝厜_闈掔豢澶ч潰",
+   "use_nodes": true,
+   "img_nodes": [
+    {
+     "node": "Image Texture",
+     "image": "璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png",
+     "interpolation": "Closest"
+    }
+   ],
+   "uv_nodes": [
+    "PaletteUV"
+   ]
+  },
+  {
+   "name": "03_娓呮紗鍙嶅厜_绱矇鐐圭紑",
+   "use_nodes": true,
+   "img_nodes": [
+    {
+     "node": "Image Texture",
+     "image": "璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png",
+     "interpolation": "Closest"
+    }
+   ],
+   "uv_nodes": [
+    "PaletteUV"
+   ]
+  },
+  {
+   "name": "04_鏌斿拰鑷彂鍏塤UI鐏厜",
+   "use_nodes": true,
+   "img_nodes": [
+    {
+     "node": "Image Texture",
+     "image": "璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png",
+     "interpolation": "Closest"
+    }
+   ],
+   "uv_nodes": [
+    "PaletteUV"
+   ]
+  }
+ ]
+}

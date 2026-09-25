@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_EAST_-3",
+  "slug": "wall_east_-3",
+  "name_zh": "east_墙体_-3",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "east_墙体_-3_资产包",
+  "objects": [
+    "east_墙体_-3_主体"
+  ],
+  "world_origin_m": [
+    14.815000000000001,
+    -12.5,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      14.48,
+      -15.0,
+      0.0
+    ],
+    [
+      15.15,
+      -10.0,
+      11.9
+    ]
+  ],
+  "dimensions_m": [
+    0.67,
+    5.0,
+    11.9
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 27,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-FLOOR_ZONE_MARK",
+  "slug": "floor_zone_mark",
+  "name_zh": "地面分区标识",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "地面分区标识_资产包",
+  "objects": [
+    "地面分区标识_主体"
+  ],
+  "world_origin_m": [
+    0.0,
+    -1.0943999999999994,
+    0.03
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -17.94628,
+      -13.54628,
+      0.03
+    ],
+    [
+      17.94628,
+      11.35748,
+      0.13
+    ]
+  ],
+  "dimensions_m": [
+    35.89256,
+    24.90376,
+    0.1
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 97,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "visual_only",
+  "visual_only": true,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

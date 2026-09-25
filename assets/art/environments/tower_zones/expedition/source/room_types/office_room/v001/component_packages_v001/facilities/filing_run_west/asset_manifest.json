@@ -1,0 +1,51 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN_WEST",
+  "slug": "filing_run_west",
+  "name_zh": "西墙档案柜带",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "西墙档案柜带_资产包",
+  "objects": [
+    "西墙档案柜带_主体",
+    "西墙档案柜带_自发光"
+  ],
+  "world_origin_m": [
+    -14.282499999999999,
+    0.0,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "n/a",
+  "world_bounds_m": [
+    [
+      -14.665,
+      -19.69,
+      0.0
+    ],
+    [
+      -13.9,
+      19.69,
+      3.05
+    ]
+  ],
+  "dimensions_m": [
+    0.765,
+    39.38,
+    3.05
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 154,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

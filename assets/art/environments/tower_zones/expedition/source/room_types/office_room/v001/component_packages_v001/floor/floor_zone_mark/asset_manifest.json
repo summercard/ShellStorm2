@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+  "slug": "floor_zone_mark",
+  "name_zh": "地面分区标识",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "办公室房间种类_开放办公_30x40m_v001.blend",
+  "collection": "地面分区标识_资产包",
+  "objects": [
+    "地面分区标识_主体"
+  ],
+  "world_origin_m": [
+    0.09999999999999964,
+    6.999999999999999,
+    0.022
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "inward_normal_world": "n/a",
+  "world_bounds_m": [
+    [
+      -13.30795,
+      -3.10795,
+      0.022
+    ],
+    [
+      13.50795,
+      17.10795,
+      0.114
+    ]
+  ],
+  "dimensions_m": [
+    26.8159,
+    20.2159,
+    0.092
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 10,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "visual_only",
+  "visual_only": true,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

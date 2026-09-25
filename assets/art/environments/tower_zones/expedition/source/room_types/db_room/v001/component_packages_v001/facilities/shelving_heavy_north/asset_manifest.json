@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+  "slug": "shelving_heavy_north",
+  "name_zh": "北墙重型货架",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "北墙重型货架_资产包",
+  "objects": [
+    "北墙重型货架_主体",
+    "北墙重型货架_自发光"
+  ],
+  "world_origin_m": [
+    -17.252499999999998,
+    13.57,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -19.31,
+      13.13,
+      0.0
+    ],
+    [
+      -15.195,
+      14.01,
+      3.2
+    ]
+  ],
+  "dimensions_m": [
+    4.115,
+    0.88,
+    3.2
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 35,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

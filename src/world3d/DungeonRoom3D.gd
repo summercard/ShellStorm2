@@ -318,12 +318,15 @@ const STREAM_STATE_NAMES := {
 const ROOM_OWNERSHIP_BOUNDARY_INSET_M := 0.08
 const ROOM_OWNERSHIP_MIN_LOCAL_Y_M := -0.40
 const ROOM_OWNERSHIP_MAX_LOCAL_Y_M := 2.50
-# 刷怪落点的「超量退让」参数，供 spawn_point_for_index 使用。
-# 环形点位只够 size_class 决定的那几个（布局房 = 4），而设计源允许一波 24 / 单房 64，
-# 超出部分按层退让：每层转一个固定角 + 缩一档半径，直到半径触底靠角度区分。
-const SPAWN_POINT_LAYER_ANGLE_STEP := 0.37
-const SPAWN_POINT_LAYER_RADIUS_STEP := 0.17
-const SPAWN_POINT_MIN_RADIUS_SCALE := 0.12
+# 普通怪最大基础占地为召唤者 1.22 × 1.2 × 0.7 = 1.0248m，额外留边缘余量。
+const SPAWN_CLEARANCE_M := 1.15
+const SPAWN_BOSS_CLEARANCE_M := 2.2
+const SPAWN_BODY_HEIGHT_M := 2.6
+const SPAWN_MAX_POINTS := 64
+var _spawn_candidates: Array[Vector3] = []
+var _spawn_edge_candidates: Array[bool] = []
+var _spawn_blockers: Array[AABB] = []
+var _spawn_available: Array[int] = []
 # 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
 # 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源：
 #   · `_build_spawn_points()` 只从这里取候选落点（凹口方向自然少点，不会再刷到墙外）；
@@ -401,9 +404,8 @@ var authored_layout_peaceful := false
 ## 本房**初始灯就亮**（不经玩家按开关、不播启动序列）。给「开局第一间房」用 ——
 ## 玩家一睁眼不该是黑的。默认 false = 老行为（只有 STAIR_LOBBY / BOSS 默认亮）。
 var authored_room_light_on := false
-## 区块壳体的**地砖格心**（房间局部坐标，y 恒 0）。由 `_build_spawn_points()` 从
-## `authored_layout_instances` 的 `floor_tile` 提取。空数组 = 本房没有通用壳体清单
-## ⇒ 落点与「是否在房内」两条判据都回退到旧的包围盒口径，行为逐字不变。
+## 主通行层地砖格心（房间局部 Y=0，与装配吸附规则一致），不含多层坑底砖。
+## 房间归属仍兼容无清单的旧矩形房；刷怪对 authored_layout_shell 空地板则拒绝回退。
 var _authored_tile_cells: Array[Vector3] = []
 
 
@@ -3445,83 +3447,131 @@ func _build_trigger() -> void:
 	area.body_entered.connect(_on_room_body_entered)
 
 
-## 本房刷怪落点。优先级（2026-09-25 起）：
-##   ① 区块壳体地砖格心 —— 非矩形房（L 形走廊 / U 形数据库 / 工字型桥房）的凹口在摆位
-##      阶段就被 `point_in_polygon` 剔除砖，**没有砖的位置就是房外**，故格心集合天然是
-##      「房内可用点」；旧实现按包围盒椭圆环布点，凹口方向的落点会落在墙里 / 房外 / 邻房。
-##   ② 取不到清单（v007 安全房 / 塔楼程序化房 / 旧房表）时回退**包围盒椭圆环**，
-##      与引入本机制前逐字节一致（矩形房两条路等价）。
+## floor_tile 的源槽位可能带原始高度，但装配函数把顶面吸到 Y=0。
+## 坑底保留 -12m 且 slot_role=multi_level_component，不得混入主通行层。
 func _build_spawn_points() -> void:
 	enemy_spawn_points.clear()
 	_authored_tile_cells.clear()
-	var dimensions := get_dimensions()
-	var count := (
-		4 if size_class == "tower_cell"
-		else 3 if size_class == "small"
-		else 5 if size_class == "medium"
-		else 7 if size_class == "large"
-		else 9
-	)
+	_spawn_candidates.clear()
+	_spawn_edge_candidates.clear()
 	for value in authored_layout_instances:
 		var instance := value as Dictionary
 		if str(instance.get("slot_role", "")) != "floor_tile":
 			continue
 		var cell := instance.get("position", Vector3.ZERO) as Vector3
-		_authored_tile_cells.append(Vector3(cell.x, 0.0, cell.z))
-	if _authored_tile_cells.size() >= count:
-		enemy_spawn_points.assign(_pick_ring_spawn_points(_authored_tile_cells, count))
-		return
-	for index in range(count):
-		var angle := TAU * float(index) / float(count) + _rng.randf_range(-0.24, 0.24)
-		enemy_spawn_points.append(global_position + Vector3(cos(angle) * dimensions.x * 0.23, 0.0, sin(angle) * dimensions.y * 0.23))
-
-
-## 从地砖格心里挑 count 个落点：按极角均分 count 个扇区，每扇区取**离房心最远**的格心。
-## 为什么这样挑：与原「环状等角」同形（怪贴房间外圈出现、彼此不重叠），但候选全部来自
-## 「真有砖」的格 —— 凹口方向没有砖，该扇区自然少一个落点，不会再落到墙外或邻房。
-## 入参是房间局部坐标，返回世界坐标。
-func _pick_ring_spawn_points(cells: Array[Vector3], count: int) -> Array[Vector3]:
-	var chosen: Array[Vector3] = []
-	var chosen_distance: Array[float] = []
-	for _index in range(count):
-		chosen.append(Vector3.ZERO)
-		chosen_distance.append(-1.0)
+		cell.y = 0.0
+		if not _authored_tile_cells.has(cell):
+			_authored_tile_cells.append(cell)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = room_seed ^ room_id.hash() ^ 0x53504157
+	var dimensions := get_dimensions()
+	var cells: Array[Vector3] = _authored_tile_cells.duplicate()
+	if not authored_layout_shell and cells.is_empty():
+		for x in range(ceili(dimensions.x / 5.0)):
+			for z in range(ceili(dimensions.y / 5.0)):
+				cells.append(Vector3(-dimensions.x * 0.5 + 2.5 + x * 5.0, 0, -dimensions.y * 0.5 + 2.5 + z * 5.0))
+	# 每砖分层抖动，不按扇区取最远点；使用独立随机流，不扰动家具和编成。
 	for cell in cells:
-		var angle := atan2(cell.z, cell.x)
-		var sector := clampi(int(floor((angle + PI) / TAU * float(count))), 0, count - 1)
-		var distance := Vector2(cell.x, cell.z).length()
-		if distance > chosen_distance[sector]:
-			chosen_distance[sector] = distance
-			chosen[sector] = cell
-	var result: Array[Vector3] = []
-	for index in range(count):
-		if chosen_distance[index] >= 0.0:
-			result.append(global_position + chosen[index])
-	return result
+		for x in 3:
+			for z in 3:
+				var point := cell + Vector3((x - 1) * 1.5 + rng.randf_range(-0.65, 0.65), 0, (z - 1) * 1.5 + rng.randf_range(-0.65, 0.65))
+				if _spawn_floor_contains(point, _spawn_clearance()):
+					_spawn_candidates.append(point)
+	# Fisher-Yates：顺序本身承载随机优先级，避免取最大距离又退化成固定四角。
+	for i in range(_spawn_candidates.size() - 1, 0, -1):
+		var j := rng.randi_range(0, i)
+		var point := _spawn_candidates[i]
+		_spawn_candidates[i] = _spawn_candidates[j]
+		_spawn_candidates[j] = point
+	for point in _spawn_candidates:
+		_spawn_edge_candidates.append(not _spawn_floor_contains(point, _spawn_clearance() + 3.0))
 
 
-## 取第 index 个落点 —— 数量超过环形点位时**必须仍然互不重合**。
-## 为什么必须有：布局房（`size_class == "tower_cell"`）只产出 4 个环形点，而设计源的房间级
-## 刷怪计划允许一波最多 24 只、单房最多 64 只。若沿用 `index % points.size()` 取点，
-## 超出的敌人会**逐只叠在同一坐标**，画面上看起来是「一只怪」而实际是一群 ——
-## 数量上限就成了空话，且「填了 6 只」与「填了 4 只」看不出差别。
-## 口径：环上点位算第 0 层；超出后逐层退让（每层转一个固定角并缩一档半径），
-## 使任意 index 都有确定且互不重合的落点（半径触底后仍靠角度差区分）。
-## 公式路径与设计源路径共用本函数（都经 `Dungeon3D._spawn_enemy_batch`），不另设第二套落点算法。
+func _spawn_clearance() -> float:
+	return SPAWN_BOSS_CLEARANCE_M if room_type == "BOSS" else SPAWN_CLEARANCE_M
+
+
+## 完整包围正方形都须被主层地砖并集覆盖（比圆形占地更保守，也覆盖凹角）。
+func _spawn_floor_contains(point: Vector3, radius: float) -> bool:
+	var footprint := Rect2(Vector2(point.x - radius, point.z - radius), Vector2.ONE * radius * 2.0)
+	var dimensions := get_dimensions()
+	if not Rect2(-dimensions * 0.5, dimensions).encloses(footprint):
+		return false
+	if not authored_layout_shell and _authored_tile_cells.is_empty():
+		return true
+	var covered := 0.0
+	for cell in _authored_tile_cells:
+		var tile := Rect2(Vector2(cell.x - 2.5, cell.z - 2.5), Vector2(5.0, 5.0))
+		if tile.intersects(footprint):
+			covered += tile.intersection(footprint).get_area()
+	return covered >= footprint.get_area() - 0.0001
+
+
+## 同帧 ensure_detail_built 后物理空间可能尚未同步，直接读取实体碰撞形状的变换。
+## 保守 AABB 也支持家具旋转；不把 Area3D 交互盒、camera-only 或地板当作障碍。
+func _collect_spawn_blockers() -> void:
+	_spawn_blockers.clear()
+	# 共墙和 L 角可能由邻房拥有；按空间相交收集，而不是仅查本房子树。
+	var dimensions := get_dimensions()
+	var room_bounds := AABB(Vector3(-dimensions.x * 0.5, 0.05, -dimensions.y * 0.5), Vector3(dimensions.x, SPAWN_BODY_HEIGHT_M, dimensions.y)).grow(_spawn_clearance())
+	var root: Node = get_parent() if get_parent() != null else self
+	for value in root.find_children("*", "CollisionShape3D", true, false):
+		var collision := value as CollisionShape3D
+		var body := collision.get_parent() as StaticBody3D
+		if body == null or (body.collision_layer & 1) == 0 or collision.disabled or collision.shape == null:
+			continue
+		var bounds := global_transform.affine_inverse() * collision.global_transform * collision.shape.get_debug_mesh().get_aabb()
+		if bounds.end.y <= 0.05 or bounds.position.y >= SPAWN_BODY_HEIGHT_M or not room_bounds.intersects(bounds):
+			continue
+		_spawn_blockers.append(bounds)
+
+
+func _spawn_obstacle_free(point: Vector3) -> bool:
+	var radius := _spawn_clearance()
+	for bounds in _spawn_blockers:
+		if Rect2(Vector2(bounds.position.x, bounds.position.z), Vector2(bounds.size.x, bounds.size.z)).grow(radius).has_point(Vector2(point.x, point.z)):
+			return false
+	return true
+
+
+## 每批 index=0 刷新实体障碍；后续波共用同一安全算法。任何索引都不做旋转/缩放。
 func spawn_point_for_index(index: int) -> Vector3:
-	if enemy_spawn_points.is_empty():
-		return global_position
-	var point_count := enemy_spawn_points.size()
 	var safe_index := maxi(0, index)
-	var layer := safe_index / point_count
-	var base := enemy_spawn_points[safe_index % point_count]
-	if layer <= 0:
-		return base
-	var offset := base - global_position
-	var planar := Vector3(offset.x, 0.0, offset.z)
-	var angle_shift := SPAWN_POINT_LAYER_ANGLE_STEP * float(layer)
-	var radius_scale := maxf(SPAWN_POINT_MIN_RADIUS_SCALE, 1.0 - SPAWN_POINT_LAYER_RADIUS_STEP * float(layer))
-	return global_position + planar.rotated(Vector3.UP, angle_shift) * radius_scale
+	if safe_index == 0 or enemy_spawn_points.is_empty():
+		enemy_spawn_points.clear()
+		_collect_spawn_blockers()
+		_spawn_available.clear()
+		for i in _spawn_candidates.size():
+			if _spawn_obstacle_free(_spawn_candidates[i]):
+				_spawn_available.append(i)
+	var target := mini(safe_index, SPAWN_MAX_POINTS - 1)
+	var local_points: Array[Vector3] = []
+	for previous in enemy_spawn_points:
+		local_points.append(to_local(previous))
+	while enemy_spawn_points.size() <= target:
+		var chosen := -1
+		var best_score := -1.0
+		var separation := maxf(_spawn_clearance() * 2.0 + 0.1, get_dimensions().length() * 0.22)
+		for i in _spawn_available:
+			var point := _spawn_candidates[i]
+			var distance := separation
+			for previous in local_points:
+				distance = minf(distance, point.distance_to(previous))
+			if distance < 0.01:
+				continue
+			var score := distance
+			# 优先真实边缘，但不能为贴边而堆叠；边缘容不下时自动向内部扩展。
+			if _spawn_edge_candidates[i] and distance >= _spawn_clearance() * 2.0 + 0.1:
+				score += separation
+			if score > best_score:
+				chosen = i
+				best_score = score
+		if chosen < 0:
+			push_error("DungeonRoom3D: 房间 %s 没有可用刷怪落点（index=%d）" % [room_id, safe_index])
+			return Vector3.INF
+		local_points.append(_spawn_candidates[chosen])
+		enemy_spawn_points.append(to_global(_spawn_candidates[chosen]))
+	return enemy_spawn_points[target]
 
 
 func _on_room_body_entered(body: Node3D) -> void:

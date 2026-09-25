@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "checks": {
+    "template_dimensions_locked": true,
+    "floor_extent_measured": true,
+    "floor_tiles_48_all_5m": true,
+    "visible_wall_top_11_9": true,
+    "wall_height_consistent_with_whitebox": true,
+    "standard_wall_bays_28": true,
+    "wall_bays_on_perimeter_only": true,
+    "no_interior_architectural_walls": true,
+    "facilities_inside_room_envelope": true,
+    "perimeter_furniture_avoids_door_lanes": true,
+    "door_opening_measured": true,
+    "door_contract_matches_whitebox": true,
+    "openable_lanes_match_whitebox": true,
+    "wall_armor_protrusion_ge_100mm": true,
+    "work_clusters_4": true,
+    "palette_external_unique": true,
+    "four_materials": true,
+    "all_packages_nonempty": true,
+    "facility_categories_present": true,
+    "output_uv_and_material_slots": true,
+    "one_package_per_output": true,
+    "disk_collection_count": true
+  },
+  "measured": {
+    "floor_bounds": [
+      [
+        -15.0,
+        -20.0,
+        -0.32
+      ],
+      [
+        15.0,
+        20.0,
+        0.0
+      ]
+    ],
+    "wall_bay_count": 28,
+    "door_measures": {
+      "axis": "x",
+      "width": 2.2,
+      "bottom": 0.3,
+      "lintel": 2.8
+    },
+    "armor_protrusion_m": 0.12,
+    "work_clusters": 4,
+    "source_piece_count": 5397,
+    "output_meshes": 193,
+    "output_faces": 211708
+  },
+  "scope_lock": {
+    "whitebox_sha256": "d5265ade60c32e112e5a30e34441ab1cae6d537ffab13f6c3e4123c8b4478643",
+    "reference_sha256": "634b7a63d200b33efe52c7e7a9477632dd4158c1406fb839c43cfe23c83c3d71",
+    "method": "all art geometry authorized for authoring; preserve whitebox and reference by hash; measure structural contract"
+  },
+  "visual_review": {
+    "status": "reviewed against reference (5 views)",
+    "views": [
+      "reference_cutaway",
+      "workstation_detail",
+      "perimeter_facilities_detail",
+      "top_plan",
+      "complete_structure"
+    ],
+    "reference": "docs/v0.1/design/refs/expedition01/办公室01.jpg",
+    "deepening": [
+      "palette cell CYAN corrected to (3,0) — screens/light strips were sampling the wrong cell (orange-brown)",
+      "ambient darkened, emission raised 6->16, blue kept as hue",
+      "floor light-grid densified over the whole seam lattice",
+      "wall layering re-darkened (dark body + panel armor + bright edges)",
+      "workstation deepened: wide + portrait monitors, dual under-desk drawers",
+      "chair given headrest and seat front lip",
+      "filing wall rebuilt as low bank + tall corner cabinets"
+    ]
+  },
+  "palette_texture": {
+    "image": "设施低亮多巴胺色盘_10x10_512.png",
+    "filepath": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+    "is_relative": false,
+    "packed": false,
+    "materials_bound": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "interpolation": "Closest",
+    "uv_map": "PaletteUV"
+  },
+  "runtime_integration": false
+}

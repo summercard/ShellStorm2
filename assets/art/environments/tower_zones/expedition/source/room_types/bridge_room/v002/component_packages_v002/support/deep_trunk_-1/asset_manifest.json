@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK_-1",
+  "slug": "deep_trunk_-1",
+  "name_zh": "坑底贯穿管束_-1",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "通道桥房间种类_工字型_30x60m_v002.blend",
+  "collection": "坑底贯穿管束_-1_资产包",
+  "objects": [
+    "坑底贯穿管束_-1_主体"
+  ],
+  "world_origin_m": [
+    -8.545,
+    0.0,
+    -11.05
+  ],
+  "local_origin": "bottom_center",
+  "forward_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "world_bounds_m": [
+    [
+      -9.44,
+      -14.0,
+      -11.05
+    ],
+    [
+      -7.65,
+      14.0,
+      -10.35
+    ]
+  ],
+  "dimensions_m": [
+    1.79,
+    28.0,
+    0.7
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 18,
+  "reference_cutaway_hidden": false,
+  "lower_decor_only": false,
+  "fixed_display_attachment": false,
+  "collision_status": "not_exported",
+  "exported": false,
+  "dependencies": []
+}

@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-PARTS_DRAWER_CABINET",
+  "slug": "parts_drawer_cabinet",
+  "name_zh": "多屉零件柜",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v001.blend",
+  "collection": "多屉零件柜_资产包",
+  "objects": [
+    "多屉零件柜_主体"
+  ],
+  "world_origin_m": [
+    -16.805,
+    -9.341999999999999,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -18.44,
+      -9.744,
+      0.0
+    ],
+    [
+      -15.17,
+      -8.94,
+      2.42
+    ]
+  ],
+  "dimensions_m": [
+    3.27,
+    0.804,
+    2.42
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 121,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

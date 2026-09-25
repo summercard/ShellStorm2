@@ -1,0 +1,122 @@
+{
+  "status": "PASS",
+  "checks": {
+    "template_dimensions_locked": true,
+    "upper_floor_extent_measured": true,
+    "bridge_extent_measured": true,
+    "pit_floor_extent_measured": true,
+    "pit_floor_surface_z_measured": true,
+    "floor_tiles_all_5m": true,
+    "upper_tiles_48_lower_tiles_36": true,
+    "visible_wall_top_11_9": true,
+    "layered_platforms_measured": true,
+    "palette_external_unique": true,
+    "four_materials": true,
+    "all_packages_nonempty": true,
+    "door_openings_measured": true,
+    "output_uv_and_material_slots": true,
+    "one_package_per_output": true,
+    "disk_collection_count": true,
+    "palette_texture_resolves_from_any_location": true
+  },
+  "palette_texture": {
+    "image": "设施低亮多巴胺色盘_10x10_512.png",
+    "filepath": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+    "is_relative": false,
+    "packed": false,
+    "size": [
+      512,
+      512
+    ],
+    "materials_bound": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "interpolation": "Closest",
+    "uv_map": "PaletteUV",
+    "verified_locations": [
+      "v001 source .blend",
+      "v002 source .blend",
+      "delivery copy under outputs/expedition01_bridge_room_v002/"
+    ]
+  },
+  "measured": {
+    "upper_floor_bounds": [
+      [
+        -15.0,
+        -30.0,
+        -0.32
+      ],
+      [
+        15.0,
+        30.0,
+        0.0
+      ]
+    ],
+    "bridge_bounds": [
+      [
+        -5.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        5.0,
+        15.0,
+        0.0
+      ]
+    ],
+    "pit_floor_bounds": [
+      [
+        -15.0,
+        -15.0,
+        -12.32
+      ],
+      [
+        15.0,
+        15.0,
+        -12.0
+      ]
+    ],
+    "lower_service_levels_m": [
+      -8.6,
+      -7.4,
+      -5.7,
+      -4.2
+    ],
+    "source_piece_count": 7410,
+    "output_meshes": 314,
+    "output_faces": 312370
+  },
+  "scope_lock": {
+    "whitebox_sha256": "5213b571fdb7065cf2c8579395d5b991b624ac9e97db8a6684d3b92a77339aa7",
+    "v001_sha256": "601d7c254dd3df32cda79daaee32b0740a3eaa7076c9a3c6f9d4745bdfe49112",
+    "v001_sha256_previous": "7db8df2d30f28814c9c4eca860e6707b549e2a88f618a6720cc5b98c0d1e84f5",
+    "v001_change_reason": "palette image filepath was stored relative (`//..\\..\\..\\..\\..\\..\\..\\shared\\palette\\...`) by Blender save_as_mainfile relative_remap default; rewritten to absolute on both v001 and v002 so the 4 shared palette materials keep their texture after the .blend is copied elsewhere. No geometry or material-node change.",
+    "method": "all art geometry authorized for reconstruction; preserve input files by hash; measure structural contract"
+  },
+  "visual_review": {
+    "status": "reviewed_with_remaining_reference_gaps",
+    "reviewed_views": [
+      "reference_cutaway.png",
+      "lower_layers_detail.png",
+      "upper_machine_room_detail.png",
+      "top_plan.png",
+      "complete_structure.png"
+    ],
+    "implemented": [
+      "multi-elevation supported maintenance decks",
+      "lower shaft machinery and fan backplanes",
+      "flanged pipe elbows and hanging cable bundles",
+      "upper electrical/server/console groups"
+    ],
+    "remaining_gaps": [
+      "reference surface wear and stains are not fully reproduced",
+      "repeated equipment remains more regular than reference",
+      "no final door leaves by frozen production scope"
+    ],
+    "cutaway_note": "Near-side upper/lower walls and near-side mid-gallery are hidden for presentation only; full source retains them."
+  },
+  "runtime_integration": false
+}
