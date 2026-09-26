@@ -1,0 +1,76 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+  "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+  "room_type": "DB_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+  "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+  "collection": "顶部通风管与风口_输出包",
+  "editable_collection": "顶部通风管与风口_制作源",
+  "root_object": "ROOT_ceiling_service_duct_组件",
+  "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+  "slug": "ceiling_service_duct",
+  "name_zh": "顶部通风管与风口",
+  "category": "support",
+  "bounds_size_m": [
+    1.428,
+    24.0,
+    0.8575
+  ],
+  "bounds_lo_m": [
+    -0.714,
+    -12.0,
+    0.0
+  ],
+  "bounds_hi_m": [
+    0.714,
+    12.0,
+    0.8575
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis": "-Y",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "collision_owner": "self",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_world_origin_m": [
+    3.6,
+    1.5,
+    10.3825
+  ],
+  "version": "v003",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "objects": [
+    "顶部通风管与风口_输出_部件00"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "godot_front_axis": "+Z",
+  "component_file_sha256": "2600c64bc2c3f8bf57fc87521494079fb1c82b0009f93ba02f3142c6beef6e98"
+}

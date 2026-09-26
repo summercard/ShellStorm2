@@ -1,0 +1,62 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+  "slug": "wall_t615_5m",
+  "name_zh": "墙体 0.61×5.00×11.90m",
+  "room_type": "OFFICE_ROOM",
+  "serves_room_types": [
+    "OFFICE_ROOM"
+  ],
+  "scope": "shared",
+  "instance_count": 25,
+  "absorbed_variants": [
+    "wall_east_0",
+    "wall_east_2",
+    "wall_north_-2",
+    "wall_south_-2",
+    "wall_south_0",
+    "wall_west_-2",
+    "wall_west_-4",
+    "wall_west_0",
+    "wall_west_2",
+    "wall_east_-4",
+    "wall_east_-1",
+    "wall_east_-3",
+    "wall_east_1",
+    "wall_east_3",
+    "wall_north_-1",
+    "wall_north_-3",
+    "wall_north_1",
+    "wall_north_2",
+    "wall_south_-1",
+    "wall_south_1",
+    "wall_west_-1",
+    "wall_west_-3",
+    "wall_west_1",
+    "wall_west_3"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+  "collection": "wall_t615_5m_输出包",
+  "bounds_size_m": [
+    0.615,
+    5.0,
+    11.9
+  ],
+  "front_axis": "-X",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "self",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-2",
+  "source_library": "v004"
+}

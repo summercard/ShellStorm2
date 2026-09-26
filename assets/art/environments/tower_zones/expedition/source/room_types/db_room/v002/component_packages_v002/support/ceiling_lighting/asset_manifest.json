@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+  "slug": "ceiling_lighting",
+  "name_zh": "顶部灯具",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "顶部灯具_资产包",
+  "objects": [
+    "顶部灯具_主体",
+    "顶部灯具_自发光"
+  ],
+  "world_origin_m": [
+    0.0,
+    2.5,
+    10.435
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -19.0,
+      -6.68,
+      10.435
+    ],
+    [
+      19.0,
+      11.68,
+      10.89
+    ]
+  ],
+  "dimensions_m": [
+    38.0,
+    18.36,
+    0.455
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 80,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

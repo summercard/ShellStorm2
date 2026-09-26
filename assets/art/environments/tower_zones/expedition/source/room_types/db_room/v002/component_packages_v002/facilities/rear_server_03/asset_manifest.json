@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_03",
+  "slug": "rear_server_03",
+  "name_zh": "后左服务器柜_03",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "后左服务器柜_03_资产包",
+  "objects": [
+    "后左服务器柜_03_主体",
+    "后左服务器柜_03_自发光"
+  ],
+  "world_origin_m": [
+    -9.9,
+    11.445625,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -10.9585,
+      10.6155,
+      0.0
+    ],
+    [
+      -8.8415,
+      12.27575,
+      3.944
+    ]
+  ],
+  "dimensions_m": [
+    2.117,
+    1.66025,
+    3.944
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 67,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

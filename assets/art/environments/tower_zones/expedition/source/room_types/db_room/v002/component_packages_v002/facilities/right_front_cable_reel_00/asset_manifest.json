@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+  "slug": "right_front_cable_reel_00",
+  "name_zh": "右前服务缆盘_00",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "右前服务缆盘_00_资产包",
+  "objects": [
+    "右前服务缆盘_00_主体"
+  ],
+  "world_origin_m": [
+    17.3,
+    -9.4,
+    -0.0085
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      16.78,
+      -9.82,
+      -0.0085
+    ],
+    [
+      17.82,
+      -8.98,
+      0.9
+    ]
+  ],
+  "dimensions_m": [
+    1.04,
+    0.84,
+    0.9085
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 12,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

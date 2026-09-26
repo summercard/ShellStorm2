@@ -130,6 +130,7 @@ static func generate_expedition(request: Dictionary) -> Dictionary:
 ##
 ## 房间级**可选**字段只在此处登记一次：`enemy_spawn_plan`（刷怪计划）、
 ## `boss_content_id`（首领指派）、`reward_plan`（统一掉落计划）、
+## `spawn_placements` / `encounter`（触发盒放置与调用，触发器刷怪设计 §3.2）、
 ## `authored_layout_*`（授权布局壳体，区块00 / 远征01）。两处消费方
 ## （`generate_from_level_plan` 与验收脚本）都走本函数，禁止各自复刻字段表。
 ##
@@ -161,6 +162,14 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		# 房间级刷怪计划（设计源覆盖）。空字典 = 该房走全局公式。
 		# 与 content_type 同样属于「设计源钉死优先」的字段，本层只透传不解释。
 		"enemy_spawn_plan": (src.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
+		# 触发盒放置层 + 调用机制层（触发器刷怪设计 §3.2 / §3.3）。
+		# 与 enemy_spawn_plan 同样「设计源钉死优先」：本层只透传，不解释盒心/尺寸/下标。
+		# 同样**必须在此登记**，否则设计源写了也被静默丢弃（出口白名单）。
+		"spawn_placements": (src.get("spawn_placements", []) as Array).duplicate(true),
+		"encounter": (src.get("encounter", {}) as Dictionary).duplicate(true),
+		# 「只认盒子」标记（触发器刷怪设计 §7-A）：由层下发到每间房，运行时据此判定
+		# 「没盒子就不刷」。未声明 = false ⇒ 未迁移关卡行为逐字不变。
+		"spawn_boxes_only": bool(src.get("spawn_boxes_only", false)),
 		# 房间级首领指派（仅 Boss 房有效）。空串 = 不指派：
 		# 塔楼按层号取名册条目，单层关卡则**不出 Boss**（口径见 BossContentCatalog.resolve_profile）。
 		# 只透传不解释；本字段**不进 layout_id**，故改它不会让既有存档失配。
@@ -502,13 +511,22 @@ static func _constrained_slots(
 		(branches_by_parent[parent_key] as Array).append(key)
 	# 取向不在这里定，也不靠第二个模板 id：每个槽位自带本模板的**转置尺寸**
 	# （见 `_constrained_slot`），落位阶段按连接方向二选一（见 `_placement_candidates`）。
+	# —— 房型是否钉死（业主 2026-09-26 裁定：远征主路房型固定）——
+	# 为真时主路内容房一律用 L2 蓝图钉死的 `template_id` / `template_variant`，
+	# **不再从 `content_template_pool` 按种子洗牌**；短边受限房型的槽位对调也随之跳过
+	# （它对「按种子抽取」才成立，钉死后无用）。
+	# 为什么要这个开关：房型洗牌 ⇒ 房间尺寸每局变 ⇒ 房内地砖格心每局不同，
+	# 「触发盒以地砖格心为中心、逐盒手调」这条业主口径就落不了地（声明坐标会落到房外）。
+	# 钉死后尺寸与砖格每局稳定，绝对砖心坐标才有意义。缺省 false = 洗牌（旧行为逐字不变）。
+	var pin_templates := bool(policy.get("pin_content_templates", false))
 	var content_count := main_keys.size() + branch_keys.size()
 	var draws := _constrained_template_draws(content_count, pool, rng)
-	# 短边受限房型（通道桥房）只许抽进「连接数 ≤ 2」的槽位 —— 抽中多连接槽位时与
-	# 一个「连接数 ≤ 2」的槽位对调。见 `_relieve_short_edge_slots` 的完整推导。
-	_relieve_short_edge_slots(
-		draws, _draw_slot_descriptors(chain, by_key, branches_by_parent), templates
-	)
+	if not pin_templates:
+		# 短边受限房型（通道桥房）只许抽进「连接数 ≤ 2」的槽位 —— 抽中多连接槽位时与
+		# 一个「连接数 ≤ 2」的槽位对调。见 `_relieve_short_edge_slots` 的完整推导。
+		_relieve_short_edge_slots(
+			draws, _draw_slot_descriptors(chain, by_key, branches_by_parent), templates
+		)
 	var slots: Array[Dictionary] = []
 	var content_index := 0
 	for key in chain:
@@ -516,10 +534,17 @@ static func _constrained_slots(
 		var template_id := str(raw.get("template_id", ""))
 		var variant := str(raw.get("template_variant", ""))
 		if str(raw.get("role", "")) == "main":
-			# 内容房：房型按种子洗牌（含变体），尺寸随之改 —— 这正是"每局不同"的来源。
-			template_id = draws[content_index]
 			content_index += 1
-			variant = _pick_template_variant(templates, template_id, rng)
+			if pin_templates:
+				# 钉死：蓝图写了什么就用什么；带变体族但蓝图漏写变体时，
+				# 取该族**第一个**变体（确定性），绝不退回按种子随机 —— 否则砖格仍不稳。
+				if not templates.has(template_id):
+					return []
+				variant = _pinned_variant(templates, template_id, variant)
+			else:
+				# 内容房：房型按种子洗牌（含变体），尺寸随之改 —— 这正是"每局不同"的来源。
+				template_id = draws[content_index - 1]
+				variant = _pick_template_variant(templates, template_id, rng)
 		if not templates.has(template_id):
 			return []
 		slots.append(_constrained_slot(key, raw, templates, template_id, variant))
@@ -678,6 +703,19 @@ static func _pick_template_variant(
 	return str(variants[rng.randi_range(0, variants.size() - 1)])
 
 
+## 钉死房型时的变体解析：蓝图写了就用；带变体族却漏写时取**第一个**变体（确定性）。
+## 与 `_pick_template_variant` 的分工：那个要随机（洗牌路径），这个要**可复现**（钉死路径）。
+## 无变体族恒返回空串 —— 与模板 `variants: []` 一致。
+static func _pinned_variant(templates: Dictionary, template_id: String, declared: String) -> String:
+	var template := templates.get(template_id, {}) as Dictionary
+	var variants := template.get("variants", []) as Array
+	if not declared.is_empty():
+		return declared
+	if variants.is_empty():
+		return ""
+	return str(variants[0])
+
+
 ## 单间内容房 → 槽位。槽位自带本模板的**转置尺寸**（`rotated_size`）：供落位阶段
 ## 按连接方向二选一（见 `_placement_candidates`）。
 ##
@@ -723,6 +761,11 @@ static func _constrained_slot(
 		"boss_content_id": str(raw.get("boss_content_id", "")),
 		"enemy_spawn_plan": (raw.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
 		"reward_plan": (raw.get("reward_plan", {}) as Dictionary).duplicate(true),
+		# 触发盒放置/调用：槽位必须带，否则 `_constrained_floor_from` 产出的房表
+		# 在 `room_from_source` 处取到空 —— 与 2026-09-25「刷怪批次与设计不符」同一类坑。
+		"spawn_placements": (raw.get("spawn_placements", []) as Array).duplicate(true),
+		"encounter": (raw.get("encounter", {}) as Dictionary).duplicate(true),
+		"spawn_boxes_only": bool(raw.get("spawn_boxes_only", false)),
 	}
 
 
@@ -864,14 +907,19 @@ static func _anchored_direction_order(per_direction: Array, anchor: Vector2) -> 
 	var order: Array[int] = []
 	for index in range(per_direction.size()):
 		order.append(index)
-	# 距离相同时以原索引做确定性 tie-break（`sort_custom` 本身不稳定，
-	# 只比距离会让同一份输入产出两种版图）。
+	# 距离相同时以**方向名的固定优先级**做 tie-break，**不再用数组下标**：
+	# `per_direction` 的入序来自 `_direction_trial_order`，其 `rest` 段按种子打乱 ⇒
+	# 下标随种子漂移，等距并列会翻方向 → 换门位 → 换变体轮廓 → 换砖格
+	# （实测根因：钉死房型后 room_01 的砖格仍跨种子不一致）。
+	# `sort_custom` 本身不稳定，故必须给一个与入序无关的全序键。
 	order.sort_custom(func(a: int, b: int) -> bool:
-		var distance_a := _direction_anchor_distance(per_direction[a] as Array, anchor)
-		var distance_b := _direction_anchor_distance(per_direction[b] as Array, anchor)
+		var entry_a := per_direction[a] as Dictionary
+		var entry_b := per_direction[b] as Dictionary
+		var distance_a := _direction_anchor_distance(entry_a["row"] as Array, anchor)
+		var distance_b := _direction_anchor_distance(entry_b["row"] as Array, anchor)
 		if not is_equal_approx(distance_a, distance_b):
 			return distance_a < distance_b
-		return a < b
+		return _direction_priority(str(entry_a["dir"])) < _direction_priority(str(entry_b["dir"]))
 	)
 	var out: Array = []
 	for index in order:
@@ -886,6 +934,17 @@ static func _direction_anchor_distance(row: Array, anchor: Vector2) -> float:
 		var center := (candidate_value as Dictionary)["center"] as Vector2
 		best = minf(best, center.distance_to(anchor))
 	return best
+
+
+## 方向的**固定**优先级：并列时用它定序，与种子无关。
+## 为什么不用「来向优先」或数组下标：`_direction_trial_order` 的 `rest` 段按种子打乱，
+## 下标随之漂移 ⇒ 等距并列会翻方向，进而换门位、换变体轮廓、换砖格。
+## 钉死房型后我们要的是**每局同一张图**，故并列一律按本表（东→北→西→南）定序。
+const DIRECTION_PRIORITY := {"east": 0, "north": 1, "west": 2, "south": 3}
+
+
+static func _direction_priority(direction: String) -> int:
+	return int(DIRECTION_PRIORITY.get(direction, 99))
 
 
 ## 第 `index` 个槽位当前可用的全部落位候选（已通过吸附 + 不重叠二连检查），
@@ -942,7 +1001,11 @@ static func _placement_candidates(
 			var center := _touching_center(parent_center, parent_size, child_size, direction, cross)
 			if _constrained_fits(center, child_size, rects):
 				row.append(_placement_candidate(center, child_size, slot, rotation_deg))
-		per_direction.append(row)
+		# 行里带上方向名：`_anchored_direction_order` 的并列 tie-break 要用它。
+		# 只用「行」时 tie-break 只能退回数组下标，而下标继承 `_direction_trial_order`
+		# 里被种子打乱的 `rest` 序 ⇒ 等距时会翻方向、进而换门位、换变体轮廓、换砖格
+		# （实测：同房型同变体的 room_01 在三个种子下砖格不一致的根因）。
+		per_direction.append({"dir": direction, "row": row})
 	# 主路房走锚点软引导（折返），支线房保持「先垂直侧向」的原序不动。
 	if str(slot.get("role", "")) != "branch":
 		per_direction = _anchored_direction_order(per_direction, placed[0]["center"] as Vector2)
@@ -954,8 +1017,8 @@ static func _placement_candidates(
 	var progressed := true
 	while progressed and result.size() < CONSTRAINED_BRANCH_LIMIT:
 		progressed = false
-		for row_value in per_direction:
-			var row := row_value as Array
+		for entry_value in per_direction:
+			var row := (entry_value as Dictionary)["row"] as Array
 			if rank < row.size():
 				result.append(row[rank])
 				progressed = true
@@ -1148,11 +1211,20 @@ static func _constrained_floor_from(
 			"boss_content_id": str(slot.get("boss_content_id", "")),
 			"enemy_spawn_plan": (slot.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
 			"reward_plan": (slot.get("reward_plan", {}) as Dictionary).duplicate(true),
+			# 触发盒放置/调用（触发器刷怪设计 §3.2 / §3.3）：与上列字段同口径，
+			# 本层只搬运不解释。这四项曾因硬写空而静默丢弃过，别再犯。
+			"spawn_placements": (slot.get("spawn_placements", []) as Array).duplicate(true),
+			"encounter": (slot.get("encounter", {}) as Dictionary).duplicate(true),
+			"spawn_boxes_only": bool(slot.get("spawn_boxes_only", false)),
 			"declared_ports": [],
 			"ports": [],
 			"ports_derived": false,
 		})
 	LEVEL_PLAN_LOADER.derive_ports(rooms)
+	# 「只认盒子」标记逐房下发（与 normalize_floor 同一口径，禁止分叉）。
+	if bool(blueprint.get("spawn_boxes_only", false)):
+		for room_value: Dictionary in rooms:
+			room_value["spawn_boxes_only"] = true
 	attach_authored_layout_shell(rooms, policy, templates)
 	return {
 		"level_id": str(blueprint.get("level_id", "")),
@@ -1166,6 +1238,16 @@ static func _constrained_floor_from(
 		"rooms": rooms,
 		"main_path": _string_array(blueprint.get("main_path", [])),
 		"edge_policy": _constrained_edge_policy(rooms),
+		# 触发器刷怪（设计 §7-A）：只认盒子层。true ⇒ 敌对房无实例即不刷怪。
+		# 本层必须透传，否则「没盒子就不刷」在 constrained 模式下静默失效。
+		"spawn_boxes_only": bool(blueprint.get("spawn_boxes_only", false)),
+		# 几何权威性：本结构的 `center` / `size` 是**生成器按种子算出的真几何**
+		# （`placed_room` 的实测值），不是 L2 文件里的样例 ⇒ 置真，放行校验器里
+		# 依赖真实尺寸的判据（盒越界 / 贴墙内缩 / 砖心相位）。
+		# 与 `LevelPlanLoader.normalize_floor` 的 `mode == "constrained" ⇒ false` 成对：
+		# 同一份结构，读文件得到 false、生成器算完覆写 true。缺任一侧，门禁就会
+		# 「要么全盲（样例几何照样判、误报），要么全哑（真几何也不判、漏报）」。
+		"geometry_authoritative": true,
 		"errors": [],
 	}
 

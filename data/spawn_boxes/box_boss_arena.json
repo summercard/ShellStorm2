@@ -1,0 +1,33 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_boss_arena",
+  "note": "Boss 台（8×8 m，全场唯一的大盒）：盒心出 Boss，1.5 秒后 2 只精英护场，3 秒后召唤者入场。Boss 需要更大活动面，故尺寸高于通用小盒的 2~4 m。",
+  "shape": "box",
+  "size_m": [
+    8.0,
+    3.0,
+    8.0
+  ],
+  "spawns": [
+    {
+      "type": "boss",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "elite",
+      "count": 2,
+      "delay_sec": 1.5
+    },
+    {
+      "type": "summoner",
+      "count": 1,
+      "delay_sec": 3.0
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 2.8,
+    "wall_recess_tiles": 1
+  }
+}

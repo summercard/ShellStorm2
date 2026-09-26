@@ -1,5 +1,31 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-26｜远征01 波次自动衔接修复 ＋ `room_09` 事件房改为「事件 ＋ 战斗」双职
+
+- **修「波次衔接须手动按离开的门才触发」**（业主报障）：两条独立根因 —— ① `Dungeon3D._on_room_entered` 里 `flush_runtime_checkpoint("room_transition")` 早于 `_spawn_room_enemies`，那一刻本房还没建 `_room_wave_totals`，快照 `wave_total` 仅为 `get()` 兜底值 1、队列空，随后 `_restore_room_runtime_state` 回灌把刚写的「2 波 · 1 待发」压回「1 波 · 0 待发」；② 延迟出怪（`spawn_delay_sec`）双重记账（`_queue_delayed_spawn` 时不加、到点 `additive=true` 再加一次 ⇒ 每只留幽灵计数、`alive == 0` 恒不成立）。修复：`_capture_room_runtime_state` 加 `wave_established`，`_restore_room_runtime_state` 加 `keep_live_combat_progress` 跳过压回，`_spawn_enemy_batch` 记 `queued_delayed` 并入存活账，`_on_delayed_spawn_timeout` 改 `count_reserved=true`。
+- **`room_09` 改为「`EVENT` ＋ 战斗」双职房**（业主裁定「保留 EVENT、放开规则」）：`room_09` 原只出事件终端、不刷怪。`GameDesignConfig` 新增 `EVENT_ROOM_TYPE`，`room_type_uses_spawn_boxes()` 纳入 `EVENT`（只管「**允许**摆盒」，**不动** `ROOM_TYPES_WITH_HOSTILES` 公式刷怪入口门 ⇒ 塔楼 / 主题池里无盒的程序化 EVENT 房行为逐字不变）；`LevelPlanValidator._validate_spawn_boxes` 新增 `box_authorable` 放行 EVENT 摆盒，「必须有盒」仍只看 `hostile`（EVENT 不强制有盒）；`Dungeon3D` 新增 `_event_room_has_authored_combat()`（只看 `room.spawn_placements` 是否非空，进房首帧定）与 `_room_has_pending_combat()`，事件房带盒即按盒出波、事件终端保留，`cleared` 需「战斗清完 **且** 事件结算」。`floor_00.json` 的 `room_09` 增 **4 盒 / 3 波**（复用同房型 `room_03` 盒位），全关盒数 **39 → 43**（10 内容房 39 ＋ Boss 房 4）。
+- 新增门禁 `verify_expedition_wave_chain`（注册 `core`，3 用例：真机 `_on_room_entered` 序列 / 延迟出怪记账 / 进房旧快照保护＋反向对照）。🔴 坑：`get_tree().quit(0)` **不中断当前调用栈** ⇒ `quit(0)` 后必须 `return`，否则「打印 `..._OK` 却退出码 1」。验收：新门禁与 `verify_level_plan_design_source`（`checks=234`）/ `verify_expedition_level01_flow` / `verify_dungeon_wave_intermission` / `verify_expedition_departure_carry` / `verify_runtime_autosave_flow` / `verify_tower_runtime_restart_restore` / `verify_room_graph_persistence_services` 全绿（`RAW_EXIT=0`）；探针 `probe_room09_event`（3 波清完自动放行）与 `probe_wave_chain_all`（全关 `ghost=0 no_advance=0 dropped=0`）通过。
+- 同步文档：[远征关卡01设计 §4.5 / §4.5.0 / §3.2](../design/远征关卡01设计.md)、[触发器刷怪设计 §3.5 / §3.4 / §4 / §6 / §7.1-A / §8 / §9](../design/触发器刷怪设计.md)；`EVENT×1` 多重集**保留** ⇒ `verify_expedition_level01_flow.gd` 的 `PLAN_CONTENT_TYPE_POOL` **无需改**。未提交。
+
+## 2026-09-26｜db_room v002 数据机房房间种类美术返工
+
+- 基于用户指定参考图完成 `db_room/v002` 真实 Blender 构建、两轮六视图加参考匹配镜头渲染和目视复核；保留 `v001`，未修改 office 共享源、白盒、玩法代码和账本设计页。
+- 真实产出 `数据库房间种类_数据机房_40x30m_v002.blend`：86 个独立资产包、148 个输出网格；锁定 db_01 1050m²、28 个墙件链接、42 块受控派生地砖。地砖仅删除授权白色斜标几何，保留未删除面的几何、UV 和材质索引；发光砖独立输出已恢复。
+- 新增/重排后左六柜与三辆服务推车、后右连续 L 形维修台与三屏、中央双面维修岛及两辆服务车、右前抬升检修平台与门架、独立货架/终端/缆盘包；删除重复悬空理线梁和重复三屏挂板组。
+- 展示相机与灯光已在渲染后保存进 `.blend`，主相机为 `参考镜头_用户参考匹配`，另保留六个 v001 对照镜头。最终任务级 QA 为 `PASS`，报告状态为 `CONDITIONAL_PASS`。
+- 严格通用验证器结果保留为真实 `FAIL`：173840/173840 面 PaletteUV 合格，其余材质、色盘、发光、额外 UV 检查通过；唯一失败是 `no_unused_materials`。任务级递归依赖审计确认 40 个 office 链接网格使用四个链接材质（各 users=20），不能删除；验证器 `--all-meshes` 未遍历集合实例。
+- 项目门禁：`EXPEDITION_ASSET_STATUS_OK`、文档契约 OK、运行资产命名 OK、`EXPEDITION_FOOTPRINTS_OK`。未生成 GLB/PackedScene，未接入 Godot；未提交 git。
+
+## 2026-09-26｜基地出发把 99F 全部物品与状态带进远征
+
+- 修复「在 99F 基地备好背包与主副枪，经远征情报室传送进远征关卡后身上只剩白送武器 + 保底备弹」。业主裁定：远征入场必然带着 99F 基地的所有物品和状态入场。
+- 根因：基地落盘产物是**塔楼身份**的快照（`scope=base` + 空 `runtime_map_id`），而远征场景是 `expedition_01`。`Dungeon3D._ready()` 的三条既有恢复通道（`scope=combat` 续局 / `successful_extraction_carry` 标记 / `scope=base` 且地图 ID 相同）判据全都要求地图 ID 相同 ⇒ 整条被丢弃。headless 探针实测反向确认：把快照 `runtime_map_id` 伪造成 `expedition_01` 后携带物完整装回、主武器实例 ID 与基地逐字一致，可见唯一挡路的就是匹配判定，`_restore_carried_ownership()` 本身没坏。
+- 改动：`src/world3d/Dungeon3D.gd` 新增 `MISSION_OPERATIONS_DEPARTURE_CARRY_KEY`、`_runtime_departure_carry_snapshot`、`_is_mission_operations_departure_carry_snapshot()`，`_ready()` 候选分支加一支（**排在 base 分支之后**），`_activate_runtime_persistence()` 加一支，`_restore_carried_ownership()` 增 `restore_location` 参数；`scenes/RogueMapSelectMenu.gd` 在落盘成功后写出发标记。**不放开** `_snapshot_matches_runtime_map()`：那会连带让基地世界被远征接收。
+- 隐性契约（其一、其二）：① departure 分支必须排在 base 分支之后，否则塔楼自己的场景会丢掉世界恢复；② 出发交接走 `restore_location=false`，否则基地快照的 `current_room_id=facility` 会被 `_resolve_runtime_restore_room()` 兜底解析成"入口安全房"，抹掉远征刻意的 4m 出生点偏移。第三条见下。
+- **真机回归（同日第二轮，业主实测报障）**：首版修复在真机不生效。根因是 `_enter_level()` 打完标记后 `change_scene_to_file()` 会卸载塔楼场景，而 `Dungeon3D._exit_tree()` 调 `unregister_runtime_checkpoint_provider(self, true)` —— `flush_before_unregister=true` 再抓一次状态写盘，用一条不带标记的快照整体覆盖掉刚打的标记。修法：**落盘之后、写标记之前**先 `unregister_runtime_checkpoint_provider(get_parent(), false)`（同时停掉防抖计时器，之后不再有任何写盘路径）。真机等价序列实测：修前 `[1 打标记后] marker=true` → `[2 卸载后] marker=false` → 远征入场 `potion=0 / ammo=300 / weapon_sprinkler`；修后 `[2] marker=true` → `[3] potion=3 / weapon_rifle`。上一版验收之所以全绿，是因为它只「构造快照 → 加载目的地图」、跳过了"卸载"这一步 —— 现已把真机链路（含卸载存活）补为门禁第一段。
+- 新增 `tests/verification/verify_expedition_departure_carry.{gd,tscn}` 并注册 `core`，三段断言：① 带标记 ⇒ 背包 / 主副枪 / 装备背包 / 快捷栏 / 保险格 / HP / 手电电量 / 魂 / 房间钥匙按原实例带进远征，且出生点仍在安全房中心朝前门方向 4m 处；② 反向对照去掉标记 ⇒ 一条也不装回；③ 塔楼回归 ⇒ 同一份带标记快照在塔楼侧仍进 base 分支（哨兵取 `_runtime_base_restore_snapshot` 非空）并落回 99F 基地。实测 `--headless --scene` 退出 0，`check_verification_log.py` 退出 0（无意外引擎错误、无资源泄漏）；`check_documentation_contracts` / `check_feature_traceability` / `check_verification_registry`（`scenes=162`）均全绿。
+- 同步文档：[09 §3.2 存档交接表](../09_技术施工_存档结算与复活.md)、[07 §2.2 远征情报室](../07_技术施工_基地设施.md)，`feature_registry` 的 `WORLD-ENTRY` 增登记本门禁。未提交。
+
 ## 2026-09-26｜WORLD-PLAN 真实主层安全分散刷怪落点
 
 - 仅修改 `DungeonRoom3D.gd` 与新增专项，补充[远征01设计 §4.5.1](../design/远征关卡01设计.md)；未修改 `Dungeon3D.gd`、另一代理波次测试、资产、模板 ID 或掉落数值，未提交。

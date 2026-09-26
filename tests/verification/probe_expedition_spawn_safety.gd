@@ -44,7 +44,10 @@ func _ready() -> void:
 		await get_tree().process_frame
 		await get_tree().process_frame
 	_verify_floor_contract()
-	_check(bridge_poses.size() == 2, "没有覆盖桥房0/90度两个姿态: %s" % bridge_poses)
+	# 2026-09-26 起主路房型**钉死**（`pin_content_templates: true`）⇒ 桥房不再随种子换 0°/90° 姿态，
+	# 跨种子只出**一种**固定姿态。原断言 `== 2` 属「房型每局重洗」时代，已随钉死失效；
+	# 改判「至少覆盖一种桥房姿态」（钉死本就是把双姿态覆盖换成确定性，故不再要求 2 种）。
+	_check(bridge_poses.size() >= 1, "没有覆盖任何桥房姿态: %s" % bridge_poses)
 	_check(changed_rooms >= 10, "不同run seed未改变足够房间落点")
 	_check(legacy_unsafe > 0, "旧四角旋转算法反向对照没有检出问题")
 	print("SPAWN_SAFETY_SUMMARY rooms=%d points=%d bridge_poses=%s changed_rooms=%d legacy_unsafe=%d failures=%d" % [checked_rooms, checked_points, bridge_poses, changed_rooms, legacy_unsafe, failures.size()])

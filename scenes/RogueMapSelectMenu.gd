@@ -190,9 +190,34 @@ func _enter_level(level_id: String) -> void:
 		return
 	# 远征情报室是基地到新行动地图的正式边界。不能只切场景，必须先
 	# 把基地当前玩家状态按“下线/场景卸载”规则同步落盘，再登记入口意图。
-	if BaseManager != null and not BaseManager.flush_runtime_checkpoint("mission_operations_teleport_departure"):
-		push_error("[RogueMapSelectMenu] 传送前运行态存档失败")
-		return
+	if BaseManager != null:
+		if not BaseManager.flush_runtime_checkpoint("mission_operations_teleport_departure"):
+			push_error("[RogueMapSelectMenu] 传送前运行态存档失败")
+			return
+		# ⚠️ 顺序是契约：落盘之后、写标记**之前**必须先摘掉运行时提供者。
+		# `change_scene_to_file()` 会卸载塔楼场景，而 `Dungeon3D._exit_tree()` 调的是
+		# `unregister_runtime_checkpoint_provider(self, true)` —— `flush_before_unregister=true`
+		# 会**再抓一次当前状态写盘**，用一条不带标记的快照整体覆盖掉刚打的标记。
+		# 2026-09-26 真机等价序列实测：`[1 打标记后] marker=true` → `[2 卸载后] marker=false`
+		# → 远征入场回到保底装备。摘掉提供者后 `_exit_tree` 那次 unregister 会因
+		# `provider != current` 直接返回，且防抖计时器也一并停掉，不再有任何写盘路径；
+		# 落盘本身已在上一行完成。这里用 `get_parent()` 而不是 `get_tree().current_scene`：
+		# 本菜单由 `_open_facility_menu()` 经 `add_child(menu)` 挂在打开它的那个玩法场景
+		# （= 运行时检查点提供者）之下，父节点才是权威身份；场景不对时 unregister 是
+		# no-op，不会误摘别人。
+		BaseManager.unregister_runtime_checkpoint_provider(get_parent(), false)
+		# ⚠️ 落盘产物是**塔楼身份**的基地快照（`scope=base` + 空 `runtime_map_id`），
+		# 而目的地图（远征 `expedition_01`）与它地图 ID 不同 ⇒ 目的地图的三条既有恢复
+		# 通道全部落空，玩家进关卡只剩白送武器与保底备弹。业主裁定「远征入场必然带着
+		# 99F 基地的所有物品和状态入场」，故在出发边界打上显式标记：目的地图命中后只
+		# 交接玩家所有权与状态，不再要求地图 ID 相同，也不再恢复塔楼世界与坐标。
+		var departure := BaseManager.get_active_run_checkpoint()
+		departure[Dungeon3D.MISSION_OPERATIONS_DEPARTURE_CARRY_KEY] = true
+		if not BaseManager.set_active_run_checkpoint(
+			departure, "mission_operations_departure_carry"
+		):
+			push_error("[RogueMapSelectMenu] 出发携带物交接标记写入失败")
+			return
 	var entry_request_id := GameEntryFlow.request_gameplay_entry(
 		GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT,
 		GameEntryFlow.SPAWN_SAVED_PROGRESS

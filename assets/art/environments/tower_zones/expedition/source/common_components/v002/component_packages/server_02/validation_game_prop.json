@@ -1,0 +1,627 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\common_components\\v002\\component_packages\\server_02\\server_02.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 58,
+  "polygon_count": 348,
+  "valid_island_polygon_count": 348,
+  "uv_reports": [
+    {
+      "object": "蓝光服务器机柜_制作_自发光.040",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.041",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.042",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.043",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.044",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.045",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.046",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.047",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.048",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.049",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.050",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.051",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.052",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.053",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.054",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.055",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.056",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.057",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.058",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_自发光.059",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件00.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件01.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件06.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件11.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件16.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件21.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件26.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件27.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_制作_部件28.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.040",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.041",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.042",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.043",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.044",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.045",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.046",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.047",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.048",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.049",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.050",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.051",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.052",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.053",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.054",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.055",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.056",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.057",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.058",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_自发光.059",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件00.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件01.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件06.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件11.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件16.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件21.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件26.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件27.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "蓝光服务器机柜_输出_部件28.002",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

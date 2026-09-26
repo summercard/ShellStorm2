@@ -146,11 +146,24 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		# 本字典是**白名单重建**，不是原样透传：设计源新增字段若忘记在此登记，
 		# 会被静默丢掉（不会报错、也不会红），因此每次扩字段都要连这里一起改。
 		# 已登记的房间级可选字段：enemy_spawn_plan（刷怪计划）、boss_content_id（首领指派）、
-		# reward_plan（统一掉落计划，04 §22.7 / 05 §11 reward_slots）。
+		# reward_plan（统一掉落计划，04 §22.7 / 05 §11 reward_slots）、
+		# spawn_placements（触发盒放置，触发器刷怪设计 §3.2）、encounter（波次调用 §3.3）。
 		var spawn_plan: Dictionary = {}
 		var raw_spawn_plan: Variant = raw.get("enemy_spawn_plan", {})
 		if raw_spawn_plan is Dictionary:
 			spawn_plan = (raw_spawn_plan as Dictionary).duplicate(true)
+		# 触发盒放置：本层只做**类型守卫 + 深拷贝**，几何语义（盒在房内、尺寸 ⊆ 房、
+		# box 引用存在）由 LevelPlanValidator 与 SpawnBoxCatalog 负责。
+		# 与 enemy_spawn_plan 同样「只透传不解释」—— 但**必须在此登记**，否则被静默丢弃。
+		var spawn_placements: Array = []
+		var raw_placements: Variant = raw.get("spawn_placements", [])
+		if raw_placements is Array:
+			spawn_placements = (raw_placements as Array).duplicate(true)
+		# 调用机制：第 N 波调用哪几个盒子实例。同样只透传。
+		var encounter: Dictionary = {}
+		var raw_encounter: Variant = raw.get("encounter", {})
+		if raw_encounter is Dictionary:
+			encounter = (raw_encounter as Dictionary).duplicate(true)
 		# 统一掉落计划：键是 trigger（clear / search / kill），值是槽位引用。
 		# 本层只做**类型守卫 + 深拷贝**，语义（trigger 合法、spec 存在、池已登记）由
 		# LevelPlanValidator 与 RewardSpec 负责 —— 与 enemy_spawn_plan 同样「只透传不解释」。
@@ -180,6 +193,8 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"content_type": str(raw.get("content_type", "")),
 			"boss_content_id": str(raw.get("boss_content_id", "")),
 			"enemy_spawn_plan": spawn_plan,
+			"spawn_placements": spawn_placements,
+			"encounter": encounter,
 			"reward_plan": reward_plan,
 			"declared_ports": raw.get("ports", []),
 			"ports": [],
@@ -196,6 +211,12 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		if str(room["key"]).is_empty():
 			errors.append("room_key_empty")
 		rooms.append(room)
+	# 「只认盒子」标记：层里写一次，**逐房下发**。
+	# 为什么下发而不是运行时再查层：Dungeon3D 只拿得到房间记录，拿不到层的规范化结构；
+	# 不下发的话「没盒子就不刷」在运行时无从判断，规则会静默失效。
+	if bool(floor_plan.get("spawn_boxes_only", false)):
+		for room: Dictionary in rooms:
+			room["spawn_boxes_only"] = true
 	derive_ports(rooms)
 	return {
 		"level_id": level_id,
@@ -209,6 +230,20 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		"rooms": rooms,
 		"main_path": _string_array(floor_plan.get("main_path", [])),
 		"edge_policy": floor_plan.get("edge_policy", []),
+		# 触发器刷怪（设计 §3.3 / §7-A）：本层是否为「**只认盒子**」层。
+		# true ⇒ 敌对房没有 spawn_placements 就**不刷怪**（业主裁定「没盒子就不刷」），
+		# 且校验器把「敌对房实例为空」判为错误。缺省 false ⇒ 未迁移关卡行为逐字不变。
+		"spawn_boxes_only": bool(floor_plan.get("spawn_boxes_only", false)),
+		# 几何权威性：本结构里的 `center` / `size` 是不是**真几何**。
+		#
+		# `mode = "constrained"` 的 L2 文件里 `center_m` / `size_m` 只是「拓扑蓝图 + 样例 /
+		# 兜底」—— 真正的几何由 `FloorPlanGenerator` 按种子算（见 `_constrained_floor_from`）。
+		# 因此**从文件读出来的这一份不是真几何**，标记 false，让 `LevelPlanValidator` 跳过
+		# 一切依赖真实尺寸的判据（盒越界 / 贴墙内缩 / 砖心相位）。
+		# 实测教训：远征 room_05 房表声明 30×60、运行时是 60×30（生成器按连接方向转置），
+		# 拿样例几何判会把一整房合法盒位误报成「越出房间」。
+		# `authored` 关卡（塔楼）的文件几何就是真几何 ⇒ true，判据全开、行为逐字不变。
+		"geometry_authoritative": str(floor_plan.get("mode", "authored")) != "constrained",
 		"errors": errors,
 	}
 

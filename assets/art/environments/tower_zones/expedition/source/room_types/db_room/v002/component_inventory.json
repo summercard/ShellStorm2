@@ -1,0 +1,4278 @@
+[
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3",
+    "slug": "derived_tile_-1_-3",
+    "name_zh": "受控派生地砖_-1_-3_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-1_-3_v002_资产包",
+    "objects": [
+      "受控派生地砖_-1_-3_v002_主体",
+      "受控派生地砖_-1_-3_v002_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        0.0,
+        -10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3",
+    "slug": "derived_tile_0_-3",
+    "name_zh": "受控派生地砖_0_-3_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_0_-3_v002_资产包",
+    "objects": [
+      "受控派生地砖_0_-3_v002_主体",
+      "受控派生地砖_0_-3_v002_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      -12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        0.0,
+        -15.0,
+        -0.32
+      ],
+      [
+        5.0,
+        -10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2",
+    "slug": "derived_tile_-4_-2",
+    "name_zh": "受控派生地砖_-4_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-4_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-4_-2_v002_主体",
+      "受控派生地砖_-4_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -17.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -20.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        -15.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+    "slug": "derived_tile_-3_-2",
+    "name_zh": "受控派生地砖_-3_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-3_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-3_-2_v002_主体",
+      "受控派生地砖_-3_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -15.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2",
+    "slug": "derived_tile_-2_-2",
+    "name_zh": "受控派生地砖_-2_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-2_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-2_-2_v002_主体",
+      "受控派生地砖_-2_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -10.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2",
+    "slug": "derived_tile_-1_-2",
+    "name_zh": "受控派生地砖_-1_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-1_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-1_-2_v002_主体",
+      "受控派生地砖_-1_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        0.0,
+        -5.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2",
+    "slug": "derived_tile_0_-2",
+    "name_zh": "受控派生地砖_0_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_0_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_0_-2_v002_主体",
+      "受控派生地砖_0_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        0.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        5.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2",
+    "slug": "derived_tile_1_-2",
+    "name_zh": "受控派生地砖_1_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_1_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_1_-2_v002_主体",
+      "受控派生地砖_1_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        4.98882,
+        -10.0,
+        -0.32
+      ],
+      [
+        10.01118,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.02236,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2",
+    "slug": "derived_tile_2_-2",
+    "name_zh": "受控派生地砖_2_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_2_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_2_-2_v002_主体",
+      "受控派生地砖_2_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        10.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        15.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2",
+    "slug": "derived_tile_3_-2",
+    "name_zh": "受控派生地砖_3_-2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_3_-2_v002_资产包",
+    "objects": [
+      "受控派生地砖_3_-2_v002_主体",
+      "受控派生地砖_3_-2_v002_自发光"
+    ],
+    "world_origin_m": [
+      17.5,
+      -7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        15.0,
+        -10.0,
+        -0.32
+      ],
+      [
+        20.0,
+        -5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1",
+    "slug": "derived_tile_-4_-1",
+    "name_zh": "受控派生地砖_-4_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-4_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-4_-1_v002_主体",
+      "受控派生地砖_-4_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -17.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -20.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        -15.0,
+        0.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+    "slug": "derived_tile_-3_-1",
+    "name_zh": "受控派生地砖_-3_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-3_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-3_-1_v002_主体",
+      "受控派生地砖_-3_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -15.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        0.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1",
+    "slug": "derived_tile_-2_-1",
+    "name_zh": "受控派生地砖_-2_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-2_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-2_-1_v002_主体",
+      "受控派生地砖_-2_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -10.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        0.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1",
+    "slug": "derived_tile_-1_-1",
+    "name_zh": "受控派生地砖_-1_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-1_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-1_-1_v002_主体",
+      "受控派生地砖_-1_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        0.0,
+        0.0,
+        0.1145
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.4345
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1",
+    "slug": "derived_tile_0_-1",
+    "name_zh": "受控派生地砖_0_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_0_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_0_-1_v002_主体",
+      "受控派生地砖_0_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        0.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        5.0,
+        0.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1",
+    "slug": "derived_tile_1_-1",
+    "name_zh": "受控派生地砖_1_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_1_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_1_-1_v002_主体",
+      "受控派生地砖_1_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        5.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        10.0,
+        0.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1",
+    "slug": "derived_tile_2_-1",
+    "name_zh": "受控派生地砖_2_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_2_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_2_-1_v002_主体",
+      "受控派生地砖_2_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        10.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        15.0,
+        0.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1",
+    "slug": "derived_tile_3_-1",
+    "name_zh": "受控派生地砖_3_-1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_3_-1_v002_资产包",
+    "objects": [
+      "受控派生地砖_3_-1_v002_主体",
+      "受控派生地砖_3_-1_v002_自发光"
+    ],
+    "world_origin_m": [
+      17.5,
+      -2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        15.0,
+        -5.0,
+        -0.32
+      ],
+      [
+        20.0,
+        0.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0",
+    "slug": "derived_tile_-4_0",
+    "name_zh": "受控派生地砖_-4_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-4_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_-4_0_v002_主体",
+      "受控派生地砖_-4_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      -17.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -20.0,
+        0.0,
+        -0.32
+      ],
+      [
+        -15.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+    "slug": "derived_tile_-3_0",
+    "name_zh": "受控派生地砖_-3_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-3_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_-3_0_v002_主体",
+      "受控派生地砖_-3_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -15.0,
+        0.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0",
+    "slug": "derived_tile_-2_0",
+    "name_zh": "受控派生地砖_-2_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-2_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_-2_0_v002_主体",
+      "受控派生地砖_-2_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -10.0,
+        0.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0",
+    "slug": "derived_tile_-1_0",
+    "name_zh": "受控派生地砖_-1_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-1_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_-1_0_v002_主体",
+      "受控派生地砖_-1_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -5.0,
+        0.0,
+        -0.32
+      ],
+      [
+        0.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0",
+    "slug": "derived_tile_0_0",
+    "name_zh": "受控派生地砖_0_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_0_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_0_0_v002_主体",
+      "受控派生地砖_0_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        0.0,
+        0.0,
+        -0.32
+      ],
+      [
+        5.0,
+        5.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0",
+    "slug": "derived_tile_1_0",
+    "name_zh": "受控派生地砖_1_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_1_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_1_0_v002_主体",
+      "受控派生地砖_1_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        5.0,
+        0.0,
+        -0.32
+      ],
+      [
+        10.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0",
+    "slug": "derived_tile_2_0",
+    "name_zh": "受控派生地砖_2_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_2_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_2_0_v002_主体",
+      "受控派生地砖_2_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        10.0,
+        0.0,
+        -0.32
+      ],
+      [
+        15.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0",
+    "slug": "derived_tile_3_0",
+    "name_zh": "受控派生地砖_3_0_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_3_0_v002_资产包",
+    "objects": [
+      "受控派生地砖_3_0_v002_主体",
+      "受控派生地砖_3_0_v002_自发光"
+    ],
+    "world_origin_m": [
+      17.5,
+      2.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        15.0,
+        0.0,
+        -0.32
+      ],
+      [
+        20.0,
+        5.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1",
+    "slug": "derived_tile_-4_1",
+    "name_zh": "受控派生地砖_-4_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-4_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-4_1_v002_主体",
+      "受控派生地砖_-4_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -17.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -20.0,
+        5.0,
+        -0.32
+      ],
+      [
+        -15.0,
+        10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1",
+    "slug": "derived_tile_-3_1",
+    "name_zh": "受控派生地砖_-3_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-3_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-3_1_v002_主体",
+      "受控派生地砖_-3_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -15.0,
+        5.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1",
+    "slug": "derived_tile_-2_1",
+    "name_zh": "受控派生地砖_-2_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-2_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-2_1_v002_主体",
+      "受控派生地砖_-2_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -10.0,
+        5.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        10.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1",
+    "slug": "derived_tile_-1_1",
+    "name_zh": "受控派生地砖_-1_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-1_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_-1_1_v002_主体",
+      "受控派生地砖_-1_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -5.0,
+        5.0,
+        -0.32
+      ],
+      [
+        0.0,
+        10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1",
+    "slug": "derived_tile_0_1",
+    "name_zh": "受控派生地砖_0_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_0_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_0_1_v002_主体",
+      "受控派生地砖_0_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        0.0,
+        5.0,
+        -0.32
+      ],
+      [
+        5.0,
+        10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1",
+    "slug": "derived_tile_1_1",
+    "name_zh": "受控派生地砖_1_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_1_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_1_1_v002_主体",
+      "受控派生地砖_1_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        5.0,
+        5.0,
+        -0.32
+      ],
+      [
+        10.0,
+        10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1",
+    "slug": "derived_tile_2_1",
+    "name_zh": "受控派生地砖_2_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_2_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_2_1_v002_主体",
+      "受控派生地砖_2_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        10.0,
+        5.0,
+        -0.32
+      ],
+      [
+        15.0,
+        10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1",
+    "slug": "derived_tile_3_1",
+    "name_zh": "受控派生地砖_3_1_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_3_1_v002_资产包",
+    "objects": [
+      "受控派生地砖_3_1_v002_主体",
+      "受控派生地砖_3_1_v002_自发光"
+    ],
+    "world_origin_m": [
+      17.5,
+      7.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        15.0,
+        5.0,
+        -0.32
+      ],
+      [
+        20.0,
+        10.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2",
+    "slug": "derived_tile_-4_2",
+    "name_zh": "受控派生地砖_-4_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-4_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-4_2_v002_主体",
+      "受控派生地砖_-4_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -17.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -20.0,
+        10.0,
+        -0.32
+      ],
+      [
+        -15.0,
+        15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2",
+    "slug": "derived_tile_-3_2",
+    "name_zh": "受控派生地砖_-3_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-3_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-3_2_v002_主体",
+      "受控派生地砖_-3_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -12.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -15.0,
+        10.0,
+        -0.32
+      ],
+      [
+        -10.0,
+        15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2",
+    "slug": "derived_tile_-2_2",
+    "name_zh": "受控派生地砖_-2_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-2_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-2_2_v002_主体",
+      "受控派生地砖_-2_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -7.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -10.0,
+        10.0,
+        -0.32
+      ],
+      [
+        -5.0,
+        15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2",
+    "slug": "derived_tile_-1_2",
+    "name_zh": "受控派生地砖_-1_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_-1_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_-1_2_v002_主体",
+      "受控派生地砖_-1_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      -2.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        -5.0,
+        10.0,
+        -0.32
+      ],
+      [
+        0.0,
+        15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2",
+    "slug": "derived_tile_0_2",
+    "name_zh": "受控派生地砖_0_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_0_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_0_2_v002_主体",
+      "受控派生地砖_0_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      2.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        0.0,
+        10.0,
+        -0.32
+      ],
+      [
+        5.0,
+        15.0,
+        0.1145
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.4345
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2",
+    "slug": "derived_tile_1_2",
+    "name_zh": "受控派生地砖_1_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_1_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_1_2_v002_主体",
+      "受控派生地砖_1_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      7.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        5.0,
+        10.0,
+        -0.32
+      ],
+      [
+        10.0,
+        15.0,
+        0.104
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.424
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2",
+    "slug": "derived_tile_2_2",
+    "name_zh": "受控派生地砖_2_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_2_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_2_2_v002_主体",
+      "受控派生地砖_2_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      12.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        10.0,
+        10.0,
+        -0.32
+      ],
+      [
+        15.0,
+        15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2",
+    "slug": "derived_tile_3_2",
+    "name_zh": "受控派生地砖_3_2_v002",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "受控派生地砖_3_2_v002_资产包",
+    "objects": [
+      "受控派生地砖_3_2_v002_主体",
+      "受控派生地砖_3_2_v002_自发光"
+    ],
+    "world_origin_m": [
+      17.5,
+      12.5,
+      -0.32
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "controlled_derived_tile_v002",
+    "world_bounds_m": [
+      [
+        15.0,
+        10.0,
+        -0.32
+      ],
+      [
+        20.0,
+        15.0,
+        0.087
+      ]
+    ],
+    "dimensions_m": [
+      5.0,
+      5.0,
+      0.407
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+    "slug": "floor_hazard_edging",
+    "name_zh": "沿墙黄黑警示边带",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "沿墙黄黑警示边带_资产包",
+    "objects": [
+      "沿墙黄黑警示边带_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      0.004554999999999865,
+      0.0075
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -19.6,
+        -14.59089,
+        0.0075
+      ],
+      [
+        19.6,
+        14.6,
+        0.084
+      ]
+    ],
+    "dimensions_m": [
+      39.2,
+      29.19089,
+      0.0765
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 211,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+    "slug": "floor_conduit_run",
+    "name_zh": "地面线槽与检修盖板",
+    "category": "floor",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "地面线槽与检修盖板_资产包",
+    "objects": [
+      "地面线槽与检修盖板_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      2.5,
+      0.045
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -19.0,
+        -9.5,
+        0.045
+      ],
+      [
+        19.0,
+        14.5,
+        0.076
+      ]
+    ],
+    "dimensions_m": [
+      38.0,
+      24.0,
+      0.031
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 30,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "visual_only",
+    "visual_only": true,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+    "slug": "workbench_west",
+    "name_zh": "西墙检修工作台",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "西墙检修工作台_资产包",
+    "objects": [
+      "西墙检修工作台_主体",
+      "西墙检修工作台_自发光"
+    ],
+    "world_origin_m": [
+      -17.299999999999997,
+      3.0,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -18.005,
+        0.8,
+        0.0
+      ],
+      [
+        -16.595,
+        5.2,
+        1.99
+      ]
+    ],
+    "dimensions_m": [
+      1.41,
+      4.4,
+      1.99
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 43,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+    "slug": "wall_screen_bank",
+    "name_zh": "壁挂大屏组",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "壁挂大屏组_资产包",
+    "objects": [
+      "壁挂大屏组_主体",
+      "壁挂大屏组_自发光"
+    ],
+    "world_origin_m": [
+      17.73,
+      11.655000000000001,
+      3.525
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        15.7,
+        8.55,
+        3.525
+      ],
+      [
+        19.76,
+        14.76,
+        4.95
+      ]
+    ],
+    "dimensions_m": [
+      4.06,
+      6.21,
+      1.425
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 35,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+    "slug": "shelving_heavy_north",
+    "name_zh": "北墙重型货架",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "北墙重型货架_资产包",
+    "objects": [
+      "北墙重型货架_主体",
+      "北墙重型货架_自发光"
+    ],
+    "world_origin_m": [
+      -15.2,
+      -6.0,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -17.2575,
+        -6.44,
+        0.0
+      ],
+      [
+        -13.1425,
+        -5.56,
+        3.2
+      ]
+    ],
+    "dimensions_m": [
+      4.115,
+      0.88,
+      3.2
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 35,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+    "slug": "cable_coil_wall",
+    "name_zh": "壁挂电缆线圈",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "壁挂电缆线圈_资产包",
+    "objects": [
+      "壁挂电缆线圈_主体"
+    ],
+    "world_origin_m": [
+      19.66,
+      8.9,
+      3.51346
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        19.32,
+        6.04,
+        3.51346
+      ],
+      [
+        20.0,
+        11.76,
+        4.18654
+      ]
+    ],
+    "dimensions_m": [
+      0.68,
+      5.72,
+      0.67308
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 15,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+    "slug": "equipment_rack_ne",
+    "name_zh": "东北设备机架",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "东北设备机架_资产包",
+    "objects": [
+      "东北设备机架_主体",
+      "东北设备机架_自发光"
+    ],
+    "world_origin_m": [
+      16.7,
+      0.7999999999999999,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        15.31,
+        0.2665,
+        0.0
+      ],
+      [
+        18.09,
+        1.3335,
+        3.05
+      ]
+    ],
+    "dimensions_m": [
+      2.78,
+      1.067,
+      3.05
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 54,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+    "slug": "wall_light_pylon",
+    "name_zh": "墙面竖向冷光灯柱",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "墙面竖向冷光灯柱_资产包",
+    "objects": [
+      "墙面竖向冷光灯柱_主体",
+      "墙面竖向冷光灯柱_自发光"
+    ],
+    "world_origin_m": [
+      0.0,
+      2.5,
+      3.07
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -19.8,
+        -9.8,
+        3.07
+      ],
+      [
+        19.8,
+        14.8,
+        7.73
+      ]
+    ],
+    "dimensions_m": [
+      39.6,
+      24.6,
+      4.66
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 44,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+    "slug": "wall_service_run",
+    "name_zh": "墙面管道与线束",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "墙面管道与线束_资产包",
+    "objects": [
+      "墙面管道与线束_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      3.035,
+      3.05
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -19.77,
+        -8.7,
+        3.05
+      ],
+      [
+        19.77,
+        14.77,
+        9.6
+      ]
+    ],
+    "dimensions_m": [
+      39.54,
+      23.47,
+      6.55
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 136,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00",
+    "slug": "rear_server_00",
+    "name_zh": "后左服务器柜_00",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后左服务器柜_00_资产包",
+    "objects": [
+      "后左服务器柜_00_主体",
+      "后左服务器柜_00_自发光"
+    ],
+    "world_origin_m": [
+      -16.5,
+      11.445625,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -17.5585,
+        10.6155,
+        0.0
+      ],
+      [
+        -15.4415,
+        12.27575,
+        3.944
+      ]
+    ],
+    "dimensions_m": [
+      2.117,
+      1.66025,
+      3.944
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 67,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+    "slug": "rear_server_01",
+    "name_zh": "后左服务器柜_01",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后左服务器柜_01_资产包",
+    "objects": [
+      "后左服务器柜_01_主体",
+      "后左服务器柜_01_自发光"
+    ],
+    "world_origin_m": [
+      -14.3,
+      11.445625,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -15.3585,
+        10.6155,
+        0.0
+      ],
+      [
+        -13.2415,
+        12.27575,
+        3.944
+      ]
+    ],
+    "dimensions_m": [
+      2.117,
+      1.66025,
+      3.944
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 67,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_02",
+    "slug": "rear_server_02",
+    "name_zh": "后左服务器柜_02",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后左服务器柜_02_资产包",
+    "objects": [
+      "后左服务器柜_02_主体",
+      "后左服务器柜_02_自发光"
+    ],
+    "world_origin_m": [
+      -12.1,
+      11.445625,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -13.1585,
+        10.6155,
+        0.0
+      ],
+      [
+        -11.0415,
+        12.27575,
+        3.944
+      ]
+    ],
+    "dimensions_m": [
+      2.117,
+      1.66025,
+      3.944
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 67,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_03",
+    "slug": "rear_server_03",
+    "name_zh": "后左服务器柜_03",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后左服务器柜_03_资产包",
+    "objects": [
+      "后左服务器柜_03_主体",
+      "后左服务器柜_03_自发光"
+    ],
+    "world_origin_m": [
+      -9.9,
+      11.445625,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -10.9585,
+        10.6155,
+        0.0
+      ],
+      [
+        -8.8415,
+        12.27575,
+        3.944
+      ]
+    ],
+    "dimensions_m": [
+      2.117,
+      1.66025,
+      3.944
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 67,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_04",
+    "slug": "rear_server_04",
+    "name_zh": "后左服务器柜_04",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后左服务器柜_04_资产包",
+    "objects": [
+      "后左服务器柜_04_主体",
+      "后左服务器柜_04_自发光"
+    ],
+    "world_origin_m": [
+      -7.699999999999999,
+      11.445625,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -8.7585,
+        10.6155,
+        0.0
+      ],
+      [
+        -6.6415,
+        12.27575,
+        3.944
+      ]
+    ],
+    "dimensions_m": [
+      2.117,
+      1.66025,
+      3.944
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 67,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_05",
+    "slug": "rear_server_05",
+    "name_zh": "后左服务器柜_05",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后左服务器柜_05_资产包",
+    "objects": [
+      "后左服务器柜_05_主体",
+      "后左服务器柜_05_自发光"
+    ],
+    "world_origin_m": [
+      -5.5,
+      11.445625,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -6.5585,
+        10.6155,
+        0.0
+      ],
+      [
+        -4.4415,
+        12.27575,
+        3.944
+      ]
+    ],
+    "dimensions_m": [
+      2.117,
+      1.66025,
+      3.944
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 67,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS",
+    "slug": "rear_server_bus",
+    "name_zh": "后左机柜公共理线槽",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后左机柜公共理线槽_资产包",
+    "objects": [
+      "后左机柜公共理线槽_主体"
+    ],
+    "world_origin_m": [
+      -11.0,
+      11.600000000000001,
+      0.02
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -17.75,
+        10.8,
+        0.02
+      ],
+      [
+        -4.25,
+        12.4,
+        4.21
+      ]
+    ],
+    "dimensions_m": [
+      13.5,
+      1.6,
+      4.19
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 2,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+    "slug": "workbench_l_east",
+    "name_zh": "后右连续L形维修台",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "后右连续L形维修台_资产包",
+    "objects": [
+      "后右连续L形维修台_主体",
+      "后右连续L形维修台_自发光"
+    ],
+    "world_origin_m": [
+      10.4,
+      7.875,
+      0.045
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        3.35,
+        4.25,
+        0.045
+      ],
+      [
+        17.45,
+        11.5,
+        3.61
+      ]
+    ],
+    "dimensions_m": [
+      14.1,
+      7.25,
+      3.565
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 121,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND",
+    "slug": "center_double_sided_repair_island",
+    "name_zh": "中央双面维修工作岛",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "中央双面维修工作岛_资产包",
+    "objects": [
+      "中央双面维修工作岛_主体",
+      "中央双面维修工作岛_自发光"
+    ],
+    "world_origin_m": [
+      0.0,
+      -0.8,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -3.4,
+        -2.31,
+        0.0
+      ],
+      [
+        3.4,
+        0.71,
+        2.9
+      ]
+    ],
+    "dimensions_m": [
+      6.8,
+      3.02,
+      2.9
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 112,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST",
+    "slug": "island_cart_west",
+    "name_zh": "维修岛服务车_西",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "维修岛服务车_西_资产包",
+    "objects": [
+      "维修岛服务车_西_主体"
+    ],
+    "world_origin_m": [
+      -4.15,
+      -0.8125,
+      -0.0085
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -4.56,
+        -1.445,
+        -0.0085
+      ],
+      [
+        -3.74,
+        -0.18,
+        1.08
+      ]
+    ],
+    "dimensions_m": [
+      0.82,
+      1.265,
+      1.0885
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 13,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+    "slug": "island_cart_east",
+    "name_zh": "维修岛服务车_东",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "维修岛服务车_东_资产包",
+    "objects": [
+      "维修岛服务车_东_主体"
+    ],
+    "world_origin_m": [
+      4.15,
+      -0.8125,
+      -0.0085
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        3.74,
+        -1.445,
+        -0.0085
+      ],
+      [
+        4.56,
+        -0.18,
+        1.08
+      ]
+    ],
+    "dimensions_m": [
+      0.82,
+      1.265,
+      1.0885
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 13,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+    "slug": "rear_service_cart_00",
+    "name_zh": "机柜服务推车_00",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "机柜服务推车_00_资产包",
+    "objects": [
+      "机柜服务推车_00_主体",
+      "机柜服务推车_00_自发光"
+    ],
+    "world_origin_m": [
+      -16.5,
+      8.7925,
+      -0.0085
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -17.14,
+        8.325,
+        -0.0085
+      ],
+      [
+        -15.86,
+        9.26,
+        1.19
+      ]
+    ],
+    "dimensions_m": [
+      1.28,
+      0.935,
+      1.1985
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01",
+    "slug": "rear_service_cart_01",
+    "name_zh": "机柜服务推车_01",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "机柜服务推车_01_资产包",
+    "objects": [
+      "机柜服务推车_01_主体",
+      "机柜服务推车_01_自发光"
+    ],
+    "world_origin_m": [
+      -11.0,
+      8.7925,
+      -0.0085
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -11.64,
+        8.325,
+        -0.0085
+      ],
+      [
+        -10.36,
+        9.26,
+        1.19
+      ]
+    ],
+    "dimensions_m": [
+      1.28,
+      0.935,
+      1.1985
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02",
+    "slug": "rear_service_cart_02",
+    "name_zh": "机柜服务推车_02",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "机柜服务推车_02_资产包",
+    "objects": [
+      "机柜服务推车_02_主体",
+      "机柜服务推车_02_自发光"
+    ],
+    "world_origin_m": [
+      -5.5,
+      8.7925,
+      -0.0085
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -6.14,
+        8.325,
+        -0.0085
+      ],
+      [
+        -4.86,
+        9.26,
+        1.19
+      ]
+    ],
+    "dimensions_m": [
+      1.28,
+      0.935,
+      1.1985
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 14,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+    "slug": "right_front_shelf_00",
+    "name_zh": "右前货架_00",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "右前货架_00_资产包",
+    "objects": [
+      "右前货架_00_主体"
+    ],
+    "world_origin_m": [
+      13.2,
+      -8.399999999999999,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        12.34,
+        -8.78,
+        0.0
+      ],
+      [
+        14.06,
+        -8.02,
+        2.59
+      ]
+    ],
+    "dimensions_m": [
+      1.72,
+      0.76,
+      2.59
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 10,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01",
+    "slug": "right_front_shelf_01",
+    "name_zh": "右前货架_01",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "右前货架_01_资产包",
+    "objects": [
+      "右前货架_01_主体"
+    ],
+    "world_origin_m": [
+      15.2,
+      -8.399999999999999,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        14.34,
+        -8.78,
+        0.0
+      ],
+      [
+        16.06,
+        -8.02,
+        2.59
+      ]
+    ],
+    "dimensions_m": [
+      1.72,
+      0.76,
+      2.59
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 10,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02",
+    "slug": "right_front_shelf_02",
+    "name_zh": "右前货架_02",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "右前货架_02_资产包",
+    "objects": [
+      "右前货架_02_主体"
+    ],
+    "world_origin_m": [
+      17.2,
+      -8.399999999999999,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        16.34,
+        -8.78,
+        0.0
+      ],
+      [
+        18.06,
+        -8.02,
+        2.59
+      ]
+    ],
+    "dimensions_m": [
+      1.72,
+      0.76,
+      2.59
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 10,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL",
+    "slug": "right_front_service_terminal",
+    "name_zh": "右前服务终端",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "右前服务终端_资产包",
+    "objects": [
+      "右前服务终端_主体",
+      "右前服务终端_自发光"
+    ],
+    "world_origin_m": [
+      15.2,
+      -9.5175,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        14.6,
+        -9.855,
+        0.0
+      ],
+      [
+        15.8,
+        -9.18,
+        1.44
+      ]
+    ],
+    "dimensions_m": [
+      1.2,
+      0.675,
+      1.44
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 3,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+    "slug": "right_front_cable_reel_00",
+    "name_zh": "右前服务缆盘_00",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "右前服务缆盘_00_资产包",
+    "objects": [
+      "右前服务缆盘_00_主体"
+    ],
+    "world_origin_m": [
+      17.3,
+      -9.4,
+      -0.0085
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        16.78,
+        -9.82,
+        -0.0085
+      ],
+      [
+        17.82,
+        -8.98,
+        0.9
+      ]
+    ],
+    "dimensions_m": [
+      1.04,
+      0.84,
+      0.9085
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 12,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01",
+    "slug": "right_front_cable_reel_01",
+    "name_zh": "右前服务缆盘_01",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "右前服务缆盘_01_资产包",
+    "objects": [
+      "右前服务缆盘_01_主体"
+    ],
+    "world_origin_m": [
+      18.3,
+      -9.4,
+      -0.0085
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        17.78,
+        -9.82,
+        -0.0085
+      ],
+      [
+        18.82,
+        -8.98,
+        0.9
+      ]
+    ],
+    "dimensions_m": [
+      1.04,
+      0.84,
+      0.9085
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 12,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+    "slug": "raised_service_platform",
+    "name_zh": "右前抬升检修平台",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "右前抬升检修平台_资产包",
+    "objects": [
+      "右前抬升检修平台_主体",
+      "右前抬升检修平台_自发光"
+    ],
+    "world_origin_m": [
+      9.6,
+      -4.6,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        7.2,
+        -6.375,
+        0.0
+      ],
+      [
+        12.0,
+        -2.825,
+        1.32
+      ]
+    ],
+    "dimensions_m": [
+      4.8,
+      3.55,
+      1.32
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 31,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+    "slug": "raised_service_gantry",
+    "name_zh": "抬升平台检修门架",
+    "category": "facilities",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "抬升平台检修门架_资产包",
+    "objects": [
+      "抬升平台检修门架_主体",
+      "抬升平台检修门架_自发光"
+    ],
+    "world_origin_m": [
+      9.600000000000001,
+      -3.59,
+      0.58
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        7.57,
+        -3.83,
+        0.58
+      ],
+      [
+        11.63,
+        -3.35,
+        4.51
+      ]
+    ],
+    "dimensions_m": [
+      4.06,
+      0.48,
+      3.93
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 12,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+    "slug": "ceiling_deck_-3",
+    "name_zh": "吊顶结构_-3",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "吊顶结构_-3_资产包",
+    "objects": [
+      "吊顶结构_-3_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      -12.5,
+      11.38
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -5.0,
+        -15.0,
+        11.38
+      ],
+      [
+        5.0,
+        -10.0,
+        11.87
+      ]
+    ],
+    "dimensions_m": [
+      10.0,
+      5.0,
+      0.49
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 6,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+    "slug": "ceiling_deck_-2",
+    "name_zh": "吊顶结构_-2",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "吊顶结构_-2_资产包",
+    "objects": [
+      "吊顶结构_-2_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      -7.5,
+      11.38
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -20.0,
+        -10.0,
+        11.38
+      ],
+      [
+        20.0,
+        -5.0,
+        11.87
+      ]
+    ],
+    "dimensions_m": [
+      40.0,
+      5.0,
+      0.49
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 24,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+    "slug": "ceiling_deck_-1",
+    "name_zh": "吊顶结构_-1",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "吊顶结构_-1_资产包",
+    "objects": [
+      "吊顶结构_-1_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      -2.5,
+      11.38
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -20.0,
+        -5.0,
+        11.38
+      ],
+      [
+        20.0,
+        0.0,
+        11.87
+      ]
+    ],
+    "dimensions_m": [
+      40.0,
+      5.0,
+      0.49
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 24,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+    "slug": "ceiling_deck_0",
+    "name_zh": "吊顶结构_0",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "吊顶结构_0_资产包",
+    "objects": [
+      "吊顶结构_0_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      2.5,
+      11.38
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -20.0,
+        0.0,
+        11.38
+      ],
+      [
+        20.0,
+        5.0,
+        11.87
+      ]
+    ],
+    "dimensions_m": [
+      40.0,
+      5.0,
+      0.49
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 24,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+    "slug": "ceiling_deck_1",
+    "name_zh": "吊顶结构_1",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "吊顶结构_1_资产包",
+    "objects": [
+      "吊顶结构_1_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      7.5,
+      11.38
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -20.0,
+        5.0,
+        11.38
+      ],
+      [
+        20.0,
+        10.0,
+        11.87
+      ]
+    ],
+    "dimensions_m": [
+      40.0,
+      5.0,
+      0.49
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 24,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_2",
+    "slug": "ceiling_deck_2",
+    "name_zh": "吊顶结构_2",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "吊顶结构_2_资产包",
+    "objects": [
+      "吊顶结构_2_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      12.5,
+      11.38
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -20.0,
+        10.0,
+        11.38
+      ],
+      [
+        20.0,
+        15.0,
+        11.87
+      ]
+    ],
+    "dimensions_m": [
+      40.0,
+      5.0,
+      0.49
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 24,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+    "slug": "ceiling_ring_beam",
+    "name_zh": "吊顶周圈圈梁",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "吊顶周圈圈梁_资产包",
+    "objects": [
+      "吊顶周圈圈梁_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      0.0,
+      11.15
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -20.0,
+        -15.35,
+        11.15
+      ],
+      [
+        20.0,
+        15.35,
+        11.75
+      ]
+    ],
+    "dimensions_m": [
+      40.0,
+      30.7,
+      0.6
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 7,
+    "reference_cutaway_hidden": true,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+    "slug": "ceiling_service_cable_tray",
+    "name_zh": "顶部电缆桥架与线缆",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "顶部电缆桥架与线缆_资产包",
+    "objects": [
+      "顶部电缆桥架与线缆_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      1.0,
+      10.195
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -18.0,
+        -12.0,
+        10.195
+      ],
+      [
+        18.0,
+        14.0,
+        11.55
+      ]
+    ],
+    "dimensions_m": [
+      36.0,
+      26.0,
+      1.355
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 43,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+    "slug": "ceiling_service_pipe_run",
+    "name_zh": "顶部管道与法兰",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "顶部管道与法兰_资产包",
+    "objects": [
+      "顶部管道与法兰_主体"
+    ],
+    "world_origin_m": [
+      -0.015000000000000568,
+      2.5,
+      9.86797
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -11.89,
+        -9.0,
+        9.86797
+      ],
+      [
+        11.86,
+        14.0,
+        11.095
+      ]
+    ],
+    "dimensions_m": [
+      23.75,
+      23.0,
+      1.22703
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 57,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+    "slug": "ceiling_service_duct",
+    "name_zh": "顶部通风管与风口",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "顶部通风管与风口_资产包",
+    "objects": [
+      "顶部通风管与风口_主体"
+    ],
+    "world_origin_m": [
+      3.6,
+      1.5,
+      10.3825
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        2.886,
+        -10.5,
+        10.3825
+      ],
+      [
+        4.314,
+        13.5,
+        11.24
+      ]
+    ],
+    "dimensions_m": [
+      1.428,
+      24.0,
+      0.8575
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 41,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+    "slug": "ceiling_lighting",
+    "name_zh": "顶部灯具",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "顶部灯具_资产包",
+    "objects": [
+      "顶部灯具_主体",
+      "顶部灯具_自发光"
+    ],
+    "world_origin_m": [
+      0.0,
+      2.5,
+      10.435
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -19.0,
+        -6.68,
+        10.435
+      ],
+      [
+        19.0,
+        11.68,
+        10.89
+      ]
+    ],
+    "dimensions_m": [
+      38.0,
+      18.36,
+      0.455
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 80,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+    "slug": "wall_top_service",
+    "name_zh": "墙顶管线收口",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "墙顶管线收口_资产包",
+    "objects": [
+      "墙顶管线收口_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      0.0,
+      11.15
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -19.7,
+        -14.7,
+        11.15
+      ],
+      [
+        19.7,
+        14.7,
+        11.95
+      ]
+    ],
+    "dimensions_m": [
+      39.4,
+      29.4,
+      0.8
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 56,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  },
+  {
+    "package_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+    "slug": "corner_guard",
+    "name_zh": "转角护柱",
+    "category": "support",
+    "version": "v002",
+    "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+    "collection": "转角护柱_资产包",
+    "objects": [
+      "转角护柱_主体"
+    ],
+    "world_origin_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "local_origin": "bottom_center",
+    "provenance": "authored_here",
+    "world_bounds_m": [
+      [
+        -19.79,
+        -14.79,
+        0.0
+      ],
+      [
+        19.79,
+        14.79,
+        2.2
+      ]
+    ],
+    "dimensions_m": [
+      39.58,
+      29.58,
+      2.2
+    ],
+    "materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "source_piece_count": 30,
+    "reference_cutaway_hidden": false,
+    "collision_owner": "self",
+    "visual_only": false,
+    "collision_exported": false,
+    "exported": false,
+    "dependencies": []
+  }
+]

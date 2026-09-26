@@ -1,0 +1,987 @@
+{
+  "status": "CONDITIONAL_PASS",
+  "task_level_status": "PASS",
+  "strict_validator_status": "FAIL_NO_UNUSED_MATERIALS_SCOPE_LIMITATION",
+  "strict_validator_note": "validate_game_prop.py --all-meshes only walks scene.objects; linked collection-instance meshes/materials are audited separately in linked_dependency_audit and must not be deleted",
+  "checks": {
+    "template_dimensions_locked": true,
+    "footprint_variant_is_db_01": true,
+    "footprint_area_1050": true,
+    "wall_bays_28": true,
+    "door_wall_piece_1": true,
+    "wall_bays_on_outline": true,
+    "wall_bays_echo_template_lanes": true,
+    "floor_tiles_42": true,
+    "floor_tiles_inside_footprint": true,
+    "floor_tiles_unique": true,
+    "floor_tiles_5m_grid": true,
+    "linked_library_single": true,
+    "linked_from_office_room": true,
+    "linked_collections_are_library_owned": true,
+    "no_local_wall_or_tile_meshes": true,
+    "facilities_inside_footprint": true,
+    "perimeter_furniture_avoids_door_lanes": true,
+    "door_contract_matches_whitebox": true,
+    "openable_lanes_match_template": true,
+    "palette_external_unique": true,
+    "four_local_materials": true,
+    "all_packages_nonempty": true,
+    "categories_present": true,
+    "output_uv_and_material_slots": true,
+    "one_package_per_output": true,
+    "disk_collection_count": true
+  },
+  "measured": {
+    "footprint_area_m2": 1050.0,
+    "wall_bay_count": 28,
+    "door_wall_count": 1,
+    "floor_tile_count": 42,
+    "linked_instance_count": 28,
+    "controlled_derived_instance_count": 42,
+    "authored_package_count": 86,
+    "output_meshes": 148,
+    "source_piece_count": 1932,
+    "output_faces": 123808,
+    "wall_src_distinct": 20,
+    "tile_src_distinct": 32
+  },
+  "linked_reference": {
+    "library": "assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\office_room\\v001\\办公室房间种类_开放办公_30x40m_v001.blend",
+    "distinct_wall_bays": [
+      "door_wall",
+      "east_墙体_-1",
+      "east_墙体_-2",
+      "east_墙体_-3",
+      "east_墙体_0",
+      "east_墙体_1",
+      "east_墙体_2",
+      "north_墙体_-1",
+      "north_墙体_-2",
+      "north_墙体_1",
+      "south_墙体_-1",
+      "south_墙体_-2",
+      "south_墙体_0",
+      "south_墙体_1",
+      "west_墙体_-1",
+      "west_墙体_-2",
+      "west_墙体_-3",
+      "west_墙体_0",
+      "west_墙体_1",
+      "west_墙体_2"
+    ],
+    "distinct_floor_tiles": [
+      "tile_-1_-1",
+      "tile_-1_-2",
+      "tile_-1_-3",
+      "tile_-1_0",
+      "tile_-1_1",
+      "tile_-1_2",
+      "tile_-2_-1",
+      "tile_-2_-2",
+      "tile_-2_0",
+      "tile_-2_1",
+      "tile_-2_2",
+      "tile_-3_-1",
+      "tile_-3_-2",
+      "tile_-3_0",
+      "tile_-3_1",
+      "tile_-3_2",
+      "tile_0_-1",
+      "tile_0_-2",
+      "tile_0_-3",
+      "tile_0_0",
+      "tile_0_1",
+      "tile_0_2",
+      "tile_1_-1",
+      "tile_1_-2",
+      "tile_1_0",
+      "tile_1_1",
+      "tile_1_2",
+      "tile_2_-1",
+      "tile_2_-2",
+      "tile_2_0",
+      "tile_2_1",
+      "tile_2_2"
+    ],
+    "instances": 28
+  },
+  "scope_lock": {
+    "whitebox_sha256": "239729b1f901720a05a5f758e021b3afe36174b7d9659ee311ddde3667593a69",
+    "reference_sha256": "7915c3e262fd9ece88969ba275ab45a21c865985ba8fdab8782fff0e1d017762",
+    "office_library_blend_sha256": "4cf7138d0010405202d9cb9dd2aef0af9a676984ceeb90501b5a8d92304ed95f",
+    "method": "all new art geometry authorized for authoring; office wall geometry remains Library Link; floor tile geometry is controlled-derived with only authorized white diagonal faces removed; preserve whitebox, office source and reference by hash",
+    "locked_input_sha256": {
+      "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\office_room\\v001\\办公室房间种类_开放办公_30x40m_v001.blend": "4cf7138d0010405202d9cb9dd2aef0af9a676984ceeb90501b5a8d92304ed95f",
+      "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\whitebox\\tower_zones\\expedition_01\\v001\\data\\room_templates\\db_70x50.json": "239729b1f901720a05a5f758e021b3afe36174b7d9659ee311ddde3667593a69",
+      "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+      "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\db_room\\v001\\build_db_room_v001.py": "3aabe31ecb573bff2d2fe36a282b34a8e817a8103ce7780efa069bd16cb44bef"
+    }
+  },
+  "visual_review": {
+    "status": "reviewed_latest_render_conditional",
+    "views": [
+      "reference_match_isometric",
+      "top_plan",
+      "cutaway_sw",
+      "west_rack_row",
+      "east_workbench",
+      "centre_workshop",
+      "tab_entry"
+    ],
+    "reference": "C:\\Users\\zhuangmenghong\\.workbuddy\\clipboard-images\\clipboard-2026-09-26T00-27-59-762Z-dddf2da5.jpg",
+    "fixed_camera_setup": "reference-match camera plus six retained v001 comparison cameras",
+    "deepening": [
+      "rear-left continuous six-rack bank with three service carts",
+      "rear-right continuous L repair bench with three screens and tool boards",
+      "compact double-sided central repair island with two service carts",
+      "raised service platform with gantry in the right-front annex",
+      "independent shelves, terminal and cable reels",
+      "controlled-derived tiles remove only white diagonal marker geometry"
+    ]
+  },
+  "palette_texture": {
+    "image": "设施低亮多巴胺色盘_10x10_512.png",
+    "filepath": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+    "is_relative": false,
+    "packed": false,
+    "materials_bound": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "interpolation": "Closest",
+    "uv_map": "PaletteUV"
+  },
+  "runtime_integration": false,
+  "linked_dependency_audit": {
+    "linked_collection_count": 20,
+    "linked_mesh_object_count": 40,
+    "linked_materials": [
+      {
+        "name": "01_精工金属_紫色骨架",
+        "library": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\office_room\\v001\\办公室房间种类_开放办公_30x40m_v001.blend",
+        "users": 20
+      },
+      {
+        "name": "02_细腻哑光_青绿大面",
+        "library": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\office_room\\v001\\办公室房间种类_开放办公_30x40m_v001.blend",
+        "users": 20
+      },
+      {
+        "name": "03_清漆反光_紫粉点缀",
+        "library": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\office_room\\v001\\办公室房间种类_开放办公_30x40m_v001.blend",
+        "users": 20
+      },
+      {
+        "name": "04_柔和自发光_UI灯光",
+        "library": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\office_room\\v001\\办公室房间种类_开放办公_30x40m_v001.blend",
+        "users": 20
+      }
+    ],
+    "linked_mesh_uv_audit": [
+      {
+        "object": "east_墙体_-1_主体",
+        "mesh": "east_墙体_-1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_-1_自发光",
+        "mesh": "east_墙体_-1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_-2_主体",
+        "mesh": "east_墙体_-2",
+        "palette_uv": true,
+        "faces": 2692,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_-2_自发光",
+        "mesh": "east_墙体_-2.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_-3_主体",
+        "mesh": "east_墙体_-3",
+        "palette_uv": true,
+        "faces": 2806,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_-3_自发光",
+        "mesh": "east_墙体_-3.001",
+        "palette_uv": true,
+        "faces": 162,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_0_主体",
+        "mesh": "east_墙体_0",
+        "palette_uv": true,
+        "faces": 2746,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_0_自发光",
+        "mesh": "east_墙体_0.001",
+        "palette_uv": true,
+        "faces": 162,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_1_主体",
+        "mesh": "east_墙体_1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_1_自发光",
+        "mesh": "east_墙体_1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_2_主体",
+        "mesh": "east_墙体_2",
+        "palette_uv": true,
+        "faces": 2692,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "east_墙体_2_自发光",
+        "mesh": "east_墙体_2.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "north_墙体_-1_主体",
+        "mesh": "north_墙体_-1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "north_墙体_-1_自发光",
+        "mesh": "north_墙体_-1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "north_墙体_-2_主体",
+        "mesh": "north_墙体_-2",
+        "palette_uv": true,
+        "faces": 2692,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "north_墙体_-2_自发光",
+        "mesh": "north_墙体_-2.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "north_墙体_1_主体",
+        "mesh": "north_墙体_1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "north_墙体_1_自发光",
+        "mesh": "north_墙体_1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_-1_主体",
+        "mesh": "south_墙体_-1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_-1_自发光",
+        "mesh": "south_墙体_-1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_-2_主体",
+        "mesh": "south_墙体_-2",
+        "palette_uv": true,
+        "faces": 2692,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_-2_自发光",
+        "mesh": "south_墙体_-2.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_0_主体",
+        "mesh": "south_墙体_0",
+        "palette_uv": true,
+        "faces": 2746,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_0_自发光",
+        "mesh": "south_墙体_0.001",
+        "palette_uv": true,
+        "faces": 162,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_1_主体",
+        "mesh": "south_墙体_1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "south_墙体_1_自发光",
+        "mesh": "south_墙体_1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_-1_主体",
+        "mesh": "west_墙体_-1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_-1_自发光",
+        "mesh": "west_墙体_-1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_-2_主体",
+        "mesh": "west_墙体_-2",
+        "palette_uv": true,
+        "faces": 2692,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_-2_自发光",
+        "mesh": "west_墙体_-2.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_-3_主体",
+        "mesh": "west_墙体_-3",
+        "palette_uv": true,
+        "faces": 2806,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_-3_自发光",
+        "mesh": "west_墙体_-3.001",
+        "palette_uv": true,
+        "faces": 162,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_0_主体",
+        "mesh": "west_墙体_0",
+        "palette_uv": true,
+        "faces": 2746,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_0_自发光",
+        "mesh": "west_墙体_0.001",
+        "palette_uv": true,
+        "faces": 162,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_1_主体",
+        "mesh": "west_墙体_1",
+        "palette_uv": true,
+        "faces": 2752,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_1_自发光",
+        "mesh": "west_墙体_1.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_2_主体",
+        "mesh": "west_墙体_2",
+        "palette_uv": true,
+        "faces": 2692,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "west_墙体_2_自发光",
+        "mesh": "west_墙体_2.001",
+        "palette_uv": true,
+        "faces": 108,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "门洞墙件_可复用_主体",
+        "mesh": "门洞墙件_可复用",
+        "palette_uv": true,
+        "faces": 3070,
+        "strict_uv_pass": true
+      },
+      {
+        "object": "门洞墙件_可复用_自发光",
+        "mesh": "门洞墙件_可复用.001",
+        "palette_uv": true,
+        "faces": 216,
+        "strict_uv_pass": true
+      }
+    ],
+    "strict_uv_pass": true,
+    "linked_material_dependency_pass": true,
+    "scope": "task-level recursive dependency audit; generic validator --all-meshes does not traverse collection instances"
+  },
+  "tile_derivation_audit": [
+    {
+      "source_package": "地砖_-1_-3_资产包",
+      "source_object": "地砖_-1_-3_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_-3_资产包",
+      "source_object": "地砖_-1_-3_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_-3_资产包",
+      "source_object": "地砖_0_-3_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_-3_资产包",
+      "source_object": "地砖_0_-3_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_-2_资产包",
+      "source_object": "地砖_2_-2_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_-2_资产包",
+      "source_object": "地砖_2_-2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_-2_资产包",
+      "source_object": "地砖_-3_-2_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_-2_资产包",
+      "source_object": "地砖_-3_-2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_-2_资产包",
+      "source_object": "地砖_-2_-2_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_-2_资产包",
+      "source_object": "地砖_-2_-2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_-2_资产包",
+      "source_object": "地砖_-1_-2_主体",
+      "source_faces": 1079,
+      "removed_faces": 0,
+      "retained_faces": 1079,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_-2_资产包",
+      "source_object": "地砖_-1_-2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_-2_资产包",
+      "source_object": "地砖_0_-2_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_-2_资产包",
+      "source_object": "地砖_0_-2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_-2_资产包",
+      "source_object": "地砖_1_-2_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_-2_资产包",
+      "source_object": "地砖_1_-2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_-1_资产包",
+      "source_object": "地砖_2_-1_主体",
+      "source_faces": 1079,
+      "removed_faces": 0,
+      "retained_faces": 1079,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_-1_资产包",
+      "source_object": "地砖_2_-1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_-1_资产包",
+      "source_object": "地砖_-3_-1_主体",
+      "source_faces": 1619,
+      "removed_faces": 540,
+      "retained_faces": 1079,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_-1_资产包",
+      "source_object": "地砖_-3_-1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_-1_资产包",
+      "source_object": "地砖_-2_-1_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_-1_资产包",
+      "source_object": "地砖_-2_-1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_-1_资产包",
+      "source_object": "地砖_-1_-1_主体",
+      "source_faces": 1727,
+      "removed_faces": 540,
+      "retained_faces": 1187,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_-1_资产包",
+      "source_object": "地砖_-1_-1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_-1_资产包",
+      "source_object": "地砖_0_-1_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_-1_资产包",
+      "source_object": "地砖_0_-1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_-1_资产包",
+      "source_object": "地砖_1_-1_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_-1_资产包",
+      "source_object": "地砖_1_-1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_0_资产包",
+      "source_object": "地砖_2_0_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_0_资产包",
+      "source_object": "地砖_2_0_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_0_资产包",
+      "source_object": "地砖_-3_0_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_0_资产包",
+      "source_object": "地砖_-3_0_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_0_资产包",
+      "source_object": "地砖_-2_0_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_0_资产包",
+      "source_object": "地砖_-2_0_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_0_资产包",
+      "source_object": "地砖_-1_0_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_0_资产包",
+      "source_object": "地砖_-1_0_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_0_资产包",
+      "source_object": "地砖_0_0_主体",
+      "source_faces": 1619,
+      "removed_faces": 540,
+      "retained_faces": 1079,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_0_资产包",
+      "source_object": "地砖_0_0_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_0_资产包",
+      "source_object": "地砖_1_0_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_0_资产包",
+      "source_object": "地砖_1_0_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_1_资产包",
+      "source_object": "地砖_2_1_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_1_资产包",
+      "source_object": "地砖_2_1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_1_资产包",
+      "source_object": "地砖_-3_1_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_1_资产包",
+      "source_object": "地砖_-3_1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_1_资产包",
+      "source_object": "地砖_-2_1_主体",
+      "source_faces": 1079,
+      "removed_faces": 0,
+      "retained_faces": 1079,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_1_资产包",
+      "source_object": "地砖_-2_1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_1_资产包",
+      "source_object": "地砖_-1_1_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_1_资产包",
+      "source_object": "地砖_-1_1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_1_资产包",
+      "source_object": "地砖_0_1_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_1_资产包",
+      "source_object": "地砖_0_1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_1_资产包",
+      "source_object": "地砖_1_1_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_1_资产包",
+      "source_object": "地砖_1_1_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_2_资产包",
+      "source_object": "地砖_2_2_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_2_2_资产包",
+      "source_object": "地砖_2_2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_2_资产包",
+      "source_object": "地砖_-3_2_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-3_2_资产包",
+      "source_object": "地砖_-3_2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_2_资产包",
+      "source_object": "地砖_-2_2_主体",
+      "source_faces": 1079,
+      "removed_faces": 540,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-2_2_资产包",
+      "source_object": "地砖_-2_2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_2_资产包",
+      "source_object": "地砖_-1_2_主体",
+      "source_faces": 539,
+      "removed_faces": 0,
+      "retained_faces": 539,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_-1_2_资产包",
+      "source_object": "地砖_-1_2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_2_资产包",
+      "source_object": "地砖_0_2_主体",
+      "source_faces": 1727,
+      "removed_faces": 540,
+      "retained_faces": 1187,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_0_2_资产包",
+      "source_object": "地砖_0_2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_2_资产包",
+      "source_object": "地砖_1_2_主体",
+      "source_faces": 1079,
+      "removed_faces": 0,
+      "retained_faces": 1079,
+      "retained_geometry_uv_material_exact": true
+    },
+    {
+      "source_package": "地砖_1_2_资产包",
+      "source_object": "地砖_1_2_自发光",
+      "source_faces": 216,
+      "removed_faces": 0,
+      "retained_faces": 216,
+      "retained_geometry_uv_material_exact": true
+    }
+  ],
+  "saved_display_objects": {
+    "camera_count": 7,
+    "light_count": 12,
+    "active_camera": "参考镜头_用户参考匹配"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER",
+  "slug": "bridge_girder",
+  "name_zh": "桥侧连续箱梁",
+  "room_type": "BRIDGE_ROOM",
+  "serves_room_types": [
+    "BRIDGE_ROOM"
+  ],
+  "scope": "shared",
+  "instance_count": 2,
+  "absorbed_variants": [
+    "bridge_girder_1"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "collection": "bridge_girder_输出包",
+  "bounds_size_m": [
+    0.62,
+    30.0,
+    1.1
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER_-1",
+  "source_library": "v005"
+}

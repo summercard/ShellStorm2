@@ -1,0 +1,23 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_corner_ambush",
+  "note": "角落包夹（小盒 3×3 m）：近战×2 贴身起手，共 2 只。盒小、可多摆，一房数个即形成多点包夹。",
+  "shape": "box",
+  "size_m": [
+    3.0,
+    3.0,
+    3.0
+  ],
+  "spawns": [
+    {
+      "type": "melee_chaser",
+      "count": 2,
+      "delay_sec": 0.0
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.7,
+    "wall_recess_tiles": 1
+  }
+}

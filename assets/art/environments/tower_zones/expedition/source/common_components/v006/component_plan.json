@@ -1,0 +1,541 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "source_library": "ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v004",
+  "max_variants_per_family": 3,
+  "sim_tol_m": 0.1,
+  "package_count": 106,
+  "component_count": 25,
+  "families": [
+    {
+      "family": "tile",
+      "variants_before": 48,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-3",
+          "slug": "tile_-1_-3",
+          "bounds_size_m": [
+            5.0,
+            5.0,
+            0.407
+          ],
+          "absorbed": [
+            "tile_-1_-4",
+            "tile_-1_0",
+            "tile_-1_1",
+            "tile_-1_2",
+            "tile_-2_-1",
+            "tile_-2_-2",
+            "tile_-2_-3",
+            "tile_-2_0",
+            "tile_-2_2",
+            "tile_-2_3",
+            "tile_-3_-2",
+            "tile_-3_-3",
+            "tile_-3_-4",
+            "tile_-3_0",
+            "tile_-3_1",
+            "tile_-3_2",
+            "tile_-3_3",
+            "tile_0_-1",
+            "tile_0_-2",
+            "tile_0_-3",
+            "tile_0_-4",
+            "tile_0_1",
+            "tile_0_3",
+            "tile_1_-1",
+            "tile_1_-4",
+            "tile_1_0",
+            "tile_1_1",
+            "tile_1_3",
+            "tile_2_-2",
+            "tile_2_-3",
+            "tile_2_-4",
+            "tile_2_0",
+            "tile_2_1",
+            "tile_2_2",
+            "tile_2_3",
+            "tile_-1_-2",
+            "tile_-1_3",
+            "tile_-2_-4",
+            "tile_-2_1",
+            "tile_-3_-1",
+            "tile_0_0",
+            "tile_1_2",
+            "tile_2_-1",
+            "tile_-1_-1",
+            "tile_0_2",
+            "tile_1_-2",
+            "tile_1_-3"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "wall",
+      "variants_before": 27,
+      "variants_after": 3,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-2",
+          "slug": "wall_east_-2",
+          "bounds_size_m": [
+            0.615,
+            5.0,
+            11.9
+          ],
+          "absorbed": [
+            "wall_east_0",
+            "wall_east_2",
+            "wall_north_-2",
+            "wall_south_-2",
+            "wall_south_0",
+            "wall_west_-2",
+            "wall_west_-4",
+            "wall_west_0",
+            "wall_west_2",
+            "wall_east_-4",
+            "wall_east_-1",
+            "wall_east_-3",
+            "wall_east_1",
+            "wall_east_3",
+            "wall_north_-1",
+            "wall_north_-3",
+            "wall_north_1",
+            "wall_north_2",
+            "wall_south_-1",
+            "wall_south_1",
+            "wall_west_-1",
+            "wall_west_-3",
+            "wall_west_1",
+            "wall_west_3"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_2",
+          "slug": "wall_south_2",
+          "bounds_size_m": [
+            5.0,
+            0.97,
+            11.9
+          ],
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-3",
+          "slug": "wall_south_-3",
+          "bounds_size_m": [
+            5.0,
+            1.11,
+            11.9
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_deck",
+      "variants_before": 8,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-1",
+          "slug": "ceiling_deck_-1",
+          "bounds_size_m": [
+            30.0,
+            5.0,
+            0.393
+          ],
+          "absorbed": [
+            "ceiling_deck_-2",
+            "ceiling_deck_-3",
+            "ceiling_deck_-4",
+            "ceiling_deck_0",
+            "ceiling_deck_1",
+            "ceiling_deck_2",
+            "ceiling_deck_3"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "work_cluster",
+      "variants_before": 4,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_A",
+          "slug": "work_cluster_a",
+          "bounds_size_m": [
+            5.8,
+            2.44,
+            1.67
+          ],
+          "absorbed": [
+            "work_cluster_b",
+            "work_cluster_c",
+            "work_cluster_d"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "door_wall",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+          "slug": "door_wall",
+          "bounds_size_m": [
+            5.0,
+            0.615,
+            11.9
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "filing_run",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN_WEST",
+          "slug": "filing_run_west",
+          "bounds_size_m": [
+            0.765,
+            39.38,
+            3.05
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "locker_bank",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK_NORTH",
+          "slug": "locker_bank_north",
+          "bounds_size_m": [
+            2.1,
+            0.81,
+            2.56
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "planting_perimeter",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+          "slug": "planting_perimeter",
+          "bounds_size_m": [
+            28.206,
+            35.598,
+            1.34
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "power_cabinet_bank",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK_SOUTH",
+          "slug": "power_cabinet_bank_south",
+          "bounds_size_m": [
+            3.1,
+            0.91,
+            3.82
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "prep_bench",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH_EAST",
+          "slug": "prep_bench_east",
+          "bounds_size_m": [
+            0.9,
+            3.4,
+            1.91
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "printer_station",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+          "slug": "printer_station",
+          "bounds_size_m": [
+            1.66,
+            0.965,
+            2.39
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "shelving",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING_SOUTH",
+          "slug": "shelving_south",
+          "bounds_size_m": [
+            1.8,
+            0.6,
+            2.68
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "totem_column",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+          "slug": "totem_column",
+          "bounds_size_m": [
+            0.86,
+            0.86,
+            2.98
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "water_and_supply_corner",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+          "slug": "water_and_supply_corner",
+          "bounds_size_m": [
+            3.62,
+            3.36,
+            1.88
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "floor_zone_mark",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+          "slug": "floor_zone_mark",
+          "bounds_size_m": [
+            26.816,
+            20.216,
+            0.092
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_lighting",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+          "slug": "ceiling_lighting",
+          "bounds_size_m": [
+            28.8,
+            30.34,
+            0.455
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_ring_beam",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+          "slug": "ceiling_ring_beam",
+          "bounds_size_m": [
+            30.0,
+            40.0,
+            0.6
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_service_cable_tray",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+          "slug": "ceiling_service_cable_tray",
+          "bounds_size_m": [
+            14.46,
+            38.6,
+            1.11
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_service_duct",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+          "slug": "ceiling_service_duct",
+          "bounds_size_m": [
+            1.308,
+            37.8,
+            0.858
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_service_pipe_run",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+          "slug": "ceiling_service_pipe_run",
+          "bounds_size_m": [
+            22.92,
+            38.0,
+            1.244
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "corner_guard",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+          "slug": "corner_guard",
+          "bounds_size_m": [
+            29.62,
+            39.62,
+            2.2
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "floor_service",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+          "slug": "floor_service",
+          "bounds_size_m": [
+            27.0,
+            38.0,
+            0.028
+          ],
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_top_service",
+      "variants_before": 1,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+          "slug": "wall_top_service",
+          "bounds_size_m": [
+            29.4,
+            39.4,
+            0.7
+          ],
+          "absorbed": []
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "naming_violation_count": 88,
+    "front_axis_non_enum_count": 106,
+    "rotation_locked_count": 105,
+    "over_limit_families": [
+      "wall",
+      "work_cluster",
+      "tile",
+      "ceiling_deck"
+    ]
+  }
+}

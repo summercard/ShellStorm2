@@ -1,0 +1,55 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X780",
+  "slug": "wall_x780",
+  "name_zh": "墙体 0.78×5.00×11.90m",
+  "room_type": "BRIDGE_ROOM",
+  "serves_room_types": [
+    "BRIDGE_ROOM"
+  ],
+  "scope": "shared",
+  "instance_count": 18,
+  "absorbed_variants": [
+    "wall_east_-4",
+    "wall_east_-6",
+    "wall_east_0",
+    "wall_east_2",
+    "wall_east_4",
+    "wall_north_-2",
+    "wall_north_0",
+    "wall_north_2",
+    "wall_south_-2",
+    "wall_south_0",
+    "wall_south_2",
+    "wall_west_-2",
+    "wall_west_-4",
+    "wall_west_-6",
+    "wall_west_0",
+    "wall_west_2",
+    "wall_west_4"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "collection": "wall_x780_输出包",
+  "bounds_size_m": [
+    0.78,
+    5.0,
+    11.9
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_EAST_-2",
+  "source_library": "v005"
+}

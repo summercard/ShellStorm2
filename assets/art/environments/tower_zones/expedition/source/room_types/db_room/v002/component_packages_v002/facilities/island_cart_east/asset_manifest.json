@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+  "slug": "island_cart_east",
+  "name_zh": "维修岛服务车_东",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "维修岛服务车_东_资产包",
+  "objects": [
+    "维修岛服务车_东_主体"
+  ],
+  "world_origin_m": [
+    4.15,
+    -0.8125,
+    -0.0085
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      3.74,
+      -1.445,
+      -0.0085
+    ],
+    [
+      4.56,
+      -0.18,
+      1.08
+    ]
+  ],
+  "dimensions_m": [
+    0.82,
+    1.265,
+    1.0885
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 13,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

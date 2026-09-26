@@ -1,0 +1,2906 @@
+{
+  "schema": "shellstorm2.component_catalog.v001",
+  "component_library": "expedition_db_room_components_source_v003.blend",
+  "room_type": "DB_ROOM",
+  "block_id": "expedition",
+  "version": "v003",
+  "source_room_type": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+  "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+  "source_package_list": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/component_packages_v001/facilities",
+  "runtime_connected": false,
+  "ledger_registration": "pending",
+  "packages": [
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-BENCH_ANNEX_SOUTHWEST",
+      "asset_id": "ENV-EXPEDITION-L01-DB-BENCH_ANNEX_SOUTHWEST",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/bench_annex_southwest/bench_annex_southwest.blend",
+      "collection": "西南附区作业台_输出包",
+      "editable_collection": "西南附区作业台_制作源",
+      "root_object": "ROOT_bench_annex_southwest_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-BENCH_ANNEX_SOUTHWEST",
+      "slug": "bench_annex_southwest",
+      "name_zh": "西南附区作业台",
+      "category": "facilities",
+      "bounds_size_m": [
+        5.05,
+        1.065001,
+        1.845
+      ],
+      "bounds_lo_m": [
+        -2.525,
+        -0.5325,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.525001,
+        0.5325,
+        1.845
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "西南附区作业台_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        -15.645,
+        -7.8125,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "西南附区作业台_输出_部件00",
+        "西南附区作业台_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "fec4c28d18461d58e4adf47f9aeba73c0e161e04bfb35fd4e61759aede42a243"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/cable_coil_wall/cable_coil_wall.blend",
+      "collection": "壁挂电缆线圈_输出包",
+      "editable_collection": "壁挂电缆线圈_制作源",
+      "root_object": "ROOT_cable_coil_wall_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "slug": "cable_coil_wall",
+      "name_zh": "壁挂电缆线圈",
+      "category": "facilities",
+      "bounds_size_m": [
+        0.68,
+        5.720002,
+        0.673079
+      ],
+      "bounds_lo_m": [
+        -0.34,
+        -2.860001,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.34,
+        2.860001,
+        0.673079
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        19.66,
+        8.9,
+        3.51346
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "壁挂电缆线圈_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "2652f3b6a53427754b5b07c5a8f43c942125f6c140b300a2eb150523c4866e8a"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_REEL_FLOOR",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CABLE_REEL_FLOOR",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/cable_reel_floor/cable_reel_floor.blend",
+      "collection": "落地电缆盘与线圈_输出包",
+      "editable_collection": "落地电缆盘与线圈_制作源",
+      "root_object": "ROOT_cable_reel_floor_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CABLE_REEL_FLOOR",
+      "slug": "cable_reel_floor",
+      "name_zh": "落地电缆盘与线圈",
+      "category": "facilities",
+      "bounds_size_m": [
+        4.731779,
+        3.605129,
+        1.38
+      ],
+      "bounds_lo_m": [
+        -2.36589,
+        -1.802565,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.36589,
+        1.802565,
+        1.38
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        -0.35548999999999986,
+        -10.991985,
+        -0.23
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "落地电缆盘与线圈_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "c20f3c5c6574e06b76909c84fd8b53861877d4861233cb1e1912913faf06a0d4"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CENTER_WORKTABLE",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CENTER_WORKTABLE",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/center_worktable/center_worktable.blend",
+      "collection": "中央作业台_输出包",
+      "editable_collection": "中央作业台_制作源",
+      "root_object": "ROOT_center_worktable_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CENTER_WORKTABLE",
+      "slug": "center_worktable",
+      "name_zh": "中央作业台",
+      "category": "facilities",
+      "bounds_size_m": [
+        4.3,
+        1.72,
+        1.909441
+      ],
+      "bounds_lo_m": [
+        -2.15,
+        -0.86,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.15,
+        0.86,
+        1.909441
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "中央作业台_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        -3.6,
+        -3.17,
+        -0.00944
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "中央作业台_输出_部件00",
+        "中央作业台_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "50a8048978058a46fcda826bdc4edc5d5772ad205da8d1bcc54a311e750ae55b"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CONSOLE_TRIPOD",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CONSOLE_TRIPOD",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/console_tripod/console_tripod.blend",
+      "collection": "落地仪器三脚架_输出包",
+      "editable_collection": "落地仪器三脚架_制作源",
+      "root_object": "ROOT_console_tripod_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CONSOLE_TRIPOD",
+      "slug": "console_tripod",
+      "name_zh": "落地仪器三脚架",
+      "category": "facilities",
+      "bounds_size_m": [
+        18.224117,
+        3.906807,
+        1.258886
+      ],
+      "bounds_lo_m": [
+        -9.112059,
+        -1.953403,
+        0.0
+      ],
+      "bounds_hi_m": [
+        9.112059,
+        1.953403,
+        1.258886
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "落地仪器三脚架_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        -1.0265199999999997,
+        5.728595,
+        0.01111
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "落地仪器三脚架_输出_部件00",
+        "落地仪器三脚架_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "485ef9a8dbe29160dcb9fddb890a674749431d8790eb13757be13734e2b3b3f1"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CRATE_STACK_FIELD",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CRATE_STACK_FIELD",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/crate_stack_field/crate_stack_field.blend",
+      "collection": "货箱与周转箱堆场_输出包",
+      "editable_collection": "货箱与周转箱堆场_制作源",
+      "root_object": "ROOT_crate_stack_field_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CRATE_STACK_FIELD",
+      "slug": "crate_stack_field",
+      "name_zh": "货箱与周转箱堆场",
+      "category": "facilities",
+      "bounds_size_m": [
+        33.27,
+        21.045,
+        2.4625
+      ],
+      "bounds_lo_m": [
+        -16.635,
+        -10.5225,
+        0.0
+      ],
+      "bounds_hi_m": [
+        16.635,
+        10.5225,
+        2.4625
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.6749999999999989,
+        1.5774999999999997,
+        -0.19
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "货箱与周转箱堆场_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "454f44e1565b5e4b4851871a7ee017a5776613b4f4f6b49589a64a57f2747b80"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "asset_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/equipment_rack_ne/equipment_rack_ne.blend",
+      "collection": "东北设备机架_输出包",
+      "editable_collection": "东北设备机架_制作源",
+      "root_object": "ROOT_equipment_rack_ne_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "slug": "equipment_rack_ne",
+      "name_zh": "东北设备机架",
+      "category": "facilities",
+      "bounds_size_m": [
+        2.78,
+        1.067,
+        3.05
+      ],
+      "bounds_lo_m": [
+        -1.39,
+        -0.5335,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.389999,
+        0.533501,
+        3.05
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "东北设备机架_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        15.04,
+        9.3865,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "东北设备机架_输出_部件00",
+        "东北设备机架_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "b538ebd1ed816a9a05d8d5c5f769d16d2e2b4688cad7254b018019975990cabb"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-PARTS_DRAWER_CABINET",
+      "asset_id": "ENV-EXPEDITION-L01-DB-PARTS_DRAWER_CABINET",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/parts_drawer_cabinet/parts_drawer_cabinet.blend",
+      "collection": "多屉零件柜_输出包",
+      "editable_collection": "多屉零件柜_制作源",
+      "root_object": "ROOT_parts_drawer_cabinet_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-PARTS_DRAWER_CABINET",
+      "slug": "parts_drawer_cabinet",
+      "name_zh": "多屉零件柜",
+      "category": "facilities",
+      "bounds_size_m": [
+        3.27,
+        0.803999,
+        2.42
+      ],
+      "bounds_lo_m": [
+        -1.635,
+        -0.401999,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.635,
+        0.401999,
+        2.42
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        -16.805,
+        -9.341999999999999,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "多屉零件柜_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "3bb92de99389e5c5baee36bbcbcf67b25511299c438a6543c8326f83b9fcd70c"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-PLANTER_WHITE_PAIR",
+      "asset_id": "ENV-EXPEDITION-L01-DB-PLANTER_WHITE_PAIR",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/planter_white_pair/planter_white_pair.blend",
+      "collection": "白色花箱绿植_输出包",
+      "editable_collection": "白色花箱绿植_制作源",
+      "root_object": "ROOT_planter_white_pair_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-PLANTER_WHITE_PAIR",
+      "slug": "planter_white_pair",
+      "name_zh": "白色花箱绿植",
+      "category": "facilities",
+      "bounds_size_m": [
+        33.146469,
+        26.093399,
+        1.585
+      ],
+      "bounds_lo_m": [
+        -16.573235,
+        -13.0467,
+        0.0
+      ],
+      "bounds_hi_m": [
+        16.573235,
+        13.0467,
+        1.585
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.23323500000000053,
+        -0.23346,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "白色花箱绿植_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "90d80569bac5326583b404975aa7b9486a4f52dd50d9ef8269521ceff33f00cf"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RACK_CLUSTER_CENTER",
+      "asset_id": "ENV-EXPEDITION-L01-DB-RACK_CLUSTER_CENTER",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/rack_cluster_center/rack_cluster_center.blend",
+      "collection": "中部机柜组与推车_输出包",
+      "editable_collection": "中部机柜组与推车_制作源",
+      "root_object": "ROOT_rack_cluster_center_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RACK_CLUSTER_CENTER",
+      "slug": "rack_cluster_center",
+      "name_zh": "中部机柜组与推车",
+      "category": "facilities",
+      "bounds_size_m": [
+        6.08,
+        2.125,
+        2.870385
+      ],
+      "bounds_lo_m": [
+        -3.04,
+        -1.0625,
+        0.0
+      ],
+      "bounds_hi_m": [
+        3.04,
+        1.0625,
+        2.870385
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "中部机柜组与推车_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        -11.29,
+        -6.8725,
+        -0.01039
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "中部机柜组与推车_输出_部件00",
+        "中部机柜组与推车_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "3e95587f363fdb94ad0a346bbe224fa7ca255aca8aabc5942c2552d5360fa3c5"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_ROW",
+      "asset_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_ROW",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/server_rack_row/server_rack_row.blend",
+      "collection": "西侧机柜列_输出包",
+      "editable_collection": "西侧机柜列_制作源",
+      "root_object": "ROOT_server_rack_row_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_ROW",
+      "slug": "server_rack_row",
+      "name_zh": "西侧机柜列",
+      "category": "facilities",
+      "bounds_size_m": [
+        2.09,
+        12.6,
+        3.53
+      ],
+      "bounds_lo_m": [
+        -1.045,
+        -6.3,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.045,
+        6.3,
+        3.53
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "西侧机柜列_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        -17.055,
+        4.55,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "西侧机柜列_输出_部件00",
+        "西侧机柜列_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "ff6fb351206c6e43d406348841046543ea5817c88581fba50b0e0ec4e2053566"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "asset_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/shelving_heavy_north/shelving_heavy_north.blend",
+      "collection": "北墙重型货架_输出包",
+      "editable_collection": "北墙重型货架_制作源",
+      "root_object": "ROOT_shelving_heavy_north_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "slug": "shelving_heavy_north",
+      "name_zh": "北墙重型货架",
+      "category": "facilities",
+      "bounds_size_m": [
+        4.115,
+        0.88,
+        3.2
+      ],
+      "bounds_lo_m": [
+        -2.057501,
+        -0.44,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.057499,
+        0.440001,
+        3.2
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "北墙重型货架_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        -17.252499999999998,
+        13.57,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "北墙重型货架_输出_部件00",
+        "北墙重型货架_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "fdf6f76e254c475f1aa37f8144f1ddbea545df9144de9a2673585643ead8cfa2"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-TOOL_CART_YELLOW",
+      "asset_id": "ENV-EXPEDITION-L01-DB-TOOL_CART_YELLOW",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/tool_cart_yellow/tool_cart_yellow.blend",
+      "collection": "黄色工具推车与圆凳_输出包",
+      "editable_collection": "黄色工具推车与圆凳_制作源",
+      "root_object": "ROOT_tool_cart_yellow_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-TOOL_CART_YELLOW",
+      "slug": "tool_cart_yellow",
+      "name_zh": "黄色工具推车与圆凳",
+      "category": "facilities",
+      "bounds_size_m": [
+        33.257,
+        18.554634,
+        1.464441
+      ],
+      "bounds_lo_m": [
+        -16.6285,
+        -9.277317,
+        0.0
+      ],
+      "bounds_hi_m": [
+        16.6285,
+        9.277317,
+        1.464441
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        1.0134999999999996,
+        2.15,
+        -0.00944
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "黄色工具推车与圆凳_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "d3d939d974647f189ab07cef6b752260614b2dcff045cad582dcab25ff011a6b"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-TOOL_CHEST_RED_PAIR",
+      "asset_id": "ENV-EXPEDITION-L01-DB-TOOL_CHEST_RED_PAIR",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/tool_chest_red_pair/tool_chest_red_pair.blend",
+      "collection": "红色抽屉工具车_输出包",
+      "editable_collection": "红色抽屉工具车_制作源",
+      "root_object": "ROOT_tool_chest_red_pair_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-TOOL_CHEST_RED_PAIR",
+      "slug": "tool_chest_red_pair",
+      "name_zh": "红色抽屉工具车",
+      "category": "facilities",
+      "bounds_size_m": [
+        14.710001,
+        5.1,
+        1.050385
+      ],
+      "bounds_lo_m": [
+        -7.355,
+        -2.55,
+        0.0
+      ],
+      "bounds_hi_m": [
+        7.355,
+        2.55,
+        1.050385
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        1.6999999999999997,
+        -3.2,
+        -0.01039
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "红色抽屉工具车_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "5f1152d5d64e29a2aad49b42c1af85048d4bdf3162f6af2714691596884c53dc"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "asset_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/wall_light_pylon/wall_light_pylon.blend",
+      "collection": "墙面竖向冷光灯柱_输出包",
+      "editable_collection": "墙面竖向冷光灯柱_制作源",
+      "root_object": "ROOT_wall_light_pylon_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "slug": "wall_light_pylon",
+      "name_zh": "墙面竖向冷光灯柱",
+      "category": "facilities",
+      "bounds_size_m": [
+        39.600002,
+        24.6,
+        4.659999
+      ],
+      "bounds_lo_m": [
+        -19.800001,
+        -12.3,
+        0.0
+      ],
+      "bounds_hi_m": [
+        19.800001,
+        12.3,
+        4.659999
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "墙面竖向冷光灯柱_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        2.5,
+        3.07
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "墙面竖向冷光灯柱_输出_部件00",
+        "墙面竖向冷光灯柱_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "7893cf48dee1bef9a527d9b2cc607088884af5f735838682bb4a7db5a85d2926"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "asset_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/wall_screen_bank/wall_screen_bank.blend",
+      "collection": "壁挂大屏组_输出包",
+      "editable_collection": "壁挂大屏组_制作源",
+      "root_object": "ROOT_wall_screen_bank_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "slug": "wall_screen_bank",
+      "name_zh": "壁挂大屏组",
+      "category": "facilities",
+      "bounds_size_m": [
+        4.059999,
+        6.21,
+        1.425
+      ],
+      "bounds_lo_m": [
+        -2.029999,
+        -3.105,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.030001,
+        3.105,
+        1.425
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "壁挂大屏组_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        17.73,
+        11.655000000000001,
+        3.525
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "壁挂大屏组_输出_部件00",
+        "壁挂大屏组_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "4c783083a67a79dfb1ec49ef5d3534b0f9b58aad6b0ee996ea0559ec22c4bbbb"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "asset_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/wall_service_run/wall_service_run.blend",
+      "collection": "墙面管道与线束_输出包",
+      "editable_collection": "墙面管道与线束_制作源",
+      "root_object": "ROOT_wall_service_run_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "slug": "wall_service_run",
+      "name_zh": "墙面管道与线束",
+      "category": "facilities",
+      "bounds_size_m": [
+        39.540001,
+        23.469999,
+        6.55
+      ],
+      "bounds_lo_m": [
+        -19.77,
+        -11.735,
+        0.0
+      ],
+      "bounds_hi_m": [
+        19.77,
+        11.735,
+        6.55
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        3.035,
+        3.05
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "墙面管道与线束_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "81f09f1a53546997ccf1500411286f29a8943f7524f535260a7e618b217b6402"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "asset_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/workbench_l_east/workbench_l_east.blend",
+      "collection": "东墙L形工作台_输出包",
+      "editable_collection": "东墙L形工作台_制作源",
+      "root_object": "ROOT_workbench_l_east_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "slug": "workbench_l_east",
+      "name_zh": "东墙L形工作台",
+      "category": "facilities",
+      "bounds_size_m": [
+        4.295,
+        7.5,
+        5.68
+      ],
+      "bounds_lo_m": [
+        -2.147499,
+        -3.75,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.147501,
+        3.75,
+        5.68
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-X",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "东墙L形工作台_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        17.3275,
+        10.9,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "东墙L形工作台_输出_部件00",
+        "东墙L形工作台_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "-X",
+      "component_file_sha256": "ed662b761ad3ff9e90d8b33caf6c596426936b7d6135783b5612365a3929b2b2"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "asset_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/workbench_west/workbench_west.blend",
+      "collection": "西墙检修工作台_输出包",
+      "editable_collection": "西墙检修工作台_制作源",
+      "root_object": "ROOT_workbench_west_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "slug": "workbench_west",
+      "name_zh": "西墙检修工作台",
+      "category": "facilities",
+      "bounds_size_m": [
+        1.41,
+        4.4,
+        1.99
+      ],
+      "bounds_lo_m": [
+        -0.705,
+        -2.2,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.705,
+        2.2,
+        1.99
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "+X",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "西墙检修工作台_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        -19.225,
+        12.5,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "西墙检修工作台_输出_部件00",
+        "西墙检修工作台_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+X",
+      "component_file_sha256": "229e46135e9d502016f7a2c2e009bc970a18e549f925ac19043e6ebd0b217ef3"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/floor_conduit_run/floor_conduit_run.blend",
+      "collection": "地面线槽与检修盖板_输出包",
+      "editable_collection": "地面线槽与检修盖板_制作源",
+      "root_object": "ROOT_floor_conduit_run_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "slug": "floor_conduit_run",
+      "name_zh": "地面线槽与检修盖板",
+      "category": "floor",
+      "bounds_size_m": [
+        38.0,
+        24.0,
+        0.031
+      ],
+      "bounds_lo_m": [
+        -19.0,
+        -12.0,
+        0.0
+      ],
+      "bounds_hi_m": [
+        19.0,
+        12.0,
+        0.031
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "+Z",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "visual_only",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        2.5,
+        0.045
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "地面线槽与检修盖板_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Y",
+      "component_file_sha256": "9457868f1943a969ffffd2a01f3dbc332e2c95e3aab8de287076d82d4f7e19f6"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_GRATE_GRID",
+      "asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_GRATE_GRID",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/floor_grate_grid/floor_grate_grid.blend",
+      "collection": "地面格栅与检修口_输出包",
+      "editable_collection": "地面格栅与检修口_制作源",
+      "root_object": "ROOT_floor_grate_grid_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_GRATE_GRID",
+      "slug": "floor_grate_grid",
+      "name_zh": "地面格栅与检修口",
+      "category": "floor",
+      "bounds_size_m": [
+        32.115002,
+        14.379999,
+        0.082
+      ],
+      "bounds_lo_m": [
+        -16.057501,
+        -7.19,
+        0.0
+      ],
+      "bounds_hi_m": [
+        16.057501,
+        7.19,
+        0.082
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "+Z",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "visual_only",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        1.5524999999999993,
+        -0.9199999999999999,
+        0.049
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "地面格栅与检修口_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Y",
+      "component_file_sha256": "a775c2a205c51742518071d6e804dfe15481debf7504110d1dc151dc02bbee08"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/floor_hazard_edging/floor_hazard_edging.blend",
+      "collection": "沿墙黄黑警示边带_输出包",
+      "editable_collection": "沿墙黄黑警示边带_制作源",
+      "root_object": "ROOT_floor_hazard_edging_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "slug": "floor_hazard_edging",
+      "name_zh": "沿墙黄黑警示边带",
+      "category": "floor",
+      "bounds_size_m": [
+        39.200001,
+        29.190887,
+        0.0765
+      ],
+      "bounds_lo_m": [
+        -19.6,
+        -14.595444,
+        0.0
+      ],
+      "bounds_hi_m": [
+        19.6,
+        14.595444,
+        0.0765
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "+Z",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "visual_only",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        0.004554999999999865,
+        0.0075
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "沿墙黄黑警示边带_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Y",
+      "component_file_sha256": "de575642dceb763a0fb2c764d5e4602f6ae5a8847a058e5f3a019c609db5a84a"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_SERVICE_PIT",
+      "asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_SERVICE_PIT",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/floor_service_pit/floor_service_pit.blend",
+      "collection": "地面设备坑与抬升平台_输出包",
+      "editable_collection": "地面设备坑与抬升平台_制作源",
+      "root_object": "ROOT_floor_service_pit_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_SERVICE_PIT",
+      "slug": "floor_service_pit",
+      "name_zh": "地面设备坑与抬升平台",
+      "category": "floor",
+      "bounds_size_m": [
+        3.9,
+        3.22,
+        0.439
+      ],
+      "bounds_lo_m": [
+        -1.95,
+        -1.61,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.95,
+        1.61,
+        0.439
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "+Z",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "visual_only",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        12.600000000000001,
+        3.04,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "地面设备坑与抬升平台_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Y",
+      "component_file_sha256": "be68bd2fcf8901416a356ca0839976d513596b52d46daa973b4c21e44c887a68"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_ZONE_MARK",
+      "asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_ZONE_MARK",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/floor_zone_mark/floor_zone_mark.blend",
+      "collection": "地面分区标识_输出包",
+      "editable_collection": "地面分区标识_制作源",
+      "root_object": "ROOT_floor_zone_mark_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_ZONE_MARK",
+      "slug": "floor_zone_mark",
+      "name_zh": "地面分区标识",
+      "category": "floor",
+      "bounds_size_m": [
+        35.892559,
+        24.903757,
+        0.1
+      ],
+      "bounds_lo_m": [
+        -17.94628,
+        -12.451879,
+        0.0
+      ],
+      "bounds_hi_m": [
+        17.94628,
+        12.451879,
+        0.1
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "+Z",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "visual_only",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        -1.0943999999999994,
+        0.03
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "地面分区标识_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Y",
+      "component_file_sha256": "c5708281e970b35946b0fe7a2af5de3d5c9b1261fde8b8b32e9d27b909b827f5"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_deck_-1/ceiling_deck_-1.blend",
+      "collection": "吊顶结构_-1_输出包",
+      "editable_collection": "吊顶结构_-1_制作源",
+      "root_object": "ROOT_ceiling_deck_-1_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "slug": "ceiling_deck_-1",
+      "name_zh": "吊顶结构_-1",
+      "category": "support",
+      "bounds_size_m": [
+        40.0,
+        5.0,
+        0.49
+      ],
+      "bounds_lo_m": [
+        -20.0,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        20.0,
+        2.5,
+        0.49
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        -2.5,
+        11.38
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "吊顶结构_-1_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "68fefb5b166cd6787ac70d10d669d4959ebb5b7c5e75586815a0efa7a3cf9bdf"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_deck_-2/ceiling_deck_-2.blend",
+      "collection": "吊顶结构_-2_输出包",
+      "editable_collection": "吊顶结构_-2_制作源",
+      "root_object": "ROOT_ceiling_deck_-2_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+      "slug": "ceiling_deck_-2",
+      "name_zh": "吊顶结构_-2",
+      "category": "support",
+      "bounds_size_m": [
+        40.0,
+        5.0,
+        0.49
+      ],
+      "bounds_lo_m": [
+        -20.0,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        20.0,
+        2.5,
+        0.49
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        -7.5,
+        11.38
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "吊顶结构_-2_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "a93e79d08b35764a31f37729ac9d79d016489f2e192363bb095a21da8acc7baa"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_deck_-3/ceiling_deck_-3.blend",
+      "collection": "吊顶结构_-3_输出包",
+      "editable_collection": "吊顶结构_-3_制作源",
+      "root_object": "ROOT_ceiling_deck_-3_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "slug": "ceiling_deck_-3",
+      "name_zh": "吊顶结构_-3",
+      "category": "support",
+      "bounds_size_m": [
+        10.0,
+        5.0,
+        0.49
+      ],
+      "bounds_lo_m": [
+        -5.0,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        5.0,
+        2.5,
+        0.49
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        -12.5,
+        11.38
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "吊顶结构_-3_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "f4a3e6fa5c0a40330ba38dc832f0c628f7681b5ff177f8e59a185b71a22d3ff1"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_deck_0/ceiling_deck_0.blend",
+      "collection": "吊顶结构_0_输出包",
+      "editable_collection": "吊顶结构_0_制作源",
+      "root_object": "ROOT_ceiling_deck_0_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+      "slug": "ceiling_deck_0",
+      "name_zh": "吊顶结构_0",
+      "category": "support",
+      "bounds_size_m": [
+        40.0,
+        5.0,
+        0.49
+      ],
+      "bounds_lo_m": [
+        -20.0,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        20.0,
+        2.5,
+        0.49
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        2.5,
+        11.38
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "吊顶结构_0_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "d5566b472ab0d73a364b9c482f5a4b39a00dfd39e060416538ba3ba8f2b3f5f3"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_deck_1/ceiling_deck_1.blend",
+      "collection": "吊顶结构_1_输出包",
+      "editable_collection": "吊顶结构_1_制作源",
+      "root_object": "ROOT_ceiling_deck_1_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+      "slug": "ceiling_deck_1",
+      "name_zh": "吊顶结构_1",
+      "category": "support",
+      "bounds_size_m": [
+        40.0,
+        5.0,
+        0.49
+      ],
+      "bounds_lo_m": [
+        -20.0,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        20.0,
+        2.5,
+        0.49
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        7.5,
+        11.38
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "吊顶结构_1_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "d05ab2859c1508d05a4a474c06427e9e4a496a852d2d5ee0a51efe4b096f06f5"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_2",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_2",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_deck_2/ceiling_deck_2.blend",
+      "collection": "吊顶结构_2_输出包",
+      "editable_collection": "吊顶结构_2_制作源",
+      "root_object": "ROOT_ceiling_deck_2_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_2",
+      "slug": "ceiling_deck_2",
+      "name_zh": "吊顶结构_2",
+      "category": "support",
+      "bounds_size_m": [
+        40.0,
+        5.0,
+        0.49
+      ],
+      "bounds_lo_m": [
+        -20.0,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        20.0,
+        2.5,
+        0.49
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        12.5,
+        11.38
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "吊顶结构_2_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "8d84393ccda5a856f0d5592a9d0f9b81fb164552c04209c7120ca0364a8956bf"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_lighting/ceiling_lighting.blend",
+      "collection": "顶部灯具_输出包",
+      "editable_collection": "顶部灯具_制作源",
+      "root_object": "ROOT_ceiling_lighting_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "slug": "ceiling_lighting",
+      "name_zh": "顶部灯具",
+      "category": "support",
+      "bounds_size_m": [
+        38.0,
+        18.360001,
+        0.455001
+      ],
+      "bounds_lo_m": [
+        -19.0,
+        -9.18,
+        0.0
+      ],
+      "bounds_hi_m": [
+        19.0,
+        9.18,
+        0.455001
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [
+        "顶部灯具_输出_自发光"
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        2.5,
+        10.435
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "顶部灯具_输出_部件00",
+        "顶部灯具_输出_自发光"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "dcdbfad245d52a84840e501c6f15d7b26b29154ad7a04db050f19e0ee993c77b"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+      "collection": "吊顶周圈圈梁_输出包",
+      "editable_collection": "吊顶周圈圈梁_制作源",
+      "root_object": "ROOT_ceiling_ring_beam_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "slug": "ceiling_ring_beam",
+      "name_zh": "吊顶周圈圈梁",
+      "category": "support",
+      "bounds_size_m": [
+        40.0,
+        30.700001,
+        0.6
+      ],
+      "bounds_lo_m": [
+        -20.0,
+        -15.35,
+        0.0
+      ],
+      "bounds_hi_m": [
+        20.0,
+        15.35,
+        0.6
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        0.0,
+        11.15
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "吊顶周圈圈梁_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "f2edf983973b523dfbd23bbf180bb79a99a5407e54942f23ad114ea9af210256"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+      "collection": "顶部电缆桥架与线缆_输出包",
+      "editable_collection": "顶部电缆桥架与线缆_制作源",
+      "root_object": "ROOT_ceiling_service_cable_tray_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "slug": "ceiling_service_cable_tray",
+      "name_zh": "顶部电缆桥架与线缆",
+      "category": "support",
+      "bounds_size_m": [
+        36.0,
+        26.0,
+        1.355
+      ],
+      "bounds_lo_m": [
+        -18.0,
+        -13.0,
+        0.0
+      ],
+      "bounds_hi_m": [
+        18.0,
+        13.0,
+        1.355
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        1.0,
+        10.195
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "顶部电缆桥架与线缆_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "d020d9d2498b61faade3c985fdbdd58ed5007853ce0e56a047d8b1bf0af0f522"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+      "collection": "顶部通风管与风口_输出包",
+      "editable_collection": "顶部通风管与风口_制作源",
+      "root_object": "ROOT_ceiling_service_duct_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "slug": "ceiling_service_duct",
+      "name_zh": "顶部通风管与风口",
+      "category": "support",
+      "bounds_size_m": [
+        1.428,
+        24.0,
+        0.8575
+      ],
+      "bounds_lo_m": [
+        -0.714,
+        -12.0,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.714,
+        12.0,
+        0.8575
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        3.6,
+        1.5,
+        10.3825
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "顶部通风管与风口_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "2600c64bc2c3f8bf57fc87521494079fb1c82b0009f93ba02f3142c6beef6e98"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+      "collection": "顶部管道与法兰_输出包",
+      "editable_collection": "顶部管道与法兰_制作源",
+      "root_object": "ROOT_ceiling_service_pipe_run_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "slug": "ceiling_service_pipe_run",
+      "name_zh": "顶部管道与法兰",
+      "category": "support",
+      "bounds_size_m": [
+        23.75,
+        23.000002,
+        1.227033
+      ],
+      "bounds_lo_m": [
+        -11.875,
+        -11.500001,
+        0.0
+      ],
+      "bounds_hi_m": [
+        11.875,
+        11.500001,
+        1.227033
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        -0.015000000000000568,
+        2.5,
+        9.86797
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "顶部管道与法兰_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "14fe9a0af0f2946b39caef765ba4c4a9a4c17884482566f32ecb0ad8d1d63f74"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "asset_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/corner_guard/corner_guard.blend",
+      "collection": "转角护柱_输出包",
+      "editable_collection": "转角护柱_制作源",
+      "root_object": "ROOT_corner_guard_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "slug": "corner_guard",
+      "name_zh": "转角护柱",
+      "category": "support",
+      "bounds_size_m": [
+        39.579998,
+        29.58,
+        2.2
+      ],
+      "bounds_lo_m": [
+        -19.789999,
+        -14.79,
+        0.0
+      ],
+      "bounds_hi_m": [
+        19.789999,
+        14.79,
+        2.2
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "转角护柱_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "b9c161cfcf5420e1b5e9b63c3f0b19646d4723be798806588a9903f91e2537ba"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "asset_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "room_type": "DB_ROOM",
+      "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+      "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+      "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/wall_top_service/wall_top_service.blend",
+      "collection": "墙顶管线收口_输出包",
+      "editable_collection": "墙顶管线收口_制作源",
+      "root_object": "ROOT_wall_top_service_组件",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "slug": "wall_top_service",
+      "name_zh": "墙顶管线收口",
+      "category": "support",
+      "bounds_size_m": [
+        39.400002,
+        29.400002,
+        0.799999
+      ],
+      "bounds_lo_m": [
+        -19.700001,
+        -14.700001,
+        0.0
+      ],
+      "bounds_hi_m": [
+        19.700001,
+        14.700001,
+        0.799999
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "front_axis": "-Y",
+      "front_axis_coordinate_system": "Blender Z-up",
+      "allowed_rotations_y_deg": [
+        0
+      ],
+      "allowed_rotations_blender_z_deg": [
+        0
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "emissive_objects": [],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_world_origin_m": [
+        0.0,
+        0.0,
+        11.15
+      ],
+      "version": "v003",
+      "collision": "not_authored",
+      "exported": false,
+      "runtime_connected": false,
+      "ledger_registration": "pending; component source only, not formal runtime asset",
+      "objects": [
+        "墙顶管线收口_输出_部件00"
+      ],
+      "preview_render_status": "camera_ready; representative renders only",
+      "godot_front_axis": "+Z",
+      "component_file_sha256": "77ffe39818f4813bb968bfc1ab0c92797a75c20b511d50bee4aa9f688663bd45"
+    }
+  ],
+  "independent_blend_count": 37,
+  "presentation": "separated collection-instance gallery; isolated component scenes with cameras"
+}

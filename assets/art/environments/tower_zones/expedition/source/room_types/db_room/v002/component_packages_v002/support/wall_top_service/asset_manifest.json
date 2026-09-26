@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+  "slug": "wall_top_service",
+  "name_zh": "墙顶管线收口",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "墙顶管线收口_资产包",
+  "objects": [
+    "墙顶管线收口_主体"
+  ],
+  "world_origin_m": [
+    0.0,
+    0.0,
+    11.15
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -19.7,
+      -14.7,
+      11.15
+    ],
+    [
+      19.7,
+      14.7,
+      11.95
+    ]
+  ],
+  "dimensions_m": [
+    39.4,
+    29.4,
+    0.8
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 56,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

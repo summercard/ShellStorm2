@@ -1,0 +1,14 @@
+{
+  "room_type": "BRIDGE_ROOM",
+  "library_version": "v005",
+  "source_room_type_sha256": "7ba287e92a7a16fb7ee5234d027be6a969bdbccb4f12de5b741aaecfc7b2b59e",
+  "component_count": 242,
+  "object_assignment_count": 314,
+  "duplicate_source_objects": false,
+  "all_output_instance_offsets_zero": true,
+  "all_output_roots_identity": true,
+  "room_owned_geometry": false,
+  "collision_authored": false,
+  "glb_exported": false,
+  "godot_runtime_connected": false
+}

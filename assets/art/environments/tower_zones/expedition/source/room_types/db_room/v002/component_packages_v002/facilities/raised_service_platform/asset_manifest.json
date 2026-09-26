@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+  "slug": "raised_service_platform",
+  "name_zh": "右前抬升检修平台",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "右前抬升检修平台_资产包",
+  "objects": [
+    "右前抬升检修平台_主体",
+    "右前抬升检修平台_自发光"
+  ],
+  "world_origin_m": [
+    9.6,
+    -4.6,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      7.2,
+      -6.375,
+      0.0
+    ],
+    [
+      12.0,
+      -2.825,
+      1.32
+    ]
+  ],
+  "dimensions_m": [
+    4.8,
+    3.55,
+    1.32
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 31,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

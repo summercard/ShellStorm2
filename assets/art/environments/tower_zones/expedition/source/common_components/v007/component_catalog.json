@@ -1,0 +1,1540 @@
+{
+  "schema": "shellstorm2.component_catalog.v001",
+  "component_library": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "room_type": "BRIDGE_ROOM",
+  "block_id": "expedition",
+  "version": "v007",
+  "source_room_type": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/通道桥房间种类_工字型_30x60m_v002.blend",
+  "source_room_type_sha256": "7ba287e92a7a16fb7ee5234d027be6a969bdbccb4f12de5b741aaecfc7b2b59e",
+  "source_package_list": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/component_packages_v002/architecture",
+  "runtime_connected": false,
+  "ledger_registration": "pending",
+  "packages": [
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE",
+      "slug": "bank_crate",
+      "name_zh": "固定维护箱 1.60×1.68×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "bank_crate_-1_1",
+        "bank_crate_1_0",
+        "bank_crate_1_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "bank_crate_输出包",
+      "bounds_size_m": [
+        1.6,
+        1.675,
+        1.555
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER",
+      "slug": "bridge_girder",
+      "name_zh": "桥侧连续箱梁",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "bridge_girder_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "bridge_girder_输出包",
+      "bounds_size_m": [
+        0.62,
+        30.0,
+        1.1
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL",
+      "slug": "bridge_guardrail",
+      "name_zh": "桥面完整护栏",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "bridge_guardrail_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "bridge_guardrail_输出包",
+      "bounds_size_m": [
+        0.42,
+        30.32,
+        1.87
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM",
+      "slug": "bridge_service_transom",
+      "name_zh": "桥端设备支承横梁",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "bridge_service_transom_14"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "bridge_service_transom_输出包",
+      "bounds_size_m": [
+        10.0,
+        0.32,
+        0.36
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM_-14",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT",
+      "slug": "coolant",
+      "name_zh": "下层粗管弯头",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "coolant_-1_1",
+        "coolant_-1_2",
+        "coolant_1_0",
+        "coolant_1_1",
+        "coolant_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "coolant_输出包",
+      "bounds_size_m": [
+        0.94,
+        5.36,
+        2.47
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY",
+      "slug": "cross_gantry",
+      "name_zh": "错层钢格栅检修平台 8.73×1.97×7.71m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "cross_gantry_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "cross_gantry_输出包",
+      "bounds_size_m": [
+        8.73,
+        1.97,
+        7.705
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES",
+      "slug": "deep_cables",
+      "name_zh": "跨层下垂电缆",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "deep_cables_-1_1",
+        "deep_cables_-1_2",
+        "deep_cables_1_0",
+        "deep_cables_1_1",
+        "deep_cables_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "deep_cables_输出包",
+      "bounds_size_m": [
+        2.298,
+        4.138,
+        7.773
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK",
+      "slug": "deep_trunk",
+      "name_zh": "坑底贯穿管束",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "deep_trunk_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "deep_trunk_输出包",
+      "bounds_size_m": [
+        1.79,
+        28.0,
+        0.7
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE",
+      "slug": "end_crate",
+      "name_zh": "固定维护箱 2.15×1.68×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "end_crate_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "end_crate_输出包",
+      "bounds_size_m": [
+        2.15,
+        1.675,
+        1.555
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER",
+      "slug": "end_power",
+      "name_zh": "机房设备 2.78×1.53×5.26m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "end_power_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "end_power_输出包",
+      "bounds_size_m": [
+        2.78,
+        1.535,
+        5.258
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION",
+      "slug": "half_partition",
+      "name_zh": "机房设备隔断",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "half_partition_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "half_partition_输出包",
+      "bounds_size_m": [
+        8.8,
+        0.6,
+        2.19
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES",
+      "slug": "header_cables",
+      "name_zh": "架空垂落电缆束",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "header_cables_-1_1",
+        "header_cables_-1_2",
+        "header_cables_1_0",
+        "header_cables_1_1",
+        "header_cables_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "header_cables_输出包",
+      "bounds_size_m": [
+        0.8,
+        6.553,
+        4.393
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE",
+      "slug": "longitudinal_tie",
+      "name_zh": "下层纵向腰梁",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "longitudinal_tie_-1_-9.6",
+        "longitudinal_tie_1_-4.8",
+        "longitudinal_tie_1_-9.6"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "longitudinal_tie_输出包",
+      "bounds_size_m": [
+        0.45,
+        29.0,
+        0.5
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE_-1_-4.8",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z4805",
+      "slug": "low_platform_z4805",
+      "name_zh": "错层钢格栅检修平台 6.03×4.32×4.80m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "low_platform_1_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "low_platform_z4805_输出包",
+      "bounds_size_m": [
+        6.03,
+        4.32,
+        4.805
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_-1_1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z6005",
+      "slug": "low_platform_z6005",
+      "name_zh": "错层钢格栅检修平台 6.03×4.32×6.00m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "low_platform_-1_2",
+        "low_platform_1_0",
+        "low_platform_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "low_platform_z6005_输出包",
+      "bounds_size_m": [
+        6.03,
+        4.32,
+        6.005
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL",
+      "slug": "lower_control",
+      "name_zh": "机房设备 1.33×1.51×2.60m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "lower_control_-1_1",
+        "lower_control_-1_2",
+        "lower_control_1_0",
+        "lower_control_1_1",
+        "lower_control_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "lower_control_输出包",
+      "bounds_size_m": [
+        1.33,
+        1.515,
+        2.6
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY",
+      "slug": "mid_gallery",
+      "name_zh": "错层钢格栅检修平台 2.78×27.82×9.21m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "mid_gallery_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "mid_gallery_输出包",
+      "bounds_size_m": [
+        2.78,
+        27.82,
+        9.205
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE",
+      "slug": "near_crate",
+      "name_zh": "固定维护箱 2.61×1.79×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "near_crate_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "near_crate_输出包",
+      "bounds_size_m": [
+        2.612,
+        1.791,
+        1.555
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER",
+      "slug": "near_server",
+      "name_zh": "机房设备 1.51×2.68×5.05m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "near_server_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "near_server_输出包",
+      "bounds_size_m": [
+        1.515,
+        2.68,
+        5.05
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX",
+      "slug": "partition_box",
+      "name_zh": "固定维护箱 1.65×1.68×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "partition_box_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "partition_box_输出包",
+      "bounds_size_m": [
+        1.65,
+        1.675,
+        1.555
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_END",
+      "slug": "pit_end",
+      "name_zh": "坑端壁",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "pit_end_-12.5_15",
+        "pit_end_-7.5_-15",
+        "pit_end_-7.5_15",
+        "pit_end_12.5_-15",
+        "pit_end_12.5_15",
+        "pit_end_7.5_-15",
+        "pit_end_7.5_15"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "pit_end_输出包",
+      "bounds_size_m": [
+        5.0,
+        0.3,
+        12.0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_END_-12.5_-15",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE",
+      "slug": "pit_side",
+      "name_zh": "坑壁",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 12,
+      "absorbed_variants": [
+        "pit_side_-1_-2",
+        "pit_side_-1_-3",
+        "pit_side_-1_0",
+        "pit_side_-1_1",
+        "pit_side_-1_2",
+        "pit_side_1_-1",
+        "pit_side_1_-2",
+        "pit_side_1_-3",
+        "pit_side_1_0",
+        "pit_side_1_1",
+        "pit_side_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "pit_side_输出包",
+      "bounds_size_m": [
+        0.7,
+        5.0,
+        12.125
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE_-1_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE",
+      "slug": "platform_edge",
+      "name_zh": "上层平台坑沿护栏",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "platform_edge_-1_15",
+        "platform_edge_1_-15",
+        "platform_edge_1_15"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "platform_edge_输出包",
+      "bounds_size_m": [
+        10.015,
+        0.65,
+        3.2
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE_-1_-15",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN",
+      "slug": "shaft_column",
+      "name_zh": "贯穿层间主柱",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "shaft_column_-1_-5",
+        "shaft_column_-1_14",
+        "shaft_column_-1_5",
+        "shaft_column_1_-14",
+        "shaft_column_1_-5",
+        "shaft_column_1_14",
+        "shaft_column_1_5"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "shaft_column_输出包",
+      "bounds_size_m": [
+        1.8,
+        1.8,
+        12.0
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN_-1_-14",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER",
+      "slug": "tile_lower",
+      "name_zh": "地砖_下",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 36,
+      "absorbed_variants": [
+        "tile_lower_-1_-3",
+        "tile_lower_-1_0",
+        "tile_lower_-1_2",
+        "tile_lower_-2_-2",
+        "tile_lower_-2_-3",
+        "tile_lower_-2_0",
+        "tile_lower_-2_1",
+        "tile_lower_-3_-1",
+        "tile_lower_-3_-2",
+        "tile_lower_-3_1",
+        "tile_lower_-3_2",
+        "tile_lower_0_-1",
+        "tile_lower_0_-2",
+        "tile_lower_0_1",
+        "tile_lower_0_2",
+        "tile_lower_1_-2",
+        "tile_lower_1_-3",
+        "tile_lower_1_0",
+        "tile_lower_1_1",
+        "tile_lower_2_-1",
+        "tile_lower_2_-3",
+        "tile_lower_2_0",
+        "tile_lower_2_2",
+        "tile_lower_-1_-2",
+        "tile_lower_-1_1",
+        "tile_lower_-2_-1",
+        "tile_lower_-2_2",
+        "tile_lower_-3_-3",
+        "tile_lower_-3_0",
+        "tile_lower_0_-3",
+        "tile_lower_0_0",
+        "tile_lower_1_-1",
+        "tile_lower_1_2",
+        "tile_lower_2_-2",
+        "tile_lower_2_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "tile_lower_输出包",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.407
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER_-1_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER",
+      "slug": "tile_upper",
+      "name_zh": "地砖_上",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 48,
+      "absorbed_variants": [
+        "tile_upper_-1_-3",
+        "tile_upper_-1_-4",
+        "tile_upper_-1_-6",
+        "tile_upper_-1_0",
+        "tile_upper_-1_2",
+        "tile_upper_-1_3",
+        "tile_upper_-1_5",
+        "tile_upper_-2_-5",
+        "tile_upper_-2_-6",
+        "tile_upper_-2_3",
+        "tile_upper_-2_4",
+        "tile_upper_-3_-4",
+        "tile_upper_-3_-5",
+        "tile_upper_-3_4",
+        "tile_upper_-3_5",
+        "tile_upper_0_-1",
+        "tile_upper_0_-2",
+        "tile_upper_0_-4",
+        "tile_upper_0_-5",
+        "tile_upper_0_1",
+        "tile_upper_0_2",
+        "tile_upper_0_4",
+        "tile_upper_0_5",
+        "tile_upper_1_-5",
+        "tile_upper_1_-6",
+        "tile_upper_1_3",
+        "tile_upper_1_4",
+        "tile_upper_2_-4",
+        "tile_upper_2_-6",
+        "tile_upper_2_3",
+        "tile_upper_2_5",
+        "tile_upper_-1_-2",
+        "tile_upper_-1_-5",
+        "tile_upper_-1_1",
+        "tile_upper_-1_4",
+        "tile_upper_-2_-4",
+        "tile_upper_-2_5",
+        "tile_upper_-3_-6",
+        "tile_upper_-3_3",
+        "tile_upper_0_-3",
+        "tile_upper_0_-6",
+        "tile_upper_0_0",
+        "tile_upper_0_3",
+        "tile_upper_1_-4",
+        "tile_upper_2_-5",
+        "tile_upper_2_4",
+        "tile_upper_1_5"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "tile_upper_输出包",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.407
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER_-1_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER",
+      "slug": "torn_header",
+      "name_zh": "破损管廊护板",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "torn_header_-1_1",
+        "torn_header_-1_2",
+        "torn_header_1_0",
+        "torn_header_1_1",
+        "torn_header_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "torn_header_输出包",
+      "bounds_size_m": [
+        0.08,
+        4.4,
+        4.3
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY",
+      "slug": "underbridge_service_bay",
+      "name_zh": "桥下竖井设备背板",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "underbridge_service_bay_-1_1",
+        "underbridge_service_bay_-1_2",
+        "underbridge_service_bay_1_0",
+        "underbridge_service_bay_1_1",
+        "underbridge_service_bay_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "underbridge_service_bay_输出包",
+      "bounds_size_m": [
+        0.993,
+        6.3,
+        9.4
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450",
+      "slug": "upper_bank_z5450",
+      "name_zh": "机房设备 1.51×2.63×5.45m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "upper_bank_-1_2",
+        "upper_bank_1_1",
+        "upper_bank_1_2"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "upper_bank_z5450_输出包",
+      "bounds_size_m": [
+        1.515,
+        2.63,
+        5.45
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z6197",
+      "slug": "upper_bank_z6197",
+      "name_zh": "机房设备 1.53×2.63×6.20m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "upper_bank_1_0"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "upper_bank_z6197_输出包",
+      "bounds_size_m": [
+        1.535,
+        2.63,
+        6.197
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_0",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE",
+      "slug": "upper_console",
+      "name_zh": "机房操作站",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "upper_console_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "upper_console_输出包",
+      "bounds_size_m": [
+        1.155,
+        1.12,
+        2.485
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE",
+      "slug": "vertical_service",
+      "name_zh": "竖井服务柜列",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "vertical_service_-1_0",
+        "vertical_service_-1_10",
+        "vertical_service_1_-10",
+        "vertical_service_1_0",
+        "vertical_service_1_10"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "vertical_service_输出包",
+      "bounds_size_m": [
+        1.65,
+        2.2,
+        6.05
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE_-1_-10",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER",
+      "slug": "wall_service_header",
+      "name_zh": "架空墙侧管廊",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "wall_service_header_1"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "wall_service_header_输出包",
+      "bounds_size_m": [
+        1.6,
+        28.0,
+        0.98
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X670",
+      "slug": "wall_x670",
+      "name_zh": "墙体 5.00×0.67×11.90m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 18,
+      "absorbed_variants": [
+        "wall_east_-1",
+        "wall_east_-3",
+        "wall_east_-5",
+        "wall_east_1",
+        "wall_east_3",
+        "wall_east_5",
+        "wall_north_-3",
+        "wall_north_1",
+        "wall_south_-1",
+        "wall_south_-3",
+        "wall_south_1",
+        "wall_west_-1",
+        "wall_west_-3",
+        "wall_west_-5",
+        "wall_west_1",
+        "wall_west_3",
+        "wall_west_5"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "wall_x670_输出包",
+      "bounds_size_m": [
+        5.0,
+        0.67,
+        11.9
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_NORTH_-1",
+      "source_library": "v005"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X780",
+      "slug": "wall_x780",
+      "name_zh": "墙体 0.78×5.00×11.90m",
+      "room_type": "BRIDGE_ROOM",
+      "serves_room_types": [
+        "BRIDGE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 18,
+      "absorbed_variants": [
+        "wall_east_-4",
+        "wall_east_-6",
+        "wall_east_0",
+        "wall_east_2",
+        "wall_east_4",
+        "wall_north_-2",
+        "wall_north_0",
+        "wall_north_2",
+        "wall_south_-2",
+        "wall_south_0",
+        "wall_south_2",
+        "wall_west_-2",
+        "wall_west_-4",
+        "wall_west_-6",
+        "wall_west_0",
+        "wall_west_2",
+        "wall_west_4"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "collection": "wall_x780_输出包",
+      "bounds_size_m": [
+        0.78,
+        5.0,
+        11.9
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_EAST_-2",
+      "source_library": "v005"
+    }
+  ],
+  "independent_blend_count": 35,
+  "presentation": "separated collection-instance gallery; isolated component scenes with cameras",
+  "component_count": 35,
+  "regrouped_from": "v005",
+  "regroup_rule": "MAX_VARIANTS_PER_FAMILY = 3 (skill 02)",
+  "output_mesh_count": 51,
+  "independent_blend_total_mb": 28.76,
+  "source_mesh_count": 51
+}

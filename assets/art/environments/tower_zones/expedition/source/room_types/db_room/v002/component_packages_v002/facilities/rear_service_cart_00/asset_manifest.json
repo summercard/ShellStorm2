@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+  "slug": "rear_service_cart_00",
+  "name_zh": "机柜服务推车_00",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "机柜服务推车_00_资产包",
+  "objects": [
+    "机柜服务推车_00_主体",
+    "机柜服务推车_00_自发光"
+  ],
+  "world_origin_m": [
+    -16.5,
+    8.7925,
+    -0.0085
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      -17.14,
+      8.325,
+      -0.0085
+    ],
+    [
+      -15.86,
+      9.26,
+      1.19
+    ]
+  ],
+  "dimensions_m": [
+    1.28,
+    0.935,
+    1.1985
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 14,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

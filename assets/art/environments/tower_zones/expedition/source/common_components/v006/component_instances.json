@@ -1,0 +1,1824 @@
+{
+  "schema": "shellstorm2.battle.component_instances",
+  "schema_version": 1,
+  "library": "v006",
+  "room_type": "OFFICE_ROOM",
+  "source_library": "v004",
+  "source_blend_sha256": "83c1e268ddecd6a8c292f4f7078a2965ade92a29d979e076c1a4a26db736c485",
+  "instances": [
+    {
+      "instance_id": "door_wall",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+      "component_slug": "door_wall",
+      "position_m": [
+        2.5,
+        19.8425,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
+    },
+    {
+      "instance_id": "wall_east_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.8325,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-1"
+    },
+    {
+      "instance_id": "wall_east_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.8425,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-2"
+    },
+    {
+      "instance_id": "wall_east_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.8325,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-3"
+    },
+    {
+      "instance_id": "wall_east_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.835,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-4"
+    },
+    {
+      "instance_id": "wall_east_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.8425,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_0"
+    },
+    {
+      "instance_id": "wall_east_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.8325,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_1"
+    },
+    {
+      "instance_id": "wall_east_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.8425,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_2"
+    },
+    {
+      "instance_id": "wall_east_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        14.8325,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_3"
+    },
+    {
+      "instance_id": "wall_north_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -2.5,
+        19.8325,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-1"
+    },
+    {
+      "instance_id": "wall_north_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -7.5,
+        19.8425,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-2"
+    },
+    {
+      "instance_id": "wall_north_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -12.5,
+        19.8325,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_-3"
+    },
+    {
+      "instance_id": "wall_north_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        7.5,
+        19.8325,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_1"
+    },
+    {
+      "instance_id": "wall_north_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        12.5,
+        19.8325,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_NORTH_2"
+    },
+    {
+      "instance_id": "wall_south_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -2.5,
+        -19.8325,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-1"
+    },
+    {
+      "instance_id": "wall_south_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -7.5,
+        -19.8425,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-2"
+    },
+    {
+      "instance_id": "wall_south_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M",
+      "component_slug": "wall_t1110_5m",
+      "position_m": [
+        -12.5,
+        -19.595,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-3"
+    },
+    {
+      "instance_id": "wall_south_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        2.5,
+        -19.8425,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_0"
+    },
+    {
+      "instance_id": "wall_south_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        7.5,
+        -19.8325,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_1"
+    },
+    {
+      "instance_id": "wall_south_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M",
+      "component_slug": "wall_t970_5m",
+      "position_m": [
+        12.5,
+        -19.665,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_2"
+    },
+    {
+      "instance_id": "wall_west_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8325,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-1"
+    },
+    {
+      "instance_id": "wall_west_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8425,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-2"
+    },
+    {
+      "instance_id": "wall_west_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8325,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-3"
+    },
+    {
+      "instance_id": "wall_west_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8425,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_-4"
+    },
+    {
+      "instance_id": "wall_west_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8425,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_0"
+    },
+    {
+      "instance_id": "wall_west_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8325,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_1"
+    },
+    {
+      "instance_id": "wall_west_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8425,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_2"
+    },
+    {
+      "instance_id": "wall_west_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "component_slug": "wall_t615_5m",
+      "position_m": [
+        -14.8325,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_WEST_3"
+    },
+    {
+      "instance_id": "filing_run_west",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN",
+      "component_slug": "filing_run",
+      "position_m": [
+        -14.2825,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN_WEST"
+    },
+    {
+      "instance_id": "locker_bank_north",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK",
+      "component_slug": "locker_bank",
+      "position_m": [
+        12.5,
+        19.095,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK_NORTH"
+    },
+    {
+      "instance_id": "planting_perimeter",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+      "component_slug": "planting_perimeter",
+      "position_m": [
+        0.7501,
+        1.7482,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER"
+    },
+    {
+      "instance_id": "power_cabinet_bank_south",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK",
+      "component_slug": "power_cabinet_bank",
+      "position_m": [
+        -13.4,
+        -19.255,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK_SOUTH"
+    },
+    {
+      "instance_id": "prep_bench_east",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH",
+      "component_slug": "prep_bench",
+      "position_m": [
+        14.07,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH_EAST"
+    },
+    {
+      "instance_id": "printer_station",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+      "component_slug": "printer_station",
+      "position_m": [
+        -10.97,
+        -19.1475,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION"
+    },
+    {
+      "instance_id": "shelving_south",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING",
+      "component_slug": "shelving",
+      "position_m": [
+        12.5,
+        -19.2,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING_SOUTH"
+    },
+    {
+      "instance_id": "totem_column",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+      "component_slug": "totem_column",
+      "position_m": [
+        -11.6,
+        17.2,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN"
+    },
+    {
+      "instance_id": "water_and_supply_corner",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+      "component_slug": "water_and_supply_corner",
+      "position_m": [
+        12.31,
+        15.88,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER"
+    },
+    {
+      "instance_id": "work_cluster_a",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "component_slug": "work_cluster",
+      "position_m": [
+        -6.5,
+        -9.29,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_A"
+    },
+    {
+      "instance_id": "work_cluster_b",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "component_slug": "work_cluster",
+      "position_m": [
+        6.5,
+        -10.11,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_B"
+    },
+    {
+      "instance_id": "work_cluster_c",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "component_slug": "work_cluster",
+      "position_m": [
+        -6.5,
+        4.71,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_C"
+    },
+    {
+      "instance_id": "work_cluster_d",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "component_slug": "work_cluster",
+      "position_m": [
+        6.5,
+        3.89,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_D"
+    },
+    {
+      "instance_id": "floor_zone_mark",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+      "component_slug": "floor_zone_mark",
+      "position_m": [
+        0.1,
+        7.0,
+        0.022
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK"
+    },
+    {
+      "instance_id": "tile_-1_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-1"
+    },
+    {
+      "instance_id": "tile_-1_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-2"
+    },
+    {
+      "instance_id": "tile_-1_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-3"
+    },
+    {
+      "instance_id": "tile_-1_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        -17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-4"
+    },
+    {
+      "instance_id": "tile_-1_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_0"
+    },
+    {
+      "instance_id": "tile_-1_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_1"
+    },
+    {
+      "instance_id": "tile_-1_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_2"
+    },
+    {
+      "instance_id": "tile_-1_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -2.5,
+        17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_3"
+    },
+    {
+      "instance_id": "tile_-2_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-1"
+    },
+    {
+      "instance_id": "tile_-2_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-2"
+    },
+    {
+      "instance_id": "tile_-2_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-3"
+    },
+    {
+      "instance_id": "tile_-2_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        -17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_-4"
+    },
+    {
+      "instance_id": "tile_-2_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_0"
+    },
+    {
+      "instance_id": "tile_-2_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_1"
+    },
+    {
+      "instance_id": "tile_-2_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_2"
+    },
+    {
+      "instance_id": "tile_-2_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -7.5,
+        17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-2_3"
+    },
+    {
+      "instance_id": "tile_-3_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-1"
+    },
+    {
+      "instance_id": "tile_-3_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-2"
+    },
+    {
+      "instance_id": "tile_-3_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-3"
+    },
+    {
+      "instance_id": "tile_-3_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        -17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_-4"
+    },
+    {
+      "instance_id": "tile_-3_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_0"
+    },
+    {
+      "instance_id": "tile_-3_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_1"
+    },
+    {
+      "instance_id": "tile_-3_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_2"
+    },
+    {
+      "instance_id": "tile_-3_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        -12.5,
+        17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-3_3"
+    },
+    {
+      "instance_id": "tile_0_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-1"
+    },
+    {
+      "instance_id": "tile_0_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-2"
+    },
+    {
+      "instance_id": "tile_0_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-3"
+    },
+    {
+      "instance_id": "tile_0_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        -17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-4"
+    },
+    {
+      "instance_id": "tile_0_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_0"
+    },
+    {
+      "instance_id": "tile_0_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_1"
+    },
+    {
+      "instance_id": "tile_0_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_2"
+    },
+    {
+      "instance_id": "tile_0_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        2.5,
+        17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_3"
+    },
+    {
+      "instance_id": "tile_1_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-1"
+    },
+    {
+      "instance_id": "tile_1_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.4888,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-2"
+    },
+    {
+      "instance_id": "tile_1_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.5386,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-3"
+    },
+    {
+      "instance_id": "tile_1_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.5,
+        -17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_-4"
+    },
+    {
+      "instance_id": "tile_1_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_0"
+    },
+    {
+      "instance_id": "tile_1_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_1"
+    },
+    {
+      "instance_id": "tile_1_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_2"
+    },
+    {
+      "instance_id": "tile_1_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        7.5,
+        17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_3"
+    },
+    {
+      "instance_id": "tile_2_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_-1"
+    },
+    {
+      "instance_id": "tile_2_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_-2"
+    },
+    {
+      "instance_id": "tile_2_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_-3"
+    },
+    {
+      "instance_id": "tile_2_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        -17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_-4"
+    },
+    {
+      "instance_id": "tile_2_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_0"
+    },
+    {
+      "instance_id": "tile_2_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_1"
+    },
+    {
+      "instance_id": "tile_2_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_2"
+    },
+    {
+      "instance_id": "tile_2_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "component_slug": "floor_tile_5m",
+      "position_m": [
+        12.5,
+        17.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_2_3"
+    },
+    {
+      "instance_id": "ceiling_deck_-1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        -2.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ceiling_deck_-2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        -7.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-2"
+    },
+    {
+      "instance_id": "ceiling_deck_-3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        -12.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-3"
+    },
+    {
+      "instance_id": "ceiling_deck_-4",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        -17.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-4"
+    },
+    {
+      "instance_id": "ceiling_deck_0",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        2.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_0"
+    },
+    {
+      "instance_id": "ceiling_deck_1",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        7.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_1"
+    },
+    {
+      "instance_id": "ceiling_deck_2",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        12.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_2"
+    },
+    {
+      "instance_id": "ceiling_deck_3",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "component_slug": "ceiling_deck_5m",
+      "position_m": [
+        0.0,
+        17.5,
+        11.4775
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_3"
+    },
+    {
+      "instance_id": "ceiling_lighting",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+      "component_slug": "ceiling_lighting",
+      "position_m": [
+        0.0,
+        0.0,
+        10.495
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING"
+    },
+    {
+      "instance_id": "ceiling_ring_beam",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+      "component_slug": "ceiling_ring_beam",
+      "position_m": [
+        0.0,
+        0.0,
+        11.15
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM"
+    },
+    {
+      "instance_id": "ceiling_service_cable_tray",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+      "component_slug": "ceiling_service_cable_tray",
+      "position_m": [
+        0.0,
+        0.0,
+        10.465
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY"
+    },
+    {
+      "instance_id": "ceiling_service_duct",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+      "component_slug": "ceiling_service_duct",
+      "position_m": [
+        0.0,
+        0.0,
+        10.4425
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT"
+    },
+    {
+      "instance_id": "ceiling_service_pipe_run",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+      "component_slug": "ceiling_service_pipe_run",
+      "position_m": [
+        -0.02,
+        0.0,
+        9.9306
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN"
+    },
+    {
+      "instance_id": "corner_guard",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+      "component_slug": "corner_guard",
+      "position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD"
+    },
+    {
+      "instance_id": "floor_service",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+      "component_slug": "floor_service",
+      "position_m": [
+        0.0,
+        0.0,
+        0.04
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE"
+    },
+    {
+      "instance_id": "wall_top_service",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+      "component_slug": "wall_top_service",
+      "position_m": [
+        0.0,
+        0.0,
+        11.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
+    }
+  ],
+  "validation": {
+    "source_object_count": 106,
+    "instance_count": 106,
+    "coverage_ok": true,
+    "rotation_inferred": true,
+    "rotation_stats": {
+      "0": 97,
+      "90": 9
+    }
+  },
+  "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
+  "rotation_inferred_from": "源房型源各包的平面主轴方向（确定性判据）"
+}

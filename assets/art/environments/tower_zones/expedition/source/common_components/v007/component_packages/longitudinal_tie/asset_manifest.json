@@ -1,0 +1,40 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE",
+  "slug": "longitudinal_tie",
+  "name_zh": "下层纵向腰梁",
+  "room_type": "BRIDGE_ROOM",
+  "serves_room_types": [
+    "BRIDGE_ROOM"
+  ],
+  "scope": "shared",
+  "instance_count": 4,
+  "absorbed_variants": [
+    "longitudinal_tie_-1_-9.6",
+    "longitudinal_tie_1_-4.8",
+    "longitudinal_tie_1_-9.6"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "collection": "longitudinal_tie_输出包",
+  "bounds_size_m": [
+    0.45,
+    29.0,
+    0.5
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE_-1_-4.8",
+  "source_library": "v005"
+}

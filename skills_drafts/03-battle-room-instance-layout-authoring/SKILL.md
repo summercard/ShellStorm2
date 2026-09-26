@@ -32,11 +32,13 @@ metadata:
 
 ## 输入解析
 
-必须同时定位三类输入：
+必须同时定位四类输入：
 
 1. 具体房间白模：`source/art/whitebox/tower_zones/<level>/...`，包含房间编号、尺寸、门方向、连接目标和可走面。
-2. 房间种类组件源：由 `02-battle-room-component-decomposer` 产出；不得拿另一种房间的组件源冒充。
-3. 房间级需求：文字、效果图、设施要求、门连接、镜头和局部美术约束。
+2. 房间种类组件源（`component_catalog.json`）：由 `02-battle-room-component-decomposer` 产出；不得拿另一种房间的组件源冒充。
+3. **组件清单与实例清单**（`component_plan.json` / `component_instances.json`）：同由 02 产出。实例清单记的是**该房型源原本的摆放**，可直接作为本房间布局的起点；若本房间白模与之不同，按白模改写实例清单，**不得因此新增组件**。
+   🔴 实例的 `rotation_y_deg` **语义是绕 Blender Z 轴**（世界垂直轴；房间平面为 XY）；字段名是历史命名，源自 v005 的 `allowed_rotations_blender_z_deg`。摆位时写入 `rotation_euler.z`，**写成 `.y` 会让墙体直接躺倒**。摆放完成后必须过包围盒判据：拼装总 bbox 等于房间边界（含墙厚）、越界实例数为 0。
+4. 房间级需求：文字、效果图、设施要求、门连接、镜头和局部美术约束。
 
 房间编号不能唯一解析时停止，列出候选；白模和组件源的 `room_type` 不匹配时停止。
 

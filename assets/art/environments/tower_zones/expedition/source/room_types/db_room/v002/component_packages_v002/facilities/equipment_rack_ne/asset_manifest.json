@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+  "slug": "equipment_rack_ne",
+  "name_zh": "东北设备机架",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "东北设备机架_资产包",
+  "objects": [
+    "东北设备机架_主体",
+    "东北设备机架_自发光"
+  ],
+  "world_origin_m": [
+    16.7,
+    0.7999999999999999,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      15.31,
+      0.2665,
+      0.0
+    ],
+    [
+      18.09,
+      1.3335,
+      3.05
+    ]
+  ],
+  "dimensions_m": [
+    2.78,
+    1.067,
+    3.05
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 54,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

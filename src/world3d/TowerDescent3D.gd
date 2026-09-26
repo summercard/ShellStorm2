@@ -1903,6 +1903,17 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	var reward_plan := spec.get("reward_plan", {}) as Dictionary
 	if not reward_plan.is_empty():
 		record["reward_plan"] = reward_plan.duplicate(true)
+	# —— 触发器刷怪（docs/v0.1/design/触发器刷怪设计.md §3.2 / §3.3）——
+	# 放置层 / 调用层 / 只认盒子标记：同样没写就不落字段（未迁移关卡行为逐字不变）。
+	# 漏了这里 = 设计源写了真源却被静默丢弃，运行时恒回退旧公式路径（2026-09-25 同类坑）。
+	var placements := spec.get("spawn_placements", []) as Array
+	if not placements.is_empty():
+		record["spawn_placements"] = placements.duplicate(true)
+	var encounter := spec.get("encounter", {}) as Dictionary
+	if not encounter.is_empty():
+		record["encounter"] = encounter.duplicate(true)
+	if bool(spec.get("spawn_boxes_only", false)):
+		record["spawn_boxes_only"] = true
 	if str(spec.get("type", "")) == "BOSS":
 		# Boss 身份解析走唯一口径（BossContentCatalog.resolve_profile）：
 		# 设计源房间的 boss_content_id 优先，其次按层号指派。取不到 → 一条 boss 字段都不落，
@@ -4622,6 +4633,9 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"tower_module_shell": bool(record.get("tower_module_shell", false)),
 		"open_wall_directions": record.get("open_wall_directions", []),
 		"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
+		"spawn_placements": record.get("spawn_placements", []),
+		"encounter": record.get("encounter", {}),
+		"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
 		"reward_plan": record.get("reward_plan", {}),
 		"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
 		"authored_layout_shell": bool(record.get("authored_layout_shell", false)),

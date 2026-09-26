@@ -209,6 +209,7 @@ core_scenes=(
   verify_tower_base_facility_persistent_flow
   verify_tower_extraction_return_flow
   verify_expedition_extraction_carry_return
+  verify_expedition_departure_carry
   verify_death_during_extraction_flow
   verify_game_entry_flow
   verify_base_world_flow
@@ -228,6 +229,7 @@ core_scenes=(
   verify_3d_flashlight_charge_flow
   verify_3d_combat_progression_flow
   verify_dungeon_wave_intermission
+  verify_expedition_wave_chain
   verify_3d_parity_core
   verify_3d_reload_state_flow
   verify_3d_vision_input_flow

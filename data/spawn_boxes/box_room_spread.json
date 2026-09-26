@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_room_spread",
+  "note": "混编主盒（小盒 4×4 m）：近战×2 起手，1 秒后爆×1 跟进，共 3 只。全关通用主力盒，一房摆 1~2 个即可撑住节奏。",
+  "shape": "box",
+  "size_m": [
+    4.0,
+    3.0,
+    4.0
+  ],
+  "spawns": [
+    {
+      "type": "melee_chaser",
+      "count": 2,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "exploder",
+      "count": 1,
+      "delay_sec": 1.0
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.8,
+    "wall_recess_tiles": 1
+  }
+}

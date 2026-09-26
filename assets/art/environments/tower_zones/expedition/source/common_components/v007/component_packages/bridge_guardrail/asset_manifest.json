@@ -1,0 +1,39 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL",
+  "slug": "bridge_guardrail",
+  "name_zh": "桥面完整护栏",
+  "room_type": "BRIDGE_ROOM",
+  "serves_room_types": [
+    "BRIDGE_ROOM"
+  ],
+  "scope": "room_type_local",
+  "instance_count": 2,
+  "absorbed_variants": [
+    "bridge_guardrail_1"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "collection": "bridge_guardrail_输出包",
+  "bounds_size_m": [
+    0.42,
+    30.32,
+    1.87
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL_-1",
+  "source_library": "v005"
+}

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_expedition_wave_chain.gd" id="1_wavechain"]
+
+[node name="VerifyExpeditionWaveChain" type="Node"]
+script = ExtResource("1_wavechain")

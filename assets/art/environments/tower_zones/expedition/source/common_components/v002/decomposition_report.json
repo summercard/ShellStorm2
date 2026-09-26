@@ -1,0 +1,14 @@
+{
+  "room_type": "L_CORRIDOR",
+  "library_version": "v002",
+  "source_room_type_sha256": "9c323876f7165f656e016049135652a96c83ed0adb45f4f28c49fc50cfb5adae",
+  "component_count": 121,
+  "object_assignment_count": 1609,
+  "duplicate_source_objects": false,
+  "all_output_instance_offsets_zero": true,
+  "all_output_roots_identity": true,
+  "room_owned_geometry": false,
+  "collision_authored": false,
+  "glb_exported": false,
+  "godot_runtime_connected": false
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_center_elite",
+  "note": "精英点（小盒 4×4 m）：1 只精英坐镇，0.5 秒后 1 只近战护卫。精英词缀由 MonsterInjector 抽。适合摆在房心或路口。",
+  "shape": "box",
+  "size_m": [
+    4.0,
+    3.0,
+    4.0
+  ],
+  "spawns": [
+    {
+      "type": "elite",
+      "count": 1,
+      "delay_sec": 0.0
+    },
+    {
+      "type": "melee_chaser",
+      "count": 1,
+      "delay_sec": 0.5
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 2.0,
+    "wall_recess_tiles": 1
+  }
+}

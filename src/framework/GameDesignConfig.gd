@@ -183,6 +183,11 @@ const BOSS_ROOM_TYPE := "BOSS"
 ## **钉成** `type = "BOSS"`，所以 role 与 content_type 是同一件事的两种写法，都要认。
 const BOSS_ROOM_ROLE := "boss"
 
+## 事件房型。**不在** `ROOM_TYPES_WITH_HOSTILES` 里 —— 它走事件终端、不参与公式刷怪。
+## 但**显式摆了触发盒**（`spawn_placements` 非空）时，本房变成「事件 + 战斗」双职房：
+## 事件终端照常保留，同时按盒出波（业主裁定 2026-09-26，远征01 room_09）。
+const EVENT_ROOM_TYPE := "EVENT"
+
 
 ## 房间级刷怪计划能否写在该房型上 —— **唯一口径**。
 ## 消费方共两处，都必须走本函数，禁止各自复刻列表（否则会出现两套口径互相冲突）：
@@ -208,6 +213,27 @@ static func is_spawn_plan_authorable_room(content_type: String) -> bool:
 ## 禁止在别处复刻这条判据。
 static func is_boss_room(content_type: String, role: String) -> bool:
 	return content_type == BOSS_ROOM_TYPE or role == BOSS_ROOM_ROLE
+
+
+## 触发盒刷怪（`docs/v0.1/design/触发器刷怪设计.md`）下的「本房型**是否可以摆触发盒**」
+## —— **唯一口径**。判据 = 「会刷怪的房型」＋「事件房」。**不排除 BOSS**：触发盒是唯一
+## 刷怪机制，Boss 房也用自己的盒子（`box_boss_arena`）出怪。
+##
+## 为什么把 EVENT 纳进来（业主裁定 2026-09-26）：事件房默认走事件终端、不刷怪，但只要
+## **显式摆了触发盒**就允许它有战斗（远征01 room_09）。⚠️ EVENT 只进了**本判据**、**没有**
+## 进 `ROOM_TYPES_WITH_HOSTILES` —— 后者是**公式刷怪**的入口门（`Dungeon3D := HOSTILE_ROOM_TYPES`）；
+## 若把 EVENT 塞进去，无盒的程序化事件房会掉进通用 `_:` 分支刷随机怪（塔楼 / 主题池会被误伤）。
+##
+## 消费方：
+##   ① `LevelPlanValidator._validate_spawn_boxes` —— 不在本判据里的房型摆盒即报错。
+## ⚠️ 与「**必须**摆盒」的判据不同：`spawn_boxes_only` 层只对**真敌对房**
+## （`ROOM_TYPES_WITH_HOSTILES`）强制要求盒子，EVENT 房**可以没有盒子**（保持纯事件房）。
+## `authored_layout_peaceful`（和平区）由调用方另行排除，不写进本判据。
+static func room_type_uses_spawn_boxes(content_type: String) -> bool:
+	return (
+		ROOM_TYPES_WITH_HOSTILES.has(content_type)
+		or content_type == EVENT_ROOM_TYPE
+	)
 
 
 static func scene_exists(scene_path: String) -> bool:

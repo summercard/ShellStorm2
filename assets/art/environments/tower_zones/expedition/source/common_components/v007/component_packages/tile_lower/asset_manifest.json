@@ -1,0 +1,72 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER",
+  "slug": "tile_lower",
+  "name_zh": "地砖_下",
+  "room_type": "BRIDGE_ROOM",
+  "serves_room_types": [
+    "BRIDGE_ROOM"
+  ],
+  "scope": "shared",
+  "instance_count": 36,
+  "absorbed_variants": [
+    "tile_lower_-1_-3",
+    "tile_lower_-1_0",
+    "tile_lower_-1_2",
+    "tile_lower_-2_-2",
+    "tile_lower_-2_-3",
+    "tile_lower_-2_0",
+    "tile_lower_-2_1",
+    "tile_lower_-3_-1",
+    "tile_lower_-3_-2",
+    "tile_lower_-3_1",
+    "tile_lower_-3_2",
+    "tile_lower_0_-1",
+    "tile_lower_0_-2",
+    "tile_lower_0_1",
+    "tile_lower_0_2",
+    "tile_lower_1_-2",
+    "tile_lower_1_-3",
+    "tile_lower_1_0",
+    "tile_lower_1_1",
+    "tile_lower_2_-1",
+    "tile_lower_2_-3",
+    "tile_lower_2_0",
+    "tile_lower_2_2",
+    "tile_lower_-1_-2",
+    "tile_lower_-1_1",
+    "tile_lower_-2_-1",
+    "tile_lower_-2_2",
+    "tile_lower_-3_-3",
+    "tile_lower_-3_0",
+    "tile_lower_0_-3",
+    "tile_lower_0_0",
+    "tile_lower_1_-1",
+    "tile_lower_1_2",
+    "tile_lower_2_-2",
+    "tile_lower_2_1"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "collection": "tile_lower_输出包",
+  "bounds_size_m": [
+    5.0,
+    5.0,
+    0.407
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER_-1_-1",
+  "source_library": "v005"
+}

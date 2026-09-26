@@ -1,0 +1,48 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE",
+  "slug": "pit_side",
+  "name_zh": "坑壁",
+  "room_type": "BRIDGE_ROOM",
+  "serves_room_types": [
+    "BRIDGE_ROOM"
+  ],
+  "scope": "room_type_local",
+  "instance_count": 12,
+  "absorbed_variants": [
+    "pit_side_-1_-2",
+    "pit_side_-1_-3",
+    "pit_side_-1_0",
+    "pit_side_-1_1",
+    "pit_side_-1_2",
+    "pit_side_1_-1",
+    "pit_side_1_-2",
+    "pit_side_1_-3",
+    "pit_side_1_0",
+    "pit_side_1_1",
+    "pit_side_1_2"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "collection": "pit_side_输出包",
+  "bounds_size_m": [
+    0.7,
+    5.0,
+    12.125
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE_-1_-1",
+  "source_library": "v005"
+}

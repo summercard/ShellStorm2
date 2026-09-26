@@ -1,0 +1,41 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE",
+  "slug": "platform_edge",
+  "name_zh": "上层平台坑沿护栏",
+  "room_type": "BRIDGE_ROOM",
+  "serves_room_types": [
+    "BRIDGE_ROOM"
+  ],
+  "scope": "room_type_local",
+  "instance_count": 4,
+  "absorbed_variants": [
+    "platform_edge_-1_15",
+    "platform_edge_1_-15",
+    "platform_edge_1_15"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+  "collection": "platform_edge_输出包",
+  "bounds_size_m": [
+    10.015,
+    0.65,
+    3.2
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE_-1_-15",
+  "source_library": "v005"
+}

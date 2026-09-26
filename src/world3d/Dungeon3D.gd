@@ -123,6 +123,16 @@ var _room_wave_totals: Dictionary = {}
 var _wave_spawn_pending: Dictionary = {}
 var _room_wave_intermission_tokens: Dictionary = {}
 var _reserved_room_spawns: Dictionary = {}
+## —— 触发器刷怪：延迟出怪在途（`docs/v0.1/design/触发器刷怪设计.md` §3.1 delay_sec）——
+## room_id → [{serial, config, position, delay_sec}]。摘出来的怪记在「待生成」账上
+## （见 `_pending_delayed_spawn_count`），期间本波**不判清**，到点后再实例化 ——
+## 这就是「延迟几秒怪才出现」的落地方式，且不破坏既有「全灭才推进」的波次语义。
+var _pending_delayed_spawns: Dictionary = {}
+## 延迟出怪的唯一序号（每批一个），用于定时器回执时在队列里认领自己那一条。
+var _delayed_spawn_serial := 0
+## 本房波间隙秒数。缺省沿用 ROOM_WAVE_INTERMISSION_SECONDS；
+## `encounter.intermission_sec` 可逐房覆盖（触发器刷怪设计 §3.3）。
+var _room_intermission_seconds: Dictionary = {}
 var _room_fate_wave_queued: Dictionary = {}
 var _room_spawn_blocked: Dictionary = {}
 var _loot_module: LootModule
@@ -218,6 +228,11 @@ var _runtime_base_restore_snapshot: Dictionary = {}
 ## 独立副本「撤离信号塔成功返航」的所有权交接快照。与 `_runtime_restore_snapshot`
 ## 的区别是只交接玩家携带物，绝不恢复世界布局、房间状态与坐标。
 var _runtime_carry_restore_snapshot: Dictionary = {}
+## 基地 → 新行动地图（远征情报室传送）的出发交接快照。与 `_runtime_carry_restore_snapshot`
+## 的区别：返航交接的落点就是 99F 基地房，所以它顺带恢复房间与坐标；而出发交接的落点
+## 是新地图自己的出生点，坐标与房间一律不许被基地快照覆盖（见
+## `MISSION_OPERATIONS_DEPARTURE_CARRY_KEY`）。
+var _runtime_departure_carry_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
 var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
@@ -259,6 +274,12 @@ func _ready() -> void:
 				_runtime_base_restore_snapshot = candidate
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 				_run_id = str(candidate.get("run_id", ""))
+			elif _is_mission_operations_departure_carry_snapshot(candidate):
+				# 基地 → 新行动地图的出发交接（见 MISSION_OPERATIONS_DEPARTURE_CARRY_KEY）。
+				# ⚠️ 顺序是契约：必须排在 base 分支之后 —— 塔楼自己的场景要靠 base 分支
+				# 恢复世界与坐标，而出发交接刻意不恢复它们。这里也刻意不继承 run_seed /
+				# run_id：远征是新行动，身份由目的地场景自己派生。
+				_runtime_departure_carry_snapshot = candidate
 	if gameplay_theme == null:
 		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
 	if visual_theme == null:
@@ -335,6 +356,13 @@ func _activate_runtime_persistence() -> void:
 		# 场景自己生成，否则会把返航目标改成刚离开的那张关卡地图。
 		_restore_carried_ownership(_runtime_carry_restore_snapshot)
 		_runtime_carry_restore_snapshot = {}
+	if not _runtime_departure_carry_snapshot.is_empty():
+		# 基地 → 新行动地图的出发交接：装所有权与状态（背包/主副枪/装备背包/快捷栏/
+		# 保险格/HP/手电/钥匙），坐标与房间留给落点场景自己的出生点 —— 远征是
+		# 「安全房中心朝前门方向偏 4m」，而 `_resolve_runtime_restore_room()` 会拿基地的
+		# `current_room_id=facility` 兜底解析成安全房中心，直接把出生点偏移抹掉。
+		_restore_carried_ownership(_runtime_departure_carry_snapshot, false)
+		_runtime_departure_carry_snapshot = {}
 	if _pending_insurance_return_restore:
 		# 中转集合与当前基地检查点必须原子交接；失败时清掉内存投影，
 		# 长期中转仍在，下次进入基地可以安全重试且不会复制。
@@ -469,6 +497,21 @@ func _is_combat_runtime_snapshot(snapshot: Dictionary) -> bool:
 
 const SUCCESSFUL_EXTRACTION_CARRY_KEY := "successful_extraction_carry"
 
+## 基地 → 新行动地图（远征情报室传送）的出发交接标记。
+##
+## 起因（2026-09-26 实测 bug）：基地快照的身份是塔楼 —— `scope=base` 且
+## `runtime_map_id` 为空串；而远征场景的身份是 `expedition_01`。三条既有恢复通道
+## 的判据全都要求地图 ID 相同（见 `_snapshot_matches_runtime_map`），于是这一跳
+## 被整条丢弃：玩家带着 99F 基地的背包与主副枪出发，进远征却只剩空背包 +
+## 白送武器 + 保底备弹。业主裁定「远征入场必然带着 99F 基地的所有物品和状态入场」，
+## 故新增本标记：目的地图命中它时**只交接玩家所有权与状态，不再要求地图 ID 相同，
+## 也绝不恢复塔楼世界、房间进度与坐标**（远征是单层独立关卡，塔楼世界对它无意义）。
+##
+## 判据必须是显式的：基地快照本身就是 `scope=base` + 空 map id，光看这两项无法把它
+## 与「塔楼自己的基地快照」区分开 —— 后者必须连世界一起恢复，所以不能放宽
+## `_snapshot_matches_runtime_map()`，只能新增标记。
+const MISSION_OPERATIONS_DEPARTURE_CARRY_KEY := "mission_operations_departure_carry"
+
 
 ## 独立副本「撤离信号塔」成功返航写入的所有权交接快照。它与可续局行动快照
 ## 互斥：标记存在时只交接携带物，绝不把玩家送回刚撤离的那张关卡地图。
@@ -476,6 +519,14 @@ func _is_successful_extraction_carry_snapshot(snapshot: Dictionary) -> bool:
 	if not RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(snapshot):
 		return false
 	return bool(snapshot.get(SUCCESSFUL_EXTRACTION_CARRY_KEY, false))
+
+
+## 基地 → 新行动地图的出发交接快照（见 `MISSION_OPERATIONS_DEPARTURE_CARRY_KEY`）。
+## 与 `_is_successful_extraction_carry_snapshot` 同构：同样只交接玩家所有权与状态。
+func _is_mission_operations_departure_carry_snapshot(snapshot: Dictionary) -> bool:
+	if not RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(snapshot):
+		return false
+	return bool(snapshot.get(MISSION_OPERATIONS_DEPARTURE_CARRY_KEY, false))
 
 
 ## 运行时存档按 runtime_map_id 隔离：旧塔楼（空）只匹配缺失/空的 map id，
@@ -548,7 +599,13 @@ func _base_runtime_restore_position(room: DungeonRoom3D) -> Vector3:
 ## 玩家携带物的所有权恢复 —— 世界、房间与坐标不归这里管。
 ## 独立副本「撤离信号塔成功返航」只走这一半（见 `_runtime_carry_restore_snapshot`），
 ## 因此它必须自洽：按快照整格装回，重复调用幂等，不会留下第二份实例。
-func _restore_carried_ownership(snapshot: Dictionary) -> void:
+##
+## `restore_location=false` 是「基地 → 新行动地图」出发交专用的读法（见
+## `MISSION_OPERATIONS_DEPARTURE_CARRY_KEY`）：所有权与状态照常装回，但房间与坐标
+## 一律留给落点场景自己的出生点。不这么做的话，基地快照的 `current_room_id=facility`
+## 会在目的地图里被 `_resolve_runtime_restore_room()` 兜底解析成"入口安全房"，
+## 把远征刻意的出生点偏移（安全房中心朝前门偏 4m）直接抹掉。
+func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) -> void:
 	var backpack := snapshot.get("equipped_backpack_item", {}) as Dictionary
 	if player.has_method("clear_equipped_backpack"):
 		player.clear_equipped_backpack()
@@ -606,26 +663,27 @@ func _restore_carried_ownership(snapshot: Dictionary) -> void:
 			_refresh_edge_visuals(edge_rooms[0], edge_rooms[1], opened)
 	if not restored_edges.is_empty():
 		minimap.configure(_records, _open_edges)
-	var room := _resolve_runtime_restore_room(snapshot)
-	if room != null:
-		_current_room_id = ""
-		_on_room_entered(room)
-	var saved_position: Variant = snapshot.get("player_position", [])
-	var restore_position := room.global_position + Vector3.UP * 0.05 if room != null else Vector3.ZERO
-	if saved_position is Array and (saved_position as Array).size() >= 3:
-		var candidate_position := Vector3(
-			float((saved_position as Array)[0]),
-			float((saved_position as Array)[1]),
-			float((saved_position as Array)[2]),
-		)
-		if room != null and _is_runtime_restore_position_valid(room, candidate_position):
-			restore_position = candidate_position
-	if room != null:
-		player.global_position = restore_position
-		player.velocity = Vector3.ZERO
-	# 旧存档曾写入约 +/-PI 的玩家根节点旋转，恢复后会连同子相机一起掉头，
-	# 造成整幅画面与输入的屏幕相对方向同时反转。固定相机项目中根节点必须归零。
-	player.rotation.y = 0.0
+	if restore_location:
+		var room := _resolve_runtime_restore_room(snapshot)
+		if room != null:
+			_current_room_id = ""
+			_on_room_entered(room)
+		var saved_position: Variant = snapshot.get("player_position", [])
+		var restore_position := room.global_position + Vector3.UP * 0.05 if room != null else Vector3.ZERO
+		if saved_position is Array and (saved_position as Array).size() >= 3:
+			var candidate_position := Vector3(
+				float((saved_position as Array)[0]),
+				float((saved_position as Array)[1]),
+				float((saved_position as Array)[2]),
+			)
+			if room != null and _is_runtime_restore_position_valid(room, candidate_position):
+				restore_position = candidate_position
+		if room != null:
+			player.global_position = restore_position
+			player.velocity = Vector3.ZERO
+		# 旧存档曾写入约 +/-PI 的玩家根节点旋转，恢复后会连同子相机一起掉头，
+		# 造成整幅画面与输入的屏幕相对方向同时反转。固定相机项目中根节点必须归零。
+		player.rotation.y = 0.0
 	player.current_hp = clampi(int(snapshot.get("player_hp", player.current_hp)), 1, player.max_hp)
 	player.hp_changed.emit(player.current_hp, player.max_hp)
 	if _inventory_ui != null:
@@ -1596,6 +1654,9 @@ func _generate_layout() -> void:
 			"tower_module_shell": bool(record.get("tower_module_shell", false)),
 			"open_wall_directions": record.get("open_wall_directions", []),
 			"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
+			"spawn_placements": record.get("spawn_placements", []),
+			"encounter": record.get("encounter", {}),
+			"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
 			"reward_plan": record.get("reward_plan", {}),
 			"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
 			# 授权布局壳体（区块00 98F 入口房）：入口房由本路径在开局就实例化，
@@ -2077,11 +2138,32 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		_spawn_room_enemies(room)
 	elif room.room_type == "EVENT":
 		room.cleared = false
-		if _ensure_event_room_objective(room):
+		var event_ready := _ensure_event_room_objective(room)
+		# 「事件 + 战斗」双职房（业主裁定 2026-09-26）：EVENT 房**显式摆了触发盒**时，
+		# 事件终端照常保留，同时按盒出波。⚠️ 只有真有盒才进刷怪入口 —— 否则无盒的
+		# EVENT 房会掉进 `_spawn_room_enemies` 的公式兜底刷出随机怪（不是本意）。
+		if _event_room_has_authored_combat(room):
+			_event_combat_rooms[room.room_id] = true
+			_spawn_room_enemies(room)
+			if event_ready:
+				status_label.text = "事件房：清除异常敌群，并按 E 使用紫色光柱"
+			else:
+				status_label.text = "事件房：清除异常敌群"
+		elif event_ready:
 			status_label.text = "事件房：前往紫色光柱，按 E 使用异常信号终端"
 	else:
 		status_label.text = _room_status(room.room_type)
 		_mark_room_cleared(room, room.room_type not in ["START", "EXTRACTION", "ELEVATOR"])
+
+
+## 「事件 + 战斗」双职房判据：EVENT 房**显式摆了触发盒**才带战斗（业主裁定 2026-09-26）。
+## 刻意与 `HOSTILE_ROOM_TYPES` 分开：EVENT 不在**公式刷怪**的入口门里，只有带盒才有战斗，
+## 免得塔楼 / 主题池里无盒的程序化事件房被顺带刷上随机怪。
+## 判据只看设计源（`spawn_placements`），不看运行态 —— 进房首帧就要决定要不要进刷怪入口。
+func _event_room_has_authored_combat(room: DungeonRoom3D) -> bool:
+	if room == null or room.room_type != "EVENT":
+		return false
+	return not room.spawn_placements.is_empty()
 
 
 func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
@@ -2101,6 +2183,21 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 		return true
 	var floor := maxi(1, visual_theme.difficulty_rank)
 	var floor_level := clampi(int(float(_record_index(room.room_id)) / maxf(1.0, float(_records.size() - 1)) * 3.0), 0, 3)
+	# —— 触发盒路径（`docs/v0.1/design/触发器刷怪设计.md` §4）——
+	# 房间声明了 `spawn_placements` 就**只认盒子**：出什么怪、几只、几时出全部由盒子给，
+	# 旧的三条路（enemy_spawn_plan / 房型分支 / 数量公式）一律不参与。
+	# 「只认盒子」层（spawn_boxes_only）里没摆盒子 ⇒ **不刷怪**（业主裁定：没盒子就不刷）：
+	# 房型保持敌对不变（门/小地图/HUD 语义一致），只是没有敌人，立刻清房，绝不留锁门。
+	var box_waves := _spawn_box_waves(room, floor, floor_level)
+	if not box_waves.is_empty():
+		_note_room_enemy_modifiers(room)
+		return _commit_room_waves(room, box_waves)
+	if room.spawn_boxes_only:
+		_alive_by_room[room.room_id] = 0
+		_room_wave_queues[room.room_id] = []
+		_mark_room_cleared(room, false)
+		status_label.text = "本区未布置触发盒 · 无敌对信号"
+		return true
 	# —— 设计源覆盖（房间级）——
 	# 房间若声明了 enemy_spawn_plan，则波次数、每波数量、怪物组成全部以设计源为准：
 	# desired 数量公式、COMBAT 波次表 [1,2,2,3]、主题权重池（enemy_pool）一律不参与。
@@ -2241,6 +2338,289 @@ func _authored_spawn_waves(room: DungeonRoom3D, floor: int, floor_level: int) ->
 	)
 
 
+## —— 触发盒波次（`docs/v0.1/design/触发器刷怪设计.md` §4）——
+##
+## 房间声明了 `spawn_placements` 就**只认盒子**：出什么怪（type）、几只（count）、
+## 几时出（delay_sec）全部由盒子给；本房摆几个盒子、第几波调哪几个由 `encounter` 给。
+##
+## 返回空数组 = 本房没摆盒子 ⇒ 由调用方决定「不刷」还是「回退旧路径」。
+## 盒子只负责出怪，**调用机制不在盒子里**（业主口径），故本函数只管把两层拼起来。
+func _spawn_box_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Array:
+	var placements := room.spawn_placements
+	if placements.is_empty():
+		return []
+	var stages := _resolve_encounter_stages(room.encounter, placements.size())
+	if stages.is_empty():
+		return []
+	# 波间隙：`encounter.intermission_sec` 可逐房覆盖，缺省沿用全局常量。
+	_room_intermission_seconds[room.room_id] = maxf(
+		0.0, float(room.encounter.get("intermission_sec", ROOM_WAVE_INTERMISSION_SECONDS))
+	)
+	# 盒内数量区间（count.min/max）与「半钉死」编成同口径：本函数私有 rng，
+	# 种子 = run_seed ^ 房 id 派生 ⇒ 同局同房每次调用恒定、不同局/不同房不同。
+	var rng := RandomNumberGenerator.new()
+	rng.seed = run_seed ^ room.room_id.hash() ^ 0x424f5831
+	var waves: Array = []
+	for stage_value in stages:
+		var entries: Array[Dictionary] = []
+		for instance_value in (stage_value as Array):
+			_collect_box_stage_entries(
+				room, placements, int(instance_value), floor, floor_level, rng, entries
+			)
+		if entries.is_empty():
+			continue
+		# 每波至少一条**立刻**出怪：全员延迟时把第一条拉回 0。
+		# 为什么必须要这条不变量：整波都是延迟 ⇒ 本批实到 0 只 ⇒ 落进既有空批分支
+		# （push_error + 解锁房间），表现为「房间白送」，与作者意图完全相反。
+		var has_immediate := false
+		for entry in entries:
+			if float(entry.get("spawn_delay_sec", 0.0)) <= 0.0:
+				has_immediate = true
+				break
+		if not has_immediate:
+			entries[0]["spawn_delay_sec"] = 0.0
+		var batch: Array[Dictionary] = []
+		batch.assign(entries)
+		waves.append(batch)
+	return waves
+
+
+## 把某个盒子实例的出怪清单展开为一批敌人配置，追加进 `entries`（跨条目共享落点池）。
+func _collect_box_stage_entries(
+	room: DungeonRoom3D,
+	placements: Array,
+	instance_index: int,
+	floor: int,
+	floor_level: int,
+	rng: RandomNumberGenerator,
+	entries: Array[Dictionary]
+) -> void:
+	var placement := _box_placement_at(placements, instance_index)
+	if placement.is_empty():
+		return
+	var box := SpawnBoxCatalog.load_box(str(placement.get("box", "")))
+	if box.is_empty():
+		push_error(
+			"[Dungeon3D] 房间 %s 的触发盒实例 %d（%s）解析失败，已跳过"
+			% [room.room_id, instance_index, str(placement.get("box", ""))]
+		)
+		return
+	var spec: Array[Dictionary] = []
+	var total := 0
+	for spawn_value in (box.get("spawns", []) as Array):
+		var spawn := spawn_value as Dictionary
+		var count := _roll_box_count(spawn, rng)
+		if count <= 0:
+			continue
+		spec.append({
+			"type": str(spawn.get("type", "")),
+			"count": count,
+			"delay_sec": float(placement.get("box_delay", 0.0)) + float(spawn.get("delay_sec", 0.0)),
+		})
+		total += count
+	if total <= 0:
+		return
+	# 一次性取满 total 个盒内落点，再按条目切分 —— 让「同盒内的怪」彼此拉开，
+	# 而不是每条各自从最远点重新起算（那会让第二条压到第一条头上）。
+	var points := room.spawn_points_in_box(
+		placement.get("box_center", Vector2.ZERO) as Vector2,
+		placement.get("box_size", Vector2.ZERO) as Vector2,
+		total,
+		float(placement.get("box_rotation", 0.0)),
+		float(box.get("min_spacing_m", 0.0)),
+		int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
+	)
+	# 盒内排不下（异形房凹口 / 家具占位 / 盒太小）时**只出排得下的那几只**：
+	# `spawn_points_in_box` 尾部补的 `Vector3.INF` 绝不能进 `_spawn_enemy_batch` ——
+	# 后者见到非有限点会整批判「无合法落点」、置 `_room_spawn_blocked` 并把本房锁死，
+	# 表现是「一只都不出且房间不解锁」（比少出几只严重得多）。降级语义与业主口径
+	# 「没盒子就不刷」同源：宁可少出，不可锁死。
+	var available: Array[Vector3] = []
+	for point in points:
+		if point.is_finite():
+			available.append(point)
+	if available.is_empty():
+		return
+	var cursor := 0
+	for spec_value in spec:
+		if cursor >= available.size():
+			break
+		var item := spec_value as Dictionary
+		for _repeat in range(int(item["count"])):
+			if cursor >= available.size():
+				break
+			var point := available[cursor]
+			cursor += 1
+			var config := _make_box_enemy(str(item["type"]), floor, floor_level, room)
+			if config.is_empty():
+				continue
+			# `spawn_position` 是落点直通键，`_spawn_enemy_batch` 会取用并在实例化前摘掉；
+			# `spawn_delay_sec` 是延迟键，非 0 的条目会被摘进 `_pending_delayed_spawns`。
+			config["spawn_position"] = point
+			config["spawn_delay_sec"] = float(item["delay_sec"])
+			entries.append(config)
+
+
+## 解析调用层：返回「每波 = 一组盒子实例下标」。空 = 本房没摆盒子（由调用方决定语义）。
+## `encounter.stages` 缺省时全部实例并进一波（口径与设计 §3.3 一致）。
+func _resolve_encounter_stages(encounter: Dictionary, placement_count: int) -> Array:
+	if placement_count <= 0:
+		return []
+	var raw: Variant = encounter.get("stages", [])
+	if raw is Array and not (raw as Array).is_empty():
+		var stages: Array = []
+		for stage_value in (raw as Array):
+			if not (stage_value is Dictionary):
+				continue
+			var boxes: Array = []
+			for index_value in ((stage_value as Dictionary).get("boxes", []) as Array):
+				var index := int(index_value)
+				# 越界下标在静态层已被拦；此处再兜一层是「绝不静默替换成别的实例」，
+				# 直接丢弃并让该波少一个盒子 —— 表现是少出怪，不是出到别的盒子上去。
+				if index >= 0 and index < placement_count:
+					boxes.append(index)
+			stages.append(boxes)
+		return stages
+	var all: Array = []
+	for index in range(placement_count):
+		all.append(index)
+	return [all]
+
+
+## 取一个盒子实例并预解析成运行时结构（盒心/尺寸/姿态/额外延迟）。
+## 非法引用（box 空、未登记、文件坏）返回 {}，由调用方跳过 —— 不静默替换成别的盒子。
+func _box_placement_at(placements: Array, index: int) -> Dictionary:
+	if index < 0 or index >= placements.size():
+		return {}
+	var raw: Variant = placements[index]
+	if not (raw is Dictionary):
+		return {}
+	var placement := (raw as Dictionary).duplicate(true)
+	var box_id := str(placement.get("box", ""))
+	if box_id.is_empty() or not SpawnBoxCatalog.has_id(box_id):
+		return {}
+	var box := SpawnBoxCatalog.load_box(box_id)
+	if box.is_empty():
+		return {}
+	var size := box.get("size_m", Vector2.ZERO) as Vector2
+	var raw_size: Variant = placement.get("size_m", null)
+	if raw_size is Array and (raw_size as Array).size() >= 2:
+		size = Vector2(float((raw_size as Array)[0]), float((raw_size as Array)[1]))
+	placement["box"] = box_id
+	placement["box_center"] = _placement_vec2(placement.get("center_m", []))
+	placement["box_size"] = size
+	placement["box_rotation"] = float(placement.get("rotation_deg", 0.0))
+	placement["box_delay"] = float(placement.get("delay_sec", 0.0))
+	return placement
+
+
+## 盒子数量区间抽签（含 `count` 写死为正整数的情况，此时 min == max）。
+func _roll_box_count(spawn: Dictionary, rng: RandomNumberGenerator) -> int:
+	var minimum := int(spawn.get("count_min", 0))
+	var maximum := int(spawn.get("count_max", minimum))
+	if maximum < minimum:
+		maximum = minimum
+	if maximum <= 0:
+		return 0
+	return rng.randi_range(minimum, maximum)
+
+
+## 按**点名怪种**生成一只敌人。普通怪直取 `MonsterInjector.generate_box_enemy`，
+## elite / boss 走各自装配端（身份指派），未知 type 返回 {}。
+func _make_box_enemy(
+	type_id: String, floor: int, floor_level: int, room: DungeonRoom3D
+) -> Dictionary:
+	if _monster_injector == null:
+		return {}
+	return _monster_injector.generate_box_enemy(type_id, floor, floor_level, {
+		"floor": floor,
+		"floor_level": floor_level,
+		"floor_number": _elite_floor_number(room),
+		"encounter_id": _elite_encounter_id(room),
+		"seed": run_seed,
+		"boss_content_id": str(room.get_meta("boss_content_id", "")),
+	})
+
+
+func _placement_vec2(value: Variant) -> Vector2:
+	if value is Array and (value as Array).size() >= 2:
+		return Vector2(float((value as Array)[0]), float((value as Array)[1]))
+	return Vector2.ZERO
+
+
+## —— 延迟出怪（盒子 `spawns[].delay_sec`）——
+## 摘出来的怪记进 `_pending_delayed_spawns` 并挂一枚定时器；期间计入「待生成」，
+## 本波不会被判清（见 `_pending_delayed_spawn_count` 并入 `_reserved_spawn_count`），
+## 到点后回 `_spawn_enemy_batch` 实到。这样「延迟几秒再出怪」与既有
+## 「全灭才推进」的波次语义相容，不需要另造一套调度。
+func _queue_delayed_spawn(
+	room: DungeonRoom3D, config: Dictionary, position: Vector3, delay_sec: float
+) -> void:
+	var payload := config.duplicate(true)
+	payload.erase("spawn_delay_sec")
+	_delayed_spawn_serial += 1
+	var serial := _delayed_spawn_serial
+	if not _pending_delayed_spawns.has(room.room_id):
+		_pending_delayed_spawns[room.room_id] = []
+	(_pending_delayed_spawns[room.room_id] as Array).append({
+		"serial": serial,
+		"config": payload,
+		"position": position,
+	})
+	get_tree().create_timer(maxf(0.05, delay_sec), false).timeout.connect(
+		_on_delayed_spawn_timeout.bind(room.room_id, serial)
+	)
+
+
+func _on_delayed_spawn_timeout(room_id: String, serial: int) -> void:
+	var entries := _pending_delayed_spawns.get(room_id, []) as Array
+	var found := -1
+	for index in entries.size():
+		if int((entries[index] as Dictionary).get("serial", -1)) == serial:
+			found = index
+			break
+	# 找不到 = 本条已被撤销（房间换代/存档重载）。直接返回，不重试、不补发。
+	if found < 0:
+		return
+	var entry := entries[found] as Dictionary
+	entries.remove_at(found)
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	# 只认「确实还没到的」：房间不在了、或在途期间已被判无落点，就丢弃这一条。
+	# 丢弃而不保留，是为了不让待生成计数永远悬着（那是软锁，不是延迟）。
+	if (
+		_completed
+		or not is_instance_valid(room)
+		or not room.is_streamed()
+		or _room_spawn_blocked.has(room_id)
+	):
+		return
+	var configs: Array[Dictionary] = []
+	configs.append(entry.get("config", {}) as Dictionary)
+	var positions: Array = [entry.get("position", Vector3.INF) as Vector3]
+	# additive=true：**加**在本房存活账之上，不覆盖（首批已记账）。
+	# count_reserved=true：本条在 `_queue_delayed_spawn` 那一刻就已经进了存活账
+	# （见 `_spawn_enemy_batch` 尾部口径注释），到点实到时**不许再加**，
+	# 否则每只延迟怪都会留下一个永远清不掉的幽灵计数。
+	_spawn_enemy_batch(room, configs, true, true, positions)
+
+
+func _pending_delayed_spawn_count(room_id: String) -> int:
+	return (_pending_delayed_spawns.get(room_id, []) as Array).size()
+
+
+## 落点解析优先级：**显式 positions 数组** > 配置内嵌 `spawn_position`（触发盒落点）
+## > 房间级贪心 `spawn_point_for_index`。三者互斥地只走一条，绝不混算。
+func _resolve_spawn_position(
+	room: DungeonRoom3D, config: Dictionary, index: int, positions: Array
+) -> Vector3:
+	if index < positions.size():
+		return positions[index] as Vector3
+	var embedded: Variant = config.get("spawn_position", null)
+	if embedded is Vector3:
+		return embedded as Vector3
+	return room.spawn_point_for_index(index)
+
+
 ## 把已分好的波次提交为本房的刷怪队列，并立刻刷出第一波。
 ## `waves` 每项是一波的敌人配置数组（公式路径与设计源路径共用此处）。
 ## 返回是否成功出怪；任一步失败都会把房间解锁，防软锁。
@@ -2311,10 +2691,35 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		return 0
 	if _room_spawn_blocked.has(room.room_id):
 		return -1
+	# 延迟出怪（触发盒 `spawns[].delay_sec`）：整批预检**之前**先摘出来挂定时器。
+	# 摘走的条目**不参与本次实例化**，也不计入本批实到数；它们由待生成账兜着，
+	# 本波因此不会被提前判清。`positions` 是并行数组，摘的时候必须同步撇掉。
+	var queued_delayed := 0
+	if not count_reserved:
+		var kept_configs: Array[Dictionary] = []
+		var kept_positions: Array = []
+		for index in enemy_configs.size():
+			var candidate := enemy_configs[index]
+			var delay := float(candidate.get("spawn_delay_sec", 0.0))
+			if delay > 0.0:
+				_queue_delayed_spawn(
+					room, candidate, _resolve_spawn_position(room, candidate, index, positions), delay
+				)
+				queued_delayed += 1
+				continue
+			kept_configs.append(candidate)
+			if index < positions.size():
+				kept_positions.append(positions[index])
+		enemy_configs = kept_configs
+		positions = kept_positions
+		# 整批都是延迟：本批实到 0 只，交由既有空批分支处理（见 _spawn_box_waves 的
+		# 「每波至少一条立刻出怪」不变量 —— 触发盒路径不会走到这里）。
+		if enemy_configs.is_empty():
+			return -1
 	# 整批预检先于实例化，任何非法点都不能形成半波或写入实体transform。
 	var spawn_positions: Array[Vector3] = []
 	for index in enemy_configs.size():
-		var point: Vector3 = positions[index] as Vector3 if index < positions.size() else room.spawn_point_for_index(index)
+		var point := _resolve_spawn_position(room, enemy_configs[index], index, positions)
 		if not point.is_finite():
 			_room_spawn_blocked[room.room_id] = true
 			_cancel_room_wave_intermission(room.room_id)
@@ -2335,6 +2740,10 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.room_id = room.room_id
 		$ActiveEnemies.add_child(enemy)
 		var spawn_data := enemy_configs[index].duplicate(true)
+		# 落点直通键 / 延迟键是**本系统的私有通道**，不是敌人数据的一部分：
+		# 摘掉再喂给 `configure_from_enemy_data`，免得它们漏进存档或敌人快照。
+		spawn_data.erase("spawn_position")
+		spawn_data.erase("spawn_delay_sec")
 		if not spawn_data.has("spawn_index"):
 			spawn_data["spawn_index"] = index
 		if not spawn_data.has("persistent_id"):
@@ -2365,12 +2774,20 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.set_runtime_active(room.room_id == _current_room_id, room_visible)
 		if enemy.enemy_kind == "boss":
 			_show_boss_hud(enemy)
+	# 🔴 存活账口径必须**统一**：`_alive_by_room` = 已实例化敌人 ＋ **在途预约**
+	#    （召唤预约 `_reserved_room_spawns` ＋ 延迟出怪 `_pending_delayed_spawns`）。
+	#    证据：`_reserve_room_spawn` 在**预约时**就 `+= configs.size()`，实到时走
+	#    `count_reserved=true` 不再加；`_repair_hostile_room_progress` /
+	#    `_restore_room_runtime_state` 也都按 `已实例化 + _reserved_spawn_count()` 重算。
+	#    延迟出怪原本两头都不占：`_queue_delayed_spawn` 时**不加**（存活账里没有它），
+	#    到点实到时却按 `additive=true` **加一次** ⇒ 净多 1 个「幽灵计数」：
+	#    延迟怪被杀掉后 `_alive_by_room` 永远回不到 0，
+	#    `_can_advance_room_wave` 的 `alive == 0` 判据恒不成立 ⇒ 下一波永不自动来，
+	#    必须靠玩家按门触发 `_repair_hostile_room_progress`（用真实实体重算）才推进。
+	#    这里把「摘出去挂定时器的那几只」当场记进存活账，到点补位时账不再动。
 	if not count_reserved:
-		_alive_by_room[room.room_id] = (
-			int(_alive_by_room.get(room.room_id, 0)) + spawned_count
-			if additive
-			else spawned_count
-		)
+		var base_alive := int(_alive_by_room.get(room.room_id, 0)) if additive else 0
+		_alive_by_room[room.room_id] = base_alive + spawned_count + queued_delayed
 	elif spawned_count < enemy_configs.size():
 		_alive_by_room[room.room_id] = maxi(
 			0,
@@ -2550,11 +2967,14 @@ func _repair_room_progress(room: DungeonRoom3D) -> void:
 		return
 	if room.room_type != "EVENT":
 		return
-	if not _resolved_event_rooms.has(room.room_id):
-		_ensure_event_room_objective(room)
-		return
+	# 带战斗的事件房（自带触发盒的双职房 / 事件召唤的敌群）先把战斗修好再谈事件结算：
+	# `_repair_hostile_room_progress` 在战斗没清完时自己早退，清完才 `_mark_room_cleared`，
+	# 因此插在最前也不会误放行。纯事件房 `_event_combat_rooms` 为空 ⇒ 原路径逐字不变。
 	if _event_combat_rooms.has(room.room_id):
 		_repair_hostile_room_progress(room, true)
+		return
+	if not _resolved_event_rooms.has(room.room_id):
+		_ensure_event_room_objective(room)
 		return
 	# 非战斗事件一经记录为已结算就不应继续锁门；这是热重载/旧存档兜底。
 	_mark_room_cleared(room, true)
@@ -2626,6 +3046,20 @@ func _repair_hostile_room_progress(room: DungeonRoom3D, allow_event_combat := fa
 	_spawn_room_enemies(room)
 
 
+## 本房是否还压着未清完的战斗 —— 存活 / 在途预约 / 待发波 / 本波间歇，四者任一即算。
+## 供「事件 + 战斗」双职房判定「结算事件能否直接放行」用（见 `_resolve_event_room`）。
+func _room_has_pending_combat(room: DungeonRoom3D) -> bool:
+	if room == null:
+		return false
+	if int(_alive_by_room.get(room.room_id, 0)) > 0:
+		return true
+	if _reserved_spawn_count(room.room_id) > 0:
+		return true
+	if not (_room_wave_queues.get(room.room_id, []) as Array).is_empty():
+		return true
+	return _wave_spawn_pending.has(room.room_id)
+
+
 func _can_advance_room_wave(room_id: String) -> bool:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	return (
@@ -2649,9 +3083,12 @@ func _schedule_room_wave_intermission(room_id: String) -> void:
 	_wave_spawn_pending[room_id] = token
 	var wave_number := int(_room_wave_numbers.get(room_id, 1))
 	var total := int(_room_wave_totals.get(room_id, 1))
-	status_label.text = "波次 %d/%d 已清空 · 2秒后生成下一整波" % [wave_number, total]
-	_update_wave_hud(room_id, "间歇中 · 2秒后下一波")
-	get_tree().create_timer(ROOM_WAVE_INTERMISSION_SECONDS, false).timeout.connect(
+	var intermission := maxf(
+		0.0, float(_room_intermission_seconds.get(room_id, ROOM_WAVE_INTERMISSION_SECONDS))
+	)
+	status_label.text = "波次 %d/%d 已清空 · %.0f秒后生成下一整波" % [wave_number, total, intermission]
+	_update_wave_hud(room_id, "间歇中 · %.0f秒后下一波" % intermission)
+	get_tree().create_timer(intermission, false).timeout.connect(
 		_on_room_wave_intermission_timeout.bind(room_id, token)
 	)
 
@@ -2765,6 +3202,9 @@ func _reserved_spawn_count(room_id: String) -> int:
 	var count := 0
 	for request in _reserved_room_spawns.get(room_id, []):
 		count += (request.get("configs", []) as Array).size()
+	# 延迟出怪（触发盒 delay_sec）也算「在途」：本波没到齐就不许判清房，
+	# 否则会先解锁房间、再凭空冒出一波，观感与逻辑都是错的。
+	count += _pending_delayed_spawn_count(room_id)
 	return count
 
 
@@ -3400,6 +3840,12 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 			_spawn_room_enemies(room)
 			status_label.text = "亡者召唤：额外敌群出现，击杀后获得掉落"
 			return
+	# 本房若还压着编排战斗（自带触发盒的「事件 + 战斗」双职房），结算事件不足以放行 ——
+	# 必须等敌群清空，由波次链的 `_repair_hostile_room_progress` 负责清房 / 开门。
+	# 纯事件房（`_event_combat_rooms` 为空）此判据恒 false ⇒ 原行为逐字不变。
+	if _event_combat_rooms.has(room.room_id) and _room_has_pending_combat(room):
+		status_label.text = "事件已结算 · 异常敌群尚未肃清，清除后方可放行"
+		return
 	_mark_room_cleared(room, true)
 
 
@@ -3711,7 +4157,7 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	if bool(policy.get("requires_clear", true)) and not current.cleared:
 		if current.room_type == "EVENT":
 			status_label.text = (
-				"先清除事件召唤的敌群，才能开启房门"
+				"先清除本房异常敌群，才能开启房门"
 				if _event_combat_rooms.has(current.room_id)
 				else "先前往紫色光柱，按 E 结算房间事件"
 			)
@@ -4365,6 +4811,9 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		"wave_queue": (_room_wave_queues.get(room_id, []) as Array).duplicate(true),
 		"wave_number": int(_room_wave_numbers.get(room_id, 1)),
 		"wave_total": int(_room_wave_totals.get(room_id, 1)),
+		# 🔴 本房有没有「建立过波次账」的显式标记。见 `_restore_room_runtime_state`
+		#    顶部注释：没这个标记就无法区分「真的只有 1 波」和「抓快照时还没刷怪」。
+		"wave_established": _room_wave_totals.has(room_id),
 		"captured_at_msec": Time.get_ticks_msec(),
 	}
 
@@ -4381,13 +4830,29 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		_room_spawn_blocked[room_id] = true
 	if bool(state.get("fate_wave_queued", false)):
 		_room_fate_wave_queued[room_id] = true
-	_reserved_room_spawns[room_id] = (state.get("reserved_spawns", []) as Array).duplicate(true)
+	# 🔴 快照可能是「本房建立波次之前」抓的：`_on_room_entered` 里的存档点
+	#    (`BaseManager.flush_runtime_checkpoint("room_transition")`) 跑在
+	#    `_spawn_room_enemies` **之前**，那时本房还没有 `_room_wave_totals` 条目，
+	#    落进快照的 `wave_total` 只是 `get()` 的兜底值 1、`wave_queue` 是空数组、
+	#    `alive_count`/`reserved_spawns` 也都是空的。
+	#    这种快照一旦回灌，会把 `_commit_room_waves` 刚写好的波次账覆盖回
+	#    「1 波 · 无待发队列」⇒ 清完第一波时 `_resolve_room_enemy_departure`
+	#    看到空队列，直接 `_mark_room_cleared(room, true)`，第 2 波起永不出现。
+	#    玩家侧观感就是「波次不续、必须跑去按离开的门才会推进」。
+	#    判据：快照没建立过波次账（旧存档缺该字段一律按「没建立」处理），
+	#    而本局运行态已经建立 ⇒ 保留运行态，战斗账整段不回灌。
+	var snapshot_established_waves := bool(state.get("wave_established", false))
+	var keep_live_combat_progress := (
+		not snapshot_established_waves and _room_wave_totals.has(room_id)
+	)
 	room.visited = bool(state.get("visited", room.visited))
-	room.cleared = bool(state.get("cleared", room.cleared))
-	_alive_by_room[room_id] = maxi(0, int(state.get("alive_count", _alive_by_room.get(room_id, 0))))
-	_room_wave_queues[room_id] = (state.get("wave_queue", []) as Array).duplicate(true)
-	_room_wave_numbers[room_id] = maxi(0, int(state.get("wave_number", 1)))
-	_room_wave_totals[room_id] = maxi(1, int(state.get("wave_total", 1)))
+	if not keep_live_combat_progress:
+		_reserved_room_spawns[room_id] = (state.get("reserved_spawns", []) as Array).duplicate(true)
+		room.cleared = bool(state.get("cleared", room.cleared))
+		_alive_by_room[room_id] = maxi(0, int(state.get("alive_count", _alive_by_room.get(room_id, 0))))
+		_room_wave_queues[room_id] = (state.get("wave_queue", []) as Array).duplicate(true)
+		_room_wave_numbers[room_id] = maxi(0, int(state.get("wave_number", 1)))
+		_room_wave_totals[room_id] = maxi(1, int(state.get("wave_total", 1)))
 	room.apply_runtime_detail_state({
 		"room_light_on": bool(state.get("room_light_on", false)),
 		"containers": (state.get("containers", {}) as Dictionary).duplicate(true),

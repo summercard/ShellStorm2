@@ -1,0 +1,36 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+  "slug": "ceiling_service_pipe_run",
+  "name_zh": "顶部管道与法兰",
+  "room_type": "OFFICE_ROOM",
+  "serves_room_types": [
+    "OFFICE_ROOM"
+  ],
+  "scope": "shared",
+  "instance_count": 1,
+  "absorbed_variants": [],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+  "collection": "ceiling_service_pipe_run_输出包",
+  "bounds_size_m": [
+    22.92,
+    38.0,
+    1.244
+  ],
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "self",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+  "source_library": "v004"
+}

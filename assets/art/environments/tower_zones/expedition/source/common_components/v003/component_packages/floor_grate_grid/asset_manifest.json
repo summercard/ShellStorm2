@@ -1,0 +1,82 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_GRATE_GRID",
+  "asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_GRATE_GRID",
+  "room_type": "DB_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v001/数据库房间种类_数据机房_40x30m_v001.blend",
+  "source_room_type_sha256": "153eaa883b21b4489a3b5bb0b2d67a38419186ee0e7d1ff603bd3ad8f3c291a3",
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/expedition_db_room_components_source_v003.blend",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v003/component_packages/floor_grate_grid/floor_grate_grid.blend",
+  "collection": "地面格栅与检修口_输出包",
+  "editable_collection": "地面格栅与检修口_制作源",
+  "root_object": "ROOT_floor_grate_grid_组件",
+  "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_GRATE_GRID",
+  "slug": "floor_grate_grid",
+  "name_zh": "地面格栅与检修口",
+  "category": "floor",
+  "bounds_size_m": [
+    32.115002,
+    14.379999,
+    0.082
+  ],
+  "bounds_lo_m": [
+    -16.057501,
+    -7.19,
+    0.0
+  ],
+  "bounds_hi_m": [
+    16.057501,
+    7.19,
+    0.082
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis": "+Z",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "allowed_rotations_blender_z_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "visual_only",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_world_origin_m": [
+    1.5524999999999993,
+    -0.9199999999999999,
+    0.049
+  ],
+  "version": "v003",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "objects": [
+    "地面格栅与检修口_输出_部件00"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "godot_front_axis": "+Y",
+  "component_file_sha256": "a775c2a205c51742518071d6e804dfe15481debf7504110d1dc151dc02bbee08"
+}

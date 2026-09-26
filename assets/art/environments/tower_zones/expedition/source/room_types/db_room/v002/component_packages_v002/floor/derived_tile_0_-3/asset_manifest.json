@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3",
+  "slug": "derived_tile_0_-3",
+  "name_zh": "受控派生地砖_0_-3_v002",
+  "category": "floor",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "受控派生地砖_0_-3_v002_资产包",
+  "objects": [
+    "受控派生地砖_0_-3_v002_主体",
+    "受控派生地砖_0_-3_v002_自发光"
+  ],
+  "world_origin_m": [
+    2.5,
+    -12.5,
+    -0.32
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "controlled_derived_tile_v002",
+  "world_bounds_m": [
+    [
+      0.0,
+      -15.0,
+      -0.32
+    ],
+    [
+      5.0,
+      -10.0,
+      0.087
+    ]
+  ],
+  "dimensions_m": [
+    5.0,
+    5.0,
+    0.407
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 2,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "visual_only",
+  "visual_only": true,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

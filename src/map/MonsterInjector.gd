@@ -89,6 +89,22 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 	
 	return enemies
 
+## 触发盒路径：按**明确的怪种**生成一只（`docs/v0.1/design/触发器刷怪设计.md` §3.1）。
+##
+## 为什么不能用 `generate_enemies`：它走 `match enemy_type`，普通怪种（melee_chaser 等）
+## 落到 `_:` 分支 → 生成的是**主题兜底怪**而不是点名的那个种类，盒子写什么都会失效。
+## 本函数与 `build_waves_from_plan` 同口径：普通怪直取 `_generate_basic_enemy`，
+## `elite` / `boss` 走各自装配端（它们是**身份指派**，不是编成）。
+## 未知或非法 type 返回 {}（调用方跳过，绝不退化成别的东西）。
+func generate_box_enemy(type_id: String, floor: int, floor_level: int, extra: Dictionary = {}) -> Dictionary:
+	if type_id == "elite":
+		return _generate_elite(floor, floor_level, extra)
+	if type_id == "boss":
+		return _generate_boss(floor, floor_level, extra)
+	if is_authorable_enemy_type(type_id):
+		return _generate_basic_enemy(type_id, floor, floor_level)
+	return {}
+
 ## 设计源覆盖：按关卡设计源给定的波次计划生成敌人。
 ## 外层每项 = 一波（**波次数钉死**），每波有两种写法，**互斥**：
 ##   ① 逐值固定：`{"monsters": [{"type": "melee_chaser", "count": 2}]}`

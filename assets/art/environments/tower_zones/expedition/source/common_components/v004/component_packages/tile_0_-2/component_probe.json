@@ -1,0 +1,20 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_0_-2",
+  "file": "assets/art/environments/tower_zones/expedition/source/common_components/v004/component_packages/tile_0_-2/tile_0_-2.blend",
+  "checks": {
+    "exact_output_object_set": true,
+    "one_component_scene": true,
+    "root_identity": true,
+    "mesh_identity": true,
+    "collection_offset_zero": true,
+    "nonempty": true,
+    "output_membership_unique": true,
+    "camera_ready": true,
+    "not_room_owned": true,
+    "bounds_match": true,
+    "bottom_zero": true,
+    "standard_material_uv": true
+  },
+  "passed": true,
+  "output_mesh_count": 2
+}

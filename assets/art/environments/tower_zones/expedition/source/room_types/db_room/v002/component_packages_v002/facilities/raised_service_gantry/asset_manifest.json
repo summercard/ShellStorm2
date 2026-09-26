@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+  "slug": "raised_service_gantry",
+  "name_zh": "抬升平台检修门架",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "抬升平台检修门架_资产包",
+  "objects": [
+    "抬升平台检修门架_主体",
+    "抬升平台检修门架_自发光"
+  ],
+  "world_origin_m": [
+    9.600000000000001,
+    -3.59,
+    0.58
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      7.57,
+      -3.83,
+      0.58
+    ],
+    [
+      11.63,
+      -3.35,
+      4.51
+    ]
+  ],
+  "dimensions_m": [
+    4.06,
+    0.48,
+    3.93
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 12,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

@@ -9,6 +9,7 @@
   "entry_side": "east",
   "exit_side": "west",
   "reservations": [],
+  "spawn_boxes_only": true,
   "rooms": [
     {
       "key": "entry",
@@ -49,13 +50,15 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["melee_chaser", "ambusher"],
-            "kinds": { "min": 1, "max": 1 },
-            "count": { "min": 2, "max": 4 }
-          }
+      "spawn_placements": [
+        { "box": "box_room_spread", "center_m": [-15.0, -12.5] },
+        { "box": "box_corner_ambush", "center_m": [5.0, -12.5] },
+        { "box": "box_wall_arc", "center_m": [15.0, 2.5], "rotation_deg": 90.0 }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2] }
         ]
       }
     },
@@ -78,13 +81,16 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "SCAVENGE",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["melee_chaser", "ranged_caster", "ambusher"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 2, "max": 4 }
-          }
+      "spawn_placements": [
+        { "box": "box_corner_ambush", "center_m": [-12.5, -7.5] },
+        { "box": "box_wall_arc", "center_m": [-2.5, -7.5] },
+        { "box": "box_room_spread", "center_m": [7.5, 2.5] },
+        { "box": "box_corridor_column", "center_m": [12.5, -2.5], "rotation_deg": 90.0 }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2, 3] }
         ]
       }
     },
@@ -107,18 +113,16 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["melee_chaser", "ranged_caster", "ambusher"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 3, "max": 5 }
-          },
-          {
-            "pool": ["shielded", "ranged_caster", "summoner"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 3, "max": 5 }
-          }
+      "spawn_placements": [
+        { "box": "box_room_spread", "center_m": [-7.5, -12.5] },
+        { "box": "box_corner_ambush", "center_m": [7.5, -12.5] },
+        { "box": "box_corridor_column", "center_m": [-7.5, 2.5] },
+        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0 }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2, 3] }
         ]
       }
     },
@@ -141,18 +145,16 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["ambusher", "exploder", "melee_chaser"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 3, "max": 5 }
-          },
-          {
-            "pool": ["melee_chaser", "ambusher"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 3, "max": 5 }
-          }
+      "spawn_placements": [
+        { "box": "box_room_spread", "center_m": [-15.0, -12.5] },
+        { "box": "box_corner_ambush", "center_m": [5.0, -12.5] },
+        { "box": "box_wall_arc", "center_m": [15.0, -12.5] },
+        { "box": "box_corridor_column", "center_m": [-15.0, 7.5] }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2, 3] }
         ]
       }
     },
@@ -175,18 +177,16 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["shielded", "ranged_caster", "melee_chaser"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 3, "max": 5 }
-          },
-          {
-            "pool": ["summoner", "melee_chaser", "exploder", "ranged_caster"],
-            "kinds": { "min": 2, "max": 3 },
-            "count": { "min": 5, "max": 8 }
-          }
+      "spawn_placements": [
+        { "box": "box_room_spread", "center_m": [-22.5, -7.5] },
+        { "box": "box_corner_ambush", "center_m": [-22.5, 7.5] },
+        { "box": "box_center_elite", "center_m": [22.5, -7.5] },
+        { "box": "box_room_spread", "center_m": [22.5, 7.5] }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2, 3] }
         ]
       }
     },
@@ -209,13 +209,16 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "SCAVENGE",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["melee_chaser", "ambusher", "ranged_caster"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 2, "max": 4 }
-          }
+      "spawn_placements": [
+        { "box": "box_corner_ambush", "center_m": [-12.5, -7.5] },
+        { "box": "box_room_spread", "center_m": [-2.5, -7.5] },
+        { "box": "box_wall_arc", "center_m": [12.5, -2.5], "rotation_deg": 90.0 },
+        { "box": "box_corridor_column", "center_m": [7.5, 2.5] }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2, 3] }
         ]
       }
     },
@@ -238,13 +241,15 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "STORAGE",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["shielded", "melee_chaser", "ambusher"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 2, "max": 4 }
-          }
+      "spawn_placements": [
+        { "box": "box_center_elite", "center_m": [0.0, 0.0] },
+        { "box": "box_corner_ambush", "center_m": [-5.0, -5.0] },
+        { "box": "box_corner_ambush", "center_m": [5.0, 5.0] }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2] }
         ]
       }
     },
@@ -267,18 +272,18 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "COMBAT",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["ranged_caster", "melee_chaser", "ambusher"],
-            "kinds": { "min": 2, "max": 3 },
-            "count": { "min": 5, "max": 7 }
-          },
-          {
-            "pool": ["ambusher", "exploder", "shielded"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 3, "max": 5 }
-          }
+      "spawn_placements": [
+        { "box": "box_room_spread", "center_m": [-15.0, -12.5] },
+        { "box": "box_corner_ambush", "center_m": [0.0, -12.5] },
+        { "box": "box_wall_arc", "center_m": [15.0, -2.5], "rotation_deg": 90.0 },
+        { "box": "box_center_elite", "center_m": [15.0, 7.5] },
+        { "box": "box_room_spread", "center_m": [-5.0, 12.5] }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2, 3] },
+          { "boxes": [4] }
         ]
       }
     },
@@ -300,7 +305,20 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": "EVENT"
+      "content_type": "EVENT",
+      "spawn_placements": [
+        { "box": "box_room_spread", "center_m": [-7.5, -12.5] },
+        { "box": "box_corner_ambush", "center_m": [7.5, -12.5] },
+        { "box": "box_corridor_column", "center_m": [-7.5, 2.5] },
+        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0 }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2] },
+          { "boxes": [3] }
+        ]
+      }
     },
     {
       "key": "room_10",
@@ -321,13 +339,16 @@
       ],
       "template_rotation_deg": 0,
       "content_type": "SCAVENGE",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "pool": ["melee_chaser", "ranged_caster", "shielded"],
-            "kinds": { "min": 1, "max": 2 },
-            "count": { "min": 3, "max": 5 }
-          }
+      "spawn_placements": [
+        { "box": "box_room_spread", "center_m": [-12.5, -7.5] },
+        { "box": "box_center_elite", "center_m": [7.5, -7.5] },
+        { "box": "box_wall_arc", "center_m": [12.5, 2.5], "rotation_deg": 90.0 },
+        { "box": "box_corner_ambush", "center_m": [-2.5, 2.5] }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0, 1] },
+          { "boxes": [2, 3] }
         ]
       }
     },
@@ -349,7 +370,20 @@
         40.0
       ],
       "template_rotation_deg": 0,
-      "content_type": "BOSS"
+      "content_type": "BOSS",
+      "spawn_placements": [
+        { "box": "box_boss_arena", "center_m": [-2.5, -2.5] },
+        { "box": "box_room_spread", "center_m": [-17.5, -7.5] },
+        { "box": "box_corner_ambush", "center_m": [17.5, 7.5] },
+        { "box": "box_wall_arc", "center_m": [2.5, 12.5] }
+      ],
+      "encounter": {
+        "stages": [
+          { "boxes": [0] },
+          { "boxes": [1, 2] },
+          { "boxes": [3] }
+        ]
+      }
     },
     {
       "key": "extraction",

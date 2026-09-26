@@ -1,0 +1,49 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01",
+  "slug": "right_front_shelf_01",
+  "name_zh": "右前货架_01",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "右前货架_01_资产包",
+  "objects": [
+    "右前货架_01_主体"
+  ],
+  "world_origin_m": [
+    15.2,
+    -8.399999999999999,
+    0.0
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      14.34,
+      -8.78,
+      0.0
+    ],
+    [
+      16.06,
+      -8.02,
+      2.59
+    ]
+  ],
+  "dimensions_m": [
+    1.72,
+    0.76,
+    2.59
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 10,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

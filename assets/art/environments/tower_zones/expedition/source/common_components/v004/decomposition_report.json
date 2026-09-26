@@ -1,0 +1,14 @@
+{
+  "room_type": "OFFICE_ROOM",
+  "library_version": "v004",
+  "source_room_type_sha256": "4cf7138d0010405202d9cb9dd2aef0af9a676984ceeb90501b5a8d92304ed95f",
+  "component_count": 106,
+  "object_assignment_count": 193,
+  "duplicate_source_objects": false,
+  "all_output_instance_offsets_zero": true,
+  "all_output_roots_identity": true,
+  "room_owned_geometry": false,
+  "collision_authored": false,
+  "glb_exported": false,
+  "godot_runtime_connected": false
+}

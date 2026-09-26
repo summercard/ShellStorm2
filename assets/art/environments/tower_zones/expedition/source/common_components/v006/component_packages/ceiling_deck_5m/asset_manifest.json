@@ -1,0 +1,44 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+  "slug": "ceiling_deck_5m",
+  "name_zh": "吊顶结构",
+  "room_type": "OFFICE_ROOM",
+  "serves_room_types": [
+    "OFFICE_ROOM"
+  ],
+  "scope": "shared",
+  "instance_count": 8,
+  "absorbed_variants": [
+    "ceiling_deck_-2",
+    "ceiling_deck_-3",
+    "ceiling_deck_-4",
+    "ceiling_deck_0",
+    "ceiling_deck_1",
+    "ceiling_deck_2",
+    "ceiling_deck_3"
+  ],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+  "collection": "ceiling_deck_5m_输出包",
+  "bounds_size_m": [
+    30.0,
+    5.0,
+    0.393
+  ],
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "self",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-1",
+  "source_library": "v004"
+}

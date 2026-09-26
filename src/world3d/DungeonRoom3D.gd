@@ -323,12 +323,45 @@ const SPAWN_CLEARANCE_M := 1.15
 const SPAWN_BOSS_CLEARANCE_M := 2.2
 const SPAWN_BODY_HEIGHT_M := 2.6
 const SPAWN_MAX_POINTS := 64
+## 盒内候选采样步长（米）。盒是独立采样域，密度不跟地砖走 —— 见 `_box_sample_points`。
+## 定 1.0 而非 1.5：异形房（L 型缺角、U 形空腔、非矩形凹口）里盒常只有一小片压在可通行区上，
+## 1.5 m 网格会把那一片抽成三四个点 —— 10×10 的 `box_corner_ambush` 要 6 只就取不满。
+## 步长只是采样密度，不是设计意图；把密度提上来，容量才贴近盒的真实可用面积。
+const SPAWN_BOX_SAMPLE_STEP_M := 1.0
+## 敌人实体碰撞半径（`Enemy3D` footprint 默认值）：盒内「怪与怪」的最小间距按**怪体直径**判。
+## ⚠ 不要拿 `SPAWN_CLEARANCE_M`（离墙净距，1.15）当怪半径 —— 那是给「怪与墙」留的余量，
+## 拿来当「怪与怪」的门禁会把 10×10 的盒子压到只剩 4 个落点（实测 room_01/room_04）。
+const ENEMY_BODY_RADIUS_M := 0.8
+## 盒内取点的**有界重洗**轮数。单轮「随机序 + 首适配」可能因先抽到**居中**的点而把小盒余量
+## 一次吃光（3×3 盒、间距 1.7 m 时中心到池内任一点 ≤1.414 m ⇒ 第二只无处可放），于是「本来排
+## 得下」被误判成「排不下」、触发落地平移且**随种子翻面**。首轮取不满就换种再试、取首个取满者
+## （**第 0 轮即原先的单次随机序** ⇒ 已能排下的盒位置逐字不变）。
+## 32 轮把「单轮最高约 4/7 的失败率」压到 ~1e-8，实务上等价于必成。
+const SPAWN_BOX_PICK_ATTEMPTS := 32
+## 重洗轮次间的种子步长（黄金比例常数，避开相邻轮次的相关性）。
+const SPAWN_BOX_PICK_ATTEMPT_STRIDE := 0x9E3779B1
+## 盒心「落地」搜索：只在声明位置容量不足时才启用。半径取 30 m（覆盖本关最大房的对半对角），
+## 候选按「离声明位置由近及远」试探，取第一个容量达标者 —— 漂移最小；上限 192 个候选封顶，
+## 避免极端房里逐点试算的开销失控。
+const SPAWN_BOX_SHIFT_RADIUS_M := 30.0
+const SPAWN_BOX_SHIFT_TRIES := 192
+## 触发盒最小边长（米）。业主 2026-09-26 口径：盒子是「小型单位」，**最小 2×2 m**；
+## 尺寸逐房自由可调（3×3 / 4×4 都是合法值），但不得小于本下限。
+const SPAWN_BOX_MIN_SIZE_M := 2.0
+## 地砖模数（米）。盒心必须**吸附到某块地砖的格心** —— 业主口径「以砖块为中心」，
+## 吸附后「这个房间的 01 号刷怪盒在哪」可以用「哪一块地砖」唯一描述，才能逐盒微调。
+const SPAWN_BOX_TILE_M := 5.0
+## 盒心离房墙的**默认**内缩圈数（1 圈 = 1 块地砖 = 5 m）。
+## 业主口径：「刷怪点都是靠近墙边的地砖，最好往里挪一圈到 2 圈」。
+## 逐盒可由盒子资产 `placement_policy.wall_recess_tiles` 覆盖（0 = 允许贴墙）。
+const SPAWN_BOX_WALL_RECESS_TILES := 1
 var _spawn_candidates: Array[Vector3] = []
 var _spawn_edge_candidates: Array[bool] = []
 var _spawn_blockers: Array[AABB] = []
 var _spawn_available: Array[int] = []
 # 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
-# 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源：
+# 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源；
+# 触发盒的盒心吸附（`snap_box_center_to_tile`）也依赖这套格心：
 #   · `_build_spawn_points()` 只从这里取候选落点（凹口方向自然少点，不会再刷到墙外）；
 #   · `contains_world_position()` 额外要求点落在某个真砖格上（凹口不算房内）。
 # 没有地砖清单的房（v007 安全房 / 塔楼程序化房 / 旧房表）两条路都不启用，行为逐字不变。
@@ -373,6 +406,19 @@ var open_wall_directions: Array[String] = []
 ## 设计源给出的房间级刷怪计划（波次 / 每波数量 / 怪物组成）。
 ## 空字典 = 该房走全局刷怪公式；非空时由 Dungeon3D._spawn_room_enemies 全量接管。
 var enemy_spawn_plan: Dictionary = {}
+## —— 触发器刷怪（`docs/v0.1/design/触发器刷怪设计.md`）——
+## 放置层：本房摆了哪些触发盒。每项 = `{box: String, center_m: [x,z] 房间局部坐标,
+## size_m?: [w,d] 覆盖, rotation_deg?: float, delay_sec?: float}`。数组**下标即实例 id**，
+## 供调用层 `encounter.stages[].boxes` 按序引用。
+## 空数组 = 本房没有盒子 ⇒ 在 spawn_boxes_only 层里**不刷怪**（业主裁定「没盒子就不刷」）。
+var spawn_placements: Array = []
+## 调用层：第 N 波调用哪几个盒子实例。`{stages: [{boxes: [int...]}], intermission_sec: float}`。
+## 空字典 = 全部实例并进一波（运行时口径）。推进仍复用既有波次机制。
+var encounter: Dictionary = {}
+## 「只认盒子」层标记（层里写一次、逐房下发）：置真时本房**没摆盒子就不刷怪**，
+## 绝不回退旧的公式/房型/设计源路径。业主裁定 2026-09-26「全废弃，没盒子就不刷」。
+## 缺省 false ⇒ 未迁移关卡（塔楼各层）行为逐字不变。
+var spawn_boxes_only := false
 ## 设计源给出的房间级统一掉落计划（04 §22.7）：键 = trigger（clear / search / kill），
 ## 值 = 槽位引用（`{spec_id}` / `{entries}` / `{pool_id}`）。空字典 = 本房不覆盖，
 ## 由 RewardService.resolve_dispatch 的覆盖链逐级回退（关卡 → 怪物表 → 全局默认）。
@@ -423,6 +469,9 @@ func configure(config: Dictionary) -> void:
 	tower_module_shell = bool(config.get("tower_module_shell", tower_module_shell))
 	open_wall_directions.assign(config.get("open_wall_directions", []))
 	enemy_spawn_plan = (config.get("enemy_spawn_plan", enemy_spawn_plan) as Dictionary).duplicate(true)
+	spawn_placements = (config.get("spawn_placements", spawn_placements) as Array).duplicate(true)
+	encounter = (config.get("encounter", encounter) as Dictionary).duplicate(true)
+	spawn_boxes_only = bool(config.get("spawn_boxes_only", spawn_boxes_only))
 	reward_plan = (config.get("reward_plan", reward_plan) as Dictionary).duplicate(true)
 	safe_room_corner_l = bool(config.get("safe_room_corner_l", safe_room_corner_l))
 	authored_layout_shell = bool(config.get("authored_layout_shell", authored_layout_shell))
@@ -3572,6 +3621,307 @@ func spawn_point_for_index(index: int) -> Vector3:
 		local_points.append(_spawn_candidates[chosen])
 		enemy_spawn_points.append(to_global(_spawn_candidates[chosen]))
 	return enemy_spawn_points[target]
+
+
+## —— 触发盒落点（触发器刷怪设计 §4）——
+## 候选池限定在**盒内**：
+##   ① 盒心先**吸附到地砖格心**并强制离墙内缩 `wall_recess_tiles` 圈（见 `snap_box_center_to_tile`）；
+##   ② 盒尺寸夹到下限 `SPAWN_BOX_MIN_SIZE_M`（2×2 m）；
+##   ③ 候选由**盒自己**按 `SPAWN_BOX_SAMPLE_STEP_M` 网格采样（盒局部系步进），
+##      逐个过「地砖覆盖 + 离墙净距」与「实体障碍」两道闸；
+##   ④ **带种子随机**取点 + **间距硬下限** = `spacing`，排不下就少出（绝不把两只怪塞到同一处）。
+##
+## 参数：`box_center_local` = 盒心**房间局部坐标 (x, z)**；`box_size` = (width, depth)；
+## `box_rotation_deg` = 盒自身绕 Y 轴的姿态（与房间姿态自动叠加，因为出入都走 to_global/to_local）；
+## `wall_recess_tiles` = 盒心离房墙内缩圈数（1 圈 = 5 m，0 = 允许贴墙）。
+## 返回 `count` 个**世界坐标**；取不满时尾部补 `Vector3.INF`。
+## ⚠ 调用方必须**按有限点截断**（`Dungeon3D._collect_box_stage_entries` 就是这么做的）：
+## 把 `Vector3.INF` 直接喂给 `_spawn_enemy_batch` 会让整批判「无合法落点」并把本房波次锁死。
+## 本函数不替调用方决定降级策略，但绝不用非法坐标或房间中心糊弄过去。
+func spawn_points_in_box(
+	box_center_local: Vector2,
+	box_size: Vector2,
+	count: int,
+	box_rotation_deg: float = 0.0,
+	min_spacing_m: float = 0.0,
+	wall_recess_tiles: int = SPAWN_BOX_WALL_RECESS_TILES
+) -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	if count <= 0:
+		return result
+	if _spawn_candidates.is_empty():
+		_build_spawn_points()
+	_collect_spawn_blockers()
+	box_center_local = snap_box_center_to_tile(box_center_local, wall_recess_tiles)
+	var size := Vector2(
+		maxf(SPAWN_BOX_MIN_SIZE_M, box_size.x), maxf(SPAWN_BOX_MIN_SIZE_M, box_size.y)
+	)
+	var half := size * 0.5
+	var radians := deg_to_rad(box_rotation_deg)
+	var cos_r := cos(radians)
+	var sin_r := sin(radians)
+	var clearance := _spawn_clearance()
+	var spacing := maxf(ENEMY_BODY_RADIUS_M * 2.0 + 0.1, min_spacing_m)
+	var seed_value := _box_pick_seed(box_center_local, half)
+	var resolved := _resolve_box_pool(
+		box_center_local, half, cos_r, sin_r, clearance, spacing, seed_value, count
+	)
+	var pool: Array[Vector3] = resolved["pool"]
+	box_center_local = Vector2(resolved["center"])
+	var chosen := _scatter_box_pick(pool, spacing, count, seed_value)
+	for point in chosen:
+		result.append(to_global(point))
+	while result.size() < count:
+		result.append(Vector3.INF)
+	return result
+
+
+## 盒内取点：**带种子随机** + 最小间距硬下限（业主 2026-09-26 口径「盒内随机位置刷怪」）。
+##
+## 单轮 = 「Fisher-Yates 随机序 + 首适配」：按种子派生的随机序逐个试放，与已选点都 ≥ `spacing`
+## 才收；排不下 `count` 只就**少出**（绝不把两只怪塞到同一处）。
+##
+## ⚠ 为什么要**有界重洗**（`SPAWN_BOX_PICK_ATTEMPTS` 轮）：首适配对**随机序敏感** —— 若第一只
+## 先抽到**居中**的点，会把整个小盒的余量一次吃光（3×3 盒、间距 1.7 m 时中心到池内任一点
+## ≤1.414 m < 1.7 ⇒ 第二只无处可放），于是「本来排得下」被误判成「排不下」、触发落地平移，且
+## **随种子翻面**（实测 `room_05#1` / `room_10#3`：同一盒位三种子三样）。改为「首轮取不满则换种
+## 再试，取首个取满者」，容量判定与出怪选点同时变稳。**第 0 轮 = 原先的单次随机序** ⇒ 已能排下
+## 的盒位置逐字不变，只对排不下的盒重洗。
+##
+## 为什么不是「贪心取离已选点最远者 + 贴边加权」（更早实现）：贴边加权给所有贴边点**同分**，
+## 贪心退化成「按顺序取同一条边上的下一个点」⇒ 怪在盒里排成一条线（设计 §7.1：8 个盒次异常，
+## 全部 `prefer_edge=true`）。本实现不引入任何边缘加权，位置仍是随机的。
+##
+## ⚠ 容量判定（`_fits_in_box`）与出怪选点必须**共用本函数 + 同一 `seed_value`**，
+## 否则「判定够、实际排不下」会像旧实现那样漏掉落地平移。
+func _scatter_box_pick(
+	pool_in: Array[Vector3], spacing: float, count: int, seed_value: int
+) -> Array[Vector3]:
+	if count <= 0 or pool_in.is_empty():
+		return []
+	# `assign()` 让元素仍带 Vector3 类型（`duplicate()` 返回无类型 Array）。
+	var pool: Array[Vector3] = []
+	pool.assign(pool_in)
+	var best: Array[Vector3] = []
+	# 逐轮换种重洗，取**首个取满**者；都不满则留取点最多的一轮（宁少出不穿模）。
+	for attempt in range(SPAWN_BOX_PICK_ATTEMPTS):
+		var candidate := _box_first_fit_pass(
+			pool, spacing, count, seed_value + attempt * SPAWN_BOX_PICK_ATTEMPT_STRIDE
+		)
+		if candidate.size() > best.size():
+			best = candidate
+		if best.size() >= count:
+			break
+	return best
+
+
+## 单轮「Fisher-Yates 随机序 + 首适配」。抽离出来只为让 `_scatter_box_pick` 能换种重洗。
+func _box_first_fit_pass(
+	pool: Array[Vector3], spacing: float, count: int, seed_value: int
+) -> Array[Vector3]:
+	var chosen: Array[Vector3] = []
+	var shuffled: Array[Vector3] = []
+	shuffled.assign(pool)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	for i in range(shuffled.size() - 1, 0, -1):
+		var j := rng.randi_range(0, i)
+		var swap := shuffled[i]
+		shuffled[i] = shuffled[j]
+		shuffled[j] = swap
+	for point in shuffled:
+		if chosen.size() >= count:
+			break
+		var ok := true
+		for previous in chosen:
+			if point.distance_to(previous) < spacing - 0.001:
+				ok = false
+				break
+		if ok:
+			chosen.append(point)
+	return chosen
+
+
+## 盒内随机取点的**确定性种子**：由「房种子 + 房 id + 盒心 / 尺寸」派生。
+## 目的：同局同盒每次复算都是同一批落点（探针与真机一致、可回归）；不同房 / 不同盒各自不同。
+## 刻意**不把需求量算进种子**：同一 (盒心, 尺寸) 的取点轮次序列与需求量无关；容量判定
+## （`_fits_in_box`）与出怪选点对**同一需求量**调用同一函数 + 同一批轮次种子，答案必然一致。
+func _box_pick_seed(box_center_local: Vector2, half: Vector2) -> int:
+	return (
+		room_seed
+		^ room_id.hash()
+		^ 0x424f5831
+		^ int(round(box_center_local.x * 100.0))
+		^ (int(round(box_center_local.y * 100.0)) * 131)
+		^ (int(round(half.x * 100.0)) * 6367)
+		^ (int(round(half.y * 100.0)) * 25847)
+	)
+
+
+## 盒内候选：**盒自身**按 `SPAWN_BOX_SAMPLE_STEP_M` 网格采样（在盒局部系内步进、再转回房间局部系），
+## 逐个过「地砖覆盖 + 离墙净距」与「实体障碍」两道闸。
+##
+## 为什么不复用房间级 `_spawn_candidates`：那是**每 5 m 砖 3×3 子点**的粗网格，密度由地砖粒度决定。
+## 盒子可以比一块砖还窄（6×14 的窄长盒），粗网格在盒里只剩三五个点，贪心只能把怪挤在一起
+## （实测两只相距 0.66 m ⇒ 直接穿模）。盒是**独立采样域**，密度该由盒自己定。
+func _box_sample_points(
+	box_center_local: Vector2, half: Vector2, cos_r: float, sin_r: float, clearance: float
+) -> Array[Vector3]:
+	var pool: Array[Vector3] = []
+	var step := SPAWN_BOX_SAMPLE_STEP_M
+	var columns := int(floor(half.x / step))
+	var rows := int(floor(half.y / step))
+	for ix in range(-columns, columns + 1):
+		for iz in range(-rows, rows + 1):
+			var local := Vector2(ix * step, iz * step)
+			if absf(local.x) > half.x or absf(local.y) > half.y:
+				continue
+			# 盒局部系 → 房间局部系（与 `_box_local_point` 互逆）。
+			var rel := Vector2(local.x * cos_r - local.y * sin_r, local.x * sin_r + local.y * cos_r)
+			var point := Vector3(box_center_local.x + rel.x, 0.0, box_center_local.y + rel.y)
+			if not _spawn_floor_contains(point, clearance):
+				continue
+			if not _spawn_obstacle_free(point):
+				continue
+			pool.append(point)
+	return pool
+
+
+## 解析「落地盒」：返回 `{center, pool}`。
+##
+## `constrained` 远征每局按种子重洗房型，摆放坐标只能写在**房局部系**里，数据作者无法预知
+## 本局 `room_0X` 会被洗成哪种房型。于是会出现两类失配：
+##   ① 盒心压在 U 形空腔 / 下沉坑 / 非矩形凹口上 ⇒ 盒内**一个候选都没有**，房间直接锁死；
+##   ② 盒只有一小半落在可通行区里 ⇒ **容量不足**（`box_corner_ambush` 要 6 只只排得 4 只），
+##      调用方会补 `Vector3.INF`，整波被判「无合法落点」。
+##
+## ⚠️ **本房型池下不存在「任何房型都成立」的固定坐标**（已逐块求交证明）：
+##   `corridor_45x40` 的 l_turn / u_turn 可通行区在 z∈(-5,5) 段是空集，
+##   而 `bridge_60x50` 只允许 x,z∈[-5,5] —— 房型池可通行区交集 = ∅。
+##   故 `center_m` 只能是**意图锚点**，运行时必须按本局房型落到可通行处。
+##
+## 落地口径：**容量达标就原样尊重声明位置**（多数情况，零额外开销）；不足则在
+## `SPAWN_BOX_SHIFT_RADIUS_M` 内、按「离声明位置由近及远」找**容量达标**的落点，取最近的一个
+## （最小漂移）；都不达标才退到容量最大者。落地后的盒即本局硬范围，出怪只可能落在其中。
+##
+## ⚠ 容量必须用 `_greedy_box_pick`（选点的**同一条**规则）来判 —— 只看池点数会误判成「够」。
+func _resolve_box_pool(
+	box_center_local: Vector2,
+	half: Vector2,
+	cos_r: float,
+	sin_r: float,
+	clearance: float,
+	spacing: float,
+	seed_value: int,
+	required: int
+) -> Dictionary:
+	var pool := _box_sample_points(box_center_local, half, cos_r, sin_r, clearance)
+	if _fits_in_box(pool, spacing, required, seed_value):
+		return {"center": box_center_local, "pool": pool}
+	var nearby: Array = []
+	for candidate in _spawn_candidates:
+		var offset := Vector2(candidate.x - box_center_local.x, candidate.z - box_center_local.y)
+		var distance := offset.length()
+		if distance <= SPAWN_BOX_SHIFT_RADIUS_M:
+			nearby.append({"point": candidate, "distance": distance})
+	nearby.sort_custom(func(a, b): return float(a["distance"]) < float(b["distance"]))
+	var fallback_center := box_center_local
+	var fallback_pool := pool
+	var tried := 0
+	for entry in nearby:
+		if tried >= SPAWN_BOX_SHIFT_TRIES:
+			break
+		tried += 1
+		var point := entry["point"] as Vector3
+		var anchor := Vector2(point.x, point.z)
+		var trial := _box_sample_points(anchor, half, cos_r, sin_r, clearance)
+		if _fits_in_box(trial, spacing, required, seed_value):
+			# 已按距离升序，第一条达标者即「最小漂移」解。
+			return {"center": anchor, "pool": trial}
+		if trial.size() > fallback_pool.size():
+			fallback_pool = trial
+			fallback_center = anchor
+	return {"center": fallback_center, "pool": fallback_pool}
+
+
+## 该盒位能否按 `spacing` 硬下限真的排出 `required` 个落点（取够即停，不必数满）。
+## 与出怪选点**共用 `_scatter_box_pick` 与同一 `seed_value`**，保证「判定」与「落地」一致。
+func _fits_in_box(
+	pool: Array[Vector3], spacing: float, required: int, seed_value: int
+) -> bool:
+	if required <= 0:
+		return true
+	return _scatter_box_pick(pool, spacing, required, seed_value).size() >= required
+
+
+## 公开查询：本局该盒的**落地盒心**（房局部坐标 (x, z)）。探针/校验器用它复核「声明位置
+## 是否被平移、平移了多少」；运行时由 `spawn_points_in_box` 内部复用同一口径。
+## `prefer_edge` / `min_spacing_m` 必须与出怪时一致，否则「够不够」的判定会与选点打架。
+func resolve_spawn_box_center_local(
+	box_center_local: Vector2,
+	box_size: Vector2,
+	required: int,
+	box_rotation_deg: float = 0.0,
+	min_spacing_m: float = 0.0,
+	wall_recess_tiles: int = SPAWN_BOX_WALL_RECESS_TILES
+) -> Vector2:
+	if _spawn_candidates.is_empty():
+		_build_spawn_points()
+	_collect_spawn_blockers()
+	box_center_local = snap_box_center_to_tile(box_center_local, wall_recess_tiles)
+	var size := Vector2(
+		maxf(SPAWN_BOX_MIN_SIZE_M, box_size.x), maxf(SPAWN_BOX_MIN_SIZE_M, box_size.y)
+	)
+	var half := size * 0.5
+	var radians := deg_to_rad(box_rotation_deg)
+	var spacing := maxf(ENEMY_BODY_RADIUS_M * 2.0 + 0.1, min_spacing_m)
+	var seed_value := _box_pick_seed(box_center_local, half)
+	var resolved := _resolve_box_pool(
+		box_center_local, half, cos(radians), sin(radians), _spawn_clearance(), spacing,
+		seed_value, required
+	)
+	return Vector2(resolved["center"])
+
+
+## 把声明的盒心**吸附到地砖格心**，并强制离房墙内缩 `recess_tiles` 圈（1 圈 = 5 m）。
+##
+## 为什么必须吸附：业主口径「刷怪盒以砖块（5×5 地砖）的中心为中心」—— 吸附后
+## 「这个房间的 01 号刷怪盒在哪」可以用「哪一块地砖」唯一描述，也才谈得上逐盒微调。
+##
+## 为什么在运行时吸附而非写死绝对坐标：远征 `constrained` 每局重洗房型，凹口 / 空腔会剔掉
+## 一部分砖（`_authored_tile_cells` = 本局**真实存在**的砖心）。声明坐标只能在运行时落到
+## 本局确实存在、且离墙够远的砖上。找不到满足内缩的砖时退到「最近的砖」，绝不返回房外点。
+func snap_box_center_to_tile(declared: Vector2, recess_tiles: int) -> Vector2:
+	if _authored_tile_cells.is_empty():
+		return declared
+	var want := maxi(0, recess_tiles)
+	# 内缩 want 圈 ⇔ 要求该砖心到地砖并集边界的 L∞ 距离 ≥ 5*want。
+	# `_spawn_floor_contains(point, r)` 判的是「以 point 为心、边长 2r 的正方形是否全被地砖覆盖」：
+	# 取 r = 5*want 时，ring<want 的砖必然溢出房外（不达标），ring≥want 的砖达标。
+	var clearance := SPAWN_BOX_TILE_M * float(want) + 0.01
+	var best := declared
+	var best_distance := INF
+	var nearest := declared
+	var nearest_distance := INF
+	for cell in _authored_tile_cells:
+		var candidate := Vector2(cell.x, cell.z)
+		var distance := candidate.distance_to(declared)
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest = candidate
+		if want > 0 and not _spawn_floor_contains(Vector3(candidate.x, 0.0, candidate.y), clearance):
+			continue
+		if distance < best_distance:
+			best_distance = distance
+			best = candidate
+	return best if best_distance < INF else nearest
+
+
+func _box_local_point(
+	point: Vector3, box_center_local: Vector2, cos_r: float, sin_r: float
+) -> Vector2:
+	var rel := Vector2(point.x - box_center_local.x, point.z - box_center_local.y)
+	return Vector2(rel.x * cos_r + rel.y * sin_r, -rel.x * sin_r + rel.y * cos_r)
 
 
 func _on_room_body_entered(body: Node3D) -> void:

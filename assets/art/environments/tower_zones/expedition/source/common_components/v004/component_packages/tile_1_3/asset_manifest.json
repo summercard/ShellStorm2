@@ -1,0 +1,80 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_3",
+  "asset_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_3",
+  "room_type": "OFFICE_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/办公室房间种类_开放办公_30x40m_v001.blend",
+  "source_room_type_sha256": "4cf7138d0010405202d9cb9dd2aef0af9a676984ceeb90501b5a8d92304ed95f",
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v004/expedition_office_room_components_source_v004.blend",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v004/component_packages/tile_1_3/tile_1_3.blend",
+  "collection": "地砖_1_3_输出包",
+  "editable_collection": "地砖_1_3_制作源",
+  "root_object": "ROOT_tile_1_3_组件",
+  "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_1_3",
+  "slug": "tile_1_3",
+  "name_zh": "地砖_1_3",
+  "category": "floor",
+  "bounds_size_m": [
+    5.0,
+    5.0,
+    0.407
+  ],
+  "bounds_lo_m": [
+    -2.5,
+    -2.5,
+    0.0
+  ],
+  "bounds_hi_m": [
+    2.5,
+    2.5,
+    0.407
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis": "inward_normal=n/a (Blender world); Blender +Y maps to glTF -Z after +Y-up export",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "collision_owner": "self",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [
+    "地砖_1_3_输出_自发光"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_world_origin_m": [
+    7.5,
+    17.5,
+    -0.32
+  ],
+  "version": "v004",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "objects": [
+    "地砖_1_3_输出_部件00",
+    "地砖_1_3_输出_自发光"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "godot_front_axis": "+Z",
+  "component_file_sha256": "2f8eb6d2170733ed99295a1d5f7905f64360071a639b6749f1fef525dfdff2fc"
+}

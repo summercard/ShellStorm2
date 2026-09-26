@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+  "slug": "workbench_l_east",
+  "name_zh": "后右连续L形维修台",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "后右连续L形维修台_资产包",
+  "objects": [
+    "后右连续L形维修台_主体",
+    "后右连续L形维修台_自发光"
+  ],
+  "world_origin_m": [
+    10.4,
+    7.875,
+    0.045
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      3.35,
+      4.25,
+      0.045
+    ],
+    [
+      17.45,
+      11.5,
+      3.61
+    ]
+  ],
+  "dimensions_m": [
+    14.1,
+    7.25,
+    3.565
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 121,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

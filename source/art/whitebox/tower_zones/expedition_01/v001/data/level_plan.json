@@ -58,6 +58,7 @@
       "std_25x25"
     ],
     "authored_layout_shell": true,
+    "pin_content_templates": true,
     "runtime_enabled": true
   },
   "provenance": {

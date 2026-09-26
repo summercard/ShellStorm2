@@ -1,0 +1,36 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+  "slug": "water_and_supply_corner",
+  "name_zh": "饮水与箱货区",
+  "room_type": "OFFICE_ROOM",
+  "serves_room_types": [
+    "OFFICE_ROOM"
+  ],
+  "scope": "room_type_local",
+  "instance_count": 1,
+  "absorbed_variants": [],
+  "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+  "collection": "water_and_supply_corner_输出包",
+  "bounds_size_m": [
+    3.62,
+    3.36,
+    1.88
+  ],
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "collision_owner": "self",
+  "palette_uv_layer": "PaletteUV",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+  "source_library": "v004"
+}

@@ -1,0 +1,1020 @@
+{
+  "schema": "shellstorm2.component_catalog.v001",
+  "component_library": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+  "room_type": "OFFICE_ROOM",
+  "block_id": "expedition",
+  "version": "v006",
+  "source_room_type": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/办公室房间种类_开放办公_30x40m_v001.blend",
+  "source_room_type_sha256": "4cf7138d0010405202d9cb9dd2aef0af9a676984ceeb90501b5a8d92304ed95f",
+  "source_package_list": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/component_packages_v001/architecture",
+  "runtime_connected": false,
+  "ledger_registration": "pending",
+  "packages": [
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "slug": "ceiling_deck_5m",
+      "name_zh": "吊顶结构",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "ceiling_deck_-2",
+        "ceiling_deck_-3",
+        "ceiling_deck_-4",
+        "ceiling_deck_0",
+        "ceiling_deck_1",
+        "ceiling_deck_2",
+        "ceiling_deck_3"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "ceiling_deck_5m_输出包",
+      "bounds_size_m": [
+        30.0,
+        5.0,
+        0.393
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-1",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+      "slug": "ceiling_lighting",
+      "name_zh": "顶部灯具",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "ceiling_lighting_输出包",
+      "bounds_size_m": [
+        28.8,
+        30.34,
+        0.455
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+      "slug": "ceiling_ring_beam",
+      "name_zh": "吊顶周圈圈梁",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "ceiling_ring_beam_输出包",
+      "bounds_size_m": [
+        30.0,
+        40.0,
+        0.6
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+      "slug": "ceiling_service_cable_tray",
+      "name_zh": "顶部电缆桥架与线缆",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "ceiling_service_cable_tray_输出包",
+      "bounds_size_m": [
+        14.46,
+        38.6,
+        1.11
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+      "slug": "ceiling_service_duct",
+      "name_zh": "顶部通风管与风口",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "ceiling_service_duct_输出包",
+      "bounds_size_m": [
+        1.308,
+        37.8,
+        0.858
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+      "slug": "ceiling_service_pipe_run",
+      "name_zh": "顶部管道与法兰",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "ceiling_service_pipe_run_输出包",
+      "bounds_size_m": [
+        22.92,
+        38.0,
+        1.244
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+      "slug": "corner_guard",
+      "name_zh": "转角护柱与墙裙",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "corner_guard_输出包",
+      "bounds_size_m": [
+        29.62,
+        39.62,
+        2.2
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+      "slug": "door_wall",
+      "name_zh": "门洞墙件",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "door_wall_输出包",
+      "bounds_size_m": [
+        5.0,
+        0.615,
+        11.9
+      ],
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN",
+      "slug": "filing_run",
+      "name_zh": "档案柜带",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "filing_run_输出包",
+      "bounds_size_m": [
+        0.765,
+        39.38,
+        3.05
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN_WEST",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+      "slug": "floor_service",
+      "name_zh": "地面管线与检修",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "floor_service_输出包",
+      "bounds_size_m": [
+        27.0,
+        38.0,
+        0.028
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "slug": "floor_tile_5m",
+      "name_zh": "地砖",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 48,
+      "absorbed_variants": [
+        "tile_-1_-4",
+        "tile_-1_0",
+        "tile_-1_1",
+        "tile_-1_2",
+        "tile_-2_-1",
+        "tile_-2_-2",
+        "tile_-2_-3",
+        "tile_-2_0",
+        "tile_-2_2",
+        "tile_-2_3",
+        "tile_-3_-2",
+        "tile_-3_-3",
+        "tile_-3_-4",
+        "tile_-3_0",
+        "tile_-3_1",
+        "tile_-3_2",
+        "tile_-3_3",
+        "tile_0_-1",
+        "tile_0_-2",
+        "tile_0_-3",
+        "tile_0_-4",
+        "tile_0_1",
+        "tile_0_3",
+        "tile_1_-1",
+        "tile_1_-4",
+        "tile_1_0",
+        "tile_1_1",
+        "tile_1_3",
+        "tile_2_-2",
+        "tile_2_-3",
+        "tile_2_-4",
+        "tile_2_0",
+        "tile_2_1",
+        "tile_2_2",
+        "tile_2_3",
+        "tile_-1_-2",
+        "tile_-1_3",
+        "tile_-2_-4",
+        "tile_-2_1",
+        "tile_-3_-1",
+        "tile_0_0",
+        "tile_1_2",
+        "tile_2_-1",
+        "tile_-1_-1",
+        "tile_0_2",
+        "tile_1_-2",
+        "tile_1_-3"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "floor_tile_5m_输出包",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.407
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-3",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+      "slug": "floor_zone_mark",
+      "name_zh": "地面分区标识",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "floor_zone_mark_输出包",
+      "bounds_size_m": [
+        26.816,
+        20.216,
+        0.092
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "visual_only",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK",
+      "slug": "locker_bank",
+      "name_zh": "储物柜组",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "locker_bank_输出包",
+      "bounds_size_m": [
+        2.1,
+        0.81,
+        2.56
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK_NORTH",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+      "slug": "planting_perimeter",
+      "name_zh": "周圈绿植",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "planting_perimeter_输出包",
+      "bounds_size_m": [
+        28.206,
+        35.598,
+        1.34
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK",
+      "slug": "power_cabinet_bank",
+      "name_zh": "配电柜带",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "power_cabinet_bank_输出包",
+      "bounds_size_m": [
+        3.1,
+        0.91,
+        3.82
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK_SOUTH",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH",
+      "slug": "prep_bench",
+      "name_zh": "整备台",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "prep_bench_输出包",
+      "bounds_size_m": [
+        0.9,
+        3.4,
+        1.91
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH_EAST",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+      "slug": "printer_station",
+      "name_zh": "打印机与耗材位",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "printer_station_输出包",
+      "bounds_size_m": [
+        1.66,
+        0.965,
+        2.39
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING",
+      "slug": "shelving",
+      "name_zh": "置物架",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "shelving_输出包",
+      "bounds_size_m": [
+        1.8,
+        0.6,
+        2.68
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING_SOUTH",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+      "slug": "totem_column",
+      "name_zh": "图腾立柱",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "totem_column_输出包",
+      "bounds_size_m": [
+        0.86,
+        0.86,
+        2.98
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M",
+      "slug": "wall_t1110_5m",
+      "name_zh": "墙体 5.00×1.11×11.90m",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "wall_t1110_5m_输出包",
+      "bounds_size_m": [
+        5.0,
+        1.11,
+        11.9
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-3",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "slug": "wall_t615_5m",
+      "name_zh": "墙体 0.61×5.00×11.90m",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 25,
+      "absorbed_variants": [
+        "wall_east_0",
+        "wall_east_2",
+        "wall_north_-2",
+        "wall_south_-2",
+        "wall_south_0",
+        "wall_west_-2",
+        "wall_west_-4",
+        "wall_west_0",
+        "wall_west_2",
+        "wall_east_-4",
+        "wall_east_-1",
+        "wall_east_-3",
+        "wall_east_1",
+        "wall_east_3",
+        "wall_north_-1",
+        "wall_north_-3",
+        "wall_north_1",
+        "wall_north_2",
+        "wall_south_-1",
+        "wall_south_1",
+        "wall_west_-1",
+        "wall_west_-3",
+        "wall_west_1",
+        "wall_west_3"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "wall_t615_5m_输出包",
+      "bounds_size_m": [
+        0.615,
+        5.0,
+        11.9
+      ],
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-2",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M",
+      "slug": "wall_t970_5m",
+      "name_zh": "墙体 5.00×0.97×11.90m",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "wall_t970_5m_输出包",
+      "bounds_size_m": [
+        5.0,
+        0.97,
+        11.9
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_2",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+      "slug": "wall_top_service",
+      "name_zh": "墙顶管线收口",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "wall_top_service_输出包",
+      "bounds_size_m": [
+        29.4,
+        39.4,
+        0.7
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+      "slug": "water_and_supply_corner",
+      "name_zh": "饮水与箱货区",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "water_and_supply_corner_输出包",
+      "bounds_size_m": [
+        3.62,
+        3.36,
+        1.88
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+      "source_library": "v004"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "slug": "work_cluster",
+      "name_zh": "工位",
+      "room_type": "OFFICE_ROOM",
+      "serves_room_types": [
+        "OFFICE_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "work_cluster_b",
+        "work_cluster_c",
+        "work_cluster_d"
+      ],
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "collection": "work_cluster_输出包",
+      "bounds_size_m": [
+        5.8,
+        2.44,
+        1.67
+      ],
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_A",
+      "source_library": "v004"
+    }
+  ],
+  "independent_blend_count": 25,
+  "presentation": "separated collection-instance gallery; isolated component scenes with cameras",
+  "component_count": 25,
+  "regrouped_from": "v004",
+  "regroup_rule": "MAX_VARIANTS_PER_FAMILY = 3 (skill 02)",
+  "output_mesh_count": 38,
+  "independent_blend_total_mb": 22.66,
+  "source_mesh_count": 38
+}

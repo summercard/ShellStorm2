@@ -1,0 +1,26 @@
+{
+  "schema": "shellstorm2.battle.spawn_box",
+  "schema_version": 1,
+  "box_id": "box_wall_arc",
+  "note": "贴墙远程小队（小盒 4×2 m）：一道细长火力线，远程×1~2。盒心吸附到离墙 1 圈的砖心，长边朝墙排开即读出「贴墙」感。",
+  "shape": "box",
+  "size_m": [
+    4.0,
+    3.0,
+    2.0
+  ],
+  "spawns": [
+    {
+      "type": "ranged_caster",
+      "count": {
+        "min": 1,
+        "max": 2
+      },
+      "delay_sec": 0.0
+    }
+  ],
+  "placement_policy": {
+    "min_spacing_m": 1.7,
+    "wall_recess_tiles": 1
+  }
+}

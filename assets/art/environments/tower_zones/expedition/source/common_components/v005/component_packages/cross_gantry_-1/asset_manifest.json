@@ -1,0 +1,80 @@
+{
+  "component_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
+  "asset_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
+  "room_type": "BRIDGE_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/通道桥房间种类_工字型_30x60m_v002.blend",
+  "source_room_type_sha256": "7ba287e92a7a16fb7ee5234d027be6a969bdbccb4f12de5b741aaecfc7b2b59e",
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v005/expedition_bridge_room_components_source_v005.blend",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v005/component_packages/cross_gantry_-1/cross_gantry_-1.blend",
+  "collection": "错层钢格栅检修平台_cross_gantry_-1_输出包",
+  "editable_collection": "错层钢格栅检修平台_cross_gantry_-1_制作源",
+  "root_object": "ROOT_cross_gantry_-1_组件",
+  "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
+  "slug": "cross_gantry_-1",
+  "name_zh": "错层钢格栅检修平台_cross_gantry_-1",
+  "category": "support",
+  "bounds_size_m": [
+    8.73,
+    1.97,
+    7.705
+  ],
+  "bounds_lo_m": [
+    -4.365,
+    -0.985,
+    0.0
+  ],
+  "bounds_hi_m": [
+    4.365,
+    0.985,
+    7.705
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis": "-Y in Blender; +Z after conventional glTF transform",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [
+    "错层钢格栅检修平台_cross_gantry_-1_输出_自发光"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_world_origin_m": [
+    -9.5,
+    -3.8,
+    -12.0
+  ],
+  "version": "v005",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "objects": [
+    "错层钢格栅检修平台_cross_gantry_-1_输出_部件00",
+    "错层钢格栅检修平台_cross_gantry_-1_输出_自发光"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "godot_front_axis": "+Z",
+  "component_file_sha256": "ac2387ead2f3512bd3455262981a2157966ed776c7957b0626868bfa6ca1955c"
+}

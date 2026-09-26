@@ -1,0 +1,50 @@
+{
+  "package_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+  "slug": "wall_screen_bank",
+  "name_zh": "壁挂大屏组",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "数据库房间种类_数据机房_40x30m_v002.blend",
+  "collection": "壁挂大屏组_资产包",
+  "objects": [
+    "壁挂大屏组_主体",
+    "壁挂大屏组_自发光"
+  ],
+  "world_origin_m": [
+    17.73,
+    11.655000000000001,
+    3.525
+  ],
+  "local_origin": "bottom_center",
+  "provenance": "authored_here",
+  "world_bounds_m": [
+    [
+      15.7,
+      8.55,
+      3.525
+    ],
+    [
+      19.76,
+      14.76,
+      4.95
+    ]
+  ],
+  "dimensions_m": [
+    4.06,
+    6.21,
+    1.425
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_piece_count": 35,
+  "reference_cutaway_hidden": false,
+  "collision_owner": "self",
+  "visual_only": false,
+  "collision_exported": false,
+  "exported": false,
+  "dependencies": []
+}

@@ -34,6 +34,11 @@ const SPAWN_PLAN_MAX_WAVES := 6
 const SPAWN_PLAN_MAX_PER_WAVE := 24
 const SPAWN_PLAN_MAX_TOTAL := 64
 
+## 触发器刷怪：盒子资产库（id → 路径 + 解析 + 自检）。见 `docs/v0.1/design/触发器刷怪设计.md`。
+const SPAWN_BOX_CATALOG := preload("res://src/map/SpawnBoxCatalog.gd")
+## 调用层波次上限：与 SPAWN_PLAN_MAX_WAVES 同口径（一次遭遇不该超过 6 波）。
+const SPAWN_BOX_MAX_STAGES := 6
+
 
 ## 校验整张关卡（L1 + 全部 L2 + 引用的全部 L3）。
 ## 返回：{ ok, errors, checks, floors, rooms, templates }
@@ -138,6 +143,11 @@ static func validate_normalized(
 		center_by_key[key] = room.get("center", Vector2.ZERO) as Vector2
 		size_by_key[key] = room.get("size", Vector2.ZERO) as Vector2
 		errors.append_array(_validate_room(room, templates))
+	# —— 触发器刷怪：盒子放置层 + 波次调用层（设计 §3.2 / §3.3 / §7）——
+	# 为什么要有这一关：盒子写错（引用不存在的 box_id、盒心跑到房外、盒尺寸撑出房、
+	# stage 下标越界）在运行时全部表现为「这房不出怪 / 出怪位置离奇」，且**不会报错**。
+	# 静态层拦住是唯一能把「写错了」与「没生效」分开的地方。
+	errors.append_array(_validate_spawn_boxes(rooms, center_by_key, size_by_key, normalized))
 	# —— 门槽：设计源数据 vs 几何推导（05.2 §3.3 / §8 S2 断言）——
 	# 这是盯住「跨语言门槽镜像」的那条会失败的断言：设计源写了 ports 就必须与
 	# RoomDoorLane 的推导逐字段一致，不一致直接报错，绝不静默采信任何一侧。
@@ -771,6 +781,275 @@ static func _validate_boss_content_id(room: Dictionary) -> Array[String]:
 	return errors
 
 
+## —— 触发器刷怪：盒子放置层 + 波次调用层（设计 §3.2 / §3.3 / §7）——
+##
+## 逐条判据：
+##   A `spawn_boxes_only` 层里，**真敌对房**（`ROOM_TYPES_WITH_HOSTILES`）`spawn_placements`
+##     必须非空（没盒子就不刷）；**EVENT 房例外** —— 它默认是纯事件房、**允许没有盒子**，
+##     但也**允许**显式摆盒变成「事件 + 战斗」双职房（业主 2026-09-26「EVENT 房也可刷怪」，
+##     可否摆盒的判据 = `GAME_DESIGN_CONFIG.room_type_uses_spawn_boxes`）；不在此判据里的
+##     房型摆了盒仍报 `spawn_placement_on_non_hostile_room`；
+##   B 每个实例的盒（按 rotation_deg 旋转后的 AABB）**完全落在本房名义包围盒内**；
+##   C `encounter.stages[].boxes` 下标不越界、不重复，且每个实例**至少被一波引用**；
+##   D 引用的 `box_id` 在资产库中已登记且文件合法；
+##   F `spawn_boxes_only` 层里，旧字段 `enemy_spawn_plan` 必须归零；
+##   G 盒心必须是**砖心相位**：全局 5m 砖格心恒在 `5k + 2.5`（实测 13 房逐值成立），
+##     盒心不在此相位 ⇒ 运行时 `snap_box_center_to_tile` 一定把它静默挪到最近的砖心，
+##     作者写的坐标与实得坐标对不上，「01 号盒调了没生效」的根因就在这里；
+##   H **整个盒**（含边缘）到房墙的净距 ≥ `5*wall_recess_tiles` ——
+##     即「**最外一圈地砖不得有任何刷怪点**」（业主 2026-09-26「最外一圈不要刷怪，
+##     往里头布置刷怪盒子」）。判盒边而非盒心：怪只在盒内取样，盒不压进最外圈 ⇒
+##     那圈必无怪；判盒心时「盒心够、盒边不够」仍会让怪出在最外一圈（详见实现处注释）；
+##   I 同房内两个实例**盒心不得重合**、**AABB 不得互叠**（重复刷 = 必是笔误；互叠则
+##     两盒各自贪心、互不知情，落点会挤在一起 —— 见设计文档「待修缺口 (a)」）；
+##   J 逐实例生效尺寸不得低于 `SpawnBoxCatalog.MIN_SIZE_M`（2×2 m，业主口径）；
+##   K `rotation_deg` 只许 0 / 90 / 180 / 270（斜置盒的 AABB 与砖格对不上）。
+##
+## ⚠ **几何门控**：B / G / H 依赖「房间的真实尺寸与真实位置」，而 `mode = "constrained"`
+## 关卡里 L2 文件存的 `center_m` / `size_m` 只是「样例 / 兜底」（真正的几何由生成器按种子算，
+## 见 `FloorPlanGenerator._constrained_floor_from` 的注释）。因此这三条只在
+## `normalized.geometry_authoritative == true` 时执行 —— 读文件得到 false、生成器算完
+## 覆写成 true（成对见 `LevelPlanLoader.normalize_floor`）。实测教训：远征 room_05 房表
+## 声明 30×60、运行时却是 60×30，拿样例几何判会把一整房合法盒位误报成「越出房间」。
+## G 额外要求「本房真有授权地砖」—— 没有授权壳体的房（如远征入口）`_authored_tile_cells`
+## 为空，`snap_box_center_to_tile` 直接原样返回声明点，此时砖心相位无意义。
+## I / J / K 只用**房内相对量**（局部盒心、盒尺寸、旋转角），与几何权威性无关，恒执行。
+##
+## 为什么这些必须在静态层拦住：运行时对非法放置的策略是「跳过该实例」，
+## 于是「写错了」与「这房本来就没怪」**在表现上完全一样**，且不报错。
+static func _validate_spawn_boxes(
+	rooms: Array,
+	center_by_key: Dictionary,
+	size_by_key: Dictionary,
+	normalized: Dictionary
+) -> Array[String]:
+	var errors: Array[String] = []
+	var boxes_only := bool(normalized.get("spawn_boxes_only", false))
+	# 见本函数头注释 ⚠：缺省 true（`authored` 关卡的文件几何就是真几何，行为逐字不变）。
+	var geometry_real := bool(normalized.get("geometry_authoritative", true))
+	for value in rooms:
+		var room := value as Dictionary
+		var key := str(room.get("key", ""))
+		var content_type := str(room.get("content_type", ""))
+		var hostile := (
+			GAME_DESIGN_CONFIG.ROOM_TYPES_WITH_HOSTILES.has(content_type)
+			and not bool(room.get("authored_layout_peaceful", false))
+		)
+		# 「可否摆盒」= 真敌对房 ＋ EVENT（见函数头判据 A）。⚠️ 与 `hostile` 是两件事：
+		# `hostile` 决定「**必须**有盒」，`box_authorable` 决定「**允许**有盒」。
+		var box_authorable := (
+			GAME_DESIGN_CONFIG.room_type_uses_spawn_boxes(content_type)
+			and not bool(room.get("authored_layout_peaceful", false))
+		)
+		var placements := _placement_entries(room, key, errors)
+		if boxes_only and hostile:
+			if placements.is_empty():
+				errors.append("spawn_boxes_missing_for_hostile_room:%s" % key)
+			if not (room.get("enemy_spawn_plan", {}) as Dictionary).is_empty():
+				errors.append("enemy_spawn_plan_on_spawn_boxes_layer:%s" % key)
+		elif not box_authorable and not placements.is_empty():
+			# 不在「可摆盒」判据里的房型永不调用刷怪入口，摆了等于静默失效（与 enemy_spawn_plan 同口径）。
+			errors.append("spawn_placement_on_non_hostile_room:%s:%s" % [key, content_type])
+		var room_center := center_by_key.get(key, Vector2.ZERO) as Vector2
+		var room_rect := _room_rect(key, center_by_key, size_by_key)
+		# G 的额外门控：本房真有**授权地砖**才谈得上砖心相位。判据用 `authored_layout_room_id`
+		# 非空 —— 它就是「本房拿了整房 5m 通用壳体（含 floor_tile 实例）」的标记
+		# （`FloorPlanGenerator.attach_authored_layout_shell` 置位、`normalize_floor` 透传）。
+		# 无授权壳体的房（远征入口 `entry`、塔楼程序化房）没有砖格，`snap_box_center_to_tile`
+		# 会原样返回声明点，此时判砖心相位纯属误报。
+		var has_authored_tiles := not str(room.get("authored_layout_room_id", "")).is_empty()
+		# 同房内已登记的盒（**局部**矩形 + 盒心），供判据 I 逐对比较。
+		# 为什么用局部量：与房表几何是否权威无关，故不受 `geometry_authoritative` 门控 ——
+		# 这是唯一能在「样例几何」（校验 L2 文件）下依然生效的几何判据。
+		var seen_local_centers: Array[Vector2] = []
+		var seen_local_rects: Array[Rect2] = []
+		for index in range(placements.size()):
+			var placement_value: Variant = placements[index]
+			var slot := "%s[%d]" % [key, index]
+			if not (placement_value is Dictionary):
+				errors.append("spawn_placement_not_object:%s" % slot)
+				continue
+			var placement := placement_value as Dictionary
+			var box_id := str(placement.get("box", ""))
+			if box_id.is_empty():
+				errors.append("spawn_placement_box_empty:%s" % slot)
+				continue
+			if not SPAWN_BOX_CATALOG.has_id(box_id):
+				errors.append("spawn_placement_box_unregistered:%s:%s" % [slot, box_id])
+				continue
+			var box := SPAWN_BOX_CATALOG.load_box(box_id)
+			if box.is_empty():
+				errors.append("spawn_placement_box_invalid:%s:%s" % [slot, box_id])
+				continue
+			if not placement.has("center_m"):
+				errors.append("spawn_placement_center_missing:%s" % slot)
+			var local_center := _vec2(placement.get("center_m", []))
+			var box_size := box.get("size_m", Vector2.ZERO) as Vector2
+			var raw_size: Variant = placement.get("size_m", null)
+			var size_overridden := raw_size is Array and (raw_size as Array).size() >= 2
+			if size_overridden:
+				box_size = _vec2(raw_size)
+			if box_size.x <= 0.0 or box_size.y <= 0.0:
+				errors.append("spawn_placement_size_non_positive:%s" % slot)
+				continue
+			# 判据 J：**逐实例生效尺寸**（资产缺省 or 实例覆盖）不得低于 2×2 m。
+			# 资产侧的缺省尺寸另有 `SpawnBoxCatalog.validate_box` 把关，这里只管运行时
+			# 真正用的那一份 —— 实例覆盖可以把它改小，那就是漏洞。
+			if (
+				box_size.x < SPAWN_BOX_CATALOG.MIN_SIZE_M - EPS
+				or box_size.y < SPAWN_BOX_CATALOG.MIN_SIZE_M - EPS
+			):
+				errors.append(
+					"spawn_placement_size_below_minimum:%s:%.2f×%.2f<%.1f%s"
+					% [
+						slot, box_size.x, box_size.y, SPAWN_BOX_CATALOG.MIN_SIZE_M,
+						"(size_m 覆盖)" if size_overridden else "(资产缺省)",
+					]
+				)
+			var rotation_deg := float(placement.get("rotation_deg", 0.0))
+			# 判据 K：只许 90° 的整数倍。斜置盒的 AABB 与砖格、与 `_box_local_point` 的
+			# 落点系都对不上，运行时同样静默错位。
+			var rotation_residual := fposmod(rotation_deg, 90.0)
+			if rotation_residual > EPS and absf(rotation_residual - 90.0) > EPS:
+				errors.append("spawn_placement_rotation_invalid:%s:%.2f" % [slot, rotation_deg])
+			var radians := deg_to_rad(rotation_deg)
+			# 旋转后的轴对齐外包尺寸：盒是矩形，绕 Y 转 θ 后 AABB 由 |cos|/|sin| 定。
+			var extent := Vector2(
+				absf(box_size.x * cos(radians)) + absf(box_size.y * sin(radians)),
+				absf(box_size.x * sin(radians)) + absf(box_size.y * cos(radians))
+			)
+			var box_center := room_center + local_center
+			var box_rect := Rect2(box_center - extent * 0.5, extent)
+			# 判据 B：盒 AABB 完全落在本房包围盒内（受几何门控 —— 样例几何下必误报）。
+			if geometry_real and not room_rect.encloses(box_rect):
+				errors.append(
+					"spawn_placement_outside_room:%s:box=%s:room=%s"
+					% [slot, str(box_rect), str(room_rect)]
+				)
+			# 判据 G：盒心必须是砖心相位。
+			if geometry_real and has_authored_tiles and not _tile_center_phase(box_center):
+				errors.append(
+					"spawn_placement_not_tile_center:%s:%.2f,%.2f"
+					% [slot, box_center.x, box_center.y]
+				)
+			# 判据 H：**整个盒**（含边缘）到房墙净距 ≥ 5*wall_recess_tiles。
+			##
+			## 业主口径（2026-09-26）：「**最外一圈地砖不要刷怪**，往里头布置刷怪盒子」。
+			## 为什么判**盒边**而不是盒心就能兑现这句话：怪只在盒内取样 ⇒ 盒不压进最外一圈
+			## ⇒ 那圈必然一只怪都没有。反过来「盒心够、盒边不够」时，盒仍会盖住最外圈，
+			## 怪就会出在贴墙的第一排 —— 正是业主看到的坏体验。
+			##
+			## 口径沿革（旧版只判**盒心**）：盒心 ≥5 m ＋ 盒半宽 2 m ⇒ 盒边可以只离墙 3 m，
+			## 而最外一圈地砖横跨墙内 0~5 m ⇒ 盒边仍压在最外圈上。实测旧版数据确实如此
+			## （房间级落点 183/192 落在最外圈，最近离墙 1.35 m）；判据改判盒边后，
+			## 「最外一圈禁刷」从「数据碰巧满足」变成**静态可拦的硬约束**。
+			## 现网 39 盒实测：盒边最近净距 5.55 m ≥ 5，故本次收紧不触发任何既有盒位改动。
+			if geometry_real:
+				var recess := int(box.get("wall_recess_tiles", SPAWN_BOX_CATALOG.DEFAULT_WALL_RECESS_TILES))
+				var need := ROOM_DOOR_LANE.GRID_UNIT_M * float(maxi(0, recess))
+				var edge_clearance := minf(
+					minf(box_rect.position.x - room_rect.position.x, room_rect.end.x - box_rect.end.x),
+					minf(box_rect.position.y - room_rect.position.y, room_rect.end.y - box_rect.end.y)
+				)
+				if edge_clearance < need - EPS:
+					errors.append(
+						"spawn_placement_wall_recess_short:%s:%.2f<%.2f(=%d圈)"
+						% [slot, edge_clearance, need, maxi(0, recess)]
+					)
+			# 判据 I：同房盒心不得重合、AABB 不得互叠（局部量，恒执行）。
+			# 互叠为什么是错：运行时**同波多盒之间没有排斥**（每盒各自贪心、互不知情），
+			# 重叠的两个盒会把两组怪挤在同一片地上、彼此穿模。修好前先在静态层拦住。
+			var local_rect := Rect2(local_center - extent * 0.5, extent)
+			for prior in range(seen_local_centers.size()):
+				if seen_local_centers[prior].distance_to(local_center) <= EPS:
+					errors.append("spawn_placement_center_duplicate:%s:%d" % [slot, prior])
+				elif seen_local_rects[prior].intersects(local_rect):
+					errors.append("spawn_placement_overlap:%s:%d" % [slot, prior])
+			seen_local_centers.append(local_center)
+			seen_local_rects.append(local_rect)
+			if float(placement.get("delay_sec", 0.0)) < 0.0:
+				errors.append("spawn_placement_delay_negative:%s" % slot)
+		# —— 调用层 ——
+		# 没有 encounter 时全部实例并进一波（运行时口径），故只在写了 encounter 时校验。
+		if not placements.is_empty() or not (room.get("encounter", {}) as Dictionary).is_empty():
+			errors.append_array(_validate_encounter(room, key, placements.size()))
+	return errors
+
+
+## 房间级放置数组的类型守卫：非数组报错，逐项不是对象也报错（运行时按「跳过」处理）。
+static func _placement_entries(
+	room: Dictionary, key: String, errors: Array[String]
+) -> Array:
+	var raw: Variant = room.get("spawn_placements", [])
+	if raw == null:
+		return []
+	if not (raw is Array):
+		errors.append("spawn_placements_not_array:%s" % key)
+		return []
+	return raw as Array
+
+
+## 波次调用层（`encounter.stages`）。判据 C：下标不越界、不重复、每个实例都被排到。
+static func _validate_encounter(
+	room: Dictionary, key: String, placement_count: int
+) -> Array[String]:
+	var errors: Array[String] = []
+	var raw: Variant = room.get("encounter", {})
+	if raw == null or (raw is Dictionary and (raw as Dictionary).is_empty()):
+		return errors
+	if not (raw is Dictionary):
+		errors.append("encounter_not_object:%s" % key)
+		return errors
+	var encounter := raw as Dictionary
+	if placement_count <= 0:
+		errors.append("encounter_without_placements:%s" % key)
+		return errors
+	if float(encounter.get("intermission_sec", 2.0)) < 0.0:
+		errors.append("encounter_intermission_negative:%s" % key)
+	var raw_stages: Variant = encounter.get("stages", [])
+	if not (raw_stages is Array):
+		errors.append("encounter_stages_not_array:%s" % key)
+		return errors
+	var stages := raw_stages as Array
+	if stages.is_empty():
+		return errors
+	if stages.size() > SPAWN_BOX_MAX_STAGES:
+		errors.append(
+			"encounter_too_many_stages:%s:%d>%d" % [key, stages.size(), SPAWN_BOX_MAX_STAGES]
+		)
+	var scheduled := {}
+	for stage_index in range(stages.size()):
+		var stage_value: Variant = stages[stage_index]
+		if not (stage_value is Dictionary):
+			errors.append("encounter_stage_not_object:%s:%d" % [key, stage_index])
+			continue
+		var stage := stage_value as Dictionary
+		var raw_boxes: Variant = stage.get("boxes", [])
+		if not (raw_boxes is Array) or (raw_boxes as Array).is_empty():
+			errors.append("encounter_stage_boxes_empty:%s:%d" % [key, stage_index])
+			continue
+		for box_value in (raw_boxes as Array):
+			if not (box_value is float or box_value is int):
+				errors.append("encounter_stage_box_index_not_int:%s:%d" % [key, stage_index])
+				continue
+			var index := int(box_value)
+			if index < 0 or index >= placement_count:
+				errors.append(
+					"encounter_stage_box_index_out_of_range:%s:%d:%d"
+					% [key, stage_index, index]
+				)
+				continue
+			if scheduled.has(index):
+				errors.append("encounter_stage_box_index_duplicate:%s:%d" % [key, index])
+				continue
+			scheduled[index] = true
+	# 摆了却永不排到的实例 = 一个永远不出怪的盒子 —— 静默失效，必须报。
+	for index in range(placement_count):
+		if not scheduled.has(index):
+			errors.append("spawn_placement_never_scheduled:%s:%d" % [key, index])
+	return errors
+
+
 static func _validate_template(template_id: String, template: Dictionary) -> Array[String]:
 	var errors: Array[String] = []
 	var size := _vec2(template.get("size_m", []))
@@ -895,6 +1174,25 @@ static func _room_rect(key: String, center_by_key: Dictionary, size_by_key: Dict
 	var center := center_by_key[key] as Vector2
 	var size := size_by_key[key] as Vector2
 	return Rect2(center - size * 0.5, size)
+
+
+## 判据 G 的核：全局 5m 砖格的**格心相位**。
+##
+## 砖心恒在 `5k + 2.5`（两个轴独立同式）。为什么与房宽奇偶无关：奇数格宽房心在 `5k+2.5`、
+## 偶数格宽房心在 `5k`，两种情形下掐出来的砖心相位都落在 `2.5`（5m 模数口径，见 05.2 §3.4）。
+## 已用远征 01 全部 13 房（含 boss / extraction）的探针 `tile_cells_local` 逐值实测：全局
+## 砖心的 X / Z 相位集合都恰好是 `{2.5}`。
+##
+## 判据不看房的尺寸与中心 —— 砖格是**全局锚定**的，所以这条天然免疫「房表几何 ≠ 真几何」
+## 的问题；真正需要门控的是「本房到底有没有授权地砖」（见 `_validate_spawn_boxes` 里
+## `has_authored_tiles` 的注释）。
+static func _tile_center_phase(point: Vector2) -> bool:
+	var unit := ROOM_DOOR_LANE.GRID_UNIT_M
+	var half := unit * 0.5
+	return (
+		absf(fposmod(point.x, unit) - half) <= EPS
+		and absf(fposmod(point.y, unit) - half) <= EPS
+	)
 
 
 
