@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK
+; 房型组件 office_room / v006 / locker_bank
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/locker_bank/locker_bank_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(2.1, 2.56, 0.81)
+
+[node name="RoomTypeComponentLockerBank" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK"
+metadata/asset_version = "v006"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "locker_bank"
+metadata/display_name_zh = "储物柜组"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/locker_bank/locker_bank.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(2.1, 2.56, 0.81)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.28, 0)
+shape = SubResource("BoxShape3D_proxy")

@@ -4,12 +4,40 @@ extends RefCounted
 ## 不持有场景节点，不生成表现，不写背包/钱包。
 
 const SERVICE := preload("res://src/rewards/RewardService.gd")
+const MONSTER_DROP_TABLE := preload("res://src/rewards/MonsterDropTable.gd")
 
 var _run_seed := 1
+var _level_id := ""
+var _monster_drop_specs: Dictionary = {}
+var _monster_drop_errors: Array[Dictionary] = []
 
 
 func configure(run_seed: int) -> void:
 	_run_seed = run_seed
+
+
+## 装载当前关卡的怪物掉落表。整表编译失败时清空，绝不让半张表继续生效。
+func configure_level_drop_table(level_id: String, table: Dictionary) -> Dictionary:
+	_level_id = level_id
+	_monster_drop_specs.clear()
+	_monster_drop_errors.clear()
+	if table.is_empty():
+		return {"ok": true, "level_id": level_id, "row_count": 0, "monster_count": 0, "errors": []}
+	var compiled := MONSTER_DROP_TABLE.compile(level_id, table)
+	if bool(compiled.get("ok", false)):
+		_monster_drop_specs = (compiled.get("specs", {}) as Dictionary).duplicate(true)
+	else:
+		_monster_drop_errors = (compiled.get("errors", []) as Array).duplicate(true)
+	return compiled
+
+
+func level_drop_table_snapshot() -> Dictionary:
+	return {
+		"level_id": _level_id,
+		"monster_ids": _monster_drop_specs.keys(),
+		"errors": _monster_drop_errors.duplicate(true),
+	}
+
 
 
 func resolve_search(
@@ -50,6 +78,7 @@ func resolve_kill(
 		"room_reward_plan": room_reward_plan,
 		"monster_id": str(enemy_data.get("enemy_type", "melee_chaser")),
 		"monster_tier": tier,
+		"monster_drop_specs": _monster_drop_specs,
 		"floor_level": _floor_level_from_loot_table(str(enemy_data.get("loot_table", ""))),
 		"context": _context(event_id, floor),
 	})
@@ -66,15 +95,15 @@ func resolve_kill(
 		(report["grants"] as Array).append_array(bounty_report.get("grants", []))
 		(report["errors"] as Array).append_array(bounty_report.get("errors", []))
 		report["ok"] = bool(report.get("ok", false)) and bool(bounty_report.get("ok", false))
-	# Runtime presentation keeps the current one-physical-pickup contract.  A
-	# monster spec can independently hit both its main pool and the ammo rider;
-	# ammo wins that collision so elite/boss guaranteed reserve ammo remains
-	# true. Base currency and elite bounty collapse into one ground orb.
-	_collapse_kill_ground_grants(report)
+	# 关卡表的「独立判定」允许同次击杀命中多件实物；若仍压成 1 件，作者表语义就是假的。
+	# 未命中关卡表的旧公式、精英与 Boss 保留既有「一个实物 + 一个魂球」契约。
+	var monster_id := str(enemy_data.get("enemy_type", "melee_chaser"))
+	var uses_level_table := tier == "normal" and _monster_drop_specs.has(monster_id)
+	_collapse_kill_ground_grants(report, uses_level_table)
 	return report
 
 
-func _collapse_kill_ground_grants(report: Dictionary) -> void:
+func _collapse_kill_ground_grants(report: Dictionary, preserve_physical := false) -> void:
 	var grants := report.get("grants", []) as Array
 	var currency_grants: Array = []
 	var physical_grants: Array = []
@@ -85,7 +114,9 @@ func _collapse_kill_ground_grants(report: Dictionary) -> void:
 		else:
 			physical_grants.append(grant)
 	var collapsed: Array = []
-	if not physical_grants.is_empty():
+	if preserve_physical:
+		collapsed.append_array(physical_grants)
+	elif not physical_grants.is_empty():
 		var chosen := physical_grants[0] as Dictionary
 		for value in physical_grants:
 			var candidate := value as Dictionary

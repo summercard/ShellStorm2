@@ -107,6 +107,7 @@ func _ready() -> void:
 	await _verify_loading_screen(failures)
 	_verify_plan_generator_seeds(failures)
 	_verify_constrained_generation_seeds(failures)
+	_verify_monster_drop_table_plan_contract(failures)
 	await _verify_expedition_level(failures)
 	await _verify_default_tower(failures)
 	await _verify_expedition_exit_contract(failures)
@@ -200,6 +201,37 @@ func _verify_constrained_generation_seeds(failures: Array[String]) -> void:
 			failures.append("数据驱动种子 %d 内容池不是池子的一个排列：%s" % [seed_value, content_types])
 		if not off_template.is_empty():
 			failures.append("数据驱动种子 %d 有房间尺寸不在模板集合内：%s" % [seed_value, off_template])
+
+
+func _verify_monster_drop_table_plan_contract(failures: Array[String]) -> void:
+	var first := FloorPlanGenerator.generate_from_level_plan(EXPEDITION_LEVEL_ID, 0, 77001199)
+	var second := FloorPlanGenerator.generate_from_level_plan(EXPEDITION_LEVEL_ID, 0, 77001200)
+	var table := first.get("monster_drop_table", {}) as Dictionary
+	var rows := table.get("rows", []) as Array
+	if rows.size() != 16:
+		failures.append("远征01运行时 plan 的怪物掉落表应有 16 行，实际 %d" % rows.size())
+	var monsters: Dictionary = {}
+	for value in rows:
+		var row := value as Dictionary
+		monsters[str(row.get("monster_id", ""))] = true
+	var monster_ids: Array = monsters.keys()
+	monster_ids.sort()
+	if monster_ids != ["exploder", "melee_chaser", "ranged_caster"]:
+		failures.append("远征01怪物掉落表应覆盖 3 种试点怪，实际 %s" % str(monster_ids))
+	if table != second.get("monster_drop_table", {}):
+		failures.append("怪物掉落表不应随版图种子变化")
+	# 掉落表是内容，不是几何：反向读生成器的 layout_id 函数段，防止后续误把字段
+	# 加进存档指纹。只搜该函数段，不会被上面的 plan 透传代码误命中。
+	var file := FileAccess.open("res://src/map/FloorPlanGenerator.gd", FileAccess.READ)
+	if file == null:
+		failures.append("无法读取 FloorPlanGenerator.gd 核对掉落表与 layout_id 隔离")
+	else:
+		var source := file.get_as_text()
+		var start := source.find("static func _data_driven_layout_id(")
+		var finish := source.find("\nstatic func ", start + 1)
+		var function_source := source.substr(start, finish - start if finish > start else source.length() - start)
+		if function_source.contains("monster_drop_table"):
+			failures.append("monster_drop_table 不得进入 _data_driven_layout_id（掉率调整不能让存档版图失配）")
 
 
 # —— 1) 基地目录动作 + 菜单冒烟 ——
@@ -331,6 +363,15 @@ func _verify_expedition_level(failures: Array[String]) -> void:
 		failures.append("远征关卡存档隔离标识不正确：%s" % str(tower.get_runtime_map_id()))
 	if tower.return_scene_path != GameDesignConfig.MAIN_SCENE:
 		failures.append("远征关卡退出落点不是玩家出发的塔楼 99F 基地：%s" % tower.return_scene_path)
+	var drop_snapshot := tower._reward_coordinator.level_drop_table_snapshot()
+	var loaded_monster_ids: Array = drop_snapshot.get("monster_ids", []) as Array
+	loaded_monster_ids.sort()
+	if str(drop_snapshot.get("level_id", "")) != EXPEDITION_LEVEL_ID:
+		failures.append("奖励协调器没有装载远征01掉落表：%s" % str(drop_snapshot))
+	if loaded_monster_ids != ["exploder", "melee_chaser", "ranged_caster"]:
+		failures.append("奖励协调器装载的关卡怪物集合不正确：%s" % str(loaded_monster_ids))
+	if not (drop_snapshot.get("errors", []) as Array).is_empty():
+		failures.append("奖励协调器装载关卡怪物表时报错：%s" % str(drop_snapshot.get("errors", [])))
 
 	# 单层：只有 floor_index 0，不存在 99F 基地、98—95F 战局与 94F 以下。
 	var planned_layers := tower.get_expedition_planned_floor_numbers()
@@ -707,9 +748,11 @@ func _authored_floor_tile_cells(room: DungeonRoom3D) -> Dictionary:
 	return cells
 
 
-## 格心量化键：0.01m 量化后取整，避免浮点误差把同格算成两格（格距 5m，量化 1cm 足够）。
+## 格心量化键：0.1m 量化后取整，吸收 Blender 房型源里不超过 0.04m 的建模浮点漂移。
+## 格距是 5m，10cm 量化仍有 50 倍安全余量，不会把相邻地砖合并；旧 1cm 量化会把
+## 7.4888m / 7.5386m 这类本应位于 7.5m 格心的砖误判成独立格，进而把砖间内边界当外墙。
 func _cell_key(local: Vector2) -> String:
-	return "%d|%d" % [roundi(local.x * 100.0), roundi(local.y * 100.0)]
+	return "%d|%d" % [roundi(local.x * 10.0), roundi(local.y * 10.0)]
 
 
 ## 全关门的真实世界坐标（`room_door_world_<side>`，由 `_plan_room_layout()` 统一写入）。

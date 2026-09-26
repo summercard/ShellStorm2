@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER
+; 房型组件 bridge_room / v007 / bridge_girder
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_girder/bridge_girder_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentBridgeGirder" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER"
+metadata/asset_version = "v007"
+metadata/room_type = "BRIDGE_ROOM"
+metadata/component_slug = "bridge_girder"
+metadata/display_name_zh = "桥侧连续箱梁"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_girder/bridge_girder.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.62, 1.1, 30)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

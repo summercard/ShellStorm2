@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY
+; 房型组件 bridge_room / v007 / mid_gallery
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/mid_gallery/mid_gallery_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentMidGallery" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY"
+metadata/asset_version = "v007"
+metadata/room_type = "BRIDGE_ROOM"
+metadata/component_slug = "mid_gallery"
+metadata/display_name_zh = "错层钢格栅检修平台 2.78×27.82×9.21m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/mid_gallery/mid_gallery.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(2.78, 9.205, 27.82)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

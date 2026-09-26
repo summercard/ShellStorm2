@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE
+; 房型组件 bridge_room / v007 / near_crate
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_crate/near_crate_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(2.612, 1.555, 1.791)
+
+[node name="RoomTypeComponentNearCrate" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE"
+metadata/asset_version = "v007"
+metadata/room_type = "BRIDGE_ROOM"
+metadata/component_slug = "near_crate"
+metadata/display_name_zh = "固定维护箱 2.61×1.79×1.55m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_crate/near_crate.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(2.612, 1.555, 1.791)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 0.7775, 0)
+shape = SubResource("BoxShape3D_proxy")

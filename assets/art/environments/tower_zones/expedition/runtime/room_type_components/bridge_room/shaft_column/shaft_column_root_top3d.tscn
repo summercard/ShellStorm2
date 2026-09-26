@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN
+; 房型组件 bridge_room / v007 / shaft_column
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/shaft_column/shaft_column_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(1.8, 12, 1.8)
+
+[node name="RoomTypeComponentShaftColumn" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN"
+metadata/asset_version = "v007"
+metadata/room_type = "BRIDGE_ROOM"
+metadata/component_slug = "shaft_column"
+metadata/display_name_zh = "贯穿层间主柱"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/shaft_column/shaft_column.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(1.8, 12, 1.8)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 6, 0)
+shape = SubResource("BoxShape3D_proxy")

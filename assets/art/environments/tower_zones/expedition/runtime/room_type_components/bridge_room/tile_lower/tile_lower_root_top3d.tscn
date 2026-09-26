@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER
+; 房型组件 bridge_room / v007 / tile_lower
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/tile_lower/tile_lower_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentTileLower" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER"
+metadata/asset_version = "v007"
+metadata/room_type = "BRIDGE_ROOM"
+metadata/component_slug = "tile_lower"
+metadata/display_name_zh = "地砖_下"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/tile_lower/tile_lower.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 0.407, 5)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "lower_level_visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

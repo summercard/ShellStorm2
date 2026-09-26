@@ -19,6 +19,27 @@ const BOSS_LAYOUT_SOURCE_PATH := (
 	"res://assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/"
 	+ "boss_room_50x40_v002.layout.json"
 )
+## 房型默认组件布局（02 产物）直接重放。这里只登记稳定房型模板到真源的映射；
+## 实例数量、位置、旋转全部读取 component_instances.json，不在 Godot 维护第二套摆位。
+const ROOM_TYPE_LAYOUT_SOURCES := {
+	"office_60x70": {
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_instances.json",
+		"version": "v006",
+		"asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
+		"size_m": Vector2(30.0, 40.0),
+		"door_wall_component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+	},
+	"bridge_60x50": {
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_instances.json",
+		"version": "v007",
+		"asset_id": "ENV-EXPEDITION-L01-BRIDGE-ROOM-TYPE-LAYOUT",
+		"size_m": Vector2(30.0, 60.0),
+		"door_wall_component_id": "",
+	},
+}
+const SHELL_COMPONENT_CATALOG_PATH := (
+	"res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
+)
 
 const CORE_SIZE_M := 65.0
 const CORE_CENTER := Vector2(2.5, 2.5)
@@ -343,8 +364,12 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 		"area_budget": _calculate_area_budget(rooms, policy),
 		"room_size_catalog": catalog,
 		"terminal_mode": terminal_mode,
-		# 掉落调度投影（05 §11）。本路径的设计源房间可写 reward_plan，投影出真槽位。
+		# 掉落调度投影（05 §11）。房间 reward_plan 是逐房特例；monster_drop_table
+		# 是 L1 关卡级规则，必须留在 plan 顶层，不复制进每个 room record。
 		"reward_slots": reward_slots_from_rooms(rooms),
+		"monster_drop_table": (
+			level_plan.get("monster_drop_table", {}) as Dictionary
+		).duplicate(true),
 	}
 	plan["valid"] = errors.is_empty()
 	plan["validation_errors"] = errors
@@ -1306,8 +1331,23 @@ static func attach_authored_layout_shell(
 		if key.is_empty() or str(room.get("role", "")) == "stair_entry":
 			continue
 		var center := room.get("center", Vector2.ZERO) as Vector2
-		# 多层几何规划（仅通道桥房有内容）：坑/桥矩形 + 三层几何实例。
-		# 非通道桥房返回空字典 ⇒ 下面的过滤与叠加整段不执行，行为逐字不变。
+		# 02 已冻结的房型默认布局优先于运行时通用壳体。成功读取后直接把完整实例清单
+		# 写入现有 authored_layout_instances 通道；办公室和桥房都不再叠加第二套程序化视觉。
+		var room_type_layout := _room_type_layout_for_room(room)
+		if not room_type_layout.is_empty():
+			room["authored_layout_shell"] = true
+			room["authored_layout_asset_id"] = str(room_type_layout.get("asset_id", ""))
+			room["authored_layout_version"] = str(room_type_layout.get("version", ""))
+			room["authored_layout_room_id"] = key
+			room["authored_layout_peaceful"] = false
+			room["authored_layout_instances"] = (
+				room_type_layout.get("instances", []) as Array
+			).duplicate(true)
+			if str(room.get("template_id", "")) == "bridge_60x50":
+				room["authored_layout_multi_level_room"] = true
+			continue
+		# 多层几何规划（仅未接入正式房型组件库的通道桥房有内容）：坑/桥矩形 + 三层几何实例。
+		# bridge_60x50 的 v007 完整布局在上方已 continue，绝不会再叠加旧程序化坑/桥视觉。
 		var multi_level := _bridge_multi_level_plan(room, templates)
 		var pit_rect := Rect2()
 		var bridge_rect := Rect2()
@@ -1348,6 +1388,130 @@ static func attach_authored_layout_shell(
 		room["authored_layout_room_id"] = key
 		room["authored_layout_peaceful"] = false
 		room["authored_layout_instances"] = filtered
+
+
+## —— 房型默认布局：02 的 component_instances.json → authored_layout_instances ——
+##
+## 一个 component_id 对应一个稳定 PackedScene；本函数只搬运实例变换，并从运行时 catalog
+## 读取 slot_role。Blender 平面 XY / 垂直 Z 转为 Godot XZ / 垂直 Y：
+## `(bx, by, bz) -> (bx, bz, -by)`；历史字段 rotation_y_deg 在 Blender 端实际是绕 Z，
+## 转换后直接成为 Godot rotation.y，禁止重复转轴。
+static func _room_type_layout_for_room(room: Dictionary) -> Dictionary:
+	var template_id := str(room.get("template_id", ""))
+	if not ROOM_TYPE_LAYOUT_SOURCES.has(template_id):
+		return {}
+	var source_spec := ROOM_TYPE_LAYOUT_SOURCES[template_id] as Dictionary
+	var want_size := source_spec.get("size_m", Vector2.ZERO) as Vector2
+	var got_size := room.get("size", Vector2.ZERO) as Vector2
+	var room_rotation := float(room.get("rotation_deg", 0.0))
+	if is_equal_approx(fposmod(room_rotation, 180.0), 90.0):
+		want_size = Vector2(want_size.y, want_size.x)
+	if absf(want_size.x - got_size.x) > CONSTRAINED_EPS or absf(want_size.y - got_size.y) > CONSTRAINED_EPS:
+		push_error(
+			"FloorPlanGenerator: 房型 %s 的运行尺寸 %s 与组件布局期望 %s 不符"
+			% [template_id, str(got_size), str(want_size)]
+		)
+		return {}
+	var source_path := str(source_spec.get("path", ""))
+	var source := _read_json_dictionary(source_path, "房型组件布局")
+	if source.is_empty():
+		return {}
+	var catalog_roles := _load_shell_component_roles()
+	if catalog_roles.is_empty():
+		return {}
+	var expected_count := int((source.get("validation", {}) as Dictionary).get("instance_count", -1))
+	var instances: Array = []
+	for value in source.get("instances", []):
+		if not (value is Dictionary):
+			push_error("FloorPlanGenerator: 房型 %s 的 instances[] 含非对象条目" % template_id)
+			return {}
+		var item := value as Dictionary
+		var component_id := str(item.get("component_id", ""))
+		if component_id.is_empty() or not catalog_roles.has(component_id):
+			push_error(
+				"FloorPlanGenerator: 房型 %s 的组件 %s 未登记 slot_role"
+				% [template_id, component_id]
+			)
+			return {}
+		var raw_position: Variant = item.get("position_m", [])
+		var raw_scale: Variant = item.get("scale", [])
+		if not (raw_position is Array) or (raw_position as Array).size() != 3:
+			push_error("FloorPlanGenerator: 房型实例 %s 的 position_m 不是三元组" % str(item.get("instance_id", "")))
+			return {}
+		if not (raw_scale is Array) or (raw_scale as Array).size() != 3:
+			push_error("FloorPlanGenerator: 房型实例 %s 的 scale 不是三元组" % str(item.get("instance_id", "")))
+			return {}
+		var p := raw_position as Array
+		var s := raw_scale as Array
+		var local_position := Vector3(float(p[0]), float(p[2]), -float(p[1]))
+		var local_rotation := float(item.get("rotation_y_deg", 0.0))
+		if not is_zero_approx(room_rotation):
+			local_position = local_position.rotated(Vector3.UP, deg_to_rad(room_rotation))
+			local_rotation += room_rotation
+		var role := str(catalog_roles[component_id])
+		# 只有主层地砖进入 floor_tile；坑底 tile_lower 在 catalog 中是普通房型视觉件，
+		# 因而不会进入 _authored_tile_cells，也不会参与主层刷怪格。
+		instances.append({
+			"name": str(item.get("instance_id", "RoomTypeComponent")),
+			"component_id": component_id,
+			"slot_role": role,
+			"position": local_position,
+			"rotation_y_deg": local_rotation,
+			"scale": Vector3(float(s[0]), float(s[2]), float(s[1])),
+			"preserve_authored_y": true,
+			"door_wall_component_id": str(source_spec.get("door_wall_component_id", "")),
+		})
+	if expected_count >= 0 and instances.size() != expected_count:
+		push_error(
+			"FloorPlanGenerator: 房型 %s 实例数 %d 与 validation.instance_count=%d 不符"
+			% [template_id, instances.size(), expected_count]
+		)
+		return {}
+	return {
+		"asset_id": str(source_spec.get("asset_id", "")),
+		"version": str(source_spec.get("version", "")),
+		"instances": instances,
+	}
+
+
+static func _load_shell_component_roles() -> Dictionary:
+	var source := _read_json_dictionary(SHELL_COMPONENT_CATALOG_PATH, "壳体组件注册表")
+	if source.is_empty():
+		return {}
+	var result: Dictionary = {}
+	for value in source.get("components", []):
+		if not (value is Dictionary):
+			push_error("FloorPlanGenerator: 壳体组件注册表 components[] 含非对象条目")
+			return {}
+		var entry := value as Dictionary
+		var component_id := str(entry.get("component_id", ""))
+		var role := str(entry.get("slot_role", ""))
+		if component_id.is_empty() or role.is_empty() or result.has(component_id):
+			push_error("FloorPlanGenerator: 壳体组件注册表 ID/slot_role 非法或重复（%s）" % component_id)
+			return {}
+		result[component_id] = role
+		for alias_value in entry.get("aliases", []):
+			var alias := str(alias_value)
+			if alias.is_empty() or result.has(alias):
+				push_error("FloorPlanGenerator: 壳体组件注册表 alias 非法或重复（%s）" % alias)
+				return {}
+			result[alias] = role
+	return result
+
+
+static func _read_json_dictionary(path: String, label: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		push_error("FloorPlanGenerator: %s缺失 %s" % [label, path])
+		return {}
+	var text := FileAccess.get_file_as_string(path)
+	if text.is_empty():
+		push_error("FloorPlanGenerator: %s为空 %s" % [label, path])
+		return {}
+	var parsed: Variant = JSON.parse_string(text)
+	if not (parsed is Dictionary):
+		push_error("FloorPlanGenerator: %s不是 JSON 对象 %s" % [label, path])
+		return {}
+	return parsed as Dictionary
 
 
 ## —— 第 5 环（专属件）：Boss 房 6 件专属件摆位源 ——

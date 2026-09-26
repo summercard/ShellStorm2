@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER
+; 房型组件 office_room / v006 / work_cluster
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/work_cluster/work_cluster_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(5.8, 1.67, 2.44)
+
+[node name="RoomTypeComponentWorkCluster" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
+metadata/asset_version = "v006"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "work_cluster"
+metadata/display_name_zh = "工位"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/work_cluster/work_cluster.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5.8, 1.67, 2.44)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 0.835, 0)
+shape = SubResource("BoxShape3D_proxy")

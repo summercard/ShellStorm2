@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY
+; 房型组件 bridge_room / v007 / underbridge_service_bay
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/underbridge_service_bay/underbridge_service_bay_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentUnderbridgeServiceBay" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY"
+metadata/asset_version = "v007"
+metadata/room_type = "BRIDGE_ROOM"
+metadata/component_slug = "underbridge_service_bay"
+metadata/display_name_zh = "桥下竖井设备背板"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/underbridge_service_bay/underbridge_service_bay.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.993, 9.4, 6.3)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

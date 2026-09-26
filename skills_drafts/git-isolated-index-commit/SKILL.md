@@ -75,10 +75,15 @@ git diff-tree -r --name-only --no-commit-id <新提交sha> | grep -cE '^(<剔除
 4. **别用 `git rm --cached -r <dir>` 做剔除** —— 若该目录里本来就有 HEAD 已跟踪的文件，会把它们从索引树删掉，**在提交里产生大批删除**。必须用 `git reset -- <dir>`。
 5. **自校验分两层**：① `git diff --cached --name-only` 里剔除项计数为 0（本轮没进去）；② `git diff-tree -r --name-only --no-commit-id <sha>` 里剔除项计数为 0（本提交**增量**里没有）。⚠️ 别用 `git ls-tree` 全树计数来判断 —— 历史遗留存量会让计数非 0，看着像失败。
 6. **提交后真实索引**会**落后新 HEAD 一个提交**：因为提交走的是隔离索引的副本，真实 `.git/index` 从未更新。
-   - 若真实索引**原本就已 staged** 那批文件（如别的会话已 `git add` 过）⇒ 索引内容恰好与新 HEAD 一致，`git status` 看着干净，**无事**。
-   - 若**未 staged**（文件是未暂存/未跟踪）⇒ `git status` 把新 HEAD 里有、索引里没有的文件报成 **`D `（暂存删除）**。
-     🔴 **这时只要有人跑一次 `git commit`，就会提交成百上千个删除**（实测 2296 个文件 / −225353 行），
-     文件虽仍在磁盘上、但会被从版本库里抹掉。**必须在提交后立刻 `unset GIT_INDEX_FILE && git reset -q` 把索引对齐回 HEAD**。
+   按「被提交内容的形态」有**两种截然不同的表现**，都已实测：
+
+   | 提交内容形态 | 提交后 `git status` / `--cached` | 误 `git commit` 后果 |
+   |---|---|---|
+   | 真实索引**原本就已 staged**（别的会话已 `git add` 过） | 索引内容恰好 == 新 HEAD，`git status` 看着**干净** | 无（这是唯一安全的情形） |
+   | 内容**含未跟踪新增**（未 staged） | 新 HEAD 里有、索引里没有 ⇒ 报 **`D ` 暂存删除**；实测 `+3698 / −225353` | 🔴 **一次提交 2296 个删除**，文件仍在磁盘但被从版本库抹掉 |
+   | 内容**全是已跟踪文件的修改**（未 staged） | 索引里是旧 blob ⇒ 报 **`M ` 暂存修改**，且 diff **恰好是本次提交的镜像反向**（提交 `+1018/−514` ⇒ 暂存区显示 `+514/−1018`） | 🔴 **静默把 38 个文件回退到旧版本**（比删除更隐蔽，diff 看着像正常改动） |
+
+   🔴 **两种都必须 `unset GIT_INDEX_FILE && git reset -q` 把索引对齐回 HEAD 才能收工。**
    - `git reset`（mixed）**不动工作区任何文件**；且此时「被丢弃的暂存状态」只剩你剔除的那批临时文件 ——
      其余原本 staged 的内容都已进新 HEAD，**不丢东西**。这一步不是可选项。
 7. **中文路径显示**：`git diff --cached --name-only` 默认给非 ASCII 路径加引号，用 `-c core.quotepath=false` 关掉更易读；`-z` + `tr '\0' '\n'` 则完全不转义（**统计时优先用 `-z`**）。
@@ -89,4 +94,7 @@ git diff-tree -r --name-only --no-commit-id <新提交sha> | grep -cE '^(<剔除
 12. **`grep -c` 零匹配返回退出码 1** —— 放在命令末尾会让整条命令看起来「失败」（工具报 `failed`），**实际是成功**。要么加 `|| true`，要么判成功看更早的哨兵输出（如 `ADD_DONE` / `RESET_DONE`）与统计行。
 13. **推送体积同样要评估**：单文件 >50 MB 时 GitHub 只给警告、>100 MB 会**直接拒绝**。提交前先筛一遍：`git ls-files --others --exclude-standard -z | tr '\0' '\n' | while read -r f; do [ -f "$f" ] && s=$(stat -c %s "$f") && [ "$s" -gt 104857600 ] && echo "$s $f"; done`。
 14. 🔴 **提交后必须 `git reset -q`（见坑 6）** —— 这是本方案唯一的真实危险点。判据：`unset GIT_INDEX_FILE` 后
-    `git diff --cached --shortstat` 必须**为空**；若显示大批 `deletions`，就是索引还没对齐，别交给别人用。
+    `git diff --cached --shortstat` **必须为空**。
+    ⚠️ **别只看 deletions**：内容全为「已跟踪文件修改」时，暂存区显示的是 **insertions 为主的反向 diff**
+    （提交 `+1018/−514` ⇒ 暂存区 `+514/−1018`），看着像正常改动、实为回退。
+    **唯一可靠判据 = `--cached` 完全为空**，非空就别把这个工作区交给别人用。

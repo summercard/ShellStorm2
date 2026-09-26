@@ -24,6 +24,8 @@ agent_created: true
 - Godot：`I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe`（注意 `...exe\` 是目录名；**必须用 `_console.exe` 那个** —— 非 console 版在 Windows 下不挂 stdout，`> out.txt` 会拿到空文件，容易误判成「探针没跑」）
 - 项目：`I:\工作项目\shellstrom2\ShellStorm2`
 - Python（后处理/删文件）：`C:\Users\zhuangmenghong\.workbuddy\binaries\python\versions\3.13.12\python.exe`
+- **跑之前先设独享的 ASCII `APPDATA`**：`export APPDATA='C:\tmp\ss2_appdata_<用途>'`。不隔离就与编辑器 / 其它并发会话共用同一个 user 目录 —— 本项目仓库里**跟踪着 `Godot/app_userdata`** ⇒ 会直接把工作区弄脏，并发会话之间也会互相踩。
+- **新增/改过 GLB 等需要导入的资源后，先跑一次 `--import`**：`"<godot>" --headless --path "<project>" --import`（帮助文本：「Starts the editor, waits for any resources to be imported, and then quits」）。`.godot/imported` 已有缓存时可省（本项目常年 8900+ 条 ⇒ 直跑即可）。先显式 `--import` 再直跑比让探针**隐式导入**稳 —— 隐式导入会卡到分钟级。
 
 ### Bash 工具缺陷（必踩，先避开）
 
@@ -38,6 +40,16 @@ PortableGit shim 缺 coreutils：`dirname` / `cd` / `head` / `tail` / `wc` / `ls
 ```
 
 stderr 里的 `dirname: command not found` / `cd: null directory` 是 shim 噪音，**可忽略**，看 `exit=` 和输出文件即可。删临时文件用 Python，不要用 `rm`。
+
+**三种入口写法（2026-09-26 用 4.6.3 逐个实测）：**
+
+| 写法 | 实测结果 |
+|---|---|
+| **位置参数**：`... --path "<project>" res://tests/verification/<p>.tscn` | ✅ exit 0（最省字；`OS.get_cmdline_args()` 里就是那条裸路径） |
+| **`--scene`**：`... --path "<project>" --scene res://tests/verification/<p>.tscn` | ✅ exit 0（`--scene <path>` 是 4.6.3 正式参数，写全更明确） |
+| **`--script`**：`... --path "<project>" --script res://tests/verification/<p>.gd` | ⚠️ **只对 `MainLoop` / `SceneTree` 子类有效**。探针若 `extends Node`，脚本实例化后**不进场景树** ⇒ `_ready()` 永不触发、永不 `quit` ⇒ **进程挂死**（实测 2 分钟无输出、无退出，极易误判成「探针卡在加载」） |
+
+⇒ 常规探针**用前两种**（探针写成 `extends Node` + `.tscn`）；非要用 `--script` 就必须把探针改成 `MainLoop`。
 
 ## 探针模板
 

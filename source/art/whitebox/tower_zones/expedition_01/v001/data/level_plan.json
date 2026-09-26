@@ -10,12 +10,24 @@
   "floor_height_m": 12.0,
   "visible_wall_height_m": 11.9,
   "site": {
-    "size_m": [250.0, 250.0],
-    "center_m": [2.5, 2.5]
+    "size_m": [
+      250.0,
+      250.0
+    ],
+    "center_m": [
+      2.5,
+      2.5
+    ]
   },
   "core": {
-    "size_m": [65.0, 65.0],
-    "center_m": [2.5, 2.5]
+    "size_m": [
+      65.0,
+      65.0
+    ],
+    "center_m": [
+      2.5,
+      2.5
+    ]
   },
   "floors": [
     {
@@ -38,15 +50,24 @@
   ],
   "generation_policy": {
     "min_main_content_rooms": 10,
-    "branch_count_range": [0, 0],
+    "branch_count_range": [
+      0,
+      0
+    ],
     "max_attempts": 1,
     "target_occupancy_ratio": 0.42,
     "reference_room_cost_m2": 1450.0,
     "enforce_core_exclusion": false,
     "enforce_area_budget": false,
     "content_type_pool": [
-      "COMBAT", "COMBAT", "COMBAT", "COMBAT", "COMBAT",
-      "SCAVENGE", "SCAVENGE", "SCAVENGE",
+      "COMBAT",
+      "COMBAT",
+      "COMBAT",
+      "COMBAT",
+      "COMBAT",
+      "SCAVENGE",
+      "SCAVENGE",
+      "SCAVENGE",
       "STORAGE",
       "EVENT"
     ],
@@ -65,5 +86,125 @@
     "mode": "constrained",
     "extracted_from": "src/map/FloorPlanGenerator.gd::generate_expedition",
     "note": "远征关卡01 设计源。runtime_enabled=true + mode=constrained（2026-09-21）：本设计源是运行时真源，但几何**不写死**。floors/floor_00.json 只提供拓扑蓝图（主路顺序、房间 role/key）与兜底样例坐标；每局进图由 FloorPlanGenerator._generate_constrained_floor 按运行种子现算几何——主路一线到底贴墙自避走（净距恒 0），内容房型从 content_template_pool（5 种内容房）按种子洗牌（先保证每族至少一次再整体洗牌），每间主路内容房 2 门（进 + 出）。**支线已于 2026-09-25 裁定取消**：主路 13 房一线到底（安全屋 + 10 间内容房 room_01…room_10 + Boss竞技场 + 撤离屋），故 branch_count_range=[0,0]、min_main_content_rooms=10；通道桥房只在桥两端开门 ⇒ 最多 2 连接且两连接同轴，本就不适合挂支线（见 05.2 §3.6 第 8 条）。**通道桥房的取向随连接轴定**：连接轴与桥跨向平行时用本体（bridge_60x50，30×60 工字型、桥沿 y 跨、门在南北短板），垂直时写 template_rotation_deg=90 转置（占位 60×30）—— 同一份模板文件，不再有第二个模板 id（2026-09-25 主人裁定，见 05.2 §3.4/§3.6）。**内容类型自 2026-09-25 起按房号钉死在 floors/floor_00.json**（10 间内容房各写 content_type；类型多重集仍严格等于 content_type_pool）。**刷怪编成同期改为「半钉死」**：enemy_spawn_plan 的波次数按房号钉死，每波给种类池 pool + 抽几种区间 kinds + 总数量区间 count，每局按 run_seed + 房 id 派生种子抽取（同局同房可复现，不同局/不同房不同）；旧的逐值固定写法（monsters 数组）仍逐字有效（向后兼容），两写法互斥。content_type_pool 保留作多重集参照，生成器不再消费（钉死值优先）。房间运行时 id 靠 legacy_room_id 保持不变；生成失败时回退到 floor_00.json 的样例坐标（plan.used_fallback=true）。**场地边界与总面积自 2026-09-25 起不再是摆位判据**：MAP_SIZE_M 不参与剪枝，面积数字照算照报（见 05.2 §3.7）。"
+  },
+  "monster_drop_table": {
+    "schema": "shellstorm2.monster_drop_table",
+    "schema_version": 1,
+    "source_csv": "docs/v0.1/data/怪物掉落表_地图x怪物.csv",
+    "rows_sha256": "f443874547b44a942c488ddb3999eefe241359e08a2365b3403104bd87711df4",
+    "rows": [
+      {
+        "monster_id": "melee_chaser",
+        "item_id": "weapon_pistol",
+        "chance": 0.26,
+        "weight": 3,
+        "quantity": 1,
+        "note": "主武器·权重池"
+      },
+      {
+        "monster_id": "melee_chaser",
+        "item_id": "weapon_baseball_bat",
+        "chance": 0.26,
+        "weight": 2,
+        "quantity": 1,
+        "note": "近战·权重池"
+      },
+      {
+        "monster_id": "melee_chaser",
+        "item_id": "mod_bullet_standard",
+        "chance": 0.26,
+        "weight": 2,
+        "quantity": 1,
+        "note": "子弹模块·权重池"
+      },
+      {
+        "monster_id": "melee_chaser",
+        "item_id": "item_ammo_pack",
+        "chance": 0.34,
+        "quantity": "3-8",
+        "note": "备弹·独立判定"
+      },
+      {
+        "monster_id": "melee_chaser",
+        "item_id": "@currency:extraction_points",
+        "quantity": "2+floor*1",
+        "note": "必掉·公式"
+      },
+      {
+        "monster_id": "ranged_caster",
+        "item_id": "mod_bullet_piercing",
+        "chance": 0.08,
+        "quantity": 1,
+        "note": "独立判定"
+      },
+      {
+        "monster_id": "ranged_caster",
+        "item_id": "mod_bullet_bounce",
+        "chance": 0.06,
+        "quantity": 1,
+        "note": "独立判定"
+      },
+      {
+        "monster_id": "ranged_caster",
+        "item_id": "attach_scope",
+        "chance": 0.03,
+        "quantity": 1,
+        "note": "独立判定"
+      },
+      {
+        "monster_id": "ranged_caster",
+        "item_id": "item_ammo_pack",
+        "chance": 0.34,
+        "quantity": "3-8",
+        "note": "备弹·独立判定"
+      },
+      {
+        "monster_id": "ranged_caster",
+        "item_id": "@currency:extraction_points",
+        "quantity": "2+floor*1",
+        "note": "必掉·公式"
+      },
+      {
+        "monster_id": "exploder",
+        "item_id": "mod_bullet_explosive",
+        "weight": 4,
+        "quantity": 1,
+        "note": "权重池·抽1件"
+      },
+      {
+        "monster_id": "exploder",
+        "item_id": "item_battery_s",
+        "weight": 3,
+        "quantity": 1,
+        "note": "权重池·抽1件"
+      },
+      {
+        "monster_id": "exploder",
+        "item_id": "item_battery_l",
+        "weight": 1,
+        "quantity": 1,
+        "note": "权重池·抽1件"
+      },
+      {
+        "monster_id": "exploder",
+        "item_id": "weapon_launcher",
+        "weight": 0.8,
+        "quantity": 1,
+        "note": "权重池·抽1件"
+      },
+      {
+        "monster_id": "exploder",
+        "item_id": "item_ammo_pack",
+        "chance": 0.34,
+        "quantity": "3-8",
+        "note": "备弹·独立判定"
+      },
+      {
+        "monster_id": "exploder",
+        "item_id": "@currency:extraction_points",
+        "quantity": "2+floor*1",
+        "note": "必掉·公式"
+      }
+    ]
   }
 }

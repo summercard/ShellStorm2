@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN
+; 房型组件 office_room / v006 / ceiling_service_pipe_run
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_service_pipe_run/ceiling_service_pipe_run_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentCeilingServicePipeRun" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN"
+metadata/asset_version = "v006"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "ceiling_service_pipe_run"
+metadata/display_name_zh = "顶部管道与法兰"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(22.92, 1.244, 38)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

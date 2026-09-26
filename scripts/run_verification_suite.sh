@@ -73,6 +73,10 @@ write_isolated_project_settings() {
 }
 write_isolated_project_settings "${verification_user_dir_name}"
 export SHELLSTORM_VERIFICATION_USER_DIR_NAME="${verification_user_dir_name}"
+if ! python3 "${project_root}/scripts/export_monster_drop_table.py" --check; then
+  printf 'MONSTER_DROP_TABLE_DRIFT_FAILED\n' >&2
+  exit 2
+fi
 verification_import_log="${verification_log_dir}/project_import.log"
 if ! "${godot_bin}" --headless --path "${isolated_project_root}" --import \
   >"${verification_import_log}" 2>&1; then

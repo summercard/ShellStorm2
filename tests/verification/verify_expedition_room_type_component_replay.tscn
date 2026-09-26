@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_expedition_room_type_component_replay.gd" id="1_probe"]
+
+[node name="VerifyExpeditionRoomTypeComponentReplay" type="Node"]
+script = ExtResource("1_probe")

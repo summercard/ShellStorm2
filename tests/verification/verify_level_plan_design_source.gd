@@ -10,10 +10,11 @@ extends Node
 ##   省略 --level 时校验 TARGET_LEVELS 全部。
 ##
 ## 判据：LEVEL_PLAN_VALIDATE_OK levels=N checks=K rooms=R templates=T
-##       LEVEL_PLAN_RUNTIME_GUARD_OK levels=N rooms=R checks=K plans=P boss_ids=B rewards=W
+##       LEVEL_PLAN_RUNTIME_GUARD_OK levels=N rooms=R checks=K plans=P boss_ids=B rewards=W monster_drop_rows=M
 ##   plans=P    = 设计源里填了 enemy_spawn_plan 的房数（真的带到运行时的条数）
 ##   boss_ids=B = 设计源里填了 boss_content_id 的房数
 ##   rewards=W  = 设计源里填了 reward_plan 的**槽位数**（trigger 条数，真的带到运行时的条数）
+##   monster_drop_rows=M = L1 怪物掉落表真的带到运行时 plan 的行数
 ## 三个样本计数为 0 时另打 LEVEL_PLAN_RUNTIME_NOTE，避免「0 样本」伪装成通过
 ## （透传机制由 verify_test_level_99_flow 的手写 patch 探针单独覆盖）。
 ## 失败：LEVEL_PLAN_VALIDATE_FAILED <level_id> errors=<n> 并逐条打印
@@ -119,6 +120,7 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 	var guard_boss_ids := 0
 	# 掉落计划的样本数（槽位数）。与 boss_ids 同理：0 样本必须显式声明。
 	var guard_reward_slots := 0
+	var guard_monster_drop_rows := 0
 	for level_id in targets:
 		var level_plan := LOADER.load_level_plan(level_id)
 		if level_plan.is_empty():
@@ -139,6 +141,12 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 			var source_plans := _source_spawn_plans(level_id, floor_number)
 			var source_boss_ids := _source_boss_content_ids(level_id, floor_number)
 			var source_rewards := _source_reward_plans(level_id, floor_number)
+			var source_drop_table := level_plan.get("monster_drop_table", {}) as Dictionary
+			var runtime_drop_table := plan.get("monster_drop_table", {}) as Dictionary
+			if source_drop_table != runtime_drop_table:
+				errors.append("floor %d: monster_drop_table 未逐值带到运行时 plan" % floor_number)
+			else:
+				guard_monster_drop_rows += (runtime_drop_table.get("rows", []) as Array).size()
 			level_plans += source_plans.size()
 			guard_plans += source_plans.size()
 			guard_boss_ids += source_boss_ids.size()
@@ -216,8 +224,8 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 				print("LEVEL_PLAN_RUNTIME_ERROR %s %s" % [level_id, str(error)])
 	if failed_levels == 0:
 		print(
-			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d plans=%d boss_ids=%d rewards=%d"
-			% [targets.size(), guard_rooms, guard_checks, guard_plans, guard_boss_ids, guard_reward_slots]
+			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d plans=%d boss_ids=%d rewards=%d monster_drop_rows=%d"
+			% [targets.size(), guard_rooms, guard_checks, guard_plans, guard_boss_ids, guard_reward_slots, guard_monster_drop_rows]
 		)
 		if guard_boss_ids == 0:
 			print(

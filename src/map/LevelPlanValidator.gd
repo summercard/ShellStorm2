@@ -29,6 +29,8 @@ const BOSS_CONTENT_CATALOG := preload("res://src/enemy3d/BossContentCatalog.gd")
 const REWARD_POOLS := preload("res://src/rewards/RewardPoolRegistry.gd")
 ## 规格契约：trigger 列表与槽位写法取这里的唯一口径（禁止在本处复刻一份字面量）。
 const REWARD_SPEC := preload("res://src/rewards/RewardSpec.gd")
+## 关卡级地图×怪物掉落表：结构与 RewardSpec 编译共用同一实现，避免校验器复刻语义。
+const MONSTER_DROP_TABLE := preload("res://src/rewards/MonsterDropTable.gd")
 ## 硬上限：设计源写超大数字不该变成性能事故或开局卡死，直接在静态校验拦住。
 const SPAWN_PLAN_MAX_WAVES := 6
 const SPAWN_PLAN_MAX_PER_WAVE := 24
@@ -55,6 +57,21 @@ static func validate_level(level_id: String) -> Dictionary:
 		}
 	errors.append_array(_validate_level_header(level_plan))
 	checks += 6
+	var drop_table_value: Variant = level_plan.get("monster_drop_table", {})
+	if not (drop_table_value is Dictionary):
+		errors.append("monster_drop_table_not_object")
+	else:
+		var drop_table := drop_table_value as Dictionary
+		if not drop_table.is_empty():
+			var drop_check := MONSTER_DROP_TABLE.compile(level_id, drop_table)
+			checks += int(drop_check.get("row_count", 0))
+			for error_value in drop_check.get("errors", []):
+				var error := error_value as Dictionary
+				errors.append("%s:%s:%s" % [
+					str(error.get("code", "MONSTER_DROP_TABLE_INVALID")),
+					str(error.get("path", "")),
+					str(error.get("detail", "")),
+				])
 	var templates := LOADER.load_room_templates(level_id)
 	var declared: Array = level_plan.get("room_templates", [])
 	for value in declared:

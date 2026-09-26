@@ -1720,6 +1720,15 @@ func _build_expedition_records() -> void:
 	if plan.is_empty():
 		push_error("[TowerDescent3D] 远征关卡缺少单层规划")
 		return
+	# 关卡级怪物掉落表与当前 plan 同寿命。奖励协调器持有编译结果，切关/重建时整表替换，
+	# 不塞进 MonsterInjector 静态状态，避免同进程多场景与测试之间串味。
+	if _reward_coordinator != null:
+		var drop_report := _reward_coordinator.configure_level_drop_table(
+			str(plan.get("level_id", get_expedition_level_id())),
+			plan.get("monster_drop_table", {}) as Dictionary
+		)
+		if not bool(drop_report.get("ok", false)):
+			push_error("[TowerDescent3D] 关卡怪物掉落表编译失败: %s" % str(drop_report.get("errors", [])))
 	var entry_spec := _plan_spec(plan, "entry")
 	if entry_spec.is_empty():
 		push_error("[TowerDescent3D] 远征关卡规划缺少入口安全房")

@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK
+; 房型组件 office_room / v006 / power_cabinet_bank
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/power_cabinet_bank/power_cabinet_bank_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(3.1, 3.82, 0.91)
+
+[node name="RoomTypeComponentPowerCabinetBank" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK"
+metadata/asset_version = "v006"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "power_cabinet_bank"
+metadata/display_name_zh = "配电柜带"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/power_cabinet_bank/power_cabinet_bank.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(3.1, 3.82, 0.91)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.91, 0)
+shape = SubResource("BoxShape3D_proxy")

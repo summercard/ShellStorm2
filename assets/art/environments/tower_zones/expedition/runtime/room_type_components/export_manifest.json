@@ -1,0 +1,1055 @@
+{
+  "schema": "shellstorm2.expedition.room_type_component_export.v001",
+  "component_count": 60,
+  "records": [
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_deck_5m/ceiling_deck_5m.blend",
+      "source_sha256": "a86996f138b0d9f9bff25a66353b888dee40ff5dcab8a6e3a381fe421a488ceb",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_deck_5m/ceiling_deck_5m_visual_top3d.glb",
+      "glb_sha256": "d95c11f8ed56cab990b2d16f49ef19b25fbe2789021bedaf24f33c4aa07153a4",
+      "selected_objects": [
+        "ROOT_ceiling_deck_-1_组件",
+        "吊顶结构_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 720,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "slug": "ceiling_deck_5m"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_lighting/ceiling_lighting.blend",
+      "source_sha256": "6255842a16fd1329269cdb4ea40bae1af47545f2a5123b7729014544e274f42f",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_lighting/ceiling_lighting_visual_top3d.glb",
+      "glb_sha256": "93474055579b36cbc639d0474a6667fdead10d3754a2dbd907cc313dbd7ee30f",
+      "selected_objects": [
+        "ROOT_ceiling_lighting_组件",
+        "顶部灯具_输出_部件00",
+        "顶部灯具_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 7560,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+      "slug": "ceiling_lighting"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+      "source_sha256": "e2f2329203d4b9c7e916be567d9816dc3d2c684cdd1244d13d1d14d19518c458",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_ring_beam/ceiling_ring_beam_visual_top3d.glb",
+      "glb_sha256": "f3d794b41448147af6fd5837c6cea1611325b03ba94623f7143ac3e076272abc",
+      "selected_objects": [
+        "ROOT_ceiling_ring_beam_组件",
+        "吊顶周圈圈梁_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 432,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+      "slug": "ceiling_ring_beam"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+      "source_sha256": "e0f3fa01ade730d195ae0ac2294f242255c3f94dc4450c5426a664280d0fb140",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_service_cable_tray/ceiling_service_cable_tray_visual_top3d.glb",
+      "glb_sha256": "43f3e9ce60cce54eddd53911d454b511f2167c9a1b2b05720990d348be9bb314",
+      "selected_objects": [
+        "ROOT_ceiling_service_cable_tray_组件",
+        "顶部电缆桥架与线缆_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 2384,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+      "slug": "ceiling_service_cable_tray"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+      "source_sha256": "2fa579e82aa4d3708e7a3241e43078640cb5cc60f8e9e174dba840342a9906f4",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_service_duct/ceiling_service_duct_visual_top3d.glb",
+      "glb_sha256": "7fd5798f87c6ff6bf2d38145d367a1d8836c42c08bc8722ae6e2ccdf19a5f09b",
+      "selected_objects": [
+        "ROOT_ceiling_service_duct_组件",
+        "顶部通风管与风口_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 5924,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+      "slug": "ceiling_service_duct"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+      "source_sha256": "953116e2bcb1a467399a884af7f76ba2c07ae72fa3b043aeccd7be24b9e2a91e",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/ceiling_service_pipe_run/ceiling_service_pipe_run_visual_top3d.glb",
+      "glb_sha256": "1ee9683c8f0bf10a90ea55f97a3770bc055848c8abc656b5ab54425beac750c4",
+      "selected_objects": [
+        "ROOT_ceiling_service_pipe_run_组件",
+        "顶部管道与法兰_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 3248,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+      "slug": "ceiling_service_pipe_run"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/corner_guard/corner_guard.blend",
+      "source_sha256": "5edded12f46d546dfbe20b948105795afe34da982f2e38a7425eb8b6de4b9be7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/corner_guard/corner_guard_visual_top3d.glb",
+      "glb_sha256": "0faa5978d8b37fbc7ed393bd8aec97677e7a6e669e799e3f72b5b448db2a2bce",
+      "selected_objects": [
+        "ROOT_corner_guard_组件",
+        "转角护柱与墙裙_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 4752,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+      "slug": "corner_guard"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/door_wall/door_wall.blend",
+      "source_sha256": "62ea393be0abc863dd7e3d25349863f45c029e40d027d80e135aca49b0c519f6",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb",
+      "glb_sha256": "e834b946df14f3cd40ee76fee42a0d5abd0e41b0025358b3028423c3c25279e4",
+      "selected_objects": [
+        "ROOT_door_wall_组件",
+        "门洞墙件_可复用_输出_部件00",
+        "门洞墙件_可复用_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 6604,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+      "slug": "door_wall"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/filing_run/filing_run.blend",
+      "source_sha256": "1e0b7396132c048a13d05f82789b5cb6a2d76710b0d8f2d44bf16b8dd31fe676",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/filing_run/filing_run_visual_top3d.glb",
+      "glb_sha256": "995ac6858a4e3cfb1cffcbc07dd2ed3e43a0d590502d1bdcd08fafa6c652ffc0",
+      "selected_objects": [
+        "ROOT_filing_run_west_组件",
+        "西墙档案柜带_输出_部件00",
+        "西墙档案柜带_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 16104,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN",
+      "slug": "filing_run"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_service/floor_service.blend",
+      "source_sha256": "a9e2fdd68d51462c53c1446acf85202b6690f5423ab03fbac6f3c5100e9bc1e5",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/floor_service/floor_service_visual_top3d.glb",
+      "glb_sha256": "bc89a6cacd6dbc4dd776116ad16804405f7132ade9cac65d499e998dc4e9eb24",
+      "selected_objects": [
+        "ROOT_floor_service_组件",
+        "地面管线与检修_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 2592,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+      "slug": "floor_service"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_tile_5m/floor_tile_5m.blend",
+      "source_sha256": "5e460e377b41dc839599759e724a1ccf35101891f1733ee7ea52a47d4d83bac7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/floor_tile_5m/floor_tile_5m_visual_top3d.glb",
+      "glb_sha256": "b41f084cdc194eb6c2f61eb8ff97ea39a4cff907073c203f0a8e75bf5f837696",
+      "selected_objects": [
+        "ROOT_tile_-1_-3_组件",
+        "地砖_-1_-3_输出_部件00",
+        "地砖_-1_-3_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2633,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "slug": "floor_tile_5m"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_zone_mark/floor_zone_mark.blend",
+      "source_sha256": "c3c6eb87b356367123a72d80653f1d5d6b7b0d7039d6a34e4c9019b6ee7b6879",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/floor_zone_mark/floor_zone_mark_visual_top3d.glb",
+      "glb_sha256": "19f032d481e0243780dca7fad13a49dfe5febe32aa35eb7ce7ebd857277cc948",
+      "selected_objects": [
+        "ROOT_floor_zone_mark_组件",
+        "地面分区标识_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 440,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+      "slug": "floor_zone_mark"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/locker_bank/locker_bank.blend",
+      "source_sha256": "2fda7b937cbf9e44c013934e7d142f73a2dcfc8fa12604af82e17055ab1bb98e",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/locker_bank/locker_bank_visual_top3d.glb",
+      "glb_sha256": "99f24cf6d7b12840ea87b01954d8a6f98d1e99defd2faca046a674d54a60c43e",
+      "selected_objects": [
+        "ROOT_locker_bank_north_组件",
+        "北墙储物柜组_输出_部件00",
+        "北墙储物柜组_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 1564,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK",
+      "slug": "locker_bank"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/planting_perimeter/planting_perimeter.blend",
+      "source_sha256": "e616240b94cb52ca3340a830fdb5b3b83b57a53ba96ac34f6e40c92d05a9a30f",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/planting_perimeter/planting_perimeter_visual_top3d.glb",
+      "glb_sha256": "2840b472175de45622ca94ca0887640aa465dc4640a97e8bc358982bbc463b80",
+      "selected_objects": [
+        "ROOT_planting_perimeter_组件",
+        "周圈绿植_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 13240,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+      "slug": "planting_perimeter"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/power_cabinet_bank/power_cabinet_bank.blend",
+      "source_sha256": "c99515cb31932656051a36b71c1704eb98215c03a445f95b3ec2d85ea1303f58",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/power_cabinet_bank/power_cabinet_bank_visual_top3d.glb",
+      "glb_sha256": "d369ea1050ac4dafce118021fa9350c8d3885df4e8b5ac2c5fa7186dde9e06b7",
+      "selected_objects": [
+        "ROOT_power_cabinet_bank_south_组件",
+        "南墙配电柜带_输出_部件00",
+        "南墙配电柜带_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2520,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK",
+      "slug": "power_cabinet_bank"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/prep_bench/prep_bench.blend",
+      "source_sha256": "7d47e3cbcfdc44084881376ceae06e86f685f73efb91722b6d075cb3e62f4a30",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/prep_bench/prep_bench_visual_top3d.glb",
+      "glb_sha256": "6201ccb55e03564285947cc5704cde1a50c0e72537a984de75cd79c594ddda9a",
+      "selected_objects": [
+        "ROOT_prep_bench_east_组件",
+        "东墙整备台_输出_部件00",
+        "东墙整备台_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2916,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH",
+      "slug": "prep_bench"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/printer_station/printer_station.blend",
+      "source_sha256": "817048ce8fe06ab76339544a4c55214c7e3d6a73b50783096e914837aa6608ca",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/printer_station/printer_station_visual_top3d.glb",
+      "glb_sha256": "b56f3749b6394b213ff31451522502b70515c1b1da556012fd6432ac262a5e9d",
+      "selected_objects": [
+        "ROOT_printer_station_组件",
+        "打印机与耗材位_输出_部件00",
+        "打印机与耗材位_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 1404,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+      "slug": "printer_station"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/shelving/shelving.blend",
+      "source_sha256": "1d8f77399d6ac259a3a8f9543de8504e0e7511a5ed22461ca1b13f075cfc2a7b",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/shelving/shelving_visual_top3d.glb",
+      "glb_sha256": "d4d0078d475cb840ad384c2209bdb476b28ba5851a8b444d6de63bf540ad51d2",
+      "selected_objects": [
+        "ROOT_shelving_south_组件",
+        "置物架_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 5076,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING",
+      "slug": "shelving"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/totem_column/totem_column.blend",
+      "source_sha256": "9296e1470b10aea1a49dcd6043a9da1a2b5bb938c4e325e7f31c17b15eff5c0a",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/totem_column/totem_column_visual_top3d.glb",
+      "glb_sha256": "673ddb10e74a24d64375ec4985ab5f0293320314da924cf987703fa02e883f7a",
+      "selected_objects": [
+        "ROOT_totem_column_组件",
+        "图腾立柱_输出_部件00",
+        "图腾立柱_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 1404,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+      "slug": "totem_column"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t1110_5m/wall_t1110_5m.blend",
+      "source_sha256": "b0492b2822ecb1d7d8749b34bbf2594bf597b0dca05a75c9b474ce675fc6b0d7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_visual_top3d.glb",
+      "glb_sha256": "dbfca753b43d95a3d7a6d59b869fa5c12b3433740b77bc27ef07e6aba8873d4e",
+      "selected_objects": [
+        "ROOT_wall_south_-3_组件",
+        "south_墙体_-3_输出_部件00",
+        "south_墙体_-3_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 7652,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M",
+      "slug": "wall_t1110_5m"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t615_5m/wall_t615_5m.blend",
+      "source_sha256": "f234bcbd3eacc88da6b2ec684a20a5fd4a4d6ba8ff3fdb68b0d1b38760e6be0a",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t615_5m/wall_t615_5m_visual_top3d.glb",
+      "glb_sha256": "0a113be432ca7eb0d024f33b46b2421b0e686faa71a5bb7075b15a0c93a6d707",
+      "selected_objects": [
+        "ROOT_wall_east_-2_组件",
+        "east_墙体_-2_输出_部件00",
+        "east_墙体_-2_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 5632,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "slug": "wall_t615_5m"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t970_5m/wall_t970_5m.blend",
+      "source_sha256": "5b6ceb71a720f181515ab05370ccadcf6408f940022f38ad6488168f94ff1362",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb",
+      "glb_sha256": "801b202676eb5b5f51268736740ee6997023b7c932b17f0bbad902d23717a121",
+      "selected_objects": [
+        "ROOT_wall_south_2_组件",
+        "south_墙体_2_输出_部件00",
+        "south_墙体_2_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 6320,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M",
+      "slug": "wall_t970_5m"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_top_service/wall_top_service.blend",
+      "source_sha256": "766b0214a13bc546f48d65214aecebb4fbe047aa46b4f5af31da520662802da1",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_top_service/wall_top_service_visual_top3d.glb",
+      "glb_sha256": "617d246579cb590232e1c23910b4801afdbd36e6f1e4d5c59f79d7ed84674580",
+      "selected_objects": [
+        "ROOT_wall_top_service_组件",
+        "墙顶管线收口_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 432,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+      "slug": "wall_top_service"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/water_and_supply_corner/water_and_supply_corner.blend",
+      "source_sha256": "a33433b22b20c7fb114e3057ab2fcf25a0e520784e0c8f565fbf970a158c89e5",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/water_and_supply_corner/water_and_supply_corner_visual_top3d.glb",
+      "glb_sha256": "571404b942bac1cf37723f1d65fe394aceac2542d212d594f2559093a14ce0aa",
+      "selected_objects": [
+        "ROOT_water_and_supply_corner_组件",
+        "饮水与箱货区_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1828,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+      "slug": "water_and_supply_corner"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/work_cluster/work_cluster.blend",
+      "source_sha256": "5759cf0c1fbd1bfacf85dd3b3de9454ad6bbf86f686ea4b3debf0c80e69763f5",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/work_cluster/work_cluster_visual_top3d.glb",
+      "glb_sha256": "60600ae969e5bb61fa5b271f3a98ce0731041b4d0855e918a7551fd51dad2a02",
+      "selected_objects": [
+        "ROOT_work_cluster_a_组件",
+        "工位_a_输出_部件00",
+        "工位_a_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 16328,
+      "room_type": "OFFICE_ROOM",
+      "version": "v006",
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "slug": "work_cluster"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bank_crate/bank_crate.blend",
+      "source_sha256": "5ed7636786ab12cef3867091a0e6f15addff07469102b5a7dd81b7cc56b83285",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bank_crate/bank_crate_visual_top3d.glb",
+      "glb_sha256": "8789f3947758d7633e62ebbd720edde741361f024d614b0e4e3854fb4ecb3707",
+      "selected_objects": [
+        "ROOT_bank_crate_-1_0_组件",
+        "固定维护箱_bank_crate_-1_0_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1512,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE",
+      "slug": "bank_crate"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_girder/bridge_girder.blend",
+      "source_sha256": "3ab651765be343c5eb9fb09e236b5fe239a042e8b97ea444f8ec70c582dfdad7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_girder/bridge_girder_visual_top3d.glb",
+      "glb_sha256": "b1541730443f9d9a4fb2f99cab30d8c7cae0093bc50fe88cd8e5b6ae5039a9d7",
+      "selected_objects": [
+        "ROOT_bridge_girder_-1_组件",
+        "桥侧连续箱梁_-1_输出_部件00",
+        "桥侧连续箱梁_-1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2052,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER",
+      "slug": "bridge_girder"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_guardrail/bridge_guardrail.blend",
+      "source_sha256": "2948a6b5d69fe8123a2a2741bf051ae6a4de2afd7d679483fa20207bde8c1c64",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_visual_top3d.glb",
+      "glb_sha256": "dadc3c56100b33e623804ee3ef373f0582e2f1413e087494b5dd8638d34d1769",
+      "selected_objects": [
+        "ROOT_bridge_guardrail_-1_组件",
+        "桥面完整护栏_-1_输出_部件00",
+        "桥面完整护栏_-1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 5640,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL",
+      "slug": "bridge_guardrail"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_service_transom/bridge_service_transom.blend",
+      "source_sha256": "a00f5c068ff5223bcffdcae842b38cf5b1aa336e753de42e536dc288299a2548",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_service_transom/bridge_service_transom_visual_top3d.glb",
+      "glb_sha256": "0bc656afd4bb3f5ad3f48f2edccf905fe3422d1ddab87e84c094fb21c95ee6f7",
+      "selected_objects": [
+        "ROOT_bridge_service_transom_-14_组件",
+        "桥端设备支承横梁_-14_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 108,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM",
+      "slug": "bridge_service_transom"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/coolant/coolant.blend",
+      "source_sha256": "bdab54b2d9d9d23a315a2ff2c8027669e4da5c356a631e3154cbb1544c946059",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/coolant/coolant_visual_top3d.glb",
+      "glb_sha256": "f16a918ab35f07149f4f055718bcd6f5ff66bd8793e418182a70a267bb0cc2ff",
+      "selected_objects": [
+        "ROOT_coolant_-1_0_组件",
+        "下层粗管弯头_coolant_-1_0_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1512,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT",
+      "slug": "coolant"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/cross_gantry/cross_gantry.blend",
+      "source_sha256": "8bc9e741123feee63142e6c80a616d856aaa3f7ed14734b1397f9d73d259dd21",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/cross_gantry/cross_gantry_visual_top3d.glb",
+      "glb_sha256": "a22083b052dacb74690cef3326694da839250b2d91cbf15b39436905fb142195",
+      "selected_objects": [
+        "ROOT_cross_gantry_-1_组件",
+        "错层钢格栅检修平台_cross_gantry_-1_输出_部件00",
+        "错层钢格栅检修平台_cross_gantry_-1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 11848,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY",
+      "slug": "cross_gantry"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/deep_cables/deep_cables.blend",
+      "source_sha256": "caef9f3fdd1334a5bf892ca78681edf3a7d61d5c7367856682dc9b6884125cec",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/deep_cables/deep_cables_visual_top3d.glb",
+      "glb_sha256": "d0dc599917b7cff84f67052a58b0035199d7d498764d47222424ddf6a06824a2",
+      "selected_objects": [
+        "ROOT_deep_cables_-1_0_组件",
+        "跨层下垂电缆_-1_0_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1980,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES",
+      "slug": "deep_cables"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/deep_trunk/deep_trunk.blend",
+      "source_sha256": "011d3d1a5646e240e581bc55d7f367ed0e8715e3f42dabc66fa29205073646a7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/deep_trunk/deep_trunk_visual_top3d.glb",
+      "glb_sha256": "43deb5929741ce1f980089eac61ed2c9ca39b8df5e14993f7b3c8928d10c102b",
+      "selected_objects": [
+        "ROOT_deep_trunk_-1_组件",
+        "坑底贯穿管束_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 816,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK",
+      "slug": "deep_trunk"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/end_crate/end_crate.blend",
+      "source_sha256": "d9774fbc29cdbc7aa5b3ae3dbfc289bcdfee89457dc3562242ca4d536e85567e",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/end_crate/end_crate_visual_top3d.glb",
+      "glb_sha256": "e4cf448c23dc8b52a73332a159ab511d50f7c22ef2d3955b26c686980c07dd6d",
+      "selected_objects": [
+        "ROOT_end_crate_-1_组件",
+        "固定维护箱_end_crate_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1512,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE",
+      "slug": "end_crate"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/end_power/end_power.blend",
+      "source_sha256": "e6b2fa4282290badc805640ddc7b39b10b7559a2504af9255463455c69e725ae",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/end_power/end_power_visual_top3d.glb",
+      "glb_sha256": "ef87d11d0fdc34c0bf3f7e0a81bdd6dc9cc9fd931a0e748f70a5fb5a068863e4",
+      "selected_objects": [
+        "ROOT_end_power_-1_组件",
+        "机房设备_end_power_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 4644,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER",
+      "slug": "end_power"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/half_partition/half_partition.blend",
+      "source_sha256": "bca4dcc0dd527e815dac6a0d2178e46f2c2d776582d05d05ec73ac80c4151c1a",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/half_partition/half_partition_visual_top3d.glb",
+      "glb_sha256": "5e7433fb02027f7f7042567158b9d271b9a81c40b075ce5353faf9a8e984c800",
+      "selected_objects": [
+        "ROOT_half_partition_-1_组件",
+        "机房设备隔断_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 756,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION",
+      "slug": "half_partition"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/header_cables/header_cables.blend",
+      "source_sha256": "90b11ac1f07b328d8056554acb6f5e0b14f66df506033b5f5951f6c37f775bdb",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/header_cables/header_cables_visual_top3d.glb",
+      "glb_sha256": "365ef29cfa832bd179c57ceaef8242977d9381952a4a5e7126a25f64770dc300",
+      "selected_objects": [
+        "ROOT_header_cables_-1_0_组件",
+        "架空垂落电缆束_-1_0_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 2772,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES",
+      "slug": "header_cables"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/longitudinal_tie/longitudinal_tie.blend",
+      "source_sha256": "ab781999d48ba5d8b95bca5f611a98c99c5d84002b9f6713a7127ba336d7aba7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/longitudinal_tie/longitudinal_tie_visual_top3d.glb",
+      "glb_sha256": "4ebe495a441e774669d9cfc54453111c0a1d615330c3cd7b793f51c4e34b20e0",
+      "selected_objects": [
+        "ROOT_longitudinal_tie_-1_-4.8_组件",
+        "下层纵向腰梁_-1_-4.8_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 108,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE",
+      "slug": "longitudinal_tie"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/low_platform_z4805/low_platform_z4805.blend",
+      "source_sha256": "29a9bb784b7b89d08371805584dfea3044d7c50dbf6c6ef5350ef5ff2d99690a",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/low_platform_z4805/low_platform_z4805_visual_top3d.glb",
+      "glb_sha256": "695f0a67270a882c085bba3f6660692e91e4cdd1df5e7f113aa16554f90a1e6d",
+      "selected_objects": [
+        "ROOT_low_platform_-1_1_组件",
+        "错层钢格栅检修平台_low_platform_-1_1_输出_部件00",
+        "错层钢格栅检修平台_low_platform_-1_1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 9688,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z4805",
+      "slug": "low_platform_z4805"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/low_platform_z6005/low_platform_z6005.blend",
+      "source_sha256": "61c7e130fcfd43861624c2a46ea198c5f84fd9ed83a7a639721df78015250699",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_visual_top3d.glb",
+      "glb_sha256": "a4b2c97a0329dda312ee2abd1b82b1be1168c02b1f8434ce8177c44760732477",
+      "selected_objects": [
+        "ROOT_low_platform_-1_0_组件",
+        "错层钢格栅检修平台_low_platform_-1_0_输出_部件00",
+        "错层钢格栅检修平台_low_platform_-1_0_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 9688,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z6005",
+      "slug": "low_platform_z6005"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/lower_control/lower_control.blend",
+      "source_sha256": "70bc5c492d52239728b8c3a20f39d574789e618046711aa06cc133282c0206c7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/lower_control/lower_control_visual_top3d.glb",
+      "glb_sha256": "60e0a545b8281223aaf9980ab01ac5432e9a28d4fb07323a4be9cf9e665e62ed",
+      "selected_objects": [
+        "ROOT_lower_control_-1_0_组件",
+        "机房设备_lower_control_-1_0_输出_部件00",
+        "机房设备_lower_control_-1_0_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 7236,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL",
+      "slug": "lower_control"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/mid_gallery/mid_gallery.blend",
+      "source_sha256": "3fc5701161148d577ec5fdeb9045510b6002fb2e71ba95301b37217d27d6a3fd",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/mid_gallery/mid_gallery_visual_top3d.glb",
+      "glb_sha256": "711ab0e5a10dbc87b0d2c890d9b0fbf5b43b31e04297b6094572bc3c71599b2b",
+      "selected_objects": [
+        "ROOT_mid_gallery_-1_组件",
+        "错层钢格栅检修平台_mid_gallery_-1_输出_部件00",
+        "错层钢格栅检修平台_mid_gallery_-1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 19516,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY",
+      "slug": "mid_gallery"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_crate/near_crate.blend",
+      "source_sha256": "0cf02d352ac1f5d2f22f09c052eff6ef976d623929b7ccf840cf339241416d83",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_crate/near_crate_visual_top3d.glb",
+      "glb_sha256": "33fe8cc69f0954a38a124127ff0a9fffa81bde56797ca971c6231e70dcf40036",
+      "selected_objects": [
+        "ROOT_near_crate_-1_组件",
+        "固定维护箱_near_crate_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1512,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE",
+      "slug": "near_crate"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_server/near_server.blend",
+      "source_sha256": "cdfa86ff325eeaf686d4afaa53c4162b33ad4c924e3af9cc8bff197fd3ce7e2b",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_server/near_server_visual_top3d.glb",
+      "glb_sha256": "053b415a542626e72ee390f4a7831fd0507a38a630eef87258c4e9ec2d904a19",
+      "selected_objects": [
+        "ROOT_near_server_-1_组件",
+        "机房设备_near_server_-1_输出_部件00",
+        "机房设备_near_server_-1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 13068,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER",
+      "slug": "near_server"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/partition_box/partition_box.blend",
+      "source_sha256": "741dc01e5e6780159f30786d25fb7304338d3028e3c0ca02f979a0774a770fd9",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/partition_box/partition_box_visual_top3d.glb",
+      "glb_sha256": "03590e183dfd40662e9e42b045b903c8ef972f1b7faf2a8acb48bd1528b83397",
+      "selected_objects": [
+        "ROOT_partition_box_-1_组件",
+        "固定维护箱_partition_box_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1512,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX",
+      "slug": "partition_box"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/pit_end/pit_end.blend",
+      "source_sha256": "b07e71da34c7c5255e55775d93c0821c9634840a19d966dc9683fd18c47bd8eb",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/pit_end/pit_end_visual_top3d.glb",
+      "glb_sha256": "debd16303f70a1d1d605a18a21134026156ff66450f38e4f4fd0c59e0ff34825",
+      "selected_objects": [
+        "ROOT_pit_end_-12.5_-15_组件",
+        "坑端壁_-12.5_-15_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 108,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_END",
+      "slug": "pit_end"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/pit_side/pit_side.blend",
+      "source_sha256": "99638855cb70e8c7252b63cbefd8e94d6f6dae82e4838fea76b785a33250840d",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/pit_side/pit_side_visual_top3d.glb",
+      "glb_sha256": "0c38a9a3374795e85aee682ffce16dfade0863d972c7039baaaaf0515933a5fb",
+      "selected_objects": [
+        "ROOT_pit_side_-1_-1_组件",
+        "坑壁_-1_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 756,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE",
+      "slug": "pit_side"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/platform_edge/platform_edge.blend",
+      "source_sha256": "224ce7207a4e4c29773660596b2f2d3d9b9d70e7ba40b65d799a095f44425f07",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/platform_edge/platform_edge_visual_top3d.glb",
+      "glb_sha256": "a175210add9e8b02c45d101f263b87af65412a47245594ee1a8e61613aee39ce",
+      "selected_objects": [
+        "ROOT_platform_edge_-1_-15_组件",
+        "上层平台坑沿护栏_-1_-15_输出_部件00",
+        "上层平台坑沿护栏_-1_-15_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 3588,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE",
+      "slug": "platform_edge"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/shaft_column/shaft_column.blend",
+      "source_sha256": "f2a9277df7961dcb9260ef15bd4c3458be98188489e72a2c0a910ffa71843031",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/shaft_column/shaft_column_visual_top3d.glb",
+      "glb_sha256": "578405e164834641041d3645259a438bc6aab3a2a9a1eefdd2181b961fb30032",
+      "selected_objects": [
+        "ROOT_shaft_column_-1_-14_组件",
+        "贯穿层间主柱_-1_-14_输出_部件00",
+        "贯穿层间主柱_-1_-14_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 1080,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN",
+      "slug": "shaft_column"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/tile_lower/tile_lower.blend",
+      "source_sha256": "0088cdcee5d22551ab5ab027aeced31037c62fce59eabf6e7e7df2d4020810d4",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/tile_lower/tile_lower_visual_top3d.glb",
+      "glb_sha256": "e1ea5f872c414aaebd712d96991ed5cb9d57d4fbf64b19011848b45fc5eed847",
+      "selected_objects": [
+        "ROOT_tile_lower_-1_-1_组件",
+        "地砖_下_-1_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 995,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER",
+      "slug": "tile_lower"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/tile_upper/tile_upper.blend",
+      "source_sha256": "dd844ecf0789cbef7c82c27130736cd4915e2720bf232acaad4f1736c140141a",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/tile_upper/tile_upper_visual_top3d.glb",
+      "glb_sha256": "be0d3e60ad7937767b1d6849f4a86ae3bff00e89be9f64836118aec8ecc52194",
+      "selected_objects": [
+        "ROOT_tile_upper_-1_-1_组件",
+        "地砖_上_-1_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 1428,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER",
+      "slug": "tile_upper"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/torn_header/torn_header.blend",
+      "source_sha256": "5eddc21a6f69597edc1ad70aba6bf83293d4e2361404a18f511639260ffaa9b4",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/torn_header/torn_header_visual_top3d.glb",
+      "glb_sha256": "ca0cf31e696bf8d2d94360a5679e16b81d0e5e2ceb5e1d49b6cf8835a7926a86",
+      "selected_objects": [
+        "ROOT_torn_header_-1_0_组件",
+        "破损管廊护板_-1_0_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 32,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER",
+      "slug": "torn_header"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/underbridge_service_bay/underbridge_service_bay.blend",
+      "source_sha256": "ce67591dedc670f6b5c3932e52a99bef904db3eb3110bc84ef989439ed5102ba",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/underbridge_service_bay/underbridge_service_bay_visual_top3d.glb",
+      "glb_sha256": "f0199fec251a882c722616b0b5835ac617a46629a2f27fb726302aad2d61f96b",
+      "selected_objects": [
+        "ROOT_underbridge_service_bay_-1_0_组件",
+        "桥下竖井设备背板_-1_0_输出_部件00",
+        "桥下竖井设备背板_-1_0_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 3044,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY",
+      "slug": "underbridge_service_bay"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_bank_z5450/upper_bank_z5450.blend",
+      "source_sha256": "6eef95a279826e2df3637c8b54d967b07184dae8c57d1c2702f5592cb036ab5a",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_visual_top3d.glb",
+      "glb_sha256": "b19156afff5b9de5fca7d63cf4b916567a76fdcccad5c53a719d3d9b4744a2cf",
+      "selected_objects": [
+        "ROOT_upper_bank_-1_1_组件",
+        "机房设备_upper_bank_-1_1_输出_部件00",
+        "机房设备_upper_bank_-1_1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 14040,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450",
+      "slug": "upper_bank_z5450"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_bank_z6197/upper_bank_z6197.blend",
+      "source_sha256": "bd43319884ac473bb0987b9f666669c218504759eb1156038e7f7474fafc8d7e",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_bank_z6197/upper_bank_z6197_visual_top3d.glb",
+      "glb_sha256": "3f3496aaace06fa772ee08b1d4e15c0f33321e24b22408b659890b3c68c33b9c",
+      "selected_objects": [
+        "ROOT_upper_bank_-1_0_组件",
+        "机房设备_upper_bank_-1_0_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 4644,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z6197",
+      "slug": "upper_bank_z6197"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_console/upper_console.blend",
+      "source_sha256": "94781c87d98fea153ec9dee4b122acb3a4fa0e21cc2ab08e376a94a0eddec21d",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_console/upper_console_visual_top3d.glb",
+      "glb_sha256": "5141d5b15b024a0c19938848e49019ed561c8df61c1280103db6480229fa4b13",
+      "selected_objects": [
+        "ROOT_upper_console_-1_组件",
+        "机房操作站_upper_console_-1_输出_部件00",
+        "机房操作站_upper_console_-1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2160,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE",
+      "slug": "upper_console"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/vertical_service/vertical_service.blend",
+      "source_sha256": "40cfd6f9a57abb22bdf368ea19cefe3bc5fcb96516bd9f0ae0764bf74abc60b7",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/vertical_service/vertical_service_visual_top3d.glb",
+      "glb_sha256": "27d888bcec63d30a8b0928f4e3c0c144980e1a5935acce13047b80bb5320d462",
+      "selected_objects": [
+        "ROOT_vertical_service_-1_-10_组件",
+        "竖井服务柜列_-1_-10_输出_部件00",
+        "竖井服务柜列_-1_-10_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2376,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE",
+      "slug": "vertical_service"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_service_header/wall_service_header.blend",
+      "source_sha256": "b771e2c71b78490439d3e0ae3b8e34112fa428761b62485f13b98ab1fcf5eb41",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_service_header/wall_service_header_visual_top3d.glb",
+      "glb_sha256": "2ec3cba0f8c2a6ce3eceba4c3d78208abe31ab11a5734c53afb79733036ed56d",
+      "selected_objects": [
+        "ROOT_wall_service_header_-1_组件",
+        "架空墙侧管廊_-1_输出_部件00"
+      ],
+      "mesh_count": 1,
+      "triangulated_export_copy": true,
+      "triangle_count": 612,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER",
+      "slug": "wall_service_header"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_x670/wall_x670.blend",
+      "source_sha256": "209f5d652b5d8bbf5bb8e946f22a69673b6817c42c6c24c38fdd13d0ca236391",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_x670/wall_x670_visual_top3d.glb",
+      "glb_sha256": "9db391d1eb734ee3f686e884fd317fb0514dbf3e4c08709312c4da330ca69f3b",
+      "selected_objects": [
+        "ROOT_wall_north_-1_组件",
+        "north_墙体_-1_输出_部件00",
+        "north_墙体_-1_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2736,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X670",
+      "slug": "wall_x670"
+    },
+    {
+      "source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_x780/wall_x780.blend",
+      "source_sha256": "fabba9eb974a5de69876f3fa98a7339a83a7e0ac90b36d902ea4f7c68934eba8",
+      "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_x780/wall_x780_visual_top3d.glb",
+      "glb_sha256": "2c5c7a418758a23fcb1f0deed2cf1f1db551b185e1009831fe694e3b7d6dc199",
+      "selected_objects": [
+        "ROOT_wall_east_-2_组件",
+        "east_墙体_-2_输出_部件00",
+        "east_墙体_-2_输出_自发光"
+      ],
+      "mesh_count": 2,
+      "triangulated_export_copy": true,
+      "triangle_count": 2952,
+      "room_type": "BRIDGE_ROOM",
+      "version": "v007",
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X780",
+      "slug": "wall_x780"
+    }
+  ]
+}

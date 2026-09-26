@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER
+; 房型组件 office_room / v006 / planting_perimeter
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/planting_perimeter/planting_perimeter_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentPlantingPerimeter" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER"
+metadata/asset_version = "v006"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "planting_perimeter"
+metadata/display_name_zh = "周圈绿植"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/planting_perimeter/planting_perimeter.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(28.206, 1.34, 35.598)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

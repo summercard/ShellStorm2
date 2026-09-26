@@ -1,0 +1,17 @@
+﻿关卡,关卡ID,怪物,怪物ID,物品,物品ID,概率,权重,数量,备注
+远征关卡01,expedition_01,小菌猪,melee_chaser,豌豆手枪,weapon_pistol,26%,3,1,主武器·权重池
+远征关卡01,expedition_01,小菌猪,melee_chaser,废土棒球棍,weapon_baseball_bat,26%,2,1,近战·权重池
+远征关卡01,expedition_01,小菌猪,melee_chaser,标准子弹模块,mod_bullet_standard,26%,2,1,子弹模块·权重池
+远征关卡01,expedition_01,小菌猪,melee_chaser,通用弹药,item_ammo_pack,34%,,3-8,备弹·独立判定
+远征关卡01,expedition_01,小菌猪,melee_chaser,魂,@currency:extraction_points,,,2+floor*1,必掉·公式
+远征关卡01,expedition_01,孢子射手,ranged_caster,穿甲弹模块,mod_bullet_piercing,8%,,1,独立判定
+远征关卡01,expedition_01,孢子射手,ranged_caster,回旋镖弹模块,mod_bullet_bounce,6%,,1,独立判定
+远征关卡01,expedition_01,孢子射手,ranged_caster,放大镜瞄具,attach_scope,3%,,1,独立判定
+远征关卡01,expedition_01,孢子射手,ranged_caster,通用弹药,item_ammo_pack,34%,,3-8,备弹·独立判定
+远征关卡01,expedition_01,孢子射手,ranged_caster,魂,@currency:extraction_points,,,2+floor*1,必掉·公式
+远征关卡01,expedition_01,炸弹果,exploder,爆炸弹模块,mod_bullet_explosive,,4,1,权重池·抽1件
+远征关卡01,expedition_01,炸弹果,exploder,小型电池,item_battery_s,,3,1,权重池·抽1件
+远征关卡01,expedition_01,炸弹果,exploder,大型电池,item_battery_l,,1,1,权重池·抽1件
+远征关卡01,expedition_01,炸弹果,exploder,反胃榴弹筒,weapon_launcher,,0.8,1,权重池·抽1件
+远征关卡01,expedition_01,炸弹果,exploder,通用弹药,item_ammo_pack,34%,,3-8,备弹·独立判定
+远征关卡01,expedition_01,炸弹果,exploder,魂,@currency:extraction_points,,,2+floor*1,必掉·公式

@@ -13,6 +13,7 @@ const _SPEC := preload("res://src/rewards/RewardSpec.gd")
 const _SERVICE := preload("res://src/rewards/RewardService.gd")
 const _SINK := preload("res://src/rewards/RewardSink.gd")
 const _RUNTIME_COORDINATOR := preload("res://src/rewards/RuntimeRewardCoordinator.gd")
+const _MONSTER_DROP_TABLE := preload("res://src/rewards/MonsterDropTable.gd")
 
 ## 统计样本量。4000 次下加权频率的标准差约 sqrt(p(1-p)/N) ≈ 0.008，
 ## 容差取 0.03 已是 3.7σ 以上，正常随机不会误报。
@@ -46,6 +47,7 @@ func _ready() -> void:
 	_case_truncation()
 	_case_field_conflict()
 	_case_negative_controls()
+	_case_monster_drop_table()
 	_case_runtime_coordinator()
 	_case_sink_delivery_confirmation()
 
@@ -56,6 +58,59 @@ func _ready() -> void:
 	for failure in _failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _case_monster_drop_table() -> void:
+	_reset()
+	var table := {
+		"schema": "shellstorm2.monster_drop_table",
+		"schema_version": 1,
+		"rows": [
+			{"monster_id": "ranged_caster", "item_id": "mod_bullet_piercing", "chance": 1.0, "quantity": 1},
+			{"monster_id": "ranged_caster", "item_id": "mod_bullet_bounce", "chance": 1.0, "quantity": 1},
+			{"monster_id": "ranged_caster", "item_id": "@currency:extraction_points", "quantity": "2+floor*1"},
+			{"monster_id": "melee_chaser", "item_id": "weapon_pistol", "chance": 1.0, "weight": 3, "quantity": 1},
+			{"monster_id": "melee_chaser", "item_id": "weapon_baseball_bat", "chance": 1.0, "weight": 2, "quantity": 1},
+		],
+	}
+	var compiled := _MONSTER_DROP_TABLE.compile("test_drop_table", table)
+	_expect(bool(compiled.get("ok", false)), "关卡怪物掉落表应编译成功：%s" % str(compiled.get("errors", [])))
+	_expect(int(compiled.get("monster_count", 0)) == 2, "掉落表应编译出 2 个怪物规格")
+	var coordinator := _RUNTIME_COORDINATOR.new()
+	coordinator.configure(20260926)
+	var configured := coordinator.configure_level_drop_table("test_drop_table", table)
+	_expect(bool(configured.get("ok", false)), "运行时协调器应装载关卡掉落表")
+	var multi := coordinator.resolve_kill({}, {
+		"enemy_type": "ranged_caster", "floor": 1, "loot_table": "loot_floor_1_2",
+	}, "drop_table:multi")
+	var physical := 0
+	var currency := 0
+	var currency_amount := 0
+	for value in multi.get("grants", []):
+		var grant := value as Dictionary
+		if str(grant.get("kind", "")) == "currency":
+			currency += 1
+			currency_amount += int(grant.get("amount", 0))
+		else:
+			physical += 1
+	_expect(physical == 2, "关卡表独立判定命中两件时必须保留 2 个实物，实际 %d" % physical)
+	_expect(currency == 1, "关卡表的魂公式应产出并合并为 1 个魂球")
+	_expect(currency_amount == 3, "floor=1 时魂公式 2+floor*1 应等于 3")
+	var room_override := coordinator.resolve_kill({"kill": {"entries": [{"kind": "item", "item_id": "item_ammo_pack", "count": 9}]}}, {
+		"enemy_type": "ranged_caster", "floor": 1, "loot_table": "loot_floor_1_2",
+	}, "drop_table:room_override")
+	_expect(str(room_override.get("spec_id", "")).begins_with("inline:reward_plan.room.kill"), "房间 kill 必须覆盖关卡怪物表")
+	var fallback := coordinator.resolve_kill({}, {
+		"enemy_type": "shielded", "floor": 1, "loot_table": "loot_floor_1_2",
+	}, "drop_table:fallback")
+	_expect(str(fallback.get("spec_id", "")).begins_with("monster:shielded"), "表未写的怪必须走旧公式兜底")
+
+	var bad_table := table.duplicate(true)
+	bad_table["rows"] = (table["rows"] as Array).duplicate(true)
+	var bad_rows := bad_table["rows"] as Array
+	bad_rows.append({"monster_id": "melee_chaser", "item_id": "weapon_rifle", "chance": 0.5, "weight": 1, "quantity": 1})
+	var bad := _MONSTER_DROP_TABLE.compile("bad", bad_table)
+	_expect(not bool(bad.get("ok", false)), "同怪权重组概率不一致必须拒绝整表")
 
 
 func _case_runtime_coordinator() -> void:

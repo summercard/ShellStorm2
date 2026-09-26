@@ -17,7 +17,7 @@
     "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/probe_shell_component_catalog.gd 逐件比对。",
     "alias_policy": "专属件不设 alias（只属一个房间种类、只有一条来源链）；alias 只用于通用件的批次号兼容。"
   },
-  "component_count": 12,
+  "component_count": 72,
   "components": [
     {
       "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
@@ -30,7 +30,11 @@
       "source_package_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
       "prefab_asset_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
       "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn",
-      "bounds_size_m_godot": [5.0, 11.9, 0.467503],
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        0.467503
+      ],
       "collision_owner": "self",
       "note": "静态实墙，5m 宽，与网格同宽；装饰面朝局部 -Z（房内）。"
     },
@@ -45,7 +49,11 @@
       "source_package_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
       "prefab_asset_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
       "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn",
-      "bounds_size_m_godot": [5.0, 11.9, 0.491501],
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        0.491501
+      ],
       "collision_owner": "self",
       "note": "左门垛 + 右门垛 + 门楣三块，中间让出 2.2x2.5 门洞；门洞处无碰撞，通行归 RoomDoor3D。"
     },
@@ -60,7 +68,11 @@
       "source_package_id": "ENV-BATTLE-COMMON-DOOR-5M",
       "prefab_asset_id": "ENV-TOWER-DOOR-LEAF-5M",
       "prefab_path": "res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn",
-      "bounds_size_m_godot": [2.2, 2.5, 0.18],
+      "bounds_size_m_godot": [
+        2.2,
+        2.5,
+        0.18
+      ],
       "collision_owner": "room_door",
       "note": "运行时门扇统一走塔楼 A 套正式美术（2.2x2.5x0.18，底面中心原点，forward_axis=+Z）；战局 B 套 door_5m_root_top3d.tscn 仅在库里留档，不由运行时消费。door_leaf_preview 角色运行时一律跳过，门扇由 RoomDoor3D 生成。"
     },
@@ -75,7 +87,11 @@
       "source_package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
       "prefab_asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
       "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn",
-      "bounds_size_m_godot": [4.94, 0.056, 4.94],
+      "bounds_size_m_godot": [
+        4.94,
+        0.056,
+        4.94
+      ],
       "collision_owner": "floor_support",
       "note": "棋盘格角块与中心块；内嵌静态碰撞由房间层关掉，承重归 TowerFloorStage3D._build_support()。"
     },
@@ -90,7 +106,11 @@
       "source_package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
       "prefab_asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
       "prefab_path": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn",
-      "bounds_size_m_godot": [4.94, 0.0852, 4.94],
+      "bounds_size_m_godot": [
+        4.94,
+        0.0852,
+        4.94
+      ],
       "collision_owner": "floor_support",
       "note": "棋盘格边中块（统一取带方形检修盖的一版）；碰撞归属同 c01。"
     },
@@ -105,7 +125,11 @@
       "source_package_id": "ENV-TOWER-CORNER-L-5M",
       "prefab_asset_id": "ENV-TOWER-CORNER-L-5M",
       "prefab_path": "res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn",
-      "bounds_size_m_godot": [5.15, 8.9, 5.15],
+      "bounds_size_m_godot": [
+        5.15,
+        8.9,
+        5.15
+      ],
       "collision_owner": "self",
       "note": "原点 = 角点，长臂沿 +X、短臂沿 -Z，两臂装饰面朝凹象限。corner_l 角色实际由 _spawn_room_corner() 装配（FACILITY 房取 base99 角件）；本条保证该 ID 可解析、可追溯。"
     },
@@ -119,7 +143,11 @@
       "source_package_id": "base_floor_base",
       "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
       "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/base_floor_base/base_floor_base_root_top3d.tscn",
-      "bounds_size_m_godot": [50.0, 0.26, 40.0],
+      "bounds_size_m_godot": [
+        50.0,
+        0.26,
+        40.0
+      ],
       "collision_owner": "TowerFloorStage3D._build_support",
       "note": "Boss 竞技场承重地板底盘 50x40x0.26；包内 0 碰撞，承重归 TowerFloorStage3D._build_support()（与安全房 floor_base 同判例）。"
     },
@@ -133,7 +161,11 @@
       "source_package_id": "main_fault_screen",
       "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
       "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/main_fault_screen/main_fault_screen_root_top3d.tscn",
-      "bounds_size_m_godot": [21.52, 7.09, 1.575001],
+      "bounds_size_m_godot": [
+        21.52,
+        7.09,
+        1.575001
+      ],
       "collision_owner": "none",
       "note": "破损数据库主屏 21.52x1.575x7.09；底面悬于走行面上方 3.805m，够不着，包内 0 碰撞。"
     },
@@ -147,7 +179,11 @@
       "source_package_id": "heavy_conduits",
       "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
       "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/heavy_conduits/heavy_conduits_root_top3d.tscn",
-      "bounds_size_m_godot": [47.305603, 3.672169, 32.303619],
+      "bounds_size_m_godot": [
+        47.305603,
+        3.672169,
+        32.303619
+      ],
       "collision_owner": "none",
       "note": "粗重电线管与桥架 47.31x32.30x3.67；实心包络盒会封死整房，不按包络持阻挡，包内 0 碰撞。"
     },
@@ -161,7 +197,11 @@
       "source_package_id": "north_wall_typography",
       "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
       "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/north_wall_typography/north_wall_typography_root_top3d.tscn",
-      "bounds_size_m_godot": [35.900246, 2.3201, 0.041998],
+      "bounds_size_m_godot": [
+        35.900246,
+        2.3201,
+        0.041998
+      ],
       "collision_owner": "none",
       "note": "数据库北墙标识 35.90x0.042x2.32；底面离走行面 7.446m，够不着，包内 0 碰撞。"
     },
@@ -175,7 +215,11 @@
       "source_package_id": "south_floor_marking",
       "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
       "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/south_floor_marking/south_floor_marking_root_top3d.tscn",
-      "bounds_size_m_godot": [3.696866, 0.012, 2.726689],
+      "bounds_size_m_godot": [
+        3.696866,
+        0.012,
+        2.726689
+      ],
       "collision_owner": "none",
       "note": "入口地砖标识 3.70x2.73x0.012；12mm 地面贴花，属地面装饰不属障碍，包内 0 碰撞。"
     },
@@ -189,9 +233,1217 @@
       "source_package_id": "debris_00",
       "prefab_asset_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
       "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/common_components/debris_00/debris_00_root_top3d.tscn",
-      "bounds_size_m_godot": [2.425321, 0.2195, 1.988281],
+      "bounds_size_m_godot": [
+        2.425321,
+        0.2195,
+        1.988281
+      ],
       "collision_owner": "none",
       "note": "固定碎屑_00 2.43x1.99x0.22；220mm 地面固定碎屑，属地面装饰不属障碍，包内 0 碰撞。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_deck_5m",
+      "category": "吊顶结构",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_deck_5m/ceiling_deck_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        30.0,
+        0.393,
+        5.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_lighting",
+      "category": "顶部灯具",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_lighting/ceiling_lighting_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        28.8,
+        0.455,
+        30.34
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_ring_beam",
+      "category": "吊顶周圈圈梁",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        30.0,
+        0.6,
+        40.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_service_cable_tray",
+      "category": "顶部电缆桥架与线缆",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_cable_tray/ceiling_service_cable_tray_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        14.46,
+        1.11,
+        38.6
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_service_duct",
+      "category": "顶部通风管与风口",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_duct/ceiling_service_duct_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.308,
+        0.858,
+        37.8
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_service_pipe_run",
+      "category": "顶部管道与法兰",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_pipe_run/ceiling_service_pipe_run_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        22.92,
+        1.244,
+        38.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "corner_guard",
+      "category": "转角护柱与墙裙",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/corner_guard/corner_guard_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        29.62,
+        2.2,
+        39.62
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "door_wall",
+      "category": "门洞墙件",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "door_wall",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/door_wall/door_wall_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        0.615
+      ],
+      "collision_owner": "room_door_owned",
+      "collision_policy": "split_door_wall_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "filing_run",
+      "category": "档案柜带",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN_WEST",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-FILING_RUN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/filing_run/filing_run_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.765,
+        3.05,
+        39.38
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_service",
+      "category": "地面管线与检修",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_service/floor_service_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        27.0,
+        0.028,
+        38.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m",
+      "category": "地砖",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TILE_-1_-3",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_tile_5m/floor_tile_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.407,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_zone_mark",
+      "category": "地面分区标识",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_zone_mark/floor_zone_mark_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        26.816,
+        0.092,
+        20.216
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "locker_bank",
+      "category": "储物柜组",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK_NORTH",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/locker_bank/locker_bank_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.1,
+        2.56,
+        0.81
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "planting_perimeter",
+      "category": "周圈绿植",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/planting_perimeter/planting_perimeter_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        28.206,
+        1.34,
+        35.598
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "power_cabinet_bank",
+      "category": "配电柜带",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK_SOUTH",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/power_cabinet_bank/power_cabinet_bank_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.1,
+        3.82,
+        0.91
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "prep_bench",
+      "category": "整备台",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH_EAST",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/prep_bench/prep_bench_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.9,
+        1.91,
+        3.4
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "printer_station",
+      "category": "打印机与耗材位",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/printer_station/printer_station_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.66,
+        2.39,
+        0.965
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "shelving",
+      "category": "置物架",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING_SOUTH",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-SHELVING",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/shelving/shelving_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.8,
+        2.68,
+        0.6
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "totem_column",
+      "category": "图腾立柱",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/totem_column/totem_column_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.86,
+        2.98,
+        0.86
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_t1110_5m",
+      "category": "墙体 5.00×1.11×11.90m",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_-3",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        1.11
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_t615_5m",
+      "category": "墙体 0.61×5.00×11.90m",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_EAST_-2",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t615_5m/wall_t615_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.615,
+        11.9,
+        5.0
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_t970_5m",
+      "category": "墙体 5.00×0.97×11.90m",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_SOUTH_2",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        0.97
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_top_service",
+      "category": "墙顶管线收口",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        29.4,
+        0.7,
+        39.4
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "water_and_supply_corner",
+      "category": "饮水与箱货区",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/water_and_supply_corner/water_and_supply_corner_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.62,
+        1.88,
+        3.36
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "work_cluster",
+      "category": "工位",
+      "room_type": "OFFICE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER_A",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/work_cluster/work_cluster_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.8,
+        1.67,
+        2.44
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "bank_crate",
+      "category": "固定维护箱 1.60×1.68×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bank_crate/bank_crate_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.6,
+        1.555,
+        1.675
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "bridge_girder",
+      "category": "桥侧连续箱梁",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_girder/bridge_girder_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.62,
+        1.1,
+        30.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "bridge_guardrail",
+      "category": "桥面完整护栏",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.42,
+        1.87,
+        30.32
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "bridge_service_transom",
+      "category": "桥端设备支承横梁",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM_-14",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_service_transom/bridge_service_transom_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        10.0,
+        0.36,
+        0.32
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "coolant",
+      "category": "下层粗管弯头",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/coolant/coolant_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.94,
+        2.47,
+        5.36
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "cross_gantry",
+      "category": "错层钢格栅检修平台 8.73×1.97×7.71m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/cross_gantry/cross_gantry_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        8.73,
+        7.705,
+        1.97
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "deep_cables",
+      "category": "跨层下垂电缆",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/deep_cables/deep_cables_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.298,
+        7.773,
+        4.138
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "deep_trunk",
+      "category": "坑底贯穿管束",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/deep_trunk/deep_trunk_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.79,
+        0.7,
+        28.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "end_crate",
+      "category": "固定维护箱 2.15×1.68×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_crate/end_crate_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.15,
+        1.555,
+        1.675
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "end_power",
+      "category": "机房设备 2.78×1.53×5.26m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_power/end_power_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.78,
+        5.258,
+        1.535
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "half_partition",
+      "category": "机房设备隔断",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/half_partition/half_partition_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        8.8,
+        2.19,
+        0.6
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "header_cables",
+      "category": "架空垂落电缆束",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/header_cables/header_cables_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.8,
+        4.393,
+        6.553
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "longitudinal_tie",
+      "category": "下层纵向腰梁",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE_-1_-4.8",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/longitudinal_tie/longitudinal_tie_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.45,
+        0.5,
+        29.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z4805",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "low_platform_z4805",
+      "category": "错层钢格栅检修平台 6.03×4.32×4.80m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_-1_1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z4805",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/low_platform_z4805/low_platform_z4805_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        6.03,
+        4.805,
+        4.32
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z6005",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "low_platform_z6005",
+      "category": "错层钢格栅检修平台 6.03×4.32×6.00m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z6005",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        6.03,
+        6.005,
+        4.32
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "lower_control",
+      "category": "机房设备 1.33×1.51×2.60m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/lower_control/lower_control_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.33,
+        2.6,
+        1.515
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "mid_gallery",
+      "category": "错层钢格栅检修平台 2.78×27.82×9.21m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/mid_gallery/mid_gallery_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.78,
+        9.205,
+        27.82
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "near_crate",
+      "category": "固定维护箱 2.61×1.79×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_crate/near_crate_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.612,
+        1.555,
+        1.791
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "near_server",
+      "category": "机房设备 1.51×2.68×5.05m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_server/near_server_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.515,
+        5.05,
+        2.68
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "partition_box",
+      "category": "固定维护箱 1.65×1.68×1.55m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/partition_box/partition_box_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.65,
+        1.555,
+        1.675
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_END",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "pit_end",
+      "category": "坑端壁",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_END_-12.5_-15",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_END",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/pit_end/pit_end_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        12.0,
+        0.3
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "pit_side",
+      "category": "坑壁",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE_-1_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/pit_side/pit_side_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.7,
+        12.125,
+        5.0
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "platform_edge",
+      "category": "上层平台坑沿护栏",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE_-1_-15",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/platform_edge/platform_edge_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        10.015,
+        3.2,
+        0.65
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "shaft_column",
+      "category": "贯穿层间主柱",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN_-1_-14",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/shaft_column/shaft_column_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.8,
+        12.0,
+        1.8
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "tile_lower",
+      "category": "地砖_下",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER_-1_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/tile_lower/tile_lower_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.407,
+        5.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "lower_level_visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "tile_upper",
+      "category": "地砖_上",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER_-1_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/tile_upper/tile_upper_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.407,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "torn_header",
+      "category": "破损管廊护板",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/torn_header/torn_header_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.08,
+        4.3,
+        4.4
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "underbridge_service_bay",
+      "category": "桥下竖井设备背板",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/underbridge_service_bay/underbridge_service_bay_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.993,
+        9.4,
+        6.3
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "upper_bank_z5450",
+      "category": "机房设备 1.51×2.63×5.45m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.515,
+        5.45,
+        2.63
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z6197",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "upper_bank_z6197",
+      "category": "机房设备 1.53×2.63×6.20m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z6197",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z6197/upper_bank_z6197_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.535,
+        6.197,
+        2.63
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "upper_console",
+      "category": "机房操作站",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_console/upper_console_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.155,
+        2.485,
+        1.12
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "vertical_service",
+      "category": "竖井服务柜列",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE_-1_-10",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/vertical_service/vertical_service_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.65,
+        6.05,
+        2.2
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_service_header",
+      "category": "架空墙侧管廊",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_service_header/wall_service_header_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.6,
+        0.98,
+        28.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X670",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_x670",
+      "category": "墙体 5.00×0.67×11.90m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_NORTH_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X670",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_x670/wall_x670_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        0.67
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X780",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_x780",
+      "category": "墙体 0.78×5.00×11.90m",
+      "room_type": "BRIDGE_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_EAST_-2",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_X780",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_x780/wall_x780_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.78,
+        11.9,
+        5.0
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
     }
+  ],
+  "room_type_sources": [
+    "assets/art/environments/tower_zones/expedition/source/common_components/v006/component_catalog.json",
+    "assets/art/environments/tower_zones/expedition/source/common_components/v007/component_catalog.json"
   ]
 }

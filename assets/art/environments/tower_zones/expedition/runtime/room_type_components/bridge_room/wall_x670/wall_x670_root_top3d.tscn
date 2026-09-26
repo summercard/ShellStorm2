@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-WALL_X670
+; 房型组件 bridge_room / v007 / wall_x670
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_x670/wall_x670_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(5, 11.9, 0.67)
+
+[node name="RoomTypeComponentWallX670" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
+metadata/asset_version = "v007"
+metadata/room_type = "BRIDGE_ROOM"
+metadata/component_slug = "wall_x670"
+metadata/display_name_zh = "墙体 5.00×0.67×11.90m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_x670/wall_x670.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.67)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 5.95, 0)
+shape = SubResource("BoxShape3D_proxy")

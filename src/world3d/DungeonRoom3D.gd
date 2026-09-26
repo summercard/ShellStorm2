@@ -1600,6 +1600,7 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	var tile_count := 0
 	var exclusive_count := 0
 	var multi_level_count := 0
+	var room_type_component_count := 0
 	var promoted: Array[String] = []
 	var unresolved: Array[String] = []
 	# 墙件台账（side / 沿墙偏移 / 是否门墙）。**在实例循环里精确采集**，不复扫节点树：
@@ -1620,14 +1621,19 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 				)
 				corner_count += 1
 			"solid_wall", "door_wall":
+				# 房型 Blender 源的墙原点按整樘 bbox 中心记录，会比结构外轮廓内缩
+				# 约 0.16~0.24m；不能沿用历史通用壳体的 0.01m 精确边界判据。
+				# 先由位置确定墙属于哪一侧，再判断该 lane 是否是本局真实门槽。
+				var wall_side := _authored_wall_side_from_position(local_position, half)
+				if wall_side.is_empty():
+					wall_side = _authored_wall_direction(
+						float(instance.get("rotation_y_deg", 0.0))
+					)
 				var door_side := _authored_wall_door_side(local_position, half)
 				var uses_door := role == "door_wall" or not door_side.is_empty()
 				if not _spawn_authored_layout_wall(art_root, instance, uses_door):
 					unresolved.append(str(instance.get("name", "")))
 					continue
-				var wall_side := _authored_wall_direction(
-					float(instance.get("rotation_y_deg", 0.0))
-				)
 				# 沿墙偏移：南北向墙取局部 x、东西向墙取局部 z —— 与
 				# _authored_wall_door_side() 读 tower_wall_door_offset_<side> 的坐标系一致。
 				var wall_along := local_position.z
@@ -1661,11 +1667,16 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 				else:
 					unresolved.append(str(instance.get("name", "")))
 			"multi_level_component":
-				# 多层几何件（通道桥房的下沉坑）：坑壁/护栏（part = pit_wall）与坑底地砖
-				# （part = pit_floor_tile）。与专属件一样带完整 Vector3（y = 所在水平面标高），
-				# 且坑壁还要按 scale_y 纵向拉伸到「坑深 + 护栏高」。
+				# 多层几何件（旧程序化通道桥）：只为尚未接入 v007 房型源的历史布局保留。
 				if _spawn_authored_multi_level(art_root, instance):
 					multi_level_count += 1
+				else:
+					unresolved.append(str(instance.get("name", "")))
+			"room_type_component":
+				# 02 房型组件默认布局中的普通构件。完整 Vector3/scale 来自 Blender 实例清单；
+				# 碰撞责任由各 PackedScene 自己的 metadata/collision_policy 决定。
+				if _spawn_authored_room_type_component(art_root, instance):
+					room_type_component_count += 1
 				else:
 					unresolved.append(str(instance.get("name", "")))
 			_:
@@ -1750,12 +1761,13 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	set_meta("authored_layout_floor_tile_count", tile_count)
 	set_meta("authored_layout_exclusive_count", exclusive_count)
 	set_meta("authored_layout_multi_level_count", multi_level_count)
+	set_meta("authored_layout_room_type_component_count", room_type_component_count)
 	set_meta("authored_layout_promoted_walls", promoted)
 	set_meta("authored_layout_unresolved_instances", unresolved)
 	if not unresolved.is_empty():
-		push_warning(
-			"DungeonRoom3D: 授权布局 %s 有 %d 件组件无法解析，已跳过"
-			% [room_id, unresolved.size()]
+		push_error(
+			"DungeonRoom3D: 授权布局 %s 有 %d 件组件无法解析，房型拼装不完整：%s"
+			% [room_id, unresolved.size(), str(unresolved)]
 		)
 
 
@@ -1820,23 +1832,33 @@ static func door_plane_depth(side: String, half: Vector2) -> float:
 
 ## 授权墙件是否正好坐在本房某扇门的位置上（门槽唯一口径 = tower_wall_door_offset_<side>）。
 ## 返回命中的门向，未命中返回 ""。
+static func _authored_wall_side_from_position(
+	local_position: Vector3, half: Vector2
+) -> String:
+	var distances := {
+		"east": absf(local_position.x - half.x),
+		"west": absf(local_position.x + half.x),
+		"north": absf(local_position.z + half.y),
+		"south": absf(local_position.z - half.y),
+	}
+	var best_side := ""
+	var best_distance := INF
+	for side in distances:
+		var distance := float(distances[side])
+		if distance < best_distance:
+			best_side = str(side)
+			best_distance = distance
+	return best_side if best_distance <= DOOR_LANE_GUARD_TOLERANCE_M else ""
+
+
 func _authored_wall_door_side(local_position: Vector3, half: Vector2) -> String:
-	const TOLERANCE := 0.01
-	for side in doors:
-		var along := float(get_meta("tower_wall_door_offset_%s" % side, 0.0))
-		match side:
-			"east":
-				if is_equal_approx(local_position.x, half.x) and absf(local_position.z - along) <= TOLERANCE:
-					return side
-			"west":
-				if is_equal_approx(local_position.x, -half.x) and absf(local_position.z - along) <= TOLERANCE:
-					return side
-			"north":
-				if is_equal_approx(local_position.z, -half.y) and absf(local_position.x - along) <= TOLERANCE:
-					return side
-			"south":
-				if is_equal_approx(local_position.z, half.y) and absf(local_position.x - along) <= TOLERANCE:
-					return side
+	var wall_side := _authored_wall_side_from_position(local_position, half)
+	if wall_side.is_empty() or wall_side not in doors:
+		return ""
+	var along := float(get_meta("tower_wall_door_offset_%s" % wall_side, 0.0))
+	var wall_along := local_position.x if wall_side in ["north", "south"] else local_position.z
+	if absf(wall_along - along) <= DOOR_LANE_GUARD_TOLERANCE_M:
+		return wall_side
 	return ""
 
 
@@ -1950,9 +1972,14 @@ static func _authored_wall_direction(rotation_y_deg: float) -> String:
 
 func _spawn_authored_layout_wall(art_root: Node3D, instance: Dictionary, uses_door: bool) -> bool:
 	var component_id := str(instance.get("component_id", ""))
-	# 门墙与实墙走同一条注册表解析路径（唯一真源壳在注册表，不在代码）：
-	# 门墙按槽位解析成 DOOR_WALL_COMPONENT_ID，实墙用实例自带 id。
-	var resolved_id := DOOR_WALL_COMPONENT_ID if uses_door else component_id
+	# 门墙与实墙走同一条注册表解析路径。房型源可声明自己的门墙组件；历史通用壳体
+	# 未声明时仍回退 DOOR_WALL_COMPONENT_ID。实墙在门槽上被提升时只替换为同房型门墙，
+	# 避免办公室正式墙面混入旧通用门墙。
+	var resolved_id := component_id
+	if uses_door:
+		resolved_id = str(instance.get("door_wall_component_id", ""))
+		if resolved_id.is_empty():
+			resolved_id = DOOR_WALL_COMPONENT_ID
 	var prefab := _authored_component_prefab(resolved_id)
 	if prefab == null:
 		push_error(
@@ -1968,6 +1995,7 @@ func _spawn_authored_layout_wall(art_root: Node3D, instance: Dictionary, uses_do
 	var rotation_y_deg := float(instance.get("rotation_y_deg", 0.0))
 	module.position = instance.get("position", Vector3.ZERO) as Vector3
 	module.rotation.y = deg_to_rad(rotation_y_deg)
+	module.scale = instance.get("scale", Vector3.ONE) as Vector3
 	var world_direction := _authored_wall_direction(rotation_y_deg)
 	if world_direction.is_empty():
 		push_error(
@@ -2011,13 +2039,43 @@ func _spawn_authored_layout_floor_tile(art_root: Node3D, instance: Dictionary) -
 	#（c01/c02 结构厚不同，不能共用一个硬编码偏移）。
 	var snap_offset := float(tile.get_meta("snap_to_walk_plane_offset_m", 0.0))
 	var local_position := instance.get("position", Vector3.ZERO) as Vector3
-	tile.position = Vector3(local_position.x, snap_offset, local_position.z)
+	var target_y := local_position.y
+	if not bool(instance.get("preserve_authored_y", false)):
+		target_y = 0.0
+	tile.position = Vector3(local_position.x, target_y + snap_offset, local_position.z)
 	tile.rotation.y = deg_to_rad(float(instance.get("rotation_y_deg", 0.0)))
-	tile.set_meta("walk_plane_snap_y", snap_offset)
+	tile.scale = instance.get("scale", Vector3.ONE) as Vector3
+	tile.set_meta("walk_plane_snap_y", target_y + snap_offset)
 	tile.set_meta("authored_component_id", component_id)
 	# 承重归 TowerFloorStage3D._build_support()，这里必须把内嵌静态碰撞关掉。
 	_disable_static_collision_descendants(tile)
 	art_root.add_child(tile)
+	return true
+
+
+## 房型默认布局中的普通组件。位置、旋转、缩放都来自 Blender 组件实例清单；
+## PackedScene 负责碰撞与元数据，本函数不根据包络临时生成第二套碰撞。
+func _spawn_authored_room_type_component(art_root: Node3D, instance: Dictionary) -> bool:
+	var component_id := str(instance.get("component_id", ""))
+	var prefab := _authored_component_prefab(component_id)
+	if prefab == null:
+		push_error(
+			"DungeonRoom3D: 房型布局 %s 没有组件 %s 的 prefab 映射（实例 %s）"
+			% [room_id, component_id, str(instance.get("name", ""))]
+		)
+		return false
+	var module := prefab.instantiate() as Node3D
+	if module == null:
+		push_error("DungeonRoom3D: 房型组件实例化失败（%s）" % component_id)
+		return false
+	module.name = str(instance.get("name", "RoomTypeComponent"))
+	module.position = instance.get("position", Vector3.ZERO) as Vector3
+	module.rotation.y = deg_to_rad(float(instance.get("rotation_y_deg", 0.0)))
+	module.scale = instance.get("scale", Vector3.ONE) as Vector3
+	module.set_meta("authored_component_id", component_id)
+	module.set_meta("authored_slot_role", "room_type_component")
+	_set_geometry_shadow_casting(module, true)
+	art_root.add_child(module)
 	return true
 
 

@@ -2,9 +2,10 @@ class_name RewardSpec
 extends RefCounted
 ## RewardSpec — 奖励规格的解析与校验（REWARD-SERVICE 的输入契约）。
 ##
-## 一份 Spec = 「发什么」的唯一可编辑声明。四个 kind 覆盖全部投放：
+## 一份 Spec = 「发什么」的唯一可编辑声明。五个 kind 覆盖全部投放：
 ##   item      物品表 · 按 item_id 直取
 ##   pool      物品表 · 按池键反向聚集（掷骰规则由掉落池登记表决定）
+##   weighted  关卡怪物掉落表 · 在内联 options 中按权重抽签
 ##   monster   怪物表 · 按 monster_id 取该怪的掉落规格（递归深度硬限 1）
 ##   currency  货币表 · 按公式算量
 ##
@@ -13,9 +14,10 @@ extends RefCounted
 
 const KIND_ITEM := "item"
 const KIND_POOL := "pool"
+const KIND_WEIGHTED := "weighted"
 const KIND_MONSTER := "monster"
 const KIND_CURRENCY := "currency"
-const KINDS := [KIND_ITEM, KIND_POOL, KIND_MONSTER, KIND_CURRENCY]
+const KINDS := [KIND_ITEM, KIND_POOL, KIND_WEIGHTED, KIND_MONSTER, KIND_CURRENCY]
 
 ## 三个调度触发点。`clear` 清房、`search` 搜索容器、`kill` 击杀。
 const TRIGGER_CLEAR := "clear"
@@ -286,6 +288,37 @@ static func _validate_entry(entry, path: String) -> Array[Dictionary]:
 					errors.append(_err("INVALID_ENTRY", "%s.draws" % [path], "draws 不是数值"))
 				elif int(draws) < 0:
 					errors.append(_err("INVALID_ENTRY", "%s.draws" % [path], "draws 为负"))
+
+		KIND_WEIGHTED:
+			var options_value: Variant = e.get("options", null)
+			if not (options_value is Array) or (options_value as Array).is_empty():
+				errors.append(_err("INVALID_ENTRY", "%s.options" % [path], "weighted options 必须是非空数组"))
+			else:
+				var total := 0.0
+				var option_index := 0
+				for option_value in (options_value as Array):
+					var option_path := "%s.options[%d]" % [path, option_index]
+					option_index += 1
+					if not (option_value is Dictionary):
+						errors.append(_err("INVALID_ENTRY", option_path, "weighted option 不是对象"))
+						continue
+					var option := option_value as Dictionary
+					var weight_value: Variant = option.get("weight", null)
+					if not (weight_value is int or weight_value is float) or float(weight_value) < 0.0:
+						errors.append(_err("INVALID_ENTRY", "%s.weight" % option_path, "weight 必须是非负数"))
+						continue
+					total += float(weight_value)
+					var nested := option.duplicate(true)
+					nested.erase("weight")
+					if str(nested.get("kind", "")) == KIND_WEIGHTED:
+						errors.append(_err("INVALID_ENTRY", option_path, "weighted 不得嵌套 weighted"))
+					else:
+						errors.append_array(_validate_entry(nested, option_path))
+				if total <= 0.0:
+					errors.append(_err("EMPTY_WEIGHT", "%s.options" % path, "weighted 总权重必须大于 0"))
+			var draws_value: Variant = e.get("draws", 1)
+			if not (draws_value is int or draws_value is float) or int(draws_value) <= 0:
+				errors.append(_err("INVALID_ENTRY", "%s.draws" % path, "draws 必须是正整数"))
 
 		KIND_MONSTER:
 			var monster_id := str(e.get("monster_id", ""))

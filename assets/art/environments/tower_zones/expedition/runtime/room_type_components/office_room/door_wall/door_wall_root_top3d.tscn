@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-DOOR_WALL
+; 房型组件 office_room / v006 / door_wall
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jamb"]
+size = Vector3(1.4, 2.5, 0.615)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_header"]
+size = Vector3(5, 9.4, 0.615)
+
+[node name="RoomTypeComponentDoorWall" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
+metadata/asset_version = "v006"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "door_wall"
+metadata/display_name_zh = "门洞墙件"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/door_wall/door_wall.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.615)
+metadata/slot_role = "door_wall"
+metadata/collision_owner = "room_door_owned"
+metadata/collision_policy = "split_door_wall_proxy"
+metadata/collision_shape_count = 3
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LeftJamb" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-1.8, 1.25, 0)
+shape = SubResource("BoxShape3D_jamb")
+
+[node name="RightJamb" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(1.8, 1.25, 0)
+shape = SubResource("BoxShape3D_jamb")
+
+[node name="Header" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 7.2, 0)
+shape = SubResource("BoxShape3D_header")

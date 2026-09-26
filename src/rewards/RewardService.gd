@@ -168,6 +168,12 @@ static func _monster_spec_for(request: Dictionary, context: Dictionary) -> Dicti
 	if monster_id.is_empty():
 		return {}
 	var tier := str(request.get("monster_tier", "normal"))
+	# 当前关卡的怪物掉落表只覆盖普通怪；房间 kill 已在 _pick_ref 更早命中。
+	# 表里没写这只怪时，继续走 MonsterInjector 旧公式兜底，不会空手。
+	if tier == "normal":
+		var level_specs := request.get("monster_drop_specs", {}) as Dictionary
+		if level_specs.has(monster_id):
+			return (level_specs[monster_id] as Dictionary).duplicate(true)
 	var floor_level := int(request.get("floor_level", 0))
 	var floor := int(context.get("floor", 1))
 	if _monster_spec_provider.is_valid():
@@ -220,6 +226,8 @@ static func _resolve_entry(entry: Dictionary, state: Dictionary, path: String, d
 			_resolve_item_entry(entry, state, path)
 		_SPEC.KIND_POOL:
 			_resolve_pool_entry(entry, state, path)
+		_SPEC.KIND_WEIGHTED:
+			_resolve_weighted_entry(entry, state, path, depth)
 		_SPEC.KIND_CURRENCY:
 			_resolve_currency_entry(entry, state, path)
 		_SPEC.KIND_MONSTER:
@@ -258,6 +266,33 @@ static func _resolve_item_entry(entry: Dictionary, state: Dictionary, path: Stri
 		"slot": path,
 		"merged": false,
 	}, bool(entry.get("merge_same_item", false)))
+
+
+static func _resolve_weighted_entry(
+	entry: Dictionary, state: Dictionary, path: String, depth: int
+) -> void:
+	var options := entry.get("options", []) as Array
+	var total := 0.0
+	for value in options:
+		total += maxf(0.0, float((value as Dictionary).get("weight", 0.0)))
+	if total <= 0.0:
+		state["rejected"].append({"code": "EMPTY_WEIGHT", "path": path, "detail": "inline"})
+		return
+	var rng: RandomNumberGenerator = state["rng"]
+	var draws := maxi(1, int(entry.get("draws", 1)))
+	for draw_index in range(draws):
+		var roll := rng.randf() * total
+		var cumulative := 0.0
+		var picked := options[options.size() - 1] as Dictionary
+		for value in options:
+			var option := value as Dictionary
+			cumulative += maxf(0.0, float(option.get("weight", 0.0)))
+			if roll <= cumulative:
+				picked = option
+				break
+		var nested := picked.duplicate(true)
+		nested.erase("weight")
+		_resolve_entry(nested, state, "%s.draw[%d]" % [path, draw_index], depth)
 
 
 static func _resolve_pool_entry(entry: Dictionary, state: Dictionary, path: String) -> void:
