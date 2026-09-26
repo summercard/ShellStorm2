@@ -1,6 +1,6 @@
 ---
 name: 03-battle-room-instance-layout-authoring
-description: 当为通用房02、入口安全房、BOSS房01、撤离房01等具体房间编号制作 Blender 组件布局时使用。读取该房间白盒和对应房间种类组件源，只摆放共享组件实例而不生成新组件，并导出可由 Godot 重放的房间布局清单。
+description: 当具体房间编号需要偏离房型默认组件布局时使用。默认直接继承 02 的 component_instances.json；只有门位、设施启用、实例位置或挂点不同才制作 Blender 差异布局与 overrides，不生成新组件。
 agent_created: true
 metadata:
   display_name_zh: 03 战局具体房间布局制作
@@ -15,11 +15,15 @@ metadata:
 ```text
 具体房间白模 + 房间需求/效果图
   + 对应房间种类组件 Blender 源
-  -> 具体房间布局 Blender 源
+  + 房型 component_instances.json（默认布局）
+  -> 复用默认布局或只改实例摆位
+  -> 具体房间布局 Blender 源（仅有差异时需要）
   -> room_layout.json
 ```
 
 例如 `COMMON_ROOM / main_02`、`COMMON_ROOM / branch_03`、`EXTRACTION_ROOM / exit_01`。布局源只保存组件实例和房间级标记，不生成新墙、新地板、新门或房间专用组件。
+
+**02 产出的房型 `component_instances.json` 已经是该房型的标准布局。** 具体房间完全采用标准布局时，03 不复制一份 Blender 文件，只生成轻量 `room_layout.json`（引用 `base_layout`，差异为空）；只有门位、设施启用、实例位置或房间级挂点确实不同，才建立具体房间 Blender 差异布局。
 
 不得修改玩法、房间拓扑、敌人、掉落、存档、门状态机、导航和关卡规则代码。
 
@@ -41,6 +45,15 @@ metadata:
 4. 房间级需求：文字、效果图、设施要求、门连接、镜头和局部美术约束。
 
 房间编号不能唯一解析时停止，列出候选；白模和组件源的 `room_type` 不匹配时停止。
+
+## 默认继承与差异布局
+
+先比较具体房间白模和房型默认实例清单：
+
+- **完全一致**：写 `base_layout` 指向 02 的 `component_instances.json`，`instance_overrides=[]`；不得复制默认实例列表或另存重复 Blender 房间源。
+- **局部不同**：只记录 `add/remove/transform/enable` 四类覆盖；未覆盖实例继续继承默认布局。
+- **构图明显不同**：可建立 Blender 差异布局，但仍只能引用 catalog 内组件，最终导出的是完整解析后的 `room_layout.json` 加可审计 overrides，不产生新组件。
+- 若需求新增造型而 catalog 中没有，停止并回到 02 更新组件计划；03 不得临时建模。
 
 ## Blender 布局约束
 
@@ -87,23 +100,17 @@ assets/art/environments/tower_zones/<block_id>/source/room_instances/<room_id>/v
 {
   "schema": "shellstorm2.battle.room_instance_layout",
   "schema_version": 1,
+  "block_id": "battle",
   "room_id": "main_02",
   "room_type": "COMMON_ROOM",
   "whitebox_source": "...",
   "component_source": "...",
-  "source_blend": "...",
+  "base_layout": ".../component_instances.json",
+  "source_blend": null,
+  "instance_overrides": [],
+  "component_budget_limit": 50,
   "dimensions_m": [30.0, 25.0],
-  "instances": [
-    {
-      "instance_id": "WALL_NORTH_01",
-      "component_id": "...",
-      "slot_role": "solid_wall",
-      "position_m": [0.0, 0.0, 0.0],
-      "rotation_y_deg": 180.0,
-      "scale": [1.0, 1.0, 1.0],
-      "enabled": true
-    }
-  ],
+  "instances": [],
   "room_markers": [],
   "validation": {
     "room_owned_geometry": false,
@@ -118,8 +125,8 @@ assets/art/environments/tower_zones/<block_id>/source/room_instances/<room_id>/v
 ## 验收
 
 - 白模尺寸、门洞、连接和边界一致。
-- 所有组件来自匹配的组件源和 catalog。
-- 组件实例数量、位置、旋转、包络可重建。
-- 无共享 Mesh 本地副本、无房间专用 GLB/PackedScene。
+- 所有组件来自匹配的组件源和 catalog，解析后的唯一组件数不得突破房型计划的 50 个预算。
+- 基础布局＋覆盖项可确定性解析为完整实例列表；实例数量、位置、旋转、包络可重建。
+- 与默认布局一致时没有重复 Blender 源；存在差异源时只含 Collection Instance，无共享 Mesh 本地副本、无房间专用 GLB/PackedScene。
 - 无非单位缩放、非法角度、穿地、越界、门洞侵入和重复碰撞声明。
 - 通过后将布局交给 `04-battle-room-runtime-assembler`；不要直接把 Blender 房间整屋导入 Godot。

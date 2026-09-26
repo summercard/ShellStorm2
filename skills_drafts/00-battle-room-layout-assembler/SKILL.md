@@ -14,8 +14,8 @@ metadata:
 
 | 用户意图 | 路由 Skill |
 |---|---|
-| 制作安全房/通用房/BOSS房/撤离房等房间种类 Blender 源 | `01-battle-room-type-art-authoring` |
-| 把已验收房间种类源拆成组件 Blender 源 | `02-battle-room-component-decomposer` |
+| 按概念图制作安全房/通用房/BOSS房/撤离房等房间种类 Blender 源 | `01-battle-room-type-art-authoring` + 制作开始即调用 `02-battle-room-component-decomposer` 冻结组件计划 |
+| 将历史整屋 Blender 源归并重建为组件母版＋实例布局 | `02-battle-room-component-decomposer` |
 | 根据具体房间编号白模制作 Blender 组件布局 | `03-battle-room-instance-layout-authoring` |
 | 把组件 GLB/PackedScene 导入 Godot | `godot-model-asset-import-standard` |
 | 拼装具体房间到 Godot，并选择 Blender 布局重放或白盒直装 | `04-battle-room-runtime-assembler` |
@@ -26,18 +26,20 @@ metadata:
 
 ## 目标
 
-将战局房间制作固定为“共享组件单一正本 + 房间布局源 + Godot 数据驱动重放”：
+将战局房间制作固定为“概念图先拆组件 + 共享组件单一正本 + Godot 数据驱动重放”：
 
 ```text
-通用组件 Blender 母版
-  -> 每个组件 GLB + Godot PackedScene
-  -> 房间 Blender 源只保存组件实例布局
-  -> room_layout.json
+概念图 + 白模
+  -> 制作前 component_plan（唯一组件 <= 50；同族常规 <=3、有意变体最多5）
+  -> Blender 每组件一份母版，房型源只放实例
+  -> component_instances.json
+  -> 每组件 GLB + Godot PackedScene
+  -> 默认房间直接重放；具体房间只记录差异 overrides
   -> Godot 按 AssetID 实例化同一批 PackedScene
-  -> 房间运行时验收
+  -> Blender / Godot 双端还原验收
 ```
 
-房间 Blender 文件不是新的组件生产源。房间不得导出墙、地板、门、楼梯或设施的房间专用 GLB/PackedScene。需要改造型时回到通用组件母版，完成组件验收和 Godot 替换后再回放所有房间。
+房型 Blender 文件既是组件制作工作台，也是默认实例布局的可视化真源，但不是整屋导出源。房间不得导出墙、地板、门、楼梯或设施的房间专用/整屋 GLB/PackedScene。需要改造型时回到组件母版，完成组件验收和 Godot 替换后再回放所有房间。
 
 ## 触发与输入解析
 

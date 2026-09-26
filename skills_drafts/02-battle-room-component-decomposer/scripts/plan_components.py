@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""组件拆分判断（族上限版）：包络聚类 + 族内变体上限 3 的自动收敛。
+"""组件拆分判断：包络候选聚类 + 房型 50 组件预算 + 同族 3–5 变体门禁。
 
 用法:
-    python plan_components.py <component_library_dir> [--write] [--out PATH] [--max 3] [--tol 0.06]
+    python plan_components.py <component_library_dir> [--write] [--out PATH] [--max 3] [--hard-max 5] [--component-limit 50] [--tol 0.10]
 
 只读：默认仅打印报告。加 --write 才落 component_plan.json。
 退出码: 0 = 无违规; 1 = 存在违规
@@ -33,7 +33,7 @@ STRUCT_HINT = ('墙', '地', '天花', '门', '梁', '结构', 'wall', 'floor', 
 
 
 def family(slug):
-    """族名 = slug 去方位词/数字/尾部单字母序号后的语义核心。"""
+    """兼容旧清单：从 slug 猜族名。新清单应显式写 component_family。"""
     out = []
     for t in re.split(r'[_-]', str(slug).lower()):
         if not t or t in AXIS_WORDS or NUM_RE.match(t):
@@ -42,6 +42,10 @@ def family(slug):
     while len(out) > 1 and SINGLE_ALPHA.match(out[-1]):
         out.pop()
     return '_'.join(out) or 'unknown'
+
+
+def family_of(x):
+    return str(x.get('component_family') or family(name_of(x))).strip().lower()
 
 
 def cid(x):
@@ -78,6 +82,23 @@ def is_structure(x):
 
 def naming_violations(text):
     return [why for pat, why in FORBIDDEN if pat.search(str(text))]
+
+
+def has_variant_contract(x):
+    """第 4–5 个变体必须声明可解释、可复用的状态轴。"""
+    return all(str(x.get(k) or '').strip() for k in ('variant_axis', 'variant_value', 'variant_reason'))
+
+
+def variant_contract_complete(members):
+    axes = {str(x.get('variant_axis') or '').strip() for x in members}
+    return all(has_variant_contract(x) for x in members) and len(axes) == 1
+
+
+def family_limit(members, regular_max, hard_max):
+    if len(members) <= regular_max:
+        return regular_max, True
+    contracted = variant_contract_complete(members)
+    return (hard_max if contracted else regular_max), contracted
 
 
 def load_packages(lib_dir):
@@ -142,7 +163,9 @@ def main():
     ap.add_argument('lib_dir')
     ap.add_argument('--write', action='store_true')
     ap.add_argument('--out', default=None)
-    ap.add_argument('--max', type=int, default=3)
+    ap.add_argument('--max', type=int, default=3, help='无显式状态轴的常规族上限')
+    ap.add_argument('--hard-max', type=int, default=5, help='带合法状态轴的绝对族上限')
+    ap.add_argument('--component-limit', type=int, default=50, help='单房型唯一组件定义上限')
     ap.add_argument('--tol', type=float, default=0.10)
     a = ap.parse_args()
 
@@ -153,7 +176,7 @@ def main():
 
     fams = collections.OrderedDict()
     for x in pkgs:
-        fams.setdefault(family(name_of(x)), []).append(x)
+        fams.setdefault(family_of(x), []).append(x)
 
     name_v = [x for x in pkgs if naming_violations(name_of(x))]
     cid_v = [x for x in pkgs if naming_violations(cid(x))]
@@ -161,48 +184,60 @@ def main():
     rot_locked = [x for x in pkgs if tuple(x.get('allowed_rotations_y_deg') or []) == (0,)]
 
     print('库: %s' % a.lib_dir)
-    print('包数 %d ｜ 族数 %d ｜ 族上限 %d ｜ 相似容差 %.3f m' % (len(pkgs), len(fams), a.max, a.tol))
+    print('包数 %d ｜ 族数 %d ｜ 常规上限 %d ｜ 绝对上限 %d ｜ 房型预算 %d ｜ 相似容差 %.3f m' % (
+        len(pkgs), len(fams), a.max, a.hard_max, a.component_limit, a.tol))
     print()
     print('--- 违规 ---')
     print('命名违规  slug %d / component_id %d' % (len(name_v), len(cid_v)))
     print('front_axis 非枚举 %d ｜ allowed_rotations 全 [0] %d' % (len(axis_bad), len(rot_locked)))
-    over = [(f, len(m)) for f, m in fams.items() if len(m) > a.max]
-    print('超限族（变体 > %d）: %d 个 %s' % (a.max, len(over), over if over else ''))
+    contract_missing = [(f, len(m)) for f, m in fams.items() if len(m) > a.max and not variant_contract_complete(m)]
+    absolute_over = [(f, len(m)) for f, m in fams.items() if len(m) > a.hard_max]
+    print('缺少变体契约（> %d）: %d 个 %s' % (a.max, len(contract_missing), contract_missing if contract_missing else ''))
+    print('超过绝对上限（> %d）: %d 个 %s' % (a.hard_max, len(absolute_over), absolute_over if absolute_over else ''))
     print()
 
     total_before = 0
     total_after = 0
     plan_groups = []
     print('--- 族收敛 ---')
-    print('%-22s %6s %6s  %s' % ('族', '变体', '收敛后', '代表件'))
+    print('%-22s %6s %6s %6s  %s' % ('族', '变体', '上限', '收敛后', '代表件'))
     for f, members in sorted(fams.items(), key=lambda kv: -len(kv[1])):
         before = len(members)
         total_before += before
+        limit, contracted = family_limit(members, a.max, a.hard_max)
         cl = size_clusters(members, a.tol)
         merged_deltas = []
-        if len(cl) > a.max:
-            cl, merged_deltas = merge_to_max(cl, a.max)
+        if len(cl) > limit:
+            cl, merged_deltas = merge_to_max(cl, limit)
         reps = [max(c, key=lambda x: len(x.get('objects') or [])) for c in cl]
         after = len(cl)
         total_after += after
-        flag = '  << 超限' if before > a.max else ''
-        print('%-22s %6d %6d  %s%s' % (f, before, after, [name_of(r) for r in reps][:4], flag))
+        flag = '  << 缺变体契约' if before > a.max and not contracted else ('  << 超绝对上限' if before > a.hard_max else '')
+        print('%-22s %6d %6d %6d  %s%s' % (f, before, limit, after, [name_of(r) for r in reps][:5], flag))
         plan_groups.append({
             'family': f,
             'variants_before': before,
+            'variant_limit': limit,
+            'variant_contract_complete': contracted,
             'variants_after': after,
             'merged_deltas_m': merged_deltas,
             'representatives': [{
                 'component_id': cid(r), 'slug': name_of(r),
                 'bounds_size_m': list(bounds_of(r)),
+                'variant_axis': r.get('variant_axis'),
+                'variant_value': r.get('variant_value'),
+                'variant_reason': r.get('variant_reason'),
                 'absorbed': [name_of(m) for m in c if m is not r],
             } for c, r in zip(cl, reps)],
         })
 
+    component_budget_over = total_after > a.component_limit
     print()
-    print('组件数: %d 变体 → 收敛后 %d 个组件（族上限 %d）' % (total_before, total_after, a.max))
+    print('组件数: %d 变体 → 收敛后 %d 个组件（房型预算 %d，剩余 %d）' % (
+        total_before, total_after, a.component_limit, a.component_limit - total_after))
     print()
-    print('PLAN_COMPONENTS_' + ('OK' if not (name_v or cid_v or axis_bad or over) else 'VIOLATIONS'))
+    violations = name_v or cid_v or axis_bad or contract_missing or absolute_over or component_budget_over
+    print('PLAN_COMPONENTS_' + ('OK' if not violations else 'VIOLATIONS'))
 
     if a.write:
         out = a.out or os.path.join(a.lib_dir, 'component_plan.json')
@@ -210,7 +245,13 @@ def main():
             'schema': 'shellstorm2.battle.component_plan',
             'schema_version': 1,
             'source_library': a.lib_dir.replace('\\', '/'),
-            'max_variants_per_family': a.max,
+            'regular_max_variants_per_family': a.max,
+            'hard_max_variants_per_family': a.hard_max,
+            'component_budget': {
+                'limit': a.component_limit,
+                'planned': total_after,
+                'remaining': a.component_limit - total_after,
+            },
             'sim_tol_m': a.tol,
             'package_count': len(pkgs),
             'component_count': total_after,
@@ -219,12 +260,14 @@ def main():
                 'naming_violation_count': len(name_v),
                 'front_axis_non_enum_count': len(axis_bad),
                 'rotation_locked_count': len(rot_locked),
-                'over_limit_families': [f for f, m in fams.items() if len(m) > a.max],
+                'variant_contract_missing_families': [f for f, _ in contract_missing],
+                'absolute_over_limit_families': [f for f, _ in absolute_over],
+                'component_budget_over': component_budget_over,
             },
         }, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
         print('已写出 %s' % out)
 
-    return 1 if (name_v or cid_v or axis_bad or over) else 0
+    return 1 if violations else 0
 
 
 if __name__ == '__main__':

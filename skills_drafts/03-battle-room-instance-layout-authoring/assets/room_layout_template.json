@@ -2,18 +2,28 @@
   "schema": "shellstorm2.battle.room_instance_layout",
   "schema_version": 1,
   "level_id": "battle_level01",
+  "block_id": "battle",
   "room_id": "ROOM_ID",
   "room_type": "COMMON_ROOM",
   "layout_version": "v001",
   "whitebox_source": "",
   "component_source": "",
-  "source_blend": "",
+  "base_layout": ".../component_instances.json",
+  "source_blend": null,
+  "instance_overrides": [],
+  "component_budget_limit": 50,
   "dimensions_m": [0.0, 0.0],
-  "coordinate_contract": "blender_z_up_to_godot_y_up",
+  "coordinate_contract": {
+    "source": "blender_z_up_room_local",
+    "target": "godot_y_up_room_local",
+    "rotation_y_deg_semantics_in_source": "rotation_about_blender_Z"
+  },
   "instances": [],
   "room_markers": [],
   "validation": {
     "room_owned_geometry": false,
+    "base_layout_resolved": false,
+    "unique_component_count_within_budget": false,
     "non_unit_scale_count": 0,
     "missing_components": []
   }

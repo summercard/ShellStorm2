@@ -1,12 +1,25 @@
 # Godot房间装配路由契约
 
-## 分支 A：Blender布局重放
+## 分支 A0：房型默认布局重放
 
 使用条件：
 
 ```text
-room_layout.json exists
-layout validation passes
+component_plan.json / component_catalog.json / component_instances.json pass
+room_layout.json references base_layout and has no overrides
+all component PackedScenes resolve
+source_version == runtime_version
+```
+
+输出：`assembly_route=room_type_layout_replay`。这是标准路径；逐组件导入并重放，禁止整屋 GLB。
+
+## 分支 A：具体房间差异布局重放
+
+使用条件：
+
+```text
+room_layout.json exists and has instance_overrides or an authored differential layout
+base_layout + overrides validation passes
 all component PackedScenes resolve
 source_version == runtime_version
 ```
@@ -26,7 +39,15 @@ all component PackedScenes resolve
 
 输出：`assembly_route=whitebox_direct_assembly`。
 
-分支 B 先满足白盒结构；文字、需求和图片只用于组件选择和构图，不得改变玩法空间。复杂效果应回到 Blender 生成布局后切换到分支 A。
+分支 B 先满足白盒结构；文字、需求和图片只用于组件选择和构图，不得改变玩法空间。复杂效果应回到 02 完成房型默认组件布局，或回到 03 制作具体房间差异布局，再切换到 A0/A。
+
+## 三条共同门禁
+
+- catalog 声明组件数 = 独立导入单元数 = 可解析 PackedScene 数；
+- 房型唯一组件数 `<= 50`；实例数量不限；
+- Blender→Godot 坐标转换只执行一次；历史 `rotation_y_deg` 在 Blender 端表示绕 Z；
+- 默认布局与差异布局不得重复实例化同一批对象；
+- 禁止整屋 GLB、裸 GLB 运行时加载和房间专用组件替代品。
 
 ## 隔离边界
 

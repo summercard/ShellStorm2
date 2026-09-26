@@ -7,6 +7,14 @@
   "source_blend": "",
   "whitebox_sources": [],
   "nominal_dimensions_m": [],
+  "component_plan": "",
+  "component_budget": {
+    "limit": 50,
+    "planned": 0,
+    "remaining": 50
+  },
+  "regular_max_variants_per_family": 3,
+  "hard_max_variants_per_family": 5,
   "required_components": [],
   "required_facilities": [],
   "block_id": "battle",
@@ -14,6 +22,9 @@
   "asset_ledger": "resolved_by_ledger_index",
   "validation": {
     "whitebox_contract_preserved": false,
+    "component_plan_frozen_before_modeling": false,
+    "unique_component_count_within_budget": false,
+    "master_instance_structure": false,
     "decomposable": false,
     "gameplay_files_modified": []
   }

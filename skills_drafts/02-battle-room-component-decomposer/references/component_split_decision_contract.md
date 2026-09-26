@@ -33,7 +33,7 @@ fingerprint = sha256( sorted( round( 归一化顶点, 4 ) ) )
 | 情况 | 判定 | 动作 |
 |---|---|---|
 | 尺寸同 ＋ 指纹同 | 真·同一件 | 直接归并；位置全部进实例清单 |
-| 尺寸同 ＋ 指纹不同 | **不是同一件** | 人工裁定：变体（保留 2–3 个）还是噪声（统一取代表件） |
+| 尺寸同 ＋ 指纹不同 | **不是同一件** | 按 `variant_axis/value/reason` 自动判：有意状态变体按 3–5 上限保留；无契约差异按相似度收敛到最多 3 个 |
 
 实测（办公室 30×40 / `common_components/v004`，2026-09-26，Blender 4.5 逐包顶点比较）：
 
@@ -49,9 +49,9 @@ fingerprint = sha256( sorted( round( 归一化顶点, 4 ) ) )
 ⇒ 该库 106 包里**只有天花真正在复用**；其余「同尺寸」是包络巧合，几何各自独立建模。
 ⇒ **归并必须两段判**：先包络聚类（候选），再指纹校验（确认）。只做前者会产生错误的合并。
 
-### 1.2 变体上限（族内 ≤ 3，硬约束）
+### 1.2 房型组件预算与变体上限（50 / 3–5，硬约束）
 
-**族名** ＝ slug 归一化语义核心：
+新清单必须显式填写 `component_family`。下列 slug 归一化只用于兼容历史清单并生成待回写建议：
 
 ```text
 族名 = slug
@@ -70,22 +70,33 @@ fingerprint = sha256( sorted( round( 归一化顶点, 4 ) ) )
 | `door_wall` | `door_wall` |
 | `wall_top_service` | `wall_top_service` |
 
-**规则**：同族成员数 > **3** → 必须收敛，**不请示**。
+**房型总预算**：单个房型引用的唯一 `component_id` 总数 `<= 50`，实例数不限。计划写：
+
+```json
+"component_budget": {"limit": 50, "planned": 32, "remaining": 18}
+```
+
+`planned > 50` 时不得进入正式建模。先归并位置型拆分、复用共享件、收敛变体；不能提高预算。
+
+**同族规则**：
+
+- `<= 3`：常规目标，无显式状态轴的近似件必须收敛到此范围；
+- `4–5`：仅允许概念图明确要求的破损、配色、结构状态等有意变体；族内每件都填写同一语义的 `variant_axis`，以及各自的 `variant_value`、`variant_reason`；
+- `> 5`：绝对违规，必须收敛；
+- 纯配色变化优先同一几何＋PaletteUV/材质参数，不应复制几何组件。
 
 **收敛算法**：
 
 ```text
-SIM_TOL = 0.10 m                          (结构件平面模数 5m 的 2%)
-比较键 · 结构件 = ( min(x,y), max(x,y), z )    # 平面排序 ⇒ 墙转 90° 视为同一件
-比较键 · 陈设件 = ( x, y, z )                  # 非对称件保持原序
-1. 族内按比较键贪心聚类（相邻维差 <= SIM_TOL 视为同簇）
-2. while 簇数 > 3:  合并最相似的一对簇
+SIM_TOL = 0.10 m
+比较键 · 结构件 = ( min(x,y), max(x,y), z )
+比较键 · 陈设件 = ( x, y, z )
+1. 先按真实 variant_axis/value 分组；未声明者进入默认组
+2. 默认组收敛到 <=3；合法状态轴合计收敛到 <=5
 3. 每簇代表 = 该簇内实例数最多的成员
-4. 簇内其余成员的实例全部改指代表件，位置进 component_instances.json
+4. 其余实例改指代表件，位置/旋转进 component_instances.json
+5. 仍无法合理收敛时细分真实语义族，但细分后的组件仍计入 50 总预算
 ```
-
-**例外与自纠**：收敛后仍 >3，或某代表与它统辖的成员几何差异 > 0.5 m ⇒ **族粒度划错了**，
-改族名（细分族），**不放宽上限**。
 
 **实测（办公室 30×40 / v004，2026-09-26，由 `scripts/plan_components.py` 产出）**
 
@@ -135,12 +146,17 @@ SIM_TOL = 0.10 m                          (结构件平面模数 5m 的 2%)
   "source_blend": "...",
   "source_blend_sha256": "...",
   "source_object_count": 121,
+  "component_budget": {"limit": 50, "planned": 28, "remaining": 22},
   "groups": [
     {
       "component_id": "...",
       "slug": "wall_standard_5m",
+      "component_family": "wall_standard",
       "name_zh": "标准墙 5m",
       "axis": "structure",
+      "variant_axis": null,
+      "variant_value": null,
+      "variant_reason": null,
       "merge_key": {},
       "member_objects": ["..."],
       "instance_count": 21,

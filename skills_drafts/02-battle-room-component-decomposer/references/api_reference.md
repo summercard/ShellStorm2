@@ -1,34 +1,27 @@
-# Reference Documentation for Battle Room Component Decomposer
+# 组件规划与实例清单字段速查
 
-This is a placeholder for detailed reference documentation.
-Replace with actual reference content or delete if not needed.
+## `component_plan.json`
 
-Example real reference docs from other skills:
-- product-management/references/communication.md - Comprehensive guide for status updates
-- product-management/references/context_building.md - Deep-dive on gathering context
-- bigquery/references/ - API references and query examples
+必填顶层字段：`schema`、`schema_version`、`block_id`、`source_room_type`、`component_budget`、`groups`、`validation`。
 
-## When Reference Docs Are Useful
+```json
+{
+  "component_budget": {"limit": 50, "planned": 28, "remaining": 22},
+  "regular_max_variants_per_family": 3,
+  "hard_max_variants_per_family": 5
+}
+```
 
-Reference docs are ideal for:
-- Comprehensive API documentation
-- Detailed workflow guides
-- Complex multi-step processes
-- Information too lengthy for main SKILL.md
-- Content that's only needed for specific use cases
+每个 `groups[]` 至少包含：`component_id`、`slug`、`component_family`、`axis`、`merge_key`、`instance_count`、`serves_room_types`、`scope`。第 4–5 个同族变体要求族内每件都写同一语义的 `variant_axis` 以及各自的 `variant_value`、`variant_reason`。
 
-## Structure Suggestions
+## `component_instances.json`
 
-### API Reference Example
-- Overview
-- Authentication
-- Endpoints with examples
-- Error codes
-- Rate limits
+每个实例包含 `component_id`、`instance_id`、`position_m`、`rotation_y_deg`、`scale`、`source_object`。历史字段 `rotation_y_deg` 在 Blender 端表示绕 Z；必须由 `coordinate_contract` 显式映射到 Godot。
 
-### Workflow Guide Example
-- Prerequisites
-- Step-by-step instructions
-- Common patterns
-- Troubleshooting
-- Best practices
+## 门禁
+
+- 唯一组件定义 `<= 50`，实例数不限；
+- 无状态轴的同族 `<= 3`，有完整统一状态轴的同族 `<= 5`；
+- 同一母版重复摆放必须共享 Collection/Mesh datablock；
+- `component_plan`、catalog、独立组件包和实例清单的 ID 必须守恒；
+- Blender 与 Godot 均能用同一实例清单还原 bbox 与画面；禁止整屋 GLB。

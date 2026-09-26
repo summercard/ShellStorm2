@@ -10,6 +10,9 @@
   "component_library": {
     "catalog": "assets/art/environments/tower_zones/battle/source/common_components/v006/component_catalog.json"
   },
+  "base_layout": "",
+  "instance_overrides": [],
+  "component_budget_limit": 50,
   "instances": [
     {
       "instance_id": "WALL_NORTH_01",

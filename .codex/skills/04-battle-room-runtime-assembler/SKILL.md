@@ -1,6 +1,6 @@
 ---
 name: 04-battle-room-runtime-assembler
-description: 当使用场景美术资产在 Godot 中完成某个具体战局房间编号时使用。在“Blender布局加稳定PackedScene重放”和“没有房间布局时按白盒直接装配”两条支线间路由，产出最终运行房间，不修改玩法或程序化规则。
+description: 当在 Godot 中完成具体战局房间时使用。在房型默认实例清单直接重放、具体房间差异布局重放、白盒直装三条支线间路由；逐组件导入稳定 PackedScene，禁止整屋 GLB 和手工第二套摆位。
 agent_created: true
 metadata:
   display_name_zh: 04 战局具体房间Godot装配
@@ -15,7 +15,8 @@ metadata:
 ```text
 房间编号
   -> 路由判断
-  -> 分支 A：Blender 布局 + Godot 组件
+  -> 分支 A0：房型 component_instances.json 原样重放
+  -> 分支 A：具体房间 room_layout.json 差异重放
   -> 分支 B：白盒 + Godot 组件
   -> 房间运行时节点 / 验收图 / 接入登记
 ```
@@ -32,7 +33,28 @@ metadata:
 
 ## 路由决策
 
-### 分支 A：有具体房间 Blender 布局
+### 分支 A0：直接重放房型默认布局（首选）
+
+判定条件：
+
+- 02 的 `component_catalog.json`、`component_plan.json`、`component_instances.json` 全部通过验收；
+- 具体房间白模与房型默认尺寸、门槽和必需设施一致；
+- 03 的 `room_layout.json` 只声明 `base_layout`，没有实例覆盖；
+- catalog 中每个 `component_id` 已解析到稳定 PackedScene。
+
+执行：
+
+```text
+加载 component_instances.json
+  -> 解析 Blender→Godot coordinate_contract
+  -> 由 AssetID 注册表逐组件实例化 PackedScene
+  -> 绑定房间级门/挂点等运行节点
+  -> 与 Blender 默认布局做实例表、bbox、截图三重对照
+```
+
+这是新房型的标准路径。**不要求为每个房间复制 Blender 布局，也不允许把房型 `.blend` 导成整屋 GLB。**
+
+### 分支 A：具体房间有布局差异
 
 判定条件：同时存在并通过验收：
 
@@ -45,6 +67,7 @@ metadata:
 
 ```text
 读取 room_layout.json
+  -> 解析 base_layout + instance_overrides（或已展开的完整列表）
   -> 校验布局和组件版本
   -> 由 AssetID 注册表解析稳定 PackedScene
   -> 按 position / rotation / scale 实例化
@@ -52,7 +75,7 @@ metadata:
   -> 运行具体房间验收
 ```
 
-Blender 布局是视觉摆放事实源。Godot 不得再手工摆第二套视觉组件。
+具体房间 Blender 差异布局是视觉摆放事实源；未覆盖的部分继承房型默认布局。Godot 不得再手工摆第二套视觉组件。
 
 运行时门不是可选项：当布局包含 `slot_role=door_wall` 时，装配器必须从同一门墙实例位置创建对应的 `RoomDoor3D`，并校验方向、目标房间和世界坐标误差不超过0.01m。视觉门墙与游戏门的碰撞责任必须分离，不能只数 PackedScene 组件就宣称门已接入。
 
@@ -93,17 +116,25 @@ Blender 布局是视觉摆放事实源。Godot 不得再手工摆第二套视觉
 
 ## Godot 资产来源
 
-使用 `godot-model-asset-import-standard`：
+使用 `godot-model-asset-import-standard`，按 catalog 自动逐组件处理：
 
 ```text
-组件 Blender 源
-  -> 组件输出 GLB
+component_catalog.json
+  -> 每个 component_id 的独立 Blender 组件包
+  -> 每组件一个 GLB（或一个明确的组件导入单元）
   -> 稳定 components/<asset_id>/...
   -> 稳定 runtime/<asset_id>/...tscn
   -> AssetID 注册表
+  -> component_instances / room_layout 重放
 ```
 
-运行时路径不携带版本号；版本只写在 source、manifest、PackedScene metadata、布局快照和场景账本。不得直接加载裸 GLB，不得从房间 Blender 源导入整屋 GLB。
+硬约束：
+
+- catalog 声明数、独立导入单元数、PackedScene 可解析数必须相等；缺一件就整体失败，不能静默跳过；
+- 一个组件可被 N 个实例复用；不得因实例数量重复导出 GLB；
+- 运行时路径不携带版本号；版本只写在 source、manifest、PackedScene metadata、布局快照和场景账本；
+- 不得直接加载裸 GLB，不得从房间 Blender 源导入整屋 GLB；
+- 坐标转换只执行一次：Blender 平面 XY / 垂直 Z → Godot 契约坐标。历史字段 `rotation_y_deg` 在 Blender 端语义为绕 Z，转换后才成为 Godot 垂直轴旋转，禁止按字段名重复旋转。
 
 组件账本路径必须通过：
 
@@ -130,7 +161,7 @@ assets/art/environments/tower_zones/<block_id>/runtime/room_instances/<room_id>/
 每个具体房间的最终美术装配至少生成：
 
 - 具体房间运行布局/装配 manifest；
-- `assembly_route`：`blender_layout_replay` 或 `whitebox_direct_assembly`；
+- `assembly_route`：`room_type_layout_replay`、`blender_layout_replay` 或 `whitebox_direct_assembly`；
 - 房间编号、房间种类、白模源、组件源、Godot PackedScene 引用；
 - 实例数量、包络、门洞、碰撞责任和版本哈希；
 - 运行时验收日志和至少一张游戏内或验收场景截图；
@@ -159,9 +190,12 @@ assets/art/environments/tower_zones/battle/runtime/room_instances/<room_id>/
 遇到以下任一情况立即失败，不用旧资产冒充新链路：
 
 - 房间编号、房间种类或白模无法唯一解析；
-- 组件缺 GLB、PackedScene、AssetID、包络或来源；
+- 组件缺 GLB、PackedScene、AssetID、包络或来源，或 catalog / 导入单元 / PackedScene 数量不守恒；
 - Blender 源版本高于 Godot 已接入版本；
+- 房型唯一组件数超过 50，或组件实例引用了计划/catalog 外的 ID；
 - 布局包含房间自有共享 Mesh、整屋 GLB 或非法缩放；
+- 默认布局与具体房间差异布局同时复制同一批实例，导致重复视觉/碰撞；
+- Blender→Godot 坐标转换缺失、执行两次，或把历史 `rotation_y_deg` 错当 Blender Y 轴；
 - A 分支布局和 B 分支白盒同时被当成视觉事实源；
 - Godot 代码需要新增房间专用拼装函数；
 - 撤离房缺失信标；

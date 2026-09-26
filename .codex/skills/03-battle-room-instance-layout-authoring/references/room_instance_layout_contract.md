@@ -12,8 +12,24 @@ level_id + room_id + room_type + layout_version
 
 - 白模：尺寸、门洞、连接、可走面和清空区。
 - 组件 catalog：组件身份、包络、原点、允许旋转、Godot运行资产。
-- Blender 房间布局：视觉组件实例位置。
-- Godot：只重放视觉布局并添加玩法节点；不得手工维护第二套视觉坐标。
+- 02 的 `component_instances.json`：房型默认视觉实例位置，是默认事实源。
+- 具体房间 Blender 布局：仅在偏离默认布局时存在，只拥有差异摆位。
+- Godot：解析默认布局＋overrides 后重放并添加玩法节点；不得手工维护第二套视觉坐标。
+
+## 继承与覆盖
+
+```json
+{
+  "base_layout": ".../component_instances.json",
+  "source_blend": null,
+  "instance_overrides": []
+}
+```
+
+- 默认布局完全适用时，`instances=[]`、`instance_overrides=[]`，不得复制 Blender 源。
+- 覆盖动作仅允许 `add`、`remove`、`transform`、`enable`。
+- 覆盖解析后引用的唯一组件数不得超过房型 `component_budget.limit=50`。
+- 新造型不属于覆盖，必须回到 02 更新组件计划和 catalog。
 
 ## 实例字段
 
