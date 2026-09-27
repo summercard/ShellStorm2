@@ -150,11 +150,12 @@ component_catalog.json
 
 硬约束：
 
+- **房间静态 TSCN 的 owner 只改顶层组件实例根**：把运行时组件转挂到房间场景后，只允许 `component_instance.owner = room_scene_root`；不得递归把 `ImportedModel`、Mesh、Collision 等 prefab 内部后代的 owner 改成房间根。递归改 owner 会把组件内部展开写进房间 TSCN，破坏 PackedScene 可编辑边界，并可能在场景退出时造成大规模 RID/ObjectDB 泄漏。验收须比较“房间根直接子节点数 = 布局实例数”，并确认组件根仍以 `instance=ExtResource(PackedScene)` 保存、内部后代不在房间文件中重复声明；
 - catalog 声明数、独立导入单元数、PackedScene 可解析数必须相等；缺一件就整体失败，不能静默跳过；
 - 一个组件可被 N 个实例复用；不得因实例数量重复导出 GLB；
 - 运行时路径不携带版本号；版本只写在 source、manifest、PackedScene metadata、布局快照和场景账本；
 - 不得直接加载裸 GLB，不得从房间 Blender 源导入整屋 GLB；
-- 坐标转换只执行一次：Blender 平面 XY / 垂直 Z → Godot 契约坐标。历史字段 `rotation_y_deg` 在 Blender 端语义为绕 Z，转换后才成为 Godot 垂直轴旋转，禁止按字段名重复旋转。
+- 坐标转换只执行一次：布局生产阶段先将源世界变换转换为 `blender_room_local`（`inverse(ROOM_FRAME_world) @ source_instance_world_transform`），运行时再按显式契约执行 Blender 平面 XY / 垂直 Z → Godot 房间局部 XZ / 垂直 Y。`ROOM_FRAME` 的平面原点必须是模板 footprint 包围盒中心，垂直原点必须是几何实测走行面；历史字段 `rotation_y_deg` 在 Blender 端语义为绕 Z，转换后才成为 Godot 垂直轴旋转，禁止按字段名重复旋转、隐式居中或再次减去 bbox 中心。
 
 组件账本路径必须通过：
 

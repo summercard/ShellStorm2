@@ -120,7 +120,7 @@ assets/art/environments/tower_zones/<block_id>/source/room_instances/<room_id>/v
 }
 ```
 
-坐标使用 Godot 运行坐标约定写入，Blender 原始坐标变换必须写入 `coordinate_contract`，不能由运行时猜。
+坐标使用 Godot 运行坐标约定写入；若布局源来自 Blender，必须先按 `room_local_transform = inverse(ROOM_FRAME_world) @ source_instance_world_transform` 转换，其中 `ROOM_FRAME` 的平面原点固定为模板 footprint 包围盒中心、垂直原点固定为几何实测走行面。`coordinate_contract` 必须记录 `source_space`、`origin_mode`、`source_bounds_xy_m`、`walk_plane_z_m` 和映射公式，不能由运行时猜，也不能把 `source_world_origin_m` 直接作为房间局部坐标。
 
 ## 验收
 

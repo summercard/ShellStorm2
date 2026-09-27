@@ -147,7 +147,7 @@ var checks := 0
 
 func _ready() -> void:
 	print("---- 远征01 房型组件重放验收 ----")
-	_check_runtime_prefabs()
+	await _check_runtime_prefabs()
 	var plan := GENERATOR.generate_from_level_plan(LEVEL_ID, 0, RUN_SEED)
 	_check(bool(plan.get("valid", false)), "关卡规划应有效：%s" % str(plan.get("validation_errors", [])))
 	if bool(plan.get("valid", false)):
@@ -160,12 +160,22 @@ func _ready() -> void:
 	await _check_live_expedition_rooms()
 	if failures.is_empty():
 		print("ROOM_TYPE_COMPONENT_REPLAY_OK checks=%d" % checks)
-		get_tree().quit(0)
+		call_deferred("_finish", 0)
 		return
 	print("ROOM_TYPE_COMPONENT_REPLAY_FAIL checks=%d failures=%d" % [checks, failures.size()])
 	for failure in failures:
 		print("FAIL  %s" % failure)
-	get_tree().quit(1)
+	call_deferred("_finish", 1)
+
+
+func _finish(exit_code: int) -> void:
+	var exit_timer := Timer.new()
+	exit_timer.one_shot = true
+	exit_timer.wait_time = 0.1
+	exit_timer.timeout.connect(get_tree().quit.bind(exit_code))
+	get_tree().root.add_child(exit_timer)
+	exit_timer.start()
+	queue_free()
 
 
 func _check_runtime_prefabs() -> void:
@@ -198,6 +208,7 @@ func _check_runtime_prefabs() -> void:
 		_check(instance != null, "%s 必须可实例化为 Node3D" % component_id)
 		if instance == null:
 			continue
+		add_child(instance)
 		instantiated += 1
 		_check(str(instance.get_meta("asset_id", "")) == component_id, "%s 根 metadata/asset_id 必须一致" % component_id)
 		_check(str(instance.get_meta("asset_version", "")) == str(record.get("version", "")), "%s 根版本必须与 manifest 一致" % component_id)
@@ -218,7 +229,9 @@ func _check_runtime_prefabs() -> void:
 					_check(texture.resource_path == PALETTE_PATH, "%s 的表面 %d 色盘路径错误：%s" % [component_id, surface, texture.resource_path])
 					if texture.resource_path == PALETTE_PATH:
 						palette_materials += 1
-		instance.free()
+		instance.queue_free()
+		await get_tree().process_frame
+		await get_tree().physics_frame
 	_check(loaded == EXPECTED_COMPONENTS, "PackedScene 应 %d/%d 可加载，实得 %d" % [EXPECTED_COMPONENTS, EXPECTED_COMPONENTS, loaded])
 	_check(instantiated == EXPECTED_COMPONENTS, "PackedScene 应 %d/%d 可实例化，实得 %d" % [EXPECTED_COMPONENTS, EXPECTED_COMPONENTS, instantiated])
 	_check(palette_materials > 0, "导入后材质必须实际绑定公共色盘")
@@ -272,8 +285,11 @@ func _check_live_expedition_rooms() -> void:
 			_check(room != null, "真实远征场景必须生成 %s" % room_id)
 			if room != null:
 				_check_runtime_room(room_id, room, TARGETS[room_id] as Dictionary)
-	remove_child(tower)
-	tower.free()
+	tower.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	_check(not is_instance_valid(tower), "远征验收场景必须在退出前完成释放")
 
 
 func _check_runtime_room(room_id: String, room: DungeonRoom3D, expected: Dictionary) -> void:
@@ -387,7 +403,7 @@ func _check_door_aperture(room_id: String, room: DungeonRoom3D, art_root: Node3D
 		var door := room.get_door_node(direction)
 		if door == null:
 			continue
-		var lane := art_root.global_transform.affine_inverse() * door.global_position
+		var lane := art_root.transform.affine_inverse() * door.position
 		var blocked := 0
 		for child in art_root.get_children():
 			if not (child is Node3D):
@@ -404,14 +420,13 @@ func _check_door_aperture(room_id: String, room: DungeonRoom3D, art_root: Node3D
 func _count_vertices_in_door_clear_box(
 	module: Node3D, art_root: Node3D, direction: String, lane: Vector3
 ) -> int:
-	var to_art := art_root.global_transform.affine_inverse()
 	var blocked := 0
 	for node in _mesh_instances_of(module):
 		var mesh_instance := node as MeshInstance3D
 		var mesh := mesh_instance.mesh
 		if mesh == null:
 			continue
-		var to_art_from_mesh := to_art * mesh_instance.global_transform
+		var to_art_from_mesh := _transform_relative_to_ancestor(mesh_instance, art_root)
 		for surface in range(mesh.get_surface_count()):
 			var arrays := mesh.surface_get_arrays(surface)
 			var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
@@ -425,6 +440,22 @@ func _count_vertices_in_door_clear_box(
 				elif absf(local.z - lane.z) <= 1.05 and absf(local.x - lane.x) <= 0.4:
 					blocked += 1
 	return blocked
+
+
+## 只用节点局部 Transform 累乘到指定祖先，离树节点图也可稳定验收。
+func _transform_relative_to_ancestor(
+	node: Node3D, ancestor: Node3D
+) -> Transform3D:
+	var relative := node.transform
+	var cursor := node.get_parent()
+	while cursor != ancestor:
+		assert(
+			cursor is Node3D,
+			"%s 必须是 %s 的 Node3D 后代" % [node.name, ancestor.name]
+		)
+		relative = (cursor as Node3D).transform * relative
+		cursor = cursor.get_parent()
+	return relative
 
 
 ## 模块自身或后代的全部 MeshInstance3D（含根本身）。

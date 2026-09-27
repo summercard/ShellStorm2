@@ -1887,6 +1887,13 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	record["floor_number"] = int(plan.get("floor_number", 0))
 	record["floor_plan_key"] = str(spec.get("key", ""))
 	record["floor_plan_main_path"] = str(spec.get("key", "")) in (plan.get("main_path_keys", []) as Array)
+	# 远征关卡 01 的静态视觉由每个具体房间自己的 TSCN 唯一持有。
+	# 路径随 record 显式下发，禁止按 AssetID 或同名房间猜测，避免塔楼房间误用。
+	if is_expedition() and get_expedition_level_id() == EXPEDITION_PLAN_KEY:
+		record["static_layout_scene_path"] = (
+			"res://assets/art/environments/tower_zones/expedition/runtime/room_instances/"
+			+ "f00_%s/room_static_layout.tscn" % str(spec.get("id", ""))
+		)
 	# 授权布局壳体（区块00）：把整房组件清单随记录带到 DungeonRoom3D.configure。
 	# 只在房表写了 authored_layout_shell 时才落字段，未接管的房间一个字段都不多。
 	if bool(spec.get("authored_layout_shell", false)):
@@ -4654,6 +4661,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
 		"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 		"authored_layout_instances": record.get("authored_layout_instances", []),
+		"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
 	})
 	room.position = record["position"]
 	room.set_meta("floor_number", int(record.get("floor_number", _floor_number_from_index(int(record.get("floor_index", 0))))))

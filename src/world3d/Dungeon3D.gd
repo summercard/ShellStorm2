@@ -1669,6 +1669,7 @@ func _generate_layout() -> void:
 			"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
 			"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 			"authored_layout_instances": record.get("authored_layout_instances", []),
+			"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
 		})
 		room.position = record["position"]
 		$GeneratedRooms.add_child(room)

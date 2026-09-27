@@ -125,6 +125,27 @@ PY
 否则 `--check` 全绿，WorkBuddy 在本项目里跑的却还是旧版。实测 02/04 曾落后 A 各 29/20 行。
 方向判定：以 A 为准（比 mtime + diff：`add>0 / rem=0` 就是纯补齐，可放心覆盖）。
 
+### 回灌脚本（常驻）
+
+`scripts/sync_workspace_skills.py` 专管 A→W：
+
+```bash
+python scripts/sync_workspace_skills.py --check                        # 只读校验（W 现有 skill）
+python scripts/sync_workspace_skills.py --sync                         # 以 A 为准回灌 W 现有 skill
+python scripts/sync_workspace_skills.py --sync --add NAME [NAME ...]   # 顺带把 A 里的 NAME 拉进 W
+```
+
+默认**只处理 W 里已存在的 skill**，不会把 A 的 38 个全灌进去；要扩面必须显式 `--add`
+（2026-09-27 首次扩面：W 由 5 个战局房间 skill 增至 **11 个** = 00–04 战局房间链路 + 场景制作 6 件）。
+脚本逐文件 sha256 比对、`shutil.copyfile` 字节复制（不做文本模式写入，杜绝换行二次污染）、
+顺手清副本 `__pycache__`（只删 `.pyc` 再 rmdir）；并断言 **A 侧行尾必须 CRLF**。退出码 0 = 一致。
+
+⚠️ **这条约定会被反复违反，别信「上次刚同步过」。** 2026-09-27 当天两次踩坑：15:45 刚回灌过 02/04，
+同日 23:51 又发现 **02/03/04** 落后于 A（A 侧是当天 19:59 新落的 `ROOM_FRAME` /
+`room_local_transform = inverse(ROOM_FRAME_world) @ source_instance_world_transform` 契约，W 侧还是旧表述），
+根因是中间 16:07 / 19:59 两次改 A 都没回灌。⇒ **凡本轮改了 A 里任何 W 已有的 skill，收尾必须跑一次 `--sync`**，
+让 `--check` 保持在 0；否则 `--check` 一旦是红的，「本次改动是否已同步」这个判断就失效了（红里混着历史欠账）。
+
 ## 边界
 
 - **绝不反向**：不从副本同步回 A。副本行尾被污染时，修副本、不修 A。

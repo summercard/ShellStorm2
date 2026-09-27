@@ -464,6 +464,10 @@ var authored_room_light_on := false
 ## 主通行层地砖格心（房间局部 Y=0，与装配吸附规则一致），不含多层坑底砖。
 ## 房间归属仍兼容无清单的旧矩形房；刷怪对 authored_layout_shell 空地板则拒绝回退。
 var _authored_tile_cells: Array[Vector3] = []
+## 生成房间 TSCN 时临时关闭静态场景消费，确保生成器从正式 JSON/代码链提取源壳体；
+## 正式游戏保持 true，只加载已保存的房间场景，不再逐组件灌入静态视觉。
+static var use_expedition_static_layout_scenes := true
+var static_layout_scene_path := ""
 
 
 func configure(config: Dictionary) -> void:
@@ -492,6 +496,7 @@ func configure(config: Dictionary) -> void:
 	authored_layout_room_id = str(config.get("authored_layout_room_id", authored_layout_room_id))
 	authored_layout_peaceful = bool(config.get("authored_layout_peaceful", authored_layout_peaceful))
 	authored_room_light_on = bool(config.get("authored_room_light_on", authored_room_light_on))
+	static_layout_scene_path = str(config.get("static_layout_scene_path", static_layout_scene_path))
 
 
 func _ready() -> void:
@@ -1089,7 +1094,137 @@ func _get_service_stations() -> Array[ServiceStation3D]:
 	return result
 
 
+func _expedition_static_layout_path() -> String:
+	if not use_expedition_static_layout_scenes or static_layout_scene_path.is_empty():
+		return ""
+	return static_layout_scene_path if ResourceLoader.exists(static_layout_scene_path) else ""
+
+
+func _build_runtime_doors_only() -> void:
+	var dimensions := get_dimensions()
+	for direction in doors:
+		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+	_apply_authored_runtime_door_contract(dimensions)
+
+
+## 静态 TSCN 只接管视觉与固定碰撞；门槽 lane 归属仍必须按本局拓扑重新计算。
+## 该步骤只读取实例清单，不生成第二套墙/地砖/设施。
+func _apply_authored_runtime_door_contract(dimensions: Vector2) -> void:
+	if not authored_layout_shell:
+		return
+	var half := dimensions * 0.5
+	var authored_wall_records: Array = []
+	for value in authored_layout_instances:
+		var instance := value as Dictionary
+		var role := str(instance.get("slot_role", ""))
+		if role not in ["solid_wall", "door_wall"]:
+			continue
+		var local_position := instance.get("position", Vector3.ZERO) as Vector3
+		var wall_side := _authored_wall_side_from_position(local_position, half)
+		if wall_side.is_empty():
+			wall_side = _authored_wall_direction(float(instance.get("rotation_y_deg", 0.0)))
+		var wall_along := local_position.z
+		var wall_depth := local_position.x
+		if wall_side in ["north", "south"]:
+			wall_along = local_position.x
+			wall_depth = local_position.z
+		authored_wall_records.append({
+			"side": wall_side,
+			"along": wall_along,
+			"depth": wall_depth,
+			"uses_door": not _authored_wall_door_side(local_position, half).is_empty(),
+		})
+	var door_wall_sides: Array[String] = []
+	var wall_sides: Array[String] = []
+	for record_value in authored_wall_records:
+		var record := record_value as Dictionary
+		var record_side := str(record.get("side", ""))
+		if record_side.is_empty():
+			continue
+		if record_side not in wall_sides:
+			wall_sides.append(record_side)
+		if bool(record.get("uses_door", false)) and record_side not in door_wall_sides:
+			door_wall_sides.append(record_side)
+	var delegated_sides: Array[String] = []
+	for direction in doors:
+		var door_offset := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
+		match classify_door_lane(
+			authored_wall_records, direction, door_offset, door_plane_depth(direction, half)
+		):
+			"door_wall":
+				continue
+			"solid_wall":
+				push_error(
+					"DungeonRoom3D: 静态布局 %s 的 %s 门槽 lane 上仍是实墙"
+					% [room_id, direction]
+				)
+			_:
+				delegated_sides.append(direction)
+	var common_shell_owns_door := (
+		authored_layout_asset_id.begins_with("ENV-EXPEDITION-L01-DB-")
+		or authored_layout_asset_id.begins_with("ENV-EXPEDITION-L01-CORRIDOR-")
+	)
+	for direction in delegated_sides:
+		if common_shell_owns_door and door_wall_sides.is_empty():
+			continue
+		var delegated_door := get_door_node(direction)
+		if delegated_door == null:
+			continue
+		var panel := delegated_door.get_node_or_null("DoorPanel") as Node3D
+		if panel != null:
+			panel.visible = false
+		delegated_door.set_meta("authored_shared_door_delegated", true)
+		delegated_door.set_meta("authored_shared_door_owner_side", true)
+	set_meta("authored_layout_door_wall_sides", door_wall_sides)
+	set_meta("authored_layout_wall_sides", wall_sides)
+	set_meta("authored_layout_delegated_door_sides", delegated_sides)
+	set_meta("authored_layout_unresolved_instances", [])
+
+
 func _build_shell() -> void:
+	var expedition_static_path := _expedition_static_layout_path()
+	if not expedition_static_path.is_empty():
+		var static_scene := load(expedition_static_path) as PackedScene
+		if static_scene == null:
+			push_error("DungeonRoom3D: 远征房间静态场景无法加载 %s" % expedition_static_path)
+		else:
+			var static_layout := static_scene.instantiate() as Node3D
+			if static_layout == null:
+				push_error("DungeonRoom3D: 远征房间静态场景根节点不是 Node3D %s" % expedition_static_path)
+			else:
+				var static_room_id := str(static_layout.get_meta("room_id", ""))
+				var static_instance_total := int(static_layout.get_meta("layout_instance_total", -1))
+				if not static_room_id.is_empty() and static_room_id != room_id:
+					push_error(
+						"DungeonRoom3D: 静态场景房间 ID 不符，期望 %s，实得 %s"
+						% [room_id, static_room_id]
+					)
+				if (
+					authored_layout_shell
+					and static_instance_total >= 0
+					and static_instance_total != authored_layout_instances.size()
+				):
+					push_error(
+						"DungeonRoom3D: 静态场景 %s 已过期，实例数 %d，当前规划 %d"
+						% [room_id, static_instance_total, authored_layout_instances.size()]
+					)
+				static_layout.name = (
+					"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
+				)
+				add_child(static_layout)
+				set_meta("static_layout_scene_path", expedition_static_path)
+				set_meta("static_layout_scene_loaded", true)
+				for key in [
+					"authored_layout_shell", "authored_layout_asset_id", "authored_layout_version",
+					"authored_layout_room_id", "authored_layout_corner_count", "authored_layout_solid_wall_count",
+					"authored_layout_door_wall_count", "authored_layout_floor_tile_count",
+					"authored_layout_exclusive_count", "authored_layout_multi_level_count",
+					"authored_layout_room_type_component_count", "authored_layout_promoted_walls",
+				]:
+					if static_layout.has_meta(key):
+						set_meta(key, static_layout.get_meta(key))
+				_build_runtime_doors_only()
+				return
 	var dimensions := get_dimensions()
 	_floor_material = _material(theme.floor_color, 0.08, 0.90)
 	_wall_material = _material(theme.wall_color, 0.62, 0.62)

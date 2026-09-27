@@ -77,8 +77,8 @@ metadata:
 
 1. 列出源场景全部输出对象/Collection；
 2. 用归并键聚类，一组等于一个组件母版；
-3. 将世界位置与朝向迁入 `component_instances.json`；
-4. 用母版实例重建房型场景，替换旧的一格一件结构；
+3. 先从白模/房型 manifest 冻结唯一的 `ROOM_FRAME`（平面原点 = 模板 footprint 包围盒中心，垂直原点 = 几何实测走行面），再按 `room_local_transform = inverse(ROOM_FRAME_world) @ source_instance_world_transform` 将源世界变换换算为房间局部变换后写入 `component_instances.json`；`source_world_origin_m` 只能作为追溯字段，严禁直接复制给 `position_m`；
+4. 用母版实例和新生成的房间局部实例清单重建房型场景；将重建根节点应用原 `ROOM_FRAME_world` 后，必须与历史源最终拼装逐实例重合，再替换旧的一格一件结构；
 5. 同样执行 `<= 50` 总预算和 3–5 变体门禁。
 
 ### 命名规则
@@ -197,10 +197,16 @@ assets/art/environments/tower_zones/<block_id>/runtime/common_components/<compon
   "source_room_type_blend": "...",
   "source_room_type_sha256": "...",
   "coordinate_contract": {
+    "source_space": "blender_room_local",
+    "origin_mode": "template_bounds_center_at_walk_plane",
+    "room_frame_world_translation_m": [0.0, 0.0, 0.0],
+    "room_frame_world_rotation_z_deg": 0.0,
+    "source_bounds_xy_m": [[-15.0, -20.0], [15.0, 20.0]],
+    "walk_plane_z_m": 0.0,
     "blender_plane": "XY",
     "blender_up": "+Z",
     "rotation_y_deg_semantics": "rotation_about_blender_Z",
-    "godot_mapping": "declared_by_import_manifest"
+    "godot_mapping": "(bx, by, bz) -> (bx, bz, -by)"
   },
   "instances": [
     {
@@ -221,7 +227,8 @@ assets/art/environments/tower_zones/<block_id>/runtime/common_components/<compon
 ```
 
 - `source_object` 保留到源对象的追溯，是“能还原”的证据；
-- 组件包里**不得**让摆位字段参与几何；`source_world_origin_m` 一类只作追溯元数据保留；
+- `position_m` 必须是 `blender_room_local`，由 `inverse(ROOM_FRAME_world) @ source_instance_world_transform` 得出；`ROOM_FRAME` 的平面原点只能来自模板 footprint 包围盒中心，垂直原点只能来自几何实测走行面，不得从组件实例 bbox、装饰件外凸或对象名称猜测；
+- 组件包里**不得**让摆位字段参与几何；`source_world_origin_m` 一类只作追溯元数据保留，严禁直接复制给 `position_m`；
 - 同一份实例清单可被 `03-battle-room-instance-layout-authoring` 与 Godot 运行时共同消费。
 
 ## 必须记录的契约
