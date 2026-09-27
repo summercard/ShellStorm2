@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/expedition_spawn_boxes/probe_wave_chain_all.gd" id="1_probeall"]
+
+[node name="ProbeWaveChainAll" type="Node3D"]
+script = ExtResource("1_probeall")

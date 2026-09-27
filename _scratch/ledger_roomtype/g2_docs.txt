@@ -1,0 +1,11 @@
+{
+  "engine_version": "0.1.0",
+  "documents": 142,
+  "local_links": 995,
+  "features": 37,
+  "test_references": 68,
+  "issues": [
+    "Verification registry invalid: VERIFICATION_REGISTRY_FAILED\n- unregistered: verify_expedition_room_type_component_replay"
+  ],
+  "limits": "Does not validate design semantics, Markdown anchors, runtime behavior, or test results. Not installed as a CI/hook gate."
+}

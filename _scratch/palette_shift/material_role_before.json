@@ -1,0 +1,37 @@
+{
+ "office_room/v006": {
+  "packages": 25,
+  "metal_m2": 0.0,
+  "matte_m2": 3621.051,
+  "gloss_m2": 0.0,
+  "metal_share_pct": 0.0
+ },
+ "bridge_room/v007": {
+  "packages": 35,
+  "metal_m2": 0.0,
+  "matte_m2": 3592.482,
+  "gloss_m2": 0.0,
+  "metal_share_pct": 0.0
+ },
+ "boss_room/v008": {
+  "packages": 38,
+  "metal_m2": 3471.755,
+  "matte_m2": 5538.925,
+  "gloss_m2": 261.649,
+  "metal_share_pct": 37.44
+ },
+ "l_corridor/v002": {
+  "packages": 121,
+  "metal_m2": 1176.966,
+  "matte_m2": 8607.778,
+  "gloss_m2": 43.743,
+  "metal_share_pct": 11.98
+ },
+ "db_room/v003": {
+  "packages": 37,
+  "metal_m2": 5828.13,
+  "matte_m2": 0.0,
+  "gloss_m2": 0.0,
+  "metal_share_pct": 100.0
+ }
+}

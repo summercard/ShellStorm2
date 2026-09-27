@@ -1,0 +1,407 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/east_mezzanine_structure/east_mezzanine_structure_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/east_upper_transition_stair/east_upper_transition_stair_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_window_5x12/env_base99_wall_window_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_full_replacement/env_base99_floor_full_replacement_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_visuals/loft_floor_finish/loft_floor_finish_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_backwall_services/loft_backwall_services_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_tool_pegboard/loft_tool_pegboard_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_explore_poster/loft_explore_poster_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_stay_curious_neon/loft_stay_curious_neon_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_hanging_plant/loft_hanging_plant_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/base_camp_neon_sign/base_camp_neon_sign_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/base_status_terminal/base_status_terminal_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/south_wall_pipeline_system/south_wall_pipeline_system_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/storage_terminal/storage_terminal_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/understair_bulletin_board/understair_bulletin_board_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/understair_lighting_living_support/understair_lighting_living_support_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_industrial_pipeline_system/east_industrial_pipeline_system_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_power_distribution/east_power_distribution_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_small_safety_devices/east_small_safety_devices_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_work_together_poster/east_work_together_poster_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/south_wall_information_boards/south_wall_information_boards_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/hose_reel/hose_reel_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/air_compressor/air_compressor_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/backup_generator/backup_generator_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/battery_bank/battery_bank_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/corridor_emergency_light_group/corridor_emergency_light_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_flammable_bin/east_flammable_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_low_storage_bench/east_low_storage_bench_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_maintenance_workstation/east_maintenance_workstation_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_plant_group/east_plant_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_recycle_bin/east_recycle_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_round_pendant_light/east_round_pendant_light_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_supply_24h_station/east_supply_24h_station_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_waste_bin/east_waste_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/heavy_supply_shelf/heavy_supply_shelf_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/hologram_terminal_platform/hologram_terminal_platform_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/industrial_water_tank/industrial_water_tank_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_battery_cabinet/loft_battery_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bedside_lamp/loft_bedside_lamp_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bedside_rug/loft_bedside_rug_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_coffee_table/loft_coffee_table_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_computer_workstation/loft_computer_workstation_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_food_cabinet/loft_food_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lighting_support/loft_lighting_support_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lounge_rug/loft_lounge_rug_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lounge_sofa/loft_lounge_sofa_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_medical_cabinet/loft_medical_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_nightstand/loft_nightstand_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_office_chair/loft_office_chair_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_pouf_01/loft_pouf_01_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_pouf_02/loft_pouf_02_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_side_table/loft_side_table_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/main_door_low_storage_cabinet/main_door_low_storage_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/medical_cabinet/medical_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/narrow_battery_cabinet/narrow_battery_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/narrow_emergency_cabinet/narrow_emergency_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/tools_cabinet/tools_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_green_bench/understair_green_bench_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_storage_shelf/understair_storage_shelf_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/warehouse_pendant_light_group/warehouse_pendant_light_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/water_purifier/water_purifier_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/underdeck_sheet_blocker/underdeck_sheet_blocker_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://_scratch/lootprobe/probe_spawn_points.gd:12)
+[MapFateTriggers] 已连接到 3D 局内运行时
+rooms=13
+
+ROOM start          type=STAIR_LOBBY size_class=tower_cell  dims=15 x 15  半宽(7.5, 7.5)
+     authored_layout_instances=0  floor_tile_slots=0  _authored_tile_cells=0  环形落点数=4
+       ring[0] local=(   3.42,    0.48)  r=  3.45
+       ring[1] local=(   0.70,    3.38)  r=  3.45
+       ring[2] local=(  -3.38,    0.71)  r=  3.45
+       ring[3] local=(  -0.44,   -3.42)  r=  3.45
+       idx0..11 -> (3.4,0.5) (0.7,3.4) (-3.4,0.7) (-0.4,-3.4) (2.8,-0.7) (1.6,2.4) (-2.4,1.6) (-1.4,-2.5) (1.9,-1.3) (1.8,1.3) (-1.3,1.8) (-1.7,-1.5) 
+
+ROOM room_01        type=COMBAT     size_class=tower_cell  dims=25 x 25  半宽(12.5, 12.5)
+     authored_layout_instances=40  floor_tile_slots=25  _authored_tile_cells=25  环形落点数=4
+       ring[0] local=( -10.00,  -10.00)  r= 14.14
+       ring[1] local=(  10.00,  -10.00)  r= 14.14
+       ring[2] local=(  10.00,   10.00)  r= 14.14
+       ring[3] local=( -10.00,   10.00)  r= 14.14
+       idx0..11 -> (-10.0,-10.0) (10.0,-10.0) (10.0,10.0) (-10.0,10.0) (-10.7,-4.7) (4.7,-10.7) (10.7,4.7) (-4.7,10.7) (-9.3,-0.4) (0.4,-9.3) (9.3,0.4) (-0.4,9.3) 
+
+ROOM room_02        type=SCAVENGE   size_class=tower_cell  dims=25 x 25  半宽(12.5, 12.5)
+     authored_layout_instances=38  floor_tile_slots=25  _authored_tile_cells=25  环形落点数=4
+       ring[0] local=( -10.00,  -10.00)  r= 14.14
+       ring[1] local=(  10.00,  -10.00)  r= 14.14
+       ring[2] local=(  10.00,   10.00)  r= 14.14
+       ring[3] local=( -10.00,   10.00)  r= 14.14
+       idx0..11 -> (-10.0,-10.0) (10.0,-10.0) (10.0,10.0) (-10.0,10.0) (-10.7,-4.7) (4.7,-10.7) (10.7,4.7) (-4.7,10.7) (-9.3,-0.4) (0.4,-9.3) (9.3,0.4) (-0.4,9.3) 
+
+ROOM room_03        type=COMBAT     size_class=tower_cell  dims=45 x 40  半宽(22.5, 20.0)
+     authored_layout_instances=95  floor_tile_slots=72  _authored_tile_cells=72  环形落点数=4
+       ring[0] local=( -20.00,  -17.50)  r= 26.58
+       ring[1] local=(  20.00,  -17.50)  r= 26.58
+       ring[2] local=(  20.00,   17.50)  r= 26.58
+       ring[3] local=( -20.00,   17.50)  r= 26.58
+       idx0..11 -> (-20.0,-17.5) (20.0,-17.5) (20.0,17.5) (-20.0,17.5) (-20.7,-7.5) (10.2,-19.5) (20.7,7.5) (-10.2,19.5) (-17.5,0.4) (2.0,-17.4) (17.5,-0.4) (-2.0,17.4) 
+
+ROOM room_04        type=COMBAT     size_class=tower_cell  dims=40 x 30  半宽(20.0, 15.0)
+     authored_layout_instances=59  floor_tile_slots=39  _authored_tile_cells=39  环形落点数=4
+       ring[0] local=( -17.50,  -12.50)  r= 21.51
+       ring[1] local=(  17.50,  -12.50)  r= 21.51
+       ring[2] local=(  17.50,    7.50)  r= 19.04
+       ring[3] local=( -17.50,    2.50)  r= 17.68
+       idx0..11 -> (-17.5,-12.5) (17.5,-12.5) (17.5,7.5) (-17.5,2.5) (-17.3,-4.4) (9.8,-14.9) (15.8,0.6) (-12.8,7.2) (-14.1,1.7) (3.0,-13.9) (11.9,-4.1) (-7.4,9.0) 
+
+ROOM room_05        type=COMBAT     size_class=tower_cell  dims=25 x 25  半宽(12.5, 12.5)
+     authored_layout_instances=39  floor_tile_slots=25  _authored_tile_cells=25  环形落点数=4
+       ring[0] local=( -10.00,  -10.00)  r= 14.14
+       ring[1] local=(  10.00,  -10.00)  r= 14.14
+       ring[2] local=(  10.00,   10.00)  r= 14.14
+       ring[3] local=( -10.00,   10.00)  r= 14.14
+       idx0..11 -> (-10.0,-10.0) (10.0,-10.0) (10.0,10.0) (-10.0,10.0) (-10.7,-4.7) (4.7,-10.7) (10.7,4.7) (-4.7,10.7) (-9.3,-0.4) (0.4,-9.3) (9.3,0.4) (-0.4,9.3) 
+
+ROOM room_06        type=SCAVENGE   size_class=tower_cell  dims=30 x 40  半宽(15.0, 20.0)
+     authored_layout_instances=66  floor_tile_slots=48  _authored_tile_cells=48  环形落点数=4
+       ring[0] local=( -12.50,  -17.50)  r= 21.51
+       ring[1] local=(  12.50,  -17.50)  r= 21.51
+       ring[2] local=(  12.50,   17.50)  r= 21.51
+       ring[3] local=( -12.50,   17.50)  r= 21.51
+       idx0..11 -> (-12.5,-17.5) (12.5,-17.5) (12.5,17.5) (-12.5,17.5) (-14.9,-9.8) (4.4,-17.3) (14.9,9.8) (-4.4,17.3) (-13.9,-3.0) (-1.7,-14.1) (13.9,3.0) (1.7,14.1) 
+
+ROOM room_07        type=STORAGE    size_class=tower_cell  dims=25 x 25  半宽(12.5, 12.5)
+     authored_layout_instances=38  floor_tile_slots=25  _authored_tile_cells=25  环形落点数=4
+       ring[0] local=( -10.00,  -10.00)  r= 14.14
+       ring[1] local=(  10.00,  -10.00)  r= 14.14
+       ring[2] local=(  10.00,   10.00)  r= 14.14
+       ring[3] local=( -10.00,   10.00)  r= 14.14
+       idx0..11 -> (-10.0,-10.0) (10.0,-10.0) (10.0,10.0) (-10.0,10.0) (-10.7,-4.7) (4.7,-10.7) (10.7,4.7) (-4.7,10.7) (-9.3,-0.4) (0.4,-9.3) (9.3,0.4) (-0.4,9.3) 
+
+ROOM room_08        type=COMBAT     size_class=tower_cell  dims=45 x 40  半宽(22.5, 20.0)
+     authored_layout_instances=93  floor_tile_slots=72  _authored_tile_cells=72  环形落点数=4
+       ring[0] local=( -20.00,  -17.50)  r= 26.58
+       ring[1] local=(  20.00,  -17.50)  r= 26.58
+       ring[2] local=(  20.00,   17.50)  r= 26.58
+       ring[3] local=( -20.00,   17.50)  r= 26.58
+       idx0..11 -> (-20.0,-17.5) (20.0,-17.5) (20.0,17.5) (-20.0,17.5) (-20.7,-7.5) (10.2,-19.5) (20.7,7.5) (-10.2,19.5) (-17.5,0.4) (2.0,-17.4) (17.5,-0.4) (-2.0,17.4) 
+
+ROOM room_09        type=EVENT      size_class=tower_cell  dims=25 x 25  半宽(12.5, 12.5)
+     authored_layout_instances=38  floor_tile_slots=25  _authored_tile_cells=25  环形落点数=4
+       ring[0] local=( -10.00,  -10.00)  r= 14.14
+       ring[1] local=(  10.00,  -10.00)  r= 14.14
+       ring[2] local=(  10.00,   10.00)  r= 14.14
+       ring[3] local=( -10.00,   10.00)  r= 14.14
+       idx0..11 -> (-10.0,-10.0) (10.0,-10.0) (10.0,10.0) (-10.0,10.0) (-10.7,-4.7) (4.7,-10.7) (10.7,4.7) (-4.7,10.7) (-9.3,-0.4) (0.4,-9.3) (9.3,0.4) (-0.4,9.3) 
+
+ROOM room_10        type=SCAVENGE   size_class=tower_cell  dims=30 x 60  半宽(15.0, 30.0)
+     authored_layout_instances=142  floor_tile_slots=48  _authored_tile_cells=48  环形落点数=4
+       ring[0] local=( -12.50,  -27.50)  r= 30.21
+       ring[1] local=(  12.50,  -27.50)  r= 30.21
+       ring[2] local=(  12.50,   27.50)  r= 30.21
+       ring[3] local=( -12.50,   27.50)  r= 30.21
+       idx0..11 -> (-12.5,-27.5) (12.5,-27.5) (12.5,27.5) (-12.5,27.5) (-17.9,-17.5) (1.4,-25.0) (17.9,17.5) (-1.4,25.0) (-18.3,-7.8) (-6.1,-19.0) (18.3,7.8) (6.1,19.0) 
+
+ROOM boss           type=BOSS       size_class=tower_cell  dims=50 x 40  半宽(25.0, 20.0)
+     authored_layout_instances=110  floor_tile_slots=80  _authored_tile_cells=80  环形落点数=4
+       ring[0] local=( -22.50,  -17.50)  r= 28.50
+       ring[1] local=(  22.50,  -17.50)  r= 28.50
+       ring[2] local=(  22.50,   17.50)  r= 28.50
+       ring[3] local=( -22.50,   17.50)  r= 28.50
+       idx0..11 -> (-22.5,-17.5) (22.5,-17.5) (22.5,17.5) (-22.5,17.5) (-22.7,-6.8) (12.2,-20.3) (22.7,6.8) (-12.2,20.3) (-18.8,1.5) (3.2,-18.5) (18.8,-1.5) (-3.2,18.5) 
+
+ROOM extraction     type=EXTRACTION size_class=tower_cell  dims=25 x 25  半宽(12.5, 12.5)
+     authored_layout_instances=38  floor_tile_slots=25  _authored_tile_cells=25  环形落点数=4
+       ring[0] local=( -10.00,  -10.00)  r= 14.14
+       ring[1] local=(  10.00,  -10.00)  r= 14.14
+       ring[2] local=(  10.00,   10.00)  r= 14.14
+       ring[3] local=( -10.00,   10.00)  r= 14.14
+       idx0..11 -> (-10.0,-10.0) (10.0,-10.0) (10.0,10.0) (-10.0,10.0) (-10.7,-4.7) (4.7,-10.7) (10.7,4.7) (-4.7,10.7) (-9.3,-0.4) (0.4,-9.3) (9.3,0.4) (-0.4,9.3) 
+
+=== 对照：设计源本房编成（总量区间）===
+  start        key=entry      waves=0  每波总量=[]
+  room_01      key=room_01    waves=1  每波总量=[2.0-4.0]
+  room_02      key=room_02    waves=1  每波总量=[2.0-4.0]
+  room_03      key=room_03    waves=2  每波总量=[3.0-5.0 / 3.0-5.0]
+  room_04      key=room_04    waves=2  每波总量=[3.0-5.0 / 3.0-5.0]
+  room_05      key=room_05    waves=2  每波总量=[3.0-5.0 / 5.0-8.0]
+  room_06      key=room_06    waves=1  每波总量=[2.0-4.0]
+  room_07      key=room_07    waves=1  每波总量=[2.0-4.0]
+  room_08      key=room_08    waves=2  每波总量=[5.0-7.0 / 3.0-5.0]
+  room_09      key=room_09    waves=0  每波总量=[]
+  room_10      key=room_10    waves=1  每波总量=[3.0-5.0]
+  boss         key=boss       waves=0  每波总量=[]
+  extraction   key=extraction waves=0  每波总量=[]

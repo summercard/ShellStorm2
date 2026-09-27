@@ -1,0 +1,37 @@
+{
+  "office_room/v006": {
+    "blends": 26,
+    "matte_conf": {
+      "(0.04, 0.72, 0.0)": 26
+    },
+    "missing_matte": []
+  },
+  "bridge_room/v007": {
+    "blends": 36,
+    "matte_conf": {
+      "(0.03, 0.7, 0.0)": 36
+    },
+    "missing_matte": []
+  },
+  "boss_room/v008": {
+    "blends": 39,
+    "matte_conf": {
+      "(0.03, 0.7, 0.0)": 39
+    },
+    "missing_matte": []
+  },
+  "l_corridor/v002": {
+    "blends": 122,
+    "matte_conf": {
+      "(0.02, 0.7, 0.0)": 122
+    },
+    "missing_matte": []
+  },
+  "db_room/v003": {
+    "blends": 38,
+    "matte_conf": {
+      "(0.04, 0.72, 0.0)": 38
+    },
+    "missing_matte": []
+  }
+}

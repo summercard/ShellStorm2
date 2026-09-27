@@ -1,0 +1,2844 @@
+{
+  "schema": "shellstorm2.component_catalog.v001",
+  "component_library": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+  "room_type": "BOSS_ROOM",
+  "block_id": "expedition",
+  "version": "v008",
+  "source_room_type": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "source_room_type_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "source_package_list": "expedition_boss_room_components_source_v001.blend",
+  "source_catalog_sha256": "5047d566a33dbb13a2f0be6e6ee4a7445da13cb27745a5df6a10bdabfb99bf09",
+  "runtime_connected": false,
+  "ledger_registration": "pending",
+  "packages": [
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF",
+      "slug": "archive_shelf",
+      "name_zh": "档案货架 2.45×1.60×5.35m",
+      "component_family": "archive_shelf",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "archive_shelf_01",
+        "archive_shelf_02",
+        "archive_shelf_03"
+      ],
+      "absorbed_geometry_exact_count": 4,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "archive_shelf_输出包",
+      "editable_collection": "archive_shelf_制作源",
+      "bounds_size_m": [
+        2.45,
+        1.6,
+        5.35
+      ],
+      "bounds_lo_m": [
+        -1.225,
+        -0.8,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.225,
+        0.8,
+        5.35
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "archive_shelf_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "slug": "chair",
+      "name_zh": "独立座椅 1.21×1.26×1.83m",
+      "component_family": "chair",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 5,
+      "absorbed_variants": [
+        "chair_01",
+        "chair_02",
+        "chair_03",
+        "chair_04"
+      ],
+      "absorbed_geometry_exact_count": 5,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "chair_输出包",
+      "editable_collection": "chair_制作源",
+      "bounds_size_m": [
+        1.2051,
+        1.2642,
+        1.8299
+      ],
+      "bounds_lo_m": [
+        -0.6025,
+        -0.6321,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.6025,
+        0.6321,
+        1.8299
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "chair_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_LARGE",
+      "slug": "debris_large",
+      "name_zh": "固定碎屑（大）2.55×2.22×0.22m",
+      "component_family": "debris",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "debris_large_输出包",
+      "editable_collection": "debris_large_制作源",
+      "bounds_size_m": [
+        2.554,
+        2.2216,
+        0.2195
+      ],
+      "bounds_lo_m": [
+        -1.277,
+        -1.1108,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.277,
+        1.1108,
+        0.2195
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "debris_01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_MEDIUM",
+      "slug": "debris_medium",
+      "name_zh": "固定碎屑（中）2.43×1.99×0.22m",
+      "component_family": "debris",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "debris_medium_输出包",
+      "editable_collection": "debris_medium_制作源",
+      "bounds_size_m": [
+        2.4253,
+        1.9883,
+        0.2195
+      ],
+      "bounds_lo_m": [
+        -1.2127,
+        -0.9941,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.2127,
+        0.9941,
+        0.2195
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "debris_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "slug": "debris_small",
+      "name_zh": "固定碎屑（小）2.31×1.78×0.22m",
+      "component_family": "debris",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "debris_03",
+        "debris_04",
+        "debris_05",
+        "debris_06",
+        "debris_07",
+        "debris_08",
+        "debris_09"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.348
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-04",
+          "rotation_deg": 180,
+          "max_delta_m": 1.277
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-05",
+          "rotation_deg": 180,
+          "max_delta_m": 1.319
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-06",
+          "rotation_deg": 0,
+          "max_delta_m": 1.577
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-07",
+          "rotation_deg": 0,
+          "max_delta_m": 1.441
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-08",
+          "rotation_deg": 180,
+          "max_delta_m": 1.537
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-09",
+          "rotation_deg": 0,
+          "max_delta_m": 1.647
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "debris_03",
+        "debris_04",
+        "debris_05",
+        "debris_06",
+        "debris_07",
+        "debris_08",
+        "debris_09"
+      ],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "debris_small_输出包",
+      "editable_collection": "debris_small_制作源",
+      "bounds_size_m": [
+        2.3143,
+        1.7833,
+        0.2195
+      ],
+      "bounds_lo_m": [
+        -1.1571,
+        -0.8916,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.1571,
+        0.8916,
+        0.2195
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "debris_02",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_BASE",
+      "slug": "floor_base",
+      "name_zh": "地面基板 50×40×0.26m",
+      "component_family": "floor_base",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "floor_base_输出包",
+      "editable_collection": "floor_base_制作源",
+      "bounds_size_m": [
+        50.0,
+        40.0,
+        0.26
+      ],
+      "bounds_lo_m": [
+        -25.0,
+        -20.0,
+        0.0
+      ],
+      "bounds_hi_m": [
+        25.0,
+        20.0,
+        0.26
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Z",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "base_floor_base",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING",
+      "slug": "floor_marking",
+      "name_zh": "入口地砖标识 3.70×2.73×0.01m",
+      "component_family": "south_floor_marking",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "floor_marking_输出包",
+      "editable_collection": "floor_marking_制作源",
+      "bounds_size_m": [
+        3.6969,
+        2.7267,
+        0.012
+      ],
+      "bounds_lo_m": [
+        -1.8484,
+        -1.3633,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.8484,
+        1.3633,
+        0.012
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "south_floor_marking",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "slug": "floor_tile_5m_a",
+      "name_zh": "地板 5.00×5.00×0.10m（贴花位 A）",
+      "component_family": "floor_tile_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 16,
+      "absorbed_variants": [
+        "base_floor_tile_r01_c07",
+        "base_floor_tile_r01_c08",
+        "base_floor_tile_r02_c05",
+        "base_floor_tile_r02_c08",
+        "base_floor_tile_r03_c03",
+        "base_floor_tile_r03_c08",
+        "base_floor_tile_r04_c04",
+        "base_floor_tile_r04_c09",
+        "base_floor_tile_r05_c02",
+        "base_floor_tile_r05_c05",
+        "base_floor_tile_r05_c09",
+        "base_floor_tile_r06_c04",
+        "base_floor_tile_r07_c01",
+        "base_floor_tile_r07_c03",
+        "base_floor_tile_r07_c10"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 3.178
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.531
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 3.437
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 3.072
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.638
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.298
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 2.552
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.876
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C10",
+          "rotation_deg": 90,
+          "max_delta_m": 4.38
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "base_floor_tile_r01_c07",
+        "base_floor_tile_r01_c08",
+        "base_floor_tile_r02_c05",
+        "base_floor_tile_r02_c08",
+        "base_floor_tile_r03_c03",
+        "base_floor_tile_r03_c08",
+        "base_floor_tile_r04_c04",
+        "base_floor_tile_r04_c09",
+        "base_floor_tile_r05_c02",
+        "base_floor_tile_r05_c05",
+        "base_floor_tile_r05_c09",
+        "base_floor_tile_r06_c04",
+        "base_floor_tile_r07_c01",
+        "base_floor_tile_r07_c03",
+        "base_floor_tile_r07_c10"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "decal_a",
+      "variant_reason": "同款 5m 地砖：砖体、缝隙、栅格灯全同（各自 1 个几何类），仅条形码贴花在砖内的位置不同；原源为逐砖各异的 80 份几何",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "floor_tile_5m_a_输出包",
+      "editable_collection": "floor_tile_5m_a_制作源",
+      "bounds_size_m": [
+        4.94,
+        4.94,
+        0.098
+      ],
+      "bounds_lo_m": [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.47,
+        2.47,
+        0.098
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Z",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "base_floor_tile_r01_c01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "slug": "floor_tile_5m_b",
+      "name_zh": "地板 5.00×5.00×0.09m（贴花位 B）",
+      "component_family": "floor_tile_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 20,
+      "absorbed_variants": [
+        "base_floor_tile_r01_c05",
+        "base_floor_tile_r01_c09",
+        "base_floor_tile_r02_c02",
+        "base_floor_tile_r02_c03",
+        "base_floor_tile_r02_c07",
+        "base_floor_tile_r03_c02",
+        "base_floor_tile_r03_c05",
+        "base_floor_tile_r03_c10",
+        "base_floor_tile_r04_c01",
+        "base_floor_tile_r04_c08",
+        "base_floor_tile_r05_c08",
+        "base_floor_tile_r05_c10",
+        "base_floor_tile_r07_c02",
+        "base_floor_tile_r07_c04",
+        "base_floor_tile_r08_c02",
+        "base_floor_tile_r08_c03",
+        "base_floor_tile_r08_c04",
+        "base_floor_tile_r08_c08",
+        "base_floor_tile_r08_c10"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C05",
+          "rotation_deg": 180,
+          "max_delta_m": 3.011
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 3.23
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 3.505
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 2.962
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C07",
+          "rotation_deg": 180,
+          "max_delta_m": 2.232
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 3.694
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 1.761
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 2.032
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 3.982
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 1.7
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 3.06
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 3.906
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.986
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 3.938
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.875
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 2.479
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 4.26
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 3.111
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 1.89
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "base_floor_tile_r01_c05",
+        "base_floor_tile_r01_c09",
+        "base_floor_tile_r02_c02",
+        "base_floor_tile_r02_c03",
+        "base_floor_tile_r02_c07",
+        "base_floor_tile_r03_c02",
+        "base_floor_tile_r03_c05",
+        "base_floor_tile_r03_c10",
+        "base_floor_tile_r04_c01",
+        "base_floor_tile_r04_c08",
+        "base_floor_tile_r05_c08",
+        "base_floor_tile_r05_c10",
+        "base_floor_tile_r07_c02",
+        "base_floor_tile_r07_c04",
+        "base_floor_tile_r08_c02",
+        "base_floor_tile_r08_c03",
+        "base_floor_tile_r08_c04",
+        "base_floor_tile_r08_c08",
+        "base_floor_tile_r08_c10"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "decal_b",
+      "variant_reason": "同上，贴花位置不同",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "floor_tile_5m_b_输出包",
+      "editable_collection": "floor_tile_5m_b_制作源",
+      "bounds_size_m": [
+        4.94,
+        4.94,
+        0.0875
+      ],
+      "bounds_lo_m": [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.47,
+        2.47,
+        0.0875
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Z",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "base_floor_tile_r01_c02",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "slug": "floor_tile_5m_c",
+      "name_zh": "地板 5.00×5.00×0.09m（贴花位 C）",
+      "component_family": "floor_tile_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 44,
+      "absorbed_variants": [
+        "base_floor_tile_r01_c04",
+        "base_floor_tile_r01_c06",
+        "base_floor_tile_r01_c10",
+        "base_floor_tile_r02_c01",
+        "base_floor_tile_r02_c04",
+        "base_floor_tile_r02_c06",
+        "base_floor_tile_r02_c09",
+        "base_floor_tile_r02_c10",
+        "base_floor_tile_r03_c01",
+        "base_floor_tile_r03_c04",
+        "base_floor_tile_r03_c06",
+        "base_floor_tile_r03_c07",
+        "base_floor_tile_r03_c09",
+        "base_floor_tile_r04_c02",
+        "base_floor_tile_r04_c03",
+        "base_floor_tile_r04_c05",
+        "base_floor_tile_r04_c06",
+        "base_floor_tile_r04_c07",
+        "base_floor_tile_r04_c10",
+        "base_floor_tile_r05_c01",
+        "base_floor_tile_r05_c03",
+        "base_floor_tile_r05_c04",
+        "base_floor_tile_r05_c06",
+        "base_floor_tile_r05_c07",
+        "base_floor_tile_r06_c01",
+        "base_floor_tile_r06_c02",
+        "base_floor_tile_r06_c03",
+        "base_floor_tile_r06_c05",
+        "base_floor_tile_r06_c06",
+        "base_floor_tile_r06_c07",
+        "base_floor_tile_r06_c08",
+        "base_floor_tile_r06_c09",
+        "base_floor_tile_r06_c10",
+        "base_floor_tile_r07_c05",
+        "base_floor_tile_r07_c06",
+        "base_floor_tile_r07_c07",
+        "base_floor_tile_r07_c08",
+        "base_floor_tile_r07_c09",
+        "base_floor_tile_r08_c01",
+        "base_floor_tile_r08_c05",
+        "base_floor_tile_r08_c06",
+        "base_floor_tile_r08_c07",
+        "base_floor_tile_r08_c09"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C04",
+          "rotation_deg": 180,
+          "max_delta_m": 2.432
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 1.844
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C10",
+          "rotation_deg": 0,
+          "max_delta_m": 2.349
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 2.988
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 2.694
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C06",
+          "rotation_deg": 180,
+          "max_delta_m": 2.468
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.709
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 2.446
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C01",
+          "rotation_deg": 180,
+          "max_delta_m": 2.556
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 3.784
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 3.066
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.219
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 2.756
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.022
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.948
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.018
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C06",
+          "rotation_deg": 180,
+          "max_delta_m": 2.446
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 3.453
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C10",
+          "rotation_deg": 0,
+          "max_delta_m": 2.72
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C01",
+          "rotation_deg": 180,
+          "max_delta_m": 2.446
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C03",
+          "rotation_deg": 180,
+          "max_delta_m": 2.468
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 2.532
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 1.231
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.136
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 3.338
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 1.89
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.97
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C05",
+          "rotation_deg": 180,
+          "max_delta_m": 2.798
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 2.881
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.813
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 3.124
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 3.285
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C10",
+          "rotation_deg": 0,
+          "max_delta_m": 2.665
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.466
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C06",
+          "rotation_deg": 180,
+          "max_delta_m": 2.468
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.799
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.256
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.481
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 1.768
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 3.617
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 3.365
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.108
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 3.182
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "base_floor_tile_r01_c04",
+        "base_floor_tile_r01_c06",
+        "base_floor_tile_r01_c10",
+        "base_floor_tile_r02_c01",
+        "base_floor_tile_r02_c04",
+        "base_floor_tile_r02_c06",
+        "base_floor_tile_r02_c09",
+        "base_floor_tile_r02_c10",
+        "base_floor_tile_r03_c01",
+        "base_floor_tile_r03_c04",
+        "base_floor_tile_r03_c06",
+        "base_floor_tile_r03_c07",
+        "base_floor_tile_r03_c09",
+        "base_floor_tile_r04_c02",
+        "base_floor_tile_r04_c03",
+        "base_floor_tile_r04_c05",
+        "base_floor_tile_r04_c06",
+        "base_floor_tile_r04_c07",
+        "base_floor_tile_r04_c10",
+        "base_floor_tile_r05_c01",
+        "base_floor_tile_r05_c03",
+        "base_floor_tile_r05_c04",
+        "base_floor_tile_r05_c06",
+        "base_floor_tile_r05_c07",
+        "base_floor_tile_r06_c01",
+        "base_floor_tile_r06_c02",
+        "base_floor_tile_r06_c03",
+        "base_floor_tile_r06_c05",
+        "base_floor_tile_r06_c06",
+        "base_floor_tile_r06_c07",
+        "base_floor_tile_r06_c08",
+        "base_floor_tile_r06_c09",
+        "base_floor_tile_r06_c10",
+        "base_floor_tile_r07_c05",
+        "base_floor_tile_r07_c06",
+        "base_floor_tile_r07_c07",
+        "base_floor_tile_r07_c08",
+        "base_floor_tile_r07_c09",
+        "base_floor_tile_r08_c01",
+        "base_floor_tile_r08_c05",
+        "base_floor_tile_r08_c06",
+        "base_floor_tile_r08_c07",
+        "base_floor_tile_r08_c09"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "decal_c",
+      "variant_reason": "同上，贴花位置不同",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "floor_tile_5m_c_输出包",
+      "editable_collection": "floor_tile_5m_c_制作源",
+      "bounds_size_m": [
+        4.94,
+        4.94,
+        0.0875
+      ],
+      "bounds_lo_m": [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.47,
+        2.47,
+        0.0875
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Z",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "base_floor_tile_r01_c03",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-HEAVY_CONDUITS",
+      "slug": "heavy_conduits",
+      "name_zh": "粗重电线管与桥架 47.31×32.30×3.67m",
+      "component_family": "heavy_conduits",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "heavy_conduits_输出包",
+      "editable_collection": "heavy_conduits_制作源",
+      "bounds_size_m": [
+        47.3056,
+        32.3036,
+        3.6722
+      ],
+      "bounds_lo_m": [
+        -23.6528,
+        -16.1518,
+        0.0
+      ],
+      "bounds_hi_m": [
+        23.6528,
+        16.1518,
+        3.6722
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架"
+      ],
+      "source_package_id": "heavy_conduits",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-MAIN_FAULT_SCREEN",
+      "slug": "main_fault_screen",
+      "name_zh": "主屏 破损数据库 21.52×1.58×7.09m",
+      "component_family": "main_fault_screen",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "main_fault_screen_输出包",
+      "editable_collection": "main_fault_screen_制作源",
+      "bounds_size_m": [
+        21.52,
+        1.575,
+        7.09
+      ],
+      "bounds_lo_m": [
+        -10.76,
+        -0.7875,
+        0.0
+      ],
+      "bounds_hi_m": [
+        10.76,
+        0.7875,
+        7.09
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "main_fault_screen",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_A",
+      "slug": "plant_a",
+      "name_zh": "固定绿植（型 A）1.65×1.67×1.71m",
+      "component_family": "plant",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "plant_03"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-PLANT-03",
+          "rotation_deg": 0,
+          "max_delta_m": 0.322
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "plant_03"
+      ],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "plant_a_输出包",
+      "editable_collection": "plant_a_制作源",
+      "bounds_size_m": [
+        1.6487,
+        1.6742,
+        1.7098
+      ],
+      "bounds_lo_m": [
+        -0.8244,
+        -0.8371,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.8244,
+        0.8371,
+        1.7098
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "plant_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_B",
+      "slug": "plant_b",
+      "name_zh": "固定绿植（型 B）1.65×1.67×1.71m",
+      "component_family": "plant",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "plant_b_输出包",
+      "editable_collection": "plant_b_制作源",
+      "bounds_size_m": [
+        1.6487,
+        1.6742,
+        1.7055
+      ],
+      "bounds_lo_m": [
+        -0.8244,
+        -0.8371,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.8244,
+        0.8371,
+        1.7055
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "plant_01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_C",
+      "slug": "plant_c",
+      "name_zh": "固定绿植（型 C）1.65×1.67×1.69m",
+      "component_family": "plant",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "plant_04"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-PLANT-04",
+          "rotation_deg": 0,
+          "max_delta_m": 0.341
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "plant_04"
+      ],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "plant_c_输出包",
+      "editable_collection": "plant_c_制作源",
+      "bounds_size_m": [
+        1.6487,
+        1.6742,
+        1.6891
+      ],
+      "bounds_lo_m": [
+        -0.8244,
+        -0.8371,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.8244,
+        0.8371,
+        1.6891
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "plant_02",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK",
+      "slug": "server_rack",
+      "name_zh": "服务器机柜 3.17×3.00×5.60m",
+      "component_family": "north_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 3,
+      "absorbed_variants": [
+        "north_complete_03",
+        "north_complete_06"
+      ],
+      "absorbed_geometry_exact_count": 3,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "standard",
+      "variant_reason": "机柜结构状态轴：标准高度 5.60m",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_输出包",
+      "editable_collection": "server_rack_制作源",
+      "bounds_size_m": [
+        3.17,
+        2.995,
+        5.6
+      ],
+      "bounds_lo_m": [
+        -1.585,
+        -1.4975,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.585,
+        1.4975,
+        5.6
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "north_complete_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT",
+      "slug": "server_rack_compact",
+      "name_zh": "服务器机柜（窄体）3.00×3.17×5.40m",
+      "component_family": "west_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "west_complete_02"
+      ],
+      "absorbed_geometry_exact_count": 2,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "damage_state",
+      "variant_value": "pristine",
+      "variant_reason": "完好态",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_compact_输出包",
+      "editable_collection": "server_rack_compact_制作源",
+      "bounds_size_m": [
+        2.995,
+        3.17,
+        5.4
+      ],
+      "bounds_lo_m": [
+        -1.4975,
+        -1.585,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.4975,
+        1.585,
+        5.4
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "west_complete_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT_DAMAGED",
+      "slug": "server_rack_compact_damaged",
+      "name_zh": "服务器机柜（窄体破损）3.31×3.17×5.40m",
+      "component_family": "west_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "damage_state",
+      "variant_value": "damaged",
+      "variant_reason": "破损态",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_compact_damaged_输出包",
+      "editable_collection": "server_rack_compact_damaged_制作源",
+      "bounds_size_m": [
+        3.3059,
+        3.17,
+        5.4
+      ],
+      "bounds_lo_m": [
+        -1.653,
+        -1.585,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.653,
+        1.585,
+        5.4
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "west_damaged_01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED",
+      "slug": "server_rack_damaged",
+      "name_zh": "服务器机柜（破损）3.17×3.31×5.88m",
+      "component_family": "north_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "damaged",
+      "variant_reason": "同上，破损结构（外凸破损面）",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_damaged_输出包",
+      "editable_collection": "server_rack_damaged_制作源",
+      "bounds_size_m": [
+        3.17,
+        3.3059,
+        5.88
+      ],
+      "bounds_lo_m": [
+        -1.585,
+        -1.653,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.585,
+        1.653,
+        5.88
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "north_damaged_01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED_TALL",
+      "slug": "server_rack_damaged_tall",
+      "name_zh": "服务器机柜（破损加高）3.17×3.31×6.16m",
+      "component_family": "north_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "damaged_tall",
+      "variant_reason": "同上，破损 + 加高",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_damaged_tall_输出包",
+      "editable_collection": "server_rack_damaged_tall_制作源",
+      "bounds_size_m": [
+        3.17,
+        3.3059,
+        6.16
+      ],
+      "bounds_lo_m": [
+        -1.585,
+        -1.653,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.585,
+        1.653,
+        6.16
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "north_damaged_05",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_MID",
+      "slug": "server_rack_mid",
+      "name_zh": "服务器机柜（中高）3.17×3.00×5.88m",
+      "component_family": "north_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "mid",
+      "variant_reason": "同上，中高 5.88m",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_mid_输出包",
+      "editable_collection": "server_rack_mid_制作源",
+      "bounds_size_m": [
+        3.17,
+        2.995,
+        5.88
+      ],
+      "bounds_lo_m": [
+        -1.585,
+        -1.4975,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.585,
+        1.4975,
+        5.88
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "north_complete_04",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_TALL",
+      "slug": "server_rack_tall",
+      "name_zh": "服务器机柜（加高）3.17×3.00×6.16m",
+      "component_family": "north_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "tall",
+      "variant_reason": "同上，加高 6.16m",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_tall_输出包",
+      "editable_collection": "server_rack_tall_制作源",
+      "bounds_size_m": [
+        3.17,
+        2.995,
+        6.16
+      ],
+      "bounds_lo_m": [
+        -1.585,
+        -1.4975,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.585,
+        1.4975,
+        6.16
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "north_complete_02",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "slug": "server_rack_under_screen",
+      "name_zh": "主屏下服务器（完好）2.72×2.55×3.95m",
+      "component_family": "under_screen",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 7,
+      "absorbed_variants": [
+        "under_screen_complete_01",
+        "under_screen_complete_02",
+        "under_screen_complete_03",
+        "under_screen_complete_04",
+        "under_screen_complete_06",
+        "under_screen_complete_07"
+      ],
+      "absorbed_geometry_exact_count": 7,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "damage_state",
+      "variant_value": "pristine",
+      "variant_reason": "完好态",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_under_screen_输出包",
+      "editable_collection": "server_rack_under_screen_制作源",
+      "bounds_size_m": [
+        2.72,
+        2.545,
+        3.95
+      ],
+      "bounds_lo_m": [
+        -1.36,
+        -1.2725,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.36,
+        1.2725,
+        3.95
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "under_screen_complete_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN_DAMAGED",
+      "slug": "server_rack_under_screen_damaged",
+      "name_zh": "主屏下服务器（破损）2.72×2.84×3.95m",
+      "component_family": "under_screen",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "damage_state",
+      "variant_value": "damaged",
+      "variant_reason": "破损态",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_under_screen_damaged_输出包",
+      "editable_collection": "server_rack_under_screen_damaged_制作源",
+      "bounds_size_m": [
+        2.72,
+        2.8378,
+        3.95
+      ],
+      "bounds_lo_m": [
+        -1.36,
+        -1.4189,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.36,
+        1.4189,
+        3.95
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "under_screen_damaged_05",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE",
+      "slug": "server_rack_wide",
+      "name_zh": "服务器机柜（宽体）3.00×3.17×5.60m",
+      "component_family": "east_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "east_complete_04"
+      ],
+      "absorbed_geometry_exact_count": 2,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "standard",
+      "variant_reason": "宽体机柜结构状态轴：标准 5.60m",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_wide_输出包",
+      "editable_collection": "server_rack_wide_制作源",
+      "bounds_size_m": [
+        2.995,
+        3.17,
+        5.6
+      ],
+      "bounds_lo_m": [
+        -1.4975,
+        -1.585,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.4975,
+        1.585,
+        5.6
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "east_complete_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED",
+      "slug": "server_rack_wide_damaged",
+      "name_zh": "服务器机柜（宽体破损）3.31×3.17×5.60m",
+      "component_family": "east_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "damaged",
+      "variant_reason": "同上，破损结构",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_wide_damaged_输出包",
+      "editable_collection": "server_rack_wide_damaged_制作源",
+      "bounds_size_m": [
+        3.3059,
+        3.17,
+        5.6
+      ],
+      "bounds_lo_m": [
+        -1.653,
+        -1.585,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.653,
+        1.585,
+        5.6
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "east_damaged_02",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED_TALL",
+      "slug": "server_rack_wide_damaged_tall",
+      "name_zh": "服务器机柜（宽体破损加高）3.31×3.17×5.95m",
+      "component_family": "east_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "damaged_tall",
+      "variant_reason": "同上，破损 + 加高",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_wide_damaged_tall_输出包",
+      "editable_collection": "server_rack_wide_damaged_tall_制作源",
+      "bounds_size_m": [
+        3.3059,
+        3.17,
+        5.95
+      ],
+      "bounds_lo_m": [
+        -1.653,
+        -1.585,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.653,
+        1.585,
+        5.95
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "east_damaged_05",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_TALL",
+      "slug": "server_rack_wide_tall",
+      "name_zh": "服务器机柜（宽体加高）3.00×3.17×5.95m",
+      "component_family": "east_facility",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "east_complete_03"
+      ],
+      "absorbed_geometry_exact_count": 2,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "tall",
+      "variant_reason": "同上，加高 5.95m",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "server_rack_wide_tall_输出包",
+      "editable_collection": "server_rack_wide_tall_制作源",
+      "bounds_size_m": [
+        2.995,
+        3.17,
+        5.95
+      ],
+      "bounds_lo_m": [
+        -1.4975,
+        -1.585,
+        0.0
+      ],
+      "bounds_hi_m": [
+        1.4975,
+        1.585,
+        5.95
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "east_complete_01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "slug": "wall_skin_armored_5m",
+      "name_zh": "装甲墙面 0.36m（厚型，带灯带）",
+      "component_family": "wall_skin_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 14,
+      "absorbed_variants": [
+        "wall_skin_east_02",
+        "wall_skin_east_06",
+        "wall_skin_north_00",
+        "wall_skin_north_02",
+        "wall_skin_north_06",
+        "wall_skin_north_08",
+        "wall_skin_south_00",
+        "wall_skin_south_02",
+        "wall_skin_south_06",
+        "wall_skin_south_08",
+        "wall_skin_west_00",
+        "wall_skin_west_02",
+        "wall_skin_west_06"
+      ],
+      "absorbed_geometry_exact_count": 14,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "armored",
+      "variant_reason": "装甲墙的结构状态轴：厚型 0.36m 面板 + 顶部灯带，14 处引用",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "wall_skin_armored_5m_输出包",
+      "editable_collection": "wall_skin_armored_5m_制作源",
+      "bounds_size_m": [
+        0.36,
+        4.925,
+        11.8
+      ],
+      "bounds_lo_m": [
+        -0.18,
+        -2.4625,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.18,
+        2.4625,
+        11.8
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "wall_skin_east_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M",
+      "slug": "wall_skin_armored_broken_5m",
+      "name_zh": "装甲墙面 0.36m（厚型破损）",
+      "component_family": "wall_skin_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "wall_skin_north_04",
+        "wall_skin_south_04",
+        "wall_skin_west_04"
+      ],
+      "absorbed_geometry_exact_count": 4,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "armored_broken",
+      "variant_reason": "同上，厚型 0.36m 但破损结构（与 armored 非同一几何类）",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "wall_skin_armored_broken_5m_输出包",
+      "editable_collection": "wall_skin_armored_broken_5m_制作源",
+      "bounds_size_m": [
+        0.36,
+        4.925,
+        11.8
+      ],
+      "bounds_lo_m": [
+        -0.18,
+        -2.4625,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.18,
+        2.4625,
+        11.8
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "wall_skin_east_04",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M",
+      "slug": "wall_skin_beveled_5m",
+      "name_zh": "装甲墙面 0.25m（斜切型，带灯带）",
+      "component_family": "wall_skin_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "wall_skin_south_05"
+      ],
+      "absorbed_geometry_exact_count": 2,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "beveled",
+      "variant_reason": "同上，斜切 0.25m 结构",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "wall_skin_beveled_5m_输出包",
+      "editable_collection": "wall_skin_beveled_5m_制作源",
+      "bounds_size_m": [
+        0.25,
+        4.96,
+        11.8
+      ],
+      "bounds_lo_m": [
+        -0.125,
+        -2.48,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.125,
+        2.48,
+        11.8
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "wall_skin_west_03",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "slug": "wall_skin_medium_5m",
+      "name_zh": "装甲墙面 0.20m（中型）",
+      "component_family": "wall_skin_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "wall_skin_east_07",
+        "wall_skin_north_01",
+        "wall_skin_north_07",
+        "wall_skin_south_01",
+        "wall_skin_south_07",
+        "wall_skin_west_01",
+        "wall_skin_west_07"
+      ],
+      "absorbed_geometry_exact_count": 8,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "medium",
+      "variant_reason": "同上，中型 0.20m 结构",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "wall_skin_medium_5m_输出包",
+      "editable_collection": "wall_skin_medium_5m_制作源",
+      "bounds_size_m": [
+        0.2,
+        4.925,
+        11.8
+      ],
+      "bounds_lo_m": [
+        -0.1,
+        -2.4625,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.1,
+        2.4625,
+        11.8
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "wall_skin_east_01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "slug": "wall_skin_thin_5m",
+      "name_zh": "装甲墙面 0.15m（薄型）",
+      "component_family": "wall_skin_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "wall_skin_east_05",
+        "wall_skin_north_03",
+        "wall_skin_north_05",
+        "wall_skin_north_09",
+        "wall_skin_south_03",
+        "wall_skin_south_09",
+        "wall_skin_west_05"
+      ],
+      "absorbed_geometry_exact_count": 8,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "thin",
+      "variant_reason": "同上，薄型 0.15m 结构",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "wall_skin_thin_5m_输出包",
+      "editable_collection": "wall_skin_thin_5m_制作源",
+      "bounds_size_m": [
+        0.15,
+        4.925,
+        11.8
+      ],
+      "bounds_lo_m": [
+        -0.075,
+        -2.4625,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.075,
+        2.4625,
+        11.8
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "wall_skin_east_03",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "slug": "wall_solid_5m",
+      "name_zh": "实心墙 5.00×0.30×11.90m",
+      "component_family": "wall_base_5m",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 34,
+      "absorbed_variants": [
+        "base_wall_east_slot_02_solid",
+        "base_wall_east_slot_03_solid",
+        "base_wall_east_slot_04_solid",
+        "base_wall_east_slot_05_solid",
+        "base_wall_east_slot_06_solid",
+        "base_wall_east_slot_07_solid",
+        "base_wall_east_slot_08_solid",
+        "base_wall_north_slot_01_solid",
+        "base_wall_north_slot_02_solid",
+        "base_wall_north_slot_03_solid",
+        "base_wall_north_slot_04_solid",
+        "base_wall_north_slot_05_solid",
+        "base_wall_north_slot_06_solid",
+        "base_wall_north_slot_07_solid",
+        "base_wall_north_slot_08_solid",
+        "base_wall_north_slot_09_solid",
+        "base_wall_north_slot_10_solid",
+        "base_wall_south_slot_01_solid",
+        "base_wall_south_slot_02_solid",
+        "base_wall_south_slot_03_solid",
+        "base_wall_south_slot_04_solid",
+        "base_wall_south_slot_05_solid",
+        "base_wall_south_slot_07_solid",
+        "base_wall_south_slot_08_solid",
+        "base_wall_south_slot_09_solid",
+        "base_wall_south_slot_10_solid",
+        "base_wall_west_slot_01_solid",
+        "base_wall_west_slot_02_solid",
+        "base_wall_west_slot_03_solid",
+        "base_wall_west_slot_05_solid",
+        "base_wall_west_slot_06_solid",
+        "base_wall_west_slot_07_solid",
+        "base_wall_west_slot_08_solid"
+      ],
+      "absorbed_geometry_exact_count": 34,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "wall_solid_5m_输出包",
+      "editable_collection": "wall_solid_5m_制作源",
+      "bounds_size_m": [
+        0.3,
+        5.0,
+        11.9
+      ],
+      "bounds_lo_m": [
+        -0.15,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.15,
+        2.5,
+        11.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-X",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "base_wall_east_slot_01_solid",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_TYPOGRAPHY",
+      "slug": "wall_typography",
+      "name_zh": "数据库墙面标识 35.90×0.04×2.32m",
+      "component_family": "north_wall_typography",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "wall_typography_输出包",
+      "editable_collection": "wall_typography_制作源",
+      "bounds_size_m": [
+        35.9002,
+        0.042,
+        2.3201
+      ],
+      "bounds_lo_m": [
+        -17.9501,
+        -0.021,
+        0.0
+      ],
+      "bounds_hi_m": [
+        17.9501,
+        0.021,
+        2.3201
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "north_wall_typography",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_A",
+      "slug": "workstation_a",
+      "name_zh": "工作站（型 A）4.25×2.06×2.78m",
+      "component_family": "workstation",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "workstation_a_输出包",
+      "editable_collection": "workstation_a_制作源",
+      "bounds_size_m": [
+        4.25,
+        2.055,
+        2.78
+      ],
+      "bounds_lo_m": [
+        -2.125,
+        -1.0275,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.125,
+        1.0275,
+        2.78
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "workstation_00",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_B",
+      "slug": "workstation_b",
+      "name_zh": "工作站（型 B）4.25×2.06×2.78m",
+      "component_family": "workstation",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "workstation_04"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-04",
+          "rotation_deg": 0,
+          "max_delta_m": 1.566
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "workstation_04"
+      ],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "workstation_b_输出包",
+      "editable_collection": "workstation_b_制作源",
+      "bounds_size_m": [
+        4.25,
+        2.055,
+        2.78
+      ],
+      "bounds_lo_m": [
+        -2.125,
+        -1.0275,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.125,
+        1.0275,
+        2.78
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "workstation_01",
+      "source_library": "v001"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_C",
+      "slug": "workstation_c",
+      "name_zh": "工作站（型 C）4.25×2.06×2.78m",
+      "component_family": "workstation",
+      "room_type": "BOSS_ROOM",
+      "serves_room_types": [
+        "BOSS_ROOM"
+      ],
+      "scope": "shared",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "workstation_03"
+      ],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-03",
+          "rotation_deg": 180,
+          "max_delta_m": 1.915
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "workstation_03"
+      ],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "collection": "workstation_c_输出包",
+      "editable_collection": "workstation_c_制作源",
+      "bounds_size_m": [
+        4.25,
+        2.055,
+        2.78
+      ],
+      "bounds_lo_m": [
+        -2.125,
+        -1.0275,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.125,
+        1.0275,
+        2.78
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "-Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "workstation_02",
+      "source_library": "v001"
+    }
+  ],
+  "independent_blend_count": 38,
+  "presentation": "separated component packages; isolated scene per component",
+  "component_count": 38,
+  "regrouped_from": "v001",
+  "regroup_rule": "族内几何等价类聚类（Z 轴旋转不变，容差 0.005m）+ 同族最多 3 类（skill 02）",
+  "regroup_analysis": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/regroup_analysis.json",
+  "walk_plane_shift_z_m": -0.358,
+  "output_mesh_count": 105,
+  "absorbed_geometry_variant_total": 88,
+  "absorbed_geometry_shape_mismatch_total": 0,
+  "door_slot_sealing": {
+    "dropped_members": [
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LEFT",
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-RIGHT",
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LEFT",
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-RIGHT"
+    ],
+    "sealed_members": {
+      "base_wall_south_slot_06_door_lintel": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "base_wall_west_slot_04_door_lintel": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M"
+    },
+    "reason": "02 规范要求房型源不冻结门位、不预切门洞；源里预切的门洞（门垛×2+门楣）与本关实际门位不一致，其净空是无门扇的洞。门垛丢弃、门楣改为整樘实墙，门位改由运行时按门槽车道把实墙提升为门墙。"
+  }
+}

@@ -1,0 +1,726 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "source_library": "C:/Users/zhuangmenghong/AppData/Local/Temp/ss2pal/plan_work/db",
+  "regular_max_variants_per_family": 3,
+  "hard_max_variants_per_family": 5,
+  "component_budget": {
+    "limit": 50,
+    "planned": 30,
+    "remaining": 20
+  },
+  "sim_tol_m": 0.1,
+  "package_count": 86,
+  "component_count": 30,
+  "families": [
+    {
+      "family": "floor_tile_5m",
+      "variants_before": 42,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3",
+          "slug": "derived_tile_-1_-3",
+          "bounds_size_m": [
+            5.0,
+            5.0,
+            0.407
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2",
+            "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "server_rack",
+      "variants_before": 6,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00",
+          "slug": "rear_server_00",
+          "bounds_size_m": [
+            2.117,
+            1.66,
+            3.944
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+            "ENV-EXPEDITION-L01-DB-REAR_SERVER_02",
+            "ENV-EXPEDITION-L01-DB-REAR_SERVER_03",
+            "ENV-EXPEDITION-L01-DB-REAR_SERVER_04",
+            "ENV-EXPEDITION-L01-DB-REAR_SERVER_05"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "ceiling_deck",
+      "variants_before": 6,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+          "slug": "ceiling_deck_-3",
+          "bounds_size_m": [
+            10.0,
+            5.0,
+            0.49
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+          "slug": "ceiling_deck_-1",
+          "bounds_size_m": [
+            40.0,
+            5.0,
+            0.49
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+            "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+            "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+            "ENV-EXPEDITION-L01-DB-CEILING_DECK_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "service_cart",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+          "slug": "rear_service_cart_00",
+          "bounds_size_m": [
+            1.28,
+            0.935,
+            1.198
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01",
+            "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "shelf",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+          "slug": "right_front_shelf_00",
+          "bounds_size_m": [
+            1.72,
+            0.76,
+            2.59
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01",
+            "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "ceiling_service",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 3,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+          "slug": "ceiling_service_duct",
+          "bounds_size_m": [
+            1.428,
+            24.0,
+            0.858
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+          "slug": "ceiling_service_pipe_run",
+          "bounds_size_m": [
+            23.75,
+            23.0,
+            1.227
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+          "slug": "ceiling_service_cable_tray",
+          "bounds_size_m": [
+            36.0,
+            26.0,
+            1.355
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "island_cart",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+          "slug": "island_cart_east",
+          "bounds_size_m": [
+            0.82,
+            1.265,
+            1.088
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "raised_service",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+          "slug": "raised_service_gantry",
+          "bounds_size_m": [
+            4.06,
+            0.48,
+            3.93
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+          "slug": "raised_service_platform",
+          "bounds_size_m": [
+            4.8,
+            3.55,
+            1.32
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "cable_reel",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+          "slug": "right_front_cable_reel_00",
+          "bounds_size_m": [
+            1.04,
+            0.84,
+            0.908
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "workbench",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+          "slug": "workbench_west",
+          "bounds_size_m": [
+            1.41,
+            4.4,
+            1.99
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+          "slug": "workbench_l_east",
+          "bounds_size_m": [
+            14.1,
+            7.25,
+            3.565
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "floor_detail",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+          "slug": "floor_conduit_run",
+          "bounds_size_m": [
+            38.0,
+            24.0,
+            0.031
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+          "slug": "floor_hazard_edging",
+          "bounds_size_m": [
+            39.2,
+            29.191,
+            0.076
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "cable_coil",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+          "slug": "cable_coil_wall",
+          "bounds_size_m": [
+            0.68,
+            5.72,
+            0.673
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "repair_island",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND",
+          "slug": "center_double_sided_repair_island",
+          "bounds_size_m": [
+            6.8,
+            3.02,
+            2.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "equipment_rack",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+          "slug": "equipment_rack_ne",
+          "bounds_size_m": [
+            2.78,
+            1.067,
+            3.05
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "service_terminal",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL",
+          "slug": "right_front_service_terminal",
+          "bounds_size_m": [
+            1.2,
+            0.675,
+            1.44
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "shelving",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+          "slug": "shelving_heavy_north",
+          "bounds_size_m": [
+            4.115,
+            0.88,
+            3.2
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_light_pylon",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+          "slug": "wall_light_pylon",
+          "bounds_size_m": [
+            39.6,
+            24.6,
+            4.66
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_screen",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+          "slug": "wall_screen_bank",
+          "bounds_size_m": [
+            4.06,
+            6.21,
+            1.425
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_service",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+          "slug": "wall_service_run",
+          "bounds_size_m": [
+            39.54,
+            23.47,
+            6.55
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_lighting",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+          "slug": "ceiling_lighting",
+          "bounds_size_m": [
+            38.0,
+            18.36,
+            0.455
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "ceiling_ring_beam",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+          "slug": "ceiling_ring_beam",
+          "bounds_size_m": [
+            40.0,
+            30.7,
+            0.6
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "corner_guard",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+          "slug": "corner_guard",
+          "bounds_size_m": [
+            39.58,
+            29.58,
+            2.2
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "server_bus",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS",
+          "slug": "rear_server_bus",
+          "bounds_size_m": [
+            13.5,
+            1.6,
+            4.19
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_top_service",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+          "slug": "wall_top_service",
+          "bounds_size_m": [
+            39.4,
+            29.4,
+            0.8
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "naming_violation_count": 69,
+    "front_axis_non_enum_count": 0,
+    "rotation_locked_count": 84,
+    "variant_contract_missing_families": [
+      "server_rack",
+      "floor_tile_5m",
+      "ceiling_deck"
+    ],
+    "absolute_over_limit_families": [
+      "server_rack",
+      "floor_tile_5m",
+      "ceiling_deck"
+    ],
+    "component_budget_over": false
+  }
+}

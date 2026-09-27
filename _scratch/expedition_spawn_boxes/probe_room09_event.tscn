@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/expedition_spawn_boxes/probe_room09_event.gd" id="1_room09"]
+
+[node name="ProbeRoom09Event" type="Node3D"]
+script = ExtResource("1_room09")

@@ -1,0 +1,2 @@
+ASSET_RUNTIME_NAMING_OK 剩余欠账：文件 289 / 目录 13 / 备份 1；带版本引用 gd=23 tscn=93
+（快照 scripts/asset_runtime_naming_debt.json；欠账未清零前本门禁只拦新增，清零后删除快照与豁免）

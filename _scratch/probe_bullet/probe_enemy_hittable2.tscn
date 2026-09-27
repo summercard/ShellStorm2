@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://_scratch/probe_bullet/probe_enemy_hittable2.gd" id="1_probe2"]
+
+[node name="ProbeEnemyHittable2" type="Node3D"]
+script = ExtResource("1_probe2")

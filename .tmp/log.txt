@@ -1,0 +1,585 @@
+1893f862 远征01 刷怪编成与内容分配：修根因（FloorPlanGenerator._constrained_slot 漏透传 content_type/boss_content_id/enemy_spawn_plan/reward_plan 四项房间级字段⇒设计源写了被静默丢弃、运行时恒回退公式波次）+刷怪编成改半钉死（每波给 pool+kinds 区间+count 区间，按 run_seed+房 id 派生种子抽取，同局同房可复现；旧 monsters 写法逐字兼容、两写法互斥）+内容类型按房号钉死写入 floor_00.json+非矩形房刷怪落点与房内判定改用真地砖格心（DungeonRoom3D 新增 _authored_tile_cells，凹口不再落点/不再算房内；无地砖清单的房逐字回退旧包围盒口径）
+09f22c90 远征01 支线取消落地：主路13房一线到底（branch_count_range [0,0]、min_main_content_rooms 10）+房型缩尺改型：桥房30×60工字型（坑30×30、桥10m）、数据库40×30、办公室30×40（模板id按裁定锁定不改名）+设计源floor_00落13房并同步GameDesignConfig文案01—10+图纸重编号至13张详图并重生成平面图集
+f5588111 调整关卡01的设计稿
+6f2bf419 记账：远征01 #42-B 通道桥短边连接 —— 硬约束实测不可行（回退18/24、基线违规92%）＋根因（几何长轴钉死x/首房锚正中/15+60+70越界）＋四方案待裁决
+c47ed1ba 记账：远征01 通道桥多层几何运行时装配第7环（上层平台扣坑区+坑壁护栏拉伸+坑底砖+探针高度修正）
+d5cb9a40 远征01 通道桥多层几何运行时装配第7环：生成器多层规划（模板坑/桥矩形→房局部＋上层平台砖真扣坑区18格＋坑壁护栏拉伸件30＋坑底砖24）＋装配层新增 multi_level_component 分支（pit_wall 拉伸/坑底砖 snap，均不写 tower_wall_direction 免污染门槽与塔楼墙验收）＋验收走线探针高度 1.5→0.5m 修坑沿护栏飞越假红＋新建通道桥多层几何守卫探针（规划级+房记录级 12 种子 95 断言全绿）
+M  src/world3d/Dungeon3D.gd
+M  src/world3d/DungeonRoom3D.gd
+A  tests/verification/expected_errors/verify_dungeon_wave_intermission.txt
+A  tests/verification/probe_corner_relief.gd
+A  tests/verification/probe_corner_relief.gd.uid
+A  tests/verification/probe_corner_relief.tscn
+A  tests/verification/probe_expedition_spawn_safety.gd
+A  tests/verification/probe_expedition_spawn_safety.gd.uid
+A  tests/verification/probe_expedition_spawn_safety.tscn
+A  tests/verification/probe_shared_wall_sides.gd
+A  tests/verification/probe_shared_wall_sides.gd.uid
+A  tests/verification/probe_shared_wall_sides.tscn
+A  tests/verification/probe_wall_collision_audit.gd
+A  tests/verification/probe_wall_collision_audit.gd.uid
+A  tests/verification/probe_wall_collision_audit.tscn
+A  tests/verification/probe_wall_facing_shots.gd
+A  tests/verification/probe_wall_facing_shots.gd.uid
+A  tests/verification/probe_wall_facing_shots.tscn
+A  tests/verification/probe_wall_prefab_gallery.gd
+A  tests/verification/probe_wall_prefab_gallery.gd.uid
+A  tests/verification/probe_wall_prefab_gallery.tscn
+A  tests/verification/probe_wall_relief.gd
+A  tests/verification/probe_wall_relief.gd.uid
+A  tests/verification/probe_wall_relief.tscn
+A  tests/verification/probe_wall_tint_shots.gd
+A  tests/verification/probe_wall_tint_shots.gd.uid
+A  tests/verification/probe_wall_tint_shots.tscn
+A  tests/verification/probe_wall_visual_facing.gd
+A  tests/verification/probe_wall_visual_facing.gd.uid
+A  tests/verification/probe_wall_visual_facing.tscn
+A  tests/verification/verify_dungeon_wave_intermission.gd
+A  tests/verification/verify_dungeon_wave_intermission.gd.uid
+A  tests/verification/verify_dungeon_wave_intermission.tscn
+ .../01-battle-room-type-art-authoring/SKILL.md     |    48 +-
+ .codex/skills/godot-export-pack-audit/SKILL.md     |   102 +
+ .../godot-export-pack-audit/scripts/pck_inspect.py |    91 +
+ .codex/skills/godot-runtime-probe/SKILL.md         |    39 +-
+ .../SKILL.md                                       |    22 +-
+ .tmp/appdata-import/Godot/editor_settings-4.6.tres |    56 +
+ .../Godot/editor_doc_cache-4.6.res                 |   Bin 0 -> 3142844 bytes
+ .../base_save.json"                                |   343 +
+ .../Godot/editor_settings-4.6.tres                 |    56 +
+ .../Godot/editor_doc_cache-4.6.res                 |   Bin 0 -> 3142846 bytes
+ .../base_save.json"                                |   343 +
+ .../base_save.json"                                |   343 +
+ .tmp/wave-appdata/Godot/editor_settings-4.6.tres   |    56 +
+ .../base_save.json"                                |   343 +
+ .../Godot/editor_doc_cache-4.6.res                 |   Bin 0 -> 3142844 bytes
+ .../base_save.json"                                |   253 +-
+ ....forward_plus.nvidia_geforce_rtx_4060_ti.cache" |   Bin 11509665 -> 15418420 bytes
+ ...\245\345\255\227\345\236\213_30x60m_v001.blend" |   Bin 0 -> 9087463 bytes
+ ...\245\345\255\227\345\236\213_30x60m_v002.blend" |   Bin 0 -> 84441645 bytes
+ _scratch/db_room/probe_origins.py                  |    37 +
+ _scratch/lootprobe/append_spawn_diagnosis.py       |    77 +
+ _scratch/lootprobe/build_expedition01_report.py    |   411 +
+ _scratch/lootprobe/loot_pools_dump.tsv             |   156 +
+ _scratch/lootprobe/probe_spawn_points.gd           |    76 +
+ _scratch/lootprobe/probe_spawn_points.gd.uid       |     1 +
+ _scratch/lootprobe/probe_spawn_points.tscn         |     6 +
+ _scratch/lootprobe/slim_memory_20260925.py         |   162 +
+ _scratch/lootprobe/slim_memory_round2_20260925.py  |    91 +
+ _scratch/lootprobe/spawn_points_out.txt            |   407 +
+ _scratch/lootprobe/write_log_20260925.py           |    98 +
+ _scratch/pathprobe/_recheck_v001.json              |    66 +
+ _scratch/pathprobe/_recheck_v002.json              |    66 +
+ _scratch/pathprobe/battle_v004.json                |    12 +
+ _scratch/pathprobe/delivery_recheck.json           |    66 +
+ _scratch/pathprobe/fix_v001.json                   |    12 +
+ _scratch/pathprobe/fix_v002.json                   |    12 +
+ _scratch/pathprobe/load_from_delivery.json         |    66 +
+ _scratch/pathprobe/v001.json                       |    19 +
+ .../bridge_room/v001/build_bridge_room_v001.py     |   404 +
+ .../bridge_room/v001/component_inventory.json      | 22455 ++++++++++++++++++
+ .../room_types/bridge_room/v001/path_check.json    |    66 +
+ .../room_types/bridge_room/v001/qa_report.json     |    34 +
+ .../v001/renders/detail_bridge_pipes.png           |   Bin 0 -> 674705 bytes
+ .../bridge_room/v001/renders/reference_full.png    |   Bin 0 -> 823423 bytes
+ .../bridge_room/v001/renders/top_plan.png          |   Bin 0 -> 791551 bytes
+ .../bridge_room/v001/room_type_manifest.json       | 22890 +++++++++++++++++++
+ .../bridge_room/v001/validator_report.json         | 13808 +++++++++++
+ ...\245\345\255\227\345\236\213_30x60m_v001.blend" |   Bin 0 -> 9084775 bytes
+ .../bridge_room/v002/build_bridge_room_v002.py     |   545 +
+ .../room_types/bridge_room/v002/compare_paths.py   |    11 +
+ .../bridge_room/v002/component_inventory.json      | 11932 ++++++++++
+ .../bridge_girder_-1/asset_manifest.json           |    50 +
+ .../bridge_girder_1/asset_manifest.json            |    50 +
+ .../bridge_guardrail_-1/asset_manifest.json        |    50 +
+ .../bridge_guardrail_1/asset_manifest.json         |    50 +
+ .../half_partition_-1/asset_manifest.json          |    49 +
+ .../half_partition_1/asset_manifest.json           |    49 +
+ .../longitudinal_tie_-1_-4.8/asset_manifest.json   |    49 +
+ .../longitudinal_tie_-1_-9.6/asset_manifest.json   |    49 +
+ .../longitudinal_tie_1_-4.8/asset_manifest.json    |    49 +
+ .../longitudinal_tie_1_-9.6/asset_manifest.json    |    49 +
+ .../pit_end_-12.5_-15/asset_manifest.json          |    49 +
+ .../pit_end_-12.5_15/asset_manifest.json           |    49 +
+ .../pit_end_-7.5_-15/asset_manifest.json           |    49 +
+ .../pit_end_-7.5_15/asset_manifest.json            |    49 +
+ .../pit_end_12.5_-15/asset_manifest.json           |    49 +
+ .../pit_end_12.5_15/asset_manifest.json            |    49 +
+ .../pit_end_7.5_-15/asset_manifest.json            |    49 +
+ .../pit_end_7.5_15/asset_manifest.json             |    49 +
+ .../pit_side_-1_-1/asset_manifest.json             |    49 +
+ .../pit_side_-1_-2/asset_manifest.json             |    49 +
+ .../pit_side_-1_-3/asset_manifest.json             |    49 +
+ .../architecture/pit_side_-1_0/asset_manifest.json |    49 +
+ .../architecture/pit_side_-1_1/asset_manifest.json |    49 +
+ .../architecture/pit_side_-1_2/asset_manifest.json |    49 +
+ .../architecture/pit_side_1_-1/asset_manifest.json |    49 +
+ .../architecture/pit_side_1_-2/asset_manifest.json |    49 +
+ .../architecture/pit_side_1_-3/asset_manifest.json |    49 +
+ .../architecture/pit_side_1_0/asset_manifest.json  |    49 +
+ .../architecture/pit_side_1_1/asset_manifest.json  |    49 +
+ .../architecture/pit_side_1_2/asset_manifest.json  |    49 +
+ .../platform_edge_-1_-15/asset_manifest.json       |    50 +
+ .../platform_edge_-1_15/asset_manifest.json        |    50 +
+ .../platform_edge_1_-15/asset_manifest.json        |    50 +
+ .../platform_edge_1_15/asset_manifest.json         |    50 +
+ .../shaft_column_-1_-14/asset_manifest.json        |    50 +
+ .../shaft_column_-1_-5/asset_manifest.json         |    50 +
+ .../shaft_column_-1_14/asset_manifest.json         |    50 +
+ .../shaft_column_-1_5/asset_manifest.json          |    50 +
+ .../shaft_column_1_-14/asset_manifest.json         |    50 +
+ .../shaft_column_1_-5/asset_manifest.json          |    50 +
+ .../shaft_column_1_14/asset_manifest.json          |    50 +
+ .../shaft_column_1_5/asset_manifest.json           |    50 +
+ .../architecture/wall_east_-1/asset_manifest.json  |    49 +
+ .../architecture/wall_east_-2/asset_manifest.json  |    50 +
+ .../architecture/wall_east_-3/asset_manifest.json  |    49 +
+ .../architecture/wall_east_-4/asset_manifest.json  |    50 +
+ .../architecture/wall_east_-5/asset_manifest.json  |    49 +
+ .../architecture/wall_east_-6/asset_manifest.json  |    50 +
+ .../architecture/wall_east_0/asset_manifest.json   |    50 +
+ .../architecture/wall_east_1/asset_manifest.json   |    49 +
+ .../architecture/wall_east_2/asset_manifest.json   |    50 +
+ .../architecture/wall_east_3/asset_manifest.json   |    49 +
+ .../architecture/wall_east_4/asset_manifest.json   |    50 +
+ .../architecture/wall_east_5/asset_manifest.json   |    49 +
+ .../architecture/wall_north_-1/asset_manifest.json |    50 +
+ .../architecture/wall_north_-2/asset_manifest.json |    50 +
+ .../architecture/wall_north_-3/asset_manifest.json |    49 +
+ .../architecture/wall_north_0/asset_manifest.json  |    50 +
+ .../architecture/wall_north_1/asset_manifest.json  |    49 +
+ .../architecture/wall_north_2/asset_manifest.json  |    50 +
+ .../architecture/wall_south_-1/asset_manifest.json |    50 +
+ .../architecture/wall_south_-2/asset_manifest.json |    50 +
+ .../architecture/wall_south_-3/asset_manifest.json |    49 +
+ .../architecture/wall_south_0/asset_manifest.json  |    50 +
+ .../architecture/wall_south_1/asset_manifest.json  |    49 +
+ .../architecture/wall_south_2/asset_manifest.json  |    50 +
+ .../architecture/wall_west_-1/asset_manifest.json  |    49 +
+ .../architecture/wall_west_-2/asset_manifest.json  |    50 +
+ .../architecture/wall_west_-3/asset_manifest.json  |    49 +
+ .../architecture/wall_west_-4/asset_manifest.json  |    50 +
+ .../architecture/wall_west_-5/asset_manifest.json  |    49 +
+ .../architecture/wall_west_-6/asset_manifest.json  |    50 +
+ .../architecture/wall_west_0/asset_manifest.json   |    50 +
+ .../architecture/wall_west_1/asset_manifest.json   |    49 +
+ .../architecture/wall_west_2/asset_manifest.json   |    50 +
+ .../architecture/wall_west_3/asset_manifest.json   |    49 +
+ .../architecture/wall_west_4/asset_manifest.json   |    50 +
+ .../architecture/wall_west_5/asset_manifest.json   |    49 +
+ .../facilities/bank_crate_-1_0/asset_manifest.json |    49 +
+ .../facilities/bank_crate_-1_1/asset_manifest.json |    49 +
+ .../facilities/bank_crate_1_0/asset_manifest.json  |    49 +
+ .../facilities/bank_crate_1_1/asset_manifest.json  |    49 +
+ .../facilities/end_crate_-1/asset_manifest.json    |    49 +
+ .../facilities/end_crate_1/asset_manifest.json     |    49 +
+ .../facilities/end_power_-1/asset_manifest.json    |    49 +
+ .../facilities/end_power_1/asset_manifest.json     |    49 +
+ .../lower_control_-1_0/asset_manifest.json         |    50 +
+ .../lower_control_-1_1/asset_manifest.json         |    50 +
+ .../lower_control_-1_2/asset_manifest.json         |    50 +
+ .../lower_control_1_0/asset_manifest.json          |    50 +
+ .../lower_control_1_1/asset_manifest.json          |    50 +
+ .../lower_control_1_2/asset_manifest.json          |    50 +
+ .../facilities/near_crate_-1/asset_manifest.json   |    49 +
+ .../facilities/near_crate_1/asset_manifest.json    |    49 +
+ .../facilities/near_server_-1/asset_manifest.json  |    50 +
+ .../facilities/near_server_1/asset_manifest.json   |    50 +
+ .../partition_box_-1/asset_manifest.json           |    49 +
+ .../facilities/partition_box_1/asset_manifest.json |    49 +
+ .../asset_manifest.json                            |    50 +
+ .../asset_manifest.json                            |    50 +
+ .../asset_manifest.json                            |    50 +
+ .../asset_manifest.json                            |    50 +
+ .../asset_manifest.json                            |    50 +
+ .../asset_manifest.json                            |    50 +
+ .../facilities/upper_bank_-1_0/asset_manifest.json |    49 +
+ .../facilities/upper_bank_-1_1/asset_manifest.json |    50 +
+ .../facilities/upper_bank_-1_2/asset_manifest.json |    50 +
+ .../facilities/upper_bank_1_0/asset_manifest.json  |    49 +
+ .../facilities/upper_bank_1_1/asset_manifest.json  |    50 +
+ .../facilities/upper_bank_1_2/asset_manifest.json  |    50 +
+ .../upper_console_-1/asset_manifest.json           |    50 +
+ .../facilities/upper_console_1/asset_manifest.json |    50 +
+ .../vertical_service_-1_-10/asset_manifest.json    |    50 +
+ .../vertical_service_-1_0/asset_manifest.json      |    50 +
+ .../vertical_service_-1_10/asset_manifest.json     |    50 +
+ .../vertical_service_1_-10/asset_manifest.json     |    50 +
+ .../vertical_service_1_0/asset_manifest.json       |    50 +
+ .../vertical_service_1_10/asset_manifest.json      |    50 +
+ .../floor/tile_lower_-1_-1/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-1_-2/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-1_-3/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-1_0/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-1_1/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-1_2/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-2_-1/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-2_-2/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-2_-3/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-2_0/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-2_1/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-2_2/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-3_-1/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-3_-2/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-3_-3/asset_manifest.json     |    49 +
+ .../floor/tile_lower_-3_0/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-3_1/asset_manifest.json      |    49 +
+ .../floor/tile_lower_-3_2/asset_manifest.json      |    49 +
+ .../floor/tile_lower_0_-1/asset_manifest.json      |    49 +
+ .../floor/tile_lower_0_-2/asset_manifest.json      |    49 +
+ .../floor/tile_lower_0_-3/asset_manifest.json      |    49 +
+ .../floor/tile_lower_0_0/asset_manifest.json       |    49 +
+ .../floor/tile_lower_0_1/asset_manifest.json       |    49 +
+ .../floor/tile_lower_0_2/asset_manifest.json       |    49 +
+ .../floor/tile_lower_1_-1/asset_manifest.json      |    49 +
+ .../floor/tile_lower_1_-2/asset_manifest.json      |    49 +
+ .../floor/tile_lower_1_-3/asset_manifest.json      |    49 +
+ .../floor/tile_lower_1_0/asset_manifest.json       |    49 +
+ .../floor/tile_lower_1_1/asset_manifest.json       |    49 +
+ .../floor/tile_lower_1_2/asset_manifest.json       |    49 +
+ .../floor/tile_lower_2_-1/asset_manifest.json      |    49 +
+ .../floor/tile_lower_2_-2/asset_manifest.json      |    49 +
+ .../floor/tile_lower_2_-3/asset_manifest.json      |    49 +
+ .../floor/tile_lower_2_0/asset_manifest.json       |    49 +
+ .../floor/tile_lower_2_1/asset_manifest.json       |    49 +
+ .../floor/tile_lower_2_2/asset_manifest.json       |    49 +
+ .../floor/tile_upper_-1_-1/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-1_-2/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-1_-3/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-1_-4/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-1_-5/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-1_-6/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-1_0/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-1_1/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-1_2/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-1_3/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-1_4/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-1_5/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-2_-4/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-2_-5/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-2_-6/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-2_3/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-2_4/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-2_5/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-3_-4/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-3_-5/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-3_-6/asset_manifest.json     |    49 +
+ .../floor/tile_upper_-3_3/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-3_4/asset_manifest.json      |    49 +
+ .../floor/tile_upper_-3_5/asset_manifest.json      |    49 +
+ .../floor/tile_upper_0_-1/asset_manifest.json      |    49 +
+ .../floor/tile_upper_0_-2/asset_manifest.json      |    49 +
+ .../floor/tile_upper_0_-3/asset_manifest.json      |    49 +
+ .../floor/tile_upper_0_-4/asset_manifest.json      |    49 +
+ .../floor/tile_upper_0_-5/asset_manifest.json      |    49 +
+ .../floor/tile_upper_0_-6/asset_manifest.json      |    49 +
+ .../floor/tile_upper_0_0/asset_manifest.json       |    49 +
+ .../floor/tile_upper_0_1/asset_manifest.json       |    49 +
+ .../floor/tile_upper_0_2/asset_manifest.json       |    49 +
+ .../floor/tile_upper_0_3/asset_manifest.json       |    49 +
+ .../floor/tile_upper_0_4/asset_manifest.json       |    49 +
+ .../floor/tile_upper_0_5/asset_manifest.json       |    49 +
+ .../floor/tile_upper_1_-4/asset_manifest.json      |    49 +
+ .../floor/tile_upper_1_-5/asset_manifest.json      |    49 +
+ .../floor/tile_upper_1_-6/asset_manifest.json      |    49 +
+ .../floor/tile_upper_1_3/asset_manifest.json       |    49 +
+ .../floor/tile_upper_1_4/asset_manifest.json       |    49 +
+ .../floor/tile_upper_1_5/asset_manifest.json       |    49 +
+ .../floor/tile_upper_2_-4/asset_manifest.json      |    49 +
+ .../floor/tile_upper_2_-5/asset_manifest.json      |    49 +
+ .../floor/tile_upper_2_-6/asset_manifest.json      |    49 +
+ .../floor/tile_upper_2_3/asset_manifest.json       |    49 +
+ .../floor/tile_upper_2_4/asset_manifest.json       |    49 +
+ .../floor/tile_upper_2_5/asset_manifest.json       |    49 +
+ .../bridge_service_transom_-14/asset_manifest.json |    49 +
+ .../bridge_service_transom_14/asset_manifest.json  |    49 +
+ .../support/coolant_-1_0/asset_manifest.json       |    49 +
+ .../support/coolant_-1_1/asset_manifest.json       |    49 +
+ .../support/coolant_-1_2/asset_manifest.json       |    49 +
+ .../support/coolant_1_0/asset_manifest.json        |    49 +
+ .../support/coolant_1_1/asset_manifest.json        |    49 +
+ .../support/coolant_1_2/asset_manifest.json        |    49 +
+ .../support/cross_gantry_-1/asset_manifest.json    |    50 +
+ .../support/cross_gantry_1/asset_manifest.json     |    50 +
+ .../support/deep_cables_-1_0/asset_manifest.json   |    49 +
+ .../support/deep_cables_-1_1/asset_manifest.json   |    49 +
+ .../support/deep_cables_-1_2/asset_manifest.json   |    49 +
+ .../support/deep_cables_1_0/asset_manifest.json    |    49 +
+ .../support/deep_cables_1_1/asset_manifest.json    |    49 +
+ .../support/deep_cables_1_2/asset_manifest.json    |    49 +
+ .../support/deep_trunk_-1/asset_manifest.json      |    49 +
+ .../support/deep_trunk_1/asset_manifest.json       |    49 +
+ .../support/header_cables_-1_0/asset_manifest.json |    49 +
+ .../support/header_cables_-1_1/asset_manifest.json |    49 +
+ .../support/header_cables_-1_2/asset_manifest.json |    49 +
+ .../support/header_cables_1_0/asset_manifest.json  |    49 +
+ .../support/header_cables_1_1/asset_manifest.json  |    49 +
+ .../support/header_cables_1_2/asset_manifest.json  |    49 +
+ .../support/low_platform_-1_0/asset_manifest.json  |    50 +
+ .../support/low_platform_-1_1/asset_manifest.json  |    50 +
+ .../support/low_platform_-1_2/asset_manifest.json  |    50 +
+ .../support/low_platform_1_0/asset_manifest.json   |    50 +
+ .../support/low_platform_1_1/asset_manifest.json   |    50 +
+ .../support/low_platform_1_2/asset_manifest.json   |    50 +
+ .../support/mid_gallery_-1/asset_manifest.json     |    50 +
+ .../support/mid_gallery_1/asset_manifest.json      |    50 +
+ .../support/torn_header_-1_0/asset_manifest.json   |    49 +
+ .../support/torn_header_-1_1/asset_manifest.json   |    49 +
+ .../support/torn_header_-1_2/asset_manifest.json   |    49 +
+ .../support/torn_header_1_0/asset_manifest.json    |    49 +
+ .../support/torn_header_1_1/asset_manifest.json    |    49 +
+ .../support/torn_header_1_2/asset_manifest.json    |    49 +
+ .../wall_service_header_-1/asset_manifest.json     |    49 +
+ .../wall_service_header_1/asset_manifest.json      |    49 +
+ .../room_types/bridge_room/v002/component_tree.txt |   242 +
+ .../room_types/bridge_room/v002/dump_path.py       |     9 +
+ .../bridge_room/v002/finalize_delivery.py          |    32 +
+ .../bridge_room/v002/fix_palette_path.py           |    28 +
+ .../bridge_room/v002/inspect_materials.py          |    15 +
+ .../room_types/bridge_room/v002/inspect_out.json   |    75 +
+ .../bridge_room/v002/path_check_v002.json          |    66 +
+ .../room_types/bridge_room/v002/qa_report.json     |   122 +
+ .../bridge_room/v002/refine_floor_finish.py        |    18 +
+ .../room_types/bridge_room/v002/render_saved.py    |    17 +
+ .../v002/renders/complete_structure.png            |   Bin 0 -> 2422825 bytes
+ .../v002/renders/lower_layers_detail.png           |   Bin 0 -> 2973882 bytes
+ .../bridge_room/v002/renders/reference_cutaway.png |   Bin 0 -> 2720362 bytes
+ .../bridge_room/v002/renders/top_plan.png          |   Bin 0 -> 2451521 bytes
+ .../v002/renders/upper_machine_room_detail.png     |   Bin 0 -> 2912219 bytes
+ .../bridge_room/v002/room_type_manifest.json       | 11991 ++++++++++
+ .../bridge_room/v002/validator_report.json         |  3188 +++
+ .../bridge_room/v002/verify_and_render.py          |    19 +
+ .../bridge_room/v002/verify_palette_load.py        |    36 +
+ ...\245\345\255\227\345\236\213_30x60m_v002.blend" |   Bin 0 -> 84441645 bytes
+ .../room_types/db_room/v001/build_db_room_v001.py  |  1331 ++
+ .../db_room/v001/component_inventory.json          |  1827 ++
+ .../bench_annex_southwest/asset_manifest.json      |    50 +
+ .../facilities/cable_coil_wall/asset_manifest.json |    49 +
+ .../cable_reel_floor/asset_manifest.json           |    49 +
+ .../center_worktable/asset_manifest.json           |    50 +
+ .../facilities/console_tripod/asset_manifest.json  |    50 +
+ .../crate_stack_field/asset_manifest.json          |    49 +
+ .../equipment_rack_ne/asset_manifest.json          |    50 +
+ .../parts_drawer_cabinet/asset_manifest.json       |    49 +
+ .../planter_white_pair/asset_manifest.json         |    49 +
+ .../rack_cluster_center/asset_manifest.json        |    50 +
+ .../facilities/server_rack_row/asset_manifest.json |    50 +
+ .../shelving_heavy_north/asset_manifest.json       |    50 +
+ .../tool_cart_yellow/asset_manifest.json           |    49 +
+ .../tool_chest_red_pair/asset_manifest.json        |    49 +
+ .../wall_light_pylon/asset_manifest.json           |    50 +
+ .../wall_screen_bank/asset_manifest.json           |    50 +
+ .../wall_service_run/asset_manifest.json           |    49 +
+ .../workbench_l_east/asset_manifest.json           |    50 +
+ .../facilities/workbench_west/asset_manifest.json  |    50 +
+ .../floor/floor_conduit_run/asset_manifest.json    |    49 +
+ .../floor/floor_grate_grid/asset_manifest.json     |    49 +
+ .../floor/floor_hazard_edging/asset_manifest.json  |    49 +
+ .../floor/floor_service_pit/asset_manifest.json    |    49 +
+ .../floor/floor_zone_mark/asset_manifest.json      |    49 +
+ .../support/ceiling_deck_-1/asset_manifest.json    |    49 +
+ .../support/ceiling_deck_-2/asset_manifest.json    |    49 +
+ .../support/ceiling_deck_-3/asset_manifest.json    |    49 +
+ .../support/ceiling_deck_0/asset_manifest.json     |    49 +
+ .../support/ceiling_deck_1/asset_manifest.json     |    49 +
+ .../support/ceiling_deck_2/asset_manifest.json     |    49 +
+ .../support/ceiling_lighting/asset_manifest.json   |    50 +
+ .../support/ceiling_ring_beam/asset_manifest.json  |    49 +
+ .../ceiling_service_cable_tray/asset_manifest.json |    49 +
+ .../ceiling_service_duct/asset_manifest.json       |    49 +
+ .../ceiling_service_pipe_run/asset_manifest.json   |    49 +
+ .../support/corner_guard/asset_manifest.json       |    49 +
+ .../support/wall_top_service/asset_manifest.json   |    49 +
+ .../room_types/db_room/v001/component_tree.txt     |    37 +
+ .../db_room/v001/linked_office_components.json     |  1434 ++
+ .../source/room_types/db_room/v001/qa_report.json  |   146 +
+ .../room_types/db_room/v001/renders/db_01_top.png  |   Bin 0 -> 2425233 bytes
+ .../db_room/v001/renders/db_02_cutaway_sw.png      |   Bin 0 -> 2467385 bytes
+ .../db_room/v001/renders/db_03_west_rack_row.png   |   Bin 0 -> 2614116 bytes
+ .../db_room/v001/renders/db_04_east_workbench.png  |   Bin 0 -> 2945676 bytes
+ .../db_room/v001/renders/db_05_centre_workshop.png |   Bin 0 -> 3057789 bytes
+ .../db_room/v001/renders/db_06_tab_entry.png       |   Bin 0 -> 2364005 bytes
+ .../db_room/v001/room_type_manifest.json           |  1992 ++
+ ...\256\346\234\272\346\210\277_40x30m_v001.blend" |   Bin 0 -> 32440534 bytes
+ .../office_room/v001/build_office_room_v001.py     |  1093 +
+ .../office_room/v001/component_inventory.json      |  5766 +++++
+ .../architecture/door_wall/asset_manifest.json     |    64 +
+ .../architecture/wall_east_-1/asset_manifest.json  |    64 +
+ .../architecture/wall_east_-2/asset_manifest.json  |    64 +
+ .../architecture/wall_east_-3/asset_manifest.json  |    64 +
+ .../architecture/wall_east_-4/asset_manifest.json  |    64 +
+ .../architecture/wall_east_0/asset_manifest.json   |    64 +
+ .../architecture/wall_east_1/asset_manifest.json   |    64 +
+ .../architecture/wall_east_2/asset_manifest.json   |    64 +
+ .../architecture/wall_east_3/asset_manifest.json   |    64 +
+ .../architecture/wall_north_-1/asset_manifest.json |    64 +
+ .../architecture/wall_north_-2/asset_manifest.json |    64 +
+ .../architecture/wall_north_-3/asset_manifest.json |    64 +
+ .../architecture/wall_north_1/asset_manifest.json  |    64 +
+ .../architecture/wall_north_2/asset_manifest.json  |    64 +
+ .../architecture/wall_south_-1/asset_manifest.json |    64 +
+ .../architecture/wall_south_-2/asset_manifest.json |    64 +
+ .../architecture/wall_south_-3/asset_manifest.json |    64 +
+ .../architecture/wall_south_0/asset_manifest.json  |    64 +
+ .../architecture/wall_south_1/asset_manifest.json  |    64 +
+ .../architecture/wall_south_2/asset_manifest.json  |    64 +
+ .../architecture/wall_west_-1/asset_manifest.json  |    64 +
+ .../architecture/wall_west_-2/asset_manifest.json  |    64 +
+ .../architecture/wall_west_-3/asset_manifest.json  |    64 +
+ .../architecture/wall_west_-4/asset_manifest.json  |    64 +
+ .../architecture/wall_west_0/asset_manifest.json   |    64 +
+ .../architecture/wall_west_1/asset_manifest.json   |    64 +
+ .../architecture/wall_west_2/asset_manifest.json   |    64 +
+ .../architecture/wall_west_3/asset_manifest.json   |    64 +
+ .../facilities/filing_run_west/asset_manifest.json |    51 +
+ .../locker_bank_north/asset_manifest.json          |    51 +
+ .../planting_perimeter/asset_manifest.json         |    50 +
+ .../power_cabinet_bank_south/asset_manifest.json   |    51 +
+ .../facilities/prep_bench_east/asset_manifest.json |    51 +
+ .../facilities/printer_station/asset_manifest.json |    51 +
+ .../facilities/shelving_south/asset_manifest.json  |    50 +
+ .../facilities/totem_column/asset_manifest.json    |    51 +
+ .../water_and_supply_corner/asset_manifest.json    |    50 +
+ .../facilities/work_cluster_a/asset_manifest.json  |    51 +
+ .../facilities/work_cluster_b/asset_manifest.json  |    51 +
+ .../facilities/work_cluster_c/asset_manifest.json  |    51 +
+ .../facilities/work_cluster_d/asset_manifest.json  |    51 +
+ .../floor/floor_zone_mark/asset_manifest.json      |    50 +
+ .../floor/tile_-1_-1/asset_manifest.json           |    51 +
+ .../floor/tile_-1_-2/asset_manifest.json           |    51 +
+ .../floor/tile_-1_-3/asset_manifest.json           |    51 +
+ .../floor/tile_-1_-4/asset_manifest.json           |    51 +
+ .../floor/tile_-1_0/asset_manifest.json            |    51 +
+ .../floor/tile_-1_1/asset_manifest.json            |    51 +
+ .../floor/tile_-1_2/asset_manifest.json            |    51 +
+ .../floor/tile_-1_3/asset_manifest.json            |    51 +
+ .../floor/tile_-2_-1/asset_manifest.json           |    51 +
+ .../floor/tile_-2_-2/asset_manifest.json           |    51 +
+ .../floor/tile_-2_-3/asset_manifest.json           |    51 +
+ .../floor/tile_-2_-4/asset_manifest.json           |    51 +
+ .../floor/tile_-2_0/asset_manifest.json            |    51 +
+ .../floor/tile_-2_1/asset_manifest.json            |    51 +
+ .../floor/tile_-2_2/asset_manifest.json            |    51 +
+ .../floor/tile_-2_3/asset_manifest.json            |    51 +
+ .../floor/tile_-3_-1/asset_manifest.json           |    51 +
+ .../floor/tile_-3_-2/asset_manifest.json           |    51 +
+ .../floor/tile_-3_-3/asset_manifest.json           |    51 +
+ .../floor/tile_-3_-4/asset_manifest.json           |    51 +
+ .../floor/tile_-3_0/asset_manifest.json            |    51 +
+ .../floor/tile_-3_1/asset_manifest.json            |    51 +
+ .../floor/tile_-3_2/asset_manifest.json            |    51 +
+ .../floor/tile_-3_3/asset_manifest.json            |    51 +
+ .../floor/tile_0_-1/asset_manifest.json            |    51 +
+ .../floor/tile_0_-2/asset_manifest.json            |    51 +
+ .../floor/tile_0_-3/asset_manifest.json            |    51 +
+ .../floor/tile_0_-4/asset_manifest.json            |    51 +
+ .../floor/tile_0_0/asset_manifest.json             |    51 +
+ .../floor/tile_0_1/asset_manifest.json             |    51 +
+ .../floor/tile_0_2/asset_manifest.json             |    51 +
+ .../floor/tile_0_3/asset_manifest.json             |    51 +
+ .../floor/tile_1_-1/asset_manifest.json            |    51 +
+ .../floor/tile_1_-2/asset_manifest.json            |    51 +
+ .../floor/tile_1_-3/asset_manifest.json            |    51 +
+ .../floor/tile_1_-4/asset_manifest.json            |    51 +
+ .../floor/tile_1_0/asset_manifest.json             |    51 +
+ .../floor/tile_1_1/asset_manifest.json             |    51 +
+ .../floor/tile_1_2/asset_manifest.json             |    51 +
+ .../floor/tile_1_3/asset_manifest.json             |    51 +
+ .../floor/tile_2_-1/asset_manifest.json            |    51 +
+ .../floor/tile_2_-2/asset_manifest.json            |    51 +
+ .../floor/tile_2_-3/asset_manifest.json            |    51 +
+ .../floor/tile_2_-4/asset_manifest.json            |    51 +
+ .../floor/tile_2_0/asset_manifest.json             |    51 +
+ .../floor/tile_2_1/asset_manifest.json             |    51 +
+ .../floor/tile_2_2/asset_manifest.json             |    51 +
+ .../floor/tile_2_3/asset_manifest.json             |    51 +
+ .../support/ceiling_deck_-1/asset_manifest.json    |    50 +
+ .../support/ceiling_deck_-2/asset_manifest.json    |    50 +
+ .../support/ceiling_deck_-3/asset_manifest.json    |    50 +
+ .../support/ceiling_deck_-4/asset_manifest.json    |    50 +
+ .../support/ceiling_deck_0/asset_manifest.json     |    50 +
+ .../support/ceiling_deck_1/asset_manifest.json     |    50 +
+ .../support/ceiling_deck_2/asset_manifest.json     |    50 +
+ .../support/ceiling_deck_3/asset_manifest.json     |    50 +
+ .../support/ceiling_lighting/asset_manifest.json   |    51 +
+ .../support/ceiling_ring_beam/asset_manifest.json  |    50 +
+ .../ceiling_service_cable_tray/asset_manifest.json |    50 +
+ .../ceiling_service_duct/asset_manifest.json       |    50 +
+ .../ceiling_service_pipe_run/asset_manifest.json   |    50 +
+ .../support/corner_guard/asset_manifest.json       |    50 +
+ .../support/floor_service/asset_manifest.json      |    50 +
+ .../support/wall_top_service/asset_manifest.json   |    63 +
+ .../room_types/office_room/v001/component_tree.txt |   106 +
+ .../room_types/office_room/v001/qa_report.json     |    93 +
+ .../v001/renders/complete_structure.png            |   Bin 0 -> 2122015 bytes
+ .../v001/renders/perimeter_facilities_detail.png   |   Bin 0 -> 2066248 bytes
+ .../office_room/v001/renders/reference_cutaway.png |   Bin 0 -> 2434638 bytes
+ .../office_room/v001/renders/top_plan.png          |   Bin 0 -> 2272321 bytes
+ .../v001/renders/workstation_detail.png            |   Bin 0 -> 2758858 bytes
+ .../office_room/v001/room_type_manifest.json       |  5853 +++++
+ ...\276\345\212\236\345\205\254_30x40m_v001.blend" |   Bin 0 -> 58253332 bytes
+ .../std_25x25/v001/build_std25_room_v001.py        |   298 +
+ .../std_25x25/v001/component_inventory.json        |  6040 +++++
+ .../std_25x25/v001/emit_std25_inventories.py       |   233 +
+ .../std_25x25/v001/layout_build_report.json        |  1490 ++
+ .../room_types/std_25x25/v001/qa_report.json       |  2125 ++
+ .../std_25x25/v001/renders/std25_01_top.png        |   Bin 0 -> 2068743 bytes
+ .../std_25x25/v001/renders/std25_02_cutaway_nw.png |   Bin 0 -> 1514357 bytes
+ .../v001/renders/std25_03_corridor_west_in.png     |   Bin 0 -> 1767099 bytes
+ .../renders/std25_04_south_mech_from_north.png     |   Bin 0 -> 1790454 bytes
+ .../renders/std25_05_north_office_from_south.png   |   Bin 0 -> 1669703 bytes
+ .../v001/renders/std25_06_interior_no_shell.png    |   Bin 0 -> 1695695 bytes
+ .../std_25x25/v001/room_type_manifest.json         |  6207 +++++
+ .../std_25x25/v001/std_25x25_v001.layout.json      |  2006 ++
+ .../std_25x25/v001/verify_std25_layout_v001.py     |   288 +
+ ...\231\345\271\263\346\210\277_25x25m_v001.blend" |   Bin 0 -> 651379 bytes
+ assets/registry/ledger_split_baseline.json         |  4314 ++--
+ ...\346\231\257\350\264\246\346\234\254_v001.xlsx" |   Bin 167678 -> 184105 bytes
+ ...224\237\346\210\220\350\247\204\350\214\203.md" |    16 +
+ ...251\347\262\276\350\213\261\344\270\216Boss.md" |     2 +-
+ ...241\224\347\275\227\347\211\214\347\273\204.md" |     5 +
+ docs/v0.1/MODULE_INDEX.md                          |     2 +-
+ ...221\210\347\216\260\350\256\276\350\256\241.md" |     1 +
+ ...5\263\345\215\24101\350\256\276\350\256\241.md" |    76 +-
+ .../2026-09-26_room_wave_intermission.md           |    55 +
+ docs/v0.1/development/CHANGELOG.md                 |    16 +
+ docs/v0.1/feature_registry.json                    |     4 +-
+ scripts/run_verification_suite.sh                  |     1 +
+ .../01-battle-room-type-art-authoring/SKILL.md     |    48 +-
+ skills_drafts/godot-export-pack-audit/SKILL.md     |   102 +
+ .../godot-export-pack-audit/scripts/pck_inspect.py |    91 +
+ skills_drafts/godot-runtime-probe/SKILL.md         |    39 +-
+ .../SKILL.md                                       |    22 +-
+ src/world3d/Dungeon3D.gd                           |   316 +-
+ src/world3d/DungeonRoom3D.gd                       |   196 +-
+ .../verify_dungeon_wave_intermission.txt           |     1 +
+ tests/verification/probe_corner_relief.gd          |   116 +
+ tests/verification/probe_corner_relief.gd.uid      |     1 +
+ tests/verification/probe_corner_relief.tscn        |     6 +
+ .../verification/probe_expedition_spawn_safety.gd  |   239 +
+ .../probe_expedition_spawn_safety.gd.uid           |     1 +
+ .../probe_expedition_spawn_safety.tscn             |     6 +
+ tests/verification/probe_shared_wall_sides.gd      |   233 +
+ tests/verification/probe_shared_wall_sides.gd.uid  |     1 +
+ tests/verification/probe_shared_wall_sides.tscn    |     6 +
+ tests/verification/probe_wall_collision_audit.gd   |   169 +
+ .../verification/probe_wall_collision_audit.gd.uid |     1 +
+ tests/verification/probe_wall_collision_audit.tscn |     6 +
+ tests/verification/probe_wall_facing_shots.gd      |   283 +
+ tests/verification/probe_wall_facing_shots.gd.uid  |     1 +
+ tests/verification/probe_wall_facing_shots.tscn    |     6 +
+ tests/verification/probe_wall_prefab_gallery.gd    |   276 +
+ .../verification/probe_wall_prefab_gallery.gd.uid  |     1 +
+ tests/verification/probe_wall_prefab_gallery.tscn  |     6 +
+ tests/verification/probe_wall_relief.gd            |   115 +
+ tests/verification/probe_wall_relief.gd.uid        |     1 +
+ tests/verification/probe_wall_relief.tscn          |     6 +
+ tests/verification/probe_wall_tint_shots.gd        |   345 +
+ tests/verification/probe_wall_tint_shots.gd.uid    |     1 +
+ tests/verification/probe_wall_tint_shots.tscn      |     6 +
+ tests/verification/probe_wall_visual_facing.gd     |   209 +
+ tests/verification/probe_wall_visual_facing.gd.uid |     1 +
+ tests/verification/probe_wall_visual_facing.tscn   |     6 +
+ .../verify_dungeon_wave_intermission.gd            |   288 +
+ .../verify_dungeon_wave_intermission.gd.uid        |     1 +
+ .../verify_dungeon_wave_intermission.tscn          |     6 +
+ 545 files changed, 155027 insertions(+), 2446 deletions(-)

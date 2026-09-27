@@ -1,0 +1,197 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+loot_common	bp_pistol	豌豆手枪蓝图碎片	blueprint	gun_body	common	0	50	gunbody	1.00	8.91
+loot_common	bp_rifle	步枪蓝图碎片	blueprint	gun_body	uncommon	1	80	gunbody	1.00	8.91
+loot_common	bp_shotgun	散射喷壶蓝图碎片	blueprint	gun_body	common	0	60	gunbody	1.00	8.91
+loot_common	bp_sniper	弹弓狙击蓝图碎片	blueprint	gun_body	rare	2	120	gunbody	0.50	4.46
+loot_common	bp_sprinkler	花洒机枪蓝图碎片	blueprint	gun_body	common	0	45	gunbody	1.00	8.91
+loot_common	equipment_backpack_2	轻型腰包	equipment	backpack	common	0	55	other	0.22	1.96
+loot_common	item_ammo_pack	通用弹药	consumable		common	0	30	other	1.50	13.37
+loot_common	item_battery_s	小型电池	consumable	battery	common	0	25	other	2.00	17.83
+loot_common	item_health_potion	治疗药水	consumable		common	0	40	other	2.00	17.83
+loot_common	item_room_key	房间钥匙	key		common	0	40	other	1.00	8.91
+##TOTAL	loot_common	10	11.22
+loot_floor_1_2	attach_rubber_stock	橡皮枪托	attachment	stock	common	0	45	attachment	3.00	8.31
+loot_floor_1_2	attach_triple_muzzle	三叉枪口	attachment	muzzle	uncommon	0	70	attachment	2.50	6.93
+loot_floor_1_2	bp_pistol	豌豆手枪蓝图碎片	blueprint	gun_body	common	0	50	gunbody	3.00	8.31
+loot_floor_1_2	bp_shotgun	散射喷壶蓝图碎片	blueprint	gun_body	common	0	60	gunbody	2.50	6.93
+loot_floor_1_2	bp_sprinkler	花洒机枪蓝图碎片	blueprint	gun_body	common	0	45	gunbody	2.00	5.54
+loot_floor_1_2	equipment_backpack_2	轻型腰包	equipment	backpack	common	0	55	other	0.50	1.39
+loot_floor_1_2	equipment_backpack_4	战术背包	equipment	backpack	uncommon	0	120	other	0.16	0.44
+loot_floor_1_2	item_ammo_pack	通用弹药	consumable		common	0	30	other	2.50	6.93
+loot_floor_1_2	item_battery_s	小型电池	consumable	battery	common	0	25	other	2.50	6.93
+loot_floor_1_2	item_beacon	撤离信标	consumable		rare	0	150	other	1.00	2.77
+loot_floor_1_2	item_health_potion	治疗药水	consumable		common	0	40	other	2.00	5.54
+loot_floor_1_2	item_room_key	房间钥匙	key		common	0	40	other	1.80	4.99
+loot_floor_1_2	mod_bullet_bounce	回旋镖弹模块	module	bullet	uncommon	0	60	bullet	1.50	4.16
+loot_floor_1_2	mod_bullet_standard	标准子弹模块	module	bullet	common	0	30	bullet	3.00	8.31
+loot_floor_1_2	mod_bullet_sticky	黏黏弹模块	module	bullet	uncommon	0	50	bullet	2.00	5.54
+loot_floor_1_2	weapon_baseball_bat	废土棒球棍	weapon	melee_weapon	common	0	45	other	1.60	4.43
+loot_floor_1_2	weapon_greatblade	巨型工业断刃	weapon	melee_weapon	uncommon	0	165	other	0.75	2.08
+loot_floor_1_2	weapon_machinegun	蜂窝机枪	weapon	gun_body	uncommon	1	180	gunbody	1.00	2.77
+loot_floor_1_2	weapon_pistol	豌豆手枪	weapon	gun_body	common	0	70	gunbody	0.80	2.22
+loot_floor_1_2	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	0.30	0.83
+loot_floor_1_2	weapon_shotgun	散射喷壶	weapon	gun_body	uncommon	0	110	gunbody	1.00	2.77
+loot_floor_1_2	weapon_sprinkler	花洒机枪	weapon	gun_body	uncommon	0	90	gunbody	0.50	1.39
+loot_floor_1_2	weapon_waraxe	攻城裂甲斧	weapon	melee_weapon	rare	1	240	other	0.18	0.50
+##TOTAL	loot_floor_1_2	23	36.09
+loot_floor_3_4	attach_big_mag	肉质弹匣	attachment	magazine	uncommon	1	80	attachment	2.00	4.73
+loot_floor_3_4	attach_rubber_stock	橡皮枪托	attachment	stock	common	0	45	attachment	2.50	5.92
+loot_floor_3_4	attach_scope	放大镜瞄具	attachment	scope	rare	1	100	attachment	2.00	4.73
+loot_floor_3_4	attach_triple_muzzle	三叉枪口	attachment	muzzle	uncommon	0	70	attachment	2.00	4.73
+loot_floor_3_4	bp_machinegun	蜂窝机枪蓝图碎片	blueprint	gun_body	uncommon	1	90	gunbody	1.50	3.55
+loot_floor_3_4	bp_pistol	豌豆手枪蓝图碎片	blueprint	gun_body	common	0	50	gunbody	2.50	5.92
+loot_floor_3_4	bp_rifle	步枪蓝图碎片	blueprint	gun_body	uncommon	1	80	gunbody	2.00	4.73
+loot_floor_3_4	bp_shotgun	散射喷壶蓝图碎片	blueprint	gun_body	common	0	60	gunbody	2.00	4.73
+loot_floor_3_4	bp_sprinkler	花洒机枪蓝图碎片	blueprint	gun_body	common	0	45	gunbody	1.50	3.55
+loot_floor_3_4	equipment_backpack_4	战术背包	equipment	backpack	uncommon	0	120	other	0.65	1.54
+loot_floor_3_4	item_battery_l	大型电池	consumable		uncommon	0	60	other	1.20	2.84
+loot_floor_3_4	item_beacon	撤离信标	consumable		rare	0	150	other	1.50	3.55
+loot_floor_3_4	item_health_potion	治疗药水	consumable		common	0	40	other	1.50	3.55
+loot_floor_3_4	mod_bullet_balloon	气球弹模块	module	bullet	rare	1	90	bullet	1.50	3.55
+loot_floor_3_4	mod_bullet_bounce	回旋镖弹模块	module	bullet	uncommon	0	60	bullet	2.00	4.73
+loot_floor_3_4	mod_bullet_explosive	爆炸弹模块	module	bullet	rare	1	100	bullet	1.50	3.55
+loot_floor_3_4	mod_bullet_piercing	穿甲弹模块	module	bullet	rare	1	80	bullet	2.00	4.73
+loot_floor_3_4	mod_bullet_standard	标准子弹模块	module	bullet	common	0	30	bullet	2.50	5.92
+loot_floor_3_4	mod_bullet_sticky	黏黏弹模块	module	bullet	uncommon	0	50	bullet	2.50	5.92
+loot_floor_3_4	weapon_greatblade	巨型工业断刃	weapon	melee_weapon	uncommon	0	165	other	1.20	2.84
+loot_floor_3_4	weapon_launcher	反胃榴弹筒	weapon	gun_body	rare	2	250	gunbody	1.00	2.37
+loot_floor_3_4	weapon_machinegun	蜂窝机枪	weapon	gun_body	uncommon	1	180	gunbody	1.50	3.55
+loot_floor_3_4	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	1.50	3.55
+loot_floor_3_4	weapon_sniper	弹弓狙击	weapon	gun_body	rare	2	220	gunbody	0.50	1.18
+loot_floor_3_4	weapon_sprinkler	花洒机枪	weapon	gun_body	uncommon	0	90	gunbody	0.75	1.78
+loot_floor_3_4	weapon_waraxe	攻城裂甲斧	weapon	melee_weapon	rare	1	240	other	0.95	2.25
+##TOTAL	loot_floor_3_4	26	42.25
+loot_floor_5	attach_big_mag	肉质弹匣	attachment	magazine	uncommon	1	80	attachment	2.50	5.01
+loot_floor_5	attach_fan	小风扇	attachment	external	epic	2	150	attachment	2.00	4.01
+loot_floor_5	attach_rubber_stock	橡皮枪托	attachment	stock	common	0	45	attachment	2.00	4.01
+loot_floor_5	attach_scope	放大镜瞄具	attachment	scope	rare	1	100	attachment	2.50	5.01
+loot_floor_5	attach_triple_muzzle	三叉枪口	attachment	muzzle	uncommon	0	70	attachment	1.50	3.01
+loot_floor_5	bp_machinegun	蜂窝机枪蓝图碎片	blueprint	gun_body	uncommon	1	90	gunbody	2.00	4.01
+loot_floor_5	bp_pistol	豌豆手枪蓝图碎片	blueprint	gun_body	common	0	50	gunbody	2.00	4.01
+loot_floor_5	bp_rifle	步枪蓝图碎片	blueprint	gun_body	uncommon	1	80	gunbody	2.50	5.01
+loot_floor_5	bp_shotgun	散射喷壶蓝图碎片	blueprint	gun_body	common	0	60	gunbody	1.50	3.01
+loot_floor_5	bp_sniper	弹弓狙击蓝图碎片	blueprint	gun_body	rare	2	120	gunbody	2.00	4.01
+loot_floor_5	bp_sprinkler	花洒机枪蓝图碎片	blueprint	gun_body	common	0	45	gunbody	1.00	2.00
+loot_floor_5	equipment_backpack_8	远征背包	equipment	backpack	rare	0	260	other	0.55	1.10
+loot_floor_5	item_beacon	撤离信标	consumable		rare	0	150	other	2.00	4.01
+loot_floor_5	item_cell_pack	电芯包	consumable		rare	0	120	other	0.60	1.20
+loot_floor_5	mod_bullet_balloon	气球弹模块	module	bullet	rare	1	90	bullet	2.00	4.01
+loot_floor_5	mod_bullet_bounce	回旋镖弹模块	module	bullet	uncommon	0	60	bullet	2.50	5.01
+loot_floor_5	mod_bullet_explosive	爆炸弹模块	module	bullet	rare	1	100	bullet	2.00	4.01
+loot_floor_5	mod_bullet_homing	蜂卵弹模块	module	bullet	epic	2	150	bullet	2.00	4.01
+loot_floor_5	mod_bullet_piercing	穿甲弹模块	module	bullet	rare	1	80	bullet	2.50	5.01
+loot_floor_5	mod_bullet_standard	标准子弹模块	module	bullet	common	0	30	bullet	2.00	4.01
+loot_floor_5	mod_bullet_sticky	黏黏弹模块	module	bullet	uncommon	0	50	bullet	2.00	4.01
+loot_floor_5	weapon_charge	蓄力萝卜炮	weapon	gun_body	epic	3	350	gunbody	0.80	1.60
+loot_floor_5	weapon_launcher	反胃榴弹筒	weapon	gun_body	rare	2	250	gunbody	1.50	3.01
+loot_floor_5	weapon_machinegun	蜂窝机枪	weapon	gun_body	uncommon	1	180	gunbody	2.00	4.01
+loot_floor_5	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	2.00	4.01
+loot_floor_5	weapon_sniper	弹弓狙击	weapon	gun_body	rare	2	220	gunbody	1.50	3.01
+loot_floor_5	weapon_sprinkler	花洒机枪	weapon	gun_body	uncommon	0	90	gunbody	1.00	2.00
+loot_floor_5	weapon_waraxe	攻城裂甲斧	weapon	melee_weapon	rare	1	240	other	1.45	2.91
+##TOTAL	loot_floor_5	28	49.90
+loot_abyss	attach_big_mag	肉质弹匣	attachment	magazine	uncommon	1	80	attachment	2.00	3.05
+loot_abyss	attach_copy_sticker	复制贴纸	attachment	mutator	epic	2	200	attachment	2.00	3.05
+loot_abyss	attach_fan	小风扇	attachment	external	epic	2	150	attachment	2.50	3.81
+loot_abyss	attach_rubber_stock	橡皮枪托	attachment	stock	common	0	45	attachment	1.50	2.28
+loot_abyss	attach_scope	放大镜瞄具	attachment	scope	rare	1	100	attachment	3.00	4.57
+loot_abyss	attach_triple_muzzle	三叉枪口	attachment	muzzle	uncommon	0	70	attachment	1.00	1.52
+loot_abyss	bp_charge	蓄力萝卜炮蓝图碎片	blueprint	gun_body	epic	3	200	gunbody	2.00	3.05
+loot_abyss	bp_launcher	反胃榴弹筒蓝图碎片	blueprint	gun_body	rare	2	130	gunbody	2.50	3.81
+loot_abyss	bp_machinegun	蜂窝机枪蓝图碎片	blueprint	gun_body	uncommon	1	90	gunbody	2.50	3.81
+loot_abyss	bp_pistol	豌豆手枪蓝图碎片	blueprint	gun_body	common	0	50	gunbody	1.50	2.28
+loot_abyss	bp_rifle	步枪蓝图碎片	blueprint	gun_body	uncommon	1	80	gunbody	3.00	4.57
+loot_abyss	bp_shotgun	散射喷壶蓝图碎片	blueprint	gun_body	common	0	60	gunbody	1.00	1.52
+loot_abyss	bp_sniper	弹弓狙击蓝图碎片	blueprint	gun_body	rare	2	120	gunbody	3.00	4.57
+loot_abyss	bp_sprinkler	花洒机枪蓝图碎片	blueprint	gun_body	common	0	45	gunbody	0.75	1.14
+loot_abyss	equipment_backpack_8	远征背包	equipment	backpack	rare	0	260	other	0.85	1.29
+loot_abyss	item_beacon	撤离信标	consumable		rare	0	150	other	2.50	3.81
+loot_abyss	item_cell_pack	电芯包	consumable		rare	0	120	other	1.00	1.52
+loot_abyss	mod_bullet_balloon	气球弹模块	module	bullet	rare	1	90	bullet	2.00	3.05
+loot_abyss	mod_bullet_blackhole	黑洞弹模块	module	bullet	epic	2	180	bullet	2.50	3.81
+loot_abyss	mod_bullet_bounce	回旋镖弹模块	module	bullet	uncommon	0	60	bullet	2.00	3.05
+loot_abyss	mod_bullet_explosive	爆炸弹模块	module	bullet	rare	1	100	bullet	2.50	3.81
+loot_abyss	mod_bullet_homing	蜂卵弹模块	module	bullet	epic	2	150	bullet	3.00	4.57
+loot_abyss	mod_bullet_piercing	穿甲弹模块	module	bullet	rare	1	80	bullet	3.00	4.57
+loot_abyss	mod_bullet_standard	标准子弹模块	module	bullet	common	0	30	bullet	1.50	2.28
+loot_abyss	mod_bullet_sticky	黏黏弹模块	module	bullet	uncommon	0	50	bullet	1.50	2.28
+loot_abyss	weapon_charge	蓄力萝卜炮	weapon	gun_body	epic	3	350	gunbody	2.00	3.05
+loot_abyss	weapon_launcher	反胃榴弹筒	weapon	gun_body	rare	2	250	gunbody	2.50	3.81
+loot_abyss	weapon_machinegun	蜂窝机枪	weapon	gun_body	uncommon	1	180	gunbody	2.50	3.81
+loot_abyss	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	2.50	3.81
+loot_abyss	weapon_sniper	弹弓狙击	weapon	gun_body	rare	2	220	gunbody	2.50	3.81
+loot_abyss	weapon_sprinkler	花洒机枪	weapon	gun_body	uncommon	0	90	gunbody	1.25	1.90
+loot_abyss	weapon_waraxe	攻城裂甲斧	weapon	melee_weapon	rare	1	240	other	1.80	2.74
+##TOTAL	loot_abyss	32	65.65
+scavenge_floor_1	attach_rubber_stock	橡皮枪托	attachment	stock	common	0	45	attachment	3.00	10.79
+scavenge_floor_1	attach_triple_muzzle	三叉枪口	attachment	muzzle	uncommon	0	70	attachment	2.50	8.99
+scavenge_floor_1	bp_pistol	豌豆手枪蓝图碎片	blueprint	gun_body	common	0	50	gunbody	2.50	8.99
+scavenge_floor_1	bp_shotgun	散射喷壶蓝图碎片	blueprint	gun_body	common	0	60	gunbody	2.00	7.19
+scavenge_floor_1	bp_sprinkler	花洒机枪蓝图碎片	blueprint	gun_body	common	0	45	gunbody	1.50	5.40
+scavenge_floor_1	equipment_backpack_2	轻型腰包	equipment	backpack	common	0	55	other	1.20	4.32
+scavenge_floor_1	item_beacon	撤离信标	consumable		rare	0	150	other	0.80	2.88
+scavenge_floor_1	item_room_key	房间钥匙	key		common	0	40	other	2.40	8.63
+scavenge_floor_1	mod_bullet_bounce	回旋镖弹模块	module	bullet	uncommon	0	60	bullet	1.50	5.40
+scavenge_floor_1	mod_bullet_standard	标准子弹模块	module	bullet	common	0	30	bullet	3.00	10.79
+scavenge_floor_1	mod_bullet_sticky	黏黏弹模块	module	bullet	uncommon	0	50	bullet	2.00	7.19
+scavenge_floor_1	weapon_baseball_bat	废土棒球棍	weapon	melee_weapon	common	0	45	other	1.80	6.47
+scavenge_floor_1	weapon_greatblade	巨型工业断刃	weapon	melee_weapon	uncommon	0	165	other	0.65	2.34
+scavenge_floor_1	weapon_machinegun	蜂窝机枪	weapon	gun_body	uncommon	1	180	gunbody	0.50	1.80
+scavenge_floor_1	weapon_pistol	豌豆手枪	weapon	gun_body	common	0	70	gunbody	0.80	2.88
+scavenge_floor_1	weapon_shotgun	散射喷壶	weapon	gun_body	uncommon	0	110	gunbody	1.40	5.04
+scavenge_floor_1	weapon_sprinkler	花洒机枪	weapon	gun_body	uncommon	0	90	gunbody	0.25	0.90
+##TOTAL	scavenge_floor_1	17	27.80
+elite_floor_1	equipment_backpack_4	战术背包	equipment	backpack	uncommon	0	120	other	0.85	7.59
+elite_floor_1	item_battery_l	大型电池	consumable		uncommon	0	60	other	0.80	7.14
+elite_floor_1	item_beacon	撤离信标	consumable		rare	0	150	other	1.50	13.39
+elite_floor_1	item_flashlight_efficient	节能模块	module	flashlight_module	rare	0	0	other	0.60	5.36
+elite_floor_1	item_room_key	房间钥匙	key		common	0	40	other	1.00	8.93
+elite_floor_1	weapon_machinegun	蜂窝机枪	weapon	gun_body	uncommon	1	180	gunbody	1.50	13.39
+elite_floor_1	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	1.50	13.39
+elite_floor_1	weapon_sniper	弹弓狙击	weapon	gun_body	rare	2	220	gunbody	1.50	13.39
+elite_floor_1	weapon_sprinkler	花洒机枪	weapon	gun_body	uncommon	0	90	gunbody	0.75	6.70
+elite_floor_1	weapon_waraxe	攻城裂甲斧	weapon	melee_weapon	rare	1	240	other	1.20	10.71
+##TOTAL	elite_floor_1	10	11.20
+elite_floor_2	equipment_backpack_4	战术背包	equipment	backpack	uncommon	0	120	other	0.55	2.63
+elite_floor_2	equipment_backpack_8	远征背包	equipment	backpack	rare	0	260	other	0.75	3.58
+elite_floor_2	item_battery_l	大型电池	consumable		uncommon	0	60	other	0.80	3.82
+elite_floor_2	item_beacon	撤离信标	consumable		rare	0	150	other	1.50	7.16
+elite_floor_2	item_flashlight_efficient	节能模块	module	flashlight_module	rare	0	0	other	0.80	3.82
+elite_floor_2	item_room_key	房间钥匙	key		common	0	40	other	1.00	4.77
+elite_floor_2	weapon_charge	蓄力萝卜炮	weapon	gun_body	epic	3	350	gunbody	3.00	14.32
+elite_floor_2	weapon_launcher	反胃榴弹筒	weapon	gun_body	rare	2	250	gunbody	3.00	14.32
+elite_floor_2	weapon_machinegun	蜂窝机枪	weapon	gun_body	uncommon	1	180	gunbody	2.50	11.93
+elite_floor_2	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	2.00	9.55
+elite_floor_2	weapon_sniper	弹弓狙击	weapon	gun_body	rare	2	220	gunbody	2.00	9.55
+elite_floor_2	weapon_sprinkler	花洒机枪	weapon	gun_body	uncommon	0	90	gunbody	1.25	5.97
+elite_floor_2	weapon_waraxe	攻城裂甲斧	weapon	melee_weapon	rare	1	240	other	1.80	8.59
+##TOTAL	elite_floor_2	13	20.95
+boss_floor_1	attach_copy_sticker	复制贴纸	attachment	mutator	epic	2	200	attachment	3.00	8.51
+boss_floor_1	attach_fan	小风扇	attachment	external	epic	2	150	attachment	3.00	8.51
+boss_floor_1	bp_launcher	反胃榴弹筒蓝图碎片	blueprint	gun_body	rare	2	130	gunbody	3.00	8.51
+boss_floor_1	bp_rifle	步枪蓝图碎片	blueprint	gun_body	uncommon	1	80	gunbody	3.00	8.51
+boss_floor_1	bp_sniper	弹弓狙击蓝图碎片	blueprint	gun_body	rare	2	120	gunbody	4.00	11.35
+boss_floor_1	equipment_backpack_8	远征背包	equipment	backpack	rare	0	260	other	1.25	3.55
+boss_floor_1	item_battery_l	大型电池	consumable		uncommon	0	60	other	1.50	4.26
+boss_floor_1	item_beacon	撤离信标	consumable		rare	0	150	other	3.00	8.51
+boss_floor_1	mod_bullet_blackhole	黑洞弹模块	module	bullet	epic	2	180	bullet	3.00	8.51
+boss_floor_1	mod_bullet_homing	蜂卵弹模块	module	bullet	epic	2	150	bullet	4.00	11.35
+boss_floor_1	weapon_launcher	反胃榴弹筒	weapon	gun_body	rare	2	250	gunbody	2.50	7.09
+boss_floor_1	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	2.00	5.67
+boss_floor_1	weapon_sniper	弹弓狙击	weapon	gun_body	rare	2	220	gunbody	2.00	5.67
+##TOTAL	boss_floor_1	13	35.25
+boss_floor_2	attach_copy_sticker	复制贴纸	attachment	mutator	epic	2	200	attachment	4.00	9.03
+boss_floor_2	bp_charge	蓄力萝卜炮蓝图碎片	blueprint	gun_body	epic	3	200	gunbody	4.00	9.03
+boss_floor_2	bp_launcher	反胃榴弹筒蓝图碎片	blueprint	gun_body	rare	2	130	gunbody	4.00	9.03
+boss_floor_2	bp_sniper	弹弓狙击蓝图碎片	blueprint	gun_body	rare	2	120	gunbody	5.00	11.29
+boss_floor_2	equipment_backpack_8	远征背包	equipment	backpack	rare	0	260	other	1.80	4.06
+boss_floor_2	item_beacon	撤离信标	consumable		rare	0	150	other	4.00	9.03
+boss_floor_2	item_cell_pack	电芯包	consumable		rare	0	120	other	1.50	3.39
+boss_floor_2	item_flashlight_efficient	节能模块	module	flashlight_module	rare	0	0	other	1.00	2.26
+boss_floor_2	mod_bullet_blackhole	黑洞弹模块	module	bullet	epic	2	180	bullet	4.00	9.03
+boss_floor_2	weapon_charge	蓄力萝卜炮	weapon	gun_body	epic	3	350	gunbody	4.00	9.03
+boss_floor_2	weapon_launcher	反胃榴弹筒	weapon	gun_body	rare	2	250	gunbody	4.00	9.03
+boss_floor_2	weapon_rifle	步枪	weapon	gun_body	rare	1	150	gunbody	3.00	6.77
+boss_floor_2	weapon_sniper	弹弓狙击	weapon	gun_body	rare	2	220	gunbody	4.00	9.03
+##TOTAL	boss_floor_2	13	44.30

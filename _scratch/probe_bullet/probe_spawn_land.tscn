@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cslprobe8xx01"]
+
+[ext_resource type="Script" path="res://_scratch/probe_bullet/probe_spawn_land.gd" id="1_sl"]
+
+[node name="ProbeSpawnLand" type="Node3D"]
+script = ExtResource("1_sl")

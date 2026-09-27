@@ -1,0 +1,6577 @@
+{
+  "box_total": 39,
+  "difficulty_rank": 1,
+  "level_id": "expedition_01",
+  "point_total": 83,
+  "room_count": 13,
+  "rooms": [
+    {
+      "authored_instance_total": 0,
+      "authored_layout_room_id": "",
+      "dimensions": [
+        15.0,
+        15.0
+      ],
+      "doors": [
+        {
+          "dir": "east",
+          "local": [
+            7.5,
+            0.0
+          ],
+          "target": ""
+        },
+        {
+          "dir": "north",
+          "local": [
+            0.0,
+            -7.5
+          ],
+          "target": "room_01"
+        }
+      ],
+      "floor_level": 0,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          -1.118,
+          3.676
+        ],
+        [
+          4.778,
+          -2.147
+        ],
+        [
+          0.336,
+          -5.355
+        ],
+        [
+          4.532,
+          4.673
+        ],
+        [
+          -3.839,
+          0.351
+        ],
+        [
+          5.161,
+          1.031
+        ],
+        [
+          -3.51,
+          5.356
+        ],
+        [
+          1.634,
+          4.872
+        ],
+        [
+          5.625,
+          -4.532
+        ],
+        [
+          0.64,
+          0.185
+        ],
+        [
+          -3.349,
+          -3.142
+        ],
+        [
+          -2.095,
+          -1.114
+        ],
+        [
+          1.258,
+          -1.906
+        ],
+        [
+          -1.812,
+          1.046
+        ],
+        [
+          3.278,
+          6.168
+        ],
+        [
+          3.916,
+          -0.393
+        ]
+      ],
+      "origin": [
+        2.5,
+        2.5
+      ],
+      "peaceful": false,
+      "placements": [],
+      "room_id": "start",
+      "room_type": "STAIR_LOBBY",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [],
+      "tile_cells_local": [],
+      "waves": [],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 98,
+      "authored_layout_room_id": "room_01",
+      "dimensions": [
+        45.0,
+        40.0
+      ],
+      "doors": [
+        {
+          "dir": "south",
+          "local": [
+            0.0,
+            20.0
+          ],
+          "target": "start"
+        },
+        {
+          "dir": "east",
+          "local": [
+            22.5,
+            -2.5
+          ],
+          "target": "room_02"
+        }
+      ],
+      "floor_level": 0,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          8.643,
+          -15.857
+        ],
+        [
+          3.792,
+          8.996
+        ],
+        [
+          -18.22,
+          -18.047
+        ],
+        [
+          -18.178,
+          17.857
+        ],
+        [
+          18.684,
+          2.875
+        ],
+        [
+          15.999,
+          17.69
+        ],
+        [
+          -4.615,
+          -7.272
+        ],
+        [
+          -10.437,
+          7.13
+        ],
+        [
+          21.02,
+          -15.434
+        ],
+        [
+          -4.74,
+          17.958
+        ],
+        [
+          -16.314,
+          -6.628
+        ],
+        [
+          9.768,
+          -4.174
+        ],
+        [
+          -6.896,
+          -18.682
+        ],
+        [
+          -21.193,
+          7.209
+        ],
+        [
+          4.842,
+          18.031
+        ],
+        [
+          20.142,
+          -6.466
+        ]
+      ],
+      "origin": [
+        2.5,
+        -25.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 7,
+          "center_declared": [
+            -15.0,
+            -12.5
+          ],
+          "center_landed": [
+            -15.0,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 16,
+          "demand_max": 3,
+          "index": 0,
+          "min_spacing_m": 1.8,
+          "pool_count": 16,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            5.0,
+            -12.5
+          ],
+          "center_landed": [
+            5.0,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 9,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 1.7,
+          "pool_count": 9,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 6,
+          "center_declared": [
+            15.0,
+            2.5
+          ],
+          "center_landed": [
+            15.0,
+            2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 90.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_01",
+      "room_type": "COMBAT",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -20.0,
+          17.5
+        ],
+        [
+          -20.0,
+          12.5
+        ],
+        [
+          -20.0,
+          7.5
+        ],
+        [
+          -20.0,
+          -7.5
+        ],
+        [
+          -20.0,
+          -12.5
+        ],
+        [
+          -20.0,
+          -17.5
+        ],
+        [
+          -15.0,
+          17.5
+        ],
+        [
+          -15.0,
+          12.5
+        ],
+        [
+          -15.0,
+          7.5
+        ],
+        [
+          -15.0,
+          -7.5
+        ],
+        [
+          -15.0,
+          -12.5
+        ],
+        [
+          -15.0,
+          -17.5
+        ],
+        [
+          -10.0,
+          17.5
+        ],
+        [
+          -10.0,
+          12.5
+        ],
+        [
+          -10.0,
+          7.5
+        ],
+        [
+          -10.0,
+          -7.5
+        ],
+        [
+          -10.0,
+          -12.5
+        ],
+        [
+          -10.0,
+          -17.5
+        ],
+        [
+          -5.0,
+          17.5
+        ],
+        [
+          -5.0,
+          12.5
+        ],
+        [
+          -5.0,
+          7.5
+        ],
+        [
+          -5.0,
+          -7.5
+        ],
+        [
+          -5.0,
+          -12.5
+        ],
+        [
+          -5.0,
+          -17.5
+        ],
+        [
+          0.0,
+          17.5
+        ],
+        [
+          0.0,
+          12.5
+        ],
+        [
+          0.0,
+          7.5
+        ],
+        [
+          0.0,
+          -7.5
+        ],
+        [
+          0.0,
+          -12.5
+        ],
+        [
+          0.0,
+          -17.5
+        ],
+        [
+          5.0,
+          17.5
+        ],
+        [
+          5.0,
+          12.5
+        ],
+        [
+          5.0,
+          7.5
+        ],
+        [
+          5.0,
+          -7.5
+        ],
+        [
+          5.0,
+          -12.5
+        ],
+        [
+          5.0,
+          -17.5
+        ],
+        [
+          10.0,
+          17.5
+        ],
+        [
+          10.0,
+          12.5
+        ],
+        [
+          10.0,
+          7.5
+        ],
+        [
+          10.0,
+          2.5
+        ],
+        [
+          10.0,
+          -2.5
+        ],
+        [
+          10.0,
+          -7.5
+        ],
+        [
+          10.0,
+          -12.5
+        ],
+        [
+          10.0,
+          -17.5
+        ],
+        [
+          15.0,
+          17.5
+        ],
+        [
+          15.0,
+          12.5
+        ],
+        [
+          15.0,
+          7.5
+        ],
+        [
+          15.0,
+          2.5
+        ],
+        [
+          15.0,
+          -2.5
+        ],
+        [
+          15.0,
+          -7.5
+        ],
+        [
+          15.0,
+          -12.5
+        ],
+        [
+          15.0,
+          -17.5
+        ],
+        [
+          20.0,
+          17.5
+        ],
+        [
+          20.0,
+          12.5
+        ],
+        [
+          20.0,
+          7.5
+        ],
+        [
+          20.0,
+          2.5
+        ],
+        [
+          20.0,
+          -2.5
+        ],
+        [
+          20.0,
+          -7.5
+        ],
+        [
+          20.0,
+          -12.5
+        ],
+        [
+          20.0,
+          -17.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -13.0,
+              -11.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -10.5,
+              -36.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -15.0,
+              -13.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -12.5,
+              -38.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 1.0,
+            "local": [
+              -17.0,
+              -14.5
+            ],
+            "type": "exploder",
+            "world": [
+              -14.5,
+              -39.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              4.0,
+              -13.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              6.5,
+              -38.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              4.0,
+              -11.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              6.5,
+              -36.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              15.0,
+              4.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              17.5,
+              -20.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 62,
+      "authored_layout_room_id": "room_02",
+      "dimensions": [
+        40.0,
+        30.0
+      ],
+      "doors": [
+        {
+          "dir": "west",
+          "local": [
+            -20.0,
+            -2.5
+          ],
+          "target": "room_01"
+        },
+        {
+          "dir": "south",
+          "local": [
+            -2.5,
+            15.0
+          ],
+          "target": "room_03"
+        }
+      ],
+      "floor_level": 0,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          1.447,
+          -10.953
+        ],
+        [
+          -6.975,
+          5.915
+        ],
+        [
+          -17.45,
+          -12.348
+        ],
+        [
+          17.984,
+          8.084
+        ],
+        [
+          17.752,
+          -3.944
+        ],
+        [
+          -18.587,
+          7.845
+        ],
+        [
+          4.491,
+          6.592
+        ],
+        [
+          11.597,
+          -12.875
+        ],
+        [
+          -17.183,
+          -2.68
+        ],
+        [
+          -7.973,
+          -12.523
+        ],
+        [
+          -1.517,
+          13.444
+        ],
+        [
+          11.05,
+          8.595
+        ],
+        [
+          18.38,
+          -13.439
+        ],
+        [
+          -1.238,
+          6.571
+        ],
+        [
+          -15.868,
+          3.016
+        ],
+        [
+          16.508,
+          2.961
+        ]
+      ],
+      "origin": [
+        45.0,
+        -25.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 3,
+          "center_declared": [
+            -12.5,
+            -7.5
+          ],
+          "center_landed": [
+            -12.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 5,
+          "demand_max": 2,
+          "index": 0,
+          "min_spacing_m": 1.7,
+          "pool_count": 5,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 5,
+          "center_declared": [
+            -2.5,
+            -7.5
+          ],
+          "center_landed": [
+            -2.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            4.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 8,
+          "center_declared": [
+            7.5,
+            2.5
+          ],
+          "center_landed": [
+            7.5,
+            2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 3,
+          "index": 2,
+          "min_spacing_m": 1.8,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corridor_column",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            12.5,
+            -2.5
+          ],
+          "center_landed": [
+            12.5,
+            -2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 12,
+          "demand_max": 3,
+          "index": 3,
+          "min_spacing_m": 1.7,
+          "pool_count": 12,
+          "pool_span": [
+            4.0,
+            2.0
+          ],
+          "rotation_deg": 90.0,
+          "shift": 0.0,
+          "size": [
+            2.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.5,
+              "type": "shielded"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_02",
+      "room_type": "SCAVENGE",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -17.5,
+          7.5
+        ],
+        [
+          -17.5,
+          2.5
+        ],
+        [
+          -17.5,
+          -2.5
+        ],
+        [
+          -17.5,
+          -7.5
+        ],
+        [
+          -17.5,
+          -12.5
+        ],
+        [
+          -12.5,
+          7.5
+        ],
+        [
+          -12.5,
+          2.5
+        ],
+        [
+          -12.5,
+          -2.5
+        ],
+        [
+          -12.5,
+          -7.5
+        ],
+        [
+          -12.5,
+          -12.5
+        ],
+        [
+          -7.5,
+          7.5
+        ],
+        [
+          -7.5,
+          2.5
+        ],
+        [
+          -7.5,
+          -2.5
+        ],
+        [
+          -7.5,
+          -7.5
+        ],
+        [
+          -7.5,
+          -12.5
+        ],
+        [
+          -2.5,
+          12.5
+        ],
+        [
+          -2.5,
+          7.5
+        ],
+        [
+          -2.5,
+          2.5
+        ],
+        [
+          -2.5,
+          -2.5
+        ],
+        [
+          -2.5,
+          -7.5
+        ],
+        [
+          -2.5,
+          -12.5
+        ],
+        [
+          2.5,
+          12.5
+        ],
+        [
+          2.5,
+          7.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          2.5,
+          -2.5
+        ],
+        [
+          2.5,
+          -7.5
+        ],
+        [
+          2.5,
+          -12.5
+        ],
+        [
+          7.5,
+          7.5
+        ],
+        [
+          7.5,
+          2.5
+        ],
+        [
+          7.5,
+          -2.5
+        ],
+        [
+          7.5,
+          -7.5
+        ],
+        [
+          7.5,
+          -12.5
+        ],
+        [
+          12.5,
+          7.5
+        ],
+        [
+          12.5,
+          2.5
+        ],
+        [
+          12.5,
+          -2.5
+        ],
+        [
+          12.5,
+          -7.5
+        ],
+        [
+          12.5,
+          -12.5
+        ],
+        [
+          17.5,
+          7.5
+        ],
+        [
+          17.5,
+          2.5
+        ],
+        [
+          17.5,
+          -2.5
+        ],
+        [
+          17.5,
+          -7.5
+        ],
+        [
+          17.5,
+          -12.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -11.5,
+              -7.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              33.5,
+              -32.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -13.5,
+              -6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              31.5,
+              -31.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -0.5,
+              -6.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              44.5,
+              -31.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              7.5,
+              4.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              52.5,
+              -20.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              7.5,
+              0.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              52.5,
+              -24.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 1.0,
+            "local": [
+              8.5,
+              2.5
+            ],
+            "type": "exploder",
+            "world": [
+              53.5,
+              -22.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              14.5,
+              -2.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              59.5,
+              -27.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              11.5,
+              -3.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              56.5,
+              -28.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 1.5,
+            "local": [
+              11.5,
+              -1.5
+            ],
+            "type": "shielded",
+            "world": [
+              56.5,
+              -26.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 70,
+      "authored_layout_room_id": "room_03",
+      "dimensions": [
+        30.0,
+        40.0
+      ],
+      "doors": [
+        {
+          "dir": "north",
+          "local": [
+            -2.5,
+            -20.0
+          ],
+          "target": "room_02"
+        },
+        {
+          "dir": "south",
+          "local": [
+            -2.5,
+            20.0
+          ],
+          "target": "room_04"
+        }
+      ],
+      "floor_level": 0,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          8.352,
+          -18.051
+        ],
+        [
+          -9.269,
+          17.253
+        ],
+        [
+          -10.736,
+          -16.046
+        ],
+        [
+          9.536,
+          16.363
+        ],
+        [
+          12.0,
+          -6.888
+        ],
+        [
+          -11.987,
+          -2.216
+        ],
+        [
+          11.885,
+          5.422
+        ],
+        [
+          -12.145,
+          8.05
+        ],
+        [
+          0.513,
+          17.276
+        ],
+        [
+          -0.604,
+          -17.797
+        ],
+        [
+          -12.566,
+          -9.3
+        ],
+        [
+          13.356,
+          -13.874
+        ],
+        [
+          13.485,
+          12.114
+        ],
+        [
+          11.168,
+          -1.393
+        ],
+        [
+          -5.515,
+          -16.114
+        ],
+        [
+          -12.948,
+          2.923
+        ]
+      ],
+      "origin": [
+        45.0,
+        10.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 7,
+          "center_declared": [
+            -7.5,
+            -12.5
+          ],
+          "center_landed": [
+            -7.5,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 22,
+          "demand_max": 3,
+          "index": 0,
+          "min_spacing_m": 1.8,
+          "pool_count": 22,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 3,
+          "center_declared": [
+            7.5,
+            -12.5
+          ],
+          "center_landed": [
+            7.5,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 7,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 1.7,
+          "pool_count": 7,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corridor_column",
+          "box_delay_sec": 0.0,
+          "capacity": 6,
+          "center_declared": [
+            -7.5,
+            2.5
+          ],
+          "center_landed": [
+            -7.5,
+            2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 3,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            2.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.5,
+              "type": "shielded"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 6,
+          "center_declared": [
+            7.5,
+            2.5
+          ],
+          "center_landed": [
+            7.5,
+            2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 2,
+          "index": 3,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 90.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_03",
+      "room_type": "COMBAT",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -12.5,
+          17.5
+        ],
+        [
+          -12.5,
+          12.5
+        ],
+        [
+          -12.5,
+          7.5
+        ],
+        [
+          -12.5,
+          2.5
+        ],
+        [
+          -12.5,
+          -2.5
+        ],
+        [
+          -12.5,
+          -7.5
+        ],
+        [
+          -12.5,
+          -12.5
+        ],
+        [
+          -12.5,
+          -17.5
+        ],
+        [
+          -7.5,
+          17.5
+        ],
+        [
+          -7.5,
+          12.5
+        ],
+        [
+          -7.5,
+          7.5
+        ],
+        [
+          -7.5,
+          2.5
+        ],
+        [
+          -7.5,
+          -2.5
+        ],
+        [
+          -7.5,
+          -7.5
+        ],
+        [
+          -7.5,
+          -12.5
+        ],
+        [
+          -7.5,
+          -17.5
+        ],
+        [
+          -2.5,
+          17.5
+        ],
+        [
+          -2.5,
+          12.5
+        ],
+        [
+          -2.5,
+          7.5
+        ],
+        [
+          -2.5,
+          2.5
+        ],
+        [
+          -2.5,
+          -2.5
+        ],
+        [
+          -2.5,
+          -7.5
+        ],
+        [
+          -2.5,
+          -12.5
+        ],
+        [
+          -2.5,
+          -17.5
+        ],
+        [
+          2.5,
+          17.5
+        ],
+        [
+          2.5,
+          12.5
+        ],
+        [
+          2.5,
+          7.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          2.5,
+          -2.5
+        ],
+        [
+          2.5,
+          -7.5
+        ],
+        [
+          2.5,
+          -12.5
+        ],
+        [
+          2.5,
+          -17.5
+        ],
+        [
+          7.5,
+          17.5
+        ],
+        [
+          7.5,
+          12.5
+        ],
+        [
+          7.5,
+          7.5
+        ],
+        [
+          7.5,
+          2.5
+        ],
+        [
+          7.5,
+          -2.5
+        ],
+        [
+          7.5,
+          -7.5
+        ],
+        [
+          7.5,
+          -12.5
+        ],
+        [
+          7.5,
+          -17.5
+        ],
+        [
+          12.5,
+          17.5
+        ],
+        [
+          12.5,
+          12.5
+        ],
+        [
+          12.5,
+          7.5
+        ],
+        [
+          12.5,
+          2.5
+        ],
+        [
+          12.5,
+          -2.5
+        ],
+        [
+          12.5,
+          -7.5
+        ],
+        [
+          12.5,
+          -12.5
+        ],
+        [
+          12.5,
+          -17.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -8.5,
+              -14.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              36.5,
+              -4.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -6.5,
+              -11.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              38.5,
+              -1.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 1.0,
+            "local": [
+              -5.5,
+              -13.5
+            ],
+            "type": "exploder",
+            "world": [
+              39.5,
+              -3.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              6.5,
+              -12.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              51.5,
+              -2.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              8.5,
+              -13.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              53.5,
+              -3.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              -8.5,
+              0.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              36.5,
+              10.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              -6.5,
+              1.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              38.5,
+              11.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 1.5,
+            "local": [
+              -7.5,
+              3.5
+            ],
+            "type": "shielded",
+            "world": [
+              37.5,
+              13.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              8.5,
+              2.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              53.5,
+              12.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 63,
+      "authored_layout_room_id": "room_04",
+      "dimensions": [
+        45.0,
+        40.0
+      ],
+      "doors": [
+        {
+          "dir": "north",
+          "local": [
+            0.0,
+            -20.0
+          ],
+          "target": "room_03"
+        },
+        {
+          "dir": "west",
+          "local": [
+            -22.5,
+            -2.5
+          ],
+          "target": "room_05"
+        }
+      ],
+      "floor_level": 1,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          -9.594,
+          13.109
+        ],
+        [
+          -20.615,
+          -8.434
+        ],
+        [
+          20.974,
+          -13.127
+        ],
+        [
+          -5.211,
+          -18.514
+        ],
+        [
+          5.866,
+          -6.877
+        ],
+        [
+          -20.44,
+          5.514
+        ],
+        [
+          -9.534,
+          -1.997
+        ],
+        [
+          9.414,
+          -18.382
+        ],
+        [
+          -20.05,
+          17.199
+        ],
+        [
+          -14.952,
+          -17.682
+        ],
+        [
+          -3.614,
+          -9.036
+        ],
+        [
+          15.946,
+          -6.378
+        ],
+        [
+          -11.65,
+          6.347
+        ],
+        [
+          -10.608,
+          -8.903
+        ],
+        [
+          1.549,
+          -17.924
+        ],
+        [
+          -18.838,
+          -0.838
+        ]
+      ],
+      "origin": [
+        42.5,
+        50.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 7,
+          "center_declared": [
+            -15.0,
+            -12.5
+          ],
+          "center_landed": [
+            -15.0,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 16,
+          "demand_max": 3,
+          "index": 0,
+          "min_spacing_m": 1.8,
+          "pool_count": 16,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            5.0,
+            -12.5
+          ],
+          "center_landed": [
+            5.0,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 9,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 1.7,
+          "pool_count": 9,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            15.0,
+            -12.5
+          ],
+          "center_landed": [
+            15.0,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 7,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 7,
+          "pool_span": [
+            4.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corridor_column",
+          "box_delay_sec": 0.0,
+          "capacity": 6,
+          "center_declared": [
+            -15.0,
+            7.5
+          ],
+          "center_landed": [
+            -15.0,
+            7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 3,
+          "index": 3,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            2.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.5,
+              "type": "shielded"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_04",
+      "room_type": "COMBAT",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -20.0,
+          17.5
+        ],
+        [
+          -20.0,
+          12.5
+        ],
+        [
+          -20.0,
+          7.5
+        ],
+        [
+          -20.0,
+          2.5
+        ],
+        [
+          -20.0,
+          -2.5
+        ],
+        [
+          -20.0,
+          -7.5
+        ],
+        [
+          -20.0,
+          -12.5
+        ],
+        [
+          -20.0,
+          -17.5
+        ],
+        [
+          -15.0,
+          17.5
+        ],
+        [
+          -15.0,
+          12.5
+        ],
+        [
+          -15.0,
+          7.5
+        ],
+        [
+          -15.0,
+          2.5
+        ],
+        [
+          -15.0,
+          -2.5
+        ],
+        [
+          -15.0,
+          -7.5
+        ],
+        [
+          -15.0,
+          -12.5
+        ],
+        [
+          -15.0,
+          -17.5
+        ],
+        [
+          -10.0,
+          17.5
+        ],
+        [
+          -10.0,
+          12.5
+        ],
+        [
+          -10.0,
+          7.5
+        ],
+        [
+          -10.0,
+          2.5
+        ],
+        [
+          -10.0,
+          -2.5
+        ],
+        [
+          -10.0,
+          -7.5
+        ],
+        [
+          -10.0,
+          -12.5
+        ],
+        [
+          -10.0,
+          -17.5
+        ],
+        [
+          -5.0,
+          -7.5
+        ],
+        [
+          -5.0,
+          -12.5
+        ],
+        [
+          -5.0,
+          -17.5
+        ],
+        [
+          0.0,
+          -7.5
+        ],
+        [
+          0.0,
+          -12.5
+        ],
+        [
+          0.0,
+          -17.5
+        ],
+        [
+          5.0,
+          -7.5
+        ],
+        [
+          5.0,
+          -12.5
+        ],
+        [
+          5.0,
+          -17.5
+        ],
+        [
+          10.0,
+          -7.5
+        ],
+        [
+          10.0,
+          -12.5
+        ],
+        [
+          10.0,
+          -17.5
+        ],
+        [
+          15.0,
+          -7.5
+        ],
+        [
+          15.0,
+          -12.5
+        ],
+        [
+          15.0,
+          -17.5
+        ],
+        [
+          20.0,
+          -7.5
+        ],
+        [
+          20.0,
+          -12.5
+        ],
+        [
+          20.0,
+          -17.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -17.0,
+              -12.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              25.5,
+              37.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -15.0,
+              -13.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              27.5,
+              36.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 1.0,
+            "local": [
+              -13.0,
+              -12.5
+            ],
+            "type": "exploder",
+            "world": [
+              29.5,
+              37.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              6.0,
+              -11.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              48.5,
+              38.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              4.0,
+              -13.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              46.5,
+              36.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              13.0,
+              -12.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              55.5,
+              37.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              15.0,
+              -13.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              57.5,
+              36.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              -16.0,
+              7.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              26.5,
+              57.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              -16.0,
+              5.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              26.5,
+              55.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 1.5,
+            "local": [
+              -16.0,
+              9.5
+            ],
+            "type": "shielded",
+            "world": [
+              26.5,
+              59.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 143,
+      "authored_layout_room_id": "room_05",
+      "dimensions": [
+        60.0,
+        30.0
+      ],
+      "doors": [
+        {
+          "dir": "east",
+          "local": [
+            30.0,
+            -2.5
+          ],
+          "target": "room_04"
+        },
+        {
+          "dir": "west",
+          "local": [
+            -30.0,
+            -2.5
+          ],
+          "target": "room_06"
+        }
+      ],
+      "floor_level": 1,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          5.414,
+          -0.922
+        ],
+        [
+          -26.094,
+          0.839
+        ],
+        [
+          -18.136,
+          -13.627
+        ],
+        [
+          17.71,
+          -12.536
+        ],
+        [
+          -9.015,
+          2.781
+        ],
+        [
+          26.867,
+          12.087
+        ],
+        [
+          27.684,
+          -2.494
+        ],
+        [
+          -17.62,
+          12.919
+        ],
+        [
+          16.573,
+          4.615
+        ],
+        [
+          -27.563,
+          -9.606
+        ],
+        [
+          -27.355,
+          10.436
+        ],
+        [
+          28.134,
+          -12.039
+        ],
+        [
+          -17.427,
+          -4.349
+        ],
+        [
+          13.709,
+          -3.507
+        ],
+        [
+          -17.417,
+          4.3
+        ],
+        [
+          16.496,
+          12.947
+        ]
+      ],
+      "origin": [
+        -10.0,
+        50.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 7,
+          "center_declared": [
+            -22.5,
+            -7.5
+          ],
+          "center_landed": [
+            -22.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 19,
+          "demand_max": 3,
+          "index": 0,
+          "min_spacing_m": 1.8,
+          "pool_count": 19,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 3,
+          "center_declared": [
+            -22.5,
+            7.5
+          ],
+          "center_landed": [
+            -22.5,
+            7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 7,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 1.7,
+          "pool_count": 7,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_center_elite",
+          "box_delay_sec": 0.0,
+          "capacity": 7,
+          "center_declared": [
+            22.5,
+            -7.5
+          ],
+          "center_landed": [
+            22.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 19,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 2.0,
+          "pool_count": 19,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "elite"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.5,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 9,
+          "center_declared": [
+            22.5,
+            7.5
+          ],
+          "center_landed": [
+            22.5,
+            7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 3,
+          "index": 3,
+          "min_spacing_m": 1.8,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_05",
+      "room_type": "COMBAT",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -27.5,
+          12.5
+        ],
+        [
+          -27.5,
+          7.5
+        ],
+        [
+          -27.5,
+          2.5
+        ],
+        [
+          -27.5,
+          -2.5
+        ],
+        [
+          -27.5,
+          -7.5
+        ],
+        [
+          -27.5,
+          -12.5
+        ],
+        [
+          -22.5,
+          12.5
+        ],
+        [
+          -22.5,
+          7.5
+        ],
+        [
+          -22.5,
+          2.5
+        ],
+        [
+          -22.5,
+          -2.5
+        ],
+        [
+          -22.5,
+          -7.5
+        ],
+        [
+          -22.5,
+          -12.5
+        ],
+        [
+          -17.5,
+          12.5
+        ],
+        [
+          -17.5,
+          7.5
+        ],
+        [
+          -17.5,
+          2.5
+        ],
+        [
+          -17.5,
+          -2.5
+        ],
+        [
+          -17.5,
+          -7.5
+        ],
+        [
+          -17.5,
+          -12.5
+        ],
+        [
+          -12.5,
+          2.5
+        ],
+        [
+          -12.5,
+          -2.5
+        ],
+        [
+          -7.5,
+          2.5
+        ],
+        [
+          -7.5,
+          -2.5
+        ],
+        [
+          -2.5,
+          2.5
+        ],
+        [
+          -2.5,
+          -2.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          2.5,
+          -2.5
+        ],
+        [
+          7.5,
+          2.5
+        ],
+        [
+          7.5,
+          -2.5
+        ],
+        [
+          12.5,
+          2.5
+        ],
+        [
+          12.5,
+          -2.5
+        ],
+        [
+          17.5,
+          12.5
+        ],
+        [
+          17.5,
+          7.5
+        ],
+        [
+          17.5,
+          2.5
+        ],
+        [
+          17.5,
+          -2.5
+        ],
+        [
+          17.5,
+          -7.5
+        ],
+        [
+          17.5,
+          -12.5
+        ],
+        [
+          22.5,
+          12.5
+        ],
+        [
+          22.5,
+          7.5
+        ],
+        [
+          22.5,
+          2.5
+        ],
+        [
+          22.5,
+          -2.5
+        ],
+        [
+          22.5,
+          -7.5
+        ],
+        [
+          22.5,
+          -12.5
+        ],
+        [
+          27.5,
+          12.5
+        ],
+        [
+          27.5,
+          7.5
+        ],
+        [
+          27.5,
+          2.5
+        ],
+        [
+          27.5,
+          -2.5
+        ],
+        [
+          27.5,
+          -7.5
+        ],
+        [
+          27.5,
+          -12.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -23.5,
+              -7.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -33.5,
+              42.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -23.5,
+              -9.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -33.5,
+              40.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 1.0,
+            "local": [
+              -20.5,
+              -5.5
+            ],
+            "type": "exploder",
+            "world": [
+              -30.5,
+              44.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -21.5,
+              6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -31.5,
+              56.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -23.5,
+              6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -33.5,
+              56.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.5,
+            "local": [
+              20.5,
+              -6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              10.5,
+              43.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              23.5,
+              6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              13.5,
+              56.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              20.5,
+              6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              10.5,
+              56.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 1.0,
+            "local": [
+              21.5,
+              9.5
+            ],
+            "type": "exploder",
+            "world": [
+              11.5,
+              59.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 56,
+      "authored_layout_room_id": "room_06",
+      "dimensions": [
+        40.0,
+        30.0
+      ],
+      "doors": [
+        {
+          "dir": "east",
+          "local": [
+            20.0,
+            -2.5
+          ],
+          "target": "room_05"
+        },
+        {
+          "dir": "north",
+          "local": [
+            -2.5,
+            -15.0
+          ],
+          "target": "room_07"
+        }
+      ],
+      "floor_level": 1,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          16.896,
+          -3.613
+        ],
+        [
+          -3.071,
+          5.796
+        ],
+        [
+          11.295,
+          6.443
+        ],
+        [
+          2.19,
+          -12.671
+        ],
+        [
+          -17.191,
+          -7.292
+        ],
+        [
+          -13.633,
+          3.519
+        ],
+        [
+          12.576,
+          -13.597
+        ],
+        [
+          -7.833,
+          -13.051
+        ],
+        [
+          2.914,
+          13.549
+        ],
+        [
+          18.636,
+          8.489
+        ],
+        [
+          3.494,
+          6.873
+        ],
+        [
+          -7.823,
+          0.968
+        ],
+        [
+          18.45,
+          -11.916
+        ],
+        [
+          -3.1,
+          12.52
+        ],
+        [
+          -14.542,
+          -12.756
+        ],
+        [
+          17.574,
+          2.293
+        ]
+      ],
+      "origin": [
+        -60.0,
+        50.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 3,
+          "center_declared": [
+            -12.5,
+            -7.5
+          ],
+          "center_landed": [
+            -12.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 5,
+          "demand_max": 2,
+          "index": 0,
+          "min_spacing_m": 1.7,
+          "pool_count": 5,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 8,
+          "center_declared": [
+            -2.5,
+            -7.5
+          ],
+          "center_landed": [
+            -2.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 3,
+          "index": 1,
+          "min_spacing_m": 1.8,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 5,
+          "center_declared": [
+            12.5,
+            -2.5
+          ],
+          "center_landed": [
+            12.5,
+            -2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 11,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 11,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 90.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corridor_column",
+          "box_delay_sec": 0.0,
+          "capacity": 6,
+          "center_declared": [
+            7.5,
+            2.5
+          ],
+          "center_landed": [
+            7.5,
+            2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 3,
+          "index": 3,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            2.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.5,
+              "type": "shielded"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_06",
+      "room_type": "SCAVENGE",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -17.5,
+          2.5
+        ],
+        [
+          -17.5,
+          -2.5
+        ],
+        [
+          -17.5,
+          -7.5
+        ],
+        [
+          -17.5,
+          -12.5
+        ],
+        [
+          -12.5,
+          2.5
+        ],
+        [
+          -12.5,
+          -2.5
+        ],
+        [
+          -12.5,
+          -7.5
+        ],
+        [
+          -12.5,
+          -12.5
+        ],
+        [
+          -7.5,
+          2.5
+        ],
+        [
+          -7.5,
+          -2.5
+        ],
+        [
+          -7.5,
+          -7.5
+        ],
+        [
+          -7.5,
+          -12.5
+        ],
+        [
+          -2.5,
+          12.5
+        ],
+        [
+          -2.5,
+          7.5
+        ],
+        [
+          -2.5,
+          2.5
+        ],
+        [
+          -2.5,
+          -2.5
+        ],
+        [
+          -2.5,
+          -7.5
+        ],
+        [
+          -2.5,
+          -12.5
+        ],
+        [
+          2.5,
+          12.5
+        ],
+        [
+          2.5,
+          7.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          2.5,
+          -2.5
+        ],
+        [
+          2.5,
+          -7.5
+        ],
+        [
+          2.5,
+          -12.5
+        ],
+        [
+          7.5,
+          7.5
+        ],
+        [
+          7.5,
+          2.5
+        ],
+        [
+          7.5,
+          -2.5
+        ],
+        [
+          7.5,
+          -7.5
+        ],
+        [
+          7.5,
+          -12.5
+        ],
+        [
+          12.5,
+          7.5
+        ],
+        [
+          12.5,
+          2.5
+        ],
+        [
+          12.5,
+          -2.5
+        ],
+        [
+          12.5,
+          -7.5
+        ],
+        [
+          12.5,
+          -12.5
+        ],
+        [
+          17.5,
+          7.5
+        ],
+        [
+          17.5,
+          2.5
+        ],
+        [
+          17.5,
+          -2.5
+        ],
+        [
+          17.5,
+          -7.5
+        ],
+        [
+          17.5,
+          -12.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -11.5,
+              -7.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -71.5,
+              42.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -13.5,
+              -6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -73.5,
+              43.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -0.5,
+              -8.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -60.5,
+              41.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -3.5,
+              -8.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -63.5,
+              41.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 1.0,
+            "local": [
+              -3.5,
+              -5.5
+            ],
+            "type": "exploder",
+            "world": [
+              -63.5,
+              44.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              12.5,
+              -3.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              -47.5,
+              46.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              6.5,
+              1.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -53.5,
+              51.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              6.5,
+              4.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -53.5,
+              54.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 1.5,
+            "local": [
+              8.5,
+              0.5
+            ],
+            "type": "shielded",
+            "world": [
+              -51.5,
+              50.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 38,
+      "authored_layout_room_id": "room_07",
+      "dimensions": [
+        25.0,
+        25.0
+      ],
+      "doors": [
+        {
+          "dir": "south",
+          "local": [
+            0.0,
+            12.5
+          ],
+          "target": "room_06"
+        },
+        {
+          "dir": "north",
+          "local": [
+            0.0,
+            -12.5
+          ],
+          "target": "room_08"
+        }
+      ],
+      "floor_level": 1,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          4.403,
+          9.614
+        ],
+        [
+          11.035,
+          -5.271
+        ],
+        [
+          -8.643,
+          -11.047
+        ],
+        [
+          3.524,
+          -9.747
+        ],
+        [
+          -9.796,
+          3.254
+        ],
+        [
+          9.614,
+          2.9
+        ],
+        [
+          -5.47,
+          9.757
+        ],
+        [
+          -11.053,
+          -4.497
+        ],
+        [
+          10.969,
+          10.427
+        ],
+        [
+          -2.124,
+          -9.502
+        ],
+        [
+          10.98,
+          -10.422
+        ],
+        [
+          -0.474,
+          8.831
+        ],
+        [
+          -9.447,
+          9.081
+        ],
+        [
+          8.895,
+          -1.912
+        ],
+        [
+          10.855,
+          6.261
+        ],
+        [
+          -10.508,
+          -7.928
+        ]
+      ],
+      "origin": [
+        -62.5,
+        22.5
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_center_elite",
+          "box_delay_sec": 0.0,
+          "capacity": 9,
+          "center_declared": [
+            0.0,
+            0.0
+          ],
+          "center_landed": [
+            0.0,
+            0.0
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 2,
+          "index": 0,
+          "min_spacing_m": 2.0,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "elite"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.5,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            -5.0,
+            -5.0
+          ],
+          "center_landed": [
+            -5.0,
+            -5.0
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 9,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 1.7,
+          "pool_count": 9,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            5.0,
+            5.0
+          ],
+          "center_landed": [
+            5.0,
+            5.0
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 9,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 9,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_07",
+      "room_type": "STORAGE",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -10.0,
+          10.0
+        ],
+        [
+          -10.0,
+          5.0
+        ],
+        [
+          -10.0,
+          0.0
+        ],
+        [
+          -10.0,
+          -5.0
+        ],
+        [
+          -10.0,
+          -10.0
+        ],
+        [
+          -5.0,
+          10.0
+        ],
+        [
+          -5.0,
+          5.0
+        ],
+        [
+          -5.0,
+          0.0
+        ],
+        [
+          -5.0,
+          -5.0
+        ],
+        [
+          -5.0,
+          -10.0
+        ],
+        [
+          0.0,
+          10.0
+        ],
+        [
+          0.0,
+          5.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          -5.0
+        ],
+        [
+          0.0,
+          -10.0
+        ],
+        [
+          5.0,
+          10.0
+        ],
+        [
+          5.0,
+          5.0
+        ],
+        [
+          5.0,
+          0.0
+        ],
+        [
+          5.0,
+          -5.0
+        ],
+        [
+          5.0,
+          -10.0
+        ],
+        [
+          10.0,
+          10.0
+        ],
+        [
+          10.0,
+          5.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          -5.0
+        ],
+        [
+          10.0,
+          -10.0
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.5,
+            "local": [
+              -1.0,
+              0.0
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -63.5,
+              22.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -4.0,
+              -5.0
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -66.5,
+              17.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -6.0,
+              -6.0
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -68.5,
+              16.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              6.0,
+              5.0
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -56.5,
+              27.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              4.0,
+              4.0
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -58.5,
+              26.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 93,
+      "authored_layout_room_id": "room_08",
+      "dimensions": [
+        45.0,
+        40.0
+      ],
+      "doors": [
+        {
+          "dir": "south",
+          "local": [
+            0.0,
+            20.0
+          ],
+          "target": "room_07"
+        },
+        {
+          "dir": "north",
+          "local": [
+            0.0,
+            -20.0
+          ],
+          "target": "room_09"
+        }
+      ],
+      "floor_level": 2,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          5.491,
+          -16.961
+        ],
+        [
+          -18.614,
+          16.341
+        ],
+        [
+          14.693,
+          18.613
+        ],
+        [
+          19.83,
+          -18.641
+        ],
+        [
+          -9.787,
+          -8.983
+        ],
+        [
+          18.777,
+          2.318
+        ],
+        [
+          -0.059,
+          6.58
+        ],
+        [
+          -19.604,
+          -17.221
+        ],
+        [
+          -3.45,
+          18.563
+        ],
+        [
+          9.474,
+          -6.153
+        ],
+        [
+          -11.384,
+          7.512
+        ],
+        [
+          20.405,
+          -7.842
+        ],
+        [
+          10.1,
+          8.143
+        ],
+        [
+          -20.441,
+          -7.52
+        ],
+        [
+          -0.115,
+          -6.343
+        ],
+        [
+          -21.18,
+          7.231
+        ]
+      ],
+      "origin": [
+        -62.5,
+        -10.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 7,
+          "center_declared": [
+            -15.0,
+            -12.5
+          ],
+          "center_landed": [
+            -15.0,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 16,
+          "demand_max": 3,
+          "index": 0,
+          "min_spacing_m": 1.8,
+          "pool_count": 16,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            0.0,
+            -12.5
+          ],
+          "center_landed": [
+            0.0,
+            -12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 9,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 1.7,
+          "pool_count": 9,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 6,
+          "center_declared": [
+            15.0,
+            -2.5
+          ],
+          "center_landed": [
+            15.0,
+            -2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 90.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_center_elite",
+          "box_delay_sec": 0.0,
+          "capacity": 9,
+          "center_declared": [
+            15.0,
+            7.5
+          ],
+          "center_landed": [
+            15.0,
+            7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 2,
+          "index": 3,
+          "min_spacing_m": 2.0,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "elite"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.5,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 9,
+          "center_declared": [
+            -5.0,
+            12.5
+          ],
+          "center_landed": [
+            -5.0,
+            12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 3,
+          "index": 4,
+          "min_spacing_m": 1.8,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_08",
+      "room_type": "COMBAT",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -20.0,
+          17.5
+        ],
+        [
+          -20.0,
+          12.5
+        ],
+        [
+          -20.0,
+          7.5
+        ],
+        [
+          -20.0,
+          -7.5
+        ],
+        [
+          -20.0,
+          -12.5
+        ],
+        [
+          -20.0,
+          -17.5
+        ],
+        [
+          -15.0,
+          17.5
+        ],
+        [
+          -15.0,
+          12.5
+        ],
+        [
+          -15.0,
+          7.5
+        ],
+        [
+          -15.0,
+          -7.5
+        ],
+        [
+          -15.0,
+          -12.5
+        ],
+        [
+          -15.0,
+          -17.5
+        ],
+        [
+          -10.0,
+          17.5
+        ],
+        [
+          -10.0,
+          12.5
+        ],
+        [
+          -10.0,
+          7.5
+        ],
+        [
+          -10.0,
+          -7.5
+        ],
+        [
+          -10.0,
+          -12.5
+        ],
+        [
+          -10.0,
+          -17.5
+        ],
+        [
+          -5.0,
+          17.5
+        ],
+        [
+          -5.0,
+          12.5
+        ],
+        [
+          -5.0,
+          7.5
+        ],
+        [
+          -5.0,
+          -7.5
+        ],
+        [
+          -5.0,
+          -12.5
+        ],
+        [
+          -5.0,
+          -17.5
+        ],
+        [
+          0.0,
+          17.5
+        ],
+        [
+          0.0,
+          12.5
+        ],
+        [
+          0.0,
+          7.5
+        ],
+        [
+          0.0,
+          -7.5
+        ],
+        [
+          0.0,
+          -12.5
+        ],
+        [
+          0.0,
+          -17.5
+        ],
+        [
+          5.0,
+          17.5
+        ],
+        [
+          5.0,
+          12.5
+        ],
+        [
+          5.0,
+          7.5
+        ],
+        [
+          5.0,
+          -7.5
+        ],
+        [
+          5.0,
+          -12.5
+        ],
+        [
+          5.0,
+          -17.5
+        ],
+        [
+          10.0,
+          17.5
+        ],
+        [
+          10.0,
+          12.5
+        ],
+        [
+          10.0,
+          7.5
+        ],
+        [
+          10.0,
+          2.5
+        ],
+        [
+          10.0,
+          -2.5
+        ],
+        [
+          10.0,
+          -7.5
+        ],
+        [
+          10.0,
+          -12.5
+        ],
+        [
+          10.0,
+          -17.5
+        ],
+        [
+          15.0,
+          17.5
+        ],
+        [
+          15.0,
+          12.5
+        ],
+        [
+          15.0,
+          7.5
+        ],
+        [
+          15.0,
+          2.5
+        ],
+        [
+          15.0,
+          -2.5
+        ],
+        [
+          15.0,
+          -7.5
+        ],
+        [
+          15.0,
+          -12.5
+        ],
+        [
+          15.0,
+          -17.5
+        ],
+        [
+          20.0,
+          17.5
+        ],
+        [
+          20.0,
+          12.5
+        ],
+        [
+          20.0,
+          7.5
+        ],
+        [
+          20.0,
+          2.5
+        ],
+        [
+          20.0,
+          -2.5
+        ],
+        [
+          20.0,
+          -7.5
+        ],
+        [
+          20.0,
+          -12.5
+        ],
+        [
+          20.0,
+          -17.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -17.0,
+              -10.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -79.5,
+              -20.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -13.0,
+              -13.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -75.5,
+              -23.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 1.0,
+            "local": [
+              -16.0,
+              -14.5
+            ],
+            "type": "exploder",
+            "world": [
+              -78.5,
+              -24.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -1.0,
+              -11.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -63.5,
+              -21.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              1.0,
+              -12.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -61.5,
+              -22.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              14.0,
+              -1.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              -48.5,
+              -11.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              15.0,
+              -3.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              -47.5,
+              -13.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.5,
+            "local": [
+              16.0,
+              8.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -46.5,
+              -1.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 4,
+            "delay_sec": 0.0,
+            "local": [
+              -6.0,
+              13.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -68.5,
+              3.5
+            ]
+          },
+          {
+            "box_index": 4,
+            "delay_sec": 0.0,
+            "local": [
+              -7.0,
+              11.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -69.5,
+              1.5
+            ]
+          },
+          {
+            "box_index": 4,
+            "delay_sec": 1.0,
+            "local": [
+              -4.0,
+              11.5
+            ],
+            "type": "exploder",
+            "world": [
+              -66.5,
+              1.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 67,
+      "authored_layout_room_id": "room_09",
+      "dimensions": [
+        30.0,
+        40.0
+      ],
+      "doors": [
+        {
+          "dir": "south",
+          "local": [
+            2.5,
+            20.0
+          ],
+          "target": "room_08"
+        },
+        {
+          "dir": "north",
+          "local": [
+            -2.5,
+            -20.0
+          ],
+          "target": "room_10"
+        }
+      ],
+      "floor_level": 2,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          -0.922,
+          16.467
+        ],
+        [
+          12.049,
+          -16.218
+        ],
+        [
+          11.084,
+          14.549
+        ],
+        [
+          -13.041,
+          -9.132
+        ],
+        [
+          11.949,
+          -3.141
+        ],
+        [
+          -13.589,
+          13.752
+        ],
+        [
+          -6.224,
+          -18.124
+        ],
+        [
+          -12.651,
+          2.267
+        ],
+        [
+          2.667,
+          -17.832
+        ],
+        [
+          12.849,
+          5.516
+        ],
+        [
+          -13.38,
+          -18.024
+        ],
+        [
+          -7.623,
+          17.651
+        ],
+        [
+          6.111,
+          18.651
+        ],
+        [
+          11.397,
+          -9.217
+        ],
+        [
+          -12.531,
+          7.751
+        ],
+        [
+          -12.282,
+          -3.714
+        ]
+      ],
+      "origin": [
+        -65.0,
+        -50.0
+      ],
+      "peaceful": false,
+      "placements": [],
+      "room_id": "room_09",
+      "room_type": "EVENT",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [],
+      "tile_cells_local": [
+        [
+          -12.5,
+          17.5
+        ],
+        [
+          -12.5,
+          12.5
+        ],
+        [
+          -12.5,
+          7.5
+        ],
+        [
+          -12.5,
+          2.5
+        ],
+        [
+          -12.5,
+          -2.5
+        ],
+        [
+          -12.5,
+          -7.5
+        ],
+        [
+          -12.5,
+          -12.5
+        ],
+        [
+          -12.5,
+          -17.5
+        ],
+        [
+          -7.5,
+          17.5
+        ],
+        [
+          -7.5,
+          12.5
+        ],
+        [
+          -7.5,
+          7.5
+        ],
+        [
+          -7.5,
+          2.5
+        ],
+        [
+          -7.5,
+          -2.5
+        ],
+        [
+          -7.5,
+          -7.5
+        ],
+        [
+          -7.5,
+          -12.5
+        ],
+        [
+          -7.5,
+          -17.5
+        ],
+        [
+          -2.5,
+          17.5
+        ],
+        [
+          -2.5,
+          12.5
+        ],
+        [
+          -2.5,
+          7.5
+        ],
+        [
+          -2.5,
+          2.5
+        ],
+        [
+          -2.5,
+          -2.5
+        ],
+        [
+          -2.5,
+          -7.5
+        ],
+        [
+          -2.5,
+          -12.5
+        ],
+        [
+          -2.5,
+          -17.5
+        ],
+        [
+          2.5,
+          17.5
+        ],
+        [
+          2.5,
+          12.5
+        ],
+        [
+          2.5,
+          7.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          2.5,
+          -2.5
+        ],
+        [
+          2.5,
+          -7.5
+        ],
+        [
+          2.5,
+          -12.5
+        ],
+        [
+          2.5,
+          -17.5
+        ],
+        [
+          7.5,
+          17.5
+        ],
+        [
+          7.5,
+          12.5
+        ],
+        [
+          7.5,
+          7.5
+        ],
+        [
+          7.5,
+          2.5
+        ],
+        [
+          7.5,
+          -2.5
+        ],
+        [
+          7.5,
+          -7.5
+        ],
+        [
+          7.5,
+          -12.5
+        ],
+        [
+          7.5,
+          -17.5
+        ],
+        [
+          12.5,
+          17.5
+        ],
+        [
+          12.5,
+          12.5
+        ],
+        [
+          12.5,
+          7.5
+        ],
+        [
+          12.5,
+          2.5
+        ],
+        [
+          12.5,
+          -2.5
+        ],
+        [
+          12.5,
+          -7.5
+        ],
+        [
+          12.5,
+          -12.5
+        ],
+        [
+          12.5,
+          -17.5
+        ]
+      ],
+      "waves": [],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 64,
+      "authored_layout_room_id": "room_10",
+      "dimensions": [
+        40.0,
+        30.0
+      ],
+      "doors": [
+        {
+          "dir": "south",
+          "local": [
+            -2.5,
+            15.0
+          ],
+          "target": "room_09"
+        },
+        {
+          "dir": "east",
+          "local": [
+            20.0,
+            -2.5
+          ],
+          "target": "boss"
+        }
+      ],
+      "floor_level": 2,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          -16.466,
+          1.945
+        ],
+        [
+          2.914,
+          -11.605
+        ],
+        [
+          5.554,
+          7.94
+        ],
+        [
+          17.6,
+          -6.485
+        ],
+        [
+          -13.008,
+          -12.166
+        ],
+        [
+          17.768,
+          5.836
+        ],
+        [
+          -6.197,
+          8.357
+        ],
+        [
+          11.459,
+          -13.125
+        ],
+        [
+          -17.878,
+          -6.074
+        ],
+        [
+          -5.627,
+          -13.661
+        ],
+        [
+          -18.417,
+          8.668
+        ],
+        [
+          -0.966,
+          12.891
+        ],
+        [
+          18.108,
+          -0.5
+        ],
+        [
+          18.035,
+          -12.258
+        ],
+        [
+          12.627,
+          8.417
+        ],
+        [
+          -1.27,
+          5.893
+        ]
+      ],
+      "origin": [
+        -65.0,
+        -85.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 5,
+          "center_declared": [
+            -12.5,
+            -7.5
+          ],
+          "center_landed": [
+            -12.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 16,
+          "demand_max": 3,
+          "index": 0,
+          "min_spacing_m": 1.8,
+          "pool_count": 16,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_center_elite",
+          "box_delay_sec": 0.0,
+          "capacity": 9,
+          "center_declared": [
+            7.5,
+            -7.5
+          ],
+          "center_landed": [
+            7.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 2,
+          "index": 1,
+          "min_spacing_m": 2.0,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "elite"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.5,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 5,
+          "center_declared": [
+            12.5,
+            2.5
+          ],
+          "center_landed": [
+            12.5,
+            2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 11,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 11,
+          "pool_span": [
+            2.0,
+            4.0
+          ],
+          "rotation_deg": 90.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            -2.5,
+            2.5
+          ],
+          "center_landed": [
+            -2.5,
+            2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 9,
+          "demand_max": 2,
+          "index": 3,
+          "min_spacing_m": 1.7,
+          "pool_count": 9,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "room_10",
+      "room_type": "SCAVENGE",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -17.5,
+          7.5
+        ],
+        [
+          -17.5,
+          2.5
+        ],
+        [
+          -17.5,
+          -2.5
+        ],
+        [
+          -17.5,
+          -7.5
+        ],
+        [
+          -17.5,
+          -12.5
+        ],
+        [
+          -12.5,
+          7.5
+        ],
+        [
+          -12.5,
+          2.5
+        ],
+        [
+          -12.5,
+          -2.5
+        ],
+        [
+          -12.5,
+          -7.5
+        ],
+        [
+          -12.5,
+          -12.5
+        ],
+        [
+          -7.5,
+          7.5
+        ],
+        [
+          -7.5,
+          2.5
+        ],
+        [
+          -7.5,
+          -2.5
+        ],
+        [
+          -7.5,
+          -7.5
+        ],
+        [
+          -7.5,
+          -12.5
+        ],
+        [
+          -2.5,
+          12.5
+        ],
+        [
+          -2.5,
+          7.5
+        ],
+        [
+          -2.5,
+          2.5
+        ],
+        [
+          -2.5,
+          -2.5
+        ],
+        [
+          -2.5,
+          -7.5
+        ],
+        [
+          -2.5,
+          -12.5
+        ],
+        [
+          2.5,
+          12.5
+        ],
+        [
+          2.5,
+          7.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          2.5,
+          -2.5
+        ],
+        [
+          2.5,
+          -7.5
+        ],
+        [
+          2.5,
+          -12.5
+        ],
+        [
+          7.5,
+          7.5
+        ],
+        [
+          7.5,
+          2.5
+        ],
+        [
+          7.5,
+          -2.5
+        ],
+        [
+          7.5,
+          -7.5
+        ],
+        [
+          7.5,
+          -12.5
+        ],
+        [
+          12.5,
+          7.5
+        ],
+        [
+          12.5,
+          2.5
+        ],
+        [
+          12.5,
+          -2.5
+        ],
+        [
+          12.5,
+          -7.5
+        ],
+        [
+          12.5,
+          -12.5
+        ],
+        [
+          17.5,
+          7.5
+        ],
+        [
+          17.5,
+          2.5
+        ],
+        [
+          17.5,
+          -2.5
+        ],
+        [
+          17.5,
+          -7.5
+        ],
+        [
+          17.5,
+          -12.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -10.5,
+              -7.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -75.5,
+              -92.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -12.5,
+              -5.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -77.5,
+              -90.5
+            ]
+          },
+          {
+            "box_index": 0,
+            "delay_sec": 1.0,
+            "local": [
+              -11.5,
+              -9.5
+            ],
+            "type": "exploder",
+            "world": [
+              -76.5,
+              -94.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.5,
+            "local": [
+              9.5,
+              -5.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -55.5,
+              -90.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              12.5,
+              3.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              -52.5,
+              -81.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              11.5,
+              1.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              -53.5,
+              -83.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              -1.5,
+              1.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -66.5,
+              -83.5
+            ]
+          },
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              -3.5,
+              2.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -68.5,
+              -82.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 111,
+      "authored_layout_room_id": "boss",
+      "dimensions": [
+        50.0,
+        40.0
+      ],
+      "doors": [
+        {
+          "dir": "west",
+          "local": [
+            -25.0,
+            -2.5
+          ],
+          "target": "room_10"
+        },
+        {
+          "dir": "east",
+          "local": [
+            25.0,
+            -2.5
+          ],
+          "target": "extraction"
+        }
+      ],
+      "floor_level": 2,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          21.151,
+          12.318
+        ],
+        [
+          21.222,
+          -12.019
+        ],
+        [
+          -12.382,
+          -17.412
+        ],
+        [
+          -22.428,
+          2.364
+        ],
+        [
+          -8.625,
+          17.393
+        ],
+        [
+          2.539,
+          -17.227
+        ],
+        [
+          7.266,
+          16.889
+        ],
+        [
+          -21.278,
+          16.161
+        ],
+        [
+          -22.448,
+          -11.052
+        ],
+        [
+          20.509,
+          -0.528
+        ],
+        [
+          12.37,
+          -17.267
+        ],
+        [
+          -0.629,
+          15.982
+        ],
+        [
+          15.787,
+          16.859
+        ],
+        [
+          -4.461,
+          -17.05
+        ],
+        [
+          -22.125,
+          9.332
+        ],
+        [
+          -20.675,
+          -17.608
+        ]
+      ],
+      "origin": [
+        -20.0,
+        -85.0
+      ],
+      "peaceful": false,
+      "placements": [
+        {
+          "box": "box_boss_arena",
+          "box_delay_sec": 0.0,
+          "capacity": 11,
+          "center_declared": [
+            -2.5,
+            -2.5
+          ],
+          "center_landed": [
+            -2.5,
+            -2.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 81,
+          "demand_max": 4,
+          "index": 0,
+          "min_spacing_m": 2.8,
+          "pool_count": 81,
+          "pool_span": [
+            8.0,
+            8.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            8.0,
+            8.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "boss"
+            },
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 1.5,
+              "type": "elite"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 3.0,
+              "type": "summoner"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_room_spread",
+          "box_delay_sec": 0.0,
+          "capacity": 8,
+          "center_declared": [
+            -17.5,
+            -7.5
+          ],
+          "center_landed": [
+            -17.5,
+            -7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 25,
+          "demand_max": 3,
+          "index": 1,
+          "min_spacing_m": 1.8,
+          "pool_count": 25,
+          "pool_span": [
+            4.0,
+            4.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            4.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            },
+            {
+              "count_max": 1,
+              "count_min": 1,
+              "delay_sec": 1.0,
+              "type": "exploder"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_corner_ambush",
+          "box_delay_sec": 0.0,
+          "capacity": 4,
+          "center_declared": [
+            17.5,
+            7.5
+          ],
+          "center_landed": [
+            17.5,
+            7.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 9,
+          "demand_max": 2,
+          "index": 2,
+          "min_spacing_m": 1.7,
+          "pool_count": 9,
+          "pool_span": [
+            2.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            3.0,
+            3.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 2,
+              "delay_sec": 0.0,
+              "type": "melee_chaser"
+            }
+          ],
+          "wall_recess_tiles": 1
+        },
+        {
+          "box": "box_wall_arc",
+          "box_delay_sec": 0.0,
+          "capacity": 6,
+          "center_declared": [
+            2.5,
+            12.5
+          ],
+          "center_landed": [
+            2.5,
+            12.5
+          ],
+          "declared_fits": true,
+          "declared_is_tile": true,
+          "declared_pool_count": 15,
+          "demand_max": 2,
+          "index": 3,
+          "min_spacing_m": 1.7,
+          "pool_count": 15,
+          "pool_span": [
+            4.0,
+            2.0
+          ],
+          "rotation_deg": 0.0,
+          "shift": 0.0,
+          "size": [
+            4.0,
+            2.0
+          ],
+          "snap_delta": 0.0,
+          "spawns": [
+            {
+              "count_max": 2,
+              "count_min": 1,
+              "delay_sec": 0.0,
+              "type": "ranged_caster"
+            }
+          ],
+          "wall_recess_tiles": 1
+        }
+      ],
+      "room_id": "boss",
+      "room_type": "BOSS",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [
+        [
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "tile_cells_local": [
+        [
+          -22.5,
+          17.5
+        ],
+        [
+          -22.5,
+          12.5
+        ],
+        [
+          -22.5,
+          7.5
+        ],
+        [
+          -22.5,
+          2.5
+        ],
+        [
+          -22.5,
+          -2.5
+        ],
+        [
+          -22.5,
+          -7.5
+        ],
+        [
+          -22.5,
+          -12.5
+        ],
+        [
+          -22.5,
+          -17.5
+        ],
+        [
+          -17.5,
+          17.5
+        ],
+        [
+          -17.5,
+          12.5
+        ],
+        [
+          -17.5,
+          7.5
+        ],
+        [
+          -17.5,
+          2.5
+        ],
+        [
+          -17.5,
+          -2.5
+        ],
+        [
+          -17.5,
+          -7.5
+        ],
+        [
+          -17.5,
+          -12.5
+        ],
+        [
+          -17.5,
+          -17.5
+        ],
+        [
+          -12.5,
+          17.5
+        ],
+        [
+          -12.5,
+          12.5
+        ],
+        [
+          -12.5,
+          7.5
+        ],
+        [
+          -12.5,
+          2.5
+        ],
+        [
+          -12.5,
+          -2.5
+        ],
+        [
+          -12.5,
+          -7.5
+        ],
+        [
+          -12.5,
+          -12.5
+        ],
+        [
+          -12.5,
+          -17.5
+        ],
+        [
+          -7.5,
+          17.5
+        ],
+        [
+          -7.5,
+          12.5
+        ],
+        [
+          -7.5,
+          7.5
+        ],
+        [
+          -7.5,
+          2.5
+        ],
+        [
+          -7.5,
+          -2.5
+        ],
+        [
+          -7.5,
+          -7.5
+        ],
+        [
+          -7.5,
+          -12.5
+        ],
+        [
+          -7.5,
+          -17.5
+        ],
+        [
+          -2.5,
+          17.5
+        ],
+        [
+          -2.5,
+          12.5
+        ],
+        [
+          -2.5,
+          7.5
+        ],
+        [
+          -2.5,
+          2.5
+        ],
+        [
+          -2.5,
+          -2.5
+        ],
+        [
+          -2.5,
+          -7.5
+        ],
+        [
+          -2.5,
+          -12.5
+        ],
+        [
+          -2.5,
+          -17.5
+        ],
+        [
+          2.5,
+          17.5
+        ],
+        [
+          2.5,
+          12.5
+        ],
+        [
+          2.5,
+          7.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          2.5,
+          -2.5
+        ],
+        [
+          2.5,
+          -7.5
+        ],
+        [
+          2.5,
+          -12.5
+        ],
+        [
+          2.5,
+          -17.5
+        ],
+        [
+          7.5,
+          17.5
+        ],
+        [
+          7.5,
+          12.5
+        ],
+        [
+          7.5,
+          7.5
+        ],
+        [
+          7.5,
+          2.5
+        ],
+        [
+          7.5,
+          -2.5
+        ],
+        [
+          7.5,
+          -7.5
+        ],
+        [
+          7.5,
+          -12.5
+        ],
+        [
+          7.5,
+          -17.5
+        ],
+        [
+          12.5,
+          17.5
+        ],
+        [
+          12.5,
+          12.5
+        ],
+        [
+          12.5,
+          7.5
+        ],
+        [
+          12.5,
+          2.5
+        ],
+        [
+          12.5,
+          -2.5
+        ],
+        [
+          12.5,
+          -7.5
+        ],
+        [
+          12.5,
+          -12.5
+        ],
+        [
+          12.5,
+          -17.5
+        ],
+        [
+          17.5,
+          17.5
+        ],
+        [
+          17.5,
+          12.5
+        ],
+        [
+          17.5,
+          7.5
+        ],
+        [
+          17.5,
+          2.5
+        ],
+        [
+          17.5,
+          -2.5
+        ],
+        [
+          17.5,
+          -7.5
+        ],
+        [
+          17.5,
+          -12.5
+        ],
+        [
+          17.5,
+          -17.5
+        ],
+        [
+          22.5,
+          17.5
+        ],
+        [
+          22.5,
+          12.5
+        ],
+        [
+          22.5,
+          7.5
+        ],
+        [
+          22.5,
+          2.5
+        ],
+        [
+          22.5,
+          -2.5
+        ],
+        [
+          22.5,
+          -7.5
+        ],
+        [
+          22.5,
+          -12.5
+        ],
+        [
+          22.5,
+          -17.5
+        ]
+      ],
+      "waves": [
+        [
+          {
+            "box_index": 0,
+            "delay_sec": 0.0,
+            "local": [
+              -2.5,
+              -2.5
+            ],
+            "type": "summoner",
+            "world": [
+              -22.5,
+              -87.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -19.5,
+              -5.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -39.5,
+              -90.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 0.0,
+            "local": [
+              -16.5,
+              -9.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -36.5,
+              -94.5
+            ]
+          },
+          {
+            "box_index": 1,
+            "delay_sec": 1.0,
+            "local": [
+              -17.5,
+              -5.5
+            ],
+            "type": "exploder",
+            "world": [
+              -37.5,
+              -90.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              17.5,
+              8.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -2.5,
+              -76.5
+            ]
+          },
+          {
+            "box_index": 2,
+            "delay_sec": 0.0,
+            "local": [
+              16.5,
+              6.5
+            ],
+            "type": "melee_chaser",
+            "world": [
+              -3.5,
+              -78.5
+            ]
+          }
+        ],
+        [
+          {
+            "box_index": 3,
+            "delay_sec": 0.0,
+            "local": [
+              3.5,
+              11.5
+            ],
+            "type": "ranged_caster",
+            "world": [
+              -16.5,
+              -73.5
+            ]
+          }
+        ]
+      ],
+      "yaw_deg": 0.0
+    },
+    {
+      "authored_instance_total": 38,
+      "authored_layout_room_id": "extraction",
+      "dimensions": [
+        25.0,
+        25.0
+      ],
+      "doors": [
+        {
+          "dir": "west",
+          "local": [
+            -12.5,
+            0.0
+          ],
+          "target": "boss"
+        }
+      ],
+      "floor_level": 3,
+      "is_main_path": true,
+      "legacy_points": [
+        [
+          -8.93,
+          -1.047
+        ],
+        [
+          -3.31,
+          -8.781
+        ],
+        [
+          -4.629,
+          9.465
+        ],
+        [
+          5.186,
+          9.874
+        ],
+        [
+          11.176,
+          -2.908
+        ],
+        [
+          5.316,
+          -10.006
+        ],
+        [
+          -11.148,
+          -9.011
+        ],
+        [
+          10.418,
+          4.557
+        ],
+        [
+          -9.781,
+          4.685
+        ],
+        [
+          -10.061,
+          11.086
+        ],
+        [
+          10.231,
+          9.945
+        ],
+        [
+          0.274,
+          8.404
+        ],
+        [
+          9.838,
+          -9.436
+        ],
+        [
+          1.208,
+          -10.425
+        ],
+        [
+          -10.1,
+          -4.589
+        ],
+        [
+          8.384,
+          -5.26
+        ]
+      ],
+      "origin": [
+        17.5,
+        -87.5
+      ],
+      "peaceful": false,
+      "placements": [],
+      "room_id": "extraction",
+      "room_type": "EXTRACTION",
+      "size_class": "tower_cell",
+      "spawn_boxes_only": true,
+      "stages": [],
+      "tile_cells_local": [
+        [
+          -10.0,
+          10.0
+        ],
+        [
+          -10.0,
+          5.0
+        ],
+        [
+          -10.0,
+          0.0
+        ],
+        [
+          -10.0,
+          -5.0
+        ],
+        [
+          -10.0,
+          -10.0
+        ],
+        [
+          -5.0,
+          10.0
+        ],
+        [
+          -5.0,
+          5.0
+        ],
+        [
+          -5.0,
+          0.0
+        ],
+        [
+          -5.0,
+          -5.0
+        ],
+        [
+          -5.0,
+          -10.0
+        ],
+        [
+          0.0,
+          10.0
+        ],
+        [
+          0.0,
+          5.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          -5.0
+        ],
+        [
+          0.0,
+          -10.0
+        ],
+        [
+          5.0,
+          10.0
+        ],
+        [
+          5.0,
+          5.0
+        ],
+        [
+          5.0,
+          0.0
+        ],
+        [
+          5.0,
+          -5.0
+        ],
+        [
+          5.0,
+          -10.0
+        ],
+        [
+          10.0,
+          10.0
+        ],
+        [
+          10.0,
+          5.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          -5.0
+        ],
+        [
+          10.0,
+          -10.0
+        ]
+      ],
+      "waves": [],
+      "yaw_deg": 0.0
+    }
+  ],
+  "seed": 20260919,
+  "shifted_total": 0
+}

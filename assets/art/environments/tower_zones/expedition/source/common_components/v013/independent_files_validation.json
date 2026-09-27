@@ -1,0 +1,1732 @@
+{
+  "room_type": "DB_ROOM",
+  "passed": true,
+  "independent_blend_count": 86,
+  "output_mesh_count": 148,
+  "failure_count": 0,
+  "failures": [],
+  "source_hash_unchanged": true,
+  "source_sha256": "91ba228258b698bddcba2f27c46d4223b50f681f71c2e36a76e4b1ee13b0dcb4",
+  "files": [
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/cable_coil_wall/cable_coil_wall.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/center_double_sided_repair_island/center_double_sided_repair_island.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/equipment_rack_ne/equipment_rack_ne.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_east/island_cart_east.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_west/island_cart_west.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_gantry/raised_service_gantry.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_platform/raised_service_platform.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_00/rear_server_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_01/rear_server_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_02/rear_server_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_03/rear_server_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_04/rear_server_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_05/rear_server_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_00/rear_service_cart_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_01/rear_service_cart_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_02/rear_service_cart_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_00/right_front_cable_reel_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_01/right_front_cable_reel_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_service_terminal/right_front_service_terminal.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_00/right_front_shelf_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_01/right_front_shelf_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_02/right_front_shelf_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/shelving_heavy_north/shelving_heavy_north.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_light_pylon/wall_light_pylon.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_screen_bank/wall_screen_bank.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_service_run/wall_service_run.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_l_east/workbench_l_east.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_west/workbench_west.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-1/derived_tile_-1_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-2/derived_tile_-1_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-3/derived_tile_-1_-3.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_0/derived_tile_-1_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_1/derived_tile_-1_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_2/derived_tile_-1_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-1/derived_tile_-2_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-2/derived_tile_-2_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_0/derived_tile_-2_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_1/derived_tile_-2_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_2/derived_tile_-2_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-1/derived_tile_-3_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-2/derived_tile_-3_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_0/derived_tile_-3_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_1/derived_tile_-3_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_2/derived_tile_-3_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-1/derived_tile_-4_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-2/derived_tile_-4_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_0/derived_tile_-4_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_1/derived_tile_-4_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_2/derived_tile_-4_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-1/derived_tile_0_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-2/derived_tile_0_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-3/derived_tile_0_-3.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_0/derived_tile_0_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_1/derived_tile_0_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_2/derived_tile_0_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-1/derived_tile_1_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-2/derived_tile_1_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_0/derived_tile_1_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_1/derived_tile_1_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_2/derived_tile_1_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-1/derived_tile_2_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-2/derived_tile_2_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_0/derived_tile_2_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_1/derived_tile_2_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_2/derived_tile_2_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-1/derived_tile_3_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-2/derived_tile_3_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_0/derived_tile_3_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_1/derived_tile_3_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_2/derived_tile_3_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_conduit_run/floor_conduit_run.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_hazard_edging/floor_hazard_edging.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-1/ceiling_deck_-1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-2/ceiling_deck_-2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-3/ceiling_deck_-3.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_0/ceiling_deck_0.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_1/ceiling_deck_1.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_2",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_2/ceiling_deck_2.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_lighting/ceiling_lighting.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/corner_guard/corner_guard.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_bus/rear_server_bus.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_top_service/wall_top_service.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    }
+  ]
+}

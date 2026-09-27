@@ -24,8 +24,13 @@ Blender 侧实现 —— Boss 房实测：规划候选把 214 包收敛成 28 �
 
   · `--source-lib`：旧库目录（`component_catalog.json` + `component_packages/<pkg>/<pkg>.blend`）。
     独立包形状：一个 `ROOT_*_组件` EMPTY + 若干 `<名>_输出_部件NN` / `_输出_自发光` MESH。
+    **包目录名解析**：历史库（Boss v001）把 `source_package_id` 直接当目录名，走廊/数据库库
+    却把 `slug` 当目录名而 `source_package_id` 是 `ENV-...` 全 id。两种约定都要认，故统一走
+    `package_dir_name()`（按 `source_package_id` → `slug` → `component_id` 次序探测存在的目录）。
   · `--plan`：02 的 `component_plan.json`；只用它的**族归属**（`families[].representatives[].absorbed[]`）。
   · `--slug-map`：语义命名表，键 = 工具选出的**等价类代表件 component_id**（`--analyze` 出初稿）。
+  · `--asset-prefix`：`--write-slug-map` 出初稿时的 component_id 前缀（各房型自带，如
+    `ENV-EXPEDITION-L01-BOSS` / `ENV-EXPEDITION-L01-CORRIDOR` / `ENV-EXPEDITION-L01-DB`）。
 
 ## 输出
 
@@ -47,6 +52,7 @@ Blender 侧实现 —— Boss 房实测：规划候选把 214 包收敛成 28 �
         --slug-map    assets/.../common_components/v008/component_slug_map.json \
         --out-lib     assets/.../common_components/v008 \
         [--analyze] [--family-cap 3] [--tol 0.005] \
+        [--asset-prefix ENV-EXPEDITION-L01-BOSS] \
         [--library-blend-name expedition_boss_room_components_source_v008.blend] \
         [--skip-master]
 
@@ -71,7 +77,7 @@ AXIS_WORDS = ("north", "south", "east", "west", "front", "rear", "inner", "outer
 DEFAULT_ROTATIONS = [0, 90, 180, 270]
 PART_SUFFIX_RE = re.compile(r"_输出_")
 EMPTY_COLLECTION_PREFIX = "01_制作组件_"
-LEGACY_PREFIX = "ENV-EXPEDITION-BOSSROOM-"
+DEFAULT_ASSET_PREFIX = "ENV-EXPEDITION-L01-BOSS"
 
 
 # --------------------------------------------------------------------------- io
@@ -84,6 +90,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--plan", required=True)
     parser.add_argument("--slug-map", required=True)
     parser.add_argument("--out-lib", required=True)
+    parser.add_argument(
+        "--asset-prefix",
+        default=DEFAULT_ASSET_PREFIX,
+        help="--write-slug-map 出命名初稿时的 component_id 前缀（各房型自带）",
+    )
     parser.add_argument("--library-blend-name", default="")
     parser.add_argument("--family-cap", type=int, default=3)
     parser.add_argument(
@@ -320,7 +331,7 @@ def base_family_slug(family: str) -> str:
     return re.sub(r"[^a-z0-9_]", "", str(family).lower()) or "component"
 
 
-def draft_slug_map(components: list[dict], packages: dict) -> dict:
+def draft_slug_map(components: list[dict], asset_prefix: str) -> dict:
     """按等价类代表件生成命名初稿；同族多类用 `_a/_b/_c` 后缀，人工再语义化。"""
     by_family: dict[str, list[dict]] = {}
     for component in components:
@@ -331,7 +342,7 @@ def draft_slug_map(components: list[dict], packages: dict) -> dict:
         for index, component in enumerate(sorted(group, key=lambda c: c["rep_id"])):
             slug = base if len(group) == 1 else f"{base}_{chr(ord('a') + index)}"
             table[component["rep_id"]] = {
-                "component_id": f"ENV-EXPEDITION-L01-BOSS-{slug.upper()}",
+                "component_id": f"{asset_prefix}-{slug.upper()}",
                 "slug": slug,
                 "component_family": family,
                 "name_zh": slug,
@@ -368,6 +379,20 @@ def sanitize_check(component_id: str, slug: str) -> list[str]:
 
 
 # ----------------------------------------------------------------------- build
+
+
+def package_dir_name(source_lib: Path, package: dict) -> str:
+    """解析包在 `component_packages/` 下的目录名。
+
+    两种历史约定并存：Boss v001 用 `source_package_id` 直接作目录名；走廊 v002 / 数据库 v003
+    用 `slug` 作目录名而 `source_package_id` 是 `ENV-...` 全 id。按候选次序返回第一个真实存在的
+    目录，都不存在时回退到 `source_package_id`（让调用方照常报错而不是静默换件）。
+    """
+    for key in ("source_package_id", "slug", "component_id"):
+        name = str(package.get(key) or "").strip()
+        if name and (source_lib / "component_packages" / name).is_dir():
+            return name
+    return str(package.get("source_package_id") or package.get("slug") or "")
 
 
 def rebuild_package(rep_pkg_dir: Path, slug: str, out_path: Path) -> None:
@@ -518,8 +543,12 @@ def main() -> int:
     )
     sigs: dict[str, dict] = {}
     for component_id in all_ids:
-        pkg = str(packages[component_id].get("source_package_id", component_id))
-        open_blend(source_lib / "component_packages" / pkg / f"{pkg}.blend")
+        pkg = package_dir_name(source_lib, packages[component_id])
+        blend_path = source_lib / "component_packages" / pkg / f"{pkg}.blend"
+        if not blend_path.is_file():
+            print(f"FAIL: 源库缺包 {blend_path}")
+            return 2
+        open_blend(blend_path)
         sigs[component_id] = signature()
 
     components = build_components(plan, sigs, args.tol, args.family_cap, cap_overrides)
@@ -595,7 +624,7 @@ def main() -> int:
     if args.analyze:
         write_json(out_lib / "regroup_analysis.json", analysis)
         if args.write_slug_map:
-            write_json(slug_map_path, draft_slug_map(components, packages))
+            write_json(slug_map_path, draft_slug_map(components, args.asset_prefix))
             print(f"REGROUP_SLUG_MAP_DRAFTED:{slug_map_path}")
         print(f"REGROUP_ANALYZED:{out_lib / 'regroup_analysis.json'}")
         return 0
@@ -686,7 +715,7 @@ def main() -> int:
 
     for component in kept_components:
         slug = str(slug_table[component["rep_id"]]["slug"])
-        pkg = str(packages[component["rep_id"]].get("source_package_id", component["rep_id"]))
+        pkg = package_dir_name(source_lib, packages[component["rep_id"]])
         rebuild_package(
             source_lib / "component_packages" / pkg,
             slug,
@@ -769,12 +798,15 @@ def main() -> int:
             }
         )
     library_blend = args.library_blend_name or f"{version}_library.blend"
+    # 与 decompose/finalize 同约定：包级写**仓库相对路径**（`rel()`），库级只写**文件名**。
+    # 早期 v006–v011 误写成绝对机器路径（`I:/工作项目/...`），换机即失效，此处纠正。
+    out_lib_rel = out_lib.relative_to(root).as_posix()
     for record in catalog_records:
-        record["component_library_blend"] = f"{out_lib.as_posix()}/{library_blend}"
+        record["component_library_blend"] = f"{out_lib_rel}/{library_blend}"
     catalog_records.sort(key=lambda item: str(item["slug"]))
     catalog = {
         "schema": "shellstorm2.component_catalog.v001",
-        "component_library": f"{out_lib.as_posix()}/{library_blend}",
+        "component_library": library_blend,
         "room_type": room_type,
         "block_id": str(source_catalog.get("block_id", "expedition")),
         "version": version,
@@ -793,7 +825,7 @@ def main() -> int:
             "族内几何等价类聚类（Z 轴旋转不变，容差 %sm）+ 同族最多 %d 类（skill 02）"
             % (args.tol, args.family_cap)
         ),
-        "regroup_analysis": f"{out_lib.as_posix()}/regroup_analysis.json",
+        "regroup_analysis": f"{out_lib_rel}/regroup_analysis.json",
         "walk_plane_shift_z_m": shift_z,
         "output_mesh_count": sum(sigs[c["rep_id"]]["mesh_count"] for c in kept_components),
         "absorbed_geometry_variant_total": total_variant,

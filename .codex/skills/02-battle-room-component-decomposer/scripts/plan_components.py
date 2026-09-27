@@ -227,7 +227,11 @@ def main():
                 'variant_axis': r.get('variant_axis'),
                 'variant_value': r.get('variant_value'),
                 'variant_reason': r.get('variant_reason'),
-                'absorbed': [name_of(m) for m in c if m is not r],
+                # absorbed 必须是 **component_id**：下游 regroup_room_type_components.py 按
+                # component_id 到 catalog 里取件。旧 Boss 库 slug 为 None 时 name_of 恰好回退到
+                # component_id 才没暴露此缺陷；走廊/数据库库有 slug，用 name_of 会写出 slug 而
+                # 让归并报「源库缺组件」。
+                'absorbed': [cid(m) for m in c if m is not r],
             } for c, r in zip(cl, reps)],
         })
 

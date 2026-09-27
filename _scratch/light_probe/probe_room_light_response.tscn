@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/light_probe/probe_room_light_response.gd" id="1_probe"]
+
+[node name="ProbeRoomLightResponse" type="Node"]
+script = ExtResource("1_probe")

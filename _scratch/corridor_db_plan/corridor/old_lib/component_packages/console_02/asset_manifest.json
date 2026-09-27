@@ -1,0 +1,110 @@
+{
+  "component_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+  "asset_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+  "room_type": "L_CORRIDOR",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/l_corridor/v003/L型走廊种类_数据连廊_45x40m_v003.blend",
+  "source_room_type_sha256": "9c323876f7165f656e016049135652a96c83ed0adb45f4f28c49fc50cfb5adae",
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v002/expedition_l_corridor_components_source_v002.blend",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v002/component_packages/console_02/console_02.blend",
+  "collection": "立式访问终端_输出包.002",
+  "editable_collection": "立式访问终端_制作源.002",
+  "root_object": "ROOT_console_02_组件",
+  "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+  "slug": "console_02",
+  "name_zh": "立式访问终端",
+  "category": "facility",
+  "bounds_size_m": [
+    1.072498,
+    1.099999,
+    2.265
+  ],
+  "bounds_lo_m": [
+    -0.536247,
+    -0.549999,
+    0.0
+  ],
+  "bounds_hi_m": [
+    0.536251,
+    0.55,
+    2.265
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis": "-Y",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [
+    "立式访问终端_输出_自发光.015",
+    "立式访问终端_输出_自发光.016",
+    "立式访问终端_输出_自发光.017",
+    "立式访问终端_输出_自发光.018",
+    "立式访问终端_输出_自发光.019",
+    "立式访问终端_输出_自发光.020",
+    "立式访问终端_输出_自发光.021",
+    "立式访问终端_输出_自发光.022",
+    "立式访问终端_输出_自发光.023",
+    "立式访问终端_输出_自发光.024",
+    "立式访问终端_输出_自发光.025",
+    "立式访问终端_输出_自发光.026"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_world_origin_m": null,
+  "version": "v002",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "objects": [
+    "立式访问终端_输出_部件00.002",
+    "立式访问终端_输出_部件01.002",
+    "立式访问终端_输出_部件02.002",
+    "立式访问终端_输出_自发光.015",
+    "立式访问终端_输出_部件04.001",
+    "立式访问终端_输出_部件05.001",
+    "立式访问终端_输出_部件06.001",
+    "立式访问终端_输出_部件07.001",
+    "立式访问终端_输出_部件08.001",
+    "立式访问终端_输出_部件09.001",
+    "立式访问终端_输出_自发光.016",
+    "立式访问终端_输出_自发光.017",
+    "立式访问终端_输出_自发光.018",
+    "立式访问终端_输出_自发光.019",
+    "立式访问终端_输出_自发光.020",
+    "立式访问终端_输出_部件15.001",
+    "立式访问终端_输出_自发光.021",
+    "立式访问终端_输出_自发光.022",
+    "立式访问终端_输出_自发光.023",
+    "立式访问终端_输出_自发光.024",
+    "立式访问终端_输出_自发光.025",
+    "立式访问终端_输出_部件21.001",
+    "立式访问终端_输出_自发光.026",
+    "立式访问终端_输出_部件23.001",
+    "立式访问终端_输出_部件24.001"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "godot_front_axis": "+Z",
+  "component_file_sha256": "62ccf4a8f6f3f98aea8698d1e1d97cbbfdabc1d28e79c42b0e9f9831724c1085"
+}

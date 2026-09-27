@@ -1,0 +1,2612 @@
+{
+  "office_room/v006": {
+    "packages": [
+      {
+        "package": "ceiling_deck_5m_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 343.205,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "ceiling_lighting_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 99.488,
+        "gloss_m2": 0.0,
+        "emissive_m2": 12.334,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "ceiling_ring_beam_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 359.67,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "ceiling_service_cable_tray_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 256.546,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "ceiling_service_duct_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 168.338,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "ceiling_service_pipe_run_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 106.478,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "corner_guard_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 31.414,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "door_wall_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 421.934,
+        "gloss_m2": 0.0,
+        "emissive_m2": 3.731,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "filing_run_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 180.612,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.471,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_service_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 76.608,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_tile_5m_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 108.819,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.744,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_zone_mark_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 31.561,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "locker_bank_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 22.976,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.274,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "planting_perimeter_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 51.644,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "power_cabinet_bank_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 38.807,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.595,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "prep_bench_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 27.203,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.229,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "printer_station_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 14.174,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.21,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "shelving_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 24.715,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "totem_column_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 13.05,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.742,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_t1110_5m_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 320.517,
+        "gloss_m2": 0.0,
+        "emissive_m2": 5.796,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_t615_5m_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 281.846,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.644,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_t970_5m_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 287.491,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.644,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_top_service_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 240.534,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "water_and_supply_corner_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 29.537,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "work_cluster_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 83.881,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.507,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      }
+    ],
+    "packages_total": 25,
+    "packages_failed": 0,
+    "library_metal_m2": 0.0,
+    "library_matte_m2": 3621.051,
+    "library_gloss_m2": 0.0,
+    "library_metal_share": 0.0
+  },
+  "bridge_room/v007": {
+    "packages": [
+      {
+        "package": "bank_crate_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 38.047,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "bridge_girder_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 187.899,
+        "gloss_m2": 0.0,
+        "emissive_m2": 7.024,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "bridge_guardrail_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 55.987,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.95,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "bridge_service_transom_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 13.328,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "coolant_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 26.67,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "cross_gantry_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 118.543,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.223,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "deep_cables_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 31.128,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "deep_trunk_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 122.231,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "end_crate_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 43.999,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "end_power_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 131.399,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "half_partition_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 85.371,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "header_cables_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 31.045,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "longitudinal_tie_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 54.143,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "low_platform_z4805_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 116.037,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.223,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "low_platform_z6005_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 119.652,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.223,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "lower_control_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 43.393,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.183,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "mid_gallery_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 324.062,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.223,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "near_crate_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 48.328,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "near_server_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 128.865,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.458,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "partition_box_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 38.588,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "pit_end_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 129.387,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "pit_side_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 217.887,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "platform_edge_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 78.753,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.95,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "shaft_column_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 116.464,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.15,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "tile_lower_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 106.048,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "tile_upper_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 107.726,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "torn_header_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 33.354,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "underbridge_service_bay_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 174.398,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.857,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "upper_bank_z5450_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 135.981,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.504,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "upper_bank_z6197_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 141.654,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "upper_console_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 14.807,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.409,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "vertical_service_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 59.783,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.442,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_service_header_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 80.278,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_x670_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 171.823,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.752,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_x780_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 265.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.269,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      }
+    ],
+    "packages_total": 35,
+    "packages_failed": 0,
+    "library_metal_m2": 0.0,
+    "library_matte_m2": 3592.482,
+    "library_gloss_m2": 0.0,
+    "library_metal_share": 0.0
+  },
+  "boss_room/v008": {
+    "packages": [
+      {
+        "package": "debris_large_输出包",
+        "metal_m2": 1.233,
+        "matte_m2": 1.346,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.478,
+        "verdict": "OK"
+      },
+      {
+        "package": "debris_medium_输出包",
+        "metal_m2": 1.233,
+        "matte_m2": 1.346,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.478,
+        "verdict": "OK"
+      },
+      {
+        "package": "debris_small_输出包",
+        "metal_m2": 1.233,
+        "matte_m2": 1.346,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.478,
+        "verdict": "OK"
+      },
+      {
+        "package": "archive_shelf_输出包",
+        "metal_m2": 47.972,
+        "matte_m2": 52.806,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.476,
+        "verdict": "OK"
+      },
+      {
+        "package": "workstation_a_输出包",
+        "metal_m2": 27.262,
+        "matte_m2": 36.296,
+        "gloss_m2": 3.96,
+        "emissive_m2": 0.621,
+        "other_m2": 0,
+        "metal_share": 0.4038,
+        "verdict": "OK"
+      },
+      {
+        "package": "workstation_b_输出包",
+        "metal_m2": 27.262,
+        "matte_m2": 36.296,
+        "gloss_m2": 3.96,
+        "emissive_m2": 0.59,
+        "other_m2": 0,
+        "metal_share": 0.4038,
+        "verdict": "OK"
+      },
+      {
+        "package": "workstation_c_输出包",
+        "metal_m2": 27.262,
+        "matte_m2": 36.296,
+        "gloss_m2": 3.96,
+        "emissive_m2": 0.621,
+        "other_m2": 0,
+        "metal_share": 0.4038,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_skin_armored_broken_5m_输出包",
+        "metal_m2": 39.311,
+        "matte_m2": 111.932,
+        "gloss_m2": 0.0,
+        "emissive_m2": 4.42,
+        "other_m2": 0,
+        "metal_share": 0.2599,
+        "verdict": "OK"
+      },
+      {
+        "package": "chair_输出包",
+        "metal_m2": 1.403,
+        "matte_m2": 5.198,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2125,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_skin_armored_5m_输出包",
+        "metal_m2": 28.905,
+        "matte_m2": 111.932,
+        "gloss_m2": 0.0,
+        "emissive_m2": 4.42,
+        "other_m2": 0,
+        "metal_share": 0.2052,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_skin_medium_5m_输出包",
+        "metal_m2": 21.549,
+        "matte_m2": 111.932,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.1614,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_skin_beveled_5m_输出包",
+        "metal_m2": 17.106,
+        "matte_m2": 101.713,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.355,
+        "other_m2": 0,
+        "metal_share": 0.144,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_tile_5m_a_输出包",
+        "metal_m2": 5.354,
+        "matte_m2": 52.446,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.078,
+        "other_m2": 0,
+        "metal_share": 0.0926,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_skin_thin_5m_输出包",
+        "metal_m2": 11.143,
+        "matte_m2": 111.932,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0905,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_tile_5m_c_输出包",
+        "metal_m2": 3.651,
+        "matte_m2": 49.217,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.077,
+        "other_m2": 0,
+        "metal_share": 0.0691,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_tile_5m_b_输出包",
+        "metal_m2": 3.651,
+        "matte_m2": 49.233,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.078,
+        "other_m2": 0,
+        "metal_share": 0.069,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_base_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 4046.8,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "floor_marking_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 1.981,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "heavy_conduits_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 104.143,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "main_fault_screen_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 436.217,
+        "gloss_m2": 249.769,
+        "emissive_m2": 15.038,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "plant_a_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 5.225,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "plant_b_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 5.155,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "plant_c_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 5.101,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_compact_damaged_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 246.498,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.459,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_compact_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 242.757,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.086,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_damaged_tall_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 271.925,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.576,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_damaged_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 263.718,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.564,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_mid_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 259.64,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.171,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_tall_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 267.65,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.171,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_under_screen_damaged_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 155.53,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.92,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_under_screen_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 153.222,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.618,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_wide_damaged_tall_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 265.77,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.567,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_wide_damaged_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 252.36,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.467,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_wide_tall_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 261.643,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.171,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_wide_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 248.478,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.086,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "server_rack_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 248.478,
+        "gloss_m2": 0.0,
+        "emissive_m2": 2.086,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_solid_5m_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "wall_typography_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 2.45,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      }
+    ],
+    "packages_total": 38,
+    "packages_failed": 0,
+    "library_metal_m2": 265.528,
+    "library_matte_m2": 8745.152,
+    "library_gloss_m2": 261.649,
+    "library_metal_share": 0.0286
+  },
+  "l_corridor/v002": {
+    "packages": [
+      {
+        "package": "双层带轮数据维修推车_输出包",
+        "metal_m2": 17.064,
+        "matte_m2": 21.01,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.071,
+        "other_m2": 0,
+        "metal_share": 0.4482,
+        "verdict": "OK"
+      },
+      {
+        "package": "双层带轮数据维修推车_输出包.001",
+        "metal_m2": 17.064,
+        "matte_m2": 21.01,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.071,
+        "other_m2": 0,
+        "metal_share": 0.4482,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_00_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_01_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_02_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_03_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_04_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_05_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_06_扩展资产包_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高东墙管道跨段_06_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_00_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_01_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.065,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_02_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_03_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.065,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_04_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_05_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.065,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_06_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_07_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.065,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "七米高后墙管道跨段_08_输出包",
+        "metal_m2": 4.004,
+        "matte_m2": 5.422,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.4248,
+        "verdict": "OK"
+      },
+      {
+        "package": "立式访问终端_输出包",
+        "metal_m2": 2.888,
+        "matte_m2": 4.163,
+        "gloss_m2": 0.527,
+        "emissive_m2": 0.093,
+        "other_m2": 0,
+        "metal_share": 0.3811,
+        "verdict": "OK"
+      },
+      {
+        "package": "立式访问终端_输出包.001",
+        "metal_m2": 4.553,
+        "matte_m2": 7.834,
+        "gloss_m2": 0.895,
+        "emissive_m2": 0.534,
+        "other_m2": 0,
+        "metal_share": 0.3428,
+        "verdict": "OK"
+      },
+      {
+        "package": "立式访问终端_输出包.002",
+        "metal_m2": 4.553,
+        "matte_m2": 7.834,
+        "gloss_m2": 0.895,
+        "emissive_m2": 0.534,
+        "other_m2": 0,
+        "metal_share": 0.3428,
+        "verdict": "OK"
+      },
+      {
+        "package": "固定维修设备箱_输出包",
+        "metal_m2": 2.711,
+        "matte_m2": 5.635,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.107,
+        "other_m2": 0,
+        "metal_share": 0.3248,
+        "verdict": "OK"
+      },
+      {
+        "package": "固定维修设备箱_输出包.001",
+        "metal_m2": 2.711,
+        "matte_m2": 5.635,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.107,
+        "other_m2": 0,
+        "metal_share": 0.3248,
+        "verdict": "OK"
+      },
+      {
+        "package": "固定维修设备箱_输出包.002",
+        "metal_m2": 2.711,
+        "matte_m2": 5.635,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.107,
+        "other_m2": 0,
+        "metal_share": 0.3248,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-10米_35米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-15米_35米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-20米_35米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-25米_35米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-5米_35米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_00米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_05米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_10米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_15米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_20米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_25米_输出包",
+        "metal_m2": 6.48,
+        "matte_m2": 17.31,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2724,
+        "verdict": "OK"
+      },
+      {
+        "package": "高处下垂粗电缆_输出包.004",
+        "metal_m2": 0.692,
+        "matte_m2": 2.034,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2538,
+        "verdict": "OK"
+      },
+      {
+        "package": "高处下垂粗电缆_输出包.001",
+        "metal_m2": 0.692,
+        "matte_m2": 2.126,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2455,
+        "verdict": "OK"
+      },
+      {
+        "package": "高处下垂粗电缆_输出包.003",
+        "metal_m2": 0.692,
+        "matte_m2": 2.251,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2351,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面竖向管线_00_输出包",
+        "metal_m2": 0.602,
+        "matte_m2": 2.138,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.017,
+        "other_m2": 0,
+        "metal_share": 0.2198,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面竖向管线_01_输出包",
+        "metal_m2": 0.602,
+        "matte_m2": 2.138,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.017,
+        "other_m2": 0,
+        "metal_share": 0.2198,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面竖向管线_02_输出包",
+        "metal_m2": 0.602,
+        "matte_m2": 2.138,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.017,
+        "other_m2": 0,
+        "metal_share": 0.2198,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面竖向管线_03_输出包",
+        "metal_m2": 0.602,
+        "matte_m2": 2.138,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.017,
+        "other_m2": 0,
+        "metal_share": 0.2198,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面竖向管线_04_输出包",
+        "metal_m2": 0.602,
+        "matte_m2": 2.138,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.017,
+        "other_m2": 0,
+        "metal_share": 0.2198,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面竖向管线_05_输出包",
+        "metal_m2": 0.602,
+        "matte_m2": 2.138,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.017,
+        "other_m2": 0,
+        "metal_share": 0.2198,
+        "verdict": "OK"
+      },
+      {
+        "package": "高处下垂粗电缆_输出包",
+        "metal_m2": 0.692,
+        "matte_m2": 2.582,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.2113,
+        "verdict": "OK"
+      },
+      {
+        "package": "蓝光服务器机柜_输出包",
+        "metal_m2": 4.083,
+        "matte_m2": 16.051,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.2,
+        "other_m2": 0,
+        "metal_share": 0.2028,
+        "verdict": "OK"
+      },
+      {
+        "package": "蓝光服务器机柜_输出包.001",
+        "metal_m2": 4.083,
+        "matte_m2": 16.051,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.2,
+        "other_m2": 0,
+        "metal_share": 0.2028,
+        "verdict": "OK"
+      },
+      {
+        "package": "蓝光服务器机柜_输出包.002",
+        "metal_m2": 4.083,
+        "matte_m2": 16.051,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.2,
+        "other_m2": 0,
+        "metal_share": 0.2028,
+        "verdict": "OK"
+      },
+      {
+        "package": "蓝光服务器机柜_输出包.003",
+        "metal_m2": 4.083,
+        "matte_m2": 16.051,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.2,
+        "other_m2": 0,
+        "metal_share": 0.2028,
+        "verdict": "OK"
+      },
+      {
+        "package": "蓝光服务器机柜_输出包.004",
+        "metal_m2": 4.083,
+        "matte_m2": 16.051,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.2,
+        "other_m2": 0,
+        "metal_share": 0.2028,
+        "verdict": "OK"
+      },
+      {
+        "package": "高处下垂粗电缆_输出包.002",
+        "metal_m2": 0.692,
+        "matte_m2": 2.785,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.199,
+        "verdict": "OK"
+      },
+      {
+        "package": "双跨玻璃数据库陈列窗_输出包",
+        "metal_m2": 16.274,
+        "matte_m2": 52.547,
+        "gloss_m2": 41.426,
+        "emissive_m2": 0.966,
+        "other_m2": 0,
+        "metal_share": 0.1476,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R00_C08_输出包",
+        "metal_m2": 17.332,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1388,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R01_C07_输出包",
+        "metal_m2": 17.332,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1388,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C03_输出包",
+        "metal_m2": 17.332,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1388,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C02_输出包",
+        "metal_m2": 17.332,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.1388,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C08_输出包",
+        "metal_m2": 17.332,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1388,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R04_C07_扩展资产包_输出包",
+        "metal_m2": 17.332,
+        "matte_m2": 108.926,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1373,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C05_扩展资产包_输出包",
+        "metal_m2": 17.332,
+        "matte_m2": 108.926,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1373,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_40米_扩展资产包_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "前墙_40米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "后墙_00米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "后墙_10米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "后墙_15米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "后墙_20米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "后墙_25米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "后墙_30米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "后墙_40米_输出包",
+        "metal_m2": 17.111,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.294,
+        "other_m2": 0,
+        "metal_share": 0.117,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R02_C08_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R03_C07_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R04_C08_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C01_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C05_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C07_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C00_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C04_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C06_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.1084,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R00_C07_扩展资产包_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1072,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R02_C07_扩展资产包_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1072,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C01_扩展资产包_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1072,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C03_扩展资产包_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1072,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C07_扩展资产包_输出包",
+        "metal_m2": 12.794,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.1072,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R01_C07_扩展资产包_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0902,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C02_扩展资产包_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.0902,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C08_扩展资产包_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 107.509,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0902,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R03_C08_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 108.926,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.0891,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R04_C07_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 108.926,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0891,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C00_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 108.926,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.0891,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C06_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 108.926,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0891,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C05_输出包",
+        "metal_m2": 10.653,
+        "matte_m2": 108.926,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0891,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-10米_45米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.373,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-15米_45米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.365,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-20米_45米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.373,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-25米_45米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.365,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_-5米_45米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.365,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_0米_0米_扩展资产包_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.373,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_0米_0米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.373,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_0米_45米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.373,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_5米_45米_扩展资产包_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.365,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "侧墙_5米_45米_输出包",
+        "metal_m2": 9.335,
+        "matte_m2": 129.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.365,
+        "other_m2": 0,
+        "metal_share": 0.0674,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R03_C07_扩展资产包_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0549,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C00_扩展资产包_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0549,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C04_扩展资产包_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0549,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C06_扩展资产包_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 105.178,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.0549,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R00_C07_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R01_C08_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R02_C07_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C02_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C04_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R05_C08_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.693,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C01_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C03_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "地砖_R06_C07_输出包",
+        "metal_m2": 6.114,
+        "matte_m2": 106.595,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.478,
+        "other_m2": 0,
+        "metal_share": 0.0542,
+        "verdict": "OK"
+      },
+      {
+        "package": "白色方形固定花槽_输出包",
+        "metal_m2": 0.209,
+        "matte_m2": 7.3,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0278,
+        "verdict": "OK"
+      },
+      {
+        "package": "白色方形固定花槽_输出包.001",
+        "metal_m2": 0.209,
+        "matte_m2": 7.3,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0278,
+        "verdict": "OK"
+      },
+      {
+        "package": "白色方形固定花槽_输出包.002",
+        "metal_m2": 0.209,
+        "matte_m2": 7.3,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0278,
+        "verdict": "OK"
+      },
+      {
+        "package": "三角墙面警示标识_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 0.734,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.082,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "三角墙面警示标识_输出包.001",
+        "metal_m2": 0.0,
+        "matte_m2": 0.734,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.082,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "镜头侧墙完整高度基准_0_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 739.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "镜头侧墙完整高度基准_1_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 617.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      }
+    ],
+    "packages_total": 121,
+    "packages_failed": 0,
+    "library_metal_m2": 950.482,
+    "library_matte_m2": 8834.261,
+    "library_gloss_m2": 43.743,
+    "library_metal_share": 0.0967
+  },
+  "db_room/v003": {
+    "packages": [
+      {
+        "package": "东北设备机架_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 64.217,
+        "gloss_m2": 0.0,
+        "emissive_m2": 5.211,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "东墙L形工作台_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 83.156,
+        "gloss_m2": 0.0,
+        "emissive_m2": 3.483,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "中央作业台_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 58.14,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.915,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "中部机柜组与推车_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 152.093,
+        "gloss_m2": 0.0,
+        "emissive_m2": 3.736,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "北墙重型货架_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 86.583,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.094,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "吊顶周圈圈梁_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 400.399,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "吊顶结构_-1_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 458.806,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "吊顶结构_-2_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 458.806,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "吊顶结构_-3_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 114.702,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "吊顶结构_0_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 458.806,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "吊顶结构_1_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 458.806,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "吊顶结构_2_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 458.806,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "地面分区标识_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 155.311,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "地面格栅与检修口_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 97.067,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "地面线槽与检修盖板_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 80.545,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "地面设备坑与抬升平台_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 94.647,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面竖向冷光灯柱_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 55.901,
+        "gloss_m2": 0.0,
+        "emissive_m2": 19.004,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙面管道与线束_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 169.943,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "墙顶管线收口_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 249.777,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "壁挂大屏组_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 29.353,
+        "gloss_m2": 0.0,
+        "emissive_m2": 21.719,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "壁挂电缆线圈_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 10.143,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "多屉零件柜_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 51.736,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "沿墙黄黑警示边带_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 206.798,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "白色花箱绿植_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 49.452,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "红色抽屉工具车_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 16.757,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "落地仪器三脚架_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 4.64,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.372,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "落地电缆盘与线圈_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 31.135,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "西侧机柜列_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 403.234,
+        "gloss_m2": 0.0,
+        "emissive_m2": 12.43,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "西南附区作业台_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 35.632,
+        "gloss_m2": 0.0,
+        "emissive_m2": 1.429,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "西墙检修工作台_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 36.07,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.774,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "货箱与周转箱堆场_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 158.458,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "转角护柱_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 29.052,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "顶部灯具_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 112.714,
+        "gloss_m2": 0.0,
+        "emissive_m2": 17.015,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "顶部电缆桥架与线缆_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 247.879,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "顶部管道与法兰_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 101.133,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "顶部通风管与风口_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 116.458,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      },
+      {
+        "package": "黄色工具推车与圆凳_输出包",
+        "metal_m2": 0.0,
+        "matte_m2": 30.974,
+        "gloss_m2": 0.0,
+        "emissive_m2": 0.0,
+        "other_m2": 0,
+        "metal_share": 0.0,
+        "verdict": "OK"
+      }
+    ],
+    "packages_total": 37,
+    "packages_failed": 0,
+    "library_metal_m2": 0.0,
+    "library_matte_m2": 5828.13,
+    "library_gloss_m2": 0.0,
+    "library_metal_share": 0.0
+  }
+}

@@ -3,16 +3,23 @@
 	"payload": {
 		"active_run_snapshot": {
 			"active_weapon_slot": 0.0,
-			"checkpoint_id": "checkpoint:run:2603918655:00065bf5e5b7e7f0:0028eb58",
-			"current_floor_index": 2.0,
-			"current_room_id": "floor_01_entry",
+			"checkpoint_id": "checkpoint:run:1852314432:00065c4b4cee9270:0055edde",
+			"current_floor_index": 0.0,
+			"current_room_id": "start",
 			"edge_states": {
-				"facility|floor_01_entry": false,
+				"boss|extraction": false,
+				"boss|room_10": false,
 				"facility|start": true,
-				"floor_01_entry|floor_01_hub": false,
-				"floor_01_exit|floor_01_main_02": false,
-				"floor_01_exit|floor_02_entry": false,
-				"floor_01_hub|floor_01_main_02": false
+				"room_01|room_02": false,
+				"room_01|start": false,
+				"room_02|room_03": false,
+				"room_03|room_04": false,
+				"room_04|room_05": false,
+				"room_05|room_06": false,
+				"room_06|room_07": false,
+				"room_07|room_08": false,
+				"room_08|room_09": false,
+				"room_09|room_10": false
 			},
 			"equipped_backpack_item": {
 
@@ -65,7 +72,7 @@
 					"base_shelf_order": 0.0,
 					"base_shop_enabled": false,
 					"base_stock_rule": "not_listed",
-					"created_transaction_id": "create:wpn_00065bf5e5b51160_00261848_0001",
+					"created_transaction_id": "create:wpn_00065c4b4cee1188_0055704d_0001",
 					"current_ammo": 100.0,
 					"description": "出厂标配的连射武器。弹匣大、射速快、单发伤害低，靠持续泼洒火力压制走廊。左键装备为当前主武器。",
 					"fate_slot_capacity": 4.0,
@@ -142,16 +149,16 @@
 								"supports_tactical"
 							]
 						},
-						"created_transaction_id": "create:wpn_00065bf5e5b51160_00261848_0001",
+						"created_transaction_id": "create:wpn_00065c4b4cee1188_0055704d_0001",
 						"current_ammo": 100.0,
 						"fate_slot_capacity": 4.0,
 						"fate_upgrades": [],
 						"rarity": "uncommon",
 						"schema_version": 2.0,
 						"weapon_content_id": "weapon_sprinkler",
-						"weapon_instance_id": "wpn_00065bf5e5b51160_00261848_0001"
+						"weapon_instance_id": "wpn_00065c4b4cee1188_0055704d_0001"
 					},
-					"weapon_instance_id": "wpn_00065bf5e5b51160_00261848_0001"
+					"weapon_instance_id": "wpn_00065c4b4cee1188_0055704d_0001"
 				},
 				{
 
@@ -171,13 +178,14 @@
 			"inventory_capacity": 12.0,
 			"inventory_slots": [
 				{
-					"count": 60.0,
+					"count": 300.0,
 					"item": {
 						"base_buy_price": 30.0,
 						"base_sell_price": 15.0,
 						"base_shelf_order": 0.0,
 						"base_shop_enabled": false,
 						"base_stock_rule": "not_listed",
+						"count": 300.0,
 						"description": "每个堆叠单位代表1发备弹；换弹按实际弹匣缺口消耗。",
 						"floor_loot_weights": {
 							"combat_floor_1": 2.0,
@@ -238,12 +246,18 @@
 				}
 			],
 			"kills": 0.0,
-			"layout_id": "floor_98_3283592901",
+			"layout_id": "f00_de15f6e0b47e5db6",
+			"merchant_stock": {
+				"schema": "run_merchant_stock_v1",
+				"stocks": {
+
+				}
+			},
 			"player_hp": 100.0,
 			"player_position": [
-				27.5,
-				-23.9700012207031,
-				2.5
+				2.5,
+				0.0299999974668026,
+				-1.5
 			],
 			"player_rotation_y": 0.0,
 			"quick_item_ids": [
@@ -258,29 +272,32 @@
 
 				}
 			],
-			"room_key_count": 3.0,
+			"room_key_count": 1.0,
 			"run_currency": 0.0,
-			"run_id": "run:2603918655:00065bf5e5b7e7f0:0028eb58",
-			"run_seed": 2603918655.0,
+			"run_id": "run:1852314432:00065c4b4cee9270:0055edde",
+			"run_seed": 1852314432.0,
 			"run_value": 0.0,
-			"runtime_map_id": "",
-			"saved_at_unix": 1789969351.0,
+			"runtime_map_id": "expedition_01",
+			"saved_at_unix": 1790328529.0,
 			"schema": "runtime_player_state_v2",
 			"scope": "combat",
+			"trade_extraction_room_id": "",
+			"trade_extraction_unlocked": false,
 			"valid": true,
 			"world_state": {
 				"committed_floor_indices": [
-					0.0,
-					2.0
+					0.0
 				],
 				"floor_layout_ids": {
-					"0": "bootstrap",
-					"2": "floor_98_3283592901"
+					"0": "f00_de15f6e0b47e5db6"
 				},
 				"initial_loop_gate_armed": false,
 				"initial_loop_gate_sealed": false,
+				"narrative_spawned_keys": {
+
+				},
 				"room_progress": {
-					"facility": {
+					"boss": {
 						"cleared": false,
 						"event_combat": false,
 						"event_resolved": false,
@@ -289,25 +306,7 @@
 						"spawned": false,
 						"visited": false
 					},
-					"floor_01_entry": {
-						"cleared": true,
-						"event_combat": false,
-						"event_resolved": false,
-						"key_spawned": true,
-						"key_unclaimed": true,
-						"spawned": true,
-						"visited": true
-					},
-					"floor_01_exit": {
-						"cleared": true,
-						"event_combat": false,
-						"event_resolved": false,
-						"key_spawned": true,
-						"key_unclaimed": true,
-						"spawned": true,
-						"visited": true
-					},
-					"floor_01_hub": {
+					"extraction": {
 						"cleared": false,
 						"event_combat": false,
 						"event_resolved": false,
@@ -316,7 +315,7 @@
 						"spawned": false,
 						"visited": false
 					},
-					"floor_01_main_02": {
+					"room_01": {
 						"cleared": false,
 						"event_combat": false,
 						"event_resolved": false,
@@ -325,7 +324,79 @@
 						"spawned": false,
 						"visited": false
 					},
-					"floor_02_entry": {
+					"room_02": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_03": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_04": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_05": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_06": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_07": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_08": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_09": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"room_10": {
 						"cleared": false,
 						"event_combat": false,
 						"event_resolved": false,
@@ -338,85 +409,17 @@
 						"cleared": true,
 						"event_combat": false,
 						"event_resolved": false,
-						"key_spawned": false,
+						"key_spawned": true,
 						"key_unclaimed": false,
 						"spawned": true,
-						"visited": false
+						"visited": true
 					}
 				},
 				"schema": "tower_world_state_v1",
 				"segment_runtime_state": {
-					"facility": {
-						"alive_count": 0.0,
-						"captured_at_msec": 2945.0,
-						"cleared": false,
-						"containers": {
-
-						},
-						"enemies": [],
-						"ground_items": [],
-						"room_keys": [],
-						"room_light_on": false,
-						"visited": false,
-						"wave_number": 1.0,
-						"wave_queue": [],
-						"wave_total": 1.0
-					},
-					"floor_01_entry": {
-						"alive_count": 0.0,
-						"captured_at_msec": 3080.0,
-						"cleared": true,
-						"containers": {
-
-						},
-						"enemies": [],
-						"ground_items": [],
-						"room_keys": [
-							{
-								"position": [
-									27.5,
-									-23.9500007629395,
-									2.5
-								],
-								"room_id": "floor_01_entry"
-							}
-						],
-						"room_light_on": true,
-						"visited": true,
-						"wave_number": 1.0,
-						"wave_queue": [],
-						"wave_total": 1.0
-					},
-					"floor_01_exit": {
-						"alive_count": 0.0,
-						"captured_at_msec": 3062.0,
-						"cleared": true,
-						"containers": {
-							"floor_01_exit_prop_00": false,
-							"floor_01_exit_prop_01": false,
-							"floor_01_exit_prop_02": false
-						},
-						"enemies": [],
-						"ground_items": [],
-						"room_keys": [
-							{
-								"position": [
-									-30.5535144805908,
-									-23.9500007629395,
-									6.02527618408203
-								],
-								"room_id": "floor_01_exit"
-							}
-						],
-						"room_light_on": false,
-						"visited": true,
-						"wave_number": 1.0,
-						"wave_queue": [],
-						"wave_total": 1.0
-					},
 					"start": {
 						"alive_count": 0.0,
-						"captured_at_msec": 2945.0,
+						"captured_at_msec": 7296.0,
 						"cleared": true,
 						"containers": {
 
@@ -424,8 +427,8 @@
 						"enemies": [],
 						"ground_items": [],
 						"room_keys": [],
-						"room_light_on": false,
-						"visited": false,
+						"room_light_on": true,
+						"visited": true,
 						"wave_number": 1.0,
 						"wave_queue": [],
 						"wave_total": 1.0
@@ -433,9 +436,7 @@
 				},
 				"unloaded_segment_floor_indices": [],
 				"vertical_arrival_open": {
-					"facility|floor_01_entry": false,
-					"facility|start": false,
-					"floor_01_exit|floor_02_entry": false
+
 				}
 			}
 		},
@@ -446,7 +447,7 @@
 		},
 		"base_energy_capacity": 100.0,
 		"base_energy_current": 100.0,
-		"base_energy_last_synced_game_seconds": 87228.9599519362,
+		"base_energy_last_synced_game_seconds": 122214.095127819,
 		"blackmarket_level": 0.0,
 		"blackmarket_unlocked": false,
 		"blueprint_attachment_tier": 0.0,
@@ -743,7 +744,7 @@
 		"greenhouse_level": 0.0,
 		"greenhouse_unlocked": false,
 		"last_save_reason": "world_time_interval",
-		"last_saved_at_unix": 1790298892.0,
+		"last_saved_at_unix": 1790416048.0,
 		"narrative_history": {
 
 		},
@@ -752,7 +753,7 @@
 		},
 		"pending_insurance_slots": [],
 		"pending_loadout_items": [],
-		"save_revision": 127.0,
+		"save_revision": 184.0,
 		"save_version": "2.0",
 		"scrapyard_level": 0.0,
 		"scrapyard_unlocked": false,
@@ -766,13 +767,13 @@
 		"vault_unlocked": false,
 		"workshop_level": 0.0,
 		"workshop_unlocked": false,
-		"world_time_elapsed_game_seconds": 87228.9599519362,
+		"world_time_elapsed_game_seconds": 122214.095127819,
 		"zero_load_extraction": false
 	},
-	"payload_checksum": "d2423a4db300bdf2d5927f8f826a497762ac61b29c769ded8fe7b4f9a9147e78",
+	"payload_checksum": "1c7169f143d438d2f057057d057552120182b4ea503fbbcb3e287f9ad6e9d073",
 	"payload_checksum_algorithm": "canonical_json_v3",
 	"profile_schema": "2.0",
 	"reason": "world_time_interval",
-	"revision": 127,
-	"saved_at_unix": 1790298892
+	"revision": 184,
+	"saved_at_unix": 1790416048
 }

@@ -25,6 +25,8 @@
 
 Run with Blender 4.5+:
   blender --factory-startup --background --python <this> -- --project-root <root>
+  # 只跑一个库的一个版本（同一 room_slug 有多版时必须写 `slug/version`）：
+  blender ... -- --project-root <root> --libraries db_room/v013
   # 只读复核（不改任何 blend，按磁盘重算并回写报告）：
   blender ... -- --project-root <root> --verify
 """
@@ -45,6 +47,12 @@ LIBRARIES = (
     ("boss_room", "v011"),
     ("l_corridor", "v002"),
     ("db_room", "v003"),
+    # 2026-09-27 请求线 A：数据库房按业主要求改用房间种类源 v002 重新拆解出旧库 v013，
+    # 与 v003 属同一 room_slug 的两个版本，故必须写 `db_room/v013` 才能只跑这一版。
+    # ⚠ 归并后的库（corridor v012 / db v014）**不得列入**：它们的 UV 是从本表里已提亮的
+    # 旧库经 regroup 按网格原样继承的（`regrouped_from` 记着来源），本脚本的幂等标记
+    # （场景自定义属性）不会跟着搬过去，列进来会在已提亮的 UV 上再位移一次。
+    ("db_room", "v013"),
 )
 LIBRARY_ROOT = Path(
     "assets/art/environments/tower_zones/expedition/source/common_components"
@@ -88,7 +96,10 @@ def parse_args() -> argparse.Namespace:
         help="提亮前的库备份根目录，--verify 用它算「提亮前直方图」",
     )
     parser.add_argument(
-        "--libraries", default="", help="逗号分隔 room_slug，默认全部；用于分批复跑"
+        "--libraries",
+        default="",
+        help="逗号分隔筛选，默认全部；每项写 `room_slug` 或 `room_slug/version`"
+        "（同一 room_slug 有多版时必须写 `slug/version` 才能只跑一版）",
     )
     parser.add_argument(
         "--report", default="", help="报告输出路径（相对 project-root）"
@@ -99,6 +110,29 @@ def parse_args() -> argparse.Namespace:
 
 def hex_of(cell: tuple[int, int]) -> str:
     return "#" + PALETTE_HEX[9 - cell[1]][cell[0]]
+
+
+def selected(wanted: set[str], room_slug: str, version: str) -> bool:
+    """`--libraries` 每项可写 `room_slug`（含该房型全部版本）或 `room_slug/version`。"""
+    if not wanted:
+        return True
+    return room_slug in wanted or f"{room_slug}/{version}" in wanted
+
+
+def report_target(root: Path, args) -> Path:
+    """报告落点：显式 `--report` 优先；否则默认 `REPORT_REL`，但**只跑子集**时另写
+    `<stem>.<subset>[.dryrun].json` —— 免得用部分库的报告覆盖全库正本。"""
+    if args.report:
+        return root / args.report
+    path = root / REPORT_REL
+    tags = []
+    if args.libraries:
+        tags.append(args.libraries.replace(",", "+").replace("/", "-"))
+    if args.dry_run:
+        tags.append("dryrun")
+    if tags:
+        path = path.parent / (path.stem + "." + ".".join(tags) + ".json")
+    return path
 
 
 def cell_of(u: float, v: float) -> tuple[int, int]:
@@ -320,14 +354,14 @@ def run_verify(args: argparse.Namespace, root: Path, wanted: set[str]) -> None:
     正确落点 r3/r4/r5/r6 本身还会被再移一次。真判据＝
     `map(备份直方图) == 现状直方图`，逐 blend（母版 + 每个分包）成立。
     """
-    report_path = root / (args.report or REPORT_REL)
+    report_path = report_target(root, args)
     report = json.loads(report_path.read_text(encoding="utf-8"))
     recorded = {r["blend"]: r for r in report["records"]}
     backup_root = Path(args.backup_root).resolve()
     per_library: dict[str, dict] = {}
     failures: list[str] = []
     for room_slug, version in LIBRARIES:
-        if wanted and room_slug not in wanted:
+        if not selected(wanted, room_slug, version):
             continue
         master, packages = library_targets(root, room_slug, version)
         targets = [master] + packages
@@ -428,7 +462,7 @@ def main() -> None:
     per_library: dict[str, dict] = {}
 
     for room_slug, version in LIBRARIES:
-        if wanted and room_slug not in wanted:
+        if not selected(wanted, room_slug, version):
             continue
         master, packages = library_targets(root, room_slug, version)
         targets = [master] + packages
@@ -476,9 +510,7 @@ def main() -> None:
 
     if args.dry_run:
         print("DRY-RUN：未写任何 blend 文件")
-    report_path = root / (args.report or REPORT_REL)
-    if args.dry_run and not args.report:
-        report_path = report_path.parent / (report_path.stem + ".dryrun.json")
+    report_path = report_target(root, args)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(
         json.dumps(

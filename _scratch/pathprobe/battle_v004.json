@@ -1,0 +1,12 @@
+{
+ "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+ "images": [
+  {
+   "name": "设施低亮多巴胺色盘_10x10_512.png",
+   "filepath": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+   "is_relative": false,
+   "norm": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+   "exists_norm": true
+  }
+ ]
+}

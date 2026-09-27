@@ -1,0 +1,14 @@
+{
+  "room_type": "DB_ROOM",
+  "library_version": "v013",
+  "source_room_type_sha256": "91ba228258b698bddcba2f27c46d4223b50f681f71c2e36a76e4b1ee13b0dcb4",
+  "component_count": 86,
+  "object_assignment_count": 148,
+  "duplicate_source_objects": false,
+  "all_output_instance_offsets_zero": true,
+  "all_output_roots_identity": true,
+  "room_owned_geometry": false,
+  "collision_authored": false,
+  "glb_exported": false,
+  "godot_runtime_connected": false
+}

@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://_scratch/probe_bullet/probe_bridge_dump.gd" id="1_probe3"]
+
+[node name="ProbeBridgeDump" type="Node3D"]
+script = ExtResource("1_probe3")

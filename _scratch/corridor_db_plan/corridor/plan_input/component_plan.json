@@ -1,0 +1,530 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "source_library": "C:/Users/zhuangmenghong/AppData/Local/Temp/ss2pal/plan_work/corridor",
+  "regular_max_variants_per_family": 3,
+  "hard_max_variants_per_family": 5,
+  "component_budget": {
+    "limit": 50,
+    "planned": 19,
+    "remaining": 31
+  },
+  "sim_tol_m": 0.1,
+  "package_count": 121,
+  "component_count": 19,
+  "families": [
+    {
+      "family": "floor_tile_5m",
+      "variants_before": 42,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08",
+          "slug": "tile_r03_c08",
+          "bounds_size_m": [
+            5.0,
+            5.0,
+            0.433
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C08",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C02",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C05",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C01",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C03",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C04",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C00",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C03",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C04",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C05",
+            "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C08"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "wall_5m",
+      "variants_before": 30,
+      "variant_limit": 5,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT",
+          "slug": "wall_x_00_front",
+          "bounds_size_m": [
+            5.0,
+            0.39,
+            1.35
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "cutaway_low",
+          "variant_reason": "源为出图剖切把该边压低至 1.35m；owner 裁定保留为独立变体，不并回全高墙",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR",
+          "slug": "wall_x_00_rear",
+          "bounds_size_m": [
+            5.0,
+            0.511,
+            11.9
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "standard",
+          "variant_reason": "全高 11.90m 结构墙（本关房间外壳）",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_REAR",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_REAR",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_REAR",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_REAR",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_REAR",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_45",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_45",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_45",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00",
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_45"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "high_pipe",
+      "variants_before": 17,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01",
+          "slug": "high_pipe_rear_01",
+          "bounds_size_m": [
+            4.76,
+            0.44,
+            0.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_01",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_02",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_03",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_04",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_05",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_06",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_07",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_02",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_04",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_06",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_08",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_03",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_05",
+            "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_07"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "pipe_riser",
+      "variants_before": 6,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00",
+          "slug": "pipe_riser_00",
+          "bounds_size_m": [
+            0.435,
+            0.16,
+            3.65
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_01",
+            "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_02",
+            "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_03",
+            "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_04",
+            "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_05"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "server_rack",
+      "variants_before": 5,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+          "slug": "server_00",
+          "bounds_size_m": [
+            1.035,
+            0.985,
+            3.185
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-SERVER_01",
+            "ENV-EXPEDITION-L-CORRIDOR-SERVER_02",
+            "ENV-EXPEDITION-L-CORRIDOR-SERVER_03",
+            "ENV-EXPEDITION-L-CORRIDOR-SERVER_04"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "hanging_cable",
+      "variants_before": 5,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 3,
+      "merged_deltas_m": [
+        0.195,
+        0.43
+      ],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A",
+          "slug": "hanging_cable_south_a",
+          "bounds_size_m": [
+            0.764,
+            0.73,
+            4.18
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B",
+          "slug": "hanging_cable_gallery_b",
+          "bounds_size_m": [
+            0.784,
+            0.735,
+            3.15
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN",
+          "slug": "hanging_cable_turn",
+          "bounds_size_m": [
+            1.1,
+            1.58,
+            2.399
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "access_console",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00",
+          "slug": "console_00",
+          "bounds_size_m": [
+            0.7,
+            0.768,
+            1.99
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+          "slug": "console_02",
+          "bounds_size_m": [
+            1.072,
+            1.1,
+            2.265
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "crate",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_00",
+          "slug": "crate_00",
+          "bounds_size_m": [
+            1.21,
+            0.927,
+            1.02
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-CRATE_01",
+            "ENV-EXPEDITION-L-CORRIDOR-CRATE_04"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "planter",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00",
+          "slug": "planter_00",
+          "bounds_size_m": [
+            1.032,
+            1.059,
+            1.668
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-PLANTER_01",
+            "ENV-EXPEDITION-L-CORRIDOR-PLANTER_02"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "cutaway_reference",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1",
+          "slug": "cutaway_wall_contract_1",
+          "bounds_size_m": [
+            0.3,
+            25.0,
+            11.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0",
+          "slug": "cutaway_wall_contract_0",
+          "bounds_size_m": [
+            30.0,
+            0.3,
+            11.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "service_cart",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH",
+          "slug": "service_cart_south",
+          "bounds_size_m": [
+            1.183,
+            1.57,
+            1.69
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY",
+          "slug": "service_cart_gallery",
+          "bounds_size_m": [
+            1.57,
+            1.183,
+            1.69
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_label",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY",
+          "slug": "wall_label_gallery",
+          "bounds_size_m": [
+            0.63,
+            0.068,
+            0.51
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_SOUTH"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "server_gallery",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY",
+          "slug": "server_gallery",
+          "bounds_size_m": [
+            9.82,
+            0.4,
+            2.675
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "naming_violation_count": 73,
+    "front_axis_non_enum_count": 0,
+    "rotation_locked_count": 121,
+    "variant_contract_missing_families": [
+      "server_rack",
+      "floor_tile_5m",
+      "hanging_cable",
+      "high_pipe",
+      "pipe_riser"
+    ],
+    "absolute_over_limit_families": [
+      "wall_5m",
+      "floor_tile_5m",
+      "high_pipe",
+      "pipe_riser"
+    ],
+    "component_budget_over": false
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "component_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+  "asset_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+  "room_type": "L_CORRIDOR",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/l_corridor/v003/L型走廊种类_数据连廊_45x40m_v003.blend",
+  "source_room_type_sha256": "9c323876f7165f656e016049135652a96c83ed0adb45f4f28c49fc50cfb5adae",
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v002/expedition_l_corridor_components_source_v002.blend",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v002/component_packages/server_00/server_00.blend",
+  "collection": "蓝光服务器机柜_输出包",
+  "editable_collection": "蓝光服务器机柜_制作源",
+  "root_object": "ROOT_server_00_组件",
+  "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+  "slug": "server_00",
+  "name_zh": "蓝光服务器机柜",
+  "category": "facility",
+  "bounds_size_m": [
+    1.035,
+    0.985001,
+    3.185
+  ],
+  "bounds_lo_m": [
+    -0.5175,
+    -0.4925,
+    0.0
+  ],
+  "bounds_hi_m": [
+    0.5175,
+    0.4925,
+    3.185
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis": "-Y",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::资产主表",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [
+    "蓝光服务器机柜_输出_自发光",
+    "蓝光服务器机柜_输出_自发光.001",
+    "蓝光服务器机柜_输出_自发光.002",
+    "蓝光服务器机柜_输出_自发光.003",
+    "蓝光服务器机柜_输出_自发光.004",
+    "蓝光服务器机柜_输出_自发光.005",
+    "蓝光服务器机柜_输出_自发光.006",
+    "蓝光服务器机柜_输出_自发光.007",
+    "蓝光服务器机柜_输出_自发光.008",
+    "蓝光服务器机柜_输出_自发光.009",
+    "蓝光服务器机柜_输出_自发光.010",
+    "蓝光服务器机柜_输出_自发光.011",
+    "蓝光服务器机柜_输出_自发光.012",
+    "蓝光服务器机柜_输出_自发光.013",
+    "蓝光服务器机柜_输出_自发光.014",
+    "蓝光服务器机柜_输出_自发光.015",
+    "蓝光服务器机柜_输出_自发光.016",
+    "蓝光服务器机柜_输出_自发光.017",
+    "蓝光服务器机柜_输出_自发光.018",
+    "蓝光服务器机柜_输出_自发光.019"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_world_origin_m": null,
+  "version": "v002",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "objects": [
+    "蓝光服务器机柜_输出_部件00",
+    "蓝光服务器机柜_输出_部件01",
+    "蓝光服务器机柜_输出_自发光",
+    "蓝光服务器机柜_输出_自发光.001",
+    "蓝光服务器机柜_输出_自发光.002",
+    "蓝光服务器机柜_输出_自发光.003",
+    "蓝光服务器机柜_输出_部件06",
+    "蓝光服务器机柜_输出_自发光.004",
+    "蓝光服务器机柜_输出_自发光.005",
+    "蓝光服务器机柜_输出_自发光.006",
+    "蓝光服务器机柜_输出_自发光.007",
+    "蓝光服务器机柜_输出_部件11",
+    "蓝光服务器机柜_输出_自发光.008",
+    "蓝光服务器机柜_输出_自发光.009",
+    "蓝光服务器机柜_输出_自发光.010",
+    "蓝光服务器机柜_输出_自发光.011",
+    "蓝光服务器机柜_输出_部件16",
+    "蓝光服务器机柜_输出_自发光.012",
+    "蓝光服务器机柜_输出_自发光.013",
+    "蓝光服务器机柜_输出_自发光.014",
+    "蓝光服务器机柜_输出_自发光.015",
+    "蓝光服务器机柜_输出_部件21",
+    "蓝光服务器机柜_输出_自发光.016",
+    "蓝光服务器机柜_输出_自发光.017",
+    "蓝光服务器机柜_输出_自发光.018",
+    "蓝光服务器机柜_输出_自发光.019",
+    "蓝光服务器机柜_输出_部件26",
+    "蓝光服务器机柜_输出_部件27",
+    "蓝光服务器机柜_输出_部件28"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "godot_front_axis": "+Z",
+  "component_file_sha256": "7158d29c29ae890769b1a083039a14067231edba06d8c54b9752d8f99c9b72a6"
+}

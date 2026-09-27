@@ -10,11 +10,16 @@ agent_created: true
 
 `.gitignore` 管的是**版本库**，`.gdignore` 管的是**Godot 导入**，`export_presets.cfg` 管的是**导出过滤** —— 三者互不相干。
 
-实测（ShellStorm2，Godot 4.6.3）三条反直觉事实，**光看配置猜不出来**：
+实测（ShellStorm2，Godot 4.6.3）五条反直觉事实，**光看配置猜不出来**：
 
-1. **`.blend` 源文件不进包**（0 个）—— Godot 用 `.godot/` 里的导入产物替代它。所以 `source/**/*.blend` 没被 `.gdignore` 排除，**也不会**把几百 MB 的 blend 带进发行包。
-2. **`.json` 会进包**（ShellStorm2 实测 2454 个 / 33 MB）—— 构建期记账用的 `asset_manifest.json` 之类会被原样打进去，因为 `export_filter="all_resources"` 收所有文件。
-3. **`.import`、`tests/`、`docs/`、`tools/`、`_scratch/` 一律进包** —— 只要 `exclude_filter` 是空的。
+1. **`.blend` / `.blend1` 源文件不进包**（各 0 个）—— Godot 用 `.godot/` 里的导入产物替代它。所以 `source/**/*.blend` 没被 `.gdignore` 排除，**也不会**把几百 MB 的 blend 带进发行包。
+   - **补充实测（2026-09-27）**：**即使 `project.godot` 设了 `[filesystem] import/blender/enabled=false` 把 Blender 导入器整个关掉，`.blend`/`.blend1` 仍然 0 个进包**（11795 个打包文件里命中 0）。导出层排除 `.blend` 是独立于导入器开关的内置行为 ⇒ **关导入器不会把 1.8 GB 的 .blend 源灌进发行包**，不需要额外配 `exclude_filter`。这条能直接否掉「关了导入器会不会反而把源文件打进包」这个看起来很合理的担忧 —— **必须实测才敢下结论**。
+2. **`.json` 会进包**（实测 5055 个 / 52.8 MB）—— 构建期记账用的 `asset_manifest.json` 之类会被原样打进去（2719 个 / 5.4 MB），因为 `export_filter="all_resources"` 收所有文件。
+3. **`.import`、`tests/`、`docs/`、`tools/`、`_scratch/`、`skills_drafts/` 一律进包** —— 只要 `exclude_filter` 是空的。`.import` 实测 2073 个；`_scratch/` 1412 个 / 13.5 MB。
+4. **🆕 `.gdignore` 会连导出包一起丢**（2026-09-27 对照实测）：`outputs/`（**有** `.gdignore`）进包 **0** 个；`output/`（**无** `.gdignore`，仅差一个字母）进包 **41** 个。⇒ `.gdignore` 是**目录级整体跳过**，编辑器扫描 / 导入 / **导出打包**全跳过。
+   - 推论：**任何被 `FileAccess` 在 `res://` 下读取的 JSON，其所在目录绝不能加 `.gdignore`**，否则开发期（编辑器运行直读磁盘）一切正常、**导出后才炸**。
+   - ShellStorm2 已经踩着的实例：顶层 `source/` 有 `.gdignore`（进包 0 个），但 `src/map/LevelPlanLoader.gd` 与 `src/world3d/Block00MasterOfficeLayout3D.gd` 运行时在读它下面的数据 ⇒ **导出包内读不到**。属既有隐患，发现即报主人，别顺手改。
+5. **🆕 `.gd` 会被编译成 `.gdc` 进包**：`_scratch/probe_*.gd` 在包里是 `probe_*.gdc`。所以「临时探针脚本」也会进发行包，`_scratch/` 想不进包只能靠 `.gdignore` 或 `exclude_filter`。
 
 ⇒ 结论：**必须实测，不能推理**。
 
@@ -37,6 +42,23 @@ cd <项目根>
 - `--export-pack` 产出单个 `.pck`，比 `--export-release` 快且不需要装 exe。
 - **输出路径放仓库外**（如父目录的 `_scratch/`），否则会污染工作区。
 - 退出码 0 且日志末尾出现 `[ DONE ] savepack` 即成功。
+- ⏱️ **耗时随项目体积增长，别用固定值估**：2026-09-25 实测 4m22s / 913 MB；2026-09-27 同样预设 **8m59s** / 753 MB / 11795 个文件。一律丢后台跑。
+
+### 1.5) 不用等导出完成：日志本身就是证据
+
+导出日志**逐行**记录每个被打包的文件，形如
+`[  94% ] savepack | 保存文件：res://<path>`。所以 PCK 还在写 `.tmp` 时就能先数一遍：
+
+```bash
+grep -c "保存文件" export.log                       # 打包文件总数
+grep "保存文件" export.log | grep -c '\.blend\b'     # .blend 命中
+grep "保存文件" export.log | grep -c '\.blend1'      # .blend1 命中
+grep "保存文件" export.log | grep -c "res://outputs/"  # 某目录（.gdignore 生效验证）
+```
+
+⚠️ `grep -c "保存文件" export.log | grep -i blend` 会把**文件名里含 blend 字样**的算进去
+（实测 3 条全是 `probe_blender_import_switch.gdc` / `old_blender_versions.json` / `source_manifest_template.json`），
+**必须用 `\.blend\b` 锚定扩展名**，否则会把 0 误报成 3。
 
 ### 2) 解析 PCK 索引
 
@@ -99,4 +121,7 @@ u32 file_count
 - **体积永远给绝对值 + 占比**：`3.07 MB / 913 MB = 0.34%`，别只说「很多」。
 - **区分「进包了」与「有问题」**：进包 ≠ 有害。判有害要看①体积占比②运行时是否被读③是否属于开发期内容。
 - **运行时硬依赖要单列**：任何被 `FileAccess` / `load()` 在 `res://` 下引用的路径，若打算用 `exclude_filter` 裁掉，**逐条验证过再裁**。ShellStorm2 的实例：`FloorPlanGenerator.gd` 用 `FileAccess.get_file_as_string()` 读 `…/expedition/source/room_types/boss_room/v002/boss_room_50x40_v002.layout.json` —— 它就在 `source/` 里，所以对 `source/**` 做一刀切排除会**打断 Boss 房装配**。
+- **🆕 想用 `.gdignore` 排除 DCC 源目录前，先查该目录有没有运行时读的 JSON**：`.gdignore` 比 `exclude_filter` 更狠（整个目录连导出一起丢，见事实 4）。实测 ShellStorm2 的 `assets/**/source/` **31 个目录里绝大多数混着运行时 JSON/PNG**（`expedition/source` 一个就 3906 个、`battle/source` 434、`rooftop/source` 207），只有角色/道具那几个（约 20 个目录、60 个 `.blend`）是纯 DCC ⇒ **一刀切给 `assets/**/source/` 加 `.gdignore` 会打断 Boss 房装配与天台装饰**。
+  - 一票否决式的替代解法：**全局关导入器** `project.godot` → `[filesystem] import/blender/enabled=false`（**全工程级**，未来在任何目录 —— 含角色/道具 —— 新增 `.blend` 都自动不导入，比逐目录 `.gdignore` 更强且零副作用），再按事实 1 用实测确认 `.blend` 本来就不进包。
+  - 查法：`for d in $(find ./assets -type d -name source); do find "$d" -type f \( -name '*.json' -o -name '*.png' -o -name '*.gd' \) | wc -l; done` —— 非 0 就说明该目录**不能**加 `.gdignore`。
 - **`exclude_filter` 的陷阱**：`export_filter="all_resources"` + 空 `exclude_filter` 是默认值，等于全收。要裁剪就在 `export_presets.cfg` 的 `exclude_filter` 里写 glob（逗号分隔），**改完重新导出并复查那几个硬依赖仍在包内**。

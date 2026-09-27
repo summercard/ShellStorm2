@@ -51,6 +51,11 @@ LIBRARIES = (
     ("boss_room", "v011"),
     ("l_corridor", "v002"),
     ("db_room", "v003"),
+    # 2026-09-27 请求线 A：数据库房按业主要求改用房间种类源 v002 重新拆解出旧库 v013，
+    # 与 v003 属同一 room_slug 的两个版本，故必须写 `db_room/v013` 才能只跑这一版。
+    # ⚠ 归并后的库（corridor v012 / db v014）**不得列入**：材质槽指向是从本表里已亚光的
+    # 旧库经 regroup 原样继承的（`regrouped_from` 记着来源），列进来会把已改指的槽再判一遍。
+    ("db_room", "v013"),
 )
 LIBRARY_ROOT = Path(
     "assets/art/environments/tower_zones/expedition/source/common_components"
@@ -80,10 +85,34 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--project-root", required=True)
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--libraries", default="", help="逗号分隔 room_slug")
+    parser.add_argument(
+        "--libraries",
+        default="",
+        help="逗号分隔筛选，默认全部；每项写 `room_slug` 或 `room_slug/version`"
+        "（同一 room_slug 有多版时必须写 `slug/version` 才能只跑一版）",
+    )
     parser.add_argument("--report", default="")
     argv = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     return parser.parse_args(argv)
+
+
+def selected(wanted: set[str], room_slug: str, version: str) -> bool:
+    """`--libraries` 每项可写 `room_slug`（含该房型全部版本）或 `room_slug/version`。"""
+    if not wanted:
+        return True
+    return room_slug in wanted or f"{room_slug}/{version}" in wanted
+
+
+def report_target(root: Path, args) -> Path:
+    """报告落点：显式 `--report` 优先；否则默认 `REPORT_REL`，但**只跑子集**时另写
+    `<stem>.<subset>.json` —— 免得用部分库的报告覆盖全库正本。"""
+    if args.report:
+        return root / args.report
+    if not args.libraries:
+        return root / REPORT_REL
+    tag = args.libraries.replace(",", "+").replace("/", "-")
+    path = root / REPORT_REL
+    return path.parent / (path.stem + "." + tag + ".json")
 
 
 def role_of(name: str) -> str:
@@ -361,7 +390,7 @@ def main() -> None:
     wanted = {t for t in args.libraries.split(",") if t}
     records: list[dict] = []
     for room_slug, version in LIBRARIES:
-        if wanted and room_slug not in wanted:
+        if not selected(wanted, room_slug, version):
             continue
         targets = library_targets(root, room_slug, version)
         matte_conf = master_matte_conf(root, room_slug, version)
@@ -392,7 +421,7 @@ def main() -> None:
         print()
     if args.dry_run:
         print("DRY-RUN：未写任何 blend")
-    report_path = root / (args.report or REPORT_REL)
+    report_path = report_target(root, args)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(
         json.dumps(

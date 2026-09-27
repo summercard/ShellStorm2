@@ -1,0 +1,2917 @@
+{
+  "schema": "shellstorm2.expedition.room_type_palette_lighten.v001",
+  "mark": "palette_lighten_v001",
+  "scope": "只处理房型**组件库**（母版 + 每个独立组件包）；房型概念源 blend 未动（美术参考 + 场景账本已登记 sha256）。",
+  "rules": {
+    "neutral_column_u9": "图面行 +3；行 7/8/9 已到浅端，原样保留",
+    "hue_family_rows_1_8_col_0_5": "同色相列 +3；列 6/7/8 已在族内最亮，原样",
+    "rows_0_and_9_colored": "非渐变行（饱和原色行 / 近黑阴影行），原样不动",
+    "near_black_0_0": "原样保留：#05050c 实测是斜角描边面（法线 ∓0.33/∓0.89/∓0.33，每件约 5% 表面积）与 db 沿墙黄黑警示边带的黑条"
+  },
+  "row_shift": 3,
+  "col_shift": 3,
+  "libraries": [
+    "office_room/v009",
+    "bridge_room/v010",
+    "boss_room/v011",
+    "l_corridor/v002",
+    "db_room/v003",
+    "db_room/v013"
+  ],
+  "per_library": {
+    "db_room/v013": {
+      "blends": 87,
+      "master_polygons": 247616,
+      "master_polygons_moved": 145192,
+      "cells_before": {
+        "9_6": {
+          "faces": 57096,
+          "hex": "#3f4f62",
+          "row": 3
+        },
+        "8_9": {
+          "faces": 49552,
+          "hex": "#1b3b6f",
+          "row": 0
+        },
+        "0_0": {
+          "faces": 37788,
+          "hex": "#05050c",
+          "row": 9
+        },
+        "9_4": {
+          "faces": 30160,
+          "hex": "#5d6e82",
+          "row": 5
+        },
+        "9_8": {
+          "faces": 26676,
+          "hex": "#263242",
+          "row": 1
+        },
+        "9_7": {
+          "faces": 15108,
+          "hex": "#324052",
+          "row": 2
+        },
+        "9_9": {
+          "faces": 14444,
+          "hex": "#1b2533",
+          "row": 0
+        },
+        "9_1": {
+          "faces": 5184,
+          "hex": "#a5b2c1",
+          "row": 8
+        },
+        "6_6": {
+          "faces": 5076,
+          "hex": "#715c09",
+          "row": 3
+        },
+        "3_9": {
+          "faces": 2052,
+          "hex": "#0f5f72",
+          "row": 0
+        },
+        "6_4": {
+          "faces": 1080,
+          "hex": "#0f5f6b",
+          "row": 5
+        },
+        "8_7": {
+          "faces": 864,
+          "hex": "#72614d",
+          "row": 2
+        },
+        "6_0": {
+          "faces": 828,
+          "hex": "#381408",
+          "row": 9
+        },
+        "9_5": {
+          "faces": 540,
+          "hex": "#4d5e72",
+          "row": 4
+        },
+        "5_8": {
+          "faces": 520,
+          "hex": "#6e1c2a",
+          "row": 1
+        },
+        "4_3": {
+          "faces": 324,
+          "hex": "#112d6a",
+          "row": 6
+        },
+        "5_4": {
+          "faces": 324,
+          "hex": "#145f56",
+          "row": 5
+        }
+      },
+      "cells_after": {
+        "9_3": {
+          "faces": 57096,
+          "hex": "#718195",
+          "row": 6
+        },
+        "8_9": {
+          "faces": 49552,
+          "hex": "#1b3b6f",
+          "row": 0
+        },
+        "0_0": {
+          "faces": 37788,
+          "hex": "#05050c",
+          "row": 9
+        },
+        "9_1": {
+          "faces": 35344,
+          "hex": "#a5b2c1",
+          "row": 8
+        },
+        "9_5": {
+          "faces": 26676,
+          "hex": "#4d5e72",
+          "row": 4
+        },
+        "9_4": {
+          "faces": 15108,
+          "hex": "#5d6e82",
+          "row": 5
+        },
+        "9_6": {
+          "faces": 14444,
+          "hex": "#3f4f62",
+          "row": 3
+        },
+        "6_6": {
+          "faces": 5076,
+          "hex": "#715c09",
+          "row": 3
+        },
+        "3_9": {
+          "faces": 2052,
+          "hex": "#0f5f72",
+          "row": 0
+        },
+        "6_4": {
+          "faces": 1080,
+          "hex": "#0f5f6b",
+          "row": 5
+        },
+        "8_7": {
+          "faces": 864,
+          "hex": "#72614d",
+          "row": 2
+        },
+        "6_0": {
+          "faces": 828,
+          "hex": "#381408",
+          "row": 9
+        },
+        "9_2": {
+          "faces": 540,
+          "hex": "#8998aa",
+          "row": 7
+        },
+        "8_8": {
+          "faces": 520,
+          "hex": "#725c5f",
+          "row": 1
+        },
+        "7_3": {
+          "faces": 324,
+          "hex": "#425972",
+          "row": 6
+        },
+        "8_4": {
+          "faces": 324,
+          "hex": "#4a6d71",
+          "row": 5
+        }
+      },
+      "cells_after_expected": {
+        "9_3": {
+          "faces": 57096,
+          "hex": "#718195",
+          "row": 6
+        },
+        "8_9": {
+          "faces": 49552,
+          "hex": "#1b3b6f",
+          "row": 0
+        },
+        "0_0": {
+          "faces": 37788,
+          "hex": "#05050c",
+          "row": 9
+        },
+        "9_1": {
+          "faces": 35344,
+          "hex": "#a5b2c1",
+          "row": 8
+        },
+        "9_5": {
+          "faces": 26676,
+          "hex": "#4d5e72",
+          "row": 4
+        },
+        "9_4": {
+          "faces": 15108,
+          "hex": "#5d6e82",
+          "row": 5
+        },
+        "9_6": {
+          "faces": 14444,
+          "hex": "#3f4f62",
+          "row": 3
+        },
+        "6_6": {
+          "faces": 5076,
+          "hex": "#715c09",
+          "row": 3
+        },
+        "3_9": {
+          "faces": 2052,
+          "hex": "#0f5f72",
+          "row": 0
+        },
+        "6_4": {
+          "faces": 1080,
+          "hex": "#0f5f6b",
+          "row": 5
+        },
+        "8_7": {
+          "faces": 864,
+          "hex": "#72614d",
+          "row": 2
+        },
+        "6_0": {
+          "faces": 828,
+          "hex": "#381408",
+          "row": 9
+        },
+        "9_2": {
+          "faces": 540,
+          "hex": "#8998aa",
+          "row": 7
+        },
+        "8_8": {
+          "faces": 520,
+          "hex": "#725c5f",
+          "row": 1
+        },
+        "7_3": {
+          "faces": 324,
+          "hex": "#425972",
+          "row": 6
+        },
+        "8_4": {
+          "faces": 324,
+          "hex": "#4a6d71",
+          "row": 5
+        }
+      }
+    }
+  },
+  "records": [
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/expedition_db_room_components_source_v013.blend",
+      "applied": true,
+      "meshes": 296,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 296
+      },
+      "polygons": 247616,
+      "polygons_moved": 145192,
+      "loops_moved": 589476,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 57096,
+        "8_9": 49552,
+        "0_0": 37788,
+        "9_4": 30160,
+        "9_8": 26676,
+        "9_7": 15108,
+        "9_9": 14444,
+        "9_1": 5184,
+        "6_6": 5076,
+        "3_9": 2052,
+        "6_4": 1080,
+        "8_7": 864,
+        "6_0": 828,
+        "9_5": 540,
+        "5_8": 520,
+        "4_3": 324,
+        "5_4": 324
+      },
+      "cells_after": {
+        "9_3": 57096,
+        "8_9": 49552,
+        "0_0": 37788,
+        "9_1": 35344,
+        "9_5": 26676,
+        "9_4": 15108,
+        "9_6": 14444,
+        "6_6": 5076,
+        "3_9": 2052,
+        "6_4": 1080,
+        "8_7": 864,
+        "6_0": 828,
+        "9_2": 540,
+        "8_8": 520,
+        "7_3": 324,
+        "8_4": 324
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/cable_coil_wall/cable_coil_wall.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 960,
+      "polygons_moved": 144,
+      "loops_moved": 792,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "0_0": 720,
+        "9_9": 96,
+        "5_8": 48,
+        "8_9": 48,
+        "6_6": 48
+      },
+      "cells_after": {
+        "0_0": 720,
+        "9_6": 96,
+        "8_8": 48,
+        "8_9": 48,
+        "6_6": 48
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/center_double_sided_repair_island/center_double_sided_repair_island.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 11128,
+      "polygons_moved": 4216,
+      "loops_moved": 17040,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 4752,
+        "9_9": 2064,
+        "0_0": 1512,
+        "9_4": 964,
+        "3_9": 648,
+        "9_8": 648,
+        "9_5": 216,
+        "9_7": 216,
+        "9_6": 108
+      },
+      "cells_after": {
+        "8_9": 4752,
+        "9_6": 2064,
+        "0_0": 1512,
+        "9_1": 964,
+        "3_9": 648,
+        "9_5": 648,
+        "9_2": 216,
+        "9_4": 216,
+        "9_3": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/equipment_rack_ne/equipment_rack_ne.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 5392,
+      "polygons_moved": 2544,
+      "loops_moved": 10224,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_7": 1944,
+        "8_9": 1100,
+        "6_4": 1080,
+        "0_0": 648,
+        "9_9": 256,
+        "9_8": 216,
+        "9_6": 108,
+        "6_6": 20,
+        "5_8": 20
+      },
+      "cells_after": {
+        "9_4": 1944,
+        "8_9": 1100,
+        "6_4": 1080,
+        "0_0": 648,
+        "9_6": 256,
+        "9_5": 216,
+        "9_3": 108,
+        "6_6": 20,
+        "8_8": 20
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_east/island_cart_east.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 732,
+      "polygons_moved": 312,
+      "loops_moved": 1344,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 216,
+        "9_8": 108,
+        "9_6": 108,
+        "6_6": 108,
+        "0_0": 96,
+        "9_4": 96
+      },
+      "cells_after": {
+        "8_9": 216,
+        "9_5": 108,
+        "9_3": 108,
+        "6_6": 108,
+        "0_0": 96,
+        "9_1": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/island_cart_west/island_cart_west.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 732,
+      "polygons_moved": 312,
+      "loops_moved": 1344,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 216,
+        "9_8": 108,
+        "9_6": 108,
+        "6_6": 108,
+        "0_0": 96,
+        "9_4": 96
+      },
+      "cells_after": {
+        "8_9": 216,
+        "9_5": 108,
+        "9_3": 108,
+        "6_6": 108,
+        "0_0": 96,
+        "9_1": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_gantry/raised_service_gantry.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1032,
+      "polygons_moved": 708,
+      "loops_moved": 2880,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 324,
+        "9_8": 216,
+        "6_6": 216,
+        "9_1": 108,
+        "9_9": 108,
+        "9_4": 60
+      },
+      "cells_after": {
+        "9_3": 324,
+        "9_5": 216,
+        "6_6": 216,
+        "9_1": 168,
+        "9_6": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/raised_service_platform/raised_service_platform.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 3028,
+      "polygons_moved": 868,
+      "loops_moved": 3600,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "0_0": 1836,
+        "9_6": 432,
+        "6_6": 216,
+        "9_4": 112,
+        "3_9": 108,
+        "9_9": 108,
+        "9_8": 108,
+        "9_7": 108
+      },
+      "cells_after": {
+        "0_0": 1836,
+        "9_3": 432,
+        "6_6": 216,
+        "9_1": 112,
+        "3_9": 108,
+        "9_6": 108,
+        "9_5": 108,
+        "9_4": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_00/rear_server_00.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 6608,
+      "polygons_moved": 2828,
+      "loops_moved": 11400,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 3240,
+        "9_7": 1512,
+        "9_4": 648,
+        "0_0": 540,
+        "9_9": 296,
+        "9_6": 264,
+        "9_8": 108
+      },
+      "cells_after": {
+        "8_9": 3240,
+        "9_4": 1512,
+        "9_1": 648,
+        "0_0": 540,
+        "9_6": 296,
+        "9_3": 264,
+        "9_5": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_01/rear_server_01.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 6608,
+      "polygons_moved": 2828,
+      "loops_moved": 11400,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 3240,
+        "9_7": 1512,
+        "9_4": 648,
+        "0_0": 540,
+        "9_9": 296,
+        "9_6": 264,
+        "9_8": 108
+      },
+      "cells_after": {
+        "8_9": 3240,
+        "9_4": 1512,
+        "9_1": 648,
+        "0_0": 540,
+        "9_6": 296,
+        "9_3": 264,
+        "9_5": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_02/rear_server_02.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 6608,
+      "polygons_moved": 2828,
+      "loops_moved": 11400,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 3240,
+        "9_7": 1512,
+        "9_4": 648,
+        "0_0": 540,
+        "9_9": 296,
+        "9_6": 264,
+        "9_8": 108
+      },
+      "cells_after": {
+        "8_9": 3240,
+        "9_4": 1512,
+        "9_1": 648,
+        "0_0": 540,
+        "9_6": 296,
+        "9_3": 264,
+        "9_5": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_03/rear_server_03.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 6608,
+      "polygons_moved": 2828,
+      "loops_moved": 11400,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 3240,
+        "9_7": 1512,
+        "9_4": 648,
+        "0_0": 540,
+        "9_9": 296,
+        "9_6": 264,
+        "9_8": 108
+      },
+      "cells_after": {
+        "8_9": 3240,
+        "9_4": 1512,
+        "9_1": 648,
+        "0_0": 540,
+        "9_6": 296,
+        "9_3": 264,
+        "9_5": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_04/rear_server_04.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 6608,
+      "polygons_moved": 2828,
+      "loops_moved": 11400,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 3240,
+        "9_7": 1512,
+        "9_4": 648,
+        "0_0": 540,
+        "9_9": 296,
+        "9_6": 264,
+        "9_8": 108
+      },
+      "cells_after": {
+        "8_9": 3240,
+        "9_4": 1512,
+        "9_1": 648,
+        "0_0": 540,
+        "9_6": 296,
+        "9_3": 264,
+        "9_5": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_05/rear_server_05.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 6608,
+      "polygons_moved": 2828,
+      "loops_moved": 11400,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 3240,
+        "9_7": 1512,
+        "9_4": 648,
+        "0_0": 540,
+        "9_9": 296,
+        "9_6": 264,
+        "9_8": 108
+      },
+      "cells_after": {
+        "8_9": 3240,
+        "9_4": 1512,
+        "9_1": 648,
+        "0_0": 540,
+        "9_6": 296,
+        "9_3": 264,
+        "9_5": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_00/rear_service_cart_00.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 840,
+      "polygons_moved": 312,
+      "loops_moved": 1344,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "8_9": 324,
+        "3_9": 108,
+        "9_8": 108,
+        "9_6": 108,
+        "0_0": 96,
+        "9_4": 96
+      },
+      "cells_after": {
+        "8_9": 324,
+        "3_9": 108,
+        "9_5": 108,
+        "9_3": 108,
+        "0_0": 96,
+        "9_1": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_01/rear_service_cart_01.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 840,
+      "polygons_moved": 312,
+      "loops_moved": 1344,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "6_6": 324,
+        "3_9": 108,
+        "9_8": 108,
+        "9_6": 108,
+        "0_0": 96,
+        "9_4": 96
+      },
+      "cells_after": {
+        "6_6": 324,
+        "3_9": 108,
+        "9_5": 108,
+        "9_3": 108,
+        "0_0": 96,
+        "9_1": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_service_cart_02/rear_service_cart_02.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 840,
+      "polygons_moved": 636,
+      "loops_moved": 2640,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "5_8": 324,
+        "3_9": 108,
+        "9_8": 108,
+        "9_6": 108,
+        "0_0": 96,
+        "9_4": 96
+      },
+      "cells_after": {
+        "8_8": 324,
+        "3_9": 108,
+        "9_5": 108,
+        "9_3": 108,
+        "0_0": 96,
+        "9_1": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_00/right_front_cable_reel_00.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 424,
+      "polygons_moved": 184,
+      "loops_moved": 960,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "0_0": 204,
+        "9_4": 96,
+        "5_8": 88,
+        "6_0": 36
+      },
+      "cells_after": {
+        "0_0": 204,
+        "9_1": 96,
+        "8_8": 88,
+        "6_0": 36
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_cable_reel_01/right_front_cable_reel_01.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 424,
+      "polygons_moved": 96,
+      "loops_moved": 480,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "0_0": 204,
+        "9_4": 96,
+        "8_9": 88,
+        "6_0": 36
+      },
+      "cells_after": {
+        "0_0": 204,
+        "9_1": 96,
+        "8_9": 88,
+        "6_0": 36
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_service_terminal/right_front_service_terminal.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 324,
+      "polygons_moved": 216,
+      "loops_moved": 864,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "3_9": 108,
+        "9_8": 108,
+        "9_9": 108
+      },
+      "cells_after": {
+        "3_9": 108,
+        "9_5": 108,
+        "9_6": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_00/right_front_shelf_00.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1080,
+      "polygons_moved": 864,
+      "loops_moved": 3456,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_9": 432,
+        "9_8": 324,
+        "8_7": 108,
+        "6_0": 108,
+        "5_4": 108
+      },
+      "cells_after": {
+        "9_6": 432,
+        "9_5": 324,
+        "8_7": 108,
+        "6_0": 108,
+        "8_4": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_01/right_front_shelf_01.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1080,
+      "polygons_moved": 864,
+      "loops_moved": 3456,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_9": 432,
+        "9_8": 324,
+        "8_7": 108,
+        "6_0": 108,
+        "5_4": 108
+      },
+      "cells_after": {
+        "9_6": 432,
+        "9_5": 324,
+        "8_7": 108,
+        "6_0": 108,
+        "8_4": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/right_front_shelf_02/right_front_shelf_02.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1080,
+      "polygons_moved": 864,
+      "loops_moved": 3456,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_9": 432,
+        "9_8": 324,
+        "8_7": 108,
+        "6_0": 108,
+        "5_4": 108
+      },
+      "cells_after": {
+        "9_6": 432,
+        "9_5": 324,
+        "8_7": 108,
+        "6_0": 108,
+        "8_4": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/shelving_heavy_north/shelving_heavy_north.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 3780,
+      "polygons_moved": 1836,
+      "loops_moved": 7344,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_1": 864,
+        "9_8": 756,
+        "9_6": 432,
+        "6_0": 432,
+        "8_7": 432,
+        "4_3": 324,
+        "9_9": 324,
+        "6_6": 108,
+        "0_0": 108
+      },
+      "cells_after": {
+        "9_1": 864,
+        "9_5": 756,
+        "9_3": 432,
+        "6_0": 432,
+        "8_7": 432,
+        "7_3": 324,
+        "9_6": 324,
+        "6_6": 108,
+        "0_0": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_light_pylon/wall_light_pylon.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 4752,
+      "polygons_moved": 2376,
+      "loops_moved": 9504,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 2376,
+        "8_9": 1188,
+        "0_0": 1188
+      },
+      "cells_after": {
+        "9_3": 2376,
+        "8_9": 1188,
+        "0_0": 1188
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_screen_bank/wall_screen_bank.blend",
+      "applied": false,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 3780,
+      "polygons_moved": 0,
+      "loops_moved": 0,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_1": 1512,
+        "0_0": 1080,
+        "8_9": 864,
+        "3_9": 324
+      },
+      "cells_after": {
+        "9_1": 1512,
+        "0_0": 1080,
+        "8_9": 864,
+        "3_9": 324
+      },
+      "skip_reason": "无需位移（所有格已满足映射）",
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_service_run/wall_service_run.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 9984,
+      "polygons_moved": 9984,
+      "loops_moved": 41280,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 7368,
+        "9_4": 2292,
+        "9_9": 324
+      },
+      "cells_after": {
+        "9_3": 7368,
+        "9_1": 2292,
+        "9_6": 324
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_l_east/workbench_l_east.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 11844,
+      "polygons_moved": 7524,
+      "loops_moved": 30528,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_4": 2928,
+        "9_7": 2808,
+        "8_9": 1944,
+        "6_6": 1296,
+        "9_8": 864,
+        "9_9": 708,
+        "0_0": 648,
+        "3_9": 432,
+        "9_5": 216
+      },
+      "cells_after": {
+        "9_1": 2928,
+        "9_4": 2808,
+        "8_9": 1944,
+        "6_6": 1296,
+        "9_5": 864,
+        "9_6": 708,
+        "0_0": 648,
+        "3_9": 432,
+        "9_2": 216
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/workbench_west/workbench_west.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 4556,
+      "polygons_moved": 2720,
+      "loops_moved": 10896,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_4": 1296,
+        "8_9": 1188,
+        "9_7": 540,
+        "9_9": 452,
+        "0_0": 324,
+        "9_6": 216,
+        "3_9": 108,
+        "9_1": 108,
+        "9_5": 108,
+        "9_8": 108,
+        "8_7": 108
+      },
+      "cells_after": {
+        "9_1": 1404,
+        "8_9": 1188,
+        "9_4": 540,
+        "9_6": 452,
+        "0_0": 324,
+        "9_3": 216,
+        "3_9": 108,
+        "9_2": 108,
+        "9_5": 108,
+        "8_7": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-1/derived_tile_-1_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2806,
+      "polygons_moved": 2266,
+      "loops_moved": 9150,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_4": 1252,
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "0_0": 108,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_1": 1252,
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "0_0": 108,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-2/derived_tile_-1_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_-3/derived_tile_-1_-3.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_0/derived_tile_-1_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_1/derived_tile_-1_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-1_2/derived_tile_-1_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-1/derived_tile_-2_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_-2/derived_tile_-2_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_0/derived_tile_-2_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_1/derived_tile_-2_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-2_2/derived_tile_-2_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-1/derived_tile_-3_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_-2/derived_tile_-3_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_0/derived_tile_-3_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_1/derived_tile_-3_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-3_2/derived_tile_-3_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-1/derived_tile_-4_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_-2/derived_tile_-4_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_0/derived_tile_-4_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_1/derived_tile_-4_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_-4_2/derived_tile_-4_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-1/derived_tile_0_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-2/derived_tile_0_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_-3/derived_tile_0_-3.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_0/derived_tile_0_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_1/derived_tile_0_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_0_2/derived_tile_0_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2806,
+      "polygons_moved": 2266,
+      "loops_moved": 9150,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_4": 1252,
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "0_0": 108,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_1": 1252,
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "0_0": 108,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-1/derived_tile_1_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_-2/derived_tile_1_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_0/derived_tile_1_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_1/derived_tile_1_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_1_2/derived_tile_1_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-1/derived_tile_2_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_-2/derived_tile_2_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_0/derived_tile_2_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_1/derived_tile_2_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_2_2/derived_tile_2_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-1/derived_tile_3_-1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 2590,
+      "polygons_moved": 2158,
+      "loops_moved": 8718,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 1524,
+        "8_9": 432,
+        "9_8": 432,
+        "9_9": 128,
+        "9_4": 64,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 1524,
+        "8_9": 432,
+        "9_5": 432,
+        "9_6": 128,
+        "9_1": 64,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_-2/derived_tile_3_-2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_0/derived_tile_3_0.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_1/derived_tile_3_1.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/derived_tile_3_2/derived_tile_3_2.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 1510,
+      "polygons_moved": 1078,
+      "loops_moved": 4398,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 552,
+        "8_9": 432,
+        "9_8": 432,
+        "9_4": 64,
+        "9_9": 20,
+        "9_7": 10
+      },
+      "cells_after": {
+        "9_3": 552,
+        "8_9": 432,
+        "9_5": 432,
+        "9_1": 64,
+        "9_6": 20,
+        "9_4": 10
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_conduit_run/floor_conduit_run.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 3240,
+      "polygons_moved": 3240,
+      "loops_moved": 12960,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_9": 2808,
+        "9_6": 432
+      },
+      "cells_after": {
+        "9_6": 2808,
+        "9_3": 432
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/floor_hazard_edging/floor_hazard_edging.blend",
+      "applied": false,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 22788,
+      "polygons_moved": 0,
+      "loops_moved": 0,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "0_0": 22140,
+        "6_6": 648
+      },
+      "cells_after": {
+        "0_0": 22140,
+        "6_6": 648
+      },
+      "skip_reason": "无需位移（所有格已满足映射）",
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-1/ceiling_deck_-1.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1824,
+      "polygons_moved": 1824,
+      "loops_moved": 7296,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 864,
+        "9_4": 864,
+        "9_9": 96
+      },
+      "cells_after": {
+        "9_3": 864,
+        "9_1": 864,
+        "9_6": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-2/ceiling_deck_-2.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1824,
+      "polygons_moved": 1824,
+      "loops_moved": 7296,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 864,
+        "9_4": 864,
+        "9_9": 96
+      },
+      "cells_after": {
+        "9_3": 864,
+        "9_1": 864,
+        "9_6": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_-3/ceiling_deck_-3.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 456,
+      "polygons_moved": 456,
+      "loops_moved": 1824,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 216,
+        "9_4": 216,
+        "9_9": 24
+      },
+      "cells_after": {
+        "9_3": 216,
+        "9_1": 216,
+        "9_6": 24
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_0/ceiling_deck_0.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1824,
+      "polygons_moved": 1824,
+      "loops_moved": 7296,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 864,
+        "9_4": 864,
+        "9_9": 96
+      },
+      "cells_after": {
+        "9_3": 864,
+        "9_1": 864,
+        "9_6": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_1/ceiling_deck_1.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1824,
+      "polygons_moved": 1824,
+      "loops_moved": 7296,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 864,
+        "9_4": 864,
+        "9_9": 96
+      },
+      "cells_after": {
+        "9_3": 864,
+        "9_1": 864,
+        "9_6": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_deck_2/ceiling_deck_2.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 1824,
+      "polygons_moved": 1824,
+      "loops_moved": 7296,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 864,
+        "9_4": 864,
+        "9_9": 96
+      },
+      "cells_after": {
+        "9_3": 864,
+        "9_1": 864,
+        "9_6": 96
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_lighting/ceiling_lighting.blend",
+      "applied": true,
+      "meshes": 4,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 4
+      },
+      "polygons": 8640,
+      "polygons_moved": 3456,
+      "loops_moved": 13824,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_1": 2592,
+        "0_0": 2592,
+        "9_8": 2592,
+        "9_9": 864
+      },
+      "cells_after": {
+        "9_1": 2592,
+        "0_0": 2592,
+        "9_5": 2592,
+        "9_6": 864
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 756,
+      "polygons_moved": 756,
+      "loops_moved": 3024,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 756
+      },
+      "cells_after": {
+        "9_3": 756
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 3764,
+      "polygons_moved": 3684,
+      "loops_moved": 14832,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_4": 2700,
+        "9_9": 512,
+        "9_6": 432,
+        "8_9": 40,
+        "5_8": 40,
+        "6_6": 40
+      },
+      "cells_after": {
+        "9_1": 2700,
+        "9_6": 512,
+        "9_3": 432,
+        "8_9": 40,
+        "8_8": 40,
+        "6_6": 40
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 3692,
+      "polygons_moved": 3692,
+      "loops_moved": 14832,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 3132,
+        "9_9": 324,
+        "9_4": 128,
+        "9_8": 108
+      },
+      "cells_after": {
+        "9_3": 3132,
+        "9_6": 324,
+        "9_1": 128,
+        "9_5": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 2724,
+      "polygons_moved": 2724,
+      "loops_moved": 12096,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_6": 2388,
+        "9_4": 336
+      },
+      "cells_after": {
+        "9_3": 2388,
+        "9_1": 336
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/corner_guard/corner_guard.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 3240,
+      "polygons_moved": 648,
+      "loops_moved": 2592,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "6_6": 1944,
+        "9_8": 648,
+        "0_0": 648
+      },
+      "cells_after": {
+        "6_6": 1944,
+        "9_5": 648,
+        "0_0": 648
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/rear_server_bus/rear_server_bus.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 216,
+      "polygons_moved": 216,
+      "loops_moved": 864,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_9": 108,
+        "9_6": 108
+      },
+      "cells_after": {
+        "9_6": 108,
+        "9_3": 108
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v013/component_packages/wall_top_service/wall_top_service.blend",
+      "applied": true,
+      "meshes": 2,
+      "meshes_missing_uv": 0,
+      "uv_layer_names": {
+        "PaletteUV": 2
+      },
+      "polygons": 6048,
+      "polygons_moved": 6048,
+      "loops_moved": 24192,
+      "polygons_spanning_cells": 0,
+      "cells_before": {
+        "9_4": 5184,
+        "9_6": 864
+      },
+      "cells_after": {
+        "9_1": 5184,
+        "9_3": 864
+      },
+      "room_type": "db_room",
+      "version": "v013"
+    }
+  ],
+  "verified_from_disk": true,
+  "verify_failures": []
+}

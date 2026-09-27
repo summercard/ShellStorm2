@@ -1,0 +1,19 @@
+{
+ "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\room_types\\bridge_room\\v001\\通道桥房间种类_工字型_30x60m_v001.blend",
+ "images": [
+  {
+   "name": "Render Result",
+   "filepath": "",
+   "is_relative": false,
+   "norm": ".",
+   "exists_norm": true
+  },
+  {
+   "name": "设施低亮多巴胺色盘_10x10_512.png",
+   "filepath": "//..\\..\\..\\..\\..\\..\\..\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+   "is_relative": true,
+   "norm": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+   "exists_norm": true
+  }
+ ]
+}

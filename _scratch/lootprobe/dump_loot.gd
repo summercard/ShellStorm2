@@ -5,13 +5,16 @@ extends SceneTree
 const ItemRegistryScript := preload("res://src/base/ItemRegistry.gd")
 
 const POOLS := [
+	"loot_common",
 	"loot_floor_1_2",
 	"loot_floor_3_4",
 	"loot_floor_5",
 	"loot_abyss",
 	"scavenge_floor_1",
 	"elite_floor_1",
+	"elite_floor_2",
 	"boss_floor_1",
+	"boss_floor_2",
 ]
 
 

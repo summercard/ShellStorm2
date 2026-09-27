@@ -1,0 +1,272 @@
+{
+  "schema": "shellstorm2.component_slug_map",
+  "schema_version": 1,
+  "generated_from_plan": false,
+  "note": "键 = 几何等价类代表件的 component_id；slug 必须唯一且禁方位词/槽位号/色盘格坐标。",
+  "components": {
+    "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "slug": "floor_tile_5m_a",
+      "component_family": "floor_tile_5m",
+      "name_zh": "floor_tile_5m_a",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "slug": "floor_tile_5m_b",
+      "component_family": "floor_tile_5m",
+      "name_zh": "floor_tile_5m_b",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "slug": "floor_tile_5m_c",
+      "component_family": "floor_tile_5m",
+      "name_zh": "floor_tile_5m_c",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "slug": "wall_5m_a",
+      "component_family": "wall_5m",
+      "name_zh": "wall_5m_a",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "slug": "wall_5m_b",
+      "component_family": "wall_5m",
+      "name_zh": "wall_5m_b",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "slug": "wall_5m_c",
+      "component_family": "wall_5m",
+      "name_zh": "wall_5m_c",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "slug": "high_pipe_a",
+      "component_family": "high_pipe",
+      "name_zh": "high_pipe_a",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "slug": "high_pipe_b",
+      "component_family": "high_pipe",
+      "name_zh": "high_pipe_b",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "slug": "high_pipe_c",
+      "component_family": "high_pipe",
+      "name_zh": "high_pipe_c",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "slug": "pipe_riser",
+      "component_family": "pipe_riser",
+      "name_zh": "pipe_riser",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-SERVER_00": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "slug": "server_rack",
+      "component_family": "server_rack",
+      "name_zh": "server_rack",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "slug": "hanging_cable_a",
+      "component_family": "hanging_cable",
+      "name_zh": "hanging_cable_a",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
+      "slug": "hanging_cable_b",
+      "component_family": "hanging_cable",
+      "name_zh": "hanging_cable_b",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "slug": "hanging_cable_c",
+      "component_family": "hanging_cable",
+      "name_zh": "hanging_cable_c",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "slug": "access_console_a",
+      "component_family": "access_console",
+      "name_zh": "access_console_a",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "slug": "access_console_b",
+      "component_family": "access_console",
+      "name_zh": "access_console_b",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-CRATE_00": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "slug": "crate",
+      "component_family": "crate",
+      "name_zh": "crate",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "slug": "planter",
+      "component_family": "planter",
+      "name_zh": "planter",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
+      "slug": "cutaway_reference_a",
+      "component_family": "cutaway_reference",
+      "name_zh": "cutaway_reference_a",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
+      "slug": "cutaway_reference_b",
+      "component_family": "cutaway_reference",
+      "name_zh": "cutaway_reference_b",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "slug": "service_cart_a",
+      "component_family": "service_cart",
+      "name_zh": "service_cart_a",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "slug": "service_cart_b",
+      "component_family": "service_cart",
+      "name_zh": "service_cart_b",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "slug": "wall_label",
+      "component_family": "wall_label",
+      "name_zh": "wall_label",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    },
+    "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY": {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "slug": "server_gallery",
+      "component_family": "server_gallery",
+      "name_zh": "server_gallery",
+      "scope": "shared",
+      "front_axis": "+Y",
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": ""
+    }
+  }
+}

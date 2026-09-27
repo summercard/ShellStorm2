@@ -1,0 +1,2373 @@
+{
+  "schema": "shellstorm2.expedition.room_type_material_role_correction.v002",
+  "policy": "每组件主面判据：金属面积 >= 哑光+反光面积 ⇒ 按槽面积从大到小改哑光，直到金属 < 哑光+反光。只改槽指向，不动 PBR 参数、几何、UV、色盘格。平衡单元 = 组件 × 镜像集合（_输出包 与 _制作源 各自独立判定）。",
+  "from_role": "01_精工金属",
+  "to_role": "02_细腻哑光_青绿大面",
+  "libraries": [
+    "office_room/v006",
+    "bridge_room/v007",
+    "boss_room/v008",
+    "l_corridor/v002",
+    "db_room/v003"
+  ],
+  "records": [
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "groups": {
+        "archive_shelf_制作源": {
+          "metal_area_m2": 47.972,
+          "matte_area_m2": 52.806,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "archive_shelf",
+          "converted": []
+        },
+        "archive_shelf_输出包": {
+          "metal_area_m2": 47.972,
+          "matte_area_m2": 52.806,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "archive_shelf",
+          "converted": []
+        },
+        "chair_制作源": {
+          "metal_area_m2": 1.403,
+          "matte_area_m2": 5.198,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "chair",
+          "converted": []
+        },
+        "chair_输出包": {
+          "metal_area_m2": 1.403,
+          "matte_area_m2": 5.198,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "chair",
+          "converted": []
+        },
+        "debris_large_制作源": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_large",
+          "converted": []
+        },
+        "debris_large_输出包": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_large",
+          "converted": []
+        },
+        "debris_medium_制作源": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_medium",
+          "converted": []
+        },
+        "debris_medium_输出包": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_medium",
+          "converted": []
+        },
+        "debris_small_制作源": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_small",
+          "converted": []
+        },
+        "debris_small_输出包": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_small",
+          "converted": []
+        },
+        "floor_base_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 4046.8,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_base",
+          "converted": []
+        },
+        "floor_base_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 4046.8,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_base",
+          "converted": []
+        },
+        "floor_marking_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 1.981,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_marking",
+          "converted": []
+        },
+        "floor_marking_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 1.981,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_marking",
+          "converted": []
+        },
+        "floor_tile_5m_a_制作源": {
+          "metal_area_m2": 5.354,
+          "matte_area_m2": 52.446,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_a",
+          "converted": []
+        },
+        "floor_tile_5m_a_输出包": {
+          "metal_area_m2": 5.354,
+          "matte_area_m2": 52.446,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_a",
+          "converted": []
+        },
+        "floor_tile_5m_b_制作源": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.233,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_b",
+          "converted": []
+        },
+        "floor_tile_5m_b_输出包": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.233,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_b",
+          "converted": []
+        },
+        "floor_tile_5m_c_制作源": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.217,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.077,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_c",
+          "converted": []
+        },
+        "floor_tile_5m_c_输出包": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.217,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.077,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_c",
+          "converted": []
+        },
+        "heavy_conduits_制作源": {
+          "metal_area_m2": 104.143,
+          "matte_area_m2": 0.0,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 104.143,
+          "component": "heavy_conduits",
+          "converted": [
+            {
+              "object": "粗重电线管与桥架_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 104.143,
+              "faces": 1152
+            }
+          ]
+        },
+        "heavy_conduits_输出包": {
+          "metal_area_m2": 104.143,
+          "matte_area_m2": 0.0,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 104.143,
+          "component": "heavy_conduits",
+          "converted": [
+            {
+              "object": "粗重电线管与桥架_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 104.143,
+              "faces": 1152
+            }
+          ]
+        },
+        "main_fault_screen_制作源": {
+          "metal_area_m2": 434.242,
+          "matte_area_m2": 1.975,
+          "gloss_area_m2": 249.769,
+          "emissive_area_m2": 15.038,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 436.217,
+          "component": "main_fault_screen",
+          "converted": [
+            {
+              "object": "主屏_破损数据库_制作_部件03",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 434.242,
+              "faces": 310
+            }
+          ]
+        },
+        "main_fault_screen_输出包": {
+          "metal_area_m2": 434.242,
+          "matte_area_m2": 1.975,
+          "gloss_area_m2": 249.769,
+          "emissive_area_m2": 15.038,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 436.217,
+          "component": "main_fault_screen",
+          "converted": [
+            {
+              "object": "主屏_破损数据库_输出_部件03",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 434.242,
+              "faces": 310
+            }
+          ]
+        },
+        "plant_a_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.225,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_a",
+          "converted": []
+        },
+        "plant_a_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.225,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_a",
+          "converted": []
+        },
+        "plant_b_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.155,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_b",
+          "converted": []
+        },
+        "plant_b_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.155,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_b",
+          "converted": []
+        },
+        "plant_c_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.101,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_c",
+          "converted": []
+        },
+        "plant_c_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.101,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_c",
+          "converted": []
+        },
+        "server_rack_compact_damaged_制作源": {
+          "metal_area_m2": 209.447,
+          "matte_area_m2": 37.052,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.459,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 246.498,
+          "component": "server_rack_compact_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_west_damaged_01_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 209.447,
+              "faces": 236
+            }
+          ]
+        },
+        "server_rack_compact_damaged_输出包": {
+          "metal_area_m2": 209.447,
+          "matte_area_m2": 37.052,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.459,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 246.498,
+          "component": "server_rack_compact_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_west_damaged_01_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 209.447,
+              "faces": 236
+            }
+          ]
+        },
+        "server_rack_compact_制作源": {
+          "metal_area_m2": 206.37,
+          "matte_area_m2": 36.386,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 242.757,
+          "component": "server_rack_compact",
+          "converted": [
+            {
+              "object": "完整服务器_west_complete_00_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 206.37,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_compact_输出包": {
+          "metal_area_m2": 206.37,
+          "matte_area_m2": 36.386,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 242.757,
+          "component": "server_rack_compact",
+          "converted": [
+            {
+              "object": "完整服务器_west_complete_00_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 206.37,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_damaged_tall_制作源": {
+          "metal_area_m2": 230.743,
+          "matte_area_m2": 41.182,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.576,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 271.925,
+          "component": "server_rack_damaged_tall",
+          "converted": [
+            {
+              "object": "破损服务器_north_damaged_05_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 230.743,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_damaged_tall_输出包": {
+          "metal_area_m2": 230.743,
+          "matte_area_m2": 41.182,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.576,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 271.925,
+          "component": "server_rack_damaged_tall",
+          "converted": [
+            {
+              "object": "破损服务器_north_damaged_05_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 230.743,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_damaged_制作源": {
+          "metal_area_m2": 224.001,
+          "matte_area_m2": 39.717,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.564,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 263.718,
+          "component": "server_rack_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_north_damaged_01_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 224.001,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_damaged_输出包": {
+          "metal_area_m2": 224.001,
+          "matte_area_m2": 39.717,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.564,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 263.718,
+          "component": "server_rack_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_north_damaged_01_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 224.001,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_mid_制作源": {
+          "metal_area_m2": 220.69,
+          "matte_area_m2": 38.95,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 259.64,
+          "component": "server_rack_mid",
+          "converted": [
+            {
+              "object": "完整服务器_north_complete_04_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 220.69,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_mid_输出包": {
+          "metal_area_m2": 220.69,
+          "matte_area_m2": 38.95,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 259.64,
+          "component": "server_rack_mid",
+          "converted": [
+            {
+              "object": "完整服务器_north_complete_04_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 220.69,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_tall_制作源": {
+          "metal_area_m2": 227.295,
+          "matte_area_m2": 40.355,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 267.65,
+          "component": "server_rack_tall",
+          "converted": [
+            {
+              "object": "完整服务器_north_complete_02_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 227.295,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_tall_输出包": {
+          "metal_area_m2": 227.295,
+          "matte_area_m2": 40.355,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 267.65,
+          "component": "server_rack_tall",
+          "converted": [
+            {
+              "object": "完整服务器_north_complete_02_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 227.295,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_under_screen_damaged_制作源": {
+          "metal_area_m2": 133.418,
+          "matte_area_m2": 22.112,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.92,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 155.53,
+          "component": "server_rack_under_screen_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_under_screen_damaged_05_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 133.418,
+              "faces": 200
+            }
+          ]
+        },
+        "server_rack_under_screen_damaged_输出包": {
+          "metal_area_m2": 133.418,
+          "matte_area_m2": 22.112,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.92,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 155.53,
+          "component": "server_rack_under_screen_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_under_screen_damaged_05_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 133.418,
+              "faces": 200
+            }
+          ]
+        },
+        "server_rack_under_screen_制作源": {
+          "metal_area_m2": 131.413,
+          "matte_area_m2": 21.809,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.618,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 153.222,
+          "component": "server_rack_under_screen",
+          "converted": [
+            {
+              "object": "完整服务器_under_screen_complete_00_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 131.413,
+              "faces": 192
+            }
+          ]
+        },
+        "server_rack_under_screen_输出包": {
+          "metal_area_m2": 131.413,
+          "matte_area_m2": 21.809,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.618,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 153.222,
+          "component": "server_rack_under_screen",
+          "converted": [
+            {
+              "object": "完整服务器_under_screen_complete_00_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 131.413,
+              "faces": 192
+            }
+          ]
+        },
+        "server_rack_wide_damaged_tall_制作源": {
+          "metal_area_m2": 225.686,
+          "matte_area_m2": 40.083,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.567,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 265.77,
+          "component": "server_rack_wide_damaged_tall",
+          "converted": [
+            {
+              "object": "破损服务器_east_damaged_05_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 225.686,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_wide_damaged_tall_输出包": {
+          "metal_area_m2": 225.686,
+          "matte_area_m2": 40.083,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.567,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 265.77,
+          "component": "server_rack_wide_damaged_tall",
+          "converted": [
+            {
+              "object": "破损服务器_east_damaged_05_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 225.686,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_wide_damaged_制作源": {
+          "metal_area_m2": 214.262,
+          "matte_area_m2": 38.098,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.467,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 252.36,
+          "component": "server_rack_wide_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_east_damaged_02_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 214.262,
+              "faces": 236
+            }
+          ]
+        },
+        "server_rack_wide_damaged_输出包": {
+          "metal_area_m2": 214.262,
+          "matte_area_m2": 38.098,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.467,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 252.36,
+          "component": "server_rack_wide_damaged",
+          "converted": [
+            {
+              "object": "破损服务器_east_damaged_02_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 214.262,
+              "faces": 236
+            }
+          ]
+        },
+        "server_rack_wide_tall_制作源": {
+          "metal_area_m2": 222.342,
+          "matte_area_m2": 39.301,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 261.643,
+          "component": "server_rack_wide_tall",
+          "converted": [
+            {
+              "object": "完整服务器_east_complete_01_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 222.342,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_wide_tall_输出包": {
+          "metal_area_m2": 222.342,
+          "matte_area_m2": 39.301,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 261.643,
+          "component": "server_rack_wide_tall",
+          "converted": [
+            {
+              "object": "完整服务器_east_complete_01_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 222.342,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_wide_制作源": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack_wide",
+          "converted": [
+            {
+              "object": "完整服务器_east_complete_00_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_wide_输出包": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack_wide",
+          "converted": [
+            {
+              "object": "完整服务器_east_complete_00_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_制作源": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack",
+          "converted": [
+            {
+              "object": "完整服务器_north_complete_00_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_输出包": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack",
+          "converted": [
+            {
+              "object": "完整服务器_north_complete_00_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        },
+        "wall_skin_armored_5m_制作源": {
+          "metal_area_m2": 28.905,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_5m",
+          "converted": []
+        },
+        "wall_skin_armored_5m_输出包": {
+          "metal_area_m2": 28.905,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_5m",
+          "converted": []
+        },
+        "wall_skin_armored_broken_5m_制作源": {
+          "metal_area_m2": 39.311,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_broken_5m",
+          "converted": []
+        },
+        "wall_skin_armored_broken_5m_输出包": {
+          "metal_area_m2": 39.311,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_broken_5m",
+          "converted": []
+        },
+        "wall_skin_beveled_5m_制作源": {
+          "metal_area_m2": 17.106,
+          "matte_area_m2": 101.713,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.355,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_beveled_5m",
+          "converted": []
+        },
+        "wall_skin_beveled_5m_输出包": {
+          "metal_area_m2": 17.106,
+          "matte_area_m2": 101.713,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.355,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_beveled_5m",
+          "converted": []
+        },
+        "wall_skin_medium_5m_制作源": {
+          "metal_area_m2": 21.549,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_medium_5m",
+          "converted": []
+        },
+        "wall_skin_medium_5m_输出包": {
+          "metal_area_m2": 21.549,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_medium_5m",
+          "converted": []
+        },
+        "wall_skin_thin_5m_制作源": {
+          "metal_area_m2": 11.143,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_thin_5m",
+          "converted": []
+        },
+        "wall_skin_thin_5m_输出包": {
+          "metal_area_m2": 11.143,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_thin_5m",
+          "converted": []
+        },
+        "wall_solid_5m_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 129.14,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_solid_5m",
+          "converted": []
+        },
+        "wall_solid_5m_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 129.14,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_solid_5m",
+          "converted": []
+        },
+        "wall_typography_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 2.45,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_typography",
+          "converted": []
+        },
+        "wall_typography_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 2.45,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_typography",
+          "converted": []
+        },
+        "workstation_a_制作源": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_a",
+          "converted": []
+        },
+        "workstation_a_输出包": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_a",
+          "converted": []
+        },
+        "workstation_b_制作源": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.59,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_b",
+          "converted": []
+        },
+        "workstation_b_输出包": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.59,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_b",
+          "converted": []
+        },
+        "workstation_c_制作源": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_c",
+          "converted": []
+        },
+        "workstation_c_输出包": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_c",
+          "converted": []
+        }
+      },
+      "slots_replaced": 30,
+      "faces_affected": 8948,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/archive_shelf/archive_shelf.blend",
+      "groups": {
+        "archive_shelf_制作源": {
+          "metal_area_m2": 47.972,
+          "matte_area_m2": 52.806,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "archive_shelf",
+          "converted": []
+        },
+        "archive_shelf_输出包": {
+          "metal_area_m2": 47.972,
+          "matte_area_m2": 52.806,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "archive_shelf",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/chair/chair.blend",
+      "groups": {
+        "chair_制作源": {
+          "metal_area_m2": 1.403,
+          "matte_area_m2": 5.198,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "chair",
+          "converted": []
+        },
+        "chair_输出包": {
+          "metal_area_m2": 1.403,
+          "matte_area_m2": 5.198,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "chair",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/debris_large/debris_large.blend",
+      "groups": {
+        "debris_large_制作源": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_large",
+          "converted": []
+        },
+        "debris_large_输出包": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_large",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/debris_medium/debris_medium.blend",
+      "groups": {
+        "debris_medium_制作源": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_medium",
+          "converted": []
+        },
+        "debris_medium_输出包": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_medium",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/debris_small/debris_small.blend",
+      "groups": {
+        "debris_small_制作源": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_small",
+          "converted": []
+        },
+        "debris_small_输出包": {
+          "metal_area_m2": 1.233,
+          "matte_area_m2": 1.346,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "debris_small",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_base/floor_base.blend",
+      "groups": {
+        "floor_base_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 4046.8,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_base",
+          "converted": []
+        },
+        "floor_base_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 4046.8,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_base",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_marking/floor_marking.blend",
+      "groups": {
+        "floor_marking_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 1.981,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_marking",
+          "converted": []
+        },
+        "floor_marking_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 1.981,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "floor_marking",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_tile_5m_a/floor_tile_5m_a.blend",
+      "groups": {
+        "floor_tile_5m_a_制作源": {
+          "metal_area_m2": 5.354,
+          "matte_area_m2": 52.446,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_a",
+          "converted": []
+        },
+        "floor_tile_5m_a_输出包": {
+          "metal_area_m2": 5.354,
+          "matte_area_m2": 52.446,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_a",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_tile_5m_b/floor_tile_5m_b.blend",
+      "groups": {
+        "floor_tile_5m_b_制作源": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.233,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_b",
+          "converted": []
+        },
+        "floor_tile_5m_b_输出包": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.233,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.078,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_b",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_tile_5m_c/floor_tile_5m_c.blend",
+      "groups": {
+        "floor_tile_5m_c_制作源": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.217,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.077,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_c",
+          "converted": []
+        },
+        "floor_tile_5m_c_输出包": {
+          "metal_area_m2": 3.651,
+          "matte_area_m2": 49.217,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.077,
+          "verdict": "金属已是小部分，保留",
+          "component": "floor_tile_5m_c",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/heavy_conduits/heavy_conduits.blend",
+      "groups": {
+        "heavy_conduits_制作源": {
+          "metal_area_m2": 104.143,
+          "matte_area_m2": 0.0,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 104.143,
+          "component": "heavy_conduits",
+          "converted": [
+            {
+              "object": "heavy_conduits_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 104.143,
+              "faces": 1152
+            }
+          ]
+        },
+        "heavy_conduits_输出包": {
+          "metal_area_m2": 104.143,
+          "matte_area_m2": 0.0,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 104.143,
+          "component": "heavy_conduits",
+          "converted": [
+            {
+              "object": "heavy_conduits_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 104.143,
+              "faces": 1152
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 2304,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/main_fault_screen/main_fault_screen.blend",
+      "groups": {
+        "main_fault_screen_制作源": {
+          "metal_area_m2": 434.242,
+          "matte_area_m2": 1.975,
+          "gloss_area_m2": 249.769,
+          "emissive_area_m2": 15.038,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 436.217,
+          "component": "main_fault_screen",
+          "converted": [
+            {
+              "object": "main_fault_screen_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 434.242,
+              "faces": 310
+            }
+          ]
+        },
+        "main_fault_screen_输出包": {
+          "metal_area_m2": 434.242,
+          "matte_area_m2": 1.975,
+          "gloss_area_m2": 249.769,
+          "emissive_area_m2": 15.038,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 436.217,
+          "component": "main_fault_screen",
+          "converted": [
+            {
+              "object": "main_fault_screen_输出_部件03",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 434.242,
+              "faces": 310
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 620,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/plant_a/plant_a.blend",
+      "groups": {
+        "plant_a_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.225,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_a",
+          "converted": []
+        },
+        "plant_a_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.225,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_a",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/plant_b/plant_b.blend",
+      "groups": {
+        "plant_b_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.155,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_b",
+          "converted": []
+        },
+        "plant_b_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.155,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_b",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/plant_c/plant_c.blend",
+      "groups": {
+        "plant_c_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.101,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_c",
+          "converted": []
+        },
+        "plant_c_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 5.101,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "plant_c",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack/server_rack.blend",
+      "groups": {
+        "server_rack_制作源": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack",
+          "converted": [
+            {
+              "object": "server_rack_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_输出包": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack",
+          "converted": [
+            {
+              "object": "server_rack_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 456,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_compact/server_rack_compact.blend",
+      "groups": {
+        "server_rack_compact_制作源": {
+          "metal_area_m2": 206.37,
+          "matte_area_m2": 36.386,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 242.757,
+          "component": "server_rack_compact",
+          "converted": [
+            {
+              "object": "server_rack_compact_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 206.37,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_compact_输出包": {
+          "metal_area_m2": 206.37,
+          "matte_area_m2": 36.386,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 242.757,
+          "component": "server_rack_compact",
+          "converted": [
+            {
+              "object": "server_rack_compact_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 206.37,
+              "faces": 228
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 456,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_compact_damaged/server_rack_compact_damaged.blend",
+      "groups": {
+        "server_rack_compact_damaged_制作源": {
+          "metal_area_m2": 209.447,
+          "matte_area_m2": 37.052,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.459,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 246.498,
+          "component": "server_rack_compact_damaged",
+          "converted": [
+            {
+              "object": "server_rack_compact_damaged_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 209.447,
+              "faces": 236
+            }
+          ]
+        },
+        "server_rack_compact_damaged_输出包": {
+          "metal_area_m2": 209.447,
+          "matte_area_m2": 37.052,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.459,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 246.498,
+          "component": "server_rack_compact_damaged",
+          "converted": [
+            {
+              "object": "server_rack_compact_damaged_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 209.447,
+              "faces": 236
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 472,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_damaged/server_rack_damaged.blend",
+      "groups": {
+        "server_rack_damaged_制作源": {
+          "metal_area_m2": 224.001,
+          "matte_area_m2": 39.717,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.564,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 263.718,
+          "component": "server_rack_damaged",
+          "converted": [
+            {
+              "object": "server_rack_damaged_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 224.001,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_damaged_输出包": {
+          "metal_area_m2": 224.001,
+          "matte_area_m2": 39.717,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.564,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 263.718,
+          "component": "server_rack_damaged",
+          "converted": [
+            {
+              "object": "server_rack_damaged_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 224.001,
+              "faces": 248
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 496,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_damaged_tall/server_rack_damaged_tall.blend",
+      "groups": {
+        "server_rack_damaged_tall_制作源": {
+          "metal_area_m2": 230.743,
+          "matte_area_m2": 41.182,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.576,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 271.925,
+          "component": "server_rack_damaged_tall",
+          "converted": [
+            {
+              "object": "server_rack_damaged_tall_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 230.743,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_damaged_tall_输出包": {
+          "metal_area_m2": 230.743,
+          "matte_area_m2": 41.182,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.576,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 271.925,
+          "component": "server_rack_damaged_tall",
+          "converted": [
+            {
+              "object": "server_rack_damaged_tall_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 230.743,
+              "faces": 248
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 496,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_mid/server_rack_mid.blend",
+      "groups": {
+        "server_rack_mid_制作源": {
+          "metal_area_m2": 220.69,
+          "matte_area_m2": 38.95,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 259.64,
+          "component": "server_rack_mid",
+          "converted": [
+            {
+              "object": "server_rack_mid_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 220.69,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_mid_输出包": {
+          "metal_area_m2": 220.69,
+          "matte_area_m2": 38.95,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 259.64,
+          "component": "server_rack_mid",
+          "converted": [
+            {
+              "object": "server_rack_mid_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 220.69,
+              "faces": 240
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 480,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_tall/server_rack_tall.blend",
+      "groups": {
+        "server_rack_tall_制作源": {
+          "metal_area_m2": 227.295,
+          "matte_area_m2": 40.355,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 267.65,
+          "component": "server_rack_tall",
+          "converted": [
+            {
+              "object": "server_rack_tall_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 227.295,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_tall_输出包": {
+          "metal_area_m2": 227.295,
+          "matte_area_m2": 40.355,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 267.65,
+          "component": "server_rack_tall",
+          "converted": [
+            {
+              "object": "server_rack_tall_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 227.295,
+              "faces": 240
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 480,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_under_screen/server_rack_under_screen.blend",
+      "groups": {
+        "server_rack_under_screen_制作源": {
+          "metal_area_m2": 131.413,
+          "matte_area_m2": 21.809,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.618,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 153.222,
+          "component": "server_rack_under_screen",
+          "converted": [
+            {
+              "object": "server_rack_under_screen_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 131.413,
+              "faces": 192
+            }
+          ]
+        },
+        "server_rack_under_screen_输出包": {
+          "metal_area_m2": 131.413,
+          "matte_area_m2": 21.809,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.618,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 153.222,
+          "component": "server_rack_under_screen",
+          "converted": [
+            {
+              "object": "server_rack_under_screen_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 131.413,
+              "faces": 192
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 384,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_under_screen_damaged/server_rack_under_screen_damaged.blend",
+      "groups": {
+        "server_rack_under_screen_damaged_制作源": {
+          "metal_area_m2": 133.418,
+          "matte_area_m2": 22.112,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.92,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 155.53,
+          "component": "server_rack_under_screen_damaged",
+          "converted": [
+            {
+              "object": "server_rack_under_screen_damaged_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 133.418,
+              "faces": 200
+            }
+          ]
+        },
+        "server_rack_under_screen_damaged_输出包": {
+          "metal_area_m2": 133.418,
+          "matte_area_m2": 22.112,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.92,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 155.53,
+          "component": "server_rack_under_screen_damaged",
+          "converted": [
+            {
+              "object": "server_rack_under_screen_damaged_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 133.418,
+              "faces": 200
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 400,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide/server_rack_wide.blend",
+      "groups": {
+        "server_rack_wide_制作源": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack_wide",
+          "converted": [
+            {
+              "object": "server_rack_wide_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        },
+        "server_rack_wide_输出包": {
+          "metal_area_m2": 211.088,
+          "matte_area_m2": 37.39,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.086,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 248.478,
+          "component": "server_rack_wide",
+          "converted": [
+            {
+              "object": "server_rack_wide_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 211.088,
+              "faces": 228
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 456,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide_damaged/server_rack_wide_damaged.blend",
+      "groups": {
+        "server_rack_wide_damaged_制作源": {
+          "metal_area_m2": 214.262,
+          "matte_area_m2": 38.098,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.467,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 252.36,
+          "component": "server_rack_wide_damaged",
+          "converted": [
+            {
+              "object": "server_rack_wide_damaged_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 214.262,
+              "faces": 236
+            }
+          ]
+        },
+        "server_rack_wide_damaged_输出包": {
+          "metal_area_m2": 214.262,
+          "matte_area_m2": 38.098,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.467,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 252.36,
+          "component": "server_rack_wide_damaged",
+          "converted": [
+            {
+              "object": "server_rack_wide_damaged_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 214.262,
+              "faces": 236
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 472,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall.blend",
+      "groups": {
+        "server_rack_wide_damaged_tall_制作源": {
+          "metal_area_m2": 225.686,
+          "matte_area_m2": 40.083,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.567,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 265.77,
+          "component": "server_rack_wide_damaged_tall",
+          "converted": [
+            {
+              "object": "server_rack_wide_damaged_tall_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 225.686,
+              "faces": 248
+            }
+          ]
+        },
+        "server_rack_wide_damaged_tall_输出包": {
+          "metal_area_m2": 225.686,
+          "matte_area_m2": 40.083,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.567,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 265.77,
+          "component": "server_rack_wide_damaged_tall",
+          "converted": [
+            {
+              "object": "server_rack_wide_damaged_tall_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 225.686,
+              "faces": 248
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 496,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide_tall/server_rack_wide_tall.blend",
+      "groups": {
+        "server_rack_wide_tall_制作源": {
+          "metal_area_m2": 222.342,
+          "matte_area_m2": 39.301,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 261.643,
+          "component": "server_rack_wide_tall",
+          "converted": [
+            {
+              "object": "server_rack_wide_tall_制作_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 222.342,
+              "faces": 240
+            }
+          ]
+        },
+        "server_rack_wide_tall_输出包": {
+          "metal_area_m2": 222.342,
+          "matte_area_m2": 39.301,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 2.171,
+          "verdict": "金属为大面积 ⇒ 由大到小改哑光 1 槽",
+          "metal_area_after_m2": 0.0,
+          "matte_area_after_m2": 261.643,
+          "component": "server_rack_wide_tall",
+          "converted": [
+            {
+              "object": "server_rack_wide_tall_输出_部件00",
+              "slot": 0,
+              "from": "01_精工金属_紫色骨架",
+              "area_m2": 222.342,
+              "faces": 240
+            }
+          ]
+        }
+      },
+      "slots_replaced": 2,
+      "faces_affected": 480,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_armored_5m/wall_skin_armored_5m.blend",
+      "groups": {
+        "wall_skin_armored_5m_制作源": {
+          "metal_area_m2": 28.905,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_5m",
+          "converted": []
+        },
+        "wall_skin_armored_5m_输出包": {
+          "metal_area_m2": 28.905,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_5m",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m.blend",
+      "groups": {
+        "wall_skin_armored_broken_5m_制作源": {
+          "metal_area_m2": 39.311,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_broken_5m",
+          "converted": []
+        },
+        "wall_skin_armored_broken_5m_输出包": {
+          "metal_area_m2": 39.311,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 4.42,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_armored_broken_5m",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_beveled_5m/wall_skin_beveled_5m.blend",
+      "groups": {
+        "wall_skin_beveled_5m_制作源": {
+          "metal_area_m2": 17.106,
+          "matte_area_m2": 101.713,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.355,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_beveled_5m",
+          "converted": []
+        },
+        "wall_skin_beveled_5m_输出包": {
+          "metal_area_m2": 17.106,
+          "matte_area_m2": 101.713,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 1.355,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_beveled_5m",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_medium_5m/wall_skin_medium_5m.blend",
+      "groups": {
+        "wall_skin_medium_5m_制作源": {
+          "metal_area_m2": 21.549,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_medium_5m",
+          "converted": []
+        },
+        "wall_skin_medium_5m_输出包": {
+          "metal_area_m2": 21.549,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_medium_5m",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_thin_5m/wall_skin_thin_5m.blend",
+      "groups": {
+        "wall_skin_thin_5m_制作源": {
+          "metal_area_m2": 11.143,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_thin_5m",
+          "converted": []
+        },
+        "wall_skin_thin_5m_输出包": {
+          "metal_area_m2": 11.143,
+          "matte_area_m2": 111.932,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "金属已是小部分，保留",
+          "component": "wall_skin_thin_5m",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_solid_5m/wall_solid_5m.blend",
+      "groups": {
+        "wall_solid_5m_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 129.14,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_solid_5m",
+          "converted": []
+        },
+        "wall_solid_5m_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 129.14,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_solid_5m",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_typography/wall_typography.blend",
+      "groups": {
+        "wall_typography_制作源": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 2.45,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_typography",
+          "converted": []
+        },
+        "wall_typography_输出包": {
+          "metal_area_m2": 0,
+          "matte_area_m2": 2.45,
+          "gloss_area_m2": 0.0,
+          "emissive_area_m2": 0.0,
+          "verdict": "无金属，跳过",
+          "component": "wall_typography",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_a/workstation_a.blend",
+      "groups": {
+        "workstation_a_制作源": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_a",
+          "converted": []
+        },
+        "workstation_a_输出包": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_a",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_b/workstation_b.blend",
+      "groups": {
+        "workstation_b_制作源": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.59,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_b",
+          "converted": []
+        },
+        "workstation_b_输出包": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.59,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_b",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_c/workstation_c.blend",
+      "groups": {
+        "workstation_c_制作源": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_c",
+          "converted": []
+        },
+        "workstation_c_输出包": {
+          "metal_area_m2": 27.262,
+          "matte_area_m2": 36.296,
+          "gloss_area_m2": 3.96,
+          "emissive_area_m2": 0.621,
+          "verdict": "金属已是小部分，保留",
+          "component": "workstation_c",
+          "converted": []
+        }
+      },
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "boss_room",
+      "version": "v008"
+    }
+  ]
+}

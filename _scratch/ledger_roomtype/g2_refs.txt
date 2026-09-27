@@ -1,0 +1,39 @@
+待处理脚本（会读写旧单体账本）: 21
+    assets/art/environments/tower_zones/battle/source/common_components/v001/qa/update_registry.mjs
+    assets/art/environments/tower_zones/battle/source/common_components/v001/qa/verify_registry.py
+    assets/art/environments/tower_zones/battle/source/common_components/v002/qa/update_registry.mjs
+    assets/art/environments/tower_zones/battle/source/common_components/v002/qa/verify_registry.py
+    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/register_floor_tile_ledger_rows.py
+    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/register_wall_door_ledger_rows.py
+    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/update_registry.mjs
+    assets/art/environments/tower_zones/battle/source/common_components/v003/qa/verify_registry.py
+    assets/art/environments/tower_zones/battle/source/common_components/v004/qa/update_ledger_rows_v004.py
+    assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/qa/update_ledger.mjs
+    assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/qa/verify_ledger.py
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v001/qa/update_registry.mjs
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v001/qa/verify_registry.py
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/finalize_registry_layout.mjs
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/sync_final_hash.mjs
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/update_registry.mjs
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/verify_registry.py
+    source/art/whitebox/tower_zones/battle_level01/v003/qa/fix_registry_row_style.mjs
+    source/art/whitebox/tower_zones/battle_level01/v003/qa/inspect_registry.mjs
+    source/art/whitebox/tower_zones/battle_level01/v003/qa/update_registry.mjs
+    source/art/whitebox/tower_zones/battle_level01/v003/qa/verify_registry.py
+
+设计允许（注册表工具）: 2
+    tools/asset_pipeline/split_asset_ledger.py
+    tools/asset_pipeline/update_v01_completion_registry.mjs
+
+指向不存在的账本文件（历史遗留，文件部分不可信）: 49
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_corner/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_edge/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_full/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_half/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']
+    assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_inner/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']
+    … 其余 44 条见 --json-output
+
+历史产出记录 / 文档引用（保持原样）: 176 个 json + 14 个文本
+    （明细见 --json-output，或直接 grep）
+
+LEDGER_REFS_NEED_REBASE pending=21（重放前须重定向到分账本并重定行号；见文件头说明）

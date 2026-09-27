@@ -136,6 +136,11 @@
     "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
   ],
   "door_geometry_in_source": false,
+  "variants": [
+    "l_turn",
+    "u_turn"
+  ],
+  "variant_note": "业主 2026-09-27 裁定：`u_turn`（凹字形，对应「拐角走廊02」/`room_04`）作为 L 型房间的「变体」标注，不另立房间种类源、不另出组件集 —— **其全部组件一律引用本 L 型源的既有件**（凹口中部内墙岛的三面墙由同一 5 m 实墙族摆出）。变体外轮廓真源仍是 `room_templates/corridor_45x40.json` 的 `variant_footprints`，`door_contract` 在两变体间一致。",
   "block_id_note": "业主 2026-09-24 裁决：L 型走廊归属远征关卡01。原 battle 区块的产出记录保留在 docs/v0.1/development/2026-09-23_battle_l_corridor_room_type_v001..v003.md；skill 01 的房间种类清单未包含 L_CORRIDOR，归属按源文件实际服务区块判定。",
   "whitebox_note": "远征01 版图与白盒目录均无走廊白模；本房间种类源为参考图推定尺寸，门位与两臂长度见 door_centers_m / dimensions_m，接入前需远征白盒补走廊席位。"
 }

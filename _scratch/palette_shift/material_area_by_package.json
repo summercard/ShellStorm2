@@ -1,0 +1,1059 @@
+{
+  "office_v006": {
+    "ceiling_deck_5m_输出包": {
+      "matte": 343.205
+    },
+    "ceiling_lighting_输出包": {
+      "emissive": 12.334,
+      "matte": 99.488
+    },
+    "ceiling_ring_beam_输出包": {
+      "matte": 359.67
+    },
+    "ceiling_service_cable_tray_输出包": {
+      "matte": 256.546
+    },
+    "ceiling_service_duct_输出包": {
+      "matte": 168.338
+    },
+    "ceiling_service_pipe_run_输出包": {
+      "matte": 106.478
+    },
+    "corner_guard_输出包": {
+      "matte": 31.414
+    },
+    "door_wall_输出包": {
+      "emissive": 3.731,
+      "matte": 421.934
+    },
+    "filing_run_输出包": {
+      "emissive": 2.471,
+      "matte": 180.612
+    },
+    "floor_service_输出包": {
+      "matte": 76.608
+    },
+    "floor_tile_5m_输出包": {
+      "emissive": 1.744,
+      "matte": 108.819
+    },
+    "floor_zone_mark_输出包": {
+      "matte": 31.561
+    },
+    "locker_bank_输出包": {
+      "emissive": 0.274,
+      "matte": 22.976
+    },
+    "planting_perimeter_输出包": {
+      "matte": 51.644
+    },
+    "power_cabinet_bank_输出包": {
+      "emissive": 1.595,
+      "matte": 38.807
+    },
+    "prep_bench_输出包": {
+      "emissive": 0.229,
+      "matte": 27.203
+    },
+    "printer_station_输出包": {
+      "emissive": 0.21,
+      "matte": 14.174
+    },
+    "shelving_输出包": {
+      "matte": 24.715
+    },
+    "totem_column_输出包": {
+      "emissive": 1.742,
+      "matte": 13.05
+    },
+    "wall_t1110_5m_输出包": {
+      "emissive": 5.796,
+      "matte": 320.517
+    },
+    "wall_t615_5m_输出包": {
+      "emissive": 2.644,
+      "matte": 281.846
+    },
+    "wall_t970_5m_输出包": {
+      "emissive": 2.644,
+      "matte": 287.491
+    },
+    "wall_top_service_输出包": {
+      "matte": 240.534
+    },
+    "water_and_supply_corner_输出包": {
+      "matte": 29.537
+    },
+    "work_cluster_输出包": {
+      "emissive": 2.507,
+      "matte": 83.881
+    }
+  },
+  "bridge_v007": {
+    "bank_crate_输出包": {
+      "matte": 38.047
+    },
+    "bridge_girder_输出包": {
+      "emissive": 7.024,
+      "matte": 187.899
+    },
+    "bridge_guardrail_输出包": {
+      "emissive": 0.95,
+      "matte": 55.987
+    },
+    "bridge_service_transom_输出包": {
+      "matte": 13.328
+    },
+    "coolant_输出包": {
+      "matte": 26.67
+    },
+    "cross_gantry_输出包": {
+      "emissive": 0.223,
+      "matte": 118.543
+    },
+    "deep_cables_输出包": {
+      "matte": 31.128
+    },
+    "deep_trunk_输出包": {
+      "matte": 122.231
+    },
+    "end_crate_输出包": {
+      "matte": 43.999
+    },
+    "end_power_输出包": {
+      "matte": 131.399
+    },
+    "half_partition_输出包": {
+      "matte": 85.371
+    },
+    "header_cables_输出包": {
+      "matte": 31.045
+    },
+    "longitudinal_tie_输出包": {
+      "matte": 54.143
+    },
+    "low_platform_z4805_输出包": {
+      "emissive": 0.223,
+      "matte": 116.037
+    },
+    "low_platform_z6005_输出包": {
+      "emissive": 0.223,
+      "matte": 119.652
+    },
+    "lower_control_输出包": {
+      "emissive": 0.183,
+      "matte": 43.393
+    },
+    "mid_gallery_输出包": {
+      "emissive": 0.223,
+      "matte": 324.062
+    },
+    "near_crate_输出包": {
+      "matte": 48.328
+    },
+    "near_server_输出包": {
+      "emissive": 0.458,
+      "matte": 128.865
+    },
+    "partition_box_输出包": {
+      "matte": 38.588
+    },
+    "pit_end_输出包": {
+      "matte": 129.387
+    },
+    "pit_side_输出包": {
+      "matte": 217.887
+    },
+    "platform_edge_输出包": {
+      "emissive": 0.95,
+      "matte": 78.753
+    },
+    "shaft_column_输出包": {
+      "emissive": 2.15,
+      "matte": 116.464
+    },
+    "tile_lower_输出包": {
+      "matte": 106.048
+    },
+    "tile_upper_输出包": {
+      "matte": 107.726
+    },
+    "torn_header_输出包": {
+      "matte": 33.354
+    },
+    "underbridge_service_bay_输出包": {
+      "emissive": 1.857,
+      "matte": 174.398
+    },
+    "upper_bank_z5450_输出包": {
+      "emissive": 0.504,
+      "matte": 135.981
+    },
+    "upper_bank_z6197_输出包": {
+      "matte": 141.654
+    },
+    "upper_console_输出包": {
+      "emissive": 0.409,
+      "matte": 14.807
+    },
+    "vertical_service_输出包": {
+      "emissive": 1.442,
+      "matte": 59.783
+    },
+    "wall_service_header_输出包": {
+      "matte": 80.278
+    },
+    "wall_x670_输出包": {
+      "emissive": 0.752,
+      "matte": 171.823
+    },
+    "wall_x780_输出包": {
+      "emissive": 1.269,
+      "matte": 265.422
+    }
+  },
+  "boss_v008": {
+    "archive_shelf_输出包": {
+      "matte": 52.806,
+      "metal": 47.972
+    },
+    "chair_输出包": {
+      "matte": 5.198,
+      "metal": 1.403
+    },
+    "debris_large_输出包": {
+      "matte": 1.346,
+      "metal": 1.233
+    },
+    "debris_medium_输出包": {
+      "matte": 1.346,
+      "metal": 1.233
+    },
+    "debris_small_输出包": {
+      "matte": 1.346,
+      "metal": 1.233
+    },
+    "floor_base_输出包": {
+      "matte": 4046.8
+    },
+    "floor_marking_输出包": {
+      "matte": 1.981
+    },
+    "floor_tile_5m_a_输出包": {
+      "emissive": 0.078,
+      "matte": 52.446,
+      "metal": 5.354
+    },
+    "floor_tile_5m_b_输出包": {
+      "emissive": 0.078,
+      "matte": 49.233,
+      "metal": 3.651
+    },
+    "floor_tile_5m_c_输出包": {
+      "emissive": 0.077,
+      "matte": 49.217,
+      "metal": 3.651
+    },
+    "heavy_conduits_输出包": {
+      "metal": 104.143
+    },
+    "main_fault_screen_输出包": {
+      "emissive": 15.038,
+      "gloss": 249.769,
+      "matte": 1.975,
+      "metal": 434.242
+    },
+    "plant_a_输出包": {
+      "matte": 5.225
+    },
+    "plant_b_输出包": {
+      "matte": 5.155
+    },
+    "plant_c_输出包": {
+      "matte": 5.101
+    },
+    "server_rack_compact_damaged_输出包": {
+      "emissive": 2.459,
+      "matte": 37.052,
+      "metal": 209.447
+    },
+    "server_rack_compact_输出包": {
+      "emissive": 2.086,
+      "matte": 36.386,
+      "metal": 206.37
+    },
+    "server_rack_damaged_tall_输出包": {
+      "emissive": 2.576,
+      "matte": 41.182,
+      "metal": 230.743
+    },
+    "server_rack_damaged_输出包": {
+      "emissive": 2.564,
+      "matte": 39.717,
+      "metal": 224.001
+    },
+    "server_rack_mid_输出包": {
+      "emissive": 2.171,
+      "matte": 38.95,
+      "metal": 220.69
+    },
+    "server_rack_tall_输出包": {
+      "emissive": 2.171,
+      "matte": 40.355,
+      "metal": 227.295
+    },
+    "server_rack_under_screen_damaged_输出包": {
+      "emissive": 1.92,
+      "matte": 22.112,
+      "metal": 133.418
+    },
+    "server_rack_under_screen_输出包": {
+      "emissive": 1.618,
+      "matte": 21.809,
+      "metal": 131.413
+    },
+    "server_rack_wide_damaged_tall_输出包": {
+      "emissive": 2.567,
+      "matte": 40.083,
+      "metal": 225.686
+    },
+    "server_rack_wide_damaged_输出包": {
+      "emissive": 2.467,
+      "matte": 38.098,
+      "metal": 214.262
+    },
+    "server_rack_wide_tall_输出包": {
+      "emissive": 2.171,
+      "matte": 39.301,
+      "metal": 222.342
+    },
+    "server_rack_wide_输出包": {
+      "emissive": 2.086,
+      "matte": 37.39,
+      "metal": 211.088
+    },
+    "server_rack_输出包": {
+      "emissive": 2.086,
+      "matte": 37.39,
+      "metal": 211.088
+    },
+    "wall_skin_armored_5m_输出包": {
+      "emissive": 4.42,
+      "matte": 111.932,
+      "metal": 28.905
+    },
+    "wall_skin_armored_broken_5m_输出包": {
+      "emissive": 4.42,
+      "matte": 111.932,
+      "metal": 39.311
+    },
+    "wall_skin_beveled_5m_输出包": {
+      "emissive": 1.355,
+      "matte": 101.713,
+      "metal": 17.106
+    },
+    "wall_skin_medium_5m_输出包": {
+      "matte": 111.932,
+      "metal": 21.549
+    },
+    "wall_skin_thin_5m_输出包": {
+      "matte": 111.932,
+      "metal": 11.143
+    },
+    "wall_solid_5m_输出包": {
+      "matte": 129.14
+    },
+    "wall_typography_输出包": {
+      "matte": 2.45
+    },
+    "workstation_a_输出包": {
+      "emissive": 0.621,
+      "gloss": 3.96,
+      "matte": 36.296,
+      "metal": 27.262
+    },
+    "workstation_b_输出包": {
+      "emissive": 0.59,
+      "gloss": 3.96,
+      "matte": 36.296,
+      "metal": 27.262
+    },
+    "workstation_c_输出包": {
+      "emissive": 0.621,
+      "gloss": 3.96,
+      "matte": 36.296,
+      "metal": 27.262
+    }
+  },
+  "corridor_v002": {
+    "七米高东墙管道跨段_00_输出包": {
+      "metal": 9.426
+    },
+    "七米高东墙管道跨段_01_输出包": {
+      "metal": 9.426
+    },
+    "七米高东墙管道跨段_02_输出包": {
+      "metal": 9.426
+    },
+    "七米高东墙管道跨段_03_输出包": {
+      "metal": 9.426
+    },
+    "七米高东墙管道跨段_04_输出包": {
+      "metal": 9.426
+    },
+    "七米高东墙管道跨段_05_输出包": {
+      "metal": 9.426
+    },
+    "七米高东墙管道跨段_06_扩展资产包_输出包": {
+      "metal": 9.426
+    },
+    "七米高东墙管道跨段_06_输出包": {
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_00_输出包": {
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_01_输出包": {
+      "emissive": 0.065,
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_02_输出包": {
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_03_输出包": {
+      "emissive": 0.065,
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_04_输出包": {
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_05_输出包": {
+      "emissive": 0.065,
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_06_输出包": {
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_07_输出包": {
+      "emissive": 0.065,
+      "metal": 9.426
+    },
+    "七米高后墙管道跨段_08_输出包": {
+      "metal": 9.426
+    },
+    "三角墙面警示标识_输出包": {
+      "emissive": 0.082,
+      "metal": 0.734
+    },
+    "三角墙面警示标识_输出包.001": {
+      "emissive": 0.082,
+      "metal": 0.734
+    },
+    "侧墙_-10米_35米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "侧墙_-10米_45米_输出包": {
+      "emissive": 0.373,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_-15米_35米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "侧墙_-15米_45米_输出包": {
+      "emissive": 1.365,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_-20米_35米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "侧墙_-20米_45米_输出包": {
+      "emissive": 0.373,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_-25米_35米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "侧墙_-25米_45米_输出包": {
+      "emissive": 1.365,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_-5米_35米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "侧墙_-5米_45米_输出包": {
+      "emissive": 1.365,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_0米_0米_扩展资产包_输出包": {
+      "emissive": 0.373,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_0米_0米_输出包": {
+      "emissive": 0.373,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_0米_45米_输出包": {
+      "emissive": 0.373,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_5米_45米_扩展资产包_输出包": {
+      "emissive": 1.365,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "侧墙_5米_45米_输出包": {
+      "emissive": 1.365,
+      "matte": 129.14,
+      "metal": 9.335
+    },
+    "前墙_00米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "前墙_05米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "前墙_10米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "前墙_15米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "前墙_20米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "前墙_25米_输出包": {
+      "matte": 17.31,
+      "metal": 6.48
+    },
+    "前墙_40米_扩展资产包_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "前墙_40米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "双层带轮数据维修推车_输出包": {
+      "emissive": 0.071,
+      "matte": 10.081,
+      "metal": 27.993
+    },
+    "双层带轮数据维修推车_输出包.001": {
+      "emissive": 0.071,
+      "matte": 10.081,
+      "metal": 27.993
+    },
+    "双跨玻璃数据库陈列窗_输出包": {
+      "emissive": 0.966,
+      "gloss": 41.426,
+      "matte": 52.547,
+      "metal": 16.274
+    },
+    "后墙_00米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "后墙_10米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "后墙_15米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "后墙_20米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "后墙_25米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "后墙_30米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "后墙_40米_输出包": {
+      "emissive": 1.294,
+      "matte": 129.14,
+      "metal": 17.111
+    },
+    "固定维修设备箱_输出包": {
+      "emissive": 0.107,
+      "metal": 8.346
+    },
+    "固定维修设备箱_输出包.001": {
+      "emissive": 0.107,
+      "metal": 8.346
+    },
+    "固定维修设备箱_输出包.002": {
+      "emissive": 0.107,
+      "metal": 8.346
+    },
+    "地砖_R00_C07_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 12.794
+    },
+    "地砖_R00_C07_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R00_C08_输出包": {
+      "emissive": 0.478,
+      "matte": 107.509,
+      "metal": 17.332
+    },
+    "地砖_R01_C07_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 107.509,
+      "metal": 10.653
+    },
+    "地砖_R01_C07_输出包": {
+      "emissive": 0.478,
+      "matte": 107.509,
+      "metal": 17.332
+    },
+    "地砖_R01_C08_输出包": {
+      "emissive": 0.693,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R02_C07_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 12.794
+    },
+    "地砖_R02_C07_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R02_C08_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R03_C07_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 6.114
+    },
+    "地砖_R03_C07_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R03_C08_输出包": {
+      "emissive": 0.693,
+      "matte": 108.926,
+      "metal": 10.653
+    },
+    "地砖_R04_C07_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 108.926,
+      "metal": 17.332
+    },
+    "地砖_R04_C07_输出包": {
+      "emissive": 0.478,
+      "matte": 108.926,
+      "metal": 10.653
+    },
+    "地砖_R04_C08_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R05_C00_输出包": {
+      "emissive": 0.693,
+      "matte": 108.926,
+      "metal": 10.653
+    },
+    "地砖_R05_C01_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R05_C02_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R05_C03_输出包": {
+      "emissive": 0.478,
+      "matte": 107.509,
+      "metal": 17.332
+    },
+    "地砖_R05_C04_输出包": {
+      "emissive": 0.693,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R05_C05_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R05_C06_输出包": {
+      "emissive": 0.478,
+      "matte": 108.926,
+      "metal": 10.653
+    },
+    "地砖_R05_C07_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R05_C08_输出包": {
+      "emissive": 0.693,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R06_C00_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 6.114
+    },
+    "地砖_R06_C00_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R06_C01_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 12.794
+    },
+    "地砖_R06_C01_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R06_C02_扩展资产包_输出包": {
+      "emissive": 0.693,
+      "matte": 107.509,
+      "metal": 10.653
+    },
+    "地砖_R06_C02_输出包": {
+      "emissive": 0.693,
+      "matte": 107.509,
+      "metal": 17.332
+    },
+    "地砖_R06_C03_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 12.794
+    },
+    "地砖_R06_C03_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R06_C04_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 6.114
+    },
+    "地砖_R06_C04_输出包": {
+      "emissive": 0.478,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R06_C05_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 108.926,
+      "metal": 17.332
+    },
+    "地砖_R06_C05_输出包": {
+      "emissive": 0.478,
+      "matte": 108.926,
+      "metal": 10.653
+    },
+    "地砖_R06_C06_扩展资产包_输出包": {
+      "emissive": 0.693,
+      "matte": 105.178,
+      "metal": 6.114
+    },
+    "地砖_R06_C06_输出包": {
+      "emissive": 0.693,
+      "matte": 105.178,
+      "metal": 12.794
+    },
+    "地砖_R06_C07_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 12.794
+    },
+    "地砖_R06_C07_输出包": {
+      "emissive": 0.478,
+      "matte": 106.595,
+      "metal": 6.114
+    },
+    "地砖_R06_C08_扩展资产包_输出包": {
+      "emissive": 0.478,
+      "matte": 107.509,
+      "metal": 10.653
+    },
+    "地砖_R06_C08_输出包": {
+      "emissive": 0.478,
+      "matte": 107.509,
+      "metal": 17.332
+    },
+    "墙面竖向管线_00_输出包": {
+      "emissive": 0.017,
+      "metal": 2.74
+    },
+    "墙面竖向管线_01_输出包": {
+      "emissive": 0.017,
+      "metal": 2.74
+    },
+    "墙面竖向管线_02_输出包": {
+      "emissive": 0.017,
+      "metal": 2.74
+    },
+    "墙面竖向管线_03_输出包": {
+      "emissive": 0.017,
+      "metal": 2.74
+    },
+    "墙面竖向管线_04_输出包": {
+      "emissive": 0.017,
+      "metal": 2.74
+    },
+    "墙面竖向管线_05_输出包": {
+      "emissive": 0.017,
+      "metal": 2.74
+    },
+    "白色方形固定花槽_输出包": {
+      "matte": 7.3,
+      "metal": 0.209
+    },
+    "白色方形固定花槽_输出包.001": {
+      "matte": 7.3,
+      "metal": 0.209
+    },
+    "白色方形固定花槽_输出包.002": {
+      "matte": 7.3,
+      "metal": 0.209
+    },
+    "立式访问终端_输出包": {
+      "emissive": 0.093,
+      "gloss": 0.527,
+      "metal": 7.051
+    },
+    "立式访问终端_输出包.001": {
+      "emissive": 0.534,
+      "gloss": 0.895,
+      "matte": 0.228,
+      "metal": 12.159
+    },
+    "立式访问终端_输出包.002": {
+      "emissive": 0.534,
+      "gloss": 0.895,
+      "matte": 0.228,
+      "metal": 12.159
+    },
+    "蓝光服务器机柜_输出包": {
+      "emissive": 0.2,
+      "matte": 3.676,
+      "metal": 16.458
+    },
+    "蓝光服务器机柜_输出包.001": {
+      "emissive": 0.2,
+      "matte": 3.676,
+      "metal": 16.458
+    },
+    "蓝光服务器机柜_输出包.002": {
+      "emissive": 0.2,
+      "matte": 3.676,
+      "metal": 16.458
+    },
+    "蓝光服务器机柜_输出包.003": {
+      "emissive": 0.2,
+      "matte": 3.676,
+      "metal": 16.458
+    },
+    "蓝光服务器机柜_输出包.004": {
+      "emissive": 0.2,
+      "matte": 3.676,
+      "metal": 16.458
+    },
+    "镜头侧墙完整高度基准_0_输出包": {
+      "matte": 739.14
+    },
+    "镜头侧墙完整高度基准_1_输出包": {
+      "matte": 617.14
+    },
+    "高处下垂粗电缆_输出包": {
+      "matte": 2.582,
+      "metal": 0.692
+    },
+    "高处下垂粗电缆_输出包.001": {
+      "matte": 2.126,
+      "metal": 0.692
+    },
+    "高处下垂粗电缆_输出包.002": {
+      "matte": 2.785,
+      "metal": 0.692
+    },
+    "高处下垂粗电缆_输出包.003": {
+      "matte": 2.251,
+      "metal": 0.692
+    },
+    "高处下垂粗电缆_输出包.004": {
+      "matte": 2.034,
+      "metal": 0.692
+    }
+  },
+  "db_v003": {
+    "东北设备机架_输出包": {
+      "emissive": 5.211,
+      "metal": 64.217
+    },
+    "东墙L形工作台_输出包": {
+      "emissive": 3.483,
+      "metal": 83.156
+    },
+    "中央作业台_输出包": {
+      "emissive": 0.915,
+      "metal": 58.14
+    },
+    "中部机柜组与推车_输出包": {
+      "emissive": 3.736,
+      "metal": 152.093
+    },
+    "北墙重型货架_输出包": {
+      "emissive": 1.094,
+      "metal": 86.583
+    },
+    "吊顶周圈圈梁_输出包": {
+      "metal": 400.399
+    },
+    "吊顶结构_-1_输出包": {
+      "metal": 458.806
+    },
+    "吊顶结构_-2_输出包": {
+      "metal": 458.806
+    },
+    "吊顶结构_-3_输出包": {
+      "metal": 114.702
+    },
+    "吊顶结构_0_输出包": {
+      "metal": 458.806
+    },
+    "吊顶结构_1_输出包": {
+      "metal": 458.806
+    },
+    "吊顶结构_2_输出包": {
+      "metal": 458.806
+    },
+    "地面分区标识_输出包": {
+      "metal": 155.311
+    },
+    "地面格栅与检修口_输出包": {
+      "metal": 97.067
+    },
+    "地面线槽与检修盖板_输出包": {
+      "metal": 80.545
+    },
+    "地面设备坑与抬升平台_输出包": {
+      "metal": 94.647
+    },
+    "墙面竖向冷光灯柱_输出包": {
+      "emissive": 19.004,
+      "metal": 55.901
+    },
+    "墙面管道与线束_输出包": {
+      "metal": 169.943
+    },
+    "墙顶管线收口_输出包": {
+      "metal": 249.777
+    },
+    "壁挂大屏组_输出包": {
+      "emissive": 21.719,
+      "metal": 29.353
+    },
+    "壁挂电缆线圈_输出包": {
+      "metal": 10.143
+    },
+    "多屉零件柜_输出包": {
+      "metal": 51.736
+    },
+    "沿墙黄黑警示边带_输出包": {
+      "metal": 206.798
+    },
+    "白色花箱绿植_输出包": {
+      "metal": 49.452
+    },
+    "红色抽屉工具车_输出包": {
+      "metal": 16.757
+    },
+    "落地仪器三脚架_输出包": {
+      "emissive": 0.372,
+      "metal": 4.64
+    },
+    "落地电缆盘与线圈_输出包": {
+      "metal": 31.135
+    },
+    "西侧机柜列_输出包": {
+      "emissive": 12.43,
+      "metal": 403.234
+    },
+    "西南附区作业台_输出包": {
+      "emissive": 1.429,
+      "metal": 35.632
+    },
+    "西墙检修工作台_输出包": {
+      "emissive": 0.774,
+      "metal": 36.07
+    },
+    "货箱与周转箱堆场_输出包": {
+      "metal": 158.458
+    },
+    "转角护柱_输出包": {
+      "metal": 29.052
+    },
+    "顶部灯具_输出包": {
+      "emissive": 17.015,
+      "metal": 112.714
+    },
+    "顶部电缆桥架与线缆_输出包": {
+      "metal": 247.879
+    },
+    "顶部管道与法兰_输出包": {
+      "metal": 101.133
+    },
+    "顶部通风管与风口_输出包": {
+      "metal": 116.458
+    },
+    "黄色工具推车与圆凳_输出包": {
+      "metal": 30.974
+    }
+  }
+}

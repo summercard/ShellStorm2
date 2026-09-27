@@ -1,0 +1,195 @@
+LEVEL	expedition_01	theme=iron_frontier	seed=77001199	floor=1	records=13
+ENEMY_POOL	["melee_chaser", "melee_chaser", "ranged_caster", "exploder"]
+
+# 记录表（index / floor_level / 普通怪掉落池）
+REC	idx	id	type	role	floor_level	monster_pool
+REC	0	start	STAIR_LOBBY	stair_entry	0	loot_floor_1_2
+REC	1	room_01	COMBAT	main	0	loot_floor_1_2
+REC	2	room_02	SCAVENGE	main	0	loot_floor_1_2
+REC	3	room_03	COMBAT	main	0	loot_floor_1_2
+REC	4	room_04	COMBAT	main	1	loot_floor_3_4
+REC	5	room_05	COMBAT	main	1	loot_floor_3_4
+REC	6	room_06	SCAVENGE	main	1	loot_floor_3_4
+REC	7	room_07	STORAGE	main	1	loot_floor_3_4
+REC	8	room_08	COMBAT	main	2	loot_floor_5
+REC	9	room_09	EVENT	main	2	loot_floor_5
+REC	10	room_10	SCAVENGE	main	2	loot_floor_5
+REC	11	boss	BOSS	boss	2	loot_floor_5
+REC	12	extraction	EXTRACTION	extraction	3	loot_abyss
+
+# 房间实测（rooms=13）
+ROOM	room_id	type	size_class	index	floor_level	placements	waves	enemies
+ROOM	start	STAIR_LOBBY	tower_cell	0	0	0	0	0
+ROOM	room_01	COMBAT	tower_cell	1	0	3	2	7
+PLACE	room_01	{"box":"box_room_spread","center_m":[-15.0,-12.5]}
+PLACE	room_01	{"box":"box_corner_ambush","center_m":[5.0,-12.5]}
+PLACE	room_01	{"box":"box_wall_arc","center_m":[15.0,2.5],"rotation_deg":90.0}
+ROOM	room_02	SCAVENGE	tower_cell	2	0	4	2	10
+PLACE	room_02	{"box":"box_corner_ambush","center_m":[-12.5,-7.5]}
+PLACE	room_02	{"box":"box_wall_arc","center_m":[-2.5,-7.5]}
+PLACE	room_02	{"box":"box_room_spread","center_m":[7.5,2.5]}
+PLACE	room_02	{"box":"box_corridor_column","center_m":[12.5,-2.5],"rotation_deg":90.0}
+ROOM	room_03	COMBAT	tower_cell	3	0	4	2	10
+PLACE	room_03	{"box":"box_room_spread","center_m":[-7.5,-12.5]}
+PLACE	room_03	{"box":"box_corner_ambush","center_m":[7.5,-12.5]}
+PLACE	room_03	{"box":"box_corridor_column","center_m":[-7.5,2.5]}
+PLACE	room_03	{"box":"box_wall_arc","center_m":[7.5,2.5],"rotation_deg":90.0}
+ROOM	room_04	COMBAT	tower_cell	4	1	4	2	10
+PLACE	room_04	{"box":"box_room_spread","center_m":[-15.0,-12.5]}
+PLACE	room_04	{"box":"box_corner_ambush","center_m":[5.0,-12.5]}
+PLACE	room_04	{"box":"box_wall_arc","center_m":[15.0,-12.5]}
+PLACE	room_04	{"box":"box_corridor_column","center_m":[-15.0,7.5]}
+ROOM	room_05	COMBAT	tower_cell	5	1	4	2	9
+PLACE	room_05	{"box":"box_room_spread","center_m":[-22.5,-7.5]}
+PLACE	room_05	{"box":"box_corner_ambush","center_m":[-22.5,7.5]}
+PLACE	room_05	{"box":"box_center_elite","center_m":[22.5,-7.5]}
+PLACE	room_05	{"box":"box_room_spread","center_m":[22.5,7.5]}
+ROOM	room_06	SCAVENGE	tower_cell	6	1	4	2	9
+PLACE	room_06	{"box":"box_corner_ambush","center_m":[-12.5,-7.5]}
+PLACE	room_06	{"box":"box_room_spread","center_m":[-2.5,-7.5]}
+PLACE	room_06	{"box":"box_wall_arc","center_m":[12.5,-2.5],"rotation_deg":90.0}
+PLACE	room_06	{"box":"box_corridor_column","center_m":[7.5,2.5]}
+ROOM	room_07	STORAGE	tower_cell	7	1	3	2	5
+PLACE	room_07	{"box":"box_center_elite","center_m":[0.0,0.0]}
+PLACE	room_07	{"box":"box_corner_ambush","center_m":[-5.0,-5.0]}
+PLACE	room_07	{"box":"box_corner_ambush","center_m":[5.0,5.0]}
+ROOM	room_08	COMBAT	tower_cell	8	2	5	3	11
+PLACE	room_08	{"box":"box_room_spread","center_m":[-15.0,-12.5]}
+PLACE	room_08	{"box":"box_corner_ambush","center_m":[0.0,-12.5]}
+PLACE	room_08	{"box":"box_wall_arc","center_m":[15.0,-2.5],"rotation_deg":90.0}
+PLACE	room_08	{"box":"box_center_elite","center_m":[15.0,7.5]}
+PLACE	room_08	{"box":"box_room_spread","center_m":[-5.0,12.5]}
+ROOM	room_09	EVENT	tower_cell	9	2	4	3	10
+PLACE	room_09	{"box":"box_room_spread","center_m":[-7.5,-12.5]}
+PLACE	room_09	{"box":"box_corner_ambush","center_m":[7.5,-12.5]}
+PLACE	room_09	{"box":"box_corridor_column","center_m":[-7.5,2.5]}
+PLACE	room_09	{"box":"box_wall_arc","center_m":[7.5,2.5],"rotation_deg":90.0}
+ROOM	room_10	SCAVENGE	tower_cell	10	2	4	2	8
+PLACE	room_10	{"box":"box_room_spread","center_m":[-12.5,-7.5]}
+PLACE	room_10	{"box":"box_center_elite","center_m":[7.5,-7.5]}
+PLACE	room_10	{"box":"box_wall_arc","center_m":[12.5,2.5],"rotation_deg":90.0}
+PLACE	room_10	{"box":"box_corner_ambush","center_m":[-2.5,2.5]}
+ROOM	boss	BOSS	tower_cell	11	2	4	3	7
+PLACE	boss	{"box":"box_boss_arena","center_m":[-2.5,-2.5]}
+PLACE	boss	{"box":"box_room_spread","center_m":[-17.5,-7.5]}
+PLACE	boss	{"box":"box_corner_ambush","center_m":[17.5,7.5]}
+PLACE	boss	{"box":"box_wall_arc","center_m":[2.5,12.5]}
+ROOM	extraction	EXTRACTION	tower_cell	12	3	0	0	0
+
+# 逐房逐波编成（WAVE 后附每只怪）
+WAVE	room	room_type	floor_level	wave	box	box_center	enemy_type	name	tier	loot_table	hp	damage	modifier	spawn_pos_ok
+WAVE	room_01	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_01	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_01	COMBAT	0	0			exploder	边境炸弹果	normal	loot_floor_1_2	9	14		Y
+WAVE	room_01	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_01	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_01	COMBAT	0	1			ranged_caster	边境孢子射手	normal	loot_floor_1_2	14	7		Y
+WAVE	room_01	COMBAT	0	1			ranged_caster	边境孢子射手	normal	loot_floor_1_2	14	7		Y
+WAVE	room_02	SCAVENGE	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_02	SCAVENGE	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_02	SCAVENGE	0	0			ranged_caster	边境孢子射手	normal	loot_floor_1_2	14	7		Y
+WAVE	room_02	SCAVENGE	0	0			ranged_caster	边境孢子射手	normal	loot_floor_1_2	14	7		Y
+WAVE	room_02	SCAVENGE	0	1			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_02	SCAVENGE	0	1			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_02	SCAVENGE	0	1			exploder	边境炸弹果	normal	loot_floor_1_2	9	14		Y
+WAVE	room_02	SCAVENGE	0	1			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_02	SCAVENGE	0	1			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_02	SCAVENGE	0	1			shielded	边境壳甲卫兵	normal	loot_floor_1_2	38	2		Y
+WAVE	room_03	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_03	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_03	COMBAT	0	0			exploder	边境炸弹果	normal	loot_floor_1_2	9	14		Y
+WAVE	room_03	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_03	COMBAT	0	0			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_03	COMBAT	0	1			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_03	COMBAT	0	1			melee_chaser	边境小僵尸	normal	loot_floor_1_2	23	4		Y
+WAVE	room_03	COMBAT	0	1			shielded	边境壳甲卫兵	normal	loot_floor_1_2	38	2		Y
+WAVE	room_03	COMBAT	0	1			ranged_caster	边境孢子射手	normal	loot_floor_1_2	14	7		Y
+WAVE	room_03	COMBAT	0	1			ranged_caster	边境孢子射手	normal	loot_floor_1_2	14	7		Y
+WAVE	room_04	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_04	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_04	COMBAT	1	0			exploder	边境炸弹果	normal	loot_floor_3_4	9	14		Y
+WAVE	room_04	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_04	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_04	COMBAT	1	1			ranged_caster	边境孢子射手	normal	loot_floor_3_4	14	7		Y
+WAVE	room_04	COMBAT	1	1			ranged_caster	边境孢子射手	normal	loot_floor_3_4	14	7		Y
+WAVE	room_04	COMBAT	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_04	COMBAT	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_04	COMBAT	1	1			shielded	边境壳甲卫兵	normal	loot_floor_3_4	38	2		Y
+WAVE	room_05	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_05	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_05	COMBAT	1	0			exploder	边境炸弹果	normal	loot_floor_3_4	9	14		Y
+WAVE	room_05	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_05	COMBAT	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_05	COMBAT	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_05	COMBAT	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_05	COMBAT	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_05	COMBAT	1	1			exploder	边境炸弹果	normal	loot_floor_3_4	9	14		Y
+WAVE	room_06	SCAVENGE	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_06	SCAVENGE	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_06	SCAVENGE	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_06	SCAVENGE	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_06	SCAVENGE	1	0			exploder	边境炸弹果	normal	loot_floor_3_4	9	14		Y
+WAVE	room_06	SCAVENGE	1	1			ranged_caster	边境孢子射手	normal	loot_floor_3_4	14	7		Y
+WAVE	room_06	SCAVENGE	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_06	SCAVENGE	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_06	SCAVENGE	1	1			shielded	边境壳甲卫兵	normal	loot_floor_3_4	38	2		Y
+WAVE	room_07	STORAGE	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_07	STORAGE	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_07	STORAGE	1	0			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_07	STORAGE	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_07	STORAGE	1	1			melee_chaser	边境小僵尸	normal	loot_floor_3_4	23	4		Y
+WAVE	room_08	COMBAT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_08	COMBAT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_08	COMBAT	2	0			exploder	边境炸弹果	normal	loot_floor_5	9	14		Y
+WAVE	room_08	COMBAT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_08	COMBAT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_08	COMBAT	2	1			ranged_caster	边境孢子射手	normal	loot_floor_5	14	7		Y
+WAVE	room_08	COMBAT	2	1			ranged_caster	边境孢子射手	normal	loot_floor_5	14	7		Y
+WAVE	room_08	COMBAT	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_08	COMBAT	2	2			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_08	COMBAT	2	2			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_08	COMBAT	2	2			exploder	边境炸弹果	normal	loot_floor_5	9	14		Y
+WAVE	room_09	EVENT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_09	EVENT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_09	EVENT	2	0			exploder	边境炸弹果	normal	loot_floor_5	9	14		Y
+WAVE	room_09	EVENT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_09	EVENT	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_09	EVENT	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_09	EVENT	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_09	EVENT	2	1			shielded	边境壳甲卫兵	normal	loot_floor_5	38	2		Y
+WAVE	room_09	EVENT	2	2			ranged_caster	边境孢子射手	normal	loot_floor_5	14	7		Y
+WAVE	room_09	EVENT	2	2			ranged_caster	边境孢子射手	normal	loot_floor_5	14	7		Y
+WAVE	room_10	SCAVENGE	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_10	SCAVENGE	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_10	SCAVENGE	2	0			exploder	边境炸弹果	normal	loot_floor_5	9	14		Y
+WAVE	room_10	SCAVENGE	2	0			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_10	SCAVENGE	2	1			ranged_caster	边境孢子射手	normal	loot_floor_5	14	7		Y
+WAVE	room_10	SCAVENGE	2	1			ranged_caster	边境孢子射手	normal	loot_floor_5	14	7		Y
+WAVE	room_10	SCAVENGE	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	room_10	SCAVENGE	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	boss	BOSS	2	0			summoner	边境蜂巢怪	normal	loot_floor_5	28	0		Y
+WAVE	boss	BOSS	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	boss	BOSS	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	boss	BOSS	2	1			exploder	边境炸弹果	normal	loot_floor_5	9	14		Y
+WAVE	boss	BOSS	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	boss	BOSS	2	1			melee_chaser	边境小僵尸	normal	loot_floor_5	23	4		Y
+WAVE	boss	BOSS	2	2			ranged_caster	边境孢子射手	normal	loot_floor_5	14	7		Y
+
+# 结构化掉落规格（MonsterInjector.drop_spec_for 运行时真值）
+SPEC	monster	tier	floor_level	pool	item_chance	ammo_chance	ammo_range	currency
+SPEC	melee_chaser	normal	0	loot_floor_1_2	0.26	0.34	3-8	2+floor*1
+SPEC	exploder	normal	0	loot_floor_1_2	0.26	0.34	3-8	2+floor*1
+SPEC	ranged_caster	normal	0	loot_floor_1_2	0.26	0.34	3-8	2+floor*1
+SPEC	shielded	normal	0	loot_floor_1_2	0.26	0.34	3-8	2+floor*1
+SPEC	melee_chaser	normal	1	loot_floor_3_4	0.26	0.34	3-8	2+floor*1
+SPEC	exploder	normal	1	loot_floor_3_4	0.26	0.34	3-8	2+floor*1
+SPEC	ranged_caster	normal	1	loot_floor_3_4	0.26	0.34	3-8	2+floor*1
+SPEC	shielded	normal	1	loot_floor_3_4	0.26	0.34	3-8	2+floor*1
+SPEC	melee_chaser	normal	2	loot_floor_5	0.26	0.34	3-8	2+floor*1
+SPEC	exploder	normal	2	loot_floor_5	0.26	0.34	3-8	2+floor*1
+SPEC	ranged_caster	normal	2	loot_floor_5	0.26	0.34	3-8	2+floor*1
+SPEC	shielded	normal	2	loot_floor_5	0.26	0.34	3-8	2+floor*1
+SPEC	summoner	normal	2	loot_floor_5	0.26	0.34	3-8	2+floor*1
+
+# Boss 房身份
+BOSS	boss_content_id=	arena=

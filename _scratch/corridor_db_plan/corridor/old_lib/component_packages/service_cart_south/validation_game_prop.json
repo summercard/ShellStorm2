@@ -1,0 +1,1047 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\expedition\\source\\common_components\\v002\\component_packages\\service_cart_south\\service_cart_south.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 100,
+  "polygon_count": 796,
+  "valid_island_polygon_count": 796,
+  "uv_reports": [
+    {
+      "object": "双层带轮数据维修推车_制作_自发光.004",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_自发光.005",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_自发光.006",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_自发光.007",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件00.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件01.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件02.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件03.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件04.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件05.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件06.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件07.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件08.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件09.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件10.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件11.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件12.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件13.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件14.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件15.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件16.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件17.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件18.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件19.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件20.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件21.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件22.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件23.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件24.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件25.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件26.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件27.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件28.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件29.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件30.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件31.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件32.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件33.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件34.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件35.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件36.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件37.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件41.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件42.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件43.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件44.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件45.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件46.001",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件47.001",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_制作_部件48.001",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_自发光.004",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_自发光.005",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_自发光.006",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_自发光.007",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件00.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件01.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件02.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件03.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件04.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件05.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件06.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件07.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件08.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件09.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件10.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件11.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件12.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件13.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件14.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件15.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件16.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件17.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件18.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件19.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件20.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件21.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件22.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件23.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件24.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件25.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件26.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件27.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件28.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件29.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件30.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件31.001",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件32.001",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件33.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件34.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件35.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件36.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件37.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件41.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件42.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件43.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件44.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件45.001",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件46.001",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件47.001",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双层带轮数据维修推车_输出_部件48.001",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}
