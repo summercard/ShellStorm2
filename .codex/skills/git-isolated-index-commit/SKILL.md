@@ -47,6 +47,8 @@ git add -A
 
 # 4) 把要剔除的路径从隔离索引里退回（index-only unstage）
 git reset -q -- <剔除路径1> <剔除路径2> ...
+# ⚠️ 剔除项文件名含中文时，命令行里一个字都别写 —— 用纯 ASCII 前缀 + glob 匹配（见坑 2）
+git reset -q -- 'assets/art/shared/palette/*.import'
 
 # 5) 自校验：剩下多少、还有没有残留剔除项
 git diff --cached --shortstat
@@ -71,6 +73,7 @@ git diff-tree -r --name-only --no-commit-id <新提交sha> | grep -cE '^(<剔除
 
 1. **`GIT_INDEX_FILE` 每条命令都要重新 `export`** —— shell 状态在命令之间不保留（工作目录也不一定保留）。把「复制 + reset + 校验 + commit」写进同一条命令，或分多条但每次 `export`。
 2. **路径用纯 ASCII 相对路径**：`GIT_INDEX_FILE=.git/alt_index`，别用绝对中文路径。
+   - ⚠️ **剔除项文件名含中文时不要在命令行里写它**：本机 bash 会把中文参数转码成乱码，git 静默不匹配你要剔的文件（不报错，看着像成功）。改用**纯 ASCII 前缀 + glob**：剔 `assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import` 写作 `'assets/art/shared/palette/*.import'`。目录里只有这一个改动时，直接 `git reset -- <纯 ASCII 目录>` 等价。
 3. **`git reset -q -- <path>` 是 index-only**（缺省 `--mixed`），不动工作区文件。对被剔除的**新文件** = 退回未跟踪；对**已跟踪文件的改动** = 退回 HEAD 版本。
 4. **别用 `git rm --cached -r <dir>` 做剔除** —— 若该目录里本来就有 HEAD 已跟踪的文件，会把它们从索引树删掉，**在提交里产生大批删除**。必须用 `git reset -- <dir>`。
 5. **自校验分两层**：① `git diff --cached --name-only` 里剔除项计数为 0（本轮没进去）；② `git diff-tree -r --name-only --no-commit-id <sha>` 里剔除项计数为 0（本提交**增量**里没有）。⚠️ 别用 `git ls-tree` 全树计数来判断 —— 历史遗留存量会让计数非 0，看着像失败。
