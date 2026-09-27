@@ -104,6 +104,27 @@ PY
 副本落后不会自己报警，只会在下次 `--check` 时冒出来；`--check` 一旦是红的，
 「本次改动是否已同步」这个判断就失效了（红里混着历史欠账）⇒ 改完就同步，让 `--check` 保持 0。
 
+## 「整目录缺失」的真凶：A 里那件是 LF
+
+`--check` 报 `!! <copy> missing skills: [...]` + 同时 `A has N non-CRLF file(s)` 时，
+**两件事其实是同一件**：那批 skill 在 A 里是 LF 行尾，行尾关长期拦着它们，
+于是历史上每次同步都被跳掉 ⇒ 副本里从来没出现过。2026-09-27 实测 4 个 skill
+（`doc-coverage-audit` / `git-remote-credential-triage` / `windows-cli-tool-provisioning` /
+`workbuddy-skill-workspace-mirror`）就是这样静默缺了很久。
+
+⇒ **别只盯着 `diff=` 看**：`miss=`（缺文件）与 `missing skills`（缺目录）同样要追到底，
+先按 §新增 skill 第 2 步把行尾转了，再同步，一次性补齐。
+
+## 工作区级正本不在四副本内
+
+若工作区根 ≠ 仓库根（如 workspace=`I:\...\shellstrom2`、repo=`...\ShellStorm2`），
+还存在 `<workspace>/.workbuddy/skills/` —— 那是 **WorkBuddy 真正发现 skill 的地方**，
+但**不在本脚本的 A/B/C/D 四副本里，本脚本管不到它**（见 `workbuddy-skill-workspace-mirror`）。
+
+⇒ 改完 A 要**单独回灌**一次：把 A 里同名的项目 skill 覆盖过去并逐文件校验 sha256。
+否则 `--check` 全绿，WorkBuddy 在本项目里跑的却还是旧版。实测 02/04 曾落后 A 各 29/20 行。
+方向判定：以 A 为准（比 mtime + diff：`add>0 / rem=0` 就是纯补齐，可放心覆盖）。
+
 ## 边界
 
 - **绝不反向**：不从副本同步回 A。副本行尾被污染时，修副本、不修 A。

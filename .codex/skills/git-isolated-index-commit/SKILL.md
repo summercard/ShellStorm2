@@ -101,3 +101,21 @@ git diff-tree -r --name-only --no-commit-id <新提交sha> | grep -cE '^(<剔除
     ⚠️ **别只看 deletions**：内容全为「已跟踪文件修改」时，暂存区显示的是 **insertions 为主的反向 diff**
     （提交 `+1018/−514` ⇒ 暂存区 `+514/−1018`），看着像正常改动、实为回退。
     **唯一可靠判据 = `--cached` 完全为空**，非空就别把这个工作区交给别人用。
+15. **只要提交「少数几个明确目录」时，别走 `add -A` 全量再剔除**（坑 10 的反例）：
+    直接以 HEAD 为基线建索引，再精确 `git add -- <dir1> <dir2>` —— 省掉几百 MB 的逐文件哈希，
+    也不用枚举剔除集。2026-09-27 实测只提交 `skills_drafts/` 与 `.codex/skills/`（18 文件）：
+
+    ```bash
+    sha256sum .git/index                     # 前提：确认真实暂存区为空（git diff --cached --name-only | wc -l == 0）
+    rm -f .git/alt_index
+    export GIT_INDEX_FILE=.git/alt_index
+    git read-tree HEAD                       # 基线 = HEAD（不是真实索引；两者此时等价）
+    git add -- skills_drafts .codex/skills   # 只吸收目标目录，天然不含 _scratch/.tmp/…
+    git diff --cached --name-only | wc -l    # 自校验：条数应等于预期
+    git commit -F .git/COMMIT_MSG.txt
+    rm -f .git/alt_index .git/COMMIT_MSG.txt
+    unset GIT_INDEX_FILE; git reset -q       # 仍必须做，见坑 6/14
+    ```
+
+    ⚠️ 前提不满足（真实暂存区**有**别会话精心 staged 的内容）时，仍必须回到
+    `cp .git/index .git/alt_index` 的基线复制法，别用 `read-tree HEAD` 把别人的暂存内容丢掉。
