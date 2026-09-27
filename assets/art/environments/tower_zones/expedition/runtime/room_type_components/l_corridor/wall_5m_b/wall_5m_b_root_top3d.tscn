@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B
+; 房型组件 l_corridor / v012 / wall_5m_b
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_b/wall_5m_b_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(0.39, 1.35, 5)
+
+[node name="RoomTypeComponentWall5MB" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B"
+metadata/asset_version = "v012"
+metadata/room_type = "L_CORRIDOR"
+metadata/component_slug = "wall_5m_b"
+metadata/display_name_zh = "wall_5m_b"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/wall_5m_b/wall_5m_b.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.39, 1.35, 5)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 0.675, 0)
+shape = SubResource("BoxShape3D_proxy")

@@ -1,0 +1,449 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "source_library": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v012",
+  "regular_max_variants_per_family": 3,
+  "hard_max_variants_per_family": 5,
+  "component_budget": {
+    "limit": 50,
+    "planned": 22,
+    "remaining": 28
+  },
+  "sim_tol_m": 0.1,
+  "package_count": 27,
+  "component_count": 22,
+  "families": [
+    {
+      "family": "hanging_cable",
+      "variants_before": 5,
+      "variant_limit": 5,
+      "variant_contract_complete": true,
+      "variants_after": 5,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+          "slug": "hanging_cable_c",
+          "bounds_size_m": [
+            0.764,
+            0.73,
+            4.18
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "long_b",
+          "variant_reason": "吊缆轮廓状态C",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
+          "slug": "hanging_cable_b",
+          "bounds_size_m": [
+            0.784,
+            0.735,
+            3.15
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "short_a",
+          "variant_reason": "吊缆轮廓状态B",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+          "slug": "hanging_cable_a",
+          "bounds_size_m": [
+            0.785,
+            0.815,
+            3.75
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "long_a",
+          "variant_reason": "吊缆轮廓状态A",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D",
+          "slug": "hanging_cable_d",
+          "bounds_size_m": [
+            0.795,
+            0.93,
+            3.33
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "short_b",
+          "variant_reason": "吊缆轮廓状态D",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+          "slug": "hanging_cable_e",
+          "bounds_size_m": [
+            1.1,
+            1.58,
+            2.399
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "turn",
+          "variant_reason": "转角吊缆轮廓状态",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_5m",
+      "variants_before": 4,
+      "variant_limit": 5,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+          "slug": "wall_5m_b",
+          "bounds_size_m": [
+            0.39,
+            5.0,
+            1.35
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "cutaway_low",
+          "variant_reason": "源为展示剖切低墙，业主裁定保留为1.35m独立结构状态",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+          "slug": "wall_5m_a",
+          "bounds_size_m": [
+            5.0,
+            0.511,
+            11.9
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "standard_a",
+          "variant_reason": "全高5m结构墙状态A",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+            "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "floor_tile_5m",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+          "slug": "floor_tile_5m_a",
+          "bounds_size_m": [
+            5.0,
+            5.0,
+            0.397
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": "service_edge",
+          "variant_reason": "地砖附属结构轮廓不同，保留为可复用结构状态",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+            "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "high_pipe",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+          "slug": "high_pipe_a",
+          "bounds_size_m": [
+            0.415,
+            4.76,
+            0.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+          "slug": "high_pipe_b",
+          "bounds_size_m": [
+            4.76,
+            0.415,
+            0.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": [
+            "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "access_console",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+          "slug": "access_console_a",
+          "bounds_size_m": [
+            0.7,
+            0.768,
+            1.99
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+          "slug": "access_console_b",
+          "bounds_size_m": [
+            1.073,
+            1.1,
+            2.265
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "cutaway_reference",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
+          "slug": "cutaway_reference_b",
+          "bounds_size_m": [
+            0.3,
+            25.0,
+            11.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
+          "slug": "cutaway_reference_a",
+          "bounds_size_m": [
+            30.0,
+            0.3,
+            11.9
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "service_cart",
+      "variants_before": 2,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+          "slug": "service_cart_b",
+          "bounds_size_m": [
+            1.183,
+            1.57,
+            1.69
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+          "slug": "service_cart_a",
+          "bounds_size_m": [
+            1.57,
+            1.183,
+            1.69
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "crate",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+          "slug": "crate",
+          "bounds_size_m": [
+            1.21,
+            0.927,
+            1.02
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "pipe_riser",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+          "slug": "pipe_riser",
+          "bounds_size_m": [
+            0.435,
+            0.16,
+            3.65
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "planter",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+          "slug": "planter",
+          "bounds_size_m": [
+            1.032,
+            1.059,
+            1.669
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "server_gallery",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+          "slug": "server_gallery",
+          "bounds_size_m": [
+            9.82,
+            0.4,
+            2.675
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "server_rack",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+          "slug": "server_rack",
+          "bounds_size_m": [
+            1.035,
+            0.985,
+            3.185
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "wall_label",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+          "slug": "wall_label",
+          "bounds_size_m": [
+            0.63,
+            0.068,
+            0.51
+          ],
+          "variant_axis": "",
+          "variant_value": "",
+          "variant_reason": "",
+          "absorbed": []
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "naming_violation_count": 0,
+    "front_axis_non_enum_count": 0,
+    "rotation_locked_count": 0,
+    "variant_contract_missing_families": [],
+    "absolute_over_limit_families": [],
+    "component_budget_over": false
+  }
+}

@@ -1,0 +1,2080 @@
+{
+  "schema": "shellstorm2.battle.component_instances",
+  "schema_version": 1,
+  "library": "v012",
+  "room_type": "L_CORRIDOR",
+  "source_library": "old_lib",
+  "source_blend_sha256": "a5e608b6f45424a9a329607f3fc941b991635cdbc8d1a5c819d3c114fd695a0d",
+  "instances": [
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "component_slug": "access_console_a",
+      "position_m": [
+        3.0,
+        13.646,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "component_slug": "access_console_b",
+      "position_m": [
+        27.12,
+        13.5738,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "component_slug": "access_console_b",
+      "position_m": [
+        43.1238,
+        -14.92,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "component_slug": "crate",
+      "position_m": [
+        1.9,
+        13.6913,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "component_slug": "crate",
+      "position_m": [
+        20.2,
+        13.7413,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "component_slug": "crate",
+      "position_m": [
+        43.2,
+        -23.0087,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
+      "component_slug": "cutaway_reference_a",
+      "position_m": [
+        15.0,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
+      "component_slug": "cutaway_reference_b",
+      "position_m": [
+        30.0,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "component_slug": "hanging_cable_a",
+      "position_m": [
+        29.4524,
+        14.3127,
+        3.435
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
+      "component_slug": "hanging_cable_b",
+      "position_m": [
+        33.3478,
+        14.3526,
+        4.035
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "component_slug": "hanging_cable_c",
+      "position_m": [
+        44.368,
+        -8.975,
+        2.985
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D",
+      "component_slug": "hanging_cable_d",
+      "position_m": [
+        44.3527,
+        -17.275,
+        3.835
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+      "component_slug": "hanging_cable_e",
+      "position_m": [
+        44.21,
+        13.95,
+        4.785
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        -22.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        -17.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        -12.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        -7.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        -2.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        2.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_05"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        7.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "component_slug": "high_pipe_a",
+      "position_m": [
+        44.6925,
+        12.5,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "component_slug": "high_pipe_b",
+      "position_m": [
+        2.5,
+        14.6925,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "component_slug": "high_pipe_c",
+      "position_m": [
+        7.5,
+        14.68,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "component_slug": "high_pipe_b",
+      "position_m": [
+        12.5,
+        14.6925,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "component_slug": "high_pipe_c",
+      "position_m": [
+        17.5,
+        14.68,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "component_slug": "high_pipe_b",
+      "position_m": [
+        22.5,
+        14.6925,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "component_slug": "high_pipe_c",
+      "position_m": [
+        27.5,
+        14.68,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_05"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "component_slug": "high_pipe_b",
+      "position_m": [
+        32.5,
+        14.6925,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "component_slug": "high_pipe_c",
+      "position_m": [
+        37.5,
+        14.68,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "component_slug": "high_pipe_b",
+      "position_m": [
+        42.5,
+        14.6925,
+        6.62
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "component_slug": "pipe_riser",
+      "position_m": [
+        2.5275,
+        14.62,
+        0.325
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "component_slug": "pipe_riser",
+      "position_m": [
+        10.2275,
+        14.62,
+        0.325
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "component_slug": "pipe_riser",
+      "position_m": [
+        16.0275,
+        14.62,
+        0.325
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "component_slug": "pipe_riser",
+      "position_m": [
+        29.7275,
+        14.62,
+        0.325
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "component_slug": "pipe_riser",
+      "position_m": [
+        34.4275,
+        14.62,
+        0.325
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "component_slug": "pipe_riser",
+      "position_m": [
+        42.3275,
+        14.62,
+        0.325
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_05"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "component_slug": "planter",
+      "position_m": [
+        5.4132,
+        13.8,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "component_slug": "planter",
+      "position_m": [
+        33.2132,
+        13.8,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "component_slug": "planter",
+      "position_m": [
+        31.2632,
+        -22.8,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        12.8,
+        13.7675,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        14.0,
+        13.7675,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        43.5,
+        -22.0325,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        43.5,
+        -18.0325,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        31.2,
+        -14.0325,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "component_slug": "server_gallery",
+      "position_m": [
+        23.0,
+        14.565,
+        0.9625
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "component_slug": "service_cart_a",
+      "position_m": [
+        32.0,
+        13.2688,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "component_slug": "service_cart_b",
+      "position_m": [
+        43.2312,
+        -10.2,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        32.5,
+        -22.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        37.5,
+        -22.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        42.5,
+        -22.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        32.5,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        37.5,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        42.5,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        32.5,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        37.5,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        42.5,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        32.5,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        37.5,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        42.5,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        32.5,
+        -2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        37.5,
+        -2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        42.5,
+        -2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        2.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        7.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        17.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        22.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        27.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C05"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        32.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        37.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        42.5,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        7.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        17.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        22.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        27.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        32.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        37.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        42.5,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        2.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        7.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        17.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        22.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        27.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C05"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        32.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        37.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C07"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        42.5,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C08"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "component_slug": "wall_label",
+      "position_m": [
+        31.0,
+        14.4462,
+        2.295
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_SOUTH",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "component_slug": "wall_label",
+      "position_m": [
+        44.4,
+        -12.0137,
+        2.295
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_SOUTH"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        2.5,
+        -0.045,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        2.5,
+        14.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        7.5,
+        -0.045,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        12.5,
+        -0.045,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        12.5,
+        14.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        17.5,
+        -0.045,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        17.5,
+        14.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        22.5,
+        -0.045,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        22.5,
+        14.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        27.5,
+        -0.045,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        27.5,
+        14.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        32.5,
+        14.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        32.5,
+        -25.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        42.5,
+        -25.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        42.5,
+        14.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        29.955,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "component_slug": "wall_5m_c",
+      "position_m": [
+        44.887,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        29.955,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
+      "position_m": [
+        44.887,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        29.955,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "component_slug": "wall_5m_c",
+      "position_m": [
+        44.887,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        29.955,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
+      "position_m": [
+        44.887,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_45"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "component_slug": "wall_5m_b",
+      "position_m": [
+        29.955,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "component_slug": "wall_5m_c",
+      "position_m": [
+        44.887,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_45"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
+      "position_m": [
+        -0.113,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
+      "position_m": [
+        44.887,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_45"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "component_slug": "wall_5m_c",
+      "position_m": [
+        44.887,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
+      "position_m": [
+        -0.113,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_45",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "component_slug": "wall_5m_c",
+      "position_m": [
+        44.887,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_45"
+    }
+  ],
+  "validation": {
+    "source_object_count": 121,
+    "instance_count": 121,
+    "dropped_by_door_slot_sealing": 0,
+    "coverage_ok": true,
+    "rotation_inferred": true,
+    "rotation_stats": {
+      "0": 114,
+      "90": 7
+    }
+  },
+  "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
+  "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）"
+}

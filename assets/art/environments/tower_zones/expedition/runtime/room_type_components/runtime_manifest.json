@@ -1,7 +1,7 @@
 {
   "schema": "shellstorm2.expedition.room_type_component_runtime.v001",
-  "component_count": 133,
-  "catalog_component_count": 145,
+  "component_count": 160,
+  "catalog_component_count": 172,
   "import_script": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd",
   "room_runtime_manifests": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/",
   "assembly_route_scope": "per_room_instance",
@@ -2266,6 +2266,465 @@
       "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/workbench_b/workbench_b_visual_top3d.glb",
       "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_b/workbench_b_root_top3d.tscn",
       "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_packages/workbench_b/workbench_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "access_console_a",
+      "slot_role": "room_type_component",
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "bounds_size_m_godot": [
+        0.7,
+        1.99,
+        0.768
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/access_console_a/access_console_a_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_a/access_console_a_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/access_console_a/access_console_a.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "access_console_b",
+      "slot_role": "room_type_component",
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "bounds_size_m_godot": [
+        1.0725,
+        2.265,
+        1.1
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/access_console_b/access_console_b_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_b/access_console_b_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/access_console_b/access_console_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "crate",
+      "slot_role": "room_type_component",
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "bounds_size_m_godot": [
+        1.21,
+        1.02,
+        0.9275
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/crate/crate_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/crate/crate_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/crate/crate.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "cutaway_reference_a",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        30.0,
+        11.9,
+        0.3
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/cutaway_reference_a/cutaway_reference_a_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/cutaway_reference_a/cutaway_reference_a_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/cutaway_reference_a/cutaway_reference_a.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "cutaway_reference_b",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.3,
+        11.9,
+        25.0
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/cutaway_reference_b/cutaway_reference_b_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/cutaway_reference_b/cutaway_reference_b_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/cutaway_reference_b/cutaway_reference_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "floor_tile_5m_a",
+      "slot_role": "floor_tile",
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "bounds_size_m_godot": [
+        5.0,
+        0.397,
+        5.0
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/floor_tile_5m_a/floor_tile_5m_a_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/floor_tile_5m_a/floor_tile_5m_a_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/floor_tile_5m_a/floor_tile_5m_a.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "floor_tile_5m_b",
+      "slot_role": "floor_tile",
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "bounds_size_m_godot": [
+        5.0,
+        0.397,
+        5.0
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/floor_tile_5m_b/floor_tile_5m_b_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/floor_tile_5m_b/floor_tile_5m_b_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/floor_tile_5m_b/floor_tile_5m_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "floor_tile_5m_c",
+      "slot_role": "floor_tile",
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "bounds_size_m_godot": [
+        5.0,
+        0.397,
+        5.0
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/floor_tile_5m_c/floor_tile_5m_c_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/floor_tile_5m_c/floor_tile_5m_c_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/floor_tile_5m_c/floor_tile_5m_c.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "hanging_cable_a",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.7848,
+        3.75,
+        0.8146
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/hanging_cable_a/hanging_cable_a_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_a/hanging_cable_a_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/hanging_cable_a/hanging_cable_a.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "hanging_cable_b",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.7844,
+        3.15,
+        0.7348
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/hanging_cable_b/hanging_cable_b_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_b/hanging_cable_b_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/hanging_cable_b/hanging_cable_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "hanging_cable_c",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.764,
+        4.18,
+        0.73
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/hanging_cable_c/hanging_cable_c_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_c/hanging_cable_c_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/hanging_cable_c/hanging_cable_c.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "hanging_cable_d",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.7946,
+        3.33,
+        0.93
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/hanging_cable_d/hanging_cable_d_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_d/hanging_cable_d_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/hanging_cable_d/hanging_cable_d.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "hanging_cable_e",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        1.1,
+        2.3987,
+        1.58
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/hanging_cable_e/hanging_cable_e_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_e/hanging_cable_e_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/hanging_cable_e/hanging_cable_e.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "high_pipe_a",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.415,
+        0.9,
+        4.76
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/high_pipe_a/high_pipe_a_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_a/high_pipe_a_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/high_pipe_a/high_pipe_a.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "high_pipe_b",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        4.76,
+        0.9,
+        0.415
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/high_pipe_b/high_pipe_b_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_b/high_pipe_b_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/high_pipe_b/high_pipe_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "high_pipe_c",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        4.76,
+        0.9,
+        0.44
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/high_pipe_c/high_pipe_c_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_c/high_pipe_c_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/high_pipe_c/high_pipe_c.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "pipe_riser",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.435,
+        3.65,
+        0.16
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/pipe_riser/pipe_riser_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/pipe_riser/pipe_riser_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/pipe_riser/pipe_riser.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "planter",
+      "slot_role": "room_type_component",
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "bounds_size_m_godot": [
+        1.0322,
+        1.6685,
+        1.0587
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/planter/planter_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/planter/planter_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/planter/planter.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "server_gallery",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        9.82,
+        2.675,
+        0.4
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/server_gallery/server_gallery_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_gallery/server_gallery_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/server_gallery/server_gallery.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "server_rack",
+      "slot_role": "room_type_component",
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "bounds_size_m_godot": [
+        1.035,
+        3.185,
+        0.985
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/server_rack/server_rack_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_rack/server_rack_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/server_rack/server_rack.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "service_cart_a",
+      "slot_role": "room_type_component",
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "bounds_size_m_godot": [
+        1.57,
+        1.69,
+        1.1825
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/service_cart_a/service_cart_a_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_a/service_cart_a_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/service_cart_a/service_cart_a.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "service_cart_b",
+      "slot_role": "room_type_component",
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "bounds_size_m_godot": [
+        1.1825,
+        1.69,
+        1.57
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/service_cart_b/service_cart_b_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_b/service_cart_b_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/service_cart_b/service_cart_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "wall_5m_a",
+      "slot_role": "solid_wall",
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        0.511
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_a/wall_5m_a_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_a/wall_5m_a_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/wall_5m_a/wall_5m_a.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "wall_5m_b",
+      "slot_role": "solid_wall",
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "bounds_size_m_godot": [
+        0.39,
+        1.35,
+        5.0
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_b/wall_5m_b_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_b/wall_5m_b_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/wall_5m_b/wall_5m_b.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "wall_5m_c",
+      "slot_role": "solid_wall",
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "bounds_size_m_godot": [
+        0.526,
+        11.9,
+        5.0
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_c/wall_5m_c_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/wall_5m_c/wall_5m_c.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "wall_5m_d",
+      "slot_role": "solid_wall",
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "bounds_size_m_godot": [
+        0.526,
+        11.9,
+        5.0
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_5m_d/wall_5m_d_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_d/wall_5m_d_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/wall_5m_d/wall_5m_d.blend"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "room_type": "L_CORRIDOR",
+      "version": "v012",
+      "slug": "wall_label",
+      "slot_role": "room_type_component",
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "bounds_size_m_godot": [
+        0.63,
+        0.51,
+        0.0675
+      ],
+      "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/l_corridor/wall_label/wall_label_visual_top3d.glb",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_label/wall_label_root_top3d.tscn",
+      "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_packages/wall_label/wall_label.blend"
     }
   ]
 }

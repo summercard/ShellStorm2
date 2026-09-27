@@ -153,6 +153,7 @@ const BRIDGE_DARK_UPPER_TILE_ID := "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER"
 # 规则；墙、家具、标识、碎屑等自有结构件一律不动，套件边界不受影响。
 const BOSS_DARK_FLOOR_TILE_PREFIX := "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M"
 const DB_DARK_FLOOR_TILE_PREFIX := "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M"
+const CORRIDOR_DARK_FLOOR_TILE_PREFIX := "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M"
 const BRIDGE_DOOR_VISUAL_WALL_ID := "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
 const GENERIC_SOLID_WALL_ID := "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 const CORNER_L_COMPONENT_ID := "ENV-TOWER-CORNER-L-5M"
@@ -1758,8 +1759,11 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 	for direction in delegated_sides:
 		# 数据库房 v014 没有自有 door_wall，门位由通用壳体独占承接；
 		# 不能把两侧都当成共墙委派而同时隐藏门扇，否则独立验收房间中会没有可见门。
-		var db_room_shell := authored_layout_asset_id.begins_with("ENV-EXPEDITION-L01-DB-")
-		if db_room_shell and door_wall_sides.is_empty():
+		var common_shell_owns_door := (
+			authored_layout_asset_id.begins_with("ENV-EXPEDITION-L01-DB-")
+			or authored_layout_asset_id.begins_with("ENV-EXPEDITION-L01-CORRIDOR-")
+		)
+		if common_shell_owns_door and door_wall_sides.is_empty():
 			continue
 		var delegated_door := get_door_node(direction)
 		if delegated_door == null:
@@ -2069,6 +2073,7 @@ static func _runtime_floor_tile_component_id(
 		source_component_id in [OFFICE_DARK_FLOOR_TILE_ID, BRIDGE_DARK_UPPER_TILE_ID]
 		or source_component_id.begins_with(BOSS_DARK_FLOOR_TILE_PREFIX)
 		or source_component_id.begins_with(DB_DARK_FLOOR_TILE_PREFIX)
+		or source_component_id.begins_with(CORRIDOR_DARK_FLOOR_TILE_PREFIX)
 	)
 	if not replaceable:
 		return source_component_id

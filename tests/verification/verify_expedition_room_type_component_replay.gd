@@ -20,7 +20,7 @@ const MANIFEST_PATH := (
 const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 const LEVEL_ID := "expedition_01"
 const RUN_SEED := 77001199
-const EXPECTED_COMPONENTS := 133
+const EXPECTED_COMPONENTS := 160
 const COMMON_FLOOR_IDS := [
 	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
 	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
@@ -28,6 +28,28 @@ const COMMON_FLOOR_IDS := [
 const BRIDGE_BAD_WALL_ID := "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
 const GENERIC_SOLID_WALL_ID := "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 const TARGETS := {
+	"room_01": {
+		"template_id": "corridor_45x40",
+		"expected_instances": 121,
+		"expected_floor_tiles": 42,
+		"expected_common_floor_tiles": 42,
+		"expected_room_type_components": 49,
+		"expected_solid_walls": 30,
+		"expected_door_walls": 0,
+		"expected_version": "v012",
+		"expected_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
+	},
+	"room_08": {
+		"template_id": "corridor_45x40",
+		"expected_instances": 121,
+		"expected_floor_tiles": 42,
+		"expected_common_floor_tiles": 42,
+		"expected_room_type_components": 49,
+		"expected_solid_walls": 30,
+		"expected_door_walls": 0,
+		"expected_version": "v012",
+		"expected_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
+	},
 	"room_03": {
 		"template_id": "office_60x70",
 		"expected_instances": 106,
@@ -322,7 +344,7 @@ func _check_runtime_wall_contract(room_id: String, room: DungeonRoom3D, art_root
 	_check(bad_bridge_solids == 0, "room_05 不得保留带门洞视觉的普通 WALL_X670")
 	# 数据库房的墙体与门位由通用房间壳体承接，房型组件库不包含 solid_wall；
 	# 其门洞/门扇由后续 RoomDoor3D 合同验收，不能要求房型布局伪造 promoted wall。
-	if room_id in ["room_02", "room_06", "room_10"]:
+	if room_id in ["room_01", "room_02", "room_06", "room_08", "room_10"]:
 		return
 	# 每个有门的房间都至少应有一件实墙按真实门槽提升为门墙。
 	var promoted := room.get_meta("authored_layout_promoted_walls", []) as Array

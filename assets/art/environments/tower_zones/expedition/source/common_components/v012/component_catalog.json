@@ -1,0 +1,1741 @@
+{
+  "schema": "shellstorm2.component_catalog.v001",
+  "component_library": "expedition_l_corridor_components_source_v012.blend",
+  "room_type": "L_CORRIDOR",
+  "block_id": "expedition",
+  "version": "v012",
+  "source_room_type": "assets/art/environments/tower_zones/expedition/source/room_types/l_corridor/v003/L型走廊种类_数据连廊_45x40m_v003.blend",
+  "source_room_type_sha256": "9c323876f7165f656e016049135652a96c83ed0adb45f4f28c49fc50cfb5adae",
+  "source_package_list": "expedition_l_corridor_components_source_v002.blend",
+  "source_catalog_sha256": "a5e608b6f45424a9a329607f3fc941b991635cdbc8d1a5c819d3c114fd695a0d",
+  "runtime_connected": false,
+  "ledger_registration": "pending",
+  "packages": [
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "slug": "access_console_a",
+      "name_zh": "access_console_a",
+      "component_family": "access_console",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "access_console_a_输出包",
+      "editable_collection": "access_console_a_制作源",
+      "bounds_size_m": [
+        0.7,
+        0.768,
+        1.99
+      ],
+      "bounds_lo_m": [
+        -0.35,
+        -0.384,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.35,
+        0.384,
+        1.99
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "slug": "access_console_b",
+      "name_zh": "access_console_b",
+      "component_family": "access_console",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01"
+      ],
+      "absorbed_geometry_exact_count": 2,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "access_console_b_输出包",
+      "editable_collection": "access_console_b_制作源",
+      "bounds_size_m": [
+        1.0725,
+        1.1,
+        2.265
+      ],
+      "bounds_lo_m": [
+        -0.5362,
+        -0.55,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.5363,
+        0.55,
+        2.265
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "slug": "crate",
+      "name_zh": "crate",
+      "component_family": "crate",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 3,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-CRATE_01",
+        "ENV-EXPEDITION-L-CORRIDOR-CRATE_04"
+      ],
+      "absorbed_geometry_exact_count": 3,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "crate_输出包",
+      "editable_collection": "crate_制作源",
+      "bounds_size_m": [
+        1.21,
+        0.9275,
+        1.02
+      ],
+      "bounds_lo_m": [
+        -0.605,
+        -0.4637,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.605,
+        0.4637,
+        1.02
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_00",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
+      "slug": "cutaway_reference_a",
+      "name_zh": "cutaway_reference_a",
+      "component_family": "cutaway_reference",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "cutaway_reference_a_输出包",
+      "editable_collection": "cutaway_reference_a_制作源",
+      "bounds_size_m": [
+        30.0,
+        0.3,
+        11.9
+      ],
+      "bounds_lo_m": [
+        -15.0,
+        -0.15,
+        0.0
+      ],
+      "bounds_hi_m": [
+        15.0,
+        0.15,
+        11.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
+      "slug": "cutaway_reference_b",
+      "name_zh": "cutaway_reference_b",
+      "component_family": "cutaway_reference",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "cutaway_reference_b_输出包",
+      "editable_collection": "cutaway_reference_b_制作源",
+      "bounds_size_m": [
+        0.3,
+        25.0,
+        11.9
+      ],
+      "bounds_lo_m": [
+        -0.15,
+        -12.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.15,
+        12.5,
+        11.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "slug": "floor_tile_5m_a",
+      "name_zh": "floor_tile_5m_a",
+      "component_family": "floor_tile_5m",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 5,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C03",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C07"
+      ],
+      "absorbed_geometry_exact_count": 4,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01",
+          "rotation_deg": 0,
+          "max_delta_m": 3.898
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "service_edge",
+      "variant_reason": "地砖附属结构轮廓不同，保留为可复用结构状态",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "floor_tile_5m_a_输出包",
+      "editable_collection": "floor_tile_5m_a_制作源",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.397
+      ],
+      "bounds_lo_m": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.5,
+        2.5,
+        0.397
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "slug": "floor_tile_5m_b",
+      "name_zh": "floor_tile_5m_b",
+      "component_family": "floor_tile_5m",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 29,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C07",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C02",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C01",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C03",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C07",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C00",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C04",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C05",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C08"
+      ],
+      "absorbed_geometry_exact_count": 6,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C00",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C04",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C05",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C08",
+          "rotation_deg": 0
+        }
+      ],
+      "absorbed_classes": [
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "standard",
+      "variant_reason": "走廊主层标准地砖状态",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "floor_tile_5m_b_输出包",
+      "editable_collection": "floor_tile_5m_b_制作源",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.397
+      ],
+      "bounds_lo_m": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.5,
+        2.5,
+        0.397
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "slug": "floor_tile_5m_c",
+      "name_zh": "floor_tile_5m_c",
+      "component_family": "floor_tile_5m",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C07",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C08",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C05",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C07",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00",
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C04"
+      ],
+      "absorbed_geometry_exact_count": 6,
+      "absorbed_geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01",
+          "rotation_deg": 0,
+          "max_delta_m": 3.898
+        },
+        {
+          "member": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00",
+          "rotation_deg": 0,
+          "max_delta_m": 3.898
+        }
+      ],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [
+        "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "detail_cluster",
+      "variant_reason": "地砖附属细节轮廓不同，保留为可复用结构状态",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "floor_tile_5m_c_输出包",
+      "editable_collection": "floor_tile_5m_c_制作源",
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.397
+      ],
+      "bounds_lo_m": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.5,
+        2.5,
+        0.397
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "slug": "hanging_cable_a",
+      "name_zh": "hanging_cable_a",
+      "component_family": "hanging_cable",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "long_a",
+      "variant_reason": "吊缆轮廓状态A",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "hanging_cable_a_输出包",
+      "editable_collection": "hanging_cable_a_制作源",
+      "bounds_size_m": [
+        0.7848,
+        0.8146,
+        3.75
+      ],
+      "bounds_lo_m": [
+        -0.3924,
+        -0.4073,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.3924,
+        0.4073,
+        3.75
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
+      "slug": "hanging_cable_b",
+      "name_zh": "hanging_cable_b",
+      "component_family": "hanging_cable",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "short_a",
+      "variant_reason": "吊缆轮廓状态B",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "hanging_cable_b_输出包",
+      "editable_collection": "hanging_cable_b_制作源",
+      "bounds_size_m": [
+        0.7844,
+        0.7348,
+        3.15
+      ],
+      "bounds_lo_m": [
+        -0.3922,
+        -0.3674,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.3922,
+        0.3674,
+        3.15
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "slug": "hanging_cable_c",
+      "name_zh": "hanging_cable_c",
+      "component_family": "hanging_cable",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "long_b",
+      "variant_reason": "吊缆轮廓状态C",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "hanging_cable_c_输出包",
+      "editable_collection": "hanging_cable_c_制作源",
+      "bounds_size_m": [
+        0.764,
+        0.73,
+        4.18
+      ],
+      "bounds_lo_m": [
+        -0.382,
+        -0.365,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.382,
+        0.365,
+        4.18
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D",
+      "slug": "hanging_cable_d",
+      "name_zh": "hanging_cable_d",
+      "component_family": "hanging_cable",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "short_b",
+      "variant_reason": "吊缆轮廓状态D",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "hanging_cable_d_输出包",
+      "editable_collection": "hanging_cable_d_制作源",
+      "bounds_size_m": [
+        0.7946,
+        0.93,
+        3.33
+      ],
+      "bounds_lo_m": [
+        -0.3973,
+        -0.465,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.3973,
+        0.465,
+        3.33
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+      "slug": "hanging_cable_e",
+      "name_zh": "hanging_cable_e",
+      "component_family": "hanging_cable",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "turn",
+      "variant_reason": "转角吊缆轮廓状态",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "hanging_cable_e_输出包",
+      "editable_collection": "hanging_cable_e_制作源",
+      "bounds_size_m": [
+        1.1,
+        1.58,
+        2.3987
+      ],
+      "bounds_lo_m": [
+        -0.55,
+        -0.79,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.55,
+        0.79,
+        2.3987
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "slug": "high_pipe_a",
+      "name_zh": "high_pipe_a",
+      "component_family": "high_pipe",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 8,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_01",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_02",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_03",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_04",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_05",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_06",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_07"
+      ],
+      "absorbed_geometry_exact_count": 8,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "high_pipe_a_输出包",
+      "editable_collection": "high_pipe_a_制作源",
+      "bounds_size_m": [
+        0.415,
+        4.76,
+        0.9
+      ],
+      "bounds_lo_m": [
+        -0.2075,
+        -2.38,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.2075,
+        2.38,
+        0.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "slug": "high_pipe_b",
+      "name_zh": "high_pipe_b",
+      "component_family": "high_pipe",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 5,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_02",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_04",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_06",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_08"
+      ],
+      "absorbed_geometry_exact_count": 5,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "high_pipe_b_输出包",
+      "editable_collection": "high_pipe_b_制作源",
+      "bounds_size_m": [
+        4.76,
+        0.415,
+        0.9
+      ],
+      "bounds_lo_m": [
+        -2.38,
+        -0.2075,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.38,
+        0.2075,
+        0.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "slug": "high_pipe_c",
+      "name_zh": "high_pipe_c",
+      "component_family": "high_pipe",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 4,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_03",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_05",
+        "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_07"
+      ],
+      "absorbed_geometry_exact_count": 4,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "high_pipe_c_输出包",
+      "editable_collection": "high_pipe_c_制作源",
+      "bounds_size_m": [
+        4.76,
+        0.44,
+        0.9
+      ],
+      "bounds_lo_m": [
+        -2.38,
+        -0.22,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.38,
+        0.22,
+        0.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "slug": "pipe_riser",
+      "name_zh": "pipe_riser",
+      "component_family": "pipe_riser",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 6,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_01",
+        "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_02",
+        "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_03",
+        "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_04",
+        "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_05"
+      ],
+      "absorbed_geometry_exact_count": 6,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "pipe_riser_输出包",
+      "editable_collection": "pipe_riser_制作源",
+      "bounds_size_m": [
+        0.435,
+        0.16,
+        3.65
+      ],
+      "bounds_lo_m": [
+        -0.2175,
+        -0.08,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.2175,
+        0.08,
+        3.65
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "slug": "planter",
+      "name_zh": "planter",
+      "component_family": "planter",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 3,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-PLANTER_01",
+        "ENV-EXPEDITION-L-CORRIDOR-PLANTER_02"
+      ],
+      "absorbed_geometry_exact_count": 3,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "planter_输出包",
+      "editable_collection": "planter_制作源",
+      "bounds_size_m": [
+        1.0322,
+        1.0587,
+        1.6685
+      ],
+      "bounds_lo_m": [
+        -0.5161,
+        -0.5294,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.5161,
+        0.5294,
+        1.6685
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "slug": "server_gallery",
+      "name_zh": "server_gallery",
+      "component_family": "server_gallery",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "server_gallery_输出包",
+      "editable_collection": "server_gallery_制作源",
+      "bounds_size_m": [
+        9.82,
+        0.4,
+        2.675
+      ],
+      "bounds_lo_m": [
+        -4.91,
+        -0.2,
+        0.0
+      ],
+      "bounds_hi_m": [
+        4.91,
+        0.2,
+        2.675
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "slug": "server_rack",
+      "name_zh": "server_rack",
+      "component_family": "server_rack",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 5,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-SERVER_01",
+        "ENV-EXPEDITION-L-CORRIDOR-SERVER_02",
+        "ENV-EXPEDITION-L-CORRIDOR-SERVER_03",
+        "ENV-EXPEDITION-L-CORRIDOR-SERVER_04"
+      ],
+      "absorbed_geometry_exact_count": 5,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "server_rack_输出包",
+      "editable_collection": "server_rack_制作源",
+      "bounds_size_m": [
+        1.035,
+        0.985,
+        3.185
+      ],
+      "bounds_lo_m": [
+        -0.5175,
+        -0.4925,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.5175,
+        0.4925,
+        3.185
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "slug": "service_cart_a",
+      "name_zh": "service_cart_a",
+      "component_family": "service_cart",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "service_cart_a_输出包",
+      "editable_collection": "service_cart_a_制作源",
+      "bounds_size_m": [
+        1.57,
+        1.1825,
+        1.69
+      ],
+      "bounds_lo_m": [
+        -0.785,
+        -0.5913,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.785,
+        0.5913,
+        1.69
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "slug": "service_cart_b",
+      "name_zh": "service_cart_b",
+      "component_family": "service_cart",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 1,
+      "absorbed_variants": [],
+      "absorbed_geometry_exact_count": 1,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "service_cart_b_输出包",
+      "editable_collection": "service_cart_b_制作源",
+      "bounds_size_m": [
+        1.1825,
+        1.57,
+        1.69
+      ],
+      "bounds_lo_m": [
+        -0.5913,
+        -0.785,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.5913,
+        0.785,
+        1.69
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "slug": "wall_5m_a",
+      "name_zh": "wall_5m_a",
+      "component_family": "wall_5m",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 9,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_REAR",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_REAR",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_REAR",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_REAR",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_REAR"
+      ],
+      "absorbed_geometry_exact_count": 9,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "standard_a",
+      "variant_reason": "全高5m结构墙状态A",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "wall_5m_a_输出包",
+      "editable_collection": "wall_5m_a_制作源",
+      "bounds_size_m": [
+        5.0,
+        0.511,
+        11.9
+      ],
+      "bounds_lo_m": [
+        -2.5,
+        -0.2555,
+        0.0
+      ],
+      "bounds_hi_m": [
+        2.5,
+        0.2555,
+        11.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "slug": "wall_5m_b",
+      "name_zh": "wall_5m_b",
+      "component_family": "wall_5m",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 11,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35"
+      ],
+      "absorbed_geometry_exact_count": 11,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "cutaway_low",
+      "variant_reason": "源为展示剖切低墙，业主裁定保留为1.35m独立结构状态",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "wall_5m_b_输出包",
+      "editable_collection": "wall_5m_b_制作源",
+      "bounds_size_m": [
+        0.39,
+        5.0,
+        1.35
+      ],
+      "bounds_lo_m": [
+        -0.195,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.195,
+        2.5,
+        1.35
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "slug": "wall_5m_c",
+      "name_zh": "wall_5m_c",
+      "component_family": "wall_5m",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 5,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_45",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_45"
+      ],
+      "absorbed_geometry_exact_count": 5,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "standard_b",
+      "variant_reason": "全高5m结构墙状态B",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "wall_5m_c_输出包",
+      "editable_collection": "wall_5m_c_制作源",
+      "bounds_size_m": [
+        0.526,
+        5.0,
+        11.9
+      ],
+      "bounds_lo_m": [
+        -0.263,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.263,
+        2.5,
+        11.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "slug": "wall_5m_d",
+      "name_zh": "wall_5m_d",
+      "component_family": "wall_5m",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 5,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_45",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_45",
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00"
+      ],
+      "absorbed_geometry_exact_count": 5,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "structure_state",
+      "variant_value": "standard_c",
+      "variant_reason": "全高5m结构墙状态C",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "wall_5m_d_输出包",
+      "editable_collection": "wall_5m_d_制作源",
+      "bounds_size_m": [
+        0.526,
+        5.0,
+        11.9
+      ],
+      "bounds_lo_m": [
+        -0.263,
+        -2.5,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.263,
+        2.5,
+        11.9
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45",
+      "source_library": "old_lib"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "slug": "wall_label",
+      "name_zh": "wall_label",
+      "component_family": "wall_label",
+      "room_type": "L_CORRIDOR",
+      "serves_room_types": [
+        "L_CORRIDOR"
+      ],
+      "scope": "room_type_local",
+      "instance_count": 2,
+      "absorbed_variants": [
+        "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_SOUTH"
+      ],
+      "absorbed_geometry_exact_count": 2,
+      "absorbed_geometry_variant": [],
+      "absorbed_geometry_shape_mismatch": [],
+      "absorbed_classes": [],
+      "variant_axis": "",
+      "variant_value": "",
+      "variant_reason": "",
+      "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v012/expedition_l_corridor_components_source_v012.blend",
+      "collection": "wall_label_输出包",
+      "editable_collection": "wall_label_制作源",
+      "bounds_size_m": [
+        0.63,
+        0.0675,
+        0.51
+      ],
+      "bounds_lo_m": [
+        -0.315,
+        -0.0338,
+        0.0
+      ],
+      "bounds_hi_m": [
+        0.315,
+        0.0337,
+        0.51
+      ],
+      "origin_contract": "bottom-center of component bounds",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "self",
+      "palette_uv_layer": "PaletteUV",
+      "material_roles": [
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY",
+      "source_library": "old_lib"
+    }
+  ],
+  "independent_blend_count": 27,
+  "presentation": "separated component packages; isolated scene per component",
+  "component_count": 27,
+  "regrouped_from": "old_lib",
+  "regroup_rule": "族内几何等价类聚类（Z 轴旋转不变，容差 0.005m）+ 同族最多 3 类（skill 02）",
+  "regroup_analysis": "assets/art/environments/tower_zones/expedition/source/common_components/v012/regroup_analysis.json",
+  "walk_plane_shift_z_m": 0.0,
+  "output_mesh_count": 367,
+  "absorbed_geometry_variant_total": 3,
+  "absorbed_geometry_shape_mismatch_total": 23,
+  "door_slot_sealing": {
+    "dropped_members": [],
+    "sealed_members": {},
+    "reason": "02 规范要求房型源不冻结门位、不预切门洞；源里预切的门洞（门垛×2+门楣）与本关实际门位不一致，其净空是无门扇的洞。门垛丢弃、门楣改为整樘实墙，门位改由运行时按门槽车道把实墙提升为门墙。"
+  }
+}

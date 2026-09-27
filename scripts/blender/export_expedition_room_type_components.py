@@ -20,6 +20,7 @@ LIBRARIES = (
     ("bridge_room", "v010"),
     ("boss_room", "v011"),
     ("db_room", "v014"),
+    ("l_corridor", "v012"),
 )
 
 

@@ -17,7 +17,7 @@
     "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/probe_shell_component_catalog.gd 逐件比对。",
     "alias_policy": "专属件不设 alias（只属一个房间种类、只有一条来源链）；alias 只用于通用件的批次号兼容。"
   },
-  "component_count": 145,
+  "component_count": 172,
   "components": [
     {
       "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
@@ -2900,12 +2900,553 @@
       "collision_owner": "self",
       "collision_policy": "safe_box_proxy",
       "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "access_console_a",
+      "category": "access_console_a",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_a/access_console_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.7,
+        1.99,
+        0.768
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "access_console_b",
+      "category": "access_console_b",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_b/access_console_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.0725,
+        2.265,
+        1.1
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "crate",
+      "category": "crate",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/crate/crate_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.21,
+        1.02,
+        0.9275
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "cutaway_reference_a",
+      "category": "cutaway_reference_a",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/cutaway_reference_a/cutaway_reference_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        30.0,
+        11.9,
+        0.3
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "cutaway_reference_b",
+      "category": "cutaway_reference_b",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/cutaway_reference_b/cutaway_reference_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.3,
+        11.9,
+        25.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_a",
+      "category": "floor_tile_5m_a",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/floor_tile_5m_a/floor_tile_5m_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.397,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_b",
+      "category": "floor_tile_5m_b",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/floor_tile_5m_b/floor_tile_5m_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.397,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_c",
+      "category": "floor_tile_5m_c",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/floor_tile_5m_c/floor_tile_5m_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.397,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "hanging_cable_a",
+      "category": "hanging_cable_a",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_a/hanging_cable_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.7848,
+        3.75,
+        0.8146
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "hanging_cable_b",
+      "category": "hanging_cable_b",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_b/hanging_cable_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.7844,
+        3.15,
+        0.7348
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "hanging_cable_c",
+      "category": "hanging_cable_c",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_c/hanging_cable_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.764,
+        4.18,
+        0.73
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "hanging_cable_d",
+      "category": "hanging_cable_d",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_d/hanging_cable_d_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.7946,
+        3.33,
+        0.93
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "hanging_cable_e",
+      "category": "hanging_cable_e",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_e/hanging_cable_e_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.1,
+        2.3987,
+        1.58
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "high_pipe_a",
+      "category": "high_pipe_a",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_a/high_pipe_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.415,
+        0.9,
+        4.76
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "high_pipe_b",
+      "category": "high_pipe_b",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_b/high_pipe_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.76,
+        0.9,
+        0.415
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "high_pipe_c",
+      "category": "high_pipe_c",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_c/high_pipe_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.76,
+        0.9,
+        0.44
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "pipe_riser",
+      "category": "pipe_riser",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/pipe_riser/pipe_riser_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.435,
+        3.65,
+        0.16
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "planter",
+      "category": "planter",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/planter/planter_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.0322,
+        1.6685,
+        1.0587
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_gallery",
+      "category": "server_gallery",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_gallery/server_gallery_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        9.82,
+        2.675,
+        0.4
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack",
+      "category": "server_rack",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_rack/server_rack_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.035,
+        3.185,
+        0.985
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "service_cart_a",
+      "category": "service_cart_a",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_a/service_cart_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.57,
+        1.69,
+        1.1825
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "service_cart_b",
+      "category": "service_cart_b",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_b/service_cart_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.1825,
+        1.69,
+        1.57
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_5m_a",
+      "category": "wall_5m_a",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_a/wall_5m_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        11.9,
+        0.511
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_5m_b",
+      "category": "wall_5m_b",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_b/wall_5m_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.39,
+        1.35,
+        5.0
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_5m_c",
+      "category": "wall_5m_c",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.526,
+        11.9,
+        5.0
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_5m_d",
+      "category": "wall_5m_d",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "solid_wall",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_d/wall_5m_d_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.526,
+        11.9,
+        5.0
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_label",
+      "category": "wall_label",
+      "room_type": "L_CORRIDOR",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_label/wall_label_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.63,
+        0.51,
+        0.0675
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
     }
   ],
   "room_type_sources": [
     "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json",
     "assets/art/environments/tower_zones/expedition/source/common_components/v010/component_catalog.json",
     "assets/art/environments/tower_zones/expedition/source/common_components/v011/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v014/component_catalog.json"
+    "assets/art/environments/tower_zones/expedition/source/common_components/v014/component_catalog.json",
+    "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_catalog.json"
   ]
 }

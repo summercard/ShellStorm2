@@ -65,9 +65,15 @@ ROOM_TYPE_BINDING = {
         "layout_asset_id": "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT",
         "component_prefix": "ENV-EXPEDITION-L01-DB-",
     },
+    "corridor_45x40": {
+        "library_version": "v012",
+        "library_room_type": "L_CORRIDOR",
+        "layout_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
+        "component_prefix": "ENV-EXPEDITION-L01-CORRIDOR-",
+    },
 }
 
-TARGETS = ["room_02", "room_03", "room_05", "room_06", "room_09", "room_10", "boss"]
+TARGETS = ["room_01", "room_02", "room_03", "room_05", "room_06", "room_08", "room_09", "room_10", "boss"]
 EPS = 1e-6
 
 

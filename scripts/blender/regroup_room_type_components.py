@@ -401,30 +401,30 @@ def rebuild_package(rep_pkg_dir: Path, slug: str, out_path: Path) -> None:
     for scene in bpy.data.scenes:
         scene.name = f"Component_{slug}"
 
-    keep_collections = []
-    for collection in list(bpy.data.collections):
-        if collection.name.endswith("_制作源") or collection.name.endswith("_输出包"):
-            keep_collections.append(collection)
-            continue
-        bpy.data.collections.remove(collection)
+    keep_collections = [
+        collection for collection in bpy.data.collections
+        if collection.name.split(".", 1)[0].endswith("_制作源")
+        or collection.name.split(".", 1)[0].endswith("_输出包")
+    ]
 
     scene = bpy.data.scenes[0]
+    # 先把保留集合直接挂回场景，再删旧父集合。Blender 删除父集合时会递归解除其子集合的
+    # 使用关系；若先删父集合，嵌套的制作源/输出包会立刻变成孤儿，随后 purge 清空组件包。
+    for collection in keep_collections:
+        if collection.name not in scene.collection.children:
+            scene.collection.children.link(collection)
+    for collection in list(bpy.data.collections):
+        if collection not in keep_collections:
+            bpy.data.collections.remove(collection)
+
     scaffold = bpy.data.collections.new(f"{EMPTY_COLLECTION_PREFIX}{slug}")
     scene.collection.children.link(scaffold)
     for collection in keep_collections:
-        # 旧库把 `_制作源` / `_输出包` 嵌套在一个「父集合」下，而父集合已被删。
-        # 必须先与所有父集合解绑、再统一挂回场景主集合；否则这两个集合不在任何场景里，
-        # `orphans_purge` 会把它们连同对象一起当孤儿清掉 —— 这正是
-        # 「导出时 expected exactly one output root, got []」的成因。
-        parents = [c for c in bpy.data.collections if collection.name in c.children]
-        parents.append(scene.collection)
-        for parent in parents:
-            if collection.name in parent.children:
-                parent.children.unlink(collection)
         collection.name = (
-            f"{slug}_制作源" if collection.name.endswith("_制作源") else f"{slug}_输出包"
+            f"{slug}_制作源"
+            if collection.name.split(".", 1)[0].endswith("_制作源")
+            else f"{slug}_输出包"
         )
-        scene.collection.children.link(collection)
 
     part_index = 0
     for obj in list(bpy.data.objects):

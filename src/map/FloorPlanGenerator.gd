@@ -49,6 +49,17 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"size_m": Vector2(40.0, 30.0),
 		"door_wall_component_id": "",
 	},
+	"corridor_45x40": {
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
+		"version": "v012",
+		"asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
+		"size_m": Vector2(45.0, 40.0),
+		"door_wall_component_id": "",
+		# 当前 v012 的默认实例清单只对应 l_turn。此阶段房间记录尚未稳定携带
+		# template_variant，因此按设计源锁定的具体房间 key 限定，避免 room_04(u_turn)
+		# 被默认布局冒充；待 03 产出 u_turn overrides 后再扩展。
+		"room_keys": ["room_01", "room_08"],
+	},
 	"boss_50x40": {
 		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
 		"version": "v011",
@@ -1427,6 +1438,10 @@ static func _room_type_layout_for_room(room: Dictionary) -> Dictionary:
 	if not ROOM_TYPE_LAYOUT_SOURCES.has(template_id):
 		return {}
 	var source_spec := ROOM_TYPE_LAYOUT_SOURCES[template_id] as Dictionary
+	var supported_room_keys := source_spec.get("room_keys", []) as Array
+	var room_key := str(room.get("key", ""))
+	if not supported_room_keys.is_empty() and room_key not in supported_room_keys:
+		return {}
 	var want_size := source_spec.get("size_m", Vector2.ZERO) as Vector2
 	var got_size := room.get("size", Vector2.ZERO) as Vector2
 	var room_rotation := float(room.get("rotation_deg", 0.0))
