@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER
-; 房型组件 bridge_room / v007 / near_server
+; 房型组件 bridge_room / v010 / near_server
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_server/near_server_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(1.515, 5.05, 2.68)
 
 [node name="RoomTypeComponentNearServer" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER"
-metadata/asset_version = "v007"
+metadata/asset_version = "v010"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "near_server"
 metadata/display_name_zh = "机房设备 1.51×2.68×5.05m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_server/near_server.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/near_server/near_server.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

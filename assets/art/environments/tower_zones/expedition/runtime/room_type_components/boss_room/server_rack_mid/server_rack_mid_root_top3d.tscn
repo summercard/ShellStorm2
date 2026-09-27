@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-SERVER_RACK_MID
-; 房型组件 boss_room / v008 / server_rack_mid
+; 房型组件 boss_room / v011 / server_rack_mid
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/server_rack_mid/server_rack_mid_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(3.17, 5.88, 2.995)
 
 [node name="RoomTypeComponentServerRackMid" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_MID"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "server_rack_mid"
 metadata/display_name_zh = "服务器机柜（中高）3.17×3.00×5.88m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_mid/server_rack_mid.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/server_rack_mid/server_rack_mid.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

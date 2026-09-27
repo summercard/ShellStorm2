@@ -30,6 +30,47 @@
 （47.31 × 32.30）给内嵌盒会把整个房间封死，故不持有阻挡；若后续美术确认它确实占据
 玩家通路，须**由房间层另行下发分段碰撞盒**，不能改回包络盒。
 
+## `room_instances/` —— 逐具体房间的运行时装配清单
+
+按 `04-battle-room-runtime-assembler` 的「房间输出」要求，**每个具体房间**一份：
+
+```text
+room_instances/<room_id>/
+├─ room_runtime_manifest.json     # 装配清单（含 assembly_route）
+└─ acceptance/
+   ├─ replay_verification_log.txt # 房型重放验收日志
+   ├─ runtime_material_probe.txt  # 运行时逐表面材质探针日志
+   └─ runtime_doors.txt           # 运行时门位探针日志（权威门位）
+```
+
+已登记四房（2026-09-27 导入拼装）：
+
+| room_id | 房型 | 组件库 | 装配分支 | 实例数 | 主层地砖 | 门扇节点 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `f00_room_03` | `office_60x70` | `v009` | `room_type_layout_replay` | 106 | 48（通用 C01/C02） | 2 |
+| `f00_room_05` | `bridge_60x50` | `v010` | `room_type_layout_replay` | 242 | 48（通用 C01/C02） | 2 |
+| `f00_room_09` | `office_60x70` | `v009` | `room_type_layout_replay` | 106 | 48（通用 C01/C02） | 2 |
+| `f00_boss` | `boss_50x40` | `v011` | `room_type_layout_replay` | 210 | 80（通用 C01/C02） | 2 |
+
+> 组件库版本为 2026-09-27 同轮升版后的**当前源**：`office_room` `v006 → v009`、`bridge_room` `v007 → v010`、
+> `boss_room` `v008 → v011`（旧目录保留为提亮前历史源，见设计页 §3.1.1）。运行时路径**不带版本号**，
+> 版本只写在 `source/`、`asset_manifest.json`、PackedScene `metadata/asset_version`、本目录清单与场景账本。
+
+清单里 `assembly_route` 取三分支之一：`room_type_layout_replay`（分支 A0，直接重放房型
+`component_instances.json`）、`blender_layout_replay`（分支 A，具体房间有差异布局）、
+`whitebox_direct_assembly`（分支 B，白盒直装）。本关四房**全部走 A0** —— 具体房间白模与
+房型默认尺寸、门槽与必需设施一致，无 `instance_overrides`。
+
+清单记录：房间编号/种类/白模源/组件源、逐组件稳定 PackedScene 引用与碰撞责任、
+实例数量、房间局部包络、门洞契约与门位、版本哈希（`component_library_source_blend_sha256`）、
+验收日志与关卡调用登记。**门位以运行时探针实测为准**（`probe_runtime_doors.gd`，
+`RUN_SEED=77001199`）：房型源按规范不冻结门位，实跑门位由 `FloorPlanGenerator` 按种子现算
+（设计页 §4.4），静态兜底样例推导的相邻面只作对照（`door_apertures_static_reference`）。
+门位方向口径沿用跨语言红线：`+y` → 南、`−y` → 北。
+
+⚠ 本目录**只放清单与验收证据**，不放过程源、白盒源或整屋 GLB。过程源仍在
+`source/room_instances/<room_id>/v###/`。
+
 ## 壳体 5 类：复用，不在本目录复制
 
 房间壳体的墙 / 门墙 / 门扇 / 地砖 / L 转角**复用既有组件**，本目录不另建副本，

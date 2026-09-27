@@ -23,8 +23,8 @@ const BOSS_LAYOUT_SOURCE_PATH := (
 ## 实例数量、位置、旋转全部读取 component_instances.json，不在 Godot 维护第二套摆位。
 const ROOM_TYPE_LAYOUT_SOURCES := {
 	"office_60x70": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_instances.json",
-		"version": "v006",
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_instances.json",
+		"version": "v009",
 		"asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(30.0, 40.0),
 		# 办公室库里那件 `door_wall`（门洞墙件_可复用）经实测**没有通透门洞**：
@@ -36,15 +36,15 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"door_wall_component_id": "",
 	},
 	"bridge_60x50": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_instances.json",
-		"version": "v007",
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_instances.json",
+		"version": "v010",
 		"asset_id": "ENV-EXPEDITION-L01-BRIDGE-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(30.0, 60.0),
 		"door_wall_component_id": "",
 	},
 	"boss_50x40": {
-		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_instances.json",
-		"version": "v008",
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
+		"version": "v011",
 		"asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(50.0, 40.0),
 		# Boss 房**保留自有墙壁**（owner 裁定）：`wall_solid_5m` + 5 种装甲墙面

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL
-; 房型组件 bridge_room / v007 / bridge_guardrail
+; 房型组件 bridge_room / v010 / bridge_guardrail
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(0.42, 1.87, 30.32)
 
 [node name="RoomTypeComponentBridgeGuardrail" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL"
-metadata/asset_version = "v007"
+metadata/asset_version = "v010"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "bridge_guardrail"
 metadata/display_name_zh = "桥面完整护栏"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_guardrail/bridge_guardrail.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_guardrail/bridge_guardrail.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

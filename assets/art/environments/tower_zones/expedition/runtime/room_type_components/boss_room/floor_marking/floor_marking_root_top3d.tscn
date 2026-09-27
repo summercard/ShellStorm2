@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING
-; 房型组件 boss_room / v008 / floor_marking
+; 房型组件 boss_room / v011 / floor_marking
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/floor_marking/floor_marking_visual_top3d.glb" id="1_visual"]
 
 [node name="RoomTypeComponentFloorMarking" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "floor_marking"
 metadata/display_name_zh = "入口地砖标识 3.70×2.73×0.01m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_marking/floor_marking.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_marking/floor_marking.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

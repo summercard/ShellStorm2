@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK
-; 房型组件 office_room / v006 / floor_zone_mark
+; 房型组件 office_room / v009 / floor_zone_mark
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/floor_zone_mark/floor_zone_mark_visual_top3d.glb" id="1_visual"]
 
 [node name="RoomTypeComponentFloorZoneMark" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK"
-metadata/asset_version = "v006"
+metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "floor_zone_mark"
 metadata/display_name_zh = "地面分区标识"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_zone_mark/floor_zone_mark.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/floor_zone_mark/floor_zone_mark.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Y"
 metadata/up_axis = "+Y"

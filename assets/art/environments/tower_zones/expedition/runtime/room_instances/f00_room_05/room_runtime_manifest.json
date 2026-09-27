@@ -1,0 +1,606 @@
+{
+ "schema": "shellstorm2.expedition.room_runtime_manifest.v001",
+ "room_id": "f00_room_05",
+ "room_key": "room_05",
+ "room_type": "COMMON_ROOM",
+ "room_role": "main",
+ "content_type": "COMBAT",
+ "assembly_route": "room_type_layout_replay",
+ "assembly_route_note": "分支 A0：具体房间白模与房型默认尺寸、门槽与必需设施一致，且 03 的 room_layout 只声明 base_layout（无 instance_overrides）⇒ 直接重放房型 component_instances.json，不做 Godot 侧第二套手工摆位。",
+ "level": {
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "floor_index": 0,
+  "grid_unit_m": 5.0,
+  "wall_thickness_m": 0.3,
+  "visible_wall_height_m": 11.9,
+  "generator": "res://src/map/FloorPlanGenerator.gd::generate_expedition",
+  "geometry_is_generated_at_runtime": true
+ },
+ "sources": {
+  "whitebox_level_plan": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
+  "whitebox_floor_plan": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
+  "room_template": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/room_templates/bridge_60x50.json",
+  "template_id": "bridge_60x50",
+  "template_variant": "",
+  "component_instances": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_instances.json",
+  "component_library_version": "v010",
+  "component_library_room_type": "BRIDGE_ROOM",
+  "component_library_source_blend_sha256": "89e46e4e6f4a988e35cddead0befe25909c5cec9eb01c86682632c0da8285ce7",
+  "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
+  "runtime_component_manifest": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/runtime_manifest.json",
+  "component_export_manifest": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/export_manifest.json",
+  "component_export_manifest_note": "98 条逐组件 GLB 与 source_sha256/glb_sha256（运行时不加载裸 GLB）"
+ },
+ "godot_references": {
+  "layout_asset_id": "ENV-EXPEDITION-L01-BRIDGE-ROOM-TYPE-LAYOUT",
+  "component_catalog": "res://assets/art/environments/tower_zones/battle/runtime/shell_component_catalog.json",
+  "scene": "res://scenes/ExpeditionLevel01_3D.tscn",
+  "room_node_path": "Blocks/Expedition/room_05",
+  "art_root_node": "AuthoredLayoutArtRoot",
+  "component_resolution": {
+   "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bank_crate/bank_crate_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bank_crate/bank_crate_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/bank_crate/bank_crate.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.6,
+     1.555,
+     1.675
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_girder/bridge_girder_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_girder/bridge_girder_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_girder/bridge_girder.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     0.62,
+     1.1,
+     30.0
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_guardrail/bridge_guardrail.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     0.42,
+     1.87,
+     30.32
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_service_transom/bridge_service_transom_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bridge_service_transom/bridge_service_transom_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/bridge_service_transom/bridge_service_transom.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     10.0,
+     0.36,
+     0.32
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-COOLANT": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/coolant/coolant_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/coolant/coolant_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/coolant/coolant.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     0.94,
+     2.47,
+     5.36
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/cross_gantry/cross_gantry_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/cross_gantry/cross_gantry_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/cross_gantry/cross_gantry.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     8.73,
+     7.705,
+     1.97
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/deep_cables/deep_cables_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/deep_cables/deep_cables_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/deep_cables/deep_cables.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     2.298,
+     7.773,
+     4.138
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/deep_trunk/deep_trunk_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/deep_trunk/deep_trunk_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/deep_trunk/deep_trunk.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     1.79,
+     0.7,
+     28.0
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-END_CRATE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_crate/end_crate_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/end_crate/end_crate_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/end_crate/end_crate.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     2.15,
+     1.555,
+     1.675
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-END_POWER": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_power/end_power_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/end_power/end_power_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/end_power/end_power.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     2.78,
+     5.258,
+     1.535
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/half_partition/half_partition_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/half_partition/half_partition_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/half_partition/half_partition.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     8.8,
+     2.19,
+     0.6
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/header_cables/header_cables_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/header_cables/header_cables_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/header_cables/header_cables.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     0.8,
+     4.393,
+     6.553
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/longitudinal_tie/longitudinal_tie_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/longitudinal_tie/longitudinal_tie_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/longitudinal_tie/longitudinal_tie.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     0.45,
+     0.5,
+     29.0
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z4805": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/low_platform_z4805/low_platform_z4805_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/low_platform_z4805/low_platform_z4805_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/low_platform_z4805/low_platform_z4805.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     6.03,
+     4.805,
+     4.32
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_Z6005": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/low_platform_z6005/low_platform_z6005_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/low_platform_z6005/low_platform_z6005.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     6.03,
+     6.005,
+     4.32
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/lower_control/lower_control_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/lower_control/lower_control_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/lower_control/lower_control.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.33,
+     2.6,
+     1.515
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/mid_gallery/mid_gallery_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/mid_gallery/mid_gallery_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/mid_gallery/mid_gallery.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     2.78,
+     9.205,
+     27.82
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_crate/near_crate_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_crate/near_crate_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/near_crate/near_crate.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     2.612,
+     1.555,
+     1.791
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_server/near_server_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/near_server/near_server_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/near_server/near_server.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.515,
+     5.05,
+     2.68
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/partition_box/partition_box_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/partition_box/partition_box_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/partition_box/partition_box.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.65,
+     1.555,
+     1.675
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-PIT_END": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/pit_end/pit_end_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/pit_end/pit_end_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/pit_end/pit_end.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     5.0,
+     12.0,
+     0.3
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/pit_side/pit_side_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/pit_side/pit_side_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/pit_side/pit_side.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     0.7,
+     12.125,
+     5.0
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/platform_edge/platform_edge_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/platform_edge/platform_edge_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/platform_edge/platform_edge.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     10.015,
+     3.2,
+     0.65
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/shaft_column/shaft_column_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/shaft_column/shaft_column_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/shaft_column/shaft_column.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.8,
+     12.0,
+     1.8
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/tile_lower/tile_lower_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/tile_lower/tile_lower_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/tile_lower/tile_lower.blend",
+    "collision_owner": "none",
+    "collision_policy": "lower_level_visual_only",
+    "bounds_size_m_godot": [
+     5.0,
+     0.407,
+     5.0
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/tile_upper/tile_upper_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/tile_upper/tile_upper_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/tile_upper/tile_upper.blend",
+    "collision_owner": "floor_support",
+    "collision_policy": "external_floor_support",
+    "bounds_size_m_godot": [
+     5.0,
+     0.407,
+     5.0
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/torn_header/torn_header_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/torn_header/torn_header_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/torn_header/torn_header.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     0.08,
+     4.3,
+     4.4
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/underbridge_service_bay/underbridge_service_bay_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/underbridge_service_bay/underbridge_service_bay_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/underbridge_service_bay/underbridge_service_bay.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     0.993,
+     9.4,
+     6.3
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z5450": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/upper_bank_z5450/upper_bank_z5450.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.515,
+     5.45,
+     2.63
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_Z6197": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z6197/upper_bank_z6197_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_bank_z6197/upper_bank_z6197_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/upper_bank_z6197/upper_bank_z6197.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.535,
+     6.197,
+     2.63
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_console/upper_console_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/upper_console/upper_console_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/upper_console/upper_console.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.155,
+     2.485,
+     1.12
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/vertical_service/vertical_service_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/vertical_service/vertical_service_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/vertical_service/vertical_service.blend",
+    "collision_owner": "self",
+    "collision_policy": "safe_box_proxy",
+    "bounds_size_m_godot": [
+     1.65,
+     6.05,
+     2.2
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_service_header/wall_service_header_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_service_header/wall_service_header_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/wall_service_header/wall_service_header.blend",
+    "collision_owner": "none",
+    "collision_policy": "visual_only",
+    "bounds_size_m_godot": [
+     1.6,
+     0.98,
+     28.0
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-WALL_X670": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_x670/wall_x670_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_x670/wall_x670_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/wall_x670/wall_x670.blend",
+    "collision_owner": "self",
+    "collision_policy": "structural_box_proxy",
+    "bounds_size_m_godot": [
+     5.0,
+     11.9,
+     0.67
+    ]
+   },
+   "ENV-EXPEDITION-L01-BRIDGE-WALL_X780": {
+    "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_x780/wall_x780_root_top3d.tscn",
+    "visual_glb": "res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/wall_x780/wall_x780_visual_top3d.glb",
+    "source_blend": "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/wall_x780/wall_x780.blend",
+    "collision_owner": "self",
+    "collision_policy": "structural_box_proxy",
+    "bounds_size_m_godot": [
+     0.78,
+     11.9,
+     5.0
+    ]
+   }
+  }
+ },
+ "assembly": {
+  "authored_layout_shell": true,
+  "instance_total": 242,
+  "instance_total_source": "component_instances.validation.instance_count",
+  "role_counts_planned": {
+   "room_type_component": 158,
+   "solid_wall": 36,
+   "floor_tile": 48
+  },
+  "role_counts_planned_source": "FloorPlanGenerator 规划记录 + 验收日志 plan 行",
+  "runtime_role_counts": {
+   "floor_tile": 48,
+   "room_type_component": 158,
+   "unresolved_instances": 0
+  },
+  "envelope_local": {
+   "coordinate_contract": "godot_local_xz_vertical_y",
+   "min_m": [
+    -15.15,
+    -18.1875,
+    -30.15
+   ],
+   "max_m": [
+    15.15,
+    8.55,
+    30.15
+   ],
+   "size_m": [
+    30.3,
+    26.7375,
+    60.3
+   ],
+   "note": "房间局部坐标下的视觉件包络（含所有 slot_role，不含运行期通用地砖）。"
+  },
+  "door_probe": {
+   "probe_scene": "res://_scratch/palette_shift/probe_runtime_doors.tscn",
+   "probe_script": "res://_scratch/palette_shift/probe_runtime_doors.gd",
+   "run_seed": 77001199,
+   "room_center_world_m": [
+    -10.0,
+    0.0,
+    50.0
+   ],
+   "declared_sides": [
+    "east",
+    "west"
+   ],
+   "log": "acceptance/runtime_doors.txt"
+  },
+  "door_apertures_source": "**运行时探针实测**（probe_runtime_doors.gd，RUN_SEED=77001199）：房型源按规范不冻结门位，实跑门位由 FloorPlanGenerator 按种子现算（设计页 §4.4），故一律以实测为准；静态从兜底样例推导的相邻面只作参考（见 door_apertures_static_reference）。",
+  "door_apertures": [
+   {
+    "side": "east",
+    "side_convention": "平面 +y → 南 / −y → 北（设计页 §4.3 跨语言红线）",
+    "connect_to": "room_04",
+    "aperture_center_local_m": [
+     30.0,
+     0.0,
+     -2.5
+    ],
+    "aperture_center_world_m": [
+     20.0,
+     0.0,
+     47.5
+    ],
+    "local_origin": "房间中心（DungeonRoom3D 原点），Godot 局部 XZ 平面 + Y 竖直",
+    "contract": {
+     "width_m": 2.2,
+     "height_m": 2.5,
+     "clear_floor_gap_m": 0.0,
+     "bottom_z_m": 0.3,
+     "lintel_bottom_z_m": 2.8
+    },
+    "carrier": "RoomDoor3D（门扇视觉与开合动画的唯一拥有者）",
+    "wall_owner": "DungeonRoom3D._build_authored_layout_shell（按本局门槽 lane 把实墙提升为门墙，门洞处不得有几何）"
+   },
+   {
+    "side": "west",
+    "side_convention": "平面 +y → 南 / −y → 北（设计页 §4.3 跨语言红线）",
+    "connect_to": "room_06",
+    "aperture_center_local_m": [
+     -30.0,
+     0.0,
+     -2.5
+    ],
+    "aperture_center_world_m": [
+     -40.0,
+     0.0,
+     47.5
+    ],
+    "local_origin": "房间中心（DungeonRoom3D 原点），Godot 局部 XZ 平面 + Y 竖直",
+    "contract": {
+     "width_m": 2.2,
+     "height_m": 2.5,
+     "clear_floor_gap_m": 0.0,
+     "bottom_z_m": 0.3,
+     "lintel_bottom_z_m": 2.8
+    },
+    "carrier": "RoomDoor3D（门扇视觉与开合动画的唯一拥有者）",
+    "wall_owner": "DungeonRoom3D._build_authored_layout_shell（按本局门槽 lane 把实墙提升为门墙，门洞处不得有几何）"
+   }
+  ],
+  "door_apertures_static_reference": {
+   "note": "floor_00.json 兜底样例 + 主路主拓扑的几何推导结果，仅供对照，**非**实跑门位。",
+   "sides": {
+    "south": "room_04",
+    "north": "room_06"
+   }
+  },
+  "collision_responsibility": {
+   "floor_support": "TowerFloorStage3D（collision_policy=external_floor_support）",
+   "walls_and_props": "逐组件 PackedScene 自带静态碰撞；visual_only 件（门扇/地砖视觉件）无碰撞",
+   "door_passage": "RoomDoor3D（门扇沿 Y 抬升 1.25→4.07 m，门洞处无碰撞）",
+   "runtime_floor_tile_swap": {
+    "policy": "主层地砖一律在运行时换通用棋盘砖",
+    "replacement_ids": [
+     "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+     "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+    ],
+    "expected_count": 48,
+    "pit_bottom_tiles_excluded": true
+   }
+  }
+ },
+ "acceptance": {
+  "verification_scene": "res://tests/verification/verify_expedition_room_type_component_replay.tscn",
+  "result": "ROOM_TYPE_COMPONENT_REPLAY_OK checks=2051",
+  "log": "acceptance/replay_verification_log.txt",
+  "material_probe_log": "acceptance/runtime_material_probe.txt",
+  "runtime_material_probe_sheet": "res://outputs/room_type_runtime_probe_after_import.png",
+  "checks": {
+   "packed_scene_loadable": {
+    "loaded": 98,
+    "instantiated": 98,
+    "palette_materials": 194
+   },
+   "runtime_unresolved_instances": 0,
+   "runtime_door_nodes": 2,
+   "door_aperture_projection_coverage_pct": 0
+  },
+  "level_invocation": "expo01 每局由 ExpeditionLevel01_3D.tscn → TowerDescent3D → FloorPlanGenerator 生成并调用；本房在级别白模中登记为主路房间。"
+ }
+}

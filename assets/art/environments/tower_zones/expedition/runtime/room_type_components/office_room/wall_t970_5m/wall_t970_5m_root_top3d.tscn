@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M
-; 房型组件 office_room / v006 / wall_t970_5m
+; 房型组件 office_room / v009 / wall_t970_5m
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_t970_5m/wall_t970_5m_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(5, 11.9, 0.97)
 
 [node name="RoomTypeComponentWallT9705M" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M"
-metadata/asset_version = "v006"
+metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "wall_t970_5m"
 metadata/display_name_zh = "墙体 5.00×0.97×11.90m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t970_5m/wall_t970_5m.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t970_5m/wall_t970_5m.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Y"
 metadata/up_axis = "+Y"

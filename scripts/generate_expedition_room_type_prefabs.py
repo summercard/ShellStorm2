@@ -5,9 +5,9 @@ from pathlib import Path
 
 
 LIBRARIES = (
-    ("office_room", "v006"),
-    ("bridge_room", "v007"),
-    ("boss_room", "v008"),
+    ("office_room", "v009"),
+    ("bridge_room", "v010"),
+    ("boss_room", "v011"),
 )
 CATALOG_PATH = Path(
     "assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
@@ -361,10 +361,10 @@ def main() -> None:
     if len(ids) != len(set(ids)):
         raise RuntimeError("duplicate component_id after catalog merge")
     runtime_catalog["component_count"] = len(existing) + len(generated)
+    # 来源清单随 LIBRARIES 走，避免版本升版后再出现写死的旧版本号。
     runtime_catalog["room_type_sources"] = [
-        f"{SOURCE_ROOT.as_posix()}/v006/component_catalog.json",
-        f"{SOURCE_ROOT.as_posix()}/v007/component_catalog.json",
-        f"{SOURCE_ROOT.as_posix()}/v008/component_catalog.json",
+        f"{SOURCE_ROOT.as_posix()}/{version}/component_catalog.json"
+        for _room_slug, version in LIBRARIES
     ]
     runtime_catalog["components"] = existing + generated
     write_json_crlf(runtime_catalog_path, runtime_catalog)
@@ -373,6 +373,12 @@ def main() -> None:
         "component_count": len(manifest_records),
         "catalog_component_count": len(existing) + len(generated),
         "import_script": IMPORT_SCRIPT,
+        # 组件库清单是**库级**的，不声明逐房间装配分支；`assembly_route` 属具体房间，
+        # 写在各房间的 runtime/room_instances/<room_id>/room_runtime_manifest.json 里。
+        "room_runtime_manifests": (
+            "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/"
+        ),
+        "assembly_route_scope": "per_room_instance",
         "records": manifest_records,
     }
     write_json_crlf(root / RUNTIME_ROOT / "runtime_manifest.json", manifest)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-WORKSTATION_C
-; 房型组件 boss_room / v008 / workstation_c
+; 房型组件 boss_room / v011 / workstation_c
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/workstation_c/workstation_c_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(4.25, 2.78, 2.055)
 
 [node name="RoomTypeComponentWorkstationC" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-WORKSTATION_C"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "workstation_c"
 metadata/display_name_zh = "工作站（型 C）4.25×2.06×2.78m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_c/workstation_c.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/workstation_c/workstation_c.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B
-; 房型组件 boss_room / v008 / floor_tile_5m_b
+; 房型组件 boss_room / v011 / floor_tile_5m_b
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/floor_tile_5m_b/floor_tile_5m_b_visual_top3d.glb" id="1_visual"]
 
 [node name="RoomTypeComponentFloorTile5MB" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "floor_tile_5m_b"
 metadata/display_name_zh = "地板 5.00×5.00×0.09m（贴花位 B）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_tile_5m_b/floor_tile_5m_b.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/floor_tile_5m_b/floor_tile_5m_b.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Z"
 metadata/up_axis = "+Y"

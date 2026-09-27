@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-DOOR_WALL
-; 房型组件 office_room / v006 / door_wall
+; 房型组件 office_room / v009 / door_wall
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/door_wall/door_wall_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jamb"]
@@ -12,11 +12,11 @@ size = Vector3(5, 9.4, 0.615)
 
 [node name="RoomTypeComponentDoorWall" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
-metadata/asset_version = "v006"
+metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "door_wall"
 metadata/display_name_zh = "门洞墙件"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/door_wall/door_wall.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/door_wall/door_wall.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

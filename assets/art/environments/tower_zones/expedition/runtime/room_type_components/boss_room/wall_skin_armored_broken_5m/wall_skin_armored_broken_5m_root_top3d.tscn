@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M
-; 房型组件 boss_room / v008 / wall_skin_armored_broken_5m
+; 房型组件 boss_room / v011 / wall_skin_armored_broken_5m
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(0.36, 11.8, 4.925)
 
 [node name="RoomTypeComponentWallSkinArmoredBroken5M" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "wall_skin_armored_broken_5m"
 metadata/display_name_zh = "装甲墙面 0.36m（厚型破损）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-X"
 metadata/up_axis = "+Y"

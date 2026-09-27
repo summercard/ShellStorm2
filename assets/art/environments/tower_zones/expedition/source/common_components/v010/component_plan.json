@@ -1,0 +1,884 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "source_library": "ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v005",
+  "max_variants_per_family": 3,
+  "sim_tol_m": 0.1,
+  "package_count": 242,
+  "component_count": 35,
+  "families": [
+    {
+      "family": "tile_upper",
+      "variants_before": 48,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER_-1_-1",
+          "slug": "tile_upper_-1_-1",
+          "bounds_size_m": [
+            5.0,
+            5.0,
+            0.407
+          ],
+          "absorbed": [
+            "tile_upper_-1_-3",
+            "tile_upper_-1_-4",
+            "tile_upper_-1_-6",
+            "tile_upper_-1_0",
+            "tile_upper_-1_2",
+            "tile_upper_-1_3",
+            "tile_upper_-1_5",
+            "tile_upper_-2_-5",
+            "tile_upper_-2_-6",
+            "tile_upper_-2_3",
+            "tile_upper_-2_4",
+            "tile_upper_-3_-4",
+            "tile_upper_-3_-5",
+            "tile_upper_-3_4",
+            "tile_upper_-3_5",
+            "tile_upper_0_-1",
+            "tile_upper_0_-2",
+            "tile_upper_0_-4",
+            "tile_upper_0_-5",
+            "tile_upper_0_1",
+            "tile_upper_0_2",
+            "tile_upper_0_4",
+            "tile_upper_0_5",
+            "tile_upper_1_-5",
+            "tile_upper_1_-6",
+            "tile_upper_1_3",
+            "tile_upper_1_4",
+            "tile_upper_2_-4",
+            "tile_upper_2_-6",
+            "tile_upper_2_3",
+            "tile_upper_2_5",
+            "tile_upper_-1_-2",
+            "tile_upper_-1_-5",
+            "tile_upper_-1_1",
+            "tile_upper_-1_4",
+            "tile_upper_-2_-4",
+            "tile_upper_-2_5",
+            "tile_upper_-3_-6",
+            "tile_upper_-3_3",
+            "tile_upper_0_-3",
+            "tile_upper_0_-6",
+            "tile_upper_0_0",
+            "tile_upper_0_3",
+            "tile_upper_1_-4",
+            "tile_upper_2_-5",
+            "tile_upper_2_4",
+            "tile_upper_1_5"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "wall",
+      "variants_before": 36,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_NORTH_-1",
+          "slug": "wall_north_-1",
+          "bounds_size_m": [
+            5.0,
+            0.67,
+            11.9
+          ],
+          "absorbed": [
+            "wall_east_-1",
+            "wall_east_-3",
+            "wall_east_-5",
+            "wall_east_1",
+            "wall_east_3",
+            "wall_east_5",
+            "wall_north_-3",
+            "wall_north_1",
+            "wall_south_-1",
+            "wall_south_-3",
+            "wall_south_1",
+            "wall_west_-1",
+            "wall_west_-3",
+            "wall_west_-5",
+            "wall_west_1",
+            "wall_west_3",
+            "wall_west_5"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_EAST_-2",
+          "slug": "wall_east_-2",
+          "bounds_size_m": [
+            0.78,
+            5.0,
+            11.9
+          ],
+          "absorbed": [
+            "wall_east_-4",
+            "wall_east_-6",
+            "wall_east_0",
+            "wall_east_2",
+            "wall_east_4",
+            "wall_north_-2",
+            "wall_north_0",
+            "wall_north_2",
+            "wall_south_-2",
+            "wall_south_0",
+            "wall_south_2",
+            "wall_west_-2",
+            "wall_west_-4",
+            "wall_west_-6",
+            "wall_west_0",
+            "wall_west_2",
+            "wall_west_4"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "tile_lower",
+      "variants_before": 36,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER_-1_-1",
+          "slug": "tile_lower_-1_-1",
+          "bounds_size_m": [
+            5.0,
+            5.0,
+            0.407
+          ],
+          "absorbed": [
+            "tile_lower_-1_-3",
+            "tile_lower_-1_0",
+            "tile_lower_-1_2",
+            "tile_lower_-2_-2",
+            "tile_lower_-2_-3",
+            "tile_lower_-2_0",
+            "tile_lower_-2_1",
+            "tile_lower_-3_-1",
+            "tile_lower_-3_-2",
+            "tile_lower_-3_1",
+            "tile_lower_-3_2",
+            "tile_lower_0_-1",
+            "tile_lower_0_-2",
+            "tile_lower_0_1",
+            "tile_lower_0_2",
+            "tile_lower_1_-2",
+            "tile_lower_1_-3",
+            "tile_lower_1_0",
+            "tile_lower_1_1",
+            "tile_lower_2_-1",
+            "tile_lower_2_-3",
+            "tile_lower_2_0",
+            "tile_lower_2_2",
+            "tile_lower_-1_-2",
+            "tile_lower_-1_1",
+            "tile_lower_-2_-1",
+            "tile_lower_-2_2",
+            "tile_lower_-3_-3",
+            "tile_lower_-3_0",
+            "tile_lower_0_-3",
+            "tile_lower_0_0",
+            "tile_lower_1_-1",
+            "tile_lower_1_2",
+            "tile_lower_2_-2",
+            "tile_lower_2_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "pit_side",
+      "variants_before": 12,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE_-1_-1",
+          "slug": "pit_side_-1_-1",
+          "bounds_size_m": [
+            0.7,
+            5.0,
+            12.125
+          ],
+          "absorbed": [
+            "pit_side_-1_-2",
+            "pit_side_-1_-3",
+            "pit_side_-1_0",
+            "pit_side_-1_1",
+            "pit_side_-1_2",
+            "pit_side_1_-1",
+            "pit_side_1_-2",
+            "pit_side_1_-3",
+            "pit_side_1_0",
+            "pit_side_1_1",
+            "pit_side_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "pit_end",
+      "variants_before": 8,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-PIT_END_-12.5_-15",
+          "slug": "pit_end_-12.5_-15",
+          "bounds_size_m": [
+            5.0,
+            0.3,
+            12.0
+          ],
+          "absorbed": [
+            "pit_end_-12.5_15",
+            "pit_end_-7.5_-15",
+            "pit_end_-7.5_15",
+            "pit_end_12.5_-15",
+            "pit_end_12.5_15",
+            "pit_end_7.5_-15",
+            "pit_end_7.5_15"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "shaft_column",
+      "variants_before": 8,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-SHAFT_COLUMN_-1_-14",
+          "slug": "shaft_column_-1_-14",
+          "bounds_size_m": [
+            1.8,
+            1.8,
+            12.0
+          ],
+          "absorbed": [
+            "shaft_column_-1_-5",
+            "shaft_column_-1_14",
+            "shaft_column_-1_5",
+            "shaft_column_1_-14",
+            "shaft_column_1_-5",
+            "shaft_column_1_14",
+            "shaft_column_1_5"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "lower_control",
+      "variants_before": 6,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOWER_CONTROL_-1_0",
+          "slug": "lower_control_-1_0",
+          "bounds_size_m": [
+            1.33,
+            1.515,
+            2.6
+          ],
+          "absorbed": [
+            "lower_control_-1_1",
+            "lower_control_-1_2",
+            "lower_control_1_0",
+            "lower_control_1_1",
+            "lower_control_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "underbridge_service_bay",
+      "variants_before": 6,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-UNDERBRIDGE_SERVICE_BAY_-1_0",
+          "slug": "underbridge_service_bay_-1_0",
+          "bounds_size_m": [
+            0.993,
+            6.3,
+            9.4
+          ],
+          "absorbed": [
+            "underbridge_service_bay_-1_1",
+            "underbridge_service_bay_-1_2",
+            "underbridge_service_bay_1_0",
+            "underbridge_service_bay_1_1",
+            "underbridge_service_bay_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "upper_bank",
+      "variants_before": 6,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_1",
+          "slug": "upper_bank_-1_1",
+          "bounds_size_m": [
+            1.515,
+            2.63,
+            5.45
+          ],
+          "absorbed": [
+            "upper_bank_-1_2",
+            "upper_bank_1_1",
+            "upper_bank_1_2"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_BANK_-1_0",
+          "slug": "upper_bank_-1_0",
+          "bounds_size_m": [
+            1.535,
+            2.63,
+            6.197
+          ],
+          "absorbed": [
+            "upper_bank_1_0"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "vertical_service",
+      "variants_before": 6,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-VERTICAL_SERVICE_-1_-10",
+          "slug": "vertical_service_-1_-10",
+          "bounds_size_m": [
+            1.65,
+            2.2,
+            6.05
+          ],
+          "absorbed": [
+            "vertical_service_-1_0",
+            "vertical_service_-1_10",
+            "vertical_service_1_-10",
+            "vertical_service_1_0",
+            "vertical_service_1_10"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "coolant",
+      "variants_before": 6,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-COOLANT_-1_0",
+          "slug": "coolant_-1_0",
+          "bounds_size_m": [
+            0.94,
+            5.36,
+            2.47
+          ],
+          "absorbed": [
+            "coolant_-1_1",
+            "coolant_-1_2",
+            "coolant_1_0",
+            "coolant_1_1",
+            "coolant_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "deep_cables",
+      "variants_before": 6,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES_-1_0",
+          "slug": "deep_cables_-1_0",
+          "bounds_size_m": [
+            2.298,
+            4.138,
+            7.773
+          ],
+          "absorbed": [
+            "deep_cables_-1_1",
+            "deep_cables_-1_2",
+            "deep_cables_1_0",
+            "deep_cables_1_1",
+            "deep_cables_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "header_cables",
+      "variants_before": 6,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-HEADER_CABLES_-1_0",
+          "slug": "header_cables_-1_0",
+          "bounds_size_m": [
+            0.8,
+            6.553,
+            4.393
+          ],
+          "absorbed": [
+            "header_cables_-1_1",
+            "header_cables_-1_2",
+            "header_cables_1_0",
+            "header_cables_1_1",
+            "header_cables_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "low_platform",
+      "variants_before": 6,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_-1_1",
+          "slug": "low_platform_-1_1",
+          "bounds_size_m": [
+            6.03,
+            4.32,
+            4.805
+          ],
+          "absorbed": [
+            "low_platform_1_1"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-LOW_PLATFORM_-1_0",
+          "slug": "low_platform_-1_0",
+          "bounds_size_m": [
+            6.03,
+            4.32,
+            6.005
+          ],
+          "absorbed": [
+            "low_platform_-1_2",
+            "low_platform_1_0",
+            "low_platform_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "torn_header",
+      "variants_before": 6,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-TORN_HEADER_-1_0",
+          "slug": "torn_header_-1_0",
+          "bounds_size_m": [
+            0.08,
+            4.4,
+            4.3
+          ],
+          "absorbed": [
+            "torn_header_-1_1",
+            "torn_header_-1_2",
+            "torn_header_1_0",
+            "torn_header_1_1",
+            "torn_header_1_2"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "longitudinal_tie",
+      "variants_before": 4,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-LONGITUDINAL_TIE_-1_-4.8",
+          "slug": "longitudinal_tie_-1_-4.8",
+          "bounds_size_m": [
+            0.45,
+            29.0,
+            0.5
+          ],
+          "absorbed": [
+            "longitudinal_tie_-1_-9.6",
+            "longitudinal_tie_1_-4.8",
+            "longitudinal_tie_1_-9.6"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "platform_edge",
+      "variants_before": 4,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-PLATFORM_EDGE_-1_-15",
+          "slug": "platform_edge_-1_-15",
+          "bounds_size_m": [
+            10.015,
+            0.65,
+            3.2
+          ],
+          "absorbed": [
+            "platform_edge_-1_15",
+            "platform_edge_1_-15",
+            "platform_edge_1_15"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "bank_crate",
+      "variants_before": 4,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE_-1_0",
+          "slug": "bank_crate_-1_0",
+          "bounds_size_m": [
+            1.6,
+            1.675,
+            1.555
+          ],
+          "absorbed": [
+            "bank_crate_-1_1",
+            "bank_crate_1_0",
+            "bank_crate_1_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "bridge_girder",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GIRDER_-1",
+          "slug": "bridge_girder_-1",
+          "bounds_size_m": [
+            0.62,
+            30.0,
+            1.1
+          ],
+          "absorbed": [
+            "bridge_girder_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "bridge_guardrail",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL_-1",
+          "slug": "bridge_guardrail_-1",
+          "bounds_size_m": [
+            0.42,
+            30.32,
+            1.87
+          ],
+          "absorbed": [
+            "bridge_guardrail_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "half_partition",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-HALF_PARTITION_-1",
+          "slug": "half_partition_-1",
+          "bounds_size_m": [
+            8.8,
+            0.6,
+            2.19
+          ],
+          "absorbed": [
+            "half_partition_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "end_crate",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_CRATE_-1",
+          "slug": "end_crate_-1",
+          "bounds_size_m": [
+            2.15,
+            1.675,
+            1.555
+          ],
+          "absorbed": [
+            "end_crate_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "end_power",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-END_POWER_-1",
+          "slug": "end_power_-1",
+          "bounds_size_m": [
+            2.78,
+            1.535,
+            5.258
+          ],
+          "absorbed": [
+            "end_power_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "near_crate",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_CRATE_-1",
+          "slug": "near_crate_-1",
+          "bounds_size_m": [
+            2.612,
+            1.791,
+            1.555
+          ],
+          "absorbed": [
+            "near_crate_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "near_server",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-NEAR_SERVER_-1",
+          "slug": "near_server_-1",
+          "bounds_size_m": [
+            1.515,
+            2.68,
+            5.05
+          ],
+          "absorbed": [
+            "near_server_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "partition_box",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-PARTITION_BOX_-1",
+          "slug": "partition_box_-1",
+          "bounds_size_m": [
+            1.65,
+            1.675,
+            1.555
+          ],
+          "absorbed": [
+            "partition_box_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "upper_console",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-UPPER_CONSOLE_-1",
+          "slug": "upper_console_-1",
+          "bounds_size_m": [
+            1.155,
+            1.12,
+            2.485
+          ],
+          "absorbed": [
+            "upper_console_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "bridge_service_transom",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_SERVICE_TRANSOM_-14",
+          "slug": "bridge_service_transom_-14",
+          "bounds_size_m": [
+            10.0,
+            0.32,
+            0.36
+          ],
+          "absorbed": [
+            "bridge_service_transom_14"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "cross_gantry",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-CROSS_GANTRY_-1",
+          "slug": "cross_gantry_-1",
+          "bounds_size_m": [
+            8.73,
+            1.97,
+            7.705
+          ],
+          "absorbed": [
+            "cross_gantry_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "deep_trunk",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-DEEP_TRUNK_-1",
+          "slug": "deep_trunk_-1",
+          "bounds_size_m": [
+            1.79,
+            28.0,
+            0.7
+          ],
+          "absorbed": [
+            "deep_trunk_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "mid_gallery",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-MID_GALLERY_-1",
+          "slug": "mid_gallery_-1",
+          "bounds_size_m": [
+            2.78,
+            27.82,
+            9.205
+          ],
+          "absorbed": [
+            "mid_gallery_1"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "wall_service_header",
+      "variants_before": 2,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-L01-BRIDGE-WALL_SERVICE_HEADER_-1",
+          "slug": "wall_service_header_-1",
+          "bounds_size_m": [
+            1.6,
+            28.0,
+            0.98
+          ],
+          "absorbed": [
+            "wall_service_header_1"
+          ]
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "naming_violation_count": 242,
+    "front_axis_non_enum_count": 242,
+    "rotation_locked_count": 242,
+    "over_limit_families": [
+      "longitudinal_tie",
+      "pit_end",
+      "pit_side",
+      "platform_edge",
+      "shaft_column",
+      "wall",
+      "bank_crate",
+      "lower_control",
+      "underbridge_service_bay",
+      "upper_bank",
+      "vertical_service",
+      "tile_lower",
+      "tile_upper",
+      "coolant",
+      "deep_cables",
+      "header_cables",
+      "low_platform",
+      "torn_header"
+    ]
+  }
+}

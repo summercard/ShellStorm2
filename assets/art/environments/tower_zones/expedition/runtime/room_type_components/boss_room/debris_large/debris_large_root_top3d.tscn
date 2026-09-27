@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-DEBRIS_LARGE
-; 房型组件 boss_room / v008 / debris_large
+; 房型组件 boss_room / v011 / debris_large
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/debris_large/debris_large_visual_top3d.glb" id="1_visual"]
 
 [node name="RoomTypeComponentDebrisLarge" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-DEBRIS_LARGE"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "debris_large"
 metadata/display_name_zh = "固定碎屑（大）2.55×2.22×0.22m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/debris_large/debris_large.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/debris_large/debris_large.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

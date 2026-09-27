@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES
-; 房型组件 bridge_room / v007 / deep_cables
+; 房型组件 bridge_room / v010 / deep_cables
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/deep_cables/deep_cables_visual_top3d.glb" id="1_visual"]
 
 [node name="RoomTypeComponentDeepCables" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-DEEP_CABLES"
-metadata/asset_version = "v007"
+metadata/asset_version = "v010"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "deep_cables"
 metadata/display_name_zh = "跨层下垂电缆"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/deep_cables/deep_cables.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/deep_cables/deep_cables.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

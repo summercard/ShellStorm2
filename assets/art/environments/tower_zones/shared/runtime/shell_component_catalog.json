@@ -2203,8 +2203,8 @@
     }
   ],
   "room_type_sources": [
-    "assets/art/environments/tower_zones/expedition/source/common_components/v006/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v007/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v008/component_catalog.json"
+    "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json",
+    "assets/art/environments/tower_zones/expedition/source/common_components/v010/component_catalog.json",
+    "assets/art/environments/tower_zones/expedition/source/common_components/v011/component_catalog.json"
   ]
 }

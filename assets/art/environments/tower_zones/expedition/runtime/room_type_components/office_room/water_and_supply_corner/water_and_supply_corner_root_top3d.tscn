@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER
-; 房型组件 office_room / v006 / water_and_supply_corner
+; 房型组件 office_room / v009 / water_and_supply_corner
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/water_and_supply_corner/water_and_supply_corner_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(3.62, 1.88, 3.36)
 
 [node name="RoomTypeComponentWaterAndSupplyCorner" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER"
-metadata/asset_version = "v006"
+metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "water_and_supply_corner"
 metadata/display_name_zh = "饮水与箱货区"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/water_and_supply_corner/water_and_supply_corner.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/water_and_supply_corner/water_and_supply_corner.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Y"
 metadata/up_axis = "+Y"

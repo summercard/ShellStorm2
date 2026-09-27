@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN
-; 房型组件 office_room / v006 / totem_column
+; 房型组件 office_room / v009 / totem_column
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/totem_column/totem_column_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(0.86, 2.98, 0.86)
 
 [node name="RoomTypeComponentTotemColumn" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN"
-metadata/asset_version = "v006"
+metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "totem_column"
 metadata/display_name_zh = "图腾立柱"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/totem_column/totem_column.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/totem_column/totem_column.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Y"
 metadata/up_axis = "+Y"

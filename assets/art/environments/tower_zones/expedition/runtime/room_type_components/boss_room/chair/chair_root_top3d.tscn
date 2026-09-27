@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-CHAIR
-; 房型组件 boss_room / v008 / chair
+; 房型组件 boss_room / v011 / chair
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/chair/chair_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(1.2051, 1.8299, 1.2642)
 
 [node name="RoomTypeComponentChair" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-CHAIR"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "chair"
 metadata/display_name_zh = "独立座椅 1.21×1.26×1.83m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/chair/chair.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/chair/chair.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

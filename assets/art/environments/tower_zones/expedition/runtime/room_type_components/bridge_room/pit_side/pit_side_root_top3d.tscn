@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE
-; 房型组件 bridge_room / v007 / pit_side
+; 房型组件 bridge_room / v010 / pit_side
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/pit_side/pit_side_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(0.7, 12.125, 5)
 
 [node name="RoomTypeComponentPitSide" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE"
-metadata/asset_version = "v007"
+metadata/asset_version = "v010"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "pit_side"
 metadata/display_name_zh = "坑壁"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/pit_side/pit_side.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/pit_side/pit_side.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

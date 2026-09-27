@@ -1,0 +1,3595 @@
+{
+  "schema": "shellstorm2.battle.component_instances",
+  "schema_version": 1,
+  "library": "v011",
+  "room_type": "BOSS_ROOM",
+  "source_library": "v001",
+  "source_blend_sha256": "5047d566a33dbb13a2f0be6e6ee4a7445da13cb27745a5df6a10bdabfb99bf09",
+  "instances": [
+    {
+      "instance_id": "archive_shelf_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF",
+      "component_slug": "archive_shelf",
+      "position_m": [
+        21.0,
+        -13.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "archive_shelf_00"
+    },
+    {
+      "instance_id": "archive_shelf_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF",
+      "component_slug": "archive_shelf",
+      "position_m": [
+        21.0,
+        -6.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "archive_shelf_01"
+    },
+    {
+      "instance_id": "archive_shelf_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF",
+      "component_slug": "archive_shelf",
+      "position_m": [
+        21.0,
+        2.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "archive_shelf_02"
+    },
+    {
+      "instance_id": "archive_shelf_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF",
+      "component_slug": "archive_shelf",
+      "position_m": [
+        21.0,
+        10.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "archive_shelf_03"
+    },
+    {
+      "instance_id": "base_floor_base",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_BASE",
+      "component_slug": "floor_base",
+      "position_m": [
+        0.0,
+        0.0,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_base"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -22.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -17.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -12.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -7.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -2.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        7.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        12.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        17.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r01_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        22.5,
+        -17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r01_c10"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -22.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -17.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -12.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -7.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -2.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        7.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        12.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        17.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r02_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        22.5,
+        -12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r02_c10"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -22.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -17.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -12.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -7.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -2.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        7.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        12.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        17.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r03_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        22.5,
+        -7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r03_c10"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -22.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -17.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -12.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -7.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -2.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        7.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        17.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r04_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        22.5,
+        -2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r04_c10"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -22.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -17.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -12.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -7.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -2.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        7.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        17.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r05_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        22.5,
+        2.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r05_c10"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -22.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -17.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -12.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -7.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -2.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        7.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        12.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        17.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r06_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        22.5,
+        7.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r06_c10"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -22.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -17.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -12.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -7.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -2.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        7.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        12.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        17.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r07_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        22.5,
+        12.5,
+        -0.098
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r07_c10"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -22.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c01"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -17.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c02"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -12.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c03"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -7.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c04"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -2.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c05"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c06"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        7.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c07"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c08"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        17.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c09"
+    },
+    {
+      "instance_id": "base_floor_tile_r08_c10",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        22.5,
+        17.5,
+        -0.098
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_floor_tile_r08_c10"
+    },
+    {
+      "instance_id": "base_wall_east_slot_01_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        -17.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_01_solid"
+    },
+    {
+      "instance_id": "base_wall_east_slot_02_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        -12.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_02_solid"
+    },
+    {
+      "instance_id": "base_wall_east_slot_03_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        -7.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_03_solid"
+    },
+    {
+      "instance_id": "base_wall_east_slot_04_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        -2.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_04_solid"
+    },
+    {
+      "instance_id": "base_wall_east_slot_05_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        2.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_05_solid"
+    },
+    {
+      "instance_id": "base_wall_east_slot_06_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        7.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_06_solid"
+    },
+    {
+      "instance_id": "base_wall_east_slot_07_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        12.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_07_solid"
+    },
+    {
+      "instance_id": "base_wall_east_slot_08_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        24.85,
+        17.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_east_slot_08_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_01_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -22.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_01_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_02_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -17.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_02_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_03_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -12.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_03_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_04_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -7.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_04_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_05_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -2.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_05_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_06_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        2.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_06_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_07_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        7.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_07_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_08_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        12.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_08_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_09_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        17.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_09_solid"
+    },
+    {
+      "instance_id": "base_wall_north_slot_10_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        22.5,
+        19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_north_slot_10_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_01_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -22.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_01_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_02_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -17.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_02_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_03_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -12.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_03_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_04_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -7.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_04_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_05_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -2.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_05_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_06_door_lintel",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        2.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_06_door_lintel"
+    },
+    {
+      "instance_id": "base_wall_south_slot_07_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        7.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_07_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_08_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        12.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_08_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_09_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        17.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_09_solid"
+    },
+    {
+      "instance_id": "base_wall_south_slot_10_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        22.5,
+        -19.85,
+        -0.358
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_south_slot_10_solid"
+    },
+    {
+      "instance_id": "base_wall_west_slot_01_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        -17.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_01_solid"
+    },
+    {
+      "instance_id": "base_wall_west_slot_02_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        -12.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_02_solid"
+    },
+    {
+      "instance_id": "base_wall_west_slot_03_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        -7.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_03_solid"
+    },
+    {
+      "instance_id": "base_wall_west_slot_04_door_lintel",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        -2.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_04_door_lintel"
+    },
+    {
+      "instance_id": "base_wall_west_slot_05_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        2.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_05_solid"
+    },
+    {
+      "instance_id": "base_wall_west_slot_06_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        7.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_06_solid"
+    },
+    {
+      "instance_id": "base_wall_west_slot_07_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        12.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_07_solid"
+    },
+    {
+      "instance_id": "base_wall_west_slot_08_solid",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "component_slug": "wall_solid_5m",
+      "position_m": [
+        -24.85,
+        17.5,
+        -0.358
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "base_wall_west_slot_08_solid"
+    },
+    {
+      "instance_id": "chair_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "component_slug": "chair",
+      "position_m": [
+        -17.9498,
+        13.27,
+        -0.0129
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "chair_00"
+    },
+    {
+      "instance_id": "chair_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "component_slug": "chair",
+      "position_m": [
+        -17.9498,
+        7.27,
+        -0.0129
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "chair_01"
+    },
+    {
+      "instance_id": "chair_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "component_slug": "chair",
+      "position_m": [
+        -17.9498,
+        -9.73,
+        -0.0129
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "chair_02"
+    },
+    {
+      "instance_id": "chair_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "component_slug": "chair",
+      "position_m": [
+        -17.9498,
+        -16.73,
+        -0.0129
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "chair_03"
+    },
+    {
+      "instance_id": "chair_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "component_slug": "chair",
+      "position_m": [
+        -11.9498,
+        13.27,
+        -0.0129
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "chair_04"
+    },
+    {
+      "instance_id": "debris_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_MEDIUM",
+      "component_slug": "debris_medium",
+      "position_m": [
+        -10.9585,
+        15.628,
+        -0.0275
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_00"
+    },
+    {
+      "instance_id": "debris_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_LARGE",
+      "component_slug": "debris_large",
+      "position_m": [
+        -8.3624,
+        15.6271,
+        -0.0275
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_01"
+    },
+    {
+      "instance_id": "debris_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        -5.9376,
+        15.6462,
+        -0.0275
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_02"
+    },
+    {
+      "instance_id": "debris_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        -3.4922,
+        15.556,
+        -0.0275
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_03"
+    },
+    {
+      "instance_id": "debris_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        -0.7708,
+        15.5972,
+        -0.0275
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_04"
+    },
+    {
+      "instance_id": "debris_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        1.6648,
+        15.7629,
+        -0.0275
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_05"
+    },
+    {
+      "instance_id": "debris_06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        4.3212,
+        15.4793,
+        -0.0275
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_06"
+    },
+    {
+      "instance_id": "debris_07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        6.7711,
+        15.7163,
+        -0.0275
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_07"
+    },
+    {
+      "instance_id": "debris_08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        9.1676,
+        15.5468,
+        -0.0275
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_08"
+    },
+    {
+      "instance_id": "debris_09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "component_slug": "debris_small",
+      "position_m": [
+        11.5328,
+        15.6268,
+        -0.0275
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "debris_09"
+    },
+    {
+      "instance_id": "east_complete_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE",
+      "component_slug": "server_rack_wide",
+      "position_m": [
+        22.9675,
+        -15.0,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "east_complete_00"
+    },
+    {
+      "instance_id": "east_complete_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_TALL",
+      "component_slug": "server_rack_wide_tall",
+      "position_m": [
+        22.9675,
+        -10.0,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "east_complete_01"
+    },
+    {
+      "instance_id": "east_complete_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_TALL",
+      "component_slug": "server_rack_wide_tall",
+      "position_m": [
+        22.9675,
+        0.0,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "east_complete_03"
+    },
+    {
+      "instance_id": "east_complete_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE",
+      "component_slug": "server_rack_wide",
+      "position_m": [
+        22.9675,
+        5.0,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "east_complete_04"
+    },
+    {
+      "instance_id": "east_damaged_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED",
+      "component_slug": "server_rack_wide_damaged",
+      "position_m": [
+        22.812,
+        -5.0,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "east_damaged_02"
+    },
+    {
+      "instance_id": "east_damaged_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED_TALL",
+      "component_slug": "server_rack_wide_damaged_tall",
+      "position_m": [
+        22.812,
+        10.0,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "east_damaged_05"
+    },
+    {
+      "instance_id": "heavy_conduits",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-HEAVY_CONDUITS",
+      "component_slug": "heavy_conduits",
+      "position_m": [
+        0.4935,
+        1.9818,
+        -0.178
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "heavy_conduits"
+    },
+    {
+      "instance_id": "main_fault_screen",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-MAIN_FAULT_SCREEN",
+      "component_slug": "main_fault_screen",
+      "position_m": [
+        1.0,
+        18.7575,
+        3.447
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "main_fault_screen"
+    },
+    {
+      "instance_id": "north_complete_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        -19.6,
+        17.9175,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_complete_00"
+    },
+    {
+      "instance_id": "north_complete_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_TALL",
+      "component_slug": "server_rack_tall",
+      "position_m": [
+        -13.0,
+        17.9175,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_complete_02"
+    },
+    {
+      "instance_id": "north_complete_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        14.0,
+        17.9175,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_complete_03"
+    },
+    {
+      "instance_id": "north_complete_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_MID",
+      "component_slug": "server_rack_mid",
+      "position_m": [
+        17.3,
+        17.9175,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_complete_04"
+    },
+    {
+      "instance_id": "north_complete_06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK",
+      "component_slug": "server_rack",
+      "position_m": [
+        23.0,
+        17.9175,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_complete_06"
+    },
+    {
+      "instance_id": "north_damaged_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED",
+      "component_slug": "server_rack_damaged",
+      "position_m": [
+        -16.3,
+        17.762,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_damaged_01"
+    },
+    {
+      "instance_id": "north_damaged_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED_TALL",
+      "component_slug": "server_rack_damaged_tall",
+      "position_m": [
+        20.6,
+        17.762,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_damaged_05"
+    },
+    {
+      "instance_id": "north_wall_typography",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_TYPOGRAPHY",
+      "component_slug": "wall_typography",
+      "position_m": [
+        -0.2584,
+        19.45,
+        7.0881
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "north_wall_typography"
+    },
+    {
+      "instance_id": "plant_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_A",
+      "component_slug": "plant_a",
+      "position_m": [
+        -20.9744,
+        17.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "plant_00"
+    },
+    {
+      "instance_id": "plant_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_B",
+      "component_slug": "plant_b",
+      "position_m": [
+        -19.9744,
+        7.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "plant_01"
+    },
+    {
+      "instance_id": "plant_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_C",
+      "component_slug": "plant_c",
+      "position_m": [
+        -19.9744,
+        -12.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "plant_02"
+    },
+    {
+      "instance_id": "plant_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_A",
+      "component_slug": "plant_a",
+      "position_m": [
+        -14.9744,
+        -17.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "plant_03"
+    },
+    {
+      "instance_id": "plant_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_C",
+      "component_slug": "plant_c",
+      "position_m": [
+        20.0256,
+        13.0,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "plant_04"
+    },
+    {
+      "instance_id": "south_floor_marking",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING",
+      "component_slug": "floor_marking",
+      "position_m": [
+        2.5,
+        -17.176,
+        -0.024
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "south_floor_marking"
+    },
+    {
+      "instance_id": "under_screen_complete_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "component_slug": "server_rack_under_screen",
+      "position_m": [
+        -8.0,
+        17.7675,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_complete_00"
+    },
+    {
+      "instance_id": "under_screen_complete_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "component_slug": "server_rack_under_screen",
+      "position_m": [
+        -5.2,
+        17.7675,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_complete_01"
+    },
+    {
+      "instance_id": "under_screen_complete_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "component_slug": "server_rack_under_screen",
+      "position_m": [
+        -2.4,
+        17.7675,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_complete_02"
+    },
+    {
+      "instance_id": "under_screen_complete_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "component_slug": "server_rack_under_screen",
+      "position_m": [
+        0.4,
+        17.7675,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_complete_03"
+    },
+    {
+      "instance_id": "under_screen_complete_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "component_slug": "server_rack_under_screen",
+      "position_m": [
+        3.2,
+        17.7675,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_complete_04"
+    },
+    {
+      "instance_id": "under_screen_complete_06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "component_slug": "server_rack_under_screen",
+      "position_m": [
+        8.8,
+        17.7675,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_complete_06"
+    },
+    {
+      "instance_id": "under_screen_complete_07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "component_slug": "server_rack_under_screen",
+      "position_m": [
+        11.2,
+        17.7675,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_complete_07"
+    },
+    {
+      "instance_id": "under_screen_damaged_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN_DAMAGED",
+      "component_slug": "server_rack_under_screen_damaged",
+      "position_m": [
+        6.0,
+        17.6211,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "under_screen_damaged_05"
+    },
+    {
+      "instance_id": "wall_skin_east_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        24.65,
+        -17.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_00"
+    },
+    {
+      "instance_id": "wall_skin_east_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        24.65,
+        -12.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_01"
+    },
+    {
+      "instance_id": "wall_skin_east_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        24.65,
+        -7.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_02"
+    },
+    {
+      "instance_id": "wall_skin_east_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        24.65,
+        -2.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_03"
+    },
+    {
+      "instance_id": "wall_skin_east_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M",
+      "component_slug": "wall_skin_armored_broken_5m",
+      "position_m": [
+        24.65,
+        2.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_04"
+    },
+    {
+      "instance_id": "wall_skin_east_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        24.65,
+        7.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_05"
+    },
+    {
+      "instance_id": "wall_skin_east_06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        24.65,
+        12.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_06"
+    },
+    {
+      "instance_id": "wall_skin_east_07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        24.65,
+        17.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_east_07"
+    },
+    {
+      "instance_id": "wall_skin_north_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        -22.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_00"
+    },
+    {
+      "instance_id": "wall_skin_north_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        -17.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_01"
+    },
+    {
+      "instance_id": "wall_skin_north_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        -12.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_02"
+    },
+    {
+      "instance_id": "wall_skin_north_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        -7.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_03"
+    },
+    {
+      "instance_id": "wall_skin_north_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M",
+      "component_slug": "wall_skin_armored_broken_5m",
+      "position_m": [
+        -2.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_04"
+    },
+    {
+      "instance_id": "wall_skin_north_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        2.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_05"
+    },
+    {
+      "instance_id": "wall_skin_north_06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        7.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_06"
+    },
+    {
+      "instance_id": "wall_skin_north_07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        12.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_07"
+    },
+    {
+      "instance_id": "wall_skin_north_08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        17.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_08"
+    },
+    {
+      "instance_id": "wall_skin_north_09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        22.5,
+        19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_north_09"
+    },
+    {
+      "instance_id": "wall_skin_south_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        -22.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_00"
+    },
+    {
+      "instance_id": "wall_skin_south_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        -17.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_01"
+    },
+    {
+      "instance_id": "wall_skin_south_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        -12.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_02"
+    },
+    {
+      "instance_id": "wall_skin_south_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        -7.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_03"
+    },
+    {
+      "instance_id": "wall_skin_south_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M",
+      "component_slug": "wall_skin_armored_broken_5m",
+      "position_m": [
+        -2.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_04"
+    },
+    {
+      "instance_id": "wall_skin_south_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M",
+      "component_slug": "wall_skin_beveled_5m",
+      "position_m": [
+        2.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_05"
+    },
+    {
+      "instance_id": "wall_skin_south_06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        7.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_06"
+    },
+    {
+      "instance_id": "wall_skin_south_07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        12.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_07"
+    },
+    {
+      "instance_id": "wall_skin_south_08",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        17.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_08"
+    },
+    {
+      "instance_id": "wall_skin_south_09",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        22.5,
+        -19.65,
+        -0.308
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_south_09"
+    },
+    {
+      "instance_id": "wall_skin_west_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        -24.65,
+        -17.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_00"
+    },
+    {
+      "instance_id": "wall_skin_west_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        -24.65,
+        -12.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_01"
+    },
+    {
+      "instance_id": "wall_skin_west_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        -24.65,
+        -7.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_02"
+    },
+    {
+      "instance_id": "wall_skin_west_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M",
+      "component_slug": "wall_skin_beveled_5m",
+      "position_m": [
+        -24.65,
+        -2.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_03"
+    },
+    {
+      "instance_id": "wall_skin_west_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M",
+      "component_slug": "wall_skin_armored_broken_5m",
+      "position_m": [
+        -24.65,
+        2.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_04"
+    },
+    {
+      "instance_id": "wall_skin_west_05",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "component_slug": "wall_skin_thin_5m",
+      "position_m": [
+        -24.65,
+        7.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_05"
+    },
+    {
+      "instance_id": "wall_skin_west_06",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "component_slug": "wall_skin_armored_5m",
+      "position_m": [
+        -24.65,
+        12.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_06"
+    },
+    {
+      "instance_id": "wall_skin_west_07",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "component_slug": "wall_skin_medium_5m",
+      "position_m": [
+        -24.65,
+        17.5,
+        -0.308
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "wall_skin_west_07"
+    },
+    {
+      "instance_id": "west_complete_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT",
+      "component_slug": "server_rack_compact",
+      "position_m": [
+        -22.8675,
+        -14.0,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "west_complete_00"
+    },
+    {
+      "instance_id": "west_complete_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT",
+      "component_slug": "server_rack_compact",
+      "position_m": [
+        -22.8675,
+        12.5,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "west_complete_02"
+    },
+    {
+      "instance_id": "west_damaged_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT_DAMAGED",
+      "component_slug": "server_rack_compact_damaged",
+      "position_m": [
+        -22.712,
+        3.5,
+        -0.228
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "west_damaged_01"
+    },
+    {
+      "instance_id": "workstation_00",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_A",
+      "component_slug": "workstation_a",
+      "position_m": [
+        -18.0,
+        15.0025,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "workstation_00"
+    },
+    {
+      "instance_id": "workstation_01",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_B",
+      "component_slug": "workstation_b",
+      "position_m": [
+        -18.0,
+        9.0025,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "workstation_01"
+    },
+    {
+      "instance_id": "workstation_02",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_C",
+      "component_slug": "workstation_c",
+      "position_m": [
+        -18.0,
+        -7.9975,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "workstation_02"
+    },
+    {
+      "instance_id": "workstation_03",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_C",
+      "component_slug": "workstation_c",
+      "position_m": [
+        -18.0,
+        -14.9975,
+        -0.058
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "workstation_03"
+    },
+    {
+      "instance_id": "workstation_04",
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_B",
+      "component_slug": "workstation_b",
+      "position_m": [
+        -12.0,
+        15.0025,
+        -0.058
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "workstation_04"
+    }
+  ],
+  "validation": {
+    "source_object_count": 214,
+    "instance_count": 210,
+    "dropped_by_door_slot_sealing": 4,
+    "coverage_ok": true,
+    "rotation_inferred": true,
+    "rotation_stats": {
+      "0": 147,
+      "90": 31,
+      "180": 22,
+      "270": 10
+    }
+  },
+  "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
+  "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）"
+}

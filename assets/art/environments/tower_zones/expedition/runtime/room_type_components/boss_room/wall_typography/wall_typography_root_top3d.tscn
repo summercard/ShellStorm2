@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-WALL_TYPOGRAPHY
-; 房型组件 boss_room / v008 / wall_typography
+; 房型组件 boss_room / v011 / wall_typography
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_typography/wall_typography_visual_top3d.glb" id="1_visual"]
 
 [node name="RoomTypeComponentWallTypography" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-WALL_TYPOGRAPHY"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "wall_typography"
 metadata/display_name_zh = "数据库墙面标识 35.90×0.04×2.32m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_typography/wall_typography.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/wall_typography/wall_typography.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

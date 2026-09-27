@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE
-; 房型组件 bridge_room / v007 / bank_crate
+; 房型组件 bridge_room / v010 / bank_crate
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/bridge_room/bank_crate/bank_crate_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(1.6, 1.555, 1.675)
 
 [node name="RoomTypeComponentBankCrate" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE"
-metadata/asset_version = "v007"
+metadata/asset_version = "v010"
 metadata/room_type = "BRIDGE_ROOM"
 metadata/component_slug = "bank_crate"
 metadata/display_name_zh = "固定维护箱 1.60×1.68×1.55m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bank_crate/bank_crate.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v010/component_packages/bank_crate/bank_crate.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

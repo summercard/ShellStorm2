@@ -1,0 +1,44 @@
+== 1_office_work_cluster (work_cluster) aabb=(5.8, 1.67, 2.440001)
+   surface0 metallic=0.000 roughness=0.340 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.040 roughness=0.720 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 2：高金属(>=0.5) 0，低金属(<0.5) 2
+   截图 I:/ss2_iso/room_type_after_import/1_office_work_cluster.png
+== 2_office_wall_t615_5m (wall_t615_5m) aabb=(0.614999, 11.9, 5.0)
+   surface0 metallic=0.000 roughness=0.340 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.040 roughness=0.720 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 2：高金属(>=0.5) 0，低金属(<0.5) 2
+   截图 I:/ss2_iso/room_type_after_import/2_office_wall_t615_5m.png
+== 3_bridge_tile_upper (tile_upper) aabb=(5.0, 0.407, 5.0)
+   surface0 metallic=0.030 roughness=0.700 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 1：高金属(>=0.5) 0，低金属(<0.5) 1
+   截图 I:/ss2_iso/room_type_after_import/3_bridge_tile_upper.png
+== 4_bridge_pit_side (pit_side) aabb=(0.699999, 12.125, 5.0)
+   surface0 metallic=0.030 roughness=0.700 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 1：高金属(>=0.5) 0，低金属(<0.5) 1
+   截图 I:/ss2_iso/room_type_after_import/4_bridge_pit_side.png
+== 5_boss_server_rack (server_rack) aabb=(3.17, 5.6, 2.995001)
+   surface0 metallic=0.000 roughness=0.380 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.030 roughness=0.700 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.030 roughness=0.700 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 3：高金属(>=0.5) 0，低金属(<0.5) 3
+   截图 I:/ss2_iso/room_type_after_import/5_boss_server_rack.png
+== 6_boss_heavy_conduits (heavy_conduits) aabb=(47.3056, 3.672169, 32.30362)
+   surface0 metallic=0.030 roughness=0.700 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 1：高金属(>=0.5) 0，低金属(<0.5) 1
+   截图 I:/ss2_iso/room_type_after_import/6_boss_heavy_conduits.png
+== 7_boss_wall_solid_5m (wall_solid_5m) aabb=(0.299999, 11.9, 5.0)
+   surface0 metallic=0.030 roughness=0.700 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 1：高金属(>=0.5) 0，低金属(<0.5) 1
+   截图 I:/ss2_iso/room_type_after_import/7_boss_wall_solid_5m.png
+== 8_boss_workstation_a (workstation_a) aabb=(4.25, 2.78, 2.055)
+   surface0 metallic=0.000 roughness=0.380 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.030 roughness=0.700 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.860 roughness=0.290 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.180 roughness=0.150 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 4：高金属(>=0.5) 1，低金属(<0.5) 3
+   截图 I:/ss2_iso/room_type_after_import/8_boss_workstation_a.png
+== 9_office_floor_tile_5m (floor_tile_5m) aabb=(5.0, 0.407, 5.0)
+   surface0 metallic=0.000 roughness=0.340 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   surface0 metallic=0.040 roughness=0.720 albedo_tex=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+   >> 表面 2：高金属(>=0.5) 0，低金属(<0.5) 2
+   截图 I:/ss2_iso/room_type_after_import/9_office_floor_tile_5m.png

@@ -1,16 +1,16 @@
 [gd_scene load_steps=2 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-BOSS-MAIN_FAULT_SCREEN
-; 房型组件 boss_room / v008 / main_fault_screen
+; 房型组件 boss_room / v011 / main_fault_screen
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/main_fault_screen/main_fault_screen_visual_top3d.glb" id="1_visual"]
 
 [node name="RoomTypeComponentMainFaultScreen" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-MAIN_FAULT_SCREEN"
-metadata/asset_version = "v008"
+metadata/asset_version = "v011"
 metadata/room_type = "BOSS_ROOM"
 metadata/component_slug = "main_fault_screen"
 metadata/display_name_zh = "主屏 破损数据库 21.52×1.58×7.09m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/main_fault_screen/main_fault_screen.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/main_fault_screen/main_fault_screen.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "-Y"
 metadata/up_axis = "+Y"

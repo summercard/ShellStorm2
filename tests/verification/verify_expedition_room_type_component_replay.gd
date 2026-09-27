@@ -1,5 +1,5 @@
 extends Node
-## 验收：办公室 v006、通道桥 v007、Boss 房 v008 逐组件导入、默认布局重放及运行时拼装。
+## 验收：办公室 v009、通道桥 v010、Boss 房 v011 逐组件导入、默认布局重放及运行时拼装。
 ##
 ## 覆盖四层契约：
 ## ① runtime_manifest 中 98 个稳定 PackedScene 均可独立加载/实例化，且资产元数据与公共色盘绑定完整；
@@ -36,7 +36,7 @@ const TARGETS := {
 		"expected_room_type_components": 29,
 		"expected_solid_walls": 28,
 		"expected_door_walls": 1,
-		"expected_version": "v006",
+		"expected_version": "v009",
 		"expected_asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
 	},
 	"room_05": {
@@ -47,7 +47,7 @@ const TARGETS := {
 		"expected_room_type_components": 158,
 		"expected_solid_walls": 36,
 		"expected_door_walls": 0,
-		"expected_version": "v007",
+		"expected_version": "v010",
 		"expected_asset_id": "ENV-EXPEDITION-L01-BRIDGE-ROOM-TYPE-LAYOUT",
 	},
 	"room_09": {
@@ -58,7 +58,7 @@ const TARGETS := {
 		"expected_room_type_components": 29,
 		"expected_solid_walls": 28,
 		"expected_door_walls": 1,
-		"expected_version": "v006",
+		"expected_version": "v009",
 		"expected_asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
 	},
 	"boss": {
@@ -69,7 +69,7 @@ const TARGETS := {
 		"expected_room_type_components": 58,
 		"expected_solid_walls": 72,
 		"expected_door_walls": 0,
-		"expected_version": "v008",
+		"expected_version": "v011",
 		"expected_asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT",
 	},
 }
@@ -301,7 +301,7 @@ func _check_runtime_wall_contract(room_id: String, room: DungeonRoom3D, art_root
 ## 这一条必须写死：Boss 房东门口有两台机柜，其角会探进 ±1.05×±0.6 的盒子，但它们是
 ## 门内陈设、不是墙；而且门靠**整体升降**开合而不是平开 ⇒ 不构成阻挡。
 ##
-## 反例（2026-09-27 实测）：办公室 v006 的 `door_wall` 件门洞区正投影覆盖率 100%，
+## 反例（2026-09-27 实测）：办公室 v009 的 `door_wall` 件门洞区正投影覆盖率 100%，
 ## 门扇整个被埋在实心墙里，开与不开画面完全一致 —— 只数门扇存在是查不出来的。
 ## 另一个反例：Boss 房源预切的门洞（南 x=+2.5 / 西 z=+2.5）与本关门位（西/东 z=−2.5）
 ## 不一致，净空里没有任何门扇 ⇒ 入库时已按 02 规范封成整樘实墙。

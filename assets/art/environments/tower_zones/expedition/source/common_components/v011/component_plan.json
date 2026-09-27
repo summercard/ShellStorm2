@@ -1,0 +1,794 @@
+{
+  "schema": "shellstorm2.battle.component_plan",
+  "schema_version": 1,
+  "source_library": "_scratch/boss_plan/plan_input",
+  "regular_max_variants_per_family": 3,
+  "hard_max_variants_per_family": 5,
+  "component_budget": {
+    "limit": 50,
+    "planned": 28,
+    "remaining": 22
+  },
+  "sim_tol_m": 0.1,
+  "package_count": 214,
+  "component_count": 28,
+  "families": [
+    {
+      "family": "floor_tile_5m",
+      "variants_before": 80,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C02",
+          "slug": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C02",
+          "bounds_size_m": [
+            4.94,
+            4.94,
+            0.087
+          ],
+          "variant_axis": "structure_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C10",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C02",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C10",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C02",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C10",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C02",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C10",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C10",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C02",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C10",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C02",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C02",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C06",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C10",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C07",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C08",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C02",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C05",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C09",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C04",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C01",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C03",
+            "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C10"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "wall_base_5m",
+      "variants_before": 40,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 3,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LEFT",
+          "slug": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LEFT",
+          "bounds_size_m": [
+            1.4,
+            0.3,
+            11.9
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-RIGHT",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LEFT",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-RIGHT"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LINTEL",
+          "slug": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LINTEL",
+          "bounds_size_m": [
+            2.2,
+            0.3,
+            9.1
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LINTEL"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-01-SOLID",
+          "slug": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-01-SOLID",
+          "bounds_size_m": [
+            5.0,
+            0.3,
+            11.9
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-02-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-03-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-04-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-05-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-06-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-07-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-08-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-09-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-10-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-01-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-02-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-03-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-04-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-05-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-07-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-08-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-09-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-10-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-01-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-02-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-03-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-04-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-05-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-06-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-07-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-08-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-01-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-02-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-03-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-05-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-06-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-07-SOLID",
+            "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-08-SOLID"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "wall_skin_5m",
+      "variants_before": 36,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-05",
+          "slug": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-05",
+          "bounds_size_m": [
+            4.96,
+            0.25,
+            11.8
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-03",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-05",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-09",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-03",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-09",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-03",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-05",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-05",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-01",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-07",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-01",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-07",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-01",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-07",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-01",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-07",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-03"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-00",
+          "bounds_size_m": [
+            4.925,
+            0.36,
+            11.8
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-02",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-04",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-06",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-08",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-00",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-02",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-04",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-06",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-08",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-00",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-02",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-04",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-06",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-00",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-02",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-04",
+            "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-06"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "debris",
+      "variants_before": 10,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 3,
+      "merged_deltas_m": [
+        0.111,
+        0.114,
+        0.198,
+        0.205,
+        0.285
+      ],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-06",
+          "slug": "ENV-EXPEDITION-BOSSROOM-DEBRIS-06",
+          "bounds_size_m": [
+            1.668,
+            1.971,
+            0.22
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-DEBRIS-03"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-09",
+          "slug": "ENV-EXPEDITION-BOSSROOM-DEBRIS-09",
+          "bounds_size_m": [
+            2.166,
+            2.068,
+            0.22
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-DEBRIS-02",
+            "ENV-EXPEDITION-BOSSROOM-DEBRIS-07",
+            "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
+            "ENV-EXPEDITION-BOSSROOM-DEBRIS-05",
+            "ENV-EXPEDITION-BOSSROOM-DEBRIS-04",
+            "ENV-EXPEDITION-BOSSROOM-DEBRIS-08"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-01",
+          "slug": "ENV-EXPEDITION-BOSSROOM-DEBRIS-01",
+          "bounds_size_m": [
+            2.554,
+            2.222,
+            0.22
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "under_screen",
+      "variants_before": 8,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-00",
+          "bounds_size_m": [
+            2.72,
+            2.545,
+            3.95
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-01",
+            "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-02",
+            "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-03",
+            "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-04",
+            "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-06",
+            "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-07"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-DAMAGED-05",
+          "slug": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-DAMAGED-05",
+          "bounds_size_m": [
+            2.72,
+            2.838,
+            3.95
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "north_facility",
+      "variants_before": 7,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 3,
+      "merged_deltas_m": [
+        0.28,
+        0.28
+      ],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-00",
+          "bounds_size_m": [
+            3.17,
+            2.995,
+            5.6
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-03",
+            "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-06",
+            "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-04"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-02",
+          "slug": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-02",
+          "bounds_size_m": [
+            3.17,
+            2.995,
+            6.16
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-DAMAGED-01",
+          "slug": "ENV-EXPEDITION-BOSSROOM-NORTH-DAMAGED-01",
+          "bounds_size_m": [
+            3.17,
+            3.306,
+            5.88
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-NORTH-DAMAGED-05"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "east_facility",
+      "variants_before": 6,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 3,
+      "merged_deltas_m": [
+        0.311
+      ],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-00",
+          "bounds_size_m": [
+            2.995,
+            3.17,
+            5.6
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-04",
+            "ENV-EXPEDITION-BOSSROOM-EAST-DAMAGED-02"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-01",
+          "slug": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-01",
+          "bounds_size_m": [
+            2.995,
+            3.17,
+            5.95
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-03"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-DAMAGED-05",
+          "slug": "ENV-EXPEDITION-BOSSROOM-EAST-DAMAGED-05",
+          "bounds_size_m": [
+            3.306,
+            3.17,
+            5.95
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "workstation",
+      "variants_before": 5,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-00",
+          "bounds_size_m": [
+            4.25,
+            2.055,
+            2.78
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-WORKSTATION-01",
+            "ENV-EXPEDITION-BOSSROOM-WORKSTATION-02",
+            "ENV-EXPEDITION-BOSSROOM-WORKSTATION-03",
+            "ENV-EXPEDITION-BOSSROOM-WORKSTATION-04"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "chair",
+      "variants_before": 5,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-CHAIR-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-CHAIR-00",
+          "bounds_size_m": [
+            1.205,
+            1.264,
+            1.83
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-CHAIR-01",
+            "ENV-EXPEDITION-BOSSROOM-CHAIR-02",
+            "ENV-EXPEDITION-BOSSROOM-CHAIR-03",
+            "ENV-EXPEDITION-BOSSROOM-CHAIR-04"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "plant",
+      "variants_before": 5,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-02",
+          "slug": "ENV-EXPEDITION-BOSSROOM-PLANT-02",
+          "bounds_size_m": [
+            1.649,
+            1.674,
+            1.689
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-PLANT-01",
+            "ENV-EXPEDITION-BOSSROOM-PLANT-00",
+            "ENV-EXPEDITION-BOSSROOM-PLANT-04",
+            "ENV-EXPEDITION-BOSSROOM-PLANT-03"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "archive_shelf",
+      "variants_before": 4,
+      "variant_limit": 3,
+      "variant_contract_complete": false,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-00",
+          "bounds_size_m": [
+            2.45,
+            1.6,
+            5.35
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-01",
+            "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-02",
+            "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-03"
+          ]
+        }
+      ]
+    },
+    {
+      "family": "west_facility",
+      "variants_before": 3,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 2,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-WEST-COMPLETE-00",
+          "slug": "ENV-EXPEDITION-BOSSROOM-WEST-COMPLETE-00",
+          "bounds_size_m": [
+            2.995,
+            3.17,
+            5.4
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": [
+            "ENV-EXPEDITION-BOSSROOM-WEST-COMPLETE-02"
+          ]
+        },
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-WEST-DAMAGED-01",
+          "slug": "ENV-EXPEDITION-BOSSROOM-WEST-DAMAGED-01",
+          "bounds_size_m": [
+            3.306,
+            3.17,
+            5.4
+          ],
+          "variant_axis": "damage_state",
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "floor_base",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+          "slug": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+          "bounds_size_m": [
+            50.0,
+            40.0,
+            0.26
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "main_fault_screen",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+          "slug": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+          "bounds_size_m": [
+            21.52,
+            1.575,
+            7.09
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "heavy_conduits",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+          "slug": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+          "bounds_size_m": [
+            47.306,
+            32.304,
+            3.672
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "north_wall_typography",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+          "slug": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+          "bounds_size_m": [
+            35.9,
+            0.042,
+            2.32
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    },
+    {
+      "family": "south_floor_marking",
+      "variants_before": 1,
+      "variant_limit": 3,
+      "variant_contract_complete": true,
+      "variants_after": 1,
+      "merged_deltas_m": [],
+      "representatives": [
+        {
+          "component_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+          "slug": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+          "bounds_size_m": [
+            3.697,
+            2.727,
+            0.012
+          ],
+          "variant_axis": null,
+          "variant_value": null,
+          "variant_reason": null,
+          "absorbed": []
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "naming_violation_count": 131,
+    "front_axis_non_enum_count": 0,
+    "rotation_locked_count": 133,
+    "variant_contract_missing_families": [
+      "wall_base_5m",
+      "floor_tile_5m",
+      "wall_skin_5m",
+      "north_facility",
+      "under_screen",
+      "east_facility",
+      "workstation",
+      "chair",
+      "plant",
+      "archive_shelf",
+      "debris"
+    ],
+    "absolute_over_limit_families": [
+      "wall_base_5m",
+      "floor_tile_5m",
+      "wall_skin_5m",
+      "north_facility",
+      "under_screen",
+      "east_facility",
+      "debris"
+    ],
+    "component_budget_over": false
+  }
+}

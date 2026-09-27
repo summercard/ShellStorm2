@@ -1,0 +1,14 @@
+LEVEL=expedition_01 SEED=77001199
+ROOM room_03 center=(45.0, 0.0, 10.0) doors=["north", "south"]
+   north -> room_02      local=(-2.500, 0.000, -20.000) world=(42.500, 0.000, -10.000)
+   south -> room_04      local=(-2.500, 0.000, 20.000) world=(42.500, 0.000, 30.000)
+ROOM room_05 center=(-10.0, 0.0, 50.0) doors=["east", "west"]
+   east  -> room_04      local=(30.000, 0.000, -2.500) world=(20.000, 0.000, 47.500)
+   west  -> room_06      local=(-30.000, 0.000, -2.500) world=(-40.000, 0.000, 47.500)
+ROOM room_09 center=(-65.0, 0.0, -50.0) doors=["south", "north"]
+   south -> room_08      local=(2.500, 0.000, 20.000) world=(-62.500, 0.000, -30.000)
+   north -> room_10      local=(-2.500, 0.000, -20.000) world=(-67.500, 0.000, -70.000)
+ROOM boss center=(-20.0, 0.0, -85.00001) doors=["west", "east"]
+   west  -> room_10      local=(-25.000, 0.000, -2.500) world=(-45.000, 0.000, -87.500)
+   east  -> extraction   local=(25.000, 0.000, -2.500) world=(5.000, 0.000, -87.500)
+RUNTIME_DOORS_OK

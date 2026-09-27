@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE
-; 房型组件 office_room / v006 / wall_top_service
+; 房型组件 office_room / v009 / wall_top_service
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/wall_top_service/wall_top_service_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(29.4, 0.7, 39.4)
 
 [node name="RoomTypeComponentWallTopService" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
-metadata/asset_version = "v006"
+metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "wall_top_service"
 metadata/display_name_zh = "墙顶管线收口"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_top_service/wall_top_service.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_top_service/wall_top_service.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Y"
 metadata/up_axis = "+Y"

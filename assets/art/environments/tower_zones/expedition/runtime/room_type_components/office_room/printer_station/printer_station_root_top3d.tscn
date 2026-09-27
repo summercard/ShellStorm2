@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION
-; 房型组件 office_room / v006 / printer_station
+; 房型组件 office_room / v009 / printer_station
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/printer_station/printer_station_visual_top3d.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
@@ -9,11 +9,11 @@ size = Vector3(1.66, 2.39, 0.965)
 
 [node name="RoomTypeComponentPrinterStation" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION"
-metadata/asset_version = "v006"
+metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
 metadata/component_slug = "printer_station"
 metadata/display_name_zh = "打印机与耗材位"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/printer_station/printer_station.blend"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/printer_station/printer_station.blend"
 metadata/origin_contract = "bottom_center"
 metadata/front_axis_blender = "+Y"
 metadata/up_axis = "+Y"
