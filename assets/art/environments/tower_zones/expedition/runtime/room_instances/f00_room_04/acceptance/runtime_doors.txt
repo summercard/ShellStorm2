@@ -1,0 +1,4 @@
+room_04 template_variant=u_turn
+room_04 door_count=2
+footprint_port_validation=EXPEDITION_FOOTPRINTS_OK
+door_aperture_validation=passed

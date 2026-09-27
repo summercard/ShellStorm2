@@ -50,6 +50,18 @@ const TARGETS := {
 		"expected_version": "v012",
 		"expected_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT",
 	},
+	"room_04": {
+		"template_id": "corridor_45x40",
+		"template_variant": "u_turn",
+		"expected_instances": 123,
+		"expected_floor_tiles": 60,
+		"expected_common_floor_tiles": 60,
+		"expected_room_type_components": 17,
+		"expected_solid_walls": 46,
+		"expected_door_walls": 0,
+		"expected_version": "v001",
+		"expected_asset_id": "ENV-EXPEDITION-L01-CORRIDOR-U-TURN-ROOM04-LAYOUT",
+	},
 	"room_03": {
 		"template_id": "office_60x70",
 		"expected_instances": 106,
@@ -162,7 +174,7 @@ func _check_runtime_prefabs() -> void:
 	if manifest.is_empty():
 		return
 	var records := manifest.get("records", []) as Array
-	_check(records.size() == EXPECTED_COMPONENTS, "PackedScene 清单应为 60，实得 %d" % records.size())
+	_check(records.size() == EXPECTED_COMPONENTS, "PackedScene 清单应为 %d，实得 %d" % [EXPECTED_COMPONENTS, records.size()])
 	var ids: Dictionary = {}
 	var loaded := 0
 	var instantiated := 0
@@ -207,8 +219,8 @@ func _check_runtime_prefabs() -> void:
 					if texture.resource_path == PALETTE_PATH:
 						palette_materials += 1
 		instance.free()
-	_check(loaded == EXPECTED_COMPONENTS, "PackedScene 应 60/60 可加载，实得 %d" % loaded)
-	_check(instantiated == EXPECTED_COMPONENTS, "PackedScene 应 60/60 可实例化，实得 %d" % instantiated)
+	_check(loaded == EXPECTED_COMPONENTS, "PackedScene 应 %d/%d 可加载，实得 %d" % [EXPECTED_COMPONENTS, EXPECTED_COMPONENTS, loaded])
+	_check(instantiated == EXPECTED_COMPONENTS, "PackedScene 应 %d/%d 可实例化，实得 %d" % [EXPECTED_COMPONENTS, EXPECTED_COMPONENTS, instantiated])
 	_check(palette_materials > 0, "导入后材质必须实际绑定公共色盘")
 	print("prefabs loaded=%d instantiated=%d palette_materials=%d" % [loaded, instantiated, palette_materials])
 
@@ -218,6 +230,10 @@ func _check_plan_record(room_id: String, record: Dictionary, expected: Dictionar
 	_check(bool(record.get("authored_layout_shell", false)), "%s 必须启用 authored_layout_shell" % room_id)
 	_check(str(record.get("authored_layout_version", "")) == str(expected["expected_version"]), "%s 房型版本应为 %s" % [room_id, expected["expected_version"]])
 	_check(str(record.get("authored_layout_asset_id", "")) == str(expected["expected_asset_id"]), "%s 房型 asset_id 不符" % room_id)
+	if expected.has("template_variant"):
+		# 运行房表的精简 record 不透传 template_variant；具体房间 asset_id 只有在生成器
+		# 同时匹配 room_key/template_id/template_variant 时才会选中，因此它就是变体门禁。
+		_check(str(record.get("authored_layout_asset_id", "")) == str(expected["expected_asset_id"]), "%s 必须选中 %s 差异布局" % [room_id, expected["template_variant"]])
 	_check(instances.size() == int(expected["expected_instances"]), "%s 规划实例数应为 %d，实得 %d" % [room_id, int(expected["expected_instances"]), instances.size()])
 	var roles := _role_counts(instances)
 	_check(int(roles.get("floor_tile", 0)) == int(expected["expected_floor_tiles"]), "%s 主层地砖规划数错误：%s" % [room_id, str(roles)])
@@ -344,7 +360,7 @@ func _check_runtime_wall_contract(room_id: String, room: DungeonRoom3D, art_root
 	_check(bad_bridge_solids == 0, "room_05 不得保留带门洞视觉的普通 WALL_X670")
 	# 数据库房的墙体与门位由通用房间壳体承接，房型组件库不包含 solid_wall；
 	# 其门洞/门扇由后续 RoomDoor3D 合同验收，不能要求房型布局伪造 promoted wall。
-	if room_id in ["room_01", "room_02", "room_06", "room_08", "room_10"]:
+	if room_id in ["room_01", "room_02", "room_04", "room_06", "room_08", "room_10"]:
 		return
 	# 每个有门的房间都至少应有一件实墙按真实门槽提升为门墙。
 	var promoted := room.get_meta("authored_layout_promoted_walls", []) as Array

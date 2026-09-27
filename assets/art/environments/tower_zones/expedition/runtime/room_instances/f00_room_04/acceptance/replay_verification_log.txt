@@ -1,0 +1,3 @@
+ROOM_TYPE_COMPONENT_REPLAY_OK checks=4539
+room_04 instances=123 floor_tiles=60 solid_walls=46 room_type_components=17 room_specific_components=0 unresolved=0
+packed_scene loaded=160 instantiated=160 palette_materials=615

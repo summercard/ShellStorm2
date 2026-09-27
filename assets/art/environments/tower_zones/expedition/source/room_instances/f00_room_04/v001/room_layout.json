@@ -1,0 +1,4753 @@
+{
+  "schema": "shellstorm2.battle.room_instance_layout",
+  "schema_version": 1,
+  "level_id": "expedition_01",
+  "block_id": "expedition",
+  "room_id": "f00_room_04",
+  "room_key": "room_04",
+  "room_type": "COMMON_ROOM",
+  "template_id": "corridor_45x40",
+  "template_variant": "u_turn",
+  "layout_version": "v001",
+  "dimensions_m": [
+    45.0,
+    40.0
+  ],
+  "whitebox_source": "source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
+  "component_source": "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_catalog.json",
+  "component_source_version": "v012",
+  "base_layout": "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
+  "base_layout_sha256": "a57df50a1c877772c6c31d39793386529bf570e010e3c2213f493b5ea2cf1495",
+  "source_blend": null,
+  "coordinate_contract": {
+    "source": "blender_z_up_room_centered_layout_space",
+    "source_bounds_xy_m": [
+      [
+        -22.5,
+        -20.0
+      ],
+      [
+        22.5,
+        20.0
+      ]
+    ],
+    "target": "godot_y_up_room_local",
+    "mapping": "(bx, by, bz) -> (bx, bz, -by)",
+    "rotation_y_deg_semantics_in_source": "rotation_about_blender_Z"
+  },
+  "instance_overrides": [
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_03"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_05"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_03"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_05"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_03"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_05"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-PLANTER_02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_03"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C05"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C03"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C03"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C04"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C05"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C07"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C08"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_SOUTH"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_REAR"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_REAR"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_REAR"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_REAR"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_REAR"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_45"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_45"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_45"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00"
+    },
+    {
+      "op": "remove",
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_45"
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C00",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -20.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C01",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -15.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C02",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -10.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C03",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -5.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C04",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          0.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C05",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          5.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R00_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R00_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          -17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C00",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -20.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C01",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -15.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C02",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -10.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C03",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -5.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C04",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          0.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C05",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          5.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R01_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R01_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          -12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C00",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -20.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C01",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -15.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C02",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -10.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C03",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -5.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C04",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          0.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C05",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          5.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R02_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R02_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          -7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R03_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R03_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          -2.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R03_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R03_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          -2.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R03_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R03_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          -2.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R04_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R04_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          2.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R04_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R04_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          2.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R04_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R04_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          2.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C00",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -20.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C01",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -15.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C02",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -10.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C03",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -5.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C04",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          0.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C05",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          5.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R05_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R05_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          7.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C00",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -20.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C01",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -15.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C02",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -10.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C03",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -5.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C04",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          0.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C05",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          5.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R06_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R06_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          12.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C00",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -20.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C01",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -15.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C02",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -10.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C03",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          -5.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C04",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          0.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C05",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          5.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C06",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          10.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C07",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          15.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_FLOOR_R07_C08",
+      "instance": {
+        "instance_id": "ROOM04_U_FLOOR_R07_C08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+        "position_m": [
+          20.0,
+          17.5,
+          -0.3
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_00",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -20.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_01",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -15.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_02",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -10.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_03",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -5.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_04",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          0.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_05",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          5.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_06",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          10.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_07",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          15.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_NORTH_08",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_NORTH_08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          20.0,
+          -20.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_00",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -20.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_01",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -15.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_02",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -10.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_03",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -5.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_04",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          0.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_05",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          5.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_06",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          10.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_07",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          15.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_SOUTH_08",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_SOUTH_08",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          20.0,
+          19.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_00",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          -17.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_01",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          -12.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_02",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          -7.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_03",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          -2.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_04",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          2.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_05",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          7.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_06",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          12.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_EAST_07",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_EAST_07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          22.387,
+          17.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_WEST_N_00",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_WEST_N_00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          -22.613,
+          -17.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_WEST_N_01",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_WEST_N_01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          -22.613,
+          -12.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_WEST_N_02",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_WEST_N_02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          -22.613,
+          -7.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_WEST_S_05",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_WEST_S_05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          -22.613,
+          7.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_WEST_S_06",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_WEST_S_06",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          -22.613,
+          12.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_WEST_S_07",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_WEST_S_07",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          -22.613,
+          17.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_N_00",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_N_00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -20.0,
+          -5.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_N_01",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_N_01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -15.0,
+          -5.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_N_02",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_N_02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -10.0,
+          -5.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_N_03",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_N_03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -5.0,
+          -5.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_N_04",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_N_04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          0.0,
+          -5.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_N_05",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_N_05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          5.0,
+          -5.1055,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_S_00",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_S_00",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -20.0,
+          4.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_S_01",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_S_01",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -15.0,
+          4.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_S_02",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_S_02",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -10.0,
+          4.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_S_03",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_S_03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          -5.0,
+          4.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_S_04",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_S_04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          0.0,
+          4.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_S_05",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_S_05",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+        "position_m": [
+          5.0,
+          4.8945,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_E_03",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_E_03",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          7.387,
+          -2.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_WALL_INNER_E_04",
+      "instance": {
+        "instance_id": "ROOM04_U_WALL_INNER_E_04",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+        "position_m": [
+          7.387,
+          2.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_00_ACCESS_CONSOLE_A",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_00_ACCESS_CONSOLE_A",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+        "position_m": [
+          12.5,
+          -12.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_01_ACCESS_CONSOLE_B",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_01_ACCESS_CONSOLE_B",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+        "position_m": [
+          18.0,
+          10.0,
+          0.0
+        ],
+        "rotation_y_deg": 90.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_02_CRATE",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_02_CRATE",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+        "position_m": [
+          10.5,
+          11.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_03_HANGING_CABLE_A",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_03_HANGING_CABLE_A",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+        "position_m": [
+          15.5,
+          -10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_04_HANGING_CABLE_C",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_04_HANGING_CABLE_C",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+        "position_m": [
+          15.5,
+          10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_05_HANGING_CABLE_E",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_05_HANGING_CABLE_E",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+        "position_m": [
+          17.5,
+          0.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_06_HIGH_PIPE_A",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_06_HIGH_PIPE_A",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+        "position_m": [
+          19.5,
+          -10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_07_HIGH_PIPE_A",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_07_HIGH_PIPE_A",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+        "position_m": [
+          19.5,
+          10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_08_HIGH_PIPE_B",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_08_HIGH_PIPE_B",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+        "position_m": [
+          -2.5,
+          -13.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_09_HIGH_PIPE_C",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_09_HIGH_PIPE_C",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+        "position_m": [
+          -2.5,
+          13.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_10_PIPE_RISER",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_10_PIPE_RISER",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+        "position_m": [
+          20.5,
+          0.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_11_PLANTER",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_11_PLANTER",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+        "position_m": [
+          11.5,
+          -10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_12_SERVER_GALLERY",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_12_SERVER_GALLERY",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+        "position_m": [
+          -2.5,
+          -13.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_13_SERVER_RACK",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_13_SERVER_RACK",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+        "position_m": [
+          12.5,
+          10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_14_SERVICE_CART_A",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_14_SERVICE_CART_A",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+        "position_m": [
+          -14.5,
+          -10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_15_SERVICE_CART_B",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_15_SERVICE_CART_B",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+        "position_m": [
+          -14.5,
+          10.0,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "instance_id": "ROOM04_U_DECOR_16_WALL_LABEL",
+      "instance": {
+        "instance_id": "ROOM04_U_DECOR_16_WALL_LABEL",
+        "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+        "position_m": [
+          2.5,
+          13.5,
+          0.0
+        ],
+        "rotation_y_deg": 0.0,
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    }
+  ],
+  "instances": [
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -20.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -15.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -10.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -5.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        0.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        5.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R00_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        -17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -20.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -15.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -10.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -5.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        0.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        5.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R01_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        -12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -20.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -15.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -10.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -5.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        0.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        5.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R02_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        -7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R03_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        -2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R03_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        -2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R03_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        -2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R04_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R04_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R04_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        2.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -20.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -15.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -10.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -5.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        0.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        5.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R05_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        7.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -20.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -15.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -10.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -5.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        0.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        5.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R06_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        12.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -20.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -15.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -10.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        -5.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        0.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        5.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        10.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        15.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_FLOOR_R07_C08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "position_m": [
+        20.0,
+        17.5,
+        -0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -20.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -15.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -10.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -5.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        0.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        5.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        10.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        15.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_NORTH_08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        20.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -20.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -15.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -10.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -5.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        0.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        5.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        10.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        15.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_SOUTH_08",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        20.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_EAST_07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        22.387,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_WEST_N_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        -22.613,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_WEST_N_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        -22.613,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_WEST_N_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        -22.613,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_WEST_S_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        -22.613,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_WEST_S_06",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        -22.613,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_WEST_S_07",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        -22.613,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_N_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -20.0,
+        -5.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_N_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -15.0,
+        -5.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_N_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -10.0,
+        -5.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_N_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -5.0,
+        -5.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_N_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        0.0,
+        -5.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_N_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        5.0,
+        -5.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_S_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -20.0,
+        4.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_S_01",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -15.0,
+        4.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_S_02",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -10.0,
+        4.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_S_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        -5.0,
+        4.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_S_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        0.0,
+        4.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_S_05",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "position_m": [
+        5.0,
+        4.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_E_03",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        7.387,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_WALL_INNER_E_04",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "position_m": [
+        7.387,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_00_ACCESS_CONSOLE_A",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "position_m": [
+        12.5,
+        -12.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_01_ACCESS_CONSOLE_B",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "position_m": [
+        18.0,
+        10.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_02_CRATE",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "position_m": [
+        10.5,
+        11.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_03_HANGING_CABLE_A",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "position_m": [
+        15.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_04_HANGING_CABLE_C",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "position_m": [
+        15.5,
+        10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_05_HANGING_CABLE_E",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+      "position_m": [
+        17.5,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_06_HIGH_PIPE_A",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "position_m": [
+        19.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_07_HIGH_PIPE_A",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "position_m": [
+        19.5,
+        10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_08_HIGH_PIPE_B",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "position_m": [
+        -2.5,
+        -13.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_09_HIGH_PIPE_C",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "position_m": [
+        -2.5,
+        13.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_10_PIPE_RISER",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "position_m": [
+        20.5,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_11_PLANTER",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "position_m": [
+        11.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_12_SERVER_GALLERY",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "position_m": [
+        -2.5,
+        -13.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_13_SERVER_RACK",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "position_m": [
+        12.5,
+        10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_14_SERVICE_CART_A",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "position_m": [
+        -14.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_15_SERVICE_CART_B",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "position_m": [
+        -14.5,
+        10.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "instance_id": "ROOM04_U_DECOR_16_WALL_LABEL",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
+      "position_m": [
+        2.5,
+        13.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "validation": {
+    "room_owned_geometry": false,
+    "component_budget_limit": 50,
+    "unique_component_count": 19,
+    "unique_component_ids": [
+      "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
+      "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
+      "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
+      "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
+      "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
+      "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
+      "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
+      "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
+      "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
+      "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
+      "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
+      "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
+      "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
+      "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
+      "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
+      "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
+      "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
+      "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL"
+    ],
+    "base_instance_count": 121,
+    "resolved_instance_count": 123,
+    "floor_tile_count": 60,
+    "solid_wall_count": 46,
+    "room_type_component_count": 17,
+    "non_unit_scale_count": 0,
+    "missing_components": [],
+    "footprint_area_m2": 1500.0,
+    "notch_bounds_xy_m": [
+      [
+        -22.5,
+        -5.0
+      ],
+      [
+        7.5,
+        5.0
+      ]
+    ],
+    "room_specific_component_count": 0
+  }
+}

@@ -74,6 +74,18 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"door_wall_component_id": "",
 	},
 }
+const ROOM_INSTANCE_LAYOUT_SOURCES := {
+	"room_04": {
+		"path": "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",
+		"version": "v001",
+		"component_version": "v012",
+		"asset_id": "ENV-EXPEDITION-L01-CORRIDOR-U-TURN-ROOM04-LAYOUT",
+		"template_id": "corridor_45x40",
+		"template_variant": "u_turn",
+		"size_m": Vector2(45.0, 40.0),
+		"door_wall_component_id": "",
+	},
+}
 const SHELL_COMPONENT_CATALOG_PATH := (
 	"res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
 )
@@ -929,13 +941,17 @@ static func _place_recursive(
 			"center": center,
 			# 桥房族的实际落位尺寸由**连接方向**决定（本体 / 转置），不等于槽位尺寸。
 			"size": candidate["size"],
+			"parent_key": str(slot.get("parent_key", "")),
 			"template_id": str(candidate.get("template_id", "")),
 			"template_variant": str(candidate.get("template_variant", "")),
 			"short_edge_locked": bool(candidate.get("short_edge_locked", false)),
 			"rotation_deg": float(candidate.get("rotation_deg", 0.0)),
 			"dir": _direction_from_delta(center - _parent_center(slot, placed)),
 		})
-		if _place_recursive(slots, index + 1, placed, rng, state):
+		if (
+			_new_connection_accepts_declared_footprints(placed)
+			and _place_recursive(slots, index + 1, placed, rng, state)
+		):
 			return true
 		placed.pop_back()
 	return false
@@ -944,6 +960,52 @@ static func _place_recursive(
 ## 一个候选落位点。带**实际尺寸与旋转角** —— 桥房族的尺寸由连接方向决定（本体 / 转置），
 ## 与槽位里存的本体不同，所以不能只留在槽位里。模板 id 不跟着换（转置只是旋转，
 ## 不是另一个房型），尺寸差异由 `rotation_deg` 解释。
+## 每新增一条父子连接就校验这条门是否落在两端声明 footprint 的真实外边界上。
+## 钉死房型时不能等到 authored shell 阶段再把 u_turn 静默换成 l_turn；不兼容候选
+## 在此立即淘汰，回溯成本只是一条边，而不是整张图生成完后全部推倒。
+static func _new_connection_accepts_declared_footprints(placed: Array[Dictionary]) -> bool:
+	if placed.size() < 2:
+		return true
+	var child := placed[-1] as Dictionary
+	var parent_index := _placed_index_by_key(placed, str(child.get("parent_key", "")))
+	if parent_index < 0:
+		return true
+	var parent := placed[parent_index] as Dictionary
+	var pair := ROOM_DOOR_LANE.port_pair(
+		child.get("center", Vector2.ZERO) as Vector2,
+		child.get("size", Vector2.ZERO) as Vector2,
+		parent.get("center", Vector2.ZERO) as Vector2,
+		parent.get("size", Vector2.ZERO) as Vector2
+	)
+	var templates := LEVEL_PLAN_LOADER.load_room_templates("expedition_01")
+	return (
+		_room_footprint_accepts_one_port(child, str(pair.get("a_side", "")), float(pair.get("a_lane", 0.0)), templates)
+		and _room_footprint_accepts_one_port(parent, str(pair.get("b_side", "")), float(pair.get("b_lane", 0.0)), templates)
+	)
+
+
+static func _room_footprint_accepts_one_port(
+	room: Dictionary, side: String, lane: float, templates: Dictionary
+) -> bool:
+	var template := templates.get(str(room.get("template_id", "")), {}) as Dictionary
+	var variants := template.get("variant_footprints", {}) as Dictionary
+	var variant := str(room.get("template_variant", ""))
+	if not variants.has(variant):
+		return true
+	var outline := variants[variant] as Dictionary
+	var center := room.get("center", Vector2.ZERO) as Vector2
+	var size := room.get("size", Vector2.ZERO) as Vector2
+	var by_center := -center.y
+	var door_coordinate := center.x + lane if side in ["north", "south"] else by_center - lane
+	return ROOM_SHELL_LAYOUT_BUILDER.footprint_accepts_ports(
+		outline.get("vertices_m", []) as Array,
+		str(outline.get("frame", ROOM_SHELL_LAYOUT_BUILDER.FOOTPRINT_FRAME)),
+		[center.x - size.x * 0.5, center.x + size.x * 0.5],
+		[by_center - size.y * 0.5, by_center + size.y * 0.5],
+		{side: door_coordinate}, {}
+	)
+
+
 static func _placement_candidate(
 	center: Vector2, size: Vector2, slot: Dictionary, rotation_deg: float = 0.0
 ) -> Dictionary:
@@ -1368,9 +1430,11 @@ static func attach_authored_layout_shell(
 		if key.is_empty() or str(room.get("role", "")) == "stair_entry":
 			continue
 		var center := room.get("center", Vector2.ZERO) as Vector2
-		# 02 已冻结的房型默认布局优先于运行时通用壳体。成功读取后直接把完整实例清单
-		# 写入现有 authored_layout_instances 通道；办公室和桥房都不再叠加第二套程序化视觉。
-		var room_type_layout := _room_type_layout_for_room(room)
+		# 03 的具体房间差异布局优先；没有差异布局时才重放 02 的房型默认布局。
+		# 两路都解析成同一 authored_layout_instances 通道，Godot 不维护第二套手工坐标。
+		var room_type_layout := _room_instance_layout_for_room(room)
+		if room_type_layout.is_empty():
+			room_type_layout = _room_type_layout_for_room(room)
 		if not room_type_layout.is_empty():
 			room["authored_layout_shell"] = true
 			room["authored_layout_asset_id"] = str(room_type_layout.get("asset_id", ""))
@@ -1427,6 +1491,19 @@ static func attach_authored_layout_shell(
 		room["authored_layout_instances"] = filtered
 
 
+## —— 具体房间差异布局：03 的 resolved instances → authored_layout_instances ——
+static func _room_instance_layout_for_room(room: Dictionary) -> Dictionary:
+	var room_key := str(room.get("key", ""))
+	if not ROOM_INSTANCE_LAYOUT_SOURCES.has(room_key):
+		return {}
+	var source_spec := ROOM_INSTANCE_LAYOUT_SOURCES[room_key] as Dictionary
+	if str(room.get("template_id", "")) != str(source_spec.get("template_id", "")):
+		return {}
+	if str(room.get("template_variant", "")) != str(source_spec.get("template_variant", "")):
+		return {}
+	return _load_authored_component_layout(room, source_spec, "具体房间组件布局")
+
+
 ## —— 房型默认布局：02 的 component_instances.json → authored_layout_instances ——
 ##
 ## 一个 component_id 对应一个稳定 PackedScene；本函数只搬运实例变换，并从运行时 catalog
@@ -1453,14 +1530,33 @@ static func _room_type_layout_for_room(room: Dictionary) -> Dictionary:
 			% [template_id, str(got_size), str(want_size)]
 		)
 		return {}
+	return _load_authored_component_layout(room, source_spec, "房型组件布局")
+
+
+static func _load_authored_component_layout(
+	room: Dictionary, source_spec: Dictionary, label: String
+) -> Dictionary:
+	var template_id := str(room.get("template_id", ""))
+	var room_rotation := float(room.get("rotation_deg", 0.0))
 	var source_path := str(source_spec.get("path", ""))
-	var source := _read_json_dictionary(source_path, "房型组件布局")
+	var source := _read_json_dictionary(source_path, label)
 	if source.is_empty():
+		return {}
+	var expected_template := str(source_spec.get("template_id", ""))
+	if not expected_template.is_empty() and str(source.get("template_id", "")) != expected_template:
+		push_error("FloorPlanGenerator: %s 的 template_id 与登记不符" % label)
+		return {}
+	var expected_variant := str(source_spec.get("template_variant", ""))
+	if not expected_variant.is_empty() and str(source.get("template_variant", "")) != expected_variant:
+		push_error("FloorPlanGenerator: %s 的 template_variant 与登记不符" % label)
 		return {}
 	var catalog_roles := _load_shell_component_roles()
 	if catalog_roles.is_empty():
 		return {}
-	var expected_count := int((source.get("validation", {}) as Dictionary).get("instance_count", -1))
+	var validation := source.get("validation", {}) as Dictionary
+	var expected_count := int(validation.get(
+		"resolved_instance_count", validation.get("instance_count", -1)
+	))
 	var instances: Array = []
 	for value in source.get("instances", []):
 		if not (value is Dictionary):
@@ -1511,6 +1607,7 @@ static func _room_type_layout_for_room(room: Dictionary) -> Dictionary:
 	return {
 		"asset_id": str(source_spec.get("asset_id", "")),
 		"version": str(source_spec.get("version", "")),
+		"component_version": str(source_spec.get("component_version", source_spec.get("version", ""))),
 		"instances": instances,
 	}
 

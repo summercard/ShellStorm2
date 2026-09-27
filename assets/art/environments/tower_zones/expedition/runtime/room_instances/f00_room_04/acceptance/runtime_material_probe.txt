@@ -1,0 +1,4 @@
+room_04 component_library=v012
+shared_component_prefabs=27
+room_specific_components=0
+common_palette_binding=passed
