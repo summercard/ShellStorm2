@@ -1,5 +1,29 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-27｜玩家跑步动画播放速度 ×1.3
+
+- **业主指定「只调播放速度」**：`CharacterMotionLibrary3D` 新增常量 `RUN_CLIP_RATE_SCALE = 1.3`，在 `apply()` 里对跑步剪辑的相位推进速率整体缩放：`rate = clampf(planar_speed / 5.0, 0.72, 1.18) × 1.3`（`_time += delta * rate`）。持械跑步 `armed_moving` 走同一条 rate，一并生效；走路剪辑 `walking`（除数 2.4）**不参与**，保持 1.0。
+- **数值**：跑步剪辑 `moving` = 0.8s/循环、每循环左右脚各抬 1 次。常速（移速 5.0 m/s ⇒ 基准 rate = 1.0）下循环周期 `0.8 / 1.3 = 0.615s`、步频 `2 步 / 0.615s = 3.25 步/秒`、步幅 `5.0 / 3.25 = 1.538 m`（改前 2.5 步/秒、步幅 2.0 m，偏滑）。移速带加成时先钳位再乘，实际区间 `[0.72×1.3, 1.18×1.3] = [0.936, 1.534]`。
+- **当时未改**：`Player3D.SPEED`（随后业主另指定 `5.0 → 4.6`，见下一条）、走路分支、剪辑 JSON 的 `duration`（Blender 导出产物，重导会被覆盖）。低移速撞墙等情形下钳位下限被抬到 0.936，腿部略快于位移 —— 属既有钳位语义，未另设下限。
+- **验收**：本次未跑（业主要求只改数值）。既有门禁 `verify_character_authoring_bundle` 不校验倍率（只校验剪辑齐全、基础剪辑不使网格变形、掌心贴合枪械 socket），在倍率 1.6 时实跑为 `CHARACTER_AUTHORING_BUNDLE_OK`（`EXIT=0`）。探针 `_scratch/run_clip_rate_probe/probe_run_clip_rate.tscn` 已备好：统计 6 秒内 `foot_l` 抬脚次数换算实际循环周期，改常量回 1.0 可做反向对照。未提交。
+
+## 2026-09-27｜玩家移动速度 5.0 → 4.6 m/s
+
+- **业主指定**：`Player3D.SPEED` 由 `5.0` 改为 `4.6`（m/s）。冲刺 `DASH_SPEED = 16.5` / `DASH_DURATION = 0.204s` / 冷却 `2.2s`、重力 `24.0`、空中控制 `24.0` 均不变 ⇒ 冲刺位移仍为 `16.5 × 0.204 ≈ 3.37 m`，冲刺相对常速倍率由 `3.30×` 升到 `3.59×`；命运卡移速加成继续乘在 `get_move_speed()` 上（`4.6 × multiplier`）。
+- **与跑步动画的关系（未同步除数，待裁定）**：`CharacterMotionLibrary3D` 的除数仍是 `5.0`，保留「动画速率随实际移速线性自适应」的既有语义 ⇒ 常速下 `rate = clampf(4.6 / 5.0, 0.72, 1.18) × 1.3 = 1.196`，循环周期 `0.8 / 1.196 = 0.669s`、步频 `2.99 步/秒`、**步幅仍为 `4.6 / 2.99 = 1.538 m`**（与改速前一致，不打滑）。若要让步频固定在 3.25 步/秒（步幅随之降到 1.415 m），把该除数同步改成 `4.6` 即可。
+- **文档同步**：[03 玩家与操作 §2](../03_技术施工_玩家与操作.md) 两处 `5.0m/s → 4.6m/s`（已实装基线段、体型基线段）；历史记录文件不动。
+- **验收**：未跑（业主只要求改数值）。已核对门禁：用玩家移速的地方取 `player.get_move_speed()`（如 `verify_player3d_lower_body_socket_flow:31`），未发现对玩家移动速度写死 `5.0` 的判据。未提交。
+
+## 2026-09-27｜普通怪通用弹药掉落发数 3–8 → 30–50
+
+- **数值调整（业主指定）**：普通怪备弹由 **3–8 发**上调为 **30–50 发**。掉落概率 **0.34 不变**；精英 / Boss 的 `DROP_AMMO_MIN_ELITE` / `DROP_AMMO_MAX_ELITE`（8–16）**不在本次范围内**。
+- **两处同步落地**，避免同一关内出现两套备弹量：① 跨关卡作者表 `docs/v0.1/data/怪物掉落表_地图x怪物.csv` 的远征01 三行（小菌猪 / 孢子射手 / 炸弹果）由 `3-8` 改为 `30-50`；② 旧公式兜底常量 `MonsterInjector.DROP_AMMO_MIN_NORMAL` / `DROP_AMMO_MAX_NORMAL`。后者决定**未配置怪与塔楼各层**的普通怪备弹量，属全局平衡改动。`level_plan.json` / `monster_drop_table` 由 `scripts/export_monster_drop_table.py` 重新导出，`rows_sha256` 更新为 `fe6e7387…`，`--check` 报 `levels=1 rows=16 changed=0`。
+- **新增门禁判据** `verify_reward_service_flow._case_normal_ammo_range`：① 规格层直读 `MonsterInjector.drop_spec_for` 的备弹条目区间（普通怪 `{min:30,max:50}` / 概率 0.34、精英 `{min:8,max:16}`）；② 运行层真跑覆盖链，要求产出 ≥30 发档备弹。**反向对照已做**：把常量改回 3/8 后该用例报 4 条红、还原后复绿 —— 其中 `max > 8` 这条在旧值下必假，所以它不是自我满足的区间检查。
+- **坑（已在用例注释里写明）**：不能把「所有 `item_ammo_pack` 掉落都 ≥30」当判据 —— 普通怪另有 26% 的**池**抽取，池里的 `item_ammo_pack` 是「1 件 = 1 发」的地面单件（`RewardService._resolve_pool_entry` 固定 `count = 1`）。池抽到弹药、而 34% 加成未中时确实只拿 1 发，这是**既有池语义**，不是本次调整的产物。
+- **验收**：`REWARD_SERVICE_FLOW_OK`（含新判据）/ `REWARD_GROUND_HANDOFF_OK` / `FINITE_AMMO_FLOW_OK` / `GUARANTEED_LOADOUT_AMMO_OK` / `LEVEL_PLAN_RUNTIME_GUARD_OK … monster_drop_rows=16` / `MONSTER_DROP_TABLE_CHECK_OK` 全绿。运行时探针 `_scratch/lootprobe/probe_ammo_range`（seed 77001199，各 120 次击杀）实测 `melee_chaser` / `ranged_caster` / `exploder` 三种怪的备弹 min=30 / max=50。
+- 同步文档：[远征关卡01设计 §4.5.2](../design/远征关卡01设计.md)（三行数值 + 新增「数值变更」段）；精英 / Boss 的 8–16 与保底备弹 300 发均未改动。
+- **隔离阻塞（与本次无关）**：`verify_expedition_level01_flow` 仍稳定失败于 `room_03` / `room_05` / `room_09` 的房型外壳碰撞检查，发生在掉落断言之后；未擅改墙体资产。未提交。
+
 ## 2026-09-26｜远征01 波次自动衔接修复 ＋ `room_09` 事件房改为「事件 ＋ 战斗」双职
 
 - **修「波次衔接须手动按离开的门才触发」**（业主报障）：两条独立根因 —— ① `Dungeon3D._on_room_entered` 里 `flush_runtime_checkpoint("room_transition")` 早于 `_spawn_room_enemies`，那一刻本房还没建 `_room_wave_totals`，快照 `wave_total` 仅为 `get()` 兜底值 1、队列空，随后 `_restore_room_runtime_state` 回灌把刚写的「2 波 · 1 待发」压回「1 波 · 0 待发」；② 延迟出怪（`spawn_delay_sec`）双重记账（`_queue_delayed_spawn` 时不加、到点 `additive=true` 再加一次 ⇒ 每只留幽灵计数、`alive == 0` 恒不成立）。修复：`_capture_room_runtime_state` 加 `wave_established`，`_restore_room_runtime_state` 加 `keep_live_combat_progress` 跳过压回，`_spawn_enemy_batch` 记 `queued_delayed` 并入存活账，`_on_delayed_spawn_timeout` 改 `count_reserved=true`。

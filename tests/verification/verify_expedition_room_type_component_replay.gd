@@ -19,6 +19,12 @@ const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色�
 const LEVEL_ID := "expedition_01"
 const RUN_SEED := 77001199
 const EXPECTED_COMPONENTS := 60
+const COMMON_FLOOR_IDS := [
+	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+]
+const BRIDGE_BAD_WALL_ID := "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
+const GENERIC_SOLID_WALL_ID := "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 const TARGETS := {
 	"room_03": {
 		"template_id": "office_60x70",
@@ -201,6 +207,9 @@ func _check_runtime_room(room_id: String, room: DungeonRoom3D, expected: Diction
 		_check(is_zero_approx(cell.y), "%s 主层地砖格 y 必须归零" % room_id)
 	if room_id in ["room_03", "room_09"]:
 		_check(int(room.get_meta("authored_layout_door_wall_count", -1)) >= 1, "%s 必须至少实例化 1 件办公室门墙" % room_id)
+	_check_runtime_floor_tiles(room_id, art_root, int(expected["expected_floor_tiles"]))
+	_check_runtime_wall_contract(room_id, room, art_root)
+	_check_door_aperture(room_id, room, art_root)
 	_check_runtime_doors(room_id, room)
 	print("runtime %-7s unresolved=%d floor_tiles=%d room_type=%d doors=%d" % [
 		room_id,
@@ -209,6 +218,132 @@ func _check_runtime_room(room_id: String, room: DungeonRoom3D, expected: Diction
 		int(room.get_meta("authored_layout_room_type_component_count", -1)),
 		(room.get("_door_nodes") as Dictionary).size(),
 	])
+
+
+func _check_runtime_floor_tiles(room_id: String, art_root: Node3D, expected_count: int) -> void:
+	if art_root == null:
+		return
+	var counts := {COMMON_FLOOR_IDS[0]: 0, COMMON_FLOOR_IDS[1]: 0}
+	var total := 0
+	for child in art_root.get_children():
+		if not (child is Node3D):
+			continue
+		var node := child as Node3D
+		var component_id := str(node.get_meta("authored_component_id", ""))
+		if component_id not in COMMON_FLOOR_IDS:
+			continue
+		total += 1
+		counts[component_id] = int(counts[component_id]) + 1
+		_check(
+			is_equal_approx(node.position.y, float(node.get_meta("walk_plane_snap_y", INF))),
+			"%s 通用地砖位置必须使用自身 walk-plane 偏移" % room_id
+		)
+	_check(total == expected_count, "%s 运行时必须用 %d 块通用地砖，实得 %d" % [room_id, expected_count, total])
+	_check(abs(int(counts[COMMON_FLOOR_IDS[0]]) - int(counts[COMMON_FLOOR_IDS[1]])) <= 1, "%s 通用地砖必须按 C01/C02 棋盘交替：%s" % [room_id, str(counts)])
+
+
+func _check_runtime_wall_contract(room_id: String, room: DungeonRoom3D, art_root: Node3D) -> void:
+	if art_root == null:
+		return
+	var bad_bridge_solids := 0
+	for child in art_root.get_children():
+		if not (child is Node3D):
+			continue
+		var wall := child as Node3D
+		var source_id := str(wall.get_meta("authored_source_component_id", ""))
+		var resolved_id := str(wall.get_meta("authored_component_id", ""))
+		var direction := str(wall.get_meta("tower_wall_direction", ""))
+		if direction.is_empty():
+			continue
+		var expected_yaw := 0.0 if direction in ["north", "south"] else 90.0
+		if bool(wall.get_meta("authored_door_wall_promoted", false)):
+			_check(
+				is_equal_approx(absf(rad_to_deg(wall.rotation.y)), expected_yaw),
+				"%s 的 %s 门墙旋转必须与 %s 墙面一致，实得 %.1f°"
+				% [room_id, wall.name, direction, rad_to_deg(wall.rotation.y)]
+			)
+		if room_id == "room_05" and source_id == BRIDGE_BAD_WALL_ID:
+			if not bool(wall.get_meta("authored_door_wall_promoted", false)):
+				_check(resolved_id == GENERIC_SOLID_WALL_ID, "%s 的非门槽 WALL_X670 必须替换成通用实墙" % wall.name)
+				if resolved_id != GENERIC_SOLID_WALL_ID:
+					bad_bridge_solids += 1
+	_check(bad_bridge_solids == 0, "room_05 不得保留带门洞视觉的普通 WALL_X670")
+	var promoted := room.get_meta("authored_layout_promoted_walls", []) as Array
+	_check(not promoted.is_empty(), "%s 至少应有一件实墙按真实门槽提升为门墙" % room_id)
+
+
+## 门位门墙必须**真的留出通透门洞**：升降门板上行时，门洞区里不能有墙件几何。
+## 2.2×2.5m 净空由 TowerGeometry3D 定义；这里在门墙模块的局部坐标里判，
+## 与模块朝向无关（局部 X 恒为墙宽轴）。
+## 反例（2026-09-27 实测）：办公室 v006 的 `door_wall` 件门洞区正投影覆盖率 100%，
+## 门扇整个被埋在实心墙里，开与不开画面完全一致 —— 只数门扇存在是查不出来的。
+func _check_door_aperture(room_id: String, room: DungeonRoom3D, art_root: Node3D) -> void:
+	if art_root == null:
+		return
+	for direction_value in room.doors:
+		var direction := str(direction_value)
+		var door := room.get_door_node(direction)
+		if door == null:
+			continue
+		var wall := _door_lane_wall(art_root, direction, _along_of(door.position, direction))
+		_check(wall != null, "%s 的 %s 门位必须有一件门墙承接" % [room_id, direction])
+		if wall == null:
+			continue
+		var blocked := _count_geometry_in_door_clear_region(wall)
+		_check(
+			blocked == 0,
+			"%s 的 %s 门位门洞被 %d 个顶点封住（门墙未切通透门洞）"
+			% [room_id, direction, blocked]
+		)
+
+
+func _along_of(local_position: Vector3, direction: String) -> float:
+	return (
+		local_position.x
+		if direction in ["north", "south"]
+		else local_position.z
+	)
+
+
+## 门槽车道上那件门墙：按 tower_wall_direction + 沿墙坐标匹配（容差沿用门槽判据）。
+func _door_lane_wall(art_root: Node3D, direction: String, along: float) -> Node3D:
+	var best: Node3D = null
+	var best_gap := INF
+	for child in art_root.get_children():
+		var module := child as Node3D
+		if module == null:
+			continue
+		if str(module.get_meta("tower_wall_direction", "")) != direction:
+			continue
+		var gap := absf(_along_of(module.position, direction) - along)
+		if gap <= 0.3 and gap < best_gap:
+			best_gap = gap
+			best = module
+	return best
+
+
+## 门洞净空区（局部 |x| ≤ 1.1、y ∈ [0, 2.5]）内的墙件顶点数。
+func _count_geometry_in_door_clear_region(module: Node3D) -> int:
+	var to_module := module.global_transform.affine_inverse()
+	var blocked := 0
+	for node in module.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		var mesh := mesh_instance.mesh
+		if mesh == null:
+			continue
+		var to_module_from_mesh := to_module * mesh_instance.global_transform
+		for surface in range(mesh.get_surface_count()):
+			var arrays := mesh.surface_get_arrays(surface)
+			var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
+			for vertex in vertices:
+				var local := to_module_from_mesh * vertex
+				if (
+					absf(local.x) <= 1.05
+					and local.y >= 0.15
+					and local.y <= 2.35
+				):
+					blocked += 1
+	return blocked
 
 
 func _check_runtime_doors(room_id: String, room: DungeonRoom3D) -> void:

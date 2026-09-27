@@ -91,7 +91,7 @@
     "schema": "shellstorm2.monster_drop_table",
     "schema_version": 1,
     "source_csv": "docs/v0.1/data/怪物掉落表_地图x怪物.csv",
-    "rows_sha256": "f443874547b44a942c488ddb3999eefe241359e08a2365b3403104bd87711df4",
+    "rows_sha256": "fe6e73878830e4baa795f00f30e208d97fafbfcf2a07bf3eccfdf9983ef989de",
     "rows": [
       {
         "monster_id": "melee_chaser",
@@ -121,7 +121,7 @@
         "monster_id": "melee_chaser",
         "item_id": "item_ammo_pack",
         "chance": 0.34,
-        "quantity": "3-8",
+        "quantity": "30-50",
         "note": "备弹·独立判定"
       },
       {
@@ -155,7 +155,7 @@
         "monster_id": "ranged_caster",
         "item_id": "item_ammo_pack",
         "chance": 0.34,
-        "quantity": "3-8",
+        "quantity": "30-50",
         "note": "备弹·独立判定"
       },
       {
@@ -196,7 +196,7 @@
         "monster_id": "exploder",
         "item_id": "item_ammo_pack",
         "chance": 0.34,
-        "quantity": "3-8",
+        "quantity": "30-50",
         "note": "备弹·独立判定"
       },
       {

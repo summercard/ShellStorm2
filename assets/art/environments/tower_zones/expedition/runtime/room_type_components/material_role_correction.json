@@ -1,0 +1,566 @@
+{
+  "schema": "shellstorm2.expedition.room_type_material_role_correction.v001",
+  "reason": "这两批房型源把精工金属(metallic 0.86)当结构件默认材质；Godot 无反射来源 ⇒ 大面积不受光。校正为细腻哑光(metallic 0.03)，与其它房间口径一致。几何/UV/色盘格不变。",
+  "from_role": "01_精工金属",
+  "to_role": "02_细腻哑光_青绿大面",
+  "records": [
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/expedition_office_room_components_source_v006.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_deck_5m/ceiling_deck_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_lighting/ceiling_lighting.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/corner_guard/corner_guard.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/door_wall/door_wall.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/filing_run/filing_run.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_service/floor_service.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_tile_5m/floor_tile_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_zone_mark/floor_zone_mark.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/locker_bank/locker_bank.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/planting_perimeter/planting_perimeter.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/power_cabinet_bank/power_cabinet_bank.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/prep_bench/prep_bench.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/printer_station/printer_station.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/shelving/shelving.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/totem_column/totem_column.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t1110_5m/wall_t1110_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t615_5m/wall_t615_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t970_5m/wall_t970_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_top_service/wall_top_service.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/water_and_supply_corner/water_and_supply_corner.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/work_cluster/work_cluster.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "office_room",
+      "version": "v006"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bank_crate/bank_crate.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_girder/bridge_girder.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_guardrail/bridge_guardrail.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_service_transom/bridge_service_transom.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/coolant/coolant.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/cross_gantry/cross_gantry.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/deep_cables/deep_cables.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/deep_trunk/deep_trunk.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/end_crate/end_crate.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/end_power/end_power.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/half_partition/half_partition.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/header_cables/header_cables.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/longitudinal_tie/longitudinal_tie.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/low_platform_z4805/low_platform_z4805.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/low_platform_z6005/low_platform_z6005.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/lower_control/lower_control.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/mid_gallery/mid_gallery.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_crate/near_crate.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_server/near_server.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/partition_box/partition_box.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/pit_end/pit_end.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/pit_side/pit_side.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/platform_edge/platform_edge.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/shaft_column/shaft_column.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/tile_lower/tile_lower.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/tile_upper/tile_upper.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/torn_header/torn_header.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/underbridge_service_bay/underbridge_service_bay.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_bank_z5450/upper_bank_z5450.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_bank_z6197/upper_bank_z6197.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_console/upper_console.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/vertical_service/vertical_service.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_service_header/wall_service_header.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_x670/wall_x670.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_x780/wall_x780.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "room_type": "bridge_room",
+      "version": "v007"
+    }
+  ]
+}

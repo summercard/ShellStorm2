@@ -145,6 +145,10 @@ const WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 const DOOR_WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 const FLOOR_TILE_C01_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 const FLOOR_TILE_C02_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+const OFFICE_DARK_FLOOR_TILE_ID := "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
+const BRIDGE_DARK_UPPER_TILE_ID := "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER"
+const BRIDGE_DOOR_VISUAL_WALL_ID := "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
+const GENERIC_SOLID_WALL_ID := "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 const CORNER_L_COMPONENT_ID := "ENV-TOWER-CORNER-L-5M"
 # 门墙的**通用件名**（注册表 primary_key）。授权布局里「门墙」不再用硬编码 prefab 常量，
 # 而是把槽位解析成这个 ID 再查注册表 —— 与实墙同一条解析路径，prefab 的唯一真源仍在注册表。
@@ -1630,8 +1634,15 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 						float(instance.get("rotation_y_deg", 0.0))
 					)
 				var door_side := _authored_wall_door_side(local_position, half)
-				var uses_door := role == "door_wall" or not door_side.is_empty()
-				if not _spawn_authored_layout_wall(art_root, instance, uses_door):
+				# 门位**只认本局真实门槽车道**（tower_wall_door_offset_<side>），不认摆位源
+				# 的 `slot_role=door_wall`：房型源按规范「不冻结门位」，它的门墙件只是摆在自己
+				# 的建档位置（办公室那件落在 north x=+2.5，而本关 room_03 的 north 门槽在
+				# x=-2.5）。若在这里认 role，那件非门位的墙会被当成门墙换掉，凭空造出一个
+				# 没有门扇的假门洞；它自身几何是实体，当普通墙渲染才不会漏光。
+				var uses_door := not door_side.is_empty()
+				if not _spawn_authored_layout_wall(
+					art_root, instance, uses_door, wall_side, role == "solid_wall" and uses_door
+				):
 					unresolved.append(str(instance.get("name", "")))
 					continue
 				# 沿墙偏移：南北向墙取局部 x、东西向墙取局部 z —— 与
@@ -1970,12 +1981,24 @@ static func _authored_wall_direction(rotation_y_deg: float) -> String:
 	return ""
 
 
-func _spawn_authored_layout_wall(art_root: Node3D, instance: Dictionary, uses_door: bool) -> bool:
+func _spawn_authored_layout_wall(
+	art_root: Node3D,
+	instance: Dictionary,
+	uses_door: bool,
+	wall_side: String,
+	promoted_from_solid: bool
+) -> bool:
 	var component_id := str(instance.get("component_id", ""))
+	# v007 的 WALL_X670 曾误以门洞墙 wall_north_-1 作为 18 个普通墙槽位的视觉母版。
+	# 非门槽统一换现有通用实墙；真实门槽仍由门墙组件接管，避免不可通行处出现假门。
+	var resolved_id := (
+		GENERIC_SOLID_WALL_ID
+		if component_id == BRIDGE_DOOR_VISUAL_WALL_ID and not uses_door
+		else component_id
+	)
 	# 门墙与实墙走同一条注册表解析路径。房型源可声明自己的门墙组件；历史通用壳体
 	# 未声明时仍回退 DOOR_WALL_COMPONENT_ID。实墙在门槽上被提升时只替换为同房型门墙，
 	# 避免办公室正式墙面混入旧通用门墙。
-	var resolved_id := component_id
 	if uses_door:
 		resolved_id = str(instance.get("door_wall_component_id", ""))
 		if resolved_id.is_empty():
@@ -1993,20 +2016,27 @@ func _spawn_authored_layout_wall(art_root: Node3D, instance: Dictionary, uses_do
 		return false
 	module.name = str(instance.get("name", "AuthoredWall"))
 	var rotation_y_deg := float(instance.get("rotation_y_deg", 0.0))
+	# 门墙替换后不能沿用源实墙的局部轴角度：办公室 wall_t615 与门墙、桥房 wall_x780
+	# 与通用门墙的局部长轴相差 90°。最终门墙统一按已解析的墙 side 对齐门扇平面。
+	if uses_door:
+		rotation_y_deg = 0.0 if wall_side in ["north", "south"] else 90.0
 	module.position = instance.get("position", Vector3.ZERO) as Vector3
 	module.rotation.y = deg_to_rad(rotation_y_deg)
 	module.scale = instance.get("scale", Vector3.ONE) as Vector3
-	var world_direction := _authored_wall_direction(rotation_y_deg)
+	var world_direction := wall_side
+	if world_direction.is_empty():
+		world_direction = _authored_wall_direction(rotation_y_deg)
 	if world_direction.is_empty():
 		push_error(
-			"DungeonRoom3D: 授权墙 %s 的 rotation_z_deg=%s 不是四种墙向之一"
+			"DungeonRoom3D: 授权墙 %s 无法解析所在墙向（rotation_y_deg=%s）"
 			% [module.name, str(rotation_y_deg)]
 		)
 	module.set_meta("tower_wall_direction", world_direction)
 	module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
-	module.set_meta("authored_component_id", component_id)
+	module.set_meta("authored_component_id", resolved_id)
+	module.set_meta("authored_source_component_id", component_id)
 	if uses_door:
-		module.set_meta("authored_door_wall_promoted", component_id == WALL_COMPONENT_ASSET_ID)
+		module.set_meta("authored_door_wall_promoted", promoted_from_solid)
 	_set_camera_lower_wall_on_static_bodies(
 		module, world_direction in ["north", "south"]
 	)
@@ -2021,8 +2051,25 @@ func _spawn_authored_layout_wall(art_root: Node3D, instance: Dictionary, uses_do
 	return true
 
 
+static func _runtime_floor_tile_component_id(
+	source_component_id: String, local_position: Vector3
+) -> String:
+	if source_component_id not in [OFFICE_DARK_FLOOR_TILE_ID, BRIDGE_DARK_UPPER_TILE_ID]:
+		return source_component_id
+	# 与 RoomShellLayoutBuilder3D 相同的 5m 棋盘规则；只替换主层视觉，桥房坑底砖不经过此分支。
+	var grid_x := roundi((local_position.x - 2.5) / TOWER_GEOMETRY.GRID_UNIT_M)
+	var grid_z := roundi((local_position.z - 2.5) / TOWER_GEOMETRY.GRID_UNIT_M)
+	return (
+		FLOOR_TILE_C01_COMPONENT_ID
+		if absi(grid_x + grid_z) % 2 == 0
+		else FLOOR_TILE_C02_COMPONENT_ID
+	)
+
+
 func _spawn_authored_layout_floor_tile(art_root: Node3D, instance: Dictionary) -> bool:
-	var component_id := str(instance.get("component_id", ""))
+	var source_component_id := str(instance.get("component_id", ""))
+	var local_position := instance.get("position", Vector3.ZERO) as Vector3
+	var component_id := _runtime_floor_tile_component_id(source_component_id, local_position)
 	var prefab := _authored_component_prefab(component_id)
 	if prefab == null:
 		push_error(
@@ -2038,15 +2085,16 @@ func _spawn_authored_layout_floor_tile(art_root: Node3D, instance: Dictionary) -
 	# 砖面顶面按每个组件自己声明的 snap_to_walk_plane_offset_m 落到 Y=0
 	#（c01/c02 结构厚不同，不能共用一个硬编码偏移）。
 	var snap_offset := float(tile.get_meta("snap_to_walk_plane_offset_m", 0.0))
-	var local_position := instance.get("position", Vector3.ZERO) as Vector3
 	var target_y := local_position.y
-	if not bool(instance.get("preserve_authored_y", false)):
+	var runtime_remapped := component_id != source_component_id
+	if runtime_remapped or not bool(instance.get("preserve_authored_y", false)):
 		target_y = 0.0
 	tile.position = Vector3(local_position.x, target_y + snap_offset, local_position.z)
 	tile.rotation.y = deg_to_rad(float(instance.get("rotation_y_deg", 0.0)))
 	tile.scale = instance.get("scale", Vector3.ONE) as Vector3
 	tile.set_meta("walk_plane_snap_y", target_y + snap_offset)
 	tile.set_meta("authored_component_id", component_id)
+	tile.set_meta("authored_source_component_id", source_component_id)
 	# 承重归 TowerFloorStage3D._build_support()，这里必须把内嵌静态碰撞关掉。
 	_disable_static_collision_descendants(tile)
 	art_root.add_child(tile)

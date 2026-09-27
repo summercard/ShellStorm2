@@ -484,9 +484,12 @@ static func get_loot_table_for_level(floor_level: int) -> String:
 ## 普通怪：出 1 件非货币物品的概率。
 const DROP_ITEM_CHANCE_NORMAL := 0.26
 ## 普通怪：备弹概率与数量区间。
+## 【2026-09-27 数值调整】普通怪备弹由 3–8 上调为 30–50（主人指定）。概率 0.34 不变；
+## 精英 / Boss 的 8–16 是另一组常量，不在本次调整范围内。远征01已配置怪的实际发数走
+## `monster_drop_table`（作者表 CSV），本次两处同步改动，避免同关内出现两套备弹量。
 const DROP_AMMO_CHANCE_NORMAL := 0.34
-const DROP_AMMO_MIN_NORMAL := 3
-const DROP_AMMO_MAX_NORMAL := 8
+const DROP_AMMO_MIN_NORMAL := 30
+const DROP_AMMO_MAX_NORMAL := 50
 ## 精英 / Boss：稳定单件 + 满额备弹。
 const DROP_AMMO_MIN_ELITE := 8
 const DROP_AMMO_MAX_ELITE := 16

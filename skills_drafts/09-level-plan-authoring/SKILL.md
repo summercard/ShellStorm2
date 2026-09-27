@@ -326,6 +326,54 @@ L2 每个房间还有两个**可选**字段：
 的字段白名单里。若哪天有人把它加进去，`layout_id` 会变 ⇒ 玩家存档的房间进度全部失配，
 所以探针里专门有一条断言盯着这件事。
 
+### 第 2 步补充四 · 关卡级怪物掉落表 `monster_drop_table`
+
+**L1 顶层字段，不是房间级字段。** 同种怪在同一关卡内无论位于哪个房间，都用同一份掉落规格。
+
+**⚠️ 唯一真源是作者表 CSV；`level_plan.json` 里那份是导出产物，不是手改面：**
+
+```text
+docs/v0.1/data/怪物掉落表_地图x怪物.csv          ← 作者只在这里改
+  → scripts/export_monster_drop_table.py        ← 导出（按 `关卡ID` 分组写各关 L1）
+  → <level>/data/level_plan.json 顶层 monster_drop_table
+  → scripts/export_monster_drop_table.py --check ← 漂移门禁（已接进 run_verification_suite.sh 导入前置）
+```
+
+**手改 `level_plan.json` 的 `monster_drop_table` 会被下一次导出静默覆盖**，且 `--check` 报漂移。
+该字段正是「数值改动给公式」那条纪律的适用场景：数值由主人拍板，本 Skill 只负责把它落进真源与门禁。
+
+**覆盖顺序（高 → 低）：**
+
+```text
+房间 reward_plan.kill
+    >
+当前关卡 monster_drop_table[monster_id]
+    >
+MonsterInjector.drop_spec_for() 旧公式
+```
+
+只接管**普通怪**；精英与 Boss 走各自独立结算；未配置怪回落旧公式，不静默空掉。
+
+**行语义：** `权重` 留空 = 每行独立掷骰（可同时命中多件实物）；填了 `权重` = 同怪所有带权重的行
+组成一个**内联权重组**（先按统一 `chance` 判是否触发，再按 `权重 / Σ权重` 抽 `draws` 次）；
+`@currency:<id>` = 货币，`@pool:<id>` = 既登记池。数量支持常量、`"3-8"` 区间、`"2+floor*1"` 公式。
+任一行非法 ⇒ **整表拒绝**，不会半张表生效。
+
+**本字段属内容、不属几何**：刻意不进 `_data_driven_layout_id()` —— 改掉率不得让既有存档的版图指纹失配。
+落表后**不要**把它加进那个函数。
+
+**落地要有两道闸（缺一即等于没接通）：**
+
+1. `export_monster_drop_table.py --check` 报 `MONSTER_DROP_TABLE_CHECK_OK levels=… rows=… changed=0`。
+2. `LEVEL_PLAN_RUNTIME_GUARD_OK … monster_drop_rows=N` 的 `N` 要等于 CSV 里该关的行数
+   （写了几行就该是几；是 0 就是被吞了）。
+
+**改了数值还要加钉住数值的断言**，别只靠上面两条结构闸：范本
+`verify_reward_service_flow._case_normal_ammo_range` —— 它同时做**规格层**（直读
+`MonsterInjector.drop_spec_for()` 的条目区间）与**运行层**（真跑覆盖链）两层判据，并配反向对照
+（把常量改回旧值必须报红）。⚠️ 写这类断言时注意：同一物品可能既有「池抽到的单件（`count = 1`）」
+又有「怪物公式的整包」，别把「所有掉落都落在区间内」当判据，否则会被既有池语义长期假红。
+
 ### 第 3 步 · 取门槽数据（禁止手算）
 
 **绝不在第二种语言里复刻门槽公式。** 唯一实现是 `src/map/RoomDoorLane.gd`。
@@ -498,6 +546,9 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 | 在 `boss_content_id` 里写竞技场 / 技能袋 / 血量 | 设计源**只指定身份**，其余全由 `BossContentCatalog` 名册条目决定。写第二份必然与名册漂移 |
 | 擅自给房间填 `boss_content_id` | 同为可选覆盖项。用户没明确说「这一间房要出哪个首领」时，留空（塔楼按层取 / 单层不出 Boss）才是对的 |
 | 以为「单层 Boss 房没写首领」是配置错误 | 那是**合法空房**：运行时清房放行、不报错。别去补 `enemy_spawn_plan` 或硬塞一个小怪顶替 |
+| 手改 `level_plan.json` 的 `monster_drop_table` | 它是**导出产物**：下一次跑导出器会静默覆盖，`--check` 也会报漂移。要改就改 `docs/v0.1/data/怪物掉落表_地图x怪物.csv` 再跑导出器（见 §2 第 2 步补充四） |
+| 把 `monster_drop_table` 加进 `_data_driven_layout_id()` | 掉落是**内容**不是几何。加进去会让「改一次掉率」直接把既有存档的版图指纹改掉 |
+| 只改 CSV 不跑导出器就宣称改完 | `level_plan.json` 仍是旧值，运行时不生效，而 CSV 看起来已经改了 |
 
 ---
 

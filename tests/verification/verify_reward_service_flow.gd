@@ -48,11 +48,12 @@ func _ready() -> void:
 	_case_field_conflict()
 	_case_negative_controls()
 	_case_monster_drop_table()
+	_case_normal_ammo_range()
 	_case_runtime_coordinator()
 	_case_sink_delivery_confirmation()
 
 	if _failures.is_empty():
-		print("REWARD_SERVICE_FLOW_OK: registry gate, reproducibility, four dispatch sources, override chain, rejection paths, weighted/independent math, truncation and negative controls pass")
+		print("REWARD_SERVICE_FLOW_OK: registry gate, reproducibility, four dispatch sources, override chain, rejection paths, weighted/independent math, normal ammo range, truncation and negative controls pass")
 		get_tree().quit(0)
 		return
 	for failure in _failures:
@@ -111,6 +112,82 @@ func _case_monster_drop_table() -> void:
 	bad_rows.append({"monster_id": "melee_chaser", "item_id": "weapon_rifle", "chance": 0.5, "weight": 1, "quantity": 1})
 	var bad := _MONSTER_DROP_TABLE.compile("bad", bad_table)
 	_expect(not bool(bad.get("ok", false)), "同怪权重组概率不一致必须拒绝整表")
+
+
+func _case_normal_ammo_range() -> void:
+	_reset()
+	# 2026-09-27 数值调整：普通怪备弹由 3–8 上调为 30–50（概率 0.34 不变）；
+	# 精英 / Boss 仍是 8–16。
+	#
+	# 判据分两层，缺一层都不成立：
+	#  ① 规格层：直接读 `MonsterInjector.drop_spec_for` 的备弹条目区间 —— 这才是常量的唯一消费点。
+	#  ② 运行层：真跑覆盖链，证明运行时会产出 ≥30 发的备弹。
+	# ⚠️ 不能把「所有 item_ammo_pack 掉落都 ≥30」当判据：普通怪另有 26% 的**池**抽取，
+	# 池里的 `item_ammo_pack` 是「1 件 = 1 发」的地面单件（`RewardService._resolve_pool_entry`
+	# 固定 `count = 1`）。池抽到弹药、而 34% 备弹加成没中时，玩家确实只拿 1 发 —— 那是既有的
+	# 池语义，不是本次调整的产物；把它写进断言会让这条用例长期假红。
+	var injector := load("res://src/map/MonsterInjector.gd")
+	var normal_spec := injector.drop_spec_for("shielded", "normal", 0, 1) as Dictionary
+	var normal_ammo := _ammo_entry_of(normal_spec)
+	_expect(not normal_ammo.is_empty(), "普通怪的兜底公式必须带备弹条目")
+	if not normal_ammo.is_empty():
+		var normal_count := normal_ammo.get("count", {}) as Dictionary
+		_expect(int(normal_count.get("min", 0)) == 30, "普通怪备弹下限应为 30 发，实际 %s" % str(normal_count))
+		_expect(int(normal_count.get("max", 0)) == 50, "普通怪备弹上限应为 50 发，实际 %s" % str(normal_count))
+		_expect(
+			is_equal_approx(float(normal_ammo.get("chance", 0.0)), 0.34),
+			"普通怪备弹概率应保持 0.34，实际 %s" % str(normal_ammo.get("chance", ""))
+		)
+	var elite_spec := injector.drop_spec_for("melee_chaser", "elite", 0, 2) as Dictionary
+	var elite_ammo := _ammo_entry_of(elite_spec)
+	_expect(not elite_ammo.is_empty(), "精英的兜底公式必须带备弹条目")
+	if not elite_ammo.is_empty():
+		var elite_count := elite_ammo.get("count", {}) as Dictionary
+		_expect(int(elite_count.get("min", 0)) == 8, "精英备弹下限应保持 8 发，实际 %s" % str(elite_count))
+		_expect(int(elite_count.get("max", 0)) == 16, "精英备弹上限应保持 16 发，实际 %s" % str(elite_count))
+
+	var coordinator := _RUNTIME_COORDINATOR.new()
+	coordinator.configure(20260927)
+	var bonus_min := 1 << 30
+	var bonus_max := -1
+	var bonus_samples := 0
+	for index in 240:
+		var report := coordinator.resolve_kill({}, {
+			"enemy_type": "shielded", "floor": 1, "loot_table": "loot_floor_1_2",
+		}, "ammo_range:normal_%d" % index)
+		for value in _SINK.materialize_ground_items(report.get("grants", [])):
+			var item := value as Dictionary
+			if str(item.get("id", "")) != "item_ammo_pack":
+				continue
+			var count := int(item.get("count", 0))
+			if count < 30:
+				# 池抽到「1 发」的既有单件语义，不计入加成区间样本。
+				continue
+			bonus_samples += 1
+			bonus_min = mini(bonus_min, count)
+			bonus_max = maxi(bonus_max, count)
+	_expect(bonus_samples > 0, "运行链必须真的产出 30 发档的备弹加成，实测样本 0")
+	_expect(
+		bonus_samples == 0 or bonus_min >= 30,
+		"备弹加成下限应为 30 发，实测最小 %d" % bonus_min
+	)
+	_expect(
+		bonus_samples == 0 or bonus_max <= 50,
+		"备弹加成上限应为 50 发，实测最大 %d" % bonus_max
+	)
+	_expect(
+		bonus_max > 8,
+		"普通怪备弹已由 3–8 上调为 30–50，实测最大仅 %d 说明常量被改回去了" % bonus_max
+	)
+
+
+## 取规格里 `item_ammo_pack` 那一条 entry（顶层或嵌套都找得到）。
+func _ammo_entry_of(spec: Dictionary) -> Dictionary:
+	for value in spec.get("entries", []) as Array:
+		var entry := value as Dictionary
+		if str(entry.get("item_id", "")) == "item_ammo_pack":
+			return entry
+	return {}
 
 
 func _case_runtime_coordinator() -> void:

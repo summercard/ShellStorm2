@@ -4,6 +4,9 @@ extends RefCounted
 ## Never writes Player3D, weapons, physics, animation events, or save data.
 
 const LIBRARY_PATH := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/anim_bunny01_library_v009.json"
+## 跑步剪辑（moving / armed_moving）的播放倍率。只缩放采样相位的推进速度，
+## 不写玩家状态、不改移动速度、不改剪辑数据。走路剪辑（walking）保持 1.0。
+const RUN_CLIP_RATE_SCALE := 1.3
 static var _libraries: Dictionary = {}
 var _cache: Dictionary = {}
 var _fallback: Dictionary = {}
@@ -70,7 +73,10 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var duration: float = clip.duration
 	var rate := 1.0
 	if state == "moving" and avatar.get("_player") != null:
-		rate = clampf(planar_speed / (2.4 if locomotion_name == "walking" else 5.0), 0.72, 1.18)
+		var walking_clip := locomotion_name == "walking"
+		rate = clampf(planar_speed / (2.4 if walking_clip else 5.0), 0.72, 1.18)
+		if not walking_clip:
+			rate *= RUN_CLIP_RATE_SCALE
 	_time += delta * rate
 	var phase := _time / duration
 	match state:

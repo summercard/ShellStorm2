@@ -25,7 +25,7 @@ signal flashlight_module_changed(snapshot: Dictionary)
 signal debug_scale_changed(snapshot: Dictionary)
 signal death_animation_finished()
 
-const SPEED := 5.0
+const SPEED := 4.6
 const DASH_SPEED := 16.5
 const DASH_DURATION := 0.204
 const DASH_COOLDOWN := 2.2

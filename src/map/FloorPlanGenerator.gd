@@ -27,7 +27,13 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"version": "v006",
 		"asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(30.0, 40.0),
-		"door_wall_component_id": "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL",
+		# 办公室库里那件 `door_wall`（门洞墙件_可复用）经实测**没有通透门洞**：
+		# 门洞区 2.2×2.5m 正投影覆盖率 100%（只在下半 0.2m 处有一块浅凹底板），
+		# 而关卡通用的 `wall_door_5m` 同一区域覆盖率 0%（真门洞，且门楣上方留空
+		# 供升降门板通过）。源清单也写明「运行时按门位车道替换对应标准墙件」。
+		# 因此门位不声明房型自有门墙，回退到通用门墙 —— 与通道桥同口径。
+		# 若要改用办公室自己的门墙美术，须先在 Blender 里给它切出通透门洞。
+		"door_wall_component_id": "",
 	},
 	"bridge_60x50": {
 		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v007/component_instances.json",
