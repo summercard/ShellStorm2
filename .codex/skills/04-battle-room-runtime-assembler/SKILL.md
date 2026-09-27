@@ -54,6 +54,24 @@ metadata:
 
 这是新房型的标准路径。**不要求为每个房间复制 Blender 布局，也不允许把房型 `.blend` 导成整屋 GLB。**
 
+**主层地砖一律在运行时换成通用棋盘砖**。房型源自有地砖（`slot_role=floor_tile`）只作建模基准，运行时由
+`DungeonRoom3D._runtime_floor_tile_component_id()` 换成通用 `ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01/C02`，
+按房间局部 5m 网格棋盘交替（`(roundi((x-2.5)/5) + roundi((z-2.5)/5)) % 2`）。理由：房型地砖多为深色/异形，
+各房不一致会让同一层出现两种地板观感，且深色砖吃不到光。
+
+替换名单的写法是「精确 id ＋ 房型前缀」，例如：
+
+```text
+办公室   ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M
+通道桥   ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER
+Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀，用 begins_with 匹配）
+```
+
+**换砖只动视觉件**：碰撞与承重仍归 `TowerFloorStage3D`（`collision_owner=floor_support` /
+`collision_policy=external_floor_support`），刷怪格仍由 `floor_tile` 角色的实例决定（替换不改变角色），
+房型自有地砖件留在组件库与注册表里、只是运行时不引用。**下沉坑底砖**（如桥房 `tile_lower`）**不在**替换名单，
+保持原标高与材质。
+
 ### 分支 A：具体房间有布局差异
 
 判定条件：同时存在并通过验收：

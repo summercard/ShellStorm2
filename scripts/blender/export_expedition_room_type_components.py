@@ -18,6 +18,7 @@ import bpy
 LIBRARIES = (
     ("office_room", "v006"),
     ("bridge_room", "v007"),
+    ("boss_room", "v008"),
 )
 
 

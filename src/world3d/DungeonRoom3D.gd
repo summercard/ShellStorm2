@@ -147,6 +147,11 @@ const FLOOR_TILE_C01_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 const FLOOR_TILE_C02_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 const OFFICE_DARK_FLOOR_TILE_ID := "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 const BRIDGE_DARK_UPPER_TILE_ID := "ENV-EXPEDITION-L01-BRIDGE-TILE_UPPER"
+# Boss 房 v008 自有 5m 地砖（A/B/C 三个变体，仅贴花位不同，主面哑光但偏暗）。
+# Boss 房套件本身是**独立一库**（独立目录 / 独立母版 / 独立注册表条目，不与他人混用），
+# 但主层地砖按全项目统一口径换成通用 C01/C02 棋盘砖 —— 与办公室、通道桥同一条运行时
+# 规则；墙、家具、标识、碎屑等自有结构件一律不动，套件边界不受影响。
+const BOSS_DARK_FLOOR_TILE_PREFIX := "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M"
 const BRIDGE_DOOR_VISUAL_WALL_ID := "ENV-EXPEDITION-L01-BRIDGE-WALL_X670"
 const GENERIC_SOLID_WALL_ID := "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 const CORNER_L_COMPONENT_ID := "ENV-TOWER-CORNER-L-5M"
@@ -2054,7 +2059,11 @@ func _spawn_authored_layout_wall(
 static func _runtime_floor_tile_component_id(
 	source_component_id: String, local_position: Vector3
 ) -> String:
-	if source_component_id not in [OFFICE_DARK_FLOOR_TILE_ID, BRIDGE_DARK_UPPER_TILE_ID]:
+	var replaceable := (
+		source_component_id in [OFFICE_DARK_FLOOR_TILE_ID, BRIDGE_DARK_UPPER_TILE_ID]
+		or source_component_id.begins_with(BOSS_DARK_FLOOR_TILE_PREFIX)
+	)
+	if not replaceable:
 		return source_component_id
 	# 与 RoomShellLayoutBuilder3D 相同的 5m 棋盘规则；只替换主层视觉，桥房坑底砖不经过此分支。
 	var grid_x := roundi((local_position.x - 2.5) / TOWER_GEOMETRY.GRID_UNIT_M)

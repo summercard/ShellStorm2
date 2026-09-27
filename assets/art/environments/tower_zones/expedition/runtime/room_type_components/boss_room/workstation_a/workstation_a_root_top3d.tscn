@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BOSS-WORKSTATION_A
+; 房型组件 boss_room / v008 / workstation_a
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/workstation_a/workstation_a_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(4.25, 2.78, 2.055)
+
+[node name="RoomTypeComponentWorkstationA" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-WORKSTATION_A"
+metadata/asset_version = "v008"
+metadata/room_type = "BOSS_ROOM"
+metadata/component_slug = "workstation_a"
+metadata/display_name_zh = "工作站（型 A）4.25×2.06×2.78m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_a/workstation_a.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.25, 2.78, 2.055)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.39, 0)
+shape = SubResource("BoxShape3D_proxy")

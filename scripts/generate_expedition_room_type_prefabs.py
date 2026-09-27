@@ -7,6 +7,7 @@ from pathlib import Path
 LIBRARIES = (
     ("office_room", "v006"),
     ("bridge_room", "v007"),
+    ("boss_room", "v008"),
 )
 CATALOG_PATH = Path(
     "assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
@@ -54,6 +55,44 @@ BRIDGE_BOX_COLLISION = {
     "upper_console",
     "vertical_service",
 }
+BOSS_BOX_COLLISION = {
+    "server_rack",
+    "server_rack_tall",
+    "server_rack_mid",
+    "server_rack_damaged",
+    "server_rack_damaged_tall",
+    "server_rack_wide",
+    "server_rack_wide_tall",
+    "server_rack_wide_damaged",
+    "server_rack_wide_damaged_tall",
+    "server_rack_compact",
+    "server_rack_compact_damaged",
+    "server_rack_under_screen",
+    "server_rack_under_screen_damaged",
+    "workstation_a",
+    "workstation_b",
+    "workstation_c",
+    "chair",
+    "plant_a",
+    "plant_b",
+    "plant_c",
+    "archive_shelf",
+    # 门垛 / 门楣：Boss 房自有的门位三件，必须给碰撞（挡住门洞两侧与上方），
+    # 但**不能**登记成 solid_wall —— 门楣中心正好落在本局门槽车道上，
+    # 走 solid_wall 会被运行时提升成整樘门墙，把已留好的 2.2×2.8 门洞重新封死。
+    "wall_door_pier_5m",
+    "wall_door_lintel_5m",
+}
+BOSS_VISUAL_ONLY = {
+    "debris_large",
+    "debris_medium",
+    "debris_small",
+    "floor_base",
+    "main_fault_screen",
+    "heavy_conduits",
+    "wall_typography",
+    "floor_marking",
+}
 
 
 def read_json(path: Path) -> dict:
@@ -75,6 +114,17 @@ def godot_bounds(bounds: list[float]) -> list[float]:
 
 
 def classify(room_slug: str, slug: str) -> tuple[str, str, str]:
+    if room_slug == "boss_room":
+        # Boss 房主层地砖 = floor_tile（进刷怪格）；墙/装甲墙 = solid_wall（参与门槽判定）。
+        if slug.startswith("floor_tile_5m"):
+            return "floor_tile", "floor_support", "external_floor_support"
+        if slug == "wall_solid_5m" or slug.startswith("wall_skin_"):
+            return "solid_wall", "self", "structural_box_proxy"
+        if slug in BOSS_BOX_COLLISION:
+            return "room_type_component", "self", "safe_box_proxy"
+        if slug in BOSS_VISUAL_ONLY:
+            return "room_type_component", "none", "visual_only"
+        raise RuntimeError(f"未分类的 Boss 房组件 slug: {slug}")
     if room_slug == "office_room":
         if slug == "door_wall":
             return "door_wall", "room_door_owned", "split_door_wall_proxy"
@@ -238,7 +288,11 @@ def main() -> None:
         entry
         for entry in runtime_catalog.get("components", [])
         if not str(entry.get("component_id", "")).startswith(
-            ("ENV-EXPEDITION-L01-OFFICE-", "ENV-EXPEDITION-L01-BRIDGE-")
+            (
+                "ENV-EXPEDITION-L01-OFFICE-",
+                "ENV-EXPEDITION-L01-BRIDGE-",
+                "ENV-EXPEDITION-L01-BOSS-",
+            )
         )
     ]
     generated: list[dict] = []
@@ -310,6 +364,7 @@ def main() -> None:
     runtime_catalog["room_type_sources"] = [
         f"{SOURCE_ROOT.as_posix()}/v006/component_catalog.json",
         f"{SOURCE_ROOT.as_posix()}/v007/component_catalog.json",
+        f"{SOURCE_ROOT.as_posix()}/v008/component_catalog.json",
     ]
     runtime_catalog["components"] = existing + generated
     write_json_crlf(runtime_catalog_path, runtime_catalog)

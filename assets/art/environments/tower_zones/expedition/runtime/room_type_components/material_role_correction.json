@@ -1,6 +1,19 @@
 {
   "schema": "shellstorm2.expedition.room_type_material_role_correction.v001",
-  "reason": "这两批房型源把精工金属(metallic 0.86)当结构件默认材质；Godot 无反射来源 ⇒ 大面积不受光。校正为细腻哑光(metallic 0.03)，与其它房间口径一致。几何/UV/色盘格不变。",
+  "reason": "这些房型源的精工金属(metallic 0.86)被用在了结构大面上；Godot 无反射来源 ⇒ 大面积不受光。校正为细腻哑光(metallic 0.03)，与其它房间口径一致。几何/UV/色盘格不变。策略：办公室/通道桥是「结构件默认材质」误用 ⇒ 全量角色 0 面改哑光；Boss 房结构面本身已分得清 ⇒ 只在金属占比 >=50% 且总面积 >=50m² 时改，保住真正的金属小件。",
+  "library_policies": {
+    "office_room": {
+      "mode": "all"
+    },
+    "bridge_room": {
+      "mode": "all"
+    },
+    "boss_room": {
+      "mode": "dominant",
+      "min_share": 0.5,
+      "min_area_m2": 50.0
+    }
+  },
   "from_role": "01_精工金属",
   "to_role": "02_细腻哑光_青绿大面",
   "records": [
@@ -10,8 +23,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_deck_5m/ceiling_deck_5m.blend",
@@ -19,8 +38,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_lighting/ceiling_lighting.blend",
@@ -28,8 +53,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_ring_beam/ceiling_ring_beam.blend",
@@ -37,8 +68,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_cable_tray/ceiling_service_cable_tray.blend",
@@ -46,8 +83,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_duct/ceiling_service_duct.blend",
@@ -55,8 +98,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/ceiling_service_pipe_run/ceiling_service_pipe_run.blend",
@@ -64,8 +113,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/corner_guard/corner_guard.blend",
@@ -73,8 +128,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/door_wall/door_wall.blend",
@@ -82,8 +143,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/filing_run/filing_run.blend",
@@ -91,8 +158,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_service/floor_service.blend",
@@ -100,8 +173,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_tile_5m/floor_tile_5m.blend",
@@ -109,8 +188,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/floor_zone_mark/floor_zone_mark.blend",
@@ -118,8 +203,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/locker_bank/locker_bank.blend",
@@ -127,8 +218,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/planting_perimeter/planting_perimeter.blend",
@@ -136,8 +233,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/power_cabinet_bank/power_cabinet_bank.blend",
@@ -145,8 +248,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/prep_bench/prep_bench.blend",
@@ -154,8 +263,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/printer_station/printer_station.blend",
@@ -163,8 +278,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/shelving/shelving.blend",
@@ -172,8 +293,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/totem_column/totem_column.blend",
@@ -181,8 +308,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t1110_5m/wall_t1110_5m.blend",
@@ -190,8 +323,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t615_5m/wall_t615_5m.blend",
@@ -199,8 +338,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_t970_5m/wall_t970_5m.blend",
@@ -208,8 +353,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/wall_top_service/wall_top_service.blend",
@@ -217,8 +368,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/water_and_supply_corner/water_and_supply_corner.blend",
@@ -226,8 +383,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v006/component_packages/work_cluster/work_cluster.blend",
@@ -235,8 +398,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "office_room",
-      "version": "v006"
+      "version": "v006",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/expedition_bridge_room_components_source_v007.blend",
@@ -244,8 +413,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bank_crate/bank_crate.blend",
@@ -253,8 +428,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_girder/bridge_girder.blend",
@@ -262,8 +443,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_guardrail/bridge_guardrail.blend",
@@ -271,8 +458,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/bridge_service_transom/bridge_service_transom.blend",
@@ -280,8 +473,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/coolant/coolant.blend",
@@ -289,8 +488,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/cross_gantry/cross_gantry.blend",
@@ -298,8 +503,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/deep_cables/deep_cables.blend",
@@ -307,8 +518,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/deep_trunk/deep_trunk.blend",
@@ -316,8 +533,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/end_crate/end_crate.blend",
@@ -325,8 +548,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/end_power/end_power.blend",
@@ -334,8 +563,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/half_partition/half_partition.blend",
@@ -343,8 +578,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/header_cables/header_cables.blend",
@@ -352,8 +593,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/longitudinal_tie/longitudinal_tie.blend",
@@ -361,8 +608,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/low_platform_z4805/low_platform_z4805.blend",
@@ -370,8 +623,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/low_platform_z6005/low_platform_z6005.blend",
@@ -379,8 +638,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/lower_control/lower_control.blend",
@@ -388,8 +653,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/mid_gallery/mid_gallery.blend",
@@ -397,8 +668,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_crate/near_crate.blend",
@@ -406,8 +683,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/near_server/near_server.blend",
@@ -415,8 +698,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/partition_box/partition_box.blend",
@@ -424,8 +713,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/pit_end/pit_end.blend",
@@ -433,8 +728,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/pit_side/pit_side.blend",
@@ -442,8 +743,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/platform_edge/platform_edge.blend",
@@ -451,8 +758,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/shaft_column/shaft_column.blend",
@@ -460,8 +773,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/tile_lower/tile_lower.blend",
@@ -469,8 +788,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/tile_upper/tile_upper.blend",
@@ -478,8 +803,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/torn_header/torn_header.blend",
@@ -487,8 +818,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/underbridge_service_bay/underbridge_service_bay.blend",
@@ -496,8 +833,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_bank_z5450/upper_bank_z5450.blend",
@@ -505,8 +848,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_bank_z6197/upper_bank_z6197.blend",
@@ -514,8 +863,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/upper_console/upper_console.blend",
@@ -523,8 +878,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/vertical_service/vertical_service.blend",
@@ -532,8 +893,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_service_header/wall_service_header.blend",
@@ -541,8 +908,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_x670/wall_x670.blend",
@@ -550,8 +923,14 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
     },
     {
       "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v007/component_packages/wall_x780/wall_x780.blend",
@@ -559,8 +938,711 @@
       "slots_replaced": 0,
       "faces_affected": 0,
       "saved": false,
+      "metal_area_m2": 0.0,
+      "total_area_m2": 0.0,
+      "decision": "全量角色 0 → 哑光",
       "room_type": "bridge_room",
-      "version": "v007"
+      "version": "v007",
+      "policy": {
+        "mode": "all"
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/expedition_boss_room_components_source_v008.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 6943.51,
+      "total_area_m2": 18833.378,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/archive_shelf/archive_shelf.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 95.944,
+      "total_area_m2": 201.557,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/chair/chair.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 2.806,
+      "total_area_m2": 13.202,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/debris_large/debris_large.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 2.465,
+      "total_area_m2": 5.158,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/debris_medium/debris_medium.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 2.465,
+      "total_area_m2": 5.158,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/debris_small/debris_small.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 2.465,
+      "total_area_m2": 5.158,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_base/floor_base.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 8093.6,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_marking/floor_marking.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 3.962,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_tile_5m_a/floor_tile_5m_a.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 10.708,
+      "total_area_m2": 115.755,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_tile_5m_b/floor_tile_5m_b.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 7.301,
+      "total_area_m2": 105.921,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/floor_tile_5m_c/floor_tile_5m_c.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 7.301,
+      "total_area_m2": 105.891,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/heavy_conduits/heavy_conduits.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 2304,
+      "saved": true,
+      "metal_area_m2": 208.285,
+      "total_area_m2": 208.285,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/main_fault_screen/main_fault_screen.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 620,
+      "saved": true,
+      "metal_area_m2": 868.485,
+      "total_area_m2": 1402.049,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/plant_a/plant_a.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 10.451,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/plant_b/plant_b.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 10.31,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/plant_c/plant_c.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 10.203,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack/server_rack.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 456,
+      "saved": true,
+      "metal_area_m2": 422.175,
+      "total_area_m2": 501.128,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_compact/server_rack_compact.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 456,
+      "saved": true,
+      "metal_area_m2": 412.74,
+      "total_area_m2": 489.685,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_compact_damaged/server_rack_compact_damaged.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 472,
+      "saved": true,
+      "metal_area_m2": 418.893,
+      "total_area_m2": 497.915,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_damaged/server_rack_damaged.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 496,
+      "saved": true,
+      "metal_area_m2": 448.002,
+      "total_area_m2": 532.564,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_damaged_tall/server_rack_damaged_tall.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 496,
+      "saved": true,
+      "metal_area_m2": 461.485,
+      "total_area_m2": 549.001,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_mid/server_rack_mid.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 480,
+      "saved": true,
+      "metal_area_m2": 441.381,
+      "total_area_m2": 523.623,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_tall/server_rack_tall.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 480,
+      "saved": true,
+      "metal_area_m2": 454.59,
+      "total_area_m2": 539.643,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_under_screen/server_rack_under_screen.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 384,
+      "saved": true,
+      "metal_area_m2": 262.825,
+      "total_area_m2": 309.68,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_under_screen_damaged/server_rack_under_screen_damaged.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 400,
+      "saved": true,
+      "metal_area_m2": 266.835,
+      "total_area_m2": 314.9,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide/server_rack_wide.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 456,
+      "saved": true,
+      "metal_area_m2": 422.176,
+      "total_area_m2": 501.128,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide_damaged/server_rack_wide_damaged.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 472,
+      "saved": true,
+      "metal_area_m2": 428.524,
+      "total_area_m2": 509.654,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 496,
+      "saved": true,
+      "metal_area_m2": 451.373,
+      "total_area_m2": 536.674,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/server_rack_wide_tall/server_rack_wide_tall.blend",
+      "objects_touched": 2,
+      "slots_replaced": 2,
+      "faces_affected": 480,
+      "saved": true,
+      "metal_area_m2": 444.683,
+      "total_area_m2": 527.628,
+      "decision": "金属为主面，改哑光",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_door_lintel_5m/wall_door_lintel_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 93.64,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_door_pier_5m/wall_door_pier_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 82.6,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_armored_5m/wall_skin_armored_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 57.809,
+      "total_area_m2": 290.513,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 78.622,
+      "total_area_m2": 311.326,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_beveled_5m/wall_skin_beveled_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 34.213,
+      "total_area_m2": 240.35,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_medium_5m/wall_skin_medium_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 43.099,
+      "total_area_m2": 266.963,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_thin_5m/wall_skin_thin_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 22.286,
+      "total_area_m2": 246.15,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_solid_5m/wall_solid_5m.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 258.28,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_typography/wall_typography.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 0,
+      "total_area_m2": 4.9,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_a/workstation_a.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 54.524,
+      "total_area_m2": 136.278,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_b/workstation_b.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 54.524,
+      "total_area_m2": 136.216,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
+    },
+    {
+      "blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/workstation_c/workstation_c.blend",
+      "objects_touched": 0,
+      "slots_replaced": 0,
+      "faces_affected": 0,
+      "saved": false,
+      "metal_area_m2": 54.524,
+      "total_area_m2": 136.279,
+      "decision": "金属非主面，保留",
+      "room_type": "boss_room",
+      "version": "v008",
+      "policy": {
+        "mode": "dominant",
+        "min_share": 0.5,
+        "min_area_m2": 50.0
+      }
     }
   ]
 }

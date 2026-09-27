@@ -7,8 +7,8 @@
   "source_room_type": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/办公室房间种类_开放办公_30x40m_v001.blend",
   "source_room_type_sha256": "4cf7138d0010405202d9cb9dd2aef0af9a676984ceeb90501b5a8d92304ed95f",
   "source_package_list": "assets/art/environments/tower_zones/expedition/source/room_types/office_room/v001/component_packages_v001/architecture",
-  "runtime_connected": false,
-  "ledger_registration": "pending",
+  "runtime_connected": true,
+  "ledger_registration": "completed",
   "packages": [
     {
       "component_id": "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M",

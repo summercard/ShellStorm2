@@ -1,0 +1,1598 @@
+{
+  "schema": "shellstorm2.component_regroup_analysis",
+  "schema_version": 1,
+  "source_library": "assets/art/environments/tower_zones/expedition/source/common_components/v001",
+  "tolerance_m": 0.005,
+  "family_cap": 3,
+  "family_cap_overrides": {
+    "wall_skin_5m": 5,
+    "north_facility": 5,
+    "east_facility": 5,
+    "under_screen": 5,
+    "west_facility": 5
+  },
+  "package_count": 214,
+  "plan_member_count": 214,
+  "component_count": 38,
+  "absorbed_variant_total": 88,
+  "absorbed_shape_mismatch_total": 0,
+  "families_converged": [
+    "debris",
+    "floor_tile_5m",
+    "plant",
+    "workstation"
+  ],
+  "components": [
+    {
+      "family": "floor_tile_5m",
+      "representative_package_id": "base_floor_tile_r01_c01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C01",
+      "member_count": 16,
+      "classes_in_family": 80,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C03",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C09",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C02",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C09",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C01",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C03",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C10"
+      ],
+      "bounds_size_m": [
+        4.94,
+        4.94,
+        0.098
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 3.178
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.531
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 3.437
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 3.072
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.638
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.298
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 2.248
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 2.552
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.876
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C10",
+          "rotation_deg": 90,
+          "max_delta_m": 4.38
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "base_floor_tile_r01_c01",
+        "base_floor_tile_r01_c07",
+        "base_floor_tile_r01_c08",
+        "base_floor_tile_r02_c05",
+        "base_floor_tile_r02_c08",
+        "base_floor_tile_r03_c03",
+        "base_floor_tile_r03_c08",
+        "base_floor_tile_r04_c04",
+        "base_floor_tile_r04_c09",
+        "base_floor_tile_r05_c02",
+        "base_floor_tile_r05_c05",
+        "base_floor_tile_r05_c09",
+        "base_floor_tile_r06_c04",
+        "base_floor_tile_r07_c01",
+        "base_floor_tile_r07_c03",
+        "base_floor_tile_r07_c10"
+      ]
+    },
+    {
+      "family": "floor_tile_5m",
+      "representative_package_id": "base_floor_tile_r01_c02",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C02",
+      "member_count": 20,
+      "classes_in_family": 80,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C09",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C02",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C03",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C02",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C10",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C01",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C10",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C02",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C02",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C03",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C10"
+      ],
+      "bounds_size_m": [
+        4.94,
+        4.94,
+        0.0875
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C05",
+          "rotation_deg": 180,
+          "max_delta_m": 3.011
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 3.23
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 3.505
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 2.962
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C07",
+          "rotation_deg": 180,
+          "max_delta_m": 2.232
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 3.694
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 1.761
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 2.032
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 3.982
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 1.7
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 3.06
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 3.906
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.986
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 3.938
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.875
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 2.479
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 4.26
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 3.111
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 1.89
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "base_floor_tile_r01_c02",
+        "base_floor_tile_r01_c05",
+        "base_floor_tile_r01_c09",
+        "base_floor_tile_r02_c02",
+        "base_floor_tile_r02_c03",
+        "base_floor_tile_r02_c07",
+        "base_floor_tile_r03_c02",
+        "base_floor_tile_r03_c05",
+        "base_floor_tile_r03_c10",
+        "base_floor_tile_r04_c01",
+        "base_floor_tile_r04_c08",
+        "base_floor_tile_r05_c08",
+        "base_floor_tile_r05_c10",
+        "base_floor_tile_r07_c02",
+        "base_floor_tile_r07_c04",
+        "base_floor_tile_r08_c02",
+        "base_floor_tile_r08_c03",
+        "base_floor_tile_r08_c04",
+        "base_floor_tile_r08_c08",
+        "base_floor_tile_r08_c10"
+      ]
+    },
+    {
+      "family": "floor_tile_5m",
+      "representative_package_id": "base_floor_tile_r01_c03",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C03",
+      "member_count": 44,
+      "classes_in_family": 80,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C10",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C01",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C09",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C10",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C01",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C09",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C02",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C03",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C10",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C01",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C03",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C04",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C01",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C02",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C03",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C09",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C10",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C08",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C09",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C01",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C05",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C06",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C07",
+        "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C09"
+      ],
+      "bounds_size_m": [
+        4.94,
+        4.94,
+        0.0875
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C04",
+          "rotation_deg": 180,
+          "max_delta_m": 2.432
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 1.844
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C10",
+          "rotation_deg": 0,
+          "max_delta_m": 2.349
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 2.988
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 2.694
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C06",
+          "rotation_deg": 180,
+          "max_delta_m": 2.468
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.709
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C10",
+          "rotation_deg": 180,
+          "max_delta_m": 2.446
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C01",
+          "rotation_deg": 180,
+          "max_delta_m": 2.556
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 3.784
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 3.066
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.219
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 2.756
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 2.022
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.948
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.018
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C06",
+          "rotation_deg": 180,
+          "max_delta_m": 2.446
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 3.453
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C10",
+          "rotation_deg": 0,
+          "max_delta_m": 2.72
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C01",
+          "rotation_deg": 180,
+          "max_delta_m": 2.446
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C03",
+          "rotation_deg": 180,
+          "max_delta_m": 2.468
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C04",
+          "rotation_deg": 0,
+          "max_delta_m": 2.532
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 1.231
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.136
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 3.338
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C02",
+          "rotation_deg": 0,
+          "max_delta_m": 1.89
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.97
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C05",
+          "rotation_deg": 180,
+          "max_delta_m": 2.798
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 2.881
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.813
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 3.124
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 3.285
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C10",
+          "rotation_deg": 0,
+          "max_delta_m": 2.665
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 2.466
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C06",
+          "rotation_deg": 180,
+          "max_delta_m": 2.468
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.799
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C08",
+          "rotation_deg": 0,
+          "max_delta_m": 2.256
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C09",
+          "rotation_deg": 0,
+          "max_delta_m": 2.481
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C01",
+          "rotation_deg": 0,
+          "max_delta_m": 1.768
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C05",
+          "rotation_deg": 0,
+          "max_delta_m": 3.617
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C06",
+          "rotation_deg": 0,
+          "max_delta_m": 3.365
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C07",
+          "rotation_deg": 0,
+          "max_delta_m": 2.108
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C09",
+          "rotation_deg": 180,
+          "max_delta_m": 3.182
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "base_floor_tile_r01_c03",
+        "base_floor_tile_r01_c04",
+        "base_floor_tile_r01_c06",
+        "base_floor_tile_r01_c10",
+        "base_floor_tile_r02_c01",
+        "base_floor_tile_r02_c04",
+        "base_floor_tile_r02_c06",
+        "base_floor_tile_r02_c09",
+        "base_floor_tile_r02_c10",
+        "base_floor_tile_r03_c01",
+        "base_floor_tile_r03_c04",
+        "base_floor_tile_r03_c06",
+        "base_floor_tile_r03_c07",
+        "base_floor_tile_r03_c09",
+        "base_floor_tile_r04_c02",
+        "base_floor_tile_r04_c03",
+        "base_floor_tile_r04_c05",
+        "base_floor_tile_r04_c06",
+        "base_floor_tile_r04_c07",
+        "base_floor_tile_r04_c10",
+        "base_floor_tile_r05_c01",
+        "base_floor_tile_r05_c03",
+        "base_floor_tile_r05_c04",
+        "base_floor_tile_r05_c06",
+        "base_floor_tile_r05_c07",
+        "base_floor_tile_r06_c01",
+        "base_floor_tile_r06_c02",
+        "base_floor_tile_r06_c03",
+        "base_floor_tile_r06_c05",
+        "base_floor_tile_r06_c06",
+        "base_floor_tile_r06_c07",
+        "base_floor_tile_r06_c08",
+        "base_floor_tile_r06_c09",
+        "base_floor_tile_r06_c10",
+        "base_floor_tile_r07_c05",
+        "base_floor_tile_r07_c06",
+        "base_floor_tile_r07_c07",
+        "base_floor_tile_r07_c08",
+        "base_floor_tile_r07_c09",
+        "base_floor_tile_r08_c01",
+        "base_floor_tile_r08_c05",
+        "base_floor_tile_r08_c06",
+        "base_floor_tile_r08_c07",
+        "base_floor_tile_r08_c09"
+      ]
+    },
+    {
+      "family": "wall_base_5m",
+      "representative_package_id": "base_wall_east_slot_01_solid",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-01-SOLID",
+      "member_count": 34,
+      "classes_in_family": 3,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.3,
+        5.0,
+        11.9
+      ],
+      "geometry_exact_count": 34,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "base_wall_east_slot_01_solid",
+        "base_wall_east_slot_02_solid",
+        "base_wall_east_slot_03_solid",
+        "base_wall_east_slot_04_solid",
+        "base_wall_east_slot_05_solid",
+        "base_wall_east_slot_06_solid",
+        "base_wall_east_slot_07_solid",
+        "base_wall_east_slot_08_solid",
+        "base_wall_north_slot_01_solid",
+        "base_wall_north_slot_02_solid",
+        "base_wall_north_slot_03_solid",
+        "base_wall_north_slot_04_solid",
+        "base_wall_north_slot_05_solid",
+        "base_wall_north_slot_06_solid",
+        "base_wall_north_slot_07_solid",
+        "base_wall_north_slot_08_solid",
+        "base_wall_north_slot_09_solid",
+        "base_wall_north_slot_10_solid",
+        "base_wall_south_slot_01_solid",
+        "base_wall_south_slot_02_solid",
+        "base_wall_south_slot_03_solid",
+        "base_wall_south_slot_04_solid",
+        "base_wall_south_slot_05_solid",
+        "base_wall_south_slot_07_solid",
+        "base_wall_south_slot_08_solid",
+        "base_wall_south_slot_09_solid",
+        "base_wall_south_slot_10_solid",
+        "base_wall_west_slot_01_solid",
+        "base_wall_west_slot_02_solid",
+        "base_wall_west_slot_03_solid",
+        "base_wall_west_slot_05_solid",
+        "base_wall_west_slot_06_solid",
+        "base_wall_west_slot_07_solid",
+        "base_wall_west_slot_08_solid"
+      ]
+    },
+    {
+      "family": "wall_base_5m",
+      "representative_package_id": "base_wall_west_slot_04_door_left",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LEFT",
+      "member_count": 4,
+      "classes_in_family": 3,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.3,
+        1.4,
+        11.9
+      ],
+      "geometry_exact_count": 4,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "base_wall_south_slot_06_door_left",
+        "base_wall_south_slot_06_door_right",
+        "base_wall_west_slot_04_door_left",
+        "base_wall_west_slot_04_door_right"
+      ]
+    },
+    {
+      "family": "wall_base_5m",
+      "representative_package_id": "base_wall_west_slot_04_door_lintel",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LINTEL",
+      "member_count": 2,
+      "classes_in_family": 3,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.3,
+        2.2,
+        9.1
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "base_wall_south_slot_06_door_lintel",
+        "base_wall_west_slot_04_door_lintel"
+      ]
+    },
+    {
+      "family": "wall_skin_5m",
+      "representative_package_id": "wall_skin_east_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-00",
+      "member_count": 14,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.36,
+        4.925,
+        11.8
+      ],
+      "geometry_exact_count": 14,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "wall_skin_east_00",
+        "wall_skin_east_02",
+        "wall_skin_east_06",
+        "wall_skin_north_00",
+        "wall_skin_north_02",
+        "wall_skin_north_06",
+        "wall_skin_north_08",
+        "wall_skin_south_00",
+        "wall_skin_south_02",
+        "wall_skin_south_06",
+        "wall_skin_south_08",
+        "wall_skin_west_00",
+        "wall_skin_west_02",
+        "wall_skin_west_06"
+      ]
+    },
+    {
+      "family": "wall_skin_5m",
+      "representative_package_id": "wall_skin_east_01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-01",
+      "member_count": 8,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.2,
+        4.925,
+        11.8
+      ],
+      "geometry_exact_count": 8,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "wall_skin_east_01",
+        "wall_skin_east_07",
+        "wall_skin_north_01",
+        "wall_skin_north_07",
+        "wall_skin_south_01",
+        "wall_skin_south_07",
+        "wall_skin_west_01",
+        "wall_skin_west_07"
+      ]
+    },
+    {
+      "family": "wall_skin_5m",
+      "representative_package_id": "wall_skin_east_03",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-03",
+      "member_count": 8,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.15,
+        4.925,
+        11.8
+      ],
+      "geometry_exact_count": 8,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "wall_skin_east_03",
+        "wall_skin_east_05",
+        "wall_skin_north_03",
+        "wall_skin_north_05",
+        "wall_skin_north_09",
+        "wall_skin_south_03",
+        "wall_skin_south_09",
+        "wall_skin_west_05"
+      ]
+    },
+    {
+      "family": "wall_skin_5m",
+      "representative_package_id": "wall_skin_east_04",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-04",
+      "member_count": 4,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.36,
+        4.925,
+        11.8
+      ],
+      "geometry_exact_count": 4,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "wall_skin_east_04",
+        "wall_skin_north_04",
+        "wall_skin_south_04",
+        "wall_skin_west_04"
+      ]
+    },
+    {
+      "family": "wall_skin_5m",
+      "representative_package_id": "wall_skin_west_03",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-03",
+      "member_count": 2,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.25,
+        4.96,
+        11.8
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "wall_skin_south_05",
+        "wall_skin_west_03"
+      ]
+    },
+    {
+      "family": "debris",
+      "representative_package_id": "debris_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
+      "member_count": 1,
+      "classes_in_family": 10,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.4253,
+        1.9883,
+        0.2195
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "debris_00"
+      ]
+    },
+    {
+      "family": "debris",
+      "representative_package_id": "debris_01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-01",
+      "member_count": 1,
+      "classes_in_family": 10,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.554,
+        2.2216,
+        0.2195
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "debris_01"
+      ]
+    },
+    {
+      "family": "debris",
+      "representative_package_id": "debris_02",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-02",
+      "member_count": 8,
+      "classes_in_family": 10,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-DEBRIS-03",
+        "ENV-EXPEDITION-BOSSROOM-DEBRIS-04",
+        "ENV-EXPEDITION-BOSSROOM-DEBRIS-05",
+        "ENV-EXPEDITION-BOSSROOM-DEBRIS-06",
+        "ENV-EXPEDITION-BOSSROOM-DEBRIS-07",
+        "ENV-EXPEDITION-BOSSROOM-DEBRIS-08",
+        "ENV-EXPEDITION-BOSSROOM-DEBRIS-09"
+      ],
+      "bounds_size_m": [
+        2.3143,
+        1.7833,
+        0.2195
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-03",
+          "rotation_deg": 0,
+          "max_delta_m": 1.348
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-04",
+          "rotation_deg": 180,
+          "max_delta_m": 1.277
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-05",
+          "rotation_deg": 180,
+          "max_delta_m": 1.319
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-06",
+          "rotation_deg": 0,
+          "max_delta_m": 1.577
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-07",
+          "rotation_deg": 0,
+          "max_delta_m": 1.441
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-08",
+          "rotation_deg": 180,
+          "max_delta_m": 1.537
+        },
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-DEBRIS-09",
+          "rotation_deg": 0,
+          "max_delta_m": 1.647
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "debris_02",
+        "debris_03",
+        "debris_04",
+        "debris_05",
+        "debris_06",
+        "debris_07",
+        "debris_08",
+        "debris_09"
+      ]
+    },
+    {
+      "family": "under_screen",
+      "representative_package_id": "under_screen_complete_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-00",
+      "member_count": 7,
+      "classes_in_family": 2,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.72,
+        2.545,
+        3.95
+      ],
+      "geometry_exact_count": 7,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "under_screen_complete_00",
+        "under_screen_complete_01",
+        "under_screen_complete_02",
+        "under_screen_complete_03",
+        "under_screen_complete_04",
+        "under_screen_complete_06",
+        "under_screen_complete_07"
+      ]
+    },
+    {
+      "family": "under_screen",
+      "representative_package_id": "under_screen_damaged_05",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-DAMAGED-05",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.72,
+        2.8378,
+        3.95
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "under_screen_damaged_05"
+      ]
+    },
+    {
+      "family": "north_facility",
+      "representative_package_id": "north_complete_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-00",
+      "member_count": 3,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.17,
+        2.995,
+        5.6
+      ],
+      "geometry_exact_count": 3,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "north_complete_00",
+        "north_complete_03",
+        "north_complete_06"
+      ]
+    },
+    {
+      "family": "north_facility",
+      "representative_package_id": "north_complete_02",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-02",
+      "member_count": 1,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.17,
+        2.995,
+        6.16
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "north_complete_02"
+      ]
+    },
+    {
+      "family": "north_facility",
+      "representative_package_id": "north_complete_04",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-04",
+      "member_count": 1,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.17,
+        2.995,
+        5.88
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "north_complete_04"
+      ]
+    },
+    {
+      "family": "north_facility",
+      "representative_package_id": "north_damaged_01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-DAMAGED-01",
+      "member_count": 1,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.17,
+        3.3059,
+        5.88
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "north_damaged_01"
+      ]
+    },
+    {
+      "family": "north_facility",
+      "representative_package_id": "north_damaged_05",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-DAMAGED-05",
+      "member_count": 1,
+      "classes_in_family": 5,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.17,
+        3.3059,
+        6.16
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "north_damaged_05"
+      ]
+    },
+    {
+      "family": "east_facility",
+      "representative_package_id": "east_complete_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-00",
+      "member_count": 2,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.995,
+        3.17,
+        5.6
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "east_complete_00",
+        "east_complete_04"
+      ]
+    },
+    {
+      "family": "east_facility",
+      "representative_package_id": "east_complete_01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-01",
+      "member_count": 2,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.995,
+        3.17,
+        5.95
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "east_complete_01",
+        "east_complete_03"
+      ]
+    },
+    {
+      "family": "east_facility",
+      "representative_package_id": "east_damaged_02",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-EAST-DAMAGED-02",
+      "member_count": 1,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.3059,
+        3.17,
+        5.6
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "east_damaged_02"
+      ]
+    },
+    {
+      "family": "east_facility",
+      "representative_package_id": "east_damaged_05",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-EAST-DAMAGED-05",
+      "member_count": 1,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.3059,
+        3.17,
+        5.95
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "east_damaged_05"
+      ]
+    },
+    {
+      "family": "workstation",
+      "representative_package_id": "workstation_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-00",
+      "member_count": 1,
+      "classes_in_family": 5,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        4.25,
+        2.055,
+        2.78
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "workstation_00"
+      ]
+    },
+    {
+      "family": "workstation",
+      "representative_package_id": "workstation_01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-01",
+      "member_count": 2,
+      "classes_in_family": 5,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-WORKSTATION-04"
+      ],
+      "bounds_size_m": [
+        4.25,
+        2.055,
+        2.78
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-04",
+          "rotation_deg": 0,
+          "max_delta_m": 1.566
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "workstation_01",
+        "workstation_04"
+      ]
+    },
+    {
+      "family": "workstation",
+      "representative_package_id": "workstation_02",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-02",
+      "member_count": 2,
+      "classes_in_family": 5,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-WORKSTATION-03"
+      ],
+      "bounds_size_m": [
+        4.25,
+        2.055,
+        2.78
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-03",
+          "rotation_deg": 180,
+          "max_delta_m": 1.915
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "workstation_02",
+        "workstation_03"
+      ]
+    },
+    {
+      "family": "chair",
+      "representative_package_id": "chair_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-CHAIR-00",
+      "member_count": 5,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.2051,
+        1.2642,
+        1.8299
+      ],
+      "geometry_exact_count": 5,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "chair_00",
+        "chair_01",
+        "chair_02",
+        "chair_03",
+        "chair_04"
+      ]
+    },
+    {
+      "family": "plant",
+      "representative_package_id": "plant_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-00",
+      "member_count": 2,
+      "classes_in_family": 5,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-PLANT-03"
+      ],
+      "bounds_size_m": [
+        1.6487,
+        1.6742,
+        1.7098
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-PLANT-03",
+          "rotation_deg": 0,
+          "max_delta_m": 0.322
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "plant_00",
+        "plant_03"
+      ]
+    },
+    {
+      "family": "plant",
+      "representative_package_id": "plant_01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-01",
+      "member_count": 1,
+      "classes_in_family": 5,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.6487,
+        1.6742,
+        1.7055
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "plant_01"
+      ]
+    },
+    {
+      "family": "plant",
+      "representative_package_id": "plant_02",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-02",
+      "member_count": 2,
+      "classes_in_family": 5,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-BOSSROOM-PLANT-04"
+      ],
+      "bounds_size_m": [
+        1.6487,
+        1.6742,
+        1.6891
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-BOSSROOM-PLANT-04",
+          "rotation_deg": 0,
+          "max_delta_m": 0.341
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "plant_02",
+        "plant_04"
+      ]
+    },
+    {
+      "family": "archive_shelf",
+      "representative_package_id": "archive_shelf_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-00",
+      "member_count": 4,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.45,
+        1.6,
+        5.35
+      ],
+      "geometry_exact_count": 4,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "archive_shelf_00",
+        "archive_shelf_01",
+        "archive_shelf_02",
+        "archive_shelf_03"
+      ]
+    },
+    {
+      "family": "west_facility",
+      "representative_package_id": "west_complete_00",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WEST-COMPLETE-00",
+      "member_count": 2,
+      "classes_in_family": 2,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.995,
+        3.17,
+        5.4
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "west_complete_00",
+        "west_complete_02"
+      ]
+    },
+    {
+      "family": "west_facility",
+      "representative_package_id": "west_damaged_01",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-WEST-DAMAGED-01",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.3059,
+        3.17,
+        5.4
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "west_damaged_01"
+      ]
+    },
+    {
+      "family": "floor_base",
+      "representative_package_id": "base_floor_base",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        50.0,
+        40.0,
+        0.26
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "base_floor_base"
+      ]
+    },
+    {
+      "family": "main_fault_screen",
+      "representative_package_id": "main_fault_screen",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        21.52,
+        1.575,
+        7.09
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "main_fault_screen"
+      ]
+    },
+    {
+      "family": "heavy_conduits",
+      "representative_package_id": "heavy_conduits",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        47.3056,
+        32.3036,
+        3.6722
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "heavy_conduits"
+      ]
+    },
+    {
+      "family": "north_wall_typography",
+      "representative_package_id": "north_wall_typography",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        35.9002,
+        0.042,
+        2.3201
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "north_wall_typography"
+      ]
+    },
+    {
+      "family": "south_floor_marking",
+      "representative_package_id": "south_floor_marking",
+      "representative_component_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        3.6969,
+        2.7267,
+        0.012
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "south_floor_marking"
+      ]
+    }
+  ],
+  "door_slot_sealing": {
+    "dropped_members": [
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LEFT",
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-RIGHT",
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LEFT",
+      "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-RIGHT"
+    ],
+    "sealed_members": {
+      "base_wall_south_slot_06_door_lintel": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "base_wall_west_slot_04_door_lintel": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M"
+    },
+    "reason": "02 规范要求房型源不冻结门位、不预切门洞；源里预切的门洞（门垛×2+门楣）与本关实际门位不一致，其净空是无门扇的洞。门垛丢弃、门楣改为整樘实墙，门位改由运行时按门槽车道把实墙提升为门墙。"
+  }
+}

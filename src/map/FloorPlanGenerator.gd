@@ -42,6 +42,19 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"size_m": Vector2(30.0, 60.0),
 		"door_wall_component_id": "",
 	},
+	"boss_50x40": {
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_instances.json",
+		"version": "v008",
+		"asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT",
+		"size_m": Vector2(50.0, 40.0),
+		# Boss 房**保留自有墙壁**（owner 裁定）：`wall_solid_5m` + 5 种装甲墙面
+		# `wall_skin_*`，门位由自有三件组成（门垛 ×2 + 门楣），实测门洞净空
+		# 2.2×2.8m 完全通透（左/右门垛占 |x|∈[1.1,2.5]、门楣占 z∈[2.8,11.9]），
+		# 与 `room_templates/boss_50x40.json` 的 `door_contract`（宽 2.2 / 高 2.5 /
+		# `lintel_bottom_z_m` 2.80）逐项吻合。故门位不声明房型自有门墙组件，
+		# 由房间拓扑的 `RoomDoor3D` 独占门扇与通行碰撞。
+		"door_wall_component_id": "",
+	},
 }
 const SHELL_COMPONENT_CATALOG_PATH := (
 	"res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"

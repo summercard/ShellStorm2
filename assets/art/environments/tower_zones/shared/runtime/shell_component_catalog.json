@@ -17,7 +17,7 @@
     "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/probe_shell_component_catalog.gd 逐件比对。",
     "alias_policy": "专属件不设 alias（只属一个房间种类、只有一条来源链）；alias 只用于通用件的批次号兼容。"
   },
-  "component_count": 72,
+  "component_count": 110,
   "components": [
     {
       "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
@@ -1440,10 +1440,771 @@
       "collision_owner": "self",
       "collision_policy": "structural_box_proxy",
       "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "archive_shelf",
+      "category": "档案货架 2.45×1.60×5.35m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "archive_shelf_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/archive_shelf/archive_shelf_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.45,
+        5.35,
+        1.6
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "chair",
+      "category": "独立座椅 1.21×1.26×1.83m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "chair_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-CHAIR",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/chair/chair_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.2051,
+        1.8299,
+        1.2642
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_LARGE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "debris_large",
+      "category": "固定碎屑（大）2.55×2.22×0.22m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "debris_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_LARGE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/debris_large/debris_large_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.554,
+        0.2195,
+        2.2216
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_MEDIUM",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "debris_medium",
+      "category": "固定碎屑（中）2.43×1.99×0.22m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "debris_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_MEDIUM",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/debris_medium/debris_medium_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.4253,
+        0.2195,
+        1.9883
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "debris_small",
+      "category": "固定碎屑（小）2.31×1.78×0.22m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "debris_02",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-DEBRIS_SMALL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/debris_small/debris_small_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.3143,
+        0.2195,
+        1.7833
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_BASE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_base",
+      "category": "地面基板 50×40×0.26m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "base_floor_base",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_BASE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_base/floor_base_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        50.0,
+        0.26,
+        40.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_marking",
+      "category": "入口地砖标识 3.70×2.73×0.01m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "south_floor_marking",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_marking/floor_marking_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.6969,
+        0.012,
+        2.7267
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_a",
+      "category": "地板 5.00×5.00×0.10m（贴花位 A）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "base_floor_tile_r01_c01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_tile_5m_a/floor_tile_5m_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.94,
+        0.098,
+        4.94
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_b",
+      "category": "地板 5.00×5.00×0.09m（贴花位 B）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "base_floor_tile_r01_c02",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_tile_5m_b/floor_tile_5m_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.94,
+        0.0875,
+        4.94
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_c",
+      "category": "地板 5.00×5.00×0.09m（贴花位 C）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "base_floor_tile_r01_c03",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_tile_5m_c/floor_tile_5m_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.94,
+        0.0875,
+        4.94
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-HEAVY_CONDUITS",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "heavy_conduits",
+      "category": "粗重电线管与桥架 47.31×32.30×3.67m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "heavy_conduits",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-HEAVY_CONDUITS",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/heavy_conduits/heavy_conduits_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        47.3056,
+        3.6722,
+        32.3036
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-MAIN_FAULT_SCREEN",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "main_fault_screen",
+      "category": "主屏 破损数据库 21.52×1.58×7.09m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "main_fault_screen",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-MAIN_FAULT_SCREEN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/main_fault_screen/main_fault_screen_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        21.52,
+        7.09,
+        1.575
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "plant_a",
+      "category": "固定绿植（型 A）1.65×1.67×1.71m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "plant_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-PLANT_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_a/plant_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.6487,
+        1.7098,
+        1.6742
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "plant_b",
+      "category": "固定绿植（型 B）1.65×1.67×1.71m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "plant_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-PLANT_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_b/plant_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.6487,
+        1.7055,
+        1.6742
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-PLANT_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "plant_c",
+      "category": "固定绿植（型 C）1.65×1.67×1.69m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "plant_02",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-PLANT_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_c/plant_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.6487,
+        1.6891,
+        1.6742
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack",
+      "category": "服务器机柜 3.17×3.00×5.60m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "north_complete_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack/server_rack_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.17,
+        5.6,
+        2.995
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_compact",
+      "category": "服务器机柜（窄体）3.00×3.17×5.40m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "west_complete_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_compact/server_rack_compact_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.995,
+        5.4,
+        3.17
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT_DAMAGED",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_compact_damaged",
+      "category": "服务器机柜（窄体破损）3.31×3.17×5.40m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "west_damaged_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT_DAMAGED",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_compact_damaged/server_rack_compact_damaged_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.3059,
+        5.4,
+        3.17
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_damaged",
+      "category": "服务器机柜（破损）3.17×3.31×5.88m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "north_damaged_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_damaged/server_rack_damaged_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.17,
+        5.88,
+        3.3059
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED_TALL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_damaged_tall",
+      "category": "服务器机柜（破损加高）3.17×3.31×6.16m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "north_damaged_05",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_DAMAGED_TALL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_damaged_tall/server_rack_damaged_tall_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.17,
+        6.16,
+        3.3059
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_MID",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_mid",
+      "category": "服务器机柜（中高）3.17×3.00×5.88m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "north_complete_04",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_MID",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_mid/server_rack_mid_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.17,
+        5.88,
+        2.995
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_TALL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_tall",
+      "category": "服务器机柜（加高）3.17×3.00×6.16m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "north_complete_02",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_TALL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_tall/server_rack_tall_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.17,
+        6.16,
+        2.995
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_under_screen",
+      "category": "主屏下服务器（完好）2.72×2.55×3.95m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "under_screen_complete_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen/server_rack_under_screen_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.72,
+        3.95,
+        2.545
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN_DAMAGED",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_under_screen_damaged",
+      "category": "主屏下服务器（破损）2.72×2.84×3.95m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "under_screen_damaged_05",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_UNDER_SCREEN_DAMAGED",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen_damaged/server_rack_under_screen_damaged_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.72,
+        3.95,
+        2.8378
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_wide",
+      "category": "服务器机柜（宽体）3.00×3.17×5.60m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "east_complete_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide/server_rack_wide_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.995,
+        5.6,
+        3.17
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_wide_damaged",
+      "category": "服务器机柜（宽体破损）3.31×3.17×5.60m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "east_damaged_02",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_damaged/server_rack_wide_damaged_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.3059,
+        5.6,
+        3.17
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED_TALL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_wide_damaged_tall",
+      "category": "服务器机柜（宽体破损加高）3.31×3.17×5.95m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "east_damaged_05",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_DAMAGED_TALL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        3.3059,
+        5.95,
+        3.17
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_TALL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_wide_tall",
+      "category": "服务器机柜（宽体加高）3.00×3.17×5.95m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "east_complete_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_WIDE_TALL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_tall/server_rack_wide_tall_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.995,
+        5.95,
+        3.17
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_skin_armored_5m",
+      "category": "装甲墙面 0.36m（厚型，带灯带）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "wall_skin_east_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_armored_5m/wall_skin_armored_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.36,
+        11.8,
+        4.925
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_skin_armored_broken_5m",
+      "category": "装甲墙面 0.36m（厚型破损）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "wall_skin_east_04",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.36,
+        11.8,
+        4.925
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_skin_beveled_5m",
+      "category": "装甲墙面 0.25m（斜切型，带灯带）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "wall_skin_west_03",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_beveled_5m/wall_skin_beveled_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.25,
+        11.8,
+        4.96
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_skin_medium_5m",
+      "category": "装甲墙面 0.20m（中型）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "wall_skin_east_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_MEDIUM_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_medium_5m/wall_skin_medium_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.2,
+        11.8,
+        4.925
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_skin_thin_5m",
+      "category": "装甲墙面 0.15m（薄型）",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "wall_skin_east_03",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_thin_5m/wall_skin_thin_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.15,
+        11.8,
+        4.925
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_solid_5m",
+      "category": "实心墙 5.00×0.30×11.90m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "solid_wall",
+      "source_package_id": "base_wall_east_slot_01_solid",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WALL_SOLID_5M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_solid_5m/wall_solid_5m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.3,
+        11.9,
+        5.0
+      ],
+      "collision_owner": "self",
+      "collision_policy": "structural_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WALL_TYPOGRAPHY",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_typography",
+      "category": "数据库墙面标识 35.90×0.04×2.32m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "north_wall_typography",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WALL_TYPOGRAPHY",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_typography/wall_typography_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        35.9002,
+        2.3201,
+        0.042
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "workstation_a",
+      "category": "工作站（型 A）4.25×2.06×2.78m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "workstation_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_a/workstation_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.25,
+        2.78,
+        2.055
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "workstation_b",
+      "category": "工作站（型 B）4.25×2.06×2.78m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "workstation_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_b/workstation_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.25,
+        2.78,
+        2.055
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "workstation_c",
+      "category": "工作站（型 C）4.25×2.06×2.78m",
+      "room_type": "BOSS_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "workstation_02",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-BOSS-WORKSTATION_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_c/workstation_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.25,
+        2.78,
+        2.055
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
     }
   ],
   "room_type_sources": [
     "assets/art/environments/tower_zones/expedition/source/common_components/v006/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v007/component_catalog.json"
+    "assets/art/environments/tower_zones/expedition/source/common_components/v007/component_catalog.json",
+    "assets/art/environments/tower_zones/expedition/source/common_components/v008/component_catalog.json"
   ]
 }

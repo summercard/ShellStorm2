@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M
+; 房型组件 boss_room / v008 / wall_skin_armored_5m
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/wall_skin_armored_5m/wall_skin_armored_5m_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(0.36, 11.8, 4.925)
+
+[node name="RoomTypeComponentWallSkinArmored5M" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_5M"
+metadata/asset_version = "v008"
+metadata/room_type = "BOSS_ROOM"
+metadata/component_slug = "wall_skin_armored_5m"
+metadata/display_name_zh = "装甲墙面 0.36m（厚型，带灯带）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/wall_skin_armored_5m/wall_skin_armored_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.36, 11.8, 4.925)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 5.9, 0)
+shape = SubResource("BoxShape3D_proxy")

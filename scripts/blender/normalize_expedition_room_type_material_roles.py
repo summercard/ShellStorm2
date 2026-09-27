@@ -25,7 +25,18 @@ import bpy
 LIBRARIES = (
     ("office_room", "v006"),
     ("bridge_room", "v007"),
+    ("boss_room", "v008"),
 )
+## 每批库的校正策略：
+##   all       = 建模脚本把精工金属当**结构件默认材质**，全部角色 0 面改哑光；
+##   dominant  = 结构面本身分得清（墙体/地板已是哑光），只有「主面角色 = 精工金属」的
+##               大型构件才是误用 —— 判据：该库件内金属面积占比 >= min_share 且
+##               总面积 >= min_area_m2。这样能保住真正的金属小件与装饰件。
+LIBRARY_POLICIES = {
+    "office_room": {"mode": "all"},
+    "bridge_room": {"mode": "all"},
+    "boss_room": {"mode": "dominant", "min_share": 0.5, "min_area_m2": 50.0},
+}
 LIBRARY_ROOT = Path(
     "assets/art/environments/tower_zones/expedition/source/common_components"
 )
@@ -34,7 +45,7 @@ SHARED_PALETTE = Path("assets/art/shared/palette/设施低亮多巴胺色盘_10x
 METAL_ROLE_PREFIX = "01_精工金属"
 MATTE_ROLE = "02_细腻哑光_青绿大面"
 ## 与建模脚本 conf 表一致的 PBR 参数：角色 1 = 细腻哑光。
-MATTE_CONF = {"office_room": (0.04, 0.72, 0.0), "bridge_room": (0.03, 0.70, 0.0)}
+MATTE_CONF = {"office_room": (0.04, 0.72, 0.0), "bridge_room": (0.03, 0.70, 0.0), "boss_room": (0.03, 0.70, 0.0)}
 
 
 def parse_args() -> argparse.Namespace:
@@ -73,9 +84,52 @@ def ensure_matte_material(room_slug: str, palette_path: Path) -> bpy.types.Mater
     return material
 
 
-def remap_blend(blend_path: Path, room_slug: str, palette_path: Path) -> dict:
+def role_areas() -> dict[str, float]:
+    """全库件按材质角色累计三角面面积（对象均在世界原点，局部面积即真实面积）。"""
+    areas: dict[str, float] = {}
+    for obj in bpy.data.objects:
+        if obj.type != "MESH":
+            continue
+        slots = obj.material_slots
+        for polygon in obj.data.polygons:
+            index = polygon.material_index
+            name = (
+                slots[index].material.name
+                if index < len(slots) and slots[index].material
+                else "<none>"
+            )
+            areas[name] = areas.get(name, 0.0) + polygon.area
+    return areas
+
+
+def remap_blend(
+    blend_path: Path, room_slug: str, palette_path: Path, policy: dict
+) -> dict:
     bpy.ops.wm.open_mainfile(filepath=str(blend_path))
     matte = ensure_matte_material(room_slug, palette_path)
+    metal_area = 0.0
+    total_area = 0.0
+    mode = str(policy.get("mode", "all"))
+    if mode == "dominant":
+        areas = role_areas()
+        total_area = sum(areas.values())
+        metal_area = sum(
+            value for name, value in areas.items() if name.startswith(METAL_ROLE_PREFIX)
+        )
+        share = metal_area / total_area if total_area else 0.0
+        if share < float(policy.get("min_share", 0.5)) or total_area < float(
+            policy.get("min_area_m2", 0.0)
+        ):
+            return {
+                "blend": blend_path.as_posix(),
+                "objects_touched": 0,
+                "slots_replaced": 0,
+                "faces_affected": 0,
+                "saved": False,
+                "metal_area_m2": round(metal_area, 3),
+                "total_area_m2": round(total_area, 3),
+                "decision": "金属非主面，保留",
+            }
     slots_replaced = 0
     faces_affected = 0
     objects_touched = 0
@@ -103,6 +157,9 @@ def remap_blend(blend_path: Path, room_slug: str, palette_path: Path) -> dict:
         "slots_replaced": slots_replaced,
         "faces_affected": faces_affected,
         "saved": bool(slots_replaced),
+        "metal_area_m2": round(metal_area, 3),
+        "total_area_m2": round(total_area, 3),
+        "decision": "金属为主面，改哑光" if mode == "dominant" else "全量角色 0 → 哑光",
     }
 
 
@@ -129,17 +186,19 @@ def main() -> None:
                 raise FileNotFoundError(blend)
             targets.append(blend)
         print("==== %s / %s 目标 blend %d 个" % (room_slug, version, len(targets)))
+        policy = LIBRARY_POLICIES.get(room_slug, {"mode": "all"})
         for blend in targets:
-            record = remap_blend(blend, room_slug, palette_path)
-            record.update({"room_type": room_slug, "version": version})
+            record = remap_blend(blend, room_slug, palette_path, policy)
+            record.update({"room_type": room_slug, "version": version, "policy": policy})
             records.append(record)
             print(
-                "  %-46s 槽=%d 面=%d%s"
+                "  %-46s 槽=%d 面=%d%s (%s)"
                 % (
                     blend.name,
                     record["slots_replaced"],
                     record["faces_affected"],
-                    "" if record["saved"] else "（已是哑光，跳过）",
+                    "" if record["saved"] else "（未改）",
+                    record["decision"],
                 )
             )
     report_path = (
@@ -153,10 +212,14 @@ def main() -> None:
             {
                 "schema": "shellstorm2.expedition.room_type_material_role_correction.v001",
                 "reason": (
-                    "这两批房型源把精工金属(metallic 0.86)当结构件默认材质；"
+                    "这些房型源的精工金属(metallic 0.86)被用在了结构大面上；"
                     "Godot 无反射来源 ⇒ 大面积不受光。校正为细腻哑光(metallic 0.03)，"
                     "与其它房间口径一致。几何/UV/色盘格不变。"
+                    "策略：办公室/通道桥是「结构件默认材质」误用 ⇒ 全量角色 0 面改哑光；"
+                    "Boss 房结构面本身已分得清 ⇒ 只在金属占比 >=50% 且总面积 >=50m² 时改，"
+                    "保住真正的金属小件。"
                 ),
+                "library_policies": LIBRARY_POLICIES,
                 "from_role": METAL_ROLE_PREFIX,
                 "to_role": MATTE_ROLE,
                 "records": records,

@@ -367,3 +367,32 @@ ShellStorm2 里已有通用化脚本：`scripts/blender/dump_room_type_packages.
 **⚠️ 这一段是「分」的口径，不含归并**：按它跑完会得到「一个源对象一个包」。用「组件拆分判断」重跑一遍归并键聚类、
 把同键包合成一个组件后，才算符合本 Skill 的交付判据。实测四批的降幅见
 `references/component_split_decision_contract.md`。
+
+## 归并（旧库 → 新库）的真源工具与两个坑（2026-09-27 Boss 房 v008 实测）
+
+`plan_components.py` **只用包络 + 材质 + 旋转做候选聚类**（它自己的 docstring 就写着「几何指纹需 Blender 侧校验」）。
+候选 ≠ 真值：Boss 房实测候选计划里 **140/214** 个成员与所属代表件并不几何等价 —— 照候选合并会**静默丢掉
+140 件各不相同的几何**。归并必须走 **`scripts/blender/regroup_room_type_components.py`**（常驻，别放 scratch）：
+
+- 判据 = **族内几何等价类聚类**：顶点搬到组件 bbox 中心、按 1e-3 量化，在 Blender Z 轴 0/90/180/270° 旋转下
+  逐点最大偏移 ≤ `--tol`（默认 5mm），且网格数 / 材质多重集 / 顶点数一致；
+- 同族等价类数 > `--family-cap`（默认 3，即本 Skill 的常规上限）时**只保留成员数最多的 N 类**，其余整体并入
+  最近的保留类，并逐件登记角度与最大偏移（`absorbed_geometry_variant` / `..._shape_mismatch`）；
+- `--family-cap-overrides family=N` 仅用于本 Skill 允许的**破损 / 配色 / 结构状态轴**族；
+- 命名表 `component_slug_map.json` 还可声明下面两条布局规则。
+
+**坑 1 —— 房型源不预切门洞，预切了就必须封堵。** 预切门洞与本关实际门位不一致时，那处净空就是
+**没有门扇的洞**（漏光 + 可穿行）。Boss 房源自带门洞在南 x=+2.5 / 西 z=+2.5，而本关门位在西/东 z=−2.5
+（该房型模板的 note 早写明「白模门位南进西出，与设计页冲突」）⇒ 门垛 4 件 `"drop": true`、
+门楣 2 件 `"seal_door_slot": "<target component_id>"`（换成整樘实墙且 z 归零）。门位一律留给运行时按门槽车道
+把实墙提升为门墙。**门件有没有通透门洞必须按几何实测**：Boss 门位三件实测左/右门垛占 |x|∈[1.1,2.5]、
+门楣占 z∈[2.8,11.9]，中间 2.2×2.8 完全通透、与 `door_contract.lintel_bottom_z_m=2.8` 逐项吻合 ——
+按命名推测「同办公室病症」是错的。
+
+**坑 2 —— 走行面标高 ≠ 源 z=0。** 运行时把 **y=0 当走行面**。Boss 源里 z=0 是地板底板底面
+（底板 0→0.26、地砖顶面 0.358）⇒ 命名表声明 `walk_plane.shift_z_m = -0.358` 整房平移，使**地砖顶面**落到 y=0。
+摆位源声明的 `floor_top_m` 可能只是名义值（实测差 5.8cm）—— **以几何实测为准**。
+
+判据落位：`plan_components.py` 跑新库要 `<PLAN_COMPONENTS_OK>`；实例侧要 unresolved=0、
+角色分布与 `component_instances.validation` 逐项相符；门位净空盒里不得有**墙带内**（法向 ±0.4m）的几何
+（±0.6m 会把门口陈设的角算成阻挡）。

@@ -7,8 +7,8 @@
   "source_room_type": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/通道桥房间种类_工字型_30x60m_v002.blend",
   "source_room_type_sha256": "7ba287e92a7a16fb7ee5234d027be6a969bdbccb4f12de5b741aaecfc7b2b59e",
   "source_package_list": "assets/art/environments/tower_zones/expedition/source/room_types/bridge_room/v002/component_packages_v002/architecture",
-  "runtime_connected": false,
-  "ledger_registration": "pending",
+  "runtime_connected": true,
+  "ledger_registration": "completed",
   "packages": [
     {
       "component_id": "ENV-EXPEDITION-L01-BRIDGE-BANK_CRATE",

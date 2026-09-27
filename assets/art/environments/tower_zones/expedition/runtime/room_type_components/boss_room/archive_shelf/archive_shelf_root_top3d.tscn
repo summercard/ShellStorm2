@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF
+; 房型组件 boss_room / v008 / archive_shelf
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/boss_room/archive_shelf/archive_shelf_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
+size = Vector3(2.45, 5.35, 1.6)
+
+[node name="RoomTypeComponentArchiveShelf" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF"
+metadata/asset_version = "v008"
+metadata/room_type = "BOSS_ROOM"
+metadata/component_slug = "archive_shelf"
+metadata/display_name_zh = "档案货架 2.45×1.60×5.35m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v008/component_packages/archive_shelf/archive_shelf.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(2.45, 5.35, 1.6)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 2.675, 0)
+shape = SubResource("BoxShape3D_proxy")

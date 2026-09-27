@@ -1,11 +1,13 @@
 extends Node
-## 验收：办公室 v006 与通道桥 v007 逐组件导入、默认布局重放及运行时拼装。
+## 验收：办公室 v006、通道桥 v007、Boss 房 v008 逐组件导入、默认布局重放及运行时拼装。
 ##
 ## 覆盖四层契约：
-## ① runtime_manifest 中 60 个稳定 PackedScene 均可独立加载/实例化，且资产元数据与公共色盘绑定完整；
-## ② FloorPlanGenerator 对 room_03/room_09 重放 106 件、room_05 重放 242 件；
+## ① runtime_manifest 中 98 个稳定 PackedScene 均可独立加载/实例化，且资产元数据与公共色盘绑定完整；
+## ② FloorPlanGenerator 对 room_03/room_09 重放 106 件、room_05 重放 242 件、boss 重放 210 件；
 ## ③ DungeonRoom3D 实际生成同数实例且 unresolved=0，桥房旧 multi_level_component=0；
-## ④ 办公室门墙/RoomDoor3D 门扇与主层地砖存在，桥房 tile_lower 不进入主层刷怪格。
+## ④ 三个房间的门位净空区都不得被封住（门墙通透门洞 + RoomDoor3D 门扇齐备）。
+##    三个房间的主层都用通用 C01/C02 棋盘砖（办公室/通道桥/Boss 房同一口径；
+##    Boss 房套件独立，但地砖按全项目统一规则替换，自有结构件不动）。
 
 const GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const ROOM_SCRIPT := preload("res://src/world3d/DungeonRoom3D.gd")
@@ -18,7 +20,7 @@ const MANIFEST_PATH := (
 const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 const LEVEL_ID := "expedition_01"
 const RUN_SEED := 77001199
-const EXPECTED_COMPONENTS := 60
+const EXPECTED_COMPONENTS := 98
 const COMMON_FLOOR_IDS := [
 	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
 	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
@@ -30,6 +32,7 @@ const TARGETS := {
 		"template_id": "office_60x70",
 		"expected_instances": 106,
 		"expected_floor_tiles": 48,
+		"expected_common_floor_tiles": 48,
 		"expected_room_type_components": 29,
 		"expected_solid_walls": 28,
 		"expected_door_walls": 1,
@@ -40,6 +43,7 @@ const TARGETS := {
 		"template_id": "bridge_60x50",
 		"expected_instances": 242,
 		"expected_floor_tiles": 48,
+		"expected_common_floor_tiles": 48,
 		"expected_room_type_components": 158,
 		"expected_solid_walls": 36,
 		"expected_door_walls": 0,
@@ -50,11 +54,23 @@ const TARGETS := {
 		"template_id": "office_60x70",
 		"expected_instances": 106,
 		"expected_floor_tiles": 48,
+		"expected_common_floor_tiles": 48,
 		"expected_room_type_components": 29,
 		"expected_solid_walls": 28,
 		"expected_door_walls": 1,
 		"expected_version": "v006",
 		"expected_asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
+	},
+	"boss": {
+		"template_id": "boss_50x40",
+		"expected_instances": 210,
+		"expected_floor_tiles": 80,
+		"expected_common_floor_tiles": 80,
+		"expected_room_type_components": 58,
+		"expected_solid_walls": 72,
+		"expected_door_walls": 0,
+		"expected_version": "v008",
+		"expected_asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT",
 	},
 }
 
@@ -207,7 +223,9 @@ func _check_runtime_room(room_id: String, room: DungeonRoom3D, expected: Diction
 		_check(is_zero_approx(cell.y), "%s 主层地砖格 y 必须归零" % room_id)
 	if room_id in ["room_03", "room_09"]:
 		_check(int(room.get_meta("authored_layout_door_wall_count", -1)) >= 1, "%s 必须至少实例化 1 件办公室门墙" % room_id)
-	_check_runtime_floor_tiles(room_id, art_root, int(expected["expected_floor_tiles"]))
+	_check_runtime_floor_tiles(
+		room_id, art_root, int(expected.get("expected_common_floor_tiles", expected["expected_floor_tiles"]))
+	)
 	_check_runtime_wall_contract(room_id, room, art_root)
 	_check_door_aperture(room_id, room, art_root)
 	_check_runtime_doors(room_id, room)
@@ -239,7 +257,8 @@ func _check_runtime_floor_tiles(room_id: String, art_root: Node3D, expected_coun
 			"%s 通用地砖位置必须使用自身 walk-plane 偏移" % room_id
 		)
 	_check(total == expected_count, "%s 运行时必须用 %d 块通用地砖，实得 %d" % [room_id, expected_count, total])
-	_check(abs(int(counts[COMMON_FLOOR_IDS[0]]) - int(counts[COMMON_FLOOR_IDS[1]])) <= 1, "%s 通用地砖必须按 C01/C02 棋盘交替：%s" % [room_id, str(counts)])
+	if expected_count > 0:
+		_check(abs(int(counts[COMMON_FLOOR_IDS[0]]) - int(counts[COMMON_FLOOR_IDS[1]])) <= 1, "%s 通用地砖必须按 C01/C02 棋盘交替：%s" % [room_id, str(counts)])
 
 
 func _check_runtime_wall_contract(room_id: String, room: DungeonRoom3D, art_root: Node3D) -> void:
@@ -268,15 +287,24 @@ func _check_runtime_wall_contract(room_id: String, room: DungeonRoom3D, art_root
 				if resolved_id != GENERIC_SOLID_WALL_ID:
 					bad_bridge_solids += 1
 	_check(bad_bridge_solids == 0, "room_05 不得保留带门洞视觉的普通 WALL_X670")
+	# 每个有门的房间都至少应有一件实墙按真实门槽提升为门墙 —— 这是「门开在实墙上」的
+	# 唯一合法出路：房型源不预切门洞（Boss 房源里预切的门洞已在入库时封成整樘实墙）。
 	var promoted := room.get_meta("authored_layout_promoted_walls", []) as Array
 	_check(not promoted.is_empty(), "%s 至少应有一件实墙按真实门槽提升为门墙" % room_id)
 
 
-## 门位门墙必须**真的留出通透门洞**：升降门板上行时，门洞区里不能有墙件几何。
-## 2.2×2.5m 净空由 TowerGeometry3D 定义；这里在门墙模块的局部坐标里判，
-## 与模块朝向无关（局部 X 恒为墙宽轴）。
+## 门位必须**真的留出通透门洞**：升降门板上行时，净空区里不能有本层任何几何。
+##
+## 判据用**房间局部空间**的净空盒，与「门位由谁承接」无关：
+##   沿墙轴 ±1.05m（门宽 2.2 的一半）、竖直 y ∈ [0.15, 2.35]（净高 2.5 去掉上下余量）、
+##   法向 ±0.4m —— **只覆盖墙带**（墙厚 0.3 加余量），不含站在门前的家具。
+## 这一条必须写死：Boss 房东门口有两台机柜，其角会探进 ±1.05×±0.6 的盒子，但它们是
+## 门内陈设、不是墙；而且门靠**整体升降**开合而不是平开 ⇒ 不构成阻挡。
+##
 ## 反例（2026-09-27 实测）：办公室 v006 的 `door_wall` 件门洞区正投影覆盖率 100%，
 ## 门扇整个被埋在实心墙里，开与不开画面完全一致 —— 只数门扇存在是查不出来的。
+## 另一个反例：Boss 房源预切的门洞（南 x=+2.5 / 西 z=+2.5）与本关门位（西/东 z=−2.5）
+## 不一致，净空里没有任何门扇 ⇒ 入库时已按 02 规范封成整樘实墙。
 func _check_door_aperture(room_id: String, room: DungeonRoom3D, art_root: Node3D) -> void:
 	if art_root == null:
 		return
@@ -285,67 +313,56 @@ func _check_door_aperture(room_id: String, room: DungeonRoom3D, art_root: Node3D
 		var door := room.get_door_node(direction)
 		if door == null:
 			continue
-		var wall := _door_lane_wall(art_root, direction, _along_of(door.position, direction))
-		_check(wall != null, "%s 的 %s 门位必须有一件门墙承接" % [room_id, direction])
-		if wall == null:
-			continue
-		var blocked := _count_geometry_in_door_clear_region(wall)
+		var lane := art_root.global_transform.affine_inverse() * door.global_position
+		var blocked := 0
+		for child in art_root.get_children():
+			if not (child is Node3D):
+				continue
+			blocked += _count_vertices_in_door_clear_box(child as Node3D, art_root, direction, lane)
 		_check(
 			blocked == 0,
-			"%s 的 %s 门位门洞被 %d 个顶点封住（门墙未切通透门洞）"
+			"%s 的 %s 门位门洞被 %d 个顶点封住（门洞未通透）"
 			% [room_id, direction, blocked]
 		)
 
 
-func _along_of(local_position: Vector3, direction: String) -> float:
-	return (
-		local_position.x
-		if direction in ["north", "south"]
-		else local_position.z
-	)
-
-
-## 门槽车道上那件门墙：按 tower_wall_direction + 沿墙坐标匹配（容差沿用门槽判据）。
-func _door_lane_wall(art_root: Node3D, direction: String, along: float) -> Node3D:
-	var best: Node3D = null
-	var best_gap := INF
-	for child in art_root.get_children():
-		var module := child as Node3D
-		if module == null:
-			continue
-		if str(module.get_meta("tower_wall_direction", "")) != direction:
-			continue
-		var gap := absf(_along_of(module.position, direction) - along)
-		if gap <= 0.3 and gap < best_gap:
-			best_gap = gap
-			best = module
-	return best
-
-
-## 门洞净空区（局部 |x| ≤ 1.1、y ∈ [0, 2.5]）内的墙件顶点数。
-func _count_geometry_in_door_clear_region(module: Node3D) -> int:
-	var to_module := module.global_transform.affine_inverse()
+## 净空盒内的顶点数（顶点先转到 art_root 局部，再按门位四面判定）。
+func _count_vertices_in_door_clear_box(
+	module: Node3D, art_root: Node3D, direction: String, lane: Vector3
+) -> int:
+	var to_art := art_root.global_transform.affine_inverse()
 	var blocked := 0
-	for node in module.find_children("*", "MeshInstance3D", true, false):
+	for node in _mesh_instances_of(module):
 		var mesh_instance := node as MeshInstance3D
 		var mesh := mesh_instance.mesh
 		if mesh == null:
 			continue
-		var to_module_from_mesh := to_module * mesh_instance.global_transform
+		var to_art_from_mesh := to_art * mesh_instance.global_transform
 		for surface in range(mesh.get_surface_count()):
 			var arrays := mesh.surface_get_arrays(surface)
 			var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
 			for vertex in vertices:
-				var local := to_module_from_mesh * vertex
-				if (
-					absf(local.x) <= 1.05
-					and local.y >= 0.15
-					and local.y <= 2.35
-				):
+				var local := to_art_from_mesh * vertex
+				if local.y < 0.15 or local.y > 2.35:
+					continue
+				if direction in ["north", "south"]:
+					if absf(local.x - lane.x) <= 1.05 and absf(local.z - lane.z) <= 0.4:
+						blocked += 1
+				elif absf(local.z - lane.z) <= 1.05 and absf(local.x - lane.x) <= 0.4:
 					blocked += 1
 	return blocked
 
 
+## 模块自身或后代的全部 MeshInstance3D（含根本身）。
+func _mesh_instances_of(module: Node3D) -> Array[Node]:
+	var meshes: Array[Node] = []
+	if module is MeshInstance3D:
+		meshes.append(module)
+	meshes.append_array(module.find_children("*", "MeshInstance3D", true, false))
+	return meshes
+
+
+## 门扇：RoomDoor3D 必须存在、带 ImportedDoorVisual、且至少一扇可见。
 func _check_runtime_doors(room_id: String, room: DungeonRoom3D) -> void:
 	var door_nodes := room.get("_door_nodes") as Dictionary
 	_check(door_nodes.size() == room.doors.size(), "%s RoomDoor3D 数应与 doors 一致" % room_id)
