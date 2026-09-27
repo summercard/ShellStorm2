@@ -1,0 +1,1487 @@
+{
+  "schema": "shellstorm2.battle.component_instances",
+  "schema_version": 1,
+  "library": "v014",
+  "room_type": "DB_ROOM",
+  "source_library": "v013",
+  "source_blend_sha256": "d205e699ec2a376ebdffebc3e2d22cdbd9a0cdd9b4a5a0869a100f307102bafb",
+  "instances": [
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL",
+      "component_slug": "cable_coil",
+      "position_m": [
+        19.66,
+        8.9,
+        3.5135
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        0.0,
+        -2.5,
+        11.38
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        0.0,
+        -7.5,
+        11.38
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_10M",
+      "component_slug": "ceiling_deck_10m",
+      "position_m": [
+        0.0,
+        -12.5,
+        11.38
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        0.0,
+        2.5,
+        11.38
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        0.0,
+        7.5,
+        11.38
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "component_slug": "ceiling_deck_40m",
+      "position_m": [
+        0.0,
+        12.5,
+        11.38
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "component_slug": "ceiling_lighting",
+      "position_m": [
+        0.0,
+        2.5,
+        10.435
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "component_slug": "ceiling_ring_beam",
+      "position_m": [
+        0.0,
+        0.0,
+        11.15
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A",
+      "component_slug": "ceiling_service_a",
+      "position_m": [
+        0.0,
+        1.0,
+        10.195
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B",
+      "component_slug": "ceiling_service_b",
+      "position_m": [
+        3.6,
+        1.5,
+        10.3825
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C",
+      "component_slug": "ceiling_service_c",
+      "position_m": [
+        -0.015,
+        2.5,
+        9.868
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND",
+      "component_id": "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND",
+      "component_slug": "repair_island",
+      "position_m": [
+        0.0,
+        -0.8,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "component_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "component_slug": "corner_guard",
+      "position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -2.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -2.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -2.5,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -2.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -2.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -2.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -7.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -7.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -7.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -7.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -7.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -12.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -12.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -12.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -12.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -12.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        -17.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -17.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -17.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        -17.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        -17.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        2.5,
+        -12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        2.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        2.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        2.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        7.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        7.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        7.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        7.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        7.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        12.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        12.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        12.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        12.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "component_slug": "floor_tile_5m_a",
+      "position_m": [
+        17.5,
+        -2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        17.5,
+        -7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "component_slug": "floor_tile_5m_c",
+      "position_m": [
+        17.5,
+        2.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        17.5,
+        7.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "component_slug": "floor_tile_5m_b",
+      "position_m": [
+        17.5,
+        12.5,
+        -0.32
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "component_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK",
+      "component_slug": "equipment_rack",
+      "position_m": [
+        16.7,
+        0.8,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_A",
+      "component_slug": "floor_detail_a",
+      "position_m": [
+        0.0,
+        2.5,
+        0.045
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B",
+      "component_slug": "floor_detail_b",
+      "position_m": [
+        0.0,
+        0.0046,
+        0.0075
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+      "component_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART",
+      "component_slug": "island_cart",
+      "position_m": [
+        4.15,
+        -0.8125,
+        -0.0085
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST",
+      "component_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART",
+      "component_slug": "island_cart",
+      "position_m": [
+        -4.15,
+        -0.8125,
+        -0.0085
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+      "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A",
+      "component_slug": "raised_service_a",
+      "position_m": [
+        9.6,
+        -3.59,
+        0.58
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+      "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B",
+      "component_slug": "raised_service_b",
+      "position_m": [
+        9.6,
+        -4.6,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_A",
+      "component_slug": "server_rack_a",
+      "position_m": [
+        -16.5,
+        11.4456,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_B",
+      "component_slug": "server_rack_b",
+      "position_m": [
+        -14.3,
+        11.4456,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_02",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_B",
+      "component_slug": "server_rack_b",
+      "position_m": [
+        -12.1,
+        11.4456,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_03",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_B",
+      "component_slug": "server_rack_b",
+      "position_m": [
+        -9.9,
+        11.4456,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_03"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_04",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_C",
+      "component_slug": "server_rack_c",
+      "position_m": [
+        -7.7,
+        11.4456,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_04"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_05",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_D",
+      "component_slug": "server_rack_d",
+      "position_m": [
+        -5.5,
+        11.4456,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_05"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_BUS",
+      "component_slug": "server_bus",
+      "position_m": [
+        -11.0,
+        11.6,
+        0.02
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVICE_CART",
+      "component_slug": "service_cart",
+      "position_m": [
+        -16.5,
+        8.7925,
+        -0.0085
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVICE_CART",
+      "component_slug": "service_cart",
+      "position_m": [
+        -11.0,
+        8.7925,
+        -0.0085
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVICE_CART",
+      "component_slug": "service_cart",
+      "position_m": [
+        -5.5,
+        8.7925,
+        -0.0085
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_REEL",
+      "component_slug": "cable_reel",
+      "position_m": [
+        17.3,
+        -9.4,
+        -0.0085
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01",
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_REEL",
+      "component_slug": "cable_reel",
+      "position_m": [
+        18.3,
+        -9.4,
+        -0.0085
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL",
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVICE_TERMINAL",
+      "component_slug": "service_terminal",
+      "position_m": [
+        15.2,
+        -9.5175,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELF",
+      "component_slug": "shelf",
+      "position_m": [
+        13.2,
+        -8.4,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01",
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELF",
+      "component_slug": "shelf",
+      "position_m": [
+        15.2,
+        -8.4,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02",
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELF",
+      "component_slug": "shelf",
+      "position_m": [
+        17.2,
+        -8.4,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELVING",
+      "component_slug": "shelving",
+      "position_m": [
+        -15.2,
+        -6.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "component_slug": "wall_light_pylon",
+      "position_m": [
+        0.0,
+        2.5,
+        3.07
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN",
+      "component_slug": "wall_screen",
+      "position_m": [
+        17.73,
+        11.655,
+        3.525
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE",
+      "component_slug": "wall_service",
+      "position_m": [
+        0.0,
+        3.035,
+        3.05
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "component_slug": "wall_top_service",
+      "position_m": [
+        0.0,
+        0.0,
+        11.15
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_A",
+      "component_slug": "workbench_a",
+      "position_m": [
+        10.4,
+        7.875,
+        0.045
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_B",
+      "component_slug": "workbench_b",
+      "position_m": [
+        -17.3,
+        3.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST"
+    }
+  ],
+  "validation": {
+    "source_object_count": 86,
+    "instance_count": 86,
+    "dropped_by_door_slot_sealing": 0,
+    "coverage_ok": true,
+    "rotation_inferred": true,
+    "rotation_stats": {
+      "0": 77,
+      "90": 2,
+      "180": 4,
+      "270": 3
+    }
+  },
+  "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
+  "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）"
+}

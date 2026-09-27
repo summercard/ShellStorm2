@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-DB-CEILING_DECK_40M
+; 房型组件 db_room / v014 / ceiling_deck_40m
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/ceiling_deck_40m/ceiling_deck_40m_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentCeilingDeck40M" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
+metadata/asset_version = "v014"
+metadata/room_type = "DB_ROOM"
+metadata/component_slug = "ceiling_deck_40m"
+metadata/display_name_zh = "天花承板 40×5m（主跨）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_packages/ceiling_deck_40m/ceiling_deck_40m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(40, 0.49, 5)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

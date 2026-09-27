@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A
+; 房型组件 db_room / v014 / ceiling_service_a
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/ceiling_service_a/ceiling_service_a_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentCeilingServiceA" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A"
+metadata/asset_version = "v014"
+metadata/room_type = "DB_ROOM"
+metadata/component_slug = "ceiling_service_a"
+metadata/display_name_zh = "ceiling_service_a"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_packages/ceiling_service_a/ceiling_service_a.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(36, 1.355, 26)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

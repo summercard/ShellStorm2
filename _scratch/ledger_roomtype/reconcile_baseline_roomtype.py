@@ -31,8 +31,8 @@ from split_asset_ledger import (  # noqa: E402
     _row_digest,
 )
 
-NEW_ID = "ENV-EXPEDITION-L01-BOSS-ROOM"
-UPDATED_IDS = ("ENV-EXPEDITION-L01-OFFICE-ROOM", "ENV-EXPEDITION-L01-BRIDGE-ROOM")
+NEW_ID = ""
+UPDATED_IDS = ("ENV-EXPEDITION-L01-OFFICE-ROOM", "ENV-EXPEDITION-L01-BRIDGE-ROOM", "ENV-EXPEDITION-L01-ROOM-DB-70X50")
 BASELINE = ROOT / "assets/registry/ledger_split_baseline.json"
 LEDGER = ROOT / "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx"
 

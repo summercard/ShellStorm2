@@ -42,6 +42,13 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"size_m": Vector2(30.0, 60.0),
 		"door_wall_component_id": "",
 	},
+	"db_70x50": {
+		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_instances.json",
+		"version": "v014",
+		"asset_id": "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT",
+		"size_m": Vector2(40.0, 30.0),
+		"door_wall_component_id": "",
+	},
 	"boss_50x40": {
 		"path": "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_instances.json",
 		"version": "v011",

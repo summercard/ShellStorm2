@@ -8,6 +8,7 @@ LIBRARIES = (
     ("office_room", "v009"),
     ("bridge_room", "v010"),
     ("boss_room", "v011"),
+    ("db_room", "v014"),
 )
 CATALOG_PATH = Path(
     "assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json"
@@ -125,6 +126,17 @@ def classify(room_slug: str, slug: str) -> tuple[str, str, str]:
         if slug in BOSS_VISUAL_ONLY:
             return "room_type_component", "none", "visual_only"
         raise RuntimeError(f"未分类的 Boss 房组件 slug: {slug}")
+    if room_slug == "db_room":
+        if slug.startswith("floor_tile_5m"):
+            return "floor_tile", "floor_support", "external_floor_support"
+        if slug in {
+            "server_rack_a", "server_rack_b", "server_rack_c", "server_rack_d",
+            "service_cart", "shelf", "island_cart", "raised_service_a", "raised_service_b",
+            "cable_reel", "workbench_a", "workbench_b", "repair_island", "equipment_rack",
+            "service_terminal", "shelving",
+        }:
+            return "room_type_component", "self", "safe_box_proxy"
+        return "room_type_component", "none", "visual_only"
     if room_slug == "office_room":
         if slug == "door_wall":
             return "door_wall", "room_door_owned", "split_door_wall_proxy"
@@ -292,6 +304,7 @@ def main() -> None:
                 "ENV-EXPEDITION-L01-OFFICE-",
                 "ENV-EXPEDITION-L01-BRIDGE-",
                 "ENV-EXPEDITION-L01-BOSS-",
+                "ENV-EXPEDITION-L01-DB-",
             )
         )
     ]

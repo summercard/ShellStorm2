@@ -1,5 +1,5 @@
 extends Node
-## 验收：办公室 v009、通道桥 v010、Boss 房 v011 逐组件导入、默认布局重放及运行时拼装。
+## 验收：办公室 v009、通道桥 v010、Boss 房 v011、数据库房 v014 逐组件导入、默认布局重放及运行时拼装。
 ##
 ## 覆盖四层契约：
 ## ① runtime_manifest 中 98 个稳定 PackedScene 均可独立加载/实例化，且资产元数据与公共色盘绑定完整；
@@ -20,7 +20,7 @@ const MANIFEST_PATH := (
 const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 const LEVEL_ID := "expedition_01"
 const RUN_SEED := 77001199
-const EXPECTED_COMPONENTS := 98
+const EXPECTED_COMPONENTS := 133
 const COMMON_FLOOR_IDS := [
 	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
 	"ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
@@ -71,6 +71,39 @@ const TARGETS := {
 		"expected_door_walls": 0,
 		"expected_version": "v011",
 		"expected_asset_id": "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT",
+	},
+	"room_02": {
+		"template_id": "db_70x50",
+		"expected_instances": 86,
+		"expected_floor_tiles": 42,
+		"expected_common_floor_tiles": 42,
+		"expected_room_type_components": 44,
+		"expected_solid_walls": 0,
+		"expected_door_walls": 0,
+		"expected_version": "v014",
+		"expected_asset_id": "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT",
+	},
+	"room_06": {
+		"template_id": "db_70x50",
+		"expected_instances": 86,
+		"expected_floor_tiles": 42,
+		"expected_common_floor_tiles": 42,
+		"expected_room_type_components": 44,
+		"expected_solid_walls": 0,
+		"expected_door_walls": 0,
+		"expected_version": "v014",
+		"expected_asset_id": "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT",
+	},
+	"room_10": {
+		"template_id": "db_70x50",
+		"expected_instances": 86,
+		"expected_floor_tiles": 42,
+		"expected_common_floor_tiles": 42,
+		"expected_room_type_components": 44,
+		"expected_solid_walls": 0,
+		"expected_door_walls": 0,
+		"expected_version": "v014",
+		"expected_asset_id": "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT",
 	},
 }
 
@@ -287,8 +320,11 @@ func _check_runtime_wall_contract(room_id: String, room: DungeonRoom3D, art_root
 				if resolved_id != GENERIC_SOLID_WALL_ID:
 					bad_bridge_solids += 1
 	_check(bad_bridge_solids == 0, "room_05 不得保留带门洞视觉的普通 WALL_X670")
-	# 每个有门的房间都至少应有一件实墙按真实门槽提升为门墙 —— 这是「门开在实墙上」的
-	# 唯一合法出路：房型源不预切门洞（Boss 房源里预切的门洞已在入库时封成整樘实墙）。
+	# 数据库房的墙体与门位由通用房间壳体承接，房型组件库不包含 solid_wall；
+	# 其门洞/门扇由后续 RoomDoor3D 合同验收，不能要求房型布局伪造 promoted wall。
+	if room_id in ["room_02", "room_06", "room_10"]:
+		return
+	# 每个有门的房间都至少应有一件实墙按真实门槽提升为门墙。
 	var promoted := room.get_meta("authored_layout_promoted_walls", []) as Array
 	_check(not promoted.is_empty(), "%s 至少应有一件实墙按真实门槽提升为门墙" % room_id)
 

@@ -39,13 +39,16 @@ TODAY = "2026-09-27"
 
 OFFICE = "ENV-EXPEDITION-L01-OFFICE-ROOM"
 BRIDGE = "ENV-EXPEDITION-L01-BRIDGE-ROOM"
+DB = "ENV-EXPEDITION-L01-ROOM-DB-70X50"
 BOSS = "ENV-EXPEDITION-L01-BOSS-ROOM"
 
 wb = load_workbook(LEDGER)
 ws = wb[ASSET_SHEET]
 
-LAST_BEFORE = ws.max_row
-assert LAST_BEFORE == 246, "末行变了：%s（脚本按 246 写的）" % LAST_BEFORE
+LAST_BEFORE = max(
+    r for r in range(FIRST_DATA_ROW, ws.max_row + 1) if ws.cell(r, 1).value
+)
+assert LAST_BEFORE == 246, "资产数据末行变了：%s（脚本按 246 写的）" % LAST_BEFORE
 assert str(ws.cell(HEADER_ROW, 1).value) == "AssetID"
 
 row_of: dict[str, int] = {}
@@ -55,6 +58,7 @@ for r in range(FIRST_DATA_ROW, LAST_BEFORE + 1):
         row_of[aid] = r
 assert row_of[OFFICE] == 243, row_of.get(OFFICE)
 assert row_of[BRIDGE] == 244, row_of.get(BRIDGE)
+assert row_of[DB] == 246, row_of.get(DB)
 assert BOSS not in row_of, "Boss 行已存在 —— 本脚本不该重跑"
 
 # ------------------------------------------------------------------ ① 转正
@@ -85,7 +89,31 @@ for aid, (spec_suffix, old_tail, new_tail) in PROMOTIONS.items():
     ws.cell(r, 22).value = TODAY
     print("PROMOTED %s r%d" % (aid, r))
 
-# ------------------------------------------------------------ ② 新增 Boss 行
+# ------------------------------------------------------------ ② 数据库房 v014 转正
+DB_ROW = row_of[DB]
+assert ws.cell(DB_ROW, 11).value == "Blender源已完成", (DB, ws.cell(DB_ROW, 11).value)
+ws.cell(DB_ROW, 11).value = "正式美术已接入"
+ws.cell(DB_ROW, 13).value = "v014"
+ws.cell(DB_ROW, 14).value = (
+    "40×30m；房型组件库 v014：35 个唯一组件 / 86 个实例；"
+    "运行时 3 间房均按 component_instances.json 重放，42 块主层地砖换通用 C01/C02，"
+    "44 个普通房型组件，unresolved=0，门 2 扇；db_02 仍待另行制作"
+)
+ws.cell(DB_ROW, 15).value = "assets/art/environments/tower_zones/expedition/source/room_types/db_room/v002/"
+ws.cell(DB_ROW, 16).value = (
+    "assets/art/environments/tower_zones/expedition/source/common_components/v014/component_catalog.json；"
+    "component_instances.json；运行时 PackedScene 注册表 shell_component_catalog.json"
+)
+ws.cell(DB_ROW, 20).value = "ba0d29bcd4e89d901fa3102f66fa449ea6028bcb860c5be170bdc50fd31303c6"
+ws.cell(DB_ROW, 22).value = TODAY
+ws.cell(DB_ROW, 25).value = (
+    "2026-09-27：数据库房 v014 已完成 35 个独立 GLB/PackedScene 导出并接入 Godot。"
+    "room_02 / room_06 / room_10 均通过组件重放验收（86 实例、42 通用棋盘砖、44 普通组件、"
+    "unresolved=0、2 扇门）；room_06 当前暂重放 db_01 默认布局，db_02 变体仍待另行制作。"
+)
+print("PROMOTED %s r%d" % (DB, DB_ROW))
+
+# ------------------------------------------------------------ ③ 新增 Boss 行
 NEW_ROW = LAST_BEFORE + 1
 BOSS_PATH = (
     "assets/art/environments/tower_zones/expedition/source/room_types/"

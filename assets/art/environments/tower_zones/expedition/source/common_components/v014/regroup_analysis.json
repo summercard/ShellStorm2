@@ -1,0 +1,1026 @@
+{
+  "schema": "shellstorm2.component_regroup_analysis",
+  "schema_version": 1,
+  "source_library": "assets/art/environments/tower_zones/expedition/source/common_components/v013",
+  "tolerance_m": 0.005,
+  "family_cap": 3,
+  "family_cap_overrides": {
+    "floor_tile_5m": 3,
+    "server_rack": 5
+  },
+  "package_count": 86,
+  "plan_member_count": 86,
+  "component_count": 35,
+  "absorbed_variant_total": 34,
+  "absorbed_shape_mismatch_total": 2,
+  "families_converged": [
+    "floor_tile_5m"
+  ],
+  "components": [
+    {
+      "family": "floor_tile_5m",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+      "member_count": 10,
+      "classes_in_family": 32,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2"
+      ],
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.424
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2",
+          "rotation_deg": 270,
+          "max_delta_m": 4.775
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        }
+      ],
+      "geometry_shape_mismatch": [
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1",
+          "rotation_deg": 0
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2",
+          "rotation_deg": 0
+        }
+      ],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1"
+      ]
+    },
+    {
+      "family": "floor_tile_5m",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+      "member_count": 22,
+      "classes_in_family": 32,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1"
+      ],
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.407
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3",
+          "rotation_deg": 0,
+          "max_delta_m": 4.756
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1",
+          "rotation_deg": 90,
+          "max_delta_m": 4.78
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.771
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.932
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2",
+          "rotation_deg": 0,
+          "max_delta_m": 5.0
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.917
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2"
+      ]
+    },
+    {
+      "family": "floor_tile_5m",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+      "member_count": 10,
+      "classes_in_family": 32,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3"
+      ],
+      "bounds_size_m": [
+        5.0,
+        5.0,
+        0.407
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2",
+          "rotation_deg": 180,
+          "max_delta_m": 4.763
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0",
+          "rotation_deg": 180,
+          "max_delta_m": 4.768
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2",
+          "rotation_deg": 270,
+          "max_delta_m": 4.772
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1",
+          "rotation_deg": 180,
+          "max_delta_m": 4.771
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2",
+          "rotation_deg": 0,
+          "max_delta_m": 4.77
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3",
+          "rotation_deg": 90,
+          "max_delta_m": 4.78
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0",
+          "rotation_deg": 180,
+          "max_delta_m": 4.768
+        },
+        {
+          "member": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2",
+          "rotation_deg": 270,
+          "max_delta_m": 4.772
+        }
+      ],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2",
+        "ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0"
+      ]
+    },
+    {
+      "family": "server_rack",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00",
+      "member_count": 1,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.117,
+        1.6603,
+        3.944
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-REAR_SERVER_00"
+      ]
+    },
+    {
+      "family": "server_rack",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+      "member_count": 3,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.117,
+        1.6603,
+        3.944
+      ],
+      "geometry_exact_count": 3,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+        "ENV-EXPEDITION-L01-DB-REAR_SERVER_02",
+        "ENV-EXPEDITION-L01-DB-REAR_SERVER_03"
+      ]
+    },
+    {
+      "family": "server_rack",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_04",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_04",
+      "member_count": 1,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.117,
+        1.6603,
+        3.944
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-REAR_SERVER_04"
+      ]
+    },
+    {
+      "family": "server_rack",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_05",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_05",
+      "member_count": 1,
+      "classes_in_family": 4,
+      "family_cap_applied": 5,
+      "family_cap_relaxed": true,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.117,
+        1.6603,
+        3.944
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-REAR_SERVER_05"
+      ]
+    },
+    {
+      "family": "ceiling_deck",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "member_count": 5,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        40.0,
+        5.0,
+        0.49
+      ],
+      "geometry_exact_count": 5,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+        "ENV-EXPEDITION-L01-DB-CEILING_DECK_-2",
+        "ENV-EXPEDITION-L01-DB-CEILING_DECK_0",
+        "ENV-EXPEDITION-L01-DB-CEILING_DECK_1",
+        "ENV-EXPEDITION-L01-DB-CEILING_DECK_2"
+      ]
+    },
+    {
+      "family": "ceiling_deck",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        10.0,
+        5.0,
+        0.49
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3"
+      ]
+    },
+    {
+      "family": "service_cart",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+      "member_count": 3,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.28,
+        0.935,
+        1.1985
+      ],
+      "geometry_exact_count": 3,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+        "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01",
+        "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02"
+      ]
+    },
+    {
+      "family": "shelf",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+      "member_count": 3,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.72,
+        0.76,
+        2.59
+      ],
+      "geometry_exact_count": 3,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+        "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01",
+        "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02"
+      ]
+    },
+    {
+      "family": "ceiling_service",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "member_count": 1,
+      "classes_in_family": 3,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        36.0,
+        26.0,
+        1.355
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY"
+      ]
+    },
+    {
+      "family": "ceiling_service",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "member_count": 1,
+      "classes_in_family": 3,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.428,
+        24.0,
+        0.8575
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT"
+      ]
+    },
+    {
+      "family": "ceiling_service",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "member_count": 1,
+      "classes_in_family": 3,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        23.75,
+        23.0,
+        1.227
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN"
+      ]
+    },
+    {
+      "family": "island_cart",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+      "member_count": 2,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.82,
+        1.265,
+        1.0885
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+        "ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST"
+      ]
+    },
+    {
+      "family": "raised_service",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        4.06,
+        0.48,
+        3.93
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY"
+      ]
+    },
+    {
+      "family": "raised_service",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        4.8,
+        3.55,
+        1.32
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM"
+      ]
+    },
+    {
+      "family": "cable_reel",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+      "member_count": 2,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.04,
+        0.84,
+        0.9085
+      ],
+      "geometry_exact_count": 2,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+        "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01"
+      ]
+    },
+    {
+      "family": "workbench",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        14.1,
+        7.25,
+        3.565
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST"
+      ]
+    },
+    {
+      "family": "workbench",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.41,
+        4.4,
+        1.99
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST"
+      ]
+    },
+    {
+      "family": "floor_detail",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        38.0,
+        24.0,
+        0.031
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN"
+      ]
+    },
+    {
+      "family": "floor_detail",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "member_count": 1,
+      "classes_in_family": 2,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        39.2,
+        29.1909,
+        0.0765
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING"
+      ]
+    },
+    {
+      "family": "cable_coil",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        0.68,
+        5.72,
+        0.6731
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL"
+      ]
+    },
+    {
+      "family": "repair_island",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        6.8,
+        3.02,
+        2.9
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND"
+      ]
+    },
+    {
+      "family": "equipment_rack",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        2.78,
+        1.067,
+        3.05
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE"
+      ]
+    },
+    {
+      "family": "service_terminal",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        1.2,
+        0.675,
+        1.44
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL"
+      ]
+    },
+    {
+      "family": "shelving",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        4.115,
+        0.88,
+        3.2
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH"
+      ]
+    },
+    {
+      "family": "wall_light_pylon",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        39.6,
+        24.6,
+        4.66
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON"
+      ]
+    },
+    {
+      "family": "wall_screen",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        4.06,
+        6.21,
+        1.425
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK"
+      ]
+    },
+    {
+      "family": "wall_service",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        39.54,
+        23.47,
+        6.55
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN"
+      ]
+    },
+    {
+      "family": "ceiling_lighting",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        38.0,
+        18.36,
+        0.455
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING"
+      ]
+    },
+    {
+      "family": "ceiling_ring_beam",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        40.0,
+        30.7,
+        0.6
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
+      ]
+    },
+    {
+      "family": "corner_guard",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        39.58,
+        29.58,
+        2.2
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-CORNER_GUARD"
+      ]
+    },
+    {
+      "family": "server_bus",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        13.5,
+        1.6,
+        4.19
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS"
+      ]
+    },
+    {
+      "family": "wall_top_service",
+      "representative_package_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "representative_component_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "member_count": 1,
+      "classes_in_family": 1,
+      "family_cap_applied": 3,
+      "family_cap_relaxed": false,
+      "absorbed_classes": [],
+      "bounds_size_m": [
+        39.4,
+        29.4,
+        0.8
+      ],
+      "geometry_exact_count": 1,
+      "geometry_variant": [],
+      "geometry_shape_mismatch": [],
+      "members": [
+        "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"
+      ]
+    }
+  ],
+  "door_slot_sealing": {
+    "dropped_members": [],
+    "sealed_members": {},
+    "reason": "02 规范要求房型源不冻结门位、不预切门洞；源里预切的门洞（门垛×2+门楣）与本关实际门位不一致，其净空是无门扇的洞。门垛丢弃、门楣改为整樘实墙，门位改由运行时按门槽车道把实墙提升为门墙。"
+  }
+}

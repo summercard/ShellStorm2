@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_A
+; 房型组件 db_room / v014 / floor_detail_a
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/floor_detail_a/floor_detail_a_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentFloorDetailA" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_A"
+metadata/asset_version = "v014"
+metadata/room_type = "DB_ROOM"
+metadata/component_slug = "floor_detail_a"
+metadata/display_name_zh = "floor_detail_a"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_packages/floor_detail_a/floor_detail_a.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(38, 0.031, 24)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "none"
+metadata/collision_policy = "visual_only"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

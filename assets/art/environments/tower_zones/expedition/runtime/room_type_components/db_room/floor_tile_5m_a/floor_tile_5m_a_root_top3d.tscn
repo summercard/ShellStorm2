@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A
+; 房型组件 db_room / v014 / floor_tile_5m_a
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/floor_tile_5m_a/floor_tile_5m_a_visual_top3d.glb" id="1_visual"]
+
+[node name="RoomTypeComponentFloorTile5MA" type="Node3D"]
+metadata/asset_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
+metadata/asset_version = "v014"
+metadata/room_type = "DB_ROOM"
+metadata/component_slug = "floor_tile_5m_a"
+metadata/display_name_zh = "数据库房 5m 地砖（设备压边型）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v014/component_packages/floor_tile_5m_a/floor_tile_5m_a.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "+Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 0.424, 5)
+metadata/slot_role = "floor_tile"
+metadata/collision_owner = "floor_support"
+metadata/collision_policy = "external_floor_support"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

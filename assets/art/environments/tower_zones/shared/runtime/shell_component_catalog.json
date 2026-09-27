@@ -17,7 +17,7 @@
     "prefab_asset_id": "prefab 根节点 metadata/asset_id 的期望值，由 qa/probe_shell_component_catalog.gd 逐件比对。",
     "alias_policy": "专属件不设 alias（只属一个房间种类、只有一条来源链）；alias 只用于通用件的批次号兼容。"
   },
-  "component_count": 110,
+  "component_count": 145,
   "components": [
     {
       "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
@@ -2200,11 +2200,712 @@
       "collision_owner": "self",
       "collision_policy": "safe_box_proxy",
       "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "cable_coil",
+      "category": "cable_coil",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CABLE_COIL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/cable_coil/cable_coil_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.68,
+        0.6731,
+        5.72
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CABLE_REEL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "cable_reel",
+      "category": "cable_reel",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CABLE_REEL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/cable_reel/cable_reel_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.04,
+        0.9085,
+        0.84
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_10M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_deck_10m",
+      "category": "天花承板 10×5m（收口）",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-3",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_10M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_10m/ceiling_deck_10m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        10.0,
+        0.49,
+        5.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_deck_40m",
+      "category": "天花承板 40×5m（主跨）",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_40m/ceiling_deck_40m_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        40.0,
+        0.49,
+        5.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_lighting",
+      "category": "ceiling_lighting",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_lighting/ceiling_lighting_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        38.0,
+        0.455,
+        18.36
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_ring_beam",
+      "category": "ceiling_ring_beam",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        40.0,
+        0.6,
+        30.7
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_service_a",
+      "category": "ceiling_service_a",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_service_a/ceiling_service_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        36.0,
+        1.355,
+        26.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_service_b",
+      "category": "ceiling_service_b",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_service_b/ceiling_service_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.428,
+        0.8575,
+        24.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "ceiling_service_c",
+      "category": "ceiling_service_c",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_service_c/ceiling_service_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        23.75,
+        1.227,
+        23.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "corner_guard",
+      "category": "corner_guard",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-CORNER_GUARD",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/corner_guard/corner_guard_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        39.58,
+        2.2,
+        29.58
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "equipment_rack",
+      "category": "equipment_rack",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/equipment_rack/equipment_rack_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.78,
+        3.05,
+        1.067
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_detail_a",
+      "category": "floor_detail_a",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_a/floor_detail_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        38.0,
+        0.031,
+        24.0
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_detail_b",
+      "category": "floor_detail_b",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_b/floor_detail_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        39.2,
+        0.0765,
+        29.1909
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_a",
+      "category": "数据库房 5m 地砖（设备压边型）",
+      "room_type": "DB_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_tile_5m_a/floor_tile_5m_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.424,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_b",
+      "category": "数据库房 5m 地砖（标准设备型）",
+      "room_type": "DB_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_tile_5m_b/floor_tile_5m_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.407,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "floor_tile_5m_c",
+      "category": "数据库房 5m 地砖（管线穿越型）",
+      "room_type": "DB_ROOM",
+      "slot_role": "floor_tile",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_tile_5m_c/floor_tile_5m_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        5.0,
+        0.407,
+        5.0
+      ],
+      "collision_owner": "floor_support",
+      "collision_policy": "external_floor_support",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "island_cart",
+      "category": "island_cart",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-ISLAND_CART",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/island_cart/island_cart_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        0.82,
+        1.0885,
+        1.265
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "raised_service_a",
+      "category": "raised_service_a",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/raised_service_a/raised_service_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.06,
+        3.93,
+        0.48
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "raised_service_b",
+      "category": "raised_service_b",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/raised_service_b/raised_service_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.8,
+        1.32,
+        3.55
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "repair_island",
+      "category": "repair_island",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        6.8,
+        2.9,
+        3.02
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_BUS",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_bus",
+      "category": "server_bus",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SERVER_BUS",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_bus/server_bus_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        13.5,
+        4.19,
+        1.6
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_a",
+      "category": "服务器机柜（封闭前板）",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_a/server_rack_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.117,
+        3.944,
+        1.6603
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_b",
+      "category": "服务器机柜（标准设备层）",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_01",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_b/server_rack_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.117,
+        3.944,
+        1.6603
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_C",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_c",
+      "category": "服务器机柜（加强设备层）",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_04",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_C",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_c/server_rack_c_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.117,
+        3.944,
+        1.6603
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_D",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "server_rack_d",
+      "category": "服务器机柜（线缆维护型）",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVER_05",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SERVER_RACK_D",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_d/server_rack_d_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        2.117,
+        3.944,
+        1.6603
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVICE_CART",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "service_cart",
+      "category": "service_cart",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SERVICE_CART",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/service_cart/service_cart_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.28,
+        1.1985,
+        0.935
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SERVICE_TERMINAL",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "service_terminal",
+      "category": "service_terminal",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SERVICE_TERMINAL",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/service_terminal/service_terminal_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.2,
+        1.44,
+        0.675
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELF",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "shelf",
+      "category": "shelf",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SHELF",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelf/shelf_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.72,
+        2.59,
+        0.76
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-SHELVING",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "shelving",
+      "category": "shelving",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-SHELVING",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelving/shelving_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.115,
+        3.2,
+        0.88
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_light_pylon",
+      "category": "wall_light_pylon",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_light_pylon/wall_light_pylon_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        39.6,
+        4.66,
+        24.6
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_screen",
+      "category": "wall_screen",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-WALL_SCREEN",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_screen/wall_screen_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        4.06,
+        1.425,
+        6.21
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_service",
+      "category": "wall_service",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-WALL_SERVICE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_service/wall_service_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        39.54,
+        6.55,
+        23.47
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "wall_top_service",
+      "category": "wall_top_service",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/wall_top_service/wall_top_service_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        39.4,
+        0.8,
+        29.4
+      ],
+      "collision_owner": "none",
+      "collision_policy": "visual_only",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_A",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "workbench_a",
+      "category": "workbench_a",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_A",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_a/workbench_a_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        14.1,
+        3.565,
+        7.25
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
+    },
+    {
+      "component_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_B",
+      "kind": "room_type",
+      "aliases": [],
+      "slug": "workbench_b",
+      "category": "workbench_b",
+      "room_type": "DB_ROOM",
+      "slot_role": "room_type_component",
+      "source_package_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_WEST",
+      "prefab_asset_id": "ENV-EXPEDITION-L01-DB-WORKBENCH_B",
+      "prefab_path": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_b/workbench_b_root_top3d.tscn",
+      "bounds_size_m_godot": [
+        1.41,
+        1.99,
+        4.4
+      ],
+      "collision_owner": "self",
+      "collision_policy": "safe_box_proxy",
+      "note": "房型组件默认布局重放；坐标由 component_instances.json 唯一提供。"
     }
   ],
   "room_type_sources": [
     "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json",
     "assets/art/environments/tower_zones/expedition/source/common_components/v010/component_catalog.json",
-    "assets/art/environments/tower_zones/expedition/source/common_components/v011/component_catalog.json"
+    "assets/art/environments/tower_zones/expedition/source/common_components/v011/component_catalog.json",
+    "assets/art/environments/tower_zones/expedition/source/common_components/v014/component_catalog.json"
   ]
 }
