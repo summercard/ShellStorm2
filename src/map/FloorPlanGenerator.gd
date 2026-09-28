@@ -47,6 +47,10 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 		"version": "v014",
 		"asset_id": "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT",
 		"size_m": Vector2(40.0, 30.0),
+		# v014 只提供数据库的设备/墙面装饰；外围的承重实墙、L 转角与门墙
+		# 必须复用远征通用壳体。否则把房型布局固化为 static TSCN 后会只剩内部
+		# 装饰而缺失房间边界。门位仍由运行时端口所有权将实墙提升为唯一门墙。
+		"requires_generic_shell_structure": true,
 		"door_wall_component_id": "",
 	},
 	"corridor_45x40": {
@@ -75,6 +79,18 @@ const ROOM_TYPE_LAYOUT_SOURCES := {
 	},
 }
 const ROOM_INSTANCE_LAYOUT_SOURCES := {
+	# room_03 继承 office 默认布局；其 A 端口在旋转后正对默认西侧文件柜。
+	# 专属覆写只移除这一件沿墙陈设，保证 room_02 -> room_03 的门洞净空。
+	"room_03": {
+		"path": "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_03/v001/room_layout.json",
+		"version": "v001",
+		"component_version": "v009",
+		"asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM03-PORT-CLEARANCE-LAYOUT",
+		"template_id": "office_60x70",
+		"template_variant": "",
+		"size_m": Vector2(30.0, 40.0),
+		"door_wall_component_id": "",
+	},
 	"room_04": {
 		"path": "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",
 		"version": "v001",
@@ -1624,6 +1640,12 @@ static func attach_authored_layout_shell(
 		if room_type_layout.is_empty():
 			room_type_layout = _room_type_layout_for_room(room)
 		if not room_type_layout.is_empty():
+			if bool(room_type_layout.get("requires_generic_shell_structure", false)):
+				room_type_layout["instances"] = _with_room_footprint_shell_structure(
+					room_type_layout.get("instances", []) as Array,
+					room,
+					templates
+				)
 			room["authored_layout_shell"] = true
 			room["authored_layout_asset_id"] = str(room_type_layout.get("asset_id", ""))
 			room["authored_layout_version"] = str(room_type_layout.get("version", ""))
@@ -1730,6 +1752,7 @@ static func _load_authored_component_layout(
 	var source := _read_json_dictionary(source_path, label)
 	if source.is_empty():
 		return {}
+	var validation := source.get("validation", {}) as Dictionary
 	var expected_template := str(source_spec.get("template_id", ""))
 	if not expected_template.is_empty() and str(source.get("template_id", "")) != expected_template:
 		push_error("FloorPlanGenerator: %s 的 template_id 与登记不符" % label)
@@ -1738,10 +1761,47 @@ static func _load_authored_component_layout(
 	if not expected_variant.is_empty() and str(source.get("template_variant", "")) != expected_variant:
 		push_error("FloorPlanGenerator: %s 的 template_variant 与登记不符" % label)
 		return {}
+	# 具体房间可以只声明相对房型默认布局的轻量覆写。这里刻意只支持 remove：
+	# 门洞净空的修复不复制、不手工重摆整套办公室组件，且未知操作会直接拒绝，
+	# 免得未验证的覆写悄悄改变运行时布置。
+	var declared_instances := source.get("instances", []) as Array
+	var base_layout_path := str(source.get("base_layout", ""))
+	if declared_instances.is_empty() and not base_layout_path.is_empty():
+		var base_source := _read_json_dictionary(base_layout_path, "%s 的 base_layout" % label)
+		if base_source.is_empty():
+			return {}
+		var removed_instance_ids: Dictionary = {}
+		for override_value in source.get("instance_overrides", []):
+			if not (override_value is Dictionary):
+				push_error("FloorPlanGenerator: %s 的 instance_overrides[] 含非对象条目" % label)
+				return {}
+			var override := override_value as Dictionary
+			if str(override.get("op", "")) != "remove":
+				push_error("FloorPlanGenerator: %s 只支持 remove 型 instance override" % label)
+				return {}
+			var instance_id := str(override.get("instance_id", ""))
+			if instance_id.is_empty() or removed_instance_ids.has(instance_id):
+				push_error("FloorPlanGenerator: %s 的 remove override 无效或重复" % label)
+				return {}
+			removed_instance_ids[instance_id] = true
+		var resolved_instances: Array = []
+		for base_value in base_source.get("instances", []):
+			if not (base_value is Dictionary):
+				push_error("FloorPlanGenerator: %s 的 base_layout instances[] 含非对象条目" % label)
+				return {}
+			var base_item := base_value as Dictionary
+			if not removed_instance_ids.has(str(base_item.get("instance_id", ""))):
+				resolved_instances.append(base_item)
+		if resolved_instances.size() != (base_source.get("instances", []) as Array).size() - removed_instance_ids.size():
+			push_error("FloorPlanGenerator: %s 的 remove override 未命中 base_layout 实例" % label)
+			return {}
+		source = base_source.duplicate(true)
+		source["instances"] = resolved_instances
+		# 覆写文件是具体房间的契约，不能被默认布局的 validation 覆盖。
+		source["validation"] = validation
 	var catalog_roles := _load_shell_component_roles()
 	if catalog_roles.is_empty():
 		return {}
-	var validation := source.get("validation", {}) as Dictionary
 	var expected_count := int(validation.get(
 		"resolved_instance_count", validation.get("instance_count", -1)
 	))
@@ -1811,8 +1871,54 @@ static func _load_authored_component_layout(
 		"asset_id": str(source_spec.get("asset_id", "")),
 		"version": str(source_spec.get("version", "")),
 		"component_version": str(source_spec.get("component_version", source_spec.get("version", ""))),
+		"requires_generic_shell_structure": bool(
+			source_spec.get("requires_generic_shell_structure", false)
+		),
 		"instances": instances,
 	}
+
+
+## 数据库 v014 是「设备 + 墙面装饰」布局，不拥有外围结构。这里必须按**本房**的真
+## `variant_footprints` 生成完整外壳，不能从整层的共墙归属结果中筛：后者只保留本房
+## 所拥有的 lane，单独打开 f00_room_02 时会变成残缺的矩形碎片。
+##
+## 仍复用 RoomShellLayoutBuilder3D 与 room01 相同的 5m 通用墙/L 角件。单房 build 的
+## 门 lane 先降级为 solid_wall；DungeonRoom3D 在运行时按 connection_ports 的端点所有权
+## 把拥有方提升为唯一门墙，并从非拥有方删除同一 lane，因此不会产生双墙/双门。
+static func _with_room_footprint_shell_structure(
+	room_type_instances: Array, room: Dictionary, templates: Dictionary
+) -> Array:
+	var result: Array = room_type_instances.duplicate(true)
+	var built := _authored_shell_block_room(room, templates)
+	if built.is_empty():
+		push_error("FloorPlanGenerator: 房型壳体无法建立房间输入（%s）" % str(room.get("key", "")))
+		return result
+	var shell_result := ROOM_SHELL_LAYOUT_BUILDER.build_block([built])
+	var errors := shell_result.get("errors", []) as Array
+	if not errors.is_empty():
+		push_error(
+			"FloorPlanGenerator: 房型壳体无法按真外轮廓生成（%s）：%s"
+			% [str(room.get("key", "")), str(errors)]
+		)
+		return result
+	var center := room.get("center", Vector2.ZERO) as Vector2
+	var room_key := str(room.get("key", ""))
+	var generic := ROOM_SHELL_LAYOUT_BUILDER.to_runtime_instances(
+		shell_result.get("instances", []) as Array, room_key, center.x, -center.y
+	)
+	for value in generic:
+		var instance := value as Dictionary
+		var role := str(instance.get("slot_role", ""))
+		if role not in ["corner_l", "solid_wall", "door_wall"]:
+			continue
+		var structural := instance.duplicate(true)
+		structural["name"] = "GenericShell_%s" % str(instance.get("name", ""))
+		if role == "door_wall":
+			# 不能把旧布局里的 door_wall 直接当成最终门洞：端口旋转/所有权在运行时才确定。
+			structural["component_id"] = ROOM_SHELL_LAYOUT_BUILDER.COMPONENT_WALL_STANDARD
+			structural["slot_role"] = "solid_wall"
+		result.append(structural)
+	return result
 
 
 static func _load_shell_component_roles() -> Dictionary:
@@ -2320,10 +2426,23 @@ static func _authored_shell_block_room(room: Dictionary, templates: Dictionary =
 		return {}
 	var by_center := -center.y
 	var doors: Dictionary = {}
-	for port_value in room.get("ports", []):
+	# 显式端口是远征房实际通行口的唯一真源：它已随 room.rotation_deg 旋转，且与
+	# TowerDescent3D._plan_room_layout()、RoomDoor3D 使用的 side / lane_m 完全同口径。
+	# 不能再优先读历史 `ports`；后者在 room02 仍是模板旧朝向，曾让门扇位于 +2.5m、
+	# 静态实墙/门洞却落在 -2.5m，开门后留下空气墙。
+	var declared_connection_ports := room.get("connection_ports", []) as Array
+	var shell_ports := declared_connection_ports if not declared_connection_ports.is_empty() else (
+		room.get("ports", []) as Array
+	)
+	for port_value in shell_ports:
 		if not (port_value is Dictionary):
 			continue
 		var port := port_value as Dictionary
+		# 未连接候选口必须保留实墙；只有确实有目标的显式端口才进入门墙槽。
+		if not declared_connection_ports.is_empty() and str(
+			port.get("target_room_id", port.get("target", ""))
+		).is_empty():
+			continue
 		var side := str(port.get("side", ""))
 		var lane_m := float(port.get("lane_m", 0.0))
 		if side in ["north", "south"]:
@@ -2386,13 +2505,18 @@ static func _room_variant_footprint(
 	if not (variants is Dictionary) or (variants as Dictionary).is_empty():
 		return {}
 	var declared := _vec2(template.get("size_m", []))
+	var room_rotation := float(room.get("rotation_deg", 0.0))
+	# `variant_footprints` 处在模板原生坐标系；房间本体、地砖和端口则已经随本局
+	# rotation_deg 转过。比较尺寸、筛门位和交给壳体 builder 前，轮廓也必须做同一
+	# 个 Godot +Y 旋转，否则非矩形房会出现「地砖凸在一侧、墙凸在相反侧」。
+	var expected_size := _rotated_room_size(declared, room_rotation)
 	if (
-		not is_equal_approx(declared.x, size.x)
-		or not is_equal_approx(declared.y, size.y)
+		not is_equal_approx(expected_size.x, size.x)
+		or not is_equal_approx(expected_size.y, size.y)
 	):
 		push_warning(
-			"FloorPlanGenerator: 房间 %s 的实算尺寸 %s 与模板 %s 的 size_m %s 不符，"
-			% [str(room.get("key", "")), str(size), template_id, str(declared)]
+			"FloorPlanGenerator: 房间 %s 的实算尺寸 %s 与模板 %s 旋转后的 size_m %s 不符，"
+			% [str(room.get("key", "")), str(size), template_id, str(expected_size)]
 			+ "本次按矩形处理（非矩形轮廓不挂）"
 		)
 		return {}
@@ -2402,16 +2526,48 @@ static func _room_variant_footprint(
 		if not (entry is Dictionary):
 			continue
 		var outline := entry as Dictionary
+		var rotated_vertices := _rotated_footprint_vertices(
+			outline.get("vertices_m", []) as Array, declared, room_rotation
+		)
+		if rotated_vertices.is_empty():
+			continue
 		if not ROOM_SHELL_LAYOUT_BUILDER.footprint_accepts_ports(
-			outline.get("vertices_m", []) as Array,
+			rotated_vertices,
 			str(outline.get("frame", ROOM_SHELL_LAYOUT_BUILDER.FOOTPRINT_FRAME)),
 			bounds_x_m, bounds_y_m, doors, {}
 		):
 			continue
 		var accepted := outline.duplicate()
+		accepted["vertices_m"] = rotated_vertices
 		accepted["variant"] = variant
 		return accepted
 	return {}
+
+
+## 模板 `bbox_nw_x_east_y_south` 顶点先换为模板中心的 Godot 局部 (x,z)，再与端口、
+## 地砖完全同口径地绕 +Y 旋转，最后回写到旋转后包围盒的同一模板 frame。这样下游
+## RoomShellLayoutBuilder3D 不需要知道房间旋转，仍只消费「当前朝向」的顶点与门位。
+static func _rotated_footprint_vertices(
+	vertices: Array, source_size: Vector2, rotation_deg: float
+) -> Array:
+	if vertices.is_empty() or source_size.x <= 0.0 or source_size.y <= 0.0:
+		return []
+	var final_size := _rotated_room_size(source_size, rotation_deg)
+	var result: Array = []
+	for value in vertices:
+		if not (value is Array) or (value as Array).size() < 2:
+			return []
+		var raw := value as Array
+		var native_local := Vector2(
+			float(raw[0]) - source_size.x * 0.5,
+			float(raw[1]) - source_size.y * 0.5
+		)
+		var rotated_local := _rotate_port_vector(native_local, rotation_deg)
+		result.append([
+			rotated_local.x + final_size.x * 0.5,
+			rotated_local.y + final_size.y * 0.5,
+		])
+	return result
 
 
 ## 变体候选顺序：**声明的那一个优先**（保留本局随机性），其后按模板 `variants`

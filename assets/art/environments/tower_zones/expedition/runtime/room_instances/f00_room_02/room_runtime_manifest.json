@@ -463,8 +463,18 @@
  },
  "assembly": {
   "authored_layout_shell": true,
-  "instance_total": 86,
-  "instance_total_source": "component_instances.validation.instance_count",
+  "instance_total": 100,
+  "instance_total_source": "86 个 v014 数据库房型组件 + 14 个运行时投影的共享壳体墙组件；不含 ConnectionPorts 根节点",
+  "room_type_component_instance_count": 86,
+  "generic_shell_structure_instance_count": 14,
+  "generic_wall_instance_count": 14,
+  "generic_corner_instance_count": 0,
+  "generic_shell_structure": {
+   "wall_component": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+   "corner_component": "ENV-TOWER-CORNER-L-5M",
+   "ownership": "区块级 lane/共角去重；本固定种子中 room02 保存 14 段本房拥有的外围墙与门墙，四个共角已由相邻房拥有，故不重复写入。",
+   "door_rule": "端口所有者将对应实墙提升为唯一门墙；非所有者端不生成重复墙或门。"
+  },
   "role_counts_planned": {},
   "role_counts_planned_source": "FloorPlanGenerator 规划记录 + 验收日志 plan 行",
   "runtime_role_counts": {

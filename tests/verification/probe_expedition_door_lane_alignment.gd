@@ -45,6 +45,7 @@ func _probe_seed(seed_value: int, use_static: bool, label: String) -> void:
 	print("=== seed=%d %s rooms=%d ===" % [seed_value, label, rooms.size()])
 	var start_room := _room_by_id(rooms, "start")
 	var room_01 := _room_by_id(rooms, "room_01")
+	var room_02 := _room_by_id(rooms, "room_02")
 	if start_room != null and room_01 != null:
 		print(
 			"  START=%s dim=%s  ROOM01=%s dim=%s  lateral_delta=%.2f/%s"
@@ -59,6 +60,11 @@ func _probe_seed(seed_value: int, use_static: bool, label: String) -> void:
 		)
 		if seed_value == RUN_SEEDS[0]:
 			await _check_start_room01_passage(tower, start_room, room_01, label)
+	if room_02 != null:
+		for target_value in room_02.door_targets.values():
+			var target_room := _room_by_id(rooms, str(target_value))
+			if target_room != null:
+				await _check_shared_door_passage(tower, room_02, target_room, label)
 	_check_pairs(rooms, "%s seed=%d" % [label, seed_value])
 	tower.queue_free()
 	await get_tree().process_frame
@@ -218,6 +224,48 @@ func _check_start_room01_passage(
 				"%s 玩家过门 %.2f m 后未归属 room_01（current=%s room01_contains=%s）"
 				% [label, distance, current_room_id, str(room_01_contains)]
 			)
+
+
+## room02 的入口/出口曾出现“门扇在 +2.5、静态实墙仍在同槽”的空气墙。
+## 开门后沿真实端口法线穿过三条射线；命中任何静态墙碰撞即失败。
+func _check_shared_door_passage(
+	tower: TowerDescent3D, first_room: DungeonRoom3D, second_room: DungeonRoom3D, label: String
+) -> void:
+	var first_side := _reciprocal_side(first_room, second_room.room_id)
+	var second_side := _reciprocal_side(second_room, first_room.room_id)
+	if first_side.is_empty() or second_side.is_empty():
+		failures.append("%s %s-%s 缺少成对门向" % [label, first_room.room_id, second_room.room_id])
+		return
+	var owner := first_room if first_room.owns_door_endpoint(first_side) else second_room
+	var owner_side := first_side if owner == first_room else second_side
+	var door := owner.get_door_node(owner_side)
+	if door == null:
+		failures.append("%s %s-%s 缺少唯一门实体" % [label, first_room.room_id, second_room.room_id])
+		return
+	door.set_open(true, true)
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	var normal := {
+		"north": Vector3(0.0, 0.0, -1.0), "south": Vector3(0.0, 0.0, 1.0),
+		"west": Vector3(-1.0, 0.0, 0.0), "east": Vector3(1.0, 0.0, 0.0),
+	}.get(owner_side, Vector3.ZERO) as Vector3
+	var tangent := Vector3(normal.z, 0.0, -normal.x)
+	var center := _door_world(owner, owner_side)
+	var space: PhysicsDirectSpaceState3D = tower.get_world_3d().direct_space_state
+	for tangent_offset in [-0.8, 0.0, 0.8]:
+		for height in [0.45, 1.20, 2.20]:
+			var from: Vector3 = center - normal * 1.8 + tangent * tangent_offset + Vector3.UP * height
+			var to: Vector3 = center + normal * 1.8 + tangent * tangent_offset + Vector3.UP * height
+			var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(from, to, 1))
+			print(
+				"ROOM02_PASSAGE %s edge=%s-%s owner=%s.%s tangent=%+.2f y=%.2f hit=%s"
+				% [label, first_room.room_id, second_room.room_id, owner.room_id, owner_side, tangent_offset, height, _hit_name(hit)]
+			)
+			if not hit.is_empty():
+				failures.append(
+					"%s %s-%s 开门后被 %s 阻挡（横偏 %.2f，高 %.2f）"
+					% [label, first_room.room_id, second_room.room_id, _hit_name(hit), tangent_offset, height]
+				)
 
 func _hit_name(hit: Dictionary) -> String:
 	if hit.is_empty():

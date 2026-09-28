@@ -1852,10 +1852,14 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 		match role:
 			"corner_l":
 				# 复用塔楼正式角件路径（远征四角 L 件也是这条），
-				# 它负责 tower_wall_corner / 镜头下压臂两条契约。
+				# 它负责 tower_wall_corner / 镜头下压臂两条契约。必须挂进
+				# AuthoredLayoutArtRoot：静态房间导出只固化这个根的子树；若默认
+				# 挂到 DungeonRoom3D 根，非矩形房的凸角会在编辑器静态场景中丢失。
 				_spawn_room_corner(
 					Vector2(local_position.x, local_position.z),
-					str(instance.get("corner_id", "SW"))
+					str(instance.get("corner_id", "SW")),
+					art_root,
+					str(instance.get("name", ""))
 				)
 				corner_count += 1
 			"solid_wall", "door_wall":
@@ -2979,13 +2983,16 @@ func _build_corner_aware_wall_run(
 ## 拐角 L 拼装。从 4 个角位置以合适的 rotation 报入。
 ## corner_id: "NW" / "NE" / "SW" / "SE"
 func _spawn_room_corner(
-	corner_pos: Vector2, corner_id: String, parent: Node = self
+	corner_pos: Vector2, corner_id: String, parent: Node = self, instance_label := ""
 ) -> Node3D:
 	# Base99 receives its authored Blender visual. Other tower room types retain
 	# the generic corner asset and its existing material-variant behaviour.
 	var corner_prefab := BASE99_CORNER_L_PREFAB if room_type == "FACILITY" else TOWER_CORNER_L_PREFAB
 	var module := corner_prefab.instantiate() as Node3D
-	module.name = "Imported_CornerL5M_%s" % corner_id
+	# 非矩形房可在同一朝向出现多个凸角（例如 db_01 南侧外凸的两个 SE/SW）。
+	# 组件来源实例名含真实轮廓坐标，优先用它维持同级节点名唯一；否则 Godot 保存 TSCN
+	# 时会把重复节点降成 @Node3D@N，编辑器无法再从树上辨认是哪一个外轮廓角。
+	module.name = "Imported_CornerL5M_%s" % (instance_label if not instance_label.is_empty() else corner_id)
 	module.position = Vector3(corner_pos.x, 0.0, corner_pos.y)
 	# L 默认 long=+X, short=-Z
 	# NW 角：需 long=+X(东), short=+Z(南) → rotation_y = -PI/2

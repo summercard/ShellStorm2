@@ -6,7 +6,7 @@ const ROOM_IDS := [
 	"room_07", "room_08", "room_09", "room_10", "boss", "extraction",
 ]
 const EXPECTED_MIN_CHILDREN := {
-	"start": 29, "room_01": 121, "room_02": 86, "room_03": 106, "room_04": 123,
+	"start": 29, "room_01": 121, "room_02": 86, "room_03": 105, "room_04": 123,
 	"room_05": 242, "room_06": 86, "room_07": 36, "room_08": 121, "room_09": 106,
 	"room_10": 86, "boss": 210, "extraction": 34,
 }
@@ -31,6 +31,11 @@ func _ready() -> void:
 					_check(instance.get_node_or_null("RoomTrigger") == null, "%s TSCN 不得固化 RoomTrigger" % room_id)
 					_check(instance.find_children("*", "NavigationRegion3D", true, false).is_empty(), "%s TSCN 不得固化 NavigationRegion3D" % room_id)
 					_check(instance.find_children("RuntimeDetail", "Node3D", true, false).is_empty(), "%s TSCN 不得固化 RuntimeDetail" % room_id)
+					if room_id == "room_03":
+						_check(
+							instance.get_node_or_null("filing_run_west") == null,
+							"room_03 入口净空不得固化默认西侧文件柜"
+						)
 					if room_id == "start":
 						_check(
 							_count_nodes_with_meta(instance, "tower_wall_corner") == 4,

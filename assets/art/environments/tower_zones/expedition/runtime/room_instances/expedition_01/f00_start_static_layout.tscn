@@ -22,7 +22,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/maintenance_chair/maintenance_chair_root_top3d.tscn" id="20_jee1a"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn" id="21_k60l7"]
 
-[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1187614833]
+[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1285477218]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/asset_version = "v007"
@@ -47,7 +47,7 @@ metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
 metadata/connection_port_count = 2
 
-[node name="SafeRoomWall_North_Solid" type="Node3D" parent="." unique_id=13491420 instance=ExtResource("1_2waf1")]
+[node name="SafeRoomWall_North_Solid" type="Node3D" parent="." unique_id=773283510 instance=ExtResource("1_2waf1")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -87,7 +87,7 @@ metadata/tower_wall_direction = "east"
 metadata/stair_lobby_native_direction = "north"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="SafeRoomWall_South_Door" type="Node3D" parent="." unique_id=1823644049 instance=ExtResource("2_3jakm")]
+[node name="SafeRoomWall_South_Door" type="Node3D" parent="." unique_id=1475731263 instance=ExtResource("2_3jakm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 metadata/asset_version = "v004"
@@ -130,7 +130,7 @@ metadata/tower_wall_direction = "west"
 metadata/stair_lobby_native_direction = "south"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="SafeRoomWall_East_Door" type="Node3D" parent="." unique_id=1946714002 instance=ExtResource("2_3jakm")]
+[node name="SafeRoomWall_East_Door" type="Node3D" parent="." unique_id=1479122162 instance=ExtResource("2_3jakm")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 metadata/asset_version = "v004"
@@ -173,7 +173,7 @@ metadata/tower_wall_direction = "south"
 metadata/stair_lobby_native_direction = "east"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="CameraOnlyDoorWall_South_I00" type="StaticBody3D" parent="." unique_id=1606188628]
+[node name="CameraOnlyDoorWall_South_I00" type="StaticBody3D" parent="." unique_id=1174704208]
 process_mode = 3
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, 0)
 collision_layer = 16
@@ -182,7 +182,7 @@ metadata/camera_lower_wall = true
 metadata/camera_only_door_wall = true
 metadata/tower_wall_direction = "south"
 
-[node name="SafeRoomWall_West_Solid" type="Node3D" parent="." unique_id=1210794439 instance=ExtResource("1_2waf1")]
+[node name="SafeRoomWall_West_Solid" type="Node3D" parent="." unique_id=1392021891 instance=ExtResource("1_2waf1")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.5, 0, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -222,7 +222,7 @@ metadata/tower_wall_direction = "north"
 metadata/stair_lobby_native_direction = "west"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="Imported_CornerL5M_NW" type="Node3D" parent="." unique_id=1821135466 instance=ExtResource("3_hkbvk")]
+[node name="Imported_CornerL5M_NW" type="Node3D" parent="." unique_id=1607062319 instance=ExtResource("3_hkbvk")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.5, 0, -7.5)
 metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
 metadata/asset_version = "v001"
@@ -251,7 +251,7 @@ metadata/tower_wall_corner = "NW"
 metadata/segment_index = 0
 metadata/material_variant = "A"
 
-[node name="Imported_CornerL5M_SW" type="Node3D" parent="." unique_id=921790256 instance=ExtResource("3_hkbvk")]
+[node name="Imported_CornerL5M_SW" type="Node3D" parent="." unique_id=1771332109 instance=ExtResource("3_hkbvk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 7.5)
 metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
 metadata/asset_version = "v001"
@@ -280,7 +280,7 @@ metadata/tower_wall_corner = "SW"
 metadata/segment_index = 1
 metadata/material_variant = "B"
 
-[node name="Imported_CornerL5M_SE" type="Node3D" parent="." unique_id=753327023 instance=ExtResource("3_hkbvk")]
+[node name="Imported_CornerL5M_SE" type="Node3D" parent="." unique_id=1071942726 instance=ExtResource("3_hkbvk")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, 7.5)
 metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
 metadata/asset_version = "v001"
@@ -309,7 +309,7 @@ metadata/tower_wall_corner = "SE"
 metadata/segment_index = 0
 metadata/material_variant = "A"
 
-[node name="Imported_CornerL5M_NE" type="Node3D" parent="." unique_id=1824757743 instance=ExtResource("3_hkbvk")]
+[node name="Imported_CornerL5M_NE" type="Node3D" parent="." unique_id=1561437940 instance=ExtResource("3_hkbvk")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, 0, -7.5)
 metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
 metadata/asset_version = "v001"
@@ -338,7 +338,7 @@ metadata/tower_wall_corner = "NE"
 metadata/segment_index = 1
 metadata/material_variant = "B"
 
-[node name="SafeRoomFloorTile_R01_C01" type="Node3D" parent="." unique_id=172548935 instance=ExtResource("4_yowur")]
+[node name="SafeRoomFloorTile_R01_C01" type="Node3D" parent="." unique_id=160987458 instance=ExtResource("4_yowur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.056, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -380,7 +380,7 @@ metadata/snap_to_walk_plane_offset_m = -0.056
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
 metadata/walk_plane_snap_y = -0.056
 
-[node name="SafeRoomFloorTile_R01_C02" type="Node3D" parent="." unique_id=127610224 instance=ExtResource("5_5o5se")]
+[node name="SafeRoomFloorTile_R01_C02" type="Node3D" parent="." unique_id=1719707548 instance=ExtResource("5_5o5se")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.081, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -422,7 +422,7 @@ metadata/snap_to_walk_plane_offset_m = -0.081
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
 metadata/walk_plane_snap_y = -0.081
 
-[node name="SafeRoomFloorTile_R01_C03" type="Node3D" parent="." unique_id=1436215811 instance=ExtResource("4_yowur")]
+[node name="SafeRoomFloorTile_R01_C03" type="Node3D" parent="." unique_id=1972249080 instance=ExtResource("4_yowur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.056, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -464,7 +464,7 @@ metadata/snap_to_walk_plane_offset_m = -0.056
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
 metadata/walk_plane_snap_y = -0.056
 
-[node name="SafeRoomFloorTile_R02_C01" type="Node3D" parent="." unique_id=155898501 instance=ExtResource("5_5o5se")]
+[node name="SafeRoomFloorTile_R02_C01" type="Node3D" parent="." unique_id=1253964694 instance=ExtResource("5_5o5se")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.081, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -506,7 +506,7 @@ metadata/snap_to_walk_plane_offset_m = -0.081
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
 metadata/walk_plane_snap_y = -0.081
 
-[node name="SafeRoomFloorTile_R02_C02" type="Node3D" parent="." unique_id=1403305356 instance=ExtResource("4_yowur")]
+[node name="SafeRoomFloorTile_R02_C02" type="Node3D" parent="." unique_id=497807441 instance=ExtResource("4_yowur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.056, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -548,7 +548,7 @@ metadata/snap_to_walk_plane_offset_m = -0.056
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
 metadata/walk_plane_snap_y = -0.056
 
-[node name="SafeRoomFloorTile_R02_C03" type="Node3D" parent="." unique_id=2005811334 instance=ExtResource("5_5o5se")]
+[node name="SafeRoomFloorTile_R02_C03" type="Node3D" parent="." unique_id=1351986732 instance=ExtResource("5_5o5se")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.081, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -590,7 +590,7 @@ metadata/snap_to_walk_plane_offset_m = -0.081
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
 metadata/walk_plane_snap_y = -0.081
 
-[node name="SafeRoomFloorTile_R03_C01" type="Node3D" parent="." unique_id=491619605 instance=ExtResource("4_yowur")]
+[node name="SafeRoomFloorTile_R03_C01" type="Node3D" parent="." unique_id=560730136 instance=ExtResource("4_yowur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.056, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -632,7 +632,7 @@ metadata/snap_to_walk_plane_offset_m = -0.056
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
 metadata/walk_plane_snap_y = -0.056
 
-[node name="SafeRoomFloorTile_R03_C02" type="Node3D" parent="." unique_id=303640852 instance=ExtResource("5_5o5se")]
+[node name="SafeRoomFloorTile_R03_C02" type="Node3D" parent="." unique_id=907332400 instance=ExtResource("5_5o5se")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.081, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -674,7 +674,7 @@ metadata/snap_to_walk_plane_offset_m = -0.081
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
 metadata/walk_plane_snap_y = -0.081
 
-[node name="SafeRoomFloorTile_R03_C03" type="Node3D" parent="." unique_id=1298979019 instance=ExtResource("4_yowur")]
+[node name="SafeRoomFloorTile_R03_C03" type="Node3D" parent="." unique_id=903735764 instance=ExtResource("4_yowur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.056, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -716,7 +716,7 @@ metadata/snap_to_walk_plane_offset_m = -0.056
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
 metadata/walk_plane_snap_y = -0.056
 
-[node name="SafeRoomPackage_floor_base" type="Node3D" parent="." unique_id=648209059 instance=ExtResource("6_jom57")]
+[node name="SafeRoomPackage_floor_base" type="Node3D" parent="." unique_id=9823704 instance=ExtResource("6_jom57")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_floor_base"
@@ -749,7 +749,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "floor_base"
 
-[node name="SafeRoomPackage_overhead_services" type="Node3D" parent="." unique_id=2094952254 instance=ExtResource("7_upa2l")]
+[node name="SafeRoomPackage_overhead_services" type="Node3D" parent="." unique_id=841765964 instance=ExtResource("7_upa2l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2075, 3.5996, -0.865)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_overhead_services"
@@ -782,7 +782,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "overhead_services"
 
-[node name="SafeRoomPackage_debris_papers" type="Node3D" parent="." unique_id=860524917 instance=ExtResource("8_dlfw3")]
+[node name="SafeRoomPackage_debris_papers" type="Node3D" parent="." unique_id=169968297 instance=ExtResource("8_dlfw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0288, 0.012999994, 0.0547)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_debris_papers"
@@ -815,7 +815,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "debris_papers"
 
-[node name="SafeRoomPackage_north_server_00" type="Node3D" parent="." unique_id=2117229410 instance=ExtResource("9_4mdcv")]
+[node name="SafeRoomPackage_north_server_00" type="Node3D" parent="." unique_id=842566122 instance=ExtResource("9_4mdcv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.65, -0.010000008, -6.5408)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_server_00"
@@ -848,7 +848,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_server_00"
 
-[node name="SafeRoomPackage_north_server_01" type="Node3D" parent="." unique_id=1046702516 instance=ExtResource("10_ayx7h")]
+[node name="SafeRoomPackage_north_server_01" type="Node3D" parent="." unique_id=2127597681 instance=ExtResource("10_ayx7h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.12, -0.010000008, -6.5408)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_server_01"
@@ -881,7 +881,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_server_01"
 
-[node name="SafeRoomPackage_north_server_02" type="Node3D" parent="." unique_id=106516976 instance=ExtResource("11_mft62")]
+[node name="SafeRoomPackage_north_server_02" type="Node3D" parent="." unique_id=468858746 instance=ExtResource("11_mft62")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3561, -0.010000008, -6.2704)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_server_02"
@@ -914,7 +914,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_server_02"
 
-[node name="SafeRoomPackage_north_server_03" type="Node3D" parent="." unique_id=477602516 instance=ExtResource("12_sth28")]
+[node name="SafeRoomPackage_north_server_03" type="Node3D" parent="." unique_id=1658929864 instance=ExtResource("12_sth28")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8239, -0.010000008, -6.2704)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_server_03"
@@ -947,7 +947,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_server_03"
 
-[node name="SafeRoomPackage_north_server_04" type="Node3D" parent="." unique_id=2009024077 instance=ExtResource("13_7tsw3")]
+[node name="SafeRoomPackage_north_server_04" type="Node3D" parent="." unique_id=284201398 instance=ExtResource("13_7tsw3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.12, -0.010000008, -6.5408)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_server_04"
@@ -980,7 +980,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_server_04"
 
-[node name="SafeRoomPackage_north_server_05" type="Node3D" parent="." unique_id=632353542 instance=ExtResource("14_shkg4")]
+[node name="SafeRoomPackage_north_server_05" type="Node3D" parent="." unique_id=846874190 instance=ExtResource("14_shkg4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, -0.010000008, -6.5408)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_server_05"
@@ -1013,7 +1013,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_server_05"
 
-[node name="SafeRoomPackage_north_broken_core" type="Node3D" parent="." unique_id=1050878627 instance=ExtResource("15_oy8ej")]
+[node name="SafeRoomPackage_north_broken_core" type="Node3D" parent="." unique_id=1759229221 instance=ExtResource("15_oy8ej")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1920929e-08, -5.9846)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_broken_core"
@@ -1046,7 +1046,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_broken_core"
 
-[node name="SafeRoomPackage_north_nexus_sign" type="Node3D" parent="." unique_id=1336263429 instance=ExtResource("16_6w6t0")]
+[node name="SafeRoomPackage_north_nexus_sign" type="Node3D" parent="." unique_id=1759769862 instance=ExtResource("16_6w6t0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2749996, -7.1653)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_north_nexus_sign"
@@ -1079,7 +1079,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "north_nexus_sign"
 
-[node name="SafeRoomPackage_east_repair_bay" type="Node3D" parent="." unique_id=1897838141 instance=ExtResource("17_io8ky")]
+[node name="SafeRoomPackage_east_repair_bay" type="Node3D" parent="." unique_id=1687506693 instance=ExtResource("17_io8ky")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7184, 1.1920929e-08, -4.3675)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_east_repair_bay"
@@ -1112,7 +1112,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "east_repair_bay"
 
-[node name="SafeRoomPackage_east_robot_arm" type="Node3D" parent="." unique_id=963251630 instance=ExtResource("18_ujcw8")]
+[node name="SafeRoomPackage_east_robot_arm" type="Node3D" parent="." unique_id=987626760 instance=ExtResource("18_ujcw8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26, 1.1920929e-08, 3.55)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_east_robot_arm"
@@ -1145,7 +1145,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "east_robot_arm"
 
-[node name="SafeRoomPackage_office_planter" type="Node3D" parent="." unique_id=829428533 instance=ExtResource("19_i86jp")]
+[node name="SafeRoomPackage_office_planter" type="Node3D" parent="." unique_id=1996049145 instance=ExtResource("19_i86jp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0047, 0.08, 0.7192)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_office_planter"
@@ -1178,7 +1178,7 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "office_planter"
 
-[node name="SafeRoomPackage_maintenance_chair" type="Node3D" parent="." unique_id=1577079775 instance=ExtResource("20_jee1a")]
+[node name="SafeRoomPackage_maintenance_chair" type="Node3D" parent="." unique_id=1338429088 instance=ExtResource("20_jee1a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5341, 0.010000003, -3.05)
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
 metadata/package_id = "esr_maintenance_chair"
@@ -1211,10 +1211,10 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 metadata/room_package_id = "maintenance_chair"
 
-[node name="ConnectionPorts" type="Node3D" parent="." unique_id=1378892314]
+[node name="ConnectionPorts" type="Node3D" parent="." unique_id=2093137702]
 metadata/connection_port_count = 2
 
-[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=24803548]
+[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=972061485]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.5, 0, 0)
 metadata/port_id = "A"
 metadata/target_room_id = ""
@@ -1223,7 +1223,7 @@ metadata/lane_m = 0.0
 metadata/outward = Vector2(-1, 0)
 metadata/connected = false
 
-[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=474384600]
+[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=903952314]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.5)
 metadata/port_id = "B"
 metadata/target_room_id = "room_01"
@@ -1232,7 +1232,7 @@ metadata/lane_m = 0.0
 metadata/outward = Vector2(0, 1)
 metadata/connected = true
 
-[node name="DoorLeafPreview_West" type="Node3D" parent="." unique_id=148909876 instance=ExtResource("21_k60l7")]
+[node name="DoorLeafPreview_West" type="Node3D" parent="." unique_id=1681247493 instance=ExtResource("21_k60l7")]
 transform = Transform3D(-1, 0, -3.1786506e-08, 0, 1, 0, 3.1786506e-08, 0, -1, -8.9436604e-08, 0, 7.5)
 metadata/asset_id = "ENV-TOWER-DOOR-LEAF-5M"
 metadata/asset_version = "v001"
@@ -1262,7 +1262,7 @@ metadata/editor_preview_only = true
 metadata/runtime_hidden = true
 metadata/door_direction = "west"
 
-[node name="DoorLeafPreview_South" type="Node3D" parent="." unique_id=1018774897 instance=ExtResource("21_k60l7")]
+[node name="DoorLeafPreview_South" type="Node3D" parent="." unique_id=1958032413 instance=ExtResource("21_k60l7")]
 transform = Transform3D(1.1924881e-08, 0, 1, 0, 1, 0, -1, 0, 1.1924881e-08, 7.5, 0, 8.9436604e-08)
 metadata/asset_id = "ENV-TOWER-DOOR-LEAF-5M"
 metadata/asset_version = "v001"

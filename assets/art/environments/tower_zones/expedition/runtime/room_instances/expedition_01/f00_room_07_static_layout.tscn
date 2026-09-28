@@ -1,27 +1,28 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="1_mlnbk"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="2_huqkv"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="3_rj58s"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn" id="4_d8g3m"]
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn" id="1_huqkv"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="2_rj58s"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="3_d8g3m"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="4_dqr52"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn" id="5_fy2uy"]
 
-[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=795747808]
+[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=2065863855]
 metadata/asset_id = "EXPEDITION-GENERIC-SHELL-ROOM_07"
 metadata/asset_version = "runtime_generated"
 metadata/authored_room_id = "room_07"
 metadata/authored_layout_shell = true
-metadata/layout_instance_total = 37
+metadata/layout_instance_total = 36
 metadata/authored_layout_asset_id = "EXPEDITION-GENERIC-SHELL-ROOM_07"
 metadata/authored_layout_version = "runtime_generated"
 metadata/authored_layout_room_id = "room_07"
-metadata/authored_layout_corner_count = 3
+metadata/authored_layout_corner_count = 2
 metadata/authored_layout_solid_wall_count = 8
 metadata/authored_layout_door_wall_count = 1
 metadata/authored_layout_floor_tile_count = 25
 metadata/authored_layout_exclusive_count = 0
 metadata/authored_layout_multi_level_count = 0
 metadata/authored_layout_room_type_component_count = 0
-metadata/authored_layout_promoted_walls = Array[String](["WALL_north_yp110_m137.5@north"])
+metadata/authored_layout_promoted_walls = Array[String]([])
 metadata/snapshot_tower_wall_door_offset_north = 0.0
 metadata/snapshot_tower_wall_door_offset_south = 0.0
 metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
@@ -32,7 +33,65 @@ metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
 metadata/connection_port_count = 2
 
-[node name="WALL_west_xm150_p87_5" type="Node3D" parent="." unique_id=1106167168 instance=ExtResource("1_mlnbk")]
+[node name="Imported_CornerL5M_CORNER_ROOM_07_NE" type="Node3D" parent="." unique_id=1863591832 instance=ExtResource("1_huqkv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, 0, -12.5)
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/asset_version = "v001"
+metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/logical_height_m = 12.0
+metadata/visual_height_m = 11.9
+metadata/visual_top_clearance_m = 0.1
+metadata/origin_contract = "bottom_corner"
+metadata/origin_note = "原点 = 转角（两臂交点），底面 Y=0。长臂沿 +X 覆盖 0..5m，短臂沿 -Z 覆盖 -5..0m；**房间内侧 = 两臂之间的凹象限（局部 +X/−Z）**，两条臂的装饰面都朝该侧（长臂 −Z、短臂 +X）。装配脚本按此摆位，勿把几何重新居中。"
+metadata/forward_axis = "+Z"
+metadata/forward_axis_note = "A 套家族标签：门禁要求六件一律 +Z（跨套混用会整体反 180°）。本件是 L 形、有两条臂，实际装饰面方向是长臂 −Z / 短臂 +X，没有单一的 +Z 朝向；见 origin_note。"
+metadata/bounds_size_m = Vector3(5, 11.9, 5)
+metadata/visual_bounds_size_m = Vector3(5.15, 11.9, 5.15)
+metadata/bounds_note = "结构包络 5×11.9×5 = 转角起算的 L 标称占地（两臂各 5m），玩法阻挡 12m 高由本 Prefab 的两个 StaticBody3D 承担；可视包络 5.15×11.9×5.15 = 实测两臂装饰面都朝房内（长臂 −Z 0.3175 / 短臂 +X 0.3175，落在包络内部），包络外壳面分别是两条臂的结构背（长臂 +Z 0.15、短臂 −X 0.15），故只比结构盒各多 0.15。两个包络刻意分离：替换美术只改本条与可视声明，不得改碰撞。"
+metadata/visual_node_name = "ENV_TOWER_CORNER_L_5M"
+metadata/visual_bounds_policy = "envelope_carrier_node_union_of_visible_meshes"
+metadata/visual_only = false
+metadata/collision_owner = "self"
+metadata/collision_note = "两条墙臂各一个 StaticBody3D（WallCollisionLong / WallCollisionShort），12m 高 0.30m 厚，随 Prefab 根移动。节点名是 DungeonRoom3D 的镜头下压契约，改名即回归。"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/instantiation_note = "每房间 4 个角各实例化一次（NW/NE/SW/SE 用 rotation_y 区分朝向），节点树保留。"
+metadata/tower_wall_corner = "NE"
+metadata/segment_index = 1
+metadata/material_variant = "B"
+
+[node name="Imported_CornerL5M_CORNER_ROOM_07_NW" type="Node3D" parent="." unique_id=1616072968 instance=ExtResource("1_huqkv")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -12.5, 0, -12.5)
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/asset_version = "v001"
+metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/logical_height_m = 12.0
+metadata/visual_height_m = 11.9
+metadata/visual_top_clearance_m = 0.1
+metadata/origin_contract = "bottom_corner"
+metadata/origin_note = "原点 = 转角（两臂交点），底面 Y=0。长臂沿 +X 覆盖 0..5m，短臂沿 -Z 覆盖 -5..0m；**房间内侧 = 两臂之间的凹象限（局部 +X/−Z）**，两条臂的装饰面都朝该侧（长臂 −Z、短臂 +X）。装配脚本按此摆位，勿把几何重新居中。"
+metadata/forward_axis = "+Z"
+metadata/forward_axis_note = "A 套家族标签：门禁要求六件一律 +Z（跨套混用会整体反 180°）。本件是 L 形、有两条臂，实际装饰面方向是长臂 −Z / 短臂 +X，没有单一的 +Z 朝向；见 origin_note。"
+metadata/bounds_size_m = Vector3(5, 11.9, 5)
+metadata/visual_bounds_size_m = Vector3(5.15, 11.9, 5.15)
+metadata/bounds_note = "结构包络 5×11.9×5 = 转角起算的 L 标称占地（两臂各 5m），玩法阻挡 12m 高由本 Prefab 的两个 StaticBody3D 承担；可视包络 5.15×11.9×5.15 = 实测两臂装饰面都朝房内（长臂 −Z 0.3175 / 短臂 +X 0.3175，落在包络内部），包络外壳面分别是两条臂的结构背（长臂 +Z 0.15、短臂 −X 0.15），故只比结构盒各多 0.15。两个包络刻意分离：替换美术只改本条与可视声明，不得改碰撞。"
+metadata/visual_node_name = "ENV_TOWER_CORNER_L_5M"
+metadata/visual_bounds_policy = "envelope_carrier_node_union_of_visible_meshes"
+metadata/visual_only = false
+metadata/collision_owner = "self"
+metadata/collision_note = "两条墙臂各一个 StaticBody3D（WallCollisionLong / WallCollisionShort），12m 高 0.30m 厚，随 Prefab 根移动。节点名是 DungeonRoom3D 的镜头下压契约，改名即回归。"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/instantiation_note = "每房间 4 个角各实例化一次（NW/NE/SW/SE 用 rotation_y 区分朝向），节点树保留。"
+metadata/tower_wall_corner = "NW"
+metadata/segment_index = 0
+metadata/material_variant = "A"
+
+[node name="WALL_west_xm150_p87_5" type="Node3D" parent="." unique_id=1746410510 instance=ExtResource("2_rj58s")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -12.5, 0, 10)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -73,7 +132,7 @@ metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="WALL_west_xm150_p92_5" type="Node3D" parent="." unique_id=1053413667 instance=ExtResource("1_mlnbk")]
+[node name="WALL_west_xm150_p92_5" type="Node3D" parent="." unique_id=127142626 instance=ExtResource("2_rj58s")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -12.5, 0, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -114,7 +173,7 @@ metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="WALL_west_xm150_p97_5" type="Node3D" parent="." unique_id=778179982 instance=ExtResource("1_mlnbk")]
+[node name="WALL_west_xm150_p97_5" type="Node3D" parent="." unique_id=1594711486 instance=ExtResource("2_rj58s")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -12.5, 0, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -155,7 +214,7 @@ metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="WALL_west_xm150_p102_5" type="Node3D" parent="." unique_id=1819129698 instance=ExtResource("1_mlnbk")]
+[node name="WALL_west_xm150_p102_5" type="Node3D" parent="." unique_id=256600226 instance=ExtResource("2_rj58s")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -12.5, 0, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -196,7 +255,48 @@ metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="WALL_east_xm125_p92_5" type="Node3D" parent="." unique_id=1895642606 instance=ExtResource("1_mlnbk")]
+[node name="WALL_east_xm125_p87_5" type="Node3D" parent="." unique_id=2057441837 instance=ExtResource("2_rj58s")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 0, 10)
+metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "08_wall_component"
+metadata/component = "wall_standard_5m"
+metadata/logic_id = "wall_standard_5m"
+metadata/display_name_zh = "战局通用标准墙 5×0.3×11.9m（含 5m 槽位装甲壁板）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "wall_standard_5m_通用包"
+metadata/source_root_object = "ROOT_wall_standard_5m_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/08/wall_standard_5m/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.303)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/wall_kind = "solid"
+metadata/wall_thickness_m = 0.3
+metadata/wall_visual_height_m = 11.9
+metadata/wall_logical_height_m = 12
+metadata/visual_top_clearance_m = 0.1
+metadata/grid_unit_m = 5.0
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+metadata/tower_wall_direction = "east"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="WALL_east_xm125_p92_5" type="Node3D" parent="." unique_id=410209240 instance=ExtResource("2_rj58s")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 0, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -237,7 +337,7 @@ metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="WALL_east_xm125_p97_5" type="Node3D" parent="." unique_id=54026843 instance=ExtResource("1_mlnbk")]
+[node name="WALL_east_xm125_p97_5" type="Node3D" parent="." unique_id=72782533 instance=ExtResource("2_rj58s")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 0, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -278,7 +378,7 @@ metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="WALL_east_xm125_p102_5" type="Node3D" parent="." unique_id=1451258284 instance=ExtResource("1_mlnbk")]
+[node name="WALL_east_xm125_p102_5" type="Node3D" parent="." unique_id=1486915257 instance=ExtResource("2_rj58s")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 0, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
 metadata/asset_version = "v004"
@@ -319,62 +419,8 @@ metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="WALL_north_yp110_m137_5" type="Node3D" parent="." unique_id=1168150146 instance=ExtResource("2_huqkv")]
+[node name="DOORWALL_north_yp110_m137_5" type="Node3D" parent="." unique_id=1622427692 instance=ExtResource("3_d8g3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-WALL-DOOR-5M"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "08_wall_component"
-metadata/component = "wall_door_5m"
-metadata/logic_id = "wall_door_5m"
-metadata/display_name_zh = "战局通用门墙 5×0.3×11.9m（门洞 2.2×2.5，含装甲门禁）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "wall_door_5m_通用包"
-metadata/source_root_object = "ROOT_wall_door_5m_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/08/wall_door_5m/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.365)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_three_box_bottom_center"
-metadata/collision_shape_count = 3
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/wall_kind = "door_portal"
-metadata/wall_thickness_m = 0.3
-metadata/wall_visual_height_m = 11.9
-metadata/wall_logical_height_m = 12
-metadata/grid_unit_m = 5.0
-metadata/door_clear_width_m = 2.2
-metadata/door_clear_height_m = 2.5
-metadata/pier_width_m = 1.4
-metadata/lintel_height_m = 9.4
-metadata/snap_to_ground_offset_m = 0
-metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
-metadata/tower_wall_direction = "north"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
-metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-STANDARD-5M"
-metadata/authored_door_wall_promoted = true
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="CameraOnlyDoorWall_North_I00" type="StaticBody3D" parent="." unique_id=1814509251]
-process_mode = 3
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
-collision_layer = 16
-collision_mask = 0
-metadata/camera_lower_wall = true
-metadata/camera_only_door_wall = true
-metadata/tower_wall_direction = "north"
-
-[node name="DOORWALL_north_yp110_m132_5" type="Node3D" parent="." unique_id=1582306537 instance=ExtResource("2_huqkv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 5, 0, -12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -415,9 +461,19 @@ metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可�
 metadata/tower_wall_direction = "north"
 metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
+metadata/authored_door_wall_promoted = false
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="FLOOR_ROOM_07_R01_C01" type="Node3D" parent="." unique_id=444113032 instance=ExtResource("3_rj58s")]
+[node name="CameraOnlyDoorWall_North_I00" type="StaticBody3D" parent="." unique_id=1330157901]
+process_mode = 3
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.5)
+collision_layer = 16
+collision_mask = 0
+metadata/camera_lower_wall = true
+metadata/camera_only_door_wall = true
+metadata/tower_wall_direction = "north"
+
+[node name="FLOOR_ROOM_07_R01_C01" type="Node3D" parent="." unique_id=176198657 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.056, 10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -461,7 +517,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R02_C01" type="Node3D" parent="." unique_id=106123782 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R02_C01" type="Node3D" parent="." unique_id=1703171563 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.081, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -505,7 +561,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R03_C01" type="Node3D" parent="." unique_id=173138429 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R03_C01" type="Node3D" parent="." unique_id=1855687630 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.056, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -549,7 +605,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R04_C01" type="Node3D" parent="." unique_id=2015043055 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R04_C01" type="Node3D" parent="." unique_id=534638938 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.081, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -593,7 +649,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R05_C01" type="Node3D" parent="." unique_id=181581783 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R05_C01" type="Node3D" parent="." unique_id=1295819988 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -0.056, -10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -637,7 +693,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R01_C02" type="Node3D" parent="." unique_id=1095370552 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R01_C02" type="Node3D" parent="." unique_id=1480339070 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.081, 10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -681,7 +737,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R02_C02" type="Node3D" parent="." unique_id=618589564 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R02_C02" type="Node3D" parent="." unique_id=1283410523 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.056, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -725,7 +781,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R03_C02" type="Node3D" parent="." unique_id=1286172001 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R03_C02" type="Node3D" parent="." unique_id=1350407176 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.081, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -769,7 +825,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R04_C02" type="Node3D" parent="." unique_id=1049395937 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R04_C02" type="Node3D" parent="." unique_id=380645465 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.056, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -813,7 +869,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R05_C02" type="Node3D" parent="." unique_id=1118292402 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R05_C02" type="Node3D" parent="." unique_id=1073340259 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -0.081, -10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -857,7 +913,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R01_C03" type="Node3D" parent="." unique_id=1869351323 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R01_C03" type="Node3D" parent="." unique_id=112340546 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.056, 10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -901,7 +957,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R02_C03" type="Node3D" parent="." unique_id=506254485 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R02_C03" type="Node3D" parent="." unique_id=302290956 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.081, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -945,7 +1001,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R03_C03" type="Node3D" parent="." unique_id=287546322 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R03_C03" type="Node3D" parent="." unique_id=733090032 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.056, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -989,7 +1045,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R04_C03" type="Node3D" parent="." unique_id=1288429156 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R04_C03" type="Node3D" parent="." unique_id=877812664 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.081, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -1033,7 +1089,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R05_C03" type="Node3D" parent="." unique_id=901959954 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R05_C03" type="Node3D" parent="." unique_id=80814727 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.056, -10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -1077,7 +1133,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R01_C04" type="Node3D" parent="." unique_id=970378141 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R01_C04" type="Node3D" parent="." unique_id=1961967257 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.081, 10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -1121,7 +1177,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R02_C04" type="Node3D" parent="." unique_id=566210886 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R02_C04" type="Node3D" parent="." unique_id=981056109 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.056, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -1165,7 +1221,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R03_C04" type="Node3D" parent="." unique_id=21109071 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R03_C04" type="Node3D" parent="." unique_id=1121333236 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.081, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -1209,7 +1265,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R04_C04" type="Node3D" parent="." unique_id=803583092 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R04_C04" type="Node3D" parent="." unique_id=423380645 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.056, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -1253,7 +1309,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R05_C04" type="Node3D" parent="." unique_id=1096444187 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R05_C04" type="Node3D" parent="." unique_id=2065363946 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -0.081, -10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -1297,7 +1353,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R01_C05" type="Node3D" parent="." unique_id=1737681916 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R01_C05" type="Node3D" parent="." unique_id=227632278 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.056, 10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -1341,7 +1397,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R02_C05" type="Node3D" parent="." unique_id=1629328531 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R02_C05" type="Node3D" parent="." unique_id=1443657142 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.081, 5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -1385,7 +1441,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R03_C05" type="Node3D" parent="." unique_id=1315507152 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R03_C05" type="Node3D" parent="." unique_id=31687657 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.056, 0)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -1429,7 +1485,7 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="FLOOR_ROOM_07_R04_C05" type="Node3D" parent="." unique_id=1770760490 instance=ExtResource("4_d8g3m")]
+[node name="FLOOR_ROOM_07_R04_C05" type="Node3D" parent="." unique_id=1259454056 instance=ExtResource("5_fy2uy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.081, -5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
@@ -1473,7 +1529,7 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02"
 
-[node name="FLOOR_ROOM_07_R05_C05" type="Node3D" parent="." unique_id=2044032012 instance=ExtResource("3_rj58s")]
+[node name="FLOOR_ROOM_07_R05_C05" type="Node3D" parent="." unique_id=1686329102 instance=ExtResource("4_dqr52")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -0.056, -10)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
@@ -1517,10 +1573,10 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01"
 
-[node name="ConnectionPorts" type="Node3D" parent="." unique_id=1798743655]
+[node name="ConnectionPorts" type="Node3D" parent="." unique_id=2044504628]
 metadata/connection_port_count = 2
 
-[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=1552170591]
+[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=1270332889]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.5)
 metadata/port_id = "A"
 metadata/target_room_id = "room_06"
@@ -1529,7 +1585,7 @@ metadata/lane_m = 0.0
 metadata/outward = Vector2(0, 1)
 metadata/connected = true
 
-[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=529359484]
+[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=1367745520]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -12.5)
 metadata/port_id = "B"
 metadata/target_room_id = "room_08"
