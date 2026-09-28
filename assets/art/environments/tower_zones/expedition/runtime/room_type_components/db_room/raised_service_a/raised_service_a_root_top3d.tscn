@@ -1,11 +1,21 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A
-; 房型组件 db_room / v014 / raised_service_a
+; 房型组件 db_room / v014 / raised_service_a（高位龙门架 gantry）
+; 整块 AABB 代理 4.06 x 0.48 会把两根立柱之间约 3.4 m 的通行区挡成实心（约 1.10 m^2 空阻挡）。
+; 几何实测：只有两根立柱落地 ——
+;   LegWest x[-2.0300, -1.6900] * z[-0.2400, 0.1000]，y 0..3.93
+;   LegEast x[ 1.6900,  2.0300] * z[-0.2400, 0.1000]，y 0..3.93
+; 中间跨梁与面板全部位于 y >= 2.97（y 2.97..3.93），高于玩家高度带(2.2 m)故不做碰撞。
+; 两盒并集 == 触及玩家带的几何 XZ 投影（Runtime Geometry Probe：相关三角面重心 100% 落在并集内，
+; 并集内无 >0.3 m 空腔，盒间无重叠）；足印 1.95 -> 0.23 m^2。
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/raised_service_a/raised_service_a_visual_top3d.glb" id="1_visual"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
-size = Vector3(4.06, 3.93, 0.48)
+[sub_resource type="BoxShape3D" id="BoxShape3D_leg_west"]
+size = Vector3(0.34, 3.93, 0.34)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_leg_east"]
+size = Vector3(0.34, 3.93, 0.34)
 
 [node name="RoomTypeComponentRaisedServiceA" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A"
@@ -21,7 +31,7 @@ metadata/bounds_size_m = Vector3(4.06, 3.93, 0.48)
 metadata/slot_role = "room_type_component"
 metadata/collision_owner = "self"
 metadata/collision_policy = "safe_box_proxy"
-metadata/collision_shape_count = 1
+metadata/collision_shape_count = 2
 metadata/runtime_instantiation = "per_instance_prefab"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -30,6 +40,10 @@ metadata/runtime_instantiation = "per_instance_prefab"
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
-position = Vector3(0, 1.965, 0)
-shape = SubResource("BoxShape3D_proxy")
+[node name="LegWest" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-1.86, 1.965, -0.07)
+shape = SubResource("BoxShape3D_leg_west")
+
+[node name="LegEast" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(1.86, 1.965, -0.07)
+shape = SubResource("BoxShape3D_leg_east")

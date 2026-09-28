@@ -1,11 +1,33 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER
-; 房型组件 office_room / v009 / water_and_supply_corner
+; 房型组件 office_room / v009 / water_and_supply_corner（饮水与箱货区）
+; 整块 AABB 代理 3.62 x 3.36 里有约 6.6 m^2 是空地：几何实际是「西侧一条窄柜 + 中部三只
+; 同规格矮箱 + 东南角一件高柜」，彼此不相连。按几何实测切成五块：
+;   西侧窄柜 WestShelf  x[-1.8100, -1.1100] * z[-1.5200,  1.6800]，y 0..1.88
+;   矮箱 UnitSouth      x[-0.5600,  0.5400] * z[-1.6800, -0.7600]，y 0..0.795
+;   矮箱 UnitMid        x[-0.5600,  0.5400] * z[-0.6300,  0.2900]，y 0..0.795
+;   矮箱 UnitNorth      x[-0.5600,  0.5400] * z[ 0.4200,  1.3400]，y 0..0.795
+;   东侧高柜 EastStack  x[ 1.1900,  1.8100] * z[-0.9400, -0.5000]，y 0..1.72
+; 三只矮箱之间留 0.13 m 实缝、东西两件与矮箱之间留 ~0.6 m 过道，均按几何保留不做填充。
+; 五盒并集 == 几何 XZ 投影（Runtime Geometry Probe: 相关三角面重心 100% 落在并集内，
+; 并集内无 >0.3 m 空腔）；足印 12.16 -> 5.48 m^2。
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/water_and_supply_corner/water_and_supply_corner_visual_top3d.glb" id="1_visual"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
-size = Vector3(3.62, 1.88, 3.36)
+[sub_resource type="BoxShape3D" id="BoxShape3D_west_shelf"]
+size = Vector3(0.7, 1.88, 3.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_unit_south"]
+size = Vector3(1.1, 0.795, 0.92)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_unit_mid"]
+size = Vector3(1.1, 0.795, 0.92)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_unit_north"]
+size = Vector3(1.1, 0.795, 0.92)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_east_stack"]
+size = Vector3(0.62, 1.72, 0.44)
 
 [node name="RoomTypeComponentWaterAndSupplyCorner" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER"
@@ -21,7 +43,7 @@ metadata/bounds_size_m = Vector3(3.62, 1.88, 3.36)
 metadata/slot_role = "room_type_component"
 metadata/collision_owner = "self"
 metadata/collision_policy = "safe_box_proxy"
-metadata/collision_shape_count = 1
+metadata/collision_shape_count = 5
 metadata/runtime_instantiation = "per_instance_prefab"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -30,6 +52,22 @@ metadata/runtime_instantiation = "per_instance_prefab"
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
-position = Vector3(0, 0.94, 0)
-shape = SubResource("BoxShape3D_proxy")
+[node name="WestShelf" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-1.46, 0.94, 0.08)
+shape = SubResource("BoxShape3D_west_shelf")
+
+[node name="UnitSouth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-0.01, 0.3975, -1.22)
+shape = SubResource("BoxShape3D_unit_south")
+
+[node name="UnitMid" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-0.01, 0.3975, -0.17)
+shape = SubResource("BoxShape3D_unit_mid")
+
+[node name="UnitNorth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-0.01, 0.3975, 0.88)
+shape = SubResource("BoxShape3D_unit_north")
+
+[node name="EastStack" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(1.5, 0.86, -0.72)
+shape = SubResource("BoxShape3D_east_stack")

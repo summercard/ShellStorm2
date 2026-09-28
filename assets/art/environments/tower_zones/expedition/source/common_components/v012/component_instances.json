@@ -109,40 +109,6 @@
       "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CRATE_04"
     },
     {
-      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
-      "component_slug": "cutaway_reference_a",
-      "position_m": [
-        -7.5,
-        5.0,
-        0.0
-      ],
-      "rotation_y_deg": 0.0,
-      "scale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_0"
-    },
-    {
-      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
-      "component_slug": "cutaway_reference_b",
-      "position_m": [
-        7.5,
-        -7.5,
-        0.0
-      ],
-      "rotation_y_deg": 0.0,
-      "scale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-CUTAWAY_WALL_CONTRACT_1"
-    },
-    {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A",
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
       "component_slug": "hanging_cable_a",
@@ -1555,14 +1521,14 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
       "position_m": [
         -20.0,
-        4.955,
+        4.8945,
         0.0
       ],
-      "rotation_y_deg": 90.0,
+      "rotation_y_deg": 0.0,
       "scale": [
         1.0,
         1.0,
@@ -1589,14 +1555,14 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
       "position_m": [
         -15.0,
-        4.955,
+        4.8945,
         0.0
       ],
-      "rotation_y_deg": 90.0,
+      "rotation_y_deg": 0.0,
       "scale": [
         1.0,
         1.0,
@@ -1623,14 +1589,14 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
       "position_m": [
         -10.0,
-        4.955,
+        4.8945,
         0.0
       ],
-      "rotation_y_deg": 90.0,
+      "rotation_y_deg": 0.0,
       "scale": [
         1.0,
         1.0,
@@ -1657,14 +1623,14 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
       "position_m": [
         -5.0,
-        4.955,
+        4.8945,
         0.0
       ],
-      "rotation_y_deg": 90.0,
+      "rotation_y_deg": 0.0,
       "scale": [
         1.0,
         1.0,
@@ -1691,14 +1657,14 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
       "position_m": [
         0.0,
-        4.955,
+        4.8945,
         0.0
       ],
-      "rotation_y_deg": 90.0,
+      "rotation_y_deg": 0.0,
       "scale": [
         1.0,
         1.0,
@@ -1725,14 +1691,14 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
       "position_m": [
         5.0,
-        4.955,
+        4.8945,
         0.0
       ],
-      "rotation_y_deg": 90.0,
+      "rotation_y_deg": 0.0,
       "scale": [
         1.0,
         1.0,
@@ -1861,10 +1827,10 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
       "position_m": [
-        7.455,
+        7.387,
         -17.5,
         0.0
       ],
@@ -1895,10 +1861,10 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
       "position_m": [
-        7.455,
+        7.387,
         -12.5,
         0.0
       ],
@@ -1929,10 +1895,10 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
       "position_m": [
-        7.455,
+        7.387,
         -7.5,
         0.0
       ],
@@ -1963,10 +1929,10 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
       "position_m": [
-        7.455,
+        7.387,
         -2.5,
         0.0
       ],
@@ -1997,10 +1963,10 @@
     },
     {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35",
-      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
-      "component_slug": "wall_5m_b",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
       "position_m": [
-        7.455,
+        7.387,
         2.5,
         0.0
       ],
@@ -2134,14 +2100,15 @@
   ],
   "validation": {
     "source_object_count": 125,
-    "instance_count": 125,
+    "instance_count": 123,
     "dropped_by_door_slot_sealing": 0,
     "coverage_ok": true,
     "rotation_inferred": true,
     "rotation_stats": {
-      "0": 118,
-      "90": 7
-    }
+      "0": 122,
+      "90": 1
+    },
+    "dropped_by_cutaway_reference_removal": 2
   },
   "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
   "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）",
@@ -2169,5 +2136,14 @@
     "blender_up": "+Z",
     "rotation_y_deg_semantics": "rotation_about_blender_Z",
     "godot_mapping": "(bx, by, bz) -> (bx, bz, -by)"
-  }
+  },
+  "layout_repairs": [
+    {
+      "id": "l_corridor_l_turn_inner_corner_walls",
+      "scope": "房型级，room_01 与 room_08 共用同一份默认布局",
+      "problem": "L 形凹口的两条内边原由 cutaway_reference_a/b 单块长版剖切面（30m x 11.9m / 25m x 11.9m，visual_only 无碰撞）加一排 1.35m 剖切低墙 wall_5m_b 充当：既不是 5m 模数通用墙件拼接，也没有全高承载结构。",
+      "fix": "删除 2 件 cutaway_reference；把与之同轴的 11 件 wall_5m_b 就地改为 5m 通用全高墙 —— 凹口 X 面 6 x wall_5m_a（沿 Z 向，层心线 4.8945），凹口 Z 面 5 x wall_5m_d（沿 X 向，层心线 7.387）。层心线按源规范 c = 边界 - 半厚 + 0.15 取值，使新墙外表面与原长版一致落在边界 +0.15；实例 id 不变。",
+      "generator_gap": "scripts/blender/regroup_room_type_components.py 从源库 packages 重建 instances，重跑本房型源会把这 2 件 cutaway_reference 加回来；v012 没有 component_slug_map.json，命名表的 drop 机制在此无处声明。重做 L 走廊房型源时必须一并重放本修复。"
+    }
+  ]
 }

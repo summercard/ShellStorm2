@@ -64,12 +64,12 @@ metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", 
 metadata/connection_port_count = 2
 
 [node name="ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL" parent="." unique_id=1027100065 instance=ExtResource("1_vf3xf")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.900001, 3.5135, -19.66)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.900001, 1.9648983, -19.66)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CABLE_COIL"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-1" parent="." unique_id=1695424661 instance=ExtResource("2_pix2k")]
-transform = Transform3D(-0.11830003, 0, 0.9929779, 0, 1, 0, -0.9929779, 0, -0.11830003, 2.5, 11.575202, -1.09278474e-07)
+transform = Transform3D(-0.12387863, 0, 0.9922974, 0, 1, 0, -0.9922974, 0, -0.12387863, 6.3969984, 11.575202, -1.09278474e-07)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
@@ -381,7 +381,7 @@ metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
 [node name="ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE" parent="." unique_id=1314317898 instance=ExtResource("13_ft4y7")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.8000007, 0, -16.7)
+transform = Transform3D(0.99077386, 0, -0.13552532, 0, 1, 0, 0.13552532, 0, 0.99077386, 5.528292, 0, -18.08921)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
 metadata/authored_slot_role = "room_type_component"
 
@@ -521,12 +521,12 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST" parent="." unique_id=1910143168 instance=ExtResource("33_ksar3")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.8750005, 0.045, -10.4)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10.355427, 0.045, -12.326889)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_A"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-WORKBENCH_WEST" parent="." unique_id=37228529 instance=ExtResource("34_ar6dn")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.9999993, 0, 17.3)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.091077, 0, 18.7219)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_B"
 metadata/authored_slot_role = "room_type_component"
 

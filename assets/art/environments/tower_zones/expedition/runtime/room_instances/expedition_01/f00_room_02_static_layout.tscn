@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_10m/ceiling_deck_10m_root_top3d.tscn" id="3_og1xj"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_lighting/ceiling_lighting_root_top3d.tscn" id="4_7wna1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn" id="5_nh12n"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_service_b/ceiling_service_b_root_top3d.tscn" id="7_7ojhm"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_service_c/ceiling_service_c_root_top3d.tscn" id="8_f1vo6"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn" id="9_4oqba"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/corner_guard/corner_guard_root_top3d.tscn" id="10_u35qc"]
@@ -107,11 +106,6 @@ metadata/authored_slot_role = "room_type_component"
 [node name="ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM" parent="." unique_id=1326308490 instance=ExtResource("5_nh12n")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 11.15, 0)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT" parent="." unique_id=659084228 instance=ExtResource("7_7ojhm")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.5999997, 10.3825, 1.5000004)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN" parent="." unique_id=1613138298 instance=ExtResource("8_f1vo6")]

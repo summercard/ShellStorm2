@@ -1,11 +1,29 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-FILING_RUN
-; 房型组件 office_room / v009 / filing_run
+; 房型组件 office_room / v009 / filing_run（西墙档案柜带）
+; 整块 AABB 代理 0.765 x 39.38 会把中间 30 m 的空墙一起挡成实心（约 23.8 m^2 空阻挡），
+; 玩家与子弹在那段空地上被无故挡住。几何实测只有四块实体（南北两端柜体 + 中段两块薄竖板）：
+;   柜体 CabinetSouth  x[-0.3825, 0.3825] * z[-19.6900, -15.6000]，y 0..3.05
+;   竖板 EndPanelSouth x[-0.3775, 0.3425] * z[-15.2400, -15.1600]，y 0..1.44
+;   竖板 EndPanelNorth x[-0.3775, 0.3425] * z[ 15.1600,  15.2400]，y 0..1.44
+;   柜体 CabinetNorth  x[-0.3825, 0.3825] * z[ 15.6000,  19.6900]，y 0..3.05
+; 另有 y 2.875..2.925 的一条自发光灯带横跨 z -19.61..19.61，高于玩家高度带(2.2 m)故不做碰撞。
+; 四盒并集 == 触及玩家带的几何 XZ 投影（Runtime Geometry Probe: 相关三角面重心 100% 落在并集内，
+; 并集内无 >0.3 m 空腔）；足印 30.13 -> 6.37 m^2。
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/filing_run/filing_run_visual_top3d.glb" id="1_visual"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
-size = Vector3(0.765, 3.05, 39.38)
+[sub_resource type="BoxShape3D" id="BoxShape3D_cabinet_south"]
+size = Vector3(0.765, 3.05, 4.09)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_end_panel_south"]
+size = Vector3(0.72, 1.44, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_end_panel_north"]
+size = Vector3(0.72, 1.44, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cabinet_north"]
+size = Vector3(0.765, 3.05, 4.09)
 
 [node name="RoomTypeComponentFilingRun" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-FILING_RUN"
@@ -21,7 +39,7 @@ metadata/bounds_size_m = Vector3(0.765, 3.05, 39.38)
 metadata/slot_role = "room_type_component"
 metadata/collision_owner = "self"
 metadata/collision_policy = "safe_box_proxy"
-metadata/collision_shape_count = 1
+metadata/collision_shape_count = 4
 metadata/runtime_instantiation = "per_instance_prefab"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -30,6 +48,18 @@ metadata/runtime_instantiation = "per_instance_prefab"
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
-position = Vector3(0, 1.525, 0)
-shape = SubResource("BoxShape3D_proxy")
+[node name="CabinetSouth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.525, -17.645)
+shape = SubResource("BoxShape3D_cabinet_south")
+
+[node name="EndPanelSouth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-0.0175, 0.72, -15.2)
+shape = SubResource("BoxShape3D_end_panel_south")
+
+[node name="EndPanelNorth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-0.0175, 0.72, 15.2)
+shape = SubResource("BoxShape3D_end_panel_north")
+
+[node name="CabinetNorth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.525, 17.645)
+shape = SubResource("BoxShape3D_cabinet_north")

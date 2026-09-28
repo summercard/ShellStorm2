@@ -1,11 +1,25 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER
-; 房型组件 office_room / v009 / work_cluster
+; 房型组件 office_room / v009 / work_cluster（工位）
+; 整块 AABB 代理 5.8 x 2.44 会把台前两侧、以及两块前件之间的空地一起挡成实心（约 3.6 m^2）。
+; 几何实测为「一长条台体 + 台前两块独立件」（两件与台体之间留 0.097 m 实缝，故不合并）：
+;   台体 MainBody  x[-2.9000, 2.9000] * z[-0.4425, 1.2200]，y 0..1.615
+;   前件 UnitWest  x[-1.7950,-1.1080] * z[-1.2200,-0.5397]，y 0.030..1.67
+;   前件 UnitEast  x[ 1.1050, 1.7920] * z[-1.2200,-0.5397]，y 0.030..1.67
+; 另有一条 y 0.10..1.56 的自发光条（x -2.1375..2.585，z 0.48..0.695）落在台体足印之内，已被覆盖。
+; 三盒并集 == 几何 XZ 投影（Runtime Geometry Probe: 相关三角面重心 100% 落在并集内，
+; 并集内无 >0.3 m 空腔）；足印 14.15 -> 10.58 m^2。
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/office_room/work_cluster/work_cluster_visual_top3d.glb" id="1_visual"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
-size = Vector3(5.8, 1.67, 2.44)
+[sub_resource type="BoxShape3D" id="BoxShape3D_main_body"]
+size = Vector3(5.8, 1.615, 1.6625)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_unit_west"]
+size = Vector3(0.687, 1.64, 0.6803)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_unit_east"]
+size = Vector3(0.687, 1.64, 0.6803)
 
 [node name="RoomTypeComponentWorkCluster" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
@@ -21,7 +35,7 @@ metadata/bounds_size_m = Vector3(5.8, 1.67, 2.44)
 metadata/slot_role = "room_type_component"
 metadata/collision_owner = "self"
 metadata/collision_policy = "safe_box_proxy"
-metadata/collision_shape_count = 1
+metadata/collision_shape_count = 3
 metadata/runtime_instantiation = "per_instance_prefab"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -30,6 +44,14 @@ metadata/runtime_instantiation = "per_instance_prefab"
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
-position = Vector3(0, 0.835, 0)
-shape = SubResource("BoxShape3D_proxy")
+[node name="MainBody" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 0.8075, 0.38875)
+shape = SubResource("BoxShape3D_main_body")
+
+[node name="UnitWest" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(-1.4515, 0.85, -0.87985)
+shape = SubResource("BoxShape3D_unit_west")
+
+[node name="UnitEast" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(1.4485, 0.85, -0.87985)
+shape = SubResource("BoxShape3D_unit_east")

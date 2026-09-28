@@ -5224,14 +5224,14 @@ func _install_tower_hud() -> void:
 	$HUD.add_child(margin)
 	var panel := PanelContainer.new()
 	margin.add_child(panel)
+	# 2026-09-28 主人要求：任务引导卡去掉背板与描边，文字直接浮在实景上。
+	# 内容边距沿用原值 ⇒ 四行文字的位置一字不动，只是背后的深色底与青边框消失。
+	# 塔楼模式（「楼顶 · 100F」那一套文案）与本卡共用同一处口径。
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.018, 0.035, 0.048, 0.50)
-	style.border_color = Color(0.18, 0.74, 0.82, 0.78)
-	style.set_border_width_all(2)
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_left = 8
-	style.corner_radius_bottom_right = 8
+	style.bg_color = Color(0, 0, 0, 0)
+	style.border_color = Color(0, 0, 0, 0)
+	style.set_border_width_all(0)
+	style.set_corner_radius_all(0)
 	style.content_margin_left = 11.0
 	style.content_margin_right = 11.0
 	style.content_margin_top = 8.0
@@ -5256,17 +5256,31 @@ func _install_tower_hud() -> void:
 	_tower_base_currency_label.add_theme_font_size_override("font_size", 12)
 	_tower_base_currency_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
 	vbox.add_child(_tower_base_currency_label)
+	# 背板撤掉后文字直接压在实景上：远征 01 的浅色天花板/桥体下，灰蓝的操作行
+	# （「M 路线地图…」）会与背景同明度而看不清。这里只加文字描边 —— 不是背板，
+	# 不改布局、不占像素、不改颜色；深色与浅色背景都能读。
+	for label in [
+		_tower_floor_label, _tower_target_label,
+		_tower_elevator_label, _tower_base_currency_label,
+	]:
+		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
+		label.add_theme_constant_override("outline_size", 5)
 
 
 func _install_world_time_hud() -> void:
 	if _world_time_label != null:
 		return
 	var parent_control := _reference_hud_root if _reference_hud_root != null else $HUD
-	var panel := _make_hud_panel(
-		Color(0.18, 0.74, 0.82), Color(0.006, 0.016, 0.026, 0.90)
-	)
+	# 2026-09-28 主人要求：上面这块「时间」只去掉背板、保留文字（下面那块本局计时栏
+	# 是整套去掉，见 Dungeon3D._build_reference_main_hud 的 SessionTimerPanel）。
+	# 世界时间面板只有一层背板（StyleBox），没有 _add_neon_frame 的四角括号，
+	# 所以换全透明外壳即净。_make_bare_hud_panel 由 Dungeon3D 继承而来，与战局 HUD 同口径。
+	var panel := _make_bare_hud_panel()
 	panel.name = "WorldDateTimeHUD"
-	_anchor_control(panel, 1.0, 0.0, 1.0, 0.0, -292, 366, -18, 416)
+	# 2026-09-28 主人要求：世界时间从计时栏下方（原 offset_top 366）挪到右上。
+	# 右上这块 y 44..318 原本是雷达圆盘占的，雷达已按要求隐藏 ⇒ 这里正好空出来，
+	# 时间条落在楼层标签（y 12..38）正下方，不与其重叠；计时栏现已隐藏，更无冲突。
+	_anchor_control(panel, 1.0, 0.0, 1.0, 0.0, -292, 48, -18, 98)
 	parent_control.add_child(panel)
 	_world_time_label = _make_hud_label(
 		"2075-01-01  17:00", 14, Color(0.72, 0.94, 1.0)
@@ -5274,6 +5288,9 @@ func _install_world_time_hud() -> void:
 	_world_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_world_time_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	panel.add_child(_world_time_label)
+	# 撤背板后这行浅青字压在天花板/桥体上会同明度，描边加强到与其它无背板面板同级（5）。
+	_world_time_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
+	_world_time_label.add_theme_constant_override("outline_size", 5)
 	if (
 		GameTimeManager != null
 		and not GameTimeManager.minute_changed.is_connected(_on_world_time_minute_changed)

@@ -378,6 +378,9 @@ var _spawn_available: Array[int] = []
 # 没有地砖清单的房（v007 安全房 / 塔楼程序化房 / 旧房表）两条路都不启用，行为逐字不变。
 const AUTHORED_TILE_HALF_M := 2.5
 const AUTHORED_TILE_HIT_TOLERANCE_M := 0.01
+## 墙面开关距墙皮的内缩量（开关板材厚 0.14m，留 0.2m 净空）。与 `_place_light_switch`
+## 四个包围盒候选面用的是同一个值 —— 轮廓感知落位必须与旧落位读数一致，否则无法对照。
+const SWITCH_WALL_INSET_M := 0.34
 
 var room_id := "room_00"
 var room_type := "COMBAT"
@@ -3609,7 +3612,9 @@ func _build_content() -> void:
 	else:
 		_central_light = _create_room_light(
 			"RoomCeilingLight",
-			Vector3.ZERO,
+			# 包围盒中心对非矩形房是**凹口**（房外空地）：照原样落位等于把房间顶灯吊到房外。
+			# 真砖格上的房（矩形房 / 塔楼程序化房 / 无地砖清单的 v007 安全房）返回原值。
+			_snap_planar_position_into_footprint(Vector3.ZERO),
 			theme.fixture_energy * (
 				2.20 if size_class in ["large", "arena", "floor"] else 1.85
 			),
@@ -3822,6 +3827,100 @@ func _create_room_light(
 	return room_light
 
 
+# ── 非矩形房（L 型 / U 型 / 工字桥）的落位真源：真砖格 ──────────────────────────
+# 包围盒中心与包围盒墙面都落在**凹口**上，而凹口在摆位阶段就被 `point_in_polygon` 剔掉了砖
+# —— 那里既没有地砖也没有墙。顶灯与墙面开关原先按包围盒落位，于是「灯吊在房外、开关悬在
+# 凹口里」：房间天然偏暗，玩家在房内又永远进不了 `RoomLightSwitch3D.INTERACTION_RANGE`
+# 2.2m 的交互球 ⇒ 表现就是「房间里的开关开不了灯」。`_build_spawn_points()` 早已改用真砖
+# 格，这里补齐同一口径。落点本来就在真砖格上时函数**逐字返回原值** ⇒ 矩形房 / 塔楼程序化
+# 房 / v007 安全房（无地砖清单）行为完全不变。
+func _snap_planar_position_into_footprint(planar_position: Vector3) -> Vector3:
+	if _inside_authored_footprint(planar_position) or _authored_tile_cells.is_empty():
+		return planar_position
+	# 先试真砖格质心 ≈ 可走区的几何中心：凹口是挖掉的，质心通常仍在砖上，灯挂这里覆盖最匀。
+	# 极端细长 L 的质心可能又落回空处，此时才退到最近的砖心（必在砖上）。
+	var centroid := Vector3.ZERO
+	for cell in _authored_tile_cells:
+		centroid += cell
+	centroid /= float(_authored_tile_cells.size())
+	if _inside_authored_footprint(centroid):
+		return Vector3(centroid.x, planar_position.y, centroid.z)
+	var nearest := _nearest_authored_cell(planar_position)
+	return Vector3(nearest.x, planar_position.y, nearest.z)
+
+
+func _nearest_authored_cell(planar_position: Vector3) -> Vector3:
+	var nearest := Vector3.ZERO
+	var nearest_distance := INF
+	for cell in _authored_tile_cells:
+		var offset := Vector2(cell.x - planar_position.x, cell.z - planar_position.z)
+		var distance := offset.length_squared()
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest = cell
+	return nearest
+
+
+## side 0/1 = 本地 −Z/+Z 墙，side 2/3 = 本地 −X/+X 墙（与 `_place_light_switch` 同一套）。
+## 返回该侧**真脚**那一行的砖格：凹口侧的假墙行里根本没有砖，自然被排除。
+func _authored_extreme_cell_row(side: int) -> Array[Vector3]:
+	var row: Array[Vector3] = []
+	if _authored_tile_cells.is_empty():
+		return row
+	var extreme := 0.0
+	var has_extreme := false
+	for cell in _authored_tile_cells:
+		var axis := _side_axis_value(cell, side)
+		if not has_extreme:
+			extreme = axis
+			has_extreme = true
+		elif side == 0 or side == 2:
+			extreme = minf(extreme, axis)
+		else:
+			extreme = maxf(extreme, axis)
+	for cell in _authored_tile_cells:
+		if absf(_side_axis_value(cell, side) - extreme) <= AUTHORED_TILE_HIT_TOLERANCE_M:
+			row.append(cell)
+	return row
+
+
+func _side_axis_value(cell: Vector3, side: int) -> float:
+	return cell.z if side < 2 else cell.x
+
+
+## 开关落位：落点不在真砖格上，说明这面墙是包围盒假墙 ⇒ 改贴该侧**真脚**的实体墙。
+## 在该行里挑最靠中间的一格（不把开关挤在凹角上），墙皮取该行砖格的外边缘再内缩
+## `SWITCH_WALL_INSET_M` ⇒ 落点必在砖上，玩家站上该砖即可进入交互半径。
+func _resolve_light_switch_position(side: int, fallback: Vector3) -> Vector3:
+	if _inside_authored_footprint(fallback):
+		return fallback
+	var row := _authored_extreme_cell_row(side)
+	if row.is_empty():
+		return fallback
+	var lateral_mean := 0.0
+	for cell in row:
+		lateral_mean += cell.x if side < 2 else cell.z
+	lateral_mean /= float(row.size())
+	var chosen: Vector3 = row[0]
+	var chosen_distance := INF
+	for cell in row:
+		var lateral := cell.x if side < 2 else cell.z
+		var distance := absf(lateral - lateral_mean)
+		if distance < chosen_distance:
+			chosen_distance = distance
+			chosen = cell
+	var inset := AUTHORED_TILE_HALF_M - SWITCH_WALL_INSET_M
+	match side:
+		0:
+			return Vector3(chosen.x, 0.0, chosen.z - inset)
+		1:
+			return Vector3(chosen.x, 0.0, chosen.z + inset)
+		2:
+			return Vector3(chosen.x - inset, 0.0, chosen.z)
+		_:
+			return Vector3(chosen.x + inset, 0.0, chosen.z)
+
+
 func _place_light_switch(light_switch: RoomLightSwitch3D, dimensions: Vector2) -> void:
 	if room_type == "FACILITY":
 		# 基地开关放在西侧入口门北面紧邻的第一段5m墙上：
@@ -3855,6 +3954,9 @@ func _place_light_switch(light_switch: RoomLightSwitch3D, dimensions: Vector2) -
 		_:
 			light_switch.position = Vector3(dimensions.x * 0.5 - 0.34, 0, -z_margin)
 			light_switch.rotation.y = PI * 0.5
+	# 上面四个候选面都是按**包围盒**算的：非矩形房凹口侧的「墙」在房外，开关会悬在空地
+	# 上且够不到。落点不在真砖格上就改贴该侧真脚的实体墙（旋转沿用同一面墙，无需改）。
+	light_switch.position = _resolve_light_switch_position(side, light_switch.position)
 
 
 func _build_vertical_access_marker(type_id: String) -> void:

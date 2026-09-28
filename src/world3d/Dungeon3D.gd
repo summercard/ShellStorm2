@@ -1095,10 +1095,14 @@ func _build_reference_main_hud() -> void:
 	_reference_hud_root.add_child(_hud_wave_label)
 
 	var player_panel := _make_hud_panel(cyan, Color(0.006, 0.018, 0.030, 0.88))
+	# 2026-09-28 主人要求：角色状态块的蓝色背板也去掉。背板由两部分叠成，必须一起撤：
+	# ① _make_hud_panel 的深色底 + 青色描边 + 外发光（本处）：换成全透明 StyleBox；
+	# ② _add_neon_frame 的青色四角括号（下方那一行，已删除调用）。
+	# 内层 MarginContainer 的 12/10/12/10 仍是唯一内边距来源 ⇒ 内容位置一字不动。
+	player_panel.add_theme_stylebox_override("panel", _make_bare_hud_style())
 	player_panel.name = "PlayerStatusBlock"
 	_anchor_control(player_panel, 0.0, 0.0, 0.0, 0.0, 18, 46, 360, 178)
 	_reference_hud_root.add_child(player_panel)
-	_add_neon_frame(player_panel, cyan, 0.72, true)
 	# tap 头像 → 切换背包（键 I / Tab 等效）
 	player_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	player_panel.tooltip_text = "点击打开/关闭背包 [键 I / Tab]"
@@ -1110,9 +1114,14 @@ func _build_reference_main_hud() -> void:
 	player_row.add_theme_constant_override("separation", _hud_int(12))
 	player_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	player_margin.add_child(player_row)
+	# 2026-09-28 主人要求：角色状态块不再显示「头像格」。头像格那个深色方块背板是
+	# CodeHUDGlyph._draw_robot() 自绘的，因此整格置不可见即可同时去掉背板与头像。
+	# 节点仍创建并挂进同一行，只置 visible=false —— HBoxContainer 会跳过不可见子节点，
+	# 不必改布局代码，也不动任何既有探针读取的节点结构，回滚只需删掉下面一行。
 	var portrait := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
 	portrait.custom_minimum_size = _hud_size(Vector2(82, 82))
 	portrait.configure("robot", Color(1.0, 0.25, 0.84))
+	portrait.visible = false
 	player_row.add_child(portrait)
 	var stat_vbox := VBoxContainer.new()
 	stat_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -1151,14 +1160,23 @@ func _build_reference_main_hud() -> void:
 	energy.add_child(_hud_battery_time_label)
 	loot_label = _make_hud_label("背包 0/12 · 钥匙 1 · 魂 0", 13, Color(1.0, 0.76, 0.26))
 	stat_vbox.add_child(loot_label)
+	# 背板撤掉后这些文字直接压在实景上：远征 01 的浅色天花板/桥体下，白色 HP 数字与
+	# 浅蓝电量说明会同明度而读不出。只加文字描边（不是背板）——不占像素、不改颜色。
+	for label in [hp_label, loot_label, _hud_battery_time_label]:
+		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
+		label.add_theme_constant_override("outline_size", 5)
 
 	seed_label = _make_hud_label("SEED", 12, subdued)
 	_anchor_control(seed_label, 0.0, 0.0, 0.0, 0.0, 22, 180, 360, 202)
 	_reference_hud_root.add_child(seed_label)
 
 	# 圆形小地图沿用真实房间/玩家/敌人数据，只替换视觉外壳。
+	# 2026-09-28 主人要求：右上角雷达不再显示。节点必须保留 —— 多枚探针直接
+	# get_node("HUD/DungeonMinimap3D") 并读 get_snapshot()/size/set_current_room，
+	# 因此只置 visible=false。M 键的全层地图入口与楼层标签、计时栏均不受影响。
 	minimap.z_index = 105
 	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -292, 44, -18, 318)
+	minimap.visible = false
 	# tap 小地图 → 切换全层地图（键 M 等效）
 	minimap.mouse_filter = Control.MOUSE_FILTER_STOP
 	minimap.tooltip_text = "点击打开/关闭全层地图 [键 M]"
@@ -1167,9 +1185,16 @@ func _build_reference_main_hud() -> void:
 	_hud_floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_anchor_control(_hud_floor_label, 1.0, 0.0, 1.0, 0.0, -300, 12, -12, 38)
 	_reference_hud_root.add_child(_hud_floor_label)
-	var timer_panel := _make_hud_panel(cyan, Color(0.006, 0.016, 0.026, 0.88))
+	# 2026-09-28 主人要求：右侧两块「时间」分开处置 —— 下面的本局计时栏（「◷ 00:12 ⏸」）
+	# 整个去掉，上面的世界时间只去背板（见 TowerDescent3D._install_world_time_hud）。
+	# 只隐藏外壳、不删节点：_update_hud_timer 仍每帧写 _hud_timer_label.text，
+	# 节点在树上才不会让那处空引用；将来要恢复也只需删掉下面这一行。
+	# 显式命个名：此前它只有自动名 @PanelContainer@N，调试与探针只能按内容猜。
+	var timer_panel := _make_bare_hud_panel()
+	timer_panel.name = "SessionTimerPanel"
 	_anchor_control(timer_panel, 1.0, 0.0, 1.0, 0.0, -214, 318, -18, 358)
 	_reference_hud_root.add_child(timer_panel)
+	timer_panel.visible = false
 	var timer_row := HBoxContainer.new()
 	timer_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	timer_row.add_theme_constant_override("separation", _hud_int(16))
@@ -1182,6 +1207,7 @@ func _build_reference_main_hud() -> void:
 	pause_icon.custom_minimum_size = _hud_size(Vector2(30, 30))
 	pause_icon.configure("pause", Color(0.84, 0.90, 0.96))
 	timer_row.add_child(pause_icon)
+	_outline_labels([timer_caption, _hud_timer_label])
 
 	var info_panel := _make_hud_panel(cyan, Color(0.008, 0.035, 0.052, 0.50))
 	info_panel.name = "CurrentInfoPanel"
@@ -1196,12 +1222,19 @@ func _build_reference_main_hud() -> void:
 	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_margin.add_child(status_label)
+	# 2026-09-28 主人要求：任务卡下方那条状态栏（「返回已探索房间 · 已肃清」等）不再显示。
+	# 只隐藏外壳：status_label 仍在树上可读写 text —— 多枚探针（门通行提示、波次间歇、
+	# 远征 01 门未开诊断、奖励落地回执、有限弹药）都读它的 text，隐藏不影响那些断言。
+	info_panel.visible = false
 
-	var weapon_panel := _make_hud_panel(Color(0.56, 0.78, 0.88), Color(0.006, 0.012, 0.020, 0.50))
+	# 2026-09-28 主人要求：底部这一整条的框也去掉。三块面板（QuickItemHUD_0 /
+	# CurrentWeaponPanel / QuickItemHUD_1）的背板都是两层 —— 深色底+描边
+	# （换成全透明 _make_bare_hud_style）与青色四角括号（_add_neon_frame 调用已删除）。
+	# 内层 MarginContainer(8,5,8,4) 仍是唯一内边距来源 ⇒ 图标与文字位置一字不动。
+	var weapon_panel := _make_bare_hud_panel()
 	weapon_panel.name = "CurrentWeaponPanel"
 	_anchor_control(weapon_panel, 0.5, 1.0, 0.5, 1.0, -156, -79, 156, -20)
 	_reference_hud_root.add_child(weapon_panel)
-	_add_neon_frame(weapon_panel, cyan, 0.36, false)
 	# 中央武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）
 	weapon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	weapon_panel.tooltip_text = "点击切换主/副武器"
@@ -1238,8 +1271,11 @@ func _build_reference_main_hud() -> void:
 	ammo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ammo_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(ammo_label)
+	# 撤掉背板后文字直接压在实景上：底栏这三处（武器名/命运行/弹药数）原先是深色底
+	# 保证可读，现在只靠描边。口径与 _outline_labels 的注释一致：不占像素、不改布局。
+	_outline_labels([_hud_weapon_meta_label, _hud_weapon_fate_label, ammo_label])
 	for quick_index in range(2):
-		var quick_panel := _make_hud_panel(Color(0.30, 0.86, 0.72), Color(0.006, 0.020, 0.026, 0.50))
+		var quick_panel := _make_bare_hud_panel()
 		quick_panel.name = "QuickItemHUD_%d" % quick_index
 		var left := -220.0 if quick_index == 0 else 162.0
 		var right := -162.0 if quick_index == 0 else 220.0
@@ -1264,6 +1300,7 @@ func _build_reference_main_hud() -> void:
 		quick_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_label)
 		_hud_quick_item_labels.append(quick_label)
+		_outline_labels([quick_label])
 	_refresh_quick_item_hud()
 	# 右下角不再放 R/SHIFT/F/E 四个动作键图标：动作本身仍走 InputMap（键盘与手柄照常），
 	# 这里只去掉 HUD 上的可视 + 点击入口。
@@ -1401,6 +1438,41 @@ func _make_hud_style(accent: Color, background: Color, border_width: int) -> Sty
 	style.shadow_color = Color(accent, 0.22)
 	style.shadow_size = 7
 	return style
+
+
+## 全透明 HUD 外壳：撤掉底色、描边、圆角与外发光，只保留 PanelContainer 的布局职责。
+## 2026-09-28 主人连续要求去掉各处背板，统一收敛到这一个口径，免得每处各写一遍。
+## 注意：全透明 StyleBox 仍参与 PanelContainer 的内容边距计算，所以内层
+## MarginContainer 的数值是唯一内边距来源时，内容位置不会变。
+func _make_bare_hud_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
+	style.border_color = Color(0, 0, 0, 0)
+	style.set_border_width_all(0)
+	style.set_corner_radius_all(0)
+	style.shadow_size = 0
+	return style
+
+
+## 无背板 HUD 外壳的构造入口。对齐 _make_hud_panel 的签名习惯，但外观恒为全透明。
+## 必须走 StyleBoxFlat 覆盖：PanelContainer 若不覆盖 panel，会退回主题默认深色底，
+## 那样「去掉背板」就失效了。
+func _make_bare_hud_panel() -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override("panel", _make_bare_hud_style())
+	return panel
+
+
+## 给 Label 加文字描边。撤掉背板后文字直接压在实景上，浅色天花板/桥体下
+## 白字与浅蓝字会同明度而读不出。描边不是背板 —— 不占像素、不改颜色、不改布局。
+func _outline_labels(labels: Array) -> void:
+	for entry in labels:
+		var label := entry as Label
+		if label == null:
+			continue
+		label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
+		label.add_theme_constant_override("outline_size", 5)
 
 
 func _make_bar_style(color: Color, radius: int) -> StyleBoxFlat:

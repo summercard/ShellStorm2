@@ -1,11 +1,22 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 ; Stable AssetID: ENV-EXPEDITION-L01-DB-REPAIR_ISLAND
-; 房型组件 db_room / v014 / repair_island
+; 房型组件 db_room / v014 / repair_island（房间中央双面维修岛）
+; 整块 AABB 代理 6.8 x 3.02 会把两片台体之间 0.92 m 的过道一起挡成实心（约 6.26 m^2 空阻挡），
+; 玩家无法从两排工作台中间穿过。几何实测只有南北两片台体：
+;   IslandSouth x[-3.4000, 3.4000] * z[-1.5100, -0.4600]，y 0..2.04
+;   IslandNorth x[-3.4000, 3.4000] * z[ 0.4600,  1.5100]，y 0..2.04
+; z[-0.46, 0.46] 之间是可行走过道，不做碰撞。
+; 上方 y 2.33..2.90 另有一条 x[-3.2, 3.2]、z 宽仅 0.18 的连接横梁，高于玩家高度带(2.2 m)故不做碰撞。
+; 两盒并集 == 触及玩家带的几何 XZ 投影（Runtime Geometry Probe：相关三角面重心 100% 落在并集内，
+; 并集内无 >0.3 m 空腔，盒间无重叠）；足印 20.54 -> 14.28 m^2。
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/components/room_type_components/db_room/repair_island/repair_island_visual_top3d.glb" id="1_visual"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_proxy"]
-size = Vector3(6.8, 2.9, 3.02)
+[sub_resource type="BoxShape3D" id="BoxShape3D_island_south"]
+size = Vector3(6.8, 2.04, 1.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_island_north"]
+size = Vector3(6.8, 2.04, 1.05)
 
 [node name="RoomTypeComponentRepairIsland" type="Node3D"]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
@@ -21,7 +32,7 @@ metadata/bounds_size_m = Vector3(6.8, 2.9, 3.02)
 metadata/slot_role = "room_type_component"
 metadata/collision_owner = "self"
 metadata/collision_policy = "safe_box_proxy"
-metadata/collision_shape_count = 1
+metadata/collision_shape_count = 2
 metadata/runtime_instantiation = "per_instance_prefab"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -30,6 +41,10 @@ metadata/runtime_instantiation = "per_instance_prefab"
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape" type="CollisionShape3D" parent="CollisionBody"]
-position = Vector3(0, 1.45, 0)
-shape = SubResource("BoxShape3D_proxy")
+[node name="IslandSouth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.02, -0.985)
+shape = SubResource("BoxShape3D_island_south")
+
+[node name="IslandNorth" type="CollisionShape3D" parent="CollisionBody"]
+position = Vector3(0, 1.02, 0.985)
+shape = SubResource("BoxShape3D_island_north")
