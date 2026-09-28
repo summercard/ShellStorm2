@@ -1212,6 +1212,10 @@ func _build_shell() -> void:
 					"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
 				)
 				add_child(static_layout)
+				_restore_static_layout_camera_wall_contract(static_layout)
+				for child in static_layout.get_children():
+					if bool(child.get_meta("editor_preview_only", false)) and child is Node3D:
+						(child as Node3D).visible = false
 				set_meta("static_layout_scene_path", expedition_static_path)
 				set_meta("static_layout_scene_loaded", true)
 				for key in [
@@ -1458,7 +1462,7 @@ func _build_safe_room_shell(dimensions: Vector2) -> void:
 		expected_wall_count += 1
 		if _build_safe_room_wall_slot(art_root, slot as Array, rotation_y):
 			wall_count += 1
-	var corner_count := _spawn_safe_room_corners(dimensions) if use_corner_l else 0
+	var corner_count := _spawn_safe_room_corners(dimensions, art_root) if use_corner_l else 0
 	var tile_count := _build_safe_room_floor_tiles(art_root)
 	var package_count := _build_safe_room_packages(art_root)
 	# 门扇仍走通用 _build_door：v007 门洞切向中心就是 5m 网格中段（偏移 0），
@@ -1527,12 +1531,15 @@ static func safe_room_middle_slot_count() -> int:
 ## 且 _spawn_room_corner 的 rotation_y 与角位一一对应（SW 0° / SE 90° / NE 180° / NW −90°），
 ## 两者相加正好等于整房旋转角。这样摆可以让 _configure_corner_camera_collisions()
 ## 拿到世界朝向的角 id —— 镜头下压规则按世界南北墙判定，传原生 id 会转错向。
-func _spawn_safe_room_corners(dimensions: Vector2) -> int:
+func _spawn_safe_room_corners(dimensions: Vector2, art_root: Node3D) -> int:
 	var half := dimensions * 0.5
 	var placed := 0
 	for corner_id in SAFE_ROOM_CORNER_IDS:
-		_spawn_room_corner(_safe_room_corner_position(half, corner_id), corner_id)
-		placed += 1
+		var corner := _spawn_room_corner(
+			_safe_room_corner_position(half, corner_id), corner_id, art_root
+		)
+		if corner != null:
+			placed += 1
 	return placed
 
 
@@ -2874,7 +2881,9 @@ func _build_corner_aware_wall_run(
 
 ## 拐角 L 拼装。从 4 个角位置以合适的 rotation 报入。
 ## corner_id: "NW" / "NE" / "SW" / "SE"
-func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
+func _spawn_room_corner(
+	corner_pos: Vector2, corner_id: String, parent: Node = self
+) -> Node3D:
 	# Base99 receives its authored Blender visual. Other tower room types retain
 	# the generic corner asset and its existing material-variant behaviour.
 	var corner_prefab := BASE99_CORNER_L_PREFAB if room_type == "FACILITY" else TOWER_CORNER_L_PREFAB
@@ -2902,7 +2911,8 @@ func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
 	# module collision-only so its legacy visual cannot overlap the layout GLB.
 	if room_type == "FACILITY":
 		_set_corner_visual_visible(module, false)
-	add_child(module)
+	parent.add_child(module)
+	return module
 
 
 func _get_wall_module_material(segment_index: int) -> StandardMaterial3D:
@@ -3387,6 +3397,23 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 			door.rotation.y = PI * 0.5
 	add_child(door)
 	_door_nodes[direction] = door
+
+
+func _restore_static_layout_camera_wall_contract(static_layout: Node) -> void:
+	# 静态房间 TSCN 保留顶层 PackedScene 边界；生成时写入 prefab 内部
+	# StaticBody3D 的运行时 metadata 不会被固化。加载后按实例根方向重放该契约，
+	# 只复用既有碰撞，不生成第二套墙体代理。
+	for child in static_layout.get_children():
+		var corner_id := str(child.get_meta("tower_wall_corner", ""))
+		if not corner_id.is_empty():
+			_configure_corner_camera_collisions(child, corner_id)
+			continue
+		var direction := str(child.get_meta("tower_wall_direction", ""))
+		if direction in ["north", "south", "east", "west"]:
+			_set_camera_lower_wall_on_static_bodies(
+				child,
+				direction in ["north", "south"]
+			)
 
 
 func _set_camera_lower_wall_on_static_bodies(root: Node, enabled: bool) -> void:

@@ -2,8 +2,11 @@ extends Node
 
 const EXPEDITION_SCENE: PackedScene = preload("res://scenes/ExpeditionLevel01_3D.tscn")
 const ROOM_SCRIPT := preload("res://src/world3d/DungeonRoom3D.gd")
+const TOWER_DOOR_LEAF_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn"
+)
 const RUN_SEED := 77001199
-const OUTPUT_ROOT := "res://assets/art/environments/tower_zones/expedition/runtime/room_instances"
+const OUTPUT_ROOT := "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01"
 const ROOM_IDS := [
 	"start", "room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
 	"room_07", "room_08", "room_09", "room_10", "boss", "extraction",
@@ -63,6 +66,7 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 		return
 	var root_owner := Node3D.new()
 	root_owner.name = "ExpeditionRoomStaticLayout"
+	root_owner.transform = static_root.transform
 	# 艺术根上的实例总数、AssetID 等元数据仍是现有运行时与验收契约的一部分。
 	# TSCN 化只改变静态节点的来源，不能在搬运子节点时丢掉这些契约。
 	for meta_name in static_root.get_meta_list():
@@ -95,6 +99,8 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 	for child in move:
 		static_root.remove_child(child)
 		root_owner.add_child(child)
+	if room_id == "start":
+		_add_safe_room_door_previews(dungeon_room, root_owner)
 	# 房间场景只拥有顶层 prefab 实例根；组件内部 owner 保持原 PackedScene 边界。
 	# 递归改 owner 会把 ImportedModel/Mesh/Collision 全部展开进房间 TSCN，
 	# 既破坏 prefab 可编辑边界，也会在退出时造成大规模 3D RID 泄漏。
@@ -105,15 +111,33 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 	if pack_error != OK:
 		_fail("%s PackedScene.pack 失败: %s" % [room_id, str(pack_error)])
 	else:
-		var dir := "%s/f00_%s" % [OUTPUT_ROOT, room_id if room_id != "boss" else "boss"]
-		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(dir))
-		var path := "%s/room_static_layout.tscn" % dir
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_ROOT))
+		var path := "%s/f00_%s_static_layout.tscn" % [OUTPUT_ROOT, room_id]
 		var save_error := ResourceSaver.save(packed, path)
 		if save_error != OK:
 			_fail("%s 保存失败: %s" % [room_id, str(save_error)])
 		else:
 			print("STATIC_SCENE_WRITTEN room=%s path=%s children=%d" % [room_id, path, root_owner.get_child_count()])
 	root_owner.free()
+
+
+func _add_safe_room_door_previews(room: DungeonRoom3D, root_owner: Node3D) -> void:
+	for direction in room.doors:
+		var runtime_door := room.get_door_node(str(direction)) as Node3D
+		if runtime_door == null:
+			_fail("start 缺少运行时门 %s，无法生成静态预览" % str(direction))
+			continue
+		var preview := TOWER_DOOR_LEAF_PREFAB.instantiate() as Node3D
+		if preview == null:
+			_fail("start 门扇预览 prefab 实例化失败 (%s)" % str(direction))
+			continue
+		preview.name = "DoorLeafPreview_%s" % str(direction).capitalize()
+		preview.transform = root_owner.transform.affine_inverse() * runtime_door.transform
+		preview.set_meta("editor_preview_only", true)
+		preview.set_meta("runtime_hidden", true)
+		preview.set_meta("door_direction", str(direction))
+		root_owner.add_child(preview)
+
 
 func _fail(message: String) -> void:
 	failures.append(message)

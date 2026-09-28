@@ -31,6 +31,15 @@ func _ready() -> void:
 					_check(instance.get_node_or_null("RoomTrigger") == null, "%s TSCN 不得固化 RoomTrigger" % room_id)
 					_check(instance.find_children("*", "NavigationRegion3D", true, false).is_empty(), "%s TSCN 不得固化 NavigationRegion3D" % room_id)
 					_check(instance.find_children("RuntimeDetail", "Node3D", true, false).is_empty(), "%s TSCN 不得固化 RuntimeDetail" % room_id)
+					if room_id == "start":
+						_check(
+							_count_nodes_with_meta(instance, "tower_wall_corner") == 4,
+							"start TSCN 必须包含四个 L 型转角墙 prefab"
+						)
+						_check(
+							_count_nodes_with_meta(instance, "editor_preview_only") == 2,
+							"start TSCN 必须包含两扇编辑器门扇预览"
+						)
 					instance.queue_free()
 					await get_tree().process_frame
 					await get_tree().physics_frame
@@ -59,6 +68,21 @@ func _ready() -> void:
 					"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
 				) as Node3D
 				_check(art_root != null, "%s 必须保留静态艺术根" % room_id)
+				if art_root != null:
+					_check_static_camera_wall_contract(art_root, room_id)
+				if room_id == "start" and art_root != null:
+					_check(
+						_count_nodes_with_meta(art_root, "tower_wall_corner") == 4,
+						"start 运行时必须保留四个 L 型转角墙"
+					)
+					_check(
+						_count_visible_nodes_with_meta(art_root, "editor_preview_only") == 0,
+						"start 运行时必须隐藏两扇编辑器门扇预览"
+					)
+					_check(
+						(room.get("_door_nodes") as Dictionary).size() == 2,
+						"start 运行时必须创建两扇动态门"
+					)
 				if art_root != null and room.authored_layout_shell:
 					_check(
 						int(art_root.get_meta("layout_instance_total", -1))
@@ -93,7 +117,59 @@ func _finish(exit_code: int) -> void:
 	queue_free()
 
 func _scene_path(room_id: String) -> String:
-	return "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/f00_%s/room_static_layout.tscn" % room_id
+	return (
+		"res://assets/art/environments/tower_zones/expedition/runtime/"
+		+ "room_instances/expedition_01/f00_%s_static_layout.tscn" % room_id
+	)
+
+func _check_static_camera_wall_contract(art_root: Node, room_id: String) -> void:
+	for child in art_root.get_children():
+		var corner_id := str(child.get_meta("tower_wall_corner", ""))
+		if not corner_id.is_empty():
+			var expected_body := (
+				"WallCollisionLong" if corner_id in ["SW", "NE"]
+				else "WallCollisionShort"
+			)
+			for value in child.find_children("*", "StaticBody3D", true, false):
+				var body := value as StaticBody3D
+				if body.name not in ["WallCollisionLong", "WallCollisionShort"]:
+					continue
+				_check(
+					bool(body.get_meta("camera_lower_wall", false)) == (body.name == expected_body),
+					"%s %s 转角的 %s 摄像机墙标记错误" % [room_id, corner_id, body.name]
+				)
+			continue
+		var direction := str(child.get_meta("tower_wall_direction", ""))
+		if direction not in ["north", "south", "east", "west"]:
+			continue
+		var static_bodies: Array[Node] = []
+		if child is StaticBody3D:
+			static_bodies.append(child)
+		static_bodies.append_array(child.find_children("*", "StaticBody3D", true, false))
+		_check(not static_bodies.is_empty(), "%s %s 墙必须保留摄像机碰撞" % [room_id, direction])
+		for value in static_bodies:
+			var body := value as StaticBody3D
+			_check(
+				bool(body.get_meta("camera_lower_wall", false)) == (direction in ["north", "south"]),
+				"%s %s 墙的 %s 摄像机墙标记错误" % [room_id, direction, body.name]
+			)
+
+
+func _count_nodes_with_meta(root: Node, key: StringName) -> int:
+	var count := 1 if root.has_meta(key) else 0
+	for child in root.get_children():
+		count += _count_nodes_with_meta(child, key)
+	return count
+
+
+func _count_visible_nodes_with_meta(root: Node, key: StringName) -> int:
+	var count := 0
+	if root.has_meta(key) and root is Node3D and (root as Node3D).visible:
+		count += 1
+	for child in root.get_children():
+		count += _count_visible_nodes_with_meta(child, key)
+	return count
+
 
 func _check(condition: bool, message: String) -> void:
 	checks += 1
