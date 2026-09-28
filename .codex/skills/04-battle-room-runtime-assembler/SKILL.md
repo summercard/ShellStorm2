@@ -72,6 +72,28 @@ Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀
 房型自有地砖件留在组件库与注册表里、只是运行时不引用。**下沉坑底砖**（如桥房 `tile_lower`）**不在**替换名单，
 保持原标高与材质。
 
+### 改房型源后同步静态房 TSCN：外科式回填（先例 2026-09-28 L 走廊 `l_turn` 凹口内墙）
+
+静态房 TSCN（`runtime/room_instances/<block>/f00_<room>_static_layout.tscn`）是**生成产物**，
+生成器 `scripts/generate_expedition01_room_static_scenes.tscn` 每次重跑都会从动态装配重新提取并**覆盖**这些文件。
+
+- 🔴 **不要为一次局部修复跑全量重生成**：生成产物会给**每个**组件实例附完整 `metadata/*` 块
+  （`asset_id` / `asset_version` / `bounds_size_m` / `collision_policy` …），与早期「编辑器重存」版一跑就产生
+  **上万行无关 churn**（先例 boss 5460 行 / room_05 5560 行），把真实改动淹没。除非本次任务本身就是「补回节点元数据」，否则走外科式回填。
+- 回填步骤：① 在隔离环境跑一次生成器，把输出当**参照**（不是拿去替换）；② 只从参照取**受影响节点**的
+  `instance` 路径 / `transform` / 组件 id 元数据，套回仓库版（降级版）TSCN；③ 删掉因此不再被引用的 `ext_resource`；
+  ④ 同步根计数 meta（`layout_instance_total`、`authored_layout_room_type_component_count`）。
+- 证伪判据（必备）：抽两侧 TSCN 的**节点骨架**（`name` / `instance` 路径 / `transform`）逐节点比对，
+  报告 `ONLY-IN-*` / `XFORM-DIFF` / `MISMATCH_COUNT`。验收条件是「**我引入的新差异 = 0**」，且与参照的既有差异
+  **只减不增**（先例 room_01 26→4、room_08 29→7，顺带消解 22 处既有不一致）。
+- 与本次无关的同类漂移（如 `tower_wall_direction` 旧值 `south` / 新值 `west`）**保持文件原值**，不夹带。
+- 换墙件时坐标与朝向要**实测反推**、不能按命名猜：节点转动 `= 房根 yaw + 源 rotation_y_deg`；层心线沿用全房统一
+  `中心 = 边界 + 0.15 − 半厚`（外表面停在 `边界+0.15`）。先例：L 形**凹口两条内边**原是「单块长版剖切面
+  `cutaway_reference_a/b`（`visual_only` 无碰撞）＋一排 1.35 m 剖切低墙」⇒ 拆为 6×`wall_5m_a` ＋ 5×`wall_5m_d`
+  全高通用墙（实例 id 不变），并登记一条 `layout_repairs` 说明 `generator_gap`。
+- 改完跑 `verify_expedition_room_static_scenes`（含 `layout_instance_total == room.authored_layout_instances.size()`
+  端到端一致）；若只残留**未触碰文件**的既有红项（先例 `room_03` 103<105、`boss` 206<210），照实记录、不算本次回归。
+
 ### 分支 A：具体房间有布局差异
 
 判定条件：同时存在并通过验收：
