@@ -1670,6 +1670,8 @@ func _generate_layout() -> void:
 			"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 			"authored_layout_instances": record.get("authored_layout_instances", []),
 			"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
+			"connection_ports": record.get("connection_ports", []),
+			"door_endpoint_owners": record.get("door_endpoint_owners", {}),
 		})
 		room.position = record["position"]
 		$GeneratedRooms.add_child(room)
@@ -1681,6 +1683,7 @@ func _generate_layout() -> void:
 		room.light_toggled.connect(_on_room_light_toggled)
 	_plan_room_layout()
 	_ensure_structural_shells_resident()
+	_bind_shared_edge_doors()
 	for record in _records:
 		if str(record.get("parent", "")).is_empty():
 			continue
@@ -1697,6 +1700,12 @@ func _ensure_structural_shells_resident() -> void:
 		if room != null and is_instance_valid(room):
 			room.ensure_shell_built()
 			room.visible = true
+
+
+## 子类可在全部结构壳体完成后，把一条边唯一的门实体绑定给另一端房间。
+## 默认关卡仍各房自持门，本实现为空以保持旧行为。
+func _bind_shared_edge_doors() -> void:
+	pass
 
 
 func _build_records() -> void:

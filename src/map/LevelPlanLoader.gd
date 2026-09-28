@@ -178,6 +178,22 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw_authored_instances: Variant = raw.get("authored_layout_instances", [])
 		if raw_authored_instances is Array:
 			authored_instances = (raw_authored_instances as Array).duplicate(true)
+		# 房间连接端口是房间美术局部空间里的稳定接口。位置与朝外法线随整房
+		# rotation_deg 一起旋转；target 只声明本端口接哪一个房间 key。
+		# 未连接候选端口保留 target=""，装配时必须由实墙封回，不能留下镂空。
+		var connection_ports: Array = []
+		var raw_connection_ports: Variant = raw.get("connection_ports", [])
+		if raw_connection_ports is Array:
+			for port_value in raw_connection_ports as Array:
+				if not (port_value is Dictionary):
+					continue
+				var port := port_value as Dictionary
+				connection_ports.append({
+					"port_id": str(port.get("port_id", "")),
+					"target": str(port.get("target", "")),
+					"position_m": (port.get("position_m", []) as Array).duplicate(),
+					"outward": (port.get("outward", []) as Array).duplicate(),
+				})
 		var room := {
 			"key": str(raw.get("key", "")),
 			"room_id": str(raw.get("room_id", "")),
@@ -207,6 +223,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"authored_layout_room_id": str(raw.get("authored_layout_room_id", "")),
 			"authored_layout_peaceful": bool(raw.get("authored_layout_peaceful", false)),
 			"authored_layout_instances": authored_instances,
+			"connection_ports": connection_ports,
 		}
 		if str(room["key"]).is_empty():
 			errors.append("room_key_empty")

@@ -17,7 +17,7 @@
   "component_source": "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_catalog.json",
   "component_source_version": "v012",
   "base_layout": "assets/art/environments/tower_zones/expedition/source/common_components/v012/component_instances.json",
-  "base_layout_sha256": "a57df50a1c877772c6c31d39793386529bf570e010e3c2213f493b5ea2cf1495",
+  "base_layout_sha256": "313bda2ff5a89887ae273b9042c9337c0aac90c10cf83a484a438d1940ccad47",
   "source_blend": null,
   "coordinate_contract": {
     "source": "blender_z_up_room_centered_layout_space",

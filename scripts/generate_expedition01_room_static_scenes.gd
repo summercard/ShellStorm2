@@ -80,6 +80,13 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 	]:
 		if dungeon_room.has_meta(key):
 			root_owner.set_meta(key, dungeon_room.get_meta(key))
+	# 安全房（入口房）v007 的房间级事实：版本、整房旋转步数、四角 L 开关与计数、
+	# 房间包数量。这些值在动态装配时算定；静态布局必须一并保留，否则运行时房间
+	# 读不到它们（快照 safe_room_* 归零、入口房验收误判为「未接入 v007 美术」）。
+	for meta_name in dungeon_room.get_meta_list():
+		var meta_key := str(meta_name)
+		if meta_key.begins_with("safe_room_"):
+			root_owner.set_meta(meta_key, dungeon_room.get_meta(meta_key))
 	for direction in ["north", "south", "east", "west"]:
 		var runtime_key := "tower_wall_door_offset_%s" % direction
 		if dungeon_room.has_meta(runtime_key):
@@ -99,6 +106,13 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 	for child in move:
 		static_root.remove_child(child)
 		root_owner.add_child(child)
+	# 连接端口是房间坐标系的一部分，而不是动态玩法节点；将其与静态房型一起固化，
+	# 使编辑器、运行时探针和后续拼装都读取同一组可视锚点。
+	var connection_ports_root := dungeon_room.get_node_or_null("ConnectionPorts") as Node3D
+	if connection_ports_root != null:
+		dungeon_room.remove_child(connection_ports_root)
+		root_owner.add_child(connection_ports_root)
+		root_owner.set_meta("connection_port_count", connection_ports_root.get_child_count())
 	if room_id == "start":
 		_add_safe_room_door_previews(dungeon_room, root_owner)
 	# 房间场景只拥有顶层 prefab 实例根；组件内部 owner 保持原 PackedScene 边界。
@@ -106,6 +120,9 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 	# 既破坏 prefab 可编辑边界，也会在退出时造成大规模 3D RID 泄漏。
 	for child in root_owner.get_children():
 		child.owner = root_owner
+		if child.name == "ConnectionPorts":
+			for marker in child.get_children():
+				marker.owner = root_owner
 	var packed := PackedScene.new()
 	var pack_error := packed.pack(root_owner)
 	if pack_error != OK:

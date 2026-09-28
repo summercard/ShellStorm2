@@ -143,6 +143,10 @@ static func validate_normalized(
 	for schema_error in normalized.get("errors", []):
 		errors.append(str(schema_error))
 	var mode := str(normalized.get("mode", "authored"))
+	# constrained 的 L2 房表是拓扑蓝图，center/rotation 尚未由生成器求解；只有生成器
+	# 回传 geometry_authoritative=true 后，显式端口的世界坐标与旋转后朝向才可比较。
+	# 本地端口编号、目标、边界位置仍由 _validate_room / _validate_port_derivation 恒常校验。
+	var geometry_authoritative := bool(normalized.get("geometry_authoritative", true))
 	if not mode in LOADER.VALID_MODES:
 		errors.append("floor_mode_invalid:%s" % mode)
 	var rooms := normalized.get("rooms", []) as Array
@@ -208,6 +212,29 @@ static func validate_normalized(
 			continue
 		if not center_by_key.has(parent_key):
 			errors.append("missing_parent:%s:%s" % [key, parent_key])
+			continue
+		var parent_room := _room_by_key(rooms, parent_key)
+		var explicit_pair := _explicit_connection_pair(parent_room, room)
+		if not explicit_pair.is_empty():
+			if not geometry_authoritative:
+				continue
+			var parent_port := explicit_pair[0] as Dictionary
+			var child_port := explicit_pair[1] as Dictionary
+			var parent_anchor := (
+				center_by_key[parent_key] as Vector2
+			) + _connection_port_position(parent_port)
+			var child_anchor := (
+				center_by_key[key] as Vector2
+			) + _connection_port_position(child_port)
+			if parent_anchor.distance_to(child_anchor) > EPS:
+				errors.append(
+					"connection_port_anchor_gap:%s:%s:%.3f"
+					% [parent_key, key, parent_anchor.distance_to(child_anchor)]
+				)
+			var parent_outward := _connection_port_outward(parent_port)
+			var child_outward := _connection_port_outward(child_port)
+			if parent_outward.dot(child_outward) > -0.999:
+				errors.append("connection_port_outward_not_opposed:%s:%s" % [parent_key, key])
 			continue
 		var clear := ROOM_DOOR_LANE.corridor_clear(
 			center_by_key[parent_key] as Vector2,
@@ -322,6 +349,36 @@ static func _validate_port_derivation(rooms: Array) -> Array[String]:
 				"port_count_mismatch:%s:%d vs %d" % [key, declared.size(), derived.size()]
 			)
 	return errors
+
+
+static func _connection_port_towards(room: Dictionary, target: String) -> Dictionary:
+	for value in room.get("connection_ports", []) as Array:
+		var port := value as Dictionary
+		if str(port.get("target", "")) == target:
+			return port
+	return {}
+
+
+static func _explicit_connection_pair(parent: Dictionary, child: Dictionary) -> Array:
+	var parent_key := str(parent.get("key", ""))
+	var child_key := str(child.get("key", ""))
+	var parent_port := _connection_port_towards(parent, child_key)
+	var child_port := _connection_port_towards(child, parent_key)
+	if parent_port.is_empty() or child_port.is_empty():
+		return []
+	return [parent_port, child_port]
+
+
+static func _connection_port_position(port: Dictionary) -> Vector2:
+	var raw := port.get("position_m", []) as Array
+	return Vector2(float(raw[0]), float(raw[1])) if raw.size() >= 2 else Vector2.ZERO
+
+
+static func _connection_port_outward(port: Dictionary) -> Vector2:
+	var raw := port.get("outward", []) as Array
+	if raw.size() < 2:
+		return Vector2.ZERO
+	return Vector2(float(raw[0]), float(raw[1])).normalized()
 
 
 ## 通道桥房「长边不连」门禁（业主硬口径）。
@@ -458,7 +515,14 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 				)
 			# 门位必须落在该墙的合法槽上（走唯一实现）。
 			var lane_table := template.get("wall_lane_table", {}) as Dictionary
-			for port_value in room.get("ports", []):
+			# 显式 connection_ports 是房型美术锚点，允许偏心且随房间旋转；旧 ports
+			# 是中心推导兼容层，不能再拿模板静态 lane 表反向否决显式锚点。
+			var legacy_ports: Array = (
+				[]
+				if not (room.get("connection_ports", []) as Array).is_empty()
+				else room.get("ports", []) as Array
+			)
+			for port_value in legacy_ports:
 				var port := port_value as Dictionary
 				var side := str(port.get("side", ""))
 				var lane := float(port.get("lane_m", 0.0))

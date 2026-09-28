@@ -468,6 +468,12 @@ var _authored_tile_cells: Array[Vector3] = []
 ## 正式游戏保持 true，只加载已保存的房间场景，不再逐组件灌入静态视觉。
 static var use_expedition_static_layout_scenes := true
 var static_layout_scene_path := ""
+## 房间局部连接端口：每项含稳定 port_id、目标房间、局部位置、朝外法线和最终 side/lane。
+## 未连接端口 target_room_id=""，其墙槽必须保持实墙。
+var connection_ports: Array = []
+## side -> bool。显式端口关卡中一条边只有父端为 true；子端绑定同一扇共享门。
+## 空字典表示旧关卡，仍保持每房自持门的兼容行为。
+var door_endpoint_owners: Dictionary = {}
 
 
 func configure(config: Dictionary) -> void:
@@ -497,6 +503,10 @@ func configure(config: Dictionary) -> void:
 	authored_layout_peaceful = bool(config.get("authored_layout_peaceful", authored_layout_peaceful))
 	authored_room_light_on = bool(config.get("authored_room_light_on", authored_room_light_on))
 	static_layout_scene_path = str(config.get("static_layout_scene_path", static_layout_scene_path))
+	connection_ports = (config.get("connection_ports", connection_ports) as Array).duplicate(true)
+	door_endpoint_owners = (
+		config.get("door_endpoint_owners", door_endpoint_owners) as Dictionary
+	).duplicate(true)
 
 
 func _ready() -> void:
@@ -505,6 +515,8 @@ func _ready() -> void:
 		theme = load("res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres") as DungeonTheme3D
 	add_to_group("dungeon_room_3d")
 	_build_spawn_points()
+	if _expedition_static_layout_path().is_empty():
+		_build_connection_port_markers(self)
 	set_stream_state(0)
 
 
@@ -1038,7 +1050,10 @@ func _inside_authored_footprint(local_position: Vector3) -> bool:
 func get_nearest_door(player_position: Vector3, max_distance := 3.4) -> Dictionary:
 	var nearest_distance := max_distance
 	var nearest: RoomDoor3D = null
-	for value in _door_nodes.values():
+	var nearest_direction := ""
+	for direction_value in _door_nodes.keys():
+		var direction := str(direction_value)
+		var value: Variant = _door_nodes[direction_value]
 		var door := value as RoomDoor3D
 		if door == null:
 			continue
@@ -1046,11 +1061,12 @@ func get_nearest_door(player_position: Vector3, max_distance := 3.4) -> Dictiona
 		if distance < nearest_distance:
 			nearest_distance = distance
 			nearest = door
+			nearest_direction = direction
 	if nearest == null:
 		return {}
 	return {
-		"direction": nearest.direction,
-		"target_room_id": nearest.target_room_id,
+		"direction": nearest_direction,
+		"target_room_id": str(door_targets.get(nearest_direction, nearest.target_room_id)),
 		"is_open": nearest.is_open,
 		"distance": nearest_distance,
 		"door": nearest,
@@ -1066,6 +1082,53 @@ func hide_door_prompts() -> void:
 
 func get_door_node(direction: String) -> RoomDoor3D:
 	return _door_nodes.get(direction) as RoomDoor3D
+
+
+func owns_door_endpoint(direction: String) -> bool:
+	return true if not door_endpoint_owners.has(direction) else bool(door_endpoint_owners[direction])
+
+
+func bind_shared_door(direction: String, door: RoomDoor3D) -> void:
+	if direction.is_empty() or door == null:
+		return
+	_door_nodes[direction] = door
+
+
+func get_connection_port_towards(target_room_id: String) -> Dictionary:
+	for value in connection_ports:
+		var port := value as Dictionary
+		if str(port.get("target_room_id", "")) == target_room_id:
+			return port
+	return {}
+
+
+func _build_connection_port_markers(parent: Node3D) -> void:
+	if parent == null or connection_ports.is_empty():
+		return
+	var container := Node3D.new()
+	container.name = "ConnectionPorts"
+	container.set_meta("connection_port_count", connection_ports.size())
+	parent.add_child(container)
+	for value in connection_ports:
+		var port := value as Dictionary
+		var port_id := str(port.get("port_id", ""))
+		var raw_position := port.get("position_m", []) as Array
+		var raw_outward := port.get("outward", []) as Array
+		if port_id.is_empty() or raw_position.size() < 2 or raw_outward.size() < 2:
+			continue
+		var marker := Marker3D.new()
+		marker.name = "Port_%s" % port_id
+		marker.position = Vector3(float(raw_position[0]), 0.0, float(raw_position[1]))
+		var outward := Vector2(float(raw_outward[0]), float(raw_outward[1])).normalized()
+		# Marker3D 的局部 +Z 统一指向房间外侧。
+		marker.rotation.y = atan2(outward.x, outward.y)
+		marker.set_meta("port_id", port_id)
+		marker.set_meta("target_room_id", str(port.get("target_room_id", "")))
+		marker.set_meta("side", str(port.get("side", "")))
+		marker.set_meta("lane_m", float(port.get("lane_m", 0.0)))
+		marker.set_meta("outward", outward)
+		marker.set_meta("connected", not str(port.get("target_room_id", "")).is_empty())
+		container.add_child(marker)
 
 
 func get_service_station(type_id := "") -> ServiceStation3D:
@@ -1111,6 +1174,22 @@ func _build_runtime_doors_only() -> void:
 ## 该步骤只读取实例清单，不生成第二套墙/地砖/设施。
 func _apply_authored_runtime_door_contract(dimensions: Vector2) -> void:
 	if not authored_layout_shell:
+		return
+	# 显式端口静态场景在生成阶段已经完成“所有者提升门墙 / 非所有者删除共墙”。
+	# authored_layout_instances 保留的是生成前原始清单，再用它复判会把已删除的默认封墙
+	# 误报成运行时实墙；共享门也不再需要旧版隐藏第二块 DoorPanel 的委派逻辑。
+	if not connection_ports.is_empty():
+		var owner_sides: Array[String] = []
+		var delegated_sides: Array[String] = []
+		for direction_value in doors:
+			var direction := str(direction_value)
+			if owns_door_endpoint(direction):
+				owner_sides.append(direction)
+			else:
+				delegated_sides.append(direction)
+		set_meta("authored_layout_door_wall_sides", owner_sides)
+		set_meta("authored_layout_delegated_door_sides", delegated_sides)
+		set_meta("authored_layout_unresolved_instances", [])
 		return
 	var half := dimensions * 0.5
 	var authored_wall_records: Array = []
@@ -1227,6 +1306,12 @@ func _build_shell() -> void:
 				]:
 					if static_layout.has_meta(key):
 						set_meta(key, static_layout.get_meta(key))
+				# 安全房 v007 的房间级事实（版本/旋转步/四角 L/房间包数）随静态布局
+				# 保存，加载后回填到房间节点：快照与入口房验收按房间 meta 读取它们。
+				for meta_name in static_layout.get_meta_list():
+					var static_meta_key := str(meta_name)
+					if static_meta_key.begins_with("safe_room_"):
+						set_meta(static_meta_key, static_layout.get_meta(static_meta_key))
 				_build_runtime_doors_only()
 				return
 	var dimensions := get_dimensions()
@@ -1782,6 +1867,11 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 					wall_side = _authored_wall_direction(
 						float(instance.get("rotation_y_deg", 0.0))
 					)
+				var connection_side := _authored_wall_connection_side(local_position, half)
+				# 共墙的非所有者端不再生成第二面墙：父端已经拥有唯一门墙、门扇和碰撞。
+				# 该槽从本房壳体中移除，随后绑定父端的同一个 RoomDoor3D。
+				if not connection_side.is_empty() and not owns_door_endpoint(connection_side):
+					continue
 				var door_side := _authored_wall_door_side(local_position, half)
 				# 门位**只认本局真实门槽车道**（tower_wall_door_offset_<side>），不认摆位源
 				# 的 `slot_role=door_wall`：房型源按规范「不冻结门位」，它的门墙件只是摆在自己
@@ -2020,6 +2110,13 @@ static func _authored_wall_side_from_position(
 
 
 func _authored_wall_door_side(local_position: Vector3, half: Vector2) -> String:
+	var wall_side := _authored_wall_connection_side(local_position, half)
+	if wall_side.is_empty() or not owns_door_endpoint(wall_side):
+		return ""
+	return wall_side
+
+
+func _authored_wall_connection_side(local_position: Vector3, half: Vector2) -> String:
 	var wall_side := _authored_wall_side_from_position(local_position, half)
 	if wall_side.is_empty() or wall_side not in doors:
 		return ""
@@ -2902,9 +2999,6 @@ func _spawn_room_corner(
 		"SE": module.rotation.y = PI * 0.5
 	module.set_meta("asset_id", "ENV-TOWER-CORNER-L-5M")
 	module.set_meta("tower_wall_corner", corner_id)
-	# 拐角两条墙臂使用独立碰撞：SW 的长臂、SE 的短臂才属于南墙。
-	# 不能把整个 L 角标记为南墙，否则西/东侧臂也会错误推动摄像机。
-	_configure_corner_camera_collisions(module, corner_id)
 	var corner_variant_index := 0 if corner_id in ["NW", "SE"] else 1
 	_apply_module_material_variant(module, corner_variant_index)
 	# Base99's active art layout owns the Blender corner visual. Keep this room
@@ -2912,6 +3006,9 @@ func _spawn_room_corner(
 	if room_type == "FACILITY":
 		_set_corner_visual_visible(module, false)
 	parent.add_child(module)
+	# 必须在入父链之后再标：镜头避障标记按**世界延伸轴**判定（见
+	# _configure_corner_camera_collisions），未入父链时读不到整房旋转。
+	_configure_corner_camera_collisions(module)
 	return module
 
 
@@ -3353,6 +3450,8 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 
 
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
+	if not owns_door_endpoint(direction):
+		return
 	var door := DOOR_SCENE.instantiate() as RoomDoor3D
 	if door == null:
 		push_error("通用RoomDoor3D Prefab实例化失败")
@@ -3406,7 +3505,7 @@ func _restore_static_layout_camera_wall_contract(static_layout: Node) -> void:
 	for child in static_layout.get_children():
 		var corner_id := str(child.get_meta("tower_wall_corner", ""))
 		if not corner_id.is_empty():
-			_configure_corner_camera_collisions(child, corner_id)
+			_configure_corner_camera_collisions(child)
 			continue
 		var direction := str(child.get_meta("tower_wall_direction", ""))
 		if direction in ["north", "south", "east", "west"]:
@@ -3423,16 +3522,35 @@ func _set_camera_lower_wall_on_static_bodies(root: Node, enabled: bool) -> void:
 		_set_camera_lower_wall_on_static_bodies(child, enabled)
 
 
-func _configure_corner_camera_collisions(module: Node, corner_id: String) -> void:
+## L 型转角两条碰撞臂的镜头避障标记，按**世界延伸轴**判定：
+## 臂沿世界 X 延伸 = 南北向墙（玩家背后那一面）→ 标记；沿世界 Z 延伸 = 东西向墙 → 不标记。
+## 不能按「角位 id + 固定臂名」映射：整房旋转（安全房按门向转 90° 整数倍）之后两条臂的
+## 世界朝向会互换，写死的映射会同时产生「该标的没标（朝南处穿镜）」与「不该标的标了」。
+## 用父链累乘 basis 而不是 global_transform —— 后者在节点尚未入树时不级联父链。
+func _configure_corner_camera_collisions(module: Node) -> void:
+	var node := module as Node3D
+	if node == null:
+		return
+	var basis := _world_basis_of(node)
+	var long_along_world_x := absf(basis.x.x) >= absf(basis.x.z)
+	var short_along_world_x := absf(basis.z.x) >= absf(basis.z.z)
 	for value in module.find_children("*", "StaticBody3D", true, false):
 		var body := value as StaticBody3D
-		var enabled := (
-			(corner_id == "SW" and body.name == "WallCollisionLong")
-			or (corner_id == "SE" and body.name == "WallCollisionShort")
-			or (corner_id == "NW" and body.name == "WallCollisionShort")
-			or (corner_id == "NE" and body.name == "WallCollisionLong")
-		)
-		body.set_meta("camera_lower_wall", enabled)
+		if body.name == "WallCollisionLong":
+			body.set_meta("camera_lower_wall", long_along_world_x)
+		elif body.name == "WallCollisionShort":
+			body.set_meta("camera_lower_wall", short_along_world_x)
+
+
+## 节点在房间根坐标系下的朝向（累乘父链 basis），不含父级缩放/剪切之外的运算。
+func _world_basis_of(node: Node3D) -> Basis:
+	var basis := node.transform.basis
+	var parent := node.get_parent()
+	while parent != null:
+		if parent is Node3D:
+			basis = (parent as Node3D).transform.basis * basis
+		parent = parent.get_parent()
+	return basis
 
 
 func _build_content() -> void:
@@ -4317,8 +4435,16 @@ func _find_floor_body_enabled(root: Node) -> bool:
 
 func _get_door_snapshots() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	for value in _door_nodes.values():
-		var door := value as RoomDoor3D
+	for direction_value in _door_nodes:
+		var direction := str(direction_value)
+		var door := _door_nodes[direction] as RoomDoor3D
 		if door != null:
-			result.append(door.get_snapshot())
+			var snapshot := door.get_snapshot()
+			# 共享门实体只保存一套状态机，但每个房间快照仍需报告自己的出口方向和目标。
+			snapshot["direction"] = direction
+			snapshot["target_room_id"] = str(door_targets.get(direction, ""))
+			snapshot["shared_door_owner_room_id"] = str(
+				door.get_meta("shared_door_owner_room_id", room_id)
+			)
+			result.append(snapshot)
 	return result

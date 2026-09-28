@@ -228,6 +228,7 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		"role": role,
 		"position": src.get("center", Vector2.ZERO) as Vector2,
 		"dimensions": src.get("size", Vector2.ZERO) as Vector2,
+		"rotation_deg": float(src.get("rotation_deg", 0.0)),
 		"parent_key": str(src.get("parent_key", "")),
 		# 房间级刷怪计划（设计源覆盖）。空字典 = 该房走全局公式。
 		# 与 content_type 同样属于「设计源钉死优先」的字段，本层只透传不解释。
@@ -260,6 +261,11 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		"authored_layout_peaceful": bool(src.get("authored_layout_peaceful", false)),
 		"authored_layout_instances": (
 			src.get("authored_layout_instances", []) as Array
+		).duplicate(true),
+		# 房间局部连接端口。几何由端口节点拥有，关卡只引用稳定 port_id；
+		# 运行时不再从房间包围盒中心猜门洞。
+		"connection_ports": (
+			src.get("connection_ports", []) as Array
 		).duplicate(true),
 	}
 
@@ -840,6 +846,9 @@ static func _constrained_slot(
 		"spawn_placements": (raw.get("spawn_placements", []) as Array).duplicate(true),
 		"encounter": (raw.get("encounter", {}) as Dictionary).duplicate(true),
 		"spawn_boxes_only": bool(raw.get("spawn_boxes_only", false)),
+		"connection_ports": (
+			raw.get("connection_ports", []) as Array
+		).duplicate(true),
 	}
 
 
@@ -946,6 +955,9 @@ static func _place_recursive(
 			"template_variant": str(candidate.get("template_variant", "")),
 			"short_edge_locked": bool(candidate.get("short_edge_locked", false)),
 			"rotation_deg": float(candidate.get("rotation_deg", 0.0)),
+			"connection_ports": (
+				slot.get("connection_ports", []) as Array
+			).duplicate(true),
 			"dir": _direction_from_delta(center - _parent_center(slot, placed)),
 		})
 		if (
@@ -971,6 +983,19 @@ static func _new_connection_accepts_declared_footprints(placed: Array[Dictionary
 	if parent_index < 0:
 		return true
 	var parent := placed[parent_index] as Dictionary
+	var child_port := _connection_port_towards(child, str(parent.get("key", "")))
+	var parent_port := _connection_port_towards(parent, str(child.get("key", "")))
+	if not child_port.is_empty() and not parent_port.is_empty():
+		var child_final := _rotated_connection_port(
+			child_port, float(child.get("rotation_deg", 0.0))
+		)
+		var parent_final := _rotated_connection_port(
+			parent_port, float(parent.get("rotation_deg", 0.0))
+		)
+		return (
+			_connection_port_is_on_room_boundary(child, child_final)
+			and _connection_port_is_on_room_boundary(parent, parent_final)
+		)
 	var pair := ROOM_DOOR_LANE.port_pair(
 		child.get("center", Vector2.ZERO) as Vector2,
 		child.get("size", Vector2.ZERO) as Vector2,
@@ -1016,7 +1041,155 @@ static func _placement_candidate(
 		"template_variant": str(slot.get("template_variant", "")),
 		"short_edge_locked": bool(slot.get("short_edge_locked", false)),
 		"rotation_deg": rotation_deg,
+		"connection_ports": (
+			slot.get("connection_ports", []) as Array
+		).duplicate(true),
 	}
+
+
+## 从房间端口表里找指向指定房间 key 的端口。端口 ID 与位置都来自设计源，
+## 找不到时返回空字典并让旧关卡继续走历史候选算法。
+static func _connection_port_towards(room: Dictionary, target_key: String) -> Dictionary:
+	for value in room.get("connection_ports", []) as Array:
+		var port := value as Dictionary
+		if str(port.get("target", "")) == target_key:
+			return port
+	return {}
+
+
+static func _port_vec2(port: Dictionary, field: String) -> Vector2:
+	var raw: Variant = port.get(field, [])
+	if raw is Array and (raw as Array).size() >= 2:
+		return Vector2(float(raw[0]), float(raw[1]))
+	return Vector2.ZERO
+
+
+## rotation_deg 使用 Godot 绕 +Y 的语义：(x,z) -> (z,-x)。端口位置与朝外
+## 法线必须和房间美术执行同一旋转，禁止只转房间、不转锚点。
+static func _rotate_port_vector(value: Vector2, rotation_deg: float) -> Vector2:
+	var steps := posmod(int(round(rotation_deg / 90.0)), 4)
+	var result := value
+	for _step in range(steps):
+		result = Vector2(result.y, -result.x)
+	return result
+
+
+static func _rotated_room_size(size: Vector2, rotation_deg: float) -> Vector2:
+	return Vector2(size.y, size.x) if posmod(int(round(rotation_deg / 90.0)), 2) == 1 else size
+
+
+static func _side_from_outward(outward: Vector2) -> String:
+	if absf(outward.x) >= absf(outward.y):
+		return "east" if outward.x >= 0.0 else "west"
+	return "south" if outward.y >= 0.0 else "north"
+
+
+static func _rotated_connection_port(port: Dictionary, rotation_deg: float) -> Dictionary:
+	var position := _rotate_port_vector(_port_vec2(port, "position_m"), rotation_deg)
+	var outward := _rotate_port_vector(_port_vec2(port, "outward"), rotation_deg).normalized()
+	var side := _side_from_outward(outward)
+	return {
+		"port_id": str(port.get("port_id", "")),
+		"target": str(port.get("target", "")),
+		"position_m": [position.x, position.y],
+		"outward": [outward.x, outward.y],
+		"side": side,
+		"lane_m": position.x if side in ["north", "south"] else position.y,
+	}
+
+
+static func _rotated_connection_ports(ports: Array, rotation_deg: float) -> Array:
+	var result: Array = []
+	for value in ports:
+		if value is Dictionary:
+			result.append(_rotated_connection_port(value as Dictionary, rotation_deg))
+	return result
+
+
+static func _rotated_spawn_placements(placements: Array, rotation_deg: float) -> Array:
+	var result: Array = []
+	for value in placements:
+		if not value is Dictionary:
+			continue
+		var placement := (value as Dictionary).duplicate(true)
+		var raw_center := placement.get("center_m", []) as Array
+		if raw_center.size() >= 2:
+			var center := _rotate_port_vector(
+				Vector2(float(raw_center[0]), float(raw_center[1])), rotation_deg
+			)
+			placement["center_m"] = [center.x, center.y]
+		placement["rotation_deg"] = fposmod(
+			float(placement.get("rotation_deg", 0.0)) + rotation_deg, 360.0
+		)
+		result.append(placement)
+	return result
+
+
+## 显式端口装配：父端口世界坐标 = 子端口世界坐标，且两端朝外法线相反。
+## 返回空数组表示端口声明存在但无法匹配，此时严格失败，不再偷偷回落到房间中点。
+static func _explicit_port_candidates(
+	slot: Dictionary, parent_room: Dictionary, rects: Array[Rect2]
+) -> Array:
+	var child_key := str(slot.get("key", ""))
+	var parent_key := str(slot.get("parent_key", ""))
+	var parent_port := _connection_port_towards(parent_room, child_key)
+	var child_port := _connection_port_towards(slot, parent_key)
+	if parent_port.is_empty() and child_port.is_empty():
+		return []
+	if parent_port.is_empty() or child_port.is_empty():
+		push_error(
+			"FloorPlanGenerator: 连接 %s -> %s 缺少成对 connection_port"
+			% [parent_key, child_key]
+		)
+		return []
+	var parent_rotation := float(parent_room.get("rotation_deg", 0.0))
+	var parent_anchor := _rotate_port_vector(
+		_port_vec2(parent_port, "position_m"), parent_rotation
+	)
+	var parent_outward := _rotate_port_vector(
+		_port_vec2(parent_port, "outward"), parent_rotation
+	).normalized()
+	var base_size := slot.get("size", Vector2.ZERO) as Vector2
+	var results: Array = []
+	for steps in range(4):
+		var rotation_deg := float(steps * 90)
+		var child_outward := _rotate_port_vector(
+			_port_vec2(child_port, "outward"), rotation_deg
+		).normalized()
+		if child_outward.dot(parent_outward) > -0.999:
+			continue
+		var child_anchor := _rotate_port_vector(
+			_port_vec2(child_port, "position_m"), rotation_deg
+		)
+		var center := (
+			parent_room.get("center", Vector2.ZERO) as Vector2
+		) + parent_anchor - child_anchor
+		var child_size := _rotated_room_size(base_size, rotation_deg)
+		if _constrained_fits(center, child_size, rects):
+			results.append(_placement_candidate(center, child_size, slot, rotation_deg))
+	return results
+
+
+## 显式连接端口本身就是房型美术确认过的开口事实，不能再拿旧的“从矩形中心推门槽”
+## 或未旋转的 footprint 去二次否决。这里只守住最小几何门禁：端口必须位于旋转后
+## 包围盒对应外边，并且沿墙坐标不得越界。
+static func _connection_port_is_on_room_boundary(room: Dictionary, port: Dictionary) -> bool:
+	var raw := port.get("position_m", []) as Array
+	if raw.size() < 2:
+		return false
+	var position := Vector2(float(raw[0]), float(raw[1]))
+	var size := room.get("size", Vector2.ZERO) as Vector2
+	var half := size * 0.5
+	match str(port.get("side", "")):
+		"north":
+			return absf(position.y + half.y) <= CONSTRAINED_EPS and absf(position.x) <= half.x + CONSTRAINED_EPS
+		"south":
+			return absf(position.y - half.y) <= CONSTRAINED_EPS and absf(position.x) <= half.x + CONSTRAINED_EPS
+		"west":
+			return absf(position.x + half.x) <= CONSTRAINED_EPS and absf(position.y) <= half.y + CONSTRAINED_EPS
+		"east":
+			return absf(position.x - half.x) <= CONSTRAINED_EPS and absf(position.y) <= half.y + CONSTRAINED_EPS
+	return false
 
 
 ## —— 蛇形折返：方向序的锚点软引导 ——
@@ -1096,6 +1269,14 @@ static func _placement_candidates(
 	var parent_center := parent_room["center"] as Vector2
 	var parent_size := parent_room["size"] as Vector2
 	var rects := _placed_rects(placed)
+	# 新关卡优先走显式端口：端口坐标和朝向决定整房平移/旋转。只要任一端
+	# 声明了 connection_ports，就不允许再用中心点算法兜底，避免把坏数据伪装成可运行。
+	var has_explicit_ports := (
+		not (slot.get("connection_ports", []) as Array).is_empty()
+		or not (parent_room.get("connection_ports", []) as Array).is_empty()
+	)
+	if has_explicit_ports:
+		return _explicit_port_candidates(slot, parent_room, rects)
 	# 桥房族：长轴方向由落位方向定，短边随之固定；槽位里带着本模板的转置尺寸。
 	var rotated_size := slot.get("rotated_size", Vector2.ZERO) as Vector2
 	var directions := _direction_trial_order(
@@ -1337,12 +1518,19 @@ static func _constrained_floor_from(
 			"reward_plan": (slot.get("reward_plan", {}) as Dictionary).duplicate(true),
 			# 触发盒放置/调用（触发器刷怪设计 §3.2 / §3.3）：与上列字段同口径，
 			# 本层只搬运不解释。这四项曾因硬写空而静默丢弃过，别再犯。
-			"spawn_placements": (slot.get("spawn_placements", []) as Array).duplicate(true),
+			"spawn_placements": _rotated_spawn_placements(
+				slot.get("spawn_placements", []) as Array,
+				float(placed_room.get("rotation_deg", 0.0))
+			),
 			"encounter": (slot.get("encounter", {}) as Dictionary).duplicate(true),
 			"spawn_boxes_only": bool(slot.get("spawn_boxes_only", false)),
 			"declared_ports": [],
 			"ports": [],
 			"ports_derived": false,
+			"connection_ports": _rotated_connection_ports(
+				slot.get("connection_ports", []) as Array,
+				float(placed_room.get("rotation_deg", 0.0))
+			),
 		})
 	LEVEL_PLAN_LOADER.derive_ports(rooms)
 	# 「只认盒子」标记逐房下发（与 normalize_floor 同一口径，禁止分叉）。
@@ -1580,6 +1768,21 @@ static func _load_authored_component_layout(
 			return {}
 		var p := raw_position as Array
 		var s := raw_scale as Array
+		# component_instances.position_m 必须已经是以模板包围盒中心为原点的房间局部坐标。
+		# 历史整屋源若直接把 source_world_origin_m 写进来，会让整套美术相对玩法房间锚点
+		# 偏移几十米：门节点仍对齐，但门洞/地砖/RoomTrigger 全部分离。允许 0.75m 给墙厚和装饰外凸；
+		# 超出即拒绝接入，禁止静默把未中心化坐标当局部坐标。
+		var source_size := source_spec.get("size_m", Vector2.ZERO) as Vector2
+		var source_half := source_size * 0.5 + Vector2.ONE * 0.75
+		if absf(float(p[0])) > source_half.x or absf(float(p[1])) > source_half.y:
+			push_error(
+				(
+					"FloorPlanGenerator: 房型实例 %s 坐标 %s 超出模板 %s 的中心化局部边界；"
+					+ "component_instances.position_m 必须先应用 inverse(ROOM_FRAME)"
+				)
+				% [str(item.get("instance_id", "")), str(p), str(source_size)]
+			)
+			return {}
 		var local_position := Vector3(float(p[0]), float(p[2]), -float(p[1]))
 		var local_rotation := float(item.get("rotation_y_deg", 0.0))
 		if not is_zero_approx(room_rotation):

@@ -1307,10 +1307,14 @@ func _verify_expedition_exit_contract(failures: Array[String]) -> void:
 
 # —— 工具 ——
 
-## 尺寸是否落在 8 个房型模板的尺寸集合里（constrained 路径下内容房尺寸的唯一合法域）。
+## 尺寸是否落在 8 个房型模板的尺寸集合里。显式端口拼装允许任意模板整体旋转
+## 90°/270°，所以非正方形模板的宽深转置也是同一个模板的合法占位。
 func _is_template_size(dimensions: Vector2) -> bool:
 	for candidate in PLAN_TEMPLATE_SIZES:
-		if dimensions.is_equal_approx(candidate):
+		if (
+			dimensions.is_equal_approx(candidate)
+			or dimensions.is_equal_approx(Vector2(candidate.y, candidate.x))
+		):
 			return true
 	return false
 

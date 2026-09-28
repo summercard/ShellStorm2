@@ -1883,6 +1883,16 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		spec.get("open_wall_directions", []) as Array
 	)
 	var record := _records.back() as Dictionary
+	var runtime_ports: Array = []
+	for value in spec.get("connection_ports", []) as Array:
+		var port := (value as Dictionary).duplicate(true)
+		var target_key := str(port.get("target", ""))
+		var target_spec := _plan_spec(plan, target_key) if not target_key.is_empty() else {}
+		port["target_room_id"] = str(target_spec.get("id", ""))
+		runtime_ports.append(port)
+	record["connection_ports"] = runtime_ports
+	record["door_endpoint_owners"] = {}
+	record["rotation_deg"] = float(spec.get("rotation_deg", 0.0))
 	record["floor_layout_id"] = str(plan.get("layout_id", ""))
 	record["floor_number"] = int(plan.get("floor_number", 0))
 	record["floor_plan_key"] = str(spec.get("key", ""))
@@ -2582,6 +2592,17 @@ func _plan_room_layout() -> void:
 			continue
 		for side in room.doors:
 			var target_id := str(room.door_targets.get(side, ""))
+			var explicit_port := room.get_connection_port_towards(target_id)
+			if not explicit_port.is_empty():
+				room.set_meta(
+					"tower_wall_door_offset_%s" % side,
+					float(explicit_port.get("lane_m", 0.0))
+				)
+				room.set_meta(
+					"room_door_port_id_%s" % side,
+					str(explicit_port.get("port_id", ""))
+				)
+				continue
 			var target := _room_by_id.get(target_id) as DungeonRoom3D
 			var target_side := _find_reciprocal_door_side(target, room.room_id)
 			var shared_along := _shared_door_lane(room, side, target, target_side)
@@ -2650,6 +2671,12 @@ func _door_lane_candidates(room: DungeonRoom3D, side: String) -> Array[float]:
 
 
 func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
+	var target_id := str(room.door_targets.get(side, ""))
+	var explicit_port := room.get_connection_port_towards(target_id)
+	if not explicit_port.is_empty():
+		var raw_position := explicit_port.get("position_m", []) as Array
+		if raw_position.size() >= 2:
+			return room.to_global(Vector3(float(raw_position[0]), 0.0, float(raw_position[1])))
 	var outward := {
 		"north": Vector3(0, 0, -1),
 		"south": Vector3(0, 0, 1),
@@ -2677,10 +2704,17 @@ func _build_tower_horizontal_corridor(
 	var direction := Vector3(signf(delta.x), 0.0, 0.0) if horizontal_x else Vector3(0.0, 0.0, signf(delta.z))
 	var from_side := "east" if direction.x > 0.0 else "west" if direction.x < 0.0 else "south" if direction.z > 0.0 else "north"
 	var to_side := _opposite_direction(from_side)
-	# 走廊端点必须取真实门组件坐标；房间中心只负责判断方向，不能再代替门位。
+	# 显式端口允许门洞偏离房间中心，甚至让两房中心形成斜向偏移；连接侧必须读取
+	# edge 拓扑，不能再用中心差猜测。旧关卡没有显式端口时保留历史推导。
+	var declared_sides := _edge_door_sides_by_key.get(edge, {}) as Dictionary
+	if declared_sides.has(from_room.room_id) and declared_sides.has(to_room.room_id):
+		from_side = str(declared_sides[from_room.room_id])
+		to_side = str(declared_sides[to_room.room_id])
+		horizontal_x = from_side in ["east", "west"]
+	# 走廊端点必须取真实门组件坐标；房间中心不能代替门位。
 	var start := _room_door_world_position(from_room, from_side)
 	var end := _room_door_world_position(to_room, to_side)
-	var tangent_error := absf(start.z - end.z) if horizontal_x else absf(start.x - end.x)
+	var tangent_error := start.distance_to(end)
 	if tangent_error > 0.01:
 		push_error(
 			"Tower corridor %s door modules are off the 5m lane by %.3fm" % [
@@ -3769,6 +3803,7 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	# 碰撞留在通道中的“空气墙”。
 	_plan_room_layout()
 	_ensure_structural_shells_resident()
+	_bind_shared_edge_doors()
 	var entry_room := _room_by_id.get(entry_id) as DungeonRoom3D
 	var base_room := _room_by_id.get("facility") as DungeonRoom3D
 	if base_room != null and entry_room != null:
@@ -4497,6 +4532,7 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 			_instantiate_dynamic_room(record)
 	_plan_room_layout()
 	_ensure_structural_shells_resident()
+	_bind_shared_edge_doors()
 	for declaration in _declared_edges:
 		var edge := _edge_key(str(declaration["a"]), str(declaration["b"]))
 		if _corridor_by_edge.has(edge):
@@ -4629,14 +4665,62 @@ func _register_edge_topology(
 		b_side = side if b_side.is_empty() else b_side
 		_vertical_arrival_open[edge] = false
 	else:
-		a_side = _direction_between(a_record["position"], b_record["position"])
-		b_side = _opposite_direction(a_side)
-	for pair in [[a_record, a_side, b], [b_record, b_side, a]]:
+		var a_port := _record_connection_port_towards(a_record, b)
+		var b_port := _record_connection_port_towards(b_record, a)
+		if not a_port.is_empty() and not b_port.is_empty():
+			a_side = str(a_port.get("side", ""))
+			b_side = str(b_port.get("side", ""))
+		else:
+			a_side = _direction_between(a_record["position"], b_record["position"])
+			b_side = _opposite_direction(a_side)
+		_edge_door_sides_by_key[edge] = {a: a_side, b: b_side}
+	for pair in [[a_record, a_side, b, true], [b_record, b_side, a, false]]:
 		var record := pair[0] as Dictionary
 		var direction := str(pair[1])
 		if direction not in (record["doors"] as Array):
 			(record["doors"] as Array).append(direction)
 		(record["door_targets"] as Dictionary)[direction] = str(pair[2])
+		(record["door_endpoint_owners"] as Dictionary)[direction] = bool(pair[3])
+
+
+func _record_connection_port_towards(record: Dictionary, target_room_id: String) -> Dictionary:
+	for value in record.get("connection_ports", []) as Array:
+		var port := value as Dictionary
+		if str(port.get("target_room_id", "")) == target_room_id:
+			return port
+	return {}
+
+
+## 显式端口关卡的一条水平边只生成一套门墙、门扇和门功能。父端（edge.a）
+## 是唯一实体所有者；子端房间只把同一 RoomDoor3D 引用登记到自己的门槽，
+## 因而从任一侧交互都命中同一个状态机，不会再出现两扇门重叠。
+func _bind_shared_edge_doors() -> void:
+	for declaration_value in _declared_edges:
+		var declaration := declaration_value as Dictionary
+		if str(declaration.get("kind", "horizontal")) != "horizontal":
+			continue
+		var owner_id := str(declaration.get("a", ""))
+		var peer_id := str(declaration.get("b", ""))
+		var owner := _room_by_id.get(owner_id) as DungeonRoom3D
+		var peer := _room_by_id.get(peer_id) as DungeonRoom3D
+		if owner == null or peer == null:
+			continue
+		var edge := _edge_key(owner_id, peer_id)
+		var sides := _edge_door_sides_by_key.get(edge, {}) as Dictionary
+		var owner_side := str(sides.get(owner_id, ""))
+		var peer_side := str(sides.get(peer_id, ""))
+		if owner_side.is_empty() or peer_side.is_empty():
+			continue
+		if not owner.owns_door_endpoint(owner_side) or peer.owns_door_endpoint(peer_side):
+			continue
+		var shared_door := owner.get_door_node(owner_side)
+		if shared_door == null:
+			push_error("TowerDescent3D: 边 %s 的唯一门实体缺失" % edge)
+			continue
+		peer.bind_shared_door(peer_side, shared_door)
+		shared_door.set_meta("shared_edge_key", edge)
+		shared_door.set_meta("shared_door_owner_room_id", owner_id)
+		shared_door.set_meta("shared_door_peer_room_id", peer_id)
 
 
 func _instantiate_dynamic_room(record: Dictionary) -> void:
@@ -4663,8 +4747,11 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 		"authored_layout_instances": record.get("authored_layout_instances", []),
 		"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
+		"connection_ports": record.get("connection_ports", []),
+		"door_endpoint_owners": record.get("door_endpoint_owners", {}),
 	})
 	room.position = record["position"]
+	room.set_meta("template_rotation_deg", float(record.get("rotation_deg", 0.0)))
 	room.set_meta("floor_number", int(record.get("floor_number", _floor_number_from_index(int(record.get("floor_index", 0))))))
 	room.set_meta("boss_content_id", str(record.get("boss_content_id", "")))
 	room.set_meta("arena_asset_id", str(record.get("arena_asset_id", "")))

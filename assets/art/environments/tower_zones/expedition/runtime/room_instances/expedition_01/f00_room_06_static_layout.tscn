@@ -10,8 +10,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_service_c/ceiling_service_c_root_top3d.tscn" id="8_l6xkf"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn" id="9_3ipjf"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/corner_guard/corner_guard_root_top3d.tscn" id="10_a7bys"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn" id="11_j67hv"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="12_pgw6g"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="11_j67hv"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn" id="12_pgw6g"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/equipment_rack/equipment_rack_root_top3d.tscn" id="13_aixpn"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_a/floor_detail_a_root_top3d.tscn" id="14_qvqff"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/floor_detail_b/floor_detail_b_root_top3d.tscn" id="15_7me4y"]
@@ -35,7 +35,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_a/workbench_a_root_top3d.tscn" id="33_0lgf0"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_b/workbench_b_root_top3d.tscn" id="34_v5l3j"]
 
-[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=772505401]
+[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1219076312]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT"
 metadata/asset_version = "v014"
 metadata/authored_room_id = "room_06"
@@ -52,17 +52,18 @@ metadata/authored_layout_exclusive_count = 0
 metadata/authored_layout_multi_level_count = 0
 metadata/authored_layout_room_type_component_count = 44
 metadata/authored_layout_promoted_walls = Array[String]([])
-metadata/snapshot_tower_wall_door_offset_east = -2.5
-metadata/snapshot_tower_wall_door_offset_west = -2.5
+metadata/snapshot_tower_wall_door_offset_north = -2.5
+metadata/snapshot_tower_wall_door_offset_south = -2.5
 metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
 metadata/room_id = "room_06"
 metadata/room_type = "SCAVENGE"
 metadata/source_mode = "live_expedition_runtime_static_extract"
 metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
+metadata/connection_port_count = 2
 
-[node name="ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL" type="Node3D" parent="." unique_id=1084204023 instance=ExtResource("1_gmn20")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.66, 3.5135, -8.9)
+[node name="ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL" type="Node3D" parent="." unique_id=555926943 instance=ExtResource("1_gmn20")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.900001, 3.5135, -19.66)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CABLE_COIL"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -81,8 +82,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CABLE_COIL"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-1" type="Node3D" parent="." unique_id=548574486 instance=ExtResource("2_61n5m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.38, 2.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-1" type="Node3D" parent="." unique_id=1504997997 instance=ExtResource("2_61n5m")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5, 11.38, -1.09278474e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -101,8 +102,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-2" type="Node3D" parent="." unique_id=2013558489 instance=ExtResource("2_61n5m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.38, 7.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-2" type="Node3D" parent="." unique_id=2042969566 instance=ExtResource("2_61n5m")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 11.38, -3.278354e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -121,8 +122,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-3" type="Node3D" parent="." unique_id=1208201855 instance=ExtResource("3_1n6f7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.38, 12.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_-3" type="Node3D" parent="." unique_id=259765204 instance=ExtResource("3_1n6f7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 11.38, -5.4639236e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_10M"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -141,8 +142,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_10M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_0" type="Node3D" parent="." unique_id=127699965 instance=ExtResource("2_61n5m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.38, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_0" type="Node3D" parent="." unique_id=1070935550 instance=ExtResource("2_61n5m")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 11.38, 1.09278474e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -161,8 +162,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_1" type="Node3D" parent="." unique_id=1253831726 instance=ExtResource("2_61n5m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.38, -7.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_1" type="Node3D" parent="." unique_id=10364064 instance=ExtResource("2_61n5m")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 11.38, 3.278354e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -181,8 +182,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_2" type="Node3D" parent="." unique_id=770495918 instance=ExtResource("2_61n5m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.38, -12.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_DECK_2" type="Node3D" parent="." unique_id=67887616 instance=ExtResource("2_61n5m")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.5, 11.38, 5.4639236e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -201,8 +202,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_LIGHTING" type="Node3D" parent="." unique_id=930899662 instance=ExtResource("4_vf3xf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.435, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_LIGHTING" type="Node3D" parent="." unique_id=437869489 instance=ExtResource("4_vf3xf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 10.435, 1.09278474e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -221,8 +222,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM" type="Node3D" parent="." unique_id=392736421 instance=ExtResource("5_pix2k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.15, 0)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM" type="Node3D" parent="." unique_id=364101823 instance=ExtResource("5_pix2k")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 11.15, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -241,8 +242,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY" type="Node3D" parent="." unique_id=126542456 instance=ExtResource("6_v2j07")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.195, -1)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_CABLE_TRAY" type="Node3D" parent="." unique_id=93430923 instance=ExtResource("6_v2j07")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1, 10.195, 4.371139e-08)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -261,8 +262,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_A"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT" type="Node3D" parent="." unique_id=779284678 instance=ExtResource("7_fwhmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 10.3825, -1.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_DUCT" type="Node3D" parent="." unique_id=1987666281 instance=ExtResource("7_fwhmt")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.5000001, 10.3825, -3.6)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -281,8 +282,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_B"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN" type="Node3D" parent="." unique_id=1212107243 instance=ExtResource("8_l6xkf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015, 9.868, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN" type="Node3D" parent="." unique_id=867473009 instance=ExtResource("8_l6xkf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 9.868, 0.015000109)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -301,8 +302,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" type="Node3D" parent="." unique_id=1088651085 instance=ExtResource("9_3ipjf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.8)
+[node name="ENV-EXPEDITION-L01-DB-CENTER_DOUBLE_SIDED_REPAIR_ISLAND" type="Node3D" parent="." unique_id=2024695563 instance=ExtResource("9_3ipjf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.8, 0, -3.4969112e-08)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -321,7 +322,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-REPAIR_ISLAND"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CORNER_GUARD" type="Node3D" parent="." unique_id=1203250461 instance=ExtResource("10_a7bys")]
+[node name="ENV-EXPEDITION-L01-DB-CORNER_GUARD" type="Node3D" parent="." unique_id=1778121608 instance=ExtResource("10_a7bys")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CORNER_GUARD"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -340,52 +342,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CORNER_GUARD"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1" type="Node3D" parent="." unique_id=1565882768 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.081, 2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2" type="Node3D" parent="." unique_id=1305023483 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.5, -0.056, 7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-1" type="Node3D" parent="." unique_id=1393850300 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5, -0.056, 2.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -428,404 +386,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3" type="Node3D" parent="." unique_id=1708290367 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.081, 12.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0" type="Node3D" parent="." unique_id=1932351964 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.056, -2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1" type="Node3D" parent="." unique_id=1687217004 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.081, -7.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2" type="Node3D" parent="." unique_id=1996664417 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, -0.056, -12.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1" type="Node3D" parent="." unique_id=469385618 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, -0.056, 2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2" type="Node3D" parent="." unique_id=53119290 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.081, 7.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0" type="Node3D" parent="." unique_id=1978151330 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.081, -2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1" type="Node3D" parent="." unique_id=558216433 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.056, -7.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2" type="Node3D" parent="." unique_id=483669507 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.081, -12.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1" type="Node3D" parent="." unique_id=1075234181 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.081, 2.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-2" type="Node3D" parent="." unique_id=2008220487 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, 7.5, -0.081, 2.4999998)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -868,8 +430,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2" type="Node3D" parent="." unique_id=643262912 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.056, 7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_-3" type="Node3D" parent="." unique_id=1784116586 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, -0.056, 2.4999995)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -912,52 +474,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0" type="Node3D" parent="." unique_id=1697964851 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.056, -2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1" type="Node3D" parent="." unique_id=86109607 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.081, -7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_0" type="Node3D" parent="." unique_id=1242323783 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, -0.081, 2.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1000,8 +518,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2" type="Node3D" parent="." unique_id=487501226 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.056, -12.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_1" type="Node3D" parent="." unique_id=1615687977 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, -0.056, 2.5000002)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1044,25 +562,25 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1" type="Node3D" parent="." unique_id=1816394100 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, -0.056, 2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-1_2" type="Node3D" parent="." unique_id=724341103 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.5, -0.081, 2.5000005)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
 metadata/library_root = "res://assets/art/environments/tower_zones/battle"
 metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
 metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "-Z"
 metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
 metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
 metadata/preserve_authored_palette = true
 metadata/collision_owner = "self"
@@ -1073,7 +591,7 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/supersedes = "v003"
 metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
 metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
+metadata/thickness_m = 0.081
 metadata/runtime_grid_unit_m = 5
 metadata/tile_gap_m = 0.06
 metadata/runtime_owner = "TowerFloorStage3D"
@@ -1082,14 +600,14 @@ metadata/runtime_floor_thickness_m = 0.3
 metadata/runtime_walk_plane_y = 0
 metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
 metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2" type="Node3D" parent="." unique_id=57925048 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, -0.081, 7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-1" type="Node3D" parent="." unique_id=1158713118 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5000002, -0.081, 7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1132,52 +650,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0" type="Node3D" parent="." unique_id=1417571987 instance=ExtResource("11_j67hv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.5, -0.081, -2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1" type="Node3D" parent="." unique_id=1153933342 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, -0.056, -7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_-2" type="Node3D" parent="." unique_id=624852843 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5000005, -0.056, 7.4999995)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1220,52 +694,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2" type="Node3D" parent="." unique_id=1135652216 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.5, -0.081, -12.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1" type="Node3D" parent="." unique_id=1179295731 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5, -0.056, 2.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_0" type="Node3D" parent="." unique_id=735429804 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.4999998, -0.056, 7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1306,98 +736,10 @@ metadata/snap_to_walk_plane_offset_m = -0.056
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
 metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2" type="Node3D" parent="." unique_id=885327533 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.081, 7.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3" type="Node3D" parent="." unique_id=656978645 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5, -0.056, 12.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0" type="Node3D" parent="." unique_id=1930227822 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.081, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_1" type="Node3D" parent="." unique_id=192343943 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.4999995, -0.081, 7.5000005)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1440,8 +782,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1" type="Node3D" parent="." unique_id=1042831684 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.056, -7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-2_2" type="Node3D" parent="." unique_id=976266601 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.5, -0.056, 7.5000005)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1484,228 +826,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2" type="Node3D" parent="." unique_id=1864283013 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.081, -12.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1" type="Node3D" parent="." unique_id=1952077629 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.081, 2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2" type="Node3D" parent="." unique_id=726564780 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.056, 7.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0" type="Node3D" parent="." unique_id=1741605091 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.056, -2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1" type="Node3D" parent="." unique_id=804048489 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.081, -7.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c02"
-metadata/logic_id = "floor_tile_r01_c02"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c02_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.081
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.081
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
-metadata/walk_plane_snap_y = -0.081
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2" type="Node3D" parent="." unique_id=321455431 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.056, -12.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-1" type="Node3D" parent="." unique_id=266546552 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5000005, -0.056, 12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1748,52 +870,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1" type="Node3D" parent="." unique_id=1982640954 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.056, 2.5)
-metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "09_floor_component"
-metadata/component = "floor_tile_r01_c01"
-metadata/logic_id = "floor_tile_r01_c01"
-metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "floor_tile_r01_c01_通用包"
-metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
-metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_box_bottom_center"
-metadata/collision_shape_count = 1
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/footprint_m = 4.94
-metadata/thickness_m = 0.056
-metadata/runtime_grid_unit_m = 5
-metadata/tile_gap_m = 0.06
-metadata/runtime_owner = "TowerFloorStage3D"
-metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
-metadata/runtime_floor_thickness_m = 0.3
-metadata/runtime_walk_plane_y = 0
-metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
-metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
-metadata/snap_to_walk_plane_offset_m = -0.056
-metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
-metadata/walk_plane_snap_y = -0.056
-metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
-
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2" type="Node3D" parent="." unique_id=1264725958 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.081, 7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_-2" type="Node3D" parent="." unique_id=1175677 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5000005, -0.081, 12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1836,8 +914,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0" type="Node3D" parent="." unique_id=738868729 instance=ExtResource("11_j67hv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, -0.081, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_0" type="Node3D" parent="." unique_id=2017161568 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.4999995, -0.081, 12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1880,8 +958,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1" type="Node3D" parent="." unique_id=1610285322 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.056, -7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_1" type="Node3D" parent="." unique_id=1167651814 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.4999995, -0.056, 12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1924,8 +1002,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2" type="Node3D" parent="." unique_id=2086802698 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.081, -12.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-3_2" type="Node3D" parent="." unique_id=813103566 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.499999, -0.081, 12.500001)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1966,10 +1044,10 @@ metadata/snap_to_walk_plane_offset_m = -0.081
 metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
 metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1" type="Node3D" parent="." unique_id=170435065 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, -0.081, 2.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-1" type="Node3D" parent="." unique_id=1476974871 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5000007, -0.081, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2012,8 +1090,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2" type="Node3D" parent="." unique_id=1353673724 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, -0.056, 7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_-2" type="Node3D" parent="." unique_id=143853778 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.500001, -0.056, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2056,8 +1134,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0" type="Node3D" parent="." unique_id=506903190 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, -0.056, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_0" type="Node3D" parent="." unique_id=1730252352 instance=ExtResource("11_j67hv")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.4999993, -0.056, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2100,8 +1178,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1" type="Node3D" parent="." unique_id=1706145585 instance=ExtResource("11_j67hv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, -0.081, -7.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_1" type="Node3D" parent="." unique_id=427623560 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.499999, -0.081, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2144,8 +1222,316 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2" type="Node3D" parent="." unique_id=313016756 instance=ExtResource("12_pgw6g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, -0.056, -12.5)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_-4_2" type="Node3D" parent="." unique_id=547616243 instance=ExtResource("11_j67hv")]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, -12.499999, -0.056, 17.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-1" type="Node3D" parent="." unique_id=825710881 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5, -0.081, -2.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-2" type="Node3D" parent="." unique_id=1012946954 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, -0.056, -2.5000002)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_-3" type="Node3D" parent="." unique_id=675046892 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, -0.081, -2.5000005)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_0" type="Node3D" parent="." unique_id=1613600221 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, -0.056, -2.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_1" type="Node3D" parent="." unique_id=2038941581 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, -0.081, -2.4999998)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_0_2" type="Node3D" parent="." unique_id=589447666 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.5, -0.056, -2.4999995)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-1" type="Node3D" parent="." unique_id=1843759947 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.4999998, -0.056, -7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2188,8 +1574,624 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
 
-[node name="ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE" type="Node3D" parent="." unique_id=550358013 instance=ExtResource("13_aixpn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.7, 0, -0.8)
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_-2" type="Node3D" parent="." unique_id=602054520 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.4999995, -0.081, -7.5000005)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_0" type="Node3D" parent="." unique_id=1261603144 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5000002, -0.081, -7.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_1" type="Node3D" parent="." unique_id=1273471926 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5000005, -0.056, -7.4999995)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_1_2" type="Node3D" parent="." unique_id=453857775 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.5, -0.081, -7.4999995)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-1" type="Node3D" parent="." unique_id=112800747 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.4999995, -0.081, -12.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_-2" type="Node3D" parent="." unique_id=1490702205 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.4999995, -0.056, -12.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_0" type="Node3D" parent="." unique_id=292360524 instance=ExtResource("11_j67hv")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.5000005, -0.056, -12.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_1" type="Node3D" parent="." unique_id=1804242697 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5000005, -0.081, -12.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_2_2" type="Node3D" parent="." unique_id=561236671 instance=ExtResource("11_j67hv")]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, -12.500001, -0.056, -12.499999)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-1" type="Node3D" parent="." unique_id=1978319010 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.4999993, -0.056, -17.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_-2" type="Node3D" parent="." unique_id=48087110 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.499999, -0.081, -17.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_0" type="Node3D" parent="." unique_id=1826508497 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5000007, -0.081, -17.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_1" type="Node3D" parent="." unique_id=1493360585 instance=ExtResource("11_j67hv")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.500001, -0.056, -17.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-DERIVED_TILE_3_2" type="Node3D" parent="." unique_id=1316326245 instance=ExtResource("12_pgw6g")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.500001, -0.081, -17.5)
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c02"
+metadata/logic_id = "floor_tile_r01_c02"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/方形检修盖）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c02_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c02_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c02/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.081, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.0852, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.081
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.081
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.081。"
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK_NE" type="Node3D" parent="." unique_id=377054261 instance=ExtResource("13_aixpn")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.8000007, 0, -16.7)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2208,8 +2210,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-EQUIPMENT_RACK"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN" type="Node3D" parent="." unique_id=1779410598 instance=ExtResource("14_qvqff")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-FLOOR_CONDUIT_RUN" type="Node3D" parent="." unique_id=84499936 instance=ExtResource("14_qvqff")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 0.045, 1.09278474e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_A"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2228,8 +2230,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_A"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING" type="Node3D" parent="." unique_id=805603638 instance=ExtResource("15_7me4y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0075, -0.0046)
+[node name="ENV-EXPEDITION-L01-DB-FLOOR_HAZARD_EDGING" type="Node3D" parent="." unique_id=1375530321 instance=ExtResource("15_7me4y")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.0046, 0.0075, 2.010724e-10)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2248,8 +2250,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-FLOOR_DETAIL_B"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST" type="Node3D" parent="." unique_id=873177637 instance=ExtResource("16_ft4y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.15, -0.0085, 0.8125)
+[node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_EAST" type="Node3D" parent="." unique_id=1487737117 instance=ExtResource("16_ft4y7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.8124998, -0.0085, -4.15)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2268,8 +2270,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST" type="Node3D" parent="." unique_id=53051188 instance=ExtResource("16_ft4y7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.15, -0.0085, 0.8125)
+[node name="ENV-EXPEDITION-L01-DB-ISLAND_CART_WEST" type="Node3D" parent="." unique_id=1556202091 instance=ExtResource("16_ft4y7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.8125002, -0.0085, 4.15)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2288,8 +2290,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-ISLAND_CART"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY" type="Node3D" parent="." unique_id=136732384 instance=ExtResource("17_3y156")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.6, 0.58, 3.59)
+[node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_GANTRY" type="Node3D" parent="." unique_id=910146462 instance=ExtResource("17_3y156")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 3.5899994, 0.58, -9.6)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2308,8 +2310,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_A"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM" type="Node3D" parent="." unique_id=1011735631 instance=ExtResource("18_wcyf3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.6, 0, 4.6)
+[node name="ENV-EXPEDITION-L01-DB-RAISED_SERVICE_PLATFORM" type="Node3D" parent="." unique_id=1766818823 instance=ExtResource("18_wcyf3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.5999994, 0, -9.6)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2328,8 +2330,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-RAISED_SERVICE_B"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_00" type="Node3D" parent="." unique_id=602684771 instance=ExtResource("19_gh54e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.5, 0, -11.4456)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_00" type="Node3D" parent="." unique_id=1776678482 instance=ExtResource("19_gh54e")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.445599, 0, 16.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2348,8 +2350,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_A"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_01" type="Node3D" parent="." unique_id=1089082446 instance=ExtResource("20_djdnr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.3, 0, -11.4456)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_01" type="Node3D" parent="." unique_id=132011017 instance=ExtResource("20_djdnr")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.445599, 0, 14.300001)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2368,8 +2370,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_02" type="Node3D" parent="." unique_id=1477498721 instance=ExtResource("20_djdnr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1, 0, -11.4456)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_02" type="Node3D" parent="." unique_id=1341955018 instance=ExtResource("20_djdnr")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.445599, 0, 12.100001)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2388,8 +2390,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_03" type="Node3D" parent="." unique_id=1918704494 instance=ExtResource("20_djdnr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.9, 0, -11.4456)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_03" type="Node3D" parent="." unique_id=395024204 instance=ExtResource("20_djdnr")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 9.900001)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2408,8 +2410,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_B"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_04" type="Node3D" parent="." unique_id=1620540993 instance=ExtResource("21_ihpws")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, 0, -11.4456)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_04" type="Node3D" parent="." unique_id=110656384 instance=ExtResource("21_ihpws")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 7.7000003)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_C"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2428,8 +2430,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_C"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_05" type="Node3D" parent="." unique_id=228451189 instance=ExtResource("22_t7764")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, -11.4456)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_05" type="Node3D" parent="." unique_id=1402577526 instance=ExtResource("22_t7764")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.4456, 0, 5.5000005)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_D"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2448,8 +2450,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_RACK_D"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS" type="Node3D" parent="." unique_id=1297539862 instance=ExtResource("23_gpaui")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.02, -11.6)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVER_BUS" type="Node3D" parent="." unique_id=1006210859 instance=ExtResource("23_gpaui")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.599999, 0.02, 11.000001)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVER_BUS"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2468,8 +2470,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVER_BUS"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00" type="Node3D" parent="." unique_id=1292259155 instance=ExtResource("24_p1k2n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.5, -0.0085, -8.7925)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_00" type="Node3D" parent="." unique_id=672969781 instance=ExtResource("24_p1k2n")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.792499, -0.0085, 16.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2488,8 +2490,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01" type="Node3D" parent="." unique_id=1668689959 instance=ExtResource("24_p1k2n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, -0.0085, -8.7925)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_01" type="Node3D" parent="." unique_id=2109707291 instance=ExtResource("24_p1k2n")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.792499, -0.0085, 11)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2508,8 +2510,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02" type="Node3D" parent="." unique_id=1975524398 instance=ExtResource("24_p1k2n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, -0.0085, -8.7925)
+[node name="ENV-EXPEDITION-L01-DB-REAR_SERVICE_CART_02" type="Node3D" parent="." unique_id=23570870 instance=ExtResource("24_p1k2n")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.7925, -0.0085, 5.5000005)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2528,8 +2530,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_CART"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00" type="Node3D" parent="." unique_id=824070372 instance=ExtResource("25_ciugn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.3, -0.0085, 9.4)
+[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_00" type="Node3D" parent="." unique_id=1459192412 instance=ExtResource("25_ciugn")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.399999, -0.0085, -17.3)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CABLE_REEL"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2548,8 +2550,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CABLE_REEL"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01" type="Node3D" parent="." unique_id=2025678075 instance=ExtResource("25_ciugn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.3, -0.0085, 9.4)
+[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_CABLE_REEL_01" type="Node3D" parent="." unique_id=1942814219 instance=ExtResource("25_ciugn")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.399999, -0.0085, -18.3)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-CABLE_REEL"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2568,8 +2570,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CABLE_REEL"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL" type="Node3D" parent="." unique_id=1496257471 instance=ExtResource("26_6a7bx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2, 0, 9.5175)
+[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SERVICE_TERMINAL" type="Node3D" parent="." unique_id=1334562261 instance=ExtResource("26_6a7bx")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.517499, 0, -15.2)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SERVICE_TERMINAL"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2588,8 +2590,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SERVICE_TERMINAL"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00" type="Node3D" parent="." unique_id=736476683 instance=ExtResource("27_j4xj8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2, 0, 8.4)
+[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_00" type="Node3D" parent="." unique_id=1200027872 instance=ExtResource("27_j4xj8")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 8.399999, 0, -13.2)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SHELF"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2608,8 +2610,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SHELF"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01" type="Node3D" parent="." unique_id=1763190136 instance=ExtResource("27_j4xj8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2, 0, 8.4)
+[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_01" type="Node3D" parent="." unique_id=850029834 instance=ExtResource("27_j4xj8")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 8.399999, 0, -15.2)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SHELF"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2628,8 +2630,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SHELF"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02" type="Node3D" parent="." unique_id=1527722306 instance=ExtResource("27_j4xj8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.2, 0, 8.4)
+[node name="ENV-EXPEDITION-L01-DB-RIGHT_FRONT_SHELF_02" type="Node3D" parent="." unique_id=1843735948 instance=ExtResource("27_j4xj8")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 8.399999, 0, -17.2)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SHELF"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2648,8 +2650,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SHELF"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH" type="Node3D" parent="." unique_id=693891207 instance=ExtResource("28_6ew6e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2, 0, 6)
+[node name="ENV-EXPEDITION-L01-DB-SHELVING_HEAVY_NORTH" type="Node3D" parent="." unique_id=1820508695 instance=ExtResource("28_6ew6e")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.0000005, 0, 15.2)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-SHELVING"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2668,8 +2670,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-SHELVING"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON" type="Node3D" parent="." unique_id=490501989 instance=ExtResource("29_3xlq3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.07, -2.5)
+[node name="ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON" type="Node3D" parent="." unique_id=102144832 instance=ExtResource("29_3xlq3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 3.07, 1.09278474e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2688,8 +2690,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_LIGHT_PYLON"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK" type="Node3D" parent="." unique_id=1621156504 instance=ExtResource("30_3glxw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.73, 3.525, -11.655)
+[node name="ENV-EXPEDITION-L01-DB-WALL_SCREEN_BANK" type="Node3D" parent="." unique_id=348538314 instance=ExtResource("30_3glxw")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.655001, 3.525, -17.73)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WALL_SCREEN"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2708,8 +2710,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_SCREEN"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN" type="Node3D" parent="." unique_id=456383807 instance=ExtResource("31_tx3c8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.05, -3.035)
+[node name="ENV-EXPEDITION-L01-DB-WALL_SERVICE_RUN" type="Node3D" parent="." unique_id=320220457 instance=ExtResource("31_tx3c8")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.035, 3.05, 1.3266407e-07)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WALL_SERVICE"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2728,8 +2730,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_SERVICE"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE" type="Node3D" parent="." unique_id=1558625722 instance=ExtResource("32_kam65")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.15, 0)
+[node name="ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE" type="Node3D" parent="." unique_id=710063772 instance=ExtResource("32_kam65")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 11.15, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2748,8 +2750,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WALL_TOP_SERVICE"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST" type="Node3D" parent="." unique_id=527481150 instance=ExtResource("33_0lgf0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4, 0.045, -7.875)
+[node name="ENV-EXPEDITION-L01-DB-WORKBENCH_L_EAST" type="Node3D" parent="." unique_id=1927526794 instance=ExtResource("33_0lgf0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.8750005, 0.045, -10.4)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_A"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2768,8 +2770,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_A"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-WORKBENCH_WEST" type="Node3D" parent="." unique_id=1243972638 instance=ExtResource("34_v5l3j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3, 0, -3)
+[node name="ENV-EXPEDITION-L01-DB-WORKBENCH_WEST" type="Node3D" parent="." unique_id=45511442 instance=ExtResource("34_v5l3j")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.9999993, 0, 17.3)
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_B"
 metadata/asset_version = "v014"
 metadata/room_type = "DB_ROOM"
@@ -2787,3 +2789,24 @@ metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-WORKBENCH_B"
 metadata/authored_slot_role = "room_type_component"
+
+[node name="ConnectionPorts" type="Node3D" parent="." unique_id=1966769905]
+metadata/connection_port_count = 2
+
+[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=1815428822]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 20)
+metadata/port_id = "A"
+metadata/target_room_id = "room_05"
+metadata/side = "south"
+metadata/lane_m = -2.5
+metadata/outward = Vector2(0, 1)
+metadata/connected = true
+
+[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=2036305312]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5, 0, -20)
+metadata/port_id = "B"
+metadata/target_room_id = "room_07"
+metadata/side = "north"
+metadata/lane_m = -2.5
+metadata/outward = Vector2(0, -1)
+metadata/connected = true

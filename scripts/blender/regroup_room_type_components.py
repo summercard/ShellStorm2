@@ -655,7 +655,38 @@ def main() -> int:
 
     version = out_lib.name
     room_type = str(source_catalog.get("room_type", "BOSS_ROOM"))
-    # —— 走行面平移 ——
+    # —— 房间坐标框架 + 走行面平移 ——
+    # 历史整屋源的 `source_world_origin_m` 不是房间局部坐标，必须先减去冻结的 ROOM_FRAME
+    # 世界平移，才能写入 component_instances.position_m。直接复制会让整房相对玩法锚点错位
+    # （L 走廊 v012 曾因此偏移 X=22.5m / Y=-5m，门洞与 RoomDoor3D 完全分离）。
+    room_frame = slug_map_doc.get("room_frame", {}) or {}
+    raw_room_frame_translation = room_frame.get("translation_m")
+    room_frame_source = "component_slug_map.room_frame"
+    # 已有库可能在早期归并时没有独立 slug_map（L 走廊 v012 即如此）；中心化修复后
+    # `component_instances.coordinate_contract` 就是已冻结的坐标真源。重跑时必须继承它，
+    # 不能因为缺 slug_map 又退回 [0,0,0]，把历史世界坐标重新写进 position_m。
+    existing_instances_path = out_lib / "component_instances.json"
+    if raw_room_frame_translation is None and existing_instances_path.is_file():
+        existing_instances = load_json(existing_instances_path)
+        existing_contract = existing_instances.get("coordinate_contract", {}) or {}
+        raw_room_frame_translation = existing_contract.get("room_frame_world_translation_m")
+        room_frame_source = "existing component_instances.coordinate_contract"
+    if raw_room_frame_translation is None:
+        raw_room_frame_translation = [0.0, 0.0, 0.0]
+        room_frame_source = "default centered source"
+    if not isinstance(raw_room_frame_translation, list) or len(raw_room_frame_translation) != 3:
+        print("FAIL: room_frame.translation_m 必须是三元数组")
+        return 2
+    room_frame_translation = [float(value) for value in raw_room_frame_translation]
+    if any(abs(value) > 1e-9 for value in room_frame_translation):
+        print(
+            "ROOM_FRAME_TRANSLATION:%s（%s；%s）"
+            % (
+                room_frame_translation,
+                room_frame_source,
+                str(room_frame.get("derived_from", "")),
+            )
+        )
     # 运行时把 **y=0 当走行面**（与办公室/通道桥的通用地砖口径一致）。源房型的 z=0 往往
     # 不是走行面而是地板底板底面（Boss 房：底板底面 0 → 顶面 0.26 → 地砖顶面 0.358）。
     # 因此按命名表里声明的 `walk_plane.shift_z_m` 整房平移，使源走行面落到 y=0。
@@ -731,7 +762,11 @@ def main() -> int:
         rotation = rotation_of[component_id]
         stats[rotation] = stats.get(rotation, 0) + 1
         package = packages[component_id]
-        position = [round(float(v), 4) for v in package["source_world_origin_m"]]
+        source_world_origin = [float(v) for v in package["source_world_origin_m"]]
+        position = [
+            round(source_world_origin[axis] - room_frame_translation[axis], 4)
+            for axis in range(3)
+        ]
         if component_id in sealed_of:
             position[2] = 0.0
         position[2] = round(position[2] + shift_z, 4)
@@ -850,6 +885,17 @@ def main() -> int:
         "room_type": room_type,
         "source_library": source_lib.name,
         "source_blend_sha256": sha256(source_lib / "component_catalog.json"),
+        "coordinate_contract": {
+            "source_space": "blender_room_local",
+            "origin_mode": "template_bounds_center_at_walk_plane",
+            "room_frame_world_translation_m": room_frame_translation,
+            "room_frame_world_rotation_z_deg": 0.0,
+            "walk_plane_shift_z_m": shift_z,
+            "blender_plane": "XY",
+            "blender_up": "+Z",
+            "rotation_y_deg_semantics": "rotation_about_blender_Z",
+            "godot_mapping": "(bx, by, bz) -> (bx, bz, -by)",
+        },
         "instances": records,
         "validation": {
             "source_object_count": len(packages),

@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/generate_expedition01_room_static_scenes.gd" id="1_gen"]
+
+[node name="GenerateExpedition01RoomStaticScenes" type="Node"]
+script = ExtResource("1_gen")

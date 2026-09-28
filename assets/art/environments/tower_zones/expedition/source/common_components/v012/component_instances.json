@@ -11,8 +11,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A",
       "component_slug": "access_console_a",
       "position_m": [
-        3.0,
-        13.646,
+        -19.5,
+        18.646,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -28,8 +28,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
       "component_slug": "access_console_b",
       "position_m": [
-        27.12,
-        13.5738,
+        4.62,
+        18.5738,
         0.0
       ],
       "rotation_y_deg": 90.0,
@@ -45,8 +45,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B",
       "component_slug": "access_console_b",
       "position_m": [
-        43.1238,
-        -14.92,
+        20.6238,
+        -9.92,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -62,8 +62,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
       "component_slug": "crate",
       "position_m": [
-        1.9,
-        13.6913,
+        -20.6,
+        18.6913,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -79,8 +79,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
       "component_slug": "crate",
       "position_m": [
-        20.2,
-        13.7413,
+        -2.3,
+        18.7413,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -96,8 +96,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CRATE",
       "component_slug": "crate",
       "position_m": [
-        43.2,
-        -23.0087,
+        20.7,
+        -18.0087,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -113,8 +113,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_A",
       "component_slug": "cutaway_reference_a",
       "position_m": [
-        15.0,
-        0.0,
+        -7.5,
+        5.0,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -130,8 +130,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-CUTAWAY_REFERENCE_B",
       "component_slug": "cutaway_reference_b",
       "position_m": [
-        30.0,
-        -12.5,
+        7.5,
+        -7.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -147,8 +147,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A",
       "component_slug": "hanging_cable_a",
       "position_m": [
-        29.4524,
-        14.3127,
+        6.9524,
+        19.3127,
         3.435
       ],
       "rotation_y_deg": 0.0,
@@ -164,8 +164,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B",
       "component_slug": "hanging_cable_b",
       "position_m": [
-        33.3478,
-        14.3526,
+        10.8478,
+        19.3526,
         4.035
       ],
       "rotation_y_deg": 0.0,
@@ -181,8 +181,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C",
       "component_slug": "hanging_cable_c",
       "position_m": [
-        44.368,
-        -8.975,
+        21.868,
+        -3.975,
         2.985
       ],
       "rotation_y_deg": 0.0,
@@ -198,8 +198,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D",
       "component_slug": "hanging_cable_d",
       "position_m": [
-        44.3527,
-        -17.275,
+        21.8527,
+        -12.275,
         3.835
       ],
       "rotation_y_deg": 0.0,
@@ -215,8 +215,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E",
       "component_slug": "hanging_cable_e",
       "position_m": [
-        44.21,
-        13.95,
+        21.71,
+        18.95,
         4.785
       ],
       "rotation_y_deg": 0.0,
@@ -232,8 +232,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        -22.5,
+        22.1925,
+        -17.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -249,8 +249,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        -17.5,
+        22.1925,
+        -12.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -266,8 +266,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        -12.5,
+        22.1925,
+        -7.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -283,8 +283,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        -7.5,
+        22.1925,
+        -2.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -300,8 +300,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        -2.5,
+        22.1925,
+        2.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -317,8 +317,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        2.5,
+        22.1925,
+        7.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -334,8 +334,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        7.5,
+        22.1925,
+        12.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -351,8 +351,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A",
       "component_slug": "high_pipe_a",
       "position_m": [
-        44.6925,
-        12.5,
+        22.1925,
+        17.5,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -368,8 +368,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
       "component_slug": "high_pipe_b",
       "position_m": [
-        2.5,
-        14.6925,
+        -20.0,
+        19.6925,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -385,8 +385,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
       "component_slug": "high_pipe_c",
       "position_m": [
-        7.5,
-        14.68,
+        -15.0,
+        19.68,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -402,8 +402,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
       "component_slug": "high_pipe_b",
       "position_m": [
-        12.5,
-        14.6925,
+        -10.0,
+        19.6925,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -419,8 +419,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
       "component_slug": "high_pipe_c",
       "position_m": [
-        17.5,
-        14.68,
+        -5.0,
+        19.68,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -436,8 +436,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
       "component_slug": "high_pipe_b",
       "position_m": [
-        22.5,
-        14.6925,
+        0.0,
+        19.6925,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -453,8 +453,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
       "component_slug": "high_pipe_c",
       "position_m": [
-        27.5,
-        14.68,
+        5.0,
+        19.68,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -470,8 +470,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
       "component_slug": "high_pipe_b",
       "position_m": [
-        32.5,
-        14.6925,
+        10.0,
+        19.6925,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -487,8 +487,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C",
       "component_slug": "high_pipe_c",
       "position_m": [
-        37.5,
-        14.68,
+        15.0,
+        19.68,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -504,8 +504,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B",
       "component_slug": "high_pipe_b",
       "position_m": [
-        42.5,
-        14.6925,
+        20.0,
+        19.6925,
         6.62
       ],
       "rotation_y_deg": 0.0,
@@ -521,8 +521,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
       "component_slug": "pipe_riser",
       "position_m": [
-        2.5275,
-        14.62,
+        -19.9725,
+        19.62,
         0.325
       ],
       "rotation_y_deg": 0.0,
@@ -538,8 +538,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
       "component_slug": "pipe_riser",
       "position_m": [
-        10.2275,
-        14.62,
+        -12.2725,
+        19.62,
         0.325
       ],
       "rotation_y_deg": 0.0,
@@ -555,8 +555,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
       "component_slug": "pipe_riser",
       "position_m": [
-        16.0275,
-        14.62,
+        -6.4725,
+        19.62,
         0.325
       ],
       "rotation_y_deg": 0.0,
@@ -572,8 +572,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
       "component_slug": "pipe_riser",
       "position_m": [
-        29.7275,
-        14.62,
+        7.2275,
+        19.62,
         0.325
       ],
       "rotation_y_deg": 0.0,
@@ -589,8 +589,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
       "component_slug": "pipe_riser",
       "position_m": [
-        34.4275,
-        14.62,
+        11.9275,
+        19.62,
         0.325
       ],
       "rotation_y_deg": 0.0,
@@ -606,8 +606,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER",
       "component_slug": "pipe_riser",
       "position_m": [
-        42.3275,
-        14.62,
+        19.8275,
+        19.62,
         0.325
       ],
       "rotation_y_deg": 0.0,
@@ -623,8 +623,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
       "component_slug": "planter",
       "position_m": [
-        5.4132,
-        13.8,
+        -17.0868,
+        18.8,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -640,8 +640,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
       "component_slug": "planter",
       "position_m": [
-        33.2132,
-        13.8,
+        10.7132,
+        18.8,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -657,8 +657,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-PLANTER",
       "component_slug": "planter",
       "position_m": [
-        31.2632,
-        -22.8,
+        8.7632,
+        -17.8,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -674,8 +674,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
       "component_slug": "server_rack",
       "position_m": [
-        12.8,
-        13.7675,
+        -9.7,
+        18.7675,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -691,8 +691,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
       "component_slug": "server_rack",
       "position_m": [
-        14.0,
-        13.7675,
+        -8.5,
+        18.7675,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -708,8 +708,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
       "component_slug": "server_rack",
       "position_m": [
-        43.5,
-        -22.0325,
+        21.0,
+        -17.0325,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -725,8 +725,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
       "component_slug": "server_rack",
       "position_m": [
-        43.5,
-        -18.0325,
+        21.0,
+        -13.0325,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -742,8 +742,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK",
       "component_slug": "server_rack",
       "position_m": [
-        31.2,
-        -14.0325,
+        8.7,
+        -9.0325,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -759,8 +759,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY",
       "component_slug": "server_gallery",
       "position_m": [
-        23.0,
-        14.565,
+        0.5,
+        19.565,
         0.9625
       ],
       "rotation_y_deg": 0.0,
@@ -776,8 +776,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A",
       "component_slug": "service_cart_a",
       "position_m": [
-        32.0,
-        13.2688,
+        9.5,
+        18.2688,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -793,8 +793,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B",
       "component_slug": "service_cart_b",
       "position_m": [
-        43.2312,
-        -10.2,
+        20.7312,
+        -5.2,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -810,8 +810,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
       "component_slug": "floor_tile_5m_a",
       "position_m": [
-        32.5,
-        -22.5,
+        10.0,
+        -17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -827,8 +827,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        37.5,
-        -22.5,
+        15.0,
+        -17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -844,8 +844,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        42.5,
-        -22.5,
+        20.0,
+        -17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -861,8 +861,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        32.5,
-        -17.5,
+        10.0,
+        -12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -878,8 +878,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        37.5,
-        -17.5,
+        15.0,
+        -12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -895,8 +895,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        42.5,
-        -17.5,
+        20.0,
+        -12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -912,8 +912,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
       "component_slug": "floor_tile_5m_a",
       "position_m": [
-        32.5,
-        -12.5,
+        10.0,
+        -7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -929,8 +929,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        37.5,
-        -12.5,
+        15.0,
+        -7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -946,8 +946,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
-        42.5,
-        -12.5,
+        20.0,
+        -7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -963,8 +963,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        32.5,
-        -7.5,
+        10.0,
+        -2.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -980,8 +980,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
-        37.5,
-        -7.5,
+        15.0,
+        -2.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -997,8 +997,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        42.5,
-        -7.5,
+        20.0,
+        -2.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1014,8 +1014,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        32.5,
-        -2.5,
+        10.0,
+        2.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1031,8 +1031,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        37.5,
-        -2.5,
+        15.0,
+        2.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1048,8 +1048,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
-        42.5,
-        -2.5,
+        20.0,
+        2.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1065,8 +1065,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        2.5,
-        2.5,
+        -20.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1082,8 +1082,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
+        -15.0,
         7.5,
-        2.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1099,8 +1099,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        12.5,
-        2.5,
+        -10.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1116,8 +1116,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        17.5,
-        2.5,
+        -5.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1133,8 +1133,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        22.5,
-        2.5,
+        0.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1150,8 +1150,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
-        27.5,
-        2.5,
+        5.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1167,8 +1167,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        32.5,
-        2.5,
+        10.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1184,8 +1184,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
-        37.5,
-        2.5,
+        15.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1201,8 +1201,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        42.5,
-        2.5,
+        20.0,
+        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1218,8 +1218,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
-        2.5,
-        7.5,
+        -20.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1235,8 +1235,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        7.5,
-        7.5,
+        -15.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1252,8 +1252,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
+        -10.0,
         12.5,
-        7.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1269,8 +1269,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        17.5,
-        7.5,
+        -5.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1286,8 +1286,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C",
       "component_slug": "floor_tile_5m_c",
       "position_m": [
-        22.5,
-        7.5,
+        0.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1303,8 +1303,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        27.5,
-        7.5,
+        5.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1320,8 +1320,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        32.5,
-        7.5,
+        10.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1337,8 +1337,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        37.5,
-        7.5,
+        15.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1354,8 +1354,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        42.5,
-        7.5,
+        20.0,
+        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1371,8 +1371,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        2.5,
-        12.5,
+        -20.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1388,8 +1388,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
       "component_slug": "floor_tile_5m_a",
       "position_m": [
-        7.5,
-        12.5,
+        -15.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1405,8 +1405,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        12.5,
-        12.5,
+        -10.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1422,8 +1422,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
       "component_slug": "floor_tile_5m_a",
       "position_m": [
+        -5.0,
         17.5,
-        12.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1439,8 +1439,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        22.5,
-        12.5,
+        0.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1456,8 +1456,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        27.5,
-        12.5,
+        5.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1473,8 +1473,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        32.5,
-        12.5,
+        10.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1490,8 +1490,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A",
       "component_slug": "floor_tile_5m_a",
       "position_m": [
-        37.5,
-        12.5,
+        15.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1507,8 +1507,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B",
       "component_slug": "floor_tile_5m_b",
       "position_m": [
-        42.5,
-        12.5,
+        20.0,
+        17.5,
         -0.3
       ],
       "rotation_y_deg": 0.0,
@@ -1524,8 +1524,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
       "component_slug": "wall_label",
       "position_m": [
-        31.0,
-        14.4462,
+        8.5,
+        19.4462,
         2.295
       ],
       "rotation_y_deg": 0.0,
@@ -1541,8 +1541,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL",
       "component_slug": "wall_label",
       "position_m": [
-        44.4,
-        -12.0137,
+        21.9,
+        -7.0137,
         2.295
       ],
       "rotation_y_deg": 0.0,
@@ -1558,8 +1558,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        2.5,
-        -0.045,
+        -20.0,
+        4.955,
         0.0
       ],
       "rotation_y_deg": 90.0,
@@ -1575,8 +1575,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        2.5,
-        14.8945,
+        -20.0,
+        19.8945,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1592,8 +1592,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        7.5,
-        -0.045,
+        -15.0,
+        4.955,
         0.0
       ],
       "rotation_y_deg": 90.0,
@@ -1605,12 +1605,29 @@
       "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT"
     },
     {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        -15.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_REAR"
+    },
+    {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT",
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        12.5,
-        -0.045,
+        -10.0,
+        4.955,
         0.0
       ],
       "rotation_y_deg": 90.0,
@@ -1626,8 +1643,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        12.5,
-        14.8945,
+        -10.0,
+        19.8945,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1643,8 +1660,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        17.5,
-        -0.045,
+        -5.0,
+        4.955,
         0.0
       ],
       "rotation_y_deg": 90.0,
@@ -1660,8 +1677,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        17.5,
-        14.8945,
+        -5.0,
+        19.8945,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1677,8 +1694,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        22.5,
-        -0.045,
+        0.0,
+        4.955,
         0.0
       ],
       "rotation_y_deg": 90.0,
@@ -1694,8 +1711,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        22.5,
-        14.8945,
+        0.0,
+        19.8945,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1711,8 +1728,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        27.5,
-        -0.045,
+        5.0,
+        4.955,
         0.0
       ],
       "rotation_y_deg": 90.0,
@@ -1728,8 +1745,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        27.5,
-        14.8945,
+        5.0,
+        19.8945,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1745,8 +1762,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        32.5,
-        14.8945,
+        10.0,
+        19.8945,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1762,8 +1779,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        32.5,
-        -25.1055,
+        10.0,
+        -20.1055,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1775,12 +1792,46 @@
       "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH"
     },
     {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_REAR",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        15.0,
+        19.8945,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_REAR"
+    },
+    {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_SOUTH",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
+      "component_slug": "wall_5m_a",
+      "position_m": [
+        15.0,
+        -20.1055,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_SOUTH"
+    },
+    {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT",
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        42.5,
-        -25.1055,
+        20.0,
+        -20.1055,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1796,8 +1847,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A",
       "component_slug": "wall_5m_a",
       "position_m": [
-        42.5,
-        14.8945,
+        20.0,
+        19.8945,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1813,8 +1864,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        29.955,
-        -22.5,
+        7.455,
+        -17.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1830,8 +1881,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
       "component_slug": "wall_5m_c",
       "position_m": [
-        44.887,
-        -22.5,
+        22.387,
+        -17.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1847,8 +1898,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        29.955,
-        -17.5,
+        7.455,
+        -12.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1864,8 +1915,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
       "component_slug": "wall_5m_d",
       "position_m": [
-        44.887,
-        -17.5,
+        22.387,
+        -12.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1881,8 +1932,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        29.955,
-        -12.5,
+        7.455,
+        -7.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1898,8 +1949,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
       "component_slug": "wall_5m_c",
       "position_m": [
-        44.887,
-        -12.5,
+        22.387,
+        -7.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1915,8 +1966,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        29.955,
-        -7.5,
+        7.455,
+        -2.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1932,8 +1983,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
       "component_slug": "wall_5m_d",
       "position_m": [
-        44.887,
-        -7.5,
+        22.387,
+        -2.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1949,8 +2000,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_B",
       "component_slug": "wall_5m_b",
       "position_m": [
-        29.955,
-        -2.5,
+        7.455,
+        2.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1966,8 +2017,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
       "component_slug": "wall_5m_c",
       "position_m": [
-        44.887,
-        -2.5,
+        22.387,
+        2.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -1983,8 +2034,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
       "component_slug": "wall_5m_d",
       "position_m": [
-        -0.113,
-        2.5,
+        -22.613,
+        7.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -2000,8 +2051,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
       "component_slug": "wall_5m_d",
       "position_m": [
-        44.887,
-        2.5,
+        22.387,
+        7.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -2017,8 +2068,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
       "component_slug": "wall_5m_c",
       "position_m": [
-        44.887,
-        7.5,
+        22.387,
+        12.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -2030,12 +2081,29 @@
       "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45"
     },
     {
+      "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_00",
+      "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
+      "component_slug": "wall_5m_d",
+      "position_m": [
+        -22.613,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "source_package_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_00"
+    },
+    {
       "instance_id": "ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00",
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D",
       "component_slug": "wall_5m_d",
       "position_m": [
-        -0.113,
-        12.5,
+        -22.613,
+        17.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -2051,8 +2119,8 @@
       "component_id": "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C",
       "component_slug": "wall_5m_c",
       "position_m": [
-        44.887,
-        12.5,
+        22.387,
+        17.5,
         0.0
       ],
       "rotation_y_deg": 0.0,
@@ -2065,16 +2133,41 @@
     }
   ],
   "validation": {
-    "source_object_count": 121,
-    "instance_count": 121,
+    "source_object_count": 125,
+    "instance_count": 125,
     "dropped_by_door_slot_sealing": 0,
     "coverage_ok": true,
     "rotation_inferred": true,
     "rotation_stats": {
-      "0": 114,
+      "0": 118,
       "90": 7
     }
   },
   "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
-  "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）"
+  "rotation_inferred_from": "代表件与成员包输出网格顶点的 Z 轴 0/90/180/270 旋转不变等价（Blender 侧实测）",
+  "coordinate_contract": {
+    "source_space": "blender_room_local",
+    "origin_mode": "template_bounds_center_at_walk_plane",
+    "room_frame_world_translation_m": [
+      22.5,
+      -5.0,
+      0.0
+    ],
+    "room_frame_world_rotation_z_deg": 0.0,
+    "source_bounds_xy_m": [
+      [
+        -22.5,
+        -20.0
+      ],
+      [
+        22.5,
+        20.0
+      ]
+    ],
+    "walk_plane_z_m": 0.0,
+    "blender_plane": "XY",
+    "blender_up": "+Z",
+    "rotation_y_deg_semantics": "rotation_about_blender_Z",
+    "godot_mapping": "(bx, by, bz) -> (bx, bz, -by)"
+  }
 }

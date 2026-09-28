@@ -28,7 +28,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_service/floor_service_root_top3d.tscn" id="26_mchja"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn" id="27_rjul7"]
 
-[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=897844915]
+[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1216396339]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT"
 metadata/asset_version = "v009"
 metadata/authored_room_id = "room_03"
@@ -39,23 +39,24 @@ metadata/authored_layout_version = "v009"
 metadata/authored_layout_room_id = "room_03"
 metadata/authored_layout_corner_count = 0
 metadata/authored_layout_solid_wall_count = 27
-metadata/authored_layout_door_wall_count = 2
+metadata/authored_layout_door_wall_count = 1
 metadata/authored_layout_floor_tile_count = 48
 metadata/authored_layout_exclusive_count = 0
 metadata/authored_layout_multi_level_count = 0
 metadata/authored_layout_room_type_component_count = 29
-metadata/authored_layout_promoted_walls = Array[String](["wall_north_-1@north", "wall_south_-1@south"])
-metadata/snapshot_tower_wall_door_offset_north = -2.5
-metadata/snapshot_tower_wall_door_offset_south = -2.5
+metadata/authored_layout_promoted_walls = Array[String](["wall_east_0@west"])
+metadata/snapshot_tower_wall_door_offset_east = 2.5
+metadata/snapshot_tower_wall_door_offset_west = 2.5
 metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
 metadata/room_id = "room_03"
 metadata/room_type = "COMBAT"
 metadata/source_mode = "live_expedition_runtime_static_extract"
 metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
+metadata/connection_port_count = 2
 
-[node name="door_wall" type="Node3D" parent="." unique_id=1436889800 instance=ExtResource("1_bn7ba")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -19.8425)
+[node name="door_wall" type="Node3D" parent="." unique_id=1082306306 instance=ExtResource("1_bn7ba")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.4999983, 0, 19.8425)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -71,14 +72,14 @@ metadata/collision_owner = "room_door_owned"
 metadata/collision_policy = "split_door_wall_proxy"
 metadata/collision_shape_count = 3
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "north"
+metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-DOOR_WALL"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_east_-1" type="Node3D" parent="." unique_id=1068343013 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8325, 0, 2.5)
+[node name="wall_east_-1" type="Node3D" parent="." unique_id=774285820 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.8325, 0, -2.4999988)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -94,14 +95,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
+metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_east_-2" type="Node3D" parent="." unique_id=502677825 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8425, 0, 7.5)
+[node name="wall_east_-2" type="Node3D" parent="." unique_id=2028099901 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.842501, 0, -7.4999986)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -117,14 +118,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
+metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_east_-3" type="Node3D" parent="." unique_id=1666383833 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8325, 0, 12.5)
+[node name="wall_east_-3" type="Node3D" parent="." unique_id=297732627 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.832501, 0, -12.499999)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -140,14 +141,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
+metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_east_-4" type="Node3D" parent="." unique_id=1366229088 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.835, 0, 17.5)
+[node name="wall_east_-4" type="Node3D" parent="." unique_id=1648968029 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.835002, 0, -17.499998)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -163,106 +164,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
+metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_east_0" type="Node3D" parent="." unique_id=126166806 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8425, 0, -2.5)
-metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/asset_version = "v009"
-metadata/room_type = "OFFICE_ROOM"
-metadata/component_slug = "wall_t615_5m"
-metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
-metadata/origin_contract = "bottom_center"
-metadata/front_axis_blender = "-X"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
-metadata/slot_role = "solid_wall"
-metadata/collision_owner = "self"
-metadata/collision_policy = "structural_box_proxy"
-metadata/collision_shape_count = 1
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="wall_east_1" type="Node3D" parent="." unique_id=845722595 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8325, 0, -7.5)
-metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/asset_version = "v009"
-metadata/room_type = "OFFICE_ROOM"
-metadata/component_slug = "wall_t615_5m"
-metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
-metadata/origin_contract = "bottom_center"
-metadata/front_axis_blender = "-X"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
-metadata/slot_role = "solid_wall"
-metadata/collision_owner = "self"
-metadata/collision_policy = "structural_box_proxy"
-metadata/collision_shape_count = 1
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="wall_east_2" type="Node3D" parent="." unique_id=2017312074 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8425, 0, -12.5)
-metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/asset_version = "v009"
-metadata/room_type = "OFFICE_ROOM"
-metadata/component_slug = "wall_t615_5m"
-metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
-metadata/origin_contract = "bottom_center"
-metadata/front_axis_blender = "-X"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
-metadata/slot_role = "solid_wall"
-metadata/collision_owner = "self"
-metadata/collision_policy = "structural_box_proxy"
-metadata/collision_shape_count = 1
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="wall_east_3" type="Node3D" parent="." unique_id=292147896 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8325, 0, -17.5)
-metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/asset_version = "v009"
-metadata/room_type = "OFFICE_ROOM"
-metadata/component_slug = "wall_t615_5m"
-metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
-metadata/origin_contract = "bottom_center"
-metadata/front_axis_blender = "-X"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
-metadata/slot_role = "solid_wall"
-metadata/collision_owner = "self"
-metadata/collision_policy = "structural_box_proxy"
-metadata/collision_shape_count = 1
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "east"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="wall_north_-1" type="Node3D" parent="." unique_id=1830858361 instance=ExtResource("3_5yt7f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -19.8325)
+[node name="wall_east_0" type="Node3D" parent="." unique_id=772788790 instance=ExtResource("3_5yt7f")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14.8425, 0, 2.5000012)
 metadata/asset_id = "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -300,23 +209,14 @@ metadata/pier_width_m = 1.4
 metadata/lintel_height_m = 9.4
 metadata/snap_to_ground_offset_m = 0
 metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
-metadata/tower_wall_direction = "north"
+metadata/tower_wall_direction = "west"
 metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_door_wall_promoted = true
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="CameraOnlyDoorWall_North_I00" type="StaticBody3D" parent="." unique_id=106173053]
-process_mode = 3
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -19.8325)
-collision_layer = 16
-collision_mask = 0
-metadata/camera_lower_wall = true
-metadata/camera_only_door_wall = true
-metadata/tower_wall_direction = "north"
-
-[node name="wall_north_-2" type="Node3D" parent="." unique_id=1387205201 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 0, -19.8425)
+[node name="wall_east_1" type="Node3D" parent="." unique_id=1463852538 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.8324995, 0, 7.5000014)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -332,14 +232,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "north"
+metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_north_-3" type="Node3D" parent="." unique_id=782038525 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.5, 0, -19.8325)
+[node name="wall_east_2" type="Node3D" parent="." unique_id=519580892 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.842499, 0, 12.500001)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -355,14 +255,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "north"
+metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_north_1" type="Node3D" parent="." unique_id=1037415630 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, -19.8325)
+[node name="wall_east_3" type="Node3D" parent="." unique_id=744651556 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.832499, 0, 17.500002)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -378,91 +278,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "north"
+metadata/tower_wall_direction = "west"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_north_2" type="Node3D" parent="." unique_id=139635738 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 0, -19.8325)
-metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/asset_version = "v009"
-metadata/room_type = "OFFICE_ROOM"
-metadata/component_slug = "wall_t615_5m"
-metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
-metadata/origin_contract = "bottom_center"
-metadata/front_axis_blender = "-X"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
-metadata/slot_role = "solid_wall"
-metadata/collision_owner = "self"
-metadata/collision_policy = "structural_box_proxy"
-metadata/collision_shape_count = 1
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "north"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="wall_south_-1" type="Node3D" parent="." unique_id=877587385 instance=ExtResource("3_5yt7f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 19.8325)
-metadata/asset_id = "ENV-BATTLE-COMMON-WALL-DOOR-5M"
-metadata/asset_version = "v004"
-metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
-metadata/library_root = "res://assets/art/environments/tower_zones/battle"
-metadata/category = "08_wall_component"
-metadata/component = "wall_door_5m"
-metadata/logic_id = "wall_door_5m"
-metadata/display_name_zh = "战局通用门墙 5×0.3×11.9m（门洞 2.2×2.5，含装甲门禁）"
-metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
-metadata/source_collection = "wall_door_5m_通用包"
-metadata/source_root_object = "ROOT_wall_door_5m_通用组件"
-metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/08/wall_door_5m/asset_manifest.json"
-metadata/origin_contract = "bottom_center"
-metadata/forward_axis = "-Z"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
-metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.365)
-metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
-metadata/preserve_authored_palette = true
-metadata/collision_owner = "self"
-metadata/collision_policy = "embedded_three_box_bottom_center"
-metadata/collision_shape_count = 3
-metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/supersedes = "v003"
-metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"
-metadata/wall_kind = "door_portal"
-metadata/wall_thickness_m = 0.3
-metadata/wall_visual_height_m = 11.9
-metadata/wall_logical_height_m = 12
-metadata/grid_unit_m = 5.0
-metadata/door_clear_width_m = 2.2
-metadata/door_clear_height_m = 2.5
-metadata/pier_width_m = 1.4
-metadata/lintel_height_m = 9.4
-metadata/snap_to_ground_offset_m = 0
-metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
-metadata/tower_wall_direction = "south"
-metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/authored_door_wall_promoted = true
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="CameraOnlyDoorWall_South_I00" type="StaticBody3D" parent="." unique_id=721062803]
-process_mode = 3
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 19.8325)
-collision_layer = 16
-collision_mask = 0
-metadata/camera_lower_wall = true
-metadata/camera_only_door_wall = true
-metadata/tower_wall_direction = "south"
-
-[node name="wall_south_-2" type="Node3D" parent="." unique_id=157046394 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 0, 19.8425)
+[node name="wall_north_-1" type="Node3D" parent="." unique_id=1080356068 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5000017, 0, 19.8325)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -484,8 +307,146 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_south_-3" type="Node3D" parent="." unique_id=1312227859 instance=ExtResource("4_odlwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, 19.595)
+[node name="wall_north_-2" type="Node3D" parent="." unique_id=154358646 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.500002, 0, 19.8425)
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/asset_version = "v009"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "wall_t615_5m"
+metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="wall_north_-3" type="Node3D" parent="." unique_id=51664604 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.500002, 0, 19.832499)
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/asset_version = "v009"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "wall_t615_5m"
+metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="wall_north_1" type="Node3D" parent="." unique_id=459075355 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.499998, 0, 19.8325)
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/asset_version = "v009"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "wall_t615_5m"
+metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="wall_north_2" type="Node3D" parent="." unique_id=48603637 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.499998, 0, 19.832502)
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/asset_version = "v009"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "wall_t615_5m"
+metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="wall_south_-1" type="Node3D" parent="." unique_id=1994359613 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.4999983, 0, -19.8325)
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/asset_version = "v009"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "wall_t615_5m"
+metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/tower_wall_direction = "north"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="wall_south_-2" type="Node3D" parent="." unique_id=1938357494 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.499998, 0, -19.8425)
+metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/asset_version = "v009"
+metadata/room_type = "OFFICE_ROOM"
+metadata/component_slug = "wall_t615_5m"
+metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-X"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
+metadata/slot_role = "solid_wall"
+metadata/collision_owner = "self"
+metadata/collision_policy = "structural_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/tower_wall_direction = "north"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="wall_south_-3" type="Node3D" parent="." unique_id=620205623 instance=ExtResource("4_odlwr")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.499998, 0, -19.595001)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -501,14 +462,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "south"
+metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T1110_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_south_0" type="Node3D" parent="." unique_id=520882934 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5, 0, 19.8425)
+[node name="wall_south_0" type="Node3D" parent="." unique_id=2072870483 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.5000017, 0, -19.8425)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -524,14 +485,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "south"
+metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_south_1" type="Node3D" parent="." unique_id=1290974073 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.5, 0, 19.8325)
+[node name="wall_south_1" type="Node3D" parent="." unique_id=1951672147 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.500002, 0, -19.8325)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -547,14 +508,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "south"
+metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_south_2" type="Node3D" parent="." unique_id=1382236613 instance=ExtResource("5_74fsd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 19.665)
+[node name="wall_south_2" type="Node3D" parent="." unique_id=2057879154 instance=ExtResource("5_74fsd")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.500002, 0, -19.664999)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -570,14 +531,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "south"
+metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T970_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_-1" type="Node3D" parent="." unique_id=1191639589 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8325, 0, 2.5)
+[node name="wall_west_-1" type="Node3D" parent="." unique_id=1038220657 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.8325, 0, -2.5000012)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -593,14 +554,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
+metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_-2" type="Node3D" parent="." unique_id=1687575430 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8425, 0, 7.5)
+[node name="wall_west_-2" type="Node3D" parent="." unique_id=1465252158 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.842499, 0, -7.5000014)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -616,14 +577,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
+metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_-3" type="Node3D" parent="." unique_id=738809955 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8325, 0, 12.5)
+[node name="wall_west_-3" type="Node3D" parent="." unique_id=1056450288 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.8324995, 0, -12.500001)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -639,14 +600,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
+metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_-4" type="Node3D" parent="." unique_id=872331285 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8425, 0, 17.5)
+[node name="wall_west_-4" type="Node3D" parent="." unique_id=1456627011 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.842498, 0, -17.500002)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -662,14 +623,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
+metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_0" type="Node3D" parent="." unique_id=868496054 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8425, 0, -2.5)
+[node name="wall_west_1" type="Node3D" parent="." unique_id=2108025636 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.832501, 0, 7.4999986)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -685,14 +646,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
+metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_1" type="Node3D" parent="." unique_id=1587986021 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8325, 0, -7.5)
+[node name="wall_west_2" type="Node3D" parent="." unique_id=743801574 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.842501, 0, 12.499999)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -708,14 +669,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
+metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_2" type="Node3D" parent="." unique_id=162270131 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8425, 0, -12.5)
+[node name="wall_west_3" type="Node3D" parent="." unique_id=1180077355 instance=ExtResource("2_gb6f5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.832502, 0, 17.499998)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -731,37 +692,14 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
+metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_west_3" type="Node3D" parent="." unique_id=907029624 instance=ExtResource("2_gb6f5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8325, 0, -17.5)
-metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/asset_version = "v009"
-metadata/room_type = "OFFICE_ROOM"
-metadata/component_slug = "wall_t615_5m"
-metadata/display_name_zh = "墙体 0.61×5.00×11.90m"
-metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_packages/wall_t615_5m/wall_t615_5m.blend"
-metadata/origin_contract = "bottom_center"
-metadata/front_axis_blender = "-X"
-metadata/up_axis = "+Y"
-metadata/bounds_size_m = Vector3(0.615, 11.9, 5)
-metadata/slot_role = "solid_wall"
-metadata/collision_owner = "self"
-metadata/collision_policy = "structural_box_proxy"
-metadata/collision_shape_count = 1
-metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "west"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_T615_5M"
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="filing_run_west" type="Node3D" parent="." unique_id=291715999 instance=ExtResource("6_if2ks")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2825, 0, 0)
+[node name="filing_run_west" type="Node3D" parent="." unique_id=1344719685 instance=ExtResource("6_if2ks")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.2825, 0, -1.2486158e-06)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-FILING_RUN"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -780,8 +718,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-FILING_RUN"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="locker_bank_north" type="Node3D" parent="." unique_id=1697993456 instance=ExtResource("7_dvg3r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -19.095)
+[node name="locker_bank_north" type="Node3D" parent="." unique_id=1846015351 instance=ExtResource("7_dvg3r")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.499998, 0, 19.095001)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -800,8 +738,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-LOCKER_BANK"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="planting_perimeter" type="Node3D" parent="." unique_id=1040668466 instance=ExtResource("8_wxb33")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7501, 0, -1.7482)
+[node name="planting_perimeter" type="Node3D" parent="." unique_id=586335170 instance=ExtResource("8_wxb33")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.75009984, 0, 1.7482002)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -820,8 +758,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-PLANTING_PERIMETER"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="power_cabinet_bank_south" type="Node3D" parent="." unique_id=46515429 instance=ExtResource("9_k4cne")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.4, 0, 19.255)
+[node name="power_cabinet_bank_south" type="Node3D" parent="." unique_id=174743427 instance=ExtResource("9_k4cne")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 13.399998, 0, -19.255001)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -840,8 +778,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-POWER_CABINET_BANK"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="prep_bench_east" type="Node3D" parent="." unique_id=688559168 instance=ExtResource("10_kjigu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.07, 0, 17.5)
+[node name="prep_bench_east" type="Node3D" parent="." unique_id=1533469432 instance=ExtResource("10_kjigu")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.070002, 0, -17.499998)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -860,8 +798,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-PREP_BENCH"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="printer_station" type="Node3D" parent="." unique_id=770224983 instance=ExtResource("11_p5bs5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.97, 0, 19.1475)
+[node name="printer_station" type="Node3D" parent="." unique_id=903921188 instance=ExtResource("11_p5bs5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 10.969998, 0, -19.147501)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -880,8 +818,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-PRINTER_STATION"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="shelving_south" type="Node3D" parent="." unique_id=1655086175 instance=ExtResource("12_35a3r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, 19.2)
+[node name="shelving_south" type="Node3D" parent="." unique_id=31752288 instance=ExtResource("12_35a3r")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.500002, 0, -19.199999)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-SHELVING"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -900,8 +838,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-SHELVING"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="totem_column" type="Node3D" parent="." unique_id=1197187967 instance=ExtResource("13_pq4nd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6, 0, -17.2)
+[node name="totem_column" type="Node3D" parent="." unique_id=1360205066 instance=ExtResource("13_pq4nd")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 11.600002, 0, 17.199999)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -920,8 +858,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-TOTEM_COLUMN"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="water_and_supply_corner" type="Node3D" parent="." unique_id=2003533002 instance=ExtResource("14_8vnvu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.31, 0, -15.88)
+[node name="water_and_supply_corner" type="Node3D" parent="." unique_id=3953892 instance=ExtResource("14_8vnvu")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.309999, 0, 15.880001)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -940,8 +878,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WATER_AND_SUPPLY_CORNER"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="work_cluster_a" type="Node3D" parent="." unique_id=1416280259 instance=ExtResource("15_8mijh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, 9.29)
+[node name="work_cluster_a" type="Node3D" parent="." unique_id=1417173333 instance=ExtResource("15_8mijh")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.499999, 0, -9.290001)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -960,8 +898,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="work_cluster_b" type="Node3D" parent="." unique_id=1487703478 instance=ExtResource("15_8mijh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, 10.11)
+[node name="work_cluster_b" type="Node3D" parent="." unique_id=301785536 instance=ExtResource("15_8mijh")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.500001, 0, -10.109999)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -980,8 +918,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="work_cluster_c" type="Node3D" parent="." unique_id=1808899743 instance=ExtResource("15_8mijh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, -4.71)
+[node name="work_cluster_c" type="Node3D" parent="." unique_id=1208196586 instance=ExtResource("15_8mijh")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.5000005, 0, 4.7099996)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -1000,8 +938,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="work_cluster_d" type="Node3D" parent="." unique_id=1617843840 instance=ExtResource("15_8mijh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, -3.89)
+[node name="work_cluster_d" type="Node3D" parent="." unique_id=1725194750 instance=ExtResource("15_8mijh")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.4999995, 0, 3.8900006)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -1020,8 +958,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WORK_CLUSTER"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="floor_zone_mark" type="Node3D" parent="." unique_id=877948047 instance=ExtResource("16_fvajq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.022, -7)
+[node name="floor_zone_mark" type="Node3D" parent="." unique_id=1639645346 instance=ExtResource("16_fvajq")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.09999939, 0.022, 7)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -1040,8 +978,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_ZONE_MARK"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="tile_-1_-1" type="Node3D" parent="." unique_id=1005619703 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.081, 2.5)
+[node name="tile_-1_-1" type="Node3D" parent="." unique_id=1935151884 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.4999998, -0.081, -2.5000002)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1084,8 +1022,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-1_-2" type="Node3D" parent="." unique_id=383274999 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.056, 7.5)
+[node name="tile_-1_-2" type="Node3D" parent="." unique_id=455225445 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.4999993, -0.056, -7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1128,8 +1066,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-1_-3" type="Node3D" parent="." unique_id=1646444327 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.081, 12.5)
+[node name="tile_-1_-3" type="Node3D" parent="." unique_id=134061601 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.4999988, -0.081, -12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1172,8 +1110,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-1_-4" type="Node3D" parent="." unique_id=571529297 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.056, 17.5)
+[node name="tile_-1_-4" type="Node3D" parent="." unique_id=1716003844 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.4999986, -0.056, -17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1216,8 +1154,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-1_0" type="Node3D" parent="." unique_id=1310464100 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.056, -2.5)
+[node name="tile_-1_0" type="Node3D" parent="." unique_id=107060363 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5000002, -0.056, 2.4999998)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1260,8 +1198,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-1_1" type="Node3D" parent="." unique_id=2077338050 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.081, -7.5)
+[node name="tile_-1_1" type="Node3D" parent="." unique_id=391110731 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5000007, -0.081, 7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1304,8 +1242,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-1_2" type="Node3D" parent="." unique_id=857078423 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.056, -12.5)
+[node name="tile_-1_2" type="Node3D" parent="." unique_id=1484167866 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5000012, -0.056, 12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1348,8 +1286,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-1_3" type="Node3D" parent="." unique_id=118621546 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.081, -17.5)
+[node name="tile_-1_3" type="Node3D" parent="." unique_id=1046019129 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5000014, -0.081, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1392,8 +1330,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_-1" type="Node3D" parent="." unique_id=443536062 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.056, 2.5)
+[node name="tile_-2_-1" type="Node3D" parent="." unique_id=2011195625 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, -0.056, -2.5000007)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1436,8 +1374,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_-2" type="Node3D" parent="." unique_id=487745269 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.081, 7.5)
+[node name="tile_-2_-2" type="Node3D" parent="." unique_id=800459986 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.4999995, -0.081, -7.5000005)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1480,8 +1418,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_-3" type="Node3D" parent="." unique_id=822118773 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.056, 12.5)
+[node name="tile_-2_-3" type="Node3D" parent="." unique_id=1886262177 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.499999, -0.056, -12.500001)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1524,8 +1462,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_-4" type="Node3D" parent="." unique_id=1841734884 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.081, 17.5)
+[node name="tile_-2_-4" type="Node3D" parent="." unique_id=1181810426 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.4999986, -0.081, -17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1568,8 +1506,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_0" type="Node3D" parent="." unique_id=390639555 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.081, -2.5)
+[node name="tile_-2_0" type="Node3D" parent="." unique_id=760947951 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5, -0.081, 2.4999993)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1612,8 +1550,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_1" type="Node3D" parent="." unique_id=1361303978 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.056, -7.5)
+[node name="tile_-2_1" type="Node3D" parent="." unique_id=1535629577 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5000005, -0.056, 7.4999995)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1656,8 +1594,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_2" type="Node3D" parent="." unique_id=890419141 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.081, -12.5)
+[node name="tile_-2_2" type="Node3D" parent="." unique_id=1526427529 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.500001, -0.081, 12.499999)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1700,8 +1638,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-2_3" type="Node3D" parent="." unique_id=442278908 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, -0.056, -17.5)
+[node name="tile_-2_3" type="Node3D" parent="." unique_id=782893837 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.5000014, -0.056, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1744,8 +1682,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_-1" type="Node3D" parent="." unique_id=2065661393 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.081, 2.5)
+[node name="tile_-3_-1" type="Node3D" parent="." unique_id=950027596 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, -0.081, -2.5000012)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1788,8 +1726,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_-2" type="Node3D" parent="." unique_id=743061254 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.056, 7.5)
+[node name="tile_-3_-2" type="Node3D" parent="." unique_id=656292492 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.499999, -0.056, -7.500001)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1832,8 +1770,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_-3" type="Node3D" parent="." unique_id=1202837013 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.081, 12.5)
+[node name="tile_-3_-3" type="Node3D" parent="." unique_id=180924131 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.499999, -0.081, -12.500001)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1876,8 +1814,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_-4" type="Node3D" parent="." unique_id=229049751 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.056, 17.5)
+[node name="tile_-3_-4" type="Node3D" parent="." unique_id=819472643 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.499998, -0.056, -17.500002)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1920,8 +1858,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_0" type="Node3D" parent="." unique_id=1737939354 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.056, -2.5)
+[node name="tile_-3_0" type="Node3D" parent="." unique_id=791943846 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.5, -0.056, 2.4999988)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -1964,8 +1902,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_1" type="Node3D" parent="." unique_id=1759268326 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.081, -7.5)
+[node name="tile_-3_1" type="Node3D" parent="." unique_id=1905222859 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.500001, -0.081, 7.499999)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2008,8 +1946,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_2" type="Node3D" parent="." unique_id=414371155 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.056, -12.5)
+[node name="tile_-3_2" type="Node3D" parent="." unique_id=998941359 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.500001, -0.056, 12.499999)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2052,8 +1990,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_-3_3" type="Node3D" parent="." unique_id=955793186 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, -0.081, -17.5)
+[node name="tile_-3_3" type="Node3D" parent="." unique_id=1265038424 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12.500002, -0.081, 17.499998)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2096,8 +2034,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_-1" type="Node3D" parent="." unique_id=542213458 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.056, 2.5)
+[node name="tile_0_-1" type="Node3D" parent="." unique_id=2017125303 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5000002, -0.056, -2.4999998)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2140,8 +2078,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_-2" type="Node3D" parent="." unique_id=157576987 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.081, 7.5)
+[node name="tile_0_-2" type="Node3D" parent="." unique_id=1173361388 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5000007, -0.081, -7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2184,8 +2122,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_-3" type="Node3D" parent="." unique_id=1379072398 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.056, 12.5)
+[node name="tile_0_-3" type="Node3D" parent="." unique_id=1684673234 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5000012, -0.056, -12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2228,8 +2166,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_-4" type="Node3D" parent="." unique_id=1780007115 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.081, 17.5)
+[node name="tile_0_-4" type="Node3D" parent="." unique_id=731898581 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5000014, -0.081, -17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2272,8 +2210,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_0" type="Node3D" parent="." unique_id=1637626435 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.081, -2.5)
+[node name="tile_0_0" type="Node3D" parent="." unique_id=239627306 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.4999998, -0.081, 2.5000002)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2316,8 +2254,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_1" type="Node3D" parent="." unique_id=765452926 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.056, -7.5)
+[node name="tile_0_1" type="Node3D" parent="." unique_id=1235901856 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.4999993, -0.056, 7.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2360,8 +2298,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_2" type="Node3D" parent="." unique_id=370727184 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.081, -12.5)
+[node name="tile_0_2" type="Node3D" parent="." unique_id=1114602498 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.4999988, -0.081, 12.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2404,8 +2342,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_0_3" type="Node3D" parent="." unique_id=1397374224 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.056, -17.5)
+[node name="tile_0_3" type="Node3D" parent="." unique_id=615855881 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.4999986, -0.056, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2448,8 +2386,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_-1" type="Node3D" parent="." unique_id=376856151 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.081, 2.5)
+[node name="tile_1_-1" type="Node3D" parent="." unique_id=1301377183 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.5, -0.081, -2.4999993)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2492,8 +2430,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_-2" type="Node3D" parent="." unique_id=1387507455 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4888, -0.056, 7.5)
+[node name="tile_1_-2" type="Node3D" parent="." unique_id=496934718 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.4888005, -0.056, -7.4999995)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2536,8 +2474,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_-3" type="Node3D" parent="." unique_id=2045254897 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5386, -0.081, 12.5)
+[node name="tile_1_-3" type="Node3D" parent="." unique_id=1210462949 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.538601, -0.081, -12.499999)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2580,8 +2518,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_-4" type="Node3D" parent="." unique_id=1477045368 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.056, 17.5)
+[node name="tile_1_-4" type="Node3D" parent="." unique_id=1256245455 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.5000014, -0.056, -17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2624,8 +2562,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_0" type="Node3D" parent="." unique_id=1870837972 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.056, -2.5)
+[node name="tile_1_0" type="Node3D" parent="." unique_id=256036421 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.5, -0.056, 2.5000007)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2668,8 +2606,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_1" type="Node3D" parent="." unique_id=1554849936 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.081, -7.5)
+[node name="tile_1_1" type="Node3D" parent="." unique_id=435759673 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.4999995, -0.081, 7.5000005)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2712,8 +2650,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_2" type="Node3D" parent="." unique_id=194307883 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.056, -12.5)
+[node name="tile_1_2" type="Node3D" parent="." unique_id=2110624369 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.499999, -0.056, 12.500001)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2756,8 +2694,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_1_3" type="Node3D" parent="." unique_id=961189392 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, -0.081, -17.5)
+[node name="tile_1_3" type="Node3D" parent="." unique_id=1917443795 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.4999986, -0.081, 17.5)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2800,8 +2738,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_-1" type="Node3D" parent="." unique_id=798500486 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.056, 2.5)
+[node name="tile_2_-1" type="Node3D" parent="." unique_id=1212852251 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.5, -0.056, -2.4999988)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2844,8 +2782,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_-2" type="Node3D" parent="." unique_id=1184712234 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.081, 7.5)
+[node name="tile_2_-2" type="Node3D" parent="." unique_id=152714839 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.500001, -0.081, -7.499999)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2888,8 +2826,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_-3" type="Node3D" parent="." unique_id=1067784847 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.056, 12.5)
+[node name="tile_2_-3" type="Node3D" parent="." unique_id=1182631299 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.500001, -0.056, -12.499999)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2932,8 +2870,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_-4" type="Node3D" parent="." unique_id=471028730 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.081, 17.5)
+[node name="tile_2_-4" type="Node3D" parent="." unique_id=394011873 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.500002, -0.081, -17.499998)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -2976,8 +2914,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_0" type="Node3D" parent="." unique_id=332565722 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.081, -2.5)
+[node name="tile_2_0" type="Node3D" parent="." unique_id=1064038429 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.5, -0.081, 2.5000012)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -3020,8 +2958,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_1" type="Node3D" parent="." unique_id=185682800 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.056, -7.5)
+[node name="tile_2_1" type="Node3D" parent="." unique_id=1105631282 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.499999, -0.056, 7.500001)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -3064,8 +3002,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_2" type="Node3D" parent="." unique_id=1855048435 instance=ExtResource("17_orr6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.081, -12.5)
+[node name="tile_2_2" type="Node3D" parent="." unique_id=172742723 instance=ExtResource("17_orr6q")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.499999, -0.081, 12.500001)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -3108,8 +3046,8 @@ metadata/walk_plane_snap_y = -0.081
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="tile_2_3" type="Node3D" parent="." unique_id=1444346672 instance=ExtResource("18_yyumv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, -0.056, -17.5)
+[node name="tile_2_3" type="Node3D" parent="." unique_id=1477605406 instance=ExtResource("18_yyumv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.499998, -0.056, 17.500002)
 metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/asset_version = "v004"
 metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
@@ -3152,8 +3090,8 @@ metadata/walk_plane_snap_y = -0.056
 metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_TILE_5M"
 
-[node name="ceiling_deck_-1" type="Node3D" parent="." unique_id=1840736567 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 2.5)
+[node name="ceiling_deck_-1" type="Node3D" parent="." unique_id=288591276 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.1855695e-07, 11.4775, -2.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3172,8 +3110,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_deck_-2" type="Node3D" parent="." unique_id=1127037525 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 7.5)
+[node name="ceiling_deck_-2" type="Node3D" parent="." unique_id=597577710 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.556708e-07, 11.4775, -7.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3192,8 +3130,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_deck_-3" type="Node3D" parent="." unique_id=1584924474 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 12.5)
+[node name="ceiling_deck_-3" type="Node3D" parent="." unique_id=719672063 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.0927847e-06, 11.4775, -12.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3212,8 +3150,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_deck_-4" type="Node3D" parent="." unique_id=970017071 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, 17.5)
+[node name="ceiling_deck_-4" type="Node3D" parent="." unique_id=801038699 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.5298986e-06, 11.4775, -17.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3232,8 +3170,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_deck_0" type="Node3D" parent="." unique_id=2052999529 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -2.5)
+[node name="ceiling_deck_0" type="Node3D" parent="." unique_id=1789419448 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.1855695e-07, 11.4775, 2.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3252,8 +3190,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_deck_1" type="Node3D" parent="." unique_id=955131245 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -7.5)
+[node name="ceiling_deck_1" type="Node3D" parent="." unique_id=1253519817 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.556708e-07, 11.4775, 7.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3272,8 +3210,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_deck_2" type="Node3D" parent="." unique_id=1870309451 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -12.5)
+[node name="ceiling_deck_2" type="Node3D" parent="." unique_id=992464238 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.0927847e-06, 11.4775, 12.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3292,8 +3230,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_deck_3" type="Node3D" parent="." unique_id=1116930088 instance=ExtResource("19_efrqa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4775, -17.5)
+[node name="ceiling_deck_3" type="Node3D" parent="." unique_id=902963743 instance=ExtResource("19_efrqa")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.5298986e-06, 11.4775, 17.5)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3312,8 +3250,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_DECK_5M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_lighting" type="Node3D" parent="." unique_id=1525880393 instance=ExtResource("20_wss0t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.495, 0)
+[node name="ceiling_lighting" type="Node3D" parent="." unique_id=288591380 instance=ExtResource("20_wss0t")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 10.495, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3332,8 +3270,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_LIGHTING"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_ring_beam" type="Node3D" parent="." unique_id=2082079382 instance=ExtResource("21_es8ad")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.15, 0)
+[node name="ceiling_ring_beam" type="Node3D" parent="." unique_id=33031096 instance=ExtResource("21_es8ad")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 11.15, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3352,8 +3290,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_service_cable_tray" type="Node3D" parent="." unique_id=362670986 instance=ExtResource("22_qbdwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.465, 0)
+[node name="ceiling_service_cable_tray" type="Node3D" parent="." unique_id=2002250474 instance=ExtResource("22_qbdwr")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 10.465, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3372,8 +3310,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_service_duct" type="Node3D" parent="." unique_id=1701378487 instance=ExtResource("23_oxt5l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.4425, 0)
+[node name="ceiling_service_duct" type="Node3D" parent="." unique_id=1101351453 instance=ExtResource("23_oxt5l")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 10.4425, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3392,8 +3330,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ceiling_service_pipe_run" type="Node3D" parent="." unique_id=800900117 instance=ExtResource("24_qwgjm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 9.9306, 0)
+[node name="ceiling_service_pipe_run" type="Node3D" parent="." unique_id=277906411 instance=ExtResource("24_qwgjm")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.02, 9.9306, -1.7484555e-09)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3412,7 +3350,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="corner_guard" type="Node3D" parent="." unique_id=1869291883 instance=ExtResource("25_wnk7m")]
+[node name="corner_guard" type="Node3D" parent="." unique_id=184961505 instance=ExtResource("25_wnk7m")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3431,8 +3370,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CORNER_GUARD"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="floor_service" type="Node3D" parent="." unique_id=1904438765 instance=ExtResource("26_mchja")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+[node name="floor_service" type="Node3D" parent="." unique_id=2129401206 instance=ExtResource("26_mchja")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.04, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3451,8 +3390,8 @@ metadata/runtime_instantiation = "per_instance_prefab"
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-FLOOR_SERVICE"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="wall_top_service" type="Node3D" parent="." unique_id=1642832494 instance=ExtResource("27_rjul7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.2, 0)
+[node name="wall_top_service" type="Node3D" parent="." unique_id=1044666892 instance=ExtResource("27_rjul7")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 11.2, 0)
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
 metadata/asset_version = "v009"
 metadata/room_type = "OFFICE_ROOM"
@@ -3468,8 +3407,29 @@ metadata/collision_owner = "self"
 metadata/collision_policy = "structural_box_proxy"
 metadata/collision_shape_count = 1
 metadata/runtime_instantiation = "per_instance_prefab"
-metadata/tower_wall_direction = "south"
+metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-OFFICE-WALL_TOP_SERVICE"
 metadata/shadow_policy = "cast_and_receive"
+
+[node name="ConnectionPorts" type="Node3D" parent="." unique_id=553700212]
+metadata/connection_port_count = 2
+
+[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=475755189]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15, 0, 2.5)
+metadata/port_id = "A"
+metadata/target_room_id = "room_02"
+metadata/side = "east"
+metadata/lane_m = 2.5
+metadata/outward = Vector2(1, 0)
+metadata/connected = true
+
+[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=718016571]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -15, 0, 2.5)
+metadata/port_id = "B"
+metadata/target_room_id = "room_04"
+metadata/side = "west"
+metadata/lane_m = 2.5
+metadata/outward = Vector2(-1, 0)
+metadata/connected = true

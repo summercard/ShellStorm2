@@ -126,17 +126,24 @@ func _check_static_camera_wall_contract(art_root: Node, room_id: String) -> void
 	for child in art_root.get_children():
 		var corner_id := str(child.get_meta("tower_wall_corner", ""))
 		if not corner_id.is_empty():
-			var expected_body := (
-				"WallCollisionLong" if corner_id in ["SW", "NE"]
-				else "WallCollisionShort"
-			)
+			var corner_node := child as Node3D
+			var basis := corner_node.global_transform.basis
+			var long_along_world_x := absf(basis.x.x) >= absf(basis.x.z)
+			var short_along_world_x := absf(basis.z.x) >= absf(basis.z.z)
 			for value in child.find_children("*", "StaticBody3D", true, false):
 				var body := value as StaticBody3D
-				if body.name not in ["WallCollisionLong", "WallCollisionShort"]:
+				var expected := false
+				if body.name == "WallCollisionLong":
+					expected = long_along_world_x
+				elif body.name == "WallCollisionShort":
+					expected = short_along_world_x
+				else:
 					continue
 				_check(
-					bool(body.get_meta("camera_lower_wall", false)) == (body.name == expected_body),
-					"%s %s 转角的 %s 摄像机墙标记错误" % [room_id, corner_id, body.name]
+					bool(body.get_meta("camera_lower_wall", false)) == expected,
+					"%s %s 转角的 %s 世界朝向判定与摄像机墙标记不一致" % [
+						room_id, corner_id, body.name
+					]
 				)
 			continue
 		var direction := str(child.get_meta("tower_wall_direction", ""))
