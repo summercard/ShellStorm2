@@ -74,6 +74,10 @@ _scratch/.verify_ws/
 # 补丁前的基线快照（台账/动画改前对照，用完即弃；与 b2_baseline 同类）
 _scratch/*_before_*/
 _scratch/*_before_*.blend
+_scratch/*_backup/
+
+# Blender 自动保存的备份副本（与 .blend 同名只多一个 1，体积同款几十 MB，无版本价值）
+*.blend1
 
 # WorkBuddy 会话的临时探查脚本与运行日志（scratch，不入库；记忆与工具仍正常入库）
 .workbuddy/tmp/

@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/climbing_screen_01",
+  "display_name": "立面_01_蓝色爬架屏",
+  "slug": "climbing_screen_01",
+  "category": "scaffold",
+  "version": "v002",
+  "source_blend": "塔2_施工高楼_70x50m_v002.blend",
+  "collection": "立面_01_蓝色爬架屏_资产包",
+  "objects": [
+    "立面_01_蓝色爬架屏"
+  ],
+  "root_object": "立面_01_蓝色爬架屏",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -9.010000228881836,
+    -24.899999618530273,
+    14.443708419799805
+  ],
+  "bounds_max": [
+    -8.59000015258789,
+    -19.100000381469727,
+    27.556291580200195
+  ],
+  "dimensions": [
+    0.4200000762939453,
+    5.799999237060547,
+    13.11258316040039
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "climbing_screen_01.glb",
+  "fixed_display_attachment": true
+}

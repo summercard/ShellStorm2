@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/crane_00_counter_jib",
+  "display_name": "塔吊1_平衡臂_配重块卷扬机电柜",
+  "slug": "crane_00_counter_jib",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "塔2_施工高楼_70x50m_v002.blend",
+  "collection": "塔吊1_平衡臂_配重块卷扬机电柜_资产包",
+  "objects": [
+    "塔吊1_平衡臂_配重块卷扬机电柜"
+  ],
+  "root_object": "塔吊1_平衡臂_配重块卷扬机电柜",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -54.73481369018555,
+    -22.189741134643555,
+    109.87999725341797
+  ],
+  "bounds_max": [
+    -39.21883773803711,
+    -16.345523834228516,
+    114.9000015258789
+  ],
+  "dimensions": [
+    15.515975952148438,
+    5.844217300415039,
+    5.0200042724609375
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "crane_00_counter_jib.glb",
+  "fixed_display_attachment": true
+}

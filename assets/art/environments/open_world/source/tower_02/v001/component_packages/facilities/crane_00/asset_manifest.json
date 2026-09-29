@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/crane_00",
+  "display_name": "塔吊_00_桁架驾驶室吊钩",
+  "slug": "crane_00",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+  "collection": "塔吊_00_桁架驾驶室吊钩_资产包",
+  "objects": [
+    "塔吊_00_桁架驾驶室吊钩"
+  ],
+  "root_object": "塔吊_00_桁架驾驶室吊钩",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -53.04508590698242,
+    -21.583778132003165,
+    0.0
+  ],
+  "bounds_max": [
+    -8.267129898071289,
+    -11.310729026794434,
+    122.04585266113281
+  ],
+  "dimensions": [
+    44.77795600891113,
+    10.273049105208731,
+    122.04585266113281
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "crane_00.glb",
+  "fixed_display_attachment": true
+}

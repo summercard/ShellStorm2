@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/crane_02_hook",
+  "display_name": "塔吊3_滑轮组_钢索及锻造吊钩",
+  "slug": "crane_02_hook",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "塔2_施工高楼_70x50m_v002.blend",
+  "collection": "塔吊3_滑轮组_钢索及锻造吊钩_资产包",
+  "objects": [
+    "塔吊3_滑轮组_钢索及锻造吊钩"
+  ],
+  "root_object": "塔吊3_滑轮组_钢索及锻造吊钩",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    56.868900299072266,
+    3.927009105682373,
+    88.4122314453125
+  ],
+  "bounds_max": [
+    58.81209182739258,
+    5.688475131988525,
+    108.19999694824219
+  ],
+  "dimensions": [
+    1.9431915283203125,
+    1.7614660263061523,
+    19.787765502929688
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "crane_02_hook.glb",
+  "fixed_display_attachment": true
+}

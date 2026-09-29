@@ -1,0 +1,53 @@
+{
+  "package_id": "tower_02/roof_warning",
+  "display_name": "屋顶警示灯座",
+  "slug": "roof_warning",
+  "category": "roof",
+  "version": "v002",
+  "source_blend": "塔2_施工高楼_70x50m_v002.blend",
+  "collection": "屋顶警示灯座_资产包",
+  "objects": [
+    "屋顶警示灯座",
+    "屋顶警示灯_柔和自发光"
+  ],
+  "root_object": "屋顶警示灯座",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -3.299999952316284,
+    17.700000762939453,
+    96.8499984741211
+  ],
+  "bounds_max": [
+    -2.700000047683716,
+    18.299999237060547,
+    97.0
+  ],
+  "dimensions": [
+    0.5999999046325684,
+    0.5999984741210938,
+    0.15000152587890625
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_warning.glb",
+  "fixed_display_attachment": true
+}

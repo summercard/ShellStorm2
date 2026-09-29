@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "issues": [],
+  "packages": 62,
+  "output_objects": 63,
+  "triangles": 241494,
+  "material_count": 4,
+  "footprint_m": [
+    70.0,
+    50.0
+  ],
+  "full_bounds_min": [
+    -53.04508590698242,
+    -29.65464210510254,
+    0.0
+  ],
+  "full_bounds_max": [
+    65.87248229980469,
+    26.600000381469727,
+    135.0458526611328
+  ],
+  "full_dimensions": [
+    118.91756820678711,
+    56.254642486572266,
+    135.0458526611328
+  ],
+  "source_hidden": true,
+  "scope": "new independent tower02 source; other assets untouched",
+  "runtime_integration": false
+}

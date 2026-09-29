@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/roof_shoring_01",
+  "display_name": "屋顶支模_01_梁笼及顶撑",
+  "slug": "roof_shoring_01",
+  "category": "roof",
+  "version": "v002",
+  "source_blend": "塔2_施工高楼_70x50m_v002.blend",
+  "collection": "屋顶支模_01_梁笼及顶撑_资产包",
+  "objects": [
+    "屋顶支模_01_梁笼及顶撑"
+  ],
+  "root_object": "屋顶支模_01_梁笼及顶撑",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    10.420000076293945,
+    -17.079999923706055,
+    84.47575378417969
+  ],
+  "bounds_max": [
+    26.110000610351562,
+    -12.920000076293945,
+    88.75
+  ],
+  "dimensions": [
+    15.690000534057617,
+    4.159999847412109,
+    4.2742462158203125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_shoring_01.glb",
+  "fixed_display_attachment": true
+}

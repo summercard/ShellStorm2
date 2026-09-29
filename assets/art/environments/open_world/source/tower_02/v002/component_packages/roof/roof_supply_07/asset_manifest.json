@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/roof_supply_07",
+  "display_name": "屋顶材料_07_panel",
+  "slug": "roof_supply_07",
+  "category": "roof",
+  "version": "v002",
+  "source_blend": "塔2_施工高楼_70x50m_v002.blend",
+  "collection": "屋顶材料_07_panel_资产包",
+  "objects": [
+    "屋顶材料_07_panel"
+  ],
+  "root_object": "屋顶材料_07_panel",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    2.6500000953674316,
+    -19.360000610351562,
+    84.5
+  ],
+  "bounds_max": [
+    7.349999904632568,
+    -16.639999389648438,
+    86.20999908447266
+  ],
+  "dimensions": [
+    4.699999809265137,
+    2.720001220703125,
+    1.7099990844726562
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_supply_07.glb",
+  "fixed_display_attachment": true
+}

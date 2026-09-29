@@ -1,0 +1,1298 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_02\\v001\\塔2_施工高楼_70x50m_v001.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 125,
+  "polygon_count": 203097,
+  "valid_island_polygon_count": 203097,
+  "uv_reports": [
+    {
+      "object": "双笼施工电梯_导轨附墙架",
+      "polygon_count": 3504,
+      "valid_island_polygon_count": 3504,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "双笼施工电梯_导轨附墙架_制作源",
+      "polygon_count": 3504,
+      "valid_island_polygon_count": 3504,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "塔吊_00_桁架驾驶室吊钩",
+      "polygon_count": 7710,
+      "valid_island_polygon_count": 7710,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "塔吊_00_桁架驾驶室吊钩_制作源",
+      "polygon_count": 7710,
+      "valid_island_polygon_count": 7710,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "塔吊_01_桁架驾驶室吊钩",
+      "polygon_count": 3798,
+      "valid_island_polygon_count": 3798,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "塔吊_01_桁架驾驶室吊钩_制作源",
+      "polygon_count": 3798,
+      "valid_island_polygon_count": 3798,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "塔吊_02_桁架驾驶室吊钩",
+      "polygon_count": 7542,
+      "valid_island_polygon_count": 7542,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "塔吊_02_桁架驾驶室吊钩_制作源",
+      "polygon_count": 7542,
+      "valid_island_polygon_count": 7542,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶_固定材料堆及机具",
+      "polygon_count": 1200,
+      "valid_island_polygon_count": 1200,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶_固定材料堆及机具_制作源",
+      "polygon_count": 1200,
+      "valid_island_polygon_count": 1200,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_00_钢筋模板",
+      "polygon_count": 558,
+      "valid_island_polygon_count": 558,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_00_钢筋模板_制作源",
+      "polygon_count": 558,
+      "valid_island_polygon_count": 558,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_01_钢筋模板",
+      "polygon_count": 906,
+      "valid_island_polygon_count": 906,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_01_钢筋模板_制作源",
+      "polygon_count": 906,
+      "valid_island_polygon_count": 906,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_02_钢筋模板",
+      "polygon_count": 810,
+      "valid_island_polygon_count": 810,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_02_钢筋模板_制作源",
+      "polygon_count": 810,
+      "valid_island_polygon_count": 810,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_03_钢筋模板",
+      "polygon_count": 846,
+      "valid_island_polygon_count": 846,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_03_钢筋模板_制作源",
+      "polygon_count": 846,
+      "valid_island_polygon_count": 846,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_04_钢筋模板",
+      "polygon_count": 714,
+      "valid_island_polygon_count": 714,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_04_钢筋模板_制作源",
+      "polygon_count": 714,
+      "valid_island_polygon_count": 714,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_05_钢筋模板",
+      "polygon_count": 906,
+      "valid_island_polygon_count": 906,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_05_钢筋模板_制作源",
+      "polygon_count": 906,
+      "valid_island_polygon_count": 906,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_06_钢筋模板",
+      "polygon_count": 654,
+      "valid_island_polygon_count": 654,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_06_钢筋模板_制作源",
+      "polygon_count": 654,
+      "valid_island_polygon_count": 654,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_07_钢筋模板",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_07_钢筋模板_制作源",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_08_钢筋模板",
+      "polygon_count": 714,
+      "valid_island_polygon_count": 714,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_08_钢筋模板_制作源",
+      "polygon_count": 714,
+      "valid_island_polygon_count": 714,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_09_钢筋模板",
+      "polygon_count": 750,
+      "valid_island_polygon_count": 750,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_09_钢筋模板_制作源",
+      "polygon_count": 750,
+      "valid_island_polygon_count": 750,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_10_钢筋模板",
+      "polygon_count": 810,
+      "valid_island_polygon_count": 810,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_10_钢筋模板_制作源",
+      "polygon_count": 810,
+      "valid_island_polygon_count": 810,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_11_钢筋模板",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_11_钢筋模板_制作源",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_12_钢筋模板",
+      "polygon_count": 558,
+      "valid_island_polygon_count": 558,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_12_钢筋模板_制作源",
+      "polygon_count": 558,
+      "valid_island_polygon_count": 558,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_13_钢筋模板",
+      "polygon_count": 906,
+      "valid_island_polygon_count": 906,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_13_钢筋模板_制作源",
+      "polygon_count": 906,
+      "valid_island_polygon_count": 906,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_14_钢筋模板",
+      "polygon_count": 810,
+      "valid_island_polygon_count": 810,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶柱_14_钢筋模板_制作源",
+      "polygon_count": 810,
+      "valid_island_polygon_count": 810,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶核心模板_0_支撑平台",
+      "polygon_count": 408,
+      "valid_island_polygon_count": 408,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶核心模板_0_支撑平台_制作源",
+      "polygon_count": 408,
+      "valid_island_polygon_count": 408,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶核心模板_1_支撑平台",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶核心模板_1_支撑平台_制作源",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶核心模板_2_支撑平台",
+      "polygon_count": 392,
+      "valid_island_polygon_count": 392,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶核心模板_2_支撑平台_制作源",
+      "polygon_count": 392,
+      "valid_island_polygon_count": 392,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶警示灯_柔和自发光",
+      "polygon_count": 1,
+      "valid_island_polygon_count": 1,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "核心筒_0_楼梯及开口",
+      "polygon_count": 3720,
+      "valid_island_polygon_count": 3720,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "核心筒_0_楼梯及开口_制作源",
+      "polygon_count": 3720,
+      "valid_island_polygon_count": 3720,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "核心筒_1_楼梯及开口",
+      "polygon_count": 3720,
+      "valid_island_polygon_count": 3720,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "核心筒_1_楼梯及开口_制作源",
+      "polygon_count": 3720,
+      "valid_island_polygon_count": 3720,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_00_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_00_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_01_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_01_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_02_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_02_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_03_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_03_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_04_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_04_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_05_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_05_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_06_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_06_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_07_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_07_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_08_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_08_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_09_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_09_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_10_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_10_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_11_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_11_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_12_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_12_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_13_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_13_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_14_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_14_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_15_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_15_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_16_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_16_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_17_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_17_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_18_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_18_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_19_楼板柱梁",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_19_楼板柱梁_制作源",
+      "polygon_count": 1272,
+      "valid_island_polygon_count": 1272,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_20_楼板柱梁",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "楼层_20_楼板柱梁_制作源",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_00_脚手架围网",
+      "polygon_count": 2438,
+      "valid_island_polygon_count": 2438,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_00_脚手架围网_制作源",
+      "polygon_count": 2438,
+      "valid_island_polygon_count": 2438,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_00_蓝色爬架屏",
+      "polygon_count": 760,
+      "valid_island_polygon_count": 760,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_00_蓝色爬架屏_制作源",
+      "polygon_count": 760,
+      "valid_island_polygon_count": 760,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_01_脚手架围网",
+      "polygon_count": 900,
+      "valid_island_polygon_count": 900,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_01_脚手架围网_制作源",
+      "polygon_count": 900,
+      "valid_island_polygon_count": 900,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_01_蓝色爬架屏",
+      "polygon_count": 190,
+      "valid_island_polygon_count": 190,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_01_蓝色爬架屏_制作源",
+      "polygon_count": 190,
+      "valid_island_polygon_count": 190,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_02_脚手架围网",
+      "polygon_count": 1368,
+      "valid_island_polygon_count": 1368,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_02_脚手架围网_制作源",
+      "polygon_count": 1368,
+      "valid_island_polygon_count": 1368,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_02_蓝色爬架屏",
+      "polygon_count": 380,
+      "valid_island_polygon_count": 380,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_02_蓝色爬架屏_制作源",
+      "polygon_count": 380,
+      "valid_island_polygon_count": 380,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_03_脚手架围网",
+      "polygon_count": 900,
+      "valid_island_polygon_count": 900,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_03_脚手架围网_制作源",
+      "polygon_count": 900,
+      "valid_island_polygon_count": 900,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_03_蓝色爬架屏",
+      "polygon_count": 190,
+      "valid_island_polygon_count": 190,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_03_蓝色爬架屏_制作源",
+      "polygon_count": 190,
+      "valid_island_polygon_count": 190,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_04_脚手架围网",
+      "polygon_count": 3348,
+      "valid_island_polygon_count": 3348,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_04_脚手架围网_制作源",
+      "polygon_count": 3348,
+      "valid_island_polygon_count": 3348,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_04_蓝色爬架屏",
+      "polygon_count": 1140,
+      "valid_island_polygon_count": 1140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_04_蓝色爬架屏_制作源",
+      "polygon_count": 1140,
+      "valid_island_polygon_count": 1140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_05_脚手架围网",
+      "polygon_count": 4406,
+      "valid_island_polygon_count": 4406,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_05_脚手架围网_制作源",
+      "polygon_count": 4406,
+      "valid_island_polygon_count": 4406,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_05_蓝色爬架屏",
+      "polygon_count": 1520,
+      "valid_island_polygon_count": 1520,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_05_蓝色爬架屏_制作源",
+      "polygon_count": 1520,
+      "valid_island_polygon_count": 1520,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_06_脚手架围网",
+      "polygon_count": 5984,
+      "valid_island_polygon_count": 5984,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_06_脚手架围网_制作源",
+      "polygon_count": 5984,
+      "valid_island_polygon_count": 5984,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_06_蓝色爬架屏",
+      "polygon_count": 2280,
+      "valid_island_polygon_count": 2280,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_06_蓝色爬架屏_制作源",
+      "polygon_count": 2280,
+      "valid_island_polygon_count": 2280,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_07_脚手架围网",
+      "polygon_count": 4406,
+      "valid_island_polygon_count": 4406,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_07_脚手架围网_制作源",
+      "polygon_count": 4406,
+      "valid_island_polygon_count": 4406,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_07_蓝色爬架屏",
+      "polygon_count": 1520,
+      "valid_island_polygon_count": 1520,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面_07_蓝色爬架屏_制作源",
+      "polygon_count": 1520,
+      "valid_island_polygon_count": 1520,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

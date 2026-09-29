@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/crane_00_apex",
+  "display_name": "塔吊1_塔帽_拉杆铰接销轴",
+  "slug": "crane_00_apex",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "塔2_施工高楼_70x50m_v002.blend",
+  "collection": "塔吊1_塔帽_拉杆铰接销轴_资产包",
+  "objects": [
+    "塔吊1_塔帽_拉杆铰接销轴"
+  ],
+  "root_object": "塔吊1_塔帽_拉杆铰接销轴",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -52.227535247802734,
+    -21.119539260864258,
+    113.2513427734375
+  ],
+  "bounds_max": [
+    -11.030732154846191,
+    -11.928442001342773,
+    122.3499984741211
+  ],
+  "dimensions": [
+    41.19680309295654,
+    9.191097259521484,
+    9.098655700683594
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "crane_00_apex.glb",
+  "fixed_display_attachment": true
+}

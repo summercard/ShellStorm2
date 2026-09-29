@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_02/floor_20",
+  "display_name": "楼层_20_楼板柱梁",
+  "slug": "floor_20",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+  "collection": "楼层_20_楼板柱梁_资产包",
+  "objects": [
+    "楼层_20_楼板柱梁"
+  ],
+  "root_object": "楼层_20_楼板柱梁",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -35.0,
+    -25.0,
+    84.0
+  ],
+  "bounds_max": [
+    35.0,
+    25.0,
+    84.5
+  ],
+  "dimensions": [
+    70.0,
+    50.0,
+    0.5
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "floor_20.glb",
+  "fixed_display_attachment": true
+}

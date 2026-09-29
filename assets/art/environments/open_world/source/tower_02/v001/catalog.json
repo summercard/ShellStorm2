@@ -1,0 +1,3180 @@
+{
+  "building_id": "塔2",
+  "relationship": "peer_of_main_tower",
+  "footprint_m": [
+    70,
+    50
+  ],
+  "floor_count": 20,
+  "floor_height_m": 4.2,
+  "source_status": "authored_not_runtime",
+  "ledger_status": "Blender源已完成",
+  "packages": [
+    {
+      "package_id": "tower_02/floor_00",
+      "display_name": "楼层_00_楼板柱梁",
+      "slug": "floor_00",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_00_楼板柱梁_资产包",
+      "objects": [
+        "楼层_00_楼板柱梁"
+      ],
+      "root_object": "楼层_00_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        0.0
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        4.6
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.6
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_00.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_01",
+      "display_name": "楼层_01_楼板柱梁",
+      "slug": "floor_01",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_01_楼板柱梁_资产包",
+      "objects": [
+        "楼层_01_楼板柱梁"
+      ],
+      "root_object": "楼层_01_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        4.2
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        8.8
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.6000000000000005
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_01.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_02",
+      "display_name": "楼层_02_楼板柱梁",
+      "slug": "floor_02",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_02_楼板柱梁_资产包",
+      "objects": [
+        "楼层_02_楼板柱梁"
+      ],
+      "root_object": "楼层_02_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        8.4
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        13.0
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.6
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_02.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_03",
+      "display_name": "楼层_03_楼板柱梁",
+      "slug": "floor_03",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_03_楼板柱梁_资产包",
+      "objects": [
+        "楼层_03_楼板柱梁"
+      ],
+      "root_object": "楼层_03_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        12.600000000000001
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        17.200000000000003
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.600000000000001
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_03.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_04",
+      "display_name": "楼层_04_楼板柱梁",
+      "slug": "floor_04",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_04_楼板柱梁_资产包",
+      "objects": [
+        "楼层_04_楼板柱梁"
+      ],
+      "root_object": "楼层_04_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        16.8
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        21.400000000000002
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.600000000000001
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_04.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_05",
+      "display_name": "楼层_05_楼板柱梁",
+      "slug": "floor_05",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_05_楼板柱梁_资产包",
+      "objects": [
+        "楼层_05_楼板柱梁"
+      ],
+      "root_object": "楼层_05_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        21.0
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        25.6
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.600000000000001
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_05.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_06",
+      "display_name": "楼层_06_楼板柱梁",
+      "slug": "floor_06",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_06_楼板柱梁_资产包",
+      "objects": [
+        "楼层_06_楼板柱梁"
+      ],
+      "root_object": "楼层_06_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        25.200000000000003
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        29.800000000000004
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.600000000000001
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_06.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_07",
+      "display_name": "楼层_07_楼板柱梁",
+      "slug": "floor_07",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_07_楼板柱梁_资产包",
+      "objects": [
+        "楼层_07_楼板柱梁"
+      ],
+      "root_object": "楼层_07_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        29.400000000000002
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        34.0
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999998
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_07.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_08",
+      "display_name": "楼层_08_楼板柱梁",
+      "slug": "floor_08",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_08_楼板柱梁_资产包",
+      "objects": [
+        "楼层_08_楼板柱梁"
+      ],
+      "root_object": "楼层_08_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        33.6
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        38.199999999999996
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_08.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_09",
+      "display_name": "楼层_09_楼板柱梁",
+      "slug": "floor_09",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_09_楼板柱梁_资产包",
+      "objects": [
+        "楼层_09_楼板柱梁"
+      ],
+      "root_object": "楼层_09_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        37.800000000000004
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        42.4
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_09.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_10",
+      "display_name": "楼层_10_楼板柱梁",
+      "slug": "floor_10",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_10_楼板柱梁_资产包",
+      "objects": [
+        "楼层_10_楼板柱梁"
+      ],
+      "root_object": "楼层_10_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        42.0
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        46.599999999999994
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_10.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_11",
+      "display_name": "楼层_11_楼板柱梁",
+      "slug": "floor_11",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_11_楼板柱梁_资产包",
+      "objects": [
+        "楼层_11_楼板柱梁"
+      ],
+      "root_object": "楼层_11_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        46.2
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        50.8
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_11.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_12",
+      "display_name": "楼层_12_楼板柱梁",
+      "slug": "floor_12",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_12_楼板柱梁_资产包",
+      "objects": [
+        "楼层_12_楼板柱梁"
+      ],
+      "root_object": "楼层_12_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        50.400000000000006
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        55.0
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_12.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_13",
+      "display_name": "楼层_13_楼板柱梁",
+      "slug": "floor_13",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_13_楼板柱梁_资产包",
+      "objects": [
+        "楼层_13_楼板柱梁"
+      ],
+      "root_object": "楼层_13_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        54.6
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        59.199999999999996
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_13.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_14",
+      "display_name": "楼层_14_楼板柱梁",
+      "slug": "floor_14",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_14_楼板柱梁_资产包",
+      "objects": [
+        "楼层_14_楼板柱梁"
+      ],
+      "root_object": "楼层_14_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        58.800000000000004
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        63.4
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_14.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_15",
+      "display_name": "楼层_15_楼板柱梁",
+      "slug": "floor_15",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_15_楼板柱梁_资产包",
+      "objects": [
+        "楼层_15_楼板柱梁"
+      ],
+      "root_object": "楼层_15_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        63.0
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        67.6
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_15.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_16",
+      "display_name": "楼层_16_楼板柱梁",
+      "slug": "floor_16",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_16_楼板柱梁_资产包",
+      "objects": [
+        "楼层_16_楼板柱梁"
+      ],
+      "root_object": "楼层_16_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        67.2
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        71.8
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_16.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_17",
+      "display_name": "楼层_17_楼板柱梁",
+      "slug": "floor_17",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_17_楼板柱梁_资产包",
+      "objects": [
+        "楼层_17_楼板柱梁"
+      ],
+      "root_object": "楼层_17_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        71.4
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        76.0
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_17.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_18",
+      "display_name": "楼层_18_楼板柱梁",
+      "slug": "floor_18",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_18_楼板柱梁_资产包",
+      "objects": [
+        "楼层_18_楼板柱梁"
+      ],
+      "root_object": "楼层_18_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        75.60000000000001
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        80.2
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_18.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_19",
+      "display_name": "楼层_19_楼板柱梁",
+      "slug": "floor_19",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_19_楼板柱梁_资产包",
+      "objects": [
+        "楼层_19_楼板柱梁"
+      ],
+      "root_object": "楼层_19_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.064998626708984,
+        -25.056291580200195,
+        79.8
+      ],
+      "bounds_max": [
+        35.064998626708984,
+        25.056291580200195,
+        84.39999999999999
+      ],
+      "dimensions": [
+        70.12999725341797,
+        50.11258316040039,
+        4.599999999999994
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_19.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/floor_20",
+      "display_name": "楼层_20_楼板柱梁",
+      "slug": "floor_20",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "楼层_20_楼板柱梁_资产包",
+      "objects": [
+        "楼层_20_楼板柱梁"
+      ],
+      "root_object": "楼层_20_楼板柱梁",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.0,
+        -25.0,
+        84.0
+      ],
+      "bounds_max": [
+        35.0,
+        25.0,
+        84.5
+      ],
+      "dimensions": [
+        70.0,
+        50.0,
+        0.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "floor_20.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/core_0",
+      "display_name": "核心筒_0_楼梯及开口",
+      "slug": "core_0",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "核心筒_0_楼梯及开口_资产包",
+      "objects": [
+        "核心筒_0_楼梯及开口"
+      ],
+      "root_object": "核心筒_0_楼梯及开口",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -17.0,
+        0.5,
+        0.5
+      ],
+      "bounds_max": [
+        -9.0,
+        9.5,
+        84.58999999999999
+      ],
+      "dimensions": [
+        8.0,
+        9.0,
+        84.08999999999999
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_0.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/core_1",
+      "display_name": "核心筒_1_楼梯及开口",
+      "slug": "core_1",
+      "category": "architecture",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "核心筒_1_楼梯及开口_资产包",
+      "objects": [
+        "核心筒_1_楼梯及开口"
+      ],
+      "root_object": "核心筒_1_楼梯及开口",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        10.0,
+        1.5,
+        0.5
+      ],
+      "bounds_max": [
+        18.0,
+        10.5,
+        84.58999999999999
+      ],
+      "dimensions": [
+        8.0,
+        9.0,
+        84.08999999999999
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_1.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_00",
+      "display_name": "立面_00_脚手架围网",
+      "slug": "scaffold_00",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_00_脚手架围网_资产包",
+      "objects": [
+        "立面_00_脚手架围网"
+      ],
+      "root_object": "立面_00_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.07500076293945,
+        -26.600000381469727,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        -9.925000190734863,
+        -24.149999618530273,
+        88.82245635986328
+      ],
+      "dimensions": [
+        25.15000057220459,
+        2.450000762939453,
+        88.28745635986328
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_00.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_01",
+      "display_name": "立面_01_脚手架围网",
+      "slug": "scaffold_01",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_01_脚手架围网_资产包",
+      "objects": [
+        "立面_01_脚手架围网"
+      ],
+      "root_object": "立面_01_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -10.84999942779541,
+        -25.06999969482422,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        -8.399999618530273,
+        -18.93000030517578,
+        88.82366180419922
+      ],
+      "dimensions": [
+        2.4499998092651367,
+        6.1399993896484375,
+        88.28866180419922
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_01.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_02",
+      "display_name": "立面_02_脚手架围网",
+      "slug": "scaffold_02",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_02_脚手架围网_资产包",
+      "objects": [
+        "立面_02_脚手架围网"
+      ],
+      "root_object": "立面_02_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -10.074999809265137,
+        -20.600000381469727,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        0.07500000298023224,
+        -18.149999618530273,
+        88.8208236694336
+      ],
+      "dimensions": [
+        10.149999812245369,
+        2.450000762939453,
+        88.2858236694336
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_02.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_03",
+      "display_name": "立面_03_脚手架围网",
+      "slug": "scaffold_03",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_03_脚手架围网_资产包",
+      "objects": [
+        "立面_03_脚手架围网"
+      ],
+      "root_object": "立面_03_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -1.600000023841858,
+        -25.06999969482422,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        0.8500000238418579,
+        -18.93000030517578,
+        88.82366180419922
+      ],
+      "dimensions": [
+        2.450000047683716,
+        6.1399993896484375,
+        88.28866180419922
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_03.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_04",
+      "display_name": "立面_04_脚手架围网",
+      "slug": "scaffold_04",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_04_脚手架围网_资产包",
+      "objects": [
+        "立面_04_脚手架围网"
+      ],
+      "root_object": "立面_04_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -0.07500000298023224,
+        -26.600000381469727,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        35.07500076293945,
+        -24.149999618530273,
+        88.8232192993164
+      ],
+      "dimensions": [
+        35.150000765919685,
+        2.450000762939453,
+        88.28821929931641
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_04.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_05",
+      "display_name": "立面_05_脚手架围网",
+      "slug": "scaffold_05",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_05_脚手架围网_资产包",
+      "objects": [
+        "立面_05_脚手架围网"
+      ],
+      "root_object": "立面_05_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        34.14999771118164,
+        -25.06999969482422,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        36.599998474121094,
+        25.06999969482422,
+        88.82334899902344
+      ],
+      "dimensions": [
+        2.450000762939453,
+        50.13999938964844,
+        88.28834899902344
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_05.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_06",
+      "display_name": "立面_06_脚手架围网",
+      "slug": "scaffold_06",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_06_脚手架围网_资产包",
+      "objects": [
+        "立面_06_脚手架围网"
+      ],
+      "root_object": "立面_06_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -35.07500076293945,
+        24.149999618530273,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        35.07500076293945,
+        26.600000381469727,
+        88.8232192993164
+      ],
+      "dimensions": [
+        70.1500015258789,
+        2.450000762939453,
+        88.28821929931641
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_06.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/scaffold_07",
+      "display_name": "立面_07_脚手架围网",
+      "slug": "scaffold_07",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_07_脚手架围网_资产包",
+      "objects": [
+        "立面_07_脚手架围网"
+      ],
+      "root_object": "立面_07_脚手架围网",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -36.599998474121094,
+        -25.06999969482422,
+        0.5349999999999999
+      ],
+      "bounds_max": [
+        -34.14999771118164,
+        25.06999969482422,
+        88.82334899902344
+      ],
+      "dimensions": [
+        2.450000762939453,
+        50.13999938964844,
+        88.28834899902344
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "scaffold_07.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_00",
+      "display_name": "立面_00_蓝色爬架屏",
+      "slug": "climbing_screen_00",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_00_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_00_蓝色爬架屏"
+      ],
+      "root_object": "立面_00_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -34.90399932861328,
+        -26.409997940063477,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        -15.095999717712402,
+        -25.989999237060548,
+        28.25629234313965
+      ],
+      "dimensions": [
+        19.80799961090088,
+        0.4199987030029284,
+        13.812583923339844
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_00.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_01",
+      "display_name": "立面_01_蓝色爬架屏",
+      "slug": "climbing_screen_01",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_01_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_01_蓝色爬架屏"
+      ],
+      "root_object": "立面_01_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -9.009999809265137,
+        -24.9,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        -8.59000015258789,
+        -19.1,
+        27.556291580200195
+      ],
+      "dimensions": [
+        0.4199996566772466,
+        5.799999999999997,
+        13.11258316040039
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_01.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_02",
+      "display_name": "立面_02_蓝色爬架屏",
+      "slug": "climbing_screen_02",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_02_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_02_蓝色爬架屏"
+      ],
+      "root_object": "立面_02_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -9.904000282287598,
+        -20.409997940063477,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        -0.09599985927343369,
+        -19.989999237060548,
+        27.906291961669922
+      ],
+      "dimensions": [
+        9.808000423014164,
+        0.4199987030029284,
+        13.462583541870117
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_02.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_03",
+      "display_name": "立面_03_蓝色爬架屏",
+      "slug": "climbing_screen_03",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_03_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_03_蓝色爬架屏"
+      ],
+      "root_object": "立面_03_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -1.409999966621399,
+        -24.9,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        -0.9899999523162841,
+        -19.1,
+        27.556291580200195
+      ],
+      "dimensions": [
+        0.4200000143051148,
+        5.799999999999997,
+        13.11258316040039
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_03.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_04",
+      "display_name": "立面_04_蓝色爬架屏",
+      "slug": "climbing_screen_04",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_04_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_04_蓝色爬架屏"
+      ],
+      "root_object": "立面_04_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        0.09599985927343369,
+        -26.409997940063477,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        34.90399932861328,
+        -25.989999237060548,
+        28.25629234313965
+      ],
+      "dimensions": [
+        34.80799946933985,
+        0.4199987030029284,
+        13.812583923339844
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_04.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_05",
+      "display_name": "立面_05_蓝色爬架屏",
+      "slug": "climbing_screen_05",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_05_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_05_蓝色爬架屏"
+      ],
+      "root_object": "立面_05_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        35.989999237060545,
+        -24.904001235961914,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        36.410003662109375,
+        19.904001235961914,
+        28.25629234313965
+      ],
+      "dimensions": [
+        0.4200044250488304,
+        44.80800247192383,
+        13.812583923339844
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_05.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_06",
+      "display_name": "立面_06_蓝色爬架屏",
+      "slug": "climbing_screen_06",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_06_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_06_蓝色爬架屏"
+      ],
+      "root_object": "立面_06_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -34.90399932861328,
+        25.989999237060548,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        34.90399932861328,
+        26.409997940063477,
+        28.25629234313965
+      ],
+      "dimensions": [
+        69.80799865722656,
+        0.4199987030029284,
+        13.812583923339844
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_06.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/climbing_screen_07",
+      "display_name": "立面_07_蓝色爬架屏",
+      "slug": "climbing_screen_07",
+      "category": "scaffold",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "立面_07_蓝色爬架屏_资产包",
+      "objects": [
+        "立面_07_蓝色爬架屏"
+      ],
+      "root_object": "立面_07_蓝色爬架屏",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -36.410003662109375,
+        -19.904001235961914,
+        14.443708419799805
+      ],
+      "bounds_max": [
+        -35.989999237060545,
+        24.904001235961914,
+        28.25629234313965
+      ],
+      "dimensions": [
+        0.4200044250488304,
+        44.80800247192383,
+        13.812583923339844
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "climbing_screen_07.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/construction_elevator",
+      "display_name": "双笼施工电梯_导轨附墙架",
+      "slug": "construction_elevator",
+      "category": "facilities",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "双笼施工电梯_导轨附墙架_资产包",
+      "objects": [
+        "双笼施工电梯_导轨附墙架"
+      ],
+      "root_object": "双笼施工电梯_导轨附墙架",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        13.25,
+        -29.65464210510254,
+        0.5
+      ],
+      "bounds_max": [
+        24.150000000000002,
+        -24.0,
+        89.0224838256836
+      ],
+      "dimensions": [
+        10.900000000000002,
+        5.654642105102539,
+        88.5224838256836
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "construction_elevator.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_00",
+      "display_name": "屋顶柱_00_钢筋模板",
+      "slug": "roof_column_00",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_00_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_00_钢筋模板",
+        "屋顶警示灯_柔和自发光"
+      ],
+      "root_object": "屋顶柱_00_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -30.03700065612793,
+        -17.03700065612793,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -27.96299934387207,
+        -14.963000297546387,
+        91.9000015258789
+      ],
+      "dimensions": [
+        2.0740013122558594,
+        2.074000358581543,
+        7.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_00.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_01",
+      "display_name": "屋顶柱_01_钢筋模板",
+      "slug": "roof_column_01",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_01_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_01_钢筋模板"
+      ],
+      "root_object": "屋顶柱_01_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -30.4,
+        -1.4,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -27.6,
+        1.4,
+        93.9000015258789
+      ],
+      "dimensions": [
+        2.799999999999997,
+        2.8,
+        9.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_01.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_02",
+      "display_name": "屋顶柱_02_钢筋模板",
+      "slug": "roof_column_02",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_02_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_02_钢筋模板"
+      ],
+      "root_object": "屋顶柱_02_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -30.4,
+        16.6,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -27.6,
+        19.4,
+        92.9000015258789
+      ],
+      "dimensions": [
+        2.799999999999997,
+        2.799999999999997,
+        8.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_02.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_03",
+      "display_name": "屋顶柱_03_钢筋模板",
+      "slug": "roof_column_03",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_03_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_03_钢筋模板"
+      ],
+      "root_object": "屋顶柱_03_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -17.03700065612793,
+        -17.03700065612793,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -14.963000297546387,
+        -14.963000297546387,
+        94.9000015258789
+      ],
+      "dimensions": [
+        2.074000358581543,
+        2.074000358581543,
+        10.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_03.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_04",
+      "display_name": "屋顶柱_04_钢筋模板",
+      "slug": "roof_column_04",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_04_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_04_钢筋模板"
+      ],
+      "root_object": "屋顶柱_04_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -17.4,
+        -1.4,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -14.6,
+        1.4,
+        91.9000015258789
+      ],
+      "dimensions": [
+        2.799999999999999,
+        2.8,
+        7.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_04.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_05",
+      "display_name": "屋顶柱_05_钢筋模板",
+      "slug": "roof_column_05",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_05_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_05_钢筋模板"
+      ],
+      "root_object": "屋顶柱_05_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -17.4,
+        16.6,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -14.6,
+        19.4,
+        93.9000015258789
+      ],
+      "dimensions": [
+        2.799999999999999,
+        2.799999999999997,
+        9.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_05.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_06",
+      "display_name": "屋顶柱_06_钢筋模板",
+      "slug": "roof_column_06",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_06_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_06_钢筋模板"
+      ],
+      "root_object": "屋顶柱_06_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -4.0370001792907715,
+        -17.03700065612793,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -1.9630000591278076,
+        -14.963000297546387,
+        92.9000015258789
+      ],
+      "dimensions": [
+        2.074000120162964,
+        2.074000358581543,
+        8.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_06.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_07",
+      "display_name": "屋顶柱_07_钢筋模板",
+      "slug": "roof_column_07",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_07_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_07_钢筋模板"
+      ],
+      "root_object": "屋顶柱_07_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -4.4,
+        -1.4,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -1.6,
+        1.4,
+        94.9000015258789
+      ],
+      "dimensions": [
+        2.8000000000000003,
+        2.8,
+        10.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_07.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_08",
+      "display_name": "屋顶柱_08_钢筋模板",
+      "slug": "roof_column_08",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_08_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_08_钢筋模板"
+      ],
+      "root_object": "屋顶柱_08_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -4.4,
+        16.6,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        -1.6,
+        19.4,
+        91.9000015258789
+      ],
+      "dimensions": [
+        2.8000000000000003,
+        2.799999999999997,
+        7.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_08.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_09",
+      "display_name": "屋顶柱_09_钢筋模板",
+      "slug": "roof_column_09",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_09_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_09_钢筋模板"
+      ],
+      "root_object": "屋顶柱_09_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        8.963000297546387,
+        -17.03700065612793,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        11.036999702453613,
+        -14.963000297546387,
+        93.9000015258789
+      ],
+      "dimensions": [
+        2.0739994049072266,
+        2.074000358581543,
+        9.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_09.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_10",
+      "display_name": "屋顶柱_10_钢筋模板",
+      "slug": "roof_column_10",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_10_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_10_钢筋模板"
+      ],
+      "root_object": "屋顶柱_10_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        8.6,
+        -1.4,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        11.4,
+        1.4,
+        92.9000015258789
+      ],
+      "dimensions": [
+        2.8000000000000007,
+        2.8,
+        8.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_10.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_11",
+      "display_name": "屋顶柱_11_钢筋模板",
+      "slug": "roof_column_11",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_11_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_11_钢筋模板"
+      ],
+      "root_object": "屋顶柱_11_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        8.6,
+        16.6,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        11.4,
+        19.4,
+        94.9000015258789
+      ],
+      "dimensions": [
+        2.8000000000000007,
+        2.799999999999997,
+        10.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_11.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_12",
+      "display_name": "屋顶柱_12_钢筋模板",
+      "slug": "roof_column_12",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_12_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_12_钢筋模板"
+      ],
+      "root_object": "屋顶柱_12_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        24.96299934387207,
+        -17.03700065612793,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        27.03700065612793,
+        -14.963000297546387,
+        91.9000015258789
+      ],
+      "dimensions": [
+        2.0740013122558594,
+        2.074000358581543,
+        7.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_12.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_13",
+      "display_name": "屋顶柱_13_钢筋模板",
+      "slug": "roof_column_13",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_13_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_13_钢筋模板"
+      ],
+      "root_object": "屋顶柱_13_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        24.6,
+        -1.4,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        27.4,
+        1.4,
+        93.9000015258789
+      ],
+      "dimensions": [
+        2.799999999999997,
+        2.8,
+        9.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_13.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_column_14",
+      "display_name": "屋顶柱_14_钢筋模板",
+      "slug": "roof_column_14",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶柱_14_钢筋模板_资产包",
+      "objects": [
+        "屋顶柱_14_钢筋模板"
+      ],
+      "root_object": "屋顶柱_14_钢筋模板",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        24.6,
+        16.6,
+        84.46795654296875
+      ],
+      "bounds_max": [
+        27.4,
+        19.4,
+        92.9000015258789
+      ],
+      "dimensions": [
+        2.799999999999997,
+        2.799999999999997,
+        8.432044982910156
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_column_14.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_material_stacks",
+      "display_name": "屋顶_固定材料堆及机具",
+      "slug": "roof_material_stacks",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶_固定材料堆及机具_资产包",
+      "objects": [
+        "屋顶_固定材料堆及机具"
+      ],
+      "root_object": "屋顶_固定材料堆及机具",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -28.150743753759137,
+        -10.75,
+        84.58500000000001
+      ],
+      "bounds_max": [
+        29.82057791302904,
+        22.290000915527344,
+        85.95000000000002
+      ],
+      "dimensions": [
+        57.97132166678818,
+        33.040000915527344,
+        1.365000000000009
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_material_stacks.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_formwork_0",
+      "display_name": "屋顶核心模板_0_支撑平台",
+      "slug": "roof_formwork_0",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶核心模板_0_支撑平台_资产包",
+      "objects": [
+        "屋顶核心模板_0_支撑平台"
+      ],
+      "root_object": "屋顶核心模板_0_支撑平台",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -23.165000915527344,
+        0.9351123571395874,
+        84.46524047851562
+      ],
+      "bounds_max": [
+        -14.835000038146973,
+        13.064888000488281,
+        91.8499984741211
+      ],
+      "dimensions": [
+        8.330000877380371,
+        12.129775643348694,
+        7.384757995605469
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_formwork_0.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_formwork_1",
+      "display_name": "屋顶核心模板_1_支撑平台",
+      "slug": "roof_formwork_1",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶核心模板_1_支撑平台_资产包",
+      "objects": [
+        "屋顶核心模板_1_支撑平台"
+      ],
+      "root_object": "屋顶核心模板_1_支撑平台",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -1.6649999618530273,
+        -12.056550025939941,
+        84.45287322998047
+      ],
+      "bounds_max": [
+        7.664999961853027,
+        0.056550417095422745,
+        89.8499984741211
+      ],
+      "dimensions": [
+        9.329999923706055,
+        12.113100443035364,
+        5.397125244140625
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_formwork_1.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/roof_formwork_2",
+      "display_name": "屋顶核心模板_2_支撑平台",
+      "slug": "roof_formwork_2",
+      "category": "roof",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "屋顶核心模板_2_支撑平台_资产包",
+      "objects": [
+        "屋顶核心模板_2_支撑平台"
+      ],
+      "root_object": "屋顶核心模板_2_支撑平台",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        18.334999084472656,
+        3.4383416175842285,
+        84.45978546142578
+      ],
+      "bounds_max": [
+        25.665000915527344,
+        16.56165885925293,
+        90.8499984741211
+      ],
+      "dimensions": [
+        7.3300018310546875,
+        13.123317241668701,
+        6.3902130126953125
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "roof_formwork_2.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/crane_00",
+      "display_name": "塔吊_00_桁架驾驶室吊钩",
+      "slug": "crane_00",
+      "category": "facilities",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "塔吊_00_桁架驾驶室吊钩_资产包",
+      "objects": [
+        "塔吊_00_桁架驾驶室吊钩"
+      ],
+      "root_object": "塔吊_00_桁架驾驶室吊钩",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -53.04508590698242,
+        -21.583778132003165,
+        0.0
+      ],
+      "bounds_max": [
+        -8.267129898071289,
+        -11.310729026794434,
+        122.04585266113281
+      ],
+      "dimensions": [
+        44.77795600891113,
+        10.273049105208731,
+        122.04585266113281
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "crane_00.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/crane_01",
+      "display_name": "塔吊_01_桁架驾驶室吊钩",
+      "slug": "crane_01",
+      "category": "facilities",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "塔吊_01_桁架驾驶室吊钩_资产包",
+      "objects": [
+        "塔吊_01_桁架驾驶室吊钩"
+      ],
+      "root_object": "塔吊_01_桁架驾驶室吊钩",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -20.21141242980957,
+        7.394171458769748,
+        84.5
+      ],
+      "bounds_max": [
+        23.88347053527832,
+        21.393024444580078,
+        135.0458526611328
+      ],
+      "dimensions": [
+        44.09488296508789,
+        13.99885298581033,
+        50.54585266113281
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "crane_01.glb",
+      "fixed_display_attachment": true
+    },
+    {
+      "package_id": "tower_02/crane_02",
+      "display_name": "塔吊_02_桁架驾驶室吊钩",
+      "slug": "crane_02",
+      "category": "facilities",
+      "version": "v001",
+      "source_blend": "塔2_施工高楼_70x50m_v001.blend",
+      "collection": "塔吊_02_桁架驾驶室吊钩_资产包",
+      "objects": [
+        "塔吊_02_桁架驾驶室吊钩"
+      ],
+      "root_object": "塔吊_02_桁架驾驶室吊钩",
+      "world_position": [
+        0,
+        0,
+        0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        27.691410064697266,
+        -1.2964708805084229,
+        0.0
+      ],
+      "bounds_max": [
+        65.87248229980469,
+        26.39851951599121,
+        118.04585266113281
+      ],
+      "dimensions": [
+        38.18107223510742,
+        27.694990396499634,
+        118.04585266113281
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "crane_02.glb",
+      "fixed_display_attachment": true
+    }
+  ],
+  "asset_id": "ENV-OPENWORLD-TOWER02",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx"
+}
