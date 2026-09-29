@@ -66,7 +66,85 @@ metadata/connection_port_count = 2
 metadata/authored_room_devices = true
 
 [node name="RoomCeilingLight" type="Node3D" parent="." unique_id=851201062]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8518124, 0)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 28.2
+failing = false
+flicker_seed = 77629573
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomCeilingLight5" type="Node3D" parent="RoomCeilingLight" unique_id=1669311437]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.526991, 3.4207363, 10.457619)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 28.2
+failing = false
+flicker_seed = 77629573
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomCeilingLight6" type="Node3D" parent="RoomCeilingLight" unique_id=1672581357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.175804, 2.354066, 10.457619)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 28.2
+failing = false
+flicker_seed = 77629573
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomCeilingLight3" type="Node3D" parent="RoomCeilingLight" unique_id=729403212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.966938, 2.354066, -10.566429)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 28.2
+failing = false
+flicker_seed = 77629573
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomCeilingLight4" type="Node3D" parent="RoomCeilingLight" unique_id=454281658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.735857, 1.2873955, -10.566429)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 28.2
+failing = false
+flicker_seed = 77629573
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomCeilingLight2" type="Node3D" parent="RoomCeilingLight" unique_id=1973930299]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.020384, 1.2873955, 0)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 28.2
+failing = false
+flicker_seed = 77629573
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomCeilingLight" type="Node3D" parent="RoomCeilingLight" unique_id=118541789]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.682411, 0.22072506, 0)
 script = ExtResource("900_authored_light")
 light_color = Color(0.59, 0.76, 0.88, 1)
 energy = 4.995000000000001
@@ -79,7 +157,7 @@ light_enabled = false
 metadata/authored_room_device = "ceiling_light"
 
 [node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1820346066]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.199997, 0, 19.66)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.2171817, 0, 19.556656)
 script = ExtResource("901_authored_switch")
 metadata/authored_room_device = "light_switch"
 

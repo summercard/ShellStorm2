@@ -8,6 +8,7 @@ extends RigidBody3D
 @export var coast_damp := 5.0
 @export var drive_damp := 1.0
 @export var max_push_speed := 2.2
+const TIP_ANGLE_RADIANS := PI / 4.0
 
 var rider: Player3D = null
 var _drive_input := Vector3.ZERO
@@ -15,6 +16,15 @@ var _target_swivel_yaw := 0.0
 var _dismount_brake_timer := 0.0
 var _registered_player_ids: Dictionary = {}
 @onready var swivel_pivot: Node3D = $SwivelPivot
+@onready var player_blocker: AnimatableBody3D = $PlayerBlocker
+
+
+func _ready() -> void:
+	# 物理刚体下嵌套的第二个 PhysicsBody 不会可靠地更新服务器中的碰撞位置。
+	# 保留节点归属，但让角色专用阻挡体独立使用世界坐标，并逐物理帧跟随底座。
+	player_blocker.top_level = true
+	player_blocker.sync_to_physics = false
+	player_blocker.global_transform = global_transform
 
 
 func _register_player_collision_proxy() -> void:
@@ -35,6 +45,30 @@ func get_seat_position() -> Vector3:
 
 func get_ride_speed() -> float:
 	return rider.get_move_speed() * ride_speed_multiplier if rider != null and is_instance_valid(rider) else 0.0
+
+
+func is_tipped() -> bool:
+	return global_basis.y.normalized().dot(Vector3.UP) <= cos(TIP_ANGLE_RADIANS)
+
+
+func right_seat(player: Player3D = null) -> bool:
+	if rider != null or not is_tipped():
+		return false
+	var excluded: Array[RID] = [get_rid(), player_blocker.get_rid()]
+	if player != null:
+		excluded.append(player.get_rid())
+	var ray := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 1.5, global_position + Vector3.DOWN * 2.5, 1, excluded)
+	var ground := get_world_3d().direct_space_state.intersect_ray(ray)
+	if ground.is_empty():
+		return false
+	var yaw := global_rotation.y
+	var scale_factor := global_basis.get_scale()
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	global_transform = Transform3D(Basis(Vector3.UP, yaw).scaled(scale_factor), Vector3(global_position.x, (ground["position"] as Vector3).y + 0.02, global_position.z))
+	player_blocker.global_transform = global_transform
+	sleeping = false
+	return true
 
 
 func set_swivel_yaw(world_yaw: float) -> void:
@@ -65,6 +99,8 @@ func get_interaction_candidate(player: Player3D) -> Dictionary:
 		return {}
 	if Vector2(linear_velocity.x, linear_velocity.z).length() > 0.55:
 		return {}
+	if is_tipped():
+		return {"available": true, "interaction_id": "right_seat", "prompt": "E 扶正座椅", "priority": 90, "position": global_position}
 	return {"available": true, "interaction_id": "sit_on_seat", "prompt": "E 坐上座椅", "priority": 70, "position": get_seat_position()}
 
 
@@ -74,6 +110,8 @@ func perform_interaction(player: Player3D, candidate: Dictionary) -> bool:
 			return player.try_mount_chair(self)
 		"leave_seat":
 			return player.try_dismount_chair()
+		"right_seat":
+			return right_seat(player)
 	return false
 
 
@@ -84,6 +122,7 @@ func drive(input_direction: Vector3) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	player_blocker.global_transform = global_transform
 	_register_player_collision_proxy()
 	if rider != null and not is_instance_valid(rider):
 		finish_ride()

@@ -33,10 +33,12 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	print("SEED=%d" % SEED_VALUE)
-	print("ROOM|wave|idx|box|bonus|design_min|design_max|realized|short|id_entries|trunc")
+	print("ROOM|wave|idx|box|bonus|mult|design_min|design_max|realized|short|id_entries|trunc|drift_m")
 	var grand_realized := 0
 	var grand_design_max := 0
 	var grand_trunc := 0
+	var grand_drift := 0.0
+	var drift_rows := 0
 	for key in ROOM_KEYS:
 		var room := tower._room_by_id.get(key) as DungeonRoom3D
 		if room == null:
@@ -46,8 +48,10 @@ func _ready() -> void:
 		grand_realized += int(agg["realized"])
 		grand_design_max += int(agg["design_max"])
 		grand_trunc += int(agg["trunc"])
-	print("TOTAL|realized=%d|design_max=%d|trunc=%d" % [
-		grand_realized, grand_design_max, grand_trunc,
+		grand_drift += float(agg["drift"])
+		drift_rows += int(agg["rows"])
+	print("TOTAL|realized=%d|design_max=%d|trunc=%d|drift_sum=%.2f|drift_rows=%d" % [
+		grand_realized, grand_design_max, grand_trunc, grand_drift, drift_rows,
 	])
 	print("PROBE_DONE")
 	get_tree().quit(0)
@@ -58,9 +62,11 @@ func _replay_room(room: DungeonRoom3D) -> Dictionary:
 	var realized_sum := 0
 	var design_max_sum := 0
 	var trunc_sum := 0
+	var drift_sum := 0.0
+	var rows := 0
 	if placements.is_empty():
 		print("# %s no placements" % room.room_id)
-		return {"realized": 0, "design_max": 0, "trunc": 0}
+		return {"realized": 0, "design_max": 0, "trunc": 0, "drift": 0.0}
 	var stages := tower._resolve_encounter_stages(room.encounter, placements.size())
 	var floor_number := maxi(1, tower.visual_theme.difficulty_rank)
 	var denom := maxf(1.0, float(tower._records.size() - 1))
@@ -78,8 +84,9 @@ func _replay_room(room: DungeonRoom3D) -> Dictionary:
 			var placement := placements[idx] as Dictionary
 			var box_id := str(placement.get("box", ""))
 			var bonus := int(placement.get("count_bonus", 0))
+			var mult := maxi(1, int(placement.get("count_multiplier", 1)))
 			var box := SpawnBoxCatalog.load_box(box_id)
-			var bounds := _design_bounds(box, bonus)
+			var bounds := _design_bounds(box, bonus, mult)
 			var entries: Array[Dictionary] = []
 			tower._collect_box_stage_entries(
 				room, placements, idx, floor_number, floor_level, rng, entries
@@ -90,7 +97,6 @@ func _replay_room(room: DungeonRoom3D) -> Dictionary:
 			# `id_entries` = 本盒设计里 elite/boss **身份条目**数。headless 探针里
 			# EliteRosterService 未开局预约、Boss 内容未就绪 ⇒ `_make_box_enemy` 返回 {}，
 			# 这类条目**必然**落不下来，属探针环境产物，不是盒容量截断。
-			# `trunc = short - id_entries` 才是「普通怪被盒容量截断」的真指标。
 			var id_entries := int(bounds["id"])
 			var short := int(bounds["hi"]) - realized
 			# `trunc` = 真·容量截断：实到跌破**普通怪**设计下限。两条口径都要扣掉
@@ -99,17 +105,43 @@ func _replay_room(room: DungeonRoom3D) -> Dictionary:
 			# 落在 [design_min, design_max] 内的差额只是区间随机（如 `box_wall_arc` 的 1~2）。
 			var trunc := maxi(0, (int(bounds["lo"]) - id_entries) - (realized - _id_realized(entries)))
 			trunc_sum += trunc
-			print("%s|%d|%d|%s|%d|%d|%d|%d|%d|%d|%d" % [
-				room.room_id, wave, idx, box_id.replace("box_", ""), bonus,
+			# 漂移 = 「落地盒心」离「声明盒心」多远。非 0 意味着运行时为了塞下这只数
+			# **把整个盒子挪了位** —— 声明坐标不再等于实际坐标，且可能压到邻盒（判据 I）。
+			##
+			## ⚠ 必须走 `_box_placement_at` 取**归一化**后的盒心/尺寸/姿态：`room.spawn_placements`
+			## 里是原始数据（只有 `center_m`），直接读 `box_center` 会落回 `Vector2.ZERO`、
+			## 尺寸落回零 —— 那样算出的漂移是垃圾值（曾实测全关漂移 3~22 m 全是假的）。
+			var norm := tower._box_placement_at(placements, idx)
+			var declared_center := norm.get("box_center", Vector2.ZERO) as Vector2
+			var drift := room.resolve_spawn_box_center_local(
+				declared_center,
+				norm.get("box_size", Vector2.ZERO) as Vector2,
+				maxi(1, realized),
+				float(norm.get("box_rotation", 0.0)),
+				float(box.get("min_spacing_m", 0.0)),
+				int(box.get("wall_recess_tiles", SpawnBoxCatalog.DEFAULT_WALL_RECESS_TILES))
+			).distance_to(declared_center)
+			drift_sum += drift
+			rows += 1
+			print("%s|%d|%d|%s|%d|%d|%d|%d|%d|%d|%d|%d|%.2f" % [
+				room.room_id, wave, idx, box_id.replace("box_", ""), bonus, mult,
 				int(bounds["lo"]), int(bounds["hi"]), realized, short,
-				id_entries, trunc,
+				id_entries, trunc, drift,
 			])
-	return {"realized": realized_sum, "design_max": design_max_sum, "trunc": trunc_sum}
+	return {
+		"realized": realized_sum,
+		"design_max": design_max_sum,
+		"trunc": trunc_sum,
+		"drift": drift_sum,
+		"rows": rows,
+	}
 
 
-## [lo,hi] 出怪总数：各条 count_min/max 求和，再给首条非 elite/boss 条目加 bonus。
+## [lo,hi] 出怪总数：各条 count_min/max 求和 → 再按 (×倍率, +增量) 变换**首条非身份条目**。
+## 变换顺序必须与运行时 `Dungeon3D._collect_box_stage_entries` 逐字一致，否则本探针的
+## 期望值就失去意义。
 ## `id` = 设计里 elite/boss 身份条目数（headless 探针中必然落不下来）。
-func _design_bounds(box: Dictionary, bonus: int) -> Dictionary:
+func _design_bounds(box: Dictionary, bonus: int, mult: int) -> Dictionary:
 	var lo := 0
 	var hi := 0
 	var id_entries := 0
@@ -121,10 +153,13 @@ func _design_bounds(box: Dictionary, bonus: int) -> Dictionary:
 		var c_max := int(spawn.get("count_max", c_min))
 		if type_id == "elite" or type_id == "boss":
 			id_entries += c_max
-		elif bonus > 0 and not bonus_used:
-			c_min += bonus
-			c_max += bonus
-			bonus_used = true
+		else:
+			c_min *= mult
+			c_max *= mult
+			if bonus > 0 and not bonus_used:
+				c_min += bonus
+				c_max += bonus
+				bonus_used = true
 		lo += c_min
 		hi += c_max
 	return {"lo": lo, "hi": hi, "id": id_entries}

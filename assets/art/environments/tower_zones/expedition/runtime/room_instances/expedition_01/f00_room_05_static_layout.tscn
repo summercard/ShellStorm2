@@ -37,8 +37,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/mid_gallery/mid_gallery_root_top3d.tscn" id="35_rbh6a"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/torn_header/torn_header_root_top3d.tscn" id="36_28gbh"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_service_header/wall_service_header_root_top3d.tscn" id="37_0e2n6"]
-[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
-[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
+[ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout2" type="Node3D" unique_id=1887935742]
 metadata/asset_id = "ENV-EXPEDITION-L01-BRIDGE-ROOM-TYPE-LAYOUT"
@@ -68,16 +68,11 @@ metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", 
 metadata/connection_port_count = 2
 metadata/authored_room_devices = true
 
-; 房间中央顶灯（桥房（bridge_60x50，30×60））。
-; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
-; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
-;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
-;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
 [node name="RoomCeilingLight" type="Node3D" parent="." unique_id=1807545045]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, 0)
 script = ExtResource("900_authored_light")
 light_color = Color(0.59, 0.76, 0.88, 1)
-energy = 4.995000000000001
+energy = 15.0
 light_range = 28.2
 failing = false
 flicker_seed = 77524844
@@ -86,9 +81,8 @@ fixture_style = "ceiling"
 light_enabled = false
 metadata/authored_room_device = "ceiling_light"
 
-; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
 [node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1670942658]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.199997, 0, -29.66)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.533841, 0, -29.66)
 script = ExtResource("901_authored_switch")
 metadata/authored_room_device = "light_switch"
 

@@ -2564,19 +2564,24 @@ func _collect_box_stage_entries(
 	# 平移成 (1+N)~(2+N)，随机性保留。
 	var bonus := int(placement.get("box_count_bonus", 0))
 	var bonus_used := false
+	# 逐实例出怪倍率（`spawn_placements[].count_multiplier`，设计 §3.2）：
+	# 与 `count_bonus` 正交 —— 倍率管「每条目各自乘」，增量管「一次性平移总量」。
+	# 业主 2026-09-29 口径「room1/room2 每个盒子里数量翻倍」= 倍率 2。
+	# 为什么不能只靠 `count_bonus` 兑现翻倍：增量只加在**首条**条目上，
+	# `box_room_spread`（近战×2 → 1s 爆×1）加 +3 会得到 5+1，不是 4+2 —— 翻不了。
+	# 身份条目（elite/boss）同样**不参与**倍率：翻倍是加杂兵，不是加精英。
+	var multiplier := maxi(1, int(placement.get("box_count_multiplier", 1)))
 	for spawn_value in (box.get("spawns", []) as Array):
 		var spawn := spawn_value as Dictionary
 		var type_id := str(spawn.get("type", ""))
 		var count := _roll_box_count(spawn, rng)
-		if (
-			count > 0
-			and bonus > 0
-			and not bonus_used
-			and type_id != "elite"
-			and type_id != "boss"
-		):
-			count += bonus
-			bonus_used = true
+		if count > 0 and type_id != "elite" and type_id != "boss":
+			# 先乘后加：`(抽签 × 倍率) + 增量`。顺序固定 ⇒ 同 seed 结果可复现。
+			if multiplier > 1:
+				count *= multiplier
+			if bonus > 0 and not bonus_used:
+				count += bonus
+				bonus_used = true
 		if count <= 0:
 			continue
 		spec.append({
@@ -2678,10 +2683,13 @@ func _box_placement_at(placements: Array, index: int) -> Dictionary:
 	placement["box_size"] = size
 	placement["box_rotation"] = float(placement.get("rotation_deg", 0.0))
 	placement["box_delay"] = float(placement.get("delay_sec", 0.0))
-	# 逐实例出怪增量：数据键为 `count_bonus`（设计 §3.2），运行时统一挂在
-	# `box_count_bonus` 上供 `_collect_box_stage_entries` 取用 —— 一处归一，避免
-	# 数据层与运行层各叫一个名字。缺省 0 = 维持盒子资产原始数量。
+	# 逐实例出怪增量：数据键为 `count_bonus` / `count_multiplier`（设计 §3.2），
+	# 运行时统一挂在 `box_*` 上供 `_collect_box_stage_entries` 取用 —— 一处归一，
+	# 避免数据层与运行层各叫一个名字。缺省 0 / 1 = 维持盒子资产原始数量。
 	placement["box_count_bonus"] = int(placement.get("count_bonus", 0))
+	placement["box_count_multiplier"] = maxi(
+		1, int(placement.get("count_multiplier", 1))
+	)
 	return placement
 
 

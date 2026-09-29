@@ -77,3 +77,6 @@ _scratch/*_before_*.blend
 
 # WorkBuddy 会话的临时探查脚本与运行日志（scratch，不入库；记忆与工具仍正常入库）
 .workbuddy/tmp/
+
+# Godot 运行期 appdata 副本（--headless 探针用独立 appdata 时落在项目内，非资产）
+_godot_appdata*/

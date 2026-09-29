@@ -493,7 +493,7 @@ func _finish_ladder_climb(at_top: bool) -> void:
 
 
 func try_mount_chair(chair: PushableSeat3D) -> bool:
-	if chair == null or not is_instance_valid(chair) or chair.rider != null or is_seated_on_chair():
+	if chair == null or not is_instance_valid(chair) or chair.rider != null or chair.is_tipped() or is_seated_on_chair():
 		return false
 	if input_locked or current_hp <= 0 or get_state_machine_state() not in ["idle", "moving"]:
 		return false
@@ -548,6 +548,10 @@ func _tick_seated(_delta: float) -> void:
 		_restore_chair_collision()
 		_seat_camera_drop_m = 0.0
 		camera.position = _seat_saved_camera_position
+		_transition_to_locomotion()
+		return
+	if _mounted_chair.is_tipped():
+		_force_leave_chair()
 		_transition_to_locomotion()
 		return
 	_mounted_chair.drive(_get_input_direction_3d())

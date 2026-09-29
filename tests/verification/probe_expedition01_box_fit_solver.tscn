@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/probe_expedition01_box_fit_solver.gd" id="1_solver"]
+
+[node name="ProbeExpedition01BoxFitSolver" type="Node"]
+script = ExtResource("1_solver")

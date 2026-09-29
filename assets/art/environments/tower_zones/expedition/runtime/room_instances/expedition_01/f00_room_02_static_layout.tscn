@@ -65,10 +65,23 @@ metadata/connection_port_count = 2
 metadata/authored_room_devices = true
 
 [node name="RoomCeilingLight" type="Node3D" parent="." unique_id=645956161]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.045655, 8.026315, 1.3489115)
 script = ExtResource("900_authored_light")
-light_color = Color(0.59, 0.76, 0.88, 1)
-energy = 4.995
+light_color = Color(0.6945287, 0.8406061, 0.8222737, 1)
+energy = 5.5
+light_range = 28.2
+failing = false
+flicker_seed = 77210657
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomCeilingLight" type="Node3D" parent="RoomCeilingLight" unique_id=408516807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.745361, -0.2783289, 1.3489115)
+script = ExtResource("900_authored_light")
+light_color = Color(0.6945287, 0.8406061, 0.8222737, 1)
+energy = 5.5
 light_range = 28.2
 failing = false
 flicker_seed = 77210657
@@ -78,7 +91,7 @@ light_enabled = false
 metadata/authored_room_device = "ceiling_light"
 
 [node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=891797517]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.2, 0, 14.66)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 19.537212, 0, -3.0249386)
 script = ExtResource("901_authored_switch")
 metadata/authored_room_device = "light_switch"
 

@@ -1068,6 +1068,21 @@ static func _validate_spawn_boxes(
 					errors.append(
 						"spawn_placement_count_bonus_never_applies:%s:%s" % [slot, box_id]
 					)
+			# 判据 L：逐实例出怪倍率（`count_multiplier`，设计 §3.2）。
+			## 与 `count_bonus` 同一条隐形契约（数据层写、运行层读）。额外要求 ≥ 1：
+			## 0 或负数会让该盒**一只都不出**（乘完归零），属静默失效，必须拦。
+			if placement.has("count_multiplier"):
+				var raw_mult: Variant = placement.get("count_multiplier")
+				if not (raw_mult is int or raw_mult is float):
+					errors.append("spawn_placement_count_multiplier_not_number:%s" % slot)
+				elif float(raw_mult) != floor(float(raw_mult)):
+					errors.append("spawn_placement_count_multiplier_not_integer:%s" % slot)
+				elif int(raw_mult) < 1:
+					errors.append("spawn_placement_count_multiplier_below_one:%s" % slot)
+				elif int(raw_mult) > 1 and _box_has_no_mook_entry(box):
+					errors.append(
+						"spawn_placement_count_multiplier_never_applies:%s:%s" % [slot, box_id]
+					)
 		# —— 调用层 ——
 		# 没有 encounter 时全部实例并进一波（运行时口径），故只在写了 encounter 时校验。
 		if not placements.is_empty() or not (room.get("encounter", {}) as Dictionary).is_empty():

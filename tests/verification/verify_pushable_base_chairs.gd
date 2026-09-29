@@ -7,13 +7,19 @@ const PLAYER := preload("res://scenes/Player3D.tscn")
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	BaseManager.save_path = "user://verify_pushable_base_chairs_%d.json" % Time.get_ticks_usec()
+	BaseManager.data = BaseData.new()
 	_add_static_box("Floor", Vector3(0.0, -0.1, 0.0), Vector3(12.0, 0.2, 12.0))
 	_add_static_box("StopWall", Vector3(1.5, 0.75, 0.0), Vector3(0.2, 1.5, 4.0))
 	await _verify_chair(STOOL, "维修圆凳", Vector3(1.28, 0.26, 1.24), failures)
 	await _verify_chair(CHAIR, "战术指挥椅", Vector3(1.26, 0.23, 1.24), failures)
+	await _verify_blocker_tracks_chair(STOOL, "维修圆凳", failures)
+	await _verify_blocker_tracks_chair(CHAIR, "战术指挥椅", failures)
 	await _verify_player_pushes_chair(failures)
 	await _verify_seated_chair(STOOL, "维修圆凳", failures)
 	await _verify_seated_chair(CHAIR, "战术指挥椅", failures)
+	await _verify_tip_recovery(STOOL, "维修圆凳", failures)
+	await _verify_tip_recovery(CHAIR, "战术指挥椅", failures)
 	await _verify_dismount_motion_profile(failures)
 	if failures.is_empty():
 		print("PUSHABLE_BASE_CHAIRS_OK: 两把椅子分体旋转/滑行，乘坐1.3倍步速，松手惯性与离座防弹射通过")
@@ -64,6 +70,26 @@ func _add_static_box(label: String, position: Vector3, size: Vector3) -> void:
 	body.add_child(collision)
 	body.position = position
 	add_child(body)
+
+
+func _verify_blocker_tracks_chair(scene: PackedScene, label: String, failures: Array[String]) -> void:
+	var chair := scene.instantiate() as PushableSeat3D
+	chair.max_push_speed = 8.0
+	chair.position = Vector3(-2.0, 0.0, -2.0)
+	add_child(chair)
+	await _settle(5)
+	var old_position := chair.global_position
+	chair.apply_central_impulse(Vector3(chair.mass * 9.0, 0.0, 0.0))
+	await _settle(22)
+	_check(chair.global_position.distance_to(old_position) > 1.5, "%s碰撞同步测试中没有离开原位: %s -> %s" % [label, old_position, chair.global_position], failures)
+	var old_ray := PhysicsRayQueryParameters3D.create(old_position + Vector3.UP * 1.5, old_position + Vector3.UP * 0.05, 16)
+	var new_ray := PhysicsRayQueryParameters3D.create(chair.global_position + Vector3.UP * 1.5, chair.global_position + Vector3.UP * 0.05, 16)
+	var old_hit := chair.get_world_3d().direct_space_state.intersect_ray(old_ray)
+	var new_hit := chair.get_world_3d().direct_space_state.intersect_ray(new_ray)
+	_check(old_hit.is_empty(), "%s角色用碰撞体仍留在旧位置: %s" % [label, old_hit], failures)
+	_check(new_hit.get("collider") == chair.get_node("PlayerBlocker"), "%s角色用碰撞体没有跟上移动后的椅子: %s" % [label, new_hit], failures)
+	chair.queue_free()
+	await get_tree().physics_frame
 
 
 func _verify_player_pushes_chair(failures: Array[String]) -> void:
@@ -180,6 +206,37 @@ func _verify_dismount_motion_profile(failures: Array[String]) -> void:
 		peak_height = maxf(peak_height, chair.global_position.y)
 	_check(peak_speed <= chair.max_push_speed + 0.1, "下座后椅子被弹飞", failures)
 	_check(peak_height < 0.2, "下座后椅子向上弹飞", failures)
+	player.queue_free()
+	chair.queue_free()
+	await get_tree().physics_frame
+
+
+func _verify_tip_recovery(scene: PackedScene, label: String, failures: Array[String]) -> void:
+	var chair := scene.instantiate() as PushableSeat3D
+	var player := PLAYER.instantiate() as Player3D
+	chair.position = Vector3(-2.0, 0.0, 2.0)
+	player.position = Vector3(-3.0, 0.0, 2.0)
+	add_child(chair)
+	add_child(player)
+	await _settle(8)
+	var standing_layer := player.collision_layer
+	var standing_mask := player.collision_mask
+	_check(player.try_mount_chair(chair), "%s倾斜测试无法上座" % label, failures)
+	chair.rotation.x = deg_to_rad(44.0)
+	_check(not chair.is_tipped(), "%s不足45度时过早判定倾斜" % label, failures)
+	chair.rotation.x = deg_to_rad(46.0)
+	_check(chair.is_tipped(), "%s超过45度仍未判定倾斜" % label, failures)
+	player._tick_seated(1.0 / 60.0)
+	_check(chair.rider == null and player.get_state_machine_state() != "seated", "%s倾斜后没有主动离座" % label, failures)
+	_check(player.collision_layer == standing_layer and player.collision_mask == standing_mask, "%s倾斜离座后角色碰撞未恢复" % label, failures)
+	_check(not player.try_mount_chair(chair), "%s倾斜状态仍允许直接坐上" % label, failures)
+	player.global_position = chair.global_position + Vector3(-1.1, 0.0, 0.0)
+	var candidate := chair.get_interaction_candidate(player)
+	_check(candidate.get("interaction_id") == "right_seat", "%s倾斜后没有扶正交互" % label, failures)
+	_check(chair.perform_interaction(player, candidate), "%s再次交互未能扶正" % label, failures)
+	await _settle(3)
+	_check(not chair.is_tipped(), "%s扶正后仍然倾斜" % label, failures)
+	_check(chair.get_interaction_candidate(player).get("interaction_id") == "sit_on_seat", "%s扶正后不能重新坐上" % label, failures)
 	player.queue_free()
 	chair.queue_free()
 	await get_tree().physics_frame
