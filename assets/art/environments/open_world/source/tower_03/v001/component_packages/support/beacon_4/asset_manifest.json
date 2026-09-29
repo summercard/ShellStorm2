@@ -1,0 +1,53 @@
+{
+  "package_id": "tower_03/beacon_4",
+  "slug": "beacon_4",
+  "display_name": "周界警示灯_4",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "周界警示灯_4_资产包",
+  "objects": [
+    "周界警示灯_4",
+    "周界警示灯_4_柔和自发光"
+  ],
+  "root_object": "周界警示灯_4",
+  "world_position": [
+    -12,
+    -3,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -12.15999984741211,
+    -3.1521689891815186,
+    48.099998474121094
+  ],
+  "bounds_max": [
+    -11.84000015258789,
+    -2.8478310108184814,
+    50.0
+  ],
+  "dimensions": [
+    0.31999969482421875,
+    0.3043379783630371,
+    1.9000015258789062
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "beacon_4.glb"
+}

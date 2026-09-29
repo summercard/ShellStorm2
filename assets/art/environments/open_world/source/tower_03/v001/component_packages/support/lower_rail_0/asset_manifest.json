@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/lower_rail_0",
+  "slug": "lower_rail_0",
+  "display_name": "下层周界护栏_0",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "下层周界护栏_0_资产包",
+  "objects": [
+    "下层周界护栏_0"
+  ],
+  "root_object": "下层周界护栏_0",
+  "world_position": [
+    0.0,
+    -22.0,
+    40.099998474121094
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -35.15999999642372,
+    -22.15999999642372,
+    40.099998474121094
+  ],
+  "bounds_max": [
+    35.15999999642372,
+    -21.84000000357628,
+    41.31999969482422
+  ],
+  "dimensions": [
+    70.31999999284744,
+    0.3199999928474426,
+    1.220001220703125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lower_rail_0.glb"
+}

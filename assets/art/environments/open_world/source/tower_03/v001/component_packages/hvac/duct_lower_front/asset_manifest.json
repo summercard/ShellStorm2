@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/duct_lower_front",
+  "slug": "duct_lower_front",
+  "display_name": "左前贴边长风管",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "左前贴边长风管_资产包",
+  "objects": [
+    "左前贴边长风管"
+  ],
+  "root_object": "左前贴边长风管",
+  "world_position": [
+    -28,
+    -15.8,
+    41.7
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -28.050000000745058,
+    -17.400000001490117,
+    39.650000005960464
+  ],
+  "bounds_max": [
+    -17.517500042915344,
+    -14.199999998509885,
+    43.09499998092652
+  ],
+  "dimensions": [
+    10.532499957829714,
+    3.2000000029802322,
+    3.444999974966052
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "duct_lower_front.glb"
+}

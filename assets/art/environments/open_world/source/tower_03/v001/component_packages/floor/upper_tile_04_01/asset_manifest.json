@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/upper_tile_04_01",
+  "slug": "upper_tile_04_01",
+  "display_name": "上层机房屋面_04_01",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "上层机房屋面_04_01_资产包",
+  "objects": [
+    "上层机房屋面_04_01"
+  ],
+  "root_object": "上层机房屋面_04_01",
+  "world_position": [
+    9.5,
+    5,
+    48
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    7.019999980926514,
+    2.0199999809265137,
+    47.9500000013411
+  ],
+  "bounds_max": [
+    11.980000019073486,
+    7.980000019073486,
+    48.06999999865889
+  ],
+  "dimensions": [
+    4.960000038146973,
+    5.960000038146973,
+    0.11999999731779099
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "upper_tile_04_01.glb"
+}

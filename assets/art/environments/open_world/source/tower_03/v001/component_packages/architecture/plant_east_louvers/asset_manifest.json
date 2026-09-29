@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/plant_east_louvers",
+  "slug": "plant_east_louvers",
+  "display_name": "机房东侧_两组散热百叶",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机房东侧_两组散热百叶_资产包",
+  "objects": [
+    "机房东侧_两组散热百叶"
+  ],
+  "root_object": "机房东侧_两组散热百叶",
+  "world_position": [
+    27,
+    8,
+    44
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    27.144999997019767,
+    -1.5700000002980232,
+    44.12000002861023
+  ],
+  "bounds_max": [
+    27.414999998807907,
+    15.570000000298023,
+    46.67999997138977
+  ],
+  "dimensions": [
+    0.27000000178814076,
+    17.140000000596046,
+    2.559999942779541
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "plant_east_louvers.glb"
+}

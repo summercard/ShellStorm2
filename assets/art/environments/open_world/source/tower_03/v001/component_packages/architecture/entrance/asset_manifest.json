@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/entrance",
+  "slug": "entrance",
+  "display_name": "南立面主入口_门廊挑檐",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "南立面主入口_门廊挑檐_资产包",
+  "objects": [
+    "南立面主入口_门廊挑檐"
+  ],
+  "root_object": "南立面主入口_门廊挑檐",
+  "world_position": [
+    0,
+    -22,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -6.5,
+    -24.7,
+    0.9250000029802323
+  ],
+  "bounds_max": [
+    6.5,
+    -21.7,
+    5.950000005960464
+  ],
+  "dimensions": [
+    13.0,
+    3.0,
+    5.0250000029802315
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "entrance.glb"
+}

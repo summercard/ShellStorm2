@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/facade_01",
+  "slug": "facade_01",
+  "display_name": "幕墙_01_蓝玻璃破损立面",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "幕墙_01_蓝玻璃破损立面_资产包",
+  "objects": [
+    "幕墙_01_蓝玻璃破损立面"
+  ],
+  "root_object": "幕墙_01_蓝玻璃破损立面",
+  "world_position": [
+    -17.5,
+    -22,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -23.373333332439262,
+    -22.7,
+    0.0399999141693117
+  ],
+  "bounds_max": [
+    -10.682649629153909,
+    -20.65,
+    40.025
+  ],
+  "dimensions": [
+    12.690683703285353,
+    2.0500000000000007,
+    39.985000085830684
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "facade_01.glb"
+}

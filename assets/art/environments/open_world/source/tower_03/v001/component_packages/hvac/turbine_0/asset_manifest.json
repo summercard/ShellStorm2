@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/turbine_0",
+  "slug": "turbine_0",
+  "display_name": "前沿涡轮通风帽_0",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "前沿涡轮通风帽_0_资产包",
+  "objects": [
+    "前沿涡轮通风帽_0"
+  ],
+  "root_object": "前沿涡轮通风帽_0",
+  "world_position": [
+    -7,
+    -18,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -8.149999976158142,
+    -19.149999976158142,
+    40.099999992847444
+  ],
+  "bounds_max": [
+    -5.850000023841858,
+    -16.850000023841858,
+    42.459999084472656
+  ],
+  "dimensions": [
+    2.299999952316284,
+    2.299999952316284,
+    2.3599990916252125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "turbine_0.glb"
+}

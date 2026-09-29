@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/lower_right_control",
+  "slug": "lower_right_control",
+  "display_name": "机电箱_lower_right_control",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机电箱_lower_right_control_资产包",
+  "objects": [
+    "机电箱_lower_right_control"
+  ],
+  "root_object": "机电箱_lower_right_control",
+  "world_position": [
+    32,
+    10,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    30.850000023841858,
+    8.715000001192093,
+    40.09999999850989
+  ],
+  "bounds_max": [
+    33.16227982014299,
+    11.149999976158142,
+    42.68000004768372
+  ],
+  "dimensions": [
+    2.3122797963011337,
+    2.4349999749660487,
+    2.580000049173833
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lower_right_control.glb"
+}

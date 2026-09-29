@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/conduit_banks",
+  "slug": "conduit_banks",
+  "display_name": "机房前墙_并排管线与电缆桥架",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机房前墙_并排管线与电缆桥架_资产包",
+  "objects": [
+    "机房前墙_并排管线与电缆桥架"
+  ],
+  "root_object": "机房前墙_并排管线与电缆桥架",
+  "world_position": [
+    0.2200002670288086,
+    -0.23000000000000043,
+    40.190000000596044
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -31.09000015258789,
+    -19.88000002384186,
+    40.190000000596044
+  ],
+  "bounds_max": [
+    31.530000686645508,
+    19.420000023841858,
+    44.20000001192093
+  ],
+  "dimensions": [
+    62.6200008392334,
+    39.30000004768372,
+    4.010000011324884
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "conduit_banks.glb"
+}

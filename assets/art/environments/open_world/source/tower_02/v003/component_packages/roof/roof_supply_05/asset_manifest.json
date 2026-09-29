@@ -1,0 +1,52 @@
+{
+  "package_id": "tower_02/roof_supply_05",
+  "display_name": "屋顶材料_05_plant",
+  "slug": "roof_supply_05",
+  "category": "roof",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "屋顶材料_05_plant_资产包",
+  "objects": [
+    "屋顶材料_05_plant"
+  ],
+  "root_object": "屋顶材料_05_plant",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    27.200000762939453,
+    -9.359999656677246,
+    84.5
+  ],
+  "bounds_max": [
+    32.05473327636719,
+    -6.639999866485596,
+    86.55000305175781
+  ],
+  "dimensions": [
+    4.854732513427734,
+    2.7199997901916504,
+    2.0500030517578125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_supply_05.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/roof/roof_supply_05/asset_manifest.json"
+}

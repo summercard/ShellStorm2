@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/left_service_stairs",
+  "slug": "left_service_stairs",
+  "display_name": "左机组检修台与双短梯",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "左机组检修台与双短梯_资产包",
+  "objects": [
+    "左机组检修台与双短梯"
+  ],
+  "root_object": "左机组检修台与双短梯",
+  "world_position": [
+    -23.32999999821186,
+    0.15318428277969365,
+    40.08999999642372
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -30.15999999642372,
+    -2.1436314582824707,
+    40.08999999642372
+  ],
+  "bounds_max": [
+    -16.5,
+    2.450000023841858,
+    42.77000045776367
+  ],
+  "dimensions": [
+    13.659999996423721,
+    4.593631482124328,
+    2.680000461339951
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "left_service_stairs.glb"
+}

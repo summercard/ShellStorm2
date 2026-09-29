@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/plant_room",
+  "slug": "plant_room",
+  "display_name": "后部抬高机房_面板门百叶",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "后部抬高机房_面板门百叶_资产包",
+  "objects": [
+    "后部抬高机房_面板门百叶"
+  ],
+  "root_object": "后部抬高机房_面板门百叶",
+  "world_position": [
+    7,
+    8,
+    40
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -13.299999237060547,
+    -4.470000000298024,
+    40.00000009536743
+  ],
+  "bounds_max": [
+    27.299999237060547,
+    20.414999998807907,
+    48.000000005960466
+  ],
+  "dimensions": [
+    40.599998474121094,
+    24.88499999910593,
+    7.999999910593033
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "plant_room.glb"
+}

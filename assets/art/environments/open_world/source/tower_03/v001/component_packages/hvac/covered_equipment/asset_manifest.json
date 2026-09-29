@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/covered_equipment",
+  "slug": "covered_equipment",
+  "display_name": "右侧帆布覆盖机具",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "右侧帆布覆盖机具_资产包",
+  "objects": [
+    "右侧帆布覆盖机具"
+  ],
+  "root_object": "右侧帆布覆盖机具",
+  "world_position": [
+    24,
+    -9,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    21.3,
+    -11.238081932067871,
+    40.099999976158145
+  ],
+  "bounds_max": [
+    26.7,
+    -6.762127876281738,
+    42.33584976196289
+  ],
+  "dimensions": [
+    5.399999999999999,
+    4.475954055786133,
+    2.2358497858047457
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "covered_equipment.glb"
+}

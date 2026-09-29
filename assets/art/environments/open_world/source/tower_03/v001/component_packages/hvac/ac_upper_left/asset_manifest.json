@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/ac_upper_left",
+  "slug": "ac_upper_left",
+  "display_name": "上层双风扇空调机组",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "上层双风扇空调机组_资产包",
+  "objects": [
+    "上层双风扇空调机组"
+  ],
+  "root_object": "上层双风扇空调机组",
+  "world_position": [
+    -4,
+    12,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -11.349999904632568,
+    8.349999904632568,
+    48.09999999850989
+  ],
+  "bounds_max": [
+    3.3499999046325684,
+    15.650000095367432,
+    53.12251663208008
+  ],
+  "dimensions": [
+    14.699999809265137,
+    7.300000190734863,
+    5.022516633570191
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "ac_upper_left.glb"
+}

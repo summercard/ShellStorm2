@@ -1,0 +1,53 @@
+{
+  "package_id": "tower_03/mast_1",
+  "slug": "mast_1",
+  "display_name": "辅助天线避雷杆_1",
+  "category": "telecom",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "辅助天线避雷杆_1_资产包",
+  "objects": [
+    "辅助天线避雷杆_1",
+    "辅助天线避雷杆_1_柔和自发光"
+  ],
+  "root_object": "辅助天线避雷杆_1",
+  "world_position": [
+    16.5,
+    9,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    15.526386260986328,
+    8.149999618530273,
+    48.08076858520508
+  ],
+  "bounds_max": [
+    17.473613739013672,
+    9.850000381469727,
+    53.849998474121094
+  ],
+  "dimensions": [
+    1.9472274780273438,
+    1.7000007629394531,
+    5.769229888916016
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "mast_1.glb"
+}

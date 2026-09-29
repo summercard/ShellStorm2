@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/tray_0",
+  "slug": "tray_0",
+  "display_name": "检修格栅电缆桥架_0",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "检修格栅电缆桥架_0_资产包",
+  "objects": [
+    "检修格栅电缆桥架_0"
+  ],
+  "root_object": "检修格栅电缆桥架_0",
+  "world_position": [
+    -10,
+    -13,
+    40.08
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -15.03,
+    -13.559999998658895,
+    40.079999998509884
+  ],
+  "bounds_max": [
+    -5.0,
+    -12.440000001341105,
+    40.295
+  ],
+  "dimensions": [
+    10.03,
+    1.119999997317791,
+    0.2150000014901181
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "tray_0.glb"
+}

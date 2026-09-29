@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/satellite_dish",
+  "slug": "satellite_dish",
+  "display_name": "右侧大型卫星锅_支撑及馈源",
+  "category": "telecom",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "右侧大型卫星锅_支撑及馈源_资产包",
+  "objects": [
+    "右侧大型卫星锅_支撑及馈源"
+  ],
+  "root_object": "右侧大型卫星锅_支撑及馈源",
+  "world_position": [
+    25,
+    5.3,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    22.48598861694336,
+    2.715203285217285,
+    48.09999999701977
+  ],
+  "bounds_max": [
+    27.885665893554688,
+    7.099999952316284,
+    54.48817825317383
+  ],
+  "dimensions": [
+    5.399677276611328,
+    4.384796667098999,
+    6.388178256154056
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "satellite_dish.glb"
+}

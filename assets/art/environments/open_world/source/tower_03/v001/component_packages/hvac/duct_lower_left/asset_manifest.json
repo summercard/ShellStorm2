@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/duct_lower_left",
+  "slug": "duct_lower_left",
+  "display_name": "左机组回风弯管",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "左机组回风弯管_资产包",
+  "objects": [
+    "左机组回风弯管"
+  ],
+  "root_object": "左机组回风弯管",
+  "world_position": [
+    -25,
+    13.0,
+    42.8
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -25.050000000745058,
+    10.999999998509884,
+    39.0
+  ],
+  "bounds_max": [
+    -11.835000038146973,
+    15.000000001490116,
+    44.1618186712265
+  ],
+  "dimensions": [
+    13.214999962598085,
+    4.000000002980233,
+    5.161818671226499
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "duct_lower_left.glb"
+}

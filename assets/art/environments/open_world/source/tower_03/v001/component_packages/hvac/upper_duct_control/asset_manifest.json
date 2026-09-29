@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/upper_duct_control",
+  "slug": "upper_duct_control",
+  "display_name": "机电箱_upper_duct_control",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机电箱_upper_duct_control_资产包",
+  "objects": [
+    "机电箱_upper_duct_control"
+  ],
+  "root_object": "机电箱_upper_duct_control",
+  "world_position": [
+    13,
+    1.8,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    11.901966882691603,
+    0.615000001192093,
+    48.09999999850989
+  ],
+  "bounds_max": [
+    14.097331766372406,
+    2.849999952316284,
+    50.87999995231628
+  ],
+  "dimensions": [
+    2.195364883680803,
+    2.234999951124191,
+    2.7799999538063958
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "upper_duct_control.glb"
+}

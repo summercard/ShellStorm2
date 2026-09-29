@@ -1,0 +1,44 @@
+{
+  "assembly_id": "tower_02/crane_02",
+  "collection": "塔吊3_独立合集",
+  "source_collection": "塔吊3_制作源",
+  "root_object": "塔吊3_独立根",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "version": "v003",
+  "object_names": [
+    "塔吊3_标准节塔身_螺栓梯笼",
+    "塔吊3_回转总成_折面驾驶室",
+    "塔吊3_工作臂_双弦桁架检修走道",
+    "塔吊3_平衡臂_配重块卷扬机电柜",
+    "塔吊3_塔帽_拉杆铰接销轴",
+    "塔吊3_变幅小车_行走轮电机",
+    "塔吊3_滑轮组_钢索及锻造吊钩"
+  ],
+  "component_packages": [
+    "crane_02_mast",
+    "crane_02_slew_cab",
+    "crane_02_jib",
+    "crane_02_counter_jib",
+    "crane_02_apex",
+    "crane_02_trolley",
+    "crane_02_hook"
+  ],
+  "world_origin": [
+    39.0,
+    18.0,
+    0.0
+  ],
+  "world_bounds": {
+    "min": [
+      26.057125091552734,
+      -1.5520734786987305,
+      0.0
+    ],
+    "max": [
+      66.11825561523438,
+      27.750391006469727,
+      118.3499984741211
+    ]
+  },
+  "exported": false
+}

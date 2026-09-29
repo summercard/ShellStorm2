@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/exhaust_0",
+  "slug": "exhaust_0",
+  "display_name": "排气烟道_0",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "排气烟道_0_资产包",
+  "objects": [
+    "排气烟道_0"
+  ],
+  "root_object": "排气烟道_0",
+  "world_position": [
+    -18,
+    -18,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -18.549999237060547,
+    -18.549999237060547,
+    40.099998474121094
+  ],
+  "bounds_max": [
+    -17.450000762939453,
+    -17.450000762939453,
+    43.54999923706055
+  ],
+  "dimensions": [
+    1.0999984741210938,
+    1.0999984741210938,
+    3.450000762939453
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "exhaust_0.glb"
+}

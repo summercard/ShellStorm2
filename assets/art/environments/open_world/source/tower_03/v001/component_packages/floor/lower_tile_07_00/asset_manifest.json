@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/lower_tile_07_00",
+  "slug": "lower_tile_07_00",
+  "display_name": "下层天台地砖_07_00",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "下层天台地砖_07_00_资产包",
+  "objects": [
+    "下层天台地砖_07_00"
+  ],
+  "root_object": "下层天台地砖_07_00",
+  "world_position": [
+    2.5,
+    -19.25,
+    40
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    0.019999980926513672,
+    -21.980000019073486,
+    39.71999999940395
+  ],
+  "bounds_max": [
+    4.980000019073486,
+    -16.519999980926514,
+    40.07249999985099
+  ],
+  "dimensions": [
+    4.960000038146973,
+    5.460000038146973,
+    0.3525000004470371
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lower_tile_07_00.glb"
+}

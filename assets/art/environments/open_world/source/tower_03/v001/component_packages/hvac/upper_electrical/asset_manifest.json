@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/upper_electrical",
+  "slug": "upper_electrical",
+  "display_name": "机电箱_upper_electrical",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机电箱_upper_electrical_资产包",
+  "objects": [
+    "机电箱_upper_electrical"
+  ],
+  "root_object": "机电箱_upper_electrical",
+  "world_position": [
+    17,
+    13,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    15.75,
+    11.715000001192093,
+    48.09999999850989
+  ],
+  "bounds_max": [
+    18.272077620333754,
+    14.149999976158142,
+    51.57999997615814
+  ],
+  "dimensions": [
+    2.5220776203337536,
+    2.4349999749660487,
+    3.479999977648255
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "upper_electrical.glb"
+}

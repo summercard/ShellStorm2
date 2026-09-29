@@ -1,0 +1,51 @@
+{
+  "package_id": "tower_03/duct_lower_right",
+  "slug": "duct_lower_right",
+  "display_name": "右侧高架转角风管",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "右侧高架转角风管_资产包",
+  "objects": [
+    "右侧高架转角风管"
+  ],
+  "root_object": "右侧高架转角风管",
+  "world_position": [
+    29,
+    0,
+    44.8
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    27.199999998509885,
+    -12.764999389648438,
+    41.0
+  ],
+  "bounds_max": [
+    30.800000001490115,
+    0.05000000074505815,
+    46.26181869506836
+  ],
+  "dimensions": [
+    3.600000002980231,
+    12.814999390393496,
+    5.2618186950683565
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "duct_lower_right.glb"
+}

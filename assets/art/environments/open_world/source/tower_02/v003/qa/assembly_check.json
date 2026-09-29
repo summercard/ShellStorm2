@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "crane_count": 3,
+  "parts_per_crane": [
+    7,
+    7,
+    7
+  ],
+  "mesh_count": 185,
+  "mesh_world_transform_unchanged": true,
+  "mesh_data_unchanged": true,
+  "duplicate_output_membership": 0,
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend"
+}

@@ -1,0 +1,52 @@
+{
+  "package_id": "tower_02/scaffold_07",
+  "display_name": "立面_07_脚手架围网",
+  "slug": "scaffold_07",
+  "category": "scaffold",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "立面_07_脚手架围网_资产包",
+  "objects": [
+    "立面_07_脚手架围网"
+  ],
+  "root_object": "立面_07_脚手架围网",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -36.599998474121094,
+    -25.06999969482422,
+    0.5350000262260437
+  ],
+  "bounds_max": [
+    -34.14999771118164,
+    25.06999969482422,
+    88.82334899902344
+  ],
+  "dimensions": [
+    2.450000762939453,
+    50.13999938964844,
+    88.2883489727974
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "scaffold_07.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/scaffold/scaffold_07/asset_manifest.json"
+}

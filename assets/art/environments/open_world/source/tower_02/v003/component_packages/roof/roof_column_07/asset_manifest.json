@@ -1,0 +1,52 @@
+{
+  "package_id": "tower_02/roof_column_07",
+  "display_name": "屋顶柱_07_错层钢筋笼",
+  "slug": "roof_column_07",
+  "category": "roof",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "屋顶柱_07_错层钢筋笼_资产包",
+  "objects": [
+    "屋顶柱_07_错层钢筋笼"
+  ],
+  "root_object": "屋顶柱_07_错层钢筋笼",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -6.383589267730713,
+    -1.6950000524520874,
+    84.5
+  ],
+  "bounds_max": [
+    0.38358932733535767,
+    1.6349999904632568,
+    89.0
+  ],
+  "dimensions": [
+    6.767178595066071,
+    3.3300000429153442,
+    4.5
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_column_07.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/roof/roof_column_07/asset_manifest.json"
+}
