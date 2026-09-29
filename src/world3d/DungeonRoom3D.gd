@@ -1182,6 +1182,48 @@ func _build_connection_port_markers(parent: Node3D) -> void:
 		container.add_child(marker)
 
 
+## 预烘焙静态场景里的端口 Marker 是否与本局端口声明对不上。
+## 比对口径：Marker 数量、每个 `port_id` 是否存在、`target_room_id` 是否一致、
+## **Marker 局部坐标是否与当前端口坐标重合**。
+##
+## 最后一条是必需的：房间节点自身的 `rotation` 恒为 0（朝向由端口坐标与实例清单
+## 表达，不靠节点 transform），所以「本局 rotation 变了」在静态场景里**毫无痕迹** ——
+## 壳体的门洞还留在烘焙时那面墙上，运行时按本局门位打射线就会打空
+## （实测：漏掉这条坐标比对时，`verify_expedition_level01_flow` 的轮廓感知判据
+## 从基线 2 条错涨到几十条「那面墙没有碰撞体，且不是门洞」）。
+## 随机拼接会重排开口角色与朝向，因此这条比对是「过期」的主要判据。
+static func _static_layout_ports_mismatch(static_layout: Node3D, expected: Array) -> bool:
+	if static_layout == null:
+		return false
+	var container := static_layout.find_child("ConnectionPorts", true, false) as Node3D
+	if container == null:
+		return not expected.is_empty()
+	if container.get_child_count() != expected.size():
+		return true
+	var expected_by_id := {}
+	for value in expected:
+		var port := value as Dictionary
+		var raw := port.get("position_m", []) as Array
+		var position := (
+			Vector2(float(raw[0]), float(raw[1])) if raw.size() >= 2 else Vector2.ZERO
+		)
+		expected_by_id[str(port.get("port_id", ""))] = {
+			"target": str(port.get("target_room_id", "")),
+			"position": position,
+		}
+	for child in container.get_children():
+		var port_id := str(child.get_meta("port_id", ""))
+		if not expected_by_id.has(port_id):
+			return true
+		var expect := expected_by_id[port_id] as Dictionary
+		if str(child.get_meta("target_room_id", "")) != str(expect["target"]):
+			return true
+		var marker_position := Vector2(child.position.x, child.position.z)
+		if marker_position.distance_to(expect["position"] as Vector2) > 0.01:
+			return true
+	return false
+
+
 func get_service_station(type_id := "") -> ServiceStation3D:
 	for station in _get_service_stations():
 		if type_id.is_empty() or station.station_type == type_id:
@@ -1329,42 +1371,57 @@ func _build_shell() -> void:
 						"DungeonRoom3D: 静态场景房间 ID 不符，期望 %s，实得 %s"
 						% [room_id, static_room_id]
 					)
-				if (
+				# 随机拼接后每局版图不同：这份预烘焙壳体是按**烘焙时那一版**摆的。实例数
+				# 或端口角色任何一个对不上就过期 ⇒ 丢弃它、回落程序化壳体
+				# （`_build_authored_layout_shell` 的清单与 `_build_connection_port_markers`
+				# 的端口 Marker 都按本局真几何现算，永远对得上）。此前这里是 push_error 后
+				# 照旧硬用静态场景，随机化后会把门洞/封墙留在错的墙上（实测 room_07
+				# 烘焙 36 件、随机后 37 件）。
+				var static_stale := (
 					authored_layout_shell
-					and static_instance_total >= 0
-					and static_instance_total != authored_layout_instances.size()
-				):
-					push_error(
-						"DungeonRoom3D: 静态场景 %s 已过期，实例数 %d，当前规划 %d"
-						% [room_id, static_instance_total, authored_layout_instances.size()]
+					and (
+						(
+							static_instance_total >= 0
+							and static_instance_total != authored_layout_instances.size()
+						)
+						or _static_layout_ports_mismatch(static_layout, connection_ports)
 					)
-				static_layout.name = (
-					"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
 				)
-				add_child(static_layout)
-				_restore_static_layout_camera_wall_contract(static_layout)
-				for child in static_layout.get_children():
-					if bool(child.get_meta("editor_preview_only", false)) and child is Node3D:
-						(child as Node3D).visible = false
-				set_meta("static_layout_scene_path", expedition_static_path)
-				set_meta("static_layout_scene_loaded", true)
-				for key in [
-					"authored_layout_shell", "authored_layout_asset_id", "authored_layout_version",
-					"authored_layout_room_id", "authored_layout_corner_count", "authored_layout_solid_wall_count",
-					"authored_layout_door_wall_count", "authored_layout_floor_tile_count",
-					"authored_layout_exclusive_count", "authored_layout_multi_level_count",
-					"authored_layout_room_type_component_count", "authored_layout_promoted_walls",
-				]:
-					if static_layout.has_meta(key):
-						set_meta(key, static_layout.get_meta(key))
-				# 安全房 v007 的房间级事实（版本/旋转步/四角 L/房间包数）随静态布局
-				# 保存，加载后回填到房间节点：快照与入口房验收按房间 meta 读取它们。
-				for meta_name in static_layout.get_meta_list():
-					var static_meta_key := str(meta_name)
-					if static_meta_key.begins_with("safe_room_"):
-						set_meta(static_meta_key, static_layout.get_meta(static_meta_key))
-				_build_runtime_doors_only()
-				return
+				if static_stale:
+					static_layout.free()
+					static_layout = null
+					# `_ready` 因为「静态路径存在」跳过了自建 Marker，这里丢了静态场景
+					# 就必须补上，否则本房两侧都没有 ConnectionPorts（实测 room_07 报缺）。
+					if get_node_or_null("ConnectionPorts") == null:
+						_build_connection_port_markers(self)
+				if static_layout != null:
+					static_layout.name = (
+						"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
+					)
+					add_child(static_layout)
+					_restore_static_layout_camera_wall_contract(static_layout)
+					for child in static_layout.get_children():
+						if bool(child.get_meta("editor_preview_only", false)) and child is Node3D:
+							(child as Node3D).visible = false
+					set_meta("static_layout_scene_path", expedition_static_path)
+					set_meta("static_layout_scene_loaded", true)
+					for key in [
+						"authored_layout_shell", "authored_layout_asset_id", "authored_layout_version",
+						"authored_layout_room_id", "authored_layout_corner_count", "authored_layout_solid_wall_count",
+						"authored_layout_door_wall_count", "authored_layout_floor_tile_count",
+						"authored_layout_exclusive_count", "authored_layout_multi_level_count",
+						"authored_layout_room_type_component_count", "authored_layout_promoted_walls",
+					]:
+						if static_layout.has_meta(key):
+							set_meta(key, static_layout.get_meta(key))
+					# 安全房 v007 的房间级事实（版本/旋转步/四角 L/房间包数）随静态布局
+					# 保存，加载后回填到房间节点：快照与入口房验收按房间 meta 读取它们。
+					for meta_name in static_layout.get_meta_list():
+						var static_meta_key := str(meta_name)
+						if static_meta_key.begins_with("safe_room_"):
+							set_meta(static_meta_key, static_layout.get_meta(static_meta_key))
+					_build_runtime_doors_only()
+					return
 	var dimensions := get_dimensions()
 	_floor_material = _material(theme.floor_color, 0.08, 0.90)
 	_wall_material = _material(theme.wall_color, 0.62, 0.62)

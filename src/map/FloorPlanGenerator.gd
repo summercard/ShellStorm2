@@ -971,9 +971,15 @@ static func _place_recursive(
 			"template_variant": str(candidate.get("template_variant", "")),
 			"short_edge_locked": bool(candidate.get("short_edge_locked", false)),
 			"rotation_deg": float(candidate.get("rotation_deg", 0.0)),
-			"connection_ports": (
-				slot.get("connection_ports", []) as Array
-			).duplicate(true),
+			# 声明随落位**盖章**：本连接实际用哪个开口接入，就把 target 挂到那个口上，
+			# 房表原本声明给父房、这次没被用的口改回空闲。下游（门禁
+			# `_new_connection_accepts_declared_footprints`、校验器、装配层）全部按
+			# `target` 查找端口，盖章后它们自动对着**真几何**判，不必各自再认一遍。
+			"connection_ports": _stamped_connection_ports(
+				slot.get("connection_ports", []) as Array,
+				str(candidate.get("entry_port_id", "")),
+				str(slot.get("parent_key", ""))
+			),
 			"dir": _direction_from_delta(center - _parent_center(slot, placed)),
 		})
 		if (
@@ -1142,9 +1148,21 @@ static func _rotated_spawn_placements(placements: Array, rotation_deg: float) ->
 
 
 ## 显式端口装配：父端口世界坐标 = 子端口世界坐标，且两端朝外法线相反。
-## 返回空数组表示端口声明存在但无法匹配，此时严格失败，不再偷偷回落到房间中点。
+##
+## **拼接自由度就在这里**（「随机拼接」的随机源）：一个连接的可行解**不唯一** ——
+## 子房端可在**开口池**（房表声明给父房的那一个 + 本房 `target` 为空的空闲开口）里任选一个，
+## 再叠 4 个整房朝向，凡满足「两端法线相反 + 锚点重合 + 不重叠」的都是合法摆法。
+## 例：`room_01`（l_turn，西/南/北×2 共四口）接安全屋南口时至少有三个解 ——
+## 用西口转 270°、用北口不转、用另一个北口不转，三者房心与朝向各不相同。
+##
+## 候选由 `rng` 打乱 ⇒ 同一份房表每局拼出不同版图。rng 来自
+## `run_seed ^ level_id ^ floor ^ attempt` 且按固定调用序消费，故同一局同一房仍逐位可复现
+## （回溯只多消耗 rng 值，不破坏确定性）。
+##
+## 返回空数组表示端口声明存在但一组解都拼不出，此时严格失败，不再偷偷回落到房间中点。
 static func _explicit_port_candidates(
-	slot: Dictionary, parent_room: Dictionary, rects: Array[Rect2]
+	slot: Dictionary, parent_room: Dictionary, rects: Array[Rect2],
+	rng: RandomNumberGenerator
 ) -> Array:
 	var child_key := str(slot.get("key", ""))
 	var parent_key := str(slot.get("parent_key", ""))
@@ -1167,23 +1185,100 @@ static func _explicit_port_candidates(
 	).normalized()
 	var base_size := slot.get("size", Vector2.ZERO) as Vector2
 	var results: Array = []
-	for steps in range(4):
-		var rotation_deg := float(steps * 90)
-		var child_outward := _rotate_port_vector(
-			_port_vec2(child_port, "outward"), rotation_deg
-		).normalized()
-		if child_outward.dot(parent_outward) > -0.999:
-			continue
-		var child_anchor := _rotate_port_vector(
-			_port_vec2(child_port, "position_m"), rotation_deg
-		)
-		var center := (
-			parent_room.get("center", Vector2.ZERO) as Vector2
-		) + parent_anchor - child_anchor
-		var child_size := _rotated_room_size(base_size, rotation_deg)
-		if _constrained_fits(center, child_size, rects):
-			results.append(_placement_candidate(center, child_size, slot, rotation_deg))
+	for entry_port_value in _entry_port_pool(slot, child_port):
+		var entry_port := entry_port_value as Dictionary
+		for steps in range(4):
+			var rotation_deg := float(steps * 90)
+			var child_outward := _rotate_port_vector(
+				_port_vec2(entry_port, "outward"), rotation_deg
+			).normalized()
+			if child_outward.dot(parent_outward) > -0.999:
+				continue
+			var child_anchor := _rotate_port_vector(
+				_port_vec2(entry_port, "position_m"), rotation_deg
+			)
+			var center := (
+				parent_room.get("center", Vector2.ZERO) as Vector2
+			) + parent_anchor - child_anchor
+			var child_size := _rotated_room_size(base_size, rotation_deg)
+			if _constrained_fits(center, child_size, rects):
+				var candidate := _placement_candidate(center, child_size, slot, rotation_deg)
+				# 记录本连接**实际用到的**两端端口 id：房表声明的是「候选取法」，
+				# 落位结果才是合同；装配层据此把 room record 的 `connection_ports`
+				# 改写成与几何一致（见 `_constrained_floor_from`）。不改写的话校验器
+				# 仍拿「房表声明配对」核对坐标 ⇒ `connection_port_anchor_gap` 必红
+				# （实测：不改写时 59/60 个种子校验不过）。
+				candidate["entry_port_id"] = str(entry_port.get("port_id", ""))
+				candidate["parent_port_id"] = str(parent_port.get("port_id", ""))
+				results.append(candidate)
+	_shuffle_candidates(results, rng)
 	return results
+
+
+## 子房接入父房时可用的开口池。队首恒为**房表声明给父房的那一个**（旧口径先试一次），
+## 其后追加本房**全部其余开口** —— 它们由房型模板的 `openable_walls` + `wall_lane_table`
+## 授权开洞，可被这条边临时征用，这就是「出口接入口」的拼接自由度。
+##
+## 为什么连 `target` 已指向别的房间的口也放进池里：直通型房的进/出两口本来就对称，
+## 「拿 B 口当入口、A 口当出口」只是同一间房转 180°，几何完全合法；不放进池，
+## 随机自由度会少掉一半以上（实测只放空闲口时 60 个种子仅 23 种版图）。
+## 征用的代价是**两个口的 target 必须互换**，由 `_stamped_connection_ports` 负责 ——
+## 只清空不互换会让下游房间找不到成对端口，拼接直接失败。
+static func _entry_port_pool(slot: Dictionary, declared: Dictionary) -> Array:
+	var pool: Array = [declared]
+	var declared_id := str(declared.get("port_id", ""))
+	for value in slot.get("connection_ports", []) as Array:
+		var port := value as Dictionary
+		if str(port.get("port_id", "")) == declared_id:
+			continue
+		pool.append(port)
+	return pool
+
+
+## 候选序随机化（「随机拼接」唯一的随机源）。用 Fisher-Yates 而不是 `Array.shuffle()`：
+## 后者取全局 RNG，会把随机性漏到 run_seed 之外、破坏「同种子逐位可复现」。
+static func _shuffle_candidates(results: Array, rng: RandomNumberGenerator) -> void:
+	for index in range(results.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var held: Variant = results[index]
+		results[index] = results[swap_index]
+		results[swap_index] = held
+
+
+## 把「落位实际用到的接入端口」盖章到连接声明上：**把它与房表声明的那个口的 `target` 互换**。
+##
+## 为什么要盖章：房表写死的配对只是**候选取法之一**（随机拼接正是从开口池里挑一个），
+## 而下游全按 `target` 认连接。不盖章的话，门禁与校验器拿到的仍是「房表那一个口」，
+## 与实际开门位置对不上（实测 `connection_port_anchor_gap` 59/60 必红）。
+##
+## 为什么是**互换**而不是「清空旧口 + 写新口」：直通型房的进/出两口对称，把 B 口改成
+## 入口后，A 口必须接住 B 原来的下游（否则下游房间找不到成对端口，拼接失败）。
+## 互换后 `target` 非空个数不变 ⇒ `port_count_mismatch` 也不受影响。
+static func _stamped_connection_ports(
+	ports: Array, used_port_id: String, parent_key: String
+) -> Array:
+	var stamped := ports.duplicate(true) as Array
+	if used_port_id.is_empty() or parent_key.is_empty():
+		return stamped
+	var used_target := ""
+	var declared_port_id := ""
+	for value in stamped:
+		var port := value as Dictionary
+		var pid := str(port.get("port_id", ""))
+		if pid == used_port_id:
+			used_target = str(port.get("target", ""))
+		elif str(port.get("target", "")) == parent_key:
+			declared_port_id = pid
+	if declared_port_id.is_empty() or declared_port_id == used_port_id:
+		return stamped
+	for value in stamped:
+		var port := value as Dictionary
+		var pid := str(port.get("port_id", ""))
+		if pid == used_port_id:
+			port["target"] = parent_key
+		elif pid == declared_port_id:
+			port["target"] = used_target
+	return stamped
 
 
 ## 显式连接端口本身就是房型美术确认过的开口事实，不能再拿旧的“从矩形中心推门槽”
@@ -1292,7 +1387,7 @@ static func _placement_candidates(
 		or not (parent_room.get("connection_ports", []) as Array).is_empty()
 	)
 	if has_explicit_ports:
-		return _explicit_port_candidates(slot, parent_room, rects)
+		return _explicit_port_candidates(slot, parent_room, rects, rng)
 	# 桥房族：长轴方向由落位方向定，短边随之固定；槽位里带着本模板的转置尺寸。
 	var rotated_size := slot.get("rotated_size", Vector2.ZERO) as Vector2
 	var directions := _direction_trial_order(
@@ -1543,8 +1638,10 @@ static func _constrained_floor_from(
 			"declared_ports": [],
 			"ports": [],
 			"ports_derived": false,
+			# 端口以**落位盖章后**的那一份为准（`_stamped_connection_ports`）：
+			# 随机拼接会从开口池里挑口，房表写死的 target 配对不是最终合同。
 			"connection_ports": _rotated_connection_ports(
-				slot.get("connection_ports", []) as Array,
+				placed_room.get("connection_ports", slot.get("connection_ports", [])) as Array,
 				float(placed_room.get("rotation_deg", 0.0))
 			),
 		})
