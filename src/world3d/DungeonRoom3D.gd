@@ -168,6 +168,8 @@ const DOOR_WALL_COMPONENT_ID := "ENV-SHARED-GENERIC-WALL-DOOR-5M"
 # _build_authored_layout_shell 末尾）。0.25m 远小于 5m lane 间距（不会把邻 lane 的墙
 # 误判成占据门槽），又远大于浮点误差（能抓住「离门槽只差十几厘米」的真实错位）。
 const DOOR_LANE_GUARD_TOLERANCE_M := 0.25
+## 静态场景定朝向时「场景实例 ↔ 清单实例」的配对容差（件距 5m，留 8 倍余量）。
+const STATIC_LAYOUT_ALIGN_TOLERANCE_M := 0.6
 # v007 墙槽位表，逐项源自 source/room_instances/entry_safe_room/v007/qa/slot_table.json。
 # 每项 = [房间局部 x_m, 房间局部 z_m, Godot rotation.y_deg, 是否门墙, 原生方位]。
 # 坐标换算按 Blender Z-up → Godot Y-up：(bx, by, bz) → (bx, bz, -by)，
@@ -1195,28 +1197,110 @@ func _build_connection_port_markers(parent: Node3D) -> void:
 ## —— 预烘焙静态场景与本局几何对齐 ——
 ##
 ## 静态场景是**刚体**：房间是那间房、墙是那面墙、地砖装饰灯一件不少。随机拼接只改了它
-## 在版图上的落点与朝向，所以对齐也只需要刚体级的两步：
+## 在版图上的落点与朝向，所以对齐只需要刚体级的几步：
 ##
-##   ① **朝向**：场景实例按烘焙朝向固化。实测 room_01 的场景坐标与生成器
-##      `rotation_deg=270` 的清单逐位吻合 —— 烘焙那一刻的朝向被烘进了坐标里，
-##      房间节点自身 `rot_y` 恒为 0。故整体绕 Y 转 Δ 即可，内部相对关系分毫不动。
+##   ① **朝向**：场景实例按烘焙朝向固化（房间节点自身 `rot_y` 恒为 0），故整体绕 Y 转 Δ，
+##      内部相对关系分毫不动。Δ 由几何匹配定序（见 `_static_layout_alignment_delta_deg`）。
 ##   ② **门位归属**：与父房共享的那一扇门由**父端**提供墙与门扇，本端烘焙时不生成
 ##      （代码里的 `owns_door_endpoint` 取舍）。交换出入口后「共享侧」与「自持侧」
 ##      互换 ⇒ 把那件门墙件搬回本局自持侧。不搬的后果是双向的：新自持侧缺一段墙
 ##      （可从房里走出去）、原自持侧多一道假门。
+##   ③ **废门洞**：门墙件落在本局**没有门**的侧上 ⇒ 补一段同侧实墙（`_seal_stray_door_walls`）。
 func _align_static_layout_to_room(static_layout: Node3D) -> void:
 	var delta := _static_layout_alignment_delta_deg(static_layout)
 	if not is_zero_approx(delta):
 		static_layout.rotation.y += deg_to_rad(delta)
 	_rehome_static_layout_door(static_layout)
+	_seal_stray_door_walls(static_layout)
 
 
 ## 把场景坐标转成本局坐标所需的 Y 轴旋转（度，90 的整数倍）。
 ##
-## 口径：逐个别名相同的实例配算「场景里那件的位置角」与「本局清单里那件的位置角」之差，
-## 四舍五入到 90° 后取**众数** —— 单件的浮点/两片墙（FRONT/REAR）噪声不会带偏整体。
+## 口径：**几何匹配优先** —— 把场景里每件组件的位置按候选朝向转进房间帧，数清
+## `authored_layout_instances` 里有多少条能落在 `STATIC_LAYOUT_ALIGN_TOLERANCE_M` 内，
+## 取命中最多者；并列时才回落到老口径（`_static_layout_name_vote_deg`）。
+##
+## 为什么不能只认名字（老口径就栽在这里）：房型默认布局的实例名是**序号式**
+## （`wall_east_0`，与落点无关）⇒ 名字配得上；但具体房间差异布局与通用壳体的名字里
+## **编码了烘焙时的世界坐标**（`WALL_west_xm150_p87_5`），换一局落点就一个都对不上
+## ⇒ 投票为空 ⇒ 返回 0 ⇒ 整间房的墙停在烘焙朝向。实测这会让 room_07 少 2 段墙
+## （南侧两只 L 角），而且是**静默**的：名字投票算不出分歧，看起来像「不需要转」。
+##
 ## 一个实例都配不上时返回 0（保守：不转），宁可维持烘焙朝向也不瞎转。
 func _static_layout_alignment_delta_deg(static_layout: Node3D) -> float:
+	var scene_points := _static_layout_planar_points(static_layout)
+	var checklist_points := _checklist_planar_points()
+	if scene_points.is_empty() or checklist_points.is_empty():
+		return 0.0
+	var best_delta := 0.0
+	var best_score := -1
+	var tied: Array[float] = []
+	for steps in range(4):
+		var candidate := float(steps * 90)
+		var score := _planar_match_score(scene_points, checklist_points, candidate)
+		if score > best_score:
+			best_score = score
+			best_delta = candidate
+			tied = [candidate] as Array[float]
+		elif score == best_score:
+			tied.append(candidate)
+	if tied.size() > 1:
+		var voted := fposmod(_static_layout_name_vote_deg(static_layout), 360.0)
+		for candidate in tied:
+			if absf(candidate - voted) < 0.5:
+				return candidate
+	return best_delta
+
+
+## 场景里**真组件**实例的水平坐标。灯 / 开关 / 相机代理是脚本节点，`scene_file_path`
+## 为空，天然被排除；剩下那批正是会跟着房间朝向走的美术件。
+func _static_layout_planar_points(static_layout: Node3D) -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	for child in static_layout.get_children():
+		if not (child is Node3D):
+			continue
+		var node := child as Node3D
+		if node.scene_file_path.is_empty():
+			continue
+		points.append(Vector2(node.position.x, node.position.z))
+	return points
+
+
+## 生成器清单里每个实例的水平坐标 —— 本局几何的唯一口径（地砖 / 墙 / L 角 / 陈设全在内；
+## 陈设的**不对称性**正是把 0° 与 180° 分开的依据）。
+func _checklist_planar_points() -> Array[Vector2]:
+	var points: Array[Vector2] = []
+	for value in authored_layout_instances:
+		var instance := value as Dictionary
+		var position := instance.get("position", Vector3.ZERO) as Vector3
+		points.append(Vector2(position.x, position.z))
+	return points
+
+
+## 场景点按候选朝向转进房间帧后，落在清单点容差内的条数。
+func _planar_match_score(
+	scene_points: Array[Vector2], checklist_points: Array[Vector2], delta_deg: float
+) -> int:
+	# 用 Godot 自己的 Basis，不要手写 (x,z) 平面的旋转：Y 轴旋转在 (x,z) 上的符号与
+	# `Vector2.rotated()` **相反**，手写极容易把 ±90° 判反（实测 room_04 / room_08
+	# 会因此选中差 180° 的朝向）。
+	var basis := Basis(Vector3.UP, deg_to_rad(delta_deg))
+	var rotated: Array[Vector2] = []
+	for point in scene_points:
+		var moved := basis * Vector3(point.x, 0.0, point.y)
+		rotated.append(Vector2(moved.x, moved.z))
+	var matched := 0
+	for wanted in checklist_points:
+		for point in rotated:
+			if point.distance_to(wanted) <= STATIC_LAYOUT_ALIGN_TOLERANCE_M:
+				matched += 1
+				break
+	return matched
+
+
+## 老口径：逐个别名相同的实例算「场景里那件的位置角」与「本局清单里那件的位置角」之差，
+## 四舍五入到 90° 后取众数。只在几何匹配并列时用来裁决。
+func _static_layout_name_vote_deg(static_layout: Node3D) -> float:
 	var scene_nodes := {}
 	for child in static_layout.get_children():
 		if child is Node3D:
@@ -1290,6 +1374,79 @@ func _rehome_static_layout_door(static_layout: Node3D) -> void:
 		return
 	door_node.position = target.get("position", door_node.position) as Vector3
 	door_node.rotation.y = deg_to_rad(float(target.get("rotation_y_deg", 0.0)))
+
+
+## 门墙件 = 带**通透门洞**的那一件。只认组件来源：实测同一批场景里门墙件的来源既有
+## `wall_door_5m_root_top3d.tscn`，也有反序的 `door_wall_root_top3d.tscn`；而
+## `CameraOnlyDoorWall_*` 这类**相机代理节点**名字里带 DoorWall、`scene_file_path`
+## 却是空的（没有几何也没有碰撞），按名字认会把它当门墙件误补墙。
+static func _is_door_wall_piece(node: Node3D) -> bool:
+	var source := node.scene_file_path
+	return source.contains("wall_door") or source.contains("door_wall")
+
+
+## 废门洞：门墙件落在本局**没有门**的侧上 ⇒ 补一段同侧实墙。
+##
+## 这一类洞是**烘焙时就留下的**，不是随机拼接造成的：办公室房型的源清单把自有的那扇门
+## 开在长墙上，而本关把端口放在短墙（实测 room_03 南墙 / room_09 北墙各留一个 5m 洞，
+## 射线打过去空无一物、玩家能从那里走出房间；把随机拼接整个回退到基线版图同样报这两条）。
+##
+## 修法只动这一件：从**同一侧**的实墙件复制一段补上，再释放原门墙件 —— 它的碰撞体
+## 必须一起走，否则门洞的净空还在（门墙的碰撞是两根门垛 + 门楣，中间本来就是空的）。
+## 同侧复制保证墙样式、朝向与本侧其余墙段逐项一致，不引入第二套坐标口径。
+##
+## 侧判不出来的是 L 形轮廓凹口处的件（`_authored_wall_side_from_position` 在容差外返回空），
+## 它们的归属另有口径 ⇒ 一律不动。
+func _seal_stray_door_walls(static_layout: Node3D) -> void:
+	var half := get_dimensions() * 0.5
+	var basis := Basis(Vector3.UP, static_layout.rotation.y)
+	var strays: Array[Node3D] = []
+	for child in static_layout.get_children():
+		if not (child is Node3D):
+			continue
+		var node := child as Node3D
+		if not _is_door_wall_piece(node):
+			continue
+		var side := _authored_wall_side_from_position(basis * node.position, half)
+		if side.is_empty() or side in doors:
+			continue
+		strays.append(node)
+	for stray in strays:
+		var side := _authored_wall_side_from_position(basis * stray.position, half)
+		var donor := _solid_wall_donor(static_layout, basis, half, side)
+		var stray_position := stray.position
+		var stray_name := str(stray.name)
+		static_layout.remove_child(stray)
+		stray.free()
+		if donor == null:
+			push_warning(
+				"DungeonRoom3D: %s 的 %s 侧有废门洞，但本侧找不到实墙件可补" % [room_id, side]
+			)
+			continue
+		var patch := donor.duplicate() as Node3D
+		patch.name = "%s_SolidFill" % stray_name
+		patch.position = stray_position
+		static_layout.add_child(patch)
+
+
+## 补墙用的实墙来源：优先**同一侧**的墙（样式与朝向一致），找不到才退而取任意一件墙。
+func _solid_wall_donor(
+	static_layout: Node3D, basis: Basis, half: Vector2, side: String
+) -> Node3D:
+	var fallback: Node3D = null
+	for child in static_layout.get_children():
+		if not (child is Node3D):
+			continue
+		var node := child as Node3D
+		if _is_door_wall_piece(node):
+			continue
+		if not node.scene_file_path.get_file().begins_with("wall"):
+			continue
+		if fallback == null:
+			fallback = node
+		if _authored_wall_side_from_position(basis * node.position, half) == side:
+			return node
+	return fallback
 
 
 static func _static_layout_ports_mismatch(static_layout: Node3D, expected: Array) -> bool:
@@ -3702,19 +3859,83 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 
 func _restore_static_layout_camera_wall_contract(static_layout: Node) -> void:
 	# 静态房间 TSCN 保留顶层 PackedScene 边界；生成时写入 prefab 内部
-	# StaticBody3D 的运行时 metadata 不会被固化。加载后按实例根方向重放该契约，
+	# StaticBody3D 的运行时 metadata 不会被固化。加载后重放该契约，
 	# 只复用既有碰撞，不生成第二套墙体代理。
+	#
+	# ⚠ 判据必须是**几何**（墙长轴是否沿世界 X），不能读 `tower_wall_direction`：
+	#
+	#   ① 该 meta 是**烘焙当时**的方向，房间整体旋转后即过期。随机拼接下每局朝向
+	#      不同（room_01 在各局取过 0 / 270 ...），±90° 会让南北墙与东西墙互换，
+	#      按 meta 标就会「该标的没标、不该标的标了」。
+	#   ② 即便不旋转，L 型房型的**内墙**也没有可用的 side —— 源清单只给外圈墙件
+	#      标了方位。实测 room_01 内侧横墙 `Y_*_35` 标的是 west，几何上却与南外墙
+	#      `Y_*_45` 同向（都沿世界 X 延伸）；它没被标记 ⇒ **镜头从那面墙穿出去**
+	#      （玩家在走廊北段时镜头后墙正是它）。这是进游戏肉眼可见的那一条。
+	#
+	# 转角模块本就走几何口径（`_configure_corner_camera_collisions`），这里对齐它。
 	for child in static_layout.get_children():
 		var corner_id := str(child.get_meta("tower_wall_corner", ""))
 		if not corner_id.is_empty():
 			_configure_corner_camera_collisions(child)
 			continue
-		var direction := str(child.get_meta("tower_wall_direction", ""))
-		if direction in ["north", "south", "east", "west"]:
-			_set_camera_lower_wall_on_static_bodies(
-				child,
-				direction in ["north", "south"]
-			)
+		if not (child is Node3D):
+			continue
+		var piece := child as Node3D
+		if not _is_static_layout_wall_piece(piece):
+			continue
+		_set_camera_lower_wall_on_static_bodies(
+			piece,
+			_wall_runs_along_world_x(piece)
+		)
+
+
+## 静态场景里的一件「墙」：只认**组件来源**，不认节点名。
+## `CameraOnlyDoorWall_*` 这类相机代理名字里带 DoorWall、却没有几何与碰撞；
+## L 型房型的墙件名里编码的是烘焙时的世界坐标（`WALL_west_xm150_p87_5`），也不可靠。
+## 手工补墙生成的 `_SolidFill` 是 `duplicate()` 出来的独立节点，退回看生成器给墙件
+## 写的 `tower_wall_direction`（该 meta 只写给墙件）。
+func _is_static_layout_wall_piece(piece: Node3D) -> bool:
+	if piece.scene_file_path.is_empty():
+		return piece.has_meta("tower_wall_direction")
+	if _is_door_wall_piece(piece):
+		return true
+	return piece.scene_file_path.get_file().begins_with("wall")
+
+
+## 墙件长轴是否沿**世界 X** —— 只有这类墙会成为镜头后墙（面法线朝 ±Z，镜头沿
+## 玩家后方的世界 +Z 拉远，见 `TowerDescent3D._find_lower_camera_wall_distance`）。
+##
+## 取**碰撞盒**（BoxShape3D）的世界包围盒长边，而不是实例根自带的局部轴：不同族墙件的
+## 长边分别落在 local X（`wall_5m_a` 等）与 local Z（`wall_5m_d` 等），按族分支容易漏；
+## 统一取「世界水平包围盒较长的一边」就不必知道是哪一族。碰撞盒也正是镜头射线实际
+## 打到的形状，口径一致。
+##
+## 一件都取不到 BoxShape3D 时返回 false（不标）：宁可维持现状，也不凭猜测标记。
+func _wall_runs_along_world_x(piece: Node3D) -> bool:
+	var bounds := AABB()
+	var has_bounds := false
+	for value in piece.find_children("*", "CollisionShape3D", true, false):
+		var collision := value as CollisionShape3D
+		var box := collision.shape as BoxShape3D
+		if box == null:
+			continue
+		var shape_basis := collision.global_transform.basis
+		var half := box.size * 0.5
+		for sx in [-1.0, 1.0]:
+			for sy in [-1.0, 1.0]:
+				for sz in [-1.0, 1.0]:
+					var point: Vector3 = (
+						collision.global_transform.origin
+						+ shape_basis * (Vector3(sx, sy, sz) * half)
+					)
+					if not has_bounds:
+						bounds = AABB(point, Vector3.ZERO)
+						has_bounds = true
+					else:
+						bounds = bounds.expand(point)
+	if not has_bounds:
+		return false
+	return bounds.size.x >= bounds.size.z
 
 
 func _set_camera_lower_wall_on_static_bodies(root: Node, enabled: bool) -> void:

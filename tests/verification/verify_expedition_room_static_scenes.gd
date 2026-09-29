@@ -75,6 +75,7 @@ func _ready() -> void:
 				_check(art_root != null, "%s 必须保留静态艺术根" % room_id)
 				if art_root != null:
 					_check_static_camera_wall_contract(art_root, room_id)
+					_check_camera_wall_rotation_invariance(room, art_root, room_id)
 				if room_id == "start" and art_root != null:
 					_check(
 						_count_nodes_with_meta(art_root, "tower_wall_corner") == 4,
@@ -151,20 +152,116 @@ func _check_static_camera_wall_contract(art_root: Node, room_id: String) -> void
 					]
 				)
 			continue
-		var direction := str(child.get_meta("tower_wall_direction", ""))
-		if direction not in ["north", "south", "east", "west"]:
+		if not (child is Node3D):
+			continue
+		var piece := child as Node3D
+		if not _is_wall_piece(piece):
 			continue
 		var static_bodies: Array[Node] = []
-		if child is StaticBody3D:
-			static_bodies.append(child)
-		static_bodies.append_array(child.find_children("*", "StaticBody3D", true, false))
-		_check(not static_bodies.is_empty(), "%s %s 墙必须保留摄像机碰撞" % [room_id, direction])
-		for value in static_bodies:
-			var body := value as StaticBody3D
+		if piece is StaticBody3D:
+			static_bodies.append(piece)
+		static_bodies.append_array(piece.find_children("*", "StaticBody3D", true, false))
+		if static_bodies.is_empty():
+			# 标签 / 预览这类无碰撞装饰件不参与；带 side meta 的墙必须保留碰撞体。
+			var direction := str(piece.get_meta("tower_wall_direction", ""))
 			_check(
-				bool(body.get_meta("camera_lower_wall", false)) == (direction in ["north", "south"]),
-				"%s %s 墙的 %s 摄像机墙标记错误" % [room_id, direction, body.name]
+				direction not in ["north", "south", "east", "west"],
+				"%s %s 墙必须保留摄像机碰撞" % [room_id, piece.name]
 			)
+			continue
+		# 期望值按**几何**给（墙长轴是否沿世界 X），不按 `tower_wall_direction`：
+		# 该 meta 是烘焙当时的方向，房间整体旋转后即过期；且 L 型房型的**内墙**在源
+		# 清单里根本没有可用的 side（room_01 内侧横墙标的是 west，几何上却与南外墙
+		# 同向）—— 按 meta 判会让内墙漏标，镜头从那里穿出去。转角分支本就走几何口径。
+		_check_wall_piece_camera_flags(piece, static_bodies, room_id, "")
+
+
+## 逐件比对 `camera_lower_wall` 与几何口径。`context` 非空时写进失败信息
+## （用于「摆到 90° 时」这类需要标明朝向的场合）。
+func _check_wall_piece_camera_flags(
+	piece: Node3D, static_bodies: Array[Node], room_id: String, context: String
+) -> void:
+	var expected := _wall_runs_along_world_x(piece)
+	var prefix := "" if context.is_empty() else "%s " % context
+	for value in static_bodies:
+		var body := value as StaticBody3D
+		_check(
+			bool(body.get_meta("camera_lower_wall", false)) == expected,
+			"%s%s %s 墙的 %s 摄像机墙标记错误（长轴沿世界 X = %s）" % [
+				prefix, room_id, piece.name, body.name, str(expected)
+			]
+		)
+
+
+## 镜头后墙契约必须**随朝向重放**：随机拼接下每局房间朝向不同（room_01 在各局取过
+## 0 / 90 / 180 / 270），而 `tower_wall_direction` 是**烘焙当时**的方向、整体旋转后即过期；
+## L 型房型的**内墙**更是连 side 都没有（源清单只标外圈）。
+##
+## 只在当前朝向查一遍抓不住这条：实测 room_01 在 90°/180°/270° 三个朝向下共 **28 个
+## 地砖格点镜头会穿墙**（玩家在走廊北段时，镜头后墙正是那道没被标记的内侧横墙），
+## 而它那一局恰好落在 0°、单朝向断言全绿。所以这里把房间依次摆到另外三个朝向、
+## 重放契约，再逐件比对标记与几何 —— 判据掉了这条就会当场变红。
+func _check_camera_wall_rotation_invariance(
+	room: DungeonRoom3D, art_root: Node3D, room_id: String
+) -> void:
+	var original_rotation := art_root.rotation.y
+	for rotation in [90.0, 180.0, 270.0]:
+		art_root.rotation.y = deg_to_rad(rotation)
+		room._restore_static_layout_camera_wall_contract(art_root)
+		for child in art_root.get_children():
+			if not (child is Node3D):
+				continue
+			var piece := child as Node3D
+			if not _is_wall_piece(piece) or piece.has_meta("tower_wall_corner"):
+				continue
+			var bodies: Array[Node] = []
+			if piece is StaticBody3D:
+				bodies.append(piece)
+			bodies.append_array(piece.find_children("*", "StaticBody3D", true, false))
+			if bodies.is_empty():
+				continue
+			_check_wall_piece_camera_flags(
+				piece, bodies, room_id, "摆到 %d° 时" % int(rotation)
+			)
+	art_root.rotation.y = original_rotation
+	room._restore_static_layout_camera_wall_contract(art_root)
+
+
+## 墙件判定：只认组件来源（与 DungeonRoom3D._is_static_layout_wall_piece 同口径）。
+func _is_wall_piece(piece: Node3D) -> bool:
+	if piece.scene_file_path.is_empty():
+		return piece.has_meta("tower_wall_direction")
+	if piece.scene_file_path.contains("wall_door") or piece.scene_file_path.contains("door_wall"):
+		return true
+	return piece.scene_file_path.get_file().begins_with("wall")
+
+
+## 墙长轴是否沿世界 X：取碰撞盒世界包围盒较长的一边（独立实现，不复用生产代码）。
+func _wall_runs_along_world_x(piece: Node3D) -> bool:
+	var bounds := AABB()
+	var has_bounds := false
+	for value in piece.find_children("*", "CollisionShape3D", true, false):
+		var collision := value as CollisionShape3D
+		var box := collision.shape as BoxShape3D
+		if box == null:
+			continue
+		var shape_basis := collision.global_transform.basis
+		var half := box.size * 0.5
+		for sx in [-1.0, 1.0]:
+			for sy in [-1.0, 1.0]:
+				for sz in [-1.0, 1.0]:
+					var point: Vector3 = (
+						collision.global_transform.origin
+						+ shape_basis * (Vector3(sx, sy, sz) * half)
+					)
+					if not has_bounds:
+						bounds = AABB(point, Vector3.ZERO)
+						has_bounds = true
+					else:
+						bounds = bounds.expand(point)
+	if not has_bounds:
+		return false
+	return bounds.size.x >= bounds.size.z
 
 
 func _count_nodes_with_meta(root: Node, key: StringName) -> int:
