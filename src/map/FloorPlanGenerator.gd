@@ -1215,14 +1215,17 @@ static func _explicit_port_candidates(
 	return results
 
 
-## 子房接入父房时可用的开口池。队首恒为**房表声明给父房的那一个**（旧口径先试一次），
-## 其后追加本房**全部其余开口** —— 它们由房型模板的 `openable_walls` + `wall_lane_table`
-## 授权开洞，可被这条边临时征用，这就是「出口接入口」的拼接自由度。
+## 子房接入父房时可用的开口池 = **房表声明占用的那两个口**（该房自己的进/出口）。
 ##
-## 为什么连 `target` 已指向别的房间的口也放进池里：直通型房的进/出两口本来就对称，
-## 「拿 B 口当入口、A 口当出口」只是同一间房转 180°，几何完全合法；不放进池，
-## 随机自由度会少掉一半以上（实测只放空闲口时 60 个种子仅 23 种版图）。
-## 征用的代价是**两个口的 target 必须互换**，由 `_stamped_connection_ports` 负责 ——
+## 池里只放 `target` 非空的口，两个原因：
+##   ① **预烘焙静态场景只在这两个口所在的墙上开了门洞**。实测每份
+##      `f00_*_static_layout.tscn` 恰好 2 个门槽快照（`snapshot_tower_wall_door_offset_*`）、
+##      1 个门墙件 + 1 个共墙门位，与房表声明逐口对应；空闲口所在的墙在场景里是整排实墙
+##      （如 room_01 南墙 32 段实墙无洞）。征用空闲口 = 把门洞开到实墙上 ⇒ 走不过去。
+##   ② 「拿 B 口当入口、A 口当出口」是**同一间房做 90°/180° 刚体旋转**，两端门洞都在，
+##      静态场景整体跟着转即可，零墙面改动。这是本关随机拼接的全部自由度来源。
+##
+## 代价：两个口的 `target` 必须**互换**，由 `_stamped_connection_ports` 负责 ——
 ## 只清空不互换会让下游房间找不到成对端口，拼接直接失败。
 static func _entry_port_pool(slot: Dictionary, declared: Dictionary) -> Array:
 	var pool: Array = [declared]
@@ -1230,6 +1233,8 @@ static func _entry_port_pool(slot: Dictionary, declared: Dictionary) -> Array:
 	for value in slot.get("connection_ports", []) as Array:
 		var port := value as Dictionary
 		if str(port.get("port_id", "")) == declared_id:
+			continue
+		if str(port.get("target", "")).is_empty():
 			continue
 		pool.append(port)
 	return pool

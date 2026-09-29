@@ -1192,6 +1192,106 @@ func _build_connection_port_markers(parent: Node3D) -> void:
 ## （实测：漏掉这条坐标比对时，`verify_expedition_level01_flow` 的轮廓感知判据
 ## 从基线 2 条错涨到几十条「那面墙没有碰撞体，且不是门洞」）。
 ## 随机拼接会重排开口角色与朝向，因此这条比对是「过期」的主要判据。
+## —— 预烘焙静态场景与本局几何对齐 ——
+##
+## 静态场景是**刚体**：房间是那间房、墙是那面墙、地砖装饰灯一件不少。随机拼接只改了它
+## 在版图上的落点与朝向，所以对齐也只需要刚体级的两步：
+##
+##   ① **朝向**：场景实例按烘焙朝向固化。实测 room_01 的场景坐标与生成器
+##      `rotation_deg=270` 的清单逐位吻合 —— 烘焙那一刻的朝向被烘进了坐标里，
+##      房间节点自身 `rot_y` 恒为 0。故整体绕 Y 转 Δ 即可，内部相对关系分毫不动。
+##   ② **门位归属**：与父房共享的那一扇门由**父端**提供墙与门扇，本端烘焙时不生成
+##      （代码里的 `owns_door_endpoint` 取舍）。交换出入口后「共享侧」与「自持侧」
+##      互换 ⇒ 把那件门墙件搬回本局自持侧。不搬的后果是双向的：新自持侧缺一段墙
+##      （可从房里走出去）、原自持侧多一道假门。
+func _align_static_layout_to_room(static_layout: Node3D) -> void:
+	var delta := _static_layout_alignment_delta_deg(static_layout)
+	if not is_zero_approx(delta):
+		static_layout.rotation.y += deg_to_rad(delta)
+	_rehome_static_layout_door(static_layout)
+
+
+## 把场景坐标转成本局坐标所需的 Y 轴旋转（度，90 的整数倍）。
+##
+## 口径：逐个别名相同的实例配算「场景里那件的位置角」与「本局清单里那件的位置角」之差，
+## 四舍五入到 90° 后取**众数** —— 单件的浮点/两片墙（FRONT/REAR）噪声不会带偏整体。
+## 一个实例都配不上时返回 0（保守：不转），宁可维持烘焙朝向也不瞎转。
+func _static_layout_alignment_delta_deg(static_layout: Node3D) -> float:
+	var scene_nodes := {}
+	for child in static_layout.get_children():
+		if child is Node3D:
+			scene_nodes[str(child.name)] = child as Node3D
+	if scene_nodes.is_empty():
+		return 0.0
+	var votes := {}
+	for value in authored_layout_instances:
+		var instance := value as Dictionary
+		var instance_name := str(instance.get("name", ""))
+		if instance_name.is_empty() or not scene_nodes.has(instance_name):
+			continue
+		var local_position := instance.get("position", Vector3.ZERO) as Vector3
+		var scene_position := (scene_nodes[instance_name] as Node3D).position
+		# 贴原点的实例角度是噪声，跳过。
+		if Vector2(local_position.x, local_position.z).length() < 1.0:
+			continue
+		if Vector2(scene_position.x, scene_position.z).length() < 1.0:
+			continue
+		var raw := rad_to_deg(
+			atan2(scene_position.z, scene_position.x)
+			- atan2(local_position.z, local_position.x)
+		)
+		var bucket := int(round(wrapf(raw, -180.0, 180.0) / 90.0)) * 90
+		votes[bucket] = int(votes.get(bucket, 0)) + 1
+	var best_bucket := 0
+	var best_count := 0
+	for bucket in votes:
+		if int(votes[bucket]) > best_count:
+			best_count = int(votes[bucket])
+			best_bucket = int(bucket)
+	return float(best_bucket)
+
+
+## 把静态场景里那件「本房自持的门墙件」搬回本局门位。
+##
+## 目标位置/朝向直接取生成器清单里**本房拥有**的那条 `door_wall` 记录 —— 判据
+## `_authored_wall_door_side()` 与 `_build_authored_layout_shell` 的取舍同源，
+## 所以搬完的位置与本局几何、门扇、碰撞天然一致，不需要另立一套坐标口径。
+## 没有交换出入口时目标就是原位，本函数幂等。
+func _rehome_static_layout_door(static_layout: Node3D) -> void:
+	var door_node: Node3D = null
+	for child in static_layout.get_children():
+		if not (child is Node3D):
+			continue
+		var child_3d := child as Node3D
+		# 认「组件来源」而不是节点名：实测同一批场景里门墙件既有
+		# `ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_SOUTH`（名字里根本没有 door），
+		# 也有 `GenericShell_DOORWALL_west_xm70_m47_5`。按名字认会漏掉前者，
+		# 结果是交换出入口后自持侧永久缺一段墙（可从房里走出去）。
+		if child_3d.scene_file_path.contains("wall_door"):
+			door_node = child_3d
+			break
+	if door_node == null:
+		return
+	var half := get_dimensions() * 0.5
+	var target: Dictionary = {}
+	for value in authored_layout_instances:
+		var instance := value as Dictionary
+		# 门墙有两种来源：房表直接写 `slot_role=door_wall`，或实墙槽被**提升**
+		# （`_build_authored_layout_shell` 的 promoted 分支）。两类槽都要看，
+		# 归属只由 `_authored_wall_door_side()` 判定 —— 它与装配层的取舍同源。
+		if str(instance.get("slot_role", "")) not in ["solid_wall", "door_wall"]:
+			continue
+		var local_position := instance.get("position", Vector3.ZERO) as Vector3
+		if _authored_wall_door_side(local_position, half).is_empty():
+			continue
+		target = instance
+		break
+	if target.is_empty():
+		return
+	door_node.position = target.get("position", door_node.position) as Vector3
+	door_node.rotation.y = deg_to_rad(float(target.get("rotation_y_deg", 0.0)))
+
+
 static func _static_layout_ports_mismatch(static_layout: Node3D, expected: Array) -> bool:
 	if static_layout == null:
 		return false
@@ -1371,29 +1471,16 @@ func _build_shell() -> void:
 						"DungeonRoom3D: 静态场景房间 ID 不符，期望 %s，实得 %s"
 						% [room_id, static_room_id]
 					)
-				# 随机拼接后每局版图不同：这份预烘焙壳体是按**烘焙时那一版**摆的。实例数
-				# 或端口角色任何一个对不上就过期 ⇒ 丢弃它、回落程序化壳体
-				# （`_build_authored_layout_shell` 的清单与 `_build_connection_port_markers`
-				# 的端口 Marker 都按本局真几何现算，永远对得上）。此前这里是 push_error 后
-				# 照旧硬用静态场景，随机化后会把门洞/封墙留在错的墙上（实测 room_07
-				# 烘焙 36 件、随机后 37 件）。
-				var static_stale := (
-					authored_layout_shell
-					and (
-						(
-							static_instance_total >= 0
-							and static_instance_total != authored_layout_instances.size()
-						)
-						or _static_layout_ports_mismatch(static_layout, connection_ports)
-					)
-				)
-				if static_stale:
-					static_layout.free()
-					static_layout = null
-					# `_ready` 因为「静态路径存在」跳过了自建 Marker，这里丢了静态场景
-					# 就必须补上，否则本房两侧都没有 ConnectionPorts（实测 room_07 报缺）。
-					if get_node_or_null("ConnectionPorts") == null:
-						_build_connection_port_markers(self)
+				# 静态场景**照常使用** —— 它是本关美术的唯一来源（手工排布的墙样式、
+				# 地砖、装饰、灯、专属件都在里面），程序化壳体拿不出同等观感。
+				#
+				# 它与随机拼接的冲突只有两点，都由 `_align_static_layout_to_room` 就地化解：
+				#   ① 朝向：场景按烘焙朝向固化（实测 room_01 的场景坐标与生成器
+				#      `rotation_deg=270` 的清单逐位吻合）⇒ 整体绕 Y 转回本局朝向；
+				#   ② 门位归属：与父房共享的那扇门由父端提供，本端烘焙时不生成 ⇒ 交换
+				#      出入口后把那一件门墙件搬回本局自持侧。
+				# 两者都是刚体级操作（转 + 挪一件），**其余实例一件不动**。
+				_align_static_layout_to_room(static_layout)
 				if static_layout != null:
 					static_layout.name = (
 						"SafeRoomArtRoot" if room_id == "start" else "AuthoredLayoutArtRoot"
