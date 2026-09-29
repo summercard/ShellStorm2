@@ -118,15 +118,11 @@ func _build_visual(color: Color) -> void:
 	_label = Label3D.new()
 	_label.name = "LootLabel"
 	_label.position = Vector3(0, LABEL_HEIGHT_M, 0)
+	## 业主 2026-09-29：地面掉落物名牌**只写名字**。
+	## 原来武器会追加「 #编号 · 构筑 n/8」，那两项在拾取前对玩家没有任何决策价值，
+	## 只把名牌撑长、挤小字号。武器实例号与构筑进度在背包（I）/ 工作台里看得更全。
+	## 不要再把后缀加回来 —— 需要看实例身份请走 InventoryUI，别复刻到世界里。
 	_label.text = str(item_data.get("name", item_data.get("id", "物资")))
-	if str(item_data.get("type", "")) == "weapon":
-		var upgrades: Variant = item_data.get("fate_upgrades", [])
-		var used: int = upgrades.size() if upgrades is Array else 0
-		_label.text += " #%s · 构筑 %d/%d" % [
-			str(item_data.get("weapon_instance_id", "")).right(6).to_upper(),
-			used,
-			int(item_data.get("fate_slot_capacity", 8)),
-		]
 	_label.font_size = LABEL_FONT_SIZE
 	_label.pixel_size = LABEL_PIXEL_SIZE
 	_label.outline_size = LABEL_OUTLINE_SIZE

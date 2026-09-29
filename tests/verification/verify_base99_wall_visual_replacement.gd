@@ -255,7 +255,7 @@ func _validate_legacy_structures_removed(facility: DungeonRoom3D, failures: Arra
 		return
 	var required_v021 := [
 		"V021东墙阁楼主体结构",
-		"12米东侧上行过渡楼梯",
+		"99层至100层双段伸缩直梯",
 		"V021西北贴墙L型楼梯",
 		"V021阁楼下方铁皮封闭体",
 	]

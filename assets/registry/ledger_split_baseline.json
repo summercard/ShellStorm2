@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-09-28",
+ "captured_at": "2026-09-29",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,10 +35,10 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 416,
+ "asset_count": 417,
  "assets": {
   "CHR-PLY-CAPSULE01": {
-   "v": "7bf0d42ae9bfeb342131234de92035f3c7f0d3f340a7b6a149a117610c028924",
+   "v": "f76f86f5f3b9fd9aeb4254b67cb795a71c17b268d228047dcd4667cd20903d44",
    "c": "角色",
    "d": "characters"
   },
@@ -73,7 +73,7 @@
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01": {
-   "v": "926e377d08ab59824310219c17f4ca7728cc2ec404d4eac71d2ffefb15f9af12",
+   "v": "08bd483ec84a271f2044123092ce7db9284d957f24ab787e454a52c7225f1bdc",
    "c": "角色",
    "d": "characters"
   },
@@ -743,7 +743,7 @@
    "d": "scenes"
   },
   "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR": {
-   "v": "587026bcc74f44a49daeb7535b051d126f71edee82aae38e8aa541aa78d57008",
+   "v": "d1297eef49d13ec6f056dc4939bfb1e45386c21d5655b76cb95092332da38551",
    "c": "基地资产包",
    "d": "scenes"
   },
@@ -1453,12 +1453,12 @@
    "d": "props"
   },
   "PRP-BASE-WORKSHOP-STOOL-3D": {
-   "v": "c9f05e6d475ba84e61065dfd6c9c16b10dc72b14ae487b1ec8f419b9c60a3352",
+   "v": "ccb80b666d4aca1bc532999a6f02e8d973c59969233702b866d17a8fa6567119",
    "c": "道具",
    "d": "props"
   },
   "PRP-BASE-MISSION-COMMAND-CHAIR-3D": {
-   "v": "bda25d1cd06ef8552a59fd70b91f21918f05219f91c3dca0f728150c8ec77dcc",
+   "v": "0a6ec03af13b26923ec349a1f244d03652db6910fffcb10c936d2b1d7de80aa4",
    "c": "道具",
    "d": "props"
   },
@@ -2116,36 +2116,41 @@
    "v": "a18f017e15dd358d9c3ab7133c75b3301867a672c077941baec8dbc4f075cb21",
    "c": "音乐",
    "d": "music"
+  },
+  "PRP-BASE99-TELESCOPIC-LADDER-3D": {
+   "v": "31b3b40f8238242d6d3fec7f2ebd31e4d20d56e6fde97a51eb1c0ea157a5ab55",
+   "c": "道具",
+   "d": "props"
   }
  },
  "column_digests": {
-  "1": "074e9e58bbfee91be5e1ce577d6b92f48c020f553fbd0a5c834466fc98cfe109",
-  "2": "e6fa1490f7f70f9f2cbdaaa2f197d2b3e14b6e423cad4f6126e17cd2e1c63be9",
-  "3": "252de954cdba2dfdbd3a086ec24184c1046bdaf6b16c1cfc2ddda15746d300c8",
-  "4": "f5da956dd1ab1da4f7bcf4522c936a6fb404600b393ef1b5bd8f3af4e7ca35d3",
-  "5": "255146a292fc601fd594cc269d3fa118b2580eab4fd6d331d5ac0f283c4a6ee9",
-  "6": "4245108ca28468d72588245256d65b197c6da145d8d4088fed7a84e8b73f9fe8",
-  "7": "a25c6cbd53fd9317da7ec12bd590fc62a0d50b08e297801e95444f517d6d9a2b",
-  "8": "c8f376a67b4530ef67eb71ddd014e41c53d30778e5060b010f61008b0a82af3c",
-  "9": "dcd2b13d763e812252778471af9596072b160c1ca18fd65aff102592128a3857",
-  "10": "a3a5ee29ac4e10a7e17ac376061ce24d9a1fe5c21280e904f13e33321b2d3c07",
-  "11": "8bdcbf329061b1c356373ca294bdfe03f3ea8d39b8a46faeef71033a966c384d",
-  "12": "df49d90f7a4363ce93209d5aebdd16bec3f3f69a48ebb61a8e00640713cc72f2",
-  "13": "2c4c23924f4161188ccdc12129bce655571dbb92ed60f69aab76cae3d55a16d5",
-  "14": "3b5b0de04b6e330789477665f2042cd774d2fd9f4396eb4d56af0ca15ddec7bc",
-  "15": "fd0f3d7e4149435e38515c0db9e7d2fb83518c043a32d902c1924ffdf1e16809",
-  "16": "840f5f97d612531180c4755eefa836457b0243efb6f3d0d55687680e6d6c80d4",
-  "17": "5a74b8a6923f06ccb030d11c58f5a5be28b207919cbe3e369c5b00770ec36cbf",
-  "20": "78b5a4dd935bd380a48510819ab01728d22f6a43acf2868b2339a505edd9a6dc",
-  "21": "07d2f0c7b248d3b3ae0a7020eb04e4b13a3f5817fa8175a4b8d2ea651aecb3b3",
-  "22": "ced5524056ae0124eaafed6a7620ee6d10dd33b1c6c1b77f6703655838f7ef10",
-  "23": "7266bd82b5c0f3d45bdeb2f495988a6e4f63d701a05239278f87342eab69b800",
-  "24": "bfdc57e4a57bf1114a620ca6443395afd1a5392470a1bae38e7b2526161174fb",
-  "25": "373e555f77d1fc323e45280a2f5394b1de435644beb9ca75d3a65b5a6f0995d4"
+  "1": "5bcc9831de0d4edf03d633050e509881734011e8a23ef74e25044aa730dfb7c8",
+  "2": "97bd6f9b6643d2fdd00687ae5311d99dba25a5756fb498db5d041d34e9ff7595",
+  "3": "815b15bd02b15e8f5fd91aecc2f551fbff925b3376df5c02e41a18cb0653d330",
+  "4": "b8e52d3e9ca6a54844ef97b78786a0b6c7643bf8f87614deffcfc40fc7b914b8",
+  "5": "a6a07f92ae1ad8cea52edcf9e77d463112c15c43c578ceae21b28f2e575de3fb",
+  "6": "004a3c1f9a6e86836d815cb168ea2b453710602c5771dd49bf3a1de31a400d16",
+  "7": "f6386bdfd6e4883985c733c90a38e4b5ca50f2a2d2bbb3ede2574b6836bd59ab",
+  "8": "8e7e12fae919ac8b7eeca77f1d45b7c957a11c15566e6099c151328678226a5a",
+  "9": "c52c662d1e20232732f2812029da8163a8b4d928c5005c4eff0083d994b0d7a5",
+  "10": "413a634e6a0c6cc99cc3e707f41a77b53fc1d648a37b7044af821f73df3f614c",
+  "11": "29c16f38a8dfbb0915595c916b021c079a4b20eba41dae8348b96e02ea077996",
+  "12": "d9a284141f66f919cd7d737dfbdf9d2ba08ad3a7917aea053bf3ee224755a3bd",
+  "13": "fa1d74b6a280cc453405953d24b350384825b7d0ad9ae87a7996fbfb665b7e82",
+  "14": "eca292e307d32e9273e6eb0e9c215f00a632fad36db2fde3665c358e300b8918",
+  "15": "b466652ea9783683b72df0340fce8511696181c1d37a8455b8f34f9f589e11ef",
+  "16": "2d3b8cc35b07e3caef0ba7a92b5bbbfd6398cf6e8ba27aba9030659ed60e6a49",
+  "17": "fc7504e80081f7d6e69f50ba4f8c000360152efcb159623be28a9978b4d413bf",
+  "20": "6b49e033e55459f7615517902e3211d331181e545aef04ebbd87b2000be2f782",
+  "21": "8f5a3e8ac4625c1e92da6f74a34e5ad63c05fd61abbc56a9df216ef6bb9e2a49",
+  "22": "de67a2ced62e5f18efeb897075b27458014622482a95791dd025041194f9385c",
+  "23": "25e0bb1e9fcc0bdb3c1b1ee5f79a826392f831f485fd18f7598113813418506b",
+  "24": "98fa8dc95edafb200b6806a0cc5ff5dfc0c2e64ad6edb89e2ac554634a2a1668",
+  "25": "27d6f5170d68e36e383b14b0c8587ee44a8e0357ddf327701e3790179d3bdae6"
  },
  "sheet_digests": {
   "角色组件": "fde07b2eb0b88997799b009adeb26d82daf2081427a92f0b103b26fb1b636253",
-  "动画与状态": "47cc97d561d138b1cd85a70ca057180aabba260afbc94f7d8947401acea17b13",
+  "动画与状态": "ca60374220909e4fdeebce8b3140a03b17970ddcbbff6240caaa03e1cda5fd51",
   "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
   "角色中转记录": "822e7cac33d7a67a4e1c3d31848cadc62e11749cb999b8e19f8032499060695d",
   "3D-角色": "ceaa33a6e9161585e1ccd2037e093d60c4ce00a8bbcebf8fe66ffd26e930fdf2",
@@ -2160,16 +2165,16 @@
   "3D-特效": "90f8f00cec8499d54b4222e11bb03e6c971b05fd2d06ff7924702fbf3d453ae4"
  },
  "category_counts": {
-  "角色": 16,
-  "敌人": 13,
+  "UI": 16,
   "场景": 108,
   "场景道具": 20,
   "基地资产包": 114,
-  "道具": 20,
+  "敌人": 13,
   "武器": 36,
   "特效": 16,
-  "UI": 16,
-  "音效": 48,
-  "音乐": 9
+  "角色": 16,
+  "道具": 21,
+  "音乐": 9,
+  "音效": 48
  }
 }

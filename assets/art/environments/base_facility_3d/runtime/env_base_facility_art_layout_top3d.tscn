@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d.tscn" id="7_stool"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d.tscn" id="8_chair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural/east_mezzanine_structure/east_mezzanine_structure_root_top3d.tscn" id="9_east_mezzanine"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural/east_upper_transition_stair/east_upper_transition_stair_root_top3d.tscn" id="10_east_stair"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/base99_telescopic_ladder/prp_base99_telescopic_ladder_root_top3d.tscn" id="10_east_stair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d.tscn" id="11_northwest_stair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h12/env_base100_upper_shell_30x30_h12_root_top3d.tscn" id="12_upper_shell"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d.tscn" id="13_recovery"]
@@ -192,7 +192,9 @@ rotation = Vector3(0, 3.141593, 0)
 metadata/bridge_id = "elevator_99f"
 [node name="V021东墙阁楼主体结构" parent="基地结构组件_可移动旋转" instance=ExtResource("9_east_mezzanine")]
 
-[node name="12米东侧上行过渡楼梯" parent="基地结构组件_可移动旋转" instance=ExtResource("10_east_stair")]
+[node name="99层至100层双段伸缩直梯" parent="基地结构组件_可移动旋转" instance=ExtResource("10_east_stair")]
+position = Vector3(14.5, 6, -7.5)
+rotation = Vector3(0, -1.570796, 0)
 
 [node name="V021西北贴墙L型楼梯" parent="基地结构组件_可移动旋转" instance=ExtResource("11_northwest_stair")]
 

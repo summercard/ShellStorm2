@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/cable_coil/cable_coil_root_top3d.tscn" id="1_vf3xf"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_40m/ceiling_deck_40m_root_top3d.tscn" id="2_pix2k"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_deck_10m/ceiling_deck_10m_root_top3d.tscn" id="3_v2j07"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_lighting/ceiling_lighting_root_top3d.tscn" id="4_fwhmt"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn" id="5_l6xkf"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/ceiling_service_c/ceiling_service_c_root_top3d.tscn" id="8_j67hv"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn" id="9_pgw6g"]
@@ -35,8 +34,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn" id="35_ph377"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="36_qt5y6"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="37_3logn"]
-[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
-[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
+[ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=395767599]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT"
@@ -66,11 +65,6 @@ metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", 
 metadata/connection_port_count = 2
 metadata/authored_room_devices = true
 
-; 房间中央顶灯（数据库房（db_70x50，30×40））。
-; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
-; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
-;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
-;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
 [node name="RoomCeilingLight" type="Node3D" parent="." unique_id=851201062]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, 0)
 script = ExtResource("900_authored_light")
@@ -84,7 +78,6 @@ fixture_style = "ceiling"
 light_enabled = false
 metadata/authored_room_device = "ceiling_light"
 
-; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
 [node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1820346066]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.199997, 0, 19.66)
 script = ExtResource("901_authored_switch")
@@ -130,18 +123,13 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_DECK_40M"
 metadata/authored_slot_role = "room_type_component"
 
-[node name="ENV-EXPEDITION-L01-DB-CEILING_LIGHTING" parent="." unique_id=57151933 instance=ExtResource("4_fwhmt")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 10.435, 1.09278474e-07)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_LIGHTING"
-metadata/authored_slot_role = "room_type_component"
-
 [node name="ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM" parent="." unique_id=1209106732 instance=ExtResource("5_l6xkf")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 11.15, 0)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_RING_BEAM"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L01-DB-CEILING_SERVICE_PIPE_RUN" parent="." unique_id=1177734601 instance=ExtResource("8_j67hv")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 9.868, 0.015000109)
+transform = Transform3D(-0.28270972, 2.4715268e-08, -0.9592054, -8.742278e-08, -0.9999999, -3.1058807e-22, -0.9592055, 8.38564e-08, 0.28270972, -3.6804109, 12.888514, 0.015000109)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-DB-CEILING_SERVICE_C"
 metadata/authored_slot_role = "room_type_component"
 

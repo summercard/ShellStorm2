@@ -4,7 +4,6 @@ const MEZZANINE_ID := "ENV-BASE99-MEZZANINE-20X10-Z5"
 const UNDERDECK_ID := "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER"
 const CURRENT_STRUCTURAL_IDS := [
 	"ENV-BASE99-STRUCTURAL-V021::east_mezzanine_structure",
-	"BPK-BASE99-EAST-UPPER-TRANSITION-STAIR",
 	"ENV-BASE99-STAIR-L-Z5",
 	"ENV-BASE99-STRUCTURAL-V021::underdeck_sheet_blocker",
 ]
@@ -30,6 +29,9 @@ func _ready() -> void:
 		for asset_id in CURRENT_STRUCTURAL_IDS:
 			var replacement := _find_asset(facility, asset_id)
 			_expect(replacement != null and replacement.has_node("StaticCollision"), "当前账本结构资产未接入或缺少阻挡: %s" % asset_id, failures)
+		var ladder := _find_asset(facility, "PRP-BASE99-TELESCOPIC-LADDER-3D")
+		_expect(ladder != null and ladder.has_node("UpperCollision") and ladder.has_node("LowerCollision"), "东侧双段直梯缺失或缺少分段碰撞", failures)
+		_expect(_find_asset(facility, "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR") == null, "旧东侧斜梯仍被实例化", failures)
 		var floor_visuals := facility.get_node_or_null("Art/BlenderV021完整地板表现_仅视觉")
 		_expect(floor_visuals != null and floor_visuals.get_node_or_null("二层楼中楼地板面层_仅视觉") != null, "阁楼结构接入时误删了V020二楼地板", failures)
 		var underdeck_collision_count := 0
@@ -49,7 +51,7 @@ func _ready() -> void:
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BASE99_STRUCTURAL_ASSET_INTEGRATION_OK: current ledger keeps v023 stair and current structural packages; superseded assets are history only")
+		print("BASE99_STRUCTURAL_ASSET_INTEGRATION_OK: east ramp replaced by telescopic ladder; west stair preserved")
 		get_tree().quit(0)
 		return
 	for failure in failures:

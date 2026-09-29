@@ -27,6 +27,8 @@ var pose_lock_phase := 0.0
 func bind(avatar: Node3D) -> void:
 	_version = str(avatar.get_meta("assembly_version", "v009"))
 	var path := LIBRARY_PATH.replace("v009", _version)
+	if _version == "v021":
+		path = path.replace("v021", "v024") # v024 保留坐姿并增加交替攀爬循环。
 	_cache = _load_library(path)
 	var cache_clips: Dictionary = _cache.get("clips", {})
 	_fallback = _load_library(LIBRARY_PATH) if not cache_clips.has("dead") else _cache

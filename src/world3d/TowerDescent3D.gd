@@ -1255,7 +1255,8 @@ func _apply_indoor_camera_pose() -> void:
 	# 调试快捷键产生的偏移只修改“相机→焦点”这条向量，再绕焦点竖轴
 	# 旋转 yaw；玩家自身 yaw 与移动控制完全不受影响，下墙探针/楼梯
 	# 探测以及所有 read_*.global_basis.* 都读真实玩家朝向。
-	var focal_local := Vector3(0.0, CAMERA_LOOK_HEIGHT_M, -CAMERA_LOOK_AHEAD_M)
+	var seat_drop_m := player.get_seated_camera_drop_m()
+	var focal_local := Vector3(0.0, CAMERA_LOOK_HEIGHT_M - seat_drop_m, -CAMERA_LOOK_AHEAD_M)
 	var default_relative := Vector3(
 		0.0,
 		CAMERA_HEIGHT_M + _camera_lift_current_m - _camera_stair_slab_drop_current_m - CAMERA_LOOK_HEIGHT_M,
@@ -1278,7 +1279,7 @@ func _apply_indoor_camera_pose() -> void:
 	player.camera.position = focal_local + relative_local
 	var look_target := player.global_position + Vector3(
 		0.0,
-		CAMERA_LOOK_HEIGHT_M,
+		CAMERA_LOOK_HEIGHT_M - seat_drop_m,
 		-CAMERA_LOOK_AHEAD_M
 	)
 	player.camera.look_at(look_target, Vector3.UP)

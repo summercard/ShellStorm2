@@ -10,6 +10,7 @@ var total_kills: int = 0
 # 100F 天台只属于新手引导。玩家第一次进入 99F 基地后永久置为 true，
 # 后续启动、死亡回城和普通返航都从基地中点开始。
 var tutorial_completed: bool = false
+var base99_rooftop_ladder_deployed: bool = false
 
 # 建筑解锁状态
 var workshop_unlocked: bool = false
@@ -102,6 +103,7 @@ func _to_dict() -> Dictionary:
 		"successful_extractions": successful_extractions,
 		"total_kills": total_kills,
 		"tutorial_completed": tutorial_completed,
+		"base99_rooftop_ladder_deployed": base99_rooftop_ladder_deployed,
 		"workshop_unlocked": workshop_unlocked,
 		"greenhouse_unlocked": greenhouse_unlocked,
 		"scrapyard_unlocked": scrapyard_unlocked,
@@ -162,6 +164,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 			or int(d.get("extraction_points", 0)) > 0
 			or bool(d.get("boss_defeated", false))
 		)
+	data.base99_rooftop_ladder_deployed = bool(d.get("base99_rooftop_ladder_deployed", false))
 	if d.has("workshop_unlocked"): data.workshop_unlocked = d["workshop_unlocked"]
 	if d.has("greenhouse_unlocked"): data.greenhouse_unlocked = d["greenhouse_unlocked"]
 	if d.has("scrapyard_unlocked"): data.scrapyard_unlocked = d["scrapyard_unlocked"]

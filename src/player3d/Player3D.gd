@@ -1,6 +1,6 @@
 class_name Player3D
 extends CharacterBody3D
-## 首张 3D 地图使用的玩家外壳。八态状态机包含真实下落与落地，
+## 首张 3D 地图使用的玩家外壳。状态机包含真实下落、落地与座椅乘坐，
 ## 移动、鼠标射线与碰撞统一工作在 XZ 平面和世界 Y 重力轴。
 
 signal hp_changed(current: int, maximum: int)
@@ -42,10 +42,9 @@ const LANDING_MIN_DURATION_S := 0.12
 const LANDING_MAX_DURATION_S := 0.30
 const LANDING_FULL_IMPACT_MPS := 16.0
 const FALL_RECOVERY_DISTANCE_M := 15.0
-## 基地可推动家具的推力。刚体自身的阻尼决定它只会短距离滑行。
+## 基地可推动家具的低速持续推力；避免接触每帧叠加冲量。
 const PUSHABLE_FURNITURE_GROUP := "pushable_furniture"
-const FURNITURE_PUSH_IMPULSE_PER_MPS := 0.22
-const FURNITURE_PUSH_MAX_IMPULSE := 1.10
+const FURNITURE_PUSH_ACCELERATION := 3.5
 const DEFAULT_BASE_SIZE_MULTIPLIER := 0.80
 const DEBUG_SCALE_STEP_RATIO := 0.10
 const DEBUG_SCALE_MIN_STEP := -9
@@ -114,6 +113,18 @@ var _stowed_weapon_instance_id := ""
 var equipped_backpack_item: Dictionary = {}
 var equipped_flashlight_module: Dictionary = {}
 var interaction_controller: PlayerInteractionController3D
+var _mounted_chair: PushableSeat3D = null
+var _seat_saved_collision_layer := 0
+var _seat_saved_collision_mask := 0
+var _seat_saved_camera_position := Vector3.ZERO
+var _seat_camera_drop_m := 0.0
+var _seat_exit_push_suppression := 0.0
+var _active_ladder: Base99TelescopicLadder3D = null
+var _ladder_progress := 0.0
+var _ladder_direction := 1.0
+var _ladder_saved_collision_layer := 0
+var _ladder_saved_collision_mask := 0
+const LADDER_CLIMB_SPEED_MPS := 2.5
 
 # 虚拟输入状态（来自 MobileInput / GamepadInput 两个 autoload 的信号）。
 # 变量名沿用 _mobile_ 前缀：这条通路最初为触屏而建，手柄复用同一套语义。
@@ -400,6 +411,7 @@ func _apply_debug_scale() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_seat_exit_push_suppression = maxf(0.0, _seat_exit_push_suppression - delta)
 	_update_invincibility(delta)
 	_tick_action_overlays(delta)
 	_silence_remaining = maxf(0.0, _silence_remaining - delta)
@@ -414,6 +426,179 @@ func _physics_process(delta: float) -> void:
 	var flashlight := get_node_or_null("PlayerFlashlight3D")
 	if flashlight != null:
 		flashlight.set_in_facility(is_player_inside_facility())
+
+
+func is_seated_on_chair(chair: PushableSeat3D = null) -> bool:
+	return _mounted_chair != null and is_instance_valid(_mounted_chair) and (chair == null or _mounted_chair == chair)
+
+
+func try_start_ladder_climb(ladder: Base99TelescopicLadder3D, upward: bool) -> bool:
+	if ladder == null or not is_instance_valid(ladder) or not ladder.deployed or _active_ladder != null:
+		return false
+	if input_locked or current_hp <= 0 or get_state_machine_state() not in ["idle", "moving"]:
+		return false
+	var start := ladder.get_exit_position(not upward)
+	if global_position.distance_to(start) > 1.5:
+		return false
+	_ladder_saved_collision_layer = collision_layer
+	_ladder_saved_collision_mask = collision_mask
+	_active_ladder = ladder
+	_ladder_progress = 0.0 if upward else 1.0
+	_ladder_direction = 1.0 if upward else -1.0
+	# 攀爬期间角色由固定导轨控制。结束时恢复完整世界碰撞。
+	collision_layer = 0
+	collision_mask = 0
+	velocity = Vector3.ZERO
+	global_position = ladder.get_climb_position(_ladder_progress)
+	_clear_action_overlays()
+	if weapon != null:
+		weapon.cancel_charge()
+	_state_machine.transition_to("climbing")
+	return true
+
+
+func _tick_ladder_climb(delta: float) -> void:
+	if _active_ladder == null or not is_instance_valid(_active_ladder):
+		_finish_ladder_climb(false)
+		_transition_to_locomotion()
+		return
+	# 仅反方向输入改变行进方向；松开后继续自动攀爬。
+	var vertical_input := Input.get_axis("move_up", "move_down")
+	if _mobile_input_available and absf(_mobile_move_direction.y) > 0.3:
+		vertical_input = _mobile_move_direction.y
+	if _test_move_direction is Vector3 and absf((_test_move_direction as Vector3).z) > 0.3:
+		vertical_input = (_test_move_direction as Vector3).z
+	if vertical_input < -0.3:
+		_ladder_direction = 1.0
+	elif vertical_input > 0.3:
+		_ladder_direction = -1.0
+	_ladder_progress = clampf(_ladder_progress + _ladder_direction * LADDER_CLIMB_SPEED_MPS * delta / Base99TelescopicLadder3D.TRAVEL_HEIGHT, 0.0, 1.0)
+	if _ladder_progress >= 0.9:
+		_active_ladder.prepare_upper_exit()
+	global_position = _active_ladder.get_climb_position(_ladder_progress)
+	velocity = Vector3.ZERO
+	if _ladder_progress >= 1.0 or _ladder_progress <= 0.0:
+		_finish_ladder_climb(_ladder_progress >= 1.0)
+		_transition_to_locomotion()
+
+
+func _finish_ladder_climb(at_top: bool) -> void:
+	if _active_ladder != null and is_instance_valid(_active_ladder):
+		global_position = _active_ladder.get_exit_position(at_top)
+	_active_ladder = null
+	collision_layer = _ladder_saved_collision_layer | 1
+	collision_mask = _ladder_saved_collision_mask | 1
+	virtual_collision_capsule.disabled = false
+	velocity = Vector3.ZERO
+
+
+func try_mount_chair(chair: PushableSeat3D) -> bool:
+	if chair == null or not is_instance_valid(chair) or chair.rider != null or is_seated_on_chair():
+		return false
+	if input_locked or current_hp <= 0 or get_state_machine_state() not in ["idle", "moving"]:
+		return false
+	var gap := chair.global_position - global_position
+	gap.y = 0.0
+	if gap.length() > 1.35:
+		return false
+	_seat_saved_collision_layer = collision_layer
+	_seat_saved_collision_mask = collision_mask
+	_seat_saved_camera_position = camera.position
+	var standing_height := global_position.y
+	_mounted_chair = chair
+	chair.rider = self
+	# 自身胶囊不能与承载的椅子互顶；椅子刚体仍与墙、地面和家具碰撞。
+	collision_layer = 0
+	collision_mask = 0
+	velocity = Vector3.ZERO
+	global_position = chair.get_seat_position()
+	# Root rises to the seat, but the camera must keep its standing world height.
+	_seat_camera_drop_m = global_position.y - standing_height
+	camera.position = _seat_saved_camera_position - Vector3.UP * _seat_camera_drop_m
+	_clear_action_overlays()
+	if weapon != null:
+		weapon.cancel_charge()
+	_state_machine.transition_to("seated")
+	return true
+
+
+func try_dismount_chair() -> bool:
+	if not is_seated_on_chair():
+		return false
+	var exit_position := _find_chair_exit_position(_mounted_chair)
+	if not exit_position.is_finite():
+		return false
+	_release_chair(exit_position)
+	_transition_to_locomotion()
+	return true
+
+
+func _force_leave_chair() -> void:
+	if not is_seated_on_chair():
+		return
+	var exit_position := _find_chair_exit_position(_mounted_chair)
+	if not exit_position.is_finite():
+		exit_position = _mounted_chair.get_seat_position() + Vector3.UP * 1.2
+	_release_chair(exit_position)
+
+
+func _tick_seated(_delta: float) -> void:
+	if not is_seated_on_chair():
+		_mounted_chair = null
+		_restore_chair_collision()
+		_seat_camera_drop_m = 0.0
+		camera.position = _seat_saved_camera_position
+		_transition_to_locomotion()
+		return
+	_mounted_chair.drive(_get_input_direction_3d())
+	_mounted_chair.set_swivel_yaw(aim_yaw)
+	global_position = _mounted_chair.get_seat_position()
+	velocity = _mounted_chair.linear_velocity
+
+
+func _find_chair_exit_position(chair: PushableSeat3D) -> Vector3:
+	var space := get_world_3d().direct_space_state
+	var directions := [chair.global_basis.x, -chair.global_basis.x, chair.global_basis.z, -chair.global_basis.z]
+	for basis_direction in directions:
+		var flat := Vector3(basis_direction.x, 0.0, basis_direction.z).normalized()
+		var horizontal := chair.global_position + flat * 1.1
+		var ray := PhysicsRayQueryParameters3D.create(horizontal + Vector3.UP * 1.5, horizontal + Vector3.DOWN * 0.8, 1, [get_rid(), chair.get_rid()])
+		var ground := space.intersect_ray(ray)
+		if ground.is_empty():
+			continue
+		var candidate: Vector3 = (ground["position"] as Vector3) + Vector3.UP * 0.04
+		var query := PhysicsShapeQueryParameters3D.new()
+		query.shape = virtual_collision_capsule.shape
+		query.transform = Transform3D(global_basis, candidate + virtual_collision_capsule.position)
+		query.collision_mask = _seat_saved_collision_mask
+		query.exclude = [get_rid()]
+		if space.intersect_shape(query, 1).is_empty():
+			return candidate
+	return Vector3.INF
+
+
+func _release_chair(exit_position: Vector3) -> void:
+	if is_seated_on_chair():
+		_mounted_chair.finish_ride()
+	_mounted_chair = null
+	_seat_exit_push_suppression = 0.45
+	global_position = exit_position
+	_restore_chair_collision()
+	_seat_camera_drop_m = 0.0
+	camera.position = _seat_saved_camera_position
+	velocity = Vector3.ZERO
+
+
+func _restore_chair_collision() -> void:
+	# The player scene's world channel is mandatory after leaving a vehicle.
+	# Restore any extra channels that were active before mounting as well.
+	collision_layer = _seat_saved_collision_layer | 1
+	collision_mask = _seat_saved_collision_mask | 1
+	virtual_collision_capsule.disabled = false
+
+
+func get_seated_camera_drop_m() -> float:
+	return _seat_camera_drop_m if is_seated_on_chair() else 0.0
 
 
 func _hook_mobile_input() -> void:
@@ -530,6 +715,7 @@ func set_test_move_direction(direction: Variant) -> void:
 func set_input_locked(locked: bool) -> void:
 	if locked:
 		_dash_input_buffer = 0.0
+		_force_leave_chair()
 	if input_locked == locked or current_hp <= 0:
 		return
 	input_locked = locked
@@ -657,24 +843,27 @@ func move_airborne(target_planar_velocity: Vector3, delta: float) -> bool:
 
 
 ## CharacterBody3D 会阻挡刚体，但不会自动给出可调的推力；这里在真实滑动
-## 碰撞后施加很小的平面冲量。刚体仍以 layer 1 和基地/设施碰撞，因此不会穿墙。
+## 碰撞时施加受限平面力，避免连续每帧冲量把椅子弹飞。
 func _push_collided_furniture(requested_velocity: Vector3) -> void:
+	if _seat_exit_push_suppression > 0.0:
+		return
 	# move_and_slide() 会在接触阻挡时改写 velocity；必须保留碰撞前的输入速度，
 	# 否则角色正面顶住椅子时推力会被清成零。
 	var planar_velocity := Vector3(requested_velocity.x, 0.0, requested_velocity.z)
 	if planar_velocity.length_squared() < 0.01:
 		return
-	var impulse_strength := minf(
-		planar_velocity.length() * FURNITURE_PUSH_IMPULSE_PER_MPS,
-		FURNITURE_PUSH_MAX_IMPULSE
-	)
 	for collision_index in get_slide_collision_count():
 		var collision := get_slide_collision(collision_index)
-		var body := collision.get_collider() as RigidBody3D
+		var collider := collision.get_collider() as Node
+		var body := collider as RigidBody3D
+		if body == null and collider != null and collider.name == "PlayerBlocker":
+			body = collider.get_parent() as RigidBody3D
 		if body == null or not body.is_in_group(PUSHABLE_FURNITURE_GROUP):
 			continue
 		var push_direction := planar_velocity.normalized()
-		body.apply_central_impulse(push_direction * impulse_strength)
+		var current_speed := Vector2(body.linear_velocity.x, body.linear_velocity.z).length()
+		if current_speed < 2.2:
+			body.apply_central_force(push_direction * body.mass * FURNITURE_PUSH_ACCELERATION)
 
 
 func get_landing_duration() -> float:
@@ -794,6 +983,7 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 		_character_fate["last_stand_charges"] = int(_character_fate["last_stand_charges"]) - 1
 		next_hp = 1
 	current_hp = maxi(0, next_hp)
+	_force_leave_chair()
 	if AudioManager != null:
 		AudioManager.play_player_hit_sfx()
 	hp_changed.emit(current_hp, max_hp)
@@ -1726,7 +1916,7 @@ func _update_combat_input() -> void:
 		_mobile_shoot_was_active = _mobile_shoot_active
 	if weapon != null and shoot_released_here:
 		weapon.release_charge()
-	if input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0:
+	if input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0 or _active_ladder != null:
 		if weapon != null:
 			weapon.cancel_charge()
 		return
@@ -1828,6 +2018,12 @@ func _clear_action_overlays() -> void:
 
 func _transition_to_locomotion() -> void:
 	if _state_machine == null or current_hp <= 0:
+		return
+	if is_seated_on_chair():
+		_state_machine.transition_to("seated")
+		return
+	if _active_ladder != null:
+		_state_machine.transition_to("climbing")
 		return
 	if _should_enter_falling():
 		_begin_fall()
@@ -1987,15 +2183,19 @@ func _init_state_machine() -> void:
 	_state_machine.register("locked", Player3DLockedState.new())
 	_state_machine.register("falling", Player3DFallingState.new())
 	_state_machine.register("landing", Player3DLandingState.new())
+	_state_machine.register("seated", Player3DSeatedState.new())
+	_state_machine.register("climbing", Player3DClimbingState.new())
 	_state_machine.register("dead", Player3DDeadState.new())
 	_state_machine.configure_transition_map({
-		"idle": ["moving", "dashing", "hurt", "locked", "falling", "dead"],
-		"moving": ["idle", "dashing", "hurt", "locked", "falling", "dead"],
+		"idle": ["moving", "dashing", "hurt", "locked", "falling", "seated", "climbing", "dead"],
+		"moving": ["idle", "dashing", "hurt", "locked", "falling", "seated", "climbing", "dead"],
 		"dashing": ["idle", "moving", "hurt", "locked", "falling", "dead"],
 		"hurt": ["idle", "moving", "locked", "falling", "dead"],
 		"locked": ["idle", "moving", "hurt", "falling", "dead"],
 		"falling": ["landing", "hurt", "dead"],
 		"landing": ["idle", "moving", "hurt", "locked", "falling", "dead"],
+		"seated": ["idle", "moving", "locked", "hurt", "falling", "dead"],
+		"climbing": ["idle", "moving", "falling", "dead"],
 		"dead": [],
 	})
 	_state_machine.start("idle")

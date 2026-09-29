@@ -2281,7 +2281,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 			status_label.text = _return_room_status(room)
 		return
 	_spawned_rooms[room.room_id] = true
-	if room.room_type == "START":
+	if _room_grants_starter_supply(room):
 		call_deferred("_spawn_starter_weapon_pickup", room)
 	if room.room_type in HOSTILE_ROOM_TYPES:
 		_spawn_room_enemies(room)
@@ -2844,6 +2844,26 @@ func _prepare_revealed_hostile_room(room: DungeonRoom3D) -> bool:
 	_spawned_rooms[room.room_id] = true
 	room.cleared = false
 	return _spawn_room_enemies(room)
+
+
+## 起始补给（地面那把关卡起点枪）只发给**真正的关卡起点房**。
+##
+## ⛔ 塔楼 100F 天台是塔楼里唯一 `room_type == "START"` 的房间，但它**不再**吃这条补给：
+## 2026-09-22/23 起「全新存档开场」改落 98F 主人办公室，开场那把枪由剧本
+## `nar_tower_opening_01_wake` 的 `scene.spawn_item` 刷 `weapon_sprinkler`
+## （契约见 `TowerDescent3D._clear_new_game_opening_loadout()`）。
+## 天台这把霰弹枪是**旧新手教程的遗留**，且它在**每一局**首次进入天台时都会重刷一次、
+## 写进存档 `segment_runtime_state[].ground_items` 一直躺在天台地面上 ——
+## 从 99F 归航基地抬头看天台地面，就是「一把悬在半空、捡不到也说不清的枪」。
+##
+## 判据用 `size_class`：`"rooftop"` 只由 `TowerDescent3D._build_records()` 的天台记录声明
+## （`_append_tower_record("start", "START", "rooftop", ...)`），其余关卡 ——
+## `Dungeon3D` 默认地图（起点房 size = `medium`）与 `scenes/levels3d/*` ——
+## 行为逐字不变，`verify_full_3d_game_flow` 的「拾取初始霰弹枪」用例仍然成立。
+func _room_grants_starter_supply(room: DungeonRoom3D) -> bool:
+	if room == null or room.room_type != "START":
+		return false
+	return room.size_class != "rooftop"
 
 
 func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:

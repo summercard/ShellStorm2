@@ -777,6 +777,22 @@ func should_start_on_rooftop() -> bool:
 	return not is_tutorial_completed()
 
 
+func is_base99_rooftop_ladder_deployed() -> bool:
+	_ensure_data()
+	return data.base99_rooftop_ladder_deployed
+
+
+func deploy_base99_rooftop_ladder() -> bool:
+	_ensure_data()
+	if data.base99_rooftop_ladder_deployed:
+		return true
+	data.base99_rooftop_ladder_deployed = true
+	if save_base("base99_rooftop_ladder_deployed"):
+		return true
+	data.base99_rooftop_ladder_deployed = false
+	return false
+
+
 func mark_tutorial_completed() -> bool:
 	_ensure_data()
 	if data.tutorial_completed:

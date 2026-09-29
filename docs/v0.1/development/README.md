@@ -3,6 +3,7 @@
 工程版本：0.1.0。设计、规范与目标见 [设计目录](../design/README.md)；本目录仅保存交付事实。
 
 - [版本开发日志](CHANGELOG.md)：按交付记变更，新增记录使用 [模板](../../templates/development_record.md)。
+- [99F 基地设施头顶文字精简](2026-09-29_base_facility_overhead_label_simplification.md)：常驻设施牌退役（节点与快照契约保留），只留靠近时的黄色交互提示，字号 26→34、锚点抬高 0.6 m；8 设施探针实跑通过。
 - [99F 基地室内外环境雾平滑过渡](2026-09-29_base_indoor_outdoor_fog_transition.md)：三扇基地门共用建筑壳体判定，室内降低距离雾/体积雾并平滑恢复室外原值。
 - [战斗与经济交接第4项](2026-09-24_combat_economy_handoff.md)：奖励旧字典边界、武器实例过期命令、商人会话事务与独立失败验收。
 - [第五项设计源纠正](2026-09-24_design_source_correction.md)：四份玩法设计页与施工分层，14项先读设计，23项继续迁移/审查。

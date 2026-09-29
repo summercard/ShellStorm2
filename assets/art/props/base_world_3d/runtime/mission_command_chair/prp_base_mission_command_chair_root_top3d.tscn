@@ -1,15 +1,22 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=7 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_visual_top3d.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_base_visual_v004.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/base3d/PushableSeat3D.gd" id="2_seat"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_swivel_visual_v004.glb" id="3_swivel"]
 
 [sub_resource type="BoxShape3D" id="ShapePushableChair"]
-size = Vector3(0.78, 1.08, 0.82)
+size = Vector3(1.26, 0.23, 1.24)
+
+[sub_resource type="BoxShape3D" id="ShapeSwivelChair"]
+size = Vector3(1.0, 0.76, 0.84)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterialRollers"]
 friction = 0.18
 bounce = 0.0
 
-[node name="战术指挥椅" type="RigidBody3D" groups=["pushable_furniture"]]
+[node name="战术指挥椅" type="RigidBody3D" groups=["pushable_furniture", "interaction_provider_3d"]]
+script = ExtResource("2_seat")
+seat_height = 0.79
 mass = 15.0
 linear_damp = 0.8
 angular_damp = 4.0
@@ -23,13 +30,33 @@ continuous_cd = 2
 physics_material_override = SubResource("PhysicsMaterialRollers")
 metadata/asset_name_cn = "战术指挥椅"
 metadata/asset_category = "decor_prop"
-metadata/asset_source = "res://assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v003.blend"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v004.blend"
 metadata/forward_axis = "-Z"
 metadata/physics_interactive = true
-metadata/collision_contract = "pushable_rigidbody: player, furniture and base geometry share layer 1"
+metadata/collision_contract = "rigidbody layer 1 hits world; PlayerBlocker layer 16 blocks player without rigidbody solver impulse"
 
-[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+[node name="BaseVisual" parent="." instance=ExtResource("1_visual")]
+
+[node name="SwivelPivot" type="Node3D" parent="."]
+
+[node name="SwivelVisual" parent="SwivelPivot" instance=ExtResource("3_swivel")]
 
 [node name="WorldCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.54, 0)
+position = Vector3(0, 0.115, 0)
 shape = SubResource("ShapePushableChair")
+
+[node name="SeatCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.16, 0.97, 0)
+shape = SubResource("ShapeSwivelChair")
+
+[node name="PlayerBlocker" type="AnimatableBody3D" parent="."]
+collision_layer = 16
+collision_mask = 0
+
+[node name="BaseCollision" type="CollisionShape3D" parent="PlayerBlocker"]
+position = Vector3(0, 0.115, 0)
+shape = SubResource("ShapePushableChair")
+
+[node name="SeatCollision" type="CollisionShape3D" parent="PlayerBlocker"]
+position = Vector3(0.16, 0.97, 0)
+shape = SubResource("ShapeSwivelChair")

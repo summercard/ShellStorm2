@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/Base99TelescopicLadder3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_upper_visual_top3d.glb" id="2_upper"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_lower_visual_top3d.glb" id="3_lower"]
+
+[sub_resource type="BoxShape3D" id="RailCollision"]
+size = Vector3(0.11, 3.5, 0.14)
+
+[sub_resource type="BoxShape3D" id="RungCollision"]
+size = Vector3(0.62, 0.06, 0.17)
+
+[node name="基地99层双段伸缩直梯" type="Node3D"]
+script = ExtResource("1_script")
+metadata/asset_id = "PRP-BASE99-TELESCOPIC-LADDER-3D"
+metadata/source_blend = "res://assets/art/props/base_world_3d/source/base99_telescopic_ladder/prp_base99_telescopic_ladder_source_v002.blend"
+metadata/asset_version = "v002"
+metadata/animation = "Deploy_LowerSection"
+metadata/placement_policy = "baked facility position: bottom at east mezzanine, top at rooftop door"
+
+[node name="UpperVisual" parent="." instance=ExtResource("2_upper")]
+
+[node name="LowerVisual" parent="." instance=ExtResource("3_lower")]
+position = Vector3(0, 2.5, 0)
+
+[node name="UpperCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="LeftRail" type="CollisionShape3D" parent="UpperCollision"]
+position = Vector3(-0.36, 4.25, 0)
+shape = SubResource("RailCollision")
+
+[node name="RightRail" type="CollisionShape3D" parent="UpperCollision"]
+position = Vector3(0.36, 4.25, 0)
+shape = SubResource("RailCollision")
+
+[node name="LowerCollision" type="StaticBody3D" parent="."]
+position = Vector3(0, 2.5, 0)
+collision_layer = 1
+collision_mask = 1
+
+[node name="LeftRail" type="CollisionShape3D" parent="LowerCollision"]
+position = Vector3(-0.31, 1.75, -0.16)
+shape = SubResource("RailCollision")
+
+[node name="RightRail" type="CollisionShape3D" parent="LowerCollision"]
+position = Vector3(0.31, 1.75, -0.16)
+shape = SubResource("RailCollision")

@@ -1,0 +1,92 @@
+{
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v022",
+  "base_model_version": "v021",
+  "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+  "animation_adapter": "anatomical_to_rigid_node_map",
+  "collision_owner": "scenes/Player3D.tscn",
+  "clips": {
+    "armed_idle": {
+      "duration": 3.2,
+      "loop": true,
+      "frame_count": 193
+    },
+    "armed_moving": {
+      "duration": 0.8,
+      "loop": true,
+      "frame_count": 49
+    },
+    "armed_walking": {
+      "duration": 1.0,
+      "loop": true,
+      "frame_count": 61
+    },
+    "dashing": {
+      "duration": 0.4,
+      "loop": false,
+      "frame_count": 25
+    },
+    "dead": {
+      "duration": 1.6,
+      "loop": false,
+      "frame_count": 97
+    },
+    "falling": {
+      "duration": 0.65,
+      "loop": false,
+      "frame_count": 40
+    },
+    "hurt": {
+      "duration": 0.55,
+      "loop": false,
+      "frame_count": 34
+    },
+    "idle": {
+      "duration": 3.2,
+      "loop": true,
+      "frame_count": 193
+    },
+    "landing": {
+      "duration": 0.45,
+      "loop": false,
+      "frame_count": 28
+    },
+    "locked": {
+      "duration": 1.8,
+      "loop": true,
+      "frame_count": 109
+    },
+    "moving": {
+      "duration": 0.8,
+      "loop": true,
+      "frame_count": 49
+    },
+    "seated": {
+      "duration": 1.2,
+      "loop": true,
+      "frame_count": 73
+    },
+    "walking": {
+      "duration": 1.0,
+      "loop": true,
+      "frame_count": 61
+    }
+  },
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/source/animation/chr_bunny01_animation_v022.blend",
+      "sha256": "f4a58ce316ee2f44e4224a884c157f28443d3bfca8fc349ae2f106bc27e1d6e2",
+      "bytes": 38001822
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/exports/anim_bunny01_library_v022.json",
+      "sha256": "2347a5b51cb69cc536ca1246f497d3862d15ba1dd3b10ab9dffee4ffbef0342a",
+      "bytes": 1788607
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/exports/anim_bunny01_library_v022.glb",
+      "sha256": "061b33df6a02e989a5c5f49917b4251cf5712134d7fb7365f87a5fabf8603901",
+      "bytes": 569700
+    }
+  ]
+}

@@ -3,6 +3,15 @@ extends Area3D
 
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
 const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
+## 头顶常驻名字牌（设施名 + 实时摘要）已于 2026-09-29 按业主口径退役：
+## 99F 基地设施头顶不再有常驻漂浮文字，设施可用时靠近出现的黄色交互提示是
+## 头顶唯一的文字。NameLabel 节点仍保留在场景里 —— 快照 text/modulate 契约与
+## 离线验收仍读它 —— 但运行时一律不显示。
+const NAME_LABEL_VISIBLE := false
+## 黄色交互提示接管原名字牌的位置：字号放大到 34（原资产 26），
+## 锚点整体抬高 0.6 米。业主 2026-09-29：「那个黄色的字体放大一点，位置高一点」。
+const PROMPT_LABEL_FONT_SIZE := 34
+const PROMPT_LABEL_HEIGHT_LIFT_M := 0.6
 
 signal activated(facility: BaseFacility3D)
 
@@ -124,8 +133,10 @@ func _ready() -> void:
 	_apply_catalog_definition()
 	name_label.text = display_name
 	name_label.font_size = 38
+	name_label.visible = NAME_LABEL_VISIBLE
 	prompt_label.text = "[E] 使用 %s" % display_name
 	prompt_label.visible = false
+	_apply_prompt_label_presentation()
 	if base_mesh != null:
 		_apply_material(base_mesh, facility_color.darkened(0.52), 0.58, 0.62)
 	if roof_mesh != null:
@@ -159,6 +170,18 @@ func _apply_default_base_size() -> void:
 			continue
 		spatial.scale *= base_size_multiplier
 	set_meta("base_size_multiplier", base_size_multiplier)
+
+
+## 名字牌退役后，黄色交互提示是设施头顶唯一的文字：字号放大、锚点抬高。
+## 必须在 _apply_default_base_size() 之后调用 —— 抬升量是最终米数，不参与
+## base_size_multiplier 缩放；且此时名字牌与提示牌都已按同一倍数换算过位置，
+## 两者不会被二次缩放。幂等：重复调用不会再叠一次抬升。
+func _apply_prompt_label_presentation() -> void:
+	if prompt_label == null or has_meta("prompt_label_presentation_applied"):
+		return
+	set_meta("prompt_label_presentation_applied", true)
+	prompt_label.font_size = PROMPT_LABEL_FONT_SIZE
+	prompt_label.position.y += PROMPT_LABEL_HEIGHT_LIFT_M
 
 
 func get_size_contract_snapshot() -> Dictionary:
@@ -268,6 +291,8 @@ func apply_snapshot(snapshot: Dictionary) -> void:
 	_available = bool(snapshot.get("available", false))
 	display_name = str(snapshot.get("display_name", display_name))
 	description = str(snapshot.get("description", description))
+	# name_label 已不显示（见 NAME_LABEL_VISIBLE），这里继续维护它的文字与状态色：
+	# 快照契约、离线验收和「随时可恢复常驻设施牌」都依赖这份数据。
 	name_label.text = "%s\n%s" % [display_name, str(snapshot.get("summary", "状态未知"))]
 	if not _available:
 		name_label.modulate = Color(1.0, 0.38, 0.32)

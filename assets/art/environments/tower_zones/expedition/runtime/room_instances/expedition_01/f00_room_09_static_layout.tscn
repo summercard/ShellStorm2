@@ -21,14 +21,11 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_deck_5m/ceiling_deck_5m_root_top3d.tscn" id="19_hprkp"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_lighting/ceiling_lighting_root_top3d.tscn" id="20_yq68p"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_ring_beam/ceiling_ring_beam_root_top3d.tscn" id="21_6qcue"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_cable_tray/ceiling_service_cable_tray_root_top3d.tscn" id="22_cgk1l"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_duct/ceiling_service_duct_root_top3d.tscn" id="23_vua0s"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/ceiling_service_pipe_run/ceiling_service_pipe_run_root_top3d.tscn" id="24_rbmyg"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/corner_guard/corner_guard_root_top3d.tscn" id="25_p61qp"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/floor_service/floor_service_root_top3d.tscn" id="26_5hwqt"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn" id="27_b3o5f"]
-[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
-[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
+[ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1351564467]
 metadata/asset_id = "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT"
@@ -58,11 +55,6 @@ metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", 
 metadata/connection_port_count = 2
 metadata/authored_room_devices = true
 
-; 房间中央顶灯（办公室房（office_60x70，实 30×40；EVENT））。
-; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
-; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
-;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
-;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
 [node name="RoomCeilingLight" type="Node3D" parent="." unique_id=830475127]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, 0)
 script = ExtResource("900_authored_light")
@@ -76,7 +68,6 @@ fixture_style = "ceiling"
 light_enabled = false
 metadata/authored_room_device = "ceiling_light"
 
-; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
 [node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1432301416]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.199997, 0, -19.660004)
 script = ExtResource("901_authored_switch")
@@ -705,21 +696,6 @@ metadata/authored_slot_role = "room_type_component"
 [node name="ceiling_ring_beam" parent="." unique_id=550144410 instance=ExtResource("21_6qcue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.15, 0)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_RING_BEAM"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_service_cable_tray" parent="." unique_id=948027670 instance=ExtResource("22_cgk1l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.465, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_CABLE_TRAY"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_service_duct" parent="." unique_id=510811568 instance=ExtResource("23_vua0s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.4425, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_DUCT"
-metadata/authored_slot_role = "room_type_component"
-
-[node name="ceiling_service_pipe_run" parent="." unique_id=307951325 instance=ExtResource("24_rbmyg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 9.9306, 0)
-metadata/authored_component_id = "ENV-EXPEDITION-L01-OFFICE-CEILING_SERVICE_PIPE_RUN"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="corner_guard" parent="." unique_id=2051915423 instance=ExtResource("25_p61qp")]

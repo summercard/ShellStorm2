@@ -21,8 +21,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_a/service_cart_a_root_top3d.tscn" id="19_mu2b1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_b/service_cart_b_root_top3d.tscn" id="20_xdlw3"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_label/wall_label_root_top3d.tscn" id="21_xcknf"]
-[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
-[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
+[ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout2" type="Node3D" unique_id=169885345]
 metadata/asset_id = "ENV-EXPEDITION-L01-CORRIDOR-U-TURN-ROOM04-LAYOUT"
@@ -52,11 +52,6 @@ metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", 
 metadata/connection_port_count = 4
 metadata/authored_room_devices = true
 
-; 房间中央顶灯（U 型走廊房（corridor_45x40 u_turn，45×40）；顶灯落位＝真砖格质心）。
-; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
-; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
-;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
-;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
 [node name="RoomCeilingLight" type="Node3D" parent="." unique_id=249775453]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, -7.5)
 script = ExtResource("900_authored_light")
@@ -70,7 +65,6 @@ fixture_style = "ceiling"
 light_enabled = false
 metadata/authored_room_device = "ceiling_light"
 
-; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
 [node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1316594842]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 22.160004, 0, -7.500002)
 script = ExtResource("901_authored_switch")
@@ -852,7 +846,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ROOM04_U_DECOR_09_HIGH_PIPE_C" parent="." unique_id=1995362592 instance=ExtResource("14_hw58j")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5000012, 0, 13)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.5000012, 0, 5.482046)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C"
 metadata/authored_slot_role = "room_type_component"
 

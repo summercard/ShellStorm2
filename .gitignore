@@ -67,5 +67,13 @@ __pycache__/
 _scratch/b2_baseline/
 _scratch/b2_work/
 
+# 验证套件的隔离工作区（run_verification_suite.sh 的 mktemp 基址，单轮约 5 GB；
+# 放在项目盘而非系统盘，避免被强杀留下的残留写满 C:）
+_scratch/.verify_ws/
+
+# 补丁前的基线快照（台账/动画改前对照，用完即弃；与 b2_baseline 同类）
+_scratch/*_before_*/
+_scratch/*_before_*.blend
+
 # WorkBuddy 会话的临时探查脚本与运行日志（scratch，不入库；记忆与工具仍正常入库）
 .workbuddy/tmp/

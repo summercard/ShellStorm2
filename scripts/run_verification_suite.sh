@@ -6,7 +6,14 @@ project_root="$(cd "${script_dir}/.." && pwd)"
 godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
 aggregate_mode=false
-verification_tmp_root="$(mktemp -d "${TMPDIR:-/tmp}/shellstorm-verification.XXXXXX")"
+# 临时工作区基址：默认落在**项目盘**的 _scratch/.verify_ws，不再用系统临时目录。
+# 每轮套件会在这里整份复制主工程的 .godot/imported 缓存（seed_isolated_import_cache），
+# 单轮约 5 GB。落在 %TEMP% 上时，被强杀留下的残留会把系统盘写满
+# （2026-09-29 实测：%LOCALAPPDATA%\Temp 堆了 9 个残留 = 32.7 GB，C: 只剩 1.55 GB）。
+# 可用 SHELLSTORM_VERIFY_TMP_BASE 覆盖；父目录不存在时 mktemp 会失败，故先 mkdir。
+verification_tmp_base="${SHELLSTORM_VERIFY_TMP_BASE:-${project_root}/_scratch/.verify_ws}"
+mkdir -p "${verification_tmp_base}"
+verification_tmp_root="$(mktemp -d "${verification_tmp_base}/shellstorm-verification.XXXXXX")"
 
 # Windows / Git Bash：Godot 是原生 exe，只认 Windows 路径。MSYS 的虚拟路径
 # （/tmp/...、/i/...）传给它会被判成 "Invalid project path" 并直接中止，
@@ -16,6 +23,7 @@ verification_tmp_root="$(mktemp -d "${TMPDIR:-/tmp}/shellstorm-verification.XXXX
 if command -v cygpath >/dev/null 2>&1; then
   project_root="$(cygpath -m "${project_root}")"
   verification_tmp_root="$(cygpath -m "${verification_tmp_root}")"
+  verification_tmp_base="$(cygpath -m "${verification_tmp_base}")"
 fi
 
 isolated_project_root="${verification_tmp_root}/project"
@@ -23,6 +31,27 @@ verification_log_dir="${verification_tmp_root}/logs"
 verification_user_dir_name="ShellStorm2Verification_$$_$(date +%s)"
 verification_user_dir_names=("${verification_user_dir_name}")
 verification_scene_sequence=0
+
+# 启动自清：套件被 watchdog 强杀时 EXIT trap 不触发，整份工作区（每轮约 5 GB）会留在
+# 盘上。这里在开工前先扫掉**陈旧**残留（默认 6 小时以上，避免误删并行实例的工作区），
+# 让「跑一轮漏一个」不再累积。只清 shellstorm-verification.*，护栏详见同目录
+# purge_stale_verification_workspaces.py（含"遇 reparse point 即整体拒绝"的反穿透保护）。
+purge_stale_verification_workspaces() {
+  local purge_script="${script_dir}/purge_stale_verification_workspaces.py"
+  [[ -f "${purge_script}" ]] || return 0
+  local interpreter
+  for interpreter in python3 python; do
+    command -v "${interpreter}" >/dev/null 2>&1 || continue
+    echo "[verify] 清理陈旧验证工作区（mtime > ${SHELLSTORM_VERIFY_PURGE_AGE_HOURS:-6}h）"
+    "${interpreter}" "${purge_script}" \
+      --base "${verification_tmp_base}" \
+      --max-age-hours "${SHELLSTORM_VERIFY_PURGE_AGE_HOURS:-6}" || true
+    return 0
+  done
+  echo "[verify] 未找到 python3/python，跳过陈旧工作区清理" >&2
+}
+purge_stale_verification_workspaces
+
 mkdir -p "${isolated_project_root}" "${verification_log_dir}"
 
 seed_isolated_import_cache() {
@@ -118,7 +147,8 @@ cleanup_active_test() {
 
 cleanup_verification_workspace() {
   cleanup_active_test
-  rm -rf "${verification_tmp_root}"
+  # rm 失败不能中断清理流程（set -e 下裸 rm 会中止 trap）；失败由下面的断言兜住。
+  rm -rf "${verification_tmp_root}" || true
   local isolated_name
   for isolated_name in "${verification_user_dir_names[@]}"; do
     rm -rf "${HOME}/Library/Application Support/Godot/app_userdata/${isolated_name}"
@@ -130,7 +160,17 @@ cleanup_verification_workspace() {
   done
 }
 
-trap cleanup_verification_workspace EXIT
+# 会失败的断言：EXIT trap 必须真的把本轮工作区删掉。删不掉通常意味着 Godot 还占着
+# 文件 —— 那正是「每轮无声吃掉 5 GB」的前兆。宁可让套件红着退出，也不要让它静默堆积。
+assert_workspace_removed() {
+  if [[ -e "${verification_tmp_root}" ]]; then
+    echo "[verify] FAIL: 临时工作区未被清理，仍在盘上：${verification_tmp_root}" >&2
+    echo "[verify]       手动清理：python scripts/purge_stale_verification_workspaces.py --all" >&2
+    exit 1
+  fi
+}
+
+trap 'cleanup_verification_workspace; assert_workspace_removed' EXIT
 trap 'cleanup_verification_workspace; exit 130' INT
 trap 'cleanup_verification_workspace; exit 143' TERM
 
@@ -226,6 +266,7 @@ core_scenes=(
   verify_tower_descent_flow
   verify_base99_floor_player_collision_flow
   verify_base99_structural_asset_integration
+  verify_base99_telescopic_ladder
   verify_base99_wall_content_v021
   verify_base99_remaining_facilities_v021
   verify_3d_performance_budget
