@@ -7,6 +7,10 @@ const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	# 怪物已与玩家共用同一套重力/地面口径。验收台必须提供承重面：
+	# 被激活物理的怪（追击/接近类用例）否则会一路下坠，垂直位移会直接污染
+	# 「是否靠近玩家」这类三维距离断言。
+	add_child(_make_support(Vector3(0.0, -0.15, 0.0), Vector3(200.0, 0.30, 200.0)))
 	var player := PLAYER_SCENE.instantiate() as Player3D
 	player.start_with_weapon = false
 	player.position = Vector3.ZERO
@@ -305,6 +309,20 @@ func _make_enemy(kind: String, world_position: Vector3) -> Enemy3D:
 	add_child(enemy)
 	enemy.set_runtime_active(false, true)
 	return enemy
+
+
+func _make_support(position: Vector3, size: Vector3) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.name = "VerificationSupport"
+	body.position = position
+	body.collision_layer = 1
+	body.collision_mask = 0
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = size
+	collision.shape = shape
+	body.add_child(collision)
+	return body
 
 
 func _make_omni(node_name: String, world_position: Vector3, energy: float, light_range: float, kind: String) -> OmniLight3D:

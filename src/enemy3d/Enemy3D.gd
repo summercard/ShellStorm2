@@ -27,6 +27,27 @@ const VALID_STATES := [
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
 const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
+## 垂直位移只有一个来源：重力加地面。数值与 Player3D.GRAVITY_MPS2 同源，
+## 怪物因此和角色共用同一套地板/坡面口径 —— 脚下没有地板会掉下去，
+## 能走上坡下坡，也不会顺着阻挡爬到顶面。
+const GRAVITY_MPS2 := 24.0
+const TERMINAL_FALL_SPEED_MPS := 32.0
+## 贴地时保留的极小向下速度，让 floor_snap 保持接触；不足以把怪沿坡推下去。
+const FLOOR_STICK_MPS := -0.01
+## 怪与怪的水平分离（不重叠）。权重 = 1 - 距离/最小间距，贴得越近推得越狠，
+## 刚好挨着几乎不推，所以一队怪不会互相弹开。
+## 分离只写水平分量：垂直永远归重力独占 —— 被四只怪围挤时中间的怪只会被
+## 夹在原地，既不会被顶到同伴头顶，也不会被挤到地板以下。
+const SEPARATION_WEIGHT := 0.62
+const SEPARATION_RADIUS_SCALE := 0.90
+const SEPARATION_NEIGHBOR_LIMIT := 8
+## 邻居查询的额外半径，用于覆盖最大的 Boss 世界碰撞半径。
+const SEPARATION_PROBE_MARGIN_M := 2.4
+## 重力生效后，脚下真出现洞的怪会掉下去。比出生点低过这个深度就判「已离开可行走层」，
+## 直接死亡 —— 房间因此不会卡在「有怪但打不到」的未清状态。
+## 取值必须大于塔楼整层层高（`TowerGeometry3D.FLOOR_HEIGHT_M = 12.0`）：怪沿楼梯/连接
+## 通道追玩家下一层时是 12m 级落差，不能算掉出世界；掉出世界是无限下坠，1.1s 就过 15m。
+const FALL_DEATH_DROP_M := 15.0
 const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 const BOSS_SIZE_MULTIPLIER := 1.5
 const ARTIFICIAL_LIGHT_MOVE_MULTIPLIER := 0.40
@@ -172,6 +193,15 @@ func _ready() -> void:
 	add_to_group(GROUP_DAMAGEABLE_3D)
 	collision_layer = 4
 	collision_mask = 1
+	# 与 Player3D 同一套地面口径：44° 以内算可走的坡，更陡的算墙。
+	# floor_snap 只跨数厘米的接缝，不用它模拟楼梯，所以怪不会顺着阻挡爬上顶面。
+	motion_mode = CharacterBody3D.MOTION_MODE_GROUNDED
+	up_direction = Vector3.UP
+	floor_snap_length = 0.32
+	floor_max_angle = deg_to_rad(44.0)
+	floor_stop_on_slope = true
+	floor_constant_speed = true
+	safe_margin = 0.035
 	illumination_sensor = ILLUMINATION_SCRIPT.new() as EnemyIllumination3D
 	illumination_sensor.configure(self)
 	illumination_sensor.illumination_state_changed.connect(_on_illumination_state_changed)
@@ -619,6 +649,13 @@ func _physics_process(delta: float) -> void:
 	if not _home_initialized:
 		_home_position = global_position
 		_home_initialized = true
+	if (
+		ai_state != "dead"
+		and not _elite_escape_active
+		and global_position.y < _home_position.y - FALL_DEATH_DROP_M
+	):
+		_die_from_fall_out()
+		return
 	_state_time += delta
 	_absorb_cooldown = maxf(0.0, _absorb_cooldown - delta)
 	_ambush_reburrow_cooldown = maxf(0.0, _ambush_reburrow_cooldown - delta)
@@ -658,7 +695,7 @@ func _physics_process(delta: float) -> void:
 			avatar.set_ambush_revealed(false)
 			transition_to("idle", "dark_reburrow_ready")
 	if enemy_kind == "ambusher" and not _ambush_triggered:
-		velocity = velocity.move_toward(Vector3.ZERO, delta * 16.0)
+		_brake_planar(delta * 16.0)
 		avatar.set_ambush_revealed(false)
 		var exposed_to_light := (
 			illumination_sensor != null
@@ -673,7 +710,7 @@ func _physics_process(delta: float) -> void:
 				_target = proximity_player
 			transition_to("telegraph")
 		elif _target == null:
-			move_and_slide()
+			_commit_motion(delta)
 			return
 	if _target == null:
 		var awareness := str(_ai_decision.get("awareness", "unaware"))
@@ -682,8 +719,8 @@ func _physics_process(delta: float) -> void:
 			if awareness in ["proximity_contact", "sound_contact"] and ai_state not in ["alert", "search", "telegraph", "attack", "stagger"]:
 				transition_to("alert")
 			if ai_state == "alert" and _state_time <= 0.42:
-				velocity = velocity.move_toward(Vector3.ZERO, delta * 12.0)
-				move_and_slide()
+				_brake_planar(delta * 12.0)
+				_commit_motion(delta)
 				var face_stimulus := _last_known_target_position - global_position
 				face_stimulus.y = 0.0
 				if face_stimulus.length_squared() > 0.01:
@@ -702,8 +739,8 @@ func _physics_process(delta: float) -> void:
 			_tick_patrol(delta)
 		else:
 			transition_to("idle")
-			velocity = velocity.move_toward(Vector3.ZERO, delta * 10.0)
-			move_and_slide()
+			_brake_planar(delta * 10.0)
+			_commit_motion(delta)
 		return
 	var to_target := _target.global_position - global_position
 	to_target.y = 0.0
@@ -735,23 +772,25 @@ func _physics_process(delta: float) -> void:
 		"patrol":
 			_tick_patrol(delta)
 		"telegraph":
-			velocity = velocity.move_toward(Vector3.ZERO, delta * 18.0) + _external_velocity
-			move_and_slide()
+			_brake_planar(delta * 18.0)
+			_push_planar(_external_velocity)
+			_commit_motion(delta)
 			if _state_time >= _telegraph_duration():
 				transition_to("attack")
 		"attack":
 			_perform_attack(to_target, distance)
 			transition_to("recovery")
 		"recovery":
-			velocity = velocity.move_toward(Vector3.ZERO, delta * 18.0) + _external_velocity
-			move_and_slide()
+			_brake_planar(delta * 18.0)
+			_push_planar(_external_velocity)
+			_commit_motion(delta)
 			if _state_time >= _recovery_duration():
 				if MonsterAIManager != null:
 					MonsterAIManager.release_attack_token(self)
 				transition_to("chase")
 		"stagger":
-			velocity = _last_hit_direction * _hit_knockback
-			move_and_slide()
+			_steer_planar(_last_hit_direction * _hit_knockback, 1.0)
+			_commit_motion(delta)
 			if _state_time > 0.16:
 				transition_to("chase")
 	if to_target.length_squared() > 0.01:
@@ -778,8 +817,9 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 		if distance < attack_range * 0.52:
 			desired = (-radial * 0.82 + tangent * 0.35).normalized() * effective_move_speed * _slow_factor
 	desired = _apply_local_avoidance(desired, to_target)
-	velocity = velocity.lerp(desired, minf(1.0, delta * 5.5)) + _external_velocity
-	move_and_slide()
+	_steer_planar(desired, minf(1.0, delta * 5.5))
+	_push_planar(_external_velocity)
+	_commit_motion(delta)
 	_track_stuck_recovery(delta, desired)
 
 
@@ -792,12 +832,12 @@ func _tick_search(delta: float) -> void:
 			search_direction * get_effective_move_speed() * 0.72,
 			offset
 		)
-		velocity = velocity.lerp(search_velocity, minf(1.0, delta * 4.0))
-		move_and_slide()
+		_steer_planar(search_velocity, minf(1.0, delta * 4.0))
+		_commit_motion(delta)
 		_track_stuck_recovery(delta, search_velocity)
 	else:
-		velocity = velocity.move_toward(Vector3.ZERO, delta * 8.0)
-		move_and_slide()
+		_brake_planar(delta * 8.0)
+		_commit_motion(delta)
 	if _state_time > 2.4:
 		_target = null
 		transition_to("return")
@@ -807,7 +847,7 @@ func _tick_return(delta: float) -> void:
 	var offset := _home_position - global_position
 	offset.y = 0.0
 	if offset.length() <= 0.7:
-		velocity = Vector3.ZERO
+		_stop_planar()
 		transition_to("patrol")
 		return
 	var direction := _navigation_direction(_home_position, offset)
@@ -815,8 +855,8 @@ func _tick_return(delta: float) -> void:
 		direction * get_effective_move_speed() * 0.64,
 		offset
 	)
-	velocity = velocity.lerp(desired, minf(1.0, delta * 4.0))
-	move_and_slide()
+	_steer_planar(desired, minf(1.0, delta * 4.0))
+	_commit_motion(delta)
 	_track_stuck_recovery(delta, desired)
 
 
@@ -829,8 +869,8 @@ func _tick_patrol(delta: float) -> void:
 		_patrol_target = _home_position + Vector3(cos(angle), 0, sin(angle)) * 1.7
 	var offset := _patrol_target - global_position
 	offset.y = 0.0
-	velocity = velocity.lerp(offset.normalized() * get_effective_move_speed() * 0.32, minf(1.0, delta * 3.2))
-	move_and_slide()
+	_steer_planar(offset.normalized() * get_effective_move_speed() * 0.32, minf(1.0, delta * 3.2))
+	_commit_motion(delta)
 
 
 func _has_line_of_sight(target: Node3D) -> bool:
@@ -1341,6 +1381,117 @@ func _navigation_direction(target_position: Vector3, fallback_offset: Vector3) -
 	return path_offset.normalized() if path_offset.length_squared() > 0.001 else fallback.normalized()
 
 
+## 水平位移的唯一写入口。转向、刹车、击退和分离推挤都走这里，
+## 保证没有一条通路会顺手改动 `velocity.y` —— 垂直方向只归重力管。
+func _steer_planar(target: Vector3, weight: float) -> void:
+	var current := Vector3(velocity.x, 0.0, velocity.z)
+	var planar_target := Vector3(target.x, 0.0, target.z)
+	current = current.lerp(planar_target, clampf(weight, 0.0, 1.0))
+	velocity.x = current.x
+	velocity.z = current.z
+
+
+func _brake_planar(amount: float) -> void:
+	var planar := Vector3(velocity.x, 0.0, velocity.z).move_toward(Vector3.ZERO, amount)
+	velocity.x = planar.x
+	velocity.z = planar.z
+
+
+func _stop_planar() -> void:
+	velocity.x = 0.0
+	velocity.z = 0.0
+
+
+func _push_planar(vector: Vector3) -> void:
+	velocity.x += vector.x
+	velocity.z += vector.z
+
+
+func _apply_gravity(delta: float) -> void:
+	if is_on_floor():
+		# 极小负值让 floor snap 保持接触；不会把无位移的怪沿斜坡推走。
+		velocity.y = FLOOR_STICK_MPS
+	else:
+		velocity.y = maxf(velocity.y - GRAVITY_MPS2 * delta, -TERMINAL_FALL_SPEED_MPS)
+
+
+## 碰撞柱半径 × 当前缩放，与 `get_state_snapshot().world_collision_radius` 同源。
+func get_world_body_radius() -> float:
+	if collision_shape == null or not (collision_shape.shape is CylinderShape3D):
+		return 0.8
+	var cylinder := collision_shape.shape as CylinderShape3D
+	return cylinder.radius * maxf(scale.x, scale.z)
+
+
+## 掉出可行走层：判定为死亡，走标准死亡流程（掉落、死亡特效、房间计数、精英名册结算）。
+## **先落回出生点再 `_die()`** 是有意为之：`Dungeon3D._on_enemy_killed` 拿敌人当前位置
+## 投递地面掉落，而掉落落点只做 ±3~4m 的向下支撑探测 —— 在虚空里探不到承重面，
+## 奖励会留在够不着的半空。落回出生点是同一房间内的保证可行走点。
+func _die_from_fall_out() -> void:
+	if ai_state == "dead":
+		return
+	if MonsterAIManager != null:
+		MonsterAIManager.release_attack_token(self)
+	velocity = Vector3.ZERO
+	_target = null
+	global_position = _home_position
+	_die()
+
+
+## 怪与怪的水平分离。只查空间索引里的同类，不遍历整棵树：注册表已按 16m 分桶，
+## 常见房间只命中本格，30 只怪也不会退化成全表两两比较。
+func _apply_separation(planar_velocity: Vector3) -> Vector3:
+	if GameplaySpatialRegistry3D == null:
+		return planar_velocity
+	var self_radius := get_world_body_radius()
+	var neighbors: Array[Node3D] = GameplaySpatialRegistry3D.query_radius(
+		global_position,
+		self_radius + SEPARATION_PROBE_MARGIN_M,
+		[GameplaySpatialRegistry3D.KIND_ENEMY]
+	)
+	if neighbors.is_empty():
+		return planar_velocity
+	var push := Vector3.ZERO
+	var counted := 0
+	for node in neighbors:
+		if counted >= SEPARATION_NEIGHBOR_LIMIT:
+			break
+		var other := node as Enemy3D
+		if other == null or other == self or other.ai_state == "dead":
+			continue
+		var offset := global_position - other.global_position
+		offset.y = 0.0
+		var distance := offset.length()
+		var min_distance := (
+			(self_radius + other.get_world_body_radius()) * SEPARATION_RADIUS_SCALE
+		)
+		if min_distance <= 0.0 or distance >= min_distance:
+			continue
+		counted += 1
+		if distance <= 0.001:
+			# 完全重合时按实例 ID 取一个固定切向拆开：确定性、不用随机数，
+			# 也不会因为除零产生 NaN 速度。
+			var angle := float(absi(get_instance_id()) % 360) * 0.0174532925199433
+			offset = Vector3(cos(angle), 0.0, sin(angle))
+		else:
+			offset = offset / distance
+		push += offset * (1.0 - distance / min_distance)
+	if push.length_squared() <= 0.000001:
+		return planar_velocity
+	var push_speed := get_effective_move_speed() * SEPARATION_WEIGHT * minf(push.length(), 1.0)
+	var result := planar_velocity + push.normalized() * push_speed
+	return Vector3(result.x, 0.0, result.z)
+
+
+## 推进的唯一出口：先让同伴把水平速度推开，再由重力决定垂直速度。
+func _commit_motion(delta: float) -> void:
+	var planar := _apply_separation(Vector3(velocity.x, 0.0, velocity.z))
+	velocity.x = planar.x
+	velocity.z = planar.z
+	_apply_gravity(delta)
+	move_and_slide()
+
+
 func _apply_local_avoidance(desired_velocity: Vector3, target_offset: Vector3) -> Vector3:
 	if desired_velocity.length_squared() <= 0.001 or get_world_3d() == null:
 		return desired_velocity
@@ -1373,7 +1524,11 @@ func _track_stuck_recovery(delta: float, intended_velocity: Vector3) -> void:
 	_stuck_time = 0.0
 	_stuck_recovery_count += 1
 	_avoidance_sign *= -1.0
-	velocity = Vector3(-intended_velocity.z, 0.0, intended_velocity.x).normalized() * get_effective_move_speed()
+	_steer_planar(
+		Vector3(-intended_velocity.z, 0.0, intended_velocity.x).normalized()
+		* get_effective_move_speed(),
+		1.0
+	)
 
 
 func _recovery_duration() -> float:
@@ -1586,8 +1741,11 @@ func _tick_elite_escape(delta: float) -> void:
 		escape_direction = Vector3.FORWARD
 	escape_direction = escape_direction.normalized()
 	var speed_multiplier := maxf(1.0, float(_elite_growth_profile.get("escape_speed_multiplier", 1.55)))
-	velocity = velocity.lerp(escape_direction * get_effective_move_speed() * speed_multiplier, minf(1.0, delta * 7.0))
-	move_and_slide()
+	_steer_planar(
+		escape_direction * get_effective_move_speed() * speed_multiplier,
+		minf(1.0, delta * 7.0)
+	)
+	_commit_motion(delta)
 	rotation.y = lerp_angle(rotation.y, atan2(-escape_direction.x, -escape_direction.z), minf(1.0, delta * 10.0))
 	if _elite_escape_elapsed >= maxf(0.5, float(_elite_growth_profile.get("escape_duration", 4.2))):
 		_complete_elite_escape()

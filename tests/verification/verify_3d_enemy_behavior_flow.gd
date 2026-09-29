@@ -9,15 +9,21 @@ var _summon_count := 0
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	# 怪物已与玩家共用同一套重力/地面口径。验收台必须提供承重面，
+	# 否则被验证的怪会一路下坠，位置类断言全部失去意义。
+	add_child(_make_support(Vector3(0.0, -0.15, 0.0), Vector3(200.0, 0.30, 200.0)))
 	var vfx_pool := get_tree().get_first_node_in_group("vfx_pool_3d") as VfxPool3D
 	if vfx_pool != null:
 		vfx_pool.clear_all()
+	# 重力与分离专项在玩家入场前跑：没有可追击的目标，怪只按巡逻和分离力运动，
+	# 断言口径不会被「全部扑向玩家」污染。
+	await _verify_vertical_physics_and_separation(failures)
 	var player := PLAYER_SCENE.instantiate() as Player3D
 	player.start_with_weapon = false
 	player.position = Vector3.ZERO
 	add_child(player)
 	await get_tree().process_frame
-	# 本专项没有搭建地面；冻结玩家物理，避免重力让视线射线从墙下穿过。
+	# 本专项没有搭建完整碰撞世界；冻结玩家物理，避免重力让视线射线从墙下穿过。
 	player.set_physics_process(false)
 	player.position = Vector3.ZERO
 	await _verify_ai_visibility_and_hp(player, failures)
@@ -33,7 +39,7 @@ func _ready() -> void:
 		if child is Projectile3D or child is Enemy3D or child.get_script() == DAMAGE_NUMBER_SCRIPT:
 			child.queue_free()
 	if failures.is_empty():
-		print("3D_ENEMY_BEHAVIOR_FLOW_OK: line-of-sight AI, scaled 3D HP, matched hit volumes, buried ambush, ranged volley, summon/heal support, frontal shield and death fragments pass")
+		print("3D_ENEMY_BEHAVIOR_FLOW_OK: line-of-sight AI, scaled 3D HP, matched hit volumes, buried ambush, ranged volley, summon/heal support, frontal shield, death fragments, shared gravity/floor contract, weighted enemy separation and fall-out death below 15m pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -302,6 +308,176 @@ func _make_enemy(kind: String, position: Vector3) -> Enemy3D:
 	enemy.position = position
 	add_child(enemy)
 	return enemy
+
+
+func _make_support(position: Vector3, size: Vector3) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.name = "VerificationSupport"
+	body.position = position
+	body.collision_layer = 1
+	body.collision_mask = 0
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = size
+	collision.shape = shape
+	body.add_child(collision)
+	return body
+
+
+## 重力、地面口径与「怪与怪不叠加」的联合专项。
+## 承重面覆盖 ±100m，所以下面拿 -150m 处当「脚下真的没有地板」的取样点。
+func _verify_vertical_physics_and_separation(failures: Array[String]) -> void:
+	# 1) 脚下没有承重面时必须掉下去，而不是悬空停在原地。
+	var airborne := _make_enemy("melee_chaser", Vector3(-150.0, 3.0, 0.0))
+	await get_tree().process_frame
+	var airborne_start_y := airborne.global_position.y
+	for _frame in range(30):
+		await get_tree().physics_frame
+	if airborne.global_position.y >= airborne_start_y - 0.5:
+		failures.append(
+			"Enemy without a floor does not fall: y=%.3f from %.3f" % [
+				airborne.global_position.y, airborne_start_y
+			]
+		)
+	airborne.queue_free()
+	await get_tree().process_frame
+
+	# 2) 有承重面时落到地板并停住，不会穿到地板以下。
+	var grounded := _make_enemy("melee_chaser", Vector3(45.0, 3.0, 45.0))
+	await get_tree().process_frame
+	for _frame in range(120):
+		await get_tree().physics_frame
+	if not grounded.is_on_floor() or absf(grounded.global_position.y) > 0.08:
+		failures.append(
+			"Enemy does not settle on the floor: y=%.3f on_floor=%s" % [
+				grounded.global_position.y, str(grounded.is_on_floor())
+			]
+		)
+	# 3) 地面口径必须与 Player3D 同源：44° 以内算可走的坡，更陡的算墙。
+	if (
+		not is_equal_approx(grounded.floor_max_angle, deg_to_rad(44.0))
+		or grounded.motion_mode != CharacterBody3D.MOTION_MODE_GROUNDED
+		or not grounded.up_direction.is_equal_approx(Vector3.UP)
+	):
+		failures.append("Enemy floor contract drifted from Player3D (floor_max_angle/motion_mode/up_direction)")
+	grounded.queue_free()
+	await get_tree().process_frame
+
+	# 4) 怪与怪不叠加：叠在同一点生成的两只必须被拆开到有效间距。
+	var overlap_origin := Vector3(0.0, 0.0, 45.0)
+	var first := _make_enemy("melee_chaser", overlap_origin)
+	var second := _make_enemy("melee_chaser", overlap_origin + Vector3(0.05, 0.0, 0.0))
+	await get_tree().process_frame
+	var minimum_distance := (
+		(first.get_world_body_radius() + second.get_world_body_radius())
+		* Enemy3D.SEPARATION_RADIUS_SCALE
+	)
+	for _frame in range(180):
+		await get_tree().physics_frame
+	var separated := Vector2(
+		first.global_position.x - second.global_position.x,
+		first.global_position.z - second.global_position.z
+	).length()
+	if separated < minimum_distance * 0.9:
+		failures.append(
+			"Overlapping enemies were not separated: %.3f < %.3f" % [
+				separated, minimum_distance * 0.9
+			]
+		)
+	first.queue_free()
+	second.queue_free()
+	await get_tree().process_frame
+
+	# 5) 分离只作用于水平面：五只挤成一点时，谁都不会被顶起来，也不会穿到地板以下。
+	var crowd_origin := Vector3(-45.0, 0.0, -45.0)
+	var crowd: Array[Enemy3D] = []
+	for index in range(5):
+		var angle := TAU * float(index) / 5.0
+		crowd.append(_make_enemy(
+			"melee_chaser",
+			crowd_origin + Vector3(cos(angle), 0.0, sin(angle)) * 0.45
+		))
+	await get_tree().process_frame
+	for _frame in range(180):
+		await get_tree().physics_frame
+	for enemy in crowd:
+		if enemy.global_position.y < -0.12:
+			failures.append("A crowded enemy was pushed below the floor")
+		elif absf(enemy.global_position.y) > 0.12:
+			failures.append(
+				"Crowd separation displaces enemies vertically: y=%.3f" % enemy.global_position.y
+			)
+		enemy.queue_free()
+	await get_tree().process_frame
+
+	# 6) 掉出可行走层的判死深度必须大于塔楼整层层高（12m）：
+	#    怪沿楼梯/连接通道追玩家下一层时是 12m 级落差，不能被当成掉出世界。
+	if Enemy3D.FALL_DEATH_DROP_M <= 12.0:
+		failures.append(
+			"Fall death depth %.2f is not deeper than a tower floor (12m); stair drops would kill" % (
+				Enemy3D.FALL_DEATH_DROP_M
+			)
+		)
+
+	# 7) 下落未达判死深度：不准死，也不准被拉回出生点，必须正常落在承重面上。
+	#    承重面顶面取出生点下方 12m，正好是塔楼一层落差。
+	var stair_column := Vector3(-60.0, 3.0, -140.0)
+	add_child(_make_support(
+		Vector3(stair_column.x, -9.15, stair_column.z), Vector3(16.0, 0.30, 16.0)
+	))
+	var stair_faller := _make_enemy("melee_chaser", stair_column)
+	await get_tree().process_frame
+	for _frame in range(240):
+		await get_tree().physics_frame
+	if stair_faller.ai_state == "dead":
+		failures.append("Enemy died from a one-storey stair drop (within fall death depth)")
+	elif not stair_faller.is_on_floor() or absf(stair_faller.global_position.y + 9.0) > 0.10:
+		failures.append(
+			"Enemy did not settle on the 12m-lower landing: y=%.3f on_floor=%s" % [
+				stair_faller.global_position.y, str(stair_faller.is_on_floor())
+			]
+		)
+	stair_faller.queue_free()
+	await get_tree().process_frame
+
+	# 8) 下落超过判死深度：必须直接判死（房间才清得掉），且不能是被拉回出生点的假恢复。
+	#    承重面顶面放在出生点下方 23m，远深于判死深度，所以它到不了。
+	var void_column := Vector3(60.0, 3.0, -140.0)
+	add_child(_make_support(
+		Vector3(void_column.x, -20.15, void_column.z), Vector3(16.0, 0.30, 16.0)
+	))
+	var deep_faller := _make_enemy("melee_chaser", void_column)
+	await get_tree().process_frame
+	var deepest_y := deep_faller.global_position.y
+	var deep_dead := false
+	for _frame in range(240):
+		await get_tree().physics_frame
+		if not is_instance_valid(deep_faller):
+			deep_dead = true
+			break
+		if deep_faller.ai_state == "dead":
+			deep_dead = true
+			break
+		deepest_y = minf(deepest_y, deep_faller.global_position.y)
+	if not deep_dead:
+		failures.append(
+			"Enemy that fell past the death depth stayed alive: y=%.3f" % deepest_y
+		)
+	else:
+		# 判死是每帧开头按「上一次位移后的位置」结算的，所以最后一次存活取样必然
+		# 停在触发线以上不到一帧的下落距离（末端速度 32m/s ⇒ 约 0.53m）。留 1m 容差。
+		var shallowest_allowed := (
+			void_column.y - Enemy3D.FALL_DEATH_DROP_M + 1.0
+		)
+		if deepest_y > shallowest_allowed:
+			failures.append(
+				"Fall death triggered far above the declared depth: fell to %.3f, expected <= %.3f" % [
+					deepest_y, shallowest_allowed
+				]
+			)
+	if is_instance_valid(deep_faller):
+		deep_faller.queue_free()
+	await get_tree().process_frame
 
 
 func _count_projectiles() -> int:
