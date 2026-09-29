@@ -1,0 +1,100 @@
+{
+  "schema": "shellstorm2.items_weapons.source_manifest",
+  "schema_version": 1,
+  "generated_by": "06-items-weapons-blender-authoring",
+
+  "asset_id": "ITM-KEY-ITEM-ROOM-KEY",
+  "display_name_zh": "房间钥匙",
+  "branch": "prop",
+  "logical_id": "item_room_key",
+  "asset_version": "v001",
+  "created_at": "YYYY-MM-DD",
+
+  "blender": {
+    "source_path": "assets/art/items_weapons/props/room_key/source/prp_room_key_source_v001.blend",
+    "source_sha256": null,
+    "template_used": "assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend",
+    "unit_system": "METRIC",
+    "root_scale": [1.0, 1.0, 1.0],
+    "blender_version": "4.5"
+  },
+
+  "collections": {
+    "root": "PRP_房间钥匙_中文资产管理",
+    "authoring": "01_制作组件_已统一材质",
+    "output": "02_游戏输出_整合模型",
+    "rig": "10_骨骼与动画",
+    "sockets": "80_挂点_交互接口",
+    "stage": "90_展示环境_灯光相机",
+    "stage_exported": false,
+    "authoring_exported": false
+  },
+
+  "output_meshes": [
+    {
+      "object": "prp_room_key_主体_金属哑光反光",
+      "material_role": "01_精工金属_道具骨架",
+      "triangle_count": 0,
+      "palette_uv_ok": true
+    }
+  ],
+
+  "materials": [
+    {
+      "role": "01_精工金属_道具骨架",
+      "metallic": 0.86,
+      "roughness": 0.28,
+      "coat": 0.18,
+      "emission_strength": 0.0
+    }
+  ],
+  "material_role_limit": 4,
+
+  "palette": {
+    "path": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+    "linked_externally": true,
+    "embedded": false,
+    "interpolation": "Closest"
+  },
+
+  "anchors": {
+    "required": ["ItemRoot"],
+    "present": ["ItemRoot"],
+    "notes": {
+      "ItemRoot": "原点=接地或物理平衡点，local 正面 -Z"
+    }
+  },
+
+  "animation": {
+    "tier": "tier_0_static",
+    "tier_reason": "刚性件，无独立可动结构",
+    "armature_name": null,
+    "bones": [],
+    "actions": []
+  },
+
+  "geometry": {
+    "bounds_m": [0.06, 0.015, 0.12],
+    "origin_m": [0.0, 0.0, 0.0],
+    "local_forward": "-Z",
+    "bottom_aligned": true
+  },
+
+  "previews": [],
+
+  "range_lock": {
+    "locked_objects": 0,
+    "signature_before": null,
+    "signature_after": null,
+    "out_of_scope_changes": 0
+  },
+
+  "self_check": {
+    "template_validate": "PRP_TEMPLATE_VALIDATE_OK",
+    "palette_uv_faces_pass": null,
+    "palette_uv_faces_total": null,
+    "blocking_issues": []
+  },
+
+  "next_stage": "07-items-weapons-godot-prefab-assembly"
+}

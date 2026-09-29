@@ -1,0 +1,96 @@
+{
+  "schema": "shellstorm2.items_weapons.asset_contract",
+  "schema_version": 1,
+  "generated_by": "05-items-weapons-pipeline-entry",
+  "frozen_at": "YYYY-MM-DD",
+
+  "asset_id": "ITM-KEY-ITEM-ROOM-KEY",
+  "display_name_zh": "房间钥匙",
+  "category": "道具",
+  "subclass": "key",
+  "branch": "prop",
+  "domain_ledger": {
+    "domain_key": "props",
+    "ledger_file": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+    "asset_sheet": "资产主表",
+    "prefab_page": "3D-物品",
+    "resolved_by": "ledger_index.json",
+    "master_row": null
+  },
+
+  "logical_id": "item_room_key",
+  "component_slot": "root",
+  "reuse_scope": "世界拾取/UI 图标",
+  "function_note": "任务钥匙，需要在轮廓、颜色与图标上与普通钥匙可区分",
+
+  "dimensions_m": {
+    "width": 0.06,
+    "depth": 0.015,
+    "height": 0.12,
+    "source_column": "3D-物品#标准尺寸",
+    "raw_text": "0.06×0.015×0.12m"
+  },
+  "origin_and_facing": {
+    "origin": "接地或物理平衡点",
+    "local_forward": "-Z",
+    "root_scale": [1.0, 1.0, 1.0],
+    "source_column": "3D-物品#原点与朝向"
+  },
+
+  "collision_intent": {
+    "collision_enabled": "无",
+    "collision_owner": "无",
+    "collision_shape": "无",
+    "pickup_trigger_required": true,
+    "pickup_radius_m": 0.82,
+    "note": "拾取触发范围不得同时充当实体阻挡碰撞"
+  },
+
+  "animation_tier": "tier_0_static",
+  "animation_tier_reason": "钥匙为刚性件，无独立可动结构",
+  "animation_actions": [],
+
+  "source_collection": "PRP_房间钥匙_中文资产管理",
+  "material_roles": [
+    "01_精工金属_道具骨架",
+    "02_细腻哑光_道具大面",
+    "03_清漆反光_道具点缀",
+    "04_柔和自发光_道具UI"
+  ],
+  "material_role_limit": 4,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+
+  "anchor_contract": ["ItemRoot"],
+  "anchor_notes": {
+    "ItemRoot": "稳定根；原点=接地或物理平衡点",
+    "HoldAnchor": "本资产无手持需求，不创建"
+  },
+
+  "paths": {
+    "source_dir": "assets/art/items_weapons/props/room_key/",
+    "source_blend": "assets/art/items_weapons/props/room_key/source/prp_room_key_source_v001.blend",
+    "stable_glb": "assets/art/items_weapons/props/room_key/components/prp_room_key_visual_top3d.glb",
+    "stable_rig_glb": null,
+    "stable_prefab": "assets/art/items_weapons/props/room_key/runtime/prp_room_key_root_top3d.tscn"
+  },
+
+  "consumers": {
+    "item_model_factory": "src/world3d/ItemModelFactory3D.gd",
+    "weapon_model": null,
+    "player": null,
+    "notes": "引用点必须先读代码确认，不新增第二套映射表"
+  },
+
+  "ledger_state_at_intake": {
+    "production_status": "程序占位",
+    "version": "v001",
+    "sha256": null,
+    "note": "开工前状态；转正由 08-items-weapons-code-integration 回写"
+  },
+
+  "validation": {
+    "all_required_fields_present": true,
+    "missing_fields": [],
+    "open_questions": []
+  }
+}
