@@ -219,6 +219,158 @@ assets/art/environments/tower_zones/battle/runtime/room_instances/<room_id>/
 └─ acceptance/
 ```
 
+## 房间自持设备：顶灯与墙面开关固化成静态 TSCN 节点
+
+**触发**：主人说「把房间的灯 / 开关做到 tscn 里头去，作为可手动调整的组件」。
+默认房间灯（`WastelandLight3D`）与墙面开关（`RoomLightSwitch3D`）由
+`DungeonRoom3D._build_content()` 运行时实例化、落在 `RuntimeDetail` 下 ⇒ 场景文件里查不到、
+美术无法手调。要让它们变成编辑器里可拖可改的节点，走下面这套。
+
+### 落盘形态＝裸脚本节点，不是 prefab 实例
+
+静态布局根（`ExpeditionRoomStaticLayout`）下 `parent="."` 直挂两个节点，**导出值内联写在房间 TSCN 里**：
+
+```text
+[node name="RoomCeilingLight" type="Node3D" parent="." unique_id=<随机唯一>]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, <x>, 9.28, <z>)
+script = ExtResource("900_authored_light")      # res://src/world3d/WastelandLight3D.gd
+light_color / energy / light_range / failing / flicker_seed / cast_shadow / fixture_style / light_enabled
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=<随机唯一>]
+transform = Transform3D(...)
+script = ExtResource("901_authored_switch")     # res://src/world3d/RoomLightSwitch3D.gd
+metadata/authored_room_device = "light_switch"
+```
+
+根节点补 `metadata/authored_room_devices = true`。ext_resource 用可读 id
+（`900_authored_light` / `901_authored_switch`）而不是 Godot 自动编号，便于人工核对。
+
+🔴 **不要做成 prefab 实例**：`prp_wasteland_light_root_top3d.tscn` /
+`prp_room_light_switch_root_top3d.tscn` 只是「脚本挂载壳」、零数值，实例化后美术仍得进 prefab 才能调值。
+
+🔴 **灯节点必须写出自己的 `transform` 行**（2026-09-29 踩过）。灯块里 `transform` 紧跟在节点声明行之后、
+`script` 之前；**漏掉它，灯就静默落到艺术根原点（y=0，贴地）**，而属性值（energy/range/seed）全对
+⇒ 光看「数值都对」是发现不了的。核对时必须**单独断言节点级 `transform` 行**存在且等于真值，
+不能只比对「property = value」那些行。同理开关块也必须有 `transform`。
+
+🔴 **块必须插在场景树最前面**（2026-09-29 实证）。设备节点要落在**根 `metadata/*` 全部结束之后、
+第一个 `[node …]` 之前** —— 即成为根的**第一、第二个子节点**。若按最早的做法追加到**文件末尾**，
+它们就是第 100+ 个子节点，被整房组件压在场景树底下：主人打开场景默认滚到顶部 ⇒ **看不到**，
+会直接来问「我怎么没看到灯和开关的组件？叫什么名字？」（实测 room_01 落在 853/867 行＝第 124/125 个子节点，
+必现；room_02 同理第 107/108）。注入器已按此插入点实现，且发现设备块已在别处时会**原样摘出再重插**
+（保留原 `unique_id` 与全部导出值，幂等，输出 `MOVED`）。
+
+回答主人这个问题时的标准答案：**灯 = `RoomCeilingLight`（Node3D + `WastelandLight3D.gd`）；
+开关 = `RoomLightSwitch3D`（Area3D + `RoomLightSwitch3D.gd`）**，都在静态布局根
+`ExpeditionRoomStaticLayout` 的最上面两个。
+
+### 运行时认领
+
+`DungeonRoom3D._adopt_authored_room_devices()`，在 `_build_content()` 最前调用：
+
+```gdscript
+var authored_devices := _adopt_authored_room_devices()   # 静态根下有 WastelandLight3D 才 true
+… elif authored_devices: pass                            # 只登记，不重建
+```
+
+- 探测＝按**节点类型**递归收集（`_collect_wasteland_lights` / `_collect_room_light_switches`），
+  只认 `AuthoredLayoutArtRoot` / `SafeRoomArtRoot` 两个根名；`metadata/authored_room_devices` 只是标记、不被读取。
+- 认领后 `_light_switch != null` ⇒ 原「自建 + `_add_runtime_detail_child()`」被 `if _light_switch == null:` 跳过。
+- **blast radius 精确**：静态根下没有 `WastelandLight3D` 的房间逐字走老路径 ⇒ 逐批迁移安全。
+
+### 数值必须抄运行时算定的那一份（抄错＝改画面）
+
+| 值 | 公式 |
+| --- | --- |
+| `energy` | `theme.fixture_energy × (2.20 if size_class in [large, arena, floor] else 1.85)` |
+| `light_range` | `max(theme.fixture_range × 1.72, min(房间短边) × 0.94)` |
+| `y` | `TOWER_GEOMETRY.FLOOR_HEIGHT_M − 2.72` |
+| 平面位置 | `_snap_planar_position_into_footprint(Vector3.ZERO)`（真砖格 ⇒ L 房不是 0,0） |
+| `flicker_seed` | `room_seed` |
+| 开关位置 | `_resolve_light_switch_position()`，真砖格外缘内缩 `SWITCH_WALL_INSET_M = 0.34` |
+
+真值来源＝验收探针的 `DUMP` 行（`var_to_str(transform)` 输出可直接当 TSCN 文本）。
+
+### 工具链
+
+```text
+1. 跑 probe_expedition_room_device_dump（遍历生成器 ROOM_IDS＝13 房，只打印不断言）
+   → 拿每房 DUMPX 行的 art_local_tf
+   ⚠️ 别抄 probe_expedition_room_authored_light_devices 的 light.transform 当源值：那是运行时口径，
+      未迁移的房挂在 RuntimeDetail 下 ⇒ 那是 RuntimeDetail 局部坐标、不是艺术根局部。
+2. 抄进 scripts/patch_expedition01_room_authored_devices.py 的 ROOMS 表（浮点尾数照抄、不修饰），
+   并把同一批房名同步进 generate_expedition01_room_static_scenes.gd 的 AUTHORED_DEVICE_ROOMS 声明
+3. python scripts/patch_expedition01_room_authored_devices.py [room_id …]   # 省略＝全部；幂等、行尾保真
+   输出 PATCHED（新插入）/ MOVED（原在别处，原样搬到顶部）；插入点＝场景树最前
+4. 复跑探针验收 + 相邻验收（verify_expedition_room_static_scenes / verify_expedition_room_type_component_replay）
+5. 核对「只是插了一段、别的行一行没动」：⚠️ **别用 `difflib`** —— 这类文件里成百上千行 `[node …]` /
+   `transform = Transform3D(…)` 形态几乎相同，difflib 会错误对齐，把一次纯块移动报成 1500+ 行差异
+   （已实际踩过）。改用**「剥离新增行后 body 逐行比对 + 新增行多重集比对」**，并断言：
+     · 设备节点＝根 `metadata/*` 之后的**前两个** `[node …]`（灯在前、开关在后）；
+     · 每房新增正好 **27 行**（2 ext_resource + 1 根 meta + 空行&灯 18 + 空行&开关 6）；
+       ⚠️ room_01/room_02 是 **26 行** —— 它们由更早一版注入器写就、少一行公式注释，走 MOVED 时原样保留；
+     · 每房行尾与改前**逐字节一致**（远征01：`boss` 是 CRLF，其余 12 房 LF）；
+     · 灯块里 `transform` 行在（见上一条）。
+```
+
+🔴 **不要为了加一间房就跑生成器**。`generate_expedition01_room_static_scenes.gd` 里的
+`AUTHORED_DEVICE_ROOMS`（名单**单一真源**，探针直接读它；2026-09-29 已从 room_01/room_02 扩到
+远征01 **全 13 房**）与 `SS_STATIC_ROOMS=<逗号分隔房名>` 子集开关虽然能自动产出设备节点，
+但有两点不对付，别拿它当落地手段：
+
+- 生成器走 `PackedScene.pack()` ⇒ 设备会按 **prefab 实例**形态写出（`instance=ExtResource(...)`，
+  同现有组件节点那种写法），与磁盘上现行的**裸脚本节点**形态不是一套（两者运行时等价，
+  但会让「设备块长什么样」出现两种写法）。生成器自己的注释就写着「搬过去的是组件母版实例本身」。
+- 整份产物顺带丢 `[gd_scene] uid=`、重编全部 `ext_resource` id、把编辑器早先剥掉的组件元数据补回来
+  —— 那是「静态 TSCN 全量重生成」这个独立待办，不属本路径。
+
+⇒ 增改房间一律用**注入器**（外科式、纯插入、行尾保真）；生成器里的 `AUTHORED_DEVICE_ROOMS`
+只当「哪些房已迁移」的**声明**维护，专供探针读取。
+
+### 验收判据
+
+`tests/verification/probe_expedition_room_authored_light_devices.tscn`（直跑约 20 s；
+2026-09-29 全 13 房实测 `rooms=13 checks=91`，即每房 7 项断言）：
+
+- `static_lights ≥ 1`、`static_switches ≥ 1`（设备真在静态根下）；
+- 灯 / `central_light` / 开关三者均 `from_static = true`，`parent = AuthoredLayoutArtRoot`；
+- `switch_controls_lights` 翻转成功（开关真能控这盏静态灯）。⚠️ **方向按房型而异**：
+  `start`（STAIR_LOBBY）/ `boss`（BOSS）初始**亮** ⇒ 探针打印 `true→false`，其余 11 房 `false→true`。
+  别把「必须 false→true」当判据。
+
+成功标记 `EXPEDITION_ROOM_AUTHORED_LIGHT_DEVICES_OK`。
+
+#### 探针「站位」的两个坑（2026-09-29 扩到 13 房时踩实）
+
+设备迁移把开关从 `RuntimeDetail` 下搬到**艺术根**下，于是探针里**算玩家站位的坐标口径悄悄变了**。
+room_01/room_02 因为艺术根恰为 identity 而一直没暴露；扩到 `start` / `boss` 后立刻现形：
+
+1. **坐标系各归其位**。`switch.position` 现在是**艺术根局部**；而砖格 `_authored_tile_cells`
+   是**房间局部**（来自 `authored_layout_instances` 的 `floor_tile` 槽位）。老代码
+   `room.to_global(switch.position)` 把艺术根局部当房间局部用 —— 入口安全房的艺术根带 yaw −90°，
+   同一个站位点直接偏出 **10.6m**（交互半径才 2.2m）⇒ `get_interaction_candidate()` 恒空。
+   正解：`room.global_transform.affine_inverse() * switch.global_position` 先换回房间局部再比，
+   最后 `room.to_global()` 出世界坐标。
+2. **别把玩家塞进开关里**。砖格 clamp 出来的点可能与开关**重合**（BOSS 房实测 dist=0）：开关贴墙，
+   重合点＝让玩家站在墙体/开关体内，物理把他挤出去，**归属甚至会掉到隔壁房**
+   （实测 boss 的开关站位被判成 `owner=room_10`）。故最终点必须与开关保持 ≥ 玩家身位直径
+   （`MIN_STAND_DISTANCE_M = PLAYER_BODY_RADIUS_M × 2 = 0.9m`）的平面距离，方向朝房心；
+   无砖格可依（安全房 cells=0）时走同一条退化路径。
+
+🔴 判断「是设备坏了还是探针站位算错了」的**快刀**：写个一次性诊断探针，对同一房并列试
+`art_root.to_global(局部点)` / 世界直算 `switch.global_position + 朝房心 × {0.6, 0.9, 1.2}`，
+各自真放玩家、刷归属、读 `get_interaction_candidate`。若世界直算全 `YES` ⇒ 设备与开关完好，
+问题在探针。**别靠猜，也别为了让探针变绿而放宽断言**。
+
+### 已知残留
+
+- 灯泡外形（`CeilingMount`/`Fixture`/`Lens`/`LampLight`/`LightPool`）与开关的
+  `SwitchPlate`/`Indicator`/`Lever`/`CollisionShape3D`/`InteractLabel` 仍由 `_build_fixture()` /
+  `_build_visual()` 运行时建（自带 `get_node_or_null(...) != null → return` 守卫，不会建第二份）
+  ⇒ **交互范围与提示文字目前仍不能在编辑器里调**。
+- 改完必须让主人**重启场景/编辑器**再截图：Godot 不热重载 GDScript。
+
 ## 撤离房门禁
 
 对于 `EXTRACTION_ROOM`：
