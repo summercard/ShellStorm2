@@ -47,7 +47,7 @@ func update_node(node: Node3D, room_id := "") -> void:
 	var record := _records[instance_id] as Dictionary
 	var spatial_position := _spatial_position(node)
 	var next_bucket := _bucket_key(spatial_position)
-	if str(record.get("bucket_key", "")) != next_bucket:
+	if int(record.get("bucket_key", BUCKET_KEY_NONE)) != next_bucket:
 		_remove_from_bucket(instance_id)
 		record["bucket_key"] = next_bucket
 		_add_to_bucket(next_bucket, instance_id)
@@ -76,7 +76,10 @@ func query_radius(
 	_query_count += 1
 	var result: Array[Node3D] = []
 	var seen: Dictionary = {}
-	var bucket_radius := maxi(1, ceili(maxf(0.0, radius) / BUCKET_SIZE_M) + 1)
+	# 桶坐标半径恰好覆盖查询半径即可：相邻桶心相距 BUCKET_SIZE_M，所以
+	# ceili(radius / BUCKET_SIZE_M) 个桶就够（半径 3m ⇒ 1 个桶 ⇒ 3×3×3）。
+	# 原来的 `+1` 会让 3m 的查询去扫 5×5×3 = 75 个桶，多扫的 48 个桶永远是空的。
+	var bucket_radius := maxi(1, ceili(maxf(0.0, radius) / BUCKET_SIZE_M))
 	var center := _bucket_coords(world_position)
 	var radius_squared := radius * radius
 	for floor_offset in range(-1, 2):
@@ -84,7 +87,8 @@ func query_radius(
 			for z_offset in range(-bucket_radius, bucket_radius + 1):
 				var key := _coords_key(center + Vector3i(x_offset, floor_offset, z_offset))
 				var ids := _buckets.get(key, {}) as Dictionary
-				for instance_id_value in ids.keys():
+				# 直接迭代字典取 key；`ids.keys()` 会为每个桶额外新建一个数组。
+				for instance_id_value in ids:
 					var instance_id := int(instance_id_value)
 					if seen.has(instance_id):
 						continue
@@ -93,9 +97,9 @@ func query_radius(
 					if node == null:
 						continue
 					var record := _records.get(instance_id, {}) as Dictionary
-					if not kinds.is_empty() and str(record.get("kind", "")) not in kinds:
+					if not kinds.is_empty() and not kinds.has(record.get("kind", "")):
 						continue
-					if not room_ids.is_empty() and str(record.get("room_id", "")) not in room_ids:
+					if not room_ids.is_empty() and not room_ids.has(record.get("room_id", "")):
 						continue
 					_candidate_count += 1
 					if _spatial_position(node).distance_squared_to(world_position) <= radius_squared:
@@ -185,7 +189,9 @@ func _remove_from_bucket(instance_id: int) -> void:
 	var record := _records.get(instance_id, {}) as Dictionary
 	if record.is_empty():
 		return
-	var key := str(record.get("bucket_key", ""))
+	var key := int(record.get("bucket_key", BUCKET_KEY_NONE))
+	if key == BUCKET_KEY_NONE:
+		return
 	var ids := _buckets.get(key, {}) as Dictionary
 	ids.erase(instance_id)
 	if ids.is_empty():
@@ -194,7 +200,7 @@ func _remove_from_bucket(instance_id: int) -> void:
 		_buckets[key] = ids
 
 
-func _add_to_bucket(key: String, instance_id: int) -> void:
+func _add_to_bucket(key: int, instance_id: int) -> void:
 	var ids := _buckets.get(key, {}) as Dictionary
 	ids[instance_id] = true
 	_buckets[key] = ids
@@ -215,7 +221,7 @@ func _floor_index(position: Vector3) -> int:
 	return int(round(-position.y / TOWER_GEOMETRY.FLOOR_HEIGHT_M))
 
 
-func _bucket_key(position: Vector3) -> String:
+func _bucket_key(position: Vector3) -> int:
 	return _coords_key(_bucket_coords(position))
 
 
@@ -227,5 +233,19 @@ func _bucket_coords(position: Vector3) -> Vector3i:
 	)
 
 
-func _coords_key(coords: Vector3i) -> String:
-	return "%d:%d:%d" % [coords.x, coords.y, coords.z]
+## 桶 key 用整数位打包，不用 `"%d:%d:%d"` 字符串。
+## 一次半径查询要扫几十个桶，而字符串格式化每次约 1~4 微秒且每次新建一个 String；
+## 对每帧每怪都要查询一次的调用方（怪物同类分离）来说，这一项就占掉查询成本的大半。
+## 位运算版本没有分配、没有格式化，语义与原来的三元组字符串一一对应。
+const BUCKET_KEY_OFFSET := 512
+const BUCKET_KEY_MASK := 0x3FF
+## 尚未写入任何桶时的哨兵 key。打包结果恒为非负，所以 -1 不会与真实 key 冲突。
+const BUCKET_KEY_NONE := -1
+
+
+func _coords_key(coords: Vector3i) -> int:
+	return (
+		((coords.x + BUCKET_KEY_OFFSET) & BUCKET_KEY_MASK)
+		| (((coords.y + BUCKET_KEY_OFFSET) & BUCKET_KEY_MASK) << 10)
+		| (((coords.z + BUCKET_KEY_OFFSET) & BUCKET_KEY_MASK) << 20)
+	)

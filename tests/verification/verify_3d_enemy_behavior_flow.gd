@@ -479,6 +479,58 @@ func _verify_vertical_physics_and_separation(failures: Array[String]) -> void:
 		deep_faller.queue_free()
 	await get_tree().process_frame
 
+	# 9) 分离查询必须按 SEPARATION_INTERVAL_FRAMES 降频，不许退回「每帧每怪一次」。
+	#    这是硬性能契约：`Dungeon3D.ENEMY_PREACTIVATION_RANGE = 38m` 下同时激活的怪
+	#    可达数十只，而 `query_radius` 单次实测量级 10^2 微秒 —— 每帧每只一次会把
+	#    60FPS 的物理预算吃光（实测 120 只 ⇒ 物理帧 42ms，掉到 24FPS）。
+	#    断言用「查询次数」而不是「耗时」：计数是确定性的，不会因机器负载抖动。
+	if Enemy3D.SEPARATION_INTERVAL_FRAMES <= 1:
+		failures.append("Separation recompute interval fell back to every frame")
+	else:
+		var cadence_count := 32
+		var cadence: Array[Enemy3D] = []
+		for index in range(cadence_count):
+			var angle := TAU * float(index) / float(cadence_count)
+			var spawned_enemy := _make_enemy(
+				"melee_chaser",
+				Vector3(-70.0 + cos(angle) * 3.0, 0.0, 70.0 + sin(angle) * 3.0)
+			)
+			cadence.append(spawned_enemy)
+		await get_tree().process_frame
+		# 必须真的在跑物理，否则测到的是 0 次查询，断言会假绿。
+		for enemy in cadence:
+			enemy.set_runtime_active(true)
+		var registry := GameplaySpatialRegistry3D
+		var queries_before := int(registry.get_snapshot().get("query_count", 0))
+		var cadence_frames := 60
+		for _frame in range(cadence_frames):
+			await get_tree().physics_frame
+		var queries_after := int(registry.get_snapshot().get("query_count", 0))
+		var measured_per_frame := float(queries_after - queries_before) / float(cadence_frames)
+		# 余量给 2.0 倍：光照传感器等其他调用方也走同一个 query_radius（每 0.12s 一次）。
+		# 降频一旦被去掉，实测会涨到约 1.0×N，远超该预算。
+		var cadence_budget := (
+			float(cadence_count) / float(Enemy3D.SEPARATION_INTERVAL_FRAMES) * 2.0
+		)
+		if measured_per_frame > cadence_budget:
+			failures.append(
+				"Separation queries are not throttled: %.1f per frame, budget %.1f (N=%d)" % [
+					measured_per_frame, cadence_budget, cadence_count
+				]
+			)
+		elif measured_per_frame < float(cadence_count) / float(
+			Enemy3D.SEPARATION_INTERVAL_FRAMES
+		) * 0.5:
+			# 下界：夹具必须真的跑出分离查询，否则上界断言是恒真的假绿。
+			failures.append(
+				"Cadence fixture did not exercise separation queries: %.1f per frame (N=%d)" % [
+					measured_per_frame, cadence_count
+				]
+			)
+		for enemy in cadence:
+			enemy.queue_free()
+		await get_tree().process_frame
+
 
 func _count_projectiles() -> int:
 	var count := 0

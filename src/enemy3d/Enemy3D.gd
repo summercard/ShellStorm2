@@ -43,6 +43,11 @@ const SEPARATION_RADIUS_SCALE := 0.90
 const SEPARATION_NEIGHBOR_LIMIT := 8
 ## 邻居查询的额外半径，用于覆盖最大的 Boss 世界碰撞半径。
 const SEPARATION_PROBE_MARGIN_M := 2.4
+## 分离力的重算间隔（物理帧）。分离是「视觉上不要叠在一起」的软约束，20Hz 足够，
+## 不需要每物理帧重算。依据：一次同类半径查询实测 100~300 微秒，而 38m 预激活半径
+## （`Dungeon3D.ENEMY_PREACTIVATION_RANGE`）下同时激活的怪可达数十只 ——
+## 每帧每只都查会把 60FPS 的物理预算吃光（实测 120 只 ⇒ 物理帧 42ms，掉到 24FPS）。
+const SEPARATION_INTERVAL_FRAMES := 3
 ## 重力生效后，脚下真出现洞的怪会掉下去。比出生点低过这个深度就判「已离开可行走层」，
 ## 直接死亡 —— 房间因此不会卡在「有怪但打不到」的未清状态。
 ## 取值必须大于塔楼整层层高（`TowerGeometry3D.FLOOR_HEIGHT_M = 12.0`）：怪沿楼梯/连接
@@ -183,6 +188,9 @@ var _last_state_reason := "spawned"
 var _ambush_reburrow_cooldown := 0.0
 var _ambush_unseen_time := 0.0
 var _active_explosion_committed := false
+## 当前生效的分离推力速度，以及重算相位（-1 = 尚未初始化）。
+var _separation_push := Vector3.ZERO
+var _separation_phase := -1
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -1439,10 +1447,23 @@ func _die_from_fall_out() -> void:
 
 
 ## 怪与怪的水平分离。只查空间索引里的同类，不遍历整棵树：注册表已按 16m 分桶，
-## 常见房间只命中本格，30 只怪也不会退化成全表两两比较。
+## 常见房间只命中本格，几十只怪也不会退化成全表两两比较。
+## **按固定相位降频重算**：邻居查询本身是这整套逻辑里最贵的一步，所以每
+## `SEPARATION_INTERVAL_FRAMES` 帧才算一次，中间帧沿用上一次的推力向量。
 func _apply_separation(planar_velocity: Vector3) -> Vector3:
 	if GameplaySpatialRegistry3D == null:
 		return planar_velocity
+	if _separation_phase < 0:
+		# 相位按实例 ID 固定错开，避免全场怪在同一帧集体查询造成尖峰。
+		_separation_phase = absi(get_instance_id()) % SEPARATION_INTERVAL_FRAMES
+	if Engine.get_physics_frames() % SEPARATION_INTERVAL_FRAMES == _separation_phase:
+		_separation_push = _compute_separation_push()
+	var result := planar_velocity + _separation_push
+	return Vector3(result.x, 0.0, result.z)
+
+
+## 单次分离推力的实际计算，只在重算帧被调用。
+func _compute_separation_push() -> Vector3:
 	var self_radius := get_world_body_radius()
 	var neighbors: Array[Node3D] = GameplaySpatialRegistry3D.query_radius(
 		global_position,
@@ -1450,7 +1471,7 @@ func _apply_separation(planar_velocity: Vector3) -> Vector3:
 		[GameplaySpatialRegistry3D.KIND_ENEMY]
 	)
 	if neighbors.is_empty():
-		return planar_velocity
+		return Vector3.ZERO
 	var push := Vector3.ZERO
 	var counted := 0
 	for node in neighbors:
@@ -1477,10 +1498,9 @@ func _apply_separation(planar_velocity: Vector3) -> Vector3:
 			offset = offset / distance
 		push += offset * (1.0 - distance / min_distance)
 	if push.length_squared() <= 0.000001:
-		return planar_velocity
+		return Vector3.ZERO
 	var push_speed := get_effective_move_speed() * SEPARATION_WEIGHT * minf(push.length(), 1.0)
-	var result := planar_velocity + push.normalized() * push_speed
-	return Vector3(result.x, 0.0, result.z)
+	return push.normalized() * push_speed
 
 
 ## 推进的唯一出口：先让同伴把水平速度推开，再由重力决定垂直速度。
