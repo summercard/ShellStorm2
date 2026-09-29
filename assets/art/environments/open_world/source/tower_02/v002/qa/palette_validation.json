@@ -21,8 +21,8 @@
     "emissive_has_one_material": true
   },
   "output_mesh_count": 185,
-  "polygon_count": 333379,
-  "valid_island_polygon_count": 333379,
+  "polygon_count": 333787,
+  "valid_island_polygon_count": 333787,
   "uv_reports": [
     {
       "object": "双笼施工电梯_导轨附墙架",
@@ -66,8 +66,8 @@
     },
     {
       "object": "塔吊1_回转总成_折面驾驶室",
-      "polygon_count": 2295,
-      "valid_island_polygon_count": 2295,
+      "polygon_count": 2363,
+      "valid_island_polygon_count": 2363,
       "missing_palette_uv": false,
       "active_uv": "PaletteUV",
       "active_render_uv": "PaletteUV",
@@ -76,8 +76,8 @@
     },
     {
       "object": "塔吊1_回转总成_折面驾驶室_制作源",
-      "polygon_count": 2295,
-      "valid_island_polygon_count": 2295,
+      "polygon_count": 2363,
+      "valid_island_polygon_count": 2363,
       "missing_palette_uv": false,
       "active_uv": "PaletteUV",
       "active_render_uv": "PaletteUV",
@@ -206,8 +206,8 @@
     },
     {
       "object": "塔吊2_回转总成_折面驾驶室",
-      "polygon_count": 2295,
-      "valid_island_polygon_count": 2295,
+      "polygon_count": 2363,
+      "valid_island_polygon_count": 2363,
       "missing_palette_uv": false,
       "active_uv": "PaletteUV",
       "active_render_uv": "PaletteUV",
@@ -216,8 +216,8 @@
     },
     {
       "object": "塔吊2_回转总成_折面驾驶室_制作源",
-      "polygon_count": 2295,
-      "valid_island_polygon_count": 2295,
+      "polygon_count": 2363,
+      "valid_island_polygon_count": 2363,
       "missing_palette_uv": false,
       "active_uv": "PaletteUV",
       "active_render_uv": "PaletteUV",
@@ -346,8 +346,8 @@
     },
     {
       "object": "塔吊3_回转总成_折面驾驶室",
-      "polygon_count": 2295,
-      "valid_island_polygon_count": 2295,
+      "polygon_count": 2363,
+      "valid_island_polygon_count": 2363,
       "missing_palette_uv": false,
       "active_uv": "PaletteUV",
       "active_render_uv": "PaletteUV",
@@ -356,8 +356,8 @@
     },
     {
       "object": "塔吊3_回转总成_折面驾驶室_制作源",
-      "polygon_count": 2295,
-      "valid_island_polygon_count": 2295,
+      "polygon_count": 2363,
+      "valid_island_polygon_count": 2363,
       "missing_palette_uv": false,
       "active_uv": "PaletteUV",
       "active_render_uv": "PaletteUV",
