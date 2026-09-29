@@ -14,6 +14,11 @@ const AMBIENT_ENERGY := 0.01
 const FOG_LIGHT_COLOR := Color(0.40, 0.48, 0.55)
 const FOG_DENSITY := 0.030
 const VOLUMETRIC_FOG_DENSITY := 0.009
+## 99F 基地壳体内降低空气浑浊度；壳体外继续使用上面的全塔参数。
+const BASE_INTERIOR_FOG_DENSITY := 0.012
+const BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY := 0.0035
+## 指数收敛的时间常数。约 1.65 秒达到目标差值的 95%，穿过三扇基地门时不会跳变。
+const BASE_FOG_TRANSITION_RESPONSE_S := 0.55
 const SKY_BOUNCE_ENERGY_BY_QUALITY := {
 	"low": 0.54,
 	"medium": 0.72,
@@ -55,6 +60,10 @@ var _rooftop_sky_bounce: OmniLight3D
 var _current_floor_number := 100
 var _time_source: Node
 var _last_time_snapshot: Dictionary = {}
+var _base_interior_fog_blend := 0.0
+var _distance_fog_quality_multiplier := 1.0
+var _base_interior_fog_density := BASE_INTERIOR_FOG_DENSITY
+var _base_interior_volumetric_fog_density := BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
 
 ## 仅在没有全局 GameTimeManager 的孤立验收场景里使用。
 @export_range(0.0, 24.0, 0.1) var time_of_day := 17.0
@@ -70,6 +79,9 @@ func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_sun = sun
 	if GraphicsSettingsManager != null and _environment != null:
 		GraphicsSettingsManager.register_environment(_environment)
+		_sync_base_fog_debug_overrides(GraphicsSettingsManager.get_debug_postfx_snapshot())
+		if not GraphicsSettingsManager.debug_postfx_changed.is_connected(_sync_base_fog_debug_overrides):
+			GraphicsSettingsManager.debug_postfx_changed.connect(_sync_base_fog_debug_overrides)
 	if _sun != null:
 		_sun.add_to_group(EnemyIllumination3D.SUN_GROUP)
 		_sun.set_meta("gameplay_light_kind", "sun")
@@ -136,7 +148,7 @@ func _apply_fixed_lighting() -> void:
 	if _environment != null:
 		_environment.fog_enabled = GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog")
 		_environment.fog_light_color = FOG_LIGHT_COLOR
-		_environment.fog_density = FOG_DENSITY
+		_apply_base_fog_density()
 	_apply_time_of_day()
 	set_process(_time_source == null and time_scale > 0.0)
 
@@ -271,7 +283,65 @@ func get_snapshot() -> Dictionary:
 			_environment.ambient_light_color if _environment != null else Color.BLACK
 		),
 		"fog_density": _environment.fog_density if _environment != null else 0.0,
+		"volumetric_fog_density": (
+			float(_environment.get("volumetric_fog_density")) if _environment != null else 0.0
+		),
+		"base_interior_fog_blend": _base_interior_fog_blend,
+		"base_interior_fog_density": _base_interior_fog_density,
+		"base_interior_volumetric_fog_density": _base_interior_volumetric_fog_density,
+		"base_fog_transition_response_s": BASE_FOG_TRANSITION_RESPONSE_S,
 	}
+
+
+## 由 TowerDescent3D 用基地 30×30m 壳体判定驱动。immediate 仅用于出生/传送落位，
+## 正常走过底层西门、底层东门或上层东门时均使用帧率无关的指数平滑。
+func update_base_interior_fog(inside: bool, delta: float, immediate := false) -> void:
+	var target := 1.0 if inside else 0.0
+	if immediate:
+		_base_interior_fog_blend = target
+	else:
+		var response := maxf(BASE_FOG_TRANSITION_RESPONSE_S, 0.001)
+		var weight := 1.0 - exp(-maxf(delta, 0.0) / response)
+		_base_interior_fog_blend = lerpf(_base_interior_fog_blend, target, weight)
+		if absf(_base_interior_fog_blend - target) < 0.0001:
+			_base_interior_fog_blend = target
+	_apply_base_fog_density()
+
+
+func _apply_base_fog_density() -> void:
+	if _environment == null:
+		return
+	var distance_density := lerpf(
+		FOG_DENSITY,
+		_base_interior_fog_density,
+		_base_interior_fog_blend
+	) * _distance_fog_quality_multiplier
+	var volumetric_density := lerpf(
+		VOLUMETRIC_FOG_DENSITY,
+		_base_interior_volumetric_fog_density,
+		_base_interior_fog_blend
+	)
+	_environment.fog_density = distance_density
+	# GraphicsSettingsManager 会从该 meta 重放体积雾值；同步更新可避免切画质时闪回室外浓度。
+	_environment.set_meta("presentation_volumetric_fog_density", volumetric_density)
+	_environment.set("volumetric_fog_density", volumetric_density)
+
+
+func _sync_base_fog_debug_overrides(values: Dictionary) -> void:
+	_base_interior_fog_density = clampf(
+		float(values.get("debug_base_interior_fog_density", BASE_INTERIOR_FOG_DENSITY)),
+		0.0,
+		0.05
+	)
+	_base_interior_volumetric_fog_density = clampf(
+		float(values.get(
+			"debug_base_interior_volumetric_fog_density",
+			BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
+		)),
+		0.0,
+		0.05
+	)
+	_apply_base_fog_density()
 
 
 func apply_performance_quality(profile: String) -> void:
@@ -280,7 +350,8 @@ func apply_performance_quality(profile: String) -> void:
 			profile != "low"
 			and (GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog"))
 		)
-		_environment.fog_density = FOG_DENSITY if profile == "high" else FOG_DENSITY * 0.72
+		_distance_fog_quality_multiplier = 1.0 if profile == "high" else 0.72
+		_apply_base_fog_density()
 	if _sun != null:
 		_sun.shadow_enabled = true
 		_sun.directional_shadow_max_distance = 120.0 if profile == "high" else 72.0 if profile == "balanced" else 42.0

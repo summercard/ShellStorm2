@@ -63,14 +63,14 @@ func _on_facility_activated(facility: BaseFacility3D) -> void:
 	]
 	match str(snapshot.get("action_kind", FacilityCatalog.ACTION_INFO)):
 		FacilityCatalog.ACTION_MENU:
-			_open_menu(str(snapshot.get("action_path", "")))
+			_open_menu(str(snapshot.get("action_path", "")), facility)
 		FacilityCatalog.ACTION_SCENE:
 			_load_scene(str(snapshot.get("action_path", "")), facility.target_floor)
 		FacilityCatalog.ACTION_INFO:
 			status_label.text += "\n四条远征路线均从基地外道路进入；训练场不计入行动结算。"
 
 
-func _open_menu(scene_path: String) -> void:
+func _open_menu(scene_path: String, facility: BaseFacility3D = null) -> void:
 	if scene_path.is_empty():
 		status_label.text = "该设施尚未接入功能。"
 		return
@@ -86,6 +86,8 @@ func _open_menu(scene_path: String) -> void:
 		menu.overlay_mode = true
 	if menu.has_method("set_player"):
 		menu.call("set_player", player)
+	if menu.has_method("set_facility"):
+		menu.call("set_facility", facility)
 	# 设施菜单必须覆盖基地 HUD，避免状态面板与菜单内容重叠。
 	menu.layer = 50
 	_active_menu = menu

@@ -35,6 +35,85 @@ func _ready() -> void:
 	)
 	var density := environment.fog_density
 	var atmosphere := tower.get_node("TowerAtmosphere3D") as TowerAtmosphere3D
+	# 三扇基地门共用同一个基地壳体判定，并由塔楼宿主把结果交给大气所有者。
+	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
+	tower.player.global_position = facility.to_global(Vector3(0.0, 0.05, 0.0))
+	tower._update_base_fog_transition(0.0, true)
+	_expect(
+		is_equal_approx(float(atmosphere.get_snapshot().get("base_interior_fog_blend", -1.0)), 1.0),
+		"基地中心没有被判为室内雾范围",
+		failures
+	)
+	for exit_offset in [
+		Vector3(-15.4, 0.05, 0.0), # 底层西门外
+		Vector3(15.4, 0.05, 0.0), # 底层东门外
+		Vector3(15.4, TowerDescent3D.FLOOR_HEIGHT, -7.5), # 上层东侧天台门外
+	]:
+		tower.player.global_position = facility.to_global(exit_offset)
+		tower._update_base_fog_transition(0.0, true)
+		_expect(
+			is_equal_approx(float(atmosphere.get_snapshot().get("base_interior_fog_blend", -1.0)), 0.0),
+			"基地门外没有恢复室外雾范围: %s" % exit_offset,
+			failures
+		)
+	tower.player.global_position = facility.to_global(Vector3(0.0, 0.05, 0.0))
+	tower._update_base_fog_transition(0.0, true)
+	_expect(
+		is_equal_approx(environment.fog_density, TowerAtmosphere3D.BASE_INTERIOR_FOG_DENSITY),
+		"基地室内距离雾没有切到低浓度",
+		failures
+	)
+	_expect(
+		is_equal_approx(
+			environment.volumetric_fog_density,
+			TowerAtmosphere3D.BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
+		),
+		"基地室内体积雾没有切到低浓度",
+		failures
+	)
+	GraphicsSettingsManager.set_debug_postfx("debug_base_interior_fog_density", 0.0165)
+	GraphicsSettingsManager.set_debug_postfx("debug_base_interior_volumetric_fog_density", 0.0045)
+	_expect(is_equal_approx(environment.fog_density, 0.0165), "P键距离雾调参没有实时进入基地环境", failures)
+	_expect(
+		is_equal_approx(environment.volumetric_fog_density, 0.0045),
+		"P键体积雾调参没有实时进入基地环境",
+		failures
+	)
+	GraphicsSettingsManager.clear_debug_postfx()
+	_expect(
+		is_equal_approx(environment.fog_density, TowerAtmosphere3D.BASE_INTERIOR_FOG_DENSITY),
+		"清除调试覆盖后基地距离雾没有恢复默认值",
+		failures
+	)
+	GraphicsSettingsManager.apply_to_environment(environment)
+	_expect(
+		is_equal_approx(
+			environment.volumetric_fog_density,
+			TowerAtmosphere3D.BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
+		),
+		"画质重应用把基地室内体积雾闪回室外浓度",
+		failures
+	)
+	atmosphere.update_base_interior_fog(false, 0.1)
+	_expect(
+		environment.fog_density > TowerAtmosphere3D.BASE_INTERIOR_FOG_DENSITY
+		and environment.fog_density < TowerAtmosphere3D.FOG_DENSITY,
+		"离开基地后的距离雾没有平滑过渡",
+		failures
+	)
+	_expect(
+		environment.volumetric_fog_density > TowerAtmosphere3D.BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
+		and environment.volumetric_fog_density < TowerAtmosphere3D.VOLUMETRIC_FOG_DENSITY,
+		"离开基地后的体积雾没有平滑过渡",
+		failures
+	)
+	atmosphere.update_base_interior_fog(false, 10.0)
+	_expect(is_equal_approx(environment.fog_density, density), "基地外距离雾没有恢复原值", failures)
+	_expect(
+		is_equal_approx(environment.volumetric_fog_density, TowerAtmosphere3D.VOLUMETRIC_FOG_DENSITY),
+		"基地外体积雾没有恢复原值",
+		failures
+	)
 	atmosphere.set_floor_number(98)
 	var clock_before := GameTimeManager.get_persistence_snapshot()
 	GameTimeManager.set_elapsed_game_seconds(5.0 * 3600.0, false)

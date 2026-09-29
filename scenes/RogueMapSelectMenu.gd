@@ -1,237 +1,302 @@
 extends CanvasLayer
 class_name RogueMapSelectMenu
-## 远征情报室菜单：展示「远征关卡01」的地图构成，可点击传送进入，
-## 关闭按钮正常退出并恢复基地输入。
-##
-## 传送链路：基地 →（本菜单）→ 读取界面 ExpeditionLoadingScreen →
-## 正式关卡 ExpeditionLevel01_3D。基地落盘与入口登记在本菜单完成，
-## 之后的读取界面与关卡场景都不再改存档。
-
+## Lifecycle adapter only; the city and input targets live in the gameplay world.
 const LOADING_SCENE := "res://scenes/ExpeditionLoadingScreen.tscn"
-## 到达关卡路径**不在此处硬编码**：终点真源统一为 GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D，
-## 避免换场景时漏改某一跳（基地设施目录 / 本菜单 / 读取界面 / 续局路由）。
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
-
-var _player = null
-
+const CITY_SCENE = preload("res://assets/art/ui/expedition_city/hologram_city.tscn")
+const CITY_LAYER := 1 << 18
+const LEVEL_IDS := ["expedition_01", "99"]
+var _player: Node3D
+var _facility: BaseFacility3D
+var _original_camera: Camera3D
+var _camera: Camera3D
+var _city: Node3D
+var _start_transform := Transform3D.IDENTITY
+var _target_transform := Transform3D.IDENTITY
+var _hidden: Array[Node] = []
+var _world_fades: Array[Dictionary] = []
+var _state := "opening"
+var _progress := 0.0
+var _selection := 0
+var _axis_latched := false
+var _departing := false
+var _previous_input_lock := false
+var _initial_fov := 60.0
+var _mouse_mode := Input.MOUSE_MODE_VISIBLE
+var _source_environment: Environment
+var _city_environment: Environment
+var _source_dof_blur_amount := 0.0
+var _dof_attributes: CameraAttributesPractical
+var _departure_provider: Node
 
 func set_player(value) -> void:
 	_player = value
 
+func set_facility(value: BaseFacility3D) -> void:
+	_facility = value
+
+func is_camera_override_active() -> bool:
+	return is_instance_valid(_camera)
 
 func _ready() -> void:
-	var control := Control.new()
-	control.name = "Control"
-	control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	control.mouse_filter = Control.MOUSE_FILTER_STOP
-	add_child(control)
+	_original_camera = get_viewport().get_camera_3d()
+	if _facility == null:
+		for item in get_tree().get_nodes_in_group("base_facility"):
+			if item is BaseFacility3D and item.facility_id == "mission_operations" and get_parent().is_ancestor_of(item):
+				_facility = item
+				break
+	if _facility == null or _original_camera == null:
+		push_warning("[HologramCity] Missing facility or gameplay camera")
+		queue_free()
+		return
+	_start_transform = _original_camera.global_transform
+	_initial_fov = _original_camera.fov
+	for node in get_parent().find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		if geometry.is_visible_in_tree():
+			_world_fades.append({"node": geometry, "transparency": geometry.transparency})
+	if _player != null:
+		_previous_input_lock = bool(_player.get("input_locked"))
+		_player.call("set_input_locked", true)
+	_city = CITY_SCENE.instantiate()
+	get_parent().add_child(_city)
+	var anchor := _facility.global_position + Vector3.UP * 1.7
+	if _facility.has_method("get_hologram_anchor"):
+		anchor = _facility.call("get_hologram_anchor")
+	_city.global_position = anchor
+	_city.scale = Vector3.ONE * 0.09
+	_camera = Camera3D.new()
+	_camera.name = "ExpeditionCloseupCamera"
+	get_parent().add_child(_camera)
+	_camera.global_transform = _start_transform
+	_camera.fov = _initial_fov
+	_camera.near = 0.015
+	_camera.cull_mask = _original_camera.cull_mask | CITY_LAYER
+	var env := Environment.new()
+	env.background_mode = Environment.BG_COLOR
+	env.background_color = Color(0.002, 0.004, 0.016)
+	env.glow_enabled = true
+	env.glow_intensity = 1.1
+	env.glow_bloom = 0.16
+	env.glow_hdr_threshold = 0.8
+	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	_city_environment = env
+	_source_environment = _original_camera.environment
+	if _source_environment == null:
+		_source_environment = _original_camera.get_world_3d().environment
+	if _source_environment == null:
+		_source_environment = env
+	_camera.environment = _source_environment.duplicate(true)
+	# DOF is a CameraAttributesPractical value (not an Environment value).  Copy
+	# the authored attributes so the transition never touches the gameplay camera.
+	if _original_camera.attributes is CameraAttributesPractical:
+		_dof_attributes = (_original_camera.attributes as CameraAttributesPractical).duplicate(true)
+		_source_dof_blur_amount = _dof_attributes.dof_blur_amount
+		_camera.attributes = _dof_attributes
+	else:
+		_camera.attributes = _original_camera.attributes
+	_camera.compositor = _original_camera.compositor
+	_camera.make_current()
+	var destination := anchor + Vector3(0.65, 1.42, 1.85)
+	_target_transform = Transform3D(Basis.looking_at((anchor + Vector3(0, 0.24, -0.05) - destination).normalized()), destination)
+	for item in get_parent().find_children("*", "CanvasLayer", true, false):
+		if item != self and item.visible:
+			_hidden.append(item)
+			item.visible = false
+	for item in [_facility.name_label, _facility.prompt_label]:
+		if is_instance_valid(item) and item.visible:
+			_hidden.append(item)
+			item.hide()
+	_mouse_mode = Input.mouse_mode
+	if DisplayServer.get_name() != "headless":
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-	# 半透明遮罩，覆盖基地 HUD。
-	var backdrop := ColorRect.new()
-	backdrop.color = Color(0.02, 0.03, 0.05, 0.78)
-	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
-	control.add_child(backdrop)
+func _process(delta: float) -> void:
+	if not is_instance_valid(_city) or not is_instance_valid(_camera):
+		return
+	if _state == "opening":
+		_progress = minf(1.0, _progress + delta / 4.4)
+		_apply_transition()
+		if _progress >= 1.0:
+			_state = "active"
+	elif _state == "closing":
+		_progress = maxf(0.0, _progress - delta / 3.6)
+		_apply_transition()
+		if _progress <= 0.0:
+			queue_free()
+	_city.selected = _selection
+	_city.face_markers(_camera)
+	_facility.name_label.hide()
+	_facility.prompt_label.hide()
 
-	var panel := Panel.new()
-	panel.name = "Panel"
-	# 仅设置 CENTER 锚点会让控件左上角落在画面中心，
-	# 从而导致整个面板向右下偏移。显式设置中心点两侧的偏移，
-	# 让面板几何中心与视口中心重合。
-	# 高度要容下「默认关卡版图 + 其余关卡入口」两段；只加内容不加高度会让
-	# 下半截溢到面板外，看起来像贴图错位。
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.offset_left = -340.0
-	panel.offset_top = -300.0
-	panel.offset_right = 340.0
-	panel.offset_bottom = 300.0
-	panel.custom_minimum_size = Vector2(680, 600)
-	control.add_child(panel)
+func _apply_transition() -> void:
+	var eased := smoothstep(0.0, 0.55, _progress)
+	_camera.global_transform = _start_transform.interpolate_with(_target_transform, eased)
+	_camera.fov = lerpf(_initial_fov, 48.0, eased)
+	_animate_depth_of_field(eased)
+	_city.deployment = clampf((_progress - (0.35 - 1.0 / 4.4)) / 0.65, 0.0, 1.0)
+	var fade := smoothstep(0.44, 0.72, _progress)
+	_blend_environment(fade)
+	for item in _world_fades:
+		if is_instance_valid(item.node):
+			item.node.transparency = lerpf(float(item.transparency), 1.0, fade)
+	_camera.cull_mask = CITY_LAYER if _progress > 0.73 else (_original_camera.cull_mask | CITY_LAYER)
+	if _facility.has_method("set_hologram_city_blend"):
+		_facility.call("set_hologram_city_blend", smoothstep(0.12, 0.30, _progress))
 
-	var vbox := VBoxContainer.new()
-	vbox.name = "VBoxContainer"
-	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	vbox.offset_left = 28.0
-	vbox.offset_top = 28.0
-	vbox.offset_right = -28.0
-	vbox.offset_bottom = -28.0
-	vbox.add_theme_constant_override("separation", 14)
-	panel.add_child(vbox)
+func _animate_depth_of_field(amount: float) -> void:
+	# `amount` follows the same continuous camera approach in both directions:
+	# existing blur amount → 0 at the close-up; closing restores the exact
+	# captured authored values without a snap.
+	if _dof_attributes != null:
+		_dof_attributes.dof_blur_amount = lerpf(_source_dof_blur_amount, 0.0, amount)
 
-	var title := Label.new()
-	title.name = "Title"
-	title.text = "远征情报室 · 远征关卡01"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	if title.label_settings == null:
-		var settings := LabelSettings.new()
-		settings.font_size = 26
-		title.label_settings = settings
-	vbox.add_child(title)
+func _blend_environment(amount: float) -> void:
+	# Keep the original environment throughout approach; never mutate shared resources.
+	var env := _camera.environment
+	for key in ["background_color", "ambient_light_color"]:
+		env.set(key, (_source_environment.get(key) as Color).lerp(_city_environment.get(key), amount))
+	for key in ["background_energy_multiplier", "ambient_light_energy", "tonemap_exposure", "glow_intensity", "glow_bloom", "glow_hdr_threshold", "fog_density", "volumetric_fog_density", "ssao_intensity", "ssil_intensity", "adjustment_brightness", "adjustment_contrast", "adjustment_saturation"]:
+		env.set(key, lerpf(float(_source_environment.get(key)), float(_city_environment.get(key)), amount))
+	for key in ["background_mode", "ambient_light_source", "tonemap_mode", "glow_enabled", "fog_enabled", "volumetric_fog_enabled", "ssao_enabled", "ssil_enabled", "adjustment_enabled"]:
+		env.set(key, _city_environment.get(key) if amount >= 0.999 else _source_environment.get(key))
+	# Keep the copied attributes alive at the close-up: only its DOF amount is
+	# animated, while all other authored camera-attribute values stay unchanged.
+	_camera.attributes = _dof_attributes if _dof_attributes != null else (null if amount >= 0.999 else _original_camera.attributes)
+	_camera.compositor = null if amount >= 0.999 else _original_camera.compositor
 
-	var desc := Label.new()
-	desc.name = "Description"
-	desc.text = (
-		"远征关卡01：单层独立行动。入口安全屋 → 01—05 号房 → 终点撤离房。\n"
-		+ "五间 25×25 内容房的房型与朝向按种子随机排列，门后照常触发命运卡牌。\n"
-		+ "成功撤离或退出战局均按独立副本结算，返回 99F 基地。"
-	)
-	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vbox.add_child(desc)
+func _input(event: InputEvent) -> void:
+	if not is_instance_valid(_camera):
+		return
+	# Scene replacement detaches this node synchronously. Consume before dispatch.
+	get_viewport().set_input_as_handled()
+	if event.is_action_pressed("ui_cancel"):
+		request_close()
+	elif _state == "active":
+		if event is InputEventMouseMotion:
+			var hovered := _pick(event.position)
+			if hovered >= 0 and hovered < 2:
+				_selection = hovered
+		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			var picked := _pick(event.position)
+			if picked == 2:
+				request_close()
+			elif picked >= 0:
+				_selection = picked
+				confirm_selection()
+		elif event.is_action_pressed("ui_accept"):
+			confirm_selection()
+		elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_up"):
+			_selection = posmod(_selection - 1, 2)
+		elif event.is_action_pressed("ui_right") or event.is_action_pressed("ui_down"):
+			_selection = posmod(_selection + 1, 2)
+		elif event is InputEventKey and event.pressed and not event.echo:
+			if event.physical_keycode in [KEY_A, KEY_W, KEY_D, KEY_S]:
+				_selection = 1 - _selection
+		elif event is InputEventJoypadMotion and event.axis in [JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y]:
+			if absf(event.axis_value) < 0.3:
+				_axis_latched = false
+			elif absf(event.axis_value) > 0.65 and not _axis_latched:
+				_axis_latched = true
+				_selection = 1 - _selection
 
-	# 地图展示：单层线性推进，入口安全屋在最上，终点撤离房在最下。
-	var map_view := VBoxContainer.new()
-	map_view.name = "MapView"
-	map_view.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	map_view.add_theme_constant_override("separation", 8)
-	vbox.add_child(map_view)
+func _pick(screen: Vector2) -> int:
+	var origin := _camera.project_ray_origin(screen)
+	var direction := _camera.project_ray_normal(screen)
+	for i in 2:
+		var marker: Node3D = _city.markers[i]
+		var local_origin := marker.to_local(origin)
+		var local_dir := marker.global_basis.inverse() * direction
+		if absf(local_dir.z) > 0.00001:
+			var t := (0.12 - local_origin.z) / local_dir.z
+			var p := local_origin + local_dir * t
+			if t > 0.0 and absf(p.x) < 1.8 and absf(p.y) < 1.3:
+				return i
+		var site: Node3D = _city.sites[i]
+		var plane := Plane(Vector3.UP, site.global_position.y)
+		var hit: Variant = plane.intersects_ray(origin, direction)
+		if hit != null and Vector2(hit.x - site.global_position.x, hit.z - site.global_position.z).length() < 0.18:
+			return i
+	var back: Node3D = _city.return_marker
+	if not _camera.is_position_behind(back.global_position) and _camera.unproject_position(back.global_position).distance_to(screen) < 45:
+		return 2
+	return -1
 
-	var floor_specs := [
-		{"label": "入口 · 安全屋 15×15m（含退出战局门）", "color": Color(0.36, 0.66, 0.92)},
-		{"label": "01 — 02 号房 · 25×25m（房型按种子随机）", "color": Color(0.40, 0.74, 0.56)},
-		{"label": "03 — 04 号房 · 25×25m（门后选择命运卡牌）", "color": Color(0.86, 0.74, 0.34)},
-		{"label": "05 号房 · 25×25m（主通道末间）", "color": Color(0.74, 0.58, 0.86)},
-		{"label": "终点 · 撤离房 25×25m（携带战利品返航）", "color": Color(0.92, 0.36, 0.30)},
-	]
-	for spec in floor_specs:
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 12)
-		var swatch := ColorRect.new()
-		swatch.custom_minimum_size = Vector2(28, 28)
-		swatch.color = spec["color"]
-		row.add_child(swatch)
-		var label := Label.new()
-		label.text = spec["label"]
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		row.add_child(label)
-		map_view.add_child(row)
+func request_close() -> void:
+	if _state != "entering":
+		_state = "closing"
 
-	var button_row := HBoxContainer.new()
-	button_row.name = "ButtonRow"
-	button_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	button_row.add_theme_constant_override("separation", 24)
-	vbox.add_child(button_row)
-
-	var teleport := Button.new()
-	teleport.name = "TeleportButton"
-	teleport.text = "传送进入远征关卡"
-	teleport.custom_minimum_size = Vector2(220, 52)
-	teleport.pressed.connect(_on_teleport_pressed)
-	button_row.add_child(teleport)
-
-	var close := Button.new()
-	close.name = "CloseButton"
-	close.text = "关闭"
-	close.custom_minimum_size = Vector2(160, 52)
-	close.pressed.connect(_on_close_pressed)
-	button_row.add_child(close)
-
-	# 关卡清单里的其余关卡：每登记一条就多一个入口，不另做菜单。
-	# 名单从 GameDesignConfig 取，这里不写任何关卡名或路径 —— 否则加一关就要改本文件。
-	for level_id in GameDesignConfig.expedition_level_ids():
-		if level_id == GameDesignConfig.default_expedition_level_id():
-			continue
-		var entry := GameDesignConfig.expedition_level(level_id)
-		if entry.is_empty():
-			continue
-		_add_alternate_level_row(vbox, level_id, entry)
-
-	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
-	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
-	UiMenuFocus.ensure_focus(self)
-
-
-## 追加一条「其他远征关卡」的说明行 + 进入按钮。
-func _add_alternate_level_row(vbox: VBoxContainer, level_id: String, entry: Dictionary) -> void:
-	var separator := HSeparator.new()
-	vbox.add_child(separator)
-
-	var heading := Label.new()
-	heading.name = "AlternateLevelHeading_%s" % level_id
-	heading.text = str(entry.get("display_name", level_id))
-	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	heading.add_theme_font_size_override("font_size", 18)
-	vbox.add_child(heading)
-
-	var desc := Label.new()
-	desc.name = "AlternateLevelDescription_%s" % level_id
-	desc.text = str(entry.get("subtitle", ""))
-	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(desc)
-
-	var row := HBoxContainer.new()
-	row.name = "AlternateLevelRow_%s" % level_id
-	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_child(row)
-
-	var enter := Button.new()
-	# 节点名必须能被「按关卡 id 找按钮」的验收脚本稳定命中，所以不写成固定字面量。
-	enter.name = "EnterLevelButton_%s" % level_id
-	enter.text = "进入%s" % str(entry.get("display_name", level_id))
-	enter.custom_minimum_size = Vector2(260, 52)
-	enter.pressed.connect(_on_alternate_level_pressed.bind(level_id))
-	row.add_child(enter)
-
+func _on_close_pressed() -> void:
+	request_close()
 
 func _on_teleport_pressed() -> void:
 	_enter_level(GameDesignConfig.default_expedition_level_id())
 
-
 func _on_alternate_level_pressed(level_id: String) -> void:
 	_enter_level(level_id)
 
+func confirm_selection() -> void:
+	if _state == "active":
+		_enter_level(LEVEL_IDS[_selection])
 
-## 基地 → 关卡 的唯一出发口。两张入场券（默认关卡与清单里的其余关卡）共用本函数，
-## 保证「先落盘、再登记入口意图、最后切读取界面」这串契约只有一处实现。
 func _enter_level(level_id: String) -> void:
-	# 未登记的关卡在这里就被挡下：宁可报错退回菜单，也不要把玩家静默丢进默认关卡。
-	if not GameDesignConfig.select_expedition_level(level_id):
-		push_error("[RogueMapSelectMenu] 拒绝进入未登记的远征关卡: %s" % level_id)
+	if _departing or _state == "closing":
 		return
-	# 远征情报室是基地到新行动地图的正式边界。不能只切场景，必须先
-	# 把基地当前玩家状态按“下线/场景卸载”规则同步落盘，再登记入口意图。
+	if not GameDesignConfig.select_expedition_level(level_id):
+		return
+	_departing = true
+	_state = "entering"
+	var departure: Dictionary = {}
 	if BaseManager != null:
+		_departure_provider = BaseManager.call("_get_runtime_checkpoint_provider")
 		if not BaseManager.flush_runtime_checkpoint("mission_operations_teleport_departure"):
-			push_error("[RogueMapSelectMenu] 传送前运行态存档失败")
+			_departure_failed("保存失败，请重试")
 			return
-		# ⚠️ 顺序是契约：落盘之后、写标记**之前**必须先摘掉运行时提供者。
-		# `change_scene_to_file()` 会卸载塔楼场景，而 `Dungeon3D._exit_tree()` 调的是
-		# `unregister_runtime_checkpoint_provider(self, true)` —— `flush_before_unregister=true`
-		# 会**再抓一次当前状态写盘**，用一条不带标记的快照整体覆盖掉刚打的标记。
-		# 2026-09-26 真机等价序列实测：`[1 打标记后] marker=true` → `[2 卸载后] marker=false`
-		# → 远征入场回到保底装备。摘掉提供者后 `_exit_tree` 那次 unregister 会因
-		# `provider != current` 直接返回，且防抖计时器也一并停掉，不再有任何写盘路径；
-		# 落盘本身已在上一行完成。这里用 `get_parent()` 而不是 `get_tree().current_scene`：
-		# 本菜单由 `_open_facility_menu()` 经 `add_child(menu)` 挂在打开它的那个玩法场景
-		# （= 运行时检查点提供者）之下，父节点才是权威身份；场景不对时 unregister 是
-		# no-op，不会误摘别人。
+		# Detach before writing the marker: tower unload must not overwrite it.
 		BaseManager.unregister_runtime_checkpoint_provider(get_parent(), false)
-		# ⚠️ 落盘产物是**塔楼身份**的基地快照（`scope=base` + 空 `runtime_map_id`），
-		# 而目的地图（远征 `expedition_01`）与它地图 ID 不同 ⇒ 目的地图的三条既有恢复
-		# 通道全部落空，玩家进关卡只剩白送武器与保底备弹。业主裁定「远征入场必然带着
-		# 99F 基地的所有物品和状态入场」，故在出发边界打上显式标记：目的地图命中后只
-		# 交接玩家所有权与状态，不再要求地图 ID 相同，也不再恢复塔楼世界与坐标。
-		var departure := BaseManager.get_active_run_checkpoint()
-		departure[Dungeon3D.MISSION_OPERATIONS_DEPARTURE_CARRY_KEY] = true
-		if not BaseManager.set_active_run_checkpoint(
-			departure, "mission_operations_departure_carry"
-		):
-			push_error("[RogueMapSelectMenu] 出发携带物交接标记写入失败")
+		departure = BaseManager.get_active_run_checkpoint()
+		var carried := departure.duplicate(true)
+		carried[Dungeon3D.MISSION_OPERATIONS_DEPARTURE_CARRY_KEY] = true
+		if not BaseManager.set_active_run_checkpoint(carried, "mission_operations_departure_carry"):
+			if is_instance_valid(_departure_provider):
+				BaseManager.register_runtime_checkpoint_provider(_departure_provider)
+			_departure_failed("出发交接失败，请重试")
 			return
-	var entry_request_id := GameEntryFlow.request_gameplay_entry(
-		GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT,
-		GameEntryFlow.SPAWN_SAVED_PROGRESS
-	)
-	# 先读盘，再进读取界面；读取界面只做过场，不再改存档，最后由它切进关卡场景。
+	var request_id := GameEntryFlow.request_gameplay_entry(GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT, GameEntryFlow.SPAWN_SAVED_PROGRESS)
 	var error := get_tree().change_scene_to_file(LOADING_SCENE)
 	if error != OK:
-		if entry_request_id > 0:
-			GameEntryFlow.cancel_request(entry_request_id)
-		push_error(
-			"[RogueMapSelectMenu] 进入读取界面失败，关卡场景 %s 未被加载: %s"
-			% [GameDesignConfig.expedition_level_scene(level_id), error_string(error)]
-		)
+		if request_id > 0:
+			GameEntryFlow.cancel_request(request_id)
+		if BaseManager != null:
+			BaseManager.set_active_run_checkpoint(departure, "mission_operations_departure_rollback")
+			if is_instance_valid(_departure_provider):
+				BaseManager.register_runtime_checkpoint_provider(_departure_provider)
+		_departure_failed("读取界面加载失败，请重试")
 
+func _departure_failed(message: String) -> void:
+	_departing = false
+	_state = "active"
+	GameDesignConfig.pending_expedition_level_id = ""
+	if is_instance_valid(_city):
+		_city.status.text = message + "  ·  ESC 返回"
+	push_error("[HologramCity] " + message)
 
-func _on_close_pressed() -> void:
-	queue_free()
+func _exit_tree() -> void:
+	if DisplayServer.get_name() != "headless":
+		Input.mouse_mode = _mouse_mode
+	if is_instance_valid(_original_camera) and _original_camera.is_inside_tree():
+		_original_camera.make_current()
+	for item in _world_fades:
+		if is_instance_valid(item.node):
+			item.node.transparency = float(item.transparency)
+	if is_instance_valid(_facility) and _facility.has_method("set_hologram_city_blend"):
+		_facility.call("set_hologram_city_blend", 0.0)
+	for item in _hidden:
+		if is_instance_valid(item):
+			item.show()
+	if is_instance_valid(_player) and not _previous_input_lock:
+		_player.call("set_input_locked", false)
+	if is_instance_valid(_camera):
+		_camera.queue_free()
+	if is_instance_valid(_city):
+		_city.queue_free()

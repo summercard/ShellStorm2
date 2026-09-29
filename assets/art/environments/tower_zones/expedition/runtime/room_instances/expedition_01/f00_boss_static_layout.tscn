@@ -23,6 +23,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_damaged_tall/server_rack_damaged_tall_root_top3d.tscn" id="21_ucxic"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_typography/wall_typography_root_top3d.tscn" id="22_ejprb"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_a/plant_a_root_top3d.tscn" id="23_p14cg"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_c/plant_c_root_top3d.tscn" id="25_snexm"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_b/plant_b_root_top3d.tscn" id="24_hi7xl"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/floor_marking/floor_marking_root_top3d.tscn" id="26_62hte"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen/server_rack_under_screen_root_top3d.tscn" id="27_6n0h6"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen_damaged/server_rack_under_screen_damaged_root_top3d.tscn" id="28_2yldy"]
@@ -36,6 +38,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_a/workstation_a_root_top3d.tscn" id="36_a3xon"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_b/workstation_b_root_top3d.tscn" id="37_jl63s"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_c/workstation_c_root_top3d.tscn" id="38_frftv"]
+[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=80850326]
 metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-ROOM-TYPE-LAYOUT"
@@ -63,6 +67,31 @@ metadata/source_mode = "live_expedition_runtime_static_extract"
 metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
 metadata/connection_port_count = 2
+metadata/authored_room_devices = true
+
+; 房间中央顶灯（Boss 房（boss_50x40，50×40）；初始灯亮）。
+; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
+; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
+;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
+;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
+[node name="RoomCeilingLight" type="Node3D" parent="." unique_id=471451826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, 0)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 37.599999999999994
+failing = false
+flicker_seed = 78153218
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = true
+metadata/authored_room_device = "ceiling_light"
+
+; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
+[node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1983006479]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -24.66, 0, 4.199997)
+script = ExtResource("901_authored_switch")
+metadata/authored_room_device = "light_switch"
 
 [node name="archive_shelf_00" parent="." unique_id=633247027 instance=ExtResource("1_pdc0s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, -0.058, 13)
@@ -75,7 +104,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="archive_shelf_02" parent="." unique_id=132590485 instance=ExtResource("1_pdc0s")]
-transform = Transform3D(0.016482515, -0.9684993, -0.24847011, 0.9998552, 0.01701615, 0, 0.0042280047, -0.24843414, 0.96863955, 23.588589, 1.0730814, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, -0.058, -2)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-ARCHIVE_SHELF"
 metadata/authored_slot_role = "room_type_component"
 
@@ -1010,6 +1039,86 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.9744, -0.058, -17)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-PLANT_A"
 metadata/authored_slot_role = "room_type_component"
 
+[node name="plant_01" type="Node3D" parent="." unique_id=917164477 instance=ExtResource("24_hi7xl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9744, -0.058, -7)
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-PLANT_B"
+metadata/asset_version = "v011"
+metadata/room_type = "BOSS_ROOM"
+metadata/component_slug = "plant_b"
+metadata/display_name_zh = "固定绿植（型 B）1.65×1.67×1.71m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_b/plant_b.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(1.6487, 1.7055, 1.6742)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-PLANT_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="plant_02" type="Node3D" parent="." unique_id=727564675 instance=ExtResource("25_snexm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9744, -0.058, 12)
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-PLANT_C"
+metadata/asset_version = "v011"
+metadata/room_type = "BOSS_ROOM"
+metadata/component_slug = "plant_c"
+metadata/display_name_zh = "固定绿植（型 C）1.65×1.67×1.69m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_c/plant_c.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(1.6487, 1.6891, 1.6742)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-PLANT_C"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="plant_03" type="Node3D" parent="." unique_id=1727999696 instance=ExtResource("23_p14cg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.9744, -0.058, 17)
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-PLANT_A"
+metadata/asset_version = "v011"
+metadata/room_type = "BOSS_ROOM"
+metadata/component_slug = "plant_a"
+metadata/display_name_zh = "固定绿植（型 A）1.65×1.67×1.71m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_a/plant_a.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(1.6487, 1.7098, 1.6742)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-PLANT_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="plant_04" type="Node3D" parent="." unique_id=807589747 instance=ExtResource("25_snexm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.0256, -0.058, -13)
+metadata/asset_id = "ENV-EXPEDITION-L01-BOSS-PLANT_C"
+metadata/asset_version = "v011"
+metadata/room_type = "BOSS_ROOM"
+metadata/component_slug = "plant_c"
+metadata/display_name_zh = "固定绿植（型 C）1.65×1.67×1.69m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/expedition/source/common_components/v011/component_packages/plant_c/plant_c.blend"
+metadata/origin_contract = "bottom_center"
+metadata/front_axis_blender = "-Y"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(1.6487, 1.6891, 1.6742)
+metadata/slot_role = "room_type_component"
+metadata/collision_owner = "self"
+metadata/collision_policy = "safe_box_proxy"
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-PLANT_C"
+metadata/authored_slot_role = "room_type_component"
+
 [node name="south_floor_marking" parent="." unique_id=1400216935 instance=ExtResource("26_62hte")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -0.024, 17.176)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-FLOOR_MARKING"
@@ -1085,14 +1194,6 @@ metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_THIN_5M"
-metadata/shadow_policy = "cast_and_receive"
-
-[node name="wall_skin_east_04" parent="." unique_id=1184062775 instance=ExtResource("32_8ks2c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.65, -0.308, -2.5)
-metadata/tower_wall_direction = "south"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="wall_skin_east_05" parent="." unique_id=597380839 instance=ExtResource("31_4kalg")]
@@ -1311,14 +1412,6 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M"
 metadata/authored_source_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_BEVELED_5M"
 metadata/shadow_policy = "cast_and_receive"
 
-[node name="wall_skin_west_04" parent="." unique_id=772619934 instance=ExtResource("32_8ks2c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.65, -0.308, -2.5)
-metadata/tower_wall_direction = "south"
-metadata/grid_unit_m = 5.0
-metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M"
-metadata/authored_source_component_id = "ENV-EXPEDITION-L01-BOSS-WALL_SKIN_ARMORED_BROKEN_5M"
-metadata/shadow_policy = "cast_and_receive"
-
 [node name="wall_skin_west_05" parent="." unique_id=1939277453 instance=ExtResource("31_4kalg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.65, -0.308, -7.5)
 metadata/tower_wall_direction = "south"
@@ -1354,7 +1447,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="west_damaged_01" parent="." unique_id=39476217 instance=ExtResource("35_r0f4l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.712, -0.228, -3.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.712, -0.228, -7.5)
 metadata/authored_component_id = "ENV-EXPEDITION-L01-BOSS-SERVER_RACK_COMPACT_DAMAGED"
 metadata/authored_slot_role = "room_type_component"
 

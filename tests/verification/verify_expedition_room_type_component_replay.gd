@@ -403,16 +403,33 @@ func _check_door_aperture(room_id: String, room: DungeonRoom3D, art_root: Node3D
 		var door := room.get_door_node(direction)
 		if door == null:
 			continue
-		var lane := art_root.transform.affine_inverse() * door.position
+		# 🔴 必须用**全局**坐标求车道：共享门由另一端房间 owner 创建，再经
+		# `DungeonRoom3D.bind_shared_door()` 挂进本房 `_door_nodes`（非 owner 端
+		# 不自建门节点）。此时 `door.position` 是**对方房间的局部坐标**，
+		# `art_root.transform.affine_inverse() * door.position` 会算到房间内部
+		# （2026-09-28 实测：boss 的 west 车道被算成 (20,0,-2.5)，盒子落在
+		#  archive_shelf_02 上、误报 18 个顶点封门）。改走 global 一律正确。
+		var lane := art_root.global_transform.affine_inverse() * door.global_position
 		var blocked := 0
+		var collided := 0
 		for child in art_root.get_children():
 			if not (child is Node3D):
 				continue
 			blocked += _count_vertices_in_door_clear_box(child as Node3D, art_root, direction, lane)
+			collided += _count_shapes_in_door_clear_box(child as Node3D, art_root, direction, lane)
 		_check(
 			blocked == 0,
 			"%s 的 %s 门位门洞被 %d 个顶点封住（门洞未通透）"
 			% [room_id, direction, blocked]
+		)
+		# 顶点检查对**简单盒体网格**是盲的：8 个角点全落在 5m 模块四角，窄窗（沿墙 ±1.05m）
+		# 内一个顶点都没有，可整块代孕碰撞盒却横跨门洞。2026-09-28 Boss 房门模块墙皮
+		# `WALL_SKIN_ARMORED_BROKEN_5M`（碰撞 0.36×11.8×4.925）实测正是如此：门洞视觉通透、
+		# 玩家走进去却被隐形盒挡住（「空阻挡」）。故必须与顶点检查互为补集，同时查碰撞盒。
+		_check(
+			collided == 0,
+			"%s 的 %s 门位门洞被 %d 个碰撞盒封住（空阻挡）"
+			% [room_id, direction, collided]
 		)
 
 
@@ -440,6 +457,69 @@ func _count_vertices_in_door_clear_box(
 				elif absf(local.z - lane.z) <= 1.05 and absf(local.x - lane.x) <= 0.4:
 					blocked += 1
 	return blocked
+
+
+## 门洞净空盒（art_root 局部）：沿墙轴 ±1.05m、法向 ±0.4m。
+## 与顶点检查同一口径：只覆盖墙带，不含站在门前的家具（家具角常探到法向 ±0.6m）。
+func _door_clear_box(direction: String, lane: Vector3, top: float) -> AABB:
+	var height := top - 0.15
+	if direction in ["north", "south"]:
+		return AABB(Vector3(lane.x - 1.05, 0.15, lane.z - 0.4), Vector3(2.10, height, 0.80))
+	return AABB(Vector3(lane.x - 0.4, 0.15, lane.z - 1.05), Vector3(0.80, height, 2.10))
+
+
+## 净空盒内与之相交的碰撞盒数（用形状 AABB 的保守包络求交；门墙分段件天然留出余量）。
+func _count_shapes_in_door_clear_box(
+	module: Node3D, art_root: Node3D, direction: String, lane: Vector3
+) -> int:
+	# 碰撞口径按「玩家能否通过」定：玩家胶囊高 1.5m ⇒ 取到 1.90m 留余量。
+	# 不用网格检查的 2.35m：门墙门楣的名义净高 2.5m 是相对墙底，墙件下沉 0.358m
+	# 落地后实际约 2.14m（玩家仍可通过），用 2.35 会把合法门楣判成阻挡。
+	var clear := _door_clear_box(direction, lane, 1.90)
+	var count := 0
+	for node in _collision_shapes_of(module):
+		var shape_node := node as CollisionShape3D
+		if shape_node == null or shape_node.shape == null:
+			continue
+		var to_art := _transform_relative_to_ancestor(shape_node, art_root)
+		if (to_art * _shape_aabb(shape_node.shape)).intersects(clear):
+			count += 1
+	return count
+
+
+## Shape3D 在 Godot 4 **没有** get_aabb()（调用会报 "Nonexistent function"）；
+## 必须按形状类型取尺寸。基础体走显式分支（组件库绝大多数是 BoxShape3D），
+## 其余退回调试网格包围盒。
+func _shape_aabb(shape: Shape3D) -> AABB:
+	if shape is BoxShape3D:
+		var box := (shape as BoxShape3D).size
+		return AABB(-box * 0.5, box)
+	if shape is SphereShape3D:
+		var r := (shape as SphereShape3D).radius
+		return AABB(Vector3(-r, -r, -r), Vector3(r * 2.0, r * 2.0, r * 2.0))
+	if shape is CapsuleShape3D:
+		var cap := shape as CapsuleShape3D
+		return AABB(
+			Vector3(-cap.radius, -cap.height * 0.5, -cap.radius),
+			Vector3(cap.radius * 2.0, cap.height, cap.radius * 2.0),
+		)
+	if shape is CylinderShape3D:
+		var cyl := shape as CylinderShape3D
+		return AABB(
+			Vector3(-cyl.radius, -cyl.height * 0.5, -cyl.radius),
+			Vector3(cyl.radius * 2.0, cyl.height, cyl.radius * 2.0),
+		)
+	var debug_mesh := shape.get_debug_mesh()
+	return debug_mesh.get_aabb() if debug_mesh != null else AABB()
+
+
+## 模块自身或后代的全部 CollisionShape3D（含根本身）。
+func _collision_shapes_of(module: Node3D) -> Array[Node]:
+	var shapes: Array[Node] = []
+	if module is CollisionShape3D:
+		shapes.append(module)
+	shapes.append_array(module.find_children("*", "CollisionShape3D", true, false))
+	return shapes
 
 
 ## 只用节点局部 Transform 累乘到指定祖先，离树节点图也可稳定验收。

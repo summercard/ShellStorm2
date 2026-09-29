@@ -1,0 +1,22 @@
+{
+  "asset_id": "UI-SCREEN-LEVEL-SELECT",
+  "asset_version": "v002",
+  "domain": "ui",
+  "status": "原型已接入",
+  "runtime_scene": "res://assets/art/ui/expedition_city/hologram_city.tscn",
+  "geometry_owner": "res://src/ui/HologramCity3D.gd",
+  "lifecycle_owner": "res://scenes/RogueMapSelectMenu.gd",
+  "level_ids": ["expedition_01", "99"],
+  "source_kind": "procedural_box_geometry",
+  "seed": 990129,
+  "world_scale": 0.09,
+  "opening_seconds": 4.4,
+  "city_start_seconds": 0.54,
+  "environment_fade_seconds": [1.936, 3.168],
+  "outer_buildings": 42,
+  "visual_revision": "r3",
+  "closing_seconds": 3.6,
+  "transition_particles": "six instanced cubes per construction front; hidden at rest",
+  "verification": "res://tests/verification/verify_expedition_hologram_city.tscn",
+  "reference_acceptance": "pending_user_visual_review"
+}

@@ -185,42 +185,17 @@ func _verify_level_plan_rooms(failures: Array[String]) -> void:
 # —— 3) 99F 远征情报室入口按钮 ——
 
 func _verify_menu_entry(failures: Array[String]) -> void:
-	var menu_scene := load(MENU_SCENE) as PackedScene
-	if menu_scene == null:
-		failures.append("RogueMapSelectMenu.tscn 加载失败")
-		return
-	var menu := menu_scene.instantiate() as CanvasLayer
-	if menu == null:
-		failures.append("RogueMapSelectMenu 实例化失败")
-		return
-	add_child(menu)
+	var fixture: Dictionary = preload("res://tests/verification/helpers/hologram_city_fixture.gd").create(self)
+	var menu: RogueMapSelectMenu = fixture.menu
 	await get_tree().process_frame
-
-	# 默认关卡那一段必须原样保留（本次改动只允许「追加」，不允许「替换」）。
-	var map_view := menu.find_child("MapView", true, false) as VBoxContainer
-	if map_view == null or map_view.get_child_count() != 5:
-		failures.append("远征情报室的默认版图行数被改动：%d" % (
-			map_view.get_child_count() if map_view != null else -1
-		))
-	var teleport := menu.find_child("TeleportButton", true, false) as Button
-	if teleport == null or not teleport.text.contains("远征"):
-		failures.append("默认传送按钮被改动：%s" % (teleport.text if teleport != null else "<缺失>"))
-	elif teleport.text.contains(LEVEL_DISPLAY_NAME):
-		failures.append("默认传送按钮被改成了测试关卡99 的入口：%s" % teleport.text)
-
-	# 本关卡的入口按钮：节点名按关卡 id 生成，验收才能稳定命中。
-	var enter := menu.find_child("EnterLevelButton_%s" % LEVEL_ID, true, false) as Button
-	if enter == null:
-		failures.append("远征情报室缺少「进入%s」按钮" % LEVEL_DISPLAY_NAME)
-	else:
-		if not enter.text.contains(LEVEL_DISPLAY_NAME):
-			failures.append("关卡99 入口按钮文案不正确：%s" % enter.text)
-		if enter.pressed.get_connections().size() <= 0:
-			failures.append("关卡99 入口按钮没有接任何处理函数")
-	# 说明行必须来自关卡清单，而不是菜单里再抄一份关卡名。
-	var heading := menu.find_child("AlternateLevelHeading_%s" % LEVEL_ID, true, false) as Label
-	if heading == null or heading.text != LEVEL_DISPLAY_NAME:
-		failures.append("关卡99 入口说明标题不正确：%s" % (heading.text if heading != null else "<缺失>"))
+	if menu.LEVEL_IDS != ["expedition_01", "99"]:
+		failures.append("两座楼的目的关卡ID映射错误")
+	if menu._city == null or menu._city.labels.size() != 2:
+		failures.append("城市缺少两座入口楼")
+	elif menu._city.labels[1].text != LEVEL_DISPLAY_NAME:
+		failures.append("99入口名称未读取关卡清单")
+	if not menu.find_children("*", "Control", true, false).is_empty():
+		failures.append("99入口仍使用平面按钮")
 
 	# 待进入态契约：菜单登记 → 读取界面取值。这里只验机制，不真的点按钮
 	# （点了会 change_scene_to_file，把本验收场景整个换掉）。
@@ -243,6 +218,8 @@ func _verify_menu_entry(failures: Array[String]) -> void:
 
 	if is_instance_valid(menu):
 		menu.queue_free()
+	await get_tree().process_frame
+	fixture.host.queue_free()
 	await get_tree().process_frame
 
 

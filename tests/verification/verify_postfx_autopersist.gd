@@ -17,9 +17,11 @@ const PERSIST_PATH := "user://postfx_tuning.json"
 
 const PROBE_BRIGHTNESS := 1.37
 const PROBE_SATURATION := 0.42
+const PROBE_BASE_FOG := 0.0165
+const PROBE_BASE_VOLUMETRIC_FOG := 0.0045
 const PROBE_TAMPERED := 0.63
-# 实际断言数：brightness / saturation / restored_brightness / restored_saturation / tampered
-const MIN_CHECKS := 5
+# 实际断言数：原两项 + 基地雾两项的写入/恢复 + tampered + 第三页可用。
+const MIN_CHECKS := 10
 
 var _checks := 0
 var _original_exists := false
@@ -45,6 +47,8 @@ func _run() -> void:
 	# ---------- 正向：改动 -> 防抖 -> 落盘 ----------
 	panel._postfx_brightness_slider.value = PROBE_BRIGHTNESS
 	panel._postfx_saturation_slider.value = PROBE_SATURATION
+	panel._base_fog_density_slider.value = PROBE_BASE_FOG
+	panel._base_volumetric_fog_density_slider.value = PROBE_BASE_VOLUMETRIC_FOG
 	# 必须大于 FlashlightColorTweaker.PERSIST_DEBOUNCE_SECONDS(0.4)。
 	await get_tree().create_timer(0.9).timeout
 
@@ -55,6 +59,14 @@ func _run() -> void:
 	if not _expect(written.get("debug_postfx_adjustment_brightness", null), PROBE_BRIGHTNESS, "brightness_persisted"):
 		return
 	if not _expect(written.get("debug_postfx_adjustment_saturation", null), PROBE_SATURATION, "saturation_persisted"):
+		return
+	if not _expect(written.get("debug_base_interior_fog_density", null), PROBE_BASE_FOG, "base_fog_persisted"):
+		return
+	if not _expect(
+		written.get("debug_base_interior_volumetric_fog_density", null),
+		PROBE_BASE_VOLUMETRIC_FOG,
+		"base_volumetric_fog_persisted"
+	):
 		return
 
 	# ---------- 反向对照 A：内存清空，值只能从文件回来 ----------
@@ -69,6 +81,19 @@ func _run() -> void:
 	if not _expect(panel2._postfx_brightness_slider.value, PROBE_BRIGHTNESS, "restored_brightness_from_file"):
 		return
 	if not _expect(panel2._postfx_saturation_slider.value, PROBE_SATURATION, "restored_saturation_from_file"):
+		return
+	if not _expect(panel2._base_fog_density_slider.value, PROBE_BASE_FOG, "restored_base_fog_from_file"):
+		return
+	if not _expect(
+		panel2._base_volumetric_fog_density_slider.value,
+		PROBE_BASE_VOLUMETRIC_FOG,
+		"restored_base_volumetric_fog_from_file"
+	):
+		return
+	_checks += 1
+	var base_fog_button := panel2._tab_buttons.get(FlashlightColorTweaker.TabId.BASE_FOG) as Button
+	if base_fog_button == null or base_fog_button.disabled:
+		_fail("base_fog_tab_not_enabled")
 		return
 
 	# ---------- 反向对照 B：改文件 -> 读回必须跟着变 ----------

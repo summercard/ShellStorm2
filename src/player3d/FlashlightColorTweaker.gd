@@ -1,7 +1,7 @@
 class_name FlashlightColorTweaker
 extends PanelContainer
-## 实时调参面板：顶部 tab 菜单在「调整灯光」与「后处理」之间切换，
-## 留 2 个预留位。P 键整体切显隐。
+## 实时调参面板：顶部 tab 菜单在「调整灯光」「后处理」「基地雾气」之间切换，
+## 留 1 个预留位。P 键整体切显隐。
 ##
 ## 灯光 tab：ForwardBeam / EnvironmentSpill / AvatarFrontFill 三盏灯
 ##   的 color + energy，通过 PlayerFlashlight3D 的公开 setter 同时写
@@ -57,12 +57,16 @@ const TV_GLOW_HDR_SCALE_MIN := 0.0
 const TV_GLOW_HDR_SCALE_MAX := 4.0
 const TV_GLOW_HDR_SCALE_STEP := 0.01
 
-enum TabId { LIGHT, POSTFX, RESERVED_2, RESERVED_3 }
+const BASE_FOG_DENSITY_MIN := 0.0
+const BASE_FOG_DENSITY_MAX := 0.05
+const BASE_FOG_DENSITY_STEP := 0.0005
+
+enum TabId { LIGHT, POSTFX, BASE_FOG, RESERVED_3 }
 
 const TAB_LABELS := {
 	TabId.LIGHT: "调整灯光",
 	TabId.POSTFX: "后处理",
-	TabId.RESERVED_2: "预留",
+	TabId.BASE_FOG: "基地雾气",
 	TabId.RESERVED_3: "预留",
 }
 
@@ -121,6 +125,12 @@ var _postfx_tv_glow_hdr_threshold_slider: HSlider
 var _postfx_tv_glow_hdr_threshold_label: Label
 var _postfx_tv_glow_hdr_scale_slider: HSlider
 var _postfx_tv_glow_hdr_scale_label: Label
+
+# 基地雾气 tab 控件引用
+var _base_fog_density_slider: HSlider
+var _base_fog_density_label: Label
+var _base_volumetric_fog_density_slider: HSlider
+var _base_volumetric_fog_density_label: Label
 
 # tab 容器 / 按钮
 var _tab_buttons: Dictionary = {}
@@ -228,6 +238,14 @@ func _sync_postfx_from_manager() -> void:
 	_postfx_tv_glow_strength_slider.value = float(snap.get("debug_postfx_tv_glow_strength", 0.92))
 	_postfx_tv_glow_hdr_threshold_slider.value = float(snap.get("debug_postfx_tv_glow_hdr_threshold", 1.08))
 	_postfx_tv_glow_hdr_scale_slider.value = float(snap.get("debug_postfx_tv_glow_hdr_scale", 1.65))
+	_base_fog_density_slider.value = float(snap.get(
+		"debug_base_interior_fog_density",
+		TowerAtmosphere3D.BASE_INTERIOR_FOG_DENSITY
+	))
+	_base_volumetric_fog_density_slider.value = float(snap.get(
+		"debug_base_interior_volumetric_fog_density",
+		TowerAtmosphere3D.BASE_INTERIOR_VOLUMETRIC_FOG_DENSITY
+	))
 	_block_postfx_signals(false)
 	_refresh_postfx_value_labels()
 	_refresh_postfx_controls_enabled()
@@ -258,6 +276,8 @@ func _refresh_postfx_value_labels() -> void:
 	_postfx_tv_glow_strength_label.text = "%.2f" % _postfx_tv_glow_strength_slider.value
 	_postfx_tv_glow_hdr_threshold_label.text = "%.2f" % _postfx_tv_glow_hdr_threshold_slider.value
 	_postfx_tv_glow_hdr_scale_label.text = "%.2f" % _postfx_tv_glow_hdr_scale_slider.value
+	_base_fog_density_label.text = "%.4f" % _base_fog_density_slider.value
+	_base_volumetric_fog_density_label.text = "%.4f" % _base_volumetric_fog_density_slider.value
 
 func _refresh_postfx_controls_enabled() -> void:
 	# 「色彩调整」总开关仅负责 brightness/contrast/saturation 三件套。
@@ -304,6 +324,8 @@ func _block_postfx_signals(block: bool) -> void:
 	_postfx_tv_glow_strength_slider.set_block_signals(block)
 	_postfx_tv_glow_hdr_threshold_slider.set_block_signals(block)
 	_postfx_tv_glow_hdr_scale_slider.set_block_signals(block)
+	_base_fog_density_slider.set_block_signals(block)
+	_base_volumetric_fog_density_slider.set_block_signals(block)
 
 func _get_debug_postfx_snapshot() -> Dictionary:
 	if GraphicsSettingsManager != null and GraphicsSettingsManager.has_method("get_debug_postfx_snapshot"):
@@ -350,6 +372,7 @@ func _build_ui() -> void:
 
 	_build_light_page(root)
 	_build_postfx_page(root)
+	_build_base_fog_page(root)
 	root.add_child(HSeparator.new())
 
 	var reset_btn := Button.new()
@@ -360,13 +383,13 @@ func _build_ui() -> void:
 
 	var clear_postfx_btn := Button.new()
 	clear_postfx_btn.name = "ClearPostfxButton"
-	clear_postfx_btn.text = "清除后处理调试覆盖"
+	clear_postfx_btn.text = "清除后处理 / 基地雾气调试覆盖"
 	clear_postfx_btn.pressed.connect(_on_clear_postfx_pressed)
 	root.add_child(clear_postfx_btn)
 
 	var export_postfx_btn := Button.new()
 	export_postfx_btn.name = "ExportPostfxButton"
-	export_postfx_btn.text = "导出当前后处理参数（剪贴板 + 日志）"
+	export_postfx_btn.text = "导出当前调试参数（剪贴板 + 日志）"
 	export_postfx_btn.pressed.connect(_on_export_postfx_pressed)
 	root.add_child(export_postfx_btn)
 
@@ -380,14 +403,14 @@ func _build_tab_bar(parent: Container) -> void:
 	bar.name = "TabBar"
 	bar.add_theme_constant_override("separation", 6)
 	parent.add_child(bar)
-	for tab_id in [TabId.LIGHT, TabId.POSTFX, TabId.RESERVED_2, TabId.RESERVED_3]:
+	for tab_id in [TabId.LIGHT, TabId.POSTFX, TabId.BASE_FOG, TabId.RESERVED_3]:
 		var btn := Button.new()
 		btn.name = "TabButton_%d" % int(tab_id)
 		btn.text = TAB_LABELS[tab_id]
 		btn.toggle_mode = true
 		btn.focus_mode = Control.FOCUS_NONE
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		btn.disabled = tab_id == TabId.RESERVED_2 or tab_id == TabId.RESERVED_3
+		btn.disabled = tab_id == TabId.RESERVED_3
 		btn.pressed.connect(_on_tab_button_pressed.bind(tab_id))
 		bar.add_child(btn)
 		_tab_buttons[tab_id] = btn
@@ -541,6 +564,35 @@ func _build_postfx_page(parent: Container) -> void:
 	)
 	_postfx_tv_glow_hdr_scale_label = _find_value_label_for(_postfx_tv_glow_hdr_scale_slider)
 	_postfx_tv_glow_hdr_scale_slider.value_changed.connect(_on_tv_glow_hdr_scale_changed)
+
+
+func _build_base_fog_page(parent: Container) -> void:
+	var page := VBoxContainer.new()
+	page.name = "BaseFogPage"
+	page.add_theme_constant_override("separation", 8)
+	parent.add_child(page)
+	_tab_pages[TabId.BASE_FOG] = page
+
+	var title := Label.new()
+	title.text = "99F 基地室内环境雾"
+	page.add_child(title)
+
+	var hint := Label.new()
+	hint.text = "只调整基地建筑内部；三扇门外仍保持距离雾 0.030 / 体积雾 0.009。"
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	page.add_child(hint)
+
+	_base_fog_density_slider = _add_slider_row(
+		page, "距离雾密度", BASE_FOG_DENSITY_MIN, BASE_FOG_DENSITY_MAX, BASE_FOG_DENSITY_STEP
+	)
+	_base_fog_density_label = _find_value_label_for(_base_fog_density_slider)
+	_base_fog_density_slider.value_changed.connect(_on_base_fog_density_changed)
+
+	_base_volumetric_fog_density_slider = _add_slider_row(
+		page, "体积雾密度", BASE_FOG_DENSITY_MIN, BASE_FOG_DENSITY_MAX, BASE_FOG_DENSITY_STEP
+	)
+	_base_volumetric_fog_density_label = _find_value_label_for(_base_volumetric_fog_density_slider)
+	_base_volumetric_fog_density_slider.value_changed.connect(_on_base_volumetric_fog_density_changed)
 
 # 生成一行：[标签] [HSlider] [数值]，返回 HSlider 引用；
 # 数值 Label 用唯一名挂在 row 内，便于 _find_value_label_for 反查。
@@ -787,6 +839,23 @@ func _on_tv_glow_hdr_scale_changed(value: float) -> void:
 	if GraphicsSettingsManager != null:
 		GraphicsSettingsManager.set_debug_postfx("debug_postfx_tv_glow_hdr_scale", value)
 
+
+# ---------- 99F 基地室内雾 ----------
+
+func _on_base_fog_density_changed(value: float) -> void:
+	_base_fog_density_label.text = "%.4f" % value
+	if GraphicsSettingsManager != null:
+		GraphicsSettingsManager.set_debug_postfx("debug_base_interior_fog_density", value)
+
+
+func _on_base_volumetric_fog_density_changed(value: float) -> void:
+	_base_volumetric_fog_density_label.text = "%.4f" % value
+	if GraphicsSettingsManager != null:
+		GraphicsSettingsManager.set_debug_postfx(
+			"debug_base_interior_volumetric_fog_density",
+			value
+		)
+
 func _on_clear_postfx_pressed() -> void:
 	if GraphicsSettingsManager != null:
 		GraphicsSettingsManager.clear_debug_postfx()
@@ -799,7 +868,7 @@ func _on_clear_postfx_pressed() -> void:
 
 
 # ---------- 当前参数导出 ----------
-# 把后处理 tab 的全部控件值导出成一行 JSON，同时走三条通道：
+# 把后处理与基地雾气 tab 的全部控件值导出成一行 JSON，同时走三条通道：
 #   1) 控制台带 [POSTFX-EXPORT] 前缀（便于日志 grep）
 #   2) 系统剪贴板（Ctrl+V 即可粘贴）
 #   3) user://postfx_export.json（便于外部脚本直接读文件）
@@ -824,6 +893,8 @@ func _collect_postfx_params() -> Dictionary:
 		"debug_postfx_tv_glow_strength": _postfx_tv_glow_strength_slider.value,
 		"debug_postfx_tv_glow_hdr_threshold": _postfx_tv_glow_hdr_threshold_slider.value,
 		"debug_postfx_tv_glow_hdr_scale": _postfx_tv_glow_hdr_scale_slider.value,
+		"debug_base_interior_fog_density": _base_fog_density_slider.value,
+		"debug_base_interior_volumetric_fog_density": _base_volumetric_fog_density_slider.value,
 		# 色相与噪点实际走 PostfxOverlay autoload 的全屏 shader，
 		# Environment 没有对应属性；这里沿用 overlay 自己的键名。
 		"hue_shift": _postfx_hue_slider.value,
@@ -836,7 +907,7 @@ func _on_export_postfx_pressed() -> void:
 	var line := _write_persist_file()
 	print("[POSTFX-EXPORT] %s" % line)
 	DisplayServer.clipboard_set(line)
-	_status_label.text = "后处理参数已导出 · 剪贴板 + 日志 + %s" % POSTFX_PERSIST_PATH
+	_status_label.text = "调试参数已导出 · 剪贴板 + 日志 + %s" % POSTFX_PERSIST_PATH
 
 # ---------- 后处理参数自动持久化 ----------
 # 面板里任何后处理改动都会在静默 PERSIST_DEBOUNCE_SECONDS 后写入
@@ -844,7 +915,7 @@ func _on_export_postfx_pressed() -> void:
 # 也就是“调完不用再点导出，下次进游戏画面还是这一套”。
 # 导出按钮仍然保留：它额外负责打印到控制台 + 复制到剪贴板，便于把这一套给别人。
 #
-# 范围只含后处理（Environment 侧 + PostfxOverlay 侧）；手电三盏不属于滤镜，不参与。
+# 范围含后处理与基地室内雾；手电三盏不属于该配置，不参与。
 
 const PERSIST_DEBOUNCE_SECONDS := 0.4
 
@@ -874,6 +945,8 @@ func _setup_postfx_persist() -> void:
 		_postfx_tv_glow_strength_slider,
 		_postfx_tv_glow_hdr_threshold_slider,
 		_postfx_tv_glow_hdr_scale_slider,
+		_base_fog_density_slider,
+		_base_volumetric_fog_density_slider,
 	]:
 		(slider as HSlider).value_changed.connect(_on_postfx_param_touched)
 	for toggle in [_postfx_adjustment_toggle, _postfx_grain_toggle, _postfx_tv_toggle]:

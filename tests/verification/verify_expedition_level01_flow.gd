@@ -243,61 +243,26 @@ func _verify_catalog_and_menu(failures: Array[String]) -> void:
 	if str(def.get("action_path", "")) != MENU_SCENE:
 		failures.append("mission_operations 目标菜单不是 RogueMapSelectMenu：%s" % str(def.get("action_path", "")))
 
-	var menu_scene := load(MENU_SCENE) as PackedScene
-	if menu_scene == null:
-		failures.append("RogueMapSelectMenu.tscn 加载失败")
-		return
-	var menu := menu_scene.instantiate() as CanvasLayer
-	if menu == null:
-		failures.append("RogueMapSelectMenu 实例化失败")
-		return
-	add_child(menu)
+	var fixture: Dictionary = preload("res://tests/verification/helpers/hologram_city_fixture.gd").create(self)
+	var menu: RogueMapSelectMenu = fixture.menu
 	await get_tree().process_frame
-
 	var consts := _script_constants(menu)
 	if str(consts.get("LOADING_SCENE", "")) != LOADING_SCENE:
-		failures.append("远征情报室没有先进入读取界面：LOADING_SCENE=%s" % str(consts.get("LOADING_SCENE", "")))
+		failures.append("全息城市未沿用读取界面")
 	if str(consts.get("LEVEL_SCENE", "")) != EXPEDITION_SCENE:
-		failures.append("远征情报室关卡目标不是远征关卡01：LEVEL_SCENE=%s" % str(consts.get("LEVEL_SCENE", "")))
-
-	var title := menu.find_child("Title", true, false) as Label
-	if title == null or not title.text.contains("远征关卡01"):
-		failures.append("远征情报室标题未标明远征关卡01：%s" % (title.text if title != null else "<缺失>"))
-	var desc := menu.find_child("Description", true, false) as Label
-	if desc == null or not desc.text.contains("单层独立行动"):
-		failures.append("远征情报室说明未描述单层独立行动")
-	var map_view := menu.find_child("MapView", true, false) as VBoxContainer
-	if map_view == null or map_view.get_child_count() != 5:
-		failures.append(
-			"远征情报室版图行数不是 5：%d" % (map_view.get_child_count() if map_view != null else -1)
-		)
-	var menu_panel := menu.find_child("Panel", true, false) as Control
-	if menu_panel == null:
-		failures.append("RogueMapSelectMenu 缺少主面板")
-	else:
-		var viewport_center := get_viewport().get_visible_rect().size * 0.5
-		var panel_center := menu_panel.get_global_rect().get_center()
-		if not panel_center.is_equal_approx(viewport_center):
-			failures.append("RogueMapSelectMenu 主面板未居中：panel=%s viewport=%s" % [panel_center, viewport_center])
-	var teleport := menu.find_child("TeleportButton", true, false) as Button
-	if teleport == null or not teleport.text.contains("远征"):
-		failures.append("RogueMapSelectMenu 缺少远征传送按钮")
-	var close_btn := menu.find_child("CloseButton", true, false) as Button
-	if close_btn == null:
-		failures.append("RogueMapSelectMenu 缺少关闭按钮")
-	elif not close_btn.pressed.is_connected(menu._on_close_pressed):
-		failures.append("RogueMapSelectMenu 关闭按钮未连接关闭逻辑")
-	else:
-		close_btn.pressed.emit()
-		await get_tree().process_frame
-		if is_instance_valid(menu):
-			failures.append("RogueMapSelectMenu 关闭按钮未释放菜单")
+		failures.append("默认目标不是远征01")
+	if not menu.find_children("*", "Control", true, false).is_empty():
+		failures.append("全息城市残留平面UI")
+	if menu._city == null or menu._city.markers.size() != 2:
+		failures.append("缺少两个立体入口")
+	elif menu._city.labels[0].text != "远征关卡01":
+		failures.append("默认入口未从关卡目录读取名称")
+	menu.request_close()
+	await get_tree().create_timer(0.15).timeout
 	if is_instance_valid(menu):
-		menu.queue_free()
+		failures.append("关闭未完成相机返程")
+	fixture.host.queue_free()
 	await get_tree().process_frame
-
-
-# —— 2) 读取界面 ——
 
 func _verify_loading_screen(failures: Array[String]) -> void:
 	if not ResourceLoader.exists(LOADING_SCENE, "PackedScene"):

@@ -4,7 +4,7 @@ extends Node
 ## 也没有可触发的按钮 ⇒ 手柄在整个子界面里完全无效。
 
 const MENUS := [
-	"res://scenes/RogueMapSelectMenu.tscn",
+	# Spatial expedition input is covered by verify_expedition_hologram_city.
 	"res://scenes/WorkshopMenu.tscn",
 	"res://scenes/VaultMenu.tscn",
 	"res://scenes/MonsterArchiveMenu.tscn",

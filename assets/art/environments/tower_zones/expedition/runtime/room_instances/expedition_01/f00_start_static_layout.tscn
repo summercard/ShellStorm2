@@ -21,6 +21,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/office_planter/office_planter_root_top3d.tscn" id="19_i86jp"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/maintenance_chair/maintenance_chair_root_top3d.tscn" id="20_jee1a"]
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn" id="21_k60l7"]
+[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1285477218]
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
@@ -46,6 +48,31 @@ metadata/source_mode = "live_expedition_runtime_static_extract"
 metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
 metadata/connection_port_count = 2
+metadata/authored_room_devices = true
+
+; 房间中央顶灯（入口安全房（STAIR_LOBBY v007，15×15，整房 yaw −90°）；初始灯亮）。
+; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
+; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
+;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
+;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
+[node name="RoomCeilingLight" type="Node3D" parent="." unique_id=724705899]
+transform = Transform3D(1.1924881e-08, 0, 1, 0, 1, 0, -1, 0, 1.1924881e-08, 0, 9.28, 0)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 14.62
+failing = false
+flicker_seed = 77001199
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = true
+metadata/authored_room_device = "ceiling_light"
+
+; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
+[node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=455574809]
+transform = Transform3D(-1, 0, -3.1786506e-08, 0, 1, 0, 3.1786506e-08, 0, -1, -3.2999997, 0, -7.16)
+script = ExtResource("901_authored_switch")
+metadata/authored_room_device = "light_switch"
 
 [node name="SafeRoomWall_North_Solid" type="Node3D" parent="." unique_id=773283510 instance=ExtResource("1_2waf1")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -7.5)

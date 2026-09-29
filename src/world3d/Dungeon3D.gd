@@ -1227,15 +1227,17 @@ func _build_reference_main_hud() -> void:
 	# 远征 01 门未开诊断、奖励落地回执、有限弹药）都读它的 text，隐藏不影响那些断言。
 	info_panel.visible = false
 
-	# 2026-09-28 主人要求：底部这一整条的框也去掉。三块面板（QuickItemHUD_0 /
-	# CurrentWeaponPanel / QuickItemHUD_1）的背板都是两层 —— 深色底+描边
-	# （换成全透明 _make_bare_hud_style）与青色四角括号（_add_neon_frame 调用已删除）。
-	# 内层 MarginContainer(8,5,8,4) 仍是唯一内边距来源 ⇒ 图标与文字位置一字不动。
+	# 2026-09-28 主人要求（第五轮）：武器栏精简并**挪到右下角**。只保留三项有效信息 ——
+	# 枪械模型图标、当前子弹数 · N备弹、命运卡槽占用（0/4）；武器名与「实例 #… · K 详情」
+	# 两行不再显示；字号放大。背板口径不变：仍是全透明外壳（_make_bare_hud_panel），
+	# 下方 QuickItemHUD_0/1 两块保持原位不动。
 	var weapon_panel := _make_bare_hud_panel()
 	weapon_panel.name = "CurrentWeaponPanel"
-	_anchor_control(weapon_panel, 0.5, 1.0, 0.5, 1.0, -156, -79, 156, -20)
+	# 右下角。offset 仍是 canvas 坐标、且会被 ×HUD_UI_SCALE：350×70 → 实际 280×56，
+	# 落在 verify_finite_ammo_flow 的「250..312 × 44..59」尺寸契约内（内容更小 ⇒ 由锚框决定）。
+	_anchor_control(weapon_panel, 1.0, 1.0, 1.0, 1.0, -368, -90, -18, -20)
 	_reference_hud_root.add_child(weapon_panel)
-	# 中央武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）
+	# 右下武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）
 	weapon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	weapon_panel.tooltip_text = "点击切换主/副武器"
 	weapon_panel.gui_input.connect(_on_weapon_panel_gui_input.bind(weapon_panel))
@@ -1243,37 +1245,41 @@ func _build_reference_main_hud() -> void:
 	weapon_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_panel.add_child(weapon_margin)
 	var weapon_row := HBoxContainer.new()
-	weapon_row.add_theme_constant_override("separation", _hud_int(7))
+	# 内容靠右贴角：面板宽度由锚框（280）撑住，内容只有约 200 ⇒ 右侧对齐才不会飘在中间。
+	weapon_row.alignment = BoxContainer.ALIGNMENT_END
+	weapon_row.add_theme_constant_override("separation", _hud_int(10))
 	weapon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_margin.add_child(weapon_row)
 	_hud_weapon_model_icon = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
 	_hud_weapon_model_icon.name = "CurrentWeaponModelIcon3D"
-	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(58, 41))
+	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(64, 46))
 	_hud_weapon_model_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_hud_weapon_model_icon.set_camera_size_multiplier(0.34)
 	_hud_weapon_model_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(_hud_weapon_model_icon)
 	_refresh_hud_weapon_model(true)
-	var weapon_text := VBoxContainer.new()
-	weapon_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	weapon_text.add_theme_constant_override("separation", _hud_int(2))
-	weapon_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	weapon_row.add_child(weapon_text)
-	_hud_weapon_meta_label = _make_hud_label("当前武器 · 未装备", 9, Color(0.92, 0.95, 0.98))
-	_hud_weapon_meta_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	weapon_text.add_child(_hud_weapon_meta_label)
-	_hud_weapon_fate_label = _make_hud_label("实例 ------ · 命运 0/0 · K 详情", 7, Color(0.48, 0.84, 0.94))
-	_hud_weapon_fate_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	weapon_text.add_child(_hud_weapon_fate_label)
-	ammo_label = _make_hud_label("0 / 0", 17, Color.WHITE)
-	ammo_label.custom_minimum_size = _hud_size(Vector2(67, 37))
-	ammo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# 有效信息一：当前子弹数 · N备弹（不再显示弹匣容量）。font 26×0.8 → 21 px。
+	ammo_label = _make_hud_label("0 · 0备弹", 26, Color.WHITE)
+	ammo_label.custom_minimum_size = _hud_size(Vector2(96, 44))
 	ammo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ammo_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(ammo_label)
-	# 撤掉背板后文字直接压在实景上：底栏这三处（武器名/命运行/弹药数）原先是深色底
-	# 保证可读，现在只靠描边。口径与 _outline_labels 的注释一致：不占像素、不改布局。
-	_outline_labels([_hud_weapon_meta_label, _hud_weapon_fate_label, ammo_label])
+	# 有效信息二：命运卡槽占用，只留「已用/容量」。青色小号，与左边白色弹药数区分开。
+	_hud_weapon_fate_label = _make_hud_label("0/0", 15, Color(0.48, 0.84, 0.94))
+	_hud_weapon_fate_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_hud_weapon_fate_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	weapon_row.add_child(_hud_weapon_fate_label)
+	# 武器名（[N] 名称 · 主/副武器）：主人要求「其它文字不要」⇒ 不再显示。
+	# 但节点保留在树上并继续接收 weapon_meta_text —— Presenter 的只读投影契约
+	# （verify_hud_presenter_3d）要求该字段逐字产出，删节点会让写入路径空引用。
+	# 挂在面板（而非 weapon_row）下且不可见 ⇒ 容器布局跳过不可见子节点，不占一格。
+	_hud_weapon_meta_label = _make_hud_label("当前武器 · 未装备", 9, Color(0.92, 0.95, 0.98))
+	_hud_weapon_meta_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hud_weapon_meta_label.visible = false
+	weapon_panel.add_child(_hud_weapon_meta_label)
+	# 撤掉背板后文字直接压在实景上：这两处（弹药数/命运槽）原先靠深色底保证可读，现只靠描边。
+	# 口径与 _outline_labels 的注释一致：不占像素、不改布局。
+	_outline_labels([ammo_label, _hud_weapon_fate_label])
 	for quick_index in range(2):
 		var quick_panel := _make_bare_hud_panel()
 		quick_panel.name = "QuickItemHUD_%d" % quick_index
@@ -6058,13 +6064,25 @@ func _refresh_hud_weapon_model(force := false) -> void:
 func _apply_weapon_hud_command(command: Dictionary) -> void:
 	if ammo_label != null:
 		var ammo_text := str(command.get("ammo_text", "0 / 0"))
-		if _inventory != null and not ammo_text.begins_with("近战"):
-			ammo_text += " · %d备弹" % _get_reserve_ammo_count()
-		ammo_label.text = ammo_text
+		if ammo_text.begins_with("近战"):
+			# 近战武器没有弹药口径，沿用 Presenter 的「近战 · 三段」。
+			ammo_label.text = ammo_text
+		else:
+			# 2026-09-28 主人要求：不再显示弹匣容量（原「子弹 / 总弹药 · N备弹」），
+			# 只留「当前子弹数 · N备弹」。当前值走结构化字段 ammo_current，不解析字符串。
+			var ammo_display := "%d" % int(command.get("ammo_current", 0))
+			if _inventory != null:
+				ammo_display += " · %d备弹" % _get_reserve_ammo_count()
+			ammo_label.text = ammo_display
 	if _hud_weapon_meta_label != null:
+		# 面板上已不显示（visible=false），但仍按只读投影契约逐字接收文本。
 		_hud_weapon_meta_label.text = str(command.get("weapon_meta_text", "当前武器 · 未装备"))
 	if _hud_weapon_fate_label != null:
-		_hud_weapon_fate_label.text = str(command.get("weapon_fate_text", "实例 ------ · 命运 0/0 · K 详情"))
+		# 只留命运卡槽占用「已用/容量」，去掉「实例 #… · 命运 … · K 详情」整行。
+		_hud_weapon_fate_label.text = "%d/%d" % [
+			int(command.get("fate_slot_used", 0)),
+			int(command.get("fate_slot_capacity", 0)),
+		]
 	if _hud_weapon_model_icon == null:
 		return
 	match str(command.get("model_action", "keep")):

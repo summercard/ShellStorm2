@@ -7,7 +7,23 @@ const TOWER_DOOR_LEAF_PREFAB: PackedScene = preload(
 )
 const RUN_SEED := 77001199
 const OUTPUT_ROOT := "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01"
-const ROOM_IDS := [
+const ROOM_IDS: Array[String] = [
+	"start", "room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
+	"room_07", "room_08", "room_09", "room_10", "boss", "extraction",
+]
+## 已经「静态布局自持房间灯 + 墙面开关」的房间。
+##
+## 这些房间的房间灯（`WastelandLight3D`）与墙面开关（`RoomLightSwitch3D`）不再是运行时
+## 自建对象，而是静态 TSCN 的直接子节点 —— 美术能在编辑器里手动调整它们的位置与数值。
+## 已**全部 13 房**（远征01 无遗漏）：`start`、`room_01`…`room_10`、`boss`、`extraction`。
+## 2026-09-29 从 room_01/room_02 两房推广到全量 —— 由
+## `scripts/patch_expedition01_room_authored_devices.py` 按运行时实测真值逐房外科式插入完成。
+##
+## 每迁一户往这里加一行，重跑生成器即落地；不在名单里的房间逐字走原路径（运行时自建）。
+##
+## 🔴 单一真源：验收探针 `probe_expedition_room_authored_light_devices.gd` 直接读这个
+## 常量（`TARGET_ROOMS` 由它派生），不要在两处各维护一份名单。
+const AUTHORED_DEVICE_ROOMS: Array[String] = [
 	"start", "room_01", "room_02", "room_03", "room_04", "room_05", "room_06",
 	"room_07", "room_08", "room_09", "room_10", "boss", "extraction",
 ]
@@ -17,6 +33,14 @@ var failures: Array[String] = []
 func _ready() -> void:
 	var previous_static_layout_mode: bool = ROOM_SCRIPT.use_expedition_static_layout_scenes
 	ROOM_SCRIPT.use_expedition_static_layout_scenes = false
+	var room_ids := _selected_room_ids()
+	if room_ids.is_empty():
+		_fail("没有选中任何房间（SS_STATIC_ROOMS 可能写错了房间名）")
+		ROOM_SCRIPT.use_expedition_static_layout_scenes = previous_static_layout_mode
+		for failure in failures:
+			print("FAIL %s" % failure)
+		get_tree().quit(1)
+		return
 	var tower := EXPEDITION_SCENE.instantiate()
 	if tower == null:
 		_fail("远征01场景无法实例化")
@@ -31,7 +55,7 @@ func _ready() -> void:
 		if block == null:
 			_fail("远征01运行时没有 Blocks/Expedition")
 		else:
-			for room_id in ROOM_IDS:
+			for room_id in room_ids:
 				var room := block.get_node_or_null(room_id) as Node3D
 				if room == null:
 					_fail("运行时缺少房间 %s" % room_id)
@@ -42,12 +66,36 @@ func _ready() -> void:
 		await get_tree().process_frame
 	ROOM_SCRIPT.use_expedition_static_layout_scenes = previous_static_layout_mode
 	if failures.is_empty():
-		print("EXPEDITION01_STATIC_SCENES_WRITTEN rooms=%d" % ROOM_IDS.size())
+		print("EXPEDITION01_STATIC_SCENES_WRITTEN rooms=%d" % room_ids.size())
 		get_tree().quit(0)
 		return
 	for failure in failures:
 		print("FAIL %s" % failure)
 	get_tree().quit(1)
+
+
+## 本次要重生成的房间。默认全量 13 房；`SS_STATIC_ROOMS=room_01,room_02` 可只挑几间。
+##
+## 存在的理由：改了单个房型/组件后往往只想回灌受影响的那几间。全量重写会把其余房间
+## 静态场景一起覆盖掉 —— 别人正在那些文件上做的编辑器手调会被无声抹掉。
+## 用法：
+##   SS_STATIC_ROOMS=room_01,room_02 "<godot>" --headless --path "<project>" \
+##     --scene res://scripts/generate_expedition01_room_static_scenes.tscn
+func _selected_room_ids() -> Array[String]:
+	var raw := OS.get_environment("SS_STATIC_ROOMS").strip_edges()
+	if raw.is_empty():
+		return ROOM_IDS
+	var wanted: Array[String] = []
+	for token in raw.split(",", false):
+		var room_id := token.strip_edges()
+		if room_id.is_empty():
+			continue
+		if not ROOM_IDS.has(room_id):
+			_fail("SS_STATIC_ROOMS 里含未知房间 %s，已忽略" % room_id)
+			continue
+		if not wanted.has(room_id):
+			wanted.append(room_id)
+	return wanted
 
 func _generate_live_room(room_id: String, room: Node3D) -> void:
 	var dungeon_room := room as DungeonRoom3D
@@ -55,6 +103,11 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 		_fail("%s 不是 DungeonRoom3D" % room_id)
 		return
 	dungeon_room.ensure_shell_built()
+	if room_id in AUTHORED_DEVICE_ROOMS:
+		# 名单里的房间要把房间灯与墙面开关固化进静态场景，取值来自运行时实际算定的那份。
+		# 🔴 必须赶在下面「搬走艺术根子节点」之前建 detail：组件节点被挪进 root_owner 后，
+		# 依赖房间内容的构建路径就没得读了。
+		dungeon_room.ensure_detail_built()
 	await get_tree().process_frame
 	var static_root := dungeon_room.get_node_or_null("AuthoredLayoutArtRoot") as Node3D
 	if static_root == null:
@@ -115,6 +168,10 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 		root_owner.set_meta("connection_port_count", connection_ports_root.get_child_count())
 	if room_id == "start":
 		_add_safe_room_door_previews(dungeon_room, root_owner)
+	# 房间灯与墙面开关：名单里的房间把它们固化成静态场景节点（设备真源）。
+	# 必须在下面统一接管 owner 之前挂上 —— 这个循环会把它们的 owner 一并设好。
+	if room_id in AUTHORED_DEVICE_ROOMS:
+		_emit_authored_room_devices(dungeon_room, root_owner)
 	# 房间场景只拥有顶层 prefab 实例根；组件内部 owner 保持原 PackedScene 边界。
 	# 递归改 owner 会把 ImportedModel/Mesh/Collision 全部展开进房间 TSCN，
 	# 既破坏 prefab 可编辑边界，也会在退出时造成大规模 3D RID 泄漏。
@@ -136,6 +193,64 @@ func _generate_live_room(room_id: String, room: Node3D) -> void:
 		else:
 			print("STATIC_SCENE_WRITTEN room=%s path=%s children=%d" % [room_id, path, root_owner.get_child_count()])
 	root_owner.free()
+
+
+## 把房间灯与墙面开关固化进静态布局 —— 「设备真源」从运行时自建改成场景持有。
+##
+## 位置与数值**一律取运行时实际算定的那一份**：先让房间照常把 detail 建一遍，再把
+## `_room_lights` / `_light_switch` 这些节点原样搬进静态场景。这里不复刻任何摆位规则
+## —— 两套规则一旦分叉，编辑器里手调的值与游戏里跑的值就会各说各话。
+##
+## 搬过去的是组件母版实例本身（`prp_wasteland_light_root_top3d` /
+## `prp_room_light_switch_root_top3d` 的实例根），房型场景只拥有顶层实例根、
+## 不展开组件内部节点，与其余组件实例同一条约定。
+##
+## 运行时侧由 `DungeonRoom3D._adopt_authored_room_devices()` 反向认领这两个节点，
+## 不会再建第二份（见 `DungeonRoom3D._build_content()` 的 `authored_devices` 分支）。
+func _emit_authored_room_devices(dungeon_room: DungeonRoom3D, root_owner: Node3D) -> void:
+	# detail 已在 `_generate_live_room()` 里提前建好（必须早于搬运艺术根子节点）。
+	dungeon_room.ensure_detail_built()
+	var light_count := 0
+	for value in (dungeon_room.get("_room_lights") as Array):
+		var light := value as WastelandLight3D
+		if light == null:
+			continue
+		light.set_meta("authored_room_device", "ceiling_light")
+		_graft_static_device(light, root_owner)
+		light_count += 1
+	var light_switch := dungeon_room.get("_light_switch") as RoomLightSwitch3D
+	if light_switch != null:
+		light_switch.set_meta("authored_room_device", "wall_switch")
+		_graft_static_device(light_switch, root_owner)
+	if light_count == 0 or light_switch == null:
+		# 名单里声明了「本房自持设备」，运行时却拿不出灯或开关 ⇒ 生成出来的静态场景
+		# 会缺件、运行时又因为 `authored_devices` 分支跳过自建 ⇒ 房间永远没灯。
+		# 这种静默半成品必须硬失败。
+		_fail("%s 在 AUTHORED_DEVICE_ROOMS 里，但运行时没有灯/开关可固化（灯 %d 盏、开关 %s）" % [
+			dungeon_room.room_id, light_count, str(light_switch != null),
+		])
+		return
+	root_owner.set_meta("authored_room_devices", true)
+	print("AUTHORED_ROOM_DEVICES room=%s lights=%d switch=%s" % [
+		dungeon_room.room_id, light_count, light_switch.name,
+	])
+
+
+## 把运行时设备节点搬进静态场景。
+##
+## 两个坐标系要换算一层：设备在运行时挂在 `RuntimeDetail` 下（房内局部），静态场景的
+## 子节点则是「静态艺术根局部」。`root_owner.transform` 已按原逻辑取成艺术根的 transform，
+## 所以取逆乘一次即可 —— 艺术根是单位阵时（当前 13 房）逐字不变。
+##
+## owner **只设在设备根上**：运行时自建的灯罩 / 灯管 / 交互球 owner 保持空 ⇒ 不会被写进
+## 房型 TSCN。编辑器里看到的仍是可手调的实例根，而不是一堆展开的死几何；
+## 运行时 `WastelandLight3D._ready()` / `RoomLightSwitch3D._build_visual()` 照常自建。
+func _graft_static_device(device: Node3D, root_owner: Node3D) -> void:
+	var previous_parent := device.get_parent()
+	if previous_parent != null:
+		previous_parent.remove_child(device)
+	device.transform = root_owner.transform.affine_inverse() * device.transform
+	root_owner.add_child(device)
 
 
 func _add_safe_room_door_previews(room: DungeonRoom3D, root_owner: Node3D) -> void:

@@ -43,7 +43,7 @@ const ACTION_CHANNEL_ACTIONS := [
 ## 与 A 键确认（ui_accept）都无处落脚 —— 手柄在这些子界面里会完全失灵。
 ## 清单与 BaseFacilityCatalog 里 action_kind == ACTION_MENU 的 action_path 一一对应。
 const FACILITY_MENU_SCENES := [
-	"res://scenes/RogueMapSelectMenu.tscn",
+	# WORLD-ENTRY now uses spatial targets, checked by verify_expedition_hologram_city.
 	"res://scenes/WorkshopMenu.tscn",
 	"res://scenes/VaultMenu.tscn",
 	"res://scenes/MonsterArchiveMenu.tscn",

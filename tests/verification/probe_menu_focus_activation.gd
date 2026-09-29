@@ -13,7 +13,7 @@ extends Node
 
 const WATCHDOG_SECONDS := 30.0
 const MULTI_BUTTON_MENU_PATH := "res://scenes/WorkshopMenu.tscn"
-const MENU_PATH := "res://scenes/RogueMapSelectMenu.tscn"
+const MENU_PATH := "res://scenes/WorkshopMenu.tscn"
 
 func _note_headless() -> void:
 	## 记录口径：headless 下只能验「焦点锚点是否建立」（见 probe_submenu_gamepad_focus），
@@ -78,7 +78,7 @@ func _probe_direction() -> void:
 
 
 ## 确认键：ui_accept 应命中当前焦点按钮。
-## RogueMapSelectMenu 的 CloseButton → queue_free()，因此「菜单已销毁」就是命中证据。
+## 平面设施菜单使用工坊；全息城市交互改由 verify_expedition_hologram_city 覆盖。
 ## 同时在按钮上挂一个计数，把「命中」与「菜单自行销毁」分开观察，避免再出现
 ## 「按钮其实按到了、只是销毁判定写错」这类假阴性。
 func _probe_accept(variant: String) -> void:

@@ -872,6 +872,54 @@ func _collect_wasteland_lights(root: Node) -> Array[WastelandLight3D]:
 	return found
 
 
+## 认领静态布局里的房间灯与墙面开关 —— 房间「设备真源」的落点。
+##
+## 静态布局 TSCN（`AuthoredLayoutArtRoot` / `SafeRoomArtRoot`）下的 `WastelandLight3D`
+## 与 `RoomLightSwitch3D` 由场景文件直接持有：位置与数值（颜色 / 能量 / 范围 / 投影 /
+## 灯具类型）都能在编辑器里手动调整，且随壳体常驻、不进 `RuntimeDetail` 的进出重建流程。
+## 认领成功时**不再**由 `_create_room_light()` / `LIGHT_SWITCH_SCENE` 另建一份。
+##
+## 返回 true 表示本房的房间灯已改由静态布局持有；返回 false 时调用方逐字走原路径
+## （程序化房、塔楼房、以及尚未迁移的旧静态布局）。
+func _adopt_authored_room_devices() -> bool:
+	var static_root := _authored_static_layout_root()
+	if static_root == null:
+		return false
+	var lights := _collect_wasteland_lights(static_root)
+	if lights.is_empty():
+		return false
+	_room_lights.clear()
+	for light in lights:
+		_room_lights.append(light)
+	# 第一盏即中央顶灯：与 `_create_room_light()` 的 `_central_light` 同口径
+	# （大竞技场的四区灯同样取第一盏，用来做阴影计数与快照）。
+	_central_light = lights[0]
+	var switches := _collect_room_light_switches(static_root)
+	_light_switch = switches[0] if not switches.is_empty() else null
+	set_meta("authored_room_devices", true)
+	set_meta("authored_room_light_count", lights.size())
+	return true
+
+
+## 静态布局根。远征 13 房 = `AuthoredLayoutArtRoot`；入口安全房 = `SafeRoomArtRoot`。
+func _authored_static_layout_root() -> Node3D:
+	for candidate in ["AuthoredLayoutArtRoot", "SafeRoomArtRoot"]:
+		var node := get_node_or_null(candidate) as Node3D
+		if node != null:
+			return node
+	return null
+
+
+## 收集节点自身与全部后代里的墙面灯开关（前序、顺序稳定）。
+func _collect_room_light_switches(root: Node) -> Array[RoomLightSwitch3D]:
+	var found: Array[RoomLightSwitch3D] = []
+	if root is RoomLightSwitch3D:
+		found.append(root)
+	for child in root.get_children():
+		found.append_array(_collect_room_light_switches(child))
+	return found
+
+
 ## 建齐基地成对开关（西墙→100F、东墙→98F），全部直挂房间根、不走出现流程。
 ## 两个开关共享同一组受控灯，并以 link_switch 互相并联（启动序列互锁 +
 ## 指示灯/提示文字同步），避免同一盏灯上出现两个各自为政的开关。
@@ -3569,6 +3617,9 @@ func _build_content() -> void:
 	var dimensions := get_dimensions()
 	_build_runtime_navigation_surface(dimensions)
 	_room_lights.clear()
+	# 静态布局若已把房间灯与墙面开关固化成 TSCN 节点（美术可在编辑器里手调位置与数值），
+	# 这里优先认领它们、不再自建。见 `_adopt_authored_room_devices()`。
+	var authored_devices := _adopt_authored_room_devices()
 	if size_class == "rooftop":
 		# 100F 天台是露天甲板：本房自带室外光照（TowerAtmosphere3D 的天光反弹 +
 		# 太阳 + 城市背景），室内玩法顶灯与墙边开关都属于程序生成室内设施的残留。
@@ -3586,6 +3637,9 @@ func _build_content() -> void:
 			and not _room_lights.has(_central_light)
 		):
 			_room_lights.append(_central_light)
+	elif authored_devices:
+		# 中央顶灯（含大竞技场的四区灯）已是静态布局节点：只登记，不重建。
+		pass
 	elif room_type == "BOSS" and minf(dimensions.x, dimensions.y) >= 64.0:
 		# 90m终局竞技场不能依赖一盏超大范围点光源：四区灯具让中心与
 		# 四周都保持可读，同时仍由同一个墙边开关统一控制。
@@ -3636,13 +3690,17 @@ func _build_content() -> void:
 		_bind_facility_presentation_light_control(_facility_lights_currently_on())
 		_bind_light_switch_signal()
 	elif size_class != "rooftop":
-		_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
-		_light_switch.name = "RoomLightSwitch3D"
-		_place_light_switch(_light_switch, dimensions)
 		# 房间声明的「初始灯亮」优先（开局第一间房），其次才是按房型的默认。
 		var starts_on := authored_room_light_on or room_type in ["STAIR_LOBBY", "BOSS"]
+		if _light_switch == null:
+			# 静态布局没有开关（程序化房 / 尚未迁移的旧静态布局）：沿用运行时自建
+			# 与包围盒落位。静态布局带开关时 `_adopt_authored_room_devices()` 已认领，
+			# 开关随壳体常驻，这里不再重复实例化、也不重复 add_child。
+			_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
+			_light_switch.name = "RoomLightSwitch3D"
+			_place_light_switch(_light_switch, dimensions)
+			_add_runtime_detail_child(_light_switch)
 		_light_switch.configure_group(_room_lights, starts_on)
-		_add_runtime_detail_child(_light_switch)
 		_bind_light_switch_signal()
 	# 安全房原先还有程序画的地面标线 `_build_stair_lobby_markings()`：
 	# 正中一条 StairLobbyRouteGuide（13.00×0.035×1.20m）+ 两侧门内各一条

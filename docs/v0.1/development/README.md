@@ -3,6 +3,7 @@
 工程版本：0.1.0。设计、规范与目标见 [设计目录](../design/README.md)；本目录仅保存交付事实。
 
 - [版本开发日志](CHANGELOG.md)：按交付记变更，新增记录使用 [模板](../../templates/development_record.md)。
+- [99F 基地室内外环境雾平滑过渡](2026-09-29_base_indoor_outdoor_fog_transition.md)：三扇基地门共用建筑壳体判定，室内降低距离雾/体积雾并平滑恢复室外原值。
 - [战斗与经济交接第4项](2026-09-24_combat_economy_handoff.md)：奖励旧字典边界、武器实例过期命令、商人会话事务与独立失败验收。
 - [第五项设计源纠正](2026-09-24_design_source_correction.md)：四份玩法设计页与施工分层，14项先读设计，23项继续迁移/审查。
 - [第五项技术契约填补](2026-09-24_design_contract_backfill.md)：以正式游戏对齐背包、命中、敌人奖励、基地商店、存档、对话、HUD、时间和后处理的当前接口与差距。

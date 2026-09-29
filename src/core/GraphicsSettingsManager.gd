@@ -2,6 +2,7 @@ extends Node
 ## 全局画面设置与持久化。所有正式 WorldEnvironment 注册后共享同一套玩家设置。
 
 signal settings_changed(settings: Dictionary)
+signal debug_postfx_changed(settings: Dictionary)
 
 const SAVE_PATH := "user://graphics_settings.cfg"
 const SECTION := "graphics"
@@ -77,6 +78,9 @@ const DEBUG_POSTFX_KEYS := [
 	"debug_postfx_tv_glow_strength",
 	"debug_postfx_tv_glow_hdr_threshold",
 	"debug_postfx_tv_glow_hdr_scale",
+	# 99F 基地室内雾：调试面板第三页写入，TowerAtmosphere3D 消费。
+	"debug_base_interior_fog_density",
+	"debug_base_interior_volumetric_fog_density",
 ]
 var _debug_postfx: Dictionary = {}
 
@@ -171,6 +175,7 @@ func set_debug_postfx(key: String, value: Variant, apply_now := true) -> bool:
 	_debug_postfx[key] = value
 	if apply_now:
 		_apply_all()
+	debug_postfx_changed.emit(get_debug_postfx_snapshot())
 	return true
 
 
@@ -180,6 +185,7 @@ func clear_debug_postfx(apply_now := true) -> void:
 	_debug_postfx.clear()
 	if apply_now:
 		_apply_all()
+	debug_postfx_changed.emit({})
 
 
 func get_debug_postfx_snapshot() -> Dictionary:
@@ -201,9 +207,12 @@ func apply_debug_postfx(values: Dictionary, apply_now := true) -> bool:
 		_debug_postfx.clear()
 		if apply_now:
 			_apply_all()
+		debug_postfx_changed.emit({})
 		return true
 	if apply_now:
 		_apply_all()
+	if any:
+		debug_postfx_changed.emit(get_debug_postfx_snapshot())
 	return any
 
 

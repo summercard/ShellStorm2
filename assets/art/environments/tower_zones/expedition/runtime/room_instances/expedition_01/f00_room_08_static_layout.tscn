@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="25_xu41d"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn" id="26_fmjl6"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_d/wall_5m_d_root_top3d.tscn" id="27_jeafy"]
+[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=1678511949]
 metadata/asset_id = "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT"
@@ -51,6 +53,31 @@ metadata/source_mode = "live_expedition_runtime_static_extract"
 metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
 metadata/connection_port_count = 4
+metadata/authored_room_devices = true
+
+; 房间中央顶灯（L 型走廊房（corridor_45x40 l_turn，40×45）；与 room_01 同房型、镜像落位）。
+; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
+; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
+;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
+;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
+[node name="RoomCeilingLight" type="Node3D" parent="." unique_id=988275457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.357147, 9.28, -5.357147)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 37.599999999999994
+failing = false
+flicker_seed = 77839031
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
+[node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1610054861]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.660004, 0, -16.7)
+script = ExtResource("901_authored_switch")
+metadata/authored_room_device = "light_switch"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00" parent="." unique_id=1824420440 instance=ExtResource("1_w4j0a")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -18.646, 0, 19.5)
@@ -540,7 +567,7 @@ metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL"
 metadata/authored_slot_role = "room_type_component"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT" parent="." unique_id=959002043 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.894499, 0, 20)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, 20)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -556,7 +583,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT" parent="." unique_id=1801221319 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.8944993, 0, 15)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, 15)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -572,7 +599,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT" parent="." unique_id=541130447 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.8944993, 0, 10)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, 10)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -588,7 +615,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT" parent="." unique_id=1108312257 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.8945, 0, 5)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, 5)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -604,7 +631,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT" parent="." unique_id=111035946 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.8945, 0, 2.1394538e-07)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, 0)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -620,7 +647,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT" parent="." unique_id=1158193334 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.8945, 0, -5)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, -5)
 metadata/tower_wall_direction = "north"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -644,7 +671,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH" parent="." unique_id=822615349 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.1055, 0, -10.000001)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 20.1055, 0, -10.000001)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -669,7 +696,7 @@ metadata/authored_door_wall_promoted = true
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT" parent="." unique_id=1746052434 instance=ExtResource("24_thibr")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.1055, 0, -20)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 20.1055, 0, -20)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
@@ -685,7 +712,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35" parent="." unique_id=2109724244 instance=ExtResource("27_jeafy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 17.5, 0, -7.387001)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.5, 0, -7.5)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
@@ -701,7 +728,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35" parent="." unique_id=103562077 instance=ExtResource("27_jeafy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.5, 0, -7.3870006)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 12.5, 0, -7.5)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
@@ -717,7 +744,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35" parent="." unique_id=299520842 instance=ExtResource("27_jeafy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.4999995, 0, -7.3870006)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.4999995, 0, -7.5)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
@@ -733,7 +760,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35" parent="." unique_id=1952738805 instance=ExtResource("27_jeafy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.4999998, 0, -7.387)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.4999998, 0, -7.5)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
@@ -749,7 +776,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35" parent="." unique_id=877497553 instance=ExtResource("27_jeafy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5000002, 0, -7.387)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.5000002, 0, -7.5)
 metadata/tower_wall_direction = "east"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
@@ -765,7 +792,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00" parent="." unique_id=749923951 instance=ExtResource("27_jeafy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.499999, 0, 22.613)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.5, 0, 22.5)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
@@ -789,7 +816,7 @@ metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
 metadata/shadow_policy = "cast_and_receive"
 
 [node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00" parent="." unique_id=172891202 instance=ExtResource("27_jeafy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -17.499998, 0, 22.613)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -17.5, 0, 22.5)
 metadata/tower_wall_direction = "south"
 metadata/grid_unit_m = 5.0
 metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"

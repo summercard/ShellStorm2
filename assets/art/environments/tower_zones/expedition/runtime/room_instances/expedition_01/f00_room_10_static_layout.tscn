@@ -36,6 +36,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn" id="35_vvf0i"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="36_55c5w"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="37_yr6ax"]
+[ext_resource type="Script" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
 
 [node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=753970845]
 metadata/asset_id = "ENV-EXPEDITION-L01-DB-ROOM-TYPE-LAYOUT"
@@ -63,6 +65,31 @@ metadata/source_mode = "live_expedition_runtime_static_extract"
 metadata/static_layout_only = true
 metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
 metadata/connection_port_count = 2
+metadata/authored_room_devices = true
+
+; 房间中央顶灯（数据库房（db_70x50，40×30））。
+; 真源＝本静态布局；运行时由 DungeonRoom3D._adopt_authored_room_devices() 认领，不再自建。
+; 原运行时公式：energy = theme.fixture_energy 2.7 × 1.85（size_class 非 large/arena/floor）；
+;   light_range = max(theme.fixture_range 8.5 × 1.72, min(房间短边) × 0.94)；y = FLOOR_HEIGHT_M 12 − 2.72；
+;   light_enabled = authored_room_light_on or room_type in [STAIR_LOBBY, BOSS]。
+[node name="RoomCeilingLight" type="Node3D" parent="." unique_id=1365278781]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.28, 0)
+script = ExtResource("900_authored_light")
+light_color = Color(0.59, 0.76, 0.88, 1)
+energy = 4.995000000000001
+light_range = 28.2
+failing = false
+flicker_seed = 78048489
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+; 墙面灯开关。真源＝本静态布局；运行时认领后按房间声明的初始灯亮状态配置灯组。
+[node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1222353034]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.200001, 0, 14.660004)
+script = ExtResource("901_authored_switch")
+metadata/authored_room_device = "light_switch"
 
 [node name="ENV-EXPEDITION-L01-DB-CABLE_COIL_WALL" parent="." unique_id=25686339 instance=ExtResource("1_bhww3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.66, 3.5135, -8.9)
@@ -707,3 +734,8 @@ metadata/side = "east"
 metadata/lane_m = -2.5
 metadata/outward = Vector2(1, 0)
 metadata/connected = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=643012812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.947077, 4.1288357, -10.355266)
+light_color = Color(0.17921922, 0.31672853, 1, 1)
+light_energy = 5.764

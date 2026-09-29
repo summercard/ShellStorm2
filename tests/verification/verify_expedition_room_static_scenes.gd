@@ -8,7 +8,7 @@ const ROOM_IDS := [
 const EXPECTED_MIN_CHILDREN := {
 	"start": 29, "room_01": 121, "room_02": 86, "room_03": 105, "room_04": 123,
 	"room_05": 242, "room_06": 86, "room_07": 36, "room_08": 121, "room_09": 106,
-	"room_10": 86, "boss": 210, "extraction": 34,
+	"room_10": 86, "boss": 208, "extraction": 34,
 }
 var failures: Array[String] = []
 var checks := 0

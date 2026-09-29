@@ -544,6 +544,7 @@ func _ready() -> void:
 			)
 	_update_floor_visibility_state()
 	_refresh_physical_location_authority(true)
+	_update_base_fog_transition(0.0, true)
 	_refresh_tower_hud()
 	_refresh_facility_runtime()
 	_install_main_entry_screen()
@@ -1211,6 +1212,7 @@ func _update_floor_visibility_state() -> void:
 func _physics_process(delta: float) -> void:
 	if player == null or not is_instance_valid(player):
 		return
+	_update_base_fog_transition(delta)
 	if _has_camera_presentation_override():
 		return
 	var planar_velocity := Vector2(player.velocity.x, player.velocity.z)
@@ -1238,6 +1240,12 @@ func _physics_process(delta: float) -> void:
 	_update_floor_visibility_state()
 	if refresh_camera_probes:
 		_update_camera_occlusion_silhouette()
+
+
+func _update_base_fog_transition(delta: float, immediate := false) -> void:
+	if _atmosphere == null or not _atmosphere.has_method("update_base_interior_fog"):
+		return
+	_atmosphere.call("update_base_interior_fog", is_player_inside_facility(), delta, immediate)
 
 
 func _apply_indoor_camera_pose() -> void:
@@ -5172,10 +5180,10 @@ func _on_facility_activated(facility: BaseFacility3D) -> void:
 		return
 	status_label.text = "%s：%s" % [facility.display_name, facility.description]
 	if facility.activation_type == BaseFacility3D.ActivationType.OPEN_MENU:
-		_open_facility_menu(facility.menu_scene_path)
+		_open_facility_menu(facility.menu_scene_path, facility)
 
 
-func _open_facility_menu(scene_path: String) -> void:
+func _open_facility_menu(scene_path: String, facility: BaseFacility3D = null) -> void:
 	if scene_path.is_empty() or not ResourceLoader.exists(scene_path, "PackedScene"):
 		status_label.text = "该设施尚未接入功能。"
 		return
@@ -5190,6 +5198,8 @@ func _open_facility_menu(scene_path: String) -> void:
 		menu.call("set_inventory_module", get_inventory_module())
 	if menu.has_method("set_player"):
 		menu.call("set_player", player)
+	if menu.has_method("set_facility"):
+		menu.call("set_facility", facility)
 	_active_facility_menu = menu
 	add_child(menu)
 	menu.tree_exited.connect(_on_active_facility_menu_closed)
@@ -5791,7 +5801,10 @@ func try_close_modal_for_pause() -> bool:
 		_close_elevator_panel()
 		return true
 	if _active_facility_menu != null and is_instance_valid(_active_facility_menu):
-		_active_facility_menu.queue_free()
+		if _active_facility_menu.has_method("request_close"):
+			_active_facility_menu.call("request_close")
+		else:
+			_active_facility_menu.queue_free()
 		return true
 	return super()
 
