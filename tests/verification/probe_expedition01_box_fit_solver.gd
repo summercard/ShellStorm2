@@ -16,7 +16,8 @@ const SEED_VALUE := 77001199
 const GRID_UNIT_M := 5.0
 const MAX_PROBE := 24
 
-## 目标：房间 → [(盒 id, 目标只数)]。顺序 = 房内实例顺序，与 `spawn_placements` 对齐。
+## 目标：房间 → [[盒 id, 目标只数], ...]。顺序 = 房内实例顺序，与 `spawn_placements` 对齐。
+## 用二维数组而非字典：GDScript 常量表达式里嵌套字典字面量的类型推断会告警成错误。
 const TARGETS := {
 	"room_02": [
 		["box_corner_ambush", 4],
@@ -64,9 +65,9 @@ func _solve_room(room: DungeonRoom3D, targets: Array) -> void:
 	var candidates := _candidate_centers(dim)
 	var taken: Array[Rect2] = []
 	for entry_value in targets:
-		var entry := entry_value as Dictionary
-		var box_id := str(entry["box"])
-		var target := int(entry["target"])
+		var entry := entry_value as Array
+		var box_id := str(entry[0])
+		var target := int(entry[1])
 		var box := SpawnBoxCatalog.load_box(box_id)
 		if box.is_empty():
 			print("%s|%s|INVALID_BOX" % [room.room_id, box_id])
