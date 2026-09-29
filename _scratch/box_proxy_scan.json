@@ -1,0 +1,2149 @@
+[
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_top_service/wall_top_service_root_top3d.tscn",
+  "slug": "wall_top_service",
+  "room_type": "office_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 1158.36,
+  "geom_area": 27.380000000000003,
+  "aabb_area": 1158.360029830932,
+  "cavity_area": 1090.5600000000002,
+  "cavity_biggest": 1090.5600000000002,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   0.7
+  ],
+  "y_world": [
+   11.15,
+   11.9
+  ],
+  "tris": 432,
+  "tris_in_band": 432
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_beveled_5m/wall_skin_beveled_5m_root_top3d.tscn",
+  "slug": "wall_skin_beveled_5m",
+  "room_type": "boss_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 1.24,
+  "geom_area": 0.4675,
+  "aabb_area": 1.1407977382659737,
+  "cavity_area": 0.4800000000000001,
+  "cavity_biggest": 0.4800000000000001,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.8
+  ],
+  "y_world": [
+   -0.308,
+   11.492
+  ],
+  "tris": 132,
+  "tris_in_band": 60
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t970_5m/wall_t970_5m_root_top3d.tscn",
+  "slug": "wall_t970_5m",
+  "room_type": "office_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 4.85,
+  "geom_area": 3.0375,
+  "aabb_area": 3.0499935150146484,
+  "cavity_area": 0.42500000000000004,
+  "cavity_biggest": 0.42500000000000004,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.9
+  ],
+  "y_world": [
+   0.0,
+   11.9
+  ],
+  "tris": 6320,
+  "tris_in_band": 1342
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t1110_5m/wall_t1110_5m_root_top3d.tscn",
+  "slug": "wall_t1110_5m",
+  "room_type": "office_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 5.550000000000001,
+  "geom_area": 4.482500000000001,
+  "aabb_area": 5.549993515014648,
+  "cavity_area": 0.35000000000000003,
+  "cavity_biggest": 0.18000000000000002,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.9
+  ],
+  "y_world": [
+   0.0,
+   11.9
+  ],
+  "tris": 7652,
+  "tris_in_band": 2750
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_compact_damaged/server_rack_compact_damaged_root_top3d.tscn",
+  "slug": "server_rack_compact_damaged",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 10.479702999999999,
+  "geom_area": 8.832500000000001,
+  "aabb_area": 10.149231257764768,
+  "cavity_area": 0.12750000000000003,
+  "cavity_biggest": 0.12750000000000003,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.035
+  ],
+  "y_world": [
+   -0.228,
+   4.807
+  ],
+  "tris": 1660,
+  "tris_in_band": 658
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_damaged/server_rack_damaged_root_top3d.tscn",
+  "slug": "server_rack_damaged",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 10.479702999999999,
+  "geom_area": 8.805000000000001,
+  "aabb_area": 10.149227710877312,
+  "cavity_area": 0.12250000000000001,
+  "cavity_biggest": 0.12250000000000001,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.515
+  ],
+  "y_world": [
+   -0.228,
+   5.287
+  ],
+  "tris": 1804,
+  "tris_in_band": 656
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_damaged_tall/server_rack_damaged_tall_root_top3d.tscn",
+  "slug": "server_rack_damaged_tall",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 10.479702999999999,
+  "geom_area": 8.935,
+  "aabb_area": 10.149230863666162,
+  "cavity_area": 0.12250000000000001,
+  "cavity_biggest": 0.12250000000000001,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.795
+  ],
+  "y_world": [
+   -0.228,
+   5.567
+  ],
+  "tris": 1804,
+  "tris_in_band": 646
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_damaged/server_rack_wide_damaged_root_top3d.tscn",
+  "slug": "server_rack_wide_damaged",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 10.479702999999999,
+  "geom_area": 9.102500000000001,
+  "aabb_area": 10.149231651863374,
+  "cavity_area": 0.07500000000000001,
+  "cavity_biggest": 0.07500000000000001,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.235
+  ],
+  "y_world": [
+   -0.228,
+   5.007
+  ],
+  "tris": 1660,
+  "tris_in_band": 658
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_damaged_tall/server_rack_wide_damaged_tall_root_top3d.tscn",
+  "slug": "server_rack_wide_damaged_tall",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 10.479702999999999,
+  "geom_area": 9.082500000000001,
+  "aabb_area": 10.149230863666162,
+  "cavity_area": 0.07500000000000001,
+  "cavity_biggest": 0.07500000000000001,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.585
+  ],
+  "y_world": [
+   -0.228,
+   5.357
+  ],
+  "tris": 1804,
+  "tris_in_band": 656
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen_damaged/server_rack_under_screen_damaged_root_top3d.tscn",
+  "slug": "server_rack_under_screen_damaged",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 7.718816000000001,
+  "geom_area": 6.612500000000001,
+  "aabb_area": 7.718850550258139,
+  "cavity_area": 0.065,
+  "cavity_biggest": 0.065,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.585
+  ],
+  "y_world": [
+   -0.228,
+   3.357
+  ],
+  "tris": 1228,
+  "tris_in_band": 762
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_a/plant_a_root_top3d.tscn",
+  "slug": "plant_a",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.76025354,
+  "geom_area": 1.4425000000000001,
+  "aabb_area": 2.7602715260291006,
+  "cavity_area": 0.022500000000000003,
+  "cavity_biggest": 0.0125,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.71
+  ],
+  "y_world": [
+   -0.058,
+   1.652
+  ],
+  "tris": 54,
+  "tris_in_band": 54
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_b/plant_b_root_top3d.tscn",
+  "slug": "plant_b",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.76025354,
+  "geom_area": 1.4425000000000001,
+  "aabb_area": 2.760274670748913,
+  "cavity_area": 0.022500000000000003,
+  "cavity_biggest": 0.0125,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.705
+  ],
+  "y_world": [
+   -0.058,
+   1.647
+  ],
+  "tris": 54,
+  "tris_in_band": 54
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/plant_c/plant_c_root_top3d.tscn",
+  "slug": "plant_c",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.76025354,
+  "geom_area": 1.4425000000000001,
+  "aabb_area": 2.760274670748913,
+  "cavity_area": 0.022500000000000003,
+  "cavity_biggest": 0.0125,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.689
+  ],
+  "y_world": [
+   -0.058,
+   1.631
+  ],
+  "tris": 54,
+  "tris_in_band": 54
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/archive_shelf/archive_shelf_root_top3d.tscn",
+  "slug": "archive_shelf",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.9200000000000004,
+  "geom_area": 4.125,
+  "aabb_area": 3.920002155304246,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   4.8
+  ],
+  "y_world": [
+   -0.058,
+   4.742
+  ],
+  "tris": 384,
+  "tris_in_band": 196
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/chair/chair_root_top3d.tscn",
+  "slug": "chair",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.5234874200000001,
+  "geom_area": 1.0450000000000002,
+  "aabb_area": 1.5234380708552635,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.83
+  ],
+  "y_world": [
+   -0.013,
+   1.817
+  ],
+  "tris": 192,
+  "tris_in_band": 192
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack/server_rack_root_top3d.tscn",
+  "slug": "server_rack",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 9.49415,
+  "geom_area": 8.565000000000001,
+  "aabb_area": 9.048824803161551,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.235
+  ],
+  "y_world": [
+   -0.228,
+   5.235
+  ],
+  "tris": 1584,
+  "tris_in_band": 630
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_compact/server_rack_compact_root_top3d.tscn",
+  "slug": "server_rack_compact",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 9.49415,
+  "geom_area": 8.7025,
+  "aabb_area": 9.194645806885092,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.035
+  ],
+  "y_world": [
+   -0.228,
+   4.807
+  ],
+  "tris": 1584,
+  "tris_in_band": 650
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_mid/server_rack_mid_root_top3d.tscn",
+  "slug": "server_rack_mid",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 9.49415,
+  "geom_area": 8.685,
+  "aabb_area": 9.048821992206285,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.515
+  ],
+  "y_world": [
+   -0.228,
+   5.287
+  ],
+  "tris": 1728,
+  "tris_in_band": 628
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_tall/server_rack_tall_root_top3d.tscn",
+  "slug": "server_rack_tall",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 9.49415,
+  "geom_area": 8.6775,
+  "aabb_area": 9.048824803161551,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.795
+  ],
+  "y_world": [
+   -0.228,
+   5.567
+  ],
+  "tris": 1728,
+  "tris_in_band": 618
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_under_screen/server_rack_under_screen_root_top3d.tscn",
+  "slug": "server_rack_under_screen",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 6.9224000000000006,
+  "geom_area": 6.2975,
+  "aabb_area": 6.9223996735572655,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.585
+  ],
+  "y_world": [
+   -0.228,
+   3.357
+  ],
+  "tris": 1152,
+  "tris_in_band": 694
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide/server_rack_wide_root_top3d.tscn",
+  "slug": "server_rack_wide",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 9.49415,
+  "geom_area": 8.7125,
+  "aabb_area": 9.048824803161551,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.235
+  ],
+  "y_world": [
+   -0.228,
+   5.007
+  ],
+  "tris": 1584,
+  "tris_in_band": 630
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/server_rack_wide_tall/server_rack_wide_tall_root_top3d.tscn",
+  "slug": "server_rack_wide_tall",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 9.49415,
+  "geom_area": 8.705000000000002,
+  "aabb_area": 9.048824803161551,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.585
+  ],
+  "y_world": [
+   -0.228,
+   5.357
+  ],
+  "tris": 1728,
+  "tris_in_band": 628
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_armored_5m/wall_skin_armored_5m_root_top3d.tscn",
+  "slug": "wall_skin_armored_5m",
+  "room_type": "boss_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 1.773,
+  "geom_area": 0.86,
+  "aabb_area": 1.7730027313227765,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.8
+  ],
+  "y_world": [
+   -0.308,
+   11.492
+  ],
+  "tris": 120,
+  "tris_in_band": 50
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_armored_broken_5m/wall_skin_armored_broken_5m_root_top3d.tscn",
+  "slug": "wall_skin_armored_broken_5m",
+  "room_type": "boss_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 1.773,
+  "geom_area": 0.86,
+  "aabb_area": 1.7730030746461125,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.8
+  ],
+  "y_world": [
+   -0.308,
+   11.492
+  ],
+  "tris": 216,
+  "tris_in_band": 50
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_medium_5m/wall_skin_medium_5m_root_top3d.tscn",
+  "slug": "wall_skin_medium_5m",
+  "room_type": "boss_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 0.985,
+  "geom_area": 0.52,
+  "aabb_area": 0.7387480068209697,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.8
+  ],
+  "y_world": [
+   -0.308,
+   11.492
+  ],
+  "tris": 168,
+  "tris_in_band": 30
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_skin_thin_5m/wall_skin_thin_5m_root_top3d.tscn",
+  "slug": "wall_skin_thin_5m",
+  "room_type": "boss_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 0.7387499999999999,
+  "geom_area": 0.7425000000000002,
+  "aabb_area": 0.7387481498717534,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.8
+  ],
+  "y_world": [
+   -0.308,
+   11.492
+  ],
+  "tris": 72,
+  "tris_in_band": 30
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/wall_solid_5m/wall_solid_5m_root_top3d.tscn",
+  "slug": "wall_solid_5m",
+  "room_type": "boss_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 1.5,
+  "geom_area": 1.5150000000000001,
+  "aabb_area": 1.4999961853027344,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.9
+  ],
+  "y_world": [
+   -0.358,
+   11.542
+  ],
+  "tris": 12,
+  "tris_in_band": 10
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_a/workstation_a_root_top3d.tscn",
+  "slug": "workstation_a",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 8.73375,
+  "geom_area": 8.932500000000001,
+  "aabb_area": 8.73375129699707,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.78
+  ],
+  "y_world": [
+   -0.058,
+   2.722
+  ],
+  "tris": 1256,
+  "tris_in_band": 1126
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_b/workstation_b_root_top3d.tscn",
+  "slug": "workstation_b",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 8.73375,
+  "geom_area": 8.932500000000001,
+  "aabb_area": 8.733749270439148,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.78
+  ],
+  "y_world": [
+   -0.058,
+   2.722
+  ],
+  "tris": 1256,
+  "tris_in_band": 1126
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/boss_room/workstation_c/workstation_c_root_top3d.tscn",
+  "slug": "workstation_c",
+  "room_type": "boss_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 8.73375,
+  "geom_area": 8.932500000000001,
+  "aabb_area": 8.733749270439148,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.78
+  ],
+  "y_world": [
+   -0.058,
+   2.722
+  ],
+  "tris": 1256,
+  "tris_in_band": 1126
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bank_crate/bank_crate_root_top3d.tscn",
+  "slug": "bank_crate",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.68,
+  "geom_area": 2.6075000000000004,
+  "aabb_area": 2.6799978208546236,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.555
+  ],
+  "y_world": [
+   -0.035,
+   3.02
+  ],
+  "tris": 1512,
+  "tris_in_band": 1512
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_root_top3d.tscn",
+  "slug": "bridge_guardrail",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 12.734399999999999,
+  "geom_area": 7.252500000000001,
+  "aabb_area": 12.73440218505857,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.87
+  ],
+  "y_world": [
+   0.0,
+   1.87
+  ],
+  "tris": 5640,
+  "tris_in_band": 5640
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_crate/end_crate_root_top3d.tscn",
+  "slug": "end_crate",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.60125,
+  "geom_area": 3.4450000000000003,
+  "aabb_area": 3.601248120069613,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.555
+  ],
+  "y_world": [
+   -0.035,
+   1.52
+  ],
+  "tris": 1512,
+  "tris_in_band": 1512
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/end_power/end_power_root_top3d.tscn",
+  "slug": "end_power",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 4.2673,
+  "geom_area": 4.165000000000001,
+  "aabb_area": 4.142204268264322,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.083
+  ],
+  "y_world": [
+   -0.007,
+   5.075
+  ],
+  "tris": 4644,
+  "tris_in_band": 2148
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/half_partition/half_partition_root_top3d.tscn",
+  "slug": "half_partition",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 5.28,
+  "geom_area": 5.23,
+  "aabb_area": 5.279986400604685,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.19
+  ],
+  "y_world": [
+   0.0,
+   2.19
+  ],
+  "tris": 756,
+  "tris_in_band": 756
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/lower_control/lower_control_root_top3d.tscn",
+  "slug": "lower_control",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.01495,
+  "geom_area": 1.9775000000000003,
+  "aabb_area": 2.0149503410339094,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.425
+  ],
+  "y_world": [
+   -8.54,
+   -4.915
+  ],
+  "tris": 7236,
+  "tris_in_band": 6702
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_crate/near_crate_root_top3d.tscn",
+  "slug": "near_crate",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 4.678092,
+  "geom_area": 4.1375,
+  "aabb_area": 4.679538642492844,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.555
+  ],
+  "y_world": [
+   -0.035,
+   1.52
+  ],
+  "tris": 1512,
+  "tris_in_band": 1512
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/near_server/near_server_root_top3d.tscn",
+  "slug": "near_server",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 4.0602,
+  "geom_area": 3.9225000000000003,
+  "aabb_area": 3.9999012733460404,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   4.875
+  ],
+  "y_world": [
+   0.0,
+   4.875
+  ],
+  "tris": 13068,
+  "tris_in_band": 5808
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/partition_box/partition_box_root_top3d.tscn",
+  "slug": "partition_box",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.76375,
+  "geom_area": 2.6550000000000002,
+  "aabb_area": 2.7637481021884014,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.555
+  ],
+  "y_world": [
+   -0.035,
+   1.52
+  ],
+  "tris": 1512,
+  "tris_in_band": 1512
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/pit_end/pit_end_root_top3d.tscn",
+  "slug": "pit_end",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.5,
+  "geom_area": 1.5150000000000001,
+  "aabb_area": 1.4999961853027344,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.975
+  ],
+  "y_world": [
+   -12.0,
+   -0.025
+  ],
+  "tris": 108,
+  "tris_in_band": 66
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/pit_side/pit_side_root_top3d.tscn",
+  "slug": "pit_side",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.5,
+  "geom_area": 2.22,
+  "aabb_area": 2.199997901916504,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   12.105
+  ],
+  "y_world": [
+   -12.125,
+   -0.02
+  ],
+  "tris": 756,
+  "tris_in_band": 132
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/platform_edge/platform_edge_root_top3d.tscn",
+  "slug": "platform_edge",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 6.50975,
+  "geom_area": 6.532500000000001,
+  "aabb_area": 6.509746092796377,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.105
+  ],
+  "y_world": [
+   -1.33,
+   1.775
+  ],
+  "tris": 3588,
+  "tris_in_band": 2068
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/shaft_column/shaft_column_root_top3d.tscn",
+  "slug": "shaft_column",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.24,
+  "geom_area": 3.3300000000000005,
+  "aabb_area": 3.2399989700315928,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.975
+  ],
+  "y_world": [
+   -12.0,
+   -0.025
+  ],
+  "tris": 1080,
+  "tris_in_band": 480
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z5450/upper_bank_z5450_root_top3d.tscn",
+  "slug": "upper_bank_z5450",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.9844499999999994,
+  "geom_area": 3.8725000000000005,
+  "aabb_area": 3.925277396774618,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   5.275
+  ],
+  "y_world": [
+   0.0,
+   5.275
+  ],
+  "tris": 14040,
+  "tris_in_band": 5808
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_bank_z6197/upper_bank_z6197_root_top3d.tscn",
+  "slug": "upper_bank_z6197",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 4.03705,
+  "geom_area": 3.940000000000001,
+  "aabb_area": 3.9187009895322262,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   6.023
+  ],
+  "y_world": [
+   -0.147,
+   5.875
+  ],
+  "tris": 4644,
+  "tris_in_band": 2148
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/upper_console/upper_console_root_top3d.tscn",
+  "slug": "upper_console",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.2936,
+  "geom_area": 1.3775000000000002,
+  "aabb_area": 1.293598467254924,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.464
+  ],
+  "y_world": [
+   0.0,
+   2.464
+  ],
+  "tris": 2160,
+  "tris_in_band": 1992
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/vertical_service/vertical_service_root_top3d.tscn",
+  "slug": "vertical_service",
+  "room_type": "bridge_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.63,
+  "geom_area": 3.630000000000001,
+  "aabb_area": 3.630000419616408,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   6.025
+  ],
+  "y_world": [
+   -12.0,
+   -5.975
+  ],
+  "tris": 2376,
+  "tris_in_band": 930
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_x670/wall_x670_root_top3d.tscn",
+  "slug": "wall_x670",
+  "room_type": "bridge_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 3.35,
+  "geom_area": 3.0050000000000003,
+  "aabb_area": 3.149995803833008,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.875
+  ],
+  "y_world": null,
+  "tris": 2736,
+  "tris_in_band": 960
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/wall_x780/wall_x780_root_top3d.tscn",
+  "slug": "wall_x780",
+  "room_type": "bridge_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 3.9000000000000004,
+  "geom_area": 3.0300000000000002,
+  "aabb_area": 3.15000057220459,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.875
+  ],
+  "y_world": [
+   0.0,
+   11.875
+  ],
+  "tris": 2952,
+  "tris_in_band": 720
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/cable_reel/cable_reel_root_top3d.tscn",
+  "slug": "cable_reel",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 0.8736,
+  "geom_area": 0.8075000000000001,
+  "aabb_area": 0.8736009277345147,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   0.908
+  ],
+  "y_world": [
+   -0.009,
+   0.9
+  ],
+  "tris": 608,
+  "tris_in_band": 608
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/equipment_rack/equipment_rack_root_top3d.tscn",
+  "slug": "equipment_rack",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.9662599999999997,
+  "geom_area": 2.9150000000000005,
+  "aabb_area": 2.9278904323434745,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.394
+  ],
+  "y_world": [
+   0.0,
+   2.394
+  ],
+  "tris": 5432,
+  "tris_in_band": 4632
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/island_cart/island_cart_root_top3d.tscn",
+  "slug": "island_cart",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.0372999999999999,
+  "geom_area": 1.0925,
+  "aabb_area": 1.0372998549461414,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.088
+  ],
+  "y_world": [
+   -0.009,
+   1.08
+  ],
+  "tris": 828,
+  "tris_in_band": 828
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/raised_service_a/raised_service_a_root_top3d.tscn",
+  "slug": "raised_service_a",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 2,
+  "box_area": 0.23120000000000007,
+  "geom_area": 0.2625,
+  "aabb_area": 1.3804007621765777,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.91
+  ],
+  "y_world": [
+   0.58,
+   4.49
+  ],
+  "tris": 1056,
+  "tris_in_band": 564
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/raised_service_b/raised_service_b_root_top3d.tscn",
+  "slug": "raised_service_b",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 17.04,
+  "geom_area": 17.28,
+  "aabb_area": 17.039999899864142,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.32
+  ],
+  "y_world": [
+   0.0,
+   1.32
+  ],
+  "tris": 3092,
+  "tris_in_band": 3092
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/repair_island/repair_island_root_top3d.tscn",
+  "slug": "repair_island",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 2,
+  "box_area": 14.28,
+  "geom_area": 15.067500000000003,
+  "aabb_area": 20.536000446319576,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.04
+  ],
+  "y_world": [
+   0.0,
+   2.04
+  ],
+  "tris": 11216,
+  "tris_in_band": 10968
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_a/server_rack_a_root_top3d.tscn",
+  "slug": "server_rack_a",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.5148551,
+  "geom_area": 3.5575000000000006,
+  "aabb_area": 3.414459544219426,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.152
+  ],
+  "y_world": [
+   0.0,
+   3.152
+  ],
+  "tris": 6652,
+  "tris_in_band": 4222
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_b/server_rack_b_root_top3d.tscn",
+  "slug": "server_rack_b",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.5148551,
+  "geom_area": 3.5575000000000006,
+  "aabb_area": 3.4144626417546533,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.152
+  ],
+  "y_world": [
+   0.0,
+   3.152
+  ],
+  "tris": 6652,
+  "tris_in_band": 4222
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_c/server_rack_c_root_top3d.tscn",
+  "slug": "server_rack_c",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.5148551,
+  "geom_area": 3.5575000000000006,
+  "aabb_area": 3.4144618673708464,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.152
+  ],
+  "y_world": [
+   0.0,
+   3.152
+  ],
+  "tris": 6652,
+  "tris_in_band": 4222
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/server_rack_d/server_rack_d_root_top3d.tscn",
+  "slug": "server_rack_d",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.5148551,
+  "geom_area": 3.5575000000000006,
+  "aabb_area": 3.4144610929870396,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.152
+  ],
+  "y_world": [
+   0.0,
+   3.152
+  ],
+  "tris": 6652,
+  "tris_in_band": 4222
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/service_cart/service_cart_root_top3d.tscn",
+  "slug": "service_cart",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.1968,
+  "geom_area": 1.2350000000000003,
+  "aabb_area": 1.196800287437327,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.198
+  ],
+  "y_world": [
+   -0.009,
+   1.19
+  ],
+  "tris": 936,
+  "tris_in_band": 936
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/service_terminal/service_terminal_root_top3d.tscn",
+  "slug": "service_terminal",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 0.81,
+  "geom_area": 0.8575000000000002,
+  "aabb_area": 0.8100007438661123,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.44
+  ],
+  "y_world": [
+   0.0,
+   1.44
+  ],
+  "tris": 324,
+  "tris_in_band": 324
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelf/shelf_root_top3d.tscn",
+  "slug": "shelf",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.3072,
+  "geom_area": 1.3250000000000002,
+  "aabb_area": 1.3071982315068453,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.584
+  ],
+  "y_world": [
+   0.0,
+   2.584
+  ],
+  "tris": 1080,
+  "tris_in_band": 870
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/shelving/shelving_root_top3d.tscn",
+  "slug": "shelving",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.6212000000000004,
+  "geom_area": 3.6450000000000005,
+  "aabb_area": 3.555201515960107,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.192
+  ],
+  "y_world": [
+   0.0,
+   3.192
+  ],
+  "tris": 3780,
+  "tris_in_band": 2358
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_a/workbench_a_root_top3d.tscn",
+  "slug": "workbench_a",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 2,
+  "box_area": 34.849999999999994,
+  "geom_area": 34.8675,
+  "aabb_area": 102.22498893737793,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.435
+  ],
+  "y_world": [
+   0.045,
+   3.48
+  ],
+  "tris": 12060,
+  "tris_in_band": 8724
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/db_room/workbench_b/workbench_b_root_top3d.tscn",
+  "slug": "workbench_b",
+  "room_type": "db_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 6.204,
+  "geom_area": 5.4375,
+  "aabb_area": 6.204000135421666,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.99
+  ],
+  "y_world": [
+   0.0,
+   1.99
+  ],
+  "tris": 4564,
+  "tris_in_band": 4564
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_a/access_console_a_root_top3d.tscn",
+  "slug": "access_console_a",
+  "room_type": "l_corridor",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 0.5376,
+  "geom_area": 0.56,
+  "aabb_area": 0.537599607849188,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.99
+  ],
+  "y_world": [
+   0.0,
+   1.99
+  ],
+  "tris": 84,
+  "tris_in_band": 84
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_b/access_console_b_root_top3d.tscn",
+  "slug": "access_console_b",
+  "room_type": "l_corridor",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.17975,
+  "geom_area": 1.0425000000000002,
+  "aabb_area": 1.1797475399980613,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.26
+  ],
+  "y_world": [
+   0.0,
+   2.26
+  ],
+  "tris": 300,
+  "tris_in_band": 274
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/crate/crate_root_top3d.tscn",
+  "slug": "crate",
+  "room_type": "l_corridor",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.122275,
+  "geom_area": 1.1875,
+  "aabb_area": 1.1222748690008757,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.02
+  ],
+  "y_world": [
+   0.0,
+   1.02
+  ],
+  "tris": 48,
+  "tris_in_band": 48
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/planter/planter_root_top3d.tscn",
+  "slug": "planter",
+  "room_type": "l_corridor",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.09279014,
+  "geom_area": 0.9475,
+  "aabb_area": 1.0928079356381204,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.668
+  ],
+  "y_world": [
+   0.0,
+   1.668
+  ],
+  "tris": 136,
+  "tris_in_band": 136
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_rack/server_rack_root_top3d.tscn",
+  "slug": "server_rack",
+  "room_type": "l_corridor",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.019475,
+  "geom_area": 0.9425000000000001,
+  "aabb_area": 0.9677252916335419,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   3.1
+  ],
+  "y_world": [
+   -0.228,
+   3.1
+  ],
+  "tris": 348,
+  "tris_in_band": 268
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_a/service_cart_a_root_top3d.tscn",
+  "slug": "service_cart_a",
+  "room_type": "l_corridor",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.8565250000000002,
+  "geom_area": 1.8175000000000001,
+  "aabb_area": 1.856525956725818,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.69
+  ],
+  "y_world": [
+   0.0,
+   1.69
+  ],
+  "tris": 992,
+  "tris_in_band": 992
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_b/service_cart_b_root_top3d.tscn",
+  "slug": "service_cart_b",
+  "room_type": "l_corridor",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.8565250000000002,
+  "geom_area": 1.8175000000000001,
+  "aabb_area": 1.856527823540091,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.69
+  ],
+  "y_world": [
+   0.0,
+   1.69
+  ],
+  "tris": 992,
+  "tris_in_band": 992
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_a/wall_5m_a_root_top3d.tscn",
+  "slug": "wall_5m_a",
+  "room_type": "l_corridor",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 2.555,
+  "geom_area": 2.025,
+  "aabb_area": 1.9999980926513672,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.9
+  ],
+  "y_world": [
+   0.0,
+   11.9
+  ],
+  "tris": 108,
+  "tris_in_band": 42
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_b/wall_5m_b_root_top3d.tscn",
+  "slug": "wall_5m_b",
+  "room_type": "l_corridor",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 1.9500000000000002,
+  "geom_area": 2.0175,
+  "aabb_area": 1.9499874114990234,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.35
+  ],
+  "y_world": [
+   0.0,
+   1.35
+  ],
+  "tris": 24,
+  "tris_in_band": 24
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn",
+  "slug": "wall_5m_c",
+  "room_type": "l_corridor",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 2.63,
+  "geom_area": 2.2675,
+  "aabb_area": 1.9499969482421875,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.9
+  ],
+  "y_world": [
+   0.0,
+   11.9
+  ],
+  "tris": 72,
+  "tris_in_band": 22
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_d/wall_5m_d_root_top3d.tscn",
+  "slug": "wall_5m_d",
+  "room_type": "l_corridor",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 2.63,
+  "geom_area": 2.2625,
+  "aabb_area": 1.9499969482421875,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.9
+  ],
+  "y_world": [
+   0.0,
+   11.9
+  ],
+  "tris": 60,
+  "tris_in_band": 22
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/filing_run/filing_run_root_top3d.tscn",
+  "slug": "filing_run",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 4,
+  "box_area": 6.372899999999995,
+  "geom_area": 6.307500000000001,
+  "aabb_area": 30.12571433715857,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.832
+  ],
+  "y_world": [
+   0.0,
+   2.832
+  ],
+  "tris": 16104,
+  "tris_in_band": 14168
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/locker_bank/locker_bank_root_top3d.tscn",
+  "slug": "locker_bank",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.7010000000000003,
+  "geom_area": 1.6500000000000001,
+  "aabb_area": 1.7009991874692787,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.554
+  ],
+  "y_world": [
+   0.0,
+   2.554
+  ],
+  "tris": 1564,
+  "tris_in_band": 1480
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/power_cabinet_bank/power_cabinet_bank_root_top3d.tscn",
+  "slug": "power_cabinet_bank",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 2.821,
+  "geom_area": 2.5575000000000006,
+  "aabb_area": 2.730010986328125,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.346
+  ],
+  "y_world": [
+   0.0,
+   2.346
+  ],
+  "tris": 2520,
+  "tris_in_band": 1860
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/prep_bench/prep_bench_root_top3d.tscn",
+  "slug": "prep_bench",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 3.06,
+  "geom_area": 3.1050000000000004,
+  "aabb_area": 3.0599992179868423,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.91
+  ],
+  "y_world": [
+   0.0,
+   1.91
+  ],
+  "tris": 2916,
+  "tris_in_band": 2916
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/printer_station/printer_station_root_top3d.tscn",
+  "slug": "printer_station",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.6018999999999999,
+  "geom_area": 1.3350000000000002,
+  "aabb_area": 1.6018969398501213,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.242
+  ],
+  "y_world": [
+   0.0,
+   2.242
+  ],
+  "tris": 1404,
+  "tris_in_band": 1038
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/shelving/shelving_root_top3d.tscn",
+  "slug": "shelving",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 1.08,
+  "geom_area": 1.08,
+  "aabb_area": 1.079996795655461,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.312
+  ],
+  "y_world": [
+   0.0,
+   2.312
+  ],
+  "tris": 5076,
+  "tris_in_band": 4020
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/totem_column/totem_column_root_top3d.tscn",
+  "slug": "totem_column",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 1,
+  "box_area": 0.7395999999999999,
+  "geom_area": 0.81,
+  "aabb_area": 0.73960104980506,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   2.708
+  ],
+  "y_world": [
+   0.0,
+   2.708
+  ],
+  "tris": 1404,
+  "tris_in_band": 1080
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/wall_t615_5m/wall_t615_5m_root_top3d.tscn",
+  "slug": "wall_t615_5m",
+  "room_type": "office_room",
+  "policy": "structural_box_proxy",
+  "slot_role": "solid_wall",
+  "shape_nodes": 1,
+  "box_area": 3.075,
+  "geom_area": 3.2575000000000003,
+  "aabb_area": 3.0499982833862305,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   11.9
+  ],
+  "y_world": [
+   0.0,
+   11.9
+  ],
+  "tris": 5632,
+  "tris_in_band": 1342
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/water_and_supply_corner/water_and_supply_corner_root_top3d.tscn",
+  "slug": "water_and_supply_corner",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 5,
+  "box_area": 5.548800000000001,
+  "geom_area": 5.970000000000001,
+  "aabb_area": 12.163198372650186,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.88
+  ],
+  "y_world": [
+   0.0,
+   1.88
+  ],
+  "tris": 1828,
+  "tris_in_band": 1828
+ },
+ {
+  "rel": "assets/art/environments/tower_zones/expedition/runtime/room_type_components/office_room/work_cluster/work_cluster_root_top3d.tscn",
+  "slug": "work_cluster",
+  "room_type": "office_room",
+  "policy": "safe_box_proxy",
+  "slot_role": "room_type_component",
+  "shape_nodes": 3,
+  "box_area": 10.5772322,
+  "geom_area": 10.82,
+  "aabb_area": 14.152002399444427,
+  "cavity_area": 0.0,
+  "cavity_biggest": 0.0,
+  "miss_area": 0.0,
+  "miss_biggest": 0.0,
+  "y_local": [
+   0.0,
+   1.67
+  ],
+  "y_world": [
+   0.0,
+   1.67
+  ],
+  "tris": 16328,
+  "tris_in_band": 16328
+ }
+]

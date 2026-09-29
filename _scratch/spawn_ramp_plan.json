@@ -1,0 +1,314 @@
+{
+ "room_03": {
+  "bonus": [
+   1,
+   0,
+   1,
+   1
+  ],
+  "ap": [
+   4,
+   2,
+   4,
+   3
+  ],
+  "base": [
+   3,
+   2,
+   3,
+   2
+  ],
+  "wave": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "box": [
+   "room_spread",
+   "corner_ambush",
+   "corridor_column",
+   "wall_arc"
+  ],
+  "cap": [
+   9,
+   3,
+   6,
+   6
+  ],
+  "total": 13
+ },
+ "room_04": {
+  "bonus": [
+   2,
+   1,
+   1,
+   0
+  ],
+  "ap": [
+   5,
+   3,
+   3,
+   3
+  ],
+  "base": [
+   3,
+   2,
+   2,
+   3
+  ],
+  "wave": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "box": [
+   "room_spread",
+   "corner_ambush",
+   "wall_arc",
+   "corridor_column"
+  ],
+  "cap": [
+   6,
+   4,
+   3,
+   0
+  ],
+  "total": 14
+ },
+ "room_05": {
+  "bonus": [
+   1,
+   0,
+   2,
+   2
+  ],
+  "ap": [
+   4,
+   2,
+   4,
+   5
+  ],
+  "base": [
+   3,
+   2,
+   2,
+   3
+  ],
+  "wave": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "box": [
+   "room_spread",
+   "corner_ambush",
+   "center_elite",
+   "room_spread"
+  ],
+  "cap": [
+   6,
+   3,
+   6,
+   8
+  ],
+  "total": 15
+ },
+ "room_06": {
+  "bonus": [
+   1,
+   2,
+   3,
+   0
+  ],
+  "ap": [
+   3,
+   5,
+   5,
+   3
+  ],
+  "base": [
+   2,
+   3,
+   2,
+   3
+  ],
+  "wave": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "box": [
+   "corner_ambush",
+   "room_spread",
+   "wall_arc",
+   "corridor_column"
+  ],
+  "cap": [
+   3,
+   6,
+   6,
+   2
+  ],
+  "total": 16
+ },
+ "room_07": {
+  "bonus": [
+   6,
+   2,
+   2
+  ],
+  "ap": [
+   8,
+   4,
+   4
+  ],
+  "base": [
+   2,
+   2,
+   2
+  ],
+  "wave": [
+   1,
+   1,
+   2
+  ],
+  "box": [
+   "center_elite",
+   "corner_ambush",
+   "corner_ambush"
+  ],
+  "cap": [
+   9,
+   4,
+   4
+  ],
+  "total": 16
+ },
+ "room_08": {
+  "bonus": [
+   1,
+   1,
+   1,
+   2,
+   0
+  ],
+  "ap": [
+   4,
+   3,
+   3,
+   4,
+   3
+  ],
+  "base": [
+   3,
+   2,
+   2,
+   2,
+   3
+  ],
+  "wave": [
+   1,
+   1,
+   2,
+   2,
+   3
+  ],
+  "box": [
+   "room_spread",
+   "corner_ambush",
+   "wall_arc",
+   "center_elite",
+   "room_spread"
+  ],
+  "cap": [
+   7,
+   4,
+   6,
+   8,
+   0
+  ],
+  "total": 17
+ },
+ "room_09": {
+  "bonus": [
+   0,
+   0,
+   3,
+   4
+  ],
+  "ap": [
+   3,
+   2,
+   6,
+   6
+  ],
+  "base": [
+   3,
+   2,
+   3,
+   2
+  ],
+  "wave": [
+   1,
+   1,
+   2,
+   3
+  ],
+  "box": [
+   "room_spread",
+   "corner_ambush",
+   "corridor_column",
+   "wall_arc"
+  ],
+  "cap": [
+   7,
+   3,
+   6,
+   6
+  ],
+  "total": 17
+ },
+ "room_10": {
+  "bonus": [
+   0,
+   5,
+   3,
+   0
+  ],
+  "ap": [
+   3,
+   7,
+   5,
+   2
+  ],
+  "base": [
+   3,
+   2,
+   2,
+   2
+  ],
+  "wave": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "box": [
+   "room_spread",
+   "center_elite",
+   "wall_arc",
+   "corner_ambush"
+  ],
+  "cap": [
+   3,
+   8,
+   5,
+   2
+  ],
+  "total": 17
+ }
+}

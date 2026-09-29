@@ -16,6 +16,10 @@ const VfxPool3D = preload("res://src/vfx/VfxPool3D.gd")
 const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
 const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
 const ILLUMINATION_SCRIPT := preload("res://src/enemy3d/EnemyIllumination3D.gd")
+## 敌人分组名的唯一来源。Player3D/Projectile3D/PlayerVision3D 等按名字扫组，
+## 名字写死在多处时改一处会静默漏掉另一处，所以从这里取。
+const GROUP_ENEMY_3D := "enemy_3d"
+const GROUP_DAMAGEABLE_3D := "damageable_3d"
 const VALID_STATES := [
 	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
 	"telegraph", "attack", "recovery", "stagger", "dead",
@@ -164,8 +168,8 @@ var _active_explosion_committed := false
 
 
 func _ready() -> void:
-	add_to_group("enemy_3d")
-	add_to_group("damageable_3d")
+	add_to_group(GROUP_ENEMY_3D)
+	add_to_group(GROUP_DAMAGEABLE_3D)
 	collision_layer = 4
 	collision_mask = 1
 	illumination_sensor = ILLUMINATION_SCRIPT.new() as EnemyIllumination3D
@@ -568,6 +572,13 @@ func set_runtime_active(active: bool, presentation_ready_when_inactive := false)
 
 func is_runtime_ai_active() -> bool:
 	return _runtime_ai_active
+
+
+## 该敌人此刻是否在世界上"被藏起来"（潜行用的伏击怪尚未钻出地面）。
+## 屏幕外指示箭头据此不给它画箭头 —— 否则玩家还没走到跟前，箭头就把伏击点报出来了。
+## 与 `_ambush_triggered` 是同一事实，只是对外给一个只读名字。
+func is_concealed_in_world() -> bool:
+	return enemy_kind == "ambusher" and not _ambush_triggered
 
 
 func _process(delta: float) -> void:

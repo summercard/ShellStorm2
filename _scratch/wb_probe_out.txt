@@ -1,0 +1,38 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: 'res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_descent_3d/components/env_tower_door_leaf_5m_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_zones/battle/components/common_components/wall_standard_5m/wall_standard_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_zones/battle/components/common_components/wall_door_5m/wall_door_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c01_visual_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c02_visual_top3d.glb': In external resource #0, invalid UID: 'uid://b76h10o6xeuiq' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+SHAPE BackArm size=(14.1, 3.565, 1.75) local_pos=(0.0, 1.7825, -2.75)
+SHAPE SideArm size=(1.85, 3.565, 5.5) local_pos=(6.125, 1.7825, 0.875)
+DECLARED collision_shape_count=2  LIVE=2  policy=safe_box_proxy
+NOTCH empty=36/36   ARM hit=17/17   旧整块 AABB 在相同凹口点上的命中数=36（本次修掉的空阻挡点）
+INNER_FACE 后臂内侧面 z 实测=-1.875（期望 -1.875）   侧臂内侧面 x 实测=5.200（期望 5.200）
+DB_WORKBENCH_L_COLLISION_OK notch=36 arms=17 shapes=2

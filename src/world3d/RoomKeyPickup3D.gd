@@ -99,12 +99,18 @@ func _build_visual() -> void:
 	collision.shape = shape
 	add_child(collision)
 	_label = Label3D.new()
+	_label.name = "KeyLabel"
 	_label.position = Vector3(0.35, 1.35, 0)
 	_label.text = "房间钥匙"
 	_label.font_size = 34
 	_label.pixel_size = 0.011
 	_label.outline_size = 8
 	_label.modulate = Color(1.0, 0.84, 0.32)
+	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# 与掉落物名牌、敌人血条同一口径：正对镜头，俯视相机才读得到（业主 2026-09-29）。
+	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_label.no_depth_test = true
 	add_child(_label)
 
 
@@ -114,4 +120,6 @@ func get_pickup_snapshot() -> Dictionary:
 		"picked": _picked,
 		"pickup_animation_duration": PICKUP_ANIMATION_DURATION,
 		"monitoring": monitoring,
+		"label_camera_billboard": _label != null and _label.billboard == BaseMaterial3D.BILLBOARD_ENABLED,
+		"label_no_depth_test": _label != null and _label.no_depth_test,
 	}

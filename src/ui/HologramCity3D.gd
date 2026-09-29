@@ -46,7 +46,7 @@ func _build() -> void:
 				height += _rng.randf_range(0.0, 2.0)
 			var width := _rng.randf_range(0.7, 0.96)
 			var kind := 1 if _rng.randf() < 0.22 else 0
-			batches[kind].append([Vector3(x, height * 0.5, z), Vector3(width, height, width), delay])
+			_append_stepped_building(batches[kind], Vector3(x, 0, z), width, height, delay)
 			if height > 1.5:
 				batches[kind].append([Vector3(x, height + 0.22, z), Vector3(width * 0.72, 0.4, width * 0.72), delay])
 			if _rng.randf() < 0.45:
@@ -60,7 +60,7 @@ func _build() -> void:
 		var width := _rng.randf_range(0.55, 1.3)
 		var kind := 1 if i % 4 == 0 else 0
 		var delay := _rng.randf_range(0.60, 0.78)
-		batches[kind].append([p + Vector3.UP * height * 0.5, Vector3(width, height, width), delay])
+		_append_stepped_building(batches[kind], p, width, height, delay)
 		batches[2 + kind].append([p + Vector3.UP * (height + 0.5), Vector3.ONE * width * 0.8, delay])
 	for tier in 9:
 		batches[tier % 2].append([Vector3(0, tier * 1.1 + 0.55, -5), Vector3(4.3 - tier * 0.35, 1.05, 3.1 - tier * 0.22), tier * 0.009])
@@ -173,6 +173,20 @@ func _build() -> void:
 	_staged.append({"node": particles, "position": particles.position, "delay": 0.32})
 	_build_transition_particles()
 	_update_staging()
+
+func _append_stepped_building(batch: Array, base: Vector3, width: float, height: float, delay: float) -> void:
+	# Four substantial, grid-aligned feet replace the straight lower silhouette.
+	# Coordinate-derived variation preserves the existing city layout/random stream.
+	var relief := minf(width * 0.48, height * 0.32)
+	var body_bottom := relief * 0.82
+	batch.append([base + Vector3.UP * (height + body_bottom) * 0.5, Vector3(width, height - body_bottom, width), delay])
+	var pattern := posmod(int(base.x * 7.0 + base.z * 11.0), 4)
+	var levels := [0.0, 0.32, 0.70, 0.18]
+	for cell in 4:
+		var bottom: float = relief * float(levels[(cell + pattern) % 4])
+		var top := body_bottom + relief * 0.12
+		var offset := Vector3((-0.25 if cell % 2 == 0 else 0.25) * width, (bottom + top) * 0.5, (-0.25 if cell < 2 else 0.25) * width)
+		batch.append([base + offset, Vector3(width * 0.5, top - bottom, width * 0.5), delay])
 
 func _process(delta: float) -> void:
 	elapsed += delta

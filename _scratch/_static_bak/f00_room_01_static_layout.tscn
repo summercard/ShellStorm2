@@ -1,0 +1,865 @@
+[gd_scene format=3 uid="uid://coi5sc0c5ag4c"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_a/access_console_a_root_top3d.tscn" id="1_tgtgv"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/access_console_b/access_console_b_root_top3d.tscn" id="2_2vouo"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/crate/crate_root_top3d.tscn" id="3_rslmh"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_a/hanging_cable_a_root_top3d.tscn" id="6_wgoex"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_b/hanging_cable_b_root_top3d.tscn" id="7_i5qco"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_c/hanging_cable_c_root_top3d.tscn" id="8_ifgsx"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_d/hanging_cable_d_root_top3d.tscn" id="9_be6ku"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/hanging_cable_e/hanging_cable_e_root_top3d.tscn" id="10_thi4s"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_a/high_pipe_a_root_top3d.tscn" id="11_ncska"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_b/high_pipe_b_root_top3d.tscn" id="12_ru5ca"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/high_pipe_c/high_pipe_c_root_top3d.tscn" id="13_f6pji"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/pipe_riser/pipe_riser_root_top3d.tscn" id="14_j4qp1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/planter/planter_root_top3d.tscn" id="15_7q85e"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_rack/server_rack_root_top3d.tscn" id="16_3k56t"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/server_gallery/server_gallery_root_top3d.tscn" id="17_a212i"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_a/service_cart_a_root_top3d.tscn" id="18_s0pps"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/service_cart_b/service_cart_b_root_top3d.tscn" id="19_rdlw5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="20_jbv2i"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn" id="21_yeq0o"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_label/wall_label_root_top3d.tscn" id="22_fp4mb"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_a/wall_5m_a_root_top3d.tscn" id="24_cgdt0"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn" id="25_kvl6t"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_c/wall_5m_c_root_top3d.tscn" id="26_uwes0"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/l_corridor/wall_5m_d/wall_5m_d_root_top3d.tscn" id="27_adeti"]
+[ext_resource type="Script" uid="uid://dmwls48f10kdl" path="res://src/world3d/WastelandLight3D.gd" id="900_authored_light"]
+[ext_resource type="Script" uid="uid://dgieqgeh1moll" path="res://src/world3d/RoomLightSwitch3D.gd" id="901_authored_switch"]
+
+[node name="ExpeditionRoomStaticLayout" type="Node3D" unique_id=919870559]
+metadata/asset_id = "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT"
+metadata/asset_version = "v012"
+metadata/authored_room_id = "room_01"
+metadata/authored_layout_shell = true
+metadata/layout_instance_total = 123
+metadata/authored_layout_asset_id = "ENV-EXPEDITION-L01-CORRIDOR-ROOM-TYPE-LAYOUT"
+metadata/authored_layout_version = "v012"
+metadata/authored_layout_room_id = "room_01"
+metadata/authored_layout_corner_count = 0
+metadata/authored_layout_solid_wall_count = 32
+metadata/authored_layout_door_wall_count = 1
+metadata/authored_layout_floor_tile_count = 42
+metadata/authored_layout_exclusive_count = 0
+metadata/authored_layout_multi_level_count = 0
+metadata/authored_layout_room_type_component_count = 47
+metadata/authored_layout_promoted_walls = Array[String](["ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_SOUTH@west"])
+metadata/snapshot_tower_wall_door_offset_north = 12.5
+metadata/snapshot_tower_wall_door_offset_west = 15.0
+metadata/schema = "shellstorm2.expedition.room_static_layout.v001"
+metadata/room_id = "room_01"
+metadata/room_type = "COMBAT"
+metadata/source_mode = "live_expedition_runtime_static_extract"
+metadata/static_layout_only = true
+metadata/dynamic_runtime_owned = ["RoomDoor3D", "RoomTrigger", "RuntimeDetail", "NavigationRegion3D"]
+metadata/connection_port_count = 4
+metadata/authored_room_devices = true
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_00" parent="." unique_id=847806123 instance=ExtResource("1_tgtgv")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.646, 0, -19.5)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_01" parent="." unique_id=1798839514 instance=ExtResource("2_2vouo")]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, 18.5738, 0, 4.62)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-CONSOLE_02" parent="." unique_id=1540282345 instance=ExtResource("2_2vouo")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -9.92, 0, 20.6238)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-ACCESS_CONSOLE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-CRATE_00" parent="." unique_id=1375340628 instance=ExtResource("3_rslmh")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.6913, 0, -20.6)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-CRATE"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-CRATE_01" parent="." unique_id=1076125267 instance=ExtResource("3_rslmh")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.7413, 0, -2.3000002)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-CRATE"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-CRATE_04" parent="." unique_id=1163958554 instance=ExtResource("3_rslmh")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -18.0087, 0, 20.7)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-CRATE"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_A" parent="." unique_id=544974961 instance=ExtResource("6_wgoex")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.3127, 3.435, 6.9524)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_GALLERY_B" parent="." unique_id=372215333 instance=ExtResource("7_i5qco")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.3526, 4.035, 10.8478)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_A" parent="." unique_id=1290305185 instance=ExtResource("8_ifgsx")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -3.9749997, 2.985, 21.868)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_C"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_SOUTH_B" parent="." unique_id=769201957 instance=ExtResource("9_be6ku")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.275, 3.835, 21.8527)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_D"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HANGING_CABLE_TURN" parent="." unique_id=1529164674 instance=ExtResource("10_thi4s")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.95, 4.785, 21.71)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HANGING_CABLE_E"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_00" parent="." unique_id=410150310 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.5, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_01" parent="." unique_id=1639593762 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.5, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_02" parent="." unique_id=720184142 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.4999995, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_03" parent="." unique_id=1368430262 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.4999998, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_04" parent="." unique_id=652042022 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5000002, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_05" parent="." unique_id=1302748676 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5000005, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_06" parent="." unique_id=392485387 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_EAST_07" parent="." unique_id=1334167923 instance=ExtResource("11_ncska")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, 6.62, 22.1925)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_00" parent="." unique_id=275023537 instance=ExtResource("12_ru5ca")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.6925, 6.62, -20)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_01" parent="." unique_id=1578485954 instance=ExtResource("13_f6pji")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.68, 6.62, -15)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_02" parent="." unique_id=856852134 instance=ExtResource("12_ru5ca")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.6925, 6.62, -10)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_03" parent="." unique_id=1077296895 instance=ExtResource("13_f6pji")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.68, 6.62, -5)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_04" parent="." unique_id=529687439 instance=ExtResource("12_ru5ca")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.6925, 6.62, -2.3483071e-07)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_05" parent="." unique_id=165507791 instance=ExtResource("13_f6pji")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.68, 6.62, 5)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_06" parent="." unique_id=2125854473 instance=ExtResource("12_ru5ca")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.6925, 6.62, 10)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_07" parent="." unique_id=2043744918 instance=ExtResource("13_f6pji")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.68, 6.62, 15)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_C"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-HIGH_PIPE_REAR_08" parent="." unique_id=668492243 instance=ExtResource("12_ru5ca")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.6925, 6.62, 20)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-HIGH_PIPE_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_00" parent="." unique_id=859013164 instance=ExtResource("14_j4qp1")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.62, 0.325, -19.9725)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_01" parent="." unique_id=1097968017 instance=ExtResource("14_j4qp1")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.62, 0.325, -12.2725)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_02" parent="." unique_id=978485046 instance=ExtResource("14_j4qp1")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.62, 0.325, -6.4725)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_03" parent="." unique_id=971196620 instance=ExtResource("14_j4qp1")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.62, 0.325, 7.2275)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_04" parent="." unique_id=2067480246 instance=ExtResource("14_j4qp1")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.62, 0.325, 11.9275)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PIPE_RISER_05" parent="." unique_id=1228437689 instance=ExtResource("14_j4qp1")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.62, 0.325, 19.8275)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PIPE_RISER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PLANTER_00" parent="." unique_id=1827304219 instance=ExtResource("15_7q85e")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.8, 0, -17.0868)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PLANTER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PLANTER_01" parent="." unique_id=1960032472 instance=ExtResource("15_7q85e")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.8, 0, 10.7132)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PLANTER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-PLANTER_02" parent="." unique_id=728030824 instance=ExtResource("15_7q85e")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.8, 0, 8.7632)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-PLANTER"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_00" parent="." unique_id=1852509975 instance=ExtResource("16_3k56t")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.7675, 0, -9.7)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_01" parent="." unique_id=575594241 instance=ExtResource("16_3k56t")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.7675, 0, -8.5)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_02" parent="." unique_id=1531854880 instance=ExtResource("16_3k56t")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.0325, 0, 21)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_03" parent="." unique_id=2026044565 instance=ExtResource("16_3k56t")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -13.0325, 0, 21)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_04" parent="." unique_id=177896753 instance=ExtResource("16_3k56t")]
+transform = Transform3D(0.9795261, 0, 0.20131737, 0, 1, 0, -0.20131737, 0, 0.9795261, -9.0325, 0, 8.7)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_RACK"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVER_GALLERY" parent="." unique_id=1043339596 instance=ExtResource("17_a212i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.565, 0.9625, 0.49999976)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVER_GALLERY"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_GALLERY" parent="." unique_id=1048694177 instance=ExtResource("18_s0pps")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 18.2688, 0, 9.5)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_A"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-SERVICE_CART_SOUTH" parent="." unique_id=1301151031 instance=ExtResource("19_rdlw5")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -5.1999993, 0, 20.7312)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-SERVICE_CART_B"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C06" parent="." unique_id=21402818 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.5, -0.056, 10)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C07" parent="." unique_id=782163780 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.5, -0.081, 15)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R00_C08" parent="." unique_id=629184992 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.5, -0.056, 20)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C06" parent="." unique_id=340359872 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.5, -0.081, 10)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C07" parent="." unique_id=1593994707 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.5, -0.056, 15)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R01_C08" parent="." unique_id=11206801 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.5, -0.081, 20)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C06" parent="." unique_id=757055373 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.5, -0.056, 10)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C07" parent="." unique_id=1613999811 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.5, -0.081, 15)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R02_C08" parent="." unique_id=603819961 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.4999995, -0.056, 20)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C06" parent="." unique_id=1140403885 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.4999998, -0.081, 10)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C07" parent="." unique_id=1747411695 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.4999998, -0.056, 15)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R03_C08" parent="." unique_id=743944663 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.4999998, -0.081, 20)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C06" parent="." unique_id=1234745917 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5000002, -0.056, 10)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C07" parent="." unique_id=1161919348 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5000002, -0.081, 15)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R04_C08" parent="." unique_id=2101115458 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5000002, -0.056, 20)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C00" parent="." unique_id=877632515 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.4999995, -0.056, -20)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C01" parent="." unique_id=1816543413 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, -0.081, -15)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C02" parent="." unique_id=534516276 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, -0.056, -10)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C03" parent="." unique_id=64597281 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, -0.081, -5)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C04" parent="." unique_id=1271549503 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, -0.056, -8.9436604e-08)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C05" parent="." unique_id=1117277960 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, -0.056, 5)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C06" parent="." unique_id=350100361 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, -0.081, 10)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C07" parent="." unique_id=2142695574 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5, -0.056, 15)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R05_C08" parent="." unique_id=744905238 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5000005, -0.081, 20)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C00" parent="." unique_id=1220675416 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.081, -20)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C01" parent="." unique_id=1530542651 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.056, -15)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C02" parent="." unique_id=549612591 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.081, -10)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C03" parent="." unique_id=1474704411 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.056, -5)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C04" parent="." unique_id=1140727585 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.081, -1.4906101e-07)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_C"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C05" parent="." unique_id=1826636981 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.081, 5)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C06" parent="." unique_id=957641059 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.056, 10)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C07" parent="." unique_id=1158104848 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.081, 15)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R06_C08" parent="." unique_id=10977547 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, -0.056, 20)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C00" parent="." unique_id=2091003340 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.056, -20)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C01" parent="." unique_id=525050023 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.081, -15)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C02" parent="." unique_id=1258851246 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.056, -10)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C03" parent="." unique_id=1387392114 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.081, -5)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C04" parent="." unique_id=688621516 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.056, -2.086854e-07)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C05" parent="." unique_id=2094649163 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.056, 5)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C06" parent="." unique_id=734906796 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.081, 10)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C07" parent="." unique_id=1903898908 instance=ExtResource("20_jbv2i")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.056, 15)
+metadata/walk_plane_snap_y = -0.056
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_A"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-TILE_R07_C08" parent="." unique_id=1104091703 instance=ExtResource("21_yeq0o")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, -0.081, 20)
+metadata/walk_plane_snap_y = -0.081
+metadata/authored_component_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-FLOOR_TILE_5M_B"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_GALLERY" parent="." unique_id=1579966348 instance=ExtResource("22_fp4mb")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.4462, 2.295, 8.5)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_LABEL_SOUTH" parent="." unique_id=65526491 instance=ExtResource("22_fp4mb")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.0136995, 2.295, 21.9)
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_LABEL"
+metadata/authored_slot_role = "room_type_component"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_FRONT" parent="." unique_id=143814090 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.9602933, 0, -20)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_00_REAR" parent="." unique_id=348671205 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, -20)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_FRONT" parent="." unique_id=249728348 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.8945, 0, -15)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_05_REAR" parent="." unique_id=2077770416 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, -15)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_FRONT" parent="." unique_id=1063680202 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.8945, 0, -10)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_10_REAR" parent="." unique_id=424822071 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, -10)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_FRONT" parent="." unique_id=541802680 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.8945, 0, -5)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_15_REAR" parent="." unique_id=657240828 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, -5)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_FRONT" parent="." unique_id=439438467 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.8945, 0, -5.8366325e-08)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_20_REAR" parent="." unique_id=720478633 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, -2.3723955e-07)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_FRONT" parent="." unique_id=1368079701 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.8945, 0, 5)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_25_REAR" parent="." unique_id=840046141 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, 5)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_REAR" parent="." unique_id=302166968 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, 10)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_30_SOUTH" parent="." unique_id=70384334 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20.1055, 0, 10)
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_REAR" parent="." unique_id=1417002594 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, 15)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_35_SOUTH" parent="." unique_id=830370836 instance=ExtResource("25_kvl6t")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20.1055, 0, 15)
+metadata/grid_unit_m = 5.0
+metadata/tower_wall_direction = "west"
+metadata/authored_component_id = "ENV-SHARED-GENERIC-WALL-DOOR-5M"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_door_wall_promoted = true
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_FRONT" parent="." unique_id=118300316 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20.1055, 0, 20)
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_X_40_REAR" parent="." unique_id=1867696345 instance=ExtResource("24_cgdt0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 19.8945, 0, 20)
+metadata/tower_wall_direction = "east"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_A"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_35" parent="." unique_id=1327651474 instance=ExtResource("27_adeti")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -17.5, 0, 7.5174446)
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_00_45" parent="." unique_id=1636150341 instance=ExtResource("26_uwes0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -17.5, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_35" parent="." unique_id=1939224843 instance=ExtResource("27_adeti")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.5, 0, 7.387)
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_05_45" parent="." unique_id=1573309825 instance=ExtResource("27_adeti")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -12.5, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_35" parent="." unique_id=1024336679 instance=ExtResource("27_adeti")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5, 0, 7.387)
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_10_45" parent="." unique_id=1562255680 instance=ExtResource("26_uwes0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -7.4999995, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_35" parent="." unique_id=1583067187 instance=ExtResource("27_adeti")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 0, 7.387)
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_15_45" parent="." unique_id=1596115232 instance=ExtResource("27_adeti")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -2.4999998, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_35" parent="." unique_id=1416921416 instance=ExtResource("27_adeti")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.5, 0, 7.387)
+metadata/tower_wall_direction = "west"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_20_45" parent="." unique_id=2068555655 instance=ExtResource("26_uwes0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 2.5000002, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_00" parent="." unique_id=762329491 instance=ExtResource("27_adeti")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.4999995, 0, -22.517393)
+metadata/tower_wall_direction = "north"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_25_45" parent="." unique_id=1436907215 instance=ExtResource("27_adeti")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 7.5000005, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_30_45" parent="." unique_id=1937901251 instance=ExtResource("26_uwes0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 12.5, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_00" parent="." unique_id=1846684003 instance=ExtResource("27_adeti")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 17.5, 0, -22.613)
+metadata/tower_wall_direction = "north"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_D"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ENV-EXPEDITION-L-CORRIDOR-WALL_Y_35_45" parent="." unique_id=1592828564 instance=ExtResource("26_uwes0")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 17.5, 0, 22.387)
+metadata/tower_wall_direction = "south"
+metadata/grid_unit_m = 5.0
+metadata/authored_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/authored_source_component_id = "ENV-EXPEDITION-L01-CORRIDOR-WALL_5M_C"
+metadata/shadow_policy = "cast_and_receive"
+
+[node name="ConnectionPorts" type="Node3D" parent="." unique_id=1386598201]
+metadata/connection_port_count = 4
+
+[node name="Port_A" type="Marker3D" parent="ConnectionPorts" unique_id=1467881248]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 12.5, 0, -22.5)
+metadata/port_id = "A"
+metadata/target_room_id = "start"
+metadata/side = "north"
+metadata/lane_m = 12.5
+metadata/outward = Vector2(0, -1)
+metadata/connected = true
+
+[node name="Port_B" type="Marker3D" parent="ConnectionPorts" unique_id=742495742]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -20, 0, 15)
+metadata/port_id = "B"
+metadata/target_room_id = "room_02"
+metadata/side = "west"
+metadata/lane_m = 15.0
+metadata/outward = Vector2(-1, 0)
+metadata/connected = true
+
+[node name="Port_C" type="Marker3D" parent="ConnectionPorts" unique_id=717461094]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, -15)
+metadata/port_id = "C"
+metadata/target_room_id = ""
+metadata/side = "east"
+metadata/lane_m = -15.0
+metadata/outward = Vector2(1, 0)
+metadata/connected = false
+
+[node name="Port_D" type="Marker3D" parent="ConnectionPorts" unique_id=749655490]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20, 0, 15)
+metadata/port_id = "D"
+metadata/target_room_id = ""
+metadata/side = "east"
+metadata/lane_m = 15.0
+metadata/outward = Vector2(1, 0)
+metadata/connected = false
+
+[node name="RoomCeilingLight" type="Node3D" parent="." unique_id=1499392435]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.345659, 11.410125, 16.122583)
+script = ExtResource("900_authored_light")
+light_color = Color(0.4342958, 0.5404093, 0.8287056, 1)
+energy = 12.5
+light_range = 23.5
+failing = false
+flicker_seed = 77105928
+cast_shadow = true
+fixture_style = "ceiling"
+light_enabled = false
+metadata/authored_room_device = "ceiling_light"
+
+[node name="RoomLightSwitch3D" type="Area3D" parent="." unique_id=1963385165]
+transform = Transform3D(-0.9454902, 0, 0.3256506, 0, 1, 0, -0.3256506, 0, -0.9454902, 5.040447, 0, -14.820323)
+script = ExtResource("901_authored_switch")
+metadata/authored_room_device = "light_switch"

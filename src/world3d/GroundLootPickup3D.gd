@@ -11,6 +11,18 @@ var _label: Label3D
 var _pickup_grace_until_msec := 0
 
 const PICKUP_ANIMATION_DURATION := 0.32
+## —— 头顶名牌（业主 2026-09-29：俯视镜头读不到名字）——
+## 原来 Label3D 用的是默认朝向（不 billboard），文字躺在自己的 XY 平面上、
+## 只朝世界 +Z。俯视镜头看到的是纸片侧面 ⇒ 一个字都读不出来。
+## 现在与敌人血条 / 伤害数字同一口径：始终正对镜头，且不被家具与墙体遮掉。
+## 下面几个数就是「上面的文字」的可调旋钮，改这里，别在别处复刻一份：
+##   嫌小 → 抬 LABEL_FONT_SIZE（字号）或 LABEL_PIXEL_SIZE（世界尺寸/像素比）
+##   嫌高/嫌低 → 改 LABEL_HEIGHT_M（相对物品原点的米数）
+##   嫌糊 → 抬 LABEL_OUTLINE_SIZE（黑描边宽度）
+const LABEL_HEIGHT_M := 1.05
+const LABEL_FONT_SIZE := 30
+const LABEL_PIXEL_SIZE := 0.010
+const LABEL_OUTLINE_SIZE := 8
 ## entity_size_baseline_v2：旧资产的 70% 定义为当前世界道具的 100%。
 ## 保留旧倍率用于迁移/回退，禁止把 0.70 直接烘进各物品类型的旧值。
 const CURRENT_BASE_SIZE_MULTIPLIER := 0.70
@@ -104,7 +116,8 @@ func _build_visual(color: Color) -> void:
 	collision.shape = shape
 	add_child(collision)
 	_label = Label3D.new()
-	_label.position = Vector3(0, 1.05, 0)
+	_label.name = "LootLabel"
+	_label.position = Vector3(0, LABEL_HEIGHT_M, 0)
 	_label.text = str(item_data.get("name", item_data.get("id", "物资")))
 	if str(item_data.get("type", "")) == "weapon":
 		var upgrades: Variant = item_data.get("fate_upgrades", [])
@@ -114,10 +127,15 @@ func _build_visual(color: Color) -> void:
 			used,
 			int(item_data.get("fate_slot_capacity", 8)),
 		]
-	_label.font_size = 30
-	_label.pixel_size = 0.010
-	_label.outline_size = 8
+	_label.font_size = LABEL_FONT_SIZE
+	_label.pixel_size = LABEL_PIXEL_SIZE
+	_label.outline_size = LABEL_OUTLINE_SIZE
 	_label.modulate = color.lightened(0.20)
+	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# 正对镜头 + 不参与深度遮挡：俯视相机下这才读得到（与敌人血条同口径）。
+	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_label.no_depth_test = true
 	add_child(_label)
 
 
@@ -139,4 +157,10 @@ func get_model_snapshot() -> Dictionary:
 		"legacy_visual_scale": legacy_scale,
 		"base_size_multiplier": CURRENT_BASE_SIZE_MULTIPLIER,
 		"visual_scale": _visual.scale if _visual != null else Vector3.ZERO,
+		# 头顶名牌朝向：与 `Enemy3D.overhead_health_camera_billboard` 同一口径，
+		# 让门禁能直接断言「俯视镜头读得到名字」，而不是只靠肉眼。
+		"label_camera_billboard": _label != null and _label.billboard == BaseMaterial3D.BILLBOARD_ENABLED,
+		"label_no_depth_test": _label != null and _label.no_depth_test,
+		"label_height_m": LABEL_HEIGHT_M,
+		"label_text": _label.text if _label != null else "",
 	}

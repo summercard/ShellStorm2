@@ -1,12 +1,35 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_visual_top3d.glb" id="1_visual"]
 
-[node name="赛博维修圆凳" type="Node3D"]
+[sub_resource type="BoxShape3D" id="ShapePushableStool"]
+size = Vector3(0.72, 0.72, 0.72)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterialRollers"]
+friction = 0.18
+bounce = 0.0
+
+[node name="赛博维修圆凳" type="RigidBody3D" groups=["pushable_furniture"]]
+mass = 10.0
+linear_damp = 0.8
+angular_damp = 4.0
+contact_monitor = true
+max_contacts_reported = 12
+lock_rotation_x = true
+lock_rotation_z = true
+collision_layer = 1
+collision_mask = 1
+continuous_cd = 2
+physics_material_override = SubResource("PhysicsMaterialRollers")
 metadata/asset_name_cn = "赛博维修圆凳"
 metadata/asset_category = "decor_prop"
 metadata/asset_source = "res://assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v003.blend"
 metadata/forward_axis = "-Z"
-metadata/interactive = false
+metadata/physics_interactive = true
+metadata/collision_contract = "pushable_rigidbody: player, furniture and base geometry share layer 1"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="WorldCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.36, 0)
+shape = SubResource("ShapePushableStool")

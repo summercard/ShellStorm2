@@ -12,10 +12,11 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().physics_frame
 	await _verify_room_light_key_recovery_and_pickups(dungeon, failures)
+	await _verify_ground_loot_scatter(dungeon, failures)
 	dungeon.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("3D_COMBAT_PROGRESSION_FLOW_OK: balanced central light, near-player room keys, missing-key recovery, dedupe and pickup pop-spin feedback pass")
+		print("3D_COMBAT_PROGRESSION_FLOW_OK: balanced central light, near-player room keys, missing-key recovery, dedupe, pickup pop-spin feedback and ground-loot scatter/camera-facing labels pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -61,6 +62,10 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 		var key_snapshot := key.get_pickup_snapshot()
 		if not is_instance_valid(key) or not bool(key_snapshot.get("picked", false)) or key.is_queued_for_deletion():
 			failures.append("Room key disappears in the pickup frame instead of playing pop-spin feedback")
+		# 头顶名牌必须正对镜头（业主 2026-09-29：俯视镜头只看到纸片侧面，一个字读不到）。
+		# 反向对照：把 `_label.billboard` 改回默认（BILLBOARD_DISABLED）这条必红。
+		if not bool(key_snapshot.get("label_camera_billboard", false)):
+			failures.append("Room key label is not billboarded toward the camera")
 		await get_tree().create_timer(0.42).timeout
 		await get_tree().process_frame
 		if is_instance_valid(key):
@@ -92,6 +97,13 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 	)
 	if not (loot_size_snapshot.get("visual_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE * expected_item_scale):
 		failures.append("Ground item did not migrate from the legacy visual scale to the current 70% baseline")
+	# 名牌朝向 + 不吃深度遮挡：俯视相机下这才读得到（与敌人血条同一口径）。
+	if not bool(loot_size_snapshot.get("label_camera_billboard", false)):
+		failures.append("Ground loot label is not billboarded toward the camera")
+	if not bool(loot_size_snapshot.get("label_no_depth_test", false)):
+		failures.append("Ground loot label still takes depth occlusion from furniture and walls")
+	if (loot_size_snapshot.get("label_text", "") as String).is_empty():
+		failures.append("Ground loot label lost its item name text")
 	var weapon_loot := GroundLootPickup3D.new()
 	weapon_loot.configure({
 		"id": "weapon_pistol",
@@ -121,6 +133,79 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 	var runtime := dungeon.get_runtime_snapshot()
 	if int(runtime.get("spawned_key_room_count", 0)) < 2:
 		failures.append("Runtime diagnostics do not expose key reward coverage")
+
+
+## —— 地面掉落的散布与名牌朝向（业主 2026-09-29）——
+## 两条诉求各自对应一组判据：
+## ① 「太集中」：半径必须逐件张开、最外件超过旧螺旋的 1.6 m 上限 ⇒ 曲线与范围都真变了；
+## ② 「别掉进阻挡里」：真实生成的 6 件必须全部落在房间足迹内、且落点净空为真。
+## 反向对照：把 `_loot_scatter_offset` 换回 `0.7 + index * 0.18`（旧螺旋）⇒ ① 必红；
+## 把 `_resolve_loot_spawn_position` 换回直接 `_find_supported_spawn_position` ⇒ ② 仍有概率绿，
+## 所以 ② 只作为「不回归」的护栏，不是本次改动的独立证据。
+func _verify_ground_loot_scatter(dungeon: Dungeon3D, failures: Array[String]) -> void:
+	var rooms_by_id := dungeon.get("_room_by_id") as Dictionary
+	var room := _find_eligible_room(dungeon, rooms_by_id, true)
+	if room == null:
+		failures.append("Generated dungeon has no eligible room for ground-loot scatter acceptance")
+		return
+	var item_count := 6
+	var scatter_radius := float(dungeon.call("_loot_scatter_max_radius", room, item_count))
+	if scatter_radius < Dungeon3D.LOOT_SCATTER_MIN_RADIUS_M:
+		failures.append("Loot scatter outer radius collapsed below the single-item floor (%.3f)" % scatter_radius)
+
+	var previous_radius := -1.0
+	var min_pair_distance := INF
+	var radii: Array[float] = []
+	for index in range(item_count):
+		var offset := dungeon.call("_loot_scatter_offset", index, item_count, scatter_radius) as Vector3
+		var radius := Vector2(offset.x, offset.z).length()
+		radii.append(radius)
+		if radius < Dungeon3D.LOOT_SCATTER_MIN_RADIUS_M - 0.001:
+			failures.append("Loot scatter entry %d sits closer than the single-item radius (%.3f)" % [index, radius])
+		if radius <= previous_radius:
+			failures.append("Loot scatter radius curve is not strictly widening at entry %d (%.3f <= %.3f)" % [index, radius, previous_radius])
+		previous_radius = radius
+		for other_index in range(index):
+			var other := dungeon.call("_loot_scatter_offset", other_index, item_count, scatter_radius) as Vector3
+			min_pair_distance = minf(min_pair_distance, (offset - other).length())
+	if radii[item_count - 1] < 1.8:
+		failures.append("Loot scatter stays inside the old 1.6 m spiral (outermost=%.3f)" % radii[item_count - 1])
+	if min_pair_distance < 0.5:
+		failures.append("Loot scatter entries stack on each other (closest pair=%.3f m)" % min_pair_distance)
+
+	# 真实落地：房间中心放 6 件，要求散开、不出房间足迹、且每件落点净空。
+	room.cleared = true
+	var dimensions := room.get_dimensions()
+	var origin := room.to_global(Vector3(0.0, 0.08, 0.0))
+	var batch: Array[Dictionary] = []
+	for index in range(item_count):
+		var item := (ItemRegistry.get_instance().get_item("item_health_potion") as Dictionary).duplicate(true)
+		item["count"] = 1
+		batch.append(item)
+	var spawned := int(dungeon.call("_spawn_loot_items", room, batch, origin))
+	await get_tree().process_frame
+	if spawned != item_count:
+		failures.append("Ground loot batch spawn returned %d/%d" % [spawned, item_count])
+	var landings: Array[Vector3] = []
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if (
+			value is GroundLootPickup3D
+			and room.is_ancestor_of(value)
+			and not (value as GroundLootPickup3D).is_queued_for_deletion()
+		):
+			landings.append((value as GroundLootPickup3D).global_position)
+	if landings.size() != item_count:
+		failures.append("Ground loot batch did not leave %d world pickups (got %d)" % [item_count, landings.size()])
+	var farthest := 0.0
+	for landing in landings:
+		var local := room.to_local(landing)
+		if absf(local.x) > dimensions.x * 0.5 - 0.5 or absf(local.z) > dimensions.y * 0.5 - 0.5:
+			failures.append("Ground loot landed outside the room footprint at (%.2f, %.2f)" % [local.x, local.z])
+		if not bool(dungeon.call("_is_loot_landing_clear", landing)):
+			failures.append("Ground loot landed inside a blocker at (%.2f, %.2f)" % [local.x, local.z])
+		farthest = maxf(farthest, Vector2(local.x, local.z).length())
+	if farthest < 1.9:
+		failures.append("Ground loot batch stayed concentrated in the world (farthest=%.3f m)" % farthest)
 
 
 func _find_eligible_room(dungeon: Dungeon3D, rooms_by_id: Dictionary, prefer_large: bool) -> DungeonRoom3D:

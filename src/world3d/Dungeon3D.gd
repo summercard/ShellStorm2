@@ -43,7 +43,37 @@ const ENEMY_PREACTIVATION_INTERVAL := 0.12
 const ROOM_WAVE_INTERMISSION_SECONDS := 2.0
 const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTILES
 const ENEMY_FILL_ATTEMPT_LIMIT := 4
+## —— 地面掉落的散布（业主 2026-09-29：原来的落点太集中，但要散得开又不能不进墙）——
+## 半径曲线按「等面积」取 sqrt：落点铺满圆面，而不是件数越多越往外稀、中心却空一圈。
+## 外半径随件数按 sqrt 抬：`r_max = clamp(单件基准半径 × sqrt(件数), 下限, 上限)`。
+## 三个数就是可调旋钮：嫌挤抬 `LOOT_SCATTER_UNIT_RADIUS_M` / `LOOT_SCATTER_MAX_RADIUS_M`，
+## 要求「至少有间距」抬 `LOOT_SCATTER_MIN_RADIUS_M`（单件也保证不压在原点上）。
+const LOOT_SCATTER_MIN_RADIUS_M := 0.85
+const LOOT_SCATTER_UNIT_RADIUS_M := 0.95
+const LOOT_SCATTER_MAX_RADIUS_M := 2.60
+## 黄金角：逐件错开、件数少时也不会连成一条同向螺旋线。
+const LOOT_SCATTER_GOLDEN_ANGLE := 2.399963
+## 落点水平净空：贴地后在这个高度上用这个半径探一次，撞到层 1 的墙/家具就换候选点。
+## 高度取 0.45 m（矮于台面、高于地面），半径取 0.30 m（略大于掉落物自身半径）。
+## 单件家具贴脸时最多退到原点附近 —— 宁可挤，不可塞进墙里。
+const LOOT_SCATTER_CLEARANCE_HEIGHT_M := 0.45
+const LOOT_SCATTER_CLEARANCE_RADIUS_M := 0.30
+## 候选点被占时按这个比例向原点方向收缩重试。
+const LOOT_SCATTER_FALLBACK_SHRINK := [0.66, 0.33]
 const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
+const OFFSCREEN_INDICATOR_SCRIPT := preload("res://src/ui/OffscreenEnemyIndicator3D.gd")
+## 屏幕外怪物指示箭头的喂数节奏。比小地图快一档：相机一转，整屏的"屏幕外"就全变了。
+const OFFSCREEN_INDICATOR_INTERVAL := 1.0 / 20.0
+## 取数半径（米，平面距离）。最大战斗房 65×65 ⇒ 半对角线 ≈ 46 m，向上取整到 50，
+## 保证"站在房中央能指到房间四角还活着的那只"；再远就跨到别的房间了，箭头会变成噪音。
+## 这只是上限：真正的门是 `Enemy3D.is_runtime_ai_active()`（休眠怪不给箭头）。
+const OFFSCREEN_INDICATOR_RANGE_M := 50.0
+## 同层容差，沿用 `Enemy3D.activate_from_player_proximity` 的楼板口径（4.5 m）。
+## 分两层楼的怪不互相指 —— 塔楼里指到上一层没有任何意义。
+const OFFSCREEN_INDICATOR_FLOOR_TOLERANCE_M := 4.5
+## 箭头指向的高度：怪的原点在脚底，指脚底会让箭头在透视下偏低；
+## 取 0.9 m ≈ 躯干中线（小怪体高约 1.7 m），指向与肉眼看到的身体位置一致。
+const OFFSCREEN_INDICATOR_TARGET_HEIGHT_M := 0.9
 const FATE_CURRENCY_BY_RARITY := [20, 40, 70, 120, 180]
 const BASE_INVENTORY_CAPACITY := 12
 ## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
@@ -216,6 +246,8 @@ var _last_battery_tier := -1
 var _hud_battery_blink_visible := 1.0
 var _full_map_overlay: Control = null
 var _full_map_control: DungeonMinimap3D = null
+var _offscreen_indicator: OffscreenEnemyIndicator3D = null
+var _offscreen_indicator_accumulator := 0.0
 var _hud_floor_label: Label = null
 var _hud_timer_label: Label = null
 var _hud_wave_label: Label = null
@@ -871,6 +903,16 @@ func _process(delta: float) -> void:
 			minimap.set_enemy_positions(_get_minimap_enemy_positions())
 			if _full_map_control != null and is_instance_valid(_full_map_control):
 				_full_map_control.copy_state_from(minimap)
+	_offscreen_indicator_accumulator += delta
+	if _offscreen_indicator_accumulator >= OFFSCREEN_INDICATOR_INTERVAL:
+		_offscreen_indicator_accumulator = fmod(
+			_offscreen_indicator_accumulator, OFFSCREEN_INDICATOR_INTERVAL
+		)
+		if _offscreen_indicator != null and is_instance_valid(_offscreen_indicator):
+			_offscreen_indicator.set_targets(
+				_get_offscreen_enemy_positions(),
+				get_viewport().get_camera_3d()
+			)
 
 
 ## HUD 右上、小地图正上方那块「当前所处区域」标签的文案。
@@ -1054,6 +1096,7 @@ func _install_holographic_hud_style() -> void:
 	($HUD/ControlHint as Control).visible = false
 	($HUD/VisionHint as Control).visible = false
 	_build_reference_main_hud()
+	_install_offscreen_enemy_indicator()
 
 	var extraction_style := _make_hud_style(Color(0.22, 1.0, 0.66), Color(0.008, 0.044, 0.046, 0.94), 2)
 	extraction_panel.add_theme_stylebox_override("panel", extraction_style)
@@ -1310,6 +1353,24 @@ func _build_reference_main_hud() -> void:
 	_refresh_quick_item_hud()
 	# 右下角不再放 R/SHIFT/F/E 四个动作键图标：动作本身仍走 InputMap（键盘与手柄照常），
 	# 这里只去掉 HUD 上的可视 + 点击入口。
+
+
+## 屏幕外怪物指示箭头（UI-HUD r2）。设计与判据见
+## `docs/v0.1/design/对话与战斗信息呈现设计.md` 的「屏幕外怪物指示箭头」。
+##
+## 放在 `$HUD` 下、而**不是** ReferenceCombatHUD 里：它与小地图同属"看世界"的层，
+## 不参与 HUD 面板布局；`z_index = 110` 压在小地图（105）之上、低血量暗角（220）之下，
+## 保证箭头不被面板背板吃掉，但也盖不住血量告急的全屏效果。
+func _install_offscreen_enemy_indicator() -> void:
+	if _offscreen_indicator != null and is_instance_valid(_offscreen_indicator):
+		return
+	var indicator := OFFSCREEN_INDICATOR_SCRIPT.new() as OffscreenEnemyIndicator3D
+	indicator.name = "OffscreenEnemyIndicator3D"
+	indicator.set_anchors_preset(Control.PRESET_FULL_RECT)
+	indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	indicator.z_index = 110
+	$HUD.add_child(indicator)
+	_offscreen_indicator = indicator
 
 
 func _on_weapon_panel_gui_input(event: InputEvent, panel: PanelContainer) -> void:
@@ -2495,13 +2556,31 @@ func _collect_box_stage_entries(
 		return
 	var spec: Array[Dictionary] = []
 	var total := 0
+	# 逐实例出怪总量增量（`spawn_placements[].count_bonus`，设计 §3.2）：
+	# 只加在**首条非身份条目**上。为什么排除 `elite` / `boss`：那两条是**身份指派**
+	# （内容），「加量」的语义是加普通杂兵；把它加到精英条目上会把「1 只精英」变成
+	# 「N 只精英」，是阶跃式的难度跳变，不是业主口径的「多刷几只怪」。
+	# 每条目仍各自抽 `count.min/max`，增量加在抽签结果上 ⇒ `box_wall_arc` 的 1~2 区间
+	# 平移成 (1+N)~(2+N)，随机性保留。
+	var bonus := int(placement.get("box_count_bonus", 0))
+	var bonus_used := false
 	for spawn_value in (box.get("spawns", []) as Array):
 		var spawn := spawn_value as Dictionary
+		var type_id := str(spawn.get("type", ""))
 		var count := _roll_box_count(spawn, rng)
+		if (
+			count > 0
+			and bonus > 0
+			and not bonus_used
+			and type_id != "elite"
+			and type_id != "boss"
+		):
+			count += bonus
+			bonus_used = true
 		if count <= 0:
 			continue
 		spec.append({
-			"type": str(spawn.get("type", "")),
+			"type": type_id,
 			"count": count,
 			"delay_sec": float(placement.get("box_delay", 0.0)) + float(spawn.get("delay_sec", 0.0)),
 		})
@@ -2599,6 +2678,10 @@ func _box_placement_at(placements: Array, index: int) -> Dictionary:
 	placement["box_size"] = size
 	placement["box_rotation"] = float(placement.get("rotation_deg", 0.0))
 	placement["box_delay"] = float(placement.get("delay_sec", 0.0))
+	# 逐实例出怪增量：数据键为 `count_bonus`（设计 §3.2），运行时统一挂在
+	# `box_count_bonus` 上供 `_collect_box_stage_entries` 取用 —— 一处归一，避免
+	# 数据层与运行层各叫一个名字。缺省 0 = 维持盒子资产原始数量。
+	placement["box_count_bonus"] = int(placement.get("count_bonus", 0))
 	return placement
 
 
@@ -3600,8 +3683,10 @@ func _deliver_ground_rewards(
 
 ## `spread`：是否按「第几件」做确定性散布（多件掉落才需要，避免叠在一起）。
 ## 单件、且落点要被别处（如剧本的朝向目标点）精确引用时传 `false` ——
-## 实测散布在 index=0 时是 `(cos0.45, 0, sin0.45) * 0.7` ≈ 偏 0.70m，
+## 散布在 index=0 时也至少有 `LOOT_SCATTER_MIN_RADIUS_M` 的偏移，
 ## 会让「指那个常量点」与「枪实际在哪」对不上（2026-09-22 开场那把枪）。
+## 散开范围与曲线见 `LOOT_SCATTER_*` 常量；落点仍逐件过贴地校位 + 净空校验，
+## 目的是「散得开」，不是「散进墙里」。
 func _spawn_loot_items(
 	room: DungeonRoom3D,
 	items: Array,
@@ -3612,6 +3697,7 @@ func _spawn_loot_items(
 	if room == null or not is_instance_valid(room):
 		return 0
 	var spawned := 0
+	var scatter_max_radius := _loot_scatter_max_radius(room, items.size())
 	for index in range(items.size()):
 		var item_value: Variant = items[index]
 		if not item_value is Dictionary:
@@ -3627,15 +3713,83 @@ func _spawn_loot_items(
 		room.add_child(pickup)
 		var requested_position := world_position
 		if spread:
-			var angle := float(index) * 2.1 + 0.45
-			requested_position += Vector3(cos(angle), 0.0, sin(angle)) * (0.7 + index * 0.18)
-		pickup.global_position = _find_supported_spawn_position(
+			requested_position += _loot_scatter_offset(index, items.size(), scatter_max_radius)
+		pickup.global_position = _resolve_loot_spawn_position(
 			requested_position,
-			room.global_position
+			world_position
 		)
 		pickup.pickup_requested.connect(_on_ground_loot_requested)
 		spawned += 1
 	return spawned
+
+
+## 本次掉落的散布外半径：件数越多越开，但受房间尺寸与全局上限双重夹紧。
+## 房间侧留 1.2 m 给墙厚与贴墙家具；房间再小也不会小于单件下限。
+func _loot_scatter_max_radius(room: DungeonRoom3D, item_count: int) -> float:
+	var dimensions := room.get_dimensions()
+	var room_half_min := maxf(0.0, minf(dimensions.x, dimensions.y) * 0.5)
+	var count_radius := LOOT_SCATTER_UNIT_RADIUS_M * sqrt(float(maxi(1, item_count)))
+	return clampf(
+		minf(count_radius, room_half_min - 1.2),
+		LOOT_SCATTER_MIN_RADIUS_M,
+		LOOT_SCATTER_MAX_RADIUS_M
+	)
+
+
+## 第 `index` 件的水平偏移（确定性，不掷骰）：半径按等面积曲线、角度按黄金角。
+## 半径曲线 `r = lerp(内半径, 外半径, sqrt(格心比例))` —— 这就是「落点铺满圆面」的那条曲线：
+## 直接线性取半径会让内圈密、外圈空；取 sqrt 后单位面积上的件数才均匀。
+## index=0 也落在 `sqrt(0.5/件数)` 处而不是圆心，所以单件掉落不会压在原点。
+func _loot_scatter_offset(index: int, item_count: int, max_radius: float) -> Vector3:
+	var inner := LOOT_SCATTER_MIN_RADIUS_M
+	var outer := maxf(inner, max_radius)
+	var unit := clampf((float(index) + 0.5) / float(maxi(1, item_count)), 0.0, 1.0)
+	var radius := lerpf(inner, outer, sqrt(unit))
+	var angle := float(index) * LOOT_SCATTER_GOLDEN_ANGLE + 0.35
+	return Vector3(cos(angle), 0.0, sin(angle)) * radius
+
+
+## 把「想要的落点」变成「真能站人的落点」：
+## ① 先按想要的位置找支撑面（贴地）；② 该点在 0.45 m 高、0.30 m 半径内若被层 1 碰撞体占住
+## （墙、箱柜、门框），就沿原点方向按 `LOOT_SCATTER_FALLBACK_SHRINK` 收缩重试；
+## ③ 都占着才回到掉落原点本身 —— 宁可几件挤在一起，也不塞进阻挡里。
+## 注意：净空只在**贴地校位之后**判，否则地板自己会把所有候选点判成「被占」。
+func _resolve_loot_spawn_position(
+	requested_world_position: Vector3,
+	fallback_world_position: Vector3
+) -> Vector3:
+	var supported := _find_supported_spawn_position(requested_world_position, fallback_world_position)
+	if _is_loot_landing_clear(supported):
+		return supported
+	var offset := requested_world_position - fallback_world_position
+	for shrink_value in LOOT_SCATTER_FALLBACK_SHRINK:
+		var probe := fallback_world_position + offset * float(shrink_value)
+		var probe_supported := _find_supported_spawn_position(probe, fallback_world_position)
+		if _is_loot_landing_clear(probe_supported):
+			return probe_supported
+	return _find_supported_spawn_position(fallback_world_position, fallback_world_position)
+
+
+## 落点上方一小段空间里有没有静态阻挡（墙/家具/门框）。
+## 只查层 1 的 body、不查 Area3D：掉落物自己的拾取区是 Area 且层 0，碰不到自己人。
+func _is_loot_landing_clear(landing_world_position: Vector3) -> bool:
+	var world := get_world_3d()
+	if world == null:
+		return true
+	var shape := SphereShape3D.new()
+	shape.radius = LOOT_SCATTER_CLEARANCE_RADIUS_M
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = shape
+	query.collision_mask = 1
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	query.transform = Transform3D(
+		Basis.IDENTITY,
+		landing_world_position + Vector3.UP * LOOT_SCATTER_CLEARANCE_HEIGHT_M
+	)
+	if player != null and is_instance_valid(player):
+		query.exclude = [player.get_rid()]
+	return world.direct_space_state.intersect_shape(query, 1).is_empty()
 
 
 func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> void:
@@ -3709,6 +3863,41 @@ func _get_minimap_enemy_positions() -> Array[Vector3]:
 		live_enemies.append(enemy)
 		result.append(enemy.global_position)
 	_enemy_nodes_by_room[_current_room_id] = live_enemies
+	return result
+
+
+## 屏幕外怪物指示箭头的取数口：谁有资格被箭头指。
+##
+## 判据（四条，缺一不可）：
+## 1. 活怪：`current_hp > 0` 且没在排队释放；
+## 2. **已经醒着**：`Enemy3D.is_runtime_ai_active()`。门后还没进的房间、离玩家超过预激活半径
+##    的怪一律休眠 ⇒ 不给箭头。潜行与门禁是设计的一部分，箭头不能隔墙把它报出来。
+## 3. 与玩家同层：|Δy| ≤ 4.5 m（沿用 `Enemy3D.activate_from_player_proximity` 的楼板口径）；
+## 4. 平面距离 ≤ 50 m（最大战斗房 65×65 的半对角线 ≈ 46 m，向上取整）。
+##
+## 另外显式排除"被藏起来的伏击怪"：它虽然已经醒着，但正趴在地下，箭头会毁掉伏击。
+## 与 `_get_minimap_enemy_positions()` 的区别是刻意的：小地图只画当前房间（雷达口径），
+## 箭头要覆盖"预激活圈内已经追着你跑的邻房怪"（改屏口径），所以这里按玩家半径取数。
+func _get_offscreen_enemy_positions() -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	if player == null or not is_instance_valid(player):
+		return result
+	var origin := player.global_position
+	for node in get_tree().get_nodes_in_group(Enemy3D.GROUP_ENEMY_3D):
+		var enemy := node as Enemy3D
+		if enemy == null or not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+			continue
+		# 只认本战局里的怪：别处（基地区域、训练场）残留的敌人物体不算。
+		if not is_ancestor_of(enemy) or enemy.current_hp <= 0:
+			continue
+		if not enemy.is_runtime_ai_active() or enemy.is_concealed_in_world():
+			continue
+		var offset := enemy.global_position - origin
+		if absf(offset.y) > OFFSCREEN_INDICATOR_FLOOR_TOLERANCE_M:
+			continue
+		if Vector2(offset.x, offset.z).length() > OFFSCREEN_INDICATOR_RANGE_M:
+			continue
+		result.append(enemy.global_position + Vector3.UP * OFFSCREEN_INDICATOR_TARGET_HEIGHT_M)
 	return result
 
 

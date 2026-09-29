@@ -42,6 +42,10 @@ const LANDING_MIN_DURATION_S := 0.12
 const LANDING_MAX_DURATION_S := 0.30
 const LANDING_FULL_IMPACT_MPS := 16.0
 const FALL_RECOVERY_DISTANCE_M := 15.0
+## 基地可推动家具的推力。刚体自身的阻尼决定它只会短距离滑行。
+const PUSHABLE_FURNITURE_GROUP := "pushable_furniture"
+const FURNITURE_PUSH_IMPULSE_PER_MPS := 0.22
+const FURNITURE_PUSH_MAX_IMPULSE := 1.10
 const DEFAULT_BASE_SIZE_MULTIPLIER := 0.80
 const DEBUG_SCALE_STEP_RATIO := 0.10
 const DEBUG_SCALE_MIN_STEP := -9
@@ -605,6 +609,7 @@ func move_grounded(planar_velocity: Vector3, delta: float, allow_fall_transition
 		)
 	velocity = next_velocity
 	move_and_slide()
+	_push_collided_furniture(next_velocity)
 	if is_on_floor():
 		_airborne_elapsed = 0.0
 		_record_safe_ground_position()
@@ -630,6 +635,7 @@ func move_airborne(target_planar_velocity: Vector3, delta: float) -> bool:
 		planar.z
 	)
 	move_and_slide()
+	_push_collided_furniture(planar)
 	if is_on_floor():
 		_last_impact_speed = impact_speed
 		_landing_duration = lerpf(
@@ -648,6 +654,27 @@ func move_airborne(target_planar_velocity: Vector3, delta: float) -> bool:
 	_airborne_elapsed += maxf(delta, 0.0)
 	_recover_from_invalid_fall_if_needed()
 	return false
+
+
+## CharacterBody3D 会阻挡刚体，但不会自动给出可调的推力；这里在真实滑动
+## 碰撞后施加很小的平面冲量。刚体仍以 layer 1 和基地/设施碰撞，因此不会穿墙。
+func _push_collided_furniture(requested_velocity: Vector3) -> void:
+	# move_and_slide() 会在接触阻挡时改写 velocity；必须保留碰撞前的输入速度，
+	# 否则角色正面顶住椅子时推力会被清成零。
+	var planar_velocity := Vector3(requested_velocity.x, 0.0, requested_velocity.z)
+	if planar_velocity.length_squared() < 0.01:
+		return
+	var impulse_strength := minf(
+		planar_velocity.length() * FURNITURE_PUSH_IMPULSE_PER_MPS,
+		FURNITURE_PUSH_MAX_IMPULSE
+	)
+	for collision_index in get_slide_collision_count():
+		var collision := get_slide_collision(collision_index)
+		var body := collision.get_collider() as RigidBody3D
+		if body == null or not body.is_in_group(PUSHABLE_FURNITURE_GROUP):
+			continue
+		var push_direction := planar_velocity.normalized()
+		body.apply_central_impulse(push_direction * impulse_strength)
 
 
 func get_landing_duration() -> float:

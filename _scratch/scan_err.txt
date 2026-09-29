@@ -1,0 +1,88 @@
+[1/160] boss_room/archive_shelf  empty=0.00 m^2  biggest=0.00 m^2
+[2/160] boss_room/chair  empty=0.00 m^2  biggest=0.00 m^2
+[13/160] boss_room/plant_a  empty=0.00 m^2  biggest=0.00 m^2
+[14/160] boss_room/plant_b  empty=0.00 m^2  biggest=0.00 m^2
+[15/160] boss_room/plant_c  empty=0.00 m^2  biggest=0.00 m^2
+[16/160] boss_room/server_rack  empty=0.00 m^2  biggest=0.00 m^2
+[17/160] boss_room/server_rack_compact  empty=0.00 m^2  biggest=0.00 m^2
+[18/160] boss_room/server_rack_compact_damaged  empty=0.13 m^2  biggest=0.13 m^2
+[19/160] boss_room/server_rack_damaged  empty=0.12 m^2  biggest=0.12 m^2
+[20/160] boss_room/server_rack_damaged_tall  empty=0.12 m^2  biggest=0.12 m^2
+[21/160] boss_room/server_rack_mid  empty=0.00 m^2  biggest=0.00 m^2
+[22/160] boss_room/server_rack_tall  empty=0.00 m^2  biggest=0.00 m^2
+[23/160] boss_room/server_rack_under_screen  empty=0.00 m^2  biggest=0.00 m^2
+[24/160] boss_room/server_rack_under_screen_damaged  empty=0.08 m^2  biggest=0.08 m^2
+[25/160] boss_room/server_rack_wide  empty=0.00 m^2  biggest=0.00 m^2
+[26/160] boss_room/server_rack_wide_damaged  empty=0.03 m^2  biggest=0.03 m^2
+[27/160] boss_room/server_rack_wide_damaged_tall  empty=0.03 m^2  biggest=0.03 m^2
+[28/160] boss_room/server_rack_wide_tall  empty=0.00 m^2  biggest=0.00 m^2
+[36/160] boss_room/workstation_a  empty=0.00 m^2  biggest=0.00 m^2
+[37/160] boss_room/workstation_b  empty=0.00 m^2  biggest=0.00 m^2
+[38/160] boss_room/workstation_c  empty=0.00 m^2  biggest=0.00 m^2
+[39/160] bridge_room/bank_crate  empty=0.00 m^2  biggest=0.00 m^2
+[41/160] bridge_room/bridge_guardrail  empty=0.00 m^2  biggest=0.00 m^2
+[47/160] bridge_room/end_crate  empty=0.00 m^2  biggest=0.00 m^2
+[48/160] bridge_room/end_power  empty=0.00 m^2  biggest=0.00 m^2
+[49/160] bridge_room/half_partition  empty=0.00 m^2  biggest=0.00 m^2
+[54/160] bridge_room/lower_control  empty=0.00 m^2  biggest=0.00 m^2
+[56/160] bridge_room/near_crate  empty=0.00 m^2  biggest=0.00 m^2
+[57/160] bridge_room/near_server  empty=0.00 m^2  biggest=0.00 m^2
+[58/160] bridge_room/partition_box  empty=0.00 m^2  biggest=0.00 m^2
+[59/160] bridge_room/pit_end  empty=0.00 m^2  biggest=0.00 m^2
+[60/160] bridge_room/pit_side  empty=0.00 m^2  biggest=0.00 m^2
+[61/160] bridge_room/platform_edge  empty=0.00 m^2  biggest=0.00 m^2
+[62/160] bridge_room/shaft_column  empty=0.00 m^2  biggest=0.00 m^2
+[67/160] bridge_room/upper_bank_z5450  empty=0.00 m^2  biggest=0.00 m^2
+[68/160] bridge_room/upper_bank_z6197  empty=0.00 m^2  biggest=0.00 m^2
+[69/160] bridge_room/upper_console  empty=0.00 m^2  biggest=0.00 m^2
+[70/160] bridge_room/vertical_service  empty=0.00 m^2  biggest=0.00 m^2
+[75/160] db_room/cable_reel  empty=0.00 m^2  biggest=0.00 m^2
+[84/160] db_room/equipment_rack  empty=0.00 m^2  biggest=0.00 m^2
+[90/160] db_room/island_cart  empty=0.00 m^2  biggest=0.00 m^2
+[91/160] db_room/raised_service_a  empty=0.00 m^2  biggest=0.00 m^2
+[92/160] db_room/raised_service_b  empty=0.00 m^2  biggest=0.00 m^2
+[93/160] db_room/repair_island  empty=0.00 m^2  biggest=0.00 m^2
+[95/160] db_room/server_rack_a  empty=0.00 m^2  biggest=0.00 m^2
+[96/160] db_room/server_rack_b  empty=0.00 m^2  biggest=0.00 m^2
+[97/160] db_room/server_rack_c  empty=0.00 m^2  biggest=0.00 m^2
+[98/160] db_room/server_rack_d  empty=0.00 m^2  biggest=0.00 m^2
+[99/160] db_room/service_cart  empty=0.00 m^2  biggest=0.00 m^2
+[100/160] db_room/service_terminal  empty=0.00 m^2  biggest=0.00 m^2
+[101/160] db_room/shelf  empty=0.00 m^2  biggest=0.00 m^2
+[102/160] db_room/shelving  empty=0.00 m^2  biggest=0.00 m^2
+[107/160] db_room/workbench_a  empty=61.88 m^2  biggest=61.88 m^2
+[108/160] db_room/workbench_b  empty=0.00 m^2  biggest=0.00 m^2
+[109/160] l_corridor/access_console_a  empty=0.00 m^2  biggest=0.00 m^2
+[110/160] l_corridor/access_console_b  empty=0.00 m^2  biggest=0.00 m^2
+[111/160] l_corridor/crate  empty=0.00 m^2  biggest=0.00 m^2
+[126/160] l_corridor/planter  empty=0.00 m^2  biggest=0.00 m^2
+[128/160] l_corridor/server_rack  empty=0.00 m^2  biggest=0.00 m^2
+[129/160] l_corridor/service_cart_a  empty=0.00 m^2  biggest=0.00 m^2
+[130/160] l_corridor/service_cart_b  empty=0.00 m^2  biggest=0.00 m^2
+[144/160] office_room/filing_run  empty=23.68 m^2  biggest=23.68 m^2
+[148/160] office_room/locker_bank  empty=0.00 m^2  biggest=0.00 m^2
+[150/160] office_room/power_cabinet_bank  empty=0.00 m^2  biggest=0.00 m^2
+[151/160] office_room/prep_bench  empty=0.00 m^2  biggest=0.00 m^2
+[152/160] office_room/printer_station  empty=0.00 m^2  biggest=0.00 m^2
+[153/160] office_room/shelving  empty=0.00 m^2  biggest=0.00 m^2
+[154/160] office_room/totem_column  empty=0.00 m^2  biggest=0.00 m^2
+[159/160] office_room/water_and_supply_corner  empty=2.34 m^2  biggest=1.92 m^2
+[160/160] office_room/work_cluster  empty=1.28 m^2  biggest=0.64 m^2
+Traceback (most recent call last):
+  File "I:\工作项目\shellstrom2\ShellStorm2\_scratch\scan_safe_box_proxy_nonrect.py", line 252, in <module>
+    main()
+    ~~~~^^
+  File "I:\工作项目\shellstrom2\ShellStorm2\_scratch\scan_safe_box_proxy_nonrect.py", line 234, in main
+    out.write_text(json.dumps(rows, ensure_ascii=False, indent=1), encoding="utf-8")
+                   ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zhuangmenghong\.workbuddy\binaries\python\versions\3.13.12\Lib\json\__init__.py", line 242, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "C:\Users\zhuangmenghong\.workbuddy\binaries\python\versions\3.13.12\Lib\json\encoder.py", line 202, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "C:\Users\zhuangmenghong\.workbuddy\binaries\python\versions\3.13.12\Lib\json\encoder.py", line 263, in iterencode
+    return _iterencode(o, 0)
+  File "C:\Users\zhuangmenghong\.workbuddy\binaries\python\versions\3.13.12\Lib\json\encoder.py", line 182, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type WindowsPath is not JSON serializable

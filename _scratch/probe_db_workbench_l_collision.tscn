@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/probe_db_workbench_l_collision.gd" id="1_probe"]
+
+[node name="ProbeDbWorkbenchLCollision" type="Node3D"]
+script = ExtResource("1_probe")

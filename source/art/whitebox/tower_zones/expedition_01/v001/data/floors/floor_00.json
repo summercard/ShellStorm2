@@ -132,10 +132,10 @@
         { "port_id": "B", "target": "room_04", "position_m": [15.0, -2.5], "outward": [1.0, 0.0] }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-7.5, -12.5] },
+        { "box": "box_room_spread", "center_m": [-7.5, -12.5], "count_bonus": 1 },
         { "box": "box_corner_ambush", "center_m": [7.5, -12.5] },
-        { "box": "box_corridor_column", "center_m": [-7.5, 2.5] },
-        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0 }
+        { "box": "box_corridor_column", "center_m": [-7.5, 2.5], "count_bonus": 1 },
+        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0, "count_bonus": 1 }
       ],
       "encounter": {
         "stages": [
@@ -170,9 +170,9 @@
         { "port_id": "D", "target": "", "position_m": [15.0, -20.0], "outward": [0.0, -1.0] }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-15.0, -12.5] },
-        { "box": "box_corner_ambush", "center_m": [5.0, -12.5] },
-        { "box": "box_wall_arc", "center_m": [15.0, -12.5] },
+        { "box": "box_room_spread", "center_m": [-15.0, -12.5], "count_bonus": 2 },
+        { "box": "box_corner_ambush", "center_m": [5.0, -12.5], "count_bonus": 1 },
+        { "box": "box_wall_arc", "center_m": [15.0, -12.5], "count_bonus": 1 },
         { "box": "box_corridor_column", "center_m": [-15.0, 7.5] }
       ],
       "encounter": {
@@ -206,10 +206,10 @@
         { "port_id": "B", "target": "room_06", "position_m": [-2.5, 30.0], "outward": [0.0, 1.0] }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-7.5, -22.5] },
+        { "box": "box_room_spread", "center_m": [-7.5, -22.5], "count_bonus": 1 },
         { "box": "box_corner_ambush", "center_m": [7.5, -22.5] },
-        { "box": "box_center_elite", "center_m": [-7.5, 22.5] },
-        { "box": "box_room_spread", "center_m": [7.5, 22.5] }
+        { "box": "box_center_elite", "center_m": [-7.5, 22.5], "count_bonus": 2 },
+        { "box": "box_room_spread", "center_m": [7.5, 22.5], "count_bonus": 2 }
       ],
       "encounter": {
         "stages": [
@@ -242,9 +242,9 @@
         { "port_id": "B", "target": "room_07", "position_m": [20.0, -2.5], "outward": [1.0, 0.0] }
       ],
       "spawn_placements": [
-        { "box": "box_corner_ambush", "center_m": [-12.5, -7.5] },
-        { "box": "box_room_spread", "center_m": [-2.5, -7.5] },
-        { "box": "box_wall_arc", "center_m": [12.5, -2.5], "rotation_deg": 90.0 },
+        { "box": "box_corner_ambush", "center_m": [-12.5, -7.5], "count_bonus": 1 },
+        { "box": "box_room_spread", "center_m": [-2.5, -7.5], "count_bonus": 2 },
+        { "box": "box_wall_arc", "center_m": [12.5, -2.5], "rotation_deg": 90.0, "count_bonus": 3 },
         { "box": "box_corridor_column", "center_m": [7.5, 2.5] }
       ],
       "encounter": {
@@ -278,9 +278,9 @@
         { "port_id": "B", "target": "room_08", "position_m": [12.5, 0.0], "outward": [1.0, 0.0] }
       ],
       "spawn_placements": [
-        { "box": "box_center_elite", "center_m": [0.0, 0.0] },
-        { "box": "box_corner_ambush", "center_m": [-5.0, -5.0] },
-        { "box": "box_corner_ambush", "center_m": [5.0, 5.0] }
+        { "box": "box_center_elite", "center_m": [0.0, 0.0], "count_bonus": 6 },
+        { "box": "box_corner_ambush", "center_m": [-5.0, -5.0], "count_bonus": 2 },
+        { "box": "box_corner_ambush", "center_m": [5.0, 5.0], "count_bonus": 2 }
       ],
       "encounter": {
         "stages": [
@@ -315,10 +315,10 @@
         { "port_id": "D", "target": "", "position_m": [15.0, -20.0], "outward": [0.0, -1.0] }
       ],
       "spawn_placements": [
-        { "box": "box_room_spread", "center_m": [-15.0, -12.5] },
-        { "box": "box_corner_ambush", "center_m": [0.0, -12.5] },
-        { "box": "box_wall_arc", "center_m": [15.0, -2.5], "rotation_deg": 90.0 },
-        { "box": "box_center_elite", "center_m": [15.0, 7.5] },
+        { "box": "box_room_spread", "center_m": [-15.0, -12.5], "count_bonus": 1 },
+        { "box": "box_corner_ambush", "center_m": [0.0, -12.5], "count_bonus": 1 },
+        { "box": "box_wall_arc", "center_m": [15.0, -2.5], "rotation_deg": 90.0, "count_bonus": 1 },
+        { "box": "box_center_elite", "center_m": [15.0, 7.5], "count_bonus": 2 },
         { "box": "box_room_spread", "center_m": [-5.0, 12.5] }
       ],
       "encounter": {
@@ -355,8 +355,8 @@
       "spawn_placements": [
         { "box": "box_room_spread", "center_m": [-7.5, -12.5] },
         { "box": "box_corner_ambush", "center_m": [7.5, -12.5] },
-        { "box": "box_corridor_column", "center_m": [-7.5, 2.5] },
-        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0 }
+        { "box": "box_corridor_column", "center_m": [-7.5, 2.5], "count_bonus": 3 },
+        { "box": "box_wall_arc", "center_m": [7.5, 2.5], "rotation_deg": 90.0, "count_bonus": 4 }
       ],
       "encounter": {
         "stages": [
@@ -391,8 +391,8 @@
       ],
       "spawn_placements": [
         { "box": "box_room_spread", "center_m": [-12.5, -7.5] },
-        { "box": "box_center_elite", "center_m": [7.5, -7.5] },
-        { "box": "box_wall_arc", "center_m": [12.5, 2.5], "rotation_deg": 90.0 },
+        { "box": "box_center_elite", "center_m": [7.5, -7.5], "count_bonus": 5 },
+        { "box": "box_wall_arc", "center_m": [12.5, 2.5], "rotation_deg": 90.0, "count_bonus": 3 },
         { "box": "box_corner_ambush", "center_m": [-2.5, 2.5] }
       ],
       "encounter": {

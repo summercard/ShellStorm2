@@ -1050,6 +1050,24 @@ static func _validate_spawn_boxes(
 			seen_local_rects.append(local_rect)
 			if float(placement.get("delay_sec", 0.0)) < 0.0:
 				errors.append("spawn_placement_delay_negative:%s" % slot)
+			# 判据 L：逐实例出怪增量（`count_bonus`，设计 §3.2.2）。
+			##
+			## 为什么必须有这条门禁：`count_bonus` 是**数据层写、运行层读**的隐形契约
+			## （读点在 `Dungeon3D._collect_box_stage_entries`，只加在**首条非 elite/boss 条目**上）。
+			## 一旦盒子里所有条目都是身份指派（elite/boss），增量就**永远加不上去** ——
+			## 数据里写着 +N、游戏里一只都不多，属典型的静默失效。故在此拦死。
+			if placement.has("count_bonus"):
+				var raw_bonus: Variant = placement.get("count_bonus")
+				if not (raw_bonus is int or raw_bonus is float):
+					errors.append("spawn_placement_count_bonus_not_number:%s" % slot)
+				elif float(raw_bonus) < 0.0:
+					errors.append("spawn_placement_count_bonus_negative:%s" % slot)
+				elif float(raw_bonus) != floor(float(raw_bonus)):
+					errors.append("spawn_placement_count_bonus_not_integer:%s" % slot)
+				elif int(raw_bonus) > 0 and _box_has_no_mook_entry(box):
+					errors.append(
+						"spawn_placement_count_bonus_never_applies:%s:%s" % [slot, box_id]
+					)
 		# —— 调用层 ——
 		# 没有 encounter 时全部实例并进一波（运行时口径），故只在写了 encounter 时校验。
 		if not placements.is_empty() or not (room.get("encounter", {}) as Dictionary).is_empty():
@@ -1129,6 +1147,16 @@ static func _validate_encounter(
 		if not scheduled.has(index):
 			errors.append("spawn_placement_never_scheduled:%s:%d" % [key, index])
 	return errors
+
+
+## 该盒是否存在**非身份条目**（即普通杂兵条目）。`count_bonus` 只会加在这类条目上，
+## 故「一条都没有」时增量必然静默失效（判据 K）。
+static func _box_has_no_mook_entry(box: Dictionary) -> bool:
+	for spawn_value in (box.get("spawns", []) as Array):
+		var type_id := str((spawn_value as Dictionary).get("type", ""))
+		if type_id != "elite" and type_id != "boss":
+			return false
+	return true
 
 
 static func _validate_template(template_id: String, template: Dictionary) -> Array[String]:

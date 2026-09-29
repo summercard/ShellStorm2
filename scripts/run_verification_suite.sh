@@ -154,6 +154,7 @@ core_scenes=(
   verify_room_graph_persistence_services
   verify_verification_runner_contract
   verify_hud_presenter_3d
+  verify_offscreen_enemy_indicator
   verify_postfx_overlay_runtime
   verify_speech_bubble_3d
   verify_dialogue_ui_flow
@@ -300,6 +301,7 @@ visual_scenes=(
   verify_training_range_3d_visual
   verify_tactical_inventory_minimap_visual
   verify_reference_hud_fate_visual
+  verify_offscreen_enemy_indicator_visual
   verify_wall_alignment_overlay
   verify_wall_alignment_pure
   verify_wall_alignment_visual

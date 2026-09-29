@@ -1,0 +1,4 @@
+[252/300] office_room      filing_run                       盒=1 空腔=23.76 漏=0.00
+[266/300] office_room      wall_top_service                 盒=1 空腔=1090.56 漏=0.00
+[267/300] office_room      water_and_supply_corner          盒=1 空腔=2.33 漏=0.00
+[268/300] office_room      work_cluster                     盒=1 空腔=1.44 漏=0.00

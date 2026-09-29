@@ -1,0 +1,31 @@
+FAIL  boss 的 west 门位门洞被 66 个顶点封住（门洞未通透）
+FAIL  room_01 实墙规划数错误：{ "room_type_component": 47, "floor_tile": 42, "solid_wall": 34 }
+FAIL  room_01 普通房型组件规划数错误：{ "room_type_component": 47, "floor_tile": 42, "solid_wall": 34 }
+FAIL  room_01 的 north 门位门洞被 12 个顶点封住（门洞未通透）
+FAIL  room_01 美术根记录的布局实例数错误
+FAIL  room_01 规划实例数应为 121，实得 123
+FAIL  room_01 运行时普通房型组件数错误
+FAIL  room_01 通用地砖必须按 C01/C02 棋盘交替：{ "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01": 22, "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02": 20 }
+FAIL  room_02 实墙规划数错误：{ "room_type_component": 44, "floor_tile": 42, "corner_l": 6, "solid_wall": 16 }
+FAIL  room_02 的 east 门位门洞被 860 个顶点封住（门洞未通透）
+FAIL  room_02 美术根记录的布局实例数错误
+FAIL  room_02 规划实例数应为 86，实得 108
+FAIL  room_03 房型 asset_id 不符
+FAIL  room_03 房型版本应为 v009
+FAIL  room_03 普通房型组件规划数错误：{ "door_wall": 1, "solid_wall": 28, "room_type_component": 28, "floor_tile": 48 }
+FAIL  room_03 美术根记录的布局实例数错误
+FAIL  room_03 规划实例数应为 106，实得 105
+FAIL  room_03 运行时普通房型组件数错误
+FAIL  room_04 通用地砖必须按 C01/C02 棋盘交替：{ "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01": 31, "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02": 29 }
+FAIL  room_05 的 south 门位门洞被 276 个顶点封住（门洞未通透）
+FAIL  room_06 实墙规划数错误：{ "room_type_component": 44, "floor_tile": 42, "corner_l": 6, "solid_wall": 16 }
+FAIL  room_06 美术根记录的布局实例数错误
+FAIL  room_06 规划实例数应为 86，实得 108
+FAIL  room_08 实墙规划数错误：{ "room_type_component": 47, "floor_tile": 42, "solid_wall": 34 }
+FAIL  room_08 普通房型组件规划数错误：{ "room_type_component": 47, "floor_tile": 42, "solid_wall": 34 }
+FAIL  room_08 美术根记录的布局实例数错误
+FAIL  room_08 规划实例数应为 121，实得 123
+FAIL  room_08 运行时普通房型组件数错误
+FAIL  room_10 实墙规划数错误：{ "room_type_component": 44, "floor_tile": 42, "corner_l": 6, "solid_wall": 16 }
+FAIL  room_10 美术根记录的布局实例数错误
+FAIL  room_10 规划实例数应为 86，实得 108
