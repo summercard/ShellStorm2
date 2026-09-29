@@ -35,8 +35,16 @@ const ALLOWED_BOX_TYPES: Array[String] = [
 
 ## box_id → 相对 res:// 的盒子路径。新增盒子必须同时登记在本表，
 ## 否则 `has_id()` 为假、加载器直接拒绝（不静默兜底）。
-## 6 类盒子一律**小型单位**（业主 2026-09-26 口径）：通用盒 2~5 m、一盒出 1~4 只，
-## 一房摆 3~5 盒以形成多个刷怪点；`box_boss_arena` 是唯一例外（8×8 m，Boss 需更大活动面）。
+## 通用盒一律**小型单位**（业主 2026-09-26 口径）：盒面 2~4 m、一盒出 1~4 只，
+## 一房摆 3~5 盒以形成多个刷怪点。
+## 当前共 **7 个 box_id = 5 个小盒 ＋ 2 个大盒例外**。
+##
+## ⚠ **大盒例外目前有两个**（业主逐次点名，均须在 `触发器刷怪设计.md` §3.1.1 留档）：
+##   · `box_boss_arena`（8×8 m，出 4 只）—— Boss 需要更大活动面；
+##   · `box_bridge_center`（10×14 m，出 16 只，2026-09-29）—— 桥房「桥心压制」专用，
+##     业主要求单盒一次压制 16 只（壳甲×4 + 小僵尸×8 + 警察×4）。
+##     尺寸 10 m 是**桥宽下限**：桥心可走面只有 2 格（10 m）宽，再宽就压进柱子；
+##     桥心砖心恒在 `x=±2.5`，故盒心必离桥轴对称 2.5 m（判据 G 的必然结果，无解）。
 const ENTRIES := {
 	# 角落包夹：3×3 m，近战×2（共 2 只）。
 	"box_corner_ambush": ROOT + "box_corner_ambush.json",
@@ -48,8 +56,10 @@ const ENTRIES := {
 	"box_wall_arc": ROOT + "box_wall_arc.json",
 	# 混编主盒：4×4 m，近战×2 → 1s 爆×1（共 3 只）。
 	"box_room_spread": ROOT + "box_room_spread.json",
-	# Boss 台：8×8 m（唯一大盒），Boss×1 → 1.5s 精英×2 → 3s 召唤者×1。
+	# Boss 台：8×8 m（大盒①），Boss×1 → 1.5s 精英×2 → 3s 召唤者×1。
 	"box_boss_arena": ROOT + "box_boss_arena.json",
+	# 桥心压制：10×14 m（大盒②，桥房专属），小僵尸×8 → 1s 壳甲×4 → 2s 警察×4（共 16 只）。
+	"box_bridge_center": ROOT + "box_bridge_center.json",
 }
 
 ## 解析结果缓存：同一 box_id 每局只读一次盘。

@@ -35,7 +35,15 @@ extends Node
 
 const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel01_3D.tscn")
 const SEED_VALUE := 77001199
-const TEST_ROOM_ID := "room_01"
+## 用例房候选：必须满足「触发盒展开 ≥ 2 波」。
+## ⚠ **为什么不再写死 `room_01`**：业主 2026-09-29 口径「room1 / room2 改成只有 1 波」
+## 后，这两房的 `encounter.stages` 只剩一波 —— 写死 room_01 会让本用例以
+## 「前提不成立」变红。那不是被测机制的缺陷，是**用例前提过期**。故改为按候选顺序
+## 取第一个真能展开 ≥ 2 波的房；一个都取不到才判红。
+const CANDIDATE_ROOM_IDS: Array[String] = [
+	"room_03", "room_04", "room_06", "room_07", "room_08", "room_09", "room_10",
+]
+var test_room_id := ""
 ## 远征 01 各房的 `encounter.intermission_sec` 都没写 ⇒ 走全局缺省 2.0 秒。
 const INTERMISSION := 2.0
 const INTERMISSION_SLACK := 0.35
@@ -63,9 +71,15 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 
-	room = tower._room_by_id.get(TEST_ROOM_ID) as DungeonRoom3D
+	test_room_id = _pick_test_room()
+	if test_room_id.is_empty():
+		_check(
+			false,
+			"候选房里没有一间能展开 ≥ 2 波触发盒（%s）" % str(CANDIDATE_ROOM_IDS)
+		)
+	room = tower._room_by_id.get(test_room_id) as DungeonRoom3D
 	if room == null:
-		_check(false, "找不到 %s" % TEST_ROOM_ID)
+		_check(false, "找不到 %s" % test_room_id)
 	else:
 		await _verify_box_wave_chain()
 		await _verify_delayed_spawn_accounting()
@@ -93,7 +107,7 @@ func _verify_box_wave_chain() -> void:
 	_reset_room()
 	var expected := _box_wave_count()
 	if expected < 2:
-		_check(false, "%s 的触发盒只展开出 %d 波，用例前提不成立" % [TEST_ROOM_ID, expected])
+		_check(false, "%s 的触发盒只展开出 %d 波，用例前提不成立" % [test_room_id, expected])
 		return
 	_enter(room)
 	var totals := int(tower._room_wave_totals.get(room.room_id, 0))
@@ -227,6 +241,23 @@ func _verify_entry_snapshot_guard() -> void:
 # ============================================================
 # 辅助
 # ============================================================
+
+## 从 `CANDIDATE_ROOM_IDS` 里取第一个「触发盒能展开 ≥ 2 波」的房；取不到返回空串。
+## 与 `_box_wave_count()` 同参数、同口径，只是对候选房逐个问一遍。
+func _pick_test_room() -> String:
+	var floor_number := maxi(1, tower.visual_theme.difficulty_rank)
+	var denom := maxf(1.0, float(tower._records.size() - 1))
+	for key in CANDIDATE_ROOM_IDS:
+		var candidate := tower._room_by_id.get(key) as DungeonRoom3D
+		if candidate == null:
+			continue
+		var floor_level := clampi(
+			int(float(tower._record_index(candidate.room_id)) / denom * 3.0), 0, 3
+		)
+		if tower._spawn_box_waves(candidate, floor_number, floor_level).size() >= 2:
+			return key
+	return ""
+
 
 ## 与运行时同参数展开一次触发盒波次，只取波数（`_spawn_box_waves` 用私有 rng，无副作用）。
 func _box_wave_count() -> int:

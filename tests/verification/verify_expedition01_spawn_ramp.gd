@@ -26,11 +26,22 @@ const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel01_3D.tscn")
 const SEED_VALUE := 77001199
 
 ## 曲线目标：逐房设计总量（含 elite/boss 身份条目），room_01/02 不在加量范围。
+##
+## ⚠ **room_05 = 31 是刻意的峰值，不是曲线破口**：业主 2026-09-29 点名在桥心加
+## `box_bridge_center`（一次压 16 只，见 `data/spawn_boxes/box_bridge_center.json`），
+## 于是本房 15 → 31。桥房是本关唯一的立体战斗空间、主路必经的窄口，**本来该是难度尖峰**，
+## 故它**从单调链里摘出**（见 `RAMP_MONOTONE_ORDER`），单独钉目标值。
 const RAMP_TARGET := {
-	"room_03": 13, "room_04": 14, "room_05": 15, "room_06": 16,
+	"room_03": 13, "room_04": 14, "room_05": 31, "room_06": 16,
 	"room_07": 16, "room_08": 17, "room_09": 17, "room_10": 17,
 }
-## 单调不减校验的房序列（room_03 起）。
+## 单调不减校验的房序列（room_03 起）。**room_05 已被摘出** —— 见 `RAMP_TARGET` 上方的注：
+## 峰值房不参与相邻比较，但「链上其余房单调不减」这条不许松。
+const RAMP_MONOTONE_ORDER: Array[String] = [
+	"room_03", "room_04", "room_06",
+	"room_07", "room_08", "room_09", "room_10",
+]
+## 曲线目标的房序列（room_03 起，**含**峰值房 room_05）—— 用于「盒数 / 逐实例增量 / 逐房总量」核对。
 const RAMP_ORDER: Array[String] = [
 	"room_03", "room_04", "room_05", "room_06",
 	"room_07", "room_08", "room_09", "room_10",
@@ -39,14 +50,23 @@ const RAMP_ORDER: Array[String] = [
 const EXPECTED_BONUS := {
 	"room_03": [1, 0, 1, 1],
 	"room_04": [2, 1, 1, 0],
-	"room_05": [1, 0, 2, 2],
+	# room_05：第 5 个实例是 `box_bridge_center`（桥心压制盒），靠自带 16 只出量、不吃增量。
+	"room_05": [1, 0, 2, 2, 0],
 	"room_06": [1, 2, 3, 0],
 	"room_07": [6, 2, 2],
 	"room_08": [1, 1, 1, 2, 0],
 	"room_09": [0, 0, 3, 4],
 	"room_10": [0, 5, 3, 0],
 }
-## 未加量房：逐实例必须 0，防「顺手也加了」。
+## 逐实例 `count_multiplier` 期望值（**与 `count_bonus` 同一条隐形契约**：数据层写、
+## 运行层读，归一在 `_box_placement_at`）。room_01/02 业主 2026-09-29 口径「每个盒子里数量翻倍」
+## ⇒ 全盒 ×2；其余房不得顺手写（UNTOUCHED_ROOMS 侧并查 0）。
+const EXPECTED_MULTIPLIER := {
+	"room_01": [2, 2, 2],
+	"room_02": [2, 2, 2, 2],
+}
+## 未加量房：逐实例 `count_bonus` 必须 0，防「顺手也加了」。
+## （`room_01` / `room_02` 的翻倍走 `count_multiplier`，不在此判据内 —— 见 `EXPECTED_MULTIPLIER`。）
 const UNTOUCHED_ROOMS: Array[String] = ["room_01", "room_02", "boss"]
 ## 已知存量欠账：声明盒心容量为 0、只能靠「落地平移」出怪的盒（**非本次改动引入**）。
 ## 逐条 = 房 key → {实例下标: 漂移米}。任何一条消失要缩表，任何一条新增要红。
@@ -74,6 +94,7 @@ func _ready() -> void:
 	await get_tree().physics_frame
 
 	_verify_bonus_field()
+	_verify_multiplier_field()
 	_verify_counts()
 	_verify_drift()
 	if is_instance_valid(tower):
@@ -160,11 +181,75 @@ func _verify_bonus_lands_on_grunt(
 
 
 # ============================================================
+# G：逐实例倍率 —— room_01 / room_02 的「翻倍」靠它，不靠 `count_bonus`
+# ============================================================
+
+## 与 A 同构：数据 `count_multiplier` → 运行时 `box_count_multiplier` 的归一映射必须通，
+## 且「倍率要生效就必须有可承载的普通怪条目」（否则乘了也没条目可乘 ⇒ 静默失效）。
+## 这一族与 `LevelPlanValidator` 的判据 L② 互补：那里管**取值范围**，这里管**设计意图值**。
+func _verify_multiplier_field() -> void:
+	for key in EXPECTED_MULTIPLIER.keys():
+		var room := tower._room_by_id.get(key) as DungeonRoom3D
+		if room == null:
+			_check(false, "找不到 %s" % key)
+			continue
+		var placements := room.spawn_placements
+		var expected := EXPECTED_MULTIPLIER[key] as Array
+		_check(
+			placements.size() == expected.size(),
+			"%s 盒数 %d ≠ 倍率口径 %d（改盒 = 改放置层，必须同步本门禁）"
+				% [key, placements.size(), expected.size()]
+		)
+		for index in range(mini(placements.size(), expected.size())):
+			var raw := placements[index] as Dictionary
+			var want := int(expected[index])
+			_check(
+				int(raw.get("count_multiplier", 1)) == want,
+				"%s#%d 数据 count_multiplier=%d ≠ 口径 %d"
+					% [key, index, int(raw.get("count_multiplier", 1)), want]
+			)
+			var resolved := tower._box_placement_at(placements, index)
+			_check(
+				int(resolved.get("box_count_multiplier", -1)) == want,
+				"%s#%d 运行时 box_count_multiplier=%s ≠ %d（`_box_placement_at` 归一映射断了）"
+					% [key, index, str(resolved.get("box_count_multiplier", "<缺>")), want]
+			)
+			_check(
+				_box_has_grunt(SpawnBoxCatalog.load_box(str(raw.get("box", "")))),
+				"%s#%d 有倍率 %d 却没有可承载的普通怪条目（倍率会静默丢失）" % [key, index, want]
+			)
+	# 其余房不得「顺手也乘了」。
+	for room_key in tower._room_by_id.keys():
+		var other := tower._room_by_id.get(room_key) as DungeonRoom3D
+		if other == null or EXPECTED_MULTIPLIER.has(str(room_key)):
+			continue
+		for index in range((other.spawn_placements as Array).size()):
+			var raw := other.spawn_placements[index] as Dictionary
+			_check(
+				int(raw.get("count_multiplier", 1)) == 1,
+				"%s#%d 不在翻倍范围却有 count_multiplier=%s"
+					% [room_key, index, str(raw.get("count_multiplier"))]
+			)
+
+
+## 盒内是否有可承载增量/倍率的**普通怪条目**（首条非 elite/boss 且计数 > 0）。
+func _box_has_grunt(box: Dictionary) -> bool:
+	for spawn_value in (box.get("spawns", []) as Array):
+		var spawn := spawn_value as Dictionary
+		var type_id := str(spawn.get("type", ""))
+		if type_id == "elite" or type_id == "boss":
+			continue
+		if int(spawn.get("count_max", spawn.get("count_min", 0))) > 0:
+			return true
+	return false
+
+
+# ============================================================
 # C / D：逐盒实到数 + 数据侧曲线
 # ============================================================
 
 func _verify_counts() -> void:
-	var previous_design := -1
+	var totals := {}
 	for key in RAMP_ORDER:
 		var room := tower._room_by_id.get(key) as DungeonRoom3D
 		if room == null:
@@ -172,16 +257,11 @@ func _verify_counts() -> void:
 		var agg := _replay_room(room, key)
 		# D：数据侧曲线（确定性，与 rng 无关）。
 		var design := int(agg["design_total"])
+		totals[key] = design
 		_check(
 			design == int(RAMP_TARGET[key]),
 			"%s 数据侧设计总量 %d ≠ 曲线目标 %d" % [key, design, int(RAMP_TARGET[key])]
 		)
-		_check(
-			design >= previous_design,
-			"%s 设计总量 %d 比前一房 %d 低（曲线必须单调不减）"
-				% [key, design, previous_design]
-		)
-		previous_design = design
 		# C 的汇总口径：实到普通怪必须落在数据侧区间带内。
 		_check(
 			int(agg["realized"]) >= int(agg["grunt_lo_total"]),
@@ -193,6 +273,18 @@ func _verify_counts() -> void:
 			"%s 实到普通怪 %d > 区间带上限 %d（增量重复叠加？）"
 				% [key, int(agg["realized"]), int(agg["grunt_hi_total"])]
 		)
+	# D：单调不减 —— 只跑 `RAMP_MONOTONE_ORDER`（峰值房 room_05 已摘出，见常量注释）。
+	var previous_design := -1
+	var previous_key := "—"
+	for key in RAMP_MONOTONE_ORDER:
+		var design := int(totals.get(key, -1))
+		_check(
+			design >= previous_design,
+			"%s 设计总量 %d 比前一房 %s 的 %d 低（曲线必须单调不减）"
+				% [key, design, previous_key, previous_design]
+		)
+		previous_design = design
+		previous_key = key
 
 
 ## 复刻 `_spawn_box_waves`：逐盒调 `_collect_box_stage_entries`，逐盒比对设计区间。
@@ -299,7 +391,8 @@ func _verify_drift() -> void:
 	for room_key in drifted.keys():
 		_check(
 			pinned_keys.has(room_key),
-			"新出现漂移盒：%s（不在已知欠账清单里）" % room_key
+			"新出现漂移盒：%s（不在已知欠账清单里，实测 %s）"
+				% [room_key, JSON.stringify(drifted[room_key])]
 		)
 		if not pinned_keys.has(room_key):
 			continue
@@ -307,7 +400,22 @@ func _verify_drift() -> void:
 		for index in (drifted[room_key] as Dictionary).keys():
 			_check(
 				expected.has(index),
-				"新出现漂移盒：%s#%d（不在已知欠账清单里）" % [room_key, index]
+				"新出现漂移盒：%s#%d（不在已知欠账清单里，实测 %.2f m）"
+					% [room_key, index, float((drifted[room_key] as Dictionary)[index])]
+			)
+		for index in expected.keys():
+			_check(
+				(drifted[room_key] as Dictionary).has(index),
+				"已知欠账 %s#%d 不再漂移 —— 请缩减 PINNED_DRIFT 快照（实测 %s）"
+					% [room_key, index, JSON.stringify(drifted[room_key])]
+			)
+			if not (drifted[room_key] as Dictionary).has(index):
+				continue
+			_check(
+				absf(float((drifted[room_key] as Dictionary)[index]) - float(expected[index])) <= 0.01,
+				"已知欠账 %s#%d 漂移量变了：快照 %.2f m ≠ 实测 %.2f m（几何/盒位改过就要刷快照）"
+					% [room_key, index, float(expected[index]),
+						float((drifted[room_key] as Dictionary)[index])]
 			)
 	for room_key in pinned_keys:
 		var expected := PINNED_DRIFT[room_key] as Dictionary
@@ -316,6 +424,8 @@ func _verify_drift() -> void:
 				drifted.has(room_key) and (drifted[room_key] as Dictionary).has(index),
 				"已知欠账 %s#%d 不再漂移 —— 请缩减 PINNED_DRIFT 快照" % [room_key, index]
 			)
+	# 快照同步入口：把这一行 JSON 直接改写成 PINNED_DRIFT（键是 String 房名、值是 {下标: 米}）。
+	print("SPAWN_RAMP_DRIFT_SNAPSHOT=%s" % JSON.stringify(drifted))
 
 
 # ============================================================

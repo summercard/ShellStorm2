@@ -207,12 +207,12 @@
         { "box": "box_room_spread", "center_m": [-7.5, -22.5], "count_bonus": 1 },
         { "box": "box_corner_ambush", "center_m": [7.5, -22.5] },
         { "box": "box_center_elite", "center_m": [-7.5, 22.5], "count_bonus": 2 },
-        { "box": "box_room_spread", "center_m": [7.5, 22.5], "count_bonus": 2 }
+        { "box": "box_room_spread", "center_m": [7.5, 22.5], "count_bonus": 2 },
+        { "box": "box_bridge_center", "center_m": [2.5, 2.5] }
       ],
       "encounter": {
         "stages": [
-          { "boxes": [0, 1] },
-          { "boxes": [2, 3] }
+          { "boxes": [0, 1, 2, 3, 4] }
         ]
       }
     },

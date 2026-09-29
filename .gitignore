@@ -80,3 +80,4 @@ _scratch/*_before_*.blend
 
 # Godot 运行期 appdata 副本（--headless 探针用独立 appdata 时落在项目内，非资产）
 _godot_appdata*/
+_scratch/probe_appdata/
