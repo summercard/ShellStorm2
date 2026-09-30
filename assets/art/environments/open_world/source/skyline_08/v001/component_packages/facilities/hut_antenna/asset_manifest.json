@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08",
+  "package_id": "skyline_08/hut_antenna",
+  "display_name": "机房屋顶_卫星天线与立杆",
+  "slug": "hut_antenna",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v001\\SKYLINE大楼_8层_精细天台_v001.blend",
+  "collection": "机房屋顶_卫星天线与立杆_资产包",
+  "source_collection": "机房屋顶_卫星天线与立杆_制作组件",
+  "objects": [
+    "机房屋顶_卫星天线与立杆_主体"
+  ],
+  "root_object": "机房屋顶_卫星天线与立杆_主体",
+  "world_position": [
+    12.399999618530273,
+    5.400000095367432,
+    36.880001068115234
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    11.553999900817871,
+    4.216965198516846,
+    36.823272705078125
+  ],
+  "bounds_max": [
+    13.711418151855469,
+    5.875,
+    41.33000183105469
+  ],
+  "dimensions": [
+    2.1574182510375977,
+    1.6580348014831543,
+    4.5067291259765625
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "hut_antenna.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "hut_antenna",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "用户参考图及8层楼要求",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-SKYLINE08"
+}

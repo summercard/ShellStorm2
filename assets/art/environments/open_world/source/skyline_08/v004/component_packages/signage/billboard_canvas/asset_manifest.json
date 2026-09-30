@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08",
+  "package_id": "skyline_08/billboard_canvas",
+  "display_name": "巨型广告牌_不规则破损画布",
+  "slug": "billboard_canvas",
+  "category": "signage",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "巨型广告牌_不规则破损画布_资产包",
+  "source_collection": "巨型广告牌_不规则破损画布_制作组件",
+  "objects": [
+    "巨型广告牌_不规则破损画布_主体"
+  ],
+  "root_object": "巨型广告牌_不规则破损画布_主体",
+  "world_position": [
+    -4.0,
+    8.649999618530273,
+    36.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -15.479722023010254,
+    8.265000343322754,
+    35.98689651489258
+  ],
+  "bounds_max": [
+    7.480000019073486,
+    8.52,
+    44.589996337890625
+  ],
+  "dimensions": [
+    22.95972204208374,
+    0.25499965667724567,
+    8.603099822998047
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "billboard_canvas.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "torn_billboard_canvas",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08"
+}

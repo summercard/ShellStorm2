@@ -1,0 +1,21 @@
+{
+  "source_audit_passed": true,
+  "palette_validation_passed": true,
+  "source_hash_matches_ledger": true,
+  "structure_exit": 0,
+  "lossless_split_exit": 0,
+  "ledger_full_exit": 1,
+  "ledger_prior_issues_unchanged": true,
+  "ledger_issue_counts": {
+    "sha_mismatch": 152
+  },
+  "new_asset_in_issue_set": false,
+  "documentation_exit": 1,
+  "documentation_existing_unregistered_scenes": [
+    "verify_base99_swivel_chairs",
+    "verify_expedition01_spawn_ramp",
+    "verify_pushable_base_chairs"
+  ],
+  "runtime_naming_exit": 1,
+  "runtime_naming_source_paths_affected": false
+}

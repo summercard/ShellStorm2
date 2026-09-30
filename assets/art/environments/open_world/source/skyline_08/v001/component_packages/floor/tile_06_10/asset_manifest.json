@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08",
+  "package_id": "skyline_08/tile_06_10",
+  "display_name": "天台地砖_R06_C10",
+  "slug": "tile_06_10",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v001\\SKYLINE大楼_8层_精细天台_v001.blend",
+  "collection": "天台地砖_R06_C10_资产包",
+  "source_collection": "天台地砖_R06_C10_制作组件",
+  "objects": [
+    "天台地砖_R06_C10_主体"
+  ],
+  "root_object": "天台地砖_R06_C10_主体",
+  "world_position": [
+    5.0,
+    1.0,
+    31.799999237060547
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    4.0125,
+    0.012499999999999956,
+    31.6
+  ],
+  "bounds_max": [
+    5.9875,
+    1.9875,
+    32.0
+  ],
+  "dimensions": [
+    1.9749999999999996,
+    1.975,
+    0.3999999999999986
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "tile_06_10.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "roof_tile",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "用户参考图及8层楼要求",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-SKYLINE08"
+}

@@ -1,0 +1,12 @@
+{
+  "source_version": "v004",
+  "source_sha_matches_ledger": true,
+  "source_uv_and_gray_checks_passed": true,
+  "structure_exit": 0,
+  "lossless_split_exit": 0,
+  "ledger_full_exit": 1,
+  "prior_ledger_issue_set_unchanged": true,
+  "documentation_exit": 1,
+  "documentation_remaining_issues": "三个既有未注册验证场景",
+  "all_requested_source_work_complete": true
+}

@@ -1,0 +1,5408 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\skyline_08\\v003\\SKYLINE大楼_8层_精细天台_v003.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 536,
+  "polygon_count": 83708,
+  "valid_island_polygon_count": 83708,
+  "uv_reports": [
+    {
+      "object": "01层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "06层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "06层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "07层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "07层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "08层_窗墙楼板重复模块_主体",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "08层_窗墙楼板重复模块_主体_制作源",
+      "polygon_count": 1500,
+      "valid_island_polygon_count": 1500,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_E_主体",
+      "polygon_count": 452,
+      "valid_island_polygon_count": 452,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_E_主体_制作源",
+      "polygon_count": 452,
+      "valid_island_polygon_count": 452,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_E_柔和自发光",
+      "polygon_count": 266,
+      "valid_island_polygon_count": 266,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_E_柔和自发光_制作源",
+      "polygon_count": 266,
+      "valid_island_polygon_count": 266,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_I_主体",
+      "polygon_count": 166,
+      "valid_island_polygon_count": 166,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_I_主体_制作源",
+      "polygon_count": 166,
+      "valid_island_polygon_count": 166,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_I_柔和自发光",
+      "polygon_count": 98,
+      "valid_island_polygon_count": 98,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_I_柔和自发光_制作源",
+      "polygon_count": 98,
+      "valid_island_polygon_count": 98,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_K_主体",
+      "polygon_count": 484,
+      "valid_island_polygon_count": 484,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_K_主体_制作源",
+      "polygon_count": 484,
+      "valid_island_polygon_count": 484,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_K_柔和自发光",
+      "polygon_count": 294,
+      "valid_island_polygon_count": 294,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_K_柔和自发光_制作源",
+      "polygon_count": 294,
+      "valid_island_polygon_count": 294,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_L_主体",
+      "polygon_count": 252,
+      "valid_island_polygon_count": 252,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_L_主体_制作源",
+      "polygon_count": 252,
+      "valid_island_polygon_count": 252,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_L_柔和自发光",
+      "polygon_count": 154,
+      "valid_island_polygon_count": 154,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_L_柔和自发光_制作源",
+      "polygon_count": 154,
+      "valid_island_polygon_count": 154,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_N_主体",
+      "polygon_count": 423,
+      "valid_island_polygon_count": 423,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_N_主体_制作源",
+      "polygon_count": 423,
+      "valid_island_polygon_count": 423,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_N_柔和自发光",
+      "polygon_count": 266,
+      "valid_island_polygon_count": 266,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_N_柔和自发光_制作源",
+      "polygon_count": 266,
+      "valid_island_polygon_count": 266,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_S_主体",
+      "polygon_count": 4690,
+      "valid_island_polygon_count": 4690,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_S_主体_制作源",
+      "polygon_count": 4690,
+      "valid_island_polygon_count": 4690,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_S_柔和自发光",
+      "polygon_count": 602,
+      "valid_island_polygon_count": 602,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_S_柔和自发光_制作源",
+      "polygon_count": 602,
+      "valid_island_polygon_count": 602,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_Y_主体",
+      "polygon_count": 345,
+      "valid_island_polygon_count": 345,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_Y_主体_制作源",
+      "polygon_count": 345,
+      "valid_island_polygon_count": 345,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_Y_柔和自发光",
+      "polygon_count": 210,
+      "valid_island_polygon_count": 210,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE_立体灯泡字_Y_柔和自发光_制作源",
+      "polygon_count": 210,
+      "valid_island_polygon_count": 210,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE招牌_钢轨支架与线缆_主体",
+      "polygon_count": 436,
+      "valid_island_polygon_count": 436,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "SKYLINE招牌_钢轨支架与线缆_主体_制作源",
+      "polygon_count": 436,
+      "valid_island_polygon_count": 436,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央上弯通风管_主体",
+      "polygon_count": 104,
+      "valid_island_polygon_count": 104,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央上弯通风管_主体_制作源",
+      "polygon_count": 104,
+      "valid_island_polygon_count": 104,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央双风扇空调_主体",
+      "polygon_count": 2015,
+      "valid_island_polygon_count": 2015,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央双风扇空调_主体_制作源",
+      "polygon_count": 2015,
+      "valid_island_polygon_count": 2015,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央附属空调_主体",
+      "polygon_count": 1075,
+      "valid_island_polygon_count": 1075,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央附属空调_主体_制作源",
+      "polygon_count": 1075,
+      "valid_island_polygon_count": 1075,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "前侧分节低风管_主体",
+      "polygon_count": 112,
+      "valid_island_polygon_count": 112,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "前侧分节低风管_主体_制作源",
+      "polygon_count": 112,
+      "valid_island_polygon_count": 112,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "后侧串联通风管_主体",
+      "polygon_count": 68,
+      "valid_island_polygon_count": 68,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "后侧串联通风管_主体_制作源",
+      "polygon_count": 68,
+      "valid_island_polygon_count": 68,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_前_女儿墙压边_主体",
+      "polygon_count": 400,
+      "valid_island_polygon_count": 400,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_前_女儿墙压边_主体_制作源",
+      "polygon_count": 400,
+      "valid_island_polygon_count": 400,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_前_黄色安全护栏_主体",
+      "polygon_count": 404,
+      "valid_island_polygon_count": 404,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_前_黄色安全护栏_主体_制作源",
+      "polygon_count": 404,
+      "valid_island_polygon_count": 404,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_前沿蘑菇排风帽_主体",
+      "polygon_count": 49,
+      "valid_island_polygon_count": 49,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_前沿蘑菇排风帽_主体_制作源",
+      "polygon_count": 49,
+      "valid_island_polygon_count": 49,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_右_女儿墙压边_主体",
+      "polygon_count": 300,
+      "valid_island_polygon_count": 300,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_右_女儿墙压边_主体_制作源",
+      "polygon_count": 300,
+      "valid_island_polygon_count": 300,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_右_黄色安全护栏_主体",
+      "polygon_count": 308,
+      "valid_island_polygon_count": 308,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_右_黄色安全护栏_主体_制作源",
+      "polygon_count": 308,
+      "valid_island_polygon_count": 308,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_后_女儿墙压边_主体",
+      "polygon_count": 400,
+      "valid_island_polygon_count": 400,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_后_女儿墙压边_主体_制作源",
+      "polygon_count": 400,
+      "valid_island_polygon_count": 400,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_后_黄色安全护栏_主体",
+      "polygon_count": 404,
+      "valid_island_polygon_count": 404,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_后_黄色安全护栏_主体_制作源",
+      "polygon_count": 404,
+      "valid_island_polygon_count": 404,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_左_女儿墙压边_主体",
+      "polygon_count": 300,
+      "valid_island_polygon_count": 300,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_左_女儿墙压边_主体_制作源",
+      "polygon_count": 300,
+      "valid_island_polygon_count": 300,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_左_黄色安全护栏_主体",
+      "polygon_count": 308,
+      "valid_island_polygon_count": 308,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_左_黄色安全护栏_主体_制作源",
+      "polygon_count": 308,
+      "valid_island_polygon_count": 308,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_橙色油桶固定陈设_主体",
+      "polygon_count": 812,
+      "valid_island_polygon_count": 812,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_橙色油桶固定陈设_主体_制作源",
+      "polygon_count": 812,
+      "valid_island_polygon_count": 812,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_00_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_00_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_00_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_00_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_01_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_01_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_01_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_01_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_02_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_02_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_02_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_电控箱_02_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_00_主体",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_00_主体_制作源",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_01_主体",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_01_主体_制作源",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_02_主体",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_02_主体_制作源",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_03_主体",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_03_主体_制作源",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_04_主体",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_空心砌块_04_主体_制作源",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_绿色折叠篷布覆盖设备_主体",
+      "polygon_count": 42,
+      "valid_island_polygon_count": 42,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_绿色折叠篷布覆盖设备_主体_制作源",
+      "polygon_count": 42,
+      "valid_island_polygon_count": 42,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_铜管走线与黄色设备护架_主体",
+      "polygon_count": 402,
+      "valid_island_polygon_count": 402,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台_铜管走线与黄色设备护架_主体_制作源",
+      "polygon_count": 402,
+      "valid_island_polygon_count": 402,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C00_主体",
+      "polygon_count": 16,
+      "valid_island_polygon_count": 16,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C00_主体_制作源",
+      "polygon_count": 16,
+      "valid_island_polygon_count": 16,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C02_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C02_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C03_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C03_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C04_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C04_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C06_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C06_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C07_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C07_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C08_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C08_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C09_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C09_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C10_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C10_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C12_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C12_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R00_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C00_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C00_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C03_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C03_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C04_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C04_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C06_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C06_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C07_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C07_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C08_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C08_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C09_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C09_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C10_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C10_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C11_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C11_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C15_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R01_C15_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C00_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C00_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C03_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C03_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C04_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C04_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C05_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C05_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C06_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C06_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C07_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C07_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C08_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C08_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C09_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C09_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C10_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C10_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C11_主体",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C11_主体_制作源",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C13_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C13_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R02_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C00_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C00_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C03_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C03_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C04_主体",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C04_主体_制作源",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C05_主体",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C05_主体_制作源",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C06_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C06_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C07_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C07_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C08_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C08_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C09_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C09_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C10_主体",
+      "polygon_count": 16,
+      "valid_island_polygon_count": 16,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C10_主体_制作源",
+      "polygon_count": 16,
+      "valid_island_polygon_count": 16,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R03_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C00_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C00_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C03_主体",
+      "polygon_count": 16,
+      "valid_island_polygon_count": 16,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C03_主体_制作源",
+      "polygon_count": 16,
+      "valid_island_polygon_count": 16,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C04_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C04_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C05_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C05_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C06_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C06_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C07_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C07_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C08_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C08_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C09_主体",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C09_主体_制作源",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C10_主体",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C10_主体_制作源",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C11_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C11_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C13_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C13_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R04_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C00_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C00_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C02_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C02_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C03_主体",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C03_主体_制作源",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C04_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C04_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C06_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C06_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C07_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C07_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C08_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C08_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C09_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C09_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C10_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C10_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R05_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C00_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C00_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C02_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C02_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C03_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C03_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C04_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C04_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C06_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C06_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C07_主体",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C07_主体_制作源",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C08_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C08_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C09_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C09_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C10_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C10_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C12_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C12_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R06_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C00_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C00_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C02_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C02_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C03_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C03_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C04_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C04_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C06_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C06_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C07_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C07_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C08_主体",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C08_主体_制作源",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C09_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C09_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C10_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C10_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C11_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C11_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C13_主体",
+      "polygon_count": 29,
+      "valid_island_polygon_count": 29,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C13_主体_制作源",
+      "polygon_count": 29,
+      "valid_island_polygon_count": 29,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C14_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C14_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R07_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C00_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C00_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C01_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C01_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C03_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C03_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C04_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C04_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C06_主体",
+      "polygon_count": 15,
+      "valid_island_polygon_count": 15,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C06_主体_制作源",
+      "polygon_count": 15,
+      "valid_island_polygon_count": 15,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C07_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C07_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C08_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C08_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C09_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C09_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C10_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C10_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C13_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C13_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C15_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R08_C15_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C00_主体",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C00_主体_制作源",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C03_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C03_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C04_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C04_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C06_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C06_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C07_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C07_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C08_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C08_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C09_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C09_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C10_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C10_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C12_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C12_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R09_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C00_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C00_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C03_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C03_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C04_主体",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C04_主体_制作源",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C05_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C05_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C06_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C06_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C07_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C07_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C08_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C08_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C09_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C09_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C10_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C10_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C12_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C12_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R10_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C00_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C00_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C01_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C01_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C02_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C02_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C03_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C03_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C04_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C04_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C05_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C05_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C06_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C06_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C07_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C07_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C08_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C08_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C09_主体",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C09_主体_制作源",
+      "polygon_count": 11,
+      "valid_island_polygon_count": 11,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C10_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C10_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C11_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C11_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C12_主体",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C12_主体_制作源",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C13_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C13_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C14_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C14_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C15_主体",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台地砖_R11_C15_主体_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_双色墙壳屋檐_主体",
+      "polygon_count": 502,
+      "valid_island_polygon_count": 502,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_双色墙壳屋檐_主体_制作源",
+      "polygon_count": 502,
+      "valid_island_polygon_count": 502,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_橙色爬梯与屋顶弯钩_主体",
+      "polygon_count": 284,
+      "valid_island_polygon_count": 284,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_橙色爬梯与屋顶弯钩_主体_制作源",
+      "polygon_count": 284,
+      "valid_island_polygon_count": 284,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_蓝色铁门与门灯_主体",
+      "polygon_count": 87,
+      "valid_island_polygon_count": 87,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_蓝色铁门与门灯_主体_制作源",
+      "polygon_count": 87,
+      "valid_island_polygon_count": 87,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_蓝色铁门与门灯_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台机房_蓝色铁门与门灯_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左侧双风扇机组_主体",
+      "polygon_count": 2003,
+      "valid_island_polygon_count": 2003,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左侧双风扇机组_主体_制作源",
+      "polygon_count": 2003,
+      "valid_island_polygon_count": 2003,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左前单风扇冷凝器_主体",
+      "polygon_count": 1135,
+      "valid_island_polygon_count": 1135,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左前单风扇冷凝器_主体_制作源",
+      "polygon_count": 1135,
+      "valid_island_polygon_count": 1135,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "巨型广告牌_不规则破损画布_主体",
+      "polygon_count": 361,
+      "valid_island_polygon_count": 361,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "巨型广告牌_不规则破损画布_主体_制作源",
+      "polygon_count": 361,
+      "valid_island_polygon_count": 361,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "巨型广告牌_城市剪影与落日几何图案_主体",
+      "polygon_count": 920,
+      "valid_island_polygon_count": 920,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "巨型广告牌_城市剪影与落日几何图案_主体_制作",
+      "polygon_count": 920,
+      "valid_island_polygon_count": 920,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "巨型广告牌_橙色钢架与基础_主体",
+      "polygon_count": 724,
+      "valid_island_polygon_count": 724,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "巨型广告牌_橙色钢架与基础_主体_制作源",
+      "polygon_count": 724,
+      "valid_island_polygon_count": 724,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_右_检修平台_主体",
+      "polygon_count": 518,
+      "valid_island_polygon_count": 518,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_右_检修平台_主体_制作源",
+      "polygon_count": 518,
+      "valid_island_polygon_count": 518,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_垂挂电缆与配电箱_主体",
+      "polygon_count": 1197,
+      "valid_island_polygon_count": 1197,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_垂挂电缆与配电箱_主体_制作源",
+      "polygon_count": 1197,
+      "valid_island_polygon_count": 1197,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_左_检修平台_主体",
+      "polygon_count": 548,
+      "valid_island_polygon_count": 548,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_左_检修平台_主体_制作源",
+      "polygon_count": 548,
+      "valid_island_polygon_count": 548,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_00_主体",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_00_主体_制作源",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_00_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_00_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_01_主体",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_01_主体_制作源",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_01_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_01_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_02_主体",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_02_主体_制作源",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_02_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_02_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_03_主体",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_03_主体_制作源",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_03_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_03_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_04_主体",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_04_主体_制作源",
+      "polygon_count": 54,
+      "valid_island_polygon_count": 54,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_04_柔和自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广告牌_顶部投光灯_04_柔和自发光_制作源",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机房屋顶_卫星天线与立杆_主体",
+      "polygon_count": 558,
+      "valid_island_polygon_count": 558,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机房屋顶_卫星天线与立杆_主体_制作源",
+      "polygon_count": 558,
+      "valid_island_polygon_count": 558,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机房屋顶_涡轮排气帽_主体",
+      "polygon_count": 292,
+      "valid_island_polygon_count": 292,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机房屋顶_涡轮排气帽_主体_制作源",
+      "polygon_count": 292,
+      "valid_island_polygon_count": 292,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机房左侧冷凝器_主体",
+      "polygon_count": 1123,
+      "valid_island_polygon_count": 1123,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机房左侧冷凝器_主体_制作源",
+      "polygon_count": 1123,
+      "valid_island_polygon_count": 1123,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

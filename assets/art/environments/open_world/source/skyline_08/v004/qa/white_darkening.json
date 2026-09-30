@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "user_request": "不要纯白；所有白色灰度向暗灰移动两档",
+  "previous_version": "v003",
+  "version": "v004",
+  "changed_unique_mesh_faces": 31324,
+  "mapping_face_counts": {
+    "R10C10_to_R8C10": 14770,
+    "R9C10_to_R7C10": 16554
+  },
+  "geometry_signature_before": "7c5cdf74182c860aec1b41ed84ec0b984db128257187777bd0abcd03446871ac",
+  "geometry_signature_after": "7c5cdf74182c860aec1b41ed84ec0b984db128257187777bd0abcd03446871ac",
+  "geometry_unchanged": true,
+  "lighting_unchanged": true,
+  "camera_unchanged": true,
+  "shared_palette_unchanged": true,
+  "remaining_brightest_cells": 0
+}

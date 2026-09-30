@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08",
+  "package_id": "skyline_08/letter_n_5",
+  "display_name": "SKYLINE_立体灯泡字_N",
+  "slug": "letter_n_5",
+  "category": "signage",
+  "version": "v001",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v001\\SKYLINE大楼_8层_精细天台_v001.blend",
+  "collection": "SKYLINE_立体灯泡字_N_资产包",
+  "source_collection": "SKYLINE_立体灯泡字_N_制作组件",
+  "objects": [
+    "SKYLINE_立体灯泡字_N_主体",
+    "SKYLINE_立体灯泡字_N_柔和自发光"
+  ],
+  "root_object": "SKYLINE_立体灯泡字_N_主体",
+  "world_position": [
+    6.0724778175354,
+    -12.699999809265137,
+    31.899999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    6.437062740325928,
+    -13.424650192260742,
+    31.780622482299805
+  ],
+  "bounds_max": [
+    10.329124450683594,
+    -12.405349731445312,
+    35.84584426879883
+  ],
+  "dimensions": [
+    3.892061710357666,
+    1.0193004608154297,
+    4.065221786499023
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "letter_n_5.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "marquee_letter",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "用户参考图及8层楼要求",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-SKYLINE08"
+}

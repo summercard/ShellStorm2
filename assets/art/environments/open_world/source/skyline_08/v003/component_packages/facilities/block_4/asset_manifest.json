@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08",
+  "package_id": "skyline_08/block_4",
+  "display_name": "天台_空心砌块_04",
+  "slug": "block_4",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v003\\SKYLINE大楼_8层_精细天台_v003.blend",
+  "collection": "天台_空心砌块_04_资产包",
+  "source_collection": "天台_空心砌块_04_制作组件",
+  "objects": [
+    "天台_空心砌块_04_主体"
+  ],
+  "root_object": "天台_空心砌块_04_主体",
+  "world_position": [
+    14.0,
+    -0.800000011920929,
+    32.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    13.6,
+    -1.0325,
+    31.999999999999996
+  ],
+  "bounds_max": [
+    14.4,
+    -0.5675000000000001,
+    32.31999999999999
+  ],
+  "dimensions": [
+    0.8000000000000007,
+    0.46499999999999986,
+    0.31999999999999673
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "block_4.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "cinder_block",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08"
+}

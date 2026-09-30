@@ -1,0 +1,11 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08",
+  "row": 563,
+  "ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "source_version": "v003",
+  "source_sha256": "13c5724c6217a5e3ce54a0dfa5c9eb81bfc13acaf67d90fb63060fe2360a555b",
+  "prior_asset_content_unchanged": true,
+  "prior_asset_fingerprints_unchanged": true,
+  "baseline_count": 733,
+  "status": "Blender源已完成"
+}
