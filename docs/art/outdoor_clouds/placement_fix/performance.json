@@ -1,0 +1,82 @@
+{
+  "benchmarks": [
+    {
+      "clouds_enabled": false,
+      "draw_calls_median": 3034.0,
+      "gpu_median_ms": 2.78699994087219,
+      "gpu_p95_ms": 3.00799989700317,
+      "label": "overview_without_clouds_A",
+      "profile": "high",
+      "render_cpu_median_ms": 3.16100001335144,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3061.0,
+      "gpu_median_ms": 15.048999786377,
+      "gpu_p95_ms": 15.3959999084473,
+      "label": "overview_clouds_high_A",
+      "profile": "high",
+      "render_cpu_median_ms": 3.02999997138977,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3061.0,
+      "gpu_median_ms": 10.4989995956421,
+      "gpu_p95_ms": 10.6809997558594,
+      "label": "overview_clouds_balanced",
+      "profile": "balanced",
+      "render_cpu_median_ms": 2.80599999427795,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3048.0,
+      "gpu_median_ms": 6.89900016784668,
+      "gpu_p95_ms": 7.02500009536743,
+      "label": "overview_clouds_low",
+      "profile": "low",
+      "render_cpu_median_ms": 2.68899989128113,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": false,
+      "draw_calls_median": 3034.0,
+      "gpu_median_ms": 2.78299999237061,
+      "gpu_p95_ms": 2.8529999256134,
+      "label": "overview_without_clouds_B",
+      "profile": "high",
+      "render_cpu_median_ms": 2.71499991416931,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3061.0,
+      "gpu_median_ms": 14.9720001220703,
+      "gpu_p95_ms": 15.2089996337891,
+      "label": "overview_clouds_high_B",
+      "profile": "high",
+      "render_cpu_median_ms": 2.87100005149841,
+      "samples": 90
+    }
+  ],
+  "device": "NVIDIA GeForce RTX 4060 Ti",
+  "renderer": "forward_plus",
+  "resolution": [
+    1440,
+    900
+  ],
+  "snapshot": {
+    "enabled": true,
+    "fallback_count": 0,
+    "floor_99_y": -12.0,
+    "flow_time": 24.3456903333333,
+    "keepout_count": 700,
+    "mask_valid": true,
+    "quality_profile": "high",
+    "rejected_count": 0,
+    "sea_count": 1,
+    "wisp_count": 24
+  }
+}

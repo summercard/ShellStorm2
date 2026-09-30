@@ -87,6 +87,7 @@ func _ready() -> void:
 	_validate_disabled_context(clouds, context)
 	_validate_quality_and_stale_geometry(clouds, tower, context)
 	await _validate_player_camera_render(clouds, tower)
+	await _validate_user_corner_render(clouds, tower)
 	print("OUTDOOR_CLOUDS_METRICS sea=", initial.get("sea_count", -1), " wisps=", initial.get("wisp_count", -1), " obstacles=", obstacles.size(), " rejected=", initial.get("rejected_count", -1))
 	tower.queue_free()
 	await get_tree().process_frame
@@ -213,6 +214,38 @@ func _validate_player_camera_render(clouds: Node3D, tower: Node3D) -> void:
 	clouds.set_process(true)
 
 
+func _validate_user_corner_render(clouds: Node3D, tower: Node3D) -> void:
+	var player := tower.get("player") as Node3D
+	player.global_position = Vector3(-48, 0.05, -31)
+	var camera := player.get_node("Camera3D") as Camera3D
+	camera.current = true
+	GameTimeManager.set_elapsed_game_seconds(17.7 * 3600.0, false)
+	clouds.set_process(false)
+	clouds.call("_process", 0.0)
+	clouds.visible = false
+	for _frame in range(12):
+		await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var without := get_viewport().get_texture().get_image()
+	clouds.visible = true
+	for _frame in range(12):
+		await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var with_clouds := get_viewport().get_texture().get_image()
+	var difference := 0.0
+	var count := 0
+	for y in range(int(with_clouds.get_height() * 0.10), int(with_clouds.get_height() * 0.75), 4):
+		for x in range(int(with_clouds.get_width() * 0.06), int(with_clouds.get_width() * 0.38), 4):
+			var a := with_clouds.get_pixel(x, y)
+			var b := without.get_pixel(x, y)
+			difference += absf(a.r - b.r) + absf(a.g - b.g) + absf(a.b - b.b)
+			count += 3
+	var mean_difference := difference / maxf(count, 1)
+	_expect(mean_difference > 0.012, "the reported northwest player corner must actually display clouds in the formal environment")
+	print("OUTDOOR_CLOUDS_USER_CORNER_RENDER mean_rgb_difference=", mean_difference)
+	clouds.set_process(true)
+
+
 func _validate_mounted_material(mesh_node: MeshInstance3D) -> void:
 	var material := mesh_node.material_override as ShaderMaterial
 	_expect(material != null and material.shader != null, "actual cloud meshes must use mounted ShaderMaterial")
@@ -251,6 +284,9 @@ func _validate_keepout_coverage(clouds: Node3D, obstacles: Array[AABB]) -> void:
 func _validate_baked_exterior_mask(clouds: Node3D, obstacles: Array[AABB]) -> void:
 	var first := _mesh_nodes(clouds)[0]
 	var material := first.material_override as ShaderMaterial
+	var fallback_count := int(material.get_shader_parameter("fallback_count"))
+	var fallback_regions: PackedVector4Array = material.get_shader_parameter("fallback_regions")
+	_expect(fallback_regions.size() == 32, "mounted material must receive a bounded complete fallback region array")
 	var texture := material.get_shader_parameter("building_distance") as Texture3D
 	_expect(texture != null, "cloud material must mount a native 3D exclusion texture")
 	if texture == null:
@@ -288,7 +324,12 @@ func _validate_baked_exterior_mask(clouds: Node3D, obstacles: Array[AABB]) -> vo
 						var z := clampi(cell.z + dz, 0, 287)
 						var weight := (f.x if dx == 1 else 1.0 - f.x) * (f.y if dy == 1 else 1.0 - f.y) * (f.z if dz == 1 else 1.0 - f.z)
 						sample += slices[z].get_pixel(x, y).r * weight * 16.0
-			_expect(sample <= 3.0, "GPU mask must erase cloud density at independently measured model + clearance, distance=" + str(sample))
+			for region in range(fallback_count):
+				var region_lo := Vector3(fallback_regions[region * 2].x, fallback_regions[region * 2].y, fallback_regions[region * 2].z)
+				var region_hi := Vector3(fallback_regions[region * 2 + 1].x, fallback_regions[region * 2 + 1].y, fallback_regions[region * 2 + 1].z)
+				var outside := (region_lo - point).max(point - region_hi).max(Vector3.ZERO)
+				sample = minf(sample, outside.length())
+			_expect(sample <= 3.0, "GPU mask plus actual fallback uniforms must erase density at independently measured model + clearance, distance=" + str(sample))
 	_expect(material.shader.code.contains("smoothstep(3.0, 7.0, distance_to_building)"), "shader must apply conservative masked density with feathered clearance")
 	_expect(material.shader.code.contains("far_t = min(far_t, dot(local_depth"), "volume march must stop at opaque geometry")
 
@@ -378,17 +419,21 @@ func _validate_quality_and_stale_geometry(clouds: VfxEffectBase3D, tower: Node3D
 			var structure := material.get_shader_parameter("shape_noise") as Texture3D
 			_expect(structure != null and structure.get_width() == 128 and structure.get_depth() == 128, "quality cloud must mount periodic volumetric structure")
 	var building := tower.get_node("Blocks/Rooftop/CrossTowerRoute/Tower2") as Node3D
+	var geometry_before: Dictionary = clouds.call("get_presentation_snapshot")
 	var authored := building.transform
 	building.position.x += 10.0
 	clouds.configure(Color.WHITE, 1.0, context)
 	var rejected: Dictionary = clouds.call("get_presentation_snapshot")
 	_expect(not bool(rejected["mask_valid"]), "negative control: changed building geometry must invalidate the old mask")
-	_expect(int(rejected["sea_count"]) == 0 and int(rejected["wisp_count"]) == 0, "stale mask must hide cloud geometry rather than enter changed buildings")
+	_expect(int(rejected["fallback_count"]) > 0, "changed building must receive a conservative fallback region")
+	_expect(int(rejected["sea_count"]) == 1, "moving one building must retain the continuous cloud sea")
+	_validate_baked_exterior_mask(clouds, _independent_building_bounds(tower, context["city_layout"]))
 	building.transform = authored
 	clouds.configure(Color.WHITE, 1.0, context)
 	var restored: Dictionary = clouds.call("get_presentation_snapshot")
-	_expect(bool(restored["mask_valid"]) and int(restored["sea_count"]) == 1, "restored geometry must recover correct cloud mask")
-	print("OUTDOOR_CLOUDS_NEGATIVE_CONTROL moved_building=mask_rejected restored=visible quality_steps=40,64,96")
+	_expect(bool(restored["mask_valid"]) == bool(geometry_before["mask_valid"]) and int(restored["sea_count"]) == 1, "restored geometry must recover its original baked/fallback state with clouds visible")
+	_expect(int(restored["fallback_count"]) == int(geometry_before["fallback_count"]), "restoration must clear only the temporary building fallback")
+	print("OUTDOOR_CLOUDS_NEGATIVE_CONTROL moved_building=analytic_exclusion sea=retained restored=visible quality_steps=40,64,96")
 
 
 func _independent_building_bounds(tower: Node3D, city_layout: Array) -> Array[AABB]:

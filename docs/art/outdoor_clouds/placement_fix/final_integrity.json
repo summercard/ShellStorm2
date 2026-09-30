@@ -1,0 +1,12 @@
+{
+  "runtime_checks": 30209,
+  "dependency_hashes_match": true,
+  "ledger_structure_and_split": "passed",
+  "other_asset_fingerprints_preserved": 985,
+  "existing_vfx_full_issues_unchanged": {
+    "sha_mismatch": 5
+  },
+  "media_assets": 73,
+  "documentation": "161 documents, 1105 local links; existing three unregistered scenes and system python3 lacks openpyxl",
+  "runtime_naming": "existing 14 files, 3 directories and 97 references; no new cloud naming violation"
+}

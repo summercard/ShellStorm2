@@ -20,13 +20,26 @@ uniform vec3 mask_size = vec3(480.0, 160.0, 540.0);
 uniform float sheet_mode = 1.0;
 uniform int ray_steps = 96;
 uniform int light_steps = 4;
+uniform vec4 fallback_regions[32];
+uniform int fallback_count = 0;
 varying vec3 local_surface;
 varying vec3 local_camera;
 
 float building_clearance(vec3 w) {
     vec3 uv = (w - mask_origin) / mask_size;
-    if (any(lessThan(uv, vec3(0.0))) || any(greaterThan(uv, vec3(1.0)))) { return 16.0; }
-    return texture(building_distance, uv).r * 16.0;
+    float distance_to_model = 16.0;
+    if (all(greaterThanEqual(uv, vec3(0.0))) && all(lessThanEqual(uv, vec3(1.0)))) {
+        distance_to_model = texture(building_distance, uv).r * 16.0;
+    }
+    // Only changed building regions are evaluated, not every scene mesh per sample.
+    for (int i = 0; i < 16; i++) {
+        if (i >= fallback_count) { break; }
+        vec3 lo = fallback_regions[i * 2].xyz;
+        vec3 hi = fallback_regions[i * 2 + 1].xyz;
+        vec3 outside = max(max(lo - w, w - hi), vec3(0.0));
+        distance_to_model = min(distance_to_model, length(outside));
+    }
+    return distance_to_model;
 }
 vec3 field(vec3 w) {
     vec3 wind = vec3(flow_time * 0.18, sin(flow_time * 0.023) * 0.8, -flow_time * 0.11);

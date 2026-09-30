@@ -17,7 +17,7 @@ PREFAB=ROOT/'assets/art/vfx/environment_3d/cloud_sea/vfx_env_cloud_sea_root_top3
 OUT=ROOT/'outputs/outdoor_clouds/ledger_v002'
 SPEC='连续世界密度云海476×90×536m，Y=-105～-15，云顶圆润起伏、云内遮光、下层薄雾、楼边透出下方楼层。24块漂浮小云，低档12块；高/中/低96/64/40步体积采样、4/3/2步定向透射。image-2原创1024²灰度密度，128³ RGB周期云结构，256×80×288 R8建筑避让；无碰撞。'
 ORIGIN='项目原创Shader/三维程序密度；gpt-image-2原创灰度云贴图，用户参考图仅作风格参考'
-NOTE='v002品质优先版，尚未专项优化。主场景OutdoorClouds持有；主塔全高度禁云，700建筑边界遮罩随最新布局重烘焙。实际天台520m及99F145m视距均验证云可见、亮部有余量；GPU实际纹理采样、暂停、60秒流动、失效遮罩拒绝通过。原AssetID升级，不新增行。'
+NOTE='v002品质优先版，尚未专项优化。主场景OutdoorClouds持有；主塔全高度禁云，700建筑边界随最新布局重烘焙；建筑改变时用最多16个保守解析区域单独避让，不再隐藏整套云。正式西北楼角、天台520m及99F145m视距均验证云可见、亮部有余量；GPU纹理与实际兜底参数、暂停、60秒流动及变动建筑继续避让通过。原AssetID原行更新。'
 def snapshots(wb):
  return {(w.title,c.coordinate):(c.value,c.style_id,c.number_format) for w in wb for row in w for c in row if c.value is not None}
 def gates(label):

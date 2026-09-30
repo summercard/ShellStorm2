@@ -18,6 +18,9 @@ var _sun: DirectionalLight3D
 var _baked_keepouts: Array[AABB] = []
 var _mask_valid := true
 var _quality_profile := "high"
+var _keepout_regions: Array[String] = []
+var _geometry_regions: Dictionary = {}
+var _fallback_bounds: Array[AABB] = []
 
 
 func _ready() -> void:
@@ -45,17 +48,20 @@ func _on_configure(context: Dictionary) -> void:
 	_floor_99_y = float(context.get("floor_99_y", -12.0))
 	var main_rect: Rect2 = context.get("main_tower_rect", Rect2(-50.0, -35.0, 100.0, 80.0))
 	_keepouts.clear()
+	_keepout_regions.clear()
+	_geometry_regions.clear()
 	# All-height exclusion also protects a cutaway interior or open door and rooftop rooms.
-	_keepouts.append(AABB(Vector3(main_rect.position.x, -100000.0, main_rect.position.y), Vector3(main_rect.size.x, 200000.0, main_rect.size.y)).grow(BUILDING_CLEARANCE_M))
+	_record_keepout(AABB(Vector3(main_rect.position.x, -100000.0, main_rect.position.y), Vector3(main_rect.size.x, 200000.0, main_rect.size.y)).grow(BUILDING_CLEARANCE_M), "main")
 	var world_root := context.get("world_root") as Node3D
 	if world_root != null:
 		var route := world_root.get_node_or_null("Blocks/Rooftop/CrossTowerRoute")
 		if route != null:
-			_collect_model_bounds(route)
+			for building in route.get_children():
+				_collect_model_bounds(building, "route/" + str(building.name))
 		var city_layout: Array = context.get("city_layout", [])
 		for placement: Dictionary in city_layout:
 			var placement_transform: Transform3D = placement["transform"]
-			_keepouts.append(_transformed_box(AABB(Vector3.ONE * -0.5, Vector3.ONE), placement_transform).grow(BUILDING_CLEARANCE_M))
+			_record_keepout(_transformed_box(AABB(Vector3.ONE * -0.5, Vector3.ONE), placement_transform).grow(BUILDING_CLEARANCE_M), "city/" + str(placement.get("ring", 0)))
 		_sun = world_root.get_node_or_null("DirectionalLight3D") as DirectionalLight3D
 	else:
 		_sun = null
@@ -66,28 +72,37 @@ func _on_configure(context: Dictionary) -> void:
 			var hi: Array = item["max"]
 			var origin := Vector3(float(lo[0]), float(lo[1]), float(lo[2]))
 			var endpoint := Vector3(float(hi[0]), float(hi[1]), float(hi[2]))
-			_keepouts.append(AABB(origin, endpoint - origin).grow(BUILDING_CLEARANCE_M))
+			_record_keepout(AABB(origin, endpoint - origin).grow(BUILDING_CLEARANCE_M), "frozen")
 	_validate_volumes()
 	visible = _enabled
 	_sync_materials()
 
 
-func _collect_model_bounds(node: Node) -> void:
+func _record_keepout(bounds: AABB, region: String) -> void:
+	_keepouts.append(bounds)
+	_keepout_regions.append(region)
+	_geometry_regions[region] = (_geometry_regions[region] as AABB).merge(bounds) if _geometry_regions.has(region) else bounds
+
+
+func _collect_model_bounds(node: Node, region: String) -> void:
 	# Hidden rails are still excluded: a model visibility change must never permit clouds inside.
 	if node is MeshInstance3D:
 		var mesh_node := node as MeshInstance3D
 		if mesh_node.mesh != null:
-			_keepouts.append(_transformed_box(mesh_node.get_aabb(), mesh_node.global_transform).grow(BUILDING_CLEARANCE_M))
+			_record_keepout(_transformed_box(mesh_node.get_aabb(), mesh_node.global_transform).grow(BUILDING_CLEARANCE_M), region)
 	for child in node.get_children():
-		_collect_model_bounds(child)
+		_collect_model_bounds(child, region)
 
 
 func _validate_volumes() -> void:
 	_volumes.clear()
 	_rejected_count = 0
 	_mask_valid = true
-	# A changed building must be re-baked explicitly. Never trust a stale exclusion texture.
-	for keepout in _keepouts:
+	_fallback_bounds.clear()
+	var changed_regions: Dictionary = {}
+	# Changed buildings receive a conservative analytic exclusion, keeping the rest visible.
+	for index in range(_keepouts.size()):
+		var keepout := _keepouts[index]
 		var covered := false
 		for baked in _baked_keepouts:
 			if baked.grow(0.02).encloses(keepout):
@@ -95,7 +110,13 @@ func _validate_volumes() -> void:
 				break
 		if not covered:
 			_mask_valid = false
-			break
+			changed_regions[_keepout_regions[index]] = true
+	for region in changed_regions:
+		var bounds: AABB = _geometry_regions[region]
+		if _fallback_bounds.size() < 16:
+			_fallback_bounds.append(bounds)
+		else:
+			_fallback_bounds[15] = _fallback_bounds[15].merge(bounds)
 	for group_name in ["CloudSea", "AirWisps"]:
 		var group_node := get_node_or_null(NodePath(group_name))
 		if group_node == null:
@@ -105,7 +126,7 @@ func _validate_volumes() -> void:
 				continue
 			var mesh_node := node as MeshInstance3D
 			var bounds := _transformed_box(mesh_node.get_aabb(), mesh_node.global_transform)
-			var safe := _mask_valid
+			var safe := true
 			if group_name == "CloudSea" and bounds.end.y > _floor_99_y - HEIGHT_CLEARANCE_M + 0.001:
 				safe = false
 			for keepout in _keepouts:
@@ -131,6 +152,11 @@ func _process(delta: float) -> void:
 
 func _sync_materials() -> void:
 	var daylight := clampf(_sun.light_energy / 3.0, 0.0, 1.0) if is_instance_valid(_sun) else 1.0
+	var regions := PackedVector4Array()
+	for index in range(16):
+		var bounds: AABB = _fallback_bounds[index] if index < _fallback_bounds.size() else AABB()
+		regions.append(Vector4(bounds.position.x, bounds.position.y, bounds.position.z, 0.0))
+		regions.append(Vector4(bounds.end.x, bounds.end.y, bounds.end.z, 0.0))
 	for volume in _volumes:
 		var mesh_node := volume["node"] as MeshInstance3D
 		var material := mesh_node.material_override as ShaderMaterial
@@ -141,6 +167,8 @@ func _sync_materials() -> void:
 			material.set_shader_parameter("ray_steps", 40 if _quality_profile == "low" else 64 if _quality_profile == "balanced" else 96)
 			material.set_shader_parameter("light_steps", 2 if _quality_profile == "low" else 3 if _quality_profile == "balanced" else 4)
 			material.set_shader_parameter("light_direction", _sun.global_basis.z.normalized() if is_instance_valid(_sun) else Vector3(-0.4, 0.8, 0.3).normalized())
+			material.set_shader_parameter("fallback_regions", regions)
+			material.set_shader_parameter("fallback_count", _fallback_bounds.size())
 
 
 func apply_performance_quality(profile: String) -> void:
@@ -164,6 +192,10 @@ func get_exclusion_bounds() -> Array[AABB]:
 	return _keepouts.duplicate()
 
 
+func get_fallback_bounds() -> Array[AABB]:
+	return _fallback_bounds.duplicate()
+
+
 func get_presentation_snapshot() -> Dictionary:
 	var sea_count := 0
 	var wisp_count := 0
@@ -177,4 +209,4 @@ func get_presentation_snapshot() -> Dictionary:
 	return {"enabled": _enabled, "sea_count": sea_count, "wisp_count": wisp_count,
 		"flow_time": _flow_time, "rejected_count": _rejected_count,
 		"keepout_count": _keepouts.size(), "floor_99_y": _floor_99_y,
-		"mask_valid": _mask_valid, "quality_profile": _quality_profile}
+		"mask_valid": _mask_valid, "fallback_count": _fallback_bounds.size(), "quality_profile": _quality_profile}

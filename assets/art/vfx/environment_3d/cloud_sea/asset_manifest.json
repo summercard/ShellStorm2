@@ -24,28 +24,17 @@
   "collision": "none",
   "lifecycle": "scene_owned_persistent",
   "license": "Project original; user style reference",
-  "verification": "tests/verification/verify_outdoor_clouds.tscn",
-  "verification_checks": 24044,
-  "record": "docs/v0.1/development/2026-09-30_outdoor_cloud_sea_v002.md",
-  "quality_light_steps": {
-    "high": 4,
-    "balanced": 3,
-    "low": 2
-  },
-  "noise_dimensions": [
-    128,
-    128,
-    128
-  ],
-  "noise_bytes": 6291456,
-  "texture_source_model": "gpt-image-2",
-  "runtime_optimized": false,
-  "dependency_sha256": {
-    "assets/art/vfx/environment_3d/cloud_sea/cloud_keepout.res": "3efa094c17cc1db3e0259bacf565d3a830773bf66753be409e53b755c628c026",
-    "assets/art/vfx/environment_3d/cloud_sea/cloud_noise.res": "e58745080affab6349d833e4a41d6c88f4ed206e790b126dad4850a69e6243c9",
+  "verification_checks": 30209,
+  "development_record": "docs/v0.1/development/2026-09-30_outdoor_cloud_placement_fix.md",
+  "fallback_region_limit": 16,
+  "noise_texture_bytes": 6291456,
+  "texture_generation_model": "gpt-image-2",
+  "dependencies_sha256": {
+    "assets/art/vfx/environment_3d/cloud_sea/cloud_keepout.res": "2fcc8efb9fe94013e0ce159252c02c0cf5d9d07a1ad688affc73558c55b397a5",
+    "assets/art/vfx/environment_3d/cloud_sea/cloud_noise.res": "c9c2b852777a6be1ab133959f7ccb6bb22e842ec492b85932734b6e30f0a914d",
     "assets/art/vfx/environment_3d/cloud_sea/cloud_billow_density.png": "fa821a616de7a7af7cd677127b93b6290627d65e6a12fec641bf8f80c2afbfb2",
-    "assets/art/vfx/environment_3d/cloud_sea/cloud_layout.json": "e0996b1c2fe5ab60efa8396bc78356f55b1767288d440cc4f408bb97434e48b3",
-    "assets/art/vfx/environment_3d/cloud_sea/stylized_cloud.gdshader": "15500ca9eda3d02cf48a4780596167047dd5bc8177f597f111eb3da185dea7bb",
-    "src/vfx/VfxCloudSea3D.gd": "241bd3072d8be675037289ebd3bf70bda8f928456aaa7fade9c78008d7b12e53"
+    "assets/art/vfx/environment_3d/cloud_sea/cloud_layout.json": "f35b15a426cd4fe312d770e0b4acd1b31a039db826480fff7e2e33c0aaf0e9db",
+    "assets/art/vfx/environment_3d/cloud_sea/stylized_cloud.gdshader": "983437cd2e31a7cd9d7dcab0ca3ee814e8f90afe21a847e79b5d03323af6de54",
+    "src/vfx/VfxCloudSea3D.gd": "59713e00accf1bae9d12fc4bd408df708dba93fa0206821aa53991d01af38efd"
   }
 }

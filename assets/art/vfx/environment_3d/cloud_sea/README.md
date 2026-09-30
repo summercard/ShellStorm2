@@ -13,4 +13,4 @@
 5. 运行真实Forward+专项 `tests/verification/verify_outdoor_clouds.tscn`，检查正式玩家视角。运行 `tools/asset_pipeline/render_outdoor_clouds.gd -- --motion` 保存性能、截图和12秒实时帧。
 6. 通过后更新Manifest与既有账本行；`tools/asset_pipeline/update_cloud_sea_ledger.py main`、`... prefab`为两个独立事务，只更新本AssetID。
 
-纹理不是发光颜色：cloud_billow_density为灰度密度；cloud_noise的RGB分别为大/中圆团与柔软侵蚀；cloud_keepout为0～16米保守距离。边界变化后云雾会在配置检查中停用，需重建。原始贴图和生成模型信息在source/v002/texture_provenance.json。
+纹理不是发光颜色：cloud_billow_density为灰度密度；cloud_noise的RGB分别为大/中圆团与柔软侵蚀；cloud_keepout为0～16米保守距离。配置检查发现边界变化时，用该建筑完整包络作解析禁云区，云继续显示；原烘焙位置暂时多留空，可离线重建消除。原始贴图和生成模型信息在source/v002/texture_provenance.json。

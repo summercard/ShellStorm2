@@ -110,6 +110,10 @@ func run() -> void:
 	var player := tower.get("player") as Node3D
 	player.process_mode = Node.PROCESS_MODE_DISABLED
 	player.global_position = Vector3(48.0, 0.05, 39.0)
+	if "--user-corner" in OS.get_cmdline_user_args():
+		player.global_position = Vector3(-48.0, 0.05, -31.0)
+		time_manager.call("set_elapsed_game_seconds", 17.7 * 3600.0, false)
+		clouds.call("_process", 0.0)
 	# Allow the parent camera-follow owner to settle before freezing its process.
 	player.process_mode = Node.PROCESS_MODE_INHERIT
 	for _frame in range(12):

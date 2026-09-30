@@ -1,6 +1,6 @@
 # 主塔室外柔软体积云海与漂浮小云
 
-功能归属：`ASSET-PIPELINE` / `VFX-POOL` / `WORLD-BLOCKS`。工程版本0.1.0，设计修订r3，资产v002；来源：用户城市云海、流动薄雾和光遇风格参考。状态：正式接入、专项通过；品质优先，后续专项优化。
+功能归属：`ASSET-PIPELINE` / `VFX-POOL` / `WORLD-BLOCKS`。工程版本0.1.0，设计修订r4，资产v002；来源：用户城市云海、流动薄雾和光遇风格参考。状态：正式楼角云可见与建筑变动避让修复已验收；品质优先，后续专项优化。
 
 ## 目标与范围
 
@@ -12,7 +12,7 @@
 
 AssetID `VFX-ENV-CLOUD-SEA-3D`，稳定出口 `assets/art/vfx/environment_3d/cloud_sea/vfx_env_cloud_sea_root_top3d.tscn`。根脚本 `VfxCloudSea3D` 继承 `VfxEffectBase3D`，lifetime=0，主场景 `OutdoorClouds` 实例拥有，随场景释放；不进入瞬时战斗池。所有静态几何与摆位保存在Prefab的CloudSea/AirWisps中，运行时只驱动材质、时钟与可见性。
 
-`TowerDescent3D` 在Atmosphere生成城市后通过基类 `configure(color,size,context)` 传入 `world_root:Node3D`、`city_layout:Array[Dictionary]`、`main_tower_rect:Rect2`、`floor_99_y:float`、`enabled:bool`。独立编辑预览可用冻结边界；正式运行使用实际建筑边界。`get_presentation_snapshot`、`get_cloud_volumes`、`get_exclusion_bounds` 是只读验收查询。暂停冻结表现时钟；禁用及远征关卡隐藏；不写玩法、碰撞或存档。
+`TowerDescent3D` 在Atmosphere生成城市后通过基类 `configure(color,size,context)` 传入 `world_root:Node3D`、`city_layout:Array[Dictionary]`、`main_tower_rect:Rect2`、`floor_99_y:float`、`enabled:bool`。独立编辑预览可用冻结边界；正式运行使用实际建筑边界。`get_presentation_snapshot`、`get_cloud_volumes`、`get_exclusion_bounds`、`get_fallback_bounds` 是只读验收查询。暂停冻结表现时钟；禁用及远征关卡隐藏；不写玩法、碰撞或存档。
 
 ## 体积与柔软边缘
 
@@ -24,8 +24,8 @@ AssetID `VFX-ENV-CLOUD-SEA-3D`，稳定出口 `assets/art/vfx/environment_3d/clo
 
 ## 失败、回滚与验收
 
-配置时，冻结边界必须覆盖当前运行时边界。新增、移动或替换模型使遮罩失效时，整套隐藏并重烘焙；完全进入建筑内部的小云或高度越界主云单独隐藏。重新配置正确边界可恢复。移除OutdoorClouds实例即可退役，不改变桥楼碰撞、模型与全场景距离雾。
+配置时比较冻结边界与当前实际边界。新增、移动或替换模型超出烘焙遮罩时，按该建筑当前的完整包络上传保守解析禁云区，与原距离场取更严格避让；最多16个区域，超出时合并余量。所有未烘焙障碍必须被兜底区域完整包含，不能因单栋楼变动停用整套云，也不能容许密度进入变动建筑。旧位置会暂时多留空，离线重烘焙后消除。完全进入建筑内部的小云或高度越界主云单独隐藏。移除OutdoorClouds实例即可退役，不改变桥楼碰撞、模型与全场景距离雾。
 
 真实Forward+专项 `tests/verification/verify_outdoor_clouds.tscn` 检查实际Shader纹理、独立建筑包络、GPU距离采样、暂停/60秒流动、负向拒绝、画质及实际玩家镜头开关对照。短视距145m必须仍可见，楼边云区域亮部不得剪成纯白。另存原环境玩家视角、云顶斜视、楼边下层和12秒实时漂动视频；headless不代签视觉。启动验收前隔离APPDATA。
 
-源脚本与冻结快照保存source/v002。image-2贴图为原创，用户参考仅用于风格。原AssetID在资产主表与3D-特效中升级到v002，不新增重复资产；[当前交付记录](../development/2026-09-30_outdoor_cloud_sea_v002.md)，[v001历史](../development/2026-09-30_outdoor_cloud_sea.md)。
+源脚本与冻结快照保存source/v002。image-2贴图为原创，用户参考仅用于风格。原AssetID在资产主表与3D-特效中升级到v002，不新增重复资产；[当前修复记录](../development/2026-09-30_outdoor_cloud_placement_fix.md)，[v002品质交付](../development/2026-09-30_outdoor_cloud_sea_v002.md)，[v001历史](../development/2026-09-30_outdoor_cloud_sea.md)。

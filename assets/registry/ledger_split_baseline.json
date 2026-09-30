@@ -4713,7 +4713,7 @@
    "d": "vfx"
   },
   "VFX-ENV-CLOUD-SEA-3D": {
-   "v": "3f93b7516db469f78c23ae9a2b17f578002f5a932235e87b87d3df9859acab3a",
+   "v": "73756e895aa0bce36a5d8cbb3da682f069dad189b40627da4d2e873885db5dfc",
    "c": "特效",
    "d": "vfx"
   },
@@ -4991,7 +4991,7 @@
   "22": "ac3dfbebdf2055718c2a8a9fba6f5bdc7206dfb4e9ebc1d66336c39d0b9984a2",
   "23": "5162d068e8cc2b502d558b5277d2c265dfc1a8c505ad9012371fc29bc8116872",
   "24": "3ce0c3d06f60fa7fd2aa54fe29b68b8ea0aba6c27a64df8bf215af3bd98a79be",
-  "25": "95ea3e4a32bf9784aa437a8b742140e15c3f40befbb9f653d74dc2bf1a6e621b"
+  "25": "8bb4c03e112f527f837d99b50533384eb49316b35996afe3114d7cbc14158863"
  },
  "sheet_digests": {
   "角色组件": "fde07b2eb0b88997799b009adeb26d82daf2081427a92f0b103b26fb1b636253",
@@ -5007,7 +5007,7 @@
   "3D-道具": "5f8dc97e69ce2fc033f5e870acef6bc0236e454cdf06fa31a96f614d0a970bd8",
   "3D-物品": "212b1502b45f70f56e7a2bf0c9e68a2e2b8114d8e87a2322953745c048e1d9bc",
   "3D-武器": "0ed7c67c14253417622d401d958ac8a4ed51e9aba0db25935010ac3811fec21d",
-  "3D-特效": "d2b2f4d868f0d9b54a65ad3d8a21b6ab8fbc5aa914e1589db9595da7523cfe98"
+  "3D-特效": "8d9522a6b48e2aa3ed77c026817b641d97f3f3db577dc9eb53f5acc1a9855550"
  },
  "category_counts": {
   "UI": 16,
