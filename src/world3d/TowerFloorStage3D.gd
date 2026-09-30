@@ -201,6 +201,8 @@ const BASE_99_100_ATRIUM_TILE_COUNT := 36
 
 var floor_index := 0
 var floor_kind := "combat"
+# Only an explicitly mounted rooftop route may authorize this 5m opening.
+var north_bridge_opening_x := INF
 # 单层关卡（远征）虽然 floor_index==0，但绝不继承「天台」窄轮廓：
 # 必须使用标准 250×250 网格，否则 x>40 / z<-35 的房间会既没有承重楼面、
 # 也没有外圈墙，玩家会直接掉出关卡。
@@ -1124,7 +1126,9 @@ func _build_outer_shell() -> void:
 	for index in range(segment_count_x):
 		var offset_x := _outer_segment_along(outer_rect.position.x, index)
 		var is_outer_corner_segment := floor_index == 1 and index in [0, segment_count_x - 1]
-		if _is_in_wall_door_gap("north", index):
+		if _uses_rooftop_profile() and is_finite(north_bridge_opening_x) and absf(offset_x - north_bridge_opening_x) < 0.01:
+			pass
+		elif _is_in_wall_door_gap("north", index):
 			door_transforms["north"].append(Transform3D(Basis.IDENTITY, Vector3(offset_x, 0.0, north_boundary)))
 		elif not is_outer_corner_segment:
 			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset_x, visual_wall_center_y, north_boundary)))
@@ -1516,6 +1520,12 @@ func _add_wall_collision(body: StaticBody3D, side: String, height: float) -> voi
 	var south_boundary := outer_max.y - wall_inset
 	var west_boundary := outer_rect.position.x + wall_inset
 	var east_boundary := outer_max.x - wall_inset
+	if side == "north" and _uses_rooftop_profile() and is_finite(north_bridge_opening_x):
+		var left_end := north_bridge_opening_x - GRID_UNIT * 0.5
+		var right_start := north_bridge_opening_x + GRID_UNIT * 0.5
+		_add_box_collision(body, Vector3((outer_rect.position.x + left_end) * 0.5, height * 0.5, north_boundary), Vector3(left_end - outer_rect.position.x, height, wall_thickness))
+		_add_box_collision(body, Vector3((right_start + outer_max.x) * 0.5, height * 0.5, north_boundary), Vector3(outer_max.x - right_start, height, wall_thickness))
+		return
 	if not _wall_side_has_door_gap(side):
 		match side:
 			"north":

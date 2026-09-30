@@ -1063,6 +1063,9 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 	# （见 TowerFloorStage3D.support_keep_out_rects）。必须在 add_child 之前写入 ——
 	# stage 的 _build_support() 在它自己的 _ready() 里跑。
 	stage.set("support_keep_out_rects", _authored_layout_keep_out_rects(floor_index))
+	var rooftop_route := get_node_or_null("Blocks/Rooftop/CrossTowerRoute")
+	if floor_index == 0 and not is_expedition() and rooftop_route != null:
+		stage.set("north_bridge_opening_x", float(rooftop_route.get_meta("north_bridge_opening_x", INF)))
 	stage.position.y = -FLOOR_HEIGHT * float(floor_index)
 	_room_block_for_floor(floor_index).add_child(stage)
 	# PackedScene/运行时节点在 add_child() 时可能被分配内部名；挂载后再锁定短名。

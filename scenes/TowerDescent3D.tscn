@@ -5,6 +5,7 @@
 [ext_resource type="Resource" path="res://data/map_themes/iron_frontier.tres" id="3_gameplay"]
 [ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres" id="4_visual"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn" id="5_base_art"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn" id="6_cross_tower"]
 
 [sub_resource type="Environment" id="Environment_editor_runtime_match"]
 background_mode = 1
@@ -94,10 +95,12 @@ metadata/runtime_owner = "TowerDescent3D"
 metadata/block_id = "rooftop"
 metadata/display_name = "天台区"
 metadata/floor_range = "100F"
-metadata/asset_ids = Array[String]([])
+metadata/asset_ids = Array[String](["ENV-OPENWORLD-CROSS-TOWER-ROUTE"])
 metadata/facility_art_state = "removed_by_user"
 metadata/runtime_owner = "TowerDescent3D"
-metadata/source_blends = Array[String]([])
+metadata/source_blends = Array[String](["assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend", "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend"])
+
+[node name="CrossTowerRoute" parent="Blocks/Rooftop" instance=ExtResource("6_cross_tower")]
 
 [node name="Base" type="Node3D" parent="Blocks" index="1" unique_id=931883670]
 metadata/block_id = "base"
