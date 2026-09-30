@@ -1,0 +1,9 @@
+{
+  "motion_frames": 60,
+  "duration_seconds": 12,
+  "motion_mean_rgb_byte_change": 2.9386738683127573,
+  "existing_vfx_gate_issues_unchanged": 5,
+  "manifest_dependencies_match": true,
+  "other_assets_preserved": 985,
+  "registered_verification": "verify_outdoor_clouds"
+}

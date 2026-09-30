@@ -1,0 +1,498 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxCloudSea3D.gd" id="cloud_script"]
+[ext_resource type="Shader" path="res://assets/art/vfx/environment_3d/cloud_sea/stylized_cloud.gdshader" id="cloud_shader"]
+[ext_resource type="Texture3D" path="res://assets/art/vfx/environment_3d/cloud_sea/cloud_keepout.res" id="keepout"]
+[ext_resource type="Texture3D" path="res://assets/art/vfx/environment_3d/cloud_sea/cloud_noise.res" id="noise"]
+
+[ext_resource type="Texture2D" path="res://assets/art/vfx/environment_3d/cloud_sea/cloud_billow_density.png" id="billow"]
+
+[sub_resource type="BoxMesh" id="CloudVolumeBox"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_000"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.97
+shader_parameter/density_scale = 0.065
+shader_parameter/shape_seed = 99.0
+shader_parameter/sheet_mode = 1.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_001"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.817
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 3.926
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_002"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.876
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 77.25
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_003"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.738
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 24.665
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_004"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.776
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 47.277
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_005"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.704
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 52.846
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_006"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.633
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 105.525
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_007"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.864
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 114.911
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_008"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.7
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 86.656
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_009"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.677
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 38.175
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_010"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.837
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 106.501
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_011"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.79
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 37.164
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_012"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.819
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 17.811
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_013"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.663
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 115.693
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_014"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.847
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 67.139
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_015"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.737
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 81.182
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_016"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.74
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 50.639
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_017"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.822
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 118.229
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_018"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.713
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 105.418
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_019"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.779
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 12.143
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_020"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.659
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 103.087
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_021"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.849
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 35.412
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_022"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.757
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 96.045
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_023"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.837
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 36.502
+shader_parameter/sheet_mode = 0.0
+
+[sub_resource type="ShaderMaterial" id="CloudMaterial_024"]
+resource_local_to_scene = true
+shader = ExtResource("cloud_shader")
+shader_parameter/building_distance = ExtResource("keepout")
+shader_parameter/shape_noise = ExtResource("noise")
+shader_parameter/billow_density = ExtResource("billow")
+shader_parameter/cloud_opacity = 0.862
+shader_parameter/density_scale = 0.17
+shader_parameter/shape_seed = 48.33
+shader_parameter/sheet_mode = 0.0
+
+[node name="VfxCloudSea3D" type="Node3D"]
+script = ExtResource("cloud_script")
+lifetime = 0.0
+metadata/asset_id = "VFX-ENV-CLOUD-SEA-3D"
+metadata/asset_version = "v002"
+metadata/lifecycle = "scene_owned_persistent"
+metadata/outdoor_only = true
+
+[node name="CloudSea" type="Node3D" parent="."]
+
+[node name="AirWisps" type="Node3D" parent="."]
+
+[node name="ContinuousCloudSea" type="MeshInstance3D" parent="CloudSea"]
+position = Vector3(0, -60, -50)
+scale = Vector3(476, 90, 536)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_000")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_00" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(60.0, 3.0, 39.0)
+scale = Vector3(12.0, 10.0, 14.0)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_001")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_01" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-69.0, 5.0, -10.0)
+scale = Vector3(30.0, 16.0, 24.0)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_002")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_02" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(0.0, 8.0, 64.0)
+scale = Vector3(30.0, 16.0, 24.0)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_003")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_03" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(146.767, 22.099, -165.553)
+scale = Vector3(26.499, 15.778, 19.383)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_004")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_04" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-121.409, 27.429, 127.19)
+scale = Vector3(33.151, 15.041, 23.349)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_005")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_05" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(125.372, 26.791, -70.879)
+scale = Vector3(23.509, 13.679, 17.597)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_006")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_06" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-25.281, 17.567, 78.07)
+scale = Vector3(40.22, 20.808, 16.599)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_007")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_07" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(77.431, 7.074, 19.868)
+scale = Vector3(36.864, 15.885, 20.067)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_008")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_08" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-78.812, 13.461, -232.821)
+scale = Vector3(28.986, 15.461, 21.762)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_009")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_09" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-141.562, 27.851, -116.41)
+scale = Vector3(41.909, 16.662, 18.691)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_010")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_10" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(142.307, 4.816, -128.289)
+scale = Vector3(20.617, 16.56, 21.168)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_011")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_11" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-69.468, 16.11, -107.524)
+scale = Vector3(23.396, 15.586, 19.02)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_012")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_12" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-118.818, 8.471, -195.014)
+scale = Vector3(24.697, 17.1, 15.196)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_013")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_13" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-86.152, 22.065, 78.499)
+scale = Vector3(34.219, 15.44, 19.059)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_014")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_14" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(111.729, 24.249, -17.472)
+scale = Vector3(38.93, 19.932, 24.537)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_015")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_15" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(118.972, 1.129, 50.015)
+scale = Vector3(23.842, 14.09, 27.121)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_016")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_16" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(11.982, 18.593, -155.735)
+scale = Vector3(35.959, 13.023, 19.075)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_017")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_17" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-112.241, 10.438, -168.429)
+scale = Vector3(22.368, 21.085, 29.172)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_018")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_18" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-146.207, 26.714, -59.773)
+scale = Vector3(28.912, 12.921, 16.467)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_019")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_19" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(149.349, 21.774, 80.057)
+scale = Vector3(38.609, 19.176, 25.677)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_020")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_20" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-128.45, 14.294, 6.009)
+scale = Vector3(22.36, 21.702, 16.014)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_021")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_21" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(-134.259, 1.74, 64.35)
+scale = Vector3(30.75, 16.08, 22.758)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_022")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_22" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(125.733, 21.269, -200.612)
+scale = Vector3(31.319, 20.422, 22.496)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_023")
+mesh = SubResource("CloudVolumeBox")
+
+[node name="AirWisp_23" type="MeshInstance3D" parent="AirWisps"]
+position = Vector3(65.978, 15.278, 63.769)
+scale = Vector3(23.638, 21.256, 28.743)
+cast_shadow = 0
+visibility_range_end = 650.0
+material_override = SubResource("CloudMaterial_024")
+mesh = SubResource("CloudVolumeBox")

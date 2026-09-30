@@ -1,0 +1,51 @@
+{
+  "asset_id": "VFX-ENV-CLOUD-SEA-3D",
+  "asset_version": "v002",
+  "status": "runtime_verified_quality_first",
+  "prefab": "assets/art/vfx/environment_3d/cloud_sea/vfx_env_cloud_sea_root_top3d.tscn",
+  "script": "src/vfx/VfxCloudSea3D.gd",
+  "shader": "assets/art/vfx/environment_3d/cloud_sea/stylized_cloud.gdshader",
+  "source": "assets/art/vfx/environment_3d/cloud_sea/source/v002/build_outdoor_clouds.py",
+  "layout": "assets/art/vfx/environment_3d/cloud_sea/cloud_layout.json",
+  "sea_count": 1,
+  "air_wisp_count": 24,
+  "bank_dimensions_m": [
+    476,
+    90,
+    536
+  ],
+  "quality_ray_steps": {
+    "high": 96,
+    "balanced": 64,
+    "low": 40
+  },
+  "prefab_sha256": "f7830ac829de78bdbf189b89ab16a2c5d8b8730e2cb0a694809e7472fa60d63c",
+  "mask_texture_bytes": 5898240,
+  "collision": "none",
+  "lifecycle": "scene_owned_persistent",
+  "license": "Project original; user style reference",
+  "verification": "tests/verification/verify_outdoor_clouds.tscn",
+  "verification_checks": 24044,
+  "record": "docs/v0.1/development/2026-09-30_outdoor_cloud_sea_v002.md",
+  "quality_light_steps": {
+    "high": 4,
+    "balanced": 3,
+    "low": 2
+  },
+  "noise_dimensions": [
+    128,
+    128,
+    128
+  ],
+  "noise_bytes": 6291456,
+  "texture_source_model": "gpt-image-2",
+  "runtime_optimized": false,
+  "dependency_sha256": {
+    "assets/art/vfx/environment_3d/cloud_sea/cloud_keepout.res": "3efa094c17cc1db3e0259bacf565d3a830773bf66753be409e53b755c628c026",
+    "assets/art/vfx/environment_3d/cloud_sea/cloud_noise.res": "e58745080affab6349d833e4a41d6c88f4ed206e790b126dad4850a69e6243c9",
+    "assets/art/vfx/environment_3d/cloud_sea/cloud_billow_density.png": "fa821a616de7a7af7cd677127b93b6290627d65e6a12fec641bf8f80c2afbfb2",
+    "assets/art/vfx/environment_3d/cloud_sea/cloud_layout.json": "e0996b1c2fe5ab60efa8396bc78356f55b1767288d440cc4f408bb97434e48b3",
+    "assets/art/vfx/environment_3d/cloud_sea/stylized_cloud.gdshader": "15500ca9eda3d02cf48a4780596167047dd5bc8177f597f111eb3da185dea7bb",
+    "src/vfx/VfxCloudSea3D.gd": "241bd3072d8be675037289ebd3bf70bda8f928456aaa7fade9c78008d7b12e53"
+  }
+}

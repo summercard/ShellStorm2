@@ -1,0 +1,17 @@
+{
+  "keepout": {
+    "dimensions": [
+      256,
+      80,
+      288
+    ]
+  },
+  "noise": {
+    "dimensions": [
+      128,
+      128,
+      128
+    ],
+    "channels": "RGB: broad Worley / medium Worley / soft erosion"
+  }
+}

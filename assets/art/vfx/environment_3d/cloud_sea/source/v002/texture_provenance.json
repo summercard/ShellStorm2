@@ -1,0 +1,22 @@
+{
+  "model": "gpt-image-2",
+  "quality": "high",
+  "native_resolution": [
+    1024,
+    1024
+  ],
+  "source": "T_VFX_Cloud_Billow_Density_01_TILE.png",
+  "runtime": "cloud_billow_density.png",
+  "shader_use": "linear single channel density / erosion, mirrored continuous repeat",
+  "references": [
+    "User Sky style screenshots 79b5bc8c and 26fd992f"
+  ],
+  "original": true,
+  "style_reference_only": true,
+  "channel_mapping": {
+    "cloud_noise.res": "RGB: broad periodic Worley / medium Worley / smooth erosion",
+    "cloud_keepout.res": "R8: conservative distance in 0..16m",
+    "cloud_billow_density.png": "R: grayscale density, no source_color conversion"
+  },
+  "license": "Project original AI-generated texture; user screenshots only style references"
+}

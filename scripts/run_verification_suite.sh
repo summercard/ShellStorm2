@@ -353,6 +353,7 @@ visual_scenes=(
   verify_wardrobe_layout_visual
   verify_item_model_icon_framing_visual
   verify_formal_3d_asset_gallery_visual
+  verify_outdoor_clouds
   verify_formal_asset_placement_visual
 )
 

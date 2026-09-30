@@ -503,6 +503,16 @@ func _ready() -> void:
 	_install_tower_hud()
 	_install_world_time_hud()
 	_install_atmosphere()
+	# The authored cloud prefab owns all visual geometry and motion. It only receives world bounds.
+	var outdoor_clouds := get_node_or_null("OutdoorClouds") as VfxEffectBase3D
+	if outdoor_clouds != null:
+		outdoor_clouds.configure(Color.WHITE, 1.0, {
+			"world_root": self,
+			"city_layout": _atmosphere.call("get_city_layout"),
+			"main_tower_rect": TowerFloorStage3D.TOWER_SHELL_WORLD_RECT,
+			"floor_99_y": -FLOOR_HEIGHT,
+			"enabled": not is_expedition(),
+		})
 	# 自动化/编辑器验证固定从楼顶开始，避免读取或改写开发者的真实存档。
 	var starts_on_rooftop := _should_start_on_rooftop_for_entry()
 	if is_expedition():

@@ -1,0 +1,81 @@
+{
+  "benchmarks": [
+    {
+      "clouds_enabled": false,
+      "draw_calls_median": 3034.0,
+      "gpu_median_ms": 2.6489999294281,
+      "gpu_p95_ms": 3.24600005149841,
+      "label": "overview_without_clouds_A",
+      "profile": "high",
+      "render_cpu_median_ms": 2.91199994087219,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3061.0,
+      "gpu_median_ms": 14.46399974823,
+      "gpu_p95_ms": 15.7690000534058,
+      "label": "overview_clouds_high_A",
+      "profile": "high",
+      "render_cpu_median_ms": 2.87800002098084,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3061.0,
+      "gpu_median_ms": 10.2159996032715,
+      "gpu_p95_ms": 10.3179998397827,
+      "label": "overview_clouds_balanced",
+      "profile": "balanced",
+      "render_cpu_median_ms": 2.7039999961853,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3048.0,
+      "gpu_median_ms": 6.76700019836426,
+      "gpu_p95_ms": 6.86299991607666,
+      "label": "overview_clouds_low",
+      "profile": "low",
+      "render_cpu_median_ms": 2.78600001335144,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": false,
+      "draw_calls_median": 3034.0,
+      "gpu_median_ms": 2.65100002288818,
+      "gpu_p95_ms": 2.69700002670288,
+      "label": "overview_without_clouds_B",
+      "profile": "high",
+      "render_cpu_median_ms": 2.69099998474121,
+      "samples": 90
+    },
+    {
+      "clouds_enabled": true,
+      "draw_calls_median": 3061.0,
+      "gpu_median_ms": 14.6319999694824,
+      "gpu_p95_ms": 15.8249998092651,
+      "label": "overview_clouds_high_B",
+      "profile": "high",
+      "render_cpu_median_ms": 2.89400005340576,
+      "samples": 90
+    }
+  ],
+  "device": "NVIDIA GeForce RTX 4060 Ti",
+  "renderer": "forward_plus",
+  "resolution": [
+    1440,
+    900
+  ],
+  "snapshot": {
+    "enabled": true,
+    "floor_99_y": -12.0,
+    "flow_time": 36.3425,
+    "keepout_count": 700,
+    "mask_valid": true,
+    "quality_profile": "high",
+    "rejected_count": 0,
+    "sea_count": 1,
+    "wisp_count": 24
+  }
+}
