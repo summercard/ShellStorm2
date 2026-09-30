@@ -24,6 +24,12 @@ metadata:
 
 本兼容入口只处理场景美术包装。不得修改玩法、关卡规则、敌人、掉落、存档、门状态机、导航或结算逻辑。
 
+## 分支与历史基线
+
+先确认 `block_id / level_id`：`battle` 战局与 `expedition` 远征是独立两套分支，各用自己的拓扑、楼层、房间表和结构契约；禁止从 Skill 名或 schema 中的 battle 推断远征归属。仅显式复用已验收组件及稳定 Prefab，不继承来源分支的空间规则。
+
+按 02 的“预算适用范围与历史例外”执行50/3/5：仅约束后续新资产；既有路径/版本/组件集合不追溯整改，实例手调不触发旧库归并。新增房型、组件/变体或几何定义不得借旧目录、旧版本或历史标签豁免。
+
 ## 目标
 
 将战局房间制作固定为“制作前规划组件 + Blender 模块化输出 + 稳定组件 PackedScene + Godot 正式房间编辑”。采用房型 → 房间变体 → 具体房间三层；固定房型不等于禁止作者变体，变体可由 Godot 场景或明确资源路径管理，不强制每房制作 Blender 差异布局。
@@ -56,7 +62,7 @@ metadata:
 
 1. 精确匹配当前战局白模目录 `ShellStorm2/source/art/whitebox/**` 中的 `scene_id`、房间 `id` 或 `room_id`。
 2. 精确匹配 `ShellStorm2/assets/art/environments/tower_zones/<block_id>/` 中的正式房间/变体 TSCN、房间目录、`room_manifest.json`、`room_layout.json` 或可选 Blender 参考源；`block_id` 兼容 `battle/expedition`，先确认已登记运行引用。
-3. 读取 `source/art/whitebox/tower_zones/battle_level01/**/data/unit_plan.json`，用房间 `id`、`key`、中文名和布局记录反查正式房间源。
+3. 按已确认分支读取白盒：battle可反查 `battle_level01/**/data/unit_plan.json`；expedition读取自身 `level_id` 的L1/L2/L3，不回落塔楼房表。用房间 `id`、`key`、中文名和布局记录反查正式房间源。
 4. 读取房间自己的 README、manifest、QA 报告和布局清单，确认真实 `block_id=battle/expedition`、楼层范围、设计文档和 AssetID 挂钩。
 
 出现多个候选且不能由 `room_id` 唯一确定时停止，列出候选路径并请求用户指定；不得随意选第一个。找不到候选时停止并报告搜索过的根目录。

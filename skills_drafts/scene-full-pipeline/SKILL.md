@@ -31,13 +31,17 @@ description: 场景全流程制作编排：从效果图到读取白模，到 Ble
 
 战局/远征房间通过 `00-battle-room-layout-assembler` 路由：01 制作房型组件源，02 在正式建模前冻结组件计划（唯一组件 ≤50、同族常规 ≤3、有明确状态轴 ≤5，实例数量另计），03 制作房间变体/具体布局，04 完成 Godot 装配。房型 → 房间变体 → 具体房间三层分离；固定房型不禁止作者变体，变体可通过 Godot 场景/明确资源路径管理，不强制每房 Blender 差异布局。
 
+先按 `block_id / level_id` 分清独立的 battle 战局与 expedition 远征；禁止互套拓扑、楼层编号、房间表、模板尺寸或推进规则。允许显式引用已验收组件的稳定 Prefab；复用只发生在资产/公共实现层，不改变目标关卡身份。
+
+50/3/5仅约束后续新资产，历史例外按02的同名小节执行：保留具体既有路径、版本与组件集合，不追溯整改，不把超限历史记录写成通过。新增房型、组件/变体或新几何定义必须先规划，不能借旧目录、升版、改名复制或历史标签豁免；单纯调整既有房间实例和灯光不触发旧库归并。
+
 ## 全程固定挂钩（四个阶段都必须携带）
 
 以下定位信息从阶段 0 建立，贯穿到阶段 3 的台账登记，任何阶段丢失即判定失败：
 
 - `block_id`：按白盒与资产真实所属区块填写 `rooftop / base / battle / expedition / stairs`；战局链路兼容 `battle` 与 `expedition`，不得把远征强改为 battle。区块定义及当前关卡契约见对应设计文档。
 - `floor_range` 与 `design_scope`：具体到楼层、房间、楼梯、设施或模块范围。
-- `scene_design_docs`：至少包含 `docs/v0.1/05_技术施工_关卡生成与爬楼.md` 与 `docs/v0.1/05.1_关卡区块设计.md`；基地设施另挂 `docs/v0.1/07_技术施工_基地设施.md`。
+- `scene_design_docs`：以目标分支关卡主设计为首，并挂 `docs/v0.1/05.1_关卡区块设计.md` 与 `05.2_关卡版图白盒与生成规范.md`；battle另读 `05_技术施工_关卡生成与爬楼.md`，expedition_01另读 `design/远征关卡01设计.md`，基地设施另挂 `07_技术施工_基地设施.md`。
 - `asset_ledger`：`assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx` 的 `3D-场景通用` 表及对应 AssetID 条目。账本路径由 `assets/registry/ledger_index.json` 单一声明 —— **不要写死账本文件名**；总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放索引，不含资产行。旧批次里 `…美术资产台账_v001.xlsx#3D-场景通用` 形式的引用由 `index.resolve_ref()` 解析到场景账本，无需改写。
 
 这些信息不是只写在概念稿里：白盒 JSON 写入字段；风格稿标注范围；Blend 资产包、GLB、PackedScene、导出清单与验收记录均保留 `block_id / AssetID / 场景设计文档 / 台账定位`。**缺少任一定位信息，资产不得进入下一阶段。**
@@ -79,7 +83,7 @@ assets/art/<大类>/<资产套件>/
 
 - **规范：** 只从当前游戏设计与工程契约提取尺寸，不从旧模型或效果图猜数值。每项数据记录来源文档、章节与读取日期。
 - **数据：** 平面网格、场景长宽高、层高、墙高/墙厚、地板厚度、门洞、楼梯起终点、平台高度、玩家/镜头净空、碰撞、导航、拼接插槽、坐标轴与单位。
-- **白模 JSON 格式：** 遵循 `tools/3Dgame-design` v3 —— `coordinateSystem=blender-z-up`，距离米、旋转角度；布局在 `groups[]/components[]`，墙/地板用 `surfaceSettings`，楼梯用 `stairSettings`；`projectMetadata` 承载 AssetID、区块、楼层范围、设计文档与输出路径，不得另建不兼容顶层格式。
+- **白模 JSON 格式：** 关卡结构按 `05.2_关卡版图白盒与生成规范.md` 的L1/L2/L3读取；旧 `tools/3Dgame-design` v3（`coordinateSystem=blender-z-up`、`groups[]/components[]`、`projectMetadata`）只作历史白盒兼容输入，不强制将远征设计源改成该格式。各格式明确来源、单位与坐标转换，不另造平行几何真源。
 - **目录：** `source/art/whitebox/<scene_id>/v###/` 固定分 `data/`（可编辑 JSON）、`blender/`（同版本白盒 Blend）、`renders/`（顶视图、无文字图、立面、剖面）。
 - **交付：** `whitebox_<scene_id>_v###.json` + 白盒 Blend + 至少一张带标注顶视图、一张同机位无文字顶视图。
 - **Blender 入口：** 新场景优先 `tools/blender_addons/shellstorm_level_builder/` 在 Blender 原生视口完成组件添加、吸附摆放、参数冻结、Collection 归类与资产包清单同步。此处 `.blend` 仅拥有该白盒原型的编辑事实，网页工具只做旧白盒迁移与兼容读取；正式房间 TSCN 的模块实例布局不由白盒自动回灌。
