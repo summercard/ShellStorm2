@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/upper_rail_1",
+  "slug": "upper_rail_1",
+  "display_name": "上层周界护栏_1",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "上层周界护栏_1_资产包",
+  "objects": [
+    "上层周界护栏_1"
+  ],
+  "root_object": "上层周界护栏_1",
+  "world_position": [
+    27.0,
+    8.0,
+    48.099998474121094
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    26.84000000357628,
+    -4.159999996423721,
+    48.099998474121094
+  ],
+  "bounds_max": [
+    27.15999999642372,
+    20.15999999642372,
+    49.31999969482422
+  ],
+  "dimensions": [
+    0.3199999928474426,
+    24.319999992847443,
+    1.220001220703125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "upper_rail_1.glb",
+  "anchor_blender": [
+    27.0,
+    8.0,
+    48.099998474121094
+  ],
+  "position_godot": [
+    27.0,
+    48.099998474121094,
+    -8.0
+  ],
+  "bounds_blender": [
+    [
+      26.84000015258789,
+      -4.159999847412109,
+      48.099998474121094
+    ],
+    [
+      27.15999984741211,
+      20.15999984741211,
+      49.31999969482422
+    ]
+  ],
+  "triangle_count": 952,
+  "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-1",
+  "glb": "assets/art/environments/open_world/components/tower_03/upper_rail_1/env_tower_03_upper_rail_1_visual_top3d.glb",
+  "glb_sha256": "cc74654bc0bf78d9ba8d0e25fc075024a6546e51d6d57be8046c610d5479b4fe",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/upper_rail_1/env_tower_03_upper_rail_1_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/lower_tile_07_05",
+  "slug": "lower_tile_07_05",
+  "display_name": "下层天台地砖_07_05",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "下层天台地砖_07_05_资产包",
+  "objects": [
+    "下层天台地砖_07_05"
+  ],
+  "root_object": "下层天台地砖_07_05",
+  "world_position": [
+    2.5,
+    8.25,
+    40
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    0.019999980926513672,
+    5.519999980926514,
+    39.71999999940395
+  ],
+  "bounds_max": [
+    4.980000019073486,
+    10.980000019073486,
+    40.000000000596046
+  ],
+  "dimensions": [
+    4.960000038146973,
+    5.460000038146973,
+    0.2800000011920929
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lower_tile_07_05.glb",
+  "anchor_blender": [
+    2.5,
+    8.25,
+    39.720001220703125
+  ],
+  "position_godot": [
+    2.5,
+    39.720001220703125,
+    -8.25
+  ],
+  "bounds_blender": [
+    [
+      0.019999980926513672,
+      5.519999980926514,
+      39.720001220703125
+    ],
+    [
+      4.980000019073486,
+      10.979999542236328,
+      40.0
+    ]
+  ],
+  "triangle_count": 44,
+  "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-05",
+  "glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_05/env_tower_03_lower_tile_07_05_visual_top3d.glb",
+  "glb_sha256": "1ef256dc834706910cbcd28fb5e9a190e231b5658ade4954b7e71217213dc48e",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_05/env_tower_03_lower_tile_07_05_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

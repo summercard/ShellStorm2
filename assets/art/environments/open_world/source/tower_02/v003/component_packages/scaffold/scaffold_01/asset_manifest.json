@@ -44,9 +44,12 @@
   "animation": false,
   "emissive": false,
   "dependencies": [],
-  "collision_status": "not_authored",
-  "exported": false,
+  "collision_status": "none_visual_only",
+  "exported": true,
   "expected_export": "scaffold_01.glb",
   "fixed_display_attachment": true,
-  "manifest_path": "component_packages/scaffold/scaffold_01/asset_manifest.json"
+  "manifest_path": "component_packages/scaffold/scaffold_01/asset_manifest.json",
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_01/env_tower_02_scaffold_01_root_top3d.tscn",
+  "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_01/env_tower_02_scaffold_01_visual_top3d.glb",
+  "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-01"
 }

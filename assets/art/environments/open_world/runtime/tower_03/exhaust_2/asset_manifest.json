@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/exhaust_2",
+  "slug": "exhaust_2",
+  "display_name": "排气烟道_2",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "排气烟道_2_资产包",
+  "objects": [
+    "排气烟道_2"
+  ],
+  "root_object": "排气烟道_2",
+  "world_position": [
+    31,
+    17,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    30.450000762939453,
+    16.450000762939453,
+    40.099998474121094
+  ],
+  "bounds_max": [
+    31.549999237060547,
+    17.549999237060547,
+    42.75
+  ],
+  "dimensions": [
+    1.0999984741210938,
+    1.0999984741210938,
+    2.6500015258789062
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "exhaust_2.glb",
+  "anchor_blender": [
+    31.0,
+    17.0,
+    40.099998474121094
+  ],
+  "position_godot": [
+    31.0,
+    40.099998474121094,
+    -17.0
+  ],
+  "bounds_blender": [
+    [
+      30.450000762939453,
+      16.450000762939453,
+      40.099998474121094
+    ],
+    [
+      31.549999237060547,
+      17.549999237060547,
+      42.75
+    ]
+  ],
+  "triangle_count": 132,
+  "asset_id": "ENV-OPENWORLD-TOWER03-EXHAUST-2",
+  "glb": "assets/art/environments/open_world/components/tower_03/exhaust_2/env_tower_03_exhaust_2_visual_top3d.glb",
+  "glb_sha256": "1133de3998125908b956d4e0a818694e0f32a60e0538d601c9dbe6e3f6b573ea",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/exhaust_2/env_tower_03_exhaust_2_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

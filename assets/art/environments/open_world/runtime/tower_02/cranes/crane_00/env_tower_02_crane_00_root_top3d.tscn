@@ -1,0 +1,39 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_mast/env_tower_02_crane_00_mast_root_top3d.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_root_top3d.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_jib/env_tower_02_crane_00_jib_root_top3d.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_counter_jib/env_tower_02_crane_00_counter_jib_root_top3d.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_apex/env_tower_02_crane_00_apex_root_top3d.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_trolley/env_tower_02_crane_00_trolley_root_top3d.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_hook/env_tower_02_crane_00_hook_root_top3d.tscn" id="7"]
+
+[node name="crane_00" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-TOWER02-CRANE-00"
+metadata/asset_version = "v003"
+metadata/collision_status = "none_visual_only"
+metadata/source_blend = "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend"
+metadata/component_count = 7
+
+[node name="facilities" type="Node3D" parent="."]
+
+[node name="crane_00_mast" parent="facilities" instance=ExtResource("1")]
+position = Vector3(1.447578430, 0.000000000, 0.000000000)
+
+[node name="crane_00_slew_cab" parent="facilities" instance=ExtResource("2")]
+position = Vector3(0.000000000, 108.589996338, 0.000000000)
+
+[node name="crane_00_jib" parent="facilities" instance=ExtResource("3")]
+position = Vector3(15.761848450, 112.650001526, -2.728258133)
+
+[node name="crane_00_counter_jib" parent="facilities" instance=ExtResource("4")]
+position = Vector3(-6.976825714, 109.879997253, 1.267631531)
+
+[node name="crane_00_apex" parent="facilities" instance=ExtResource("5")]
+position = Vector3(8.370866776, 113.251342773, -1.476009369)
+
+[node name="crane_00_trolley" parent="facilities" instance=ExtResource("6")]
+position = Vector3(22.650577545, 111.440002441, -3.993907928)
+
+[node name="crane_00_hook" parent="facilities" instance=ExtResource("7")]
+position = Vector3(22.650577545, 92.412231445, -3.956661224)

@@ -45,7 +45,10 @@
   "emissive": false,
   "dependencies": [],
   "fixed_display_attachment": true,
-  "collision_status": "not_authored",
-  "exported": false,
-  "expected_export": "facade_05.glb"
+  "collision_status": "none_visual_only",
+  "exported": true,
+  "expected_export": "facade_05.glb",
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_05/env_tower_03_facade_05_root_top3d.tscn",
+  "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_05/env_tower_03_facade_05_visual_top3d.glb",
+  "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-05"
 }

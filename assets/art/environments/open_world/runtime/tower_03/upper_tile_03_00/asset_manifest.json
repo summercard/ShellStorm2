@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/upper_tile_03_00",
+  "slug": "upper_tile_03_00",
+  "display_name": "上层机房屋面_03_00",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "上层机房屋面_03_00_资产包",
+  "objects": [
+    "上层机房屋面_03_00"
+  ],
+  "root_object": "上层机房屋面_03_00",
+  "world_position": [
+    4.5,
+    -1,
+    48
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    2.0199999809265137,
+    -3.9800000190734863,
+    47.9500000013411
+  ],
+  "bounds_max": [
+    6.980000019073486,
+    1.9800000190734863,
+    48.06999999865889
+  ],
+  "dimensions": [
+    4.960000038146973,
+    5.960000038146973,
+    0.11999999731779099
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "upper_tile_03_00.glb",
+  "anchor_blender": [
+    4.5,
+    -1.0,
+    47.95000076293945
+  ],
+  "position_godot": [
+    4.5,
+    47.95000076293945,
+    1.0
+  ],
+  "bounds_blender": [
+    [
+      2.0199999809265137,
+      -3.9800000190734863,
+      47.95000076293945
+    ],
+    [
+      6.980000019073486,
+      1.9800000190734863,
+      48.06999969482422
+    ]
+  ],
+  "triangle_count": 44,
+  "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-00",
+  "glb": "assets/art/environments/open_world/components/tower_03/upper_tile_03_00/env_tower_03_upper_tile_03_00_visual_top3d.glb",
+  "glb_sha256": "19c58bceab1c0d6c0498deb623d0fcd83f48689b5d29419a7226efa1d103a359",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_03_00/env_tower_03_upper_tile_03_00_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

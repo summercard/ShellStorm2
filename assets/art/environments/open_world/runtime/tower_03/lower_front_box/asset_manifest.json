@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/lower_front_box",
+  "slug": "lower_front_box",
+  "display_name": "机电箱_lower_front_box",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机电箱_lower_front_box_资产包",
+  "objects": [
+    "机电箱_lower_front_box"
+  ],
+  "root_object": "机电箱_lower_front_box",
+  "world_position": [
+    -2,
+    -18,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -2.75,
+    -18.83499999880791,
+    40.09999999850989
+  ],
+  "bounds_max": [
+    -1.25,
+    -17.30000001192093,
+    41.78
+  ],
+  "dimensions": [
+    1.5,
+    1.5349999868869801,
+    1.6800000014901144
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lower_front_box.glb",
+  "anchor_blender": [
+    -2.0,
+    -18.0674991607666,
+    40.099998474121094
+  ],
+  "position_godot": [
+    -2.0,
+    40.099998474121094,
+    18.0674991607666
+  ],
+  "bounds_blender": [
+    [
+      -2.75,
+      -18.834999084472656,
+      40.099998474121094
+    ],
+    [
+      -1.25,
+      -17.299999237060547,
+      41.779998779296875
+    ]
+  ],
+  "triangle_count": 495,
+  "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-FRONT-BOX",
+  "glb": "assets/art/environments/open_world/components/tower_03/lower_front_box/env_tower_03_lower_front_box_visual_top3d.glb",
+  "glb_sha256": "2770d187e989bda9bd9f34ef217a8bbe56b87a614e886db3f5ef95bc8f8952d2",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/lower_front_box/env_tower_03_lower_front_box_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

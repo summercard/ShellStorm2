@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/roof_shoring_00",
+  "display_name": "屋顶支模_00_梁笼及顶撑",
+  "slug": "roof_shoring_00",
+  "category": "roof",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "屋顶支模_00_梁笼及顶撑_资产包",
+  "objects": [
+    "屋顶支模_00_梁笼及顶撑"
+  ],
+  "root_object": "屋顶支模_00_梁笼及顶撑",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -29.579999923706055,
+    15.920000076293945,
+    84.47575378417969
+  ],
+  "bounds_max": [
+    -13.890000343322754,
+    20.079999923706055,
+    91.25
+  ],
+  "dimensions": [
+    15.6899995803833,
+    4.159999847412109,
+    6.7742462158203125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_shoring_00.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/roof/roof_shoring_00/asset_manifest.json",
+  "anchor_blender": [
+    -21.735000610351562,
+    18.0,
+    84.47575378417969
+  ],
+  "position_godot": [
+    -21.735000610351562,
+    84.47575378417969,
+    -18.0
+  ],
+  "bounds_blender": [
+    [
+      -29.579999923706055,
+      15.920000076293945,
+      84.47575378417969
+    ],
+    [
+      -13.890000343322754,
+      20.079999923706055,
+      91.25
+    ]
+  ],
+  "triangle_count": 4436,
+  "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-00",
+  "glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_visual_top3d.glb",
+  "glb_sha256": "12677630202836926fde4ff14c072c2f9602c3af47e28ed49fa278cd6feb65f6",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

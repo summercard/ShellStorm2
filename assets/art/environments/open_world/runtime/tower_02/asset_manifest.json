@@ -1,0 +1,15 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER02",
+  "version": "v003",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "source_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn",
+  "component_count": 92,
+  "footprint_m": [
+    70,
+    50
+  ],
+  "collision": "none_visual_only",
+  "layout_owner": "Godot TSCN; rerun preserves layout by default",
+  "crane_count": 3
+}

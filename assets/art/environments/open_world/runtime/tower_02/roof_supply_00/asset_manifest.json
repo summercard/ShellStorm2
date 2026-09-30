@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/roof_supply_00",
+  "display_name": "屋顶材料_00_rebar",
+  "slug": "roof_supply_00",
+  "category": "roof",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "屋顶材料_00_rebar_资产包",
+  "objects": [
+    "屋顶材料_00_rebar"
+  ],
+  "root_object": "屋顶材料_00_rebar",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -30.0,
+    -9.359999656677246,
+    84.01567840576172
+  ],
+  "bounds_max": [
+    -24.0,
+    -6.639999866485596,
+    86.2843246459961
+  ],
+  "dimensions": [
+    6.0,
+    2.7199997901916504,
+    2.268646240234375
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_supply_00.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/roof/roof_supply_00/asset_manifest.json",
+  "anchor_blender": [
+    -27.0,
+    -8.0,
+    84.01567840576172
+  ],
+  "position_godot": [
+    -27.0,
+    84.01567840576172,
+    8.0
+  ],
+  "bounds_blender": [
+    [
+      -30.0,
+      -9.359999656677246,
+      84.01567840576172
+    ],
+    [
+      -24.0,
+      -6.639999866485596,
+      86.2843246459961
+    ]
+  ],
+  "triangle_count": 1664,
+  "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-00",
+  "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_00/env_tower_02_roof_supply_00_visual_top3d.glb",
+  "glb_sha256": "e62290806cded017426b13b17b8a6da38a65deb34c1d821026b52722f6720d22",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_00/env_tower_02_roof_supply_00_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

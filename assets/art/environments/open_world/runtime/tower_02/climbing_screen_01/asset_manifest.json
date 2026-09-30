@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/climbing_screen_01",
+  "display_name": "立面_01_蓝色爬架屏",
+  "slug": "climbing_screen_01",
+  "category": "scaffold",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "立面_01_蓝色爬架屏_资产包",
+  "objects": [
+    "立面_01_蓝色爬架屏"
+  ],
+  "root_object": "立面_01_蓝色爬架屏",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -9.010000228881836,
+    -24.899999618530273,
+    14.443708419799805
+  ],
+  "bounds_max": [
+    -8.59000015258789,
+    -19.100000381469727,
+    27.556291580200195
+  ],
+  "dimensions": [
+    0.4200000762939453,
+    5.799999237060547,
+    13.11258316040039
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "climbing_screen_01.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/scaffold/climbing_screen_01/asset_manifest.json",
+  "anchor_blender": [
+    -8.800000190734863,
+    -22.0,
+    14.443708419799805
+  ],
+  "position_godot": [
+    -8.800000190734863,
+    14.443708419799805,
+    22.0
+  ],
+  "bounds_blender": [
+    [
+      -9.010000228881836,
+      -24.899999618530273,
+      14.443708419799805
+    ],
+    [
+      -8.59000015258789,
+      -19.100000381469727,
+      27.556291580200195
+    ]
+  ],
+  "triangle_count": 472,
+  "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-01",
+  "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_visual_top3d.glb",
+  "glb_sha256": "bc423711b4ef09ef36f1bc8c34079b659754056f7c0f94338f136c946e0559ae",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

@@ -1,0 +1,84 @@
+{
+  "package_id": "tower_02/crane_01_jib",
+  "display_name": "塔吊2_工作臂_双弦桁架检修走道",
+  "slug": "crane_01_jib",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "塔吊2_工作臂_双弦桁架检修走道_资产包",
+  "objects": [
+    "塔吊2_工作臂_双弦桁架检修走道"
+  ],
+  "root_object": "塔吊2_工作臂_双弦桁架检修走道",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -20.4135799407959,
+    10.657176971435547,
+    125.6500015258789
+  ],
+  "bounds_max": [
+    11.494294166564941,
+    21.627620697021484,
+    129.0399932861328
+  ],
+  "dimensions": [
+    31.90787410736084,
+    10.970443725585938,
+    3.3899917602539062
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "crane_01_jib.glb",
+  "fixed_display_attachment": true,
+  "assembly_id": "tower_02/crane_01",
+  "assembly_collection": "塔吊2_独立合集",
+  "assembly_root": "塔吊2_独立根",
+  "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_jib/asset_manifest.json",
+  "anchor_blender": [
+    -4.4596428871154785,
+    16.142398834228516,
+    125.6500015258789
+  ],
+  "position_godot": [
+    -4.4596428871154785,
+    125.6500015258789,
+    -16.142398834228516
+  ],
+  "bounds_blender": [
+    [
+      -20.4135799407959,
+      10.657176971435547,
+      125.6500015258789
+    ],
+    [
+      11.494294166564941,
+      21.627620697021484,
+      129.0399932861328
+    ]
+  ],
+  "triangle_count": 7484,
+  "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-JIB",
+  "glb": "assets/art/environments/open_world/components/tower_02/crane_01_jib/env_tower_02_crane_01_jib_visual_top3d.glb",
+  "glb_sha256": "c9dc348ee653364b65d7e1d804025edf96842b340d71c0b3f1f272fa1c949bea",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_jib/env_tower_02_crane_01_jib_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

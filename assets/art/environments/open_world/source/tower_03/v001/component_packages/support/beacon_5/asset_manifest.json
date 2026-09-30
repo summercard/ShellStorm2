@@ -47,7 +47,10 @@
   "emissive": true,
   "dependencies": [],
   "fixed_display_attachment": true,
-  "collision_status": "not_authored",
-  "exported": false,
-  "expected_export": "beacon_5.glb"
+  "collision_status": "none_visual_only",
+  "exported": true,
+  "expected_export": "beacon_5.glb",
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_5/env_tower_03_beacon_5_root_top3d.tscn",
+  "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_5/env_tower_03_beacon_5_visual_top3d.glb",
+  "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-5"
 }

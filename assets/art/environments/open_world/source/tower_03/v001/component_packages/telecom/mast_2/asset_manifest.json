@@ -47,7 +47,10 @@
   "emissive": true,
   "dependencies": [],
   "fixed_display_attachment": true,
-  "collision_status": "not_authored",
-  "exported": false,
-  "expected_export": "mast_2.glb"
+  "collision_status": "none_visual_only",
+  "exported": true,
+  "expected_export": "mast_2.glb",
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/mast_2/env_tower_03_mast_2_root_top3d.tscn",
+  "runtime_glb": "assets/art/environments/open_world/components/tower_03/mast_2/env_tower_03_mast_2_visual_top3d.glb",
+  "runtime_asset_id": "ENV-OPENWORLD-TOWER03-MAST-2"
 }

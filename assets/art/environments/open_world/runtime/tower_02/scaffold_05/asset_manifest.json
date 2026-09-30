@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/scaffold_05",
+  "display_name": "立面_05_脚手架围网",
+  "slug": "scaffold_05",
+  "category": "scaffold",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "立面_05_脚手架围网_资产包",
+  "objects": [
+    "立面_05_脚手架围网"
+  ],
+  "root_object": "立面_05_脚手架围网",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    34.14999771118164,
+    -25.06999969482422,
+    0.5350000262260437
+  ],
+  "bounds_max": [
+    36.599998474121094,
+    25.06999969482422,
+    88.82334899902344
+  ],
+  "dimensions": [
+    2.450000762939453,
+    50.13999938964844,
+    88.2883489727974
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "scaffold_05.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/scaffold/scaffold_05/asset_manifest.json",
+  "anchor_blender": [
+    35.375,
+    0.0,
+    0.5350000262260437
+  ],
+  "position_godot": [
+    35.375,
+    0.5350000262260437,
+    -0.0
+  ],
+  "bounds_blender": [
+    [
+      34.14999771118164,
+      -25.06999969482422,
+      0.5350000262260437
+    ],
+    [
+      36.599998474121094,
+      25.06999969482422,
+      88.82334899902344
+    ]
+  ],
+  "triangle_count": 10220,
+  "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-05",
+  "glb": "assets/art/environments/open_world/components/tower_02/scaffold_05/env_tower_02_scaffold_05_visual_top3d.glb",
+  "glb_sha256": "673e7709914039a87376abdd4fedff1325351a97358af4d81a20a6ced459b089",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_05/env_tower_02_scaffold_05_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

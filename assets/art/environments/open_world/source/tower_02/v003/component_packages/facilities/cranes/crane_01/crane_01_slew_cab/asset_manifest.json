@@ -44,12 +44,15 @@
   "animation": false,
   "emissive": false,
   "dependencies": [],
-  "collision_status": "not_authored",
-  "exported": false,
+  "collision_status": "none_visual_only",
+  "exported": true,
   "expected_export": "crane_01_slew_cab.glb",
   "fixed_display_attachment": true,
   "assembly_id": "tower_02/crane_01",
   "assembly_collection": "塔吊2_独立合集",
   "assembly_root": "塔吊2_独立根",
-  "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_slew_cab/asset_manifest.json"
+  "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_slew_cab/asset_manifest.json",
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_root_top3d.tscn",
+  "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_visual_top3d.glb",
+  "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-SLEW-CAB"
 }

@@ -1093,9 +1093,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "main_structure.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "main_structure.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/main_structure/env_tower_03_main_structure_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/main_structure/env_tower_03_main_structure_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-MAIN-STRUCTURE"
     },
     {
       "package_id": "tower_03/facade_00",
@@ -1144,9 +1147,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_00/env_tower_03_facade_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_00/env_tower_03_facade_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-00"
     },
     {
       "package_id": "tower_03/facade_01",
@@ -1195,9 +1201,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_01/env_tower_03_facade_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_01/env_tower_03_facade_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-01"
     },
     {
       "package_id": "tower_03/facade_02",
@@ -1246,9 +1255,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_02/env_tower_03_facade_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_02/env_tower_03_facade_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-02"
     },
     {
       "package_id": "tower_03/facade_03",
@@ -1297,9 +1309,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_03/env_tower_03_facade_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_03/env_tower_03_facade_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-03"
     },
     {
       "package_id": "tower_03/facade_04",
@@ -1348,9 +1363,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_04/env_tower_03_facade_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_04/env_tower_03_facade_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-04"
     },
     {
       "package_id": "tower_03/facade_05",
@@ -1399,9 +1417,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_05/env_tower_03_facade_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_05/env_tower_03_facade_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-05"
     },
     {
       "package_id": "tower_03/facade_06",
@@ -1450,9 +1471,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_06/env_tower_03_facade_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_06/env_tower_03_facade_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-06"
     },
     {
       "package_id": "tower_03/facade_07",
@@ -1501,9 +1525,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_07/env_tower_03_facade_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_07/env_tower_03_facade_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-07"
     },
     {
       "package_id": "tower_03/facade_08",
@@ -1552,9 +1579,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_08.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_08.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_08/env_tower_03_facade_08_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_08/env_tower_03_facade_08_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-08"
     },
     {
       "package_id": "tower_03/facade_09",
@@ -1603,9 +1633,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_09.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_09.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_09/env_tower_03_facade_09_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_09/env_tower_03_facade_09_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-09"
     },
     {
       "package_id": "tower_03/facade_10",
@@ -1654,9 +1687,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_10.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_10.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_10/env_tower_03_facade_10_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_10/env_tower_03_facade_10_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-10"
     },
     {
       "package_id": "tower_03/facade_11",
@@ -1705,9 +1741,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_11.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_11.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_11/env_tower_03_facade_11_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_11/env_tower_03_facade_11_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-11"
     },
     {
       "package_id": "tower_03/facade_12",
@@ -1756,9 +1795,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_12.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_12.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_12/env_tower_03_facade_12_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_12/env_tower_03_facade_12_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-12"
     },
     {
       "package_id": "tower_03/facade_13",
@@ -1807,9 +1849,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_13.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_13.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_13/env_tower_03_facade_13_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_13/env_tower_03_facade_13_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-13"
     },
     {
       "package_id": "tower_03/facade_14",
@@ -1858,9 +1903,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_14.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_14.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_14/env_tower_03_facade_14_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_14/env_tower_03_facade_14_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-14"
     },
     {
       "package_id": "tower_03/facade_15",
@@ -1909,9 +1957,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_15.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_15.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_15/env_tower_03_facade_15_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_15/env_tower_03_facade_15_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-15"
     },
     {
       "package_id": "tower_03/facade_16",
@@ -1960,9 +2011,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_16.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_16.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_16/env_tower_03_facade_16_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_16/env_tower_03_facade_16_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-16"
     },
     {
       "package_id": "tower_03/facade_17",
@@ -2011,9 +2065,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_17.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_17.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_17/env_tower_03_facade_17_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_17/env_tower_03_facade_17_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-17"
     },
     {
       "package_id": "tower_03/facade_18",
@@ -2062,9 +2119,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_18.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_18.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_18/env_tower_03_facade_18_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_18/env_tower_03_facade_18_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-18"
     },
     {
       "package_id": "tower_03/facade_19",
@@ -2113,9 +2173,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "facade_19.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "facade_19.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/facade_19/env_tower_03_facade_19_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/facade_19/env_tower_03_facade_19_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-FACADE-19"
     },
     {
       "package_id": "tower_03/entrance",
@@ -2164,9 +2227,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "entrance.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "entrance.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/entrance/env_tower_03_entrance_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/entrance/env_tower_03_entrance_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-ENTRANCE"
     },
     {
       "package_id": "tower_03/lower_tile_00_00",
@@ -2215,9 +2281,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_00/env_tower_03_lower_tile_00_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_00/env_tower_03_lower_tile_00_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-00"
     },
     {
       "package_id": "tower_03/lower_tile_00_01",
@@ -2266,9 +2335,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_01/env_tower_03_lower_tile_00_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_01/env_tower_03_lower_tile_00_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-01"
     },
     {
       "package_id": "tower_03/lower_tile_00_02",
@@ -2317,9 +2389,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_02/env_tower_03_lower_tile_00_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_02/env_tower_03_lower_tile_00_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-02"
     },
     {
       "package_id": "tower_03/lower_tile_00_03",
@@ -2368,9 +2443,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_03/env_tower_03_lower_tile_00_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_03/env_tower_03_lower_tile_00_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-03"
     },
     {
       "package_id": "tower_03/lower_tile_00_04",
@@ -2419,9 +2497,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_04/env_tower_03_lower_tile_00_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_04/env_tower_03_lower_tile_00_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-04"
     },
     {
       "package_id": "tower_03/lower_tile_00_05",
@@ -2470,9 +2551,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_05/env_tower_03_lower_tile_00_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_05/env_tower_03_lower_tile_00_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-05"
     },
     {
       "package_id": "tower_03/lower_tile_00_06",
@@ -2521,9 +2605,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_06/env_tower_03_lower_tile_00_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_06/env_tower_03_lower_tile_00_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-06"
     },
     {
       "package_id": "tower_03/lower_tile_00_07",
@@ -2572,9 +2659,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_00_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_00_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_00_07/env_tower_03_lower_tile_00_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_00_07/env_tower_03_lower_tile_00_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-07"
     },
     {
       "package_id": "tower_03/lower_tile_01_00",
@@ -2623,9 +2713,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_00/env_tower_03_lower_tile_01_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_00/env_tower_03_lower_tile_01_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-00"
     },
     {
       "package_id": "tower_03/lower_tile_01_01",
@@ -2674,9 +2767,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_01/env_tower_03_lower_tile_01_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_01/env_tower_03_lower_tile_01_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-01"
     },
     {
       "package_id": "tower_03/lower_tile_01_02",
@@ -2725,9 +2821,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_02/env_tower_03_lower_tile_01_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_02/env_tower_03_lower_tile_01_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-02"
     },
     {
       "package_id": "tower_03/lower_tile_01_03",
@@ -2776,9 +2875,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_03/env_tower_03_lower_tile_01_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_03/env_tower_03_lower_tile_01_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-03"
     },
     {
       "package_id": "tower_03/lower_tile_01_04",
@@ -2827,9 +2929,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_04/env_tower_03_lower_tile_01_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_04/env_tower_03_lower_tile_01_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-04"
     },
     {
       "package_id": "tower_03/lower_tile_01_05",
@@ -2878,9 +2983,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_05/env_tower_03_lower_tile_01_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_05/env_tower_03_lower_tile_01_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-05"
     },
     {
       "package_id": "tower_03/lower_tile_01_06",
@@ -2929,9 +3037,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_06/env_tower_03_lower_tile_01_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_06/env_tower_03_lower_tile_01_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-06"
     },
     {
       "package_id": "tower_03/lower_tile_01_07",
@@ -2980,9 +3091,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_01_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_01_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_01_07/env_tower_03_lower_tile_01_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_01_07/env_tower_03_lower_tile_01_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-07"
     },
     {
       "package_id": "tower_03/lower_tile_02_00",
@@ -3031,9 +3145,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_00/env_tower_03_lower_tile_02_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_00/env_tower_03_lower_tile_02_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-00"
     },
     {
       "package_id": "tower_03/lower_tile_02_01",
@@ -3082,9 +3199,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_01/env_tower_03_lower_tile_02_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_01/env_tower_03_lower_tile_02_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-01"
     },
     {
       "package_id": "tower_03/lower_tile_02_02",
@@ -3133,9 +3253,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_02/env_tower_03_lower_tile_02_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_02/env_tower_03_lower_tile_02_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-02"
     },
     {
       "package_id": "tower_03/lower_tile_02_03",
@@ -3184,9 +3307,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_03/env_tower_03_lower_tile_02_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_03/env_tower_03_lower_tile_02_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-03"
     },
     {
       "package_id": "tower_03/lower_tile_02_04",
@@ -3235,9 +3361,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_04/env_tower_03_lower_tile_02_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_04/env_tower_03_lower_tile_02_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-04"
     },
     {
       "package_id": "tower_03/lower_tile_02_05",
@@ -3286,9 +3415,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_05/env_tower_03_lower_tile_02_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_05/env_tower_03_lower_tile_02_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-05"
     },
     {
       "package_id": "tower_03/lower_tile_02_06",
@@ -3337,9 +3469,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_06/env_tower_03_lower_tile_02_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_06/env_tower_03_lower_tile_02_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-06"
     },
     {
       "package_id": "tower_03/lower_tile_02_07",
@@ -3388,9 +3523,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_02_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_02_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_02_07/env_tower_03_lower_tile_02_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_02_07/env_tower_03_lower_tile_02_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-07"
     },
     {
       "package_id": "tower_03/lower_tile_03_00",
@@ -3439,9 +3577,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_00/env_tower_03_lower_tile_03_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_00/env_tower_03_lower_tile_03_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-00"
     },
     {
       "package_id": "tower_03/lower_tile_03_01",
@@ -3490,9 +3631,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_01/env_tower_03_lower_tile_03_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_01/env_tower_03_lower_tile_03_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-01"
     },
     {
       "package_id": "tower_03/lower_tile_03_02",
@@ -3541,9 +3685,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_02/env_tower_03_lower_tile_03_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_02/env_tower_03_lower_tile_03_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-02"
     },
     {
       "package_id": "tower_03/lower_tile_03_03",
@@ -3592,9 +3739,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_03/env_tower_03_lower_tile_03_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_03/env_tower_03_lower_tile_03_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-03"
     },
     {
       "package_id": "tower_03/lower_tile_03_04",
@@ -3643,9 +3793,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_04/env_tower_03_lower_tile_03_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_04/env_tower_03_lower_tile_03_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-04"
     },
     {
       "package_id": "tower_03/lower_tile_03_05",
@@ -3694,9 +3847,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_05/env_tower_03_lower_tile_03_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_05/env_tower_03_lower_tile_03_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-05"
     },
     {
       "package_id": "tower_03/lower_tile_03_06",
@@ -3745,9 +3901,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_06/env_tower_03_lower_tile_03_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_06/env_tower_03_lower_tile_03_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-06"
     },
     {
       "package_id": "tower_03/lower_tile_03_07",
@@ -3796,9 +3955,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_03_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_03_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_03_07/env_tower_03_lower_tile_03_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_03_07/env_tower_03_lower_tile_03_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-07"
     },
     {
       "package_id": "tower_03/lower_tile_04_00",
@@ -3847,9 +4009,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_00/env_tower_03_lower_tile_04_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_00/env_tower_03_lower_tile_04_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-00"
     },
     {
       "package_id": "tower_03/lower_tile_04_01",
@@ -3898,9 +4063,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_01/env_tower_03_lower_tile_04_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_01/env_tower_03_lower_tile_04_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-01"
     },
     {
       "package_id": "tower_03/lower_tile_04_02",
@@ -3949,9 +4117,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_02/env_tower_03_lower_tile_04_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_02/env_tower_03_lower_tile_04_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-02"
     },
     {
       "package_id": "tower_03/lower_tile_04_03",
@@ -4000,9 +4171,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_03/env_tower_03_lower_tile_04_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_03/env_tower_03_lower_tile_04_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-03"
     },
     {
       "package_id": "tower_03/lower_tile_04_04",
@@ -4051,9 +4225,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_04/env_tower_03_lower_tile_04_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_04/env_tower_03_lower_tile_04_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-04"
     },
     {
       "package_id": "tower_03/lower_tile_04_05",
@@ -4102,9 +4279,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_05/env_tower_03_lower_tile_04_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_05/env_tower_03_lower_tile_04_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-05"
     },
     {
       "package_id": "tower_03/lower_tile_04_06",
@@ -4153,9 +4333,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_06/env_tower_03_lower_tile_04_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_06/env_tower_03_lower_tile_04_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-06"
     },
     {
       "package_id": "tower_03/lower_tile_04_07",
@@ -4204,9 +4387,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_04_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_04_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_04_07/env_tower_03_lower_tile_04_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_04_07/env_tower_03_lower_tile_04_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-07"
     },
     {
       "package_id": "tower_03/lower_tile_05_00",
@@ -4255,9 +4441,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_00/env_tower_03_lower_tile_05_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_00/env_tower_03_lower_tile_05_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-00"
     },
     {
       "package_id": "tower_03/lower_tile_05_01",
@@ -4306,9 +4495,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_01/env_tower_03_lower_tile_05_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_01/env_tower_03_lower_tile_05_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-01"
     },
     {
       "package_id": "tower_03/lower_tile_05_02",
@@ -4357,9 +4549,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_02/env_tower_03_lower_tile_05_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_02/env_tower_03_lower_tile_05_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-02"
     },
     {
       "package_id": "tower_03/lower_tile_05_03",
@@ -4408,9 +4603,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_03/env_tower_03_lower_tile_05_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_03/env_tower_03_lower_tile_05_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-03"
     },
     {
       "package_id": "tower_03/lower_tile_05_04",
@@ -4459,9 +4657,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_04/env_tower_03_lower_tile_05_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_04/env_tower_03_lower_tile_05_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-04"
     },
     {
       "package_id": "tower_03/lower_tile_05_05",
@@ -4510,9 +4711,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_05/env_tower_03_lower_tile_05_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_05/env_tower_03_lower_tile_05_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-05"
     },
     {
       "package_id": "tower_03/lower_tile_05_06",
@@ -4561,9 +4765,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_06/env_tower_03_lower_tile_05_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_06/env_tower_03_lower_tile_05_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-06"
     },
     {
       "package_id": "tower_03/lower_tile_05_07",
@@ -4612,9 +4819,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_05_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_05_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_05_07/env_tower_03_lower_tile_05_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_05_07/env_tower_03_lower_tile_05_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-07"
     },
     {
       "package_id": "tower_03/lower_tile_06_00",
@@ -4663,9 +4873,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_00/env_tower_03_lower_tile_06_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_00/env_tower_03_lower_tile_06_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-00"
     },
     {
       "package_id": "tower_03/lower_tile_06_01",
@@ -4714,9 +4927,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_01/env_tower_03_lower_tile_06_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_01/env_tower_03_lower_tile_06_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-01"
     },
     {
       "package_id": "tower_03/lower_tile_06_02",
@@ -4765,9 +4981,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_02/env_tower_03_lower_tile_06_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_02/env_tower_03_lower_tile_06_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-02"
     },
     {
       "package_id": "tower_03/lower_tile_06_03",
@@ -4816,9 +5035,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_03/env_tower_03_lower_tile_06_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_03/env_tower_03_lower_tile_06_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-03"
     },
     {
       "package_id": "tower_03/lower_tile_06_04",
@@ -4867,9 +5089,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_04/env_tower_03_lower_tile_06_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_04/env_tower_03_lower_tile_06_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-04"
     },
     {
       "package_id": "tower_03/lower_tile_06_05",
@@ -4918,9 +5143,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_05/env_tower_03_lower_tile_06_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_05/env_tower_03_lower_tile_06_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-05"
     },
     {
       "package_id": "tower_03/lower_tile_06_06",
@@ -4969,9 +5197,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_06/env_tower_03_lower_tile_06_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_06/env_tower_03_lower_tile_06_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-06"
     },
     {
       "package_id": "tower_03/lower_tile_06_07",
@@ -5020,9 +5251,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_06_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_06_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_06_07/env_tower_03_lower_tile_06_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_06_07/env_tower_03_lower_tile_06_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-07"
     },
     {
       "package_id": "tower_03/lower_tile_07_00",
@@ -5071,9 +5305,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_00/env_tower_03_lower_tile_07_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_00/env_tower_03_lower_tile_07_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-00"
     },
     {
       "package_id": "tower_03/lower_tile_07_01",
@@ -5122,9 +5359,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_01/env_tower_03_lower_tile_07_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_01/env_tower_03_lower_tile_07_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-01"
     },
     {
       "package_id": "tower_03/lower_tile_07_02",
@@ -5173,9 +5413,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_02/env_tower_03_lower_tile_07_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_02/env_tower_03_lower_tile_07_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-02"
     },
     {
       "package_id": "tower_03/lower_tile_07_03",
@@ -5224,9 +5467,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_03/env_tower_03_lower_tile_07_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_03/env_tower_03_lower_tile_07_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-03"
     },
     {
       "package_id": "tower_03/lower_tile_07_04",
@@ -5275,9 +5521,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_04/env_tower_03_lower_tile_07_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_04/env_tower_03_lower_tile_07_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-04"
     },
     {
       "package_id": "tower_03/lower_tile_07_05",
@@ -5326,9 +5575,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_05/env_tower_03_lower_tile_07_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_05/env_tower_03_lower_tile_07_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-05"
     },
     {
       "package_id": "tower_03/lower_tile_07_06",
@@ -5377,9 +5629,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_06/env_tower_03_lower_tile_07_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_06/env_tower_03_lower_tile_07_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-06"
     },
     {
       "package_id": "tower_03/lower_tile_07_07",
@@ -5428,9 +5683,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_07_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_07_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_07_07/env_tower_03_lower_tile_07_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_07_07/env_tower_03_lower_tile_07_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-07"
     },
     {
       "package_id": "tower_03/lower_tile_08_00",
@@ -5479,9 +5737,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_00/env_tower_03_lower_tile_08_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_00/env_tower_03_lower_tile_08_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-00"
     },
     {
       "package_id": "tower_03/lower_tile_08_01",
@@ -5530,9 +5791,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_01/env_tower_03_lower_tile_08_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_01/env_tower_03_lower_tile_08_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-01"
     },
     {
       "package_id": "tower_03/lower_tile_08_02",
@@ -5581,9 +5845,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_02/env_tower_03_lower_tile_08_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_02/env_tower_03_lower_tile_08_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-02"
     },
     {
       "package_id": "tower_03/lower_tile_08_03",
@@ -5632,9 +5899,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_03/env_tower_03_lower_tile_08_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_03/env_tower_03_lower_tile_08_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-03"
     },
     {
       "package_id": "tower_03/lower_tile_08_04",
@@ -5683,9 +5953,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_04/env_tower_03_lower_tile_08_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_04/env_tower_03_lower_tile_08_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-04"
     },
     {
       "package_id": "tower_03/lower_tile_08_05",
@@ -5734,9 +6007,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_05/env_tower_03_lower_tile_08_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_05/env_tower_03_lower_tile_08_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-05"
     },
     {
       "package_id": "tower_03/lower_tile_08_06",
@@ -5785,9 +6061,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_06/env_tower_03_lower_tile_08_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_06/env_tower_03_lower_tile_08_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-06"
     },
     {
       "package_id": "tower_03/lower_tile_08_07",
@@ -5836,9 +6115,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_08_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_08_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_08_07/env_tower_03_lower_tile_08_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_08_07/env_tower_03_lower_tile_08_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-07"
     },
     {
       "package_id": "tower_03/lower_tile_09_00",
@@ -5887,9 +6169,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_00/env_tower_03_lower_tile_09_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_00/env_tower_03_lower_tile_09_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-00"
     },
     {
       "package_id": "tower_03/lower_tile_09_01",
@@ -5938,9 +6223,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_01/env_tower_03_lower_tile_09_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_01/env_tower_03_lower_tile_09_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-01"
     },
     {
       "package_id": "tower_03/lower_tile_09_02",
@@ -5989,9 +6277,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_02/env_tower_03_lower_tile_09_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_02/env_tower_03_lower_tile_09_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-02"
     },
     {
       "package_id": "tower_03/lower_tile_09_03",
@@ -6040,9 +6331,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_03/env_tower_03_lower_tile_09_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_03/env_tower_03_lower_tile_09_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-03"
     },
     {
       "package_id": "tower_03/lower_tile_09_04",
@@ -6091,9 +6385,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_04/env_tower_03_lower_tile_09_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_04/env_tower_03_lower_tile_09_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-04"
     },
     {
       "package_id": "tower_03/lower_tile_09_05",
@@ -6142,9 +6439,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_05/env_tower_03_lower_tile_09_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_05/env_tower_03_lower_tile_09_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-05"
     },
     {
       "package_id": "tower_03/lower_tile_09_06",
@@ -6193,9 +6493,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_06/env_tower_03_lower_tile_09_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_06/env_tower_03_lower_tile_09_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-06"
     },
     {
       "package_id": "tower_03/lower_tile_09_07",
@@ -6244,9 +6547,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_09_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_09_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_09_07/env_tower_03_lower_tile_09_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_09_07/env_tower_03_lower_tile_09_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-07"
     },
     {
       "package_id": "tower_03/lower_tile_10_00",
@@ -6295,9 +6601,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_00/env_tower_03_lower_tile_10_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_00/env_tower_03_lower_tile_10_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-00"
     },
     {
       "package_id": "tower_03/lower_tile_10_01",
@@ -6346,9 +6655,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_01/env_tower_03_lower_tile_10_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_01/env_tower_03_lower_tile_10_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-01"
     },
     {
       "package_id": "tower_03/lower_tile_10_02",
@@ -6397,9 +6709,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_02/env_tower_03_lower_tile_10_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_02/env_tower_03_lower_tile_10_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-02"
     },
     {
       "package_id": "tower_03/lower_tile_10_03",
@@ -6448,9 +6763,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_03/env_tower_03_lower_tile_10_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_03/env_tower_03_lower_tile_10_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-03"
     },
     {
       "package_id": "tower_03/lower_tile_10_04",
@@ -6499,9 +6817,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_04/env_tower_03_lower_tile_10_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_04/env_tower_03_lower_tile_10_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-04"
     },
     {
       "package_id": "tower_03/lower_tile_10_05",
@@ -6550,9 +6871,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_05/env_tower_03_lower_tile_10_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_05/env_tower_03_lower_tile_10_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-05"
     },
     {
       "package_id": "tower_03/lower_tile_10_06",
@@ -6601,9 +6925,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_06/env_tower_03_lower_tile_10_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_06/env_tower_03_lower_tile_10_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-06"
     },
     {
       "package_id": "tower_03/lower_tile_10_07",
@@ -6652,9 +6979,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_10_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_10_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_10_07/env_tower_03_lower_tile_10_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_10_07/env_tower_03_lower_tile_10_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-07"
     },
     {
       "package_id": "tower_03/lower_tile_11_00",
@@ -6703,9 +7033,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_00/env_tower_03_lower_tile_11_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_00/env_tower_03_lower_tile_11_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-00"
     },
     {
       "package_id": "tower_03/lower_tile_11_01",
@@ -6754,9 +7087,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_01/env_tower_03_lower_tile_11_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_01/env_tower_03_lower_tile_11_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-01"
     },
     {
       "package_id": "tower_03/lower_tile_11_02",
@@ -6805,9 +7141,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_02/env_tower_03_lower_tile_11_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_02/env_tower_03_lower_tile_11_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-02"
     },
     {
       "package_id": "tower_03/lower_tile_11_03",
@@ -6856,9 +7195,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_03/env_tower_03_lower_tile_11_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_03/env_tower_03_lower_tile_11_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-03"
     },
     {
       "package_id": "tower_03/lower_tile_11_04",
@@ -6907,9 +7249,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_04/env_tower_03_lower_tile_11_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_04/env_tower_03_lower_tile_11_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-04"
     },
     {
       "package_id": "tower_03/lower_tile_11_05",
@@ -6958,9 +7303,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_05/env_tower_03_lower_tile_11_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_05/env_tower_03_lower_tile_11_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-05"
     },
     {
       "package_id": "tower_03/lower_tile_11_06",
@@ -7009,9 +7357,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_06/env_tower_03_lower_tile_11_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_06/env_tower_03_lower_tile_11_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-06"
     },
     {
       "package_id": "tower_03/lower_tile_11_07",
@@ -7060,9 +7411,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_11_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_11_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_11_07/env_tower_03_lower_tile_11_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_11_07/env_tower_03_lower_tile_11_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-07"
     },
     {
       "package_id": "tower_03/lower_tile_12_00",
@@ -7111,9 +7465,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_00/env_tower_03_lower_tile_12_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_00/env_tower_03_lower_tile_12_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-00"
     },
     {
       "package_id": "tower_03/lower_tile_12_01",
@@ -7162,9 +7519,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_01/env_tower_03_lower_tile_12_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_01/env_tower_03_lower_tile_12_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-01"
     },
     {
       "package_id": "tower_03/lower_tile_12_02",
@@ -7213,9 +7573,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_02/env_tower_03_lower_tile_12_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_02/env_tower_03_lower_tile_12_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-02"
     },
     {
       "package_id": "tower_03/lower_tile_12_03",
@@ -7264,9 +7627,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_03/env_tower_03_lower_tile_12_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_03/env_tower_03_lower_tile_12_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-03"
     },
     {
       "package_id": "tower_03/lower_tile_12_04",
@@ -7315,9 +7681,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_04/env_tower_03_lower_tile_12_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_04/env_tower_03_lower_tile_12_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-04"
     },
     {
       "package_id": "tower_03/lower_tile_12_05",
@@ -7366,9 +7735,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_05/env_tower_03_lower_tile_12_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_05/env_tower_03_lower_tile_12_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-05"
     },
     {
       "package_id": "tower_03/lower_tile_12_06",
@@ -7417,9 +7789,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_06/env_tower_03_lower_tile_12_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_06/env_tower_03_lower_tile_12_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-06"
     },
     {
       "package_id": "tower_03/lower_tile_12_07",
@@ -7468,9 +7843,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_12_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_12_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_12_07/env_tower_03_lower_tile_12_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_12_07/env_tower_03_lower_tile_12_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-07"
     },
     {
       "package_id": "tower_03/lower_tile_13_00",
@@ -7519,9 +7897,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_00/env_tower_03_lower_tile_13_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_00/env_tower_03_lower_tile_13_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-00"
     },
     {
       "package_id": "tower_03/lower_tile_13_01",
@@ -7570,9 +7951,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_01/env_tower_03_lower_tile_13_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_01/env_tower_03_lower_tile_13_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-01"
     },
     {
       "package_id": "tower_03/lower_tile_13_02",
@@ -7621,9 +8005,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_02/env_tower_03_lower_tile_13_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_02/env_tower_03_lower_tile_13_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-02"
     },
     {
       "package_id": "tower_03/lower_tile_13_03",
@@ -7672,9 +8059,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_03/env_tower_03_lower_tile_13_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_03/env_tower_03_lower_tile_13_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-03"
     },
     {
       "package_id": "tower_03/lower_tile_13_04",
@@ -7723,9 +8113,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_04/env_tower_03_lower_tile_13_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_04/env_tower_03_lower_tile_13_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-04"
     },
     {
       "package_id": "tower_03/lower_tile_13_05",
@@ -7774,9 +8167,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_05/env_tower_03_lower_tile_13_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_05/env_tower_03_lower_tile_13_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-05"
     },
     {
       "package_id": "tower_03/lower_tile_13_06",
@@ -7825,9 +8221,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_06.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_06.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_06/env_tower_03_lower_tile_13_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_06/env_tower_03_lower_tile_13_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-06"
     },
     {
       "package_id": "tower_03/lower_tile_13_07",
@@ -7876,9 +8275,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_tile_13_07.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_tile_13_07.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_tile_13_07/env_tower_03_lower_tile_13_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_tile_13_07/env_tower_03_lower_tile_13_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-07"
     },
     {
       "package_id": "tower_03/plant_east_louvers",
@@ -7927,9 +8329,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_east_louvers.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_east_louvers.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_east_louvers/env_tower_03_plant_east_louvers_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_east_louvers/env_tower_03_plant_east_louvers_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-EAST-LOUVERS"
     },
     {
       "package_id": "tower_03/plant_room",
@@ -7978,9 +8383,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_room.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_room.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_room/env_tower_03_plant_room_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_room/env_tower_03_plant_room_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-ROOM"
     },
     {
       "package_id": "tower_03/upper_tile_00_00",
@@ -8029,9 +8437,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_00_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_00_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_00_00/env_tower_03_upper_tile_00_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_00_00/env_tower_03_upper_tile_00_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-00"
     },
     {
       "package_id": "tower_03/upper_tile_00_01",
@@ -8080,9 +8491,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_00_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_00_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_00_01/env_tower_03_upper_tile_00_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_00_01/env_tower_03_upper_tile_00_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-01"
     },
     {
       "package_id": "tower_03/upper_tile_00_02",
@@ -8131,9 +8545,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_00_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_00_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_00_02/env_tower_03_upper_tile_00_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_00_02/env_tower_03_upper_tile_00_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-02"
     },
     {
       "package_id": "tower_03/upper_tile_00_03",
@@ -8182,9 +8599,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_00_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_00_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_00_03/env_tower_03_upper_tile_00_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_00_03/env_tower_03_upper_tile_00_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-03"
     },
     {
       "package_id": "tower_03/upper_tile_01_00",
@@ -8233,9 +8653,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_01_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_01_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_01_00/env_tower_03_upper_tile_01_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_01_00/env_tower_03_upper_tile_01_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-00"
     },
     {
       "package_id": "tower_03/upper_tile_01_01",
@@ -8284,9 +8707,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_01_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_01_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_01_01/env_tower_03_upper_tile_01_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_01_01/env_tower_03_upper_tile_01_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-01"
     },
     {
       "package_id": "tower_03/upper_tile_01_02",
@@ -8335,9 +8761,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_01_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_01_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_01_02/env_tower_03_upper_tile_01_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_01_02/env_tower_03_upper_tile_01_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-02"
     },
     {
       "package_id": "tower_03/upper_tile_01_03",
@@ -8386,9 +8815,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_01_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_01_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_01_03/env_tower_03_upper_tile_01_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_01_03/env_tower_03_upper_tile_01_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-03"
     },
     {
       "package_id": "tower_03/upper_tile_02_00",
@@ -8437,9 +8869,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_02_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_02_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_02_00/env_tower_03_upper_tile_02_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_02_00/env_tower_03_upper_tile_02_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-00"
     },
     {
       "package_id": "tower_03/upper_tile_02_01",
@@ -8488,9 +8923,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_02_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_02_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_02_01/env_tower_03_upper_tile_02_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_02_01/env_tower_03_upper_tile_02_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-01"
     },
     {
       "package_id": "tower_03/upper_tile_02_02",
@@ -8539,9 +8977,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_02_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_02_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_02_02/env_tower_03_upper_tile_02_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_02_02/env_tower_03_upper_tile_02_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-02"
     },
     {
       "package_id": "tower_03/upper_tile_02_03",
@@ -8590,9 +9031,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_02_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_02_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_02_03/env_tower_03_upper_tile_02_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_02_03/env_tower_03_upper_tile_02_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-03"
     },
     {
       "package_id": "tower_03/upper_tile_03_00",
@@ -8641,9 +9085,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_03_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_03_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_03_00/env_tower_03_upper_tile_03_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_03_00/env_tower_03_upper_tile_03_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-00"
     },
     {
       "package_id": "tower_03/upper_tile_03_01",
@@ -8692,9 +9139,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_03_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_03_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_03_01/env_tower_03_upper_tile_03_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_03_01/env_tower_03_upper_tile_03_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-01"
     },
     {
       "package_id": "tower_03/upper_tile_03_02",
@@ -8743,9 +9193,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_03_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_03_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_03_02/env_tower_03_upper_tile_03_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_03_02/env_tower_03_upper_tile_03_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-02"
     },
     {
       "package_id": "tower_03/upper_tile_03_03",
@@ -8794,9 +9247,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_03_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_03_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_03_03/env_tower_03_upper_tile_03_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_03_03/env_tower_03_upper_tile_03_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-03"
     },
     {
       "package_id": "tower_03/upper_tile_04_00",
@@ -8845,9 +9301,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_04_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_04_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_04_00/env_tower_03_upper_tile_04_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_04_00/env_tower_03_upper_tile_04_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-00"
     },
     {
       "package_id": "tower_03/upper_tile_04_01",
@@ -8896,9 +9355,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_04_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_04_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_04_01/env_tower_03_upper_tile_04_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_04_01/env_tower_03_upper_tile_04_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-01"
     },
     {
       "package_id": "tower_03/upper_tile_04_02",
@@ -8947,9 +9409,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_04_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_04_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_04_02/env_tower_03_upper_tile_04_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_04_02/env_tower_03_upper_tile_04_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-02"
     },
     {
       "package_id": "tower_03/upper_tile_04_03",
@@ -8998,9 +9463,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_04_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_04_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_04_03/env_tower_03_upper_tile_04_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_04_03/env_tower_03_upper_tile_04_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-03"
     },
     {
       "package_id": "tower_03/upper_tile_05_00",
@@ -9049,9 +9517,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_05_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_05_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_05_00/env_tower_03_upper_tile_05_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_05_00/env_tower_03_upper_tile_05_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-00"
     },
     {
       "package_id": "tower_03/upper_tile_05_01",
@@ -9100,9 +9571,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_05_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_05_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_05_01/env_tower_03_upper_tile_05_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_05_01/env_tower_03_upper_tile_05_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-01"
     },
     {
       "package_id": "tower_03/upper_tile_05_02",
@@ -9151,9 +9625,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_05_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_05_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_05_02/env_tower_03_upper_tile_05_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_05_02/env_tower_03_upper_tile_05_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-02"
     },
     {
       "package_id": "tower_03/upper_tile_05_03",
@@ -9202,9 +9679,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_05_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_05_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_05_03/env_tower_03_upper_tile_05_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_05_03/env_tower_03_upper_tile_05_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-03"
     },
     {
       "package_id": "tower_03/upper_tile_06_00",
@@ -9253,9 +9733,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_06_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_06_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_06_00/env_tower_03_upper_tile_06_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_06_00/env_tower_03_upper_tile_06_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-00"
     },
     {
       "package_id": "tower_03/upper_tile_06_01",
@@ -9304,9 +9787,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_06_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_06_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_06_01/env_tower_03_upper_tile_06_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_06_01/env_tower_03_upper_tile_06_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-01"
     },
     {
       "package_id": "tower_03/upper_tile_06_02",
@@ -9355,9 +9841,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_06_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_06_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_06_02/env_tower_03_upper_tile_06_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_06_02/env_tower_03_upper_tile_06_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-02"
     },
     {
       "package_id": "tower_03/upper_tile_06_03",
@@ -9406,9 +9895,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_06_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_06_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_06_03/env_tower_03_upper_tile_06_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_06_03/env_tower_03_upper_tile_06_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-03"
     },
     {
       "package_id": "tower_03/upper_tile_07_00",
@@ -9457,9 +9949,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_07_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_07_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_07_00/env_tower_03_upper_tile_07_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_07_00/env_tower_03_upper_tile_07_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-00"
     },
     {
       "package_id": "tower_03/upper_tile_07_01",
@@ -9508,9 +10003,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_07_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_07_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_07_01/env_tower_03_upper_tile_07_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_07_01/env_tower_03_upper_tile_07_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-01"
     },
     {
       "package_id": "tower_03/upper_tile_07_02",
@@ -9559,9 +10057,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_07_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_07_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_07_02/env_tower_03_upper_tile_07_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_07_02/env_tower_03_upper_tile_07_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-02"
     },
     {
       "package_id": "tower_03/upper_tile_07_03",
@@ -9610,9 +10111,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_tile_07_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_tile_07_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_tile_07_03/env_tower_03_upper_tile_07_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_tile_07_03/env_tower_03_upper_tile_07_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-03"
     },
     {
       "package_id": "tower_03/lower_rail_0",
@@ -9661,9 +10165,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_rail_0.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_rail_0.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_rail_0/env_tower_03_lower_rail_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_rail_0/env_tower_03_lower_rail_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-0"
     },
     {
       "package_id": "tower_03/lower_rail_1",
@@ -9712,9 +10219,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_rail_1.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_rail_1.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_rail_1/env_tower_03_lower_rail_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_rail_1/env_tower_03_lower_rail_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-1"
     },
     {
       "package_id": "tower_03/lower_rail_2",
@@ -9763,9 +10273,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_rail_2.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_rail_2.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_rail_2/env_tower_03_lower_rail_2_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_rail_2/env_tower_03_lower_rail_2_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-2"
     },
     {
       "package_id": "tower_03/lower_rail_3",
@@ -9814,9 +10327,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_rail_3.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_rail_3.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_rail_3/env_tower_03_lower_rail_3_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_rail_3/env_tower_03_lower_rail_3_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-3"
     },
     {
       "package_id": "tower_03/upper_rail_0",
@@ -9865,9 +10381,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_rail_0.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_rail_0.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_rail_0/env_tower_03_upper_rail_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_rail_0/env_tower_03_upper_rail_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-0"
     },
     {
       "package_id": "tower_03/upper_rail_1",
@@ -9916,9 +10435,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_rail_1.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_rail_1.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_rail_1/env_tower_03_upper_rail_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_rail_1/env_tower_03_upper_rail_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-1"
     },
     {
       "package_id": "tower_03/upper_rail_2",
@@ -9967,9 +10489,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_rail_2.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_rail_2.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_rail_2/env_tower_03_upper_rail_2_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_rail_2/env_tower_03_upper_rail_2_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-2"
     },
     {
       "package_id": "tower_03/upper_rail_3",
@@ -10018,9 +10543,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_rail_3.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_rail_3.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_rail_3/env_tower_03_upper_rail_3_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_rail_3/env_tower_03_upper_rail_3_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-3"
     },
     {
       "package_id": "tower_03/ac_lower_left",
@@ -10069,9 +10597,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "ac_lower_left.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "ac_lower_left.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/ac_lower_left/env_tower_03_ac_lower_left_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/ac_lower_left/env_tower_03_ac_lower_left_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-AC-LOWER-LEFT"
     },
     {
       "package_id": "tower_03/ac_upper_left",
@@ -10120,9 +10651,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "ac_upper_left.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "ac_upper_left.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/ac_upper_left/env_tower_03_ac_upper_left_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/ac_upper_left/env_tower_03_ac_upper_left_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-AC-UPPER-LEFT"
     },
     {
       "package_id": "tower_03/ac_lower_right",
@@ -10171,9 +10705,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "ac_lower_right.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "ac_lower_right.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/ac_lower_right/env_tower_03_ac_lower_right_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/ac_lower_right/env_tower_03_ac_lower_right_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-AC-LOWER-RIGHT"
     },
     {
       "package_id": "tower_03/left_service_stairs",
@@ -10222,9 +10759,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "left_service_stairs.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "left_service_stairs.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/left_service_stairs/env_tower_03_left_service_stairs_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/left_service_stairs/env_tower_03_left_service_stairs_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LEFT-SERVICE-STAIRS"
     },
     {
       "package_id": "tower_03/duct_upper_front",
@@ -10273,9 +10813,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "duct_upper_front.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "duct_upper_front.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/duct_upper_front/env_tower_03_duct_upper_front_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/duct_upper_front/env_tower_03_duct_upper_front_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-DUCT-UPPER-FRONT"
     },
     {
       "package_id": "tower_03/duct_lower_left",
@@ -10324,9 +10867,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "duct_lower_left.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "duct_lower_left.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/duct_lower_left/env_tower_03_duct_lower_left_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/duct_lower_left/env_tower_03_duct_lower_left_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-LEFT"
     },
     {
       "package_id": "tower_03/duct_lower_front",
@@ -10375,9 +10921,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "duct_lower_front.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "duct_lower_front.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/duct_lower_front/env_tower_03_duct_lower_front_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/duct_lower_front/env_tower_03_duct_lower_front_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-FRONT"
     },
     {
       "package_id": "tower_03/duct_lower_right",
@@ -10426,9 +10975,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "duct_lower_right.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "duct_lower_right.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/duct_lower_right/env_tower_03_duct_lower_right_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/duct_lower_right/env_tower_03_duct_lower_right_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-RIGHT"
     },
     {
       "package_id": "tower_03/plant_front_00",
@@ -10477,9 +11029,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_front_00.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_front_00.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_front_00/env_tower_03_plant_front_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_front_00/env_tower_03_plant_front_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-00"
     },
     {
       "package_id": "tower_03/plant_front_01",
@@ -10528,9 +11083,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_front_01.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_front_01.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_front_01/env_tower_03_plant_front_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_front_01/env_tower_03_plant_front_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-01"
     },
     {
       "package_id": "tower_03/plant_front_02",
@@ -10579,9 +11137,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_front_02.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_front_02.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_front_02/env_tower_03_plant_front_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_front_02/env_tower_03_plant_front_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-02"
     },
     {
       "package_id": "tower_03/plant_front_03",
@@ -10630,9 +11191,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_front_03.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_front_03.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_front_03/env_tower_03_plant_front_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_front_03/env_tower_03_plant_front_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-03"
     },
     {
       "package_id": "tower_03/plant_front_04",
@@ -10681,9 +11245,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_front_04.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_front_04.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_front_04/env_tower_03_plant_front_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_front_04/env_tower_03_plant_front_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-04"
     },
     {
       "package_id": "tower_03/plant_front_05",
@@ -10732,9 +11299,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "plant_front_05.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "plant_front_05.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/plant_front_05/env_tower_03_plant_front_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/plant_front_05/env_tower_03_plant_front_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-05"
     },
     {
       "package_id": "tower_03/upper_electrical",
@@ -10783,9 +11353,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_electrical.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_electrical.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_electrical/env_tower_03_upper_electrical_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_electrical/env_tower_03_upper_electrical_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-ELECTRICAL"
     },
     {
       "package_id": "tower_03/upper_duct_control",
@@ -10834,9 +11407,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "upper_duct_control.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "upper_duct_control.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/upper_duct_control/env_tower_03_upper_duct_control_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/upper_duct_control/env_tower_03_upper_duct_control_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-UPPER-DUCT-CONTROL"
     },
     {
       "package_id": "tower_03/lower_right_control",
@@ -10885,9 +11461,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_right_control.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_right_control.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_right_control/env_tower_03_lower_right_control_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_right_control/env_tower_03_lower_right_control_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RIGHT-CONTROL"
     },
     {
       "package_id": "tower_03/lower_front_box",
@@ -10936,9 +11515,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "lower_front_box.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "lower_front_box.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/lower_front_box/env_tower_03_lower_front_box_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/lower_front_box/env_tower_03_lower_front_box_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-LOWER-FRONT-BOX"
     },
     {
       "package_id": "tower_03/conduit_banks",
@@ -10987,9 +11569,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "conduit_banks.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "conduit_banks.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/conduit_banks/env_tower_03_conduit_banks_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/conduit_banks/env_tower_03_conduit_banks_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-CONDUIT-BANKS"
     },
     {
       "package_id": "tower_03/tray_0",
@@ -11038,9 +11623,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "tray_0.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "tray_0.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/tray_0/env_tower_03_tray_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/tray_0/env_tower_03_tray_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-TRAY-0"
     },
     {
       "package_id": "tower_03/tray_1",
@@ -11089,9 +11677,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "tray_1.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "tray_1.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/tray_1/env_tower_03_tray_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/tray_1/env_tower_03_tray_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-TRAY-1"
     },
     {
       "package_id": "tower_03/tray_2",
@@ -11140,9 +11731,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "tray_2.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "tray_2.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/tray_2/env_tower_03_tray_2_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/tray_2/env_tower_03_tray_2_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-TRAY-2"
     },
     {
       "package_id": "tower_03/vertical_access",
@@ -11191,9 +11785,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "vertical_access.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "vertical_access.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/vertical_access/env_tower_03_vertical_access_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/vertical_access/env_tower_03_vertical_access_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-VERTICAL-ACCESS"
     },
     {
       "package_id": "tower_03/turbine_0",
@@ -11242,9 +11839,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "turbine_0.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "turbine_0.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/turbine_0/env_tower_03_turbine_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/turbine_0/env_tower_03_turbine_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-TURBINE-0"
     },
     {
       "package_id": "tower_03/turbine_1",
@@ -11293,9 +11893,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "turbine_1.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "turbine_1.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/turbine_1/env_tower_03_turbine_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/turbine_1/env_tower_03_turbine_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-TURBINE-1"
     },
     {
       "package_id": "tower_03/exhaust_0",
@@ -11344,9 +11947,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "exhaust_0.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "exhaust_0.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/exhaust_0/env_tower_03_exhaust_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/exhaust_0/env_tower_03_exhaust_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-EXHAUST-0"
     },
     {
       "package_id": "tower_03/exhaust_1",
@@ -11395,9 +12001,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "exhaust_1.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "exhaust_1.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/exhaust_1/env_tower_03_exhaust_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/exhaust_1/env_tower_03_exhaust_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-EXHAUST-1"
     },
     {
       "package_id": "tower_03/exhaust_2",
@@ -11446,9 +12055,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "exhaust_2.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "exhaust_2.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/exhaust_2/env_tower_03_exhaust_2_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/exhaust_2/env_tower_03_exhaust_2_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-EXHAUST-2"
     },
     {
       "package_id": "tower_03/covered_equipment",
@@ -11497,9 +12109,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "covered_equipment.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "covered_equipment.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/covered_equipment/env_tower_03_covered_equipment_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/covered_equipment/env_tower_03_covered_equipment_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-COVERED-EQUIPMENT"
     },
     {
       "package_id": "tower_03/telecom_main",
@@ -11550,9 +12165,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "telecom_main.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "telecom_main.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/telecom_main/env_tower_03_telecom_main_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/telecom_main/env_tower_03_telecom_main_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-TELECOM-MAIN"
     },
     {
       "package_id": "tower_03/satellite_dish",
@@ -11601,9 +12219,12 @@
       "emissive": false,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "satellite_dish.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "satellite_dish.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/satellite_dish/env_tower_03_satellite_dish_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/satellite_dish/env_tower_03_satellite_dish_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-SATELLITE-DISH"
     },
     {
       "package_id": "tower_03/mast_0",
@@ -11654,9 +12275,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "mast_0.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "mast_0.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/mast_0/env_tower_03_mast_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/mast_0/env_tower_03_mast_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-MAST-0"
     },
     {
       "package_id": "tower_03/mast_1",
@@ -11707,9 +12331,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "mast_1.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "mast_1.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/mast_1/env_tower_03_mast_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/mast_1/env_tower_03_mast_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-MAST-1"
     },
     {
       "package_id": "tower_03/mast_2",
@@ -11760,9 +12387,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "mast_2.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "mast_2.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/mast_2/env_tower_03_mast_2_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/mast_2/env_tower_03_mast_2_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-MAST-2"
     },
     {
       "package_id": "tower_03/beacon_0",
@@ -11813,9 +12443,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "beacon_0.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "beacon_0.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_0/env_tower_03_beacon_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_0/env_tower_03_beacon_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-0"
     },
     {
       "package_id": "tower_03/beacon_1",
@@ -11866,9 +12499,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "beacon_1.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "beacon_1.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_1/env_tower_03_beacon_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_1/env_tower_03_beacon_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-1"
     },
     {
       "package_id": "tower_03/beacon_2",
@@ -11919,9 +12555,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "beacon_2.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "beacon_2.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_2/env_tower_03_beacon_2_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_2/env_tower_03_beacon_2_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-2"
     },
     {
       "package_id": "tower_03/beacon_3",
@@ -11972,9 +12611,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "beacon_3.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "beacon_3.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_3/env_tower_03_beacon_3_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_3/env_tower_03_beacon_3_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-3"
     },
     {
       "package_id": "tower_03/beacon_4",
@@ -12025,9 +12667,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "beacon_4.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "beacon_4.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_4/env_tower_03_beacon_4_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_4/env_tower_03_beacon_4_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-4"
     },
     {
       "package_id": "tower_03/beacon_5",
@@ -12078,9 +12723,12 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "beacon_5.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "beacon_5.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_5/env_tower_03_beacon_5_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_5/env_tower_03_beacon_5_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-5"
     },
     {
       "package_id": "tower_03/beacon_6",
@@ -12131,12 +12779,16 @@
       "emissive": true,
       "dependencies": [],
       "fixed_display_attachment": true,
-      "collision_status": "not_authored",
-      "exported": false,
-      "expected_export": "beacon_6.glb"
+      "collision_status": "none_visual_only",
+      "exported": true,
+      "expected_export": "beacon_6.glb",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_6/env_tower_03_beacon_6_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_03/beacon_6/env_tower_03_beacon_6_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-6"
     }
   ],
-  "ledger_status": "Blender源已完成",
-  "runtime_integrated": false,
-  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx"
+  "ledger_status": "已导入；优化完成",
+  "runtime_integrated": true,
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn"
 }

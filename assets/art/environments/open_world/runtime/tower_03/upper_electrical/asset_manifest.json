@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/upper_electrical",
+  "slug": "upper_electrical",
+  "display_name": "机电箱_upper_electrical",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机电箱_upper_electrical_资产包",
+  "objects": [
+    "机电箱_upper_electrical"
+  ],
+  "root_object": "机电箱_upper_electrical",
+  "world_position": [
+    17,
+    13,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    15.75,
+    11.715000001192093,
+    48.09999999850989
+  ],
+  "bounds_max": [
+    18.272077620333754,
+    14.149999976158142,
+    51.57999997615814
+  ],
+  "dimensions": [
+    2.5220776203337536,
+    2.4349999749660487,
+    3.479999977648255
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "upper_electrical.glb",
+  "anchor_blender": [
+    17.01103973388672,
+    12.932499885559082,
+    48.099998474121094
+  ],
+  "position_godot": [
+    17.01103973388672,
+    48.099998474121094,
+    -12.932499885559082
+  ],
+  "bounds_blender": [
+    [
+      15.75,
+      11.71500015258789,
+      48.099998474121094
+    ],
+    [
+      18.272077560424805,
+      14.149999618530273,
+      51.57999801635742
+    ]
+  ],
+  "triangle_count": 583,
+  "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-ELECTRICAL",
+  "glb": "assets/art/environments/open_world/components/tower_03/upper_electrical/env_tower_03_upper_electrical_visual_top3d.glb",
+  "glb_sha256": "a64b7235e3cac0ac41865530e4dbdcdaa81b325da107e1a2c610a1a987fdcc13",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/upper_electrical/env_tower_03_upper_electrical_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

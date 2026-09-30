@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/construction_elevator",
+  "display_name": "双笼施工电梯_导轨附墙架",
+  "slug": "construction_elevator",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "双笼施工电梯_导轨附墙架_资产包",
+  "objects": [
+    "双笼施工电梯_导轨附墙架"
+  ],
+  "root_object": "双笼施工电梯_导轨附墙架",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    13.25,
+    -29.65464210510254,
+    0.5
+  ],
+  "bounds_max": [
+    24.149999618530273,
+    -24.0,
+    89.0224838256836
+  ],
+  "dimensions": [
+    10.899999618530273,
+    5.654642105102539,
+    88.5224838256836
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "construction_elevator.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/facilities/construction_elevator/asset_manifest.json",
+  "anchor_blender": [
+    18.700000762939453,
+    -26.827320098876953,
+    0.5
+  ],
+  "position_godot": [
+    18.700000762939453,
+    0.5,
+    26.827320098876953
+  ],
+  "bounds_blender": [
+    [
+      13.25,
+      -29.65464210510254,
+      0.5
+    ],
+    [
+      24.149999618530273,
+      -24.0,
+      89.0224838256836
+    ]
+  ],
+  "triangle_count": 8712,
+  "asset_id": "ENV-OPENWORLD-TOWER02-CONSTRUCTION-ELEVATOR",
+  "glb": "assets/art/environments/open_world/components/tower_02/construction_elevator/env_tower_02_construction_elevator_visual_top3d.glb",
+  "glb_sha256": "93b1a5a4cc606090a70d063b49697c79e1f7119a87070113f8b6962878b3d9fb",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/construction_elevator/env_tower_02_construction_elevator_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

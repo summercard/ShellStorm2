@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/scaffold_02",
+  "display_name": "立面_02_脚手架围网",
+  "slug": "scaffold_02",
+  "category": "scaffold",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "立面_02_脚手架围网_资产包",
+  "objects": [
+    "立面_02_脚手架围网"
+  ],
+  "root_object": "立面_02_脚手架围网",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -10.074999809265137,
+    -20.600000381469727,
+    0.5350000262260437
+  ],
+  "bounds_max": [
+    0.07500000298023224,
+    -18.149999618530273,
+    88.8208236694336
+  ],
+  "dimensions": [
+    10.149999812245369,
+    2.450000762939453,
+    88.28582364320755
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "scaffold_02.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/scaffold/scaffold_02/asset_manifest.json",
+  "anchor_blender": [
+    -5.0,
+    -19.375,
+    0.5350000262260437
+  ],
+  "position_godot": [
+    -5.0,
+    0.5350000262260437,
+    19.375
+  ],
+  "bounds_blender": [
+    [
+      -10.074999809265137,
+      -20.600000381469727,
+      0.5350000262260437
+    ],
+    [
+      0.07500000298023224,
+      -18.149999618530273,
+      88.8208236694336
+    ]
+  ],
+  "triangle_count": 3228,
+  "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-02",
+  "glb": "assets/art/environments/open_world/components/tower_02/scaffold_02/env_tower_02_scaffold_02_visual_top3d.glb",
+  "glb_sha256": "7146b2b6e1a83b1ce63261be22b0708975fbcccbcdfcb45cdfc1efb6fc751ef5",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_02/env_tower_02_scaffold_02_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

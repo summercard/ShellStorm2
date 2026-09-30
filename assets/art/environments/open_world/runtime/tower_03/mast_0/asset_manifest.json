@@ -1,0 +1,82 @@
+{
+  "package_id": "tower_03/mast_0",
+  "slug": "mast_0",
+  "display_name": "辅助天线避雷杆_0",
+  "category": "telecom",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "辅助天线避雷杆_0_资产包",
+  "objects": [
+    "辅助天线避雷杆_0",
+    "辅助天线避雷杆_0_柔和自发光"
+  ],
+  "root_object": "辅助天线避雷杆_0",
+  "world_position": [
+    10,
+    14.5,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    9.02495288848877,
+    13.649999618530273,
+    48.08747863769531
+  ],
+  "bounds_max": [
+    10.97504711151123,
+    15.350000381469727,
+    56.849998474121094
+  ],
+  "dimensions": [
+    1.950094223022461,
+    1.7000007629394531,
+    8.762519836425781
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "mast_0.glb",
+  "anchor_blender": [
+    10.0,
+    14.5,
+    48.08747863769531
+  ],
+  "position_godot": [
+    10.0,
+    48.08747863769531,
+    -14.5
+  ],
+  "bounds_blender": [
+    [
+      9.02495288848877,
+      13.649999618530273,
+      48.08747863769531
+    ],
+    [
+      10.97504711151123,
+      15.350000381469727,
+      56.849998474121094
+    ]
+  ],
+  "triangle_count": 440,
+  "asset_id": "ENV-OPENWORLD-TOWER03-MAST-0",
+  "glb": "assets/art/environments/open_world/components/tower_03/mast_0/env_tower_03_mast_0_visual_top3d.glb",
+  "glb_sha256": "8a86fba211540ae2be814d51ae436faa6d7575dbc0e8fdfba267a2e1f5f1a517",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/mast_0/env_tower_03_mast_0_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

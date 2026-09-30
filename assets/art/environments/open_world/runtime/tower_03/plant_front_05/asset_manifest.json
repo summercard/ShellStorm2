@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/plant_front_05",
+  "slug": "plant_front_05",
+  "display_name": "机电箱_plant_front_05",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机电箱_plant_front_05_资产包",
+  "objects": [
+    "机电箱_plant_front_05"
+  ],
+  "root_object": "机电箱_plant_front_05",
+  "world_position": [
+    23,
+    -6,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    22.0,
+    -7.084999998807906,
+    40.09999999850989
+  ],
+  "bounds_max": [
+    24.0,
+    -5.050000011920929,
+    42.28
+  ],
+  "dimensions": [
+    2.0,
+    2.0349999868869775,
+    2.1800000014901144
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "plant_front_05.glb",
+  "anchor_blender": [
+    23.0,
+    -6.067500114440918,
+    40.099998474121094
+  ],
+  "position_godot": [
+    23.0,
+    40.099998474121094,
+    6.067500114440918
+  ],
+  "bounds_blender": [
+    [
+      22.0,
+      -7.085000038146973,
+      40.099998474121094
+    ],
+    [
+      24.0,
+      -5.050000190734863,
+      42.279998779296875
+    ]
+  ],
+  "triangle_count": 495,
+  "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-05",
+  "glb": "assets/art/environments/open_world/components/tower_03/plant_front_05/env_tower_03_plant_front_05_visual_top3d.glb",
+  "glb_sha256": "6312a8304b31c69fae96acc0c3cb384f456289332579c52e53f8fb81f53f4f78",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/plant_front_05/env_tower_03_plant_front_05_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

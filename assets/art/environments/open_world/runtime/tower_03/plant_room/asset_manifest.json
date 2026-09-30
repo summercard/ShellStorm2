@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/plant_room",
+  "slug": "plant_room",
+  "display_name": "后部抬高机房_面板门百叶",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "后部抬高机房_面板门百叶_资产包",
+  "objects": [
+    "后部抬高机房_面板门百叶"
+  ],
+  "root_object": "后部抬高机房_面板门百叶",
+  "world_position": [
+    7,
+    8,
+    40
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -13.299999237060547,
+    -4.470000000298024,
+    40.00000009536743
+  ],
+  "bounds_max": [
+    27.299999237060547,
+    20.414999998807907,
+    48.000000005960466
+  ],
+  "dimensions": [
+    40.599998474121094,
+    24.88499999910593,
+    7.999999910593033
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "plant_room.glb",
+  "anchor_blender": [
+    7.0,
+    7.972500324249268,
+    40.0
+  ],
+  "position_godot": [
+    7.0,
+    40.0,
+    -7.972500324249268
+  ],
+  "bounds_blender": [
+    [
+      -13.299999237060547,
+      -4.470000267028809,
+      40.0
+    ],
+    [
+      27.299999237060547,
+      20.415000915527344,
+      48.0
+    ]
+  ],
+  "triangle_count": 7665,
+  "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-ROOM",
+  "glb": "assets/art/environments/open_world/components/tower_03/plant_room/env_tower_03_plant_room_visual_top3d.glb",
+  "glb_sha256": "3e61a35306d234714fd86cef0a11204203769d6006357053e51a3f35ccaca5c1",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/plant_room/env_tower_03_plant_room_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/vertical_access",
+  "slug": "vertical_access",
+  "display_name": "机房及外墙爬梯_防护扶手",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "机房及外墙爬梯_防护扶手_资产包",
+  "objects": [
+    "机房及外墙爬梯_防护扶手"
+  ],
+  "root_object": "机房及外墙爬梯_防护扶手",
+  "world_position": [
+    29.630001068115234,
+    -13.599999904632568,
+    0.950545072555542
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    25.0,
+    -22.57132911682129,
+    0.950545072555542
+  ],
+  "bounds_max": [
+    34.26000213623047,
+    -4.628670692443848,
+    50.04999923706055
+  ],
+  "dimensions": [
+    9.260002136230469,
+    17.94265842437744,
+    49.099454164505005
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "vertical_access.glb",
+  "anchor_blender": [
+    29.630001068115234,
+    -13.600000381469727,
+    0.950545072555542
+  ],
+  "position_godot": [
+    29.630001068115234,
+    0.950545072555542,
+    13.600000381469727
+  ],
+  "bounds_blender": [
+    [
+      25.0,
+      -22.57132911682129,
+      0.950545072555542
+    ],
+    [
+      34.26000213623047,
+      -4.628671646118164,
+      50.04999923706055
+    ]
+  ],
+  "triangle_count": 6516,
+  "asset_id": "ENV-OPENWORLD-TOWER03-VERTICAL-ACCESS",
+  "glb": "assets/art/environments/open_world/components/tower_03/vertical_access/env_tower_03_vertical_access_visual_top3d.glb",
+  "glb_sha256": "97e9e178e1f3116987ea86707747820ed1b304d656ea680f205ce84efefbf0eb",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/vertical_access/env_tower_03_vertical_access_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

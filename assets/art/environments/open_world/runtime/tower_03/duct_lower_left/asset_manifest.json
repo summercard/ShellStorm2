@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/duct_lower_left",
+  "slug": "duct_lower_left",
+  "display_name": "左机组回风弯管",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "左机组回风弯管_资产包",
+  "objects": [
+    "左机组回风弯管"
+  ],
+  "root_object": "左机组回风弯管",
+  "world_position": [
+    -25,
+    13.0,
+    42.8
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -25.050000000745058,
+    10.999999998509884,
+    39.0
+  ],
+  "bounds_max": [
+    -11.835000038146973,
+    15.000000001490116,
+    44.1618186712265
+  ],
+  "dimensions": [
+    13.214999962598085,
+    4.000000002980233,
+    5.161818671226499
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "duct_lower_left.glb",
+  "anchor_blender": [
+    -18.4424991607666,
+    13.0,
+    39.0
+  ],
+  "position_godot": [
+    -18.4424991607666,
+    39.0,
+    -13.0
+  ],
+  "bounds_blender": [
+    [
+      -25.049999237060547,
+      11.0,
+      39.0
+    ],
+    [
+      -11.835000038146973,
+      15.0,
+      44.16181945800781
+    ]
+  ],
+  "triangle_count": 1164,
+  "asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-LEFT",
+  "glb": "assets/art/environments/open_world/components/tower_03/duct_lower_left/env_tower_03_duct_lower_left_visual_top3d.glb",
+  "glb_sha256": "dd7dd18c484190bb815f3dd4866d934a33229c8aba92247d91857ee2b88441d6",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/duct_lower_left/env_tower_03_duct_lower_left_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

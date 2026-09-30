@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/roof_column_14",
+  "display_name": "屋顶柱_14_错层钢筋笼",
+  "slug": "roof_column_14",
+  "category": "roof",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "屋顶柱_14_错层钢筋笼_资产包",
+  "objects": [
+    "屋顶柱_14_错层钢筋笼"
+  ],
+  "root_object": "屋顶柱_14_错层钢筋笼",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    22.597625732421875,
+    16.30500030517578,
+    84.5
+  ],
+  "bounds_max": [
+    29.402374267578125,
+    19.635000228881836,
+    95.5999984741211
+  ],
+  "dimensions": [
+    6.80474853515625,
+    3.3299999237060547,
+    11.099998474121094
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_column_14.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/roof/roof_column_14/asset_manifest.json",
+  "anchor_blender": [
+    26.0,
+    17.970001220703125,
+    84.5
+  ],
+  "position_godot": [
+    26.0,
+    84.5,
+    -17.970001220703125
+  ],
+  "bounds_blender": [
+    [
+      22.597625732421875,
+      16.30500030517578,
+      84.5
+    ],
+    [
+      29.402374267578125,
+      19.635000228881836,
+      95.5999984741211
+    ]
+  ],
+  "triangle_count": 3880,
+  "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-14",
+  "glb": "assets/art/environments/open_world/components/tower_02/roof_column_14/env_tower_02_roof_column_14_visual_top3d.glb",
+  "glb_sha256": "301c5ac4256a53219d770d7038ff60a700d84e0bb8da7df7cb854d894eb31f41",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_14/env_tower_02_roof_column_14_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

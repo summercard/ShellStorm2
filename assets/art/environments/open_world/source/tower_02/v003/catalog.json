@@ -8,7 +8,7 @@
   "floor_count": 20,
   "floor_height_m": 4.2,
   "source_status": "authored_not_runtime",
-  "ledger_status": "Blender源已完成",
+  "ledger_status": "已导入；优化完成",
   "packages": [
     {
       "package_id": "tower_02/floor_00",
@@ -56,11 +56,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_00.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_00/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_00/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_00/env_tower_02_floor_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-00"
     },
     {
       "package_id": "tower_02/floor_01",
@@ -108,11 +111,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_01.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_01/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_01/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_01/env_tower_02_floor_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_01/env_tower_02_floor_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-01"
     },
     {
       "package_id": "tower_02/floor_02",
@@ -160,11 +166,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_02.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_02/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_02/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_02/env_tower_02_floor_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_02/env_tower_02_floor_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-02"
     },
     {
       "package_id": "tower_02/floor_03",
@@ -212,11 +221,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_03.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_03/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_03/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_03/env_tower_02_floor_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_03/env_tower_02_floor_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-03"
     },
     {
       "package_id": "tower_02/floor_04",
@@ -264,11 +276,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_04.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_04/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_04/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_04/env_tower_02_floor_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_04/env_tower_02_floor_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-04"
     },
     {
       "package_id": "tower_02/floor_05",
@@ -316,11 +331,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_05.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_05/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_05/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_05/env_tower_02_floor_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_05/env_tower_02_floor_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-05"
     },
     {
       "package_id": "tower_02/floor_06",
@@ -368,11 +386,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_06.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_06/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_06/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_06/env_tower_02_floor_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_06/env_tower_02_floor_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-06"
     },
     {
       "package_id": "tower_02/floor_07",
@@ -420,11 +441,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_07.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_07/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_07/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_07/env_tower_02_floor_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_07/env_tower_02_floor_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-07"
     },
     {
       "package_id": "tower_02/floor_08",
@@ -472,11 +496,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_08.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_08/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_08/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_08/env_tower_02_floor_08_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_08/env_tower_02_floor_08_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-08"
     },
     {
       "package_id": "tower_02/floor_09",
@@ -524,11 +551,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_09.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_09/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_09/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_09/env_tower_02_floor_09_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_09/env_tower_02_floor_09_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-09"
     },
     {
       "package_id": "tower_02/floor_10",
@@ -576,11 +606,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_10.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_10/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_10/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_10/env_tower_02_floor_10_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_10/env_tower_02_floor_10_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-10"
     },
     {
       "package_id": "tower_02/floor_11",
@@ -628,11 +661,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_11.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_11/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_11/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_11/env_tower_02_floor_11_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_11/env_tower_02_floor_11_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-11"
     },
     {
       "package_id": "tower_02/floor_12",
@@ -680,11 +716,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_12.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_12/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_12/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_12/env_tower_02_floor_12_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_12/env_tower_02_floor_12_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-12"
     },
     {
       "package_id": "tower_02/floor_13",
@@ -732,11 +771,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_13.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_13/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_13/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_13/env_tower_02_floor_13_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_13/env_tower_02_floor_13_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-13"
     },
     {
       "package_id": "tower_02/floor_14",
@@ -784,11 +826,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_14.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_14/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_14/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_14/env_tower_02_floor_14_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_14/env_tower_02_floor_14_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-14"
     },
     {
       "package_id": "tower_02/floor_15",
@@ -836,11 +881,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_15.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_15/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_15/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_15/env_tower_02_floor_15_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_15/env_tower_02_floor_15_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-15"
     },
     {
       "package_id": "tower_02/floor_16",
@@ -888,11 +936,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_16.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_16/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_16/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_16/env_tower_02_floor_16_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_16/env_tower_02_floor_16_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-16"
     },
     {
       "package_id": "tower_02/floor_17",
@@ -940,11 +991,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_17.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_17/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_17/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_17/env_tower_02_floor_17_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_17/env_tower_02_floor_17_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-17"
     },
     {
       "package_id": "tower_02/floor_18",
@@ -992,11 +1046,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_18.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_18/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_18/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_18/env_tower_02_floor_18_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_18/env_tower_02_floor_18_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-18"
     },
     {
       "package_id": "tower_02/floor_19",
@@ -1044,11 +1101,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_19.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_19/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_19/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_19/env_tower_02_floor_19_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_19/env_tower_02_floor_19_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-19"
     },
     {
       "package_id": "tower_02/floor_20",
@@ -1096,11 +1156,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "floor_20.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/floor_20/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/floor_20/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/floor_20/env_tower_02_floor_20_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/floor_20/env_tower_02_floor_20_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-20"
     },
     {
       "package_id": "tower_02/core_0",
@@ -1148,11 +1211,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "core_0.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/core_0/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/core_0/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/core_0/env_tower_02_core_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/core_0/env_tower_02_core_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CORE-0"
     },
     {
       "package_id": "tower_02/core_1",
@@ -1200,11 +1266,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "core_1.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/architecture/core_1/asset_manifest.json"
+      "manifest_path": "component_packages/architecture/core_1/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/core_1/env_tower_02_core_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/core_1/env_tower_02_core_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CORE-1"
     },
     {
       "package_id": "tower_02/scaffold_00",
@@ -1252,11 +1321,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_00.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_00/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_00/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_00/env_tower_02_scaffold_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_00/env_tower_02_scaffold_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-00"
     },
     {
       "package_id": "tower_02/scaffold_01",
@@ -1304,11 +1376,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_01.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_01/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_01/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_01/env_tower_02_scaffold_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_01/env_tower_02_scaffold_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-01"
     },
     {
       "package_id": "tower_02/scaffold_02",
@@ -1356,11 +1431,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_02.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_02/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_02/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_02/env_tower_02_scaffold_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_02/env_tower_02_scaffold_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-02"
     },
     {
       "package_id": "tower_02/scaffold_03",
@@ -1408,11 +1486,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_03.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_03/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_03/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_03/env_tower_02_scaffold_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_03/env_tower_02_scaffold_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-03"
     },
     {
       "package_id": "tower_02/scaffold_04",
@@ -1460,11 +1541,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_04.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_04/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_04/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_04/env_tower_02_scaffold_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_04/env_tower_02_scaffold_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-04"
     },
     {
       "package_id": "tower_02/scaffold_05",
@@ -1512,11 +1596,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_05.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_05/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_05/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_05/env_tower_02_scaffold_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_05/env_tower_02_scaffold_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-05"
     },
     {
       "package_id": "tower_02/scaffold_06",
@@ -1564,11 +1651,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_06.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_06/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_06/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_06/env_tower_02_scaffold_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_06/env_tower_02_scaffold_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-06"
     },
     {
       "package_id": "tower_02/scaffold_07",
@@ -1616,11 +1706,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "scaffold_07.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/scaffold_07/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/scaffold_07/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_07/env_tower_02_scaffold_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/scaffold_07/env_tower_02_scaffold_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-07"
     },
     {
       "package_id": "tower_02/climbing_screen_00",
@@ -1668,11 +1761,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_00.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_00/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_00/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_00/env_tower_02_climbing_screen_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_00/env_tower_02_climbing_screen_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-00"
     },
     {
       "package_id": "tower_02/climbing_screen_01",
@@ -1720,11 +1816,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_01.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_01/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_01/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-01"
     },
     {
       "package_id": "tower_02/climbing_screen_02",
@@ -1772,11 +1871,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_02.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_02/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_02/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_02/env_tower_02_climbing_screen_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_02/env_tower_02_climbing_screen_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-02"
     },
     {
       "package_id": "tower_02/climbing_screen_03",
@@ -1824,11 +1926,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_03.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_03/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_03/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_03/env_tower_02_climbing_screen_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_03/env_tower_02_climbing_screen_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-03"
     },
     {
       "package_id": "tower_02/climbing_screen_04",
@@ -1876,11 +1981,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_04.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_04/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_04/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_04/env_tower_02_climbing_screen_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_04/env_tower_02_climbing_screen_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-04"
     },
     {
       "package_id": "tower_02/climbing_screen_05",
@@ -1928,11 +2036,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_05.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_05/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_05/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_05/env_tower_02_climbing_screen_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_05/env_tower_02_climbing_screen_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-05"
     },
     {
       "package_id": "tower_02/climbing_screen_06",
@@ -1980,11 +2091,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_06.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_06/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_06/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_06/env_tower_02_climbing_screen_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_06/env_tower_02_climbing_screen_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-06"
     },
     {
       "package_id": "tower_02/climbing_screen_07",
@@ -2032,11 +2146,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "climbing_screen_07.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/scaffold/climbing_screen_07/asset_manifest.json"
+      "manifest_path": "component_packages/scaffold/climbing_screen_07/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_07/env_tower_02_climbing_screen_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_07/env_tower_02_climbing_screen_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-07"
     },
     {
       "package_id": "tower_02/construction_elevator",
@@ -2084,11 +2201,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "construction_elevator.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/facilities/construction_elevator/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/construction_elevator/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/construction_elevator/env_tower_02_construction_elevator_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/construction_elevator/env_tower_02_construction_elevator_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CONSTRUCTION-ELEVATOR"
     },
     {
       "package_id": "tower_02/roof_column_00",
@@ -2136,11 +2256,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_00.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_00/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_00/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_00/env_tower_02_roof_column_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_00/env_tower_02_roof_column_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-00"
     },
     {
       "package_id": "tower_02/roof_column_01",
@@ -2188,11 +2311,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_01.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_01/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_01/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_01/env_tower_02_roof_column_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_01/env_tower_02_roof_column_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-01"
     },
     {
       "package_id": "tower_02/roof_column_02",
@@ -2240,11 +2366,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_02.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_02/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_02/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_02/env_tower_02_roof_column_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_02/env_tower_02_roof_column_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-02"
     },
     {
       "package_id": "tower_02/roof_column_03",
@@ -2292,11 +2421,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_03.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_03/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_03/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_03/env_tower_02_roof_column_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_03/env_tower_02_roof_column_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-03"
     },
     {
       "package_id": "tower_02/roof_column_04",
@@ -2344,11 +2476,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_04.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_04/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_04/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_04/env_tower_02_roof_column_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_04/env_tower_02_roof_column_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-04"
     },
     {
       "package_id": "tower_02/roof_column_05",
@@ -2396,11 +2531,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_05.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_05/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_05/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_05/env_tower_02_roof_column_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_05/env_tower_02_roof_column_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-05"
     },
     {
       "package_id": "tower_02/roof_column_06",
@@ -2448,11 +2586,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_06.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_06/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_06/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_06/env_tower_02_roof_column_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_06/env_tower_02_roof_column_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-06"
     },
     {
       "package_id": "tower_02/roof_column_07",
@@ -2500,11 +2641,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_07.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_07/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_07/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_07/env_tower_02_roof_column_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_07/env_tower_02_roof_column_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-07"
     },
     {
       "package_id": "tower_02/roof_column_08",
@@ -2552,11 +2696,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_08.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_08/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_08/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_08/env_tower_02_roof_column_08_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_08/env_tower_02_roof_column_08_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-08"
     },
     {
       "package_id": "tower_02/roof_column_09",
@@ -2604,11 +2751,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_09.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_09/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_09/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_09/env_tower_02_roof_column_09_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_09/env_tower_02_roof_column_09_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-09"
     },
     {
       "package_id": "tower_02/roof_column_10",
@@ -2656,11 +2806,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_10.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_10/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_10/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_10/env_tower_02_roof_column_10_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_10/env_tower_02_roof_column_10_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-10"
     },
     {
       "package_id": "tower_02/roof_column_11",
@@ -2708,11 +2861,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_11.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_11/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_11/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_11/env_tower_02_roof_column_11_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_11/env_tower_02_roof_column_11_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-11"
     },
     {
       "package_id": "tower_02/roof_column_12",
@@ -2760,11 +2916,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_12.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_12/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_12/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_12/env_tower_02_roof_column_12_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_12/env_tower_02_roof_column_12_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-12"
     },
     {
       "package_id": "tower_02/roof_column_13",
@@ -2812,11 +2971,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_13.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_13/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_13/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_13/env_tower_02_roof_column_13_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_13/env_tower_02_roof_column_13_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-13"
     },
     {
       "package_id": "tower_02/roof_column_14",
@@ -2864,11 +3026,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_column_14.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_column_14/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_column_14/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_14/env_tower_02_roof_column_14_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_column_14/env_tower_02_roof_column_14_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-14"
     },
     {
       "package_id": "tower_02/roof_formwork_0",
@@ -2916,11 +3081,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_formwork_0.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_formwork_0/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_formwork_0/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_0/env_tower_02_roof_formwork_0_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_0/env_tower_02_roof_formwork_0_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-0"
     },
     {
       "package_id": "tower_02/roof_formwork_1",
@@ -2968,11 +3136,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_formwork_1.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_formwork_1/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_formwork_1/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_1/env_tower_02_roof_formwork_1_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_1/env_tower_02_roof_formwork_1_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-1"
     },
     {
       "package_id": "tower_02/roof_formwork_2",
@@ -3020,11 +3191,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_formwork_2.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_formwork_2/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_formwork_2/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_2/env_tower_02_roof_formwork_2_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_2/env_tower_02_roof_formwork_2_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-2"
     },
     {
       "package_id": "tower_02/roof_shoring_00",
@@ -3072,11 +3246,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_shoring_00.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_shoring_00/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_shoring_00/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-00"
     },
     {
       "package_id": "tower_02/roof_shoring_01",
@@ -3124,11 +3301,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_shoring_01.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_shoring_01/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_shoring_01/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_01/env_tower_02_roof_shoring_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_01/env_tower_02_roof_shoring_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-01"
     },
     {
       "package_id": "tower_02/roof_shoring_02",
@@ -3176,11 +3356,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_shoring_02.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_shoring_02/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_shoring_02/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_02/env_tower_02_roof_shoring_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_02/env_tower_02_roof_shoring_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-02"
     },
     {
       "package_id": "tower_02/roof_shoring_03",
@@ -3228,11 +3411,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_shoring_03.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_shoring_03/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_shoring_03/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_03/env_tower_02_roof_shoring_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_03/env_tower_02_roof_shoring_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-03"
     },
     {
       "package_id": "tower_02/roof_supply_00",
@@ -3280,11 +3466,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_00.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_00/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_00/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_00/env_tower_02_roof_supply_00_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_00/env_tower_02_roof_supply_00_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-00"
     },
     {
       "package_id": "tower_02/roof_supply_01",
@@ -3332,11 +3521,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_01.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_01/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_01/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_01/env_tower_02_roof_supply_01_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_01/env_tower_02_roof_supply_01_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-01"
     },
     {
       "package_id": "tower_02/roof_supply_02",
@@ -3384,11 +3576,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_02.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_02/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_02/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_02/env_tower_02_roof_supply_02_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_02/env_tower_02_roof_supply_02_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-02"
     },
     {
       "package_id": "tower_02/roof_supply_03",
@@ -3436,11 +3631,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_03.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_03/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_03/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_03/env_tower_02_roof_supply_03_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_03/env_tower_02_roof_supply_03_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-03"
     },
     {
       "package_id": "tower_02/roof_supply_04",
@@ -3488,11 +3686,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_04.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_04/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_04/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_04/env_tower_02_roof_supply_04_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_04/env_tower_02_roof_supply_04_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-04"
     },
     {
       "package_id": "tower_02/roof_supply_05",
@@ -3540,11 +3741,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_05.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_05/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_05/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_05/env_tower_02_roof_supply_05_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_05/env_tower_02_roof_supply_05_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-05"
     },
     {
       "package_id": "tower_02/roof_supply_06",
@@ -3592,11 +3796,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_06.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_06/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_06/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_06/env_tower_02_roof_supply_06_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_06/env_tower_02_roof_supply_06_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-06"
     },
     {
       "package_id": "tower_02/roof_supply_07",
@@ -3644,11 +3851,14 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_supply_07.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_supply_07/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_supply_07/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_07/env_tower_02_roof_supply_07_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_07/env_tower_02_roof_supply_07_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-07"
     },
     {
       "package_id": "tower_02/crane_00_mast",
@@ -3696,14 +3906,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_00_mast.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_00",
       "assembly_collection": "塔吊1_独立合集",
       "assembly_root": "塔吊1_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_mast/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_mast/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_mast/env_tower_02_crane_00_mast_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_00_mast/env_tower_02_crane_00_mast_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-MAST"
     },
     {
       "package_id": "tower_02/crane_00_slew_cab",
@@ -3751,14 +3964,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_00_slew_cab.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_00",
       "assembly_collection": "塔吊1_独立合集",
       "assembly_root": "塔吊1_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_slew_cab/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_slew_cab/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-SLEW-CAB"
     },
     {
       "package_id": "tower_02/crane_00_jib",
@@ -3806,14 +4022,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_00_jib.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_00",
       "assembly_collection": "塔吊1_独立合集",
       "assembly_root": "塔吊1_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_jib/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_jib/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_jib/env_tower_02_crane_00_jib_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_00_jib/env_tower_02_crane_00_jib_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-JIB"
     },
     {
       "package_id": "tower_02/crane_00_counter_jib",
@@ -3861,14 +4080,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_00_counter_jib.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_00",
       "assembly_collection": "塔吊1_独立合集",
       "assembly_root": "塔吊1_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_counter_jib/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_counter_jib/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_counter_jib/env_tower_02_crane_00_counter_jib_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_00_counter_jib/env_tower_02_crane_00_counter_jib_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-COUNTER-JIB"
     },
     {
       "package_id": "tower_02/crane_00_apex",
@@ -3916,14 +4138,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_00_apex.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_00",
       "assembly_collection": "塔吊1_独立合集",
       "assembly_root": "塔吊1_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_apex/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_apex/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_apex/env_tower_02_crane_00_apex_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_00_apex/env_tower_02_crane_00_apex_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-APEX"
     },
     {
       "package_id": "tower_02/crane_00_trolley",
@@ -3971,14 +4196,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_00_trolley.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_00",
       "assembly_collection": "塔吊1_独立合集",
       "assembly_root": "塔吊1_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_trolley/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_trolley/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_trolley/env_tower_02_crane_00_trolley_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_00_trolley/env_tower_02_crane_00_trolley_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-TROLLEY"
     },
     {
       "package_id": "tower_02/crane_00_hook",
@@ -4026,14 +4254,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_00_hook.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_00",
       "assembly_collection": "塔吊1_独立合集",
       "assembly_root": "塔吊1_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_hook/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_hook/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_hook/env_tower_02_crane_00_hook_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_00_hook/env_tower_02_crane_00_hook_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-HOOK"
     },
     {
       "package_id": "tower_02/crane_01_mast",
@@ -4081,14 +4312,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_01_mast.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_01",
       "assembly_collection": "塔吊2_独立合集",
       "assembly_root": "塔吊2_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_mast/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_mast/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_mast/env_tower_02_crane_01_mast_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_mast/env_tower_02_crane_01_mast_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-MAST"
     },
     {
       "package_id": "tower_02/crane_01_slew_cab",
@@ -4136,14 +4370,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_01_slew_cab.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_01",
       "assembly_collection": "塔吊2_独立合集",
       "assembly_root": "塔吊2_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_slew_cab/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_slew_cab/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-SLEW-CAB"
     },
     {
       "package_id": "tower_02/crane_01_jib",
@@ -4191,14 +4428,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_01_jib.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_01",
       "assembly_collection": "塔吊2_独立合集",
       "assembly_root": "塔吊2_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_jib/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_jib/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_jib/env_tower_02_crane_01_jib_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_jib/env_tower_02_crane_01_jib_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-JIB"
     },
     {
       "package_id": "tower_02/crane_01_counter_jib",
@@ -4246,14 +4486,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_01_counter_jib.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_01",
       "assembly_collection": "塔吊2_独立合集",
       "assembly_root": "塔吊2_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_counter_jib/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_counter_jib/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_counter_jib/env_tower_02_crane_01_counter_jib_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_counter_jib/env_tower_02_crane_01_counter_jib_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-COUNTER-JIB"
     },
     {
       "package_id": "tower_02/crane_01_apex",
@@ -4301,14 +4544,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_01_apex.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_01",
       "assembly_collection": "塔吊2_独立合集",
       "assembly_root": "塔吊2_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_apex/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_apex/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_apex/env_tower_02_crane_01_apex_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_apex/env_tower_02_crane_01_apex_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-APEX"
     },
     {
       "package_id": "tower_02/crane_01_trolley",
@@ -4356,14 +4602,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_01_trolley.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_01",
       "assembly_collection": "塔吊2_独立合集",
       "assembly_root": "塔吊2_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_trolley/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_trolley/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_trolley/env_tower_02_crane_01_trolley_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_trolley/env_tower_02_crane_01_trolley_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-TROLLEY"
     },
     {
       "package_id": "tower_02/crane_01_hook",
@@ -4411,14 +4660,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_01_hook.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_01",
       "assembly_collection": "塔吊2_独立合集",
       "assembly_root": "塔吊2_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_hook/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_01/crane_01_hook/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_hook/env_tower_02_crane_01_hook_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_01_hook/env_tower_02_crane_01_hook_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-HOOK"
     },
     {
       "package_id": "tower_02/crane_02_mast",
@@ -4466,14 +4718,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_02_mast.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_02",
       "assembly_collection": "塔吊3_独立合集",
       "assembly_root": "塔吊3_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_mast/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_mast/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_mast/env_tower_02_crane_02_mast_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_02_mast/env_tower_02_crane_02_mast_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-MAST"
     },
     {
       "package_id": "tower_02/crane_02_slew_cab",
@@ -4521,14 +4776,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_02_slew_cab.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_02",
       "assembly_collection": "塔吊3_独立合集",
       "assembly_root": "塔吊3_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_slew_cab/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_slew_cab/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_slew_cab/env_tower_02_crane_02_slew_cab_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_02_slew_cab/env_tower_02_crane_02_slew_cab_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-SLEW-CAB"
     },
     {
       "package_id": "tower_02/crane_02_jib",
@@ -4576,14 +4834,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_02_jib.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_02",
       "assembly_collection": "塔吊3_独立合集",
       "assembly_root": "塔吊3_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_jib/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_jib/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_jib/env_tower_02_crane_02_jib_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_02_jib/env_tower_02_crane_02_jib_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-JIB"
     },
     {
       "package_id": "tower_02/crane_02_counter_jib",
@@ -4631,14 +4892,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_02_counter_jib.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_02",
       "assembly_collection": "塔吊3_独立合集",
       "assembly_root": "塔吊3_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_counter_jib/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_counter_jib/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_counter_jib/env_tower_02_crane_02_counter_jib_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_02_counter_jib/env_tower_02_crane_02_counter_jib_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-COUNTER-JIB"
     },
     {
       "package_id": "tower_02/crane_02_apex",
@@ -4686,14 +4950,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_02_apex.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_02",
       "assembly_collection": "塔吊3_独立合集",
       "assembly_root": "塔吊3_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_apex/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_apex/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_apex/env_tower_02_crane_02_apex_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_02_apex/env_tower_02_crane_02_apex_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-APEX"
     },
     {
       "package_id": "tower_02/crane_02_trolley",
@@ -4741,14 +5008,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_02_trolley.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_02",
       "assembly_collection": "塔吊3_独立合集",
       "assembly_root": "塔吊3_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_trolley/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_trolley/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_trolley/env_tower_02_crane_02_trolley_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_02_trolley/env_tower_02_crane_02_trolley_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-TROLLEY"
     },
     {
       "package_id": "tower_02/crane_02_hook",
@@ -4796,14 +5066,17 @@
       "animation": false,
       "emissive": false,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "crane_02_hook.glb",
       "fixed_display_attachment": true,
       "assembly_id": "tower_02/crane_02",
       "assembly_collection": "塔吊3_独立合集",
       "assembly_root": "塔吊3_独立根",
-      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_hook/asset_manifest.json"
+      "manifest_path": "component_packages/facilities/cranes/crane_02/crane_02_hook/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_hook/env_tower_02_crane_02_hook_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/crane_02_hook/env_tower_02_crane_02_hook_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-HOOK"
     },
     {
       "package_id": "tower_02/roof_warning",
@@ -4853,11 +5126,14 @@
       "animation": false,
       "emissive": true,
       "dependencies": [],
-      "collision_status": "not_authored",
-      "exported": false,
+      "collision_status": "none_visual_only",
+      "exported": true,
       "expected_export": "roof_warning.glb",
       "fixed_display_attachment": true,
-      "manifest_path": "component_packages/roof/roof_warning/asset_manifest.json"
+      "manifest_path": "component_packages/roof/roof_warning/asset_manifest.json",
+      "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/roof_warning/env_tower_02_roof_warning_root_top3d.tscn",
+      "runtime_glb": "assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb",
+      "runtime_asset_id": "ENV-OPENWORLD-TOWER02-ROOF-WARNING"
     }
   ],
   "asset_id": "ENV-OPENWORLD-TOWER02",
@@ -4925,7 +5201,7 @@
           122.3499984741211
         ]
       },
-      "exported": false
+      "exported": true
     },
     {
       "assembly_id": "tower_02/crane_01",
@@ -4969,7 +5245,7 @@
           135.35000610351562
         ]
       },
-      "exported": false
+      "exported": true
     },
     {
       "assembly_id": "tower_02/crane_02",
@@ -5013,7 +5289,9 @@
           118.3499984741211
         ]
       },
-      "exported": false
+      "exported": true
     }
-  ]
+  ],
+  "runtime_integrated": true,
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn"
 }

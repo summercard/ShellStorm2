@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/duct_lower_front",
+  "slug": "duct_lower_front",
+  "display_name": "左前贴边长风管",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "左前贴边长风管_资产包",
+  "objects": [
+    "左前贴边长风管"
+  ],
+  "root_object": "左前贴边长风管",
+  "world_position": [
+    -28,
+    -15.8,
+    41.7
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -28.050000000745058,
+    -17.400000001490117,
+    39.650000005960464
+  ],
+  "bounds_max": [
+    -17.517500042915344,
+    -14.199999998509885,
+    43.09499998092652
+  ],
+  "dimensions": [
+    10.532499957829714,
+    3.2000000029802322,
+    3.444999974966052
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "duct_lower_front.glb",
+  "anchor_blender": [
+    -22.783748626708984,
+    -15.799999237060547,
+    39.650001525878906
+  ],
+  "position_godot": [
+    -22.783748626708984,
+    39.650001525878906,
+    15.799999237060547
+  ],
+  "bounds_blender": [
+    [
+      -28.049999237060547,
+      -17.399999618530273,
+      39.650001525878906
+    ],
+    [
+      -17.517499923706055,
+      -14.199999809265137,
+      43.095001220703125
+    ]
+  ],
+  "triangle_count": 624,
+  "asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-FRONT",
+  "glb": "assets/art/environments/open_world/components/tower_03/duct_lower_front/env_tower_03_duct_lower_front_visual_top3d.glb",
+  "glb_sha256": "37bb354106ebe5f9ddea6687a926f353c8d95c285dc831880b0039978d43d1bd",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/duct_lower_front/env_tower_03_duct_lower_front_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

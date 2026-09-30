@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/ac_lower_right",
+  "slug": "ac_lower_right",
+  "display_name": "右前双风扇空调机组",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "右前双风扇空调机组_资产包",
+  "objects": [
+    "右前双风扇空调机组"
+  ],
+  "root_object": "右前双风扇空调机组",
+  "world_position": [
+    26,
+    -15.5,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    20.65000009536743,
+    -18.5,
+    40.09999999850989
+  ],
+  "bounds_max": [
+    31.34999990463257,
+    -12.5,
+    44.12251663208008
+  ],
+  "dimensions": [
+    10.699999809265137,
+    6.0,
+    4.022516633570191
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "ac_lower_right.glb",
+  "anchor_blender": [
+    26.0,
+    -15.5,
+    40.099998474121094
+  ],
+  "position_godot": [
+    26.0,
+    40.099998474121094,
+    15.5
+  ],
+  "bounds_blender": [
+    [
+      20.649999618530273,
+      -18.5,
+      40.099998474121094
+    ],
+    [
+      31.350000381469727,
+      -12.5,
+      44.12251663208008
+    ]
+  ],
+  "triangle_count": 5268,
+  "asset_id": "ENV-OPENWORLD-TOWER03-AC-LOWER-RIGHT",
+  "glb": "assets/art/environments/open_world/components/tower_03/ac_lower_right/env_tower_03_ac_lower_right_visual_top3d.glb",
+  "glb_sha256": "0bb2b4b40139eb6218099939dfbcb86bebb5bfe641062022cfd7e801f5c282d9",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/ac_lower_right/env_tower_03_ac_lower_right_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/facade_03",
+  "slug": "facade_03",
+  "display_name": "幕墙_03_蓝玻璃破损立面",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "幕墙_03_蓝玻璃破损立面_资产包",
+  "objects": [
+    "幕墙_03_蓝玻璃破损立面"
+  ],
+  "root_object": "幕墙_03_蓝玻璃破损立面",
+  "world_position": [
+    5.833333333333336,
+    -22,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -0.039999999105927664,
+    -22.7,
+    0.0399999141693117
+  ],
+  "bounds_max": [
+    12.588628094388866,
+    -20.65,
+    40.025
+  ],
+  "dimensions": [
+    12.628628093494793,
+    2.0500000000000007,
+    39.985000085830684
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "facade_03.glb",
+  "anchor_blender": [
+    6.2743144035339355,
+    -21.674999237060547,
+    0.039999913424253464
+  ],
+  "position_godot": [
+    6.2743144035339355,
+    0.039999913424253464,
+    21.674999237060547
+  ],
+  "bounds_blender": [
+    [
+      -0.039999961853027344,
+      -22.700000762939453,
+      0.039999913424253464
+    ],
+    [
+      12.588628768920898,
+      -20.649999618530273,
+      40.025001525878906
+    ]
+  ],
+  "triangle_count": 6474,
+  "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-03",
+  "glb": "assets/art/environments/open_world/components/tower_03/facade_03/env_tower_03_facade_03_visual_top3d.glb",
+  "glb_sha256": "df082195ee75c18aa6ef24f3b4992b1bd92a72f25c069f6ce20e588a6d4313b0",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/facade_03/env_tower_03_facade_03_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

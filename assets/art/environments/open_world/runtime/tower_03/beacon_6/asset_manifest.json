@@ -1,0 +1,82 @@
+{
+  "package_id": "tower_03/beacon_6",
+  "slug": "beacon_6",
+  "display_name": "周界警示灯_6",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "周界警示灯_6_资产包",
+  "objects": [
+    "周界警示灯_6",
+    "周界警示灯_6_柔和自发光"
+  ],
+  "root_object": "周界警示灯_6",
+  "world_position": [
+    26,
+    19,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    25.84000015258789,
+    18.84783172607422,
+    48.099998474121094
+  ],
+  "bounds_max": [
+    26.15999984741211,
+    19.15216827392578,
+    50.0
+  ],
+  "dimensions": [
+    0.31999969482421875,
+    0.3043365478515625,
+    1.9000015258789062
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "beacon_6.glb",
+  "anchor_blender": [
+    26.0,
+    19.0,
+    48.099998474121094
+  ],
+  "position_godot": [
+    26.0,
+    48.099998474121094,
+    -19.0
+  ],
+  "bounds_blender": [
+    [
+      25.84000015258789,
+      18.84783172607422,
+      48.099998474121094
+    ],
+    [
+      26.15999984741211,
+      19.15216827392578,
+      50.0
+    ]
+  ],
+  "triangle_count": 72,
+  "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-6",
+  "glb": "assets/art/environments/open_world/components/tower_03/beacon_6/env_tower_03_beacon_6_visual_top3d.glb",
+  "glb_sha256": "8f026526d7e7e0fc9907571f8f04a0fb6ff4b800f8035f4d46bf7154f84070ac",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/beacon_6/env_tower_03_beacon_6_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

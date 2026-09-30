@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/covered_equipment",
+  "slug": "covered_equipment",
+  "display_name": "右侧帆布覆盖机具",
+  "category": "hvac",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "右侧帆布覆盖机具_资产包",
+  "objects": [
+    "右侧帆布覆盖机具"
+  ],
+  "root_object": "右侧帆布覆盖机具",
+  "world_position": [
+    24,
+    -9,
+    40.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    21.3,
+    -11.238081932067871,
+    40.099999976158145
+  ],
+  "bounds_max": [
+    26.7,
+    -6.762127876281738,
+    42.33584976196289
+  ],
+  "dimensions": [
+    5.399999999999999,
+    4.475954055786133,
+    2.2358497858047457
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "covered_equipment.glb",
+  "anchor_blender": [
+    24.0,
+    -9.000104904174805,
+    40.099998474121094
+  ],
+  "position_godot": [
+    24.0,
+    40.099998474121094,
+    9.000104904174805
+  ],
+  "bounds_blender": [
+    [
+      21.299999237060547,
+      -11.238081932067871,
+      40.099998474121094
+    ],
+    [
+      26.700000762939453,
+      -6.762127876281738,
+      42.33584976196289
+    ]
+  ],
+  "triangle_count": 1422,
+  "asset_id": "ENV-OPENWORLD-TOWER03-COVERED-EQUIPMENT",
+  "glb": "assets/art/environments/open_world/components/tower_03/covered_equipment/env_tower_03_covered_equipment_visual_top3d.glb",
+  "glb_sha256": "25d51a2c20a5a8d8b35e45dd048c0c2fd17c6562982e6af4e203ca5accb9d47d",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/covered_equipment/env_tower_03_covered_equipment_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

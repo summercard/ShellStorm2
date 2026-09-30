@@ -1,0 +1,82 @@
+{
+  "package_id": "tower_03/telecom_main",
+  "slug": "telecom_main",
+  "display_name": "右后主通信桅杆_面板及微波碟",
+  "category": "telecom",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "右后主通信桅杆_面板及微波碟_资产包",
+  "objects": [
+    "右后主通信桅杆_面板及微波碟",
+    "右后主通信桅杆_面板及微波碟_柔和自发光"
+  ],
+  "root_object": "右后主通信桅杆_面板及微波碟",
+  "world_position": [
+    20.5,
+    13,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    18.7,
+    11.799999994039535,
+    48.04435729980469
+  ],
+  "bounds_max": [
+    22.949460983276367,
+    14.400000005960464,
+    62.650001525878906
+  ],
+  "dimensions": [
+    4.249460983276368,
+    2.6000000119209297,
+    14.605644226074219
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "telecom_main.glb",
+  "anchor_blender": [
+    20.824729919433594,
+    13.100000381469727,
+    48.04435729980469
+  ],
+  "position_godot": [
+    20.824729919433594,
+    48.04435729980469,
+    -13.100000381469727
+  ],
+  "bounds_blender": [
+    [
+      18.700000762939453,
+      11.800000190734863,
+      48.04435729980469
+    ],
+    [
+      22.949460983276367,
+      14.399999618530273,
+      62.650001525878906
+    ]
+  ],
+  "triangle_count": 3512,
+  "asset_id": "ENV-OPENWORLD-TOWER03-TELECOM-MAIN",
+  "glb": "assets/art/environments/open_world/components/tower_03/telecom_main/env_tower_03_telecom_main_visual_top3d.glb",
+  "glb_sha256": "d93a3f1e9db8b7eb9d96c50a357a132220dcfe5ed8d7776c92502625dd7051f7",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/telecom_main/env_tower_03_telecom_main_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

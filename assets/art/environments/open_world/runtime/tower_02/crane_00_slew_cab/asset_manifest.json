@@ -1,0 +1,84 @@
+{
+  "package_id": "tower_02/crane_00_slew_cab",
+  "display_name": "塔吊1_回转总成_折面驾驶室",
+  "slug": "crane_00_slew_cab",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "塔吊1_回转总成_折面驾驶室_资产包",
+  "objects": [
+    "塔吊1_回转总成_折面驾驶室"
+  ],
+  "root_object": "塔吊1_回转总成_折面驾驶室",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -43.91334533691406,
+    -21.426651000976562,
+    108.58999633789062
+  ],
+  "bounds_max": [
+    -36.08665466308594,
+    -14.573349952697754,
+    113.30000305175781
+  ],
+  "dimensions": [
+    7.826690673828125,
+    6.853301048278809,
+    4.7100067138671875
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "crane_00_slew_cab.glb",
+  "fixed_display_attachment": true,
+  "assembly_id": "tower_02/crane_00",
+  "assembly_collection": "塔吊1_独立合集",
+  "assembly_root": "塔吊1_独立根",
+  "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_slew_cab/asset_manifest.json",
+  "anchor_blender": [
+    -40.0,
+    -18.0,
+    108.58999633789062
+  ],
+  "position_godot": [
+    -40.0,
+    108.58999633789062,
+    18.0
+  ],
+  "bounds_blender": [
+    [
+      -43.91334533691406,
+      -21.426651000976562,
+      108.58999633789062
+    ],
+    [
+      -36.08665466308594,
+      -14.573349952697754,
+      113.30000305175781
+    ]
+  ],
+  "triangle_count": 6354,
+  "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-SLEW-CAB",
+  "glb": "assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb",
+  "glb_sha256": "9a2599202c271344ef3b647800b95d289fbf602cdf4fb79063dec589abede2f9",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

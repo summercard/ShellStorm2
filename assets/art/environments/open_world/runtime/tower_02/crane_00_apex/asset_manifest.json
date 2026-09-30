@@ -1,0 +1,84 @@
+{
+  "package_id": "tower_02/crane_00_apex",
+  "display_name": "塔吊1_塔帽_拉杆铰接销轴",
+  "slug": "crane_00_apex",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "塔吊1_塔帽_拉杆铰接销轴_资产包",
+  "objects": [
+    "塔吊1_塔帽_拉杆铰接销轴"
+  ],
+  "root_object": "塔吊1_塔帽_拉杆铰接销轴",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -52.227535247802734,
+    -21.119539260864258,
+    113.2513427734375
+  ],
+  "bounds_max": [
+    -11.030732154846191,
+    -11.928442001342773,
+    122.3499984741211
+  ],
+  "dimensions": [
+    41.19680309295654,
+    9.191097259521484,
+    9.098655700683594
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "crane_00_apex.glb",
+  "fixed_display_attachment": true,
+  "assembly_id": "tower_02/crane_00",
+  "assembly_collection": "塔吊1_独立合集",
+  "assembly_root": "塔吊1_独立根",
+  "manifest_path": "component_packages/facilities/cranes/crane_00/crane_00_apex/asset_manifest.json",
+  "anchor_blender": [
+    -31.629133224487305,
+    -16.523990631103516,
+    113.2513427734375
+  ],
+  "position_godot": [
+    -31.629133224487305,
+    113.2513427734375,
+    16.523990631103516
+  ],
+  "bounds_blender": [
+    [
+      -52.227535247802734,
+      -21.119539260864258,
+      113.2513427734375
+    ],
+    [
+      -11.030732154846191,
+      -11.928442001342773,
+      122.3499984741211
+    ]
+  ],
+  "triangle_count": 3740,
+  "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-APEX",
+  "glb": "assets/art/environments/open_world/components/tower_02/crane_00_apex/env_tower_02_crane_00_apex_visual_top3d.glb",
+  "glb_sha256": "f230f736495a423d06e60a2a40410fc813cef9ca3cff3b6eeb5229ecb8db5074",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_apex/env_tower_02_crane_00_apex_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

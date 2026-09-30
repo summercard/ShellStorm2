@@ -1,0 +1,80 @@
+{
+  "package_id": "tower_03/satellite_dish",
+  "slug": "satellite_dish",
+  "display_name": "右侧大型卫星锅_支撑及馈源",
+  "category": "telecom",
+  "version": "v001",
+  "source_blend": "塔楼03_设备天台办公楼_v001.blend",
+  "collection": "右侧大型卫星锅_支撑及馈源_资产包",
+  "objects": [
+    "右侧大型卫星锅_支撑及馈源"
+  ],
+  "root_object": "右侧大型卫星锅_支撑及馈源",
+  "world_position": [
+    25,
+    5.3,
+    48.1
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    22.48598861694336,
+    2.715203285217285,
+    48.09999999701977
+  ],
+  "bounds_max": [
+    27.885665893554688,
+    7.099999952316284,
+    54.48817825317383
+  ],
+  "dimensions": [
+    5.399677276611328,
+    4.384796667098999,
+    6.388178256154056
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "satellite_dish.glb",
+  "anchor_blender": [
+    25.185827255249023,
+    4.907601833343506,
+    48.099998474121094
+  ],
+  "position_godot": [
+    25.185827255249023,
+    48.099998474121094,
+    -4.907601833343506
+  ],
+  "bounds_blender": [
+    [
+      22.48598861694336,
+      2.7152035236358643,
+      48.099998474121094
+    ],
+    [
+      27.885665893554688,
+      7.100000381469727,
+      54.48817825317383
+    ]
+  ],
+  "triangle_count": 968,
+  "asset_id": "ENV-OPENWORLD-TOWER03-SATELLITE-DISH",
+  "glb": "assets/art/environments/open_world/components/tower_03/satellite_dish/env_tower_03_satellite_dish_visual_top3d.glb",
+  "glb_sha256": "6d51535827835cccf3b93c9e89c4607471ed49d17cdcbd7303f8e771903f500b",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/satellite_dish/env_tower_03_satellite_dish_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "collision": "none_visual_only"
+}

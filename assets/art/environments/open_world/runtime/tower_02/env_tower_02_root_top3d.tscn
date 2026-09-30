@@ -1,0 +1,315 @@
+[gd_scene load_steps=75 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_00/env_tower_02_floor_00_root_top3d.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_01/env_tower_02_floor_01_root_top3d.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_02/env_tower_02_floor_02_root_top3d.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_03/env_tower_02_floor_03_root_top3d.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_04/env_tower_02_floor_04_root_top3d.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_05/env_tower_02_floor_05_root_top3d.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_06/env_tower_02_floor_06_root_top3d.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_07/env_tower_02_floor_07_root_top3d.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_08/env_tower_02_floor_08_root_top3d.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_09/env_tower_02_floor_09_root_top3d.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_10/env_tower_02_floor_10_root_top3d.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_11/env_tower_02_floor_11_root_top3d.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_12/env_tower_02_floor_12_root_top3d.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_13/env_tower_02_floor_13_root_top3d.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_14/env_tower_02_floor_14_root_top3d.tscn" id="15"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_15/env_tower_02_floor_15_root_top3d.tscn" id="16"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_16/env_tower_02_floor_16_root_top3d.tscn" id="17"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_17/env_tower_02_floor_17_root_top3d.tscn" id="18"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_18/env_tower_02_floor_18_root_top3d.tscn" id="19"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_19/env_tower_02_floor_19_root_top3d.tscn" id="20"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/floor_20/env_tower_02_floor_20_root_top3d.tscn" id="21"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/core_0/env_tower_02_core_0_root_top3d.tscn" id="22"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/core_1/env_tower_02_core_1_root_top3d.tscn" id="23"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_00/env_tower_02_scaffold_00_root_top3d.tscn" id="24"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_01/env_tower_02_scaffold_01_root_top3d.tscn" id="25"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_02/env_tower_02_scaffold_02_root_top3d.tscn" id="26"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_03/env_tower_02_scaffold_03_root_top3d.tscn" id="27"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_04/env_tower_02_scaffold_04_root_top3d.tscn" id="28"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_05/env_tower_02_scaffold_05_root_top3d.tscn" id="29"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_06/env_tower_02_scaffold_06_root_top3d.tscn" id="30"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/scaffold_07/env_tower_02_scaffold_07_root_top3d.tscn" id="31"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_00/env_tower_02_climbing_screen_00_root_top3d.tscn" id="32"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_root_top3d.tscn" id="33"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_02/env_tower_02_climbing_screen_02_root_top3d.tscn" id="34"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_03/env_tower_02_climbing_screen_03_root_top3d.tscn" id="35"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_04/env_tower_02_climbing_screen_04_root_top3d.tscn" id="36"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_05/env_tower_02_climbing_screen_05_root_top3d.tscn" id="37"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_06/env_tower_02_climbing_screen_06_root_top3d.tscn" id="38"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/climbing_screen_07/env_tower_02_climbing_screen_07_root_top3d.tscn" id="39"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/construction_elevator/env_tower_02_construction_elevator_root_top3d.tscn" id="40"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_00/env_tower_02_roof_column_00_root_top3d.tscn" id="41"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_01/env_tower_02_roof_column_01_root_top3d.tscn" id="42"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_02/env_tower_02_roof_column_02_root_top3d.tscn" id="43"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_03/env_tower_02_roof_column_03_root_top3d.tscn" id="44"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_04/env_tower_02_roof_column_04_root_top3d.tscn" id="45"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_05/env_tower_02_roof_column_05_root_top3d.tscn" id="46"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_06/env_tower_02_roof_column_06_root_top3d.tscn" id="47"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_07/env_tower_02_roof_column_07_root_top3d.tscn" id="48"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_08/env_tower_02_roof_column_08_root_top3d.tscn" id="49"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_09/env_tower_02_roof_column_09_root_top3d.tscn" id="50"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_10/env_tower_02_roof_column_10_root_top3d.tscn" id="51"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_11/env_tower_02_roof_column_11_root_top3d.tscn" id="52"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_12/env_tower_02_roof_column_12_root_top3d.tscn" id="53"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_13/env_tower_02_roof_column_13_root_top3d.tscn" id="54"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_column_14/env_tower_02_roof_column_14_root_top3d.tscn" id="55"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_formwork_0/env_tower_02_roof_formwork_0_root_top3d.tscn" id="56"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_formwork_1/env_tower_02_roof_formwork_1_root_top3d.tscn" id="57"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_formwork_2/env_tower_02_roof_formwork_2_root_top3d.tscn" id="58"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_root_top3d.tscn" id="59"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_shoring_01/env_tower_02_roof_shoring_01_root_top3d.tscn" id="60"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_shoring_02/env_tower_02_roof_shoring_02_root_top3d.tscn" id="61"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_shoring_03/env_tower_02_roof_shoring_03_root_top3d.tscn" id="62"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_00/env_tower_02_roof_supply_00_root_top3d.tscn" id="63"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_01/env_tower_02_roof_supply_01_root_top3d.tscn" id="64"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_02/env_tower_02_roof_supply_02_root_top3d.tscn" id="65"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_03/env_tower_02_roof_supply_03_root_top3d.tscn" id="66"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_04/env_tower_02_roof_supply_04_root_top3d.tscn" id="67"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_05/env_tower_02_roof_supply_05_root_top3d.tscn" id="68"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_06/env_tower_02_roof_supply_06_root_top3d.tscn" id="69"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_supply_07/env_tower_02_roof_supply_07_root_top3d.tscn" id="70"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/roof_warning/env_tower_02_roof_warning_root_top3d.tscn" id="71"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/cranes/crane_00/env_tower_02_crane_00_root_top3d.tscn" id="72"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/cranes/crane_01/env_tower_02_crane_01_root_top3d.tscn" id="73"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/cranes/crane_02/env_tower_02_crane_02_root_top3d.tscn" id="74"]
+
+[node name="Tower02" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-TOWER02"
+metadata/asset_version = "v003"
+metadata/collision_status = "none_visual_only"
+metadata/source_blend = "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend"
+metadata/component_count = 92
+
+[node name="architecture" type="Node3D" parent="."]
+
+[node name="cranes" type="Node3D" parent="."]
+
+[node name="facilities" type="Node3D" parent="."]
+
+[node name="roof" type="Node3D" parent="."]
+
+[node name="scaffold" type="Node3D" parent="."]
+
+[node name="floor_00" parent="architecture" instance=ExtResource("1")]
+position = Vector3(0.000000000, 0.000000000, -0.000000000)
+
+[node name="floor_01" parent="architecture" instance=ExtResource("2")]
+position = Vector3(0.000000000, 4.199999809, -0.000000000)
+
+[node name="floor_02" parent="architecture" instance=ExtResource("3")]
+position = Vector3(0.000000000, 8.399999619, -0.000000000)
+
+[node name="floor_03" parent="architecture" instance=ExtResource("4")]
+position = Vector3(0.000000000, 12.600000381, -0.000000000)
+
+[node name="floor_04" parent="architecture" instance=ExtResource("5")]
+position = Vector3(0.000000000, 16.799999237, -0.000000000)
+
+[node name="floor_05" parent="architecture" instance=ExtResource("6")]
+position = Vector3(0.000000000, 21.000000000, -0.000000000)
+
+[node name="floor_06" parent="architecture" instance=ExtResource("7")]
+position = Vector3(0.000000000, 25.200000763, -0.000000000)
+
+[node name="floor_07" parent="architecture" instance=ExtResource("8")]
+position = Vector3(0.000000000, 29.399999619, -0.000000000)
+
+[node name="floor_08" parent="architecture" instance=ExtResource("9")]
+position = Vector3(0.000000000, 33.599998474, -0.000000000)
+
+[node name="floor_09" parent="architecture" instance=ExtResource("10")]
+position = Vector3(0.000000000, 37.799999237, -0.000000000)
+
+[node name="floor_10" parent="architecture" instance=ExtResource("11")]
+position = Vector3(0.000000000, 42.000000000, -0.000000000)
+
+[node name="floor_11" parent="architecture" instance=ExtResource("12")]
+position = Vector3(0.000000000, 46.200000763, -0.000000000)
+
+[node name="floor_12" parent="architecture" instance=ExtResource("13")]
+position = Vector3(0.000000000, 50.400001526, -0.000000000)
+
+[node name="floor_13" parent="architecture" instance=ExtResource("14")]
+position = Vector3(0.000000000, 54.599998474, -0.000000000)
+
+[node name="floor_14" parent="architecture" instance=ExtResource("15")]
+position = Vector3(0.000000000, 58.799999237, -0.000000000)
+
+[node name="floor_15" parent="architecture" instance=ExtResource("16")]
+position = Vector3(0.000000000, 63.000000000, -0.000000000)
+
+[node name="floor_16" parent="architecture" instance=ExtResource("17")]
+position = Vector3(0.000000000, 67.199996948, -0.000000000)
+
+[node name="floor_17" parent="architecture" instance=ExtResource("18")]
+position = Vector3(0.000000000, 71.400001526, -0.000000000)
+
+[node name="floor_18" parent="architecture" instance=ExtResource("19")]
+position = Vector3(0.000000000, 75.599998474, -0.000000000)
+
+[node name="floor_19" parent="architecture" instance=ExtResource("20")]
+position = Vector3(0.000000000, 79.800003052, -0.000000000)
+
+[node name="floor_20" parent="architecture" instance=ExtResource("21")]
+position = Vector3(0.000000000, 84.000000000, -0.000000000)
+
+[node name="core_0" parent="architecture" instance=ExtResource("22")]
+position = Vector3(-13.000000000, 0.500000000, -5.000000000)
+
+[node name="core_1" parent="architecture" instance=ExtResource("23")]
+position = Vector3(14.000000000, 0.500000000, -6.000000000)
+
+[node name="scaffold_00" parent="scaffold" instance=ExtResource("24")]
+position = Vector3(-22.500000000, 0.535000026, 25.375000000)
+
+[node name="scaffold_01" parent="scaffold" instance=ExtResource("25")]
+position = Vector3(-9.625000000, 0.535000026, 22.000000000)
+
+[node name="scaffold_02" parent="scaffold" instance=ExtResource("26")]
+position = Vector3(-5.000000000, 0.535000026, 19.375000000)
+
+[node name="scaffold_03" parent="scaffold" instance=ExtResource("27")]
+position = Vector3(-0.375000000, 0.535000026, 22.000000000)
+
+[node name="scaffold_04" parent="scaffold" instance=ExtResource("28")]
+position = Vector3(17.500000000, 0.535000026, 25.375000000)
+
+[node name="scaffold_05" parent="scaffold" instance=ExtResource("29")]
+position = Vector3(35.375000000, 0.535000026, -0.000000000)
+
+[node name="scaffold_06" parent="scaffold" instance=ExtResource("30")]
+position = Vector3(0.000000000, 0.535000026, -25.375000000)
+
+[node name="scaffold_07" parent="scaffold" instance=ExtResource("31")]
+position = Vector3(-35.375000000, 0.535000026, -0.000000000)
+
+[node name="climbing_screen_00" parent="scaffold" instance=ExtResource("32")]
+position = Vector3(-25.000000000, 14.443708420, 26.199998856)
+
+[node name="climbing_screen_01" parent="scaffold" instance=ExtResource("33")]
+position = Vector3(-8.800000191, 14.443708420, 22.000000000)
+
+[node name="climbing_screen_02" parent="scaffold" instance=ExtResource("34")]
+position = Vector3(-5.000000000, 14.443708420, 20.199998856)
+
+[node name="climbing_screen_03" parent="scaffold" instance=ExtResource("35")]
+position = Vector3(-1.199999928, 14.443708420, 22.000000000)
+
+[node name="climbing_screen_04" parent="scaffold" instance=ExtResource("36")]
+position = Vector3(17.500000000, 14.443708420, 26.199998856)
+
+[node name="climbing_screen_05" parent="scaffold" instance=ExtResource("37")]
+position = Vector3(36.200000763, 14.443708420, 2.500000000)
+
+[node name="climbing_screen_06" parent="scaffold" instance=ExtResource("38")]
+position = Vector3(0.000000000, 14.443708420, -26.199998856)
+
+[node name="climbing_screen_07" parent="scaffold" instance=ExtResource("39")]
+position = Vector3(-36.200000763, 14.443708420, -2.500000000)
+
+[node name="construction_elevator" parent="facilities" instance=ExtResource("40")]
+position = Vector3(18.700000763, 0.500000000, 26.827320099)
+
+[node name="roof_column_00" parent="roof" instance=ExtResource("41")]
+position = Vector3(-29.000000000, 84.500000000, 16.000000000)
+
+[node name="roof_column_01" parent="roof" instance=ExtResource("42")]
+position = Vector3(-28.999998093, 84.500000000, 0.030000031)
+
+[node name="roof_column_02" parent="roof" instance=ExtResource("43")]
+position = Vector3(-29.000000000, 84.500000000, -17.970001221)
+
+[node name="roof_column_03" parent="roof" instance=ExtResource("44")]
+position = Vector3(-16.000000000, 84.500000000, 16.000000000)
+
+[node name="roof_column_04" parent="roof" instance=ExtResource("45")]
+position = Vector3(-16.000000000, 84.500000000, 0.030000031)
+
+[node name="roof_column_05" parent="roof" instance=ExtResource("46")]
+position = Vector3(-16.000000000, 84.500000000, -17.970001221)
+
+[node name="roof_column_06" parent="roof" instance=ExtResource("47")]
+position = Vector3(-3.000000000, 84.500000000, 16.000000000)
+
+[node name="roof_column_07" parent="roof" instance=ExtResource("48")]
+position = Vector3(-3.000000000, 84.500000000, 0.030000031)
+
+[node name="roof_column_08" parent="roof" instance=ExtResource("49")]
+position = Vector3(-3.000000000, 84.500000000, -17.970001221)
+
+[node name="roof_column_09" parent="roof" instance=ExtResource("50")]
+position = Vector3(10.000000000, 84.500000000, 16.000000000)
+
+[node name="roof_column_10" parent="roof" instance=ExtResource("51")]
+position = Vector3(10.000000000, 84.500000000, 0.030000031)
+
+[node name="roof_column_11" parent="roof" instance=ExtResource("52")]
+position = Vector3(10.000000000, 84.500000000, -17.970001221)
+
+[node name="roof_column_12" parent="roof" instance=ExtResource("53")]
+position = Vector3(26.000000000, 84.500000000, 16.000000000)
+
+[node name="roof_column_13" parent="roof" instance=ExtResource("54")]
+position = Vector3(26.000000000, 84.500000000, 0.030000031)
+
+[node name="roof_column_14" parent="roof" instance=ExtResource("55")]
+position = Vector3(26.000000000, 84.500000000, -17.970001221)
+
+[node name="roof_formwork_0" parent="roof" instance=ExtResource("56")]
+position = Vector3(-20.000000000, 84.475753784, -7.000000000)
+
+[node name="roof_formwork_1" parent="roof" instance=ExtResource("57")]
+position = Vector3(1.000000000, 84.475753784, 6.000000000)
+
+[node name="roof_formwork_2" parent="roof" instance=ExtResource("58")]
+position = Vector3(23.000000000, 84.475753784, -9.000000000)
+
+[node name="roof_shoring_00" parent="roof" instance=ExtResource("59")]
+position = Vector3(-21.735000610, 84.475753784, -18.000000000)
+
+[node name="roof_shoring_01" parent="roof" instance=ExtResource("60")]
+position = Vector3(18.264999390, 84.475753784, 15.000000000)
+
+[node name="roof_shoring_02" parent="roof" instance=ExtResource("61")]
+position = Vector3(25.264999390, 84.475753784, -1.000000000)
+
+[node name="roof_shoring_03" parent="roof" instance=ExtResource("62")]
+position = Vector3(-7.734999657, 84.475753784, -9.000000000)
+
+[node name="roof_supply_00" parent="roof" instance=ExtResource("63")]
+position = Vector3(-27.000000000, 84.015678406, 8.000000000)
+
+[node name="roof_supply_01" parent="roof" instance=ExtResource("64")]
+position = Vector3(-18.000000000, 84.500000000, 8.000000000)
+
+[node name="roof_supply_02" parent="roof" instance=ExtResource("65")]
+position = Vector3(-27.000000000, 84.500000000, -10.000000000)
+
+[node name="roof_supply_03" parent="roof" instance=ExtResource("66")]
+position = Vector3(3.000000000, 84.015678406, -20.000000000)
+
+[node name="roof_supply_04" parent="roof" instance=ExtResource("67")]
+position = Vector3(20.000000000, 84.500000000, 6.000000000)
+
+[node name="roof_supply_05" parent="roof" instance=ExtResource("68")]
+position = Vector3(29.627367020, 84.500000000, 8.000000000)
+
+[node name="roof_supply_06" parent="roof" instance=ExtResource("69")]
+position = Vector3(-3.372632504, 84.500000000, -3.000000000)
+
+[node name="roof_supply_07" parent="roof" instance=ExtResource("70")]
+position = Vector3(5.000000000, 84.500000000, 18.000000000)
+
+[node name="roof_warning" parent="roof" instance=ExtResource("71")]
+position = Vector3(-3.000000000, 96.849998474, -18.000000000)
+
+[node name="crane_00" parent="cranes" instance=ExtResource("72")]
+position = Vector3(-40.000000000, 0.000000000, 18.000000000)
+
+[node name="crane_01" parent="cranes" instance=ExtResource("73")]
+position = Vector3(11.000000000, 84.500000000, -12.000000000)
+
+[node name="crane_02" parent="cranes" instance=ExtResource("74")]
+position = Vector3(39.000000000, 0.000000000, -18.000000000)

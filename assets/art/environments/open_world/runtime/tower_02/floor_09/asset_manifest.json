@@ -1,0 +1,81 @@
+{
+  "package_id": "tower_02/floor_09",
+  "display_name": "楼层_09_楼板柱梁",
+  "slug": "floor_09",
+  "category": "architecture",
+  "version": "v003",
+  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "collection": "楼层_09_楼板柱梁_资产包",
+  "objects": [
+    "楼层_09_楼板柱梁"
+  ],
+  "root_object": "楼层_09_楼板柱梁",
+  "world_position": [
+    0,
+    0,
+    0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -35.064998626708984,
+    -25.056291580200195,
+    37.79999923706055
+  ],
+  "bounds_max": [
+    35.064998626708984,
+    25.056291580200195,
+    42.400001525878906
+  ],
+  "dimensions": [
+    70.12999725341797,
+    50.11258316040039,
+    4.600002288818359
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "floor_09.glb",
+  "fixed_display_attachment": true,
+  "manifest_path": "component_packages/architecture/floor_09/asset_manifest.json",
+  "anchor_blender": [
+    0.0,
+    0.0,
+    37.79999923706055
+  ],
+  "position_godot": [
+    0.0,
+    37.79999923706055,
+    -0.0
+  ],
+  "bounds_blender": [
+    [
+      -35.064998626708984,
+      -25.056291580200195,
+      37.79999923706055
+    ],
+    [
+      35.064998626708984,
+      25.056291580200195,
+      42.400001525878906
+    ]
+  ],
+  "triangle_count": 3048,
+  "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-09",
+  "glb": "assets/art/environments/open_world/components/tower_02/floor_09/env_tower_02_floor_09_visual_top3d.glb",
+  "glb_sha256": "c52426d5bc5ef0fed4d6ec373dcf0129263c2d5c0711bd4f70d826ddcfa9fb88",
+  "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_09/env_tower_02_floor_09_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "collision": "none_visual_only"
+}

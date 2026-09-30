@@ -1,0 +1,15 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER03",
+  "version": "v001",
+  "source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "source_sha256": "91b2f8f7d7ccfd483e76799e4b0a7573492b1741021eb3f7b34e5bfc24ec631e",
+  "prefab": "assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn",
+  "component_count": 217,
+  "footprint_m": [
+    70,
+    44
+  ],
+  "collision": "none_visual_only",
+  "layout_owner": "Godot TSCN; rerun preserves layout by default",
+  "crane_count": 0
+}
