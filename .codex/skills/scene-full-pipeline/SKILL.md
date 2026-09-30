@@ -9,7 +9,7 @@ description: 场景全流程制作编排：从效果图到读取白模，到 Ble
 
 ## 适用边界
 
-- **适用**：塔楼区块（`rooftop` 天台 / `base` 基地 / `battle` 战斗区 / `stairs` 楼梯区）内的场景、关卡组件与固定设施。
+- **适用**：塔楼及远征区块（`rooftop` 天台 / `base` 基地 / `battle` 战斗区 / `expedition` 远征 / `stairs` 楼梯区）内的场景、关卡组件与固定设施。
 - **不适用**：枪械与近战武器 → `game-weapon-model-pipeline`；可拾取/可手持/可投掷道具 → `game-prop-model-pipeline`；玩家角色与换装 → `player-avatar-asset-standard`。
 - 本 skill 不自己画效果图、不自己捏模型、不自己导出 GLB；它保证这些步骤**按序发生、有定位、有门禁、有验收**。
 
@@ -27,13 +27,15 @@ description: 场景全流程制作编排：从效果图到读取白模，到 Ble
 登记正式可用，保留上一版本回滚
 ```
 
-每一阶段的产物，是下一阶段的输入。**未过门禁，不得进入下一阶段。**
+每一阶段的产物，是下一阶段的输入。**未过门禁，不得进入下一阶段。** 已有正式资产的修改按职责进入对应阶段，不把一次 Godot 布局调整强制退回 Blender。
+
+战局/远征房间通过 `00-battle-room-layout-assembler` 路由：01 制作房型组件源，02 在正式建模前冻结组件计划（唯一组件 ≤50、同族常规 ≤3、有明确状态轴 ≤5，实例数量另计），03 制作房间变体/具体布局，04 完成 Godot 装配。房型 → 房间变体 → 具体房间三层分离；固定房型不禁止作者变体，变体可通过 Godot 场景/明确资源路径管理，不强制每房 Blender 差异布局。
 
 ## 全程固定挂钩（四个阶段都必须携带）
 
 以下定位信息从阶段 0 建立，贯穿到阶段 3 的台账登记，任何阶段丢失即判定失败：
 
-- `block_id`：`rooftop / base / battle / stairs`，定义见 `docs/v0.1/05.1_关卡区块设计.md#3-四区块分布`。
+- `block_id`：按白盒与资产真实所属区块填写 `rooftop / base / battle / expedition / stairs`；战局链路兼容 `battle` 与 `expedition`，不得把远征强改为 battle。区块定义及当前关卡契约见对应设计文档。
 - `floor_range` 与 `design_scope`：具体到楼层、房间、楼梯、设施或模块范围。
 - `scene_design_docs`：至少包含 `docs/v0.1/05_技术施工_关卡生成与爬楼.md` 与 `docs/v0.1/05.1_关卡区块设计.md`；基地设施另挂 `docs/v0.1/07_技术施工_基地设施.md`。
 - `asset_ledger`：`assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx` 的 `3D-场景通用` 表及对应 AssetID 条目。账本路径由 `assets/registry/ledger_index.json` 单一声明 —— **不要写死账本文件名**；总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放索引，不含资产行。旧批次里 `…美术资产台账_v001.xlsx#3D-场景通用` 形式的引用由 `index.resolve_ref()` 解析到场景账本，无需改写。
@@ -55,7 +57,7 @@ assets/art/<大类>/<资产套件>/
 - 白模与正式美术源分目录：白模一律 `source/art/whitebox/`，正式 Blender 母版一律 `assets/art/<大类>/.../source/`。二者不得混放。
 - 前缀：环境 `env_`、道具与设施 `prp_`、角色 `chr_`、敌人 `enm_`、武器 `wpn_`。
 - `source/` 文件名小写 `snake_case` 且以 `_vNNN` 结尾；`components/` 与 `runtime/` 文件名同样小写 `snake_case` 但**不带版本号**。AssetID 用稳定大写连字符格式，版本变化不改变 AssetID。
-- `components/`、`runtime/` 的路径是稳定契约：替换一律覆盖同路径同名文件，不派生新文件、不新建版本目录；Godot 侧引用始终不变。
+- 组件 `components/`、`runtime/` 路径是稳定契约：升级只定点更新同路径同名组件，不派生版本目录；Godot 侧稳定引用与房间实例覆写保留，不重生成正式房间。房间变体可建立明确的场景/资源路径，这不是为组件升级派生副本。
 - `source/**/*.blend` 由 `.gdignore` 排除，不参与 Godot 导入与打包。
 
 **例外——基地设施布局**（`source/art/blender/base_facility_layout/`）是「单源多次导出」型，不走上面三件套：
@@ -80,13 +82,13 @@ assets/art/<大类>/<资产套件>/
 - **白模 JSON 格式：** 遵循 `tools/3Dgame-design` v3 —— `coordinateSystem=blender-z-up`，距离米、旋转角度；布局在 `groups[]/components[]`，墙/地板用 `surfaceSettings`，楼梯用 `stairSettings`；`projectMetadata` 承载 AssetID、区块、楼层范围、设计文档与输出路径，不得另建不兼容顶层格式。
 - **目录：** `source/art/whitebox/<scene_id>/v###/` 固定分 `data/`（可编辑 JSON）、`blender/`（同版本白盒 Blend）、`renders/`（顶视图、无文字图、立面、剖面）。
 - **交付：** `whitebox_<scene_id>_v###.json` + 白盒 Blend + 至少一张带标注顶视图、一张同机位无文字顶视图。
-- **Blender 入口：** 新场景优先 `tools/blender_addons/shellstorm_level_builder/` 在 Blender 原生视口完成组件添加、吸附摆放、参数冻结、Collection 归类与资产包清单同步。`.blend` 是人工编辑事实所有者；网页工具只做旧白盒数据迁移与兼容读取。
+- **Blender 入口：** 新场景优先 `tools/blender_addons/shellstorm_level_builder/` 在 Blender 原生视口完成组件添加、吸附摆放、参数冻结、Collection 归类与资产包清单同步。此处 `.blend` 仅拥有该白盒原型的编辑事实，网页工具只做旧白盒迁移与兼容读取；正式房间 TSCN 的模块实例布局不由白盒自动回灌。
 - **Skill：** 无专用 skill；由对应场景的白盒验证入口检查。
 - **门禁：** 网格拼接、门洞、楼梯、路线、碰撞、导航、镜头净空均验证通过，才可进入阶段 2。
 
 ### 阶段 2 · Blender 正式美术资产
 
-- **规范：** 按白盒 JSON 的尺寸、名字与组合关系制作；每个可独立导入/替换的模块或设施建立独立资产包，不把整片场景焊成一个模型。
+- **规范：** 按白盒的尺寸/接口约束制作模块化组件；战局房型先由 02 冻结组件计划。原始 Blender 文件拥有源几何材质，允许用组件实例作参考布局；每种可独立导入/替换的模块或设施建立独立包，不把整片场景焊成一个模型，也不按重复摆位复制组件定义。
 - **数据：** AssetID、白盒 JSON 路径与版本、资产包名、尺寸、原点、方向、包围盒、材质角色、公共色盘、输出集合、Blend 版本。
 - **Skill：** **`$blender-game-prop-standard`**（Blender 游戏资产制作规范）。所有制作、范围锁定、材质四角色、PaletteUV 色盘、独立资产包、任务级验收都交给它；本 skill 只负责在阶段门禁处接住它的交付并放行。
 - **交付：** 可维护 `.blend`、游戏输出集合、独立资产包清单、顶视/近景/完整预览图、Blender 验收结果（含 `scripts/validate_game_prop.py` 通过）。
@@ -94,7 +96,7 @@ assets/art/<大类>/<资产套件>/
 
 ### 阶段 3 · 资产导入 Godot
 
-- **规范：** 从已通过美术验收的游戏输出制作优化派生文件；导出版本化 GLB，建立独立 PackedScene，配置碰撞、材质、交互、标签与正式引用。不得靠 Godot 临时缩放修复上游尺寸错误。
+- **规范：** 从已通过美术验收的游戏输出制作优化派生文件，导出稳定路径 GLB，建立稳定组件 PackedScene；碰撞、挂点、交互与标签归组件 Prefab。正式房间 TSCN 拥有模块实例摆位/增删/启用及灯光，允许在 Godot 编辑。JSON/Blender 实例清单仅初始化与追溯，不得自动回灌覆盖手改；不得靠临时缩放修复上游尺寸错误。
 - **数据：** 源 Blend、优化派生 Blend、GLB、PackedScene、版本、尺寸、方向、材质数、碰撞方式、使用场景、正式引用、上一版本回滚路径。
 - **Skill：** **`$godot-model-asset-import-standard`**（Godot 模型资产导入规范）。GLB 导出、坐标比例、版本目录、PackedScene、碰撞、引用替换、台账与验收全部交给它。
 - **交付：** 优化 Blend、GLB、`.import`、PackedScene、导出清单、资产台账更新、独立加载结果、正式场景截图。
@@ -108,7 +110,11 @@ assets/art/<大类>/<资产套件>/
 
 ## 回退规则
 
-任何一步发现尺寸或组合错误，都退回阶段 1 白盒，在 `tools/blender_addons/shellstorm_level_builder/` 更新组件与布局。历史网页白盒可通过 `tools/3Dgame-design` 读取迁移，但新编辑以 `.blend` 为事实所有者。插件同步的 manifest/catalog/tree 只用于资产包目录镜像，不等于完成 GLB 导出、Godot 接入或阶段 2 美术验收。
+按错误归属回退：原型尺寸/拓扑约束回白盒；组件几何材质回 Blender；组件碰撞挂点回 Prefab；正式房间实例布局与灯光直接在 Godot TSCN 修正。白盒 `.blend` 仅拥有原型编辑事实，不能覆盖正式房间。组件重导只更新组件资产并保留房间实例覆写；几何、包络、原点或接口变化需核查所有受影响场景。
+
+当前静态生成器不具自动合并/手改保护。正式房间禁止未审查全量生成；任何回填或重生成均须先备份、对比差异、提出保留/回填计划并取得授权。当前 `room_03/04` 仍为代码注册，轻量 override 仅支持 `remove`；新增通用注册/解析不是已完成能力，缺口需单独授权，不在美术任务中偷改代码。
+
+插件同步的 manifest/catalog/tree 只用于资产包目录镜像，不等于完成 GLB 导出、Godot 接入或阶段 2 美术验收。
 
 ## 阶段交接检查清单（快速核对）
 

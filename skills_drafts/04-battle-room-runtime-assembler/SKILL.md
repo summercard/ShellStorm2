@@ -1,6 +1,6 @@
 ---
 name: 04-battle-room-runtime-assembler
-description: 当在 Godot 中完成具体战局房间时使用。在房型默认实例清单直接重放、具体房间差异布局重放、白盒直装三条支线间路由；逐组件导入稳定 PackedScene，禁止整屋 GLB 和手工第二套摆位。
+description: 当在 Godot 中完成或编辑具体战局房间时使用。优先编辑正式房间/变体 TSCN；无正式场景时选择清单或白盒初始化，逐组件引用稳定 PackedScene。禁止整屋 GLB 和未审查重生成覆盖手改。
 agent_created: true
 metadata:
   display_name_zh: 04 战局具体房间Godot装配
@@ -15,10 +15,11 @@ metadata:
 ```text
 房间编号
   -> 路由判断
-  -> 分支 A0：房型 component_instances.json 原样重放
-  -> 分支 A：具体房间 room_layout.json 差异重放
-  -> 分支 B：白盒 + Godot 组件
-  -> 房间运行时节点 / 验收图 / 接入登记
+  -> 已有正式场景：直接编辑 Godot 房间/变体 TSCN（优先）
+  -> 无正式场景时 A0：房型 component_instances.json 初始化
+  -> 无正式场景时 A：具体房间 room_layout.json 初始化
+  -> 无正式场景时 B：白盒 + Godot 组件初始化
+  -> 保存正式 TSCN / 验收图 / 核实当前接入登记
 ```
 
 只处理场景美术包装、组件导入和视觉装配。禁止修改玩法、关卡规则、房间拓扑、敌人、掉落、存档、门 FSM、导航或结算代码。
@@ -33,7 +34,17 @@ metadata:
 
 ## 路由决策
 
-### 分支 A0：直接重放房型默认布局（首选）
+### 正式场景编辑（优先于初始化）
+
+源几何材质归 Blender，组件碰撞与挂点归稳定 Prefab，房间布局归正式 Godot TSCN。允许编辑模块实例位置/旋转、增删、启用和灯光等房间参数；不展开 Prefab 内部几何维护第二份组件。JSON/Blender 实例清单仅初始化与追溯，不可自动回灌覆盖手改。
+
+采用房型 → 房间变体 → 具体房间三层；固定房型不禁止作者变体，变体可用 Godot 场景/明确资源路径管理，无需每房制作 Blender 差异布局。原型白盒维护尺寸、端口、连接和可走空间约束，不持续拥有正式房间视觉摆位。`block_id` 兼容 `battle/expedition`。
+
+当前 `room_03/04` 在 `FloorPlanGenerator.ROOM_INSTANCE_LAYOUT_SOURCES` 中代码注册，轻量 override 仅实现 `remove`。新增资源自动登记、通用 add/transform/enable 解析不是已完成功能；必要代码接线须单独授权，本 Skill 修订不补实现。
+
+组件重导只更新组件资产，保留正式房间实例覆写；几何、包络、原点、节点路径、碰撞/挂点变化先核查受影响场景。已有 TSCN 必须优先加载；下列 A0/A/B 仅供初始化、原型或隔离参考生成，不得成为覆盖正式手改的捷径。
+
+### 分支 A0：房型默认布局初始化
 
 判定条件：
 
@@ -54,7 +65,7 @@ metadata:
 
 这是新房型的标准路径。**不要求为每个房间复制 Blender 布局，也不允许把房型 `.blend` 导成整屋 GLB。**
 
-**主层地砖一律在运行时换成通用棋盘砖**。房型源自有地砖（`slot_role=floor_tile`）只作建模基准，运行时由
+**当前动态初始化链路会把名单内主层地砖替换为通用棋盘砖**，这是现有实现，不是禁止正式 TSCN 编辑地砖实例的规则，也不授予覆盖手改的权限。房型源自有地砖（`slot_role=floor_tile`）在该链路中由
 `DungeonRoom3D._runtime_floor_tile_component_id()` 换成通用 `ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01/C02`，
 按房间局部 5m 网格棋盘交替（`(roundi((x-2.5)/5) + roundi((z-2.5)/5)) % 2`）。理由：房型地砖多为深色/异形，
 各房不一致会让同一层出现两种地板观感，且深色砖吃不到光。
@@ -74,25 +85,25 @@ Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀
 
 ### 改房型源后同步静态房 TSCN：外科式回填（先例 2026-09-28 L 走廊 `l_turn` 凹口内墙）
 
-静态房 TSCN（`runtime/room_instances/<block>/f00_<room>_static_layout.tscn`）是**生成产物**，
-生成器 `scripts/generate_expedition01_room_static_scenes.tscn` 每次重跑都会从动态装配重新提取并**覆盖**这些文件。
+静态房 TSCN（`runtime/room_instances/<block>/f00_<room>_static_layout.tscn`）即使最初由生成器初始化，转正后也是**可手工维护的正式布局源**。
+现有生成器 `scripts/generate_expedition01_room_static_scenes.gd` 从动态装配重新提取并覆盖输出，**没有自动差异合并、实例覆写保留或手改保护**；`SS_STATIC_ROOMS` 只限制覆盖范围，不保护入选房间。
+
+正式房间禁止未审查全量生成。任何重生成/回填先备份正式文件、在隔离输出核对差异，明确哪些实例摆位、增删、启用、灯光及自定义节点保留，哪些更新需要回填；获得覆盖授权后才改批准范围，不能仅因 JSON 或 Blender 更新就重写 TSCN。
 
 - 🔴 **不要为一次局部修复跑全量重生成**：生成产物会给**每个**组件实例附完整 `metadata/*` 块
   （`asset_id` / `asset_version` / `bounds_size_m` / `collision_policy` …），与早期「编辑器重存」版一跑就产生
-  **上万行无关 churn**（先例 boss 5460 行 / room_05 5560 行），把真实改动淹没。除非本次任务本身就是「补回节点元数据」，否则走外科式回填。
+  大量无关差异（历史先例 boss 5460 行 / room_05 5560 行），并可能抹掉作者编辑。即使任务是补元数据，也须遵守差异审查、保留/回填计划和授权，不获得全量覆盖豁免。
 - 回填步骤：① 在隔离环境跑一次生成器，把输出当**参照**（不是拿去替换）；② 只从参照取**受影响节点**的
-  `instance` 路径 / `transform` / 组件 id 元数据，套回仓库版（降级版）TSCN；③ 删掉因此不再被引用的 `ext_resource`；
+  `instance` 路径 / `transform` / 组件 id 元数据，与正式 TSCN 手改逐项裁定后仅回填已授权项；③ 经检查移除本次修改造成的未引用 `ext_resource`；
   ④ 同步根计数 meta（`layout_instance_total`、`authored_layout_room_type_component_count`）。
 - 证伪判据（必备）：抽两侧 TSCN 的**节点骨架**（`name` / `instance` 路径 / `transform`）逐节点比对，
-  报告 `ONLY-IN-*` / `XFORM-DIFF` / `MISMATCH_COUNT`。验收条件是「**我引入的新差异 = 0**」，且与参照的既有差异
-  **只减不增**（先例 room_01 26→4、room_08 29→7，顺带消解 22 处既有不一致）。
+  报告 `ONLY-IN-*` / `XFORM-DIFF` / `MISMATCH_COUNT`，区分批准作者差异与意外变化。验收条件是「未授权变化 = 0、应保留覆写未丢失」，不是与生成参照的差异必须减少；正式手改不能为对齐旧清单而消除。
 - 与本次无关的同类漂移（如 `tower_wall_direction` 旧值 `south` / 新值 `west`）**保持文件原值**，不夹带。
 - 换墙件时坐标与朝向要**实测反推**、不能按命名猜：节点转动 `= 房根 yaw + 源 rotation_y_deg`；层心线沿用全房统一
   `中心 = 边界 + 0.15 − 半厚`（外表面停在 `边界+0.15`）。先例：L 形**凹口两条内边**原是「单块长版剖切面
   `cutaway_reference_a/b`（`visual_only` 无碰撞）＋一排 1.35 m 剖切低墙」⇒ 拆为 6×`wall_5m_a` ＋ 5×`wall_5m_d`
   全高通用墙（实例 id 不变），并登记一条 `layout_repairs` 说明 `generator_gap`。
-- 改完跑 `verify_expedition_room_static_scenes`（含 `layout_instance_total == room.authored_layout_instances.size()`
-  端到端一致）；若只残留**未触碰文件**的既有红项（先例 `room_03` 103<105、`boss` 206<210），照实记录、不算本次回归。
+- 改完运行 `verify_expedition_room_static_scenes` 并核查其判据来源：当前可能仍要求 `layout_instance_total == room.authored_layout_instances.size()`。若旧探针因已批准的 TSCN 手改与初始化数组不同而报红，记录为实现/验收契约缺口，不能回滚手改来迎合旧断言，也不能伪报通过。未触碰文件的既有红项单列。
 
 ### 分支 A：具体房间有布局差异
 
@@ -111,11 +122,11 @@ Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀
   -> 校验布局和组件版本
   -> 由 AssetID 注册表解析稳定 PackedScene
   -> 按 position / rotation / scale 实例化
-  -> 添加房间级玩法挂点，但不重做视觉摆位
+  -> 初始化房间级挂点并保存正式 TSCN，后续在 Godot 编辑视觉摆位
   -> 运行具体房间验收
 ```
 
-具体房间 Blender 差异布局是视觉摆放事实源；未覆盖的部分继承房型默认布局。Godot 不得再手工摆第二套视觉组件。
+具体房间 Blender/JSON 差异布局只在初始化时作为输入；保存正式 TSCN 后，Godot 场景成为视觉摆放事实源，允许作者手动编辑。当前轻量 overrides 仅 `remove` 已实现；完整实例表与轻量覆盖是不同输入形态，不能声称所有操作均可自动解析。
 
 运行时门不是可选项。新关卡优先由房间 `connection_ports` 提供稳定 `port_id`、房间局部 `position_m` 和局部朝外 `outward`；连接表按端口编号成对声明。房间旋转时端口位置、朝向和房型美术必须同转。装配器必须校验两端锚点世界坐标误差不超过 0.01m、朝外方向相反，不能再从房间包围盒中点猜门洞。旧关卡未声明显式端口时才允许继续使用历史 lane 推导。
 
@@ -136,9 +147,9 @@ Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀
 - ⚠️ **端口 Marker 契约**：正式房间静态场景应包含 `ConnectionPorts/Port_<ID>` Marker3D，局部 `+Z` 指向房外；验收必须覆盖编号唯一、端口随房间旋转、连接端重合、方向相反、每边恰好一个门实体、未连接端口有封墙。
 - 授权楼层会使「生成器结构契约」类验收（网格 / 走廊计数 / 门墙归属）**设计性假红** ⇒ 加测试 seam 回落生成器（先例 `TowerDescent3D.force_standard_floor_plan_for_test`，默认 false 不影响运行时），授权楼层改由专用验收探针覆盖。
 
-### 分支 B：没有具体房间 Blender 布局
+### 分支 B：尚无正式 TSCN，选择白盒初始化
 
-判定条件：没有合格的具体房间 `room_layout.json`，但存在：
+判定条件：没有正式房间/变体 TSCN，也没有合格的初始化 `room_layout.json`，但存在：
 
 - 具体房间白盒；
 - 匹配房间种类组件的 catalog、GLB 和 PackedScene；
@@ -155,7 +166,7 @@ Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀
   -> 运行具体房间验收
 ```
 
-分支 B 可以自动完成基本结构，但不应声称与 Blender 效果图完全一致。复杂的房间构图应转回 `03-battle-room-instance-layout-authoring`，完成分支 A 后再重放。
+分支 B 可以初始化基本结构，但不应声称与 Blender 效果图完全一致。复杂构图交给 03，可直接在 Godot 编辑房间/变体；只有需要 Blender 参考布局时才选择 A 初始化，不强制回到 Blender。
 
 ## Godot 资产来源
 
@@ -173,7 +184,7 @@ component_catalog.json
 
 硬约束：
 
-- **房间静态 TSCN 的 owner 只改顶层组件实例根**：把运行时组件转挂到房间场景后，只允许 `component_instance.owner = room_scene_root`；不得递归把 `ImportedModel`、Mesh、Collision 等 prefab 内部后代的 owner 改成房间根。递归改 owner 会把组件内部展开写进房间 TSCN，破坏 PackedScene 可编辑边界，并可能在场景退出时造成大规模 RID/ObjectDB 泄漏。验收须比较“房间根直接子节点数 = 布局实例数”，并确认组件根仍以 `instance=ExtResource(PackedScene)` 保存、内部后代不在房间文件中重复声明；
+- **房间静态 TSCN 的 owner 只改顶层组件实例根**：把运行时组件转挂到房间场景后，只允许 `component_instance.owner = room_scene_root`；不得递归把 `ImportedModel`、Mesh、Collision 等 prefab 内部后代的 owner 改成房间根。递归改 owner 会把组件内部展开写进房间 TSCN，破坏 PackedScene 可编辑边界，并可能在场景退出时造成大规模 RID/ObjectDB 泄漏。验收须比较“正式 TSCN 组件实例根数 = 运行时对应组件数”（房间设备、分组和挂点另计），并确认组件根仍以 `instance=ExtResource(PackedScene)` 保存、内部后代不在房间文件中重复声明；
 - catalog 声明数、独立导入单元数、PackedScene 可解析数必须相等；缺一件就整体失败，不能静默跳过；
 - 一个组件可被 N 个实例复用；不得因实例数量重复导出 GLB；
 - 运行时路径不携带版本号；版本只写在 source、manifest、PackedScene metadata、布局快照和场景账本；
@@ -205,7 +216,8 @@ assets/art/environments/tower_zones/<block_id>/runtime/room_instances/<room_id>/
 每个具体房间的最终美术装配至少生成：
 
 - 具体房间运行布局/装配 manifest；
-- `assembly_route`：`room_type_layout_replay`、`blender_layout_replay` 或 `whitebox_direct_assembly`；
+- 正式房间/变体 TSCN 路径、房型 → 变体 → 房间关系及实际登记入口；
+- 原初始化 `assembly_route` 可记录 `room_type_layout_replay`、`blender_layout_replay` 或 `whitebox_direct_assembly`；正式 Godot 编辑状态另作验收说明，不声称新增 route 枚举已获代码支持；
 - 房间编号、房间种类、白模源、组件源、Godot PackedScene 引用；
 - 实例数量、包络、门洞、碰撞责任和版本哈希；
 - 运行时验收日志和至少一张游戏内或验收场景截图；
@@ -246,8 +258,7 @@ metadata/authored_room_device = "light_switch"
 根节点补 `metadata/authored_room_devices = true`。ext_resource 用可读 id
 （`900_authored_light` / `901_authored_switch`）而不是 Godot 自动编号，便于人工核对。
 
-🔴 **不要做成 prefab 实例**：`prp_wasteland_light_root_top3d.tscn` /
-`prp_room_light_switch_root_top3d.tscn` 只是「脚本挂载壳」、零数值，实例化后美术仍得进 prefab 才能调值。
+现有迁移采用裸脚本节点，这是历史落盘形态，不是禁止 Prefab 实例覆写的通则。`prp_wasteland_light_root_top3d.tscn` / `prp_room_light_switch_root_top3d.tscn` 的房间实例可保存已暴露属性的覆写；实际编辑器可调字段须验证。不能声称调实例属性必须修改组件母版。
 
 🔴 **灯节点必须写出自己的 `transform` 行**（2026-09-29 踩过）。灯块里 `transform` 紧跟在节点声明行之后、
 `script` 之前；**漏掉它，灯就静默落到艺术根原点（y=0，贴地）**，而属性值（energy/range/seed）全对
@@ -279,7 +290,7 @@ var authored_devices := _adopt_authored_room_devices()   # 静态根下有 Waste
 - 认领后 `_light_switch != null` ⇒ 原「自建 + `_add_runtime_detail_child()`」被 `if _light_switch == null:` 跳过。
 - **blast radius 精确**：静态根下没有 `WastelandLight3D` 的房间逐字走老路径 ⇒ 逐批迁移安全。
 
-### 数值必须抄运行时算定的那一份（抄错＝改画面）
+### 首次无损迁移抄运行时值；正式 TSCN 编辑后保留作者值
 
 | 值 | 公式 |
 | --- | --- |
@@ -325,8 +336,7 @@ var authored_devices := _adopt_authored_room_devices()   # 静态根下有 Waste
 - 整份产物顺带丢 `[gd_scene] uid=`、重编全部 `ext_resource` id、把编辑器早先剥掉的组件元数据补回来
   —— 那是「静态 TSCN 全量重生成」这个独立待办，不属本路径。
 
-⇒ 增改房间一律用**注入器**（外科式、纯插入、行尾保真）；生成器里的 `AUTHORED_DEVICE_ROOMS`
-只当「哪些房已迁移」的**声明**维护，专供探针读取。
+⇒ 首次设备迁移可在审查差异、保留计划和授权后使用注入器；正式房间已有设备时直接在 Godot TSCN 调整，不以旧 ROOMS 表或运行公式覆盖作者值。注入器也须核查具体行为，不能因为“幂等”就假定会保护所有手改。生成器里的 `AUTHORED_DEVICE_ROOMS` 是当前迁移声明，不能被当成自动合并保护。
 
 ### 验收判据
 
@@ -392,7 +402,7 @@ room_01/room_02 因为艺术根恰为 identity 而一直没暴露；扩到 `star
 - 布局包含房间自有共享 Mesh、整屋 GLB 或非法缩放；
 - 默认布局与具体房间差异布局同时复制同一批实例，导致重复视觉/碰撞；
 - Blender→Godot 坐标转换缺失、执行两次，或把历史 `rotation_y_deg` 错当 Blender Y 轴；
-- A 分支布局和 B 分支白盒同时被当成视觉事实源；
+- JSON/Blender/白盒被用作覆盖正式 TSCN 的第二视觉事实源，或未经审查授权重生成正式房间；
 - Godot 代码需要新增房间专用拼装函数；
 - 撤离房缺失信标；
 - 资产导入任务试图触碰玩法/规则类文件。

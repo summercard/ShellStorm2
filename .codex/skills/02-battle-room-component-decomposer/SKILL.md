@@ -1,6 +1,6 @@
 ---
 name: 02-battle-room-component-decomposer
-description: 当按概念图制作战局房间种类 Blender 源，或把历史整屋源重建为可复用组件时使用。正式建模前冻结不超过 50 个组件的计划，同族常规最多 3 个、有明确状态轴最多 5 个；房型源只用组件母版实例拼装，并导出可由 Godot 重放的实例清单。
+description: 当按概念图制作战局房间种类 Blender 源，或把历史整屋源重建为可复用组件时使用。正式建模前冻结不超过 50 个组件的计划，同族常规最多 3 个、有明确状态轴最多 5 个；房型源用组件母版实例表达参考布局，导出供 Godot 初始化与追溯的清单；正式布局由 Godot TSCN 拥有，不自动回灌覆盖。
 agent_created: true
 metadata:
   display_name_zh: 02 战局房间组件拆解
@@ -17,7 +17,7 @@ metadata:
 - **新房型（默认）**：在创建正式 Blender 几何前先冻结 `component_plan.json`；只建计划内的组件母版，整屋只用 Collection Instance 拼装。
 - **历史整屋源（兼容）**：先盘点已有对象并归并，再重建为组件母版＋实例布局；不得继续维护一格一件的旧结构。
 
-**组件 ＝ 一份母版几何（可复用）＋ N 条实例记录（位置/旋转）。** 几何进组件库，位置进实例清单；房型 Blender 源本身就是这些母版实例的可视化拼装场景。
+**组件 ＝ 一份母版几何（可复用）＋ N 个实例（位置/旋转）。** 原始 Blender 文件输出模块化组件，也允许用母版实例制作参考布局。源几何材质归 Blender，组件碰撞与挂点归稳定 Godot Prefab；正式房间布局归 Godot TSCN。`component_instances.json` 只记录初始化与追溯基线，不能自动回灌覆盖正式房间手改。
 
 ```text
 概念图 + 白模
@@ -152,7 +152,7 @@ metadata:
 1. 读取概念图/源文件、manifest、范围锁定记录和白模契约；历史源记录 SHA-256，新房型记录概念图与白模来源签名。
 2. **组件拆分判断先于正式建模**：产出并冻结 `component_plan.json`，断言 `unique_component_count <= 50`。清单未冻结不得创建正式输出网格。
 3. 建立组件表（**每个清单项一行**，不是每个场景实例一行）：`component_id`、中文名、类别、Collection、根对象、依赖对象、局部原点、包络、正面轴、允许旋转、碰撞责任、是否自发光、`serves_room_types`、`instance_count`、`variant_axis/value/reason`。
-4. 在 Blender 的 `01_制作组件` 中每项只建一份母版，在 `02_游戏输出` 中只放 Collection Instance；房型源既是美术制作场景，也是实例清单的可视化真源。严禁为每个槽位复制 Mesh datablock。
+4. 在 Blender 的 `01_制作组件` 中每项只建一份母版，在 `02_游戏输出` 中只放 Collection Instance；房型源既是组件美术制作场景，也可作为初始化实例清单的可视化参考，不拥有正式 Godot 房间布局。严禁为每个槽位复制 Mesh datablock。
 5. 对**清单里的每个组件**建立独立资产包，并将组件母版统一放入：
 
 ```text
@@ -183,9 +183,9 @@ assets/art/environments/tower_zones/<block_id>/runtime/common_components/<compon
 10. 组件拆解文件必须能单独打开、单独渲染、单独验证；不要只保留房间总场景引用。
 11. 生成组件源版本，不覆盖房间种类源，也不覆盖历史组件源。
 
-## 实例清单（位置与旋转的唯一载体）
+## 实例清单（初始化与追溯基线）
 
-组件**不带位置**；房间的摆放由实例清单承载，这样“组件可复用”与“布局能完整还原”同时成立。
+组件几何**不带房间摆位**；初始化位置与旋转可由实例清单承载，正式房间位置与旋转则由 Godot TSCN 拥有。清单可还原 Blender 参考布局，但不持续支配作者手改的房间。房型 → 房间变体 → 具体房间三层可通过 Godot 场景或明确资源路径管理；固定房型不禁止布局变体，组件 50/3/5 预算不等于实例数量或布局变体数量上限。
 
 保存到组件库同级：`<block_id>/source/common_components/v###/component_instances.json`
 
@@ -229,7 +229,7 @@ assets/art/environments/tower_zones/<block_id>/runtime/common_components/<compon
 - `source_object` 保留到源对象的追溯，是“能还原”的证据；
 - `position_m` 必须是 `blender_room_local`，由 `inverse(ROOM_FRAME_world) @ source_instance_world_transform` 得出；`ROOM_FRAME` 的平面原点只能来自模板 footprint 包围盒中心，垂直原点只能来自几何实测走行面，不得从组件实例 bbox、装饰件外凸或对象名称猜测；
 - 组件包里**不得**让摆位字段参与几何；`source_world_origin_m` 一类只作追溯元数据保留，严禁直接复制给 `position_m`；
-- 同一份实例清单可被 `03-battle-room-instance-layout-authoring` 与 Godot 运行时共同消费。
+- 同一份实例清单可供 03 和 Godot 初始化/隔离验收消费；正式场景已编辑后不得自动再次重放到原路径。`block_id` 按真实区块兼容 `battle/expedition`，历史 schema 名中的 battle 不代表区块只能为 battle。
 
 ## 必须记录的契约
 
@@ -286,7 +286,7 @@ runtime_logic_owner = gameplay layer, not component
 
 ## 拼装还原验收
 
-组件拆得对不对，不看包的数量，看**Blender 和 Godot 能否用同一份实例数据拼回来**：
+组件拆得对不对，不看包的数量，看**初始化/隔离验收时 Blender 和 Godot 能否用同一份实例数据拼回来**。这不是正式 TSCN 手改后仍须与旧清单等同的要求；正式验收以 TSCN、批准差异和运行实测为准：
 
 1. 用 `component_plan.json`＋`component_instances.json` 在 Blender 重建房间；
 2. 逐组件导出 GLB、组装稳定 PackedScene，再由 Godot 用同一实例记录重放；不得导入房型整屋 GLB作为捷径；
@@ -337,9 +337,10 @@ runtime_logic_owner = gameplay layer, not component
 - **拼装守恒门禁**：`Σ instance_count == 源场景对象数`，组件清单 ＋ 实例清单必须能 1:1 还原源场景。
 - **互用率门禁**：陈设件中 `serves_room_types` ≥2 的比例 ≥ 0.6；结构件接口达标率必须 = 1.0。
 - 组件包不可为空；对象不得跨包重复归属。
-- 组件不能携带房间编号布局位置作为固定世界坐标；房间位置属于实例清单。
+- 组件不能携带房间编号布局位置作为固定世界坐标；初始化摆位可存实例清单，正式摆位属于房间 TSCN。
 - 禁止从具体房间实例反向生成“伪通用组件”。从具体房间派生组件本身是允许的（房型源本就按一个具体房间制作），但**必须先按归并键聚类**；未归并、一个槽位一个包的产物视为伪通用组件。
-- 禁止输出房间专用整屋 GLB/PackedScene。
+- 禁止输出整屋 GLB 或房间专用的共享组件几何副本；允许引用稳定组件 PackedScene 的房间/变体 TSCN。
+- 组件重导只更新组件资产并保留房间实例覆写；几何、接口、碰撞或挂点变化须核查受影响房间。现有静态生成器没有自动合并保护，正式房间禁止未审查全量生成；回填须差异、保留/回填计划及授权。
 - `room_owned_geometry` 对后续实例布局必须为 `false`。
 - 所有组件必须有 AssetID、稳定原点、包络、旋转和来源追溯。
 - 锚点验收必须同时覆盖三层：ROOT 对象变换、Mesh 相对 ROOT 的局部变换、输出 Collection 的 `instance_offset`。三层任一非零都不得交给房间布局；尤其要做同族差异检查（普通墙、门墙、门扇），防止只有少数组件残留制作场景偏移而被整体抽查漏过。

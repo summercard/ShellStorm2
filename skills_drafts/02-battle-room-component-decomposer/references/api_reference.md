@@ -16,7 +16,9 @@
 
 ## `component_instances.json`
 
-每个实例包含 `component_id`、`instance_id`、`position_m`、`rotation_y_deg`、`scale`、`source_object`。历史字段 `rotation_y_deg` 在 Blender 端表示绕 Z；必须由 `coordinate_contract` 显式映射到 Godot。
+每个初始化/追溯实例包含 `component_id`、`instance_id`、`position_m`、`rotation_y_deg`、`scale`、`source_object`。历史字段 `rotation_y_deg` 在 Blender 端表示绕 Z；必须由 `coordinate_contract` 显式映射到 Godot。`block_id` 兼容 `battle/expedition`。
+
+正式房间布局属于 Godot TSCN，允许编辑实例摆位/增删/启用与灯光。清单不能自动回灌覆盖手改；组件重导只更新组件资产，保留实例覆写，几何/接口变化先核查影响。
 
 ## 门禁
 
@@ -24,4 +26,4 @@
 - 无状态轴的同族 `<= 3`，有完整统一状态轴的同族 `<= 5`；
 - 同一母版重复摆放必须共享 Collection/Mesh datablock；
 - `component_plan`、catalog、独立组件包和实例清单的 ID 必须守恒；
-- Blender 与 Godot 均能用同一实例清单还原 bbox 与画面；禁止整屋 GLB。
+- 初始化/隔离验收时 Blender 与 Godot 能用同一清单还原 bbox 与画面；正式编辑后按 TSCN 与批准差异验收，不强制匹配旧清单。禁止整屋 GLB，允许引用组件 Prefab 的房间/变体 TSCN。

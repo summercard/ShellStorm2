@@ -1,6 +1,6 @@
 # v0.1 模块、功能与工程契约索引
 
-工程版本：0.1.0。设计索引修订：r10（2026-09-24）。事实核对基线：`622d6c4a` + 当前工作区。
+工程版本：0.1.0。设计索引修订：r11（2026-09-30，房间生产流程与接入状态）。事实核对基线：`622d6c4a` + 当前工作区。
 后续验收快照：[`bda2c828`全局验收](audits/2026-09-24_global_acceptance.md)及[逐功能表](audits/2026-09-24_global_feature_matrix.md)。下表中的历史通过数/资产零问题不代表本轮通过，当前结果以新快照为准。
 本表建立追溯入口，不替代各模块设计，也不把现存实现自动认定为设计已批准。功能关系、解耦和文档补全见[执行计划](FEATURE_RELATIONSHIP_PLAN.md)与[逐项跟踪表](FEATURE_RELATIONSHIP_MATRIX.md)。[P0/P1/P2 后全项目完整复评](audits/2026-09-23_full_project_reassessment.md)保留其原时点证据；后续资产复核和开发记录优先于其中的旧数字。
 
@@ -27,7 +27,7 @@
 | PRESENTATION | `HUDPresenter3D`武器栏快照、公共UI组件；VfxPool/CombatEffectPool、AudioManager、MusicManager | HUD/音乐部分；VFX未收敛 | UI、音效、音乐已有独立账本/Skill/验收链；旧CombatEffectPool兼容链仍在；后处理设计与13.1施工已分开，但调参保存失败结果与真渲染未验 |
 | PERFORMANCE | GraphicsSettingsManager、PostfxOverlay、RuntimePerformanceManager→场景/渲染 | 部分 | 调参面板越过画质服务；预算失配、渲染用例归类不全 |
 | TRAINING | `TrainingRange3D`→只读BlueprintRegistry→共用Player3D→训练会话统计 | **测试功能1.0已完成，可独立启动与验收** | 后续伤害分析、靶标编辑和自动压测另升功能版本 |
-| ASSET | XLSX台账→生产源/转移账本→GLB→PackedScene→正式场景 | 有生产标准，运行表现仍需逐批验收 | 新拉取后9本分账本410项，完整性和拆账漂移均为0；真实渲染和未来增量仍需按域核签 |
+| ASSET | 组件规划→Blender母版/实例→稳定GLB/PackedScene→正式房间TSCN；账本分别追踪源/组件/房间 | 组件源与房间编辑分权，接入部分完成 | 房间TSCN拥有布局/灯光/启用编辑权，JSON只作初始化/追溯；组件更新不得覆盖房间编辑，但现有生成器无自动合并保护。三层变体数据登记未实现，禁止未审查重生成 |
 | TOOLING | tests/verification、脚本、src/testing→隔离工程→日志与退出码 | 部分 | 用户目录与 `.godot` 已隔离，冷/热缓存自检通过；156 个验证场景已全部唯一归属；验证注册、跨域边界、37功能追溯和媒体资产门禁已并入文档总门禁 |
 
 ## 2. 功能追溯表
@@ -45,7 +45,7 @@
 | WEAPON-OWNERSHIP | 完整武器实例转移 | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md)、[09](09_技术施工_存档结算与复活.md) | `WeaponInstance`→`EquipmentTransactionService` | `verify_equipment_transaction_service`、`verify_weapon_instance_contract_matrix` | 可用替身验证；全局所有权仍待补 |
 | INVENTORY-SLOTS | 背包、保险、快捷物品、扩容 | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md) | `InventoryModule/InsuranceModule`→Dungeon→InventoryUI | `verify_backpack_equipment_flow`、`verify_finite_ammo_flow`、`verify_guaranteed_loadout_ammo_flow` | 有规范与历史；场景编排分散 |
 | FATE-RULES | 48运行塔罗、78目标牌组、三作用域 | [14](14_技术施工_命运塔罗牌组.md)、[04](04_技术施工_战斗与局内成长.md) | `FateCardPresets/FateCardEngine/TarotFateCatalog` | `verify_tarot_fate_runtime`、`verify_celestial_fate_scope_flow` | 有设计与历史；新增30张未施工 |
-| WORLD-PLAN | 纯数据楼层/房间图与四区块归属 | [远征01 设计](design/远征关卡01设计.md)；[05](05_技术施工_关卡生成与爬楼.md)、[05.1](05.1_关卡区块设计.md) | `FloorPlanGenerator/RoomGraphRuntime`、`TowerDescent3D/Blocks` | `verify_floor_plan_generator`、`verify_room_graph_persistence_services`、`verify_tower_level_blocks`、`verify_dungeon_wave_intermission` | 可独立；缺领域版本与完整门事务；波次2秒间歇专项见[开发记录](development/2026-09-26_room_wave_intermission.md) |
+| WORLD-PLAN | 纯数据关卡/房间图；塔楼四区块与远征Expedition归属 | [远征01 设计](design/远征关卡01设计.md)；[05](05_技术施工_关卡生成与爬楼.md)、[05.1](05.1_关卡区块设计.md) | `FloorPlanGenerator/RoomGraphRuntime`、`TowerDescent3D/Blocks` | `verify_floor_plan_generator`、`verify_room_graph_persistence_services`、`verify_tower_level_blocks`、`verify_dungeon_wave_intermission` | 计划/查询可独立；远征01数据驱动13房、固定房型（pin_content_templates=true）、整房端口约束摆位已接通。room_03/room_04差异仍硬编码；房型→变体→房间数据登记未实现，不要求每局随机。完整门事务及整关回归仍待闭环；波次记录见[开发记录](development/2026-09-26_room_wave_intermission.md) |
 | WORLD-ENTRY | 基地全息城市选关、读取界面与远征入场 | [全息城市设计](design/远征全息城市交互设计.md)；[05](05_技术施工_关卡生成与爬楼.md)、[07](07_技术施工_基地设施.md)、[09](09_技术施工_存档结算与复活.md) | BaseFacilityCatalog→RogueMapSelectMenu→HologramCity3D / ExpeditionLoadingScreen→目标关卡 | `verify_expedition_hologram_city`（真实窗口与tower模式）、`verify_expedition_departure_carry`、`verify_expedition_level01_flow` | 全息城市原型与连续镜头接入；两入口空间交互与返程通过。完整关卡回归仍有墙体/走廊失败，见[记录](development/2026-09-29_expedition_hologram_city.md) |
 | WORLD-GATE | 到达门、Boss门、楼梯 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D`→FloorBundle→runtime checkpoint→RoomDoor3D | `verify_arrival_gate_floor_bundle_flow` | 2026-09-23裁决：连续爬塔非当前主玩法，97F以下关闭；旧到达门/Boss门综合失败降为低优先级保留。正式版本只要求远征主线、99F与98F区块00；未来重开爬塔时复核完整合同 |
 | WORLD-SEGMENT | 隔离间、区段卸载、永久遗失 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D._finalize_airlock_commit`→BaseManager checkpoint→unload | `verify_arrival_gate_floor_bundle_flow`、`verify_three_segment_tower_generation_flow` | 2026-09-23裁决：三区段、隔离间与永久遗失链当前关闭并降为低优先级；保留实现和验收，不判绿，未来连续爬塔重新开放时统一恢复与核签 |
@@ -73,7 +73,7 @@
 | GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [玩法设计](design/时间日夜与画质设计.md)；[13.1](13.1_技术施工_画质设置与后处理.md)、[13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`、`verify_postfx_autopersist`、`verify_graphics_settings_visual` | 设计与施工已分层；调参转正范围待裁决，保存失败结果、UI与3D像素隔离、正式画面/性能仍未闭环，旧7/9口径失配不能只凭文档关闭 |
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
 | TRAINING-RANGE | 独立靶场与武器预览 | [11.1](11.1_测试功能_独立训练场.md) | `src/training3d/TrainingRange3D.gd` | `verify_training_range_3d_flow`、`verify_training_range_3d_visual` | **功能版本1.0已完成**：当前注册表 19 架、67 组合，三类靶标、重置/退出、暂停及 BaseData 隔离均由注册表驱动的独立契约覆盖 |
-| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 概念→白盒JSON/顶视图→风格稿→Blend→GLB→PackedScene→XLSX | `scripts/check_asset_registry.py`、`scripts/check_media_asset_domains.py`、资产专项、真实场景渲染 | 9本分账本中UI/音效/音乐已各自具有独立账本、Skill与验收链；原合并表现资源账本已退役。当前 411 项资产完整性与拆账漂移均为 0。L 型走廊 Blender 房间种类源（v003 为 15m 宽）已按业主裁决由战斗区迁入远征关卡01，battle 侧不留副本且已登记账本，尚无白模和运行时接入，见[记录](development/2026-09-24_expedition01_l_corridor_ownership_migration.md)。历史哈希/状态漂移已按正式运行资产和共享单账原则完成核对，后续替换仍需逐项确认来源 |
+| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 白盒/风格→02建模前组件计划→01母版/实例→稳定组件→03可继承/Godot变体/Blender差异→正式房间TSCN | `scripts/check_asset_registry.py`、`scripts/check_media_asset_domains.py`、资产专项、真实场景渲染 | **部分完成**：远征13房已有静态TSCN；L型走廊v012的l_turn/u_turn、数据库v014的db_01、办公室v009、桥房v010、Boss v011及复用安全屋已接入。标准房82实例源未转正，room_07仅通用壳体；db_02与撤离正式美术/完整验收未闭环。数据登记和自动合并保护未实现；历史资产零问题不代表当前工作区重新通过，见[链路修订记录](development/2026-09-18_战局房间美术制成与导入链路.md) |
 | ASSET-ROOFTOP | 天台参考组件与标准外墙 | [组件契约r2](design/rooftop_component_library.md) | `tower_zones/rooftop/source/reference_components/v002/`的Blend与catalog；Godot入口保留原版 | `qa/validate_rooftop.py`、锁区签名、严格逐面UV、固定镜头渲染 | Blender源44独立包完成；新增7挂藤变体与厚门口；运行天台设施已清空，见[清空记录](development/2026-09-17_rooftop_facilities_removed.md)；外墙主体5×0.30×11.9m；未导出或接入Godot，见[交付记录](development/2026-09-17_rooftop_ivy_thick_door_v002.md) |
 
 ## 3. 开发记录定位

@@ -4,7 +4,8 @@
 
 - 组件几何事实源：战局 `common_components/v###` 中已通过美术与导入门禁的最高正式版本。
 - 组件运行事实源：Godot 稳定 PackedScene 路径及其 metadata。
-- 房间空间事实源：房间 Blender 源与由它导出的 `room_layout.json`。
+- 正式房间视觉布局事实源：Godot 房间/变体 TSCN，允许模块实例摆位/增删/启用和灯光编辑；Blender/JSON 实例清单仅初始化与追溯，不能自动回灌。
+- 组件碰撞和组件挂点事实源：稳定组件 Prefab；源几何材质归 Blender。房型 → 房间变体 → 具体房间三层可用 Godot 场景或明确资源路径管理，固定房型不禁止作者变体。
 - 楼层拓扑事实源：`FloorPlanGenerator` / `unit_plan.json` 的房间位置、尺寸、连接关系。
 
 `room_layout.json` 只描述房间内部组件实例，不重复保存 Mesh，不负责决定房间在楼层中的世界坐标。
@@ -90,10 +91,10 @@ Blender rotation_z -> Godot rotation_y（符号按已验收转换器固化）
 | `schema` | 固定为 `shellstorm2.battle.room_layout` |
 | `schema_version` | 当前为整数 `1` |
 | `room_id` | 项目内唯一稳定 ID |
-| `block_id` | 固定为 `battle` |
+| `block_id` | 按真实区块使用 `battle` 或 `expedition`；历史 schema 名不限制区块 |
 | `layout_version` | `vNNN`，只表示布局版本 |
 | `coordinate_system` | 必须明确，禁止省略 |
-| `source_blend` | 房间布局源，不得指向组件母版 |
+| `source_blend` | 可选初始化参考源，无 Blender 差异布局时可为 null；正式布局使用已登记 TSCN 路径 |
 | `whitebox_source` | 房间尺寸和门连接来源 |
 | `component_library` | 必须包含 catalog 来源与版本/哈希 |
 | `instances` | 组件实例数组；允许空，但不能缺字段 |
@@ -155,7 +156,9 @@ Blender rotation_z -> Godot rotation_y（符号按已验收转换器固化）
 - `layout_version`：组件实例位置和房间连接版本。
 - `room gameplay version`：房间玩法逻辑版本，可与布局版本不同。
 
-组件升级不要求房间布局升版，前提是组件接口、包络、锚点和兼容性未变。若接口变化，必须标记 breaking change，并逐房间重放验证。
+组件重导只更新组件资产并保留正式房间实例覆写；几何、包络、原点、节点路径、碰撞/挂点接口变化须核查所有受影响 TSCN 与运行结果，不直接重放覆盖。现有静态生成器不具自动合并保护；正式房间禁止未审查全量生成，回填须先备份、输出差异、提出保留/回填计划并取得授权。
+
+当前 `room_03/04` 仍在代码中注册，轻量 override 仅支持 `remove`；通用资源自动注册和 add/transform/enable JSON 解析不是已完成能力。
 
 ## 8. 最低验收指标
 
@@ -165,7 +168,8 @@ room_owned_geometry = false
 non_unit_scale_count = 0
 illegal_rotation_count = 0
 outside_room_bounds_count = 0
-Blender实例数 = JSON实例数 = Godot运行实例数
+初始化验收：Blender参考实例数 = JSON实例数 = 隔离Godot实例数
+正式编辑后：TSCN组件实例与运行结果一致，批准差异保留；不强制等于旧JSON
 房间专用共享组件数 = 0
 组件Stable PackedScene加载失败数 = 0
 ```

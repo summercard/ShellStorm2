@@ -1,0 +1,486 @@
+{
+  "roots": {
+    "A": "C:\\Users\\zhuangmenghong\\.workbuddy\\skills",
+    "B": "I:\\工作项目\\shellstrom2\\ShellStorm2\\skills_drafts",
+    "C": "I:\\工作项目\\shellstrom2\\ShellStorm2\\.codex\\skills",
+    "D": "C:\\Users\\zhuangmenghong\\.codex\\skills",
+    "W": "I:\\工作项目\\shellstrom2\\.workbuddy\\skills"
+  },
+  "files": [
+    {
+      "file": "00-battle-room-layout-assembler/references/api_reference.md",
+      "copies": {
+        "A": {
+          "sha256": "325bc86872b8167d62b9cdddb73a9a9d5740e64821713f0c9e8e2f8ea936fc3a",
+          "size": 6368
+        },
+        "B": {
+          "sha256": "325bc86872b8167d62b9cdddb73a9a9d5740e64821713f0c9e8e2f8ea936fc3a",
+          "size": 6368
+        },
+        "C": {
+          "sha256": "325bc86872b8167d62b9cdddb73a9a9d5740e64821713f0c9e8e2f8ea936fc3a",
+          "size": 6368
+        },
+        "D": {
+          "sha256": "325bc86872b8167d62b9cdddb73a9a9d5740e64821713f0c9e8e2f8ea936fc3a",
+          "size": 6368
+        },
+        "W": {
+          "sha256": "325bc86872b8167d62b9cdddb73a9a9d5740e64821713f0c9e8e2f8ea936fc3a",
+          "size": 6368
+        }
+      }
+    },
+    {
+      "file": "00-battle-room-layout-assembler/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "70ee086ef3f4a9c00c05b1420ec137f00a21165a348254014eeb3265aed028c2",
+          "size": 15984
+        },
+        "B": {
+          "sha256": "70ee086ef3f4a9c00c05b1420ec137f00a21165a348254014eeb3265aed028c2",
+          "size": 15984
+        },
+        "C": {
+          "sha256": "70ee086ef3f4a9c00c05b1420ec137f00a21165a348254014eeb3265aed028c2",
+          "size": 15984
+        },
+        "D": {
+          "sha256": "70ee086ef3f4a9c00c05b1420ec137f00a21165a348254014eeb3265aed028c2",
+          "size": 15984
+        },
+        "W": {
+          "sha256": "70ee086ef3f4a9c00c05b1420ec137f00a21165a348254014eeb3265aed028c2",
+          "size": 15984
+        }
+      }
+    },
+    {
+      "file": "01-battle-room-type-art-authoring/references/room_type_contract.md",
+      "copies": {
+        "A": {
+          "sha256": "6f7df8d3eaa65ba6f80898d3dadc2a3be8c19f3aa0908e2fdd5d6d88d8c5cfe1",
+          "size": 1686
+        },
+        "B": {
+          "sha256": "6f7df8d3eaa65ba6f80898d3dadc2a3be8c19f3aa0908e2fdd5d6d88d8c5cfe1",
+          "size": 1686
+        },
+        "C": {
+          "sha256": "6f7df8d3eaa65ba6f80898d3dadc2a3be8c19f3aa0908e2fdd5d6d88d8c5cfe1",
+          "size": 1686
+        },
+        "D": {
+          "sha256": "6f7df8d3eaa65ba6f80898d3dadc2a3be8c19f3aa0908e2fdd5d6d88d8c5cfe1",
+          "size": 1686
+        },
+        "W": {
+          "sha256": "6f7df8d3eaa65ba6f80898d3dadc2a3be8c19f3aa0908e2fdd5d6d88d8c5cfe1",
+          "size": 1686
+        }
+      }
+    },
+    {
+      "file": "01-battle-room-type-art-authoring/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "f154859b5ad8b8874fd6bd2b69890971aadebc1572598f5149141572c77c963f",
+          "size": 10807
+        },
+        "B": {
+          "sha256": "f154859b5ad8b8874fd6bd2b69890971aadebc1572598f5149141572c77c963f",
+          "size": 10807
+        },
+        "C": {
+          "sha256": "f154859b5ad8b8874fd6bd2b69890971aadebc1572598f5149141572c77c963f",
+          "size": 10807
+        },
+        "D": {
+          "sha256": "f154859b5ad8b8874fd6bd2b69890971aadebc1572598f5149141572c77c963f",
+          "size": 10807
+        },
+        "W": {
+          "sha256": "f154859b5ad8b8874fd6bd2b69890971aadebc1572598f5149141572c77c963f",
+          "size": 10807
+        }
+      }
+    },
+    {
+      "file": "02-battle-room-component-decomposer/references/api_reference.md",
+      "copies": {
+        "A": {
+          "sha256": "18f702eeccc1005a4929627688d05dbf0a038340d12ceb3be711c7262d2ffe13",
+          "size": 1324
+        },
+        "B": {
+          "sha256": "18f702eeccc1005a4929627688d05dbf0a038340d12ceb3be711c7262d2ffe13",
+          "size": 1324
+        },
+        "C": {
+          "sha256": "18f702eeccc1005a4929627688d05dbf0a038340d12ceb3be711c7262d2ffe13",
+          "size": 1324
+        },
+        "D": {
+          "sha256": "18f702eeccc1005a4929627688d05dbf0a038340d12ceb3be711c7262d2ffe13",
+          "size": 1324
+        },
+        "W": {
+          "sha256": "18f702eeccc1005a4929627688d05dbf0a038340d12ceb3be711c7262d2ffe13",
+          "size": 1324
+        }
+      }
+    },
+    {
+      "file": "02-battle-room-component-decomposer/references/component_decomposition_contract.md",
+      "copies": {
+        "A": {
+          "sha256": "47bcf4deb02bfb3a28fe6607e2836ee1a4f417cfba47782ef351f2760424c5a7",
+          "size": 1277
+        },
+        "B": {
+          "sha256": "47bcf4deb02bfb3a28fe6607e2836ee1a4f417cfba47782ef351f2760424c5a7",
+          "size": 1277
+        },
+        "C": {
+          "sha256": "47bcf4deb02bfb3a28fe6607e2836ee1a4f417cfba47782ef351f2760424c5a7",
+          "size": 1277
+        },
+        "D": {
+          "sha256": "47bcf4deb02bfb3a28fe6607e2836ee1a4f417cfba47782ef351f2760424c5a7",
+          "size": 1277
+        },
+        "W": {
+          "sha256": "47bcf4deb02bfb3a28fe6607e2836ee1a4f417cfba47782ef351f2760424c5a7",
+          "size": 1277
+        }
+      }
+    },
+    {
+      "file": "02-battle-room-component-decomposer/references/component_split_decision_contract.md",
+      "copies": {
+        "A": {
+          "sha256": "bcb42177e1a4d0944e38c1de78456344aa5f174d5edac5d6668ae40f8cff084a",
+          "size": 10969
+        },
+        "B": {
+          "sha256": "bcb42177e1a4d0944e38c1de78456344aa5f174d5edac5d6668ae40f8cff084a",
+          "size": 10969
+        },
+        "C": {
+          "sha256": "bcb42177e1a4d0944e38c1de78456344aa5f174d5edac5d6668ae40f8cff084a",
+          "size": 10969
+        },
+        "D": {
+          "sha256": "bcb42177e1a4d0944e38c1de78456344aa5f174d5edac5d6668ae40f8cff084a",
+          "size": 10969
+        },
+        "W": {
+          "sha256": "bcb42177e1a4d0944e38c1de78456344aa5f174d5edac5d6668ae40f8cff084a",
+          "size": 10969
+        }
+      }
+    },
+    {
+      "file": "02-battle-room-component-decomposer/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "7fd8d6ab969c7faf63dc5f8584e24d37e2386c5f07f4497c1e95363028a76ce8",
+          "size": 28499
+        },
+        "B": {
+          "sha256": "7fd8d6ab969c7faf63dc5f8584e24d37e2386c5f07f4497c1e95363028a76ce8",
+          "size": 28499
+        },
+        "C": {
+          "sha256": "7fd8d6ab969c7faf63dc5f8584e24d37e2386c5f07f4497c1e95363028a76ce8",
+          "size": 28499
+        },
+        "D": {
+          "sha256": "7fd8d6ab969c7faf63dc5f8584e24d37e2386c5f07f4497c1e95363028a76ce8",
+          "size": 28499
+        },
+        "W": {
+          "sha256": "7fd8d6ab969c7faf63dc5f8584e24d37e2386c5f07f4497c1e95363028a76ce8",
+          "size": 28499
+        }
+      }
+    },
+    {
+      "file": "03-battle-room-instance-layout-authoring/references/api_reference.md",
+      "copies": {
+        "A": {
+          "sha256": "ae0ba58b249abc19653192bf5f8a3046994760c5e71411caf9725672e5c1c850",
+          "size": 918
+        },
+        "B": {
+          "sha256": "ae0ba58b249abc19653192bf5f8a3046994760c5e71411caf9725672e5c1c850",
+          "size": 918
+        },
+        "C": {
+          "sha256": "ae0ba58b249abc19653192bf5f8a3046994760c5e71411caf9725672e5c1c850",
+          "size": 918
+        },
+        "D": {
+          "sha256": "ae0ba58b249abc19653192bf5f8a3046994760c5e71411caf9725672e5c1c850",
+          "size": 918
+        },
+        "W": {
+          "sha256": "ae0ba58b249abc19653192bf5f8a3046994760c5e71411caf9725672e5c1c850",
+          "size": 918
+        }
+      }
+    },
+    {
+      "file": "03-battle-room-instance-layout-authoring/references/room_instance_layout_contract.md",
+      "copies": {
+        "A": {
+          "sha256": "25b6e93fa400d4a219bde965309831866cfa786fb47e54b9dce300bec0a0813a",
+          "size": 1611
+        },
+        "B": {
+          "sha256": "25b6e93fa400d4a219bde965309831866cfa786fb47e54b9dce300bec0a0813a",
+          "size": 1611
+        },
+        "C": {
+          "sha256": "25b6e93fa400d4a219bde965309831866cfa786fb47e54b9dce300bec0a0813a",
+          "size": 1611
+        },
+        "D": {
+          "sha256": "25b6e93fa400d4a219bde965309831866cfa786fb47e54b9dce300bec0a0813a",
+          "size": 1611
+        },
+        "W": {
+          "sha256": "25b6e93fa400d4a219bde965309831866cfa786fb47e54b9dce300bec0a0813a",
+          "size": 1611
+        }
+      }
+    },
+    {
+      "file": "03-battle-room-instance-layout-authoring/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "47d53c8566fe4298bb3851da95e4f88ecfe57315a79a9d3a65ced0bc1aa29bf8",
+          "size": 9109
+        },
+        "B": {
+          "sha256": "47d53c8566fe4298bb3851da95e4f88ecfe57315a79a9d3a65ced0bc1aa29bf8",
+          "size": 9109
+        },
+        "C": {
+          "sha256": "47d53c8566fe4298bb3851da95e4f88ecfe57315a79a9d3a65ced0bc1aa29bf8",
+          "size": 9109
+        },
+        "D": {
+          "sha256": "47d53c8566fe4298bb3851da95e4f88ecfe57315a79a9d3a65ced0bc1aa29bf8",
+          "size": 9109
+        },
+        "W": {
+          "sha256": "47d53c8566fe4298bb3851da95e4f88ecfe57315a79a9d3a65ced0bc1aa29bf8",
+          "size": 9109
+        }
+      }
+    },
+    {
+      "file": "04-battle-room-runtime-assembler/references/api_reference.md",
+      "copies": {
+        "A": {
+          "sha256": "8fb766ee739b0b3d01b59a0767a9a9ec4bb874707c49e2fd4347771460138146",
+          "size": 950
+        },
+        "B": {
+          "sha256": "8fb766ee739b0b3d01b59a0767a9a9ec4bb874707c49e2fd4347771460138146",
+          "size": 950
+        },
+        "C": {
+          "sha256": "8fb766ee739b0b3d01b59a0767a9a9ec4bb874707c49e2fd4347771460138146",
+          "size": 950
+        },
+        "D": {
+          "sha256": "8fb766ee739b0b3d01b59a0767a9a9ec4bb874707c49e2fd4347771460138146",
+          "size": 950
+        },
+        "W": {
+          "sha256": "8fb766ee739b0b3d01b59a0767a9a9ec4bb874707c49e2fd4347771460138146",
+          "size": 950
+        }
+      }
+    },
+    {
+      "file": "04-battle-room-runtime-assembler/references/runtime_route_contract.md",
+      "copies": {
+        "A": {
+          "sha256": "09de9c2d3a4c1a1178349790c019cdacc5a65c9d1f0af5b64616ffc2bc323150",
+          "size": 2443
+        },
+        "B": {
+          "sha256": "09de9c2d3a4c1a1178349790c019cdacc5a65c9d1f0af5b64616ffc2bc323150",
+          "size": 2443
+        },
+        "C": {
+          "sha256": "09de9c2d3a4c1a1178349790c019cdacc5a65c9d1f0af5b64616ffc2bc323150",
+          "size": 2443
+        },
+        "D": {
+          "sha256": "09de9c2d3a4c1a1178349790c019cdacc5a65c9d1f0af5b64616ffc2bc323150",
+          "size": 2443
+        },
+        "W": {
+          "sha256": "09de9c2d3a4c1a1178349790c019cdacc5a65c9d1f0af5b64616ffc2bc323150",
+          "size": 2443
+        }
+      }
+    },
+    {
+      "file": "04-battle-room-runtime-assembler/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "8422cdf7945fede19f5abb678bde8ab0a69dcdf28d6ba030f80d00518da60b4f",
+          "size": 26755
+        },
+        "B": {
+          "sha256": "8422cdf7945fede19f5abb678bde8ab0a69dcdf28d6ba030f80d00518da60b4f",
+          "size": 26755
+        },
+        "C": {
+          "sha256": "8422cdf7945fede19f5abb678bde8ab0a69dcdf28d6ba030f80d00518da60b4f",
+          "size": 26755
+        },
+        "D": {
+          "sha256": "8422cdf7945fede19f5abb678bde8ab0a69dcdf28d6ba030f80d00518da60b4f",
+          "size": 26755
+        },
+        "W": {
+          "sha256": "8422cdf7945fede19f5abb678bde8ab0a69dcdf28d6ba030f80d00518da60b4f",
+          "size": 26755
+        }
+      }
+    },
+    {
+      "file": "blender-game-prop-standard/references/specification.md",
+      "copies": {
+        "A": {
+          "sha256": "3d4580cb15082ae3404c6651ccba1d879b25f9f3127ea00c928ddd4cba995671",
+          "size": 14415
+        },
+        "B": {
+          "sha256": "3d4580cb15082ae3404c6651ccba1d879b25f9f3127ea00c928ddd4cba995671",
+          "size": 14415
+        },
+        "C": {
+          "sha256": "3d4580cb15082ae3404c6651ccba1d879b25f9f3127ea00c928ddd4cba995671",
+          "size": 14415
+        },
+        "D": {
+          "sha256": "3d4580cb15082ae3404c6651ccba1d879b25f9f3127ea00c928ddd4cba995671",
+          "size": 14415
+        },
+        "W": {
+          "sha256": "3d4580cb15082ae3404c6651ccba1d879b25f9f3127ea00c928ddd4cba995671",
+          "size": 14415
+        }
+      }
+    },
+    {
+      "file": "blender-game-prop-standard/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "a21e8c9a8bb162f673bd26780778a058fecfd56728153f84c91971fa9babbe02",
+          "size": 13320
+        },
+        "B": {
+          "sha256": "a21e8c9a8bb162f673bd26780778a058fecfd56728153f84c91971fa9babbe02",
+          "size": 13320
+        },
+        "C": {
+          "sha256": "a21e8c9a8bb162f673bd26780778a058fecfd56728153f84c91971fa9babbe02",
+          "size": 13320
+        },
+        "D": {
+          "sha256": "a21e8c9a8bb162f673bd26780778a058fecfd56728153f84c91971fa9babbe02",
+          "size": 13320
+        },
+        "W": {
+          "sha256": "a21e8c9a8bb162f673bd26780778a058fecfd56728153f84c91971fa9babbe02",
+          "size": 13320
+        }
+      }
+    },
+    {
+      "file": "godot-model-asset-import-standard/references/acceptance-checklist.md",
+      "copies": {
+        "A": {
+          "sha256": "cfe4ad2a636bcffa99dedc132226047a8353fe38b2957c2fd59aa1e492f7b28b",
+          "size": 4903
+        },
+        "B": {
+          "sha256": "cfe4ad2a636bcffa99dedc132226047a8353fe38b2957c2fd59aa1e492f7b28b",
+          "size": 4903
+        },
+        "C": {
+          "sha256": "cfe4ad2a636bcffa99dedc132226047a8353fe38b2957c2fd59aa1e492f7b28b",
+          "size": 4903
+        },
+        "D": {
+          "sha256": "cfe4ad2a636bcffa99dedc132226047a8353fe38b2957c2fd59aa1e492f7b28b",
+          "size": 4903
+        },
+        "W": {
+          "sha256": "cfe4ad2a636bcffa99dedc132226047a8353fe38b2957c2fd59aa1e492f7b28b",
+          "size": 4903
+        }
+      }
+    },
+    {
+      "file": "godot-model-asset-import-standard/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "05eac0c12f4319d96c9a086b0d550e91cc6f279b98cb637abe12e3cead26d47b",
+          "size": 14291
+        },
+        "B": {
+          "sha256": "05eac0c12f4319d96c9a086b0d550e91cc6f279b98cb637abe12e3cead26d47b",
+          "size": 14291
+        },
+        "C": {
+          "sha256": "05eac0c12f4319d96c9a086b0d550e91cc6f279b98cb637abe12e3cead26d47b",
+          "size": 14291
+        },
+        "D": {
+          "sha256": "05eac0c12f4319d96c9a086b0d550e91cc6f279b98cb637abe12e3cead26d47b",
+          "size": 14291
+        },
+        "W": {
+          "sha256": "05eac0c12f4319d96c9a086b0d550e91cc6f279b98cb637abe12e3cead26d47b",
+          "size": 14291
+        }
+      }
+    },
+    {
+      "file": "scene-full-pipeline/SKILL.md",
+      "copies": {
+        "A": {
+          "sha256": "8b9413b48ca687e81ac3ae342163b432d0b9e555bf5cc0f2e18657bb5fac62e9",
+          "size": 11518
+        },
+        "B": {
+          "sha256": "8b9413b48ca687e81ac3ae342163b432d0b9e555bf5cc0f2e18657bb5fac62e9",
+          "size": 11518
+        },
+        "C": {
+          "sha256": "8b9413b48ca687e81ac3ae342163b432d0b9e555bf5cc0f2e18657bb5fac62e9",
+          "size": 11518
+        },
+        "D": {
+          "sha256": "8b9413b48ca687e81ac3ae342163b432d0b9e555bf5cc0f2e18657bb5fac62e9",
+          "size": 11518
+        },
+        "W": {
+          "sha256": "8b9413b48ca687e81ac3ae342163b432d0b9e555bf5cc0f2e18657bb5fac62e9",
+          "size": 11518
+        }
+      }
+    }
+  ]
+}

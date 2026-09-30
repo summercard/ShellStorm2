@@ -1,0 +1,218 @@
+{
+  "changed_source_files": 19,
+  "copied_files": 76,
+  "verified_locations": 5,
+  "unchanged_other_files_in_target_skills": 70,
+  "conflicts": [],
+  "files": [
+    {
+      "file": "00-battle-room-layout-assembler/references/api_reference.md",
+      "sha256": {
+        "A": "0505ab4711b2f01ae993a75a2f8d93cf7581ff253c3384fd674bcb92a16a57d1",
+        "B": "0505ab4711b2f01ae993a75a2f8d93cf7581ff253c3384fd674bcb92a16a57d1",
+        "C": "0505ab4711b2f01ae993a75a2f8d93cf7581ff253c3384fd674bcb92a16a57d1",
+        "D": "0505ab4711b2f01ae993a75a2f8d93cf7581ff253c3384fd674bcb92a16a57d1",
+        "W": "0505ab4711b2f01ae993a75a2f8d93cf7581ff253c3384fd674bcb92a16a57d1"
+      },
+      "crlf": true
+    },
+    {
+      "file": "00-battle-room-layout-assembler/SKILL.md",
+      "sha256": {
+        "A": "9a84fd364150c8646df72dcd78c1d108675c50170b8ee47ba218808495379ab0",
+        "B": "9a84fd364150c8646df72dcd78c1d108675c50170b8ee47ba218808495379ab0",
+        "C": "9a84fd364150c8646df72dcd78c1d108675c50170b8ee47ba218808495379ab0",
+        "D": "9a84fd364150c8646df72dcd78c1d108675c50170b8ee47ba218808495379ab0",
+        "W": "9a84fd364150c8646df72dcd78c1d108675c50170b8ee47ba218808495379ab0"
+      },
+      "crlf": true
+    },
+    {
+      "file": "01-battle-room-type-art-authoring/references/room_type_contract.md",
+      "sha256": {
+        "A": "795757959f58883bdb7f42438afc317456597d4a2cccf295800fae5afdfeec2a",
+        "B": "795757959f58883bdb7f42438afc317456597d4a2cccf295800fae5afdfeec2a",
+        "C": "795757959f58883bdb7f42438afc317456597d4a2cccf295800fae5afdfeec2a",
+        "D": "795757959f58883bdb7f42438afc317456597d4a2cccf295800fae5afdfeec2a",
+        "W": "795757959f58883bdb7f42438afc317456597d4a2cccf295800fae5afdfeec2a"
+      },
+      "crlf": true
+    },
+    {
+      "file": "01-battle-room-type-art-authoring/SKILL.md",
+      "sha256": {
+        "A": "81d60f43d6f5635028abd58cf11d4d2081718b86602264dca05223efd02c9bd5",
+        "B": "81d60f43d6f5635028abd58cf11d4d2081718b86602264dca05223efd02c9bd5",
+        "C": "81d60f43d6f5635028abd58cf11d4d2081718b86602264dca05223efd02c9bd5",
+        "D": "81d60f43d6f5635028abd58cf11d4d2081718b86602264dca05223efd02c9bd5",
+        "W": "81d60f43d6f5635028abd58cf11d4d2081718b86602264dca05223efd02c9bd5"
+      },
+      "crlf": true
+    },
+    {
+      "file": "02-battle-room-component-decomposer/references/api_reference.md",
+      "sha256": {
+        "A": "4ddaad6039c38d41939cf71c2134d2adf8a40b02006416e7cdfee546735d9dbf",
+        "B": "4ddaad6039c38d41939cf71c2134d2adf8a40b02006416e7cdfee546735d9dbf",
+        "C": "4ddaad6039c38d41939cf71c2134d2adf8a40b02006416e7cdfee546735d9dbf",
+        "D": "4ddaad6039c38d41939cf71c2134d2adf8a40b02006416e7cdfee546735d9dbf",
+        "W": "4ddaad6039c38d41939cf71c2134d2adf8a40b02006416e7cdfee546735d9dbf"
+      },
+      "crlf": true
+    },
+    {
+      "file": "02-battle-room-component-decomposer/references/component_decomposition_contract.md",
+      "sha256": {
+        "A": "e8159dd421431b6b81ed1f5c0b06d2149d732ccf4afbef26198371ba2be9c63c",
+        "B": "e8159dd421431b6b81ed1f5c0b06d2149d732ccf4afbef26198371ba2be9c63c",
+        "C": "e8159dd421431b6b81ed1f5c0b06d2149d732ccf4afbef26198371ba2be9c63c",
+        "D": "e8159dd421431b6b81ed1f5c0b06d2149d732ccf4afbef26198371ba2be9c63c",
+        "W": "e8159dd421431b6b81ed1f5c0b06d2149d732ccf4afbef26198371ba2be9c63c"
+      },
+      "crlf": true
+    },
+    {
+      "file": "02-battle-room-component-decomposer/references/component_split_decision_contract.md",
+      "sha256": {
+        "A": "1a695efd9527a5b7d8491385f131e63c0647530a95d605c7acb284ede54c8afa",
+        "B": "1a695efd9527a5b7d8491385f131e63c0647530a95d605c7acb284ede54c8afa",
+        "C": "1a695efd9527a5b7d8491385f131e63c0647530a95d605c7acb284ede54c8afa",
+        "D": "1a695efd9527a5b7d8491385f131e63c0647530a95d605c7acb284ede54c8afa",
+        "W": "1a695efd9527a5b7d8491385f131e63c0647530a95d605c7acb284ede54c8afa"
+      },
+      "crlf": true
+    },
+    {
+      "file": "02-battle-room-component-decomposer/SKILL.md",
+      "sha256": {
+        "A": "ffdedc4d52f2159e97490961850be022c79848bd634a711cdb0e3aaf55167507",
+        "B": "ffdedc4d52f2159e97490961850be022c79848bd634a711cdb0e3aaf55167507",
+        "C": "ffdedc4d52f2159e97490961850be022c79848bd634a711cdb0e3aaf55167507",
+        "D": "ffdedc4d52f2159e97490961850be022c79848bd634a711cdb0e3aaf55167507",
+        "W": "ffdedc4d52f2159e97490961850be022c79848bd634a711cdb0e3aaf55167507"
+      },
+      "crlf": true
+    },
+    {
+      "file": "03-battle-room-instance-layout-authoring/references/api_reference.md",
+      "sha256": {
+        "A": "ebba901f89689df8167bf99eee0d237cb32558995a229d8ab963eb91e19e9843",
+        "B": "ebba901f89689df8167bf99eee0d237cb32558995a229d8ab963eb91e19e9843",
+        "C": "ebba901f89689df8167bf99eee0d237cb32558995a229d8ab963eb91e19e9843",
+        "D": "ebba901f89689df8167bf99eee0d237cb32558995a229d8ab963eb91e19e9843",
+        "W": "ebba901f89689df8167bf99eee0d237cb32558995a229d8ab963eb91e19e9843"
+      },
+      "crlf": true
+    },
+    {
+      "file": "03-battle-room-instance-layout-authoring/references/room_instance_layout_contract.md",
+      "sha256": {
+        "A": "0cfe8af34c8a394d289736eac475b69cd0aab9e7e85869e213bfacf809d9066d",
+        "B": "0cfe8af34c8a394d289736eac475b69cd0aab9e7e85869e213bfacf809d9066d",
+        "C": "0cfe8af34c8a394d289736eac475b69cd0aab9e7e85869e213bfacf809d9066d",
+        "D": "0cfe8af34c8a394d289736eac475b69cd0aab9e7e85869e213bfacf809d9066d",
+        "W": "0cfe8af34c8a394d289736eac475b69cd0aab9e7e85869e213bfacf809d9066d"
+      },
+      "crlf": true
+    },
+    {
+      "file": "03-battle-room-instance-layout-authoring/SKILL.md",
+      "sha256": {
+        "A": "5cc3f668175391373529aed41a2e204a8024fee6460be7bfb1e03a60663a6ee5",
+        "B": "5cc3f668175391373529aed41a2e204a8024fee6460be7bfb1e03a60663a6ee5",
+        "C": "5cc3f668175391373529aed41a2e204a8024fee6460be7bfb1e03a60663a6ee5",
+        "D": "5cc3f668175391373529aed41a2e204a8024fee6460be7bfb1e03a60663a6ee5",
+        "W": "5cc3f668175391373529aed41a2e204a8024fee6460be7bfb1e03a60663a6ee5"
+      },
+      "crlf": true
+    },
+    {
+      "file": "04-battle-room-runtime-assembler/references/api_reference.md",
+      "sha256": {
+        "A": "a7d7524f859479ec334ff7da823cc11d7e35f56d0a62940861afb8fbeac94507",
+        "B": "a7d7524f859479ec334ff7da823cc11d7e35f56d0a62940861afb8fbeac94507",
+        "C": "a7d7524f859479ec334ff7da823cc11d7e35f56d0a62940861afb8fbeac94507",
+        "D": "a7d7524f859479ec334ff7da823cc11d7e35f56d0a62940861afb8fbeac94507",
+        "W": "a7d7524f859479ec334ff7da823cc11d7e35f56d0a62940861afb8fbeac94507"
+      },
+      "crlf": true
+    },
+    {
+      "file": "04-battle-room-runtime-assembler/references/runtime_route_contract.md",
+      "sha256": {
+        "A": "8ca970810185eb91e2dd5dc374910c98312ba11be863b71a91ef4c84b66aeeb9",
+        "B": "8ca970810185eb91e2dd5dc374910c98312ba11be863b71a91ef4c84b66aeeb9",
+        "C": "8ca970810185eb91e2dd5dc374910c98312ba11be863b71a91ef4c84b66aeeb9",
+        "D": "8ca970810185eb91e2dd5dc374910c98312ba11be863b71a91ef4c84b66aeeb9",
+        "W": "8ca970810185eb91e2dd5dc374910c98312ba11be863b71a91ef4c84b66aeeb9"
+      },
+      "crlf": true
+    },
+    {
+      "file": "04-battle-room-runtime-assembler/SKILL.md",
+      "sha256": {
+        "A": "9042bdf9c2bc665845c71675766697d107677616d2ed9bd8a453c1079d646dd0",
+        "B": "9042bdf9c2bc665845c71675766697d107677616d2ed9bd8a453c1079d646dd0",
+        "C": "9042bdf9c2bc665845c71675766697d107677616d2ed9bd8a453c1079d646dd0",
+        "D": "9042bdf9c2bc665845c71675766697d107677616d2ed9bd8a453c1079d646dd0",
+        "W": "9042bdf9c2bc665845c71675766697d107677616d2ed9bd8a453c1079d646dd0"
+      },
+      "crlf": true
+    },
+    {
+      "file": "blender-game-prop-standard/references/specification.md",
+      "sha256": {
+        "A": "d1313d643589b5c760594eb6538cfd261a96e6be0f24f4cafbd0a9220f63cf57",
+        "B": "d1313d643589b5c760594eb6538cfd261a96e6be0f24f4cafbd0a9220f63cf57",
+        "C": "d1313d643589b5c760594eb6538cfd261a96e6be0f24f4cafbd0a9220f63cf57",
+        "D": "d1313d643589b5c760594eb6538cfd261a96e6be0f24f4cafbd0a9220f63cf57",
+        "W": "d1313d643589b5c760594eb6538cfd261a96e6be0f24f4cafbd0a9220f63cf57"
+      },
+      "crlf": true
+    },
+    {
+      "file": "blender-game-prop-standard/SKILL.md",
+      "sha256": {
+        "A": "c78b4c6739e67991e1d0b6eb7d849dfbc9f04b25dd1eae633ec0a9e54293d342",
+        "B": "c78b4c6739e67991e1d0b6eb7d849dfbc9f04b25dd1eae633ec0a9e54293d342",
+        "C": "c78b4c6739e67991e1d0b6eb7d849dfbc9f04b25dd1eae633ec0a9e54293d342",
+        "D": "c78b4c6739e67991e1d0b6eb7d849dfbc9f04b25dd1eae633ec0a9e54293d342",
+        "W": "c78b4c6739e67991e1d0b6eb7d849dfbc9f04b25dd1eae633ec0a9e54293d342"
+      },
+      "crlf": true
+    },
+    {
+      "file": "godot-model-asset-import-standard/references/acceptance-checklist.md",
+      "sha256": {
+        "A": "29c7dae894ab8cac692464faf84b0c18908749d5825cca429019ad03b94d208d",
+        "B": "29c7dae894ab8cac692464faf84b0c18908749d5825cca429019ad03b94d208d",
+        "C": "29c7dae894ab8cac692464faf84b0c18908749d5825cca429019ad03b94d208d",
+        "D": "29c7dae894ab8cac692464faf84b0c18908749d5825cca429019ad03b94d208d",
+        "W": "29c7dae894ab8cac692464faf84b0c18908749d5825cca429019ad03b94d208d"
+      },
+      "crlf": true
+    },
+    {
+      "file": "godot-model-asset-import-standard/SKILL.md",
+      "sha256": {
+        "A": "f1a0c5f034592706b6cb47ac3614ce946e9ef73f93e1c5ff87200ff413f1408b",
+        "B": "f1a0c5f034592706b6cb47ac3614ce946e9ef73f93e1c5ff87200ff413f1408b",
+        "C": "f1a0c5f034592706b6cb47ac3614ce946e9ef73f93e1c5ff87200ff413f1408b",
+        "D": "f1a0c5f034592706b6cb47ac3614ce946e9ef73f93e1c5ff87200ff413f1408b",
+        "W": "f1a0c5f034592706b6cb47ac3614ce946e9ef73f93e1c5ff87200ff413f1408b"
+      },
+      "crlf": true
+    },
+    {
+      "file": "scene-full-pipeline/SKILL.md",
+      "sha256": {
+        "A": "d32bbf2e417837d68444d5a252c68f7505244145191df55fbb7594e43105308d",
+        "B": "d32bbf2e417837d68444d5a252c68f7505244145191df55fbb7594e43105308d",
+        "C": "d32bbf2e417837d68444d5a252c68f7505244145191df55fbb7594e43105308d",
+        "D": "d32bbf2e417837d68444d5a252c68f7505244145191df55fbb7594e43105308d",
+        "W": "d32bbf2e417837d68444d5a252c68f7505244145191df55fbb7594e43105308d"
+      },
+      "crlf": true
+    }
+  ]
+}
