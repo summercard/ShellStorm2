@@ -1,0 +1,49 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08",
+  "version": "v004",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "source_sha256": "2a41fb5d67132305924c7c3b8b89b12d6e4519fbed0f93d8e7a14bdfbafa5d67",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/env_skyline_08_root_top3d.tscn",
+  "component_count": 252,
+  "collision": "none_visual_only",
+  "category": "大地图场景景观",
+  "layout_owner": "Godot TSCN",
+  "coordinate_map": "Blender (x,y,z) -> Godot (x,z,-y)",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  },
+  "placement": {
+    "scene": "scenes/TowerDescent3D.tscn",
+    "node": "Blocks/Rooftop/CrossTowerRoute/Skyline08",
+    "final_world": [
+      -17.305016,
+      -59.654587,
+      -121.18834
+    ]
+  },
+  "material_policy": "无新材质缓存；实例入树直接绑定塔2既有四角色材质资源",
+  "material_bind_script": "tools/asset_pipeline/skyline08_existing_material_bind.gd",
+  "material_import_script": "tools/asset_pipeline/skyline08_existing_material_post_import.gd",
+  "geometry_bounds_godot_min": [
+    -16.51,
+    0,
+    -12.51
+  ],
+  "geometry_bounds_godot_size": [
+    33.02,
+    45.68,
+    25.93465
+  ],
+  "front_direction": "Blender -Y -> Godot +Z",
+  "collision_owner": "none_visual_only",
+  "functional_script": null,
+  "export_manifest": "assets/art/environments/open_world/source/skyline_08/export/v004/export_manifest.json",
+  "acceptance": "outputs/skyline08_import_20260930/acceptance.json",
+  "runtime_integrated": true,
+  "runtime_status": "已导入；优化完成",
+  "ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "ledger_sheet": "3D-场景通用"
+}

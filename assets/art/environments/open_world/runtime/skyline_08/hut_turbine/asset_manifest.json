@@ -1,0 +1,96 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08-HUT-TURBINE",
+  "package_id": "skyline_08/hut_turbine",
+  "display_name": "机房屋顶_涡轮排气帽",
+  "slug": "hut_turbine",
+  "category": "facilities",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "机房屋顶_涡轮排气帽_资产包",
+  "source_collection": "机房屋顶_涡轮排气帽_制作组件",
+  "objects": [
+    "机房屋顶_涡轮排气帽_主体"
+  ],
+  "root_object": "机房屋顶_涡轮排气帽_主体",
+  "world_position": [
+    9.899999618530273,
+    5.0,
+    36.880001068115234
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    8.996090685977897,
+    4.096090685977898,
+    36.880001068115234
+  ],
+  "bounds_max": [
+    10.8039093140221,
+    5.903909314022102,
+    38.08000183105469
+  ],
+  "dimensions": [
+    1.8078186280442026,
+    1.8078186280442043,
+    1.2000007629394531
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "hut_turbine.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "turbine_vent",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "anchor_blender": [
+    9.899999618530273,
+    5.0,
+    36.880001068115234
+  ],
+  "position_godot": [
+    9.899999618530273,
+    36.880001068115234,
+    -5.0
+  ],
+  "bounds_blender": [
+    [
+      8.99609088897705,
+      4.096090793609619,
+      36.880001068115234
+    ],
+    [
+      10.803909301757812,
+      5.903909206390381,
+      38.08000183105469
+    ]
+  ],
+  "triangle_count": 664,
+  "glb": "assets/art/environments/open_world/components/skyline_08/hut_turbine/env_skyline_08_hut_turbine_visual_top3d.glb",
+  "glb_sha256": "20992e64349468ea12fa75b89158f101f07e8389321d3867f5037d2f0dd958d0",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/hut_turbine/env_skyline_08_hut_turbine_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "collision": "none_visual_only",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  }
+}

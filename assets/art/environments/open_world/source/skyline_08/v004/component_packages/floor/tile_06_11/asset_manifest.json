@@ -47,8 +47,8 @@
   "animation": false,
   "emissive": false,
   "dependencies": [],
-  "collision_status": "not_authored",
-  "exported": false,
+  "collision_status": "none_visual_only",
+  "exported": true,
   "expected_export": "tile_06_11.glb",
   "fixed_display_attachment": true,
   "component_definition": "roof_tile",
@@ -58,5 +58,9 @@
     "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
     "docs/v0.1/10.1_3D场景美术生产流程.md"
   ],
-  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08"
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "runtime_integrated": true,
+  "runtime_prefab": "assets/art/environments/open_world/runtime/skyline_08/tile_06_11/env_skyline_08_tile_06_11_root_top3d.tscn",
+  "runtime_glb": "assets/art/environments/open_world/components/skyline_08/tile_06_11/env_skyline_08_tile_06_11_visual_top3d.glb",
+  "runtime_asset_id": "ENV-OPENWORLD-SKYLINE08-TILE-06-11"
 }

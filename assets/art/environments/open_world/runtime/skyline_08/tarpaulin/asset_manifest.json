@@ -1,0 +1,96 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08-TARPAULIN",
+  "package_id": "skyline_08/tarpaulin",
+  "display_name": "天台_绿色折叠篷布覆盖设备",
+  "slug": "tarpaulin",
+  "category": "facilities",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "天台_绿色折叠篷布覆盖设备_资产包",
+  "source_collection": "天台_绿色折叠篷布覆盖设备_制作组件",
+  "objects": [
+    "天台_绿色折叠篷布覆盖设备_主体"
+  ],
+  "root_object": "天台_绿色折叠篷布覆盖设备_主体",
+  "world_position": [
+    -4.800000190734863,
+    -0.15000000596046448,
+    32.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -5.944999999999999,
+    -1.335,
+    31.999999999999996
+  ],
+  "bounds_max": [
+    -3.6999999999999997,
+    0.75,
+    33.38
+  ],
+  "dimensions": [
+    2.2449999999999997,
+    2.085,
+    1.380000000000006
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "tarpaulin.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "tarpaulin",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "anchor_blender": [
+    -4.822500228881836,
+    -0.29250001907348633,
+    32.0
+  ],
+  "position_godot": [
+    -4.822500228881836,
+    32.0,
+    0.29250001907348633
+  ],
+  "bounds_blender": [
+    [
+      -5.945000171661377,
+      -1.3350000381469727,
+      32.0
+    ],
+    [
+      -3.700000047683716,
+      0.75,
+      33.380001068115234
+    ]
+  ],
+  "triangle_count": 96,
+  "glb": "assets/art/environments/open_world/components/skyline_08/tarpaulin/env_skyline_08_tarpaulin_visual_top3d.glb",
+  "glb_sha256": "533250fb742cfc79693434b591a4e6866716e1eaf7d97128036d0eba272a159f",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/tarpaulin/env_skyline_08_tarpaulin_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "collision": "none_visual_only",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  }
+}

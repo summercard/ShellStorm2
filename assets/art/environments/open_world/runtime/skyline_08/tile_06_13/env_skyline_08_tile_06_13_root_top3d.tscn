@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/components/skyline_08/tile_06_13/env_skyline_08_tile_06_13_visual_top3d.glb" id="1"]
+
+[ext_resource type="Script" path="res://tools/asset_pipeline/skyline08_existing_material_bind.gd" id="bind"]
+
+[node name="tile_06_13" type="Node3D"]
+script = ExtResource("bind")
+metadata/asset_id = "ENV-OPENWORLD-SKYLINE08-TILE-06-13"
+metadata/asset_version = "v004"
+metadata/block_id = "open_world"
+metadata/asset_category = "大地图场景景观"
+metadata/collision_status = "none_visual_only"
+metadata/source_blend = "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend"
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("1")]

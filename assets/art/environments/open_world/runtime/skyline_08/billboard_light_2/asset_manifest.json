@@ -1,0 +1,97 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08-BILLBOARD-LIGHT-2",
+  "package_id": "skyline_08/billboard_light_2",
+  "display_name": "广告牌_顶部投光灯_02",
+  "slug": "billboard_light_2",
+  "category": "signage",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "广告牌_顶部投光灯_02_资产包",
+  "source_collection": "广告牌_顶部投光灯_02_制作组件",
+  "objects": [
+    "广告牌_顶部投光灯_02_主体",
+    "广告牌_顶部投光灯_02_柔和自发光"
+  ],
+  "root_object": "广告牌_顶部投光灯_02_主体",
+  "world_position": [
+    -4.0,
+    8.649999618530273,
+    44.400001525878906
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -4.515,
+    7.130000114440918,
+    44.54
+  ],
+  "bounds_max": [
+    -3.485,
+    8.925,
+    45.68
+  ],
+  "dimensions": [
+    1.0299999999999998,
+    1.7949998855590827,
+    1.1400000000000006
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "billboard_light_2.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "billboard_floodlight",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "anchor_blender": [
+    -4.0,
+    8.02750015258789,
+    44.540000915527344
+  ],
+  "position_godot": [
+    -4.0,
+    44.540000915527344,
+    -8.02750015258789
+  ],
+  "bounds_blender": [
+    [
+      -4.514999866485596,
+      7.130000114440918,
+      44.540000915527344
+    ],
+    [
+      -3.484999895095825,
+      8.925000190734863,
+      45.68000030517578
+    ]
+  ],
+  "triangle_count": 152,
+  "glb": "assets/art/environments/open_world/components/skyline_08/billboard_light_2/env_skyline_08_billboard_light_2_visual_top3d.glb",
+  "glb_sha256": "ab16110ebe810c3163fad47ce95f1f41a2030bc9356d2bebdfde34273aa4b7df",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/billboard_light_2/env_skyline_08_billboard_light_2_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "collision": "none_visual_only",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  }
+}

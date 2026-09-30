@@ -1,0 +1,96 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08-BILLBOARD-GRAPHIC",
+  "package_id": "skyline_08/billboard_graphic",
+  "display_name": "巨型广告牌_城市剪影与落日几何图案",
+  "slug": "billboard_graphic",
+  "category": "signage",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "巨型广告牌_城市剪影与落日几何图案_资产包",
+  "source_collection": "巨型广告牌_城市剪影与落日几何图案_制作组件",
+  "objects": [
+    "巨型广告牌_城市剪影与落日几何图案_主体"
+  ],
+  "root_object": "巨型广告牌_城市剪影与落日几何图案_主体",
+  "world_position": [
+    -4.0,
+    8.649999618530273,
+    36.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -13.778536672713084,
+    8.331,
+    36.2
+  ],
+  "bounds_max": [
+    5.770361074374124,
+    8.417,
+    43.85
+  ],
+  "dimensions": [
+    19.54889774708721,
+    0.0860000000000003,
+    7.649999999999999
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "billboard_graphic.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "billboard_city_graphic",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "anchor_blender": [
+    -4.004087924957275,
+    8.374000549316406,
+    36.20000076293945
+  ],
+  "position_godot": [
+    -4.004087924957275,
+    36.20000076293945,
+    -8.374000549316406
+  ],
+  "bounds_blender": [
+    [
+      -13.778536796569824,
+      8.331000328063965,
+      36.20000076293945
+    ],
+    [
+      5.770360946655273,
+      8.416999816894531,
+      43.849998474121094
+    ]
+  ],
+  "triangle_count": 1731,
+  "glb": "assets/art/environments/open_world/components/skyline_08/billboard_graphic/env_skyline_08_billboard_graphic_visual_top3d.glb",
+  "glb_sha256": "3b7460bc43d1d61cdff230418bf0fc395f82bc12a1f92049123f7fa5bcf1fa15",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/billboard_graphic/env_skyline_08_billboard_graphic_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "collision": "none_visual_only",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  }
+}

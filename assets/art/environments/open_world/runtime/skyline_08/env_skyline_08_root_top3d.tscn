@@ -1,0 +1,1029 @@
+[gd_scene load_steps=253 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_01/env_skyline_08_floor_01_root_top3d.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_02/env_skyline_08_floor_02_root_top3d.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_03/env_skyline_08_floor_03_root_top3d.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_04/env_skyline_08_floor_04_root_top3d.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_05/env_skyline_08_floor_05_root_top3d.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_06/env_skyline_08_floor_06_root_top3d.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_07/env_skyline_08_floor_07_root_top3d.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/floor_08/env_skyline_08_floor_08_root_top3d.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_00/env_skyline_08_tile_00_00_root_top3d.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_01/env_skyline_08_tile_00_01_root_top3d.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_02/env_skyline_08_tile_00_02_root_top3d.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_03/env_skyline_08_tile_00_03_root_top3d.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_04/env_skyline_08_tile_00_04_root_top3d.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_05/env_skyline_08_tile_00_05_root_top3d.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_06/env_skyline_08_tile_00_06_root_top3d.tscn" id="15"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_07/env_skyline_08_tile_00_07_root_top3d.tscn" id="16"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_08/env_skyline_08_tile_00_08_root_top3d.tscn" id="17"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_09/env_skyline_08_tile_00_09_root_top3d.tscn" id="18"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_10/env_skyline_08_tile_00_10_root_top3d.tscn" id="19"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_11/env_skyline_08_tile_00_11_root_top3d.tscn" id="20"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_12/env_skyline_08_tile_00_12_root_top3d.tscn" id="21"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_13/env_skyline_08_tile_00_13_root_top3d.tscn" id="22"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_14/env_skyline_08_tile_00_14_root_top3d.tscn" id="23"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_00_15/env_skyline_08_tile_00_15_root_top3d.tscn" id="24"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_00/env_skyline_08_tile_01_00_root_top3d.tscn" id="25"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_01/env_skyline_08_tile_01_01_root_top3d.tscn" id="26"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_02/env_skyline_08_tile_01_02_root_top3d.tscn" id="27"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_03/env_skyline_08_tile_01_03_root_top3d.tscn" id="28"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_04/env_skyline_08_tile_01_04_root_top3d.tscn" id="29"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_05/env_skyline_08_tile_01_05_root_top3d.tscn" id="30"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_06/env_skyline_08_tile_01_06_root_top3d.tscn" id="31"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_07/env_skyline_08_tile_01_07_root_top3d.tscn" id="32"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_08/env_skyline_08_tile_01_08_root_top3d.tscn" id="33"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_09/env_skyline_08_tile_01_09_root_top3d.tscn" id="34"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_10/env_skyline_08_tile_01_10_root_top3d.tscn" id="35"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_11/env_skyline_08_tile_01_11_root_top3d.tscn" id="36"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_12/env_skyline_08_tile_01_12_root_top3d.tscn" id="37"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_13/env_skyline_08_tile_01_13_root_top3d.tscn" id="38"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_14/env_skyline_08_tile_01_14_root_top3d.tscn" id="39"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_01_15/env_skyline_08_tile_01_15_root_top3d.tscn" id="40"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_00/env_skyline_08_tile_02_00_root_top3d.tscn" id="41"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_01/env_skyline_08_tile_02_01_root_top3d.tscn" id="42"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_02/env_skyline_08_tile_02_02_root_top3d.tscn" id="43"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_03/env_skyline_08_tile_02_03_root_top3d.tscn" id="44"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_04/env_skyline_08_tile_02_04_root_top3d.tscn" id="45"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_05/env_skyline_08_tile_02_05_root_top3d.tscn" id="46"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_06/env_skyline_08_tile_02_06_root_top3d.tscn" id="47"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_07/env_skyline_08_tile_02_07_root_top3d.tscn" id="48"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_08/env_skyline_08_tile_02_08_root_top3d.tscn" id="49"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_09/env_skyline_08_tile_02_09_root_top3d.tscn" id="50"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_10/env_skyline_08_tile_02_10_root_top3d.tscn" id="51"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_11/env_skyline_08_tile_02_11_root_top3d.tscn" id="52"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_12/env_skyline_08_tile_02_12_root_top3d.tscn" id="53"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_13/env_skyline_08_tile_02_13_root_top3d.tscn" id="54"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_14/env_skyline_08_tile_02_14_root_top3d.tscn" id="55"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_02_15/env_skyline_08_tile_02_15_root_top3d.tscn" id="56"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_00/env_skyline_08_tile_03_00_root_top3d.tscn" id="57"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_01/env_skyline_08_tile_03_01_root_top3d.tscn" id="58"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_02/env_skyline_08_tile_03_02_root_top3d.tscn" id="59"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_03/env_skyline_08_tile_03_03_root_top3d.tscn" id="60"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_04/env_skyline_08_tile_03_04_root_top3d.tscn" id="61"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_05/env_skyline_08_tile_03_05_root_top3d.tscn" id="62"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_06/env_skyline_08_tile_03_06_root_top3d.tscn" id="63"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_07/env_skyline_08_tile_03_07_root_top3d.tscn" id="64"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_08/env_skyline_08_tile_03_08_root_top3d.tscn" id="65"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_09/env_skyline_08_tile_03_09_root_top3d.tscn" id="66"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_10/env_skyline_08_tile_03_10_root_top3d.tscn" id="67"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_11/env_skyline_08_tile_03_11_root_top3d.tscn" id="68"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_12/env_skyline_08_tile_03_12_root_top3d.tscn" id="69"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_13/env_skyline_08_tile_03_13_root_top3d.tscn" id="70"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_14/env_skyline_08_tile_03_14_root_top3d.tscn" id="71"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_03_15/env_skyline_08_tile_03_15_root_top3d.tscn" id="72"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_00/env_skyline_08_tile_04_00_root_top3d.tscn" id="73"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_01/env_skyline_08_tile_04_01_root_top3d.tscn" id="74"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_02/env_skyline_08_tile_04_02_root_top3d.tscn" id="75"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_03/env_skyline_08_tile_04_03_root_top3d.tscn" id="76"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_04/env_skyline_08_tile_04_04_root_top3d.tscn" id="77"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_05/env_skyline_08_tile_04_05_root_top3d.tscn" id="78"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_06/env_skyline_08_tile_04_06_root_top3d.tscn" id="79"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_07/env_skyline_08_tile_04_07_root_top3d.tscn" id="80"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_08/env_skyline_08_tile_04_08_root_top3d.tscn" id="81"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_09/env_skyline_08_tile_04_09_root_top3d.tscn" id="82"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_10/env_skyline_08_tile_04_10_root_top3d.tscn" id="83"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_11/env_skyline_08_tile_04_11_root_top3d.tscn" id="84"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_12/env_skyline_08_tile_04_12_root_top3d.tscn" id="85"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_13/env_skyline_08_tile_04_13_root_top3d.tscn" id="86"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_14/env_skyline_08_tile_04_14_root_top3d.tscn" id="87"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_04_15/env_skyline_08_tile_04_15_root_top3d.tscn" id="88"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_00/env_skyline_08_tile_05_00_root_top3d.tscn" id="89"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_01/env_skyline_08_tile_05_01_root_top3d.tscn" id="90"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_02/env_skyline_08_tile_05_02_root_top3d.tscn" id="91"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_03/env_skyline_08_tile_05_03_root_top3d.tscn" id="92"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_04/env_skyline_08_tile_05_04_root_top3d.tscn" id="93"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_05/env_skyline_08_tile_05_05_root_top3d.tscn" id="94"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_06/env_skyline_08_tile_05_06_root_top3d.tscn" id="95"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_07/env_skyline_08_tile_05_07_root_top3d.tscn" id="96"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_08/env_skyline_08_tile_05_08_root_top3d.tscn" id="97"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_09/env_skyline_08_tile_05_09_root_top3d.tscn" id="98"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_10/env_skyline_08_tile_05_10_root_top3d.tscn" id="99"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_11/env_skyline_08_tile_05_11_root_top3d.tscn" id="100"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_12/env_skyline_08_tile_05_12_root_top3d.tscn" id="101"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_13/env_skyline_08_tile_05_13_root_top3d.tscn" id="102"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_14/env_skyline_08_tile_05_14_root_top3d.tscn" id="103"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_05_15/env_skyline_08_tile_05_15_root_top3d.tscn" id="104"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_00/env_skyline_08_tile_06_00_root_top3d.tscn" id="105"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_01/env_skyline_08_tile_06_01_root_top3d.tscn" id="106"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_02/env_skyline_08_tile_06_02_root_top3d.tscn" id="107"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_03/env_skyline_08_tile_06_03_root_top3d.tscn" id="108"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_04/env_skyline_08_tile_06_04_root_top3d.tscn" id="109"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_05/env_skyline_08_tile_06_05_root_top3d.tscn" id="110"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_06/env_skyline_08_tile_06_06_root_top3d.tscn" id="111"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_07/env_skyline_08_tile_06_07_root_top3d.tscn" id="112"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_08/env_skyline_08_tile_06_08_root_top3d.tscn" id="113"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_09/env_skyline_08_tile_06_09_root_top3d.tscn" id="114"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_10/env_skyline_08_tile_06_10_root_top3d.tscn" id="115"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_11/env_skyline_08_tile_06_11_root_top3d.tscn" id="116"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_12/env_skyline_08_tile_06_12_root_top3d.tscn" id="117"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_13/env_skyline_08_tile_06_13_root_top3d.tscn" id="118"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_14/env_skyline_08_tile_06_14_root_top3d.tscn" id="119"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_06_15/env_skyline_08_tile_06_15_root_top3d.tscn" id="120"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_00/env_skyline_08_tile_07_00_root_top3d.tscn" id="121"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_01/env_skyline_08_tile_07_01_root_top3d.tscn" id="122"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_02/env_skyline_08_tile_07_02_root_top3d.tscn" id="123"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_03/env_skyline_08_tile_07_03_root_top3d.tscn" id="124"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_04/env_skyline_08_tile_07_04_root_top3d.tscn" id="125"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_05/env_skyline_08_tile_07_05_root_top3d.tscn" id="126"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_06/env_skyline_08_tile_07_06_root_top3d.tscn" id="127"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_07/env_skyline_08_tile_07_07_root_top3d.tscn" id="128"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_08/env_skyline_08_tile_07_08_root_top3d.tscn" id="129"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_09/env_skyline_08_tile_07_09_root_top3d.tscn" id="130"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_10/env_skyline_08_tile_07_10_root_top3d.tscn" id="131"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_11/env_skyline_08_tile_07_11_root_top3d.tscn" id="132"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_12/env_skyline_08_tile_07_12_root_top3d.tscn" id="133"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_13/env_skyline_08_tile_07_13_root_top3d.tscn" id="134"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_14/env_skyline_08_tile_07_14_root_top3d.tscn" id="135"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_07_15/env_skyline_08_tile_07_15_root_top3d.tscn" id="136"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_00/env_skyline_08_tile_08_00_root_top3d.tscn" id="137"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_01/env_skyline_08_tile_08_01_root_top3d.tscn" id="138"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_02/env_skyline_08_tile_08_02_root_top3d.tscn" id="139"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_03/env_skyline_08_tile_08_03_root_top3d.tscn" id="140"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_04/env_skyline_08_tile_08_04_root_top3d.tscn" id="141"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_05/env_skyline_08_tile_08_05_root_top3d.tscn" id="142"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_06/env_skyline_08_tile_08_06_root_top3d.tscn" id="143"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_07/env_skyline_08_tile_08_07_root_top3d.tscn" id="144"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_08/env_skyline_08_tile_08_08_root_top3d.tscn" id="145"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_09/env_skyline_08_tile_08_09_root_top3d.tscn" id="146"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_10/env_skyline_08_tile_08_10_root_top3d.tscn" id="147"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_11/env_skyline_08_tile_08_11_root_top3d.tscn" id="148"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_12/env_skyline_08_tile_08_12_root_top3d.tscn" id="149"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_13/env_skyline_08_tile_08_13_root_top3d.tscn" id="150"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_14/env_skyline_08_tile_08_14_root_top3d.tscn" id="151"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_08_15/env_skyline_08_tile_08_15_root_top3d.tscn" id="152"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_00/env_skyline_08_tile_09_00_root_top3d.tscn" id="153"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_01/env_skyline_08_tile_09_01_root_top3d.tscn" id="154"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_02/env_skyline_08_tile_09_02_root_top3d.tscn" id="155"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_03/env_skyline_08_tile_09_03_root_top3d.tscn" id="156"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_04/env_skyline_08_tile_09_04_root_top3d.tscn" id="157"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_05/env_skyline_08_tile_09_05_root_top3d.tscn" id="158"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_06/env_skyline_08_tile_09_06_root_top3d.tscn" id="159"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_07/env_skyline_08_tile_09_07_root_top3d.tscn" id="160"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_08/env_skyline_08_tile_09_08_root_top3d.tscn" id="161"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_09/env_skyline_08_tile_09_09_root_top3d.tscn" id="162"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_10/env_skyline_08_tile_09_10_root_top3d.tscn" id="163"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_11/env_skyline_08_tile_09_11_root_top3d.tscn" id="164"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_12/env_skyline_08_tile_09_12_root_top3d.tscn" id="165"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_13/env_skyline_08_tile_09_13_root_top3d.tscn" id="166"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_14/env_skyline_08_tile_09_14_root_top3d.tscn" id="167"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_09_15/env_skyline_08_tile_09_15_root_top3d.tscn" id="168"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_00/env_skyline_08_tile_10_00_root_top3d.tscn" id="169"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_01/env_skyline_08_tile_10_01_root_top3d.tscn" id="170"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_02/env_skyline_08_tile_10_02_root_top3d.tscn" id="171"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_03/env_skyline_08_tile_10_03_root_top3d.tscn" id="172"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_04/env_skyline_08_tile_10_04_root_top3d.tscn" id="173"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_05/env_skyline_08_tile_10_05_root_top3d.tscn" id="174"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_06/env_skyline_08_tile_10_06_root_top3d.tscn" id="175"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_07/env_skyline_08_tile_10_07_root_top3d.tscn" id="176"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_08/env_skyline_08_tile_10_08_root_top3d.tscn" id="177"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_09/env_skyline_08_tile_10_09_root_top3d.tscn" id="178"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_10/env_skyline_08_tile_10_10_root_top3d.tscn" id="179"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_11/env_skyline_08_tile_10_11_root_top3d.tscn" id="180"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_12/env_skyline_08_tile_10_12_root_top3d.tscn" id="181"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_13/env_skyline_08_tile_10_13_root_top3d.tscn" id="182"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_14/env_skyline_08_tile_10_14_root_top3d.tscn" id="183"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_10_15/env_skyline_08_tile_10_15_root_top3d.tscn" id="184"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_00/env_skyline_08_tile_11_00_root_top3d.tscn" id="185"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_01/env_skyline_08_tile_11_01_root_top3d.tscn" id="186"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_02/env_skyline_08_tile_11_02_root_top3d.tscn" id="187"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_03/env_skyline_08_tile_11_03_root_top3d.tscn" id="188"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_04/env_skyline_08_tile_11_04_root_top3d.tscn" id="189"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_05/env_skyline_08_tile_11_05_root_top3d.tscn" id="190"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_06/env_skyline_08_tile_11_06_root_top3d.tscn" id="191"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_07/env_skyline_08_tile_11_07_root_top3d.tscn" id="192"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_08/env_skyline_08_tile_11_08_root_top3d.tscn" id="193"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_09/env_skyline_08_tile_11_09_root_top3d.tscn" id="194"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_10/env_skyline_08_tile_11_10_root_top3d.tscn" id="195"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_11/env_skyline_08_tile_11_11_root_top3d.tscn" id="196"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_12/env_skyline_08_tile_11_12_root_top3d.tscn" id="197"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_13/env_skyline_08_tile_11_13_root_top3d.tscn" id="198"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_14/env_skyline_08_tile_11_14_root_top3d.tscn" id="199"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tile_11_15/env_skyline_08_tile_11_15_root_top3d.tscn" id="200"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/parapet_0/env_skyline_08_parapet_0_root_top3d.tscn" id="201"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/parapet_1/env_skyline_08_parapet_1_root_top3d.tscn" id="202"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/parapet_2/env_skyline_08_parapet_2_root_top3d.tscn" id="203"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/parapet_3/env_skyline_08_parapet_3_root_top3d.tscn" id="204"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/rail_0/env_skyline_08_rail_0_root_top3d.tscn" id="205"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/rail_1/env_skyline_08_rail_1_root_top3d.tscn" id="206"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/rail_2/env_skyline_08_rail_2_root_top3d.tscn" id="207"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/rail_3/env_skyline_08_rail_3_root_top3d.tscn" id="208"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_frame/env_skyline_08_billboard_frame_root_top3d.tscn" id="209"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_canvas/env_skyline_08_billboard_canvas_root_top3d.tscn" id="210"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_graphic/env_skyline_08_billboard_graphic_root_top3d.tscn" id="211"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_catwalk_0/env_skyline_08_billboard_catwalk_0_root_top3d.tscn" id="212"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_catwalk_1/env_skyline_08_billboard_catwalk_1_root_top3d.tscn" id="213"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_light_0/env_skyline_08_billboard_light_0_root_top3d.tscn" id="214"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_light_1/env_skyline_08_billboard_light_1_root_top3d.tscn" id="215"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_light_2/env_skyline_08_billboard_light_2_root_top3d.tscn" id="216"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_light_3/env_skyline_08_billboard_light_3_root_top3d.tscn" id="217"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_light_4/env_skyline_08_billboard_light_4_root_top3d.tscn" id="218"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/billboard_cables/env_skyline_08_billboard_cables_root_top3d.tscn" id="219"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hut_shell/env_skyline_08_hut_shell_root_top3d.tscn" id="220"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hut_door/env_skyline_08_hut_door_root_top3d.tscn" id="221"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hut_ladder/env_skyline_08_hut_ladder_root_top3d.tscn" id="222"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hut_turbine/env_skyline_08_hut_turbine_root_top3d.tscn" id="223"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hut_antenna/env_skyline_08_hut_antenna_root_top3d.tscn" id="224"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hvac_main/env_skyline_08_hvac_main_root_top3d.tscn" id="225"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hvac_left/env_skyline_08_hvac_left_root_top3d.tscn" id="226"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hvac_front/env_skyline_08_hvac_front_root_top3d.tscn" id="227"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hvac_back/env_skyline_08_hvac_back_root_top3d.tscn" id="228"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/hvac_small/env_skyline_08_hvac_small_root_top3d.tscn" id="229"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/duct_front/env_skyline_08_duct_front_root_top3d.tscn" id="230"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/duct_center/env_skyline_08_duct_center_root_top3d.tscn" id="231"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/duct_back/env_skyline_08_duct_back_root_top3d.tscn" id="232"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/conduit_bank/env_skyline_08_conduit_bank_root_top3d.tscn" id="233"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/utility_box_0/env_skyline_08_utility_box_0_root_top3d.tscn" id="234"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/utility_box_1/env_skyline_08_utility_box_1_root_top3d.tscn" id="235"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/utility_box_2/env_skyline_08_utility_box_2_root_top3d.tscn" id="236"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/oil_drum/env_skyline_08_oil_drum_root_top3d.tscn" id="237"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/tarpaulin/env_skyline_08_tarpaulin_root_top3d.tscn" id="238"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/block_0/env_skyline_08_block_0_root_top3d.tscn" id="239"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/block_1/env_skyline_08_block_1_root_top3d.tscn" id="240"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/block_2/env_skyline_08_block_2_root_top3d.tscn" id="241"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/block_3/env_skyline_08_block_3_root_top3d.tscn" id="242"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/block_4/env_skyline_08_block_4_root_top3d.tscn" id="243"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/front_vent/env_skyline_08_front_vent_root_top3d.tscn" id="244"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/letter_s_0/env_skyline_08_letter_s_0_root_top3d.tscn" id="245"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/letter_k_1/env_skyline_08_letter_k_1_root_top3d.tscn" id="246"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/letter_y_2/env_skyline_08_letter_y_2_root_top3d.tscn" id="247"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/letter_l_3/env_skyline_08_letter_l_3_root_top3d.tscn" id="248"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/letter_i_4/env_skyline_08_letter_i_4_root_top3d.tscn" id="249"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/letter_n_5/env_skyline_08_letter_n_5_root_top3d.tscn" id="250"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/letter_e_6/env_skyline_08_letter_e_6_root_top3d.tscn" id="251"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/marquee_mount/env_skyline_08_marquee_mount_root_top3d.tscn" id="252"]
+
+[node name="Skyline08" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-SKYLINE08"
+metadata/asset_version = "v004"
+metadata/block_id = "open_world"
+metadata/asset_category = "大地图场景景观"
+metadata/collision_status = "none_visual_only"
+metadata/source_blend = "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend"
+metadata/component_count = 252
+
+[node name="architecture" type="Node3D" parent="."]
+
+[node name="facilities" type="Node3D" parent="."]
+
+[node name="floor" type="Node3D" parent="."]
+
+[node name="signage" type="Node3D" parent="."]
+
+[node name="support" type="Node3D" parent="."]
+
+[node name="floor_01" parent="architecture" instance=ExtResource("1")]
+position = Vector3(0.000000000, 0.000000000, -0.000000000)
+
+[node name="floor_02" parent="architecture" instance=ExtResource("2")]
+position = Vector3(0.000000000, 4.000000000, -0.000000000)
+
+[node name="floor_03" parent="architecture" instance=ExtResource("3")]
+position = Vector3(0.000000000, 8.000000000, -0.000000000)
+
+[node name="floor_04" parent="architecture" instance=ExtResource("4")]
+position = Vector3(0.000000000, 12.000000000, -0.000000000)
+
+[node name="floor_05" parent="architecture" instance=ExtResource("5")]
+position = Vector3(0.000000000, 16.000000000, -0.000000000)
+
+[node name="floor_06" parent="architecture" instance=ExtResource("6")]
+position = Vector3(0.000000000, 20.000000000, -0.000000000)
+
+[node name="floor_07" parent="architecture" instance=ExtResource("7")]
+position = Vector3(0.000000000, 24.000000000, -0.000000000)
+
+[node name="floor_08" parent="architecture" instance=ExtResource("8")]
+position = Vector3(0.000000000, 28.000000000, -0.000000000)
+
+[node name="tile_00_00" parent="floor" instance=ExtResource("9")]
+position = Vector3(-15.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_01" parent="floor" instance=ExtResource("10")]
+position = Vector3(-13.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_02" parent="floor" instance=ExtResource("11")]
+position = Vector3(-11.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_03" parent="floor" instance=ExtResource("12")]
+position = Vector3(-9.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_04" parent="floor" instance=ExtResource("13")]
+position = Vector3(-7.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_05" parent="floor" instance=ExtResource("14")]
+position = Vector3(-5.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_06" parent="floor" instance=ExtResource("15")]
+position = Vector3(-3.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_07" parent="floor" instance=ExtResource("16")]
+position = Vector3(-1.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_08" parent="floor" instance=ExtResource("17")]
+position = Vector3(1.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_09" parent="floor" instance=ExtResource("18")]
+position = Vector3(3.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_10" parent="floor" instance=ExtResource("19")]
+position = Vector3(5.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_11" parent="floor" instance=ExtResource("20")]
+position = Vector3(7.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_12" parent="floor" instance=ExtResource("21")]
+position = Vector3(9.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_13" parent="floor" instance=ExtResource("22")]
+position = Vector3(11.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_14" parent="floor" instance=ExtResource("23")]
+position = Vector3(13.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_00_15" parent="floor" instance=ExtResource("24")]
+position = Vector3(15.000000000, 31.600000381, 11.000000000)
+
+[node name="tile_01_00" parent="floor" instance=ExtResource("25")]
+position = Vector3(-15.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_01" parent="floor" instance=ExtResource("26")]
+position = Vector3(-13.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_02" parent="floor" instance=ExtResource("27")]
+position = Vector3(-11.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_03" parent="floor" instance=ExtResource("28")]
+position = Vector3(-9.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_04" parent="floor" instance=ExtResource("29")]
+position = Vector3(-7.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_05" parent="floor" instance=ExtResource("30")]
+position = Vector3(-5.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_06" parent="floor" instance=ExtResource("31")]
+position = Vector3(-3.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_07" parent="floor" instance=ExtResource("32")]
+position = Vector3(-1.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_08" parent="floor" instance=ExtResource("33")]
+position = Vector3(1.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_09" parent="floor" instance=ExtResource("34")]
+position = Vector3(3.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_10" parent="floor" instance=ExtResource("35")]
+position = Vector3(5.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_11" parent="floor" instance=ExtResource("36")]
+position = Vector3(7.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_12" parent="floor" instance=ExtResource("37")]
+position = Vector3(9.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_13" parent="floor" instance=ExtResource("38")]
+position = Vector3(11.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_14" parent="floor" instance=ExtResource("39")]
+position = Vector3(13.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_01_15" parent="floor" instance=ExtResource("40")]
+position = Vector3(15.000000000, 31.600000381, 9.000000000)
+
+[node name="tile_02_00" parent="floor" instance=ExtResource("41")]
+position = Vector3(-15.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_01" parent="floor" instance=ExtResource("42")]
+position = Vector3(-13.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_02" parent="floor" instance=ExtResource("43")]
+position = Vector3(-11.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_03" parent="floor" instance=ExtResource("44")]
+position = Vector3(-9.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_04" parent="floor" instance=ExtResource("45")]
+position = Vector3(-7.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_05" parent="floor" instance=ExtResource("46")]
+position = Vector3(-5.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_06" parent="floor" instance=ExtResource("47")]
+position = Vector3(-3.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_07" parent="floor" instance=ExtResource("48")]
+position = Vector3(-1.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_08" parent="floor" instance=ExtResource("49")]
+position = Vector3(1.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_09" parent="floor" instance=ExtResource("50")]
+position = Vector3(3.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_10" parent="floor" instance=ExtResource("51")]
+position = Vector3(5.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_11" parent="floor" instance=ExtResource("52")]
+position = Vector3(7.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_12" parent="floor" instance=ExtResource("53")]
+position = Vector3(9.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_13" parent="floor" instance=ExtResource("54")]
+position = Vector3(11.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_14" parent="floor" instance=ExtResource("55")]
+position = Vector3(13.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_02_15" parent="floor" instance=ExtResource("56")]
+position = Vector3(15.000000000, 31.600000381, 7.000000000)
+
+[node name="tile_03_00" parent="floor" instance=ExtResource("57")]
+position = Vector3(-15.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_01" parent="floor" instance=ExtResource("58")]
+position = Vector3(-13.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_02" parent="floor" instance=ExtResource("59")]
+position = Vector3(-11.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_03" parent="floor" instance=ExtResource("60")]
+position = Vector3(-9.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_04" parent="floor" instance=ExtResource("61")]
+position = Vector3(-7.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_05" parent="floor" instance=ExtResource("62")]
+position = Vector3(-5.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_06" parent="floor" instance=ExtResource("63")]
+position = Vector3(-3.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_07" parent="floor" instance=ExtResource("64")]
+position = Vector3(-1.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_08" parent="floor" instance=ExtResource("65")]
+position = Vector3(1.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_09" parent="floor" instance=ExtResource("66")]
+position = Vector3(3.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_10" parent="floor" instance=ExtResource("67")]
+position = Vector3(5.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_11" parent="floor" instance=ExtResource("68")]
+position = Vector3(7.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_12" parent="floor" instance=ExtResource("69")]
+position = Vector3(9.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_13" parent="floor" instance=ExtResource("70")]
+position = Vector3(11.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_14" parent="floor" instance=ExtResource("71")]
+position = Vector3(13.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_03_15" parent="floor" instance=ExtResource("72")]
+position = Vector3(15.000000000, 31.600000381, 5.000000000)
+
+[node name="tile_04_00" parent="floor" instance=ExtResource("73")]
+position = Vector3(-15.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_01" parent="floor" instance=ExtResource("74")]
+position = Vector3(-13.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_02" parent="floor" instance=ExtResource("75")]
+position = Vector3(-11.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_03" parent="floor" instance=ExtResource("76")]
+position = Vector3(-9.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_04" parent="floor" instance=ExtResource("77")]
+position = Vector3(-7.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_05" parent="floor" instance=ExtResource("78")]
+position = Vector3(-5.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_06" parent="floor" instance=ExtResource("79")]
+position = Vector3(-3.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_07" parent="floor" instance=ExtResource("80")]
+position = Vector3(-1.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_08" parent="floor" instance=ExtResource("81")]
+position = Vector3(1.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_09" parent="floor" instance=ExtResource("82")]
+position = Vector3(3.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_10" parent="floor" instance=ExtResource("83")]
+position = Vector3(5.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_11" parent="floor" instance=ExtResource("84")]
+position = Vector3(7.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_12" parent="floor" instance=ExtResource("85")]
+position = Vector3(9.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_13" parent="floor" instance=ExtResource("86")]
+position = Vector3(11.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_14" parent="floor" instance=ExtResource("87")]
+position = Vector3(13.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_04_15" parent="floor" instance=ExtResource("88")]
+position = Vector3(15.000000000, 31.600000381, 3.000000000)
+
+[node name="tile_05_00" parent="floor" instance=ExtResource("89")]
+position = Vector3(-15.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_01" parent="floor" instance=ExtResource("90")]
+position = Vector3(-13.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_02" parent="floor" instance=ExtResource("91")]
+position = Vector3(-11.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_03" parent="floor" instance=ExtResource("92")]
+position = Vector3(-9.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_04" parent="floor" instance=ExtResource("93")]
+position = Vector3(-7.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_05" parent="floor" instance=ExtResource("94")]
+position = Vector3(-5.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_06" parent="floor" instance=ExtResource("95")]
+position = Vector3(-3.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_07" parent="floor" instance=ExtResource("96")]
+position = Vector3(-1.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_08" parent="floor" instance=ExtResource("97")]
+position = Vector3(1.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_09" parent="floor" instance=ExtResource("98")]
+position = Vector3(3.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_10" parent="floor" instance=ExtResource("99")]
+position = Vector3(5.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_11" parent="floor" instance=ExtResource("100")]
+position = Vector3(7.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_12" parent="floor" instance=ExtResource("101")]
+position = Vector3(9.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_13" parent="floor" instance=ExtResource("102")]
+position = Vector3(11.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_14" parent="floor" instance=ExtResource("103")]
+position = Vector3(13.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_05_15" parent="floor" instance=ExtResource("104")]
+position = Vector3(15.000000000, 31.600000381, 1.000000000)
+
+[node name="tile_06_00" parent="floor" instance=ExtResource("105")]
+position = Vector3(-15.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_01" parent="floor" instance=ExtResource("106")]
+position = Vector3(-13.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_02" parent="floor" instance=ExtResource("107")]
+position = Vector3(-11.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_03" parent="floor" instance=ExtResource("108")]
+position = Vector3(-9.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_04" parent="floor" instance=ExtResource("109")]
+position = Vector3(-7.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_05" parent="floor" instance=ExtResource("110")]
+position = Vector3(-5.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_06" parent="floor" instance=ExtResource("111")]
+position = Vector3(-3.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_07" parent="floor" instance=ExtResource("112")]
+position = Vector3(-1.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_08" parent="floor" instance=ExtResource("113")]
+position = Vector3(1.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_09" parent="floor" instance=ExtResource("114")]
+position = Vector3(3.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_10" parent="floor" instance=ExtResource("115")]
+position = Vector3(5.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_11" parent="floor" instance=ExtResource("116")]
+position = Vector3(7.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_12" parent="floor" instance=ExtResource("117")]
+position = Vector3(9.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_13" parent="floor" instance=ExtResource("118")]
+position = Vector3(11.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_14" parent="floor" instance=ExtResource("119")]
+position = Vector3(13.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_06_15" parent="floor" instance=ExtResource("120")]
+position = Vector3(15.000000000, 31.600000381, -1.000000000)
+
+[node name="tile_07_00" parent="floor" instance=ExtResource("121")]
+position = Vector3(-15.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_01" parent="floor" instance=ExtResource("122")]
+position = Vector3(-13.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_02" parent="floor" instance=ExtResource("123")]
+position = Vector3(-11.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_03" parent="floor" instance=ExtResource("124")]
+position = Vector3(-9.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_04" parent="floor" instance=ExtResource("125")]
+position = Vector3(-7.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_05" parent="floor" instance=ExtResource("126")]
+position = Vector3(-5.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_06" parent="floor" instance=ExtResource("127")]
+position = Vector3(-3.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_07" parent="floor" instance=ExtResource("128")]
+position = Vector3(-1.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_08" parent="floor" instance=ExtResource("129")]
+position = Vector3(1.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_09" parent="floor" instance=ExtResource("130")]
+position = Vector3(3.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_10" parent="floor" instance=ExtResource("131")]
+position = Vector3(5.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_11" parent="floor" instance=ExtResource("132")]
+position = Vector3(7.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_12" parent="floor" instance=ExtResource("133")]
+position = Vector3(9.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_13" parent="floor" instance=ExtResource("134")]
+position = Vector3(11.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_14" parent="floor" instance=ExtResource("135")]
+position = Vector3(13.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_07_15" parent="floor" instance=ExtResource("136")]
+position = Vector3(15.000000000, 31.600000381, -3.000000000)
+
+[node name="tile_08_00" parent="floor" instance=ExtResource("137")]
+position = Vector3(-15.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_01" parent="floor" instance=ExtResource("138")]
+position = Vector3(-13.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_02" parent="floor" instance=ExtResource("139")]
+position = Vector3(-11.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_03" parent="floor" instance=ExtResource("140")]
+position = Vector3(-9.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_04" parent="floor" instance=ExtResource("141")]
+position = Vector3(-7.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_05" parent="floor" instance=ExtResource("142")]
+position = Vector3(-5.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_06" parent="floor" instance=ExtResource("143")]
+position = Vector3(-3.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_07" parent="floor" instance=ExtResource("144")]
+position = Vector3(-1.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_08" parent="floor" instance=ExtResource("145")]
+position = Vector3(1.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_09" parent="floor" instance=ExtResource("146")]
+position = Vector3(3.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_10" parent="floor" instance=ExtResource("147")]
+position = Vector3(5.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_11" parent="floor" instance=ExtResource("148")]
+position = Vector3(7.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_12" parent="floor" instance=ExtResource("149")]
+position = Vector3(9.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_13" parent="floor" instance=ExtResource("150")]
+position = Vector3(11.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_14" parent="floor" instance=ExtResource("151")]
+position = Vector3(13.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_08_15" parent="floor" instance=ExtResource("152")]
+position = Vector3(15.000000000, 31.600000381, -5.000000000)
+
+[node name="tile_09_00" parent="floor" instance=ExtResource("153")]
+position = Vector3(-15.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_01" parent="floor" instance=ExtResource("154")]
+position = Vector3(-13.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_02" parent="floor" instance=ExtResource("155")]
+position = Vector3(-11.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_03" parent="floor" instance=ExtResource("156")]
+position = Vector3(-9.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_04" parent="floor" instance=ExtResource("157")]
+position = Vector3(-7.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_05" parent="floor" instance=ExtResource("158")]
+position = Vector3(-5.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_06" parent="floor" instance=ExtResource("159")]
+position = Vector3(-3.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_07" parent="floor" instance=ExtResource("160")]
+position = Vector3(-1.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_08" parent="floor" instance=ExtResource("161")]
+position = Vector3(1.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_09" parent="floor" instance=ExtResource("162")]
+position = Vector3(3.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_10" parent="floor" instance=ExtResource("163")]
+position = Vector3(5.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_11" parent="floor" instance=ExtResource("164")]
+position = Vector3(7.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_12" parent="floor" instance=ExtResource("165")]
+position = Vector3(9.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_13" parent="floor" instance=ExtResource("166")]
+position = Vector3(11.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_14" parent="floor" instance=ExtResource("167")]
+position = Vector3(13.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_09_15" parent="floor" instance=ExtResource("168")]
+position = Vector3(15.000000000, 31.600000381, -7.000000000)
+
+[node name="tile_10_00" parent="floor" instance=ExtResource("169")]
+position = Vector3(-15.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_01" parent="floor" instance=ExtResource("170")]
+position = Vector3(-13.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_02" parent="floor" instance=ExtResource("171")]
+position = Vector3(-11.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_03" parent="floor" instance=ExtResource("172")]
+position = Vector3(-9.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_04" parent="floor" instance=ExtResource("173")]
+position = Vector3(-7.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_05" parent="floor" instance=ExtResource("174")]
+position = Vector3(-5.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_06" parent="floor" instance=ExtResource("175")]
+position = Vector3(-3.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_07" parent="floor" instance=ExtResource("176")]
+position = Vector3(-1.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_08" parent="floor" instance=ExtResource("177")]
+position = Vector3(1.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_09" parent="floor" instance=ExtResource("178")]
+position = Vector3(3.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_10" parent="floor" instance=ExtResource("179")]
+position = Vector3(5.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_11" parent="floor" instance=ExtResource("180")]
+position = Vector3(7.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_12" parent="floor" instance=ExtResource("181")]
+position = Vector3(9.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_13" parent="floor" instance=ExtResource("182")]
+position = Vector3(11.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_14" parent="floor" instance=ExtResource("183")]
+position = Vector3(13.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_10_15" parent="floor" instance=ExtResource("184")]
+position = Vector3(15.000000000, 31.600000381, -9.000000000)
+
+[node name="tile_11_00" parent="floor" instance=ExtResource("185")]
+position = Vector3(-15.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_01" parent="floor" instance=ExtResource("186")]
+position = Vector3(-13.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_02" parent="floor" instance=ExtResource("187")]
+position = Vector3(-11.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_03" parent="floor" instance=ExtResource("188")]
+position = Vector3(-9.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_04" parent="floor" instance=ExtResource("189")]
+position = Vector3(-7.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_05" parent="floor" instance=ExtResource("190")]
+position = Vector3(-5.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_06" parent="floor" instance=ExtResource("191")]
+position = Vector3(-3.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_07" parent="floor" instance=ExtResource("192")]
+position = Vector3(-1.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_08" parent="floor" instance=ExtResource("193")]
+position = Vector3(1.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_09" parent="floor" instance=ExtResource("194")]
+position = Vector3(3.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_10" parent="floor" instance=ExtResource("195")]
+position = Vector3(5.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_11" parent="floor" instance=ExtResource("196")]
+position = Vector3(7.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_12" parent="floor" instance=ExtResource("197")]
+position = Vector3(9.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_13" parent="floor" instance=ExtResource("198")]
+position = Vector3(11.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_14" parent="floor" instance=ExtResource("199")]
+position = Vector3(13.000000000, 31.600000381, -11.000000000)
+
+[node name="tile_11_15" parent="floor" instance=ExtResource("200")]
+position = Vector3(15.000000000, 31.600000381, -11.000000000)
+
+[node name="parapet_0" parent="architecture" instance=ExtResource("201")]
+position = Vector3(0.000000000, 31.440000534, 12.119999886)
+
+[node name="parapet_1" parent="architecture" instance=ExtResource("202")]
+position = Vector3(0.000000000, 31.440000534, -12.119999886)
+
+[node name="parapet_2" parent="architecture" instance=ExtResource("203")]
+position = Vector3(-16.119998932, 31.440000534, -0.000000000)
+
+[node name="parapet_3" parent="architecture" instance=ExtResource("204")]
+position = Vector3(16.119998932, 31.440000534, -0.000000000)
+
+[node name="rail_0" parent="architecture" instance=ExtResource("205")]
+position = Vector3(0.000000954, 32.770000458, 11.800000191)
+
+[node name="rail_1" parent="architecture" instance=ExtResource("206")]
+position = Vector3(15.800000191, 32.770000458, -0.000000000)
+
+[node name="rail_2" parent="architecture" instance=ExtResource("207")]
+position = Vector3(-0.000000954, 32.770000458, -11.800000191)
+
+[node name="rail_3" parent="architecture" instance=ExtResource("208")]
+position = Vector3(-15.800000191, 32.770000458, -0.000000000)
+
+[node name="billboard_frame" parent="signage" instance=ExtResource("209")]
+position = Vector3(-4.000000477, 32.000000000, -8.949999809)
+
+[node name="billboard_canvas" parent="signage" instance=ExtResource("210")]
+position = Vector3(-3.999861240, 35.986896515, -8.392499924)
+
+[node name="billboard_graphic" parent="signage" instance=ExtResource("211")]
+position = Vector3(-4.004087925, 36.200000763, -8.374000549)
+
+[node name="billboard_catwalk_0" parent="signage" instance=ExtResource("212")]
+position = Vector3(-12.800000191, 35.220756531, -7.550000191)
+
+[node name="billboard_catwalk_1" parent="signage" instance=ExtResource("213")]
+position = Vector3(5.550000668, 35.220756531, -7.550000191)
+
+[node name="billboard_light_0" parent="signage" instance=ExtResource("214")]
+position = Vector3(-14.299999237, 44.540000916, -8.027500153)
+
+[node name="billboard_light_1" parent="signage" instance=ExtResource("215")]
+position = Vector3(-9.200000763, 44.540000916, -8.027500153)
+
+[node name="billboard_light_2" parent="signage" instance=ExtResource("216")]
+position = Vector3(-4.000000000, 44.540000916, -8.027500153)
+
+[node name="billboard_light_3" parent="signage" instance=ExtResource("217")]
+position = Vector3(1.100000024, 44.540000916, -8.027500153)
+
+[node name="billboard_light_4" parent="signage" instance=ExtResource("218")]
+position = Vector3(6.300000191, 44.540000916, -8.027500153)
+
+[node name="billboard_cables" parent="support" instance=ExtResource("219")]
+position = Vector3(-3.399564505, 34.267089844, -7.368500233)
+
+[node name="hut_shell" parent="architecture" instance=ExtResource("220")]
+position = Vector3(9.699999809, 32.000000000, -3.995999813)
+
+[node name="hut_door" parent="facilities" instance=ExtResource("221")]
+position = Vector3(9.850000381, 32.000000000, -0.015000015)
+
+[node name="hut_ladder" parent="facilities" instance=ExtResource("222")]
+position = Vector3(13.682281494, 32.080001831, -2.500000000)
+
+[node name="hut_turbine" parent="facilities" instance=ExtResource("223")]
+position = Vector3(9.899999619, 36.880001068, -5.000000000)
+
+[node name="hut_antenna" parent="facilities" instance=ExtResource("224")]
+position = Vector3(12.632709503, 36.823272705, -5.045982361)
+
+[node name="hvac_main" parent="facilities" instance=ExtResource("225")]
+position = Vector3(-3.575000048, 32.000000000, -4.019999981)
+
+[node name="hvac_left" parent="facilities" instance=ExtResource("226")]
+position = Vector3(-8.975000381, 32.000000000, -1.019999981)
+
+[node name="hvac_front" parent="facilities" instance=ExtResource("227")]
+position = Vector3(-9.975000381, 32.000000000, 5.880000114)
+
+[node name="hvac_back" parent="facilities" instance=ExtResource("228")]
+position = Vector3(3.025000095, 32.000000000, -3.920000076)
+
+[node name="hvac_small" parent="facilities" instance=ExtResource("229")]
+position = Vector3(-0.274999976, 32.000000000, -2.569999933)
+
+[node name="duct_front" parent="facilities" instance=ExtResource("230")]
+position = Vector3(-9.171250343, 32.009998322, 7.571249962)
+
+[node name="duct_center" parent="facilities" instance=ExtResource("231")]
+position = Vector3(1.728750110, 32.509998322, -5.099999905)
+
+[node name="duct_back" parent="facilities" instance=ExtResource("232")]
+position = Vector3(-7.946249962, 32.185001373, -6.199999809)
+
+[node name="conduit_bank" parent="support" instance=ExtResource("233")]
+position = Vector3(-0.642499924, 32.000000000, 3.579999924)
+
+[node name="utility_box_0" parent="facilities" instance=ExtResource("234")]
+position = Vector3(6.300000191, 32.799999237, -0.219999999)
+
+[node name="utility_box_1" parent="facilities" instance=ExtResource("235")]
+position = Vector3(12.799999237, 33.099998474, -0.189999998)
+
+[node name="utility_box_2" parent="facilities" instance=ExtResource("236")]
+position = Vector3(-13.799999237, 32.099998474, 5.760000229)
+
+[node name="oil_drum" parent="facilities" instance=ExtResource("237")]
+position = Vector3(-6.350171089, 32.029998779, -0.250000000)
+
+[node name="tarpaulin" parent="facilities" instance=ExtResource("238")]
+position = Vector3(-4.822500229, 32.000000000, 0.292500019)
+
+[node name="block_0" parent="facilities" instance=ExtResource("239")]
+position = Vector3(-6.000000000, 32.000000000, 1.299999952)
+
+[node name="block_1" parent="facilities" instance=ExtResource("240")]
+position = Vector3(-4.000000000, 32.000000000, 1.700000048)
+
+[node name="block_2" parent="facilities" instance=ExtResource("241")]
+position = Vector3(5.500000000, 32.000000000, -0.000000000)
+
+[node name="block_3" parent="facilities" instance=ExtResource("242")]
+position = Vector3(12.000000000, 32.000000000, 2.000000000)
+
+[node name="block_4" parent="facilities" instance=ExtResource("243")]
+position = Vector3(14.000000000, 32.000000000, 0.800000012)
+
+[node name="front_vent" parent="facilities" instance=ExtResource("244")]
+position = Vector3(-4.800000191, 32.099998474, 8.300000191)
+
+[node name="letter_s_0" parent="signage" instance=ExtResource("245")]
+position = Vector3(-12.034951210, 31.662975311, 12.914999962)
+
+[node name="letter_k_1" parent="signage" instance=ExtResource("246")]
+position = Vector3(-7.202972412, 31.718000412, 12.914999962)
+
+[node name="letter_y_2" parent="signage" instance=ExtResource("247")]
+position = Vector3(-2.606897354, 31.730623245, 12.914999962)
+
+[node name="letter_l_3" parent="signage" instance=ExtResource("248")]
+position = Vector3(2.266800880, 31.718000412, 12.914999962)
+
+[node name="letter_i_4" parent="signage" instance=ExtResource("249")]
+position = Vector3(5.190243721, 31.668001175, 12.914999962)
+
+[node name="letter_n_5" parent="signage" instance=ExtResource("250")]
+position = Vector3(8.383093834, 31.718000412, 12.914999962)
+
+[node name="letter_e_6" parent="signage" instance=ExtResource("251")]
+position = Vector3(12.602537155, 31.668001175, 12.914999962)
+
+[node name="marquee_mount" parent="signage" instance=ExtResource("252")]
+position = Vector3(0.292500019, 29.765832901, 12.358189583)

@@ -1,0 +1,97 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08-LETTER-S-0",
+  "package_id": "skyline_08/letter_s_0",
+  "display_name": "SKYLINE_立体灯泡字_S",
+  "slug": "letter_s_0",
+  "category": "signage",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "SKYLINE_立体灯泡字_S_资产包",
+  "source_collection": "SKYLINE_立体灯泡字_S_制作组件",
+  "objects": [
+    "SKYLINE_立体灯泡字_S_主体",
+    "SKYLINE_立体灯泡字_S_柔和自发光"
+  ],
+  "root_object": "SKYLINE_立体灯泡字_S_主体",
+  "world_position": [
+    -14.0,
+    -12.699999809265137,
+    31.899999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -13.909896850585938,
+    -13.424650192260742,
+    31.662975311279297
+  ],
+  "bounds_max": [
+    -10.160005569458008,
+    -12.405349731445312,
+    35.86349105834961
+  ],
+  "dimensions": [
+    3.7498912811279297,
+    1.0193004608154297,
+    4.2005157470703125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "letter_s_0.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "marquee_letter",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "anchor_blender": [
+    -12.034951210021973,
+    -12.914999961853027,
+    31.662975311279297
+  ],
+  "position_godot": [
+    -12.034951210021973,
+    31.662975311279297,
+    12.914999961853027
+  ],
+  "bounds_blender": [
+    [
+      -13.909896850585938,
+      -13.424650192260742,
+      31.662975311279297
+    ],
+    [
+      -10.160005569458008,
+      -12.405349731445312,
+      35.86349105834961
+    ]
+  ],
+  "triangle_count": 12544,
+  "glb": "assets/art/environments/open_world/components/skyline_08/letter_s_0/env_skyline_08_letter_s_0_visual_top3d.glb",
+  "glb_sha256": "1061e197b7574897883f04cb94acc6b90079fa4cd57bfc9231b82682cc732ce9",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/letter_s_0/env_skyline_08_letter_s_0_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "collision": "none_visual_only",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  }
+}

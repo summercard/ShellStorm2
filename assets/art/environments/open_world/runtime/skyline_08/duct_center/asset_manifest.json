@@ -1,0 +1,96 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08-DUCT-CENTER",
+  "package_id": "skyline_08/duct_center",
+  "display_name": "中央上弯通风管",
+  "slug": "duct_center",
+  "category": "facilities",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "中央上弯通风管_资产包",
+  "source_collection": "中央上弯通风管_制作组件",
+  "objects": [
+    "中央上弯通风管_主体"
+  ],
+  "root_object": "中央上弯通风管_主体",
+  "world_position": [
+    0.699999988079071,
+    5.099999904632568,
+    33.04999923706055
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    0.41750009536743166,
+    4.459999904632569,
+    32.50999923706055
+  ],
+  "bounds_max": [
+    3.0400000953674318,
+    5.739999904632568,
+    35.24000076293945
+  ],
+  "dimensions": [
+    2.6225,
+    1.2799999999999994,
+    2.7300015258789045
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "duct_center.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "segmented_duct",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "anchor_blender": [
+    1.7287501096725464,
+    5.099999904632568,
+    32.5099983215332
+  ],
+  "position_godot": [
+    1.7287501096725464,
+    32.5099983215332,
+    -5.099999904632568
+  ],
+  "bounds_blender": [
+    [
+      0.4175001084804535,
+      4.460000038146973,
+      32.5099983215332
+    ],
+    [
+      3.0400002002716064,
+      5.739999771118164,
+      35.2400016784668
+    ]
+  ],
+  "triangle_count": 272,
+  "glb": "assets/art/environments/open_world/components/skyline_08/duct_center/env_skyline_08_duct_center_visual_top3d.glb",
+  "glb_sha256": "57c2a254fddeb02f3fd49bf9352912456562f3b967560c8d0be6e90d485346d7",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/duct_center/env_skyline_08_duct_center_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "collision": "none_visual_only",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  }
+}

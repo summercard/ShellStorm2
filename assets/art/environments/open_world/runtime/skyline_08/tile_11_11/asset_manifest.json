@@ -1,0 +1,96 @@
+{
+  "asset_id": "ENV-OPENWORLD-SKYLINE08-TILE-11-11",
+  "package_id": "skyline_08/tile_11_11",
+  "display_name": "天台地砖_R11_C11",
+  "slug": "tile_11_11",
+  "category": "floor",
+  "version": "v004",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\skyline_08\\v004\\SKYLINE大楼_8层_精细天台_v004.blend",
+  "collection": "天台地砖_R11_C11_资产包",
+  "source_collection": "天台地砖_R11_C11_制作组件",
+  "objects": [
+    "天台地砖_R11_C11_主体"
+  ],
+  "root_object": "天台地砖_R11_C11_主体",
+  "world_position": [
+    7.0,
+    11.0,
+    31.799999237060547
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    6.0125,
+    10.0125,
+    31.6
+  ],
+  "bounds_max": [
+    7.9875,
+    11.9875,
+    32.0
+  ],
+  "dimensions": [
+    1.9749999999999996,
+    1.9750000000000014,
+    0.3999999999999986
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "tile_11_11.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "roof_tile",
+  "block_id": "open_world",
+  "floor_range": "1F–8F＋天台",
+  "scene_design_docs": [
+    "docs/v0.1/development/2026-09-30_skyline08_building_source.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-SKYLINE08",
+  "anchor_blender": [
+    7.0,
+    11.0,
+    31.600000381469727
+  ],
+  "position_godot": [
+    7.0,
+    31.600000381469727,
+    -11.0
+  ],
+  "bounds_blender": [
+    [
+      6.012499809265137,
+      10.012499809265137,
+      31.600000381469727
+    ],
+    [
+      7.987500190734863,
+      11.987500190734863,
+      32.0
+    ]
+  ],
+  "triangle_count": 28,
+  "glb": "assets/art/environments/open_world/components/skyline_08/tile_11_11/env_skyline_08_tile_11_11_visual_top3d.glb",
+  "glb_sha256": "2c82bfa3cd4964dae57198d08a7c923c8c6865e1ddfe23664e7ca994da6d359e",
+  "prefab": "assets/art/environments/open_world/runtime/skyline_08/tile_11_11/env_skyline_08_tile_11_11_root_top3d.tscn",
+  "source": "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+  "collision": "none_visual_only",
+  "existing_material_resources": {
+    "01_精工金属_紫色骨架": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_orugq",
+    "02_细腻哑光_青绿大面": "res://assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb::StandardMaterial3D_b2grs",
+    "03_清漆反光_紫粉点缀": "res://assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb::StandardMaterial3D_bm4x0",
+    "04_柔和自发光_UI灯光": "res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb::StandardMaterial3D_3eayv"
+  }
+}
