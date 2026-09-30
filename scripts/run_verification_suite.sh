@@ -351,6 +351,7 @@ visual_scenes=(
   verify_first_elite_visual
   verify_player3d_head_accessory_visual
   verify_wardrobe_layout_visual
+  verify_item_model_icon_framing_visual
   verify_formal_3d_asset_gallery_visual
   verify_formal_asset_placement_visual
 )

@@ -1297,7 +1297,9 @@ func _build_reference_main_hud() -> void:
 	_hud_weapon_model_icon.name = "CurrentWeaponModelIcon3D"
 	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(64, 46))
 	_hud_weapon_model_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_hud_weapon_model_icon.set_camera_size_multiplier(0.34)
+	# 取景交给 ItemModelIcon3D 自适应（2026-09-30 主人反馈「物品大于图标尺寸会被切、
+	# 居中位置不对」）：相机尺寸与模型位移由模型自身外接盒算出，此处不再写死倍率。
+	# 原来这里传 0.34（被 clamp 到 0.45）＝按手枪调的一档，换步枪/巨剑就出框。
 	_hud_weapon_model_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(_hud_weapon_model_icon)
 	_refresh_hud_weapon_model(true)
@@ -5777,7 +5779,7 @@ func _ensure_hud_quick_item_icon(quick_index: int) -> ItemModelIcon3D:
 	var icon := ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
 	icon.name = "QuickItemModelIcon3D_%d" % quick_index
 	icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	icon.set_camera_size_multiplier(0.68)
+	# 同样交给自适应取景；原 0.68 是「按小图标另调一档」的写法，现在由模型外接盒决定。
 	_hud_quick_item_icon_hosts[quick_index].add_child(icon)
 	_hud_quick_item_icons[quick_index] = icon
 	return icon
