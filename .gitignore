@@ -86,3 +86,8 @@ _scratch/*_backup/
 # Godot 运行期 appdata 副本（--headless 探针用独立 appdata 时落在项目内，非资产）
 _godot_appdata*/
 _scratch/probe_appdata/
+isolated_userdata/
+
+# 云海烘焙的中间体：由 source/v00X/build_*.py 按固定种子确定性生成（rng seed 写在脚本里），
+# 运行时真正吃的是烘焙产物 cloud_keepout.res / cloud_noise.res。布局变化本来就要重烘焙。
+assets/art/vfx/environment_3d/cloud_sea/source/**/*.raw

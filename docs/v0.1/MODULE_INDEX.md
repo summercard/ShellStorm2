@@ -68,7 +68,7 @@
 | POWER-SYSTEM | 基地电力、手电电力、恢复舱与未来基地负载 | [15.1](15.1_技术施工_电力系统.md) | BaseEnergyService/BaseManager；PlayerFlashlight3D/ItemUseHandler | `verify_3d_flashlight_charge_flow`、`verify_base_overhaul_flow` | **开发中**：现有两条能源链已记录；基地灯光/设施用电待接入 |
 | ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[09](09_技术施工_存档结算与复活.md) | GameEntryFlow→Tower新档98F办公室/已有档99F基地→AvatarCustomizationPersistence | `verify_game_entry_flow`、`verify_avatar_return_persistence_flow`、`verify_block00_floor98_assembly`、`verify_new_save_handoff` | 新档98F、基地重登99F和未拾取地面枪跨重启已通过；开场枪由剧情生成。独立展示相机/视觉代理目标仍未满足 |
 | UI-HUD | HUD、地图与模态输入 | [玩法设计](design/对话与战斗信息呈现设计.md)；[04](04_技术施工_战斗与局内成长.md) | HUDPresenter3D/DungeonMinimap3D/InventoryUI | `verify_hud_presenter_3d`、`verify_tactical_inventory_minimap_flow` | Presenter可独立；其他UI仍直接读写多域 |
-| VFX-POOL | Prefab注册、借出、回收 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow` | 近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役 |
+| VFX-POOL | Prefab注册、借出、回收；场景常驻室外云海 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_outdoor_clouds`（v002品质/实际玩家渲染通过；[设计](design/outdoor_cloud_sea.md)）、`verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow` | 近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役 |
 | AUDIO-MUSIC | 音效和场景音乐切换 | [10](10_资产与内容规范.md)、[14.8](14.8_音乐系统与配乐资产.md) | AudioManager/MusicCatalog/MusicManager/MusicTrigger | `verify_music_system`、`verify_requested_experience_upgrade_flow` | UI/音效/音乐已拆独立账本、Skill与验收链；功能层仍保持AudioManager与MusicManager边界，不合并播放生命周期 |
 | GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [玩法设计](design/时间日夜与画质设计.md)；[13.1](13.1_技术施工_画质设置与后处理.md)、[13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`、`verify_postfx_autopersist`、`verify_graphics_settings_visual` | 设计与施工已分层；调参转正范围待裁决，保存失败结果、UI与3D像素隔离、正式画面/性能仍未闭环，旧7/9口径失配不能只凭文档关闭 |
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
@@ -93,7 +93,7 @@
 
 ## 4. 允许的独立开发方式
 
-ASSET-PIPELINE 新增独立 [SKYLINE 8层大楼美术源](development/2026-09-30_skyline08_building_source.md)：`ENV-OPENWORLD-SKYLINE08`、v003，Blender源与天台细节验收完成；GLB/Godot/碰撞/LOD未执行，不改变当前运行时接入状态。
+ASSET-PIPELINE 新增独立 [SKYLINE 8层大楼及景观接入](development/2026-09-30_skyline08_building_source.md)：`ENV-OPENWORLD-SKYLINE08`、v004，252组件及整楼稳定PackedScene已导入并按指定坐标接入大地图，全部复用塔2既有四角色材质；独立加载与真实渲染专项通过。仅表现无碰撞；导航、楼内行走及移动端性能/LOD验收未执行，不提升ASSET-PIPELINE总体完成状态。
 
 优先将楼层计划、房间图查询、装备交换、HUD映射、时间/能源计算作为稳定边界，使用输入快照和替身开发。跨模块输入使用内容ID、实例ID、布局ID、事务ID和版本化快照相连；UI与表现订阅结果，不成为领域事实源。
 

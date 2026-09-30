@@ -1,5 +1,7 @@
 # v0.1 设计与工程契约
 
+内容场景：[室外连续云海与空中薄雾](outdoor_cloud_sea.md)，99F以下主云海、建筑遮罩、流动与画质开销契约。
+
 内容场景：[主塔100F跨塔天桥](rooftop_cross_tower_route.md)，复用塔2/塔3独立资产，不改变房型或远征拓扑。
 
 工程版本：0.1.0。入口：[游戏设计](../README.md)。开发规则：[文档驱动开发](../../DOCUMENTATION_STANDARD.md)。
