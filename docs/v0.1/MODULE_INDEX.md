@@ -73,7 +73,7 @@
 | GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [玩法设计](design/时间日夜与画质设计.md)；[13.1](13.1_技术施工_画质设置与后处理.md)、[13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`、`verify_postfx_autopersist`、`verify_graphics_settings_visual` | 设计与施工已分层；调参转正范围待裁决，保存失败结果、UI与3D像素隔离、正式画面/性能仍未闭环，旧7/9口径失配不能只凭文档关闭 |
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
 | TRAINING-RANGE | 独立靶场与武器预览 | [11.1](11.1_测试功能_独立训练场.md) | `src/training3d/TrainingRange3D.gd` | `verify_training_range_3d_flow`、`verify_training_range_3d_visual` | **功能版本1.0已完成**：当前注册表 19 架、67 组合，三类靶标、重置/退出、暂停及 BaseData 隔离均由注册表驱动的独立契约覆盖 |
-| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 白盒/风格→02建模前组件计划→01母版/实例→稳定组件→03可继承/Godot变体/Blender差异→正式房间TSCN | `scripts/check_asset_registry.py`、`scripts/check_media_asset_domains.py`、资产专项、真实场景渲染 | **部分完成**：远征13房已有静态TSCN；L型走廊v012的l_turn/u_turn、数据库v014的db_01、办公室v009、桥房v010、Boss v011及复用安全屋已接入。标准房82实例源未转正，room_07仅通用壳体；db_02与撤离正式美术/完整验收未闭环。数据登记和自动合并保护未实现；历史资产零问题不代表当前工作区重新通过，见[链路修订记录](development/2026-09-18_战局房间美术制成与导入链路.md) |
+| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 白盒/风格→02建模前组件计划→01母版/实例→稳定组件→03可继承/Godot变体/Blender差异→正式房间TSCN | `scripts/check_asset_registry.py`、`scripts/check_media_asset_domains.py`、资产专项、真实场景渲染 | **部分完成**：开放世界塔2/塔楼03原资产为独立仅表现场景，塔2含三独立塔吊；[跨塔天桥](design/rooftop_cross_tower_route.md)已连接主塔100F与等高塔3，塔2低16m不可进入，两段桥使用原塔吊起重臂，308项专项通过，见[导入记录](development/2026-09-30_openworld_towers_runtime_import.md)。远征13房已有静态TSCN；L型走廊v012的l_turn/u_turn、数据库v014的db_01、办公室v009、桥房v010、Boss v011及复用安全屋已接入。标准房82实例源未转正，room_07仅通用壳体；db_02与撤离正式美术/完整验收未闭环。数据登记和自动合并保护未实现；历史资产零问题不代表当前工作区重新通过，见[链路修订记录](development/2026-09-18_战局房间美术制成与导入链路.md) |
 | ASSET-ROOFTOP | 天台参考组件与标准外墙 | [组件契约r2](design/rooftop_component_library.md) | `tower_zones/rooftop/source/reference_components/v002/`的Blend与catalog；Godot入口保留原版 | `qa/validate_rooftop.py`、锁区签名、严格逐面UV、固定镜头渲染 | Blender源44独立包完成；新增7挂藤变体与厚门口；运行天台设施已清空，见[清空记录](development/2026-09-17_rooftop_facilities_removed.md)；外墙主体5×0.30×11.9m；未导出或接入Godot，见[交付记录](development/2026-09-17_rooftop_ivy_thick_door_v002.md) |
 
 ## 3. 开发记录定位
@@ -92,6 +92,8 @@
 - NARRATIVE：剧情时间轴核心链与对话 UI 均已实装并进入 core；见 `src/narrative/`、`verify_narrative_timeline`、`verify_opening_script_runtime`。玩法事件（`MapFateTriggers`/命运卡）与剧情事件保持区分，不合并。RUN-REVIVE 已有空策略契约但无实际复活来源；GRAPHICS-POSTFX 已拆独立设计与施工，但正式表现/保存失败合同仍缺；RUN-MERCHANT与BASE-WORKSHOP已有独立玩法页。开发中功能不得因文档已建立而提前标成实现完成。
 
 ## 4. 允许的独立开发方式
+
+ASSET-PIPELINE 新增独立 [SKYLINE 8层大楼美术源](development/2026-09-30_skyline08_building_source.md)：`ENV-OPENWORLD-SKYLINE08`、v003，Blender源与天台细节验收完成；GLB/Godot/碰撞/LOD未执行，不改变当前运行时接入状态。
 
 优先将楼层计划、房间图查询、装备交换、HUD映射、时间/能源计算作为稳定边界，使用输入快照和替身开发。跨模块输入使用内容ID、实例ID、布局ID、事务ID和版本化快照相连；UI与表现订阅结果，不成为领域事实源。
 

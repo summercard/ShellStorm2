@@ -1,5 +1,42 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-30｜物品与武器 3D 图标取景改为自适应（不再被切、不再偏心）
+
+- **业主口径**：「图标栏中，物品如果大于图标尺寸，会被切，而且居中位置不对。修改一下。」
+- **改前缺陷口径**：`ItemModelIcon3D` 按模型种类**写死相机米数**（手枪一档、avatar 各部位各一档），调用点再各传一个**取景倍率**（HUD 武器栏传 `0.34`，被 clamp 到 `0.45`；快捷物品栏传 `0.68`），模型位移也写死。于是换更大的枪（步枪/霰弹枪/狙击枪/巨剑/战斧）就**出框被切**，换到宽高比不同的图标格就**看着不居中** —— 正是业主截图里那两条。
+- **改后口径**：取景完全由几何算出，调用点不参与。
+  - 相机尺寸 `needed = max(span.y, span.x / viewport_aspect)`，`camera.size = needed / FIT_FILL_RATIO × multiplier`，`FIT_FILL_RATIO = 0.88`。
+  - 居中 `_model.position -= right × center.x + up × center.y`（正交投影 ⇒ 只需补横向与纵向）。
+  - `set_camera_size_multiplier()` 定义域由 `[0.45, 1.5]` 改为 **`[1.0, 2.0]`**，语义变成「只追加余量」；小于 1.0 的**放大路径被封口**（要整体缩放请改 `FIT_FILL_RATIO`）。
+  - 视口分辨率由 `resized` 信号重算，**长宽比跟随图标格**（HUD 武器格 51.2×36.8 ⇒ 视口 96×69；此前恒为 96×96，宽格子里左右各空一条，看着像"没居中"）。
+  - avatar 部位局部特写由「写死米数 + 绝对偏移」改为模型世界外接盒的**归一化 y 区间**（头 `[0.62,1.00]`、身 `[0.12,0.84]`、手 `[0.30,0.72]`、脚 `[0.00,0.24]`）。
+  - 调用点清理：`Dungeon3D` HUD 武器栏去掉 `0.34`、快捷物品栏去掉 `0.68`。
+- **两轮修正（第二轮的坑是硬的）**：
+  1. 第一版用「逐网格局部紧盒的 8 角点」投影。它解决了**尺寸**（巨剑填充 0.135 → 0.875），但几何层的 `fit_ratio ≡ 0.880`、`center_error ≡ (0,0)` 是**自我复述** —— 位移就是按同一个投影算的。真渲染像素量出来才露馅：外接盒角点**没有几何落在角上**，斜视方向上包围盒偏胖且**不对称** ⇒ 霰弹枪偏心 **4.53px / 96px**、机枪 3.54px、发射器 2.92px、钥匙 2.24px。
+  2. 第二版改成**真实顶点沿相机轴的支撑区间**（`w·(M·p+t) = (Mᵀw)·p + w·t`，把相机轴搬到网格局部空间取顶点 min/max），同时修准尺寸与居中。按「网格实例 ID + 量化局部方向」缓存；单网格顶点采样上限 8192（超大网格等步长抽样，误差由渲染层判据兜住）。
+  3. 🔴 **坑**：支撑路径最初写成 `base = world_axis·xform.origin`，漏了 `- world_axis·camera_origin`。这个常量在 `span` 里会抵消、**在 `center` 里不抵消** ⇒ 整幅图标偏心 3.5–7.5px，且尺寸完全正常 —— 只看 `fit_ratio` 一个字段永远发现不了。修法与投影原点口径统一（`point - camera_origin`）。
+- **新增可失败证据字段**（`get_snapshot()`）：`model_bounds_min/size`、`projected_half_extents`、`frame_half_extents`、`fit_ratio`（≤1.0 = 完整可见）、`center_error_pixels`、`fit_fill_ratio`。
+- **验收（新增）**：`verify_item_model_icon_framing_visual`（注册 `visual`，真实渲染器）—— 4 种真实图标格几何（HUD 武器格 51.2×36.8 / 背包格 70×70 / 贩卖机卡 96×96 / 配件格 32×32）× 12 种物品（含狙击枪、巨剑、战斧、球棒等"大于图标尺寸"的件）＝ **48 格**，两层口径各查一次：**几何层** `fit_ratio ≤ 1.0`、中心偏差 ≤ 2px；**渲染层**（独立证据）已绘像素 `margin_min ≥ 1px`（不贴边 = 没被切）、已绘像素中心偏差 ≤ 2px、较长边填充 ≥ 0.5。另驱动**真实挂载点**复核（HUD 武器栏装巨剑、背包格放三把大件），并输出带标签的联系表 `outputs/verification/item_model_icon_framing_sheet.png`。
+- **结果**：`ITEM_MODEL_ICON_FRAMING_VISUAL_OK: 48 cells across 4 slot geometries … ; viewport aspect follows slot aspect`（`EXIT=0`）。修复前偏心最大 4.53px ⇒ 修复后全部 ≤ 2.0px。
+- **回归**：`verify_3d_inventory_weapon_flow`（含背包格 `viewport_size == (96,96)`、`camera_size ≤ 1.9` 两条契约）、`verify_hud_presenter_3d`、`verify_wardrobe_layout_visual`、`verify_reference_hud_fate_visual`、`verify_base_vending_visual`、`verify_tactical_inventory_minimap_visual` 全绿。
+- **性能预算归因（`verify_3d_performance_budget` 三条红项与本次无关，已做对照实验）**：红项为 HUD 壳 289 > 171、HUD 总 300 > 190、总节点 2571 > 2560；把 `ItemModelIcon3D.gd` / `Dungeon3D.gd` 临时还原到 HEAD 后跑同一场景，得到**完全相同的 289 / 300 / 2571** ⇒ 是既有欠账（验收脚本 L36 已自注「HUD 自己的两条上限（171 / 190）仍是既有红项」）。本次 3D 预览分账只占 **11 / 20**，未越线。
+- **文档同步**：[功能设计 · 物品与武器 3D 图标取景](../design/对话与战斗信息呈现设计.md)（UI-HUD r3，新增规则主源）；[04 §20.8](../04_技术施工_战斗与局内成长.md)（工程侧现行事实，并取代 §20.6 中「独立展示距离只改变镜头填充率」的措辞）。未提交。
+
+## 2026-09-30｜SKYLINE 8层大楼与精细天台源
+
+- ASSET-PIPELINE：按用户天台参考制作8层重复窗墙、破损广告牌、灯泡字、机房、空调风管和积水细节；独立Blend源v004，252包、4共享角色材质，严格色盘UV和结构目录验收通过。
+- 登记`ENV-OPENWORLD-SKYLINE08`为Blender源已完成；交付6张真实渲染预览。v004按用户后续要求将最浅两档白灰色下调两档，几何、灯光及机位保持。未接入Godot。见[开发记录](2026-09-30_skyline08_building_source.md)。
+
+## 2026-09-30｜主塔100F经塔2上方连接塔3
+
+- 北侧移除一段5m护栏及碰撞；依后续要求两段桥使用塔2原塔吊起重臂、每段两节32m，保留1.65m净检修走道；连接等高塔3，塔2低16m且不可进入。独立路线挂主场景Rooftop，普通实例复用现有材质，不新增minimap/MultiMesh。
+- 308项真实渲染与物理检查通过，登记独立路线并定点更新主场景哈希；见[开发记录](2026-09-30_rooftop_cross_tower_route.md)。
+
+## 2026-09-30｜开放世界塔2、塔楼03独立场景导入
+
+- ASSET-PIPELINE：项目Skill同步到Codex；塔2 v003与塔楼03 v001按309组件导入，交付两个独立建筑TSCN及三台独立塔吊场景。原始Blend保持不变，主场景不自动修改。
+- 仅表现、无碰撞与玩法；共享色盘、坐标与独立加载完成真实渲染专项。见[开发记录](2026-09-30_openworld_towers_runtime_import.md)。
+
 ## 2026-09-29｜99F 基地设施头顶文字精简
 
 - 业主口径：「设施头顶上那个常驻的文字说明漂浮去掉，只保留解禁后可交互的那个黄色提示，字体放大一点、位置高一点。」

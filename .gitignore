@@ -10,6 +10,7 @@
 !assets/art/props/base_world_3d/components/**/*.glb.import
 !assets/art/environments/tower_zones/battle/components/**/*.glb.import
 !assets/art/environments/tower_zones/expedition/components/**/*.glb.import
+!assets/art/environments/open_world/components/**/*.glb.import
 !assets/art/environments/tower_zones/rooftop/components/*.glb.import
 !assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import
 *.translation

@@ -107,6 +107,7 @@
 |---|---|---|---|---|
 | 0.2-PLAYER-001 | PLAYER | 换弹进度条由头顶横向线形改为半圆形 | 2026-09-24 | 待裁决 |
 | 0.2-PRESENTATION-001 | PRESENTATION | 过门与可交互物体统一为一套「白点 + 圆环进度」交互 UI | 2026-09-24 | 待裁决 |
+| 0.2-PRESENTATION-002 | PRESENTATION | 物品与武器 3D 图标取景改为按模型投影自适应 | 2026-09-30 | 已验收 |
 
 ---
 
@@ -146,6 +147,16 @@ _暂无登记。_
 ### INVENTORY —— 背包、保险、快捷物品、扩容、换装事务
 
 _暂无登记。_
+
+> 上方「暂无登记」是本槽登记时点的原状态，按 R1 第 1 条原样保留；以下为**后追加**的对接条。
+
+#### 0.2-PRESENTATION-002 · 物品与武器 3D 图标取景改为按模型投影自适应（对接条）
+
+- 本模块要配合：**背包 / 装备 / 保险 / 配件格是 `ItemModelIcon3D` 的主要挂载点，格子几何直接决定取景结果**。
+  - 取景改自适应后，图标的视口分辨率**跟随格子长宽比**。`verify_3d_inventory_weapon_flow` 里有两条与本模块强耦合的判据：背包格 `viewport_size == (96, 96)`、`camera_size ≤ 1.9`（可读性下限）。前者成立的前提是**背包格保持正方形**（`InventoryUI.SLOT_SIZE 78` − 上下左右各 4px inset = 70×70）；`BaseVendingMenu` 的 96×96、`BaseStorageSlot` 的 76×72、`WardrobeMenu3D` 的 118×124 同理。
+  - 因此：**若要给这些格子改宽高比，必须同时复跑 `verify_3d_inventory_weapon_flow` 与 `verify_item_model_icon_framing_visual`**，不能只看外观。正方形的格子不需要任何改动。
+  - 本模块**不需要**改代码：挂载点只删掉了写死的取景倍率（`Dungeon3D` 的 `0.34` / `0.68` 属 PRESENTATION 侧），背包侧原本就没有传倍率。
+- 主责槽：§4 PRESENTATION 分区
 
 ### FATE —— 命运塔罗、牌组、三作用域
 
@@ -231,6 +242,26 @@ _暂无登记。_
 
 - 本模块要配合：诉求末句「**所有圈的进度条要统一**」把本条也纳进本模块的管辖 —— 换弹半圆与交互圆环必须共用同一套视觉规格（线宽、颜色、底轨透明度、完成瞬间的表现）。本模块是这套规格的所有者，**先出规格再让两端各自实现**；`0.2-PRESENTATION-001` 若最终做成圆环组件，优先考虑把半圆也做成同一个组件的参数（弧角 180° vs 360°），而不是写两份绘圆代码。
 - 主责槽：§4 PLAYER 分区
+
+#### 0.2-PRESENTATION-002 · 物品与武器 3D 图标取景改为按模型投影自适应
+
+- 提出日期：2026-09-30
+- 原始诉求：
+  > 图标栏中，物品如果大于图标尺寸，会被切，而且居中位置不对。修改一下。
+- 主责模块：PRESENTATION ｜ 受影响：INVENTORY
+- 关联 FeatureID：`UI-HUD`（图标本体）、`INVENTORY-SLOTS`（背包/装备/配件格的挂载点）｜ 变更类型：表现
+- 影响面：
+  - **改的是取景口径，不是调参**。改前 `ItemModelIcon3D` 按模型种类**写死相机米数**（手枪一档、avatar 各部位各一档），调用点再各传一个**取景倍率**（`Dungeon3D` HUD 武器栏 `0.34`、快捷物品栏 `0.68`），模型位移也写死 ⇒ 换更大的枪出框被切、换宽高比不同的图标格看着不居中。这就是业主截图里的两条。
+  - 改后：相机尺寸与位移**全部由模型投影算出**（`camera.size = max(span.y, span.x / viewport_aspect) / FIT_FILL_RATIO`；`model.position -= right × center.x + up × center.y`），调用点只删参数、不参与计算；视口分辨率改为**跟随图标格长宽比**（HUD 武器格 51.2×36.8 ⇒ 96×69，此前恒为 96×96，宽格子里左右各空一条，看着像"没居中"）。
+  - **`set_camera_size_multiplier()` 的定义域由 `[0.45, 1.5]` 改为 `[1.0, 2.0]`**，语义从"展示距离"变成"只追加余量"。小于 1.0 一律封口 —— 那是"把模型放大到出框"的路径，与「永不切边」冲突。**要整体缩放请改 `FIT_FILL_RATIO`。**
+  - **投影量取的坑（本次实测）**：局部外接盒的 8 个角点是凸包顶点，但斜视方向上常常没有几何落在角上 ⇒ 投影包围盒偏胖且**不对称**（霰弹枪偏心 4.53px / 96px，机枪 3.54、发射器 2.92、钥匙 2.24）。改为**真实顶点沿相机轴的支撑区间**后同时修正尺寸与居中。另：投影原点必须是相机的（`point - camera_origin`），漏掉这个常量在 `span` 里会抵消、**在 `center` 里不抵消** ⇒ 整幅偏心而尺寸正常，只看 `fit_ratio` 永远发现不了。
+  - 影响验收场景：**新增** `verify_item_model_icon_framing_visual`（注册 `visual`：4 种真实图标格几何 × 12 种物品 = 48 格，几何层查 `fit_ratio ≤ 1.0` 与中心偏差、**渲染层**查已绘像素不贴边/居中/填充）。**可能影响** `verify_3d_inventory_weapon_flow` 的 `viewport_size == (96,96)` 与 `camera_size ≤ 1.9` 两条契约（已复验通过）。
+  - 不影响数据链与存档 schema；无禁令冲突（3D 预览分账实测 11 / 20 节点）。
+- 状态：已验收
+- 追记：
+  - 2026-09-30 · 基线 `ITEM_MODEL_ICON_FRAMING_VISUAL_OK`（48 格全绿，`EXIT=0`，修复前偏心最大 4.53px ⇒ 修复后全部 ≤ 2.0px）；回归 `verify_3d_inventory_weapon_flow` / `verify_hud_presenter_3d` / `verify_wardrobe_layout_visual` / `verify_reference_hud_fate_visual` / `verify_base_vending_visual` / `verify_tactical_inventory_minimap_visual` 全绿。见[开发记录](../v0.1/development/CHANGELOG.md)。
+  - 2026-09-30 · `verify_3d_performance_budget` 的 HUD 壳两条 + 总节点一条仍红（289/171、300/190、2571/2560）。**已做对照实验**：把 `ItemModelIcon3D.gd` / `Dungeon3D.gd` 临时还原到 HEAD 后数字完全相同 ⇒ 既有欠账，非本条引入。
+  - 2026-09-30 · **登记人注（待裁决，不在本条范围内）**：近战三件（巨剑 / 战斧 / 球棒）在图标视角下几乎是一条细线 —— 长边顶满、短边极薄（实测填充 0.854–0.875，按"较长边"口径合格）。这是**模型展示朝向**与侧视取景叠加的结果，不是取景缺陷；要改善需 ASSET 侧给近战件定一个"图标展示姿态"，属另一条。本条只保证「不切边、居中、填满」。
 
 ### PERFORMANCE —— 帧预算、流送、长测、画质与后处理
 
