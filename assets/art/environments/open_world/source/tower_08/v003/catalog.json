@@ -1,0 +1,3473 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER08",
+  "building_id": "塔8",
+  "category": "关卡场景/开放世界建筑塔",
+  "relationship": "peer_of_main_tower",
+  "source_version": "v003",
+  "dimensions_m": [
+    50,
+    34,
+    96
+  ],
+  "width_definition": "最外侧实体悬挑结构X=-25至25；无整体缩放",
+  "front_direction": "-Y",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "scale_basis": "用户给定50m宽；深34m和高96m依据单张参考图推定，不是测绘尺寸",
+  "visible_facts": [
+    "阶梯退台轮廓",
+    "底部悬挑花园及三角托架",
+    "双侧竖向蓝色立面",
+    "金属压边与细线菱形纹",
+    "正面CITY LIVE巨幅竖屏",
+    "顶部冠徽及收束尖塔",
+    "退台绿化"
+  ],
+  "inferred": [
+    "完整背面和右侧使用同族Art Deco构造",
+    "底部最低点落地Z=0；不制作参考图云海",
+    "无内部楼层、战斗碰撞、导航或运行时接入"
+  ],
+  "color_policy": "公共色盘；墙面R8C10，墙面细节R7C10；禁止R9C10/R10C10及纯白；4共享材质角色",
+  "locked": "全部已有资产、公共色盘、运行时和资产账本不修改",
+  "component_definitions": [
+    "stepped_core",
+    "fluted_wing",
+    "cantilever_garden",
+    "terrace_rail",
+    "garden_plant_cluster",
+    "entry_portal",
+    "screen_housing",
+    "screen_geometry_graphic",
+    "crown_badge",
+    "spire"
+  ],
+  "source_status": "Blender源已完成",
+  "runtime_status": "未导出；未接入",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+  "packages": [
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/core_00",
+      "display_name": "中央塔身_退台_00",
+      "slug": "core_00",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "中央塔身_退台_00_资产包",
+      "source_collection": "中央塔身_退台_00_制作组件",
+      "objects": [
+        "中央塔身_退台_00_主体"
+      ],
+      "root_object": "中央塔身_退台_00_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -18.334999084472656,
+        -12.835000038146973,
+        0.0
+      ],
+      "bounds_max": [
+        18.334999084472656,
+        12.835000038146973,
+        12.0
+      ],
+      "dimensions": [
+        36.66999816894531,
+        25.670000076293945,
+        12.0
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_00.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "stepped_core",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/core_01",
+      "display_name": "中央塔身_退台_01",
+      "slug": "core_01",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "中央塔身_退台_01_资产包",
+      "source_collection": "中央塔身_退台_01_制作组件",
+      "objects": [
+        "中央塔身_退台_01_主体"
+      ],
+      "root_object": "中央塔身_退台_01_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        12.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -15.335000038146973,
+        -11.835000038146973,
+        11.944999694824219
+      ],
+      "bounds_max": [
+        15.335000038146973,
+        11.835000038146973,
+        28.0
+      ],
+      "dimensions": [
+        30.670000076293945,
+        23.670000076293945,
+        16.05500030517578
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_01.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "stepped_core",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/core_02",
+      "display_name": "中央塔身_退台_02",
+      "slug": "core_02",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "中央塔身_退台_02_资产包",
+      "source_collection": "中央塔身_退台_02_制作组件",
+      "objects": [
+        "中央塔身_退台_02_主体"
+      ],
+      "root_object": "中央塔身_退台_02_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        28.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -13.835000038146973,
+        -10.835000038146973,
+        27.94499969482422
+      ],
+      "bounds_max": [
+        13.835000038146973,
+        10.835000038146973,
+        69.0
+      ],
+      "dimensions": [
+        27.670000076293945,
+        21.670000076293945,
+        41.05500030517578
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_02.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "stepped_core",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/core_03",
+      "display_name": "中央塔身_退台_03",
+      "slug": "core_03",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "中央塔身_退台_03_资产包",
+      "source_collection": "中央塔身_退台_03_制作组件",
+      "objects": [
+        "中央塔身_退台_03_主体"
+      ],
+      "root_object": "中央塔身_退台_03_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        69.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -11.835000038146973,
+        -9.335000038146973,
+        68.94499969482422
+      ],
+      "bounds_max": [
+        11.835000038146973,
+        9.335000038146973,
+        77.0
+      ],
+      "dimensions": [
+        23.670000076293945,
+        18.670000076293945,
+        8.055000305175781
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_03.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "stepped_core",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/core_04",
+      "display_name": "中央塔身_退台_04",
+      "slug": "core_04",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "中央塔身_退台_04_资产包",
+      "source_collection": "中央塔身_退台_04_制作组件",
+      "objects": [
+        "中央塔身_退台_04_主体"
+      ],
+      "root_object": "中央塔身_退台_04_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        77.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -9.335000038146973,
+        -7.835000038146973,
+        76.94499969482422
+      ],
+      "bounds_max": [
+        9.335000038146973,
+        7.835000038146973,
+        83.0
+      ],
+      "dimensions": [
+        18.670000076293945,
+        15.670000076293945,
+        6.055000305175781
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_04.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "stepped_core",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/core_05",
+      "display_name": "中央塔身_退台_05",
+      "slug": "core_05",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "中央塔身_退台_05_资产包",
+      "source_collection": "中央塔身_退台_05_制作组件",
+      "objects": [
+        "中央塔身_退台_05_主体"
+      ],
+      "root_object": "中央塔身_退台_05_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        83.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -5.835000038146973,
+        -5.835000038146973,
+        82.94499969482422
+      ],
+      "bounds_max": [
+        5.835000038146973,
+        5.835000038146973,
+        89.0
+      ],
+      "dimensions": [
+        11.670000076293945,
+        11.670000076293945,
+        6.055000305175781
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "core_05.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "stepped_core",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_0_-1",
+      "display_name": "侧翼_0_左_凹槽竖向立面",
+      "slug": "wing_0_-1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_0_左_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_0_左_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_0_左_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_0_左_凹槽竖向立面_主体",
+      "world_position": [
+        -19.0,
+        -0.5,
+        1.100000023841858
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -22.010000228881836,
+        -8.399999618530273,
+        1.100000023841858
+      ],
+      "bounds_max": [
+        -15.989999771118164,
+        7.309999942779541,
+        25.06999969482422
+      ],
+      "dimensions": [
+        6.020000457763672,
+        15.709999561309814,
+        23.96999967098236
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_0_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_0_-1_roof",
+      "display_name": "退台花园_wing_0_-1_roof",
+      "slug": "wing_0_-1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_0_-1_roof_资产包",
+      "source_collection": "退台花园_wing_0_-1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_0_-1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_0_-1_roof_主体",
+      "world_position": [
+        -19.0,
+        -7.0,
+        25.079999923706055
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -22.03499984741211,
+        -8.375,
+        23.280000686645508
+      ],
+      "bounds_max": [
+        -15.96500015258789,
+        -5.639999866485596,
+        28.585935592651367
+      ],
+      "dimensions": [
+        6.069999694824219,
+        2.7350001335144043,
+        5.305934906005859
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_0_-1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_0_1",
+      "display_name": "侧翼_0_右_凹槽竖向立面",
+      "slug": "wing_0_1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_0_右_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_0_右_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_0_右_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_0_右_凹槽竖向立面_主体",
+      "world_position": [
+        19.0,
+        -0.5,
+        1.100000023841858
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        15.989999771118164,
+        -8.399999618530273,
+        1.100000023841858
+      ],
+      "bounds_max": [
+        22.010000228881836,
+        7.309999942779541,
+        25.06999969482422
+      ],
+      "dimensions": [
+        6.020000457763672,
+        15.709999561309814,
+        23.96999967098236
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_0_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_0_1_roof",
+      "display_name": "退台花园_wing_0_1_roof",
+      "slug": "wing_0_1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_0_1_roof_资产包",
+      "source_collection": "退台花园_wing_0_1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_0_1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_0_1_roof_主体",
+      "world_position": [
+        19.0,
+        -7.0,
+        25.079999923706055
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        15.96500015258789,
+        -8.375,
+        23.280000686645508
+      ],
+      "bounds_max": [
+        22.03499984741211,
+        -5.639999866485596,
+        28.596357345581055
+      ],
+      "dimensions": [
+        6.069999694824219,
+        2.7350001335144043,
+        5.316356658935547
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_0_1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_1_-1",
+      "display_name": "侧翼_1_左_凹槽竖向立面",
+      "slug": "wing_1_-1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_1_左_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_1_左_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_1_左_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_1_左_凹槽竖向立面_主体",
+      "world_position": [
+        -16.100000381469727,
+        -0.5,
+        12.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -19.010000228881836,
+        -9.899999618530273,
+        12.0
+      ],
+      "bounds_max": [
+        -13.1899995803833,
+        8.8100004196167,
+        49.06999969482422
+      ],
+      "dimensions": [
+        5.820000648498535,
+        18.710000038146973,
+        37.06999969482422
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_1_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_1_-1_roof",
+      "display_name": "退台花园_wing_1_-1_roof",
+      "slug": "wing_1_-1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_1_-1_roof_资产包",
+      "source_collection": "退台花园_wing_1_-1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_1_-1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_1_-1_roof_主体",
+      "world_position": [
+        -16.100000381469727,
+        -8.5,
+        49.08000183105469
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -19.03499984741211,
+        -9.875,
+        47.279998779296875
+      ],
+      "bounds_max": [
+        -13.164999961853027,
+        -7.139999866485596,
+        52.482120513916016
+      ],
+      "dimensions": [
+        5.869999885559082,
+        2.7350001335144043,
+        5.202121734619141
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_1_-1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_1_1",
+      "display_name": "侧翼_1_右_凹槽竖向立面",
+      "slug": "wing_1_1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_1_右_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_1_右_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_1_右_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_1_右_凹槽竖向立面_主体",
+      "world_position": [
+        16.100000381469727,
+        -0.5,
+        12.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        13.1899995803833,
+        -9.899999618530273,
+        12.0
+      ],
+      "bounds_max": [
+        19.010000228881836,
+        8.8100004196167,
+        49.06999969482422
+      ],
+      "dimensions": [
+        5.820000648498535,
+        18.710000038146973,
+        37.06999969482422
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_1_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_1_1_roof",
+      "display_name": "退台花园_wing_1_1_roof",
+      "slug": "wing_1_1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_1_1_roof_资产包",
+      "source_collection": "退台花园_wing_1_1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_1_1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_1_1_roof_主体",
+      "world_position": [
+        16.100000381469727,
+        -8.5,
+        49.08000183105469
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        13.164999961853027,
+        -9.875,
+        47.279998779296875
+      ],
+      "bounds_max": [
+        19.03499984741211,
+        -7.139999866485596,
+        52.568321228027344
+      ],
+      "dimensions": [
+        5.869999885559082,
+        2.7350001335144043,
+        5.288322448730469
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_1_1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_2_-1",
+      "display_name": "侧翼_2_左_凹槽竖向立面",
+      "slug": "wing_2_-1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_2_左_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_2_左_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_2_左_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_2_左_凹槽竖向立面_主体",
+      "world_position": [
+        -12.100000381469727,
+        -0.5,
+        25.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -14.90999984741211,
+        -11.3100004196167,
+        25.0
+      ],
+      "bounds_max": [
+        -9.289999961853027,
+        10.3100004196167,
+        70.06999969482422
+      ],
+      "dimensions": [
+        5.619999885559082,
+        21.6200008392334,
+        45.06999969482422
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_2_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_2_-1_roof",
+      "display_name": "退台花园_wing_2_-1_roof",
+      "slug": "wing_2_-1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_2_-1_roof_资产包",
+      "source_collection": "退台花园_wing_2_-1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_2_-1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_2_-1_roof_主体",
+      "world_position": [
+        -12.100000381469727,
+        -10.0,
+        70.08000183105469
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -14.9350004196167,
+        -11.375,
+        68.27999877929688
+      ],
+      "bounds_max": [
+        -9.265000343322754,
+        -8.640000343322754,
+        73.3498306274414
+      ],
+      "dimensions": [
+        5.670000076293945,
+        2.734999656677246,
+        5.069831848144531
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_2_-1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_2_1",
+      "display_name": "侧翼_2_右_凹槽竖向立面",
+      "slug": "wing_2_1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_2_右_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_2_右_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_2_右_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_2_右_凹槽竖向立面_主体",
+      "world_position": [
+        12.100000381469727,
+        -0.5,
+        25.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        9.289999961853027,
+        -11.3100004196167,
+        25.0
+      ],
+      "bounds_max": [
+        14.90999984741211,
+        10.3100004196167,
+        70.06999969482422
+      ],
+      "dimensions": [
+        5.619999885559082,
+        21.6200008392334,
+        45.06999969482422
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_2_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_2_1_roof",
+      "display_name": "退台花园_wing_2_1_roof",
+      "slug": "wing_2_1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_2_1_roof_资产包",
+      "source_collection": "退台花园_wing_2_1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_2_1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_2_1_roof_主体",
+      "world_position": [
+        12.100000381469727,
+        -10.0,
+        70.08000183105469
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        9.265000343322754,
+        -11.375,
+        68.27999877929688
+      ],
+      "bounds_max": [
+        14.9350004196167,
+        -8.640000343322754,
+        73.08656311035156
+      ],
+      "dimensions": [
+        5.670000076293945,
+        2.734999656677246,
+        4.8065643310546875
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_2_1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_3_-1",
+      "display_name": "侧翼_3_左_凹槽竖向立面",
+      "slug": "wing_3_-1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_3_左_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_3_左_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_3_左_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_3_左_凹槽竖向立面_主体",
+      "world_position": [
+        -8.800000190734863,
+        -0.5,
+        69.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -11.010000228881836,
+        -8.8100004196167,
+        69.0
+      ],
+      "bounds_max": [
+        -6.590000152587891,
+        7.809999465942383,
+        77.06999969482422
+      ],
+      "dimensions": [
+        4.420000076293945,
+        16.619999885559082,
+        8.069999694824219
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_3_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_3_-1_roof",
+      "display_name": "退台花园_wing_3_-1_roof",
+      "slug": "wing_3_-1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_3_-1_roof_资产包",
+      "source_collection": "退台花园_wing_3_-1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_3_-1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_3_-1_roof_主体",
+      "world_position": [
+        -8.800000190734863,
+        -7.5,
+        77.08000183105469
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -11.03499984741211,
+        -8.875,
+        75.27999877929688
+      ],
+      "bounds_max": [
+        -6.565000057220459,
+        -6.139999866485596,
+        79.90274047851562
+      ],
+      "dimensions": [
+        4.46999979019165,
+        2.7350001335144043,
+        4.62274169921875
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_3_-1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_3_1",
+      "display_name": "侧翼_3_右_凹槽竖向立面",
+      "slug": "wing_3_1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧翼_3_右_凹槽竖向立面_资产包",
+      "source_collection": "侧翼_3_右_凹槽竖向立面_制作组件",
+      "objects": [
+        "侧翼_3_右_凹槽竖向立面_主体"
+      ],
+      "root_object": "侧翼_3_右_凹槽竖向立面_主体",
+      "world_position": [
+        8.800000190734863,
+        -0.5,
+        69.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        6.590000152587891,
+        -8.8100004196167,
+        69.0
+      ],
+      "bounds_max": [
+        11.010000228881836,
+        7.809999465942383,
+        77.06999969482422
+      ],
+      "dimensions": [
+        4.420000076293945,
+        16.619999885559082,
+        8.069999694824219
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_3_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/wing_3_1_roof",
+      "display_name": "退台花园_wing_3_1_roof",
+      "slug": "wing_3_1_roof",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_wing_3_1_roof_资产包",
+      "source_collection": "退台花园_wing_3_1_roof_制作组件",
+      "objects": [
+        "退台花园_wing_3_1_roof_主体"
+      ],
+      "root_object": "退台花园_wing_3_1_roof_主体",
+      "world_position": [
+        8.800000190734863,
+        -7.5,
+        77.08000183105469
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        6.535202503204346,
+        -8.875,
+        75.27999877929688
+      ],
+      "bounds_max": [
+        11.03499984741211,
+        -6.139999866485596,
+        80.40048217773438
+      ],
+      "dimensions": [
+        4.499797344207764,
+        2.7350001335144043,
+        5.1204833984375
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "wing_3_1_roof.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_-1_0",
+      "display_name": "退台花园_podium_-1_0",
+      "slug": "podium_-1_0",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_podium_-1_0_资产包",
+      "source_collection": "退台花园_podium_-1_0_制作组件",
+      "objects": [
+        "退台花园_podium_-1_0_主体"
+      ],
+      "root_object": "退台花园_podium_-1_0_主体",
+      "world_position": [
+        -20.940000534057617,
+        -13.9399995803833,
+        10.300000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -25.0,
+        -17.0,
+        6.006412982940674
+      ],
+      "bounds_max": [
+        -16.8799991607666,
+        -10.880000114440918,
+        13.781598091125488
+      ],
+      "dimensions": [
+        8.120000839233398,
+        6.119999885559082,
+        7.7751851081848145
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_-1_0.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_foot_-1_0",
+      "display_name": "悬挑底部_-1_0_石墩和支座",
+      "slug": "podium_foot_-1_0",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "悬挑底部_-1_0_石墩和支座_资产包",
+      "source_collection": "悬挑底部_-1_0_石墩和支座_制作组件",
+      "objects": [
+        "悬挑底部_-1_0_石墩和支座_主体"
+      ],
+      "root_object": "悬挑底部_-1_0_石墩和支座_主体",
+      "world_position": [
+        -20.940000534057617,
+        -13.9399995803833,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -23.020000457763672,
+        -15.819999694824219,
+        0.0
+      ],
+      "bounds_max": [
+        -18.860000610351562,
+        -11.260000228881836,
+        8.5
+      ],
+      "dimensions": [
+        4.159999847412109,
+        4.559999465942383,
+        8.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_foot_-1_0.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_-1_1",
+      "display_name": "退台花园_podium_-1_1",
+      "slug": "podium_-1_1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_podium_-1_1_资产包",
+      "source_collection": "退台花园_podium_-1_1_制作组件",
+      "objects": [
+        "退台花园_podium_-1_1_主体"
+      ],
+      "root_object": "退台花园_podium_-1_1_主体",
+      "world_position": [
+        -21.440000534057617,
+        -3.5,
+        10.300000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -25.0,
+        -6.375,
+        6.009566783905029
+      ],
+      "bounds_max": [
+        -17.8799991607666,
+        -0.6399998664855957,
+        13.641083717346191
+      ],
+      "dimensions": [
+        7.120000839233398,
+        5.735000133514404,
+        7.631516933441162
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_-1_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_foot_-1_1",
+      "display_name": "悬挑底部_-1_1_石墩和支座",
+      "slug": "podium_foot_-1_1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "悬挑底部_-1_1_石墩和支座_资产包",
+      "source_collection": "悬挑底部_-1_1_石墩和支座_制作组件",
+      "objects": [
+        "悬挑底部_-1_1_石墩和支座_主体"
+      ],
+      "root_object": "悬挑底部_-1_1_石墩和支座_主体",
+      "world_position": [
+        -21.440000534057617,
+        -3.5,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -23.260000228881836,
+        -5.263999938964844,
+        0.0
+      ],
+      "bounds_max": [
+        -19.6200008392334,
+        -0.931999921798706,
+        8.5
+      ],
+      "dimensions": [
+        3.6399993896484375,
+        4.332000017166138,
+        8.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_foot_-1_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_-1_2",
+      "display_name": "退台花园_podium_-1_2",
+      "slug": "podium_-1_2",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_podium_-1_2_资产包",
+      "source_collection": "退台花园_podium_-1_2_制作组件",
+      "objects": [
+        "退台花园_podium_-1_2_主体"
+      ],
+      "root_object": "退台花园_podium_-1_2_主体",
+      "world_position": [
+        -21.940000534057617,
+        14.140000343322754,
+        10.300000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -25.0,
+        11.265000343322754,
+        6.009566783905029
+      ],
+      "bounds_max": [
+        -18.8799991607666,
+        17.0,
+        13.526082038879395
+      ],
+      "dimensions": [
+        6.120000839233398,
+        5.734999656677246,
+        7.516515254974365
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_-1_2.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_foot_-1_2",
+      "display_name": "悬挑底部_-1_2_石墩和支座",
+      "slug": "podium_foot_-1_2",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "悬挑底部_-1_2_石墩和支座_资产包",
+      "source_collection": "悬挑底部_-1_2_石墩和支座_制作组件",
+      "objects": [
+        "悬挑底部_-1_2_石墩和支座_主体"
+      ],
+      "root_object": "悬挑底部_-1_2_石墩和支座_主体",
+      "world_position": [
+        -21.940000534057617,
+        14.140000343322754,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -23.5,
+        12.37600040435791,
+        0.0
+      ],
+      "bounds_max": [
+        -20.3799991607666,
+        16.70800018310547,
+        8.5
+      ],
+      "dimensions": [
+        3.1200008392333984,
+        4.331999778747559,
+        8.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_foot_-1_2.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_1_0",
+      "display_name": "退台花园_podium_1_0",
+      "slug": "podium_1_0",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_podium_1_0_资产包",
+      "source_collection": "退台花园_podium_1_0_制作组件",
+      "objects": [
+        "退台花园_podium_1_0_主体"
+      ],
+      "root_object": "退台花园_podium_1_0_主体",
+      "world_position": [
+        20.940000534057617,
+        -13.9399995803833,
+        10.300000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        16.8799991607666,
+        -17.0,
+        6.006412982940674
+      ],
+      "bounds_max": [
+        25.0,
+        -10.880000114440918,
+        13.652215957641602
+      ],
+      "dimensions": [
+        8.120000839233398,
+        6.119999885559082,
+        7.645802974700928
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_1_0.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_foot_1_0",
+      "display_name": "悬挑底部_1_0_石墩和支座",
+      "slug": "podium_foot_1_0",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "悬挑底部_1_0_石墩和支座_资产包",
+      "source_collection": "悬挑底部_1_0_石墩和支座_制作组件",
+      "objects": [
+        "悬挑底部_1_0_石墩和支座_主体"
+      ],
+      "root_object": "悬挑底部_1_0_石墩和支座_主体",
+      "world_position": [
+        20.940000534057617,
+        -13.9399995803833,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        18.860000610351562,
+        -15.819999694824219,
+        0.0
+      ],
+      "bounds_max": [
+        23.020000457763672,
+        -11.260000228881836,
+        8.5
+      ],
+      "dimensions": [
+        4.159999847412109,
+        4.559999465942383,
+        8.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_foot_1_0.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_1_1",
+      "display_name": "退台花园_podium_1_1",
+      "slug": "podium_1_1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_podium_1_1_资产包",
+      "source_collection": "退台花园_podium_1_1_制作组件",
+      "objects": [
+        "退台花园_podium_1_1_主体"
+      ],
+      "root_object": "退台花园_podium_1_1_主体",
+      "world_position": [
+        21.440000534057617,
+        -3.5,
+        10.300000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        17.8799991607666,
+        -6.375,
+        6.009566783905029
+      ],
+      "bounds_max": [
+        25.0,
+        -0.6399998664855957,
+        13.81357479095459
+      ],
+      "dimensions": [
+        7.120000839233398,
+        5.735000133514404,
+        7.8040080070495605
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_1_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_foot_1_1",
+      "display_name": "悬挑底部_1_1_石墩和支座",
+      "slug": "podium_foot_1_1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "悬挑底部_1_1_石墩和支座_资产包",
+      "source_collection": "悬挑底部_1_1_石墩和支座_制作组件",
+      "objects": [
+        "悬挑底部_1_1_石墩和支座_主体"
+      ],
+      "root_object": "悬挑底部_1_1_石墩和支座_主体",
+      "world_position": [
+        21.440000534057617,
+        -3.5,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        19.6200008392334,
+        -5.263999938964844,
+        0.0
+      ],
+      "bounds_max": [
+        23.260000228881836,
+        -0.931999921798706,
+        8.5
+      ],
+      "dimensions": [
+        3.6399993896484375,
+        4.332000017166138,
+        8.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_foot_1_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_1_2",
+      "display_name": "退台花园_podium_1_2",
+      "slug": "podium_1_2",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_podium_1_2_资产包",
+      "source_collection": "退台花园_podium_1_2_制作组件",
+      "objects": [
+        "退台花园_podium_1_2_主体"
+      ],
+      "root_object": "退台花园_podium_1_2_主体",
+      "world_position": [
+        21.940000534057617,
+        14.140000343322754,
+        10.300000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        18.8799991607666,
+        11.265000343322754,
+        6.009566783905029
+      ],
+      "bounds_max": [
+        25.0,
+        17.0,
+        12.659242630004883
+      ],
+      "dimensions": [
+        6.120000839233398,
+        5.734999656677246,
+        6.6496758460998535
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_1_2.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_foot_1_2",
+      "display_name": "悬挑底部_1_2_石墩和支座",
+      "slug": "podium_foot_1_2",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "悬挑底部_1_2_石墩和支座_资产包",
+      "source_collection": "悬挑底部_1_2_石墩和支座_制作组件",
+      "objects": [
+        "悬挑底部_1_2_石墩和支座_主体"
+      ],
+      "root_object": "悬挑底部_1_2_石墩和支座_主体",
+      "world_position": [
+        21.940000534057617,
+        14.140000343322754,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        20.3799991607666,
+        12.37600040435791,
+        0.0
+      ],
+      "bounds_max": [
+        23.5,
+        16.70800018310547,
+        8.5
+      ],
+      "dimensions": [
+        3.1200008392333984,
+        4.331999778747559,
+        8.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_foot_1_2.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_wing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/entry_flank_-1",
+      "display_name": "退台花园_entry_flank_-1",
+      "slug": "entry_flank_-1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_entry_flank_-1_资产包",
+      "source_collection": "退台花园_entry_flank_-1_制作组件",
+      "objects": [
+        "退台花园_entry_flank_-1_主体"
+      ],
+      "root_object": "退台花园_entry_flank_-1_主体",
+      "world_position": [
+        -10.5,
+        -13.0,
+        11.800000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -15.5600004196167,
+        -16.075000762939453,
+        7.506412982940674
+      ],
+      "bounds_max": [
+        -5.440000057220459,
+        -9.9399995803833,
+        14.895302772521973
+      ],
+      "dimensions": [
+        10.12000036239624,
+        6.135001182556152,
+        7.388889789581299
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "entry_flank_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/upper_entry_-1",
+      "display_name": "退台花园_upper_entry_-1",
+      "slug": "upper_entry_-1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_upper_entry_-1_资产包",
+      "source_collection": "退台花园_upper_entry_-1_制作组件",
+      "objects": [
+        "退台花园_upper_entry_-1_主体"
+      ],
+      "root_object": "退台花园_upper_entry_-1_主体",
+      "world_position": [
+        -6.300000190734863,
+        -11.600000381469727,
+        26.5
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -9.0600004196167,
+        -13.774999618530273,
+        24.700000762939453
+      ],
+      "bounds_max": [
+        -3.5399999618530273,
+        -9.4399995803833,
+        29.686214447021484
+      ],
+      "dimensions": [
+        5.520000457763672,
+        4.335000038146973,
+        4.986213684082031
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "upper_entry_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/upper_crown_-1",
+      "display_name": "退台花园_upper_crown_-1",
+      "slug": "upper_crown_-1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_upper_crown_-1_资产包",
+      "source_collection": "退台花园_upper_crown_-1_制作组件",
+      "objects": [
+        "退台花园_upper_crown_-1_主体"
+      ],
+      "root_object": "退台花园_upper_crown_-1_主体",
+      "world_position": [
+        -8.800000190734863,
+        -7.0,
+        77.5
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -11.460000038146973,
+        -8.774999618530273,
+        75.69999694824219
+      ],
+      "bounds_max": [
+        -6.139999866485596,
+        -5.239999771118164,
+        80.65587615966797
+      ],
+      "dimensions": [
+        5.320000171661377,
+        3.5349998474121094,
+        4.955879211425781
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "upper_crown_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/entry_flank_1",
+      "display_name": "退台花园_entry_flank_1",
+      "slug": "entry_flank_1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_entry_flank_1_资产包",
+      "source_collection": "退台花园_entry_flank_1_制作组件",
+      "objects": [
+        "退台花园_entry_flank_1_主体"
+      ],
+      "root_object": "退台花园_entry_flank_1_主体",
+      "world_position": [
+        10.5,
+        -13.0,
+        11.800000190734863
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        5.440000057220459,
+        -16.075000762939453,
+        7.506412982940674
+      ],
+      "bounds_max": [
+        15.5600004196167,
+        -9.9399995803833,
+        14.913283348083496
+      ],
+      "dimensions": [
+        10.12000036239624,
+        6.135001182556152,
+        7.406870365142822
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "entry_flank_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/upper_entry_1",
+      "display_name": "退台花园_upper_entry_1",
+      "slug": "upper_entry_1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_upper_entry_1_资产包",
+      "source_collection": "退台花园_upper_entry_1_制作组件",
+      "objects": [
+        "退台花园_upper_entry_1_主体"
+      ],
+      "root_object": "退台花园_upper_entry_1_主体",
+      "world_position": [
+        6.300000190734863,
+        -11.600000381469727,
+        26.5
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        3.5399999618530273,
+        -13.774999618530273,
+        24.700000762939453
+      ],
+      "bounds_max": [
+        9.0600004196167,
+        -9.4399995803833,
+        30.013776779174805
+      ],
+      "dimensions": [
+        5.520000457763672,
+        4.335000038146973,
+        5.313776016235352
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "upper_entry_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/upper_crown_1",
+      "display_name": "退台花园_upper_crown_1",
+      "slug": "upper_crown_1",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_upper_crown_1_资产包",
+      "source_collection": "退台花园_upper_crown_1_制作组件",
+      "objects": [
+        "退台花园_upper_crown_1_主体"
+      ],
+      "root_object": "退台花园_upper_crown_1_主体",
+      "world_position": [
+        8.800000190734863,
+        -7.0,
+        77.5
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        6.139999866485596,
+        -8.774999618530273,
+        75.69999694824219
+      ],
+      "bounds_max": [
+        11.460000038146973,
+        -5.239999771118164,
+        80.8293685913086
+      ],
+      "dimensions": [
+        5.320000171661377,
+        3.5349998474121094,
+        5.129371643066406
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "upper_crown_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/screen_lower_gallery",
+      "display_name": "退台花园_screen_lower_gallery",
+      "slug": "screen_lower_gallery",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_screen_lower_gallery_资产包",
+      "source_collection": "退台花园_screen_lower_gallery_制作组件",
+      "objects": [
+        "退台花园_screen_lower_gallery_主体"
+      ],
+      "root_object": "退台花园_screen_lower_gallery_主体",
+      "world_position": [
+        0.0,
+        -10.199999809265137,
+        28.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -7.960000038146973,
+        -11.274999618530273,
+        26.200000762939453
+      ],
+      "bounds_max": [
+        7.960000038146973,
+        -9.140000343322754,
+        31.389318466186523
+      ],
+      "dimensions": [
+        15.920000076293945,
+        2.1349992752075195,
+        5.18931770324707
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "screen_lower_gallery.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/upper_left_shoulder",
+      "display_name": "退台花园_upper_left_shoulder",
+      "slug": "upper_left_shoulder",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_upper_left_shoulder_资产包",
+      "source_collection": "退台花园_upper_left_shoulder_制作组件",
+      "objects": [
+        "退台花园_upper_left_shoulder_主体"
+      ],
+      "root_object": "退台花园_upper_left_shoulder_主体",
+      "world_position": [
+        -6.199999809265137,
+        3.0,
+        83.4000015258789
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -8.760000228881836,
+        1.125,
+        81.5999984741211
+      ],
+      "bounds_max": [
+        -3.640000104904175,
+        4.860000133514404,
+        86.79798126220703
+      ],
+      "dimensions": [
+        5.120000123977661,
+        3.7350001335144043,
+        5.1979827880859375
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "upper_left_shoulder.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/upper_right_shoulder",
+      "display_name": "退台花园_upper_right_shoulder",
+      "slug": "upper_right_shoulder",
+      "category": "garden",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "退台花园_upper_right_shoulder_资产包",
+      "source_collection": "退台花园_upper_right_shoulder_制作组件",
+      "objects": [
+        "退台花园_upper_right_shoulder_主体"
+      ],
+      "root_object": "退台花园_upper_right_shoulder_主体",
+      "world_position": [
+        6.199999809265137,
+        3.0,
+        83.4000015258789
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        3.640000104904175,
+        1.125,
+        81.5999984741211
+      ],
+      "bounds_max": [
+        8.760000228881836,
+        4.860000133514404,
+        86.39170837402344
+      ],
+      "dimensions": [
+        5.120000123977661,
+        3.7350001335144043,
+        4.791709899902344
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "upper_right_shoulder.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "cantilever_garden",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/entry_portal",
+      "display_name": "主入口_金色门框与蓝玻璃门",
+      "slug": "entry_portal",
+      "category": "facilities",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "主入口_金色门框与蓝玻璃门_资产包",
+      "source_collection": "主入口_金色门框与蓝玻璃门_制作组件",
+      "objects": [
+        "主入口_金色门框与蓝玻璃门_主体"
+      ],
+      "root_object": "主入口_金色门框与蓝玻璃门_主体",
+      "world_position": [
+        0.0,
+        -12.699999809265137,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -5.050000190734863,
+        -13.8149995803833,
+        0.0
+      ],
+      "bounds_max": [
+        5.050000190734863,
+        -11.574999809265137,
+        25.100000381469727
+      ],
+      "dimensions": [
+        10.100000381469727,
+        2.239999771118164,
+        25.100000381469727
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "entry_portal.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "entry_portal",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/citylive_housing",
+      "display_name": "CITYLIVE巨幕_金边框及检修灯",
+      "slug": "citylive_housing",
+      "category": "signage",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "CITYLIVE巨幕_金边框及检修灯_资产包",
+      "source_collection": "CITYLIVE巨幕_金边框及检修灯_制作组件",
+      "objects": [
+        "CITYLIVE巨幕_金边框及检修灯_主体",
+        "CITYLIVE巨幕_金边框及检修灯_柔和自发光"
+      ],
+      "root_object": "CITYLIVE巨幕_金边框及检修灯_主体",
+      "world_position": [
+        0.0,
+        -11.699999809265137,
+        29.100000381469727
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -8.680000305175781,
+        -12.359999656677246,
+        28.450000762939453
+      ],
+      "bounds_max": [
+        8.680000305175781,
+        -11.229999542236328,
+        68.44999694824219
+      ],
+      "dimensions": [
+        17.360000610351562,
+        1.130000114440918,
+        39.999996185302734
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "citylive_housing.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "screen_housing",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/citylive_graphic",
+      "display_name": "CITYLIVE巨幕_城市落日矢量几何画面",
+      "slug": "citylive_graphic",
+      "category": "signage",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "CITYLIVE巨幕_城市落日矢量几何画面_资产包",
+      "source_collection": "CITYLIVE巨幕_城市落日矢量几何画面_制作组件",
+      "objects": [
+        "CITYLIVE巨幕_城市落日矢量几何画面_柔和自发光"
+      ],
+      "root_object": "CITYLIVE巨幕_城市落日矢量几何画面_柔和自发光",
+      "world_position": [
+        0.0,
+        -11.699999809265137,
+        29.100000381469727
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -8.100000381469727,
+        -12.40999984741211,
+        29.100000381469727
+      ],
+      "bounds_max": [
+        8.100000381469727,
+        -11.932499885559082,
+        67.80000305175781
+      ],
+      "dimensions": [
+        16.200000762939453,
+        0.47749996185302734,
+        38.700002670288086
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "citylive_graphic.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "screen_geometry_graphic",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/word_city",
+      "display_name": "巨幕文字_CITY",
+      "slug": "word_city",
+      "category": "signage",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "巨幕文字_CITY_资产包",
+      "source_collection": "巨幕文字_CITY_制作组件",
+      "objects": [
+        "巨幕文字_CITY_柔和自发光"
+      ],
+      "root_object": "巨幕文字_CITY_柔和自发光",
+      "world_position": [
+        0.0,
+        -11.699999809265137,
+        55.099998474121094
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -6.506099700927734,
+        -12.385000228881836,
+        55.005733489990234
+      ],
+      "bounds_max": [
+        6.993900299072266,
+        -12.354999542236328,
+        60.505733489990234
+      ],
+      "dimensions": [
+        13.5,
+        0.030000686645507812,
+        5.5
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "word_city.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "screen_geometry_graphic",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/word_live",
+      "display_name": "巨幕文字_LIVE",
+      "slug": "word_live",
+      "category": "signage",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "巨幕文字_LIVE_资产包",
+      "source_collection": "巨幕文字_LIVE_制作组件",
+      "objects": [
+        "巨幕文字_LIVE_柔和自发光"
+      ],
+      "root_object": "巨幕文字_LIVE_柔和自发光",
+      "world_position": [
+        0.0,
+        -11.699999809265137,
+        48.599998474121094
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -6.344269752502441,
+        -12.385000228881836,
+        48.599998474121094
+      ],
+      "bounds_max": [
+        7.155730247497559,
+        -12.354999542236328,
+        54.29999923706055
+      ],
+      "dimensions": [
+        13.5,
+        0.030000686645507812,
+        5.700000762939453
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "word_live.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "screen_geometry_graphic",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/crown_badge",
+      "display_name": "顶部冠徽_金色王冠和蓝色壁龛",
+      "slug": "crown_badge",
+      "category": "signage",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "顶部冠徽_金色王冠和蓝色壁龛_资产包",
+      "source_collection": "顶部冠徽_金色王冠和蓝色壁龛_制作组件",
+      "objects": [
+        "顶部冠徽_金色王冠和蓝色壁龛_主体"
+      ],
+      "root_object": "顶部冠徽_金色王冠和蓝色壁龛_主体",
+      "world_position": [
+        0.0,
+        -9.5,
+        69.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -4.349999904632568,
+        -9.739999771118164,
+        70.35010528564453
+      ],
+      "bounds_max": [
+        4.349999904632568,
+        -9.069999694824219,
+        76.85530853271484
+      ],
+      "dimensions": [
+        8.699999809265137,
+        0.6700000762939453,
+        6.5052032470703125
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "crown_badge.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "crown_badge",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/spire",
+      "display_name": "顶部尖塔_退台冠顶与避雷针",
+      "slug": "spire",
+      "category": "support",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "顶部尖塔_退台冠顶与避雷针_资产包",
+      "source_collection": "顶部尖塔_退台冠顶与避雷针_制作组件",
+      "objects": [
+        "顶部尖塔_退台冠顶与避雷针_主体",
+        "顶部尖塔_退台冠顶与避雷针_柔和自发光"
+      ],
+      "root_object": "顶部尖塔_退台冠顶与避雷针_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        83.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -4.525000095367432,
+        -4.579999923706055,
+        86.0
+      ],
+      "bounds_max": [
+        4.525000095367432,
+        3.759999990463257,
+        96.0
+      ],
+      "dimensions": [
+        9.050000190734863,
+        8.339999914169312,
+        10.0
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "spire.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "spire",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/side_relief_-1",
+      "display_name": "侧面_左_竖向石柱与蓝色凹槽",
+      "slug": "side_relief_-1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧面_左_竖向石柱与蓝色凹槽_资产包",
+      "source_collection": "侧面_左_竖向石柱与蓝色凹槽_制作组件",
+      "objects": [
+        "侧面_左_竖向石柱与蓝色凹槽_主体"
+      ],
+      "root_object": "侧面_左_竖向石柱与蓝色凹槽_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -21.80500030517578,
+        -10.739999771118164,
+        1.399999976158142
+      ],
+      "bounds_max": [
+        -14.454999923706055,
+        9.739999771118164,
+        69.69999694824219
+      ],
+      "dimensions": [
+        7.350000381469727,
+        20.479999542236328,
+        68.29999697208405
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "side_relief_-1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "side_facade_relief",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/side_relief_1",
+      "display_name": "侧面_右_竖向石柱与蓝色凹槽",
+      "slug": "side_relief_1",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "侧面_右_竖向石柱与蓝色凹槽_资产包",
+      "source_collection": "侧面_右_竖向石柱与蓝色凹槽_制作组件",
+      "objects": [
+        "侧面_右_竖向石柱与蓝色凹槽_主体"
+      ],
+      "root_object": "侧面_右_竖向石柱与蓝色凹槽_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        14.454999923706055,
+        -10.739999771118164,
+        1.399999976158142
+      ],
+      "bounds_max": [
+        21.80500030517578,
+        9.739999771118164,
+        69.69999694824219
+      ],
+      "dimensions": [
+        7.350000381469727,
+        20.479999542236328,
+        68.29999697208405
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "side_relief_1.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "side_facade_relief",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/screen_pilaster_detail",
+      "display_name": "巨幕侧柱_密集竖槽与金属冠饰",
+      "slug": "screen_pilaster_detail",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "巨幕侧柱_密集竖槽与金属冠饰_资产包",
+      "source_collection": "巨幕侧柱_密集竖槽与金属冠饰_制作组件",
+      "objects": [
+        "巨幕侧柱_密集竖槽与金属冠饰_主体",
+        "巨幕侧柱_密集竖槽与金属冠饰_柔和自发光"
+      ],
+      "root_object": "巨幕侧柱_密集竖槽与金属冠饰_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -11.475000381469727,
+        -11.414999961853027,
+        28.600000381469727
+      ],
+      "bounds_max": [
+        11.475000381469727,
+        -9.399999618530273,
+        69.66500091552734
+      ],
+      "dimensions": [
+        22.950000762939453,
+        2.015000343322754,
+        41.06500053405762
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "screen_pilaster_detail.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "fluted_pilaster_details",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/podium_refinement",
+      "display_name": "底部悬挑_细柱托架与蓝金石板",
+      "slug": "podium_refinement",
+      "category": "architecture",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "底部悬挑_细柱托架与蓝金石板_资产包",
+      "source_collection": "底部悬挑_细柱托架与蓝金石板_制作组件",
+      "objects": [
+        "底部悬挑_细柱托架与蓝金石板_主体"
+      ],
+      "root_object": "底部悬挑_细柱托架与蓝金石板_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -24.905000686645508,
+        -17.0,
+        0.949999988079071
+      ],
+      "bounds_max": [
+        24.905000686645508,
+        15.537385940551758,
+        10.105310440063477
+      ],
+      "dimensions": [
+        49.810001373291016,
+        32.53738594055176,
+        9.155310451984406
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": false,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "podium_refinement.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "hanging_podium_detail",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER08",
+      "package_id": "tower_08/spire_fins",
+      "display_name": "冠顶_高低错落金色飞扶壁尖针",
+      "slug": "spire_fins",
+      "category": "support",
+      "version": "v003",
+      "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v003\\塔8_CITYLIVE空中花园地标_50m_v003.blend",
+      "collection": "冠顶_高低错落金色飞扶壁尖针_资产包",
+      "source_collection": "冠顶_高低错落金色飞扶壁尖针_制作组件",
+      "objects": [
+        "冠顶_高低错落金色飞扶壁尖针_主体",
+        "冠顶_高低错落金色飞扶壁尖针_柔和自发光"
+      ],
+      "root_object": "冠顶_高低错落金色飞扶壁尖针_主体",
+      "world_position": [
+        0.0,
+        0.0,
+        83.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "front_direction": "-Y",
+      "bounds_min": [
+        -5.039999961853027,
+        -7.300000190734863,
+        78.8499984741211
+      ],
+      "bounds_max": [
+        5.039999961853027,
+        -0.6800001263618469,
+        92.80000305175781
+      ],
+      "dimensions": [
+        10.079999923706055,
+        6.620000064373016,
+        13.950004577636719
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "animation": false,
+      "emissive": true,
+      "dependencies": [],
+      "collision_status": "not_authored",
+      "exported": false,
+      "expected_export": "spire_fins.glb",
+      "fixed_display_attachment": true,
+      "component_definition": "spire_deco_fins",
+      "block_id": "open_world",
+      "floor_range": "装饰退台地标；不定义战斗楼层",
+      "scene_design_docs": [
+        "用户参考图及8层楼要求",
+        "docs/v0.1/10.1_3D场景美术生产流程.md"
+      ],
+      "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+    }
+  ],
+  "package_count": 55,
+  "shared_palette": "assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+  "unit": "meter",
+  "collision_status": "none_visual_only",
+  "ledger_status": "未写入分账本；源清单登记",
+  "review_notes": "最终点级包络修正、冠顶飞扶壁可见性修正；保留v001/v002；公共色盘不打包；字体打包"
+}

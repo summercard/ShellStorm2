@@ -1,0 +1,135 @@
+{
+  "passed": false,
+  "checks": {
+    "width_50m": true,
+    "depth_34m": false,
+    "height_96m": false,
+    "base_z_zero": false,
+    "xy_centered": false,
+    "materials_exactly_four": true,
+    "source_hidden": true,
+    "output_visible": true,
+    "packages_nonempty": true,
+    "one_output_owner": true,
+    "manifest_match": true,
+    "package_bounds_match": true,
+    "no_bright_white_gray": true,
+    "no_pure_white": true,
+    "external_unpacked_palette": true,
+    "no_collision_or_runtime_scripts": true,
+    "reference_cameras_six": true
+  },
+  "asset_id": "ENV-OPENWORLD-TOWER08",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_08\\v001\\塔8_CITYLIVE空中花园地标_50m_v001.blend",
+  "bounds_min": [
+    -25.0,
+    -17.014999389648438,
+    -0.054999999701976776
+  ],
+  "bounds_max": [
+    25.0,
+    17.0,
+    96.0
+  ],
+  "dimensions_m": [
+    50.0,
+    34.01499938964844,
+    96.05499999970198
+  ],
+  "package_count": 50,
+  "category_counts": {
+    "architecture": 20,
+    "garden": 23,
+    "facilities": 1,
+    "signage": 5,
+    "support": 1
+  },
+  "output_mesh_count": 52,
+  "source_mesh_count": 52,
+  "editable_font_count": 2,
+  "triangles": 53760,
+  "polygons": 24945,
+  "vertices": 33952,
+  "material_count": 4,
+  "used_palette_cells": [
+    {
+      "column": 4,
+      "row": 6,
+      "faces": 74
+    },
+    {
+      "column": 6,
+      "row": 6,
+      "faces": 958
+    },
+    {
+      "column": 6,
+      "row": 7,
+      "faces": 114
+    },
+    {
+      "column": 6,
+      "row": 8,
+      "faces": 8
+    },
+    {
+      "column": 7,
+      "row": 5,
+      "faces": 1472
+    },
+    {
+      "column": 7,
+      "row": 6,
+      "faces": 2384
+    },
+    {
+      "column": 7,
+      "row": 8,
+      "faces": 254
+    },
+    {
+      "column": 8,
+      "row": 3,
+      "faces": 2018
+    },
+    {
+      "column": 8,
+      "row": 5,
+      "faces": 1656
+    },
+    {
+      "column": 9,
+      "row": 4,
+      "faces": 9612
+    },
+    {
+      "column": 9,
+      "row": 10,
+      "faces": 1138
+    },
+    {
+      "column": 10,
+      "row": 2,
+      "faces": 20
+    },
+    {
+      "column": 10,
+      "row": 6,
+      "faces": 1574
+    },
+    {
+      "column": 10,
+      "row": 8,
+      "faces": 3663
+    }
+  ],
+  "empty_packages": [],
+  "manifest_errors": [],
+  "bounds_errors": [],
+  "forbidden_gray_faces": 0,
+  "pure_white_faces": 0,
+  "source_sha256": "6ea5971760f8c2e512c10d667dde72343917c94a0bed4417967538e0c1963e9a",
+  "runtime_status": "未导出；未接入；无碰撞；未做LOD",
+  "scope_lock": "新建独立塔8源目录；没有修改已有塔楼、公共色盘、账本或运行时",
+  "scale_assumptions": "用户给定50m宽；深34m和高96m依据单张参考图推定，不是测绘尺寸"
+}

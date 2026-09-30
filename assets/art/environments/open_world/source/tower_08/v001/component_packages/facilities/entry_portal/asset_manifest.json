@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER08",
+  "package_id": "tower_08/entry_portal",
+  "display_name": "主入口_金色门框与蓝玻璃门",
+  "slug": "entry_portal",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v001\\塔8_CITYLIVE空中花园地标_50m_v001.blend",
+  "collection": "主入口_金色门框与蓝玻璃门_资产包",
+  "source_collection": "主入口_金色门框与蓝玻璃门_制作组件",
+  "objects": [
+    "主入口_金色门框与蓝玻璃门_主体"
+  ],
+  "root_object": "主入口_金色门框与蓝玻璃门_主体",
+  "world_position": [
+    0.0,
+    -12.699999809265137,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -5.05,
+    -13.8149995803833,
+    0.0
+  ],
+  "bounds_max": [
+    5.05,
+    -11.575000000000001,
+    25.1
+  ],
+  "dimensions": [
+    10.1,
+    2.2399995803832997,
+    25.1
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "entry_portal.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "entry_portal",
+  "block_id": "open_world",
+  "floor_range": "装饰退台地标；不定义战斗楼层",
+  "scene_design_docs": [
+    "用户参考图及8层楼要求",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+}

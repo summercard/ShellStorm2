@@ -1,0 +1,50 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER08",
+  "building_id": "塔8",
+  "category": "关卡场景/开放世界建筑塔",
+  "relationship": "peer_of_main_tower",
+  "source_version": "v001",
+  "dimensions_m": [
+    50,
+    34,
+    96
+  ],
+  "width_definition": "最外侧实体悬挑结构X=-25至25；无整体缩放",
+  "front_direction": "-Y",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "scale_basis": "用户给定50m宽；深34m和高96m依据单张参考图推定，不是测绘尺寸",
+  "visible_facts": [
+    "阶梯退台轮廓",
+    "底部悬挑花园及三角托架",
+    "双侧竖向蓝色立面",
+    "金属压边与细线菱形纹",
+    "正面CITY LIVE巨幅竖屏",
+    "顶部冠徽及收束尖塔",
+    "退台绿化"
+  ],
+  "inferred": [
+    "完整背面和右侧使用同族Art Deco构造",
+    "底部最低点落地Z=0；不制作参考图云海",
+    "无内部楼层、战斗碰撞、导航或运行时接入"
+  ],
+  "color_policy": "公共色盘；墙面R8C10，墙面细节R7C10；禁止R9C10/R10C10及纯白；4共享材质角色",
+  "locked": "全部已有资产、公共色盘、运行时和资产账本不修改",
+  "component_definitions": [
+    "stepped_core",
+    "fluted_wing",
+    "cantilever_garden",
+    "terrace_rail",
+    "garden_plant_cluster",
+    "entry_portal",
+    "screen_housing",
+    "screen_geometry_graphic",
+    "crown_badge",
+    "spire"
+  ],
+  "source_status": "planned",
+  "runtime_status": "not_exported"
+}

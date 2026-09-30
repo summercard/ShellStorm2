@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER08",
+  "package_id": "tower_08/upper_right_shoulder",
+  "display_name": "退台花园_upper_right_shoulder",
+  "slug": "upper_right_shoulder",
+  "category": "garden",
+  "version": "v002",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v002\\塔8_CITYLIVE空中花园地标_50m_v002.blend",
+  "collection": "退台花园_upper_right_shoulder_资产包",
+  "source_collection": "退台花园_upper_right_shoulder_制作组件",
+  "objects": [
+    "退台花园_upper_right_shoulder_主体"
+  ],
+  "root_object": "退台花园_upper_right_shoulder_主体",
+  "world_position": [
+    6.199999809265137,
+    3.0,
+    83.4000015258789
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    3.640000104904175,
+    1.125,
+    81.5999984741211
+  ],
+  "bounds_max": [
+    8.760000228881836,
+    4.860000133514404,
+    86.39170837402344
+  ],
+  "dimensions": [
+    5.120000123977661,
+    3.7350001335144043,
+    4.791709899902344
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "upper_right_shoulder.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "cantilever_garden",
+  "block_id": "open_world",
+  "floor_range": "装饰退台地标；不定义战斗楼层",
+  "scene_design_docs": [
+    "用户参考图及8层楼要求",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+}

@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER08",
+  "package_id": "tower_08/spire",
+  "display_name": "顶部尖塔_退台冠顶与避雷针",
+  "slug": "spire",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\tower_08\\v001\\塔8_CITYLIVE空中花园地标_50m_v001.blend",
+  "collection": "顶部尖塔_退台冠顶与避雷针_资产包",
+  "source_collection": "顶部尖塔_退台冠顶与避雷针_制作组件",
+  "objects": [
+    "顶部尖塔_退台冠顶与避雷针_主体",
+    "顶部尖塔_退台冠顶与避雷针_柔和自发光"
+  ],
+  "root_object": "顶部尖塔_退台冠顶与避雷针_主体",
+  "world_position": [
+    0.0,
+    0.0,
+    83.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -4.525,
+    -4.58,
+    86.0
+  ],
+  "bounds_max": [
+    4.525,
+    3.7600000000000002,
+    96.0
+  ],
+  "dimensions": [
+    9.05,
+    8.34,
+    10.0
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "spire.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "spire",
+  "block_id": "open_world",
+  "floor_range": "装饰退台地标；不定义战斗楼层",
+  "scene_design_docs": [
+    "用户参考图及8层楼要求",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER08"
+}
