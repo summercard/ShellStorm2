@@ -27,6 +27,27 @@ IMPORT_SCRIPT = (
     "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
 )
 
+# 仅按稳定房型 + AssetID 命中。不要改成只按 slug，否则同名组件会被误分段。
+SEGMENTED_COLLISION_BOXES = {
+    (
+        "db_room",
+        "ENV-EXPEDITION-L01-DB-WORKBENCH_A",
+    ): (
+        {
+            "name": "BackArm",
+            "shape_id": "BoxShape3D_back_arm",
+            "size": (14.1, 3.565, 1.75),
+            "position": (0.0, 1.7825, -2.75),
+        },
+        {
+            "name": "SideArm",
+            "shape_id": "BoxShape3D_side_arm",
+            "size": (1.85, 3.565, 5.5),
+            "position": (6.125, 1.7825, 0.875),
+        },
+    ),
+}
+
 OFFICE_BOX_COLLISION = {
     "filing_run",
     "locker_bank",
@@ -192,7 +213,37 @@ def tscn_text(
     subresources: list[str] = []
     collision_nodes: list[str] = []
     load_steps = 2
-    if collision_policy in {"safe_box_proxy", "structural_box_proxy"}:
+    segmented_boxes = SEGMENTED_COLLISION_BOXES.get((room_slug, component_id))
+    if segmented_boxes is not None:
+        load_steps += len(segmented_boxes)
+        for box in segmented_boxes:
+            sx, sy, sz = box["size"]
+            subresources.extend(
+                [
+                    f'[sub_resource type="BoxShape3D" id="{box["shape_id"]}"]',
+                    f"size = Vector3({sx:g}, {sy:g}, {sz:g})",
+                    "",
+                ]
+            )
+        collision_nodes.extend(
+            [
+                '[node name="CollisionBody" type="StaticBody3D" parent="."]',
+                "collision_layer = 1",
+                "collision_mask = 0",
+                "",
+            ]
+        )
+        for box in segmented_boxes:
+            px, py, pz = box["position"]
+            collision_nodes.extend(
+                [
+                    f'[node name="{box["name"]}" type="CollisionShape3D" parent="CollisionBody"]',
+                    f"position = Vector3({px:g}, {py:g}, {pz:g})",
+                    f'shape = SubResource("{box["shape_id"]}")',
+                    "",
+                ]
+            )
+    elif collision_policy in {"safe_box_proxy", "structural_box_proxy"}:
         load_steps += 1
         subresources.extend(
             [
@@ -304,8 +355,8 @@ def patch_import(path: Path) -> None:
     write_text_crlf(path, text)
 
 
-def main() -> None:
-    root = Path(__file__).resolve().parents[1]
+def main(root: Path | None = None) -> None:
+    root = root or Path(__file__).resolve().parents[1]
     runtime_catalog_path = root / CATALOG_PATH
     runtime_catalog = read_json(runtime_catalog_path)
     existing = [

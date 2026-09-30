@@ -6,7 +6,7 @@
  "room_role": "main",
  "content_type": "COMBAT",
  "assembly_route": "room_type_layout_replay",
- "assembly_route_note": "分支 A0：具体房间白模与房型默认尺寸、门槽与必需设施一致，且 03 的 room_layout 只声明 base_layout（无 instance_overrides）⇒ 直接重放房型 component_instances.json，不做 Godot 侧第二套手工摆位。",
+ "assembly_route_note": "保留 room_type_layout_replay 作为历史初始化路线标识；具体初始化输入属于分支 A：room_layout.json 以 v009 component_instances.json 为 base_layout，并明确 remove filing_run_west（106→105）。当前正式 Godot TSCN 已接管布局，允许手改，不能再按 JSON 自动回灌。",
  "level": {
   "level_id": "expedition_01",
   "block_id": "expedition",
@@ -15,7 +15,8 @@
   "wall_thickness_m": 0.3,
   "visible_wall_height_m": 11.9,
   "generator": "res://src/map/FloorPlanGenerator.gd::generate_expedition",
-  "geometry_is_generated_at_runtime": true
+  "geometry_is_generated_at_runtime": false,
+  "geometry_note": "房内正式视觉布局加载 godot_references.formal_tscn 的稳定组件实例；关卡规划、门状态与承重等仍由原运行层负责。本次不改变静态加载或拒绝逻辑。"
  },
  "sources": {
   "whitebox_level_plan": "res://source/art/whitebox/tower_zones/expedition_01/v001/data/level_plan.json",
@@ -30,11 +31,15 @@
   "rotation_axis": "Z_blender (世界垂直轴；房间平面为 XY)",
   "runtime_component_manifest": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/runtime_manifest.json",
   "component_export_manifest": "res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/export_manifest.json",
-  "component_export_manifest_note": "98 条逐组件 GLB 与 source_sha256/glb_sha256（运行时不加载裸 GLB）"
+  "component_export_manifest_note": "逐组件 GLB 与 source_sha256/glb_sha256 的导出追溯；全库数量以该清单为准，不作为 room_03 实例数或本轮加载验收结果。",
+  "room_layout": "res://assets/art/environments/tower_zones/expedition/source/room_instances/f00_room_03/v001/room_layout.json",
+  "source_component_catalog": "res://assets/art/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json"
  },
  "godot_references": {
-  "layout_asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM-TYPE-LAYOUT",
-  "component_catalog": "res://assets/art/environments/tower_zones/battle/runtime/shell_component_catalog.json",
+  "layout_asset_id": "ENV-EXPEDITION-L01-OFFICE-ROOM03-PORT-CLEARANCE-LAYOUT",
+  "formal_tscn": "res://assets/art/environments/tower_zones/expedition/runtime/room_instances/expedition_01/f00_room_03_static_layout.tscn",
+  "component_resolution_scope": "下表保留 OFFICE v009 的25个组件定义用于来源追溯，不代表正式 TSCN 全部引用。正式引用以 TSCN ext_resource 为准，包含共享门墙和两种通用地砖；缺席的顶部组件仍有 Prefab，不自动回填。",
+  "component_catalog": "res://assets/art/environments/tower_zones/shared/runtime/shell_component_catalog.json",
   "scene": "res://scenes/ExpeditionLevel01_3D.tscn",
   "room_node_path": "Blocks/Expedition/room_03",
   "art_root_node": "AuthoredLayoutArtRoot",
@@ -343,19 +348,54 @@
  },
  "assembly": {
   "authored_layout_shell": true,
-  "instance_total": 106,
-  "instance_total_source": "component_instances.validation.instance_count",
+  "instance_total": 105,
+  "instance_total_source": "formal_tscn.metadata.layout_instance_total",
+  "count_semantics_note": "105仅转述根元数据，与初始化解析数一致；实际PackedScene组件实例根为100。根角色元数据之和104亦不等于105；保留原文件事实，不将旧计数认定为当前节点实测。",
+  "initialization_layout_counts": {
+   "base_instance_count": 106,
+   "resolved_instance_count": 105,
+   "removed_instance_ids": ["filing_run_west"],
+   "source": "room_layout.validation"
+  },
   "role_counts_planned": {
    "door_wall": 1,
    "solid_wall": 28,
-   "room_type_component": 29,
+   "room_type_component": 28,
    "floor_tile": 48
   },
-  "role_counts_planned_source": "FloorPlanGenerator 规划记录 + 验收日志 plan 行",
+  "role_counts_planned_source": "room_layout resolved base JSON（106 - remove filing_run_west = 105）",
   "runtime_role_counts": {
-   "floor_tile": 48,
-   "room_type_component": 29,
-   "unresolved_instances": 0
+   "floor_tile": null,
+   "room_type_component": null,
+   "unresolved_instances": null
+  },
+  "runtime_role_counts_note": "本轮仅静态核对，未运行 Godot 探针；不得将根 metadata 或历史日志写成当前运行实测。",
+  "formal_layout_differences": {
+   "absent_from_base_instance_ids": ["wall_west_0", "filing_run_west", "ceiling_lighting", "ceiling_service_cable_tray", "ceiling_service_duct", "ceiling_service_pipe_run"],
+   "json_override_removed_instance_ids": ["filing_run_west"],
+   "note": "其余5个实例也不在正式 TSCN 中；记录当前布局差异，不据此推断删除授权或资源丢失，不补写 override、不恢复组件。105 是根元数据，100 是实际组件实例根；48个替换地砖已经包含在100中，不是105与100差额的原因。"
+  },
+  "formal_tscn_counts": {
+   "layout_instance_total": 105,
+   "component_instance_roots": 100,
+   "unique_component_ids": 22,
+   "component_roles_by_current_catalog": {
+    "floor_tile": 48,
+    "solid_wall": 26,
+    "door_wall": 2,
+    "room_type_component": 24
+   },
+   "node_declarations": 106,
+   "metadata_role_counts": {
+    "solid_wall": 27,
+    "door_wall": 1,
+    "floor_tile": 48,
+    "room_type_component": 28
+   },
+   "runtime_floor_tile_replacement_count": 48,
+   "room_device_node_count": 2,
+   "connection_port_count": 2,
+   "source": "f00_room_03_static_layout.tscn"
   },
   "envelope_local": {
    "coordinate_contract": "godot_local_xz_vertical_y",
@@ -374,7 +414,7 @@
     17.624,
     40.3
    ],
-   "note": "房间局部坐标下的视觉件包络（含所有 slot_role，不含运行期通用地砖）。"
+   "note": "历史视觉包络记录，未随正式 TSCN 手改重新测量；本轮不作为当前轮廓或通行判据，也不据此改动资产。"
   },
   "door_probe": {
    "probe_scene": "res://_scratch/palette_shift/probe_runtime_doors.tscn",
@@ -391,7 +431,8 @@
    ],
    "log": "acceptance/runtime_doors.txt"
   },
-  "door_apertures_source": "**运行时探针实测**（probe_runtime_doors.gd，RUN_SEED=77001199）：房型源按规范不冻结门位，实跑门位由 FloorPlanGenerator 按种子现算（设计页 §4.4），故一律以实测为准；静态从兜底样例推导的相邻面只作参考（见 door_apertures_static_reference）。",
+  "door_apertures_source": "以下 door_probe、door_apertures 与 door_apertures_static_reference 均为旧版历史记录，不代表当前端口。本轮仅核对正式 TSCN 的 ConnectionPorts：Port_A target=room_02，Port_B target=room_04；不裁定方向/坐标差异，不修改端口、轮廓或静态布局。",
+  "door_evidence_status": "historical_not_revalidated",
   "door_apertures": [
    {
     "side": "north",
@@ -467,6 +508,8 @@
   }
  },
  "acceptance": {
+  "evidence_status": "historical_not_revalidated",
+  "evidence_note": "本节 result/checks/log 均保留旧批次证据，不代表本轮静态核对后的 Godot 运行验收。未重跑场景、门净空、包络或材质探针。",
   "verification_scene": "res://tests/verification/verify_expedition_room_type_component_replay.tscn",
   "result": "ROOM_TYPE_COMPONENT_REPLAY_OK checks=2051",
   "log": "acceptance/replay_verification_log.txt",
