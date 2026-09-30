@@ -1,6 +1,7 @@
-[gd_scene load_steps=52 format=3]
+[gd_scene load_steps=53 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn" id="tower2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/env_skyline_08_root_top3d.tscn" id="skyline08"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn" id="tower3"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_jib/env_tower_02_crane_00_jib_root_top3d.tscn" id="jib"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_03/lower_front_box/env_tower_03_lower_front_box_root_top3d.tscn" id="cabinet"]
@@ -153,7 +154,10 @@ metadata/bridge_model_asset_id = "ENV-OPENWORLD-TOWER02-CRANE-00-JIB"
 metadata/bridge_section_pitch_m = 32.0
 
 [node name="Tower2" parent="." instance=ExtResource("tower2")]
-position = Vector3(20, -100.5, -90)
+position = Vector3(40, -100.5, -90)
+
+[node name="Skyline08" parent="." instance=ExtResource("skyline08")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -17.305016, -59.654587, -121.18834)
 
 [node name="Tower3" parent="." instance=ExtResource("tower3")]
 position = Vector3(-12, -40.15, -173.925626)

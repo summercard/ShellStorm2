@@ -4,7 +4,8 @@
 
 - 已拼装跨塔路线：`runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn`，已挂主场景 `Blocks/Rooftop/CrossTowerRoute`。主塔北侧开5m桥口，经低16m不可进入的塔2上方到等高塔3天台；布局与碰撞由路线包装拥有，两个原始建筑Prefab仍为纯表现。参见[路线契约](../../../../docs/v0.1/design/rooftop_cross_tower_route.md)。
 
-- 塔2：`res://assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn`，源版本 v003，主体70×50m。
+- SKYLINE08景观：`res://assets/art/environments/open_world/runtime/skyline_08/env_skyline_08_root_top3d.tscn`，指定源v004，252组件，完整包络33.020×45.680×25.935m（Godot XYZ），主场景路线内根坐标(10,-100.5,-90)。纯景观、无碰撞；所有表面绑定塔2旧材质对象，不新增材质。维护入口为`export_skyline08.py`与`assemble_skyline08.py`（已有布局拒绝覆盖）。
+- 塔2：`res://assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn`，源版本 v003，主体70×50m；本次根从(20,-100.5,-90)向东20m至(40,-100.5,-90)，塔3与桥不动。新景观位于塔2原根西10m，原尺寸导致包络交叠，按用户坐标要求保留。
 - 塔楼03：`res://assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn`，源版本 v001，主体70×44m，主屋顶40m，机房8m。
 - 三台独立塔吊：`runtime/tower_02/cranes/crane_00/`、`crane_01/`、`crane_02/` 下对应的 `env_tower_02_crane_XX_root_top3d.tscn`。
 

@@ -1,7 +1,7 @@
 {
   "checks": 308,
   "failures": [],
-  "renderer": "Windows",
-  "scene_sha256": "22e370b54ca4a17781c1309a3f181cd64d3049b8efac5cf83f9cc68231f2274c",
+  "renderer": "headless",
+  "scene_sha256": "b397b32008d18ff44c410fc81480a2ef79bf85a99c1ca433af766d455d2f3900",
   "walker_position": "(-11.99968, 0.000844, -161.8505)"
 }
