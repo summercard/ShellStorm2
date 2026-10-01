@@ -13,6 +13,8 @@ func _ready() -> void:
 	player.get_node("Camera3D").current = false
 	player.global_position = Vector3.ZERO
 	await get_tree().process_frame
+	# 此专项测量原角色十个网格；新增面饰的边界与换装在独立面具专项验收。
+	player.set_avatar_customization("glasses", "none")
 	player.avatar.visual_root.position = Vector3.ZERO
 	player.avatar.visual_root.rotation = Vector3.ZERO
 	player.avatar.visual_root.scale = Vector3.ONE

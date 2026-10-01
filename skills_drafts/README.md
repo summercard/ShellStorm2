@@ -15,7 +15,7 @@
 ## 当前内容
 
 - `blender-game-prop-standard`：场景、关卡组件与固定设施的 Blender 制作规范。
-- `godot-model-asset-import-standard`：场景、关卡组件与固定设施的 Godot 导入规范。
+- `02b-godot-model-asset-import-standard`：场景、关卡组件与固定设施的 Godot 导入规范。
 - `game-character-model-pipeline`：角色建模、动画、导出与 Godot 集成规范。
 - `game-prop-model-pipeline`：可拾取或可移动普通道具的资产流程规范。
 - `game-weapon-model-pipeline`：枪械与近战武器的资产流程规范。

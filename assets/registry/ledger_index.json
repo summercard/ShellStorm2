@@ -67,7 +67,7 @@
       "prefab_pages": ["3D-场景通用", "3D-设施", "3D-其他"],
       "animation_sheets": [],
       "primary_skill": "scene-full-pipeline",
-      "supporting_skills": ["godot-model-asset-import-standard", "blender-game-prop-standard", "scene-art-merge-into-shared-component"],
+      "supporting_skills": ["02b-godot-model-asset-import-standard", "blender-game-prop-standard", "scene-art-merge-into-shared-component"],
       "owner": "待分配",
       "scope_note": "关卡结构、地板、墙体、楼梯、楼板、环境套件、固定设施与基地99/100F美术资产包。场景道具按固定设施口径登记（碰撞交回引擎）；PRP 前缀同时服务本域与道具域，归属以「大类」列为准。"
     },
@@ -109,7 +109,7 @@
       "prefab_pages": ["3D-特效"],
       "animation_sheets": [],
       "primary_skill": "vfx-combat-effect-authoring",
-      "supporting_skills": ["godot-model-asset-import-standard"],
+      "supporting_skills": ["02b-godot-model-asset-import-standard"],
       "owner": "待分配",
       "scope_note": "可独立实例化的3D战斗、环境与可见性特效。每个特效一个独立 Prefab，遵循 14.6 特效系统与制作规范；制作、修复与验收的流程标准见 skill `vfx-combat-effect-authoring`（2026-09-21 接管本域 primary_skill）。"
     },

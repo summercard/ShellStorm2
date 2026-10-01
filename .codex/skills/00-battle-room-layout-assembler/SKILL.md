@@ -17,10 +17,12 @@ metadata:
 | 按概念图制作安全房/通用房/BOSS房/撤离房等房间种类 Blender 源 | `01-battle-room-type-art-authoring` + 制作开始即调用 `02-battle-room-component-decomposer` 冻结组件计划 |
 | 将历史整屋 Blender 源归并重建为组件母版＋实例布局 | `02-battle-room-component-decomposer` |
 | 制作房间变体/具体房间布局，或可选 Blender 参考布局 | `03-battle-room-instance-layout-authoring` |
-| 把组件 GLB/PackedScene 导入 Godot | `godot-model-asset-import-standard` |
+| 把组件 GLB/PackedScene 导入 Godot | `02b-godot-model-asset-import-standard` |
 | 编辑既有正式 Godot 房间，或选择清单/白盒初始化装配 | `04-battle-room-runtime-assembler` |
 
 出现“拼装XXX房间”时，XXX 若是具体房间编号，直接路由 `04-battle-room-runtime-assembler`；若是“通用房种类”等房间类型，则要求用户明确是制作种类源还是拆解组件，禁止把类型和实例混为同一资产。
+
+完整新资产链路按“01 入口 + 02 制作前规划 → Blender 组件制作与美术验收 → 02b 导入与包装验收 → 03 正式布局 → 04 最终装配验收”执行。00 是路由入口，不是自动按编号执行的程序；直达 03/04 时也须核查 02b 前置门禁，只有已完成独立另存优化与验收、源/优化/运行版本和哈希一致的组件允许复用跳过重复导出；原始文件不动，缺优化证据必须回到 02b。
 
 本兼容入口只处理场景美术包装。不得修改玩法、关卡规则、敌人、掉落、存档、门状态机、导航或结算逻辑。
 
@@ -39,7 +41,8 @@ metadata:
   -> 制作前 component_plan（唯一组件 <= 50；同族常规 <=3、有意变体最多5）
   -> Blender 每组件一份母版，房型源只放实例
   -> component_instances.json
-  -> 每组件 GLB + Godot PackedScene
+  -> 02b-godot-model-asset-import-standard：组件导出、Godot 导入与包装验收
+  -> 每组件稳定 GLB + Godot PackedScene（通过 02b 前置门禁）
   -> 用实例清单初始化房间/变体 Godot TSCN，或在 Godot 直接引用组件装配
   -> 正式房间 TSCN 保存实例摆位、增删、启用和灯光等作者编辑
   -> 初始化双端还原验收；正式编辑后按 TSCN 与已批准差异验收
@@ -137,6 +140,18 @@ Godot 运行时拥有：
 - `block_id`、`floor_range`、`design_scope`、`scene_design_docs`、`asset_ledger`。
 
 对战局普通房，不强行套用安全房 15x15m 双门契约。安全房契约只是已验证样板；普通房必须按自己的白模尺寸和门连接生成槽位。
+
+### 2b. 组件导入与版本同步门禁（正式布局前置）
+
+在建立完整组件解析表、执行 Godot 正式布局编辑或初始化之前，先核查目标组件的源版本与导入状态。不得把本门禁推迟到第 8 步，也不得只按 01→02→03→04 的编号顺序跳过 02b。
+
+- **新组件、未导入组件或源文件更新**：源文件先通过美术验收，再明确加载并执行 `02b-godot-model-asset-import-standard`，逐组件实际执行优化并另存独立优化文件，验证原始源哈希不变，从重开的优化文件完成 GLB 导出，再做 Godot 正式重导入、稳定 PackedScene 包装、碰撞与挂点核查、公共色盘、登记和独立加载验收。未通过不得进入后续正式布局与装配。
+- **复用已有组件**：核查独立优化文件与实际优化记录、原始源不变证据、前后三角面统计与保真验收、源/优化/运行版本与哈希、PackedScene 元数据和稳定引用；全部一致时记录“02b 复用核查通过”，不重复优化与导出。缺优化文件或证据时必须回到 02b，不能以旧验收豁免。
+- **资料缺失或未通过美术验收**：停止后续装配并报告阻塞项，回到 01/02 或组件制作阶段；不得用旧版、整屋 GLB 或房间专用副本补位。
+- **组件接口变化**：先列出受影响房间与适配范围；02b 只定点更新组件资产，保留正式 TSCN 的实例覆写，不授予重生成房间的权限。
+- **可选 Blender 参考布局**：允许在导入前以组件实例制作，但不能替代 02b；正式 Godot 布局只能消费通过门禁的组件。
+
+门禁通过后再进入第 3 步；第 3 步发现缺失或版本漂移时返回本步骤处理，不绕过规范。
 
 ### 3. 建立组件解析表
 
@@ -258,7 +273,7 @@ TowerDescent3D
 
 不要为单个新房间新增 `SAFE_ROOM_*` 一类硬编码组件数组。布局可在正式 Godot TSCN 编辑；新房间若仍需 GDScript 登记，应如实报告并另获代码修改授权，不宣称只改布局清单就已完成接入。
 
-Godot 导入阶段必须使用 `godot-model-asset-import-standard`：重新导入 GLB，独立加载 PackedScene，确认公共色盘、碰撞、包络、正面方向和稳定引用。
+接入前复核第 2b 步的导入门禁与组件验收结果，确认公共色盘、碰撞、包络、正面方向和稳定引用仍有效；发现新组件或版本漂移时返回 02b 处理。本步骤不得成为首次执行组件导入规范的延后入口。
 
 ### 9. 运行时验收
 
@@ -323,7 +338,7 @@ Godot运行资产：<稳定路径摘要>
 - `references/api_reference.md`：布局清单字段、坐标和门禁的详细契约。
 - `scene-full-pipeline`：全流程阶段门禁和固定挂钩。
 - `blender-game-prop-standard`：共享组件制作、锚点、PaletteUV 和范围锁定。
-- `godot-model-asset-import-standard`：GLB、PackedScene、稳定路径和 Godot 验收。
+- `02b-godot-model-asset-import-standard`：GLB、PackedScene、稳定路径和 Godot 验收。
 - `godot-runtime-probe`：运行时实际装配探针。
 - `01-battle-room-type-art-authoring`：房间种类 Blender 美术源制作。
 - `02-battle-room-component-decomposer`：房间种类源拆解为组件源。

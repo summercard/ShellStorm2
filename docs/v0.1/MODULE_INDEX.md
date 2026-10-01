@@ -66,7 +66,7 @@
 | DIALOGUE-UI | 底栏对话框、头顶气泡、打字机与推进 | [玩法设计](design/对话与战斗信息呈现设计.md)；[18](18_技术施工_UI与对话系统.md) | `src/ui/dialogue/DialogueUI.gd`（autoload）、`src/ui/bubble/`（气泡三件） | `verify_dialogue_ui_flow`、`verify_speech_bubble_3d`（均已注册`core`） | **已实装主链**：底栏打字/推进/三态outcome与头顶气泡；原6处文档口径已按现行代码收敛，抢占旧run回执、跳过键及真实渲染仍待验/补 |
 | TIME-DAYNIGHT | 权威时间、日夜与能源恢复时间输入 | [玩法设计](design/时间日夜与画质设计.md)；[15](15_技术施工_时间日夜与基地能源.md) | WorldTimeDomain/GameTimeManager→太阳/HUD | `verify_main_entry_realtime_sun_flow` | 已与电力玩法拆分；统一数据配置仍待完善 |
 | POWER-SYSTEM | 基地电力、手电电力、恢复舱与未来基地负载 | [15.1](15.1_技术施工_电力系统.md) | BaseEnergyService/BaseManager；PlayerFlashlight3D/ItemUseHandler | `verify_3d_flashlight_charge_flow`、`verify_base_overhaul_flow` | **开发中**：现有两条能源链已记录；基地灯光/设施用电待接入 |
-| ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[09](09_技术施工_存档结算与复活.md) | GameEntryFlow→Tower新档98F办公室/已有档99F基地→AvatarCustomizationPersistence | `verify_game_entry_flow`、`verify_avatar_return_persistence_flow`、`verify_block00_floor98_assembly`、`verify_new_save_handoff` | 新档98F、基地重登99F和未拾取地面枪跨重启已通过；开场枪由剧情生成。独立展示相机/视觉代理目标仍未满足 |
+| ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[09](09_技术施工_存档结算与复活.md) | GameEntryFlow→Tower新档98F办公室/已有档99F基地→AvatarCustomizationPersistence | `verify_game_entry_flow`、`verify_avatar_return_persistence_flow`、`verify_block00_floor98_assembly`、`verify_new_save_handoff`、`verify_electronic_mask_flow`、`verify_character_expression_flow` | 新档98F、基地重登99F和未拾取地面枪跨重启已通过；开场枪由剧情生成。[电子面饰v005柔和自发光](development/2026-10-01_character_expression_soft_emission.md)8种饱满无嘴部网格、状态事件随机调用、眨眼/闪烁和真实渲染通过。独立展示相机/视觉代理目标仍未满足 |
 | UI-HUD | HUD、地图与模态输入 | [玩法设计](design/对话与战斗信息呈现设计.md)；[04](04_技术施工_战斗与局内成长.md) | HUDPresenter3D/DungeonMinimap3D/InventoryUI | `verify_hud_presenter_3d`、`verify_tactical_inventory_minimap_flow` | Presenter可独立；其他UI仍直接读写多域 |
 | VFX-POOL | Prefab注册、借出、回收；场景常驻室外云海 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_outdoor_clouds`（v002品质/实际玩家渲染通过，建筑变动局部避让及楼角可见修复30209项通过；[设计](design/outdoor_cloud_sea.md)）、`verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow` | 近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役 |
 | AUDIO-MUSIC | 音效和场景音乐切换 | [10](10_资产与内容规范.md)、[14.8](14.8_音乐系统与配乐资产.md) | AudioManager/MusicCatalog/MusicManager/MusicTrigger | `verify_music_system`、`verify_requested_experience_upgrade_flow` | UI/音效/音乐已拆独立账本、Skill与验收链；功能层仍保持AudioManager与MusicManager边界，不合并播放生命周期 |
@@ -78,7 +78,7 @@
 
 ## 3. 开发记录定位
 
-ASSET-PIPELINE补充：[塔4商场源契约](design/tower04_mall_source.md)与[v002平面与近景修订记录](development/2026-10-01_tower04_plan_refinement.md)。150×50m、五层、连续天台25m、90独立包，沿用原四材质；仅Blender源及账本完成，未导入运行时。v001保留。
+ASSET-PIPELINE补充：[塔4商场源契约](design/tower04_mall_source.md)与[v005末世平台记录](development/2026-10-01_tower04_apocalypse_platform.md)。150×50m、五层；1109独立包，平台按五区及XY≤10m模块管理；54独立营地设施、12局部藤蔓，保留694地板及原流线。四材质/公共贴图/MipMap不变，下部主体锁定。仅Blender源，未导入运行时；v001–v004保留。[v004近景地表](development/2026-10-01_tower04_surface_step2.md)、[v003路线](development/2026-10-01_tower04_routes_step1.md)及[v002记录](development/2026-10-01_tower04_plan_refinement.md)保留原时点事实。
 
 当前全部功能共同关联[本次审计记录](development/2026-09-12_documentation_audit.md)，它只记录审计，不冒充功能开发史。既有功能的原始开发记录按下列位置回溯：
 
@@ -102,3 +102,7 @@ ASSET-PIPELINE 新增独立 [SKYLINE 8层大楼及景观接入](development/2026
 塔楼生命周期、统一结算、工坊交易、VFX迁移暂不能按“已完全解耦”并行改写；**剧情已冻结命令、数据所有者与失败语义**（见 [08](08_技术施工_剧情触发.md) §5/§6/§8），可按 v0.2 阶段独立施工。其余先冻结命令、数据所有者与失败语义，再做逐链路提取。每次提取同时保留正常流程与故障恢复验收，不做一次性大重写。
 
 `REWARD-SERVICE`（[04](04_技术施工_战斗与局内成长.md) §22）属于“已冻结命令、数据所有者与失败语义”的一类，可按 §22.11 五步独立施工：解析器是 `RefCounted` 纯逻辑，输入 `(spec, seed, floor, depth, multipliers)`、输出实体数组，**不依赖 Godot 场景**即可用替身验证；禁止它反向读 `Dungeon3D`/`RoomGraphRuntime`/任何 `world3d`。第 1 步影子模式不改现网行为，是安全起点。
+
+## CHARACTER-EXPRESSION · 独立表情模块
+
+Owner：`CharacterExpressionSystem`；[设计与接口](design/character_expression_system.md)。选择/随机/保持在独立模块，Player状态事件只经过适配器发命令；网格显示不反向写玩法、衣柜或角色动作。入口`verify_character_expression_flow`，当前制作与验收见[自发光减弱](development/2026-10-01_character_expression_soft_emission.md)；[无嘴部深化](development/2026-10-01_character_expression_mouth_free.md)保留历史，[初版8种表达记录](development/2026-10-01_character_expression_system.md)保留历史。

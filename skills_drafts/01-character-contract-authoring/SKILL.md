@@ -18,7 +18,7 @@ ShellStorm2 的具体证据链与已知约定见 [references/shellstorm2-reverse
 ## 边界
 
 - **适用**：玩家外观与换装件、NPC、普通怪、精英、Boss 的视觉资产与其骨架/挂点/动作母版。
-- **不适用**：枪械与近战武器（用 `game-weapon-model-pipeline`）；可拾取道具（用 `game-prop-model-pipeline`）；场景、关卡组件与固定设施（用 `blender-game-prop-standard` + `godot-model-asset-import-standard`）。
+- **不适用**：枪械与近战武器（用 `game-weapon-model-pipeline`）；可拾取道具（用 `game-prop-model-pipeline`）；场景、关卡组件与固定设施（用 `blender-game-prop-standard` + `02b-godot-model-asset-import-standard`）。
 - **所有权边界**：本段只产出**表现**。角色控制器保留移动、主碰撞、HP、输入、AI、状态机、攻击判定与存档权威。母版里出现这些内容即为越界。
 
 ## 第 0 步 · 账本先行（不可跳过）

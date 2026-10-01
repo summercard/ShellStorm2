@@ -9,7 +9,7 @@ agent_created: true
 ## 适用边界
 
 - **适用**：竖直构件只有一面有装饰、但**两侧都会被玩家看到** —— 门墙夹在房间与走廊之间、走廊两侧的墙、房间之间的隔断。目标是**把「一面是素板」这个视觉缺陷从资产层消除**，不是把它藏起来。
-- **不适用**：新建或重制资产本身（→ `blender-game-prop-standard` / `godot-model-asset-import-standard`）；房间从白模起做正式美术（→ `scene-full-pipeline`）；把房间装饰剥离并入通用组件（→ `scene-art-merge-into-shared-component`）。
+- **不适用**：新建或重制资产本身（→ `blender-game-prop-standard` / `02b-godot-model-asset-import-standard`）；房间从白模起做正式美术（→ `scene-full-pipeline`）；把房间装饰剥离并入通用组件（→ `scene-art-merge-into-shared-component`）。
 - **先判需求，再动手**：只有两侧都会被看到的件才需要双面。**不夹在走廊两侧的件（只朝房内的实心墙、L 墙角）保持单面** —— 无脑双面会白翻一倍面数。范围先和主人确认（本先例主人原话：「是门墙要做成双面的，其它先不用」）。
 
 ## 第 0 步：先证明「缺陷真的存在」

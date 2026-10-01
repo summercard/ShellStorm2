@@ -17,7 +17,7 @@ description: 角色类表现资产链路第 3 段。把 S2 产出的纯视觉 GL
 ## 边界
 
 - **适用**：玩家根/组件、NPC、普通怪、精英、Boss 的表现包装。
-- **不适用**：武器（`game-weapon-model-pipeline`）、道具（`game-prop-model-pipeline`）、场景与设施（`godot-model-asset-import-standard`）。
+- **不适用**：武器（`game-weapon-model-pipeline`）、道具（`game-prop-model-pipeline`）、场景与设施（`02b-godot-model-asset-import-standard`）。
 - **包装层职责**：持有挂点、必要子 Prefab、元数据。**不持有**移动、主碰撞、HP、输入、AI、状态机、攻击判定。
 
 ## 第 1 步 · 导入 GLB

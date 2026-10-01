@@ -7,7 +7,7 @@
 
 新增[3D 场景美术生产流程](../10.1_3D场景美术生产流程.md)，按概念稿、白盒规范、白盒组装与顶视图、风格设计稿、Blender制作、优化导入和正式登记顺序说明生产链。根据用户反馈将原复杂契约收缩为一页式流程，每一步只保留规范、数据、交付物和使用Skill。
 
-白盒阶段仍明确交付JSON和图片：JSON记录场景尺寸、模块实例、组合、名字、接口、净空和设计来源，是Blender尺寸与组合的唯一数据源；图片提供带标注顶视图、无文字顶视图及必要立面/剖面。Blender阶段标注`$blender-game-prop-standard`，优化导入阶段标注`$godot-model-asset-import-standard`。
+白盒阶段仍明确交付JSON和图片：JSON记录场景尺寸、模块实例、组合、名字、接口、净空和设计来源，是Blender尺寸与组合的唯一数据源；图片提供带标注顶视图、无文字顶视图及必要立面/剖面。Blender阶段标注`$blender-game-prop-standard`，优化导入阶段标注`$02b-godot-model-asset-import-standard`。
 
 后续补充：整个流程必须持续声明 `block_id / floor_range / design_scope / scene_design_docs / asset_ledger`，从白盒、风格稿到Blend、GLB、PackedScene和验收记录均不得丢失。`WORLD-BLOCKS r2` 逐区块列出设计范围、场景设计依据和对应台账条目，使天台、基地、战斗区和楼梯区均能从设计范围追溯到资产账本。
 

@@ -354,7 +354,7 @@ runtime_logic_owner = gameplay layer, not component
 - `room_owned_geometry` 对后续实例布局必须为 `false`。
 - 所有组件必须有 AssetID、稳定原点、包络、旋转和来源追溯。
 - 锚点验收必须同时覆盖三层：ROOT 对象变换、Mesh 相对 ROOT 的局部变换、输出 Collection 的 `instance_offset`。三层任一非零都不得交给房间布局；尤其要做同族差异检查（普通墙、门墙、门扇），防止只有少数组件残留制作场景偏移而被整体抽查漏过。
-- 源文件必须通过范围锁定、材质、UV、尺寸和包络验收后，才可交给 `godot-model-asset-import-standard`。
+- 源文件必须通过范围锁定、材质、UV、尺寸和包络验收后，才可交给 `02b-godot-model-asset-import-standard`。
 
 ## 批量拆解已有房型源的实操口径（2026-09-26 远征01 四批 506 包实测）
 

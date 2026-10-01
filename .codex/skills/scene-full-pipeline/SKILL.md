@@ -22,7 +22,7 @@ description: 场景全流程制作编排：从效果图到读取白模，到 Ble
   ↓ 门禁：空间可拼、可走、可战斗
 阶段2 Blender 正式美术资产         （$blender-game-prop-standard）
   ↓ 门禁：美术验收通过
-阶段3 资产导入 Godot               （$godot-model-asset-import-standard）
+阶段3 资产导入 Godot               （$02b-godot-model-asset-import-standard）
   ↓ 门禁：独立加载 + 正式场景 + 登记
 登记正式可用，保留上一版本回滚
 ```
@@ -102,7 +102,7 @@ assets/art/<大类>/<资产套件>/
 
 - **规范：** 从已通过美术验收的游戏输出制作优化派生文件，导出稳定路径 GLB，建立稳定组件 PackedScene；碰撞、挂点、交互与标签归组件 Prefab。正式房间 TSCN 拥有模块实例摆位/增删/启用及灯光，允许在 Godot 编辑。JSON/Blender 实例清单仅初始化与追溯，不得自动回灌覆盖手改；不得靠临时缩放修复上游尺寸错误。
 - **数据：** 源 Blend、优化派生 Blend、GLB、PackedScene、版本、尺寸、方向、材质数、碰撞方式、使用场景、正式引用、上一版本回滚路径。
-- **Skill：** **`$godot-model-asset-import-standard`**（Godot 模型资产导入规范）。GLB 导出、坐标比例、版本目录、PackedScene、碰撞、引用替换、台账与验收全部交给它。
+- **Skill：** **`$02b-godot-model-asset-import-standard`**（Godot 模型资产导入规范）。GLB 导出、坐标比例、版本目录、PackedScene、碰撞、引用替换、台账与验收全部交给它。
 - **交付：** 优化 Blend、GLB、`.import`、PackedScene、导出清单、资产台账更新、独立加载结果、正式场景截图。
 - **门禁：** 独立加载、正式场景、玩法通行、性能与真实渲染验收全部完成，才可登记正式可用。
 
@@ -110,7 +110,7 @@ assets/art/<大类>/<资产套件>/
 
 - 只有阶段 3 全部验收完成，才登记为正式可用；旧版本保留用于回滚。
 - 登记字段：AssetID、正式版本、源文件、运行路径、SHA-256、验收命令、退出码、错误、未执行项、回滚版本。
-- **Skill：** 沿用 `$godot-model-asset-import-standard`，并执行项目对应的资产与场景专项测试。
+- **Skill：** 沿用 `$02b-godot-model-asset-import-standard`，并执行项目对应的资产与场景专项测试。
 
 ## 回退规则
 
@@ -127,7 +127,7 @@ assets/art/<大类>/<资产套件>/
 | 0 效果图 | 范围说明 + 参考图 + 固定挂钩 | 五项定位信息齐备 |
 | 1 白模 | `whitebox_<scene_id>_v###.json` + 顶视图 | 可拼、可走、可战斗 |
 | 2 Blender | 独立资产包 + 游戏输出 + 验收 | `$blender-game-prop-standard` 美术验收通过 |
-| 3 Godot | GLB + PackedScene + 台账 + 截图 | `$godot-model-asset-import-standard` 全项验收通过 |
+| 3 Godot | GLB + PackedScene + 台账 + 截图 | `$02b-godot-model-asset-import-standard` 全项验收通过 |
 
 ## 参考文档
 

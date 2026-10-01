@@ -9,7 +9,7 @@ agent_created: true
 ## 适用边界
 
 - **适用**：一个已经按网格重复摆放的模块化构件（直段墙、女儿墙、地砖、栏杆段……），主人要「做几个不同破损的变种，要能接起来，然后随机排布」。
-- **不适用**：从零新建/重制资产本身（→ `blender-game-prop-standard` / `godot-model-asset-import-standard`）；角色 / 武器 / 可拾取道具（→ 对应 pipeline skill）；双面装饰（→ `scene-art-double-sided-component`）；装饰并库（→ `scene-art-merge-into-shared-component`）。
+- **不适用**：从零新建/重制资产本身（→ `blender-game-prop-standard` / `02b-godot-model-asset-import-standard`）；角色 / 武器 / 可拾取道具（→ 对应 pipeline skill）；双面装饰（→ `scene-art-double-sided-component`）；装饰并库（→ `scene-art-merge-into-shared-component`）。
 - **先锁三件事再动手**（本先例主人逐条给过答案，缺一条就会返工）：
   1. **范围**：只做哪一件、包络多少（本先例「只做 100F 天台女儿墙直段 5×1.8×0.5m，外角件不动」）；
   2. **几种破损 / 各是什么**（本先例「崩顶 / 贯穿 / 塌脚」3 种）；

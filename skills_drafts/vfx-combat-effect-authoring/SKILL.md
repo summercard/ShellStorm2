@@ -295,7 +295,7 @@ var effect := bucket.back() as VfxEffectBase3D
 - `docs/v0.1/14.6_特效系统与制作规范.md`：接口/契约变了 ⇒ 同步 §3.x 代码块 + §10 版本历史
 - `docs/v0.1/MODULE_INDEX.md`：`VFX-POOL` 行的验收脚本与现状
 - `docs/v0.1/development/2026-09-12_discrepancy_table.md`：动到双池迁移就更新 **E08** 进度
-- `assets/registry/ledger_index.json` 的 `vfx` 域 `primary_skill`：**本 skill 已接管**（旧值 `godot-model-asset-import-standard` 降为 `supporting_skills`）
+- `assets/registry/ledger_index.json` 的 `vfx` 域 `primary_skill`：**本 skill 已接管**（旧值 `02b-godot-model-asset-import-standard` 降为 `supporting_skills`）
 - 项目记忆：`.workbuddy/memory/YYYY-MM-DD/HHMM_<slug>.md` + 当天 `_INDEX.md`
 
 ## 8. 行尾与解析期坑（本仓高频翻车点）

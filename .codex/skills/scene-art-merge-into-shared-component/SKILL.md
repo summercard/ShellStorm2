@@ -9,7 +9,7 @@ agent_created: true
 ## 适用边界
 
 - **适用**：房间或场景里「按方位重复出现、但每面几何其实一样」的装饰 —— 墙面装甲壁板、门框门禁、地砖压边与拼缝、墙脚压条。目标是**把装饰搬进通用组件**，房间侧只留槽位引用，于是「不用按方位、完整替换、自动对上」。
-- **不适用**：新建具体设施资产（→ `blender-game-prop-standard` / `godot-model-asset-import-standard`）；房间从白模起做正式美术（→ `scene-full-pipeline`）。
+- **不适用**：新建具体设施资产（→ `blender-game-prop-standard` / `02b-godot-model-asset-import-standard`）；房间从白模起做正式美术（→ `scene-full-pipeline`）。
 
 先读 `scene-full-pipeline` 确认当前处在哪一阶段；本 skill 是**阶段2↔阶段3 之间的装饰并库动作**，前置条件是通用组件库已存在、房间已引用组件**裸结构**。
 

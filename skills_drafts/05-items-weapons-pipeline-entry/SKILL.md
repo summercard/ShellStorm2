@@ -23,7 +23,7 @@ metadata:
 底层技术规范不重复定义，直接沿用：
 
 - `blender-game-prop-standard`：Blender 制作、四材质角色、公共色盘、PaletteUV、范围锁定。
-- `godot-model-asset-import-standard`：GLB 导出、坐标比例、稳定路径、PackedScene、重导入与验收。
+- `02b-godot-model-asset-import-standard`：GLB 导出、坐标比例、稳定路径、PackedScene、重导入与验收。
 - `game-prop-model-pipeline`：道具的拾取、手持、物理与库存包装契约。
 - `game-weapon-model-pipeline`：武器的挂点、局部动画与命中扫掠契约。
 

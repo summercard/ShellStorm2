@@ -9,7 +9,7 @@ metadata:
 # 道具与武器 Godot Prefab 组装
 
 把 `06-items-weapons-blender-authoring` 产出的 Blender 输出转成可独立加载、可替换、可登记的
-Godot 运行时资产。坐标、比例、材质、路径与验收细节沿用 `godot-model-asset-import-standard`，
+Godot 运行时资产。坐标、比例、材质、路径与验收细节沿用 `02b-godot-model-asset-import-standard`，
 本 Skill 只规定道具与武器特有的部分。
 
 ## 触发

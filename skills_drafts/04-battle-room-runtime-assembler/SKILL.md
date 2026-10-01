@@ -115,7 +115,7 @@ Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀
 
 - 具体房间编号对应的 `room_layout.json`；
 - 匹配的 `room_type`；
-- 布局引用的组件已按 `godot-model-asset-import-standard` 导出并包装；
+- 布局引用的组件已按 `02b-godot-model-asset-import-standard` 导出并包装；
 - 所有 AssetID 能解析到稳定 PackedScene。
 
 执行：
@@ -172,9 +172,15 @@ Boss 房  ENV-EXPEDITION-L01-BOSS-FLOOR_TILE_5M   （A/B/C 三变体共用前缀
 
 分支 B 可以初始化基本结构，但不应声称与 Blender 效果图完全一致。复杂构图交给 03，可直接在 Godot 编辑房间/变体；只有需要 Blender 参考布局时才选择 A 初始化，不强制回到 Blender。
 
+## 02b 前置导入门禁
+
+进入正式房间编辑或 A0/A/B 初始化装配前，核查全部目标组件的来源、源/运行版本、GLB 哈希、稳定 PackedScene 和验收状态。新组件、未导入组件或源版本更新时，必须先加载并执行 `02b-godot-model-asset-import-standard`，通过后才装配；不得因从 00 直接路由到 04 而跳过该阶段。
+
+所有场景组件都须实际优化并另存独立优化文件，原始文件不动，GLB 只能从已保存且重开的优化文件导出。复用必须具备可追溯优化文件、实际优化记录、原始源不变证据、前后三角面统计和保真验收，并且源/优化/运行版本、哈希与稳定引用一致，才记录“02b 复用核查通过”、不重复优化与导出；缺任一证据即返回 02b。缺失源契约或美术未验收时停止并回到组件制作；组件重导不授权覆盖正式 TSCN 的实例摆位、增删、启用、灯光和自定义节点。
+
 ## Godot 资产来源
 
-使用 `godot-model-asset-import-standard`，按 catalog 自动逐组件处理：
+使用 `02b-godot-model-asset-import-standard`，按 catalog 自动逐组件处理：
 
 ```text
 component_catalog.json

@@ -173,7 +173,10 @@ func _verify_room(room: DungeonRoom3D, run_seed: int) -> void:
 		if str(instance.get("slot_role", "")) == "floor_tile":
 			var raw: Vector3 = instance["position"]
 			raw_heights[raw.y] = true
-		if str(instance.get("part", "")) == "pit_floor_tile":
+		if (
+			str(instance.get("part", "")) == "pit_floor_tile"
+			or str(instance.get("component_id", "")) == "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER"
+		):
 			pit_count += 1
 			var pit: Vector3 = instance["position"]
 			_check(pit.y < -1.0, "%s 坑底标高错误" % label)
