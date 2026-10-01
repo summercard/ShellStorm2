@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_roof_rail",
+  "slug": "oval_roof_rail",
+  "display_name": "左楼玻璃栏杆_北侧接连廊留口",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "左楼玻璃栏杆_北侧接连廊留口_资产包",
+  "source_collection": "左楼玻璃栏杆_北侧接连廊留口_制作组件",
+  "objects": [
+    "左楼玻璃栏杆_北侧接连廊留口_主体"
+  ],
+  "root_object": "左楼玻璃栏杆_北侧接连廊留口_主体",
+  "world_position": [
+    -56.52000045776367,
+    -5.159999847412109,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -72.9575143849523,
+    -17.592494988875263,
+    25.0
+  ],
+  "bounds_max": [
+    -40.155029296875,
+    6.8884053230285645,
+    26.2450008392334
+  ],
+  "dimensions": [
+    32.802485088077304,
+    24.480900311903827,
+    1.2450008392333984
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "glass_guardrail",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_roof_rail.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

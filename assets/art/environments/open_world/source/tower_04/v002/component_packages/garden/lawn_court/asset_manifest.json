@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/lawn_court",
+  "slug": "lawn_court",
+  "display_name": "右端开放草坪庭院_弯曲种植边界",
+  "category": "garden",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "右端开放草坪庭院_弯曲种植边界_资产包",
+  "source_collection": "右端开放草坪庭院_弯曲种植边界_制作组件",
+  "objects": [
+    "右端开放草坪庭院_弯曲种植边界_主体"
+  ],
+  "root_object": "右端开放草坪庭院_弯曲种植边界_主体",
+  "world_position": [
+    42.63428497314453,
+    -9.085714340209961,
+    25.027000427246094
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    31.965347290039062,
+    -17.274354934692383,
+    25.027
+  ],
+  "bounds_max": [
+    56.081363677978516,
+    -0.40525418519973755,
+    25.204999923706055
+  ],
+  "dimensions": [
+    24.116016387939453,
+    16.869100749492645,
+    0.17799992370605366
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "traced_lawn_court",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lawn_court.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

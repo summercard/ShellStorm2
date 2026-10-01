@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/litter_bin_00",
+  "slug": "litter_bin_00",
+  "display_name": "分类垃圾箱_00_门缝投口踏板",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "分类垃圾箱_00_门缝投口踏板_资产包",
+  "source_collection": "分类垃圾箱_00_门缝投口踏板_制作组件",
+  "objects": [
+    "分类垃圾箱_00_门缝投口踏板_主体"
+  ],
+  "root_object": "分类垃圾箱_00_门缝投口踏板_主体",
+  "world_position": [
+    -43.68000030517578,
+    8.880000114440918,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -44.305,
+    8.34,
+    25.0
+  ],
+  "bounds_max": [
+    -43.055,
+    9.204999999999998,
+    26.375
+  ],
+  "dimensions": [
+    1.25,
+    0.8649999999999984,
+    1.375
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "fixed_litter_bin",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "litter_bin_00.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

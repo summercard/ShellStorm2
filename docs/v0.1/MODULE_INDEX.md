@@ -78,6 +78,8 @@
 
 ## 3. 开发记录定位
 
+ASSET-PIPELINE补充：[塔4商场源契约](design/tower04_mall_source.md)与[v002平面与近景修订记录](development/2026-10-01_tower04_plan_refinement.md)。150×50m、五层、连续天台25m、90独立包，沿用原四材质；仅Blender源及账本完成，未导入运行时。v001保留。
+
 当前全部功能共同关联[本次审计记录](development/2026-09-12_documentation_audit.md)，它只记录审计，不冒充功能开发史。既有功能的原始开发记录按下列位置回溯：
 
 - PLAYER：[玩家历史](development/history/03_玩家与操作_历史记录.md)。

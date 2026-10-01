@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/leaf_canopy",
+  "slug": "leaf_canopy",
+  "display_name": "长曲线叶形顶棚_三角采光板及格构",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "长曲线叶形顶棚_三角采光板及格构_资产包",
+  "source_collection": "长曲线叶形顶棚_三角采光板及格构_制作组件",
+  "objects": [
+    "长曲线叶形顶棚_三角采光板及格构_主体"
+  ],
+  "root_object": "长曲线叶形顶棚_三角采光板及格构_主体",
+  "world_position": [
+    -3.950505495071411,
+    9.298812866210938,
+    29.799999237060547
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -55.47999954223633,
+    2.504964828491211,
+    29.647830963134766
+  ],
+  "bounds_max": [
+    30.27593421936035,
+    22.956817626953125,
+    30.190000534057617
+  ],
+  "dimensions": [
+    85.75593376159668,
+    20.451852798461914,
+    0.5421695709228516
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "traced_canopy",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "leaf_canopy.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

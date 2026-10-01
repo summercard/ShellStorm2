@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/canopy_planter_01",
+  "slug": "canopy_planter_01",
+  "display_name": "棚边连续绿带_01_分段种植槽",
+  "category": "garden",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "棚边连续绿带_01_分段种植槽_资产包",
+  "source_collection": "棚边连续绿带_01_分段种植槽_制作组件",
+  "objects": [
+    "棚边连续绿带_01_分段种植槽_主体"
+  ],
+  "root_object": "棚边连续绿带_01_分段种植槽_主体",
+  "world_position": [
+    -16.12428092956543,
+    8.791760444641113,
+    25.024999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -25.711505889892578,
+    6.061800479888916,
+    25.025
+  ],
+  "bounds_max": [
+    -6.509883403778076,
+    11.123403549194336,
+    25.6
+  ],
+  "dimensions": [
+    19.201622486114502,
+    5.06160306930542,
+    0.5750000000000028
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "linear_planter",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "canopy_planter_01.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

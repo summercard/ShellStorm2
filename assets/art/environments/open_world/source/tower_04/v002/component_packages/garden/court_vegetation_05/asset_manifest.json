@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/court_vegetation_05",
+  "slug": "court_vegetation_05",
+  "display_name": "court_景观植被_05",
+  "category": "garden",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "court_景观植被_05_资产包",
+  "source_collection": "court_景观植被_05_制作组件",
+  "objects": [
+    "court_景观植被_05_主体"
+  ],
+  "root_object": "court_景观植被_05_主体",
+  "world_position": [
+    42.47999954223633,
+    -4.199999809265137,
+    25.5
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    40.33910369873047,
+    -6.419894218444824,
+    25.46640389120371
+  ],
+  "bounds_max": [
+    44.60651837161443,
+    -1.9236570596694946,
+    29.319054135346445
+  ],
+  "dimensions": [
+    4.267414672883959,
+    4.49623715877533,
+    3.8526502441427333
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "layered_planting",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "court_vegetation_05.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

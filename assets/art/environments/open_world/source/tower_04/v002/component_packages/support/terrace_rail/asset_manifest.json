@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/terrace_rail",
+  "slug": "terrace_rail",
+  "display_name": "曲线平台玻璃护栏_节点基座夹件",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "曲线平台玻璃护栏_节点基座夹件_资产包",
+  "source_collection": "曲线平台玻璃护栏_节点基座夹件_制作组件",
+  "objects": [
+    "曲线平台玻璃护栏_节点基座夹件_主体"
+  ],
+  "root_object": "曲线平台玻璃护栏_节点基座夹件_主体",
+  "world_position": [
+    0.0,
+    0.0,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -74.87148010253907,
+    -24.91031562805176,
+    25.0
+  ],
+  "bounds_max": [
+    74.92316925048829,
+    24.91293441772461,
+    26.2450008392334
+  ],
+  "dimensions": [
+    149.79464935302735,
+    49.82325004577637,
+    1.2450008392333984
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "glass_guardrail",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "terrace_rail.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

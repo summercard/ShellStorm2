@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/planter_03",
+  "slug": "planter_03",
+  "display_name": "图纸景观岛_03_异形坐凳花池",
+  "category": "garden",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "图纸景观岛_03_异形坐凳花池_资产包",
+  "source_collection": "图纸景观岛_03_异形坐凳花池_制作组件",
+  "objects": [
+    "图纸景观岛_03_异形坐凳花池_主体"
+  ],
+  "root_object": "图纸景观岛_03_异形坐凳花池_主体",
+  "world_position": [
+    23.65999984741211,
+    -8.600000381469727,
+    25.024999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    21.38338279724121,
+    -11.047777777777778,
+    25.025
+  ],
+  "bounds_max": [
+    25.98583333333335,
+    -6.530293941497803,
+    25.67
+  ],
+  "dimensions": [
+    4.602450536092139,
+    4.517483836279975,
+    0.6450000000000031
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "traced_planter",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "planter_03.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

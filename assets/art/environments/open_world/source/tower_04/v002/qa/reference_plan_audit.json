@@ -1,0 +1,249 @@
+{
+  "passed": true,
+  "errors": [],
+  "checks": [
+    {
+      "slug": "oval_roof",
+      "reference_bbox": [
+        88,
+        286,
+        378,
+        503
+      ],
+      "observed_bbox": [
+        95.0833072066307,
+        288.416641831398,
+        370.9159126281738,
+        497.58329701423645
+      ],
+      "normalized_center_error": [
+        2.6939405920755797e-07,
+        0.001381243625398499
+      ],
+      "normalized_size_error": [
+        0.009784112277939834,
+        0.007213024693518932
+      ],
+      "observed_min_z": 24.780000686645508,
+      "expected_min_z": 24.78,
+      "passed": true
+    },
+    {
+      "slug": "leaf_canopy",
+      "reference_bbox": [
+        240,
+        156,
+        959,
+        331
+      ],
+      "observed_bbox": [
+        241.6666386127472,
+        158.69319427013397,
+        956.299467086792,
+        329.1252908706665
+      ],
+      "normalized_center_error": [
+        0.00035700770043536445,
+        0.00037683477937406815
+      ],
+      "normalized_size_error": [
+        0.003016002435051934,
+        0.004206172559362309
+      ],
+      "observed_min_z": 29.647830963134766,
+      "expected_min_z": 29.64,
+      "passed": true
+    },
+    {
+      "slug": "glass_pavilion",
+      "reference_bbox": [
+        942,
+        243,
+        1154,
+        389
+      ],
+      "observed_bbox": [
+        949.5323529243469,
+        242.594660282135,
+        1151.4676241874695,
+        383.4053020477295
+      ],
+      "normalized_center_error": [
+        0.0017265114336382618,
+        0.00276244828275115
+      ],
+      "normalized_size_error": [
+        0.0069507795144181225,
+        0.004778414580483902
+      ],
+      "observed_min_z": 25.0,
+      "expected_min_z": 25,
+      "passed": true
+    },
+    {
+      "slug": "lawn_court",
+      "reference_bbox": [
+        970,
+        354,
+        1173,
+        497
+      ],
+      "observed_bbox": [
+        970.3778643608093,
+        353.3770798444748,
+        1171.3446788787842,
+        493.9529435634613
+      ],
+      "normalized_center_error": [
+        0.00044111075980887227,
+        0.0016896761473590718
+      ],
+      "normalized_size_error": [
+        0.0014041336201831122,
+        0.0022321696878577243
+      ],
+      "observed_min_z": 25.027000427246094,
+      "expected_min_z": 25.027,
+      "passed": true
+    },
+    {
+      "slug": "planter_00",
+      "reference_bbox": [
+        595,
+        349,
+        679,
+        438
+      ],
+      "observed_bbox": [
+        597.4195272922516,
+        347.0462933778763,
+        676.5370318889618,
+        437.28009939193726
+      ],
+      "normalized_center_error": [
+        1.5000282730186841e-05,
+        0.001230942555334467
+      ],
+      "normalized_size_error": [
+        0.003371889090669748,
+        0.0011361013020819283
+      ],
+      "observed_min_z": 25.024999618530273,
+      "expected_min_z": 25.025,
+      "passed": true
+    },
+    {
+      "slug": "planter_01",
+      "reference_bbox": [
+        702,
+        402,
+        822,
+        465
+      ],
+      "observed_bbox": [
+        705.0700840950012,
+        404.3173134326935,
+        820.020833492279,
+        461.4351807832718
+      ],
+      "normalized_center_error": [
+        0.0003766980619061718,
+        0.0005743580957802619
+      ],
+      "normalized_size_error": [
+        0.003487051521216967,
+        0.0054163284064656465
+      ],
+      "observed_min_z": 25.024999618530273,
+      "expected_min_z": 25.025,
+      "passed": true
+    },
+    {
+      "slug": "planter_02",
+      "reference_bbox": [
+        875,
+        322,
+        936,
+        375
+      ],
+      "observed_bbox": [
+        874.3541827201843,
+        324.1782513856888,
+        934.5902762413025,
+        376.52780055999756
+      ],
+      "normalized_center_error": [
+        0.0007097862702048286,
+        0.0017062854261907644
+      ],
+      "normalized_size_error": [
+        0.0005275597229846933,
+        0.0005989418284449568
+      ],
+      "observed_min_z": 25.024999618530273,
+      "expected_min_z": 25.025,
+      "passed": true
+    },
+    {
+      "slug": "planter_03",
+      "reference_bbox": [
+        881,
+        401,
+        921,
+        442
+      ],
+      "observed_bbox": [
+        882.1948761940002,
+        404.4191347360611,
+        920.5486459732056,
+        442.064794421196
+      ],
+      "normalized_center_error": [
+        0.00025674107983626054,
+        0.0016040189490133885
+      ],
+      "normalized_size_error": [
+        0.0011368993237532304,
+        0.003088711155492737
+      ],
+      "observed_min_z": 25.024999618530273,
+      "expected_min_z": 25.025,
+      "passed": true
+    }
+  ],
+  "pavilion_axis_error_deg": 4.858012310648974e-06,
+  "deck_floor_bounds": [
+    -74.95,
+    -24.95,
+    74.95,
+    24.95
+  ],
+  "roof_z": 25,
+  "canopy_clearance_height": 4.8,
+  "guardrail_height": 1.2,
+  "planter_height": 0.6,
+  "walkway_widths_nominal": [
+    2,
+    4
+  ],
+  "void_witnesses": [
+    [
+      -33.0,
+      -2.28
+    ],
+    [
+      -25.919999999999998,
+      -6.84
+    ],
+    [
+      -22.2,
+      -10.799999999999999
+    ]
+  ],
+  "no_post_build_scaling": true,
+  "uncertainties": [
+    "参考图为带透视的示意平面，未提供CAD；局部尺寸链不等于整体150m",
+    "东侧裁切范围外为补全；不可见内部商铺未制作"
+  ],
+  "interpretation": "roof-plane trace correspondence; original perspective sketch is not a measured CAD survey"
+}

@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/plaza_planter_01",
+  "slug": "plaza_planter_01",
+  "display_name": "屋顶广场边缘花池_01",
+  "category": "garden",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v002/塔4_曲线天台商场_150x50m_v002.blend",
+  "collection": "屋顶广场边缘花池_01_资产包",
+  "source_collection": "屋顶广场边缘花池_01_制作组件",
+  "objects": [
+    "屋顶广场边缘花池_01_主体"
+  ],
+  "root_object": "屋顶广场边缘花池_01_主体",
+  "world_position": [
+    -60.84000015258789,
+    22.200000762939453,
+    25.024999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -62.38999938964844,
+    21.350000381469727,
+    25.025
+  ],
+  "bounds_max": [
+    -59.290000915527344,
+    23.049999237060547,
+    25.62
+  ],
+  "dimensions": [
+    3.0999984741210938,
+    1.6999988555908203,
+    0.5950000000000024
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "plaza_planter",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "plaza_planter_01.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}
