@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/pier_00",
+  "slug": "pier_00",
+  "display_name": "悬挑露台承重柱_00",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "悬挑露台承重柱_00_资产包",
+  "source_collection": "悬挑露台承重柱_00_制作组件",
+  "objects": [
+    "悬挑露台承重柱_00_主体"
+  ],
+  "root_object": "悬挑露台承重柱_00_主体",
+  "world_position": [
+    -20.0853118000635,
+    -13.276381977093532,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -21.40093381565994,
+    -14.622144112822394,
+    0.07999999821186066
+  ],
+  "bounds_max": [
+    -18.76968978446706,
+    -11.930619841364672,
+    13.800000190734863
+  ],
+  "dimensions": [
+    2.6312440311928786,
+    2.6915242714577228,
+    13.720000192523003
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "forked_canopy_column",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "pier_00.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

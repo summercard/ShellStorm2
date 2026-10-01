@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/stair_hut",
+  "slug": "stair_hut",
+  "display_name": "天台楼梯出口_门雨棚检修柜",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "天台楼梯出口_门雨棚检修柜_资产包",
+  "source_collection": "天台楼梯出口_门雨棚检修柜_制作组件",
+  "objects": [
+    "天台楼梯出口_门雨棚检修柜_主体",
+    "天台楼梯出口_门雨棚检修柜_柔和自发光"
+  ],
+  "root_object": "天台楼梯出口_门雨棚检修柜_主体",
+  "world_position": [
+    -32.13681609270086,
+    12.406111999359192,
+    15.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -34.798189957324944,
+    8.810562842655811,
+    15.05
+  ],
+  "bounds_max": [
+    -29.475442228076776,
+    14.768901445192844,
+    18.720000000000002
+  ],
+  "dimensions": [
+    5.322747729248163,
+    5.958338602537033,
+    3.6700000000000017
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": true,
+  "component_definition": "service_hut",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "stair_hut.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

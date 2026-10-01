@@ -1,0 +1,14 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "row": 816,
+  "ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "source_sha256": "2ac9ca09bdf8e38abe6cc281d8be84beb739fe7ade7bfaaffe7c79d1a20ee5b1",
+  "source_version": "v001",
+  "status": "Blender源已完成",
+  "prior_asset_content_unchanged": true,
+  "prior_baseline_fingerprints_unchanged": true,
+  "prior_unrelated_sheets_unchanged": true,
+  "prefab_page_not_modified": true,
+  "baseline_count": 987,
+  "data_validations_verified": true
+}

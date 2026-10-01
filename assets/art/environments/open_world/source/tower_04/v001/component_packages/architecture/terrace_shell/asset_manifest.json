@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/terrace_shell",
+  "slug": "terrace_shell",
+  "display_name": "波浪悬挑露台_连续曲线壳体",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "波浪悬挑露台_连续曲线壳体_资产包",
+  "source_collection": "波浪悬挑露台_连续曲线壳体_制作组件",
+  "objects": [
+    "波浪悬挑露台_连续曲线壳体_主体"
+  ],
+  "root_object": "波浪悬挑露台_连续曲线壳体_主体",
+  "world_position": [
+    0.0005286876654256043,
+    0.07851489066188423,
+    14.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -43.344714931610795,
+    -25.0,
+    13.8
+  ],
+  "bounds_max": [
+    75.0,
+    24.03250954011618,
+    15
+  ],
+  "dimensions": [
+    118.3447149316108,
+    49.03250954011618,
+    1.1999999999999993
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "scalloped_terrace",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "terrace_shell.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

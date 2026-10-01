@@ -1,0 +1,42 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "version": "v001",
+  "definition_count": 19,
+  "definitions": [
+    "ellipse_storey",
+    "curved_strip_storey",
+    "facade_curve",
+    "scalloped_terrace",
+    "elliptic_roof_curb",
+    "roof_paving",
+    "glass_guardrail",
+    "lattice_canopy",
+    "forked_canopy_column",
+    "elliptic_planter",
+    "garden_cluster",
+    "glass_pavilion",
+    "hvac_unit",
+    "service_hut",
+    "drain_bank",
+    "lighting_bollard",
+    "entrance_portal",
+    "curved_rooftop_stair",
+    "fixed_garden_bench"
+  ],
+  "footprint_m": [
+    150,
+    50
+  ],
+  "floor_count": 5,
+  "floor_height_m": 5,
+  "highest_body_roof_m": 25,
+  "terrace_m": 15,
+  "style": "Fortnite式块面、克制的宽倒角、低多边形植被，禁止写实纹理",
+  "material_policy": "只读取塔楼03既有四材质，不新建或复制材质球；公共色盘外链",
+  "reference_layout": "左椭圆高体块；中部凹入；前沿波浪露台；后侧长曲线格构顶；右端玻璃亭",
+  "locked_asset_hashes": {
+    "assets\\art\\environments\\open_world\\source\\tower_03\\v001\\塔楼03_设备天台办公楼_v001.blend": "91b2f8f7d7ccfd483e76799e4b0a7573492b1741021eb3f7b34e5bfc24ec631e",
+    "assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png.import": "1d229b7fe77409c3c7c6b97a90c7ec6ad24b7a8f0222ab01d251c0aadf9b4cb2"
+  }
+}

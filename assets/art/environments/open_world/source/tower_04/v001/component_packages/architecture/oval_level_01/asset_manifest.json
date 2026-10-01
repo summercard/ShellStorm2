@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_level_01",
+  "slug": "oval_level_01",
+  "display_name": "左翼椭圆商场_01层",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "左翼椭圆商场_01层_资产包",
+  "source_collection": "左翼椭圆商场_01层_制作组件",
+  "objects": [
+    "左翼椭圆商场_01层_主体"
+  ],
+  "root_object": "左翼椭圆商场_01层_主体",
+  "world_position": [
+    -50.214072531656896,
+    -3.0033843865124425,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -75.0,
+    -24.247943717341144,
+    0
+  ],
+  "bounds_max": [
+    -25.42845537998698,
+    18.241174944316256,
+    4.779999732971191
+  ],
+  "dimensions": [
+    49.571544620013015,
+    42.4891186616574,
+    4.779999732971191
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "ellipse_storey",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_level_01.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

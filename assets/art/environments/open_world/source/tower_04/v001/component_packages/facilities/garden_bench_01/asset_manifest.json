@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/garden_bench_01",
+  "slug": "garden_bench_01",
+  "display_name": "花园固定长椅_01_独立包",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "花园固定长椅_01_独立包_资产包",
+  "source_collection": "花园固定长椅_01_独立包_制作组件",
+  "objects": [
+    "花园固定长椅_01_独立包_主体"
+  ],
+  "root_object": "花园固定长椅_01_独立包_主体",
+  "world_position": [
+    12.052032980302782,
+    2.1331144087781024,
+    15.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    9.8425905266526,
+    1.5526900449102707,
+    15.02
+  ],
+  "bounds_max": [
+    14.261475433952963,
+    2.713538772645934,
+    16.45
+  ],
+  "dimensions": [
+    4.418884907300362,
+    1.1608487277356636,
+    1.4299999999999997
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "fixed_garden_bench",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "garden_bench_01.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

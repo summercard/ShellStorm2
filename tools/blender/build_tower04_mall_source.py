@@ -26,7 +26,10 @@ REFERENCE = Path('C:/Users/ZHUANG~1/AppData/Local/Temp/codex-clipboard-11766f86-
 NAMES = ['01_精工金属_紫色骨架', '02_细腻哑光_青绿大面', '03_清漆反光_紫粉点缀', '04_柔和自发光_UI灯光']
 for d in ('qa', 'previews', 'references', 'component_packages'):
     (OUT / d).mkdir(parents=True, exist_ok=True)
-assert not BLEND.exists(), 'Existing source: create next version instead of overwrite'
+if BLEND.exists():
+    assert '--draft-sha' in sys.argv, 'Existing source: create next version instead of overwrite'
+    expected = sys.argv[sys.argv.index('--draft-sha')+1]
+    assert hashlib.sha256(BLEND.read_bytes()).hexdigest() == expected, 'Draft edited externally; do not overwrite'
 random.seed(4004)
 locked = {str(p.relative_to(R)): hashlib.sha256(p.read_bytes()).hexdigest() for p in (DONOR, PALETTE, Path(str(PALETTE)+'.import'))}
 shutil.copy2(REFERENCE, OUT / 'references/用户参考_曲线商场.png')
@@ -45,7 +48,7 @@ sc['asset_ledger'] = 'scenes::资产主表::' + ASSET
 sc['scene_design_docs'] = 'docs/v0.1/design/tower04_mall_source.md'
 with bpy.data.libraries.load(str(DONOR), link=False) as (available, target):
     assert all(n in available.materials for n in NAMES), available.materials
-    target.materials = NAMES
+    target.materials = list(NAMES)
 MATS = [bpy.data.materials[n] for n in NAMES]
 # Relink appended image path only; do not change original materials' shader values.
 for mat in MATS:
@@ -68,7 +71,8 @@ TILE = color((.61,.68,.71)); TILE2 = color((.53,.62,.65))
 DARK = color((.12,.20,.24)); STEEL = color((.28,.40,.45))
 BLUE = color((.15,.47,.53)); BLUEHI = color((.37,.65,.69))
 WARM = color((.68,.38,.24)); GOLD = color((.90,.56,.17))
-GREEN = color((.16,.39,.17)); LEAF = color((.31,.52,.13)); LEAFHI = color((.49,.63,.18))
+GREEN = (4,4); LEAF = (5,4); LEAFHI = (6,4)
+WARM = (7,2)
 SOIL = color((.22,.24,.16)); TEAL = BLUE; RUST = WARM
 
 # Reuse the project's explicit geometry/PaletteUV primitives, without executing
@@ -157,7 +161,7 @@ def facade(slug,name,points,z0,z1,levels,closed=True):
             p.rod((*a,z0+5*k+.26),(*b,z0+5*k+.26),.09,STEEL,0)
     p.finish()
 
-definitions=['ellipse_storey','curved_strip_storey','facade_curve','scalloped_terrace','elliptic_roof_curb','roof_paving','glass_guardrail','lattice_canopy','forked_canopy_column','elliptic_planter','garden_cluster','glass_pavilion','hvac_unit','service_hut','drain_bank','utility_cabinet','lighting_bollard','entrance_portal','palm_tree','retail_awning']
+definitions=['ellipse_storey','curved_strip_storey','facade_curve','scalloped_terrace','elliptic_roof_curb','roof_paving','glass_guardrail','lattice_canopy','forked_canopy_column','elliptic_planter','garden_cluster','glass_pavilion','hvac_unit','service_hut','drain_bank','lighting_bollard','entrance_portal','curved_rooftop_stair','fixed_garden_bench']
 plan=dict(asset_id=ASSET,version='v001',definition_count=len(definitions),definitions=definitions,footprint_m=[150,50],floor_count=5,floor_height_m=5,highest_body_roof_m=25,terrace_m=15,style='Fortnite式块面、克制的宽倒角、低多边形植被，禁止写实纹理',material_policy='只读取塔楼03既有四材质，不新建或复制材质球；公共色盘外链',reference_layout='左椭圆高体块；中部凹入；前沿波浪露台；后侧长曲线格构顶；右端玻璃亭',locked_asset_hashes=locked)
 (OUT/'component_plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf8')
 
@@ -178,7 +182,18 @@ p=Part('oval_roof','左翼回旋屋顶_环形檐口','floor',(-50,-3,25),'ellipt
 p.prism(oval,24.62,25,CREAM)
 for cx,cy,rx,ry,h in [(-50,-3,23.3,19.3,.35),(-41,1,10,8,.80)]:
     ring=ellipse(cx,cy,rx,ry)
-    p.path([(*q,25+h*.5) for q in ring+[ring[0]]],h*.5,LIGHT,1,8)
+    if rx==10:
+        # Open returning spiral rather than a closed circular puck.
+        ring=[q for i,q in enumerate(ring) if i<51]
+        p.prism(ellipse(cx,cy,rx-.45,ry-.45),25,25.28,TILE)
+        p.path([(*q,25+h*.5) for q in ring],h*.5,LIGHT,1,8)
+    else: p.path([(*q,25+h*.5) for q in ring+[ring[0]]],h*.5,LIGHT,1,8)
+for x in range(-68,-30,6):
+    extent=18.7*math.sqrt(max(0,1-((x+50)/23)**2))
+    p.rod((x,-3-extent,25.022),(x,-3+extent,25.022),.025,TILE2,1,6)
+for y in (-14,-8,-2,4,10):
+    extent=23.0*math.sqrt(max(0,1-((y+3)/18.7)**2))
+    p.rod((-50-extent,y,25.025),(-50+extent,y,25.025),.025,TILE2,1,6)
 p.finish()
 p=Part('oval_roof_rail','左翼回旋屋顶玻璃护栏','support',(-50,-3,25),'glass_guardrail')
 sample_rail(p,ellipse(-50,-3,23.4,19.4,48),25); p.finish()
@@ -186,8 +201,8 @@ sample_rail(p,ellipse(-50,-3,23.4,19.4,48),25); p.finish()
 # Dominant terrace silhouette: exact Bezier boundary, not a rectangular platform.
 outline=boundary([
     ((-34,-9),(-23,-2),(-23,-10),(-12,-14)),
-    ((-12,-14),(-5,-16),(6,-13),(15,-17)),
-    ((15,-17),(30,-21),(42,-26),(53,-24)),
+    ((-12,-14),(-5,-19),(6,-8),(15,-14)),
+    ((15,-14),(30,-16),(42,-26),(53,-24)),
     ((53,-24),(67,-24),(75,-18),(74,-11)),
     ((74,-11),(75,1),(75,12),(70,15)),
     ((70,15),(56,20),(43,18),(30,21)),
@@ -251,10 +266,10 @@ for i,(x,y) in enumerate([(-20,-13),(7,-16),(36,-21),(63,-20),(72,-1)]):
     p.finish()
 
 # Long leaf/lens canopy. Two continuous curved edges with a real diamond lattice.
-def canopy_center(x): return 16-.0016*(x+7)**2
+def canopy_center(x): return 16-.0010*(x+7)**2
 def canopy_z(x): return 22+.027*(35-x)
-canopy_x=[-41+i*103/36 for i in range(37)]
-width=[5.8*math.sqrt(max(.08,1-((x-10.5)/53)**2)) for x in canopy_x]
+canopy_x=[-41+i*76/36 for i in range(37)]
+width=[5.8*math.sqrt(max(.003,1-((x+3)/38.1)**2)) for x in canopy_x]
 topside=[(x,canopy_center(x)+w,canopy_z(x)) for x,w in zip(canopy_x,width)]
 bottomside=[(x,canopy_center(x)-w,canopy_z(x)) for x,w in zip(canopy_x,width)]
 p=Part('leaf_canopy','长叶形遮阳顶_连续曲线边框','support',(0,0,22),'lattice_canopy')
@@ -271,7 +286,7 @@ for i in range(len(canopy_x)-1):
         # Sparse sail plates: lattice is open and reads clearly from the reference.
         if (i+j)%4==0: p.poly([a,b,c],[(0,1,2)],TILE,1)
 p.finish()
-for i,x in enumerate((-32,-9,14,37,56)):
+for i,x in enumerate((-32,-14,4,20,31)):
     y=canopy_center(x); z=canopy_z(x)
     p=Part('canopy_column_%02d'%i,'遮阳棚树形分叉柱_%02d'%i,'support',(x,y,15),'forked_canopy_column')
     p.rod((x,y,15),(x,y,z-2),.40,LIGHT,1,12)
@@ -281,15 +296,18 @@ for i,x in enumerate((-32,-9,14,37,56)):
 
 # Scenic low-poly flora: large chunky masses and stylized palm leaf fans.
 def blob(p,x,y,z,r,c):
-    verts=[(x,y,z+r*.95),(x,y,z-r*.50)]
-    verts += [(x+r*math.cos(j*math.tau/8),y+r*.85*math.sin(j*math.tau/8),z) for j in range(8)]
-    p.poly(verts,[(0,2+j,2+(j+1)%8) for j in range(8)]+[(1,2+(j+1)%8,2+j) for j in range(8)],c,1)
+    verts=[]
+    for k,(zz,rr) in enumerate([(-.65,.35),(-.3,.85),(.22,1),(.65,.73),(.92,.30)]):
+        verts.extend((x+r*rr*math.cos((j+.18*(k%2))*math.tau/8),y+r*.85*rr*math.sin((j+.18*(k%2))*math.tau/8),z+r*zz) for j in range(8))
+    faces=[tuple(reversed(range(8))),tuple(range(32,40))]
+    faces.extend((k*8+j,k*8+(j+1)%8,(k+1)*8+(j+1)%8,(k+1)*8+j) for k in range(4) for j in range(8))
+    p.poly(verts,faces,c,1)
 def palm(p,x,y,z,height=2.7):
     p.rod((x,y,z),(x+.18,y,z+height),.12,WARM,1,8)
     for j in range(7):
         a=j*math.tau/7; dx=math.cos(a); dy=math.sin(a)
-        base=Vector((x+.18,y,z+height)); tip=base+Vector((dx*1.7,dy*1.7,-.55))
-        mid=base+Vector((dx*.8,dy*.8,.23)); side=Vector((-dy*.28,dx*.28,0))
+        base=Vector((x+.18,y,z+height)); tip=base+Vector((dx*2.2,dy*2.2,-.65))
+        mid=base+Vector((dx*1.0,dy*1.0,.35)); side=Vector((-dy*.38,dx*.38,0))
         p.poly([base,mid+side,tip,mid-side],[(0,1,2),(0,2,3)],LEAF if j%2 else LEAFHI,1)
 islands=[(-24,-7,9,3.5),(-7,-7,8,3),(15,-4,10,3.2),(41,-12,11,3.8),(62,-12,7,3),(-25,19,9,2.3),(-4,20,8,2),(20,19,8,2),(43,15,6,2)]
 for i,(x,y,rx,ry) in enumerate(islands):
@@ -334,6 +352,9 @@ for j in range(8):
         p.poly([(xa,yy,19.27),(xb,yy,19.27),(xb,6,20.57),(xa,6,20.57)],[(0,1,2,3)],TILE,2)
         p.rod((xa,yy,19.31),(xb,6,20.62),.055,CREAM,0)
 p.rod((x0,6,20.55),(x1,6,20.55),.10,LIGHT,0)
+for x in (x0,x1):
+    p.poly([(x,y0,19.25),(x,y1,19.25),(x,6,20.55)],[(0,1,2)] if x==x1 else [(2,1,0)],BLUEHI,2)
+    p.rod((x,6,19.25),(x,6,20.55),.075,LIGHT,0)
 p.finish()
 
 # Upper left rear gallery reproduces raised crescent end seen behind the canopy.
@@ -388,7 +409,34 @@ for x in (-19,-17,-15,-13):
     p.box((x,-9.92,2.3),(.07,.09,.9),LIGHT,0,.02)
 p.box((-16,-13.25,5.25),(5.4,.12,.12),GOLD,3,.03); p.finish()
 
+# Sculptural descending return stair along the oval's right cheek: preserves
+# the reference's curved transition instead of a disconnected tall drum.
+p=Part('return_stair','左翼回旋层间楼梯_弧形踏步与扶手','architecture',(-50,-3,15),'curved_rooftop_stair')
+inner_line=[]; outer_line=[]
+for i in range(40):
+    a=math.radians(63-76*i/40); b=math.radians(63-76*(i+1)/40)
+    h=25-10*(i+1)/40
+    def stair_xy(angle,r): return (-50+r*math.cos(angle),-3+(r*.835)*math.sin(angle))
+    aa=stair_xy(a,24.6); bb=stair_xy(b,24.6); cc=stair_xy(b,27.9); dd=stair_xy(a,27.9)
+    p.prism([aa,bb,cc,dd],h-.42,h+.02,CREAM)
+    p.rod((*bb,h+.055),(*cc,h+.055),.045,TILE2,1,6)
+    inner_line.append((*aa,h+1.15)); outer_line.append((*dd,h+1.15))
+    if i%2==0:
+        for q in (aa,dd): p.rod((*q,h),(*q,h+1.15),.07,STEEL,0)
+p.path(inner_line,.07,LIGHT,0,8); p.path(outer_line,.07,LIGHT,0,8)
+p.finish()
+for i,(x,y) in enumerate([(-8,-2),(12,2),(37,-5),(60,-7)]):
+    p=Part('garden_bench_%02d'%i,'花园固定长椅_%02d_独立包'%i,'facilities',(x,y,15),'fixed_garden_bench')
+    for dx in (-1.8,1.8):
+        p.box((x+dx,y,15.32),(.25,1.1,.60),STEEL,0,.05)
+        p.box((x+dx,y+.45,15.85),(.25,.20,1.2),STEEL,0,.04)
+    for j in range(4):
+        p.box((x,y-.45+j*.30,15.64),(4.4,.23,.14),WARM,1,.05)
+    for z in (15.97,16.28): p.box((x,y+.48,z),(4.4,.16,.22),WARM,1,.05)
+    p.finish()
+
 # Quantified authoring landmarks and complete mirrored catalog.
+bpy.context.view_layer.update()
 allverts=[o.matrix_world@v.co for o in game.all_objects for v in o.data.vertices]
 mn=[min(v[j] for v in allverts) for j in range(3)]; mx=[max(v[j] for v in allverts) for j in range(3)]
 # Fit plan once at authoring stage (not an output scale): all vertices, origins and

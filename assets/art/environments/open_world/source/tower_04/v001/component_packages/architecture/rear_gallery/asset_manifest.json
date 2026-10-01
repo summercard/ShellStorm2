@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/rear_gallery",
+  "slug": "rear_gallery",
+  "display_name": "后侧升高弧形连廊_圆钝端头",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "后侧升高弧形连廊_圆钝端头_资产包",
+  "source_collection": "后侧升高弧形连廊_圆钝端头_制作组件",
+  "objects": [
+    "后侧升高弧形连廊_圆钝端头_主体"
+  ],
+  "root_object": "后侧升高弧形连廊_圆钝端头_主体",
+  "world_position": [
+    -48.205488482884,
+    18.569910553707846,
+    20.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -66.6982781025844,
+    13.90959559124502,
+    19.5
+  ],
+  "bounds_max": [
+    -28.064411627328216,
+    24.948606404532747,
+    26.270000457763672
+  ],
+  "dimensions": [
+    38.63386647525619,
+    11.039010813287728,
+    6.770000457763672
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "curved_strip_storey",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "rear_gallery.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/return_stair",
+  "slug": "return_stair",
+  "display_name": "左翼回旋层间楼梯_弧形踏步与扶手",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "左翼回旋层间楼梯_弧形踏步与扶手_资产包",
+  "source_collection": "左翼回旋层间楼梯_弧形踏步与扶手_制作组件",
+  "objects": [
+    "左翼回旋层间楼梯_弧形踏步与扶手_主体"
+  ],
+  "root_object": "左翼回旋层间楼梯_弧形踏步与扶手_主体",
+  "world_position": [
+    -50.214072531656896,
+    -3.0033843865124425,
+    15.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -39.068271507014224,
+    -8.432415589903993,
+    14.58
+  ],
+  "bounds_max": [
+    -22.124410321699546,
+    18.392530248821497,
+    25.9674129486084
+  ],
+  "dimensions": [
+    16.94386118531468,
+    26.82494583872549,
+    11.387412948608398
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "curved_rooftop_stair",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "return_stair.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

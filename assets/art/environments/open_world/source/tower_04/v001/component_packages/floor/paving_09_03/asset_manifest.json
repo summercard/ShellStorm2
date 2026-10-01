@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/paving_09_03",
+  "slug": "paving_09_03",
+  "display_name": "露台铺装_09_03",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "露台铺装_09_03_资产包",
+  "source_collection": "露台铺装_09_03_制作组件",
+  "objects": [
+    "露台铺装_09_03_主体"
+  ],
+  "root_object": "露台铺装_09_03_主体",
+  "world_position": [
+    31.133581443645262,
+    0.07851489066188423,
+    15.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    27.678816343406083,
+    -3.4553963392805747,
+    15.004
+  ],
+  "bounds_max": [
+    34.588344628349425,
+    3.612426120604343,
+    15.02
+  ],
+  "dimensions": [
+    6.909528284943343,
+    7.067822459884917,
+    0.016000000000000014
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "roof_paving",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "paving_09_03.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_glazing",
+  "slug": "oval_glazing",
+  "display_name": "左翼五层圆弧幕墙",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "左翼五层圆弧幕墙_资产包",
+  "source_collection": "左翼五层圆弧幕墙_制作组件",
+  "objects": [
+    "左翼五层圆弧幕墙_主体"
+  ],
+  "root_object": "左翼五层圆弧幕墙_主体",
+  "world_position": [
+    0.0005286876654256043,
+    0.07851489066188423,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -74.93974493042163,
+    -24.18630628043492,
+    0.16999998688697815
+  ],
+  "bounds_max": [
+    -25.488402048427176,
+    18.179537507410032,
+    24.719999313354492
+  ],
+  "dimensions": [
+    49.45134288199446,
+    42.36584378784495,
+    24.549999326467514
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "facade_curve",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_glazing.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

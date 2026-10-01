@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/rear_glazing",
+  "slug": "rear_glazing",
+  "display_name": "后侧升高连廊曲线玻璃",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v001/塔4_曲线天台商场_150x50m_v001.blend",
+  "collection": "后侧升高连廊曲线玻璃_资产包",
+  "source_collection": "后侧升高连廊曲线玻璃_制作组件",
+  "objects": [
+    "后侧升高连廊曲线玻璃_主体"
+  ],
+  "root_object": "后侧升高连廊曲线玻璃_主体",
+  "world_position": [
+    0.0005286876654256043,
+    0.07851489066188423,
+    20.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -66.74876394356251,
+    13.858228447931443,
+    20.170000076293945
+  ],
+  "bounds_max": [
+    -27.99913210939329,
+    25.0,
+    24.719999313354492
+  ],
+  "dimensions": [
+    38.74963183416922,
+    11.141771552068557,
+    4.549999237060547
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "facade_curve",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "rear_glazing.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及错层天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}
