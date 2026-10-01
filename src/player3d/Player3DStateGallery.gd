@@ -31,7 +31,7 @@ const DIY_LABELS := {
 	"hand": {"bunny_white": "兔子白手", "cat_orange": "复古橙色", "grip_olive": "橄榄握持手", "safety_orange": "橙色安全手", "gauntlet_teal": "青绿护手"},
 	"feet": {"bunny_white": "兔子白脚", "cat_orange": "复古橙色", "boot_sand": "沙色短靴", "boot_cobalt": "钴蓝短靴", "boot_teal": "青绿短靴"},
 	"hat": {"none": "无帽子", "field_cap": "荒野软帽", "hard_hat": "工兵安全帽", "sealed_hood": "密封兜帽"},
-	"glasses": {"none": "无眼镜", "mono_lens": "单目镜", "dual_goggles": "双目护镜", "wide_visor": "宽面护目镜"},
+	"glasses": {"electronic_mask": "蓝光电子面具", "none": "无面饰", "mono_lens": "单目镜", "dual_goggles": "双目护镜", "wide_visor": "宽面护目镜"},
 }
 
 var player: Player3D
@@ -450,7 +450,7 @@ func _build_interface() -> void:
 	diy_button_grid.columns = 2
 	diy_box.add_child(diy_button_grid)
 	_add_button(diy_button_grid, "DiyNextHat", "切换帽子", func(): cycle_preview_customization("hat"))
-	_add_button(diy_button_grid, "DiyNextGlasses", "切换眼镜", func(): cycle_preview_customization("glasses"))
+	_add_button(diy_button_grid, "DiyNextGlasses", "切换面饰", func(): cycle_preview_customization("glasses"))
 	_add_button(diy_button_grid, "DiyReset", "恢复默认", reset_preview_customization)
 
 	var encounter_panel := _make_panel("EncounterControls", Vector2(956, 88), Vector2(300, 530))
@@ -541,7 +541,7 @@ func _add_diy_selector(parent: Control, slot_id: String) -> void:
 	row.custom_minimum_size.y = 29
 	parent.add_child(row)
 	var label := Label.new()
-	label.text = {"body": "身体", "head": "头部", "hand": "手部", "feet": "脚部", "hat": "帽子", "glasses": "眼镜"}.get(slot_id, slot_id)
+	label.text = {"body": "身体", "head": "头部", "hand": "手部", "feet": "脚部", "hat": "帽子", "glasses": "面饰"}.get(slot_id, slot_id)
 	label.custom_minimum_size.x = 52
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	row.add_child(label)

@@ -11,7 +11,7 @@ const SLOT_LABELS := {
 	"hand": "手部",
 	"feet": "脚部",
 	"hat": "帽子",
-	"glasses": "眼镜",
+	"glasses": "面饰",
 }
 
 const VARIANT_LABELS := {
@@ -38,6 +38,7 @@ const VARIANT_LABELS := {
 	"mono_lens": "单目镜",
 	"dual_goggles": "双目护镜",
 	"wide_visor": "宽幅面罩",
+	"electronic_mask": "蓝光电子面具",
 }
 
 const VARIANT_COLORS := {
@@ -64,6 +65,7 @@ const VARIANT_COLORS := {
 	"mono_lens": Color(0.20, 0.90, 1.0),
 	"dual_goggles": Color(0.74, 0.22, 0.92),
 	"wide_visor": Color(0.18, 0.68, 0.88),
+	"electronic_mask": Color(0.02, 0.48, 0.95),
 }
 
 

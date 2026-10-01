@@ -1,0 +1,27 @@
+{
+  "result": "pass",
+  "version": "v005",
+  "original_meshes_preserved": 11,
+  "original_geometry_uv_material_transform_weights_preserved": true,
+  "skeleton_signature": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+  "model_animation_rest_signatures_match": true,
+  "all_shell_vertices_copied_from_original": 1448,
+  "pixel_cells": 180,
+  "authored_animation_curves_match": true,
+  "collection_path": "01_部件/眼镜/眼镜__electronic_mask",
+  "source_hashes_match": true,
+  "mouth_free": true,
+  "pixel_cell_size_m": 0.0118,
+  "emission_strength": 1.25,
+  "all_emotion_morphs_close_fully": true,
+  "expression_meshes_verified": {
+    "neutral": 180,
+    "happy": 116,
+    "sad": 102,
+    "angry": 112,
+    "surprised": 144,
+    "love": 148,
+    "question": 112,
+    "alert": 96
+  }
+}

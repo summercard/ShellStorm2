@@ -50,17 +50,19 @@ const DEFAULT_CUSTOMIZATION := {
 	"hand": "bunny_white",
 	"feet": "bunny_white",
 	"hat": "bunny_ears",
-	"glasses": "none",
+	"glasses": "electronic_mask",
 }
 const CHIBI_ANIME_HEAD_VARIANT := "chibi_anime"
 const BUNNY_EARS_HAT_VARIANT := "bunny_ears"
+const ELECTRONIC_MASK_VARIANT := "electronic_mask"
+const ELECTRONIC_MASK_SCENE: PackedScene = preload("res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/runtime/chr_bunny01_electronic_mask_root.tscn")
 const CUSTOMIZATION_OPTIONS := {
 	"body": ["bunny_white", "cat_orange", "suit_olive", "suit_sand", "suit_cobalt"],
 	"head": ["bunny_white", "cat_orange", "sensor_olive", "visor_cyan", "plated_amber", CHIBI_ANIME_HEAD_VARIANT],
 	"hand": ["bunny_white", "cat_orange", "grip_olive", "safety_orange", "gauntlet_teal"],
 	"feet": ["bunny_white", "cat_orange", "boot_sand", "boot_cobalt", "boot_teal"],
 	"hat": [BUNNY_EARS_HAT_VARIANT, "none", "field_cap", "hard_hat", "sealed_hood"],
-	"glasses": ["none", "mono_lens", "dual_goggles", "wide_visor"],
+	"glasses": [ELECTRONIC_MASK_VARIANT, "none", "mono_lens", "dual_goggles", "wide_visor"],
 }
 const BODY_COLORS := {
 	"bunny_white": Color.WHITE,
@@ -1368,6 +1370,19 @@ func _ensure_wearable_nodes() -> void:
 	_wearable_nodes["glasses_mono_lens"] = _create_mono_lens()
 	_wearable_nodes["glasses_dual_goggles"] = _create_dual_goggles()
 	_wearable_nodes["glasses_wide_visor"] = _create_wide_visor()
+	if _is_bunny_avatar():
+		# 正式源按 HeadJoint 的静止原点导出，和兔耳一样直接继承头部。
+		# FaceAccessorySocket 独立于旧程序配饰的 Wearables 缩放。
+		var face_socket := head.get_node_or_null("FaceAccessorySocket") as Marker3D
+		if face_socket == null:
+			face_socket = Marker3D.new()
+			face_socket.name = "FaceAccessorySocket"
+			face_socket.set_meta("attachment_slot", "glasses")
+			face_socket.set_meta("presentation_only", true)
+			head.add_child(face_socket)
+		var electronic_mask := ELECTRONIC_MASK_SCENE.instantiate() as Node3D
+		face_socket.add_child(electronic_mask)
+		_wearable_nodes["glasses_%s" % ELECTRONIC_MASK_VARIANT] = electronic_mask
 	for wearable_id in _wearable_nodes:
 		if wearable_id.ends_with("_none"):
 			continue

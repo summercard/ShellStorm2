@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "asset_id": "CHR-PLY-BUNNY01-EXPR-ALERT",
+  "version": "v003",
+  "status": "active",
+  "classification": "version_increment",
+  "parent_asset_id": "CHR-PLY-BUNNY01-FACE-ELECTRONIC-MASK",
+  "expression": {
+    "expression_id": "alert",
+    "asset_id": "CHR-PLY-BUNNY01-EXPR-ALERT",
+    "name": "警示",
+    "kind": "symbol",
+    "color": "#a1fff2",
+    "blink_enabled": false,
+    "pixel_count": 96,
+    "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_alert/runtime/chr_bunny01_expression_alert_root_top3d.tscn",
+    "source_object": "SRC_Face_Expression_alert"
+  },
+  "source_model": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+  "source_animation": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+  "shared_source": true,
+  "emission_strength": 1.25,
+  "pixel_cell_size_m": 0.0118,
+  "pixel_pitch_m": 0.014,
+  "mouth_free": true,
+  "skeleton_id": "SKEL-BUNNY01-004",
+  "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+  "blender_forward": "+Y",
+  "godot_forward": "-Z",
+  "root_scale": 1,
+  "collision_owner": "external Player3D",
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_alert/components/chr_bunny01_expression_alert_visual_top3d.glb",
+      "sha256": "7865e933c5fbae490e8e3af98a1e75a918c3b24621caf6003430f0da4029d34f",
+      "bytes": 124696,
+      "role": "output"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_alert/runtime/chr_bunny01_expression_alert_root_top3d.tscn",
+      "sha256": "5c6f8b8035594d8c68e0159eda199b050f1261d22e648ae30738863ba5bcd3b3",
+      "bytes": 566,
+      "role": "runtime_wrapper"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+      "sha256": "4d70a9e65658a8e8617ad042b42a475b28dc12ec196d4b5fdb8443b93e98a288",
+      "bytes": 12045588,
+      "role": "dependency"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+      "sha256": "3862ecf93b49e6722b70f55446c5737b5fd9492c9f652945438884a5c022b8ca",
+      "bytes": 12086869,
+      "role": "dependency"
+    }
+  ],
+  "duplicate_gate": {
+    "classification": "version_increment",
+    "passed": true,
+    "report": "outputs\\asset_guard\\CHR-PLY-BUNNY01-EXPR-ALERT_chr_bunny01_expression_alert.json",
+    "same_asset_id_count": 0,
+    "identical_registered_file_count": 16
+  },
+  "validation_status": "pass",
+  "validation": {
+    "source": "../../source_validation.json",
+    "flow_scene": "tests/verification/verify_character_expression_flow.tscn",
+    "headless_exit": 0,
+    "headless_checks": 696,
+    "real_renderer": "Forward+",
+    "render_exit": 0,
+    "render_checks": 706,
+    "random_all_reachable": true,
+    "actual_state_machine_call": "pass",
+    "independent_owner": "CharacterExpressionSystem",
+    "collision_and_gameplay_unchanged": true,
+    "mouth_free": true,
+    "fuller_elements": true,
+    "emission_strength": 1.25,
+    "emission_reduction_percent": 75,
+    "date": "2026-10-01"
+  }
+}

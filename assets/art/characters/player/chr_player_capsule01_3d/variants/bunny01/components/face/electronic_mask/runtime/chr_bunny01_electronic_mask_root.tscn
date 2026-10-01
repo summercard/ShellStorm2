@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/components/chr_bunny01_electronic_mask_visual.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/player3d/customization/ElectronicMaskExpression3D.gd" id="2_expression"]
+[ext_resource type="AnimationLibrary" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/runtime/chr_bunny01_electronic_mask_animations.tres" id="3_animations"]
+
+[node name="ElectronicMask" type="Node3D"]
+metadata/asset_id = "CHR-PLY-BUNNY01-FACE-ELECTRONIC-MASK"
+script = ExtResource("2_expression")
+metadata/asset_version = "v005"
+metadata/attachment_slot = "glasses"
+metadata/variant_id = "electronic_mask"
+metadata/attachment_anchor = "HeadJoint/FaceAccessorySocket"
+metadata/presentation_only = true
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="ExpressionPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": ExtResource("3_animations")
+}
+autoplay = "mask_idle"

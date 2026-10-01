@@ -99,6 +99,10 @@ var _invincible_remaining := 0.0
 ## 或者被作废后以 hp=0 卡在原地。由 _update_invincibility 保活，不走倒计时。
 var _post_settlement_invulnerable := false
 var _state_machine: StateMachine = null
+var expression_system: CharacterExpressionSystem
+var _expression_state_adapter: PlayerExpressionStateAdapter
+@export var expression_random_enabled := true
+@export var expression_random_seed := 0
 var melee_combat: PlayerMeleeCombat3D = null
 var _test_move_direction: Variant = null
 var weapon: WeaponModel3D = null
@@ -197,6 +201,7 @@ func _ready() -> void:
 	add_child(interaction_controller)
 	interaction_controller.configure(self)
 	_init_state_machine()
+	_init_expression_system()
 	_init_melee_combat()
 	_ensure_weapon_tree()
 	if start_with_weapon:
@@ -2043,6 +2048,21 @@ func _transition_to_locomotion() -> void:
 func _set_presentation_state(state_id: String, context: Dictionary = {}) -> void:
 	_presentation_state = state_id
 	presentation_state_changed.emit(state_id, context)
+
+
+func _init_expression_system() -> void:
+	expression_system = CharacterExpressionSystem.new()
+	expression_system.name = "CharacterExpressionSystem"
+	expression_system.random_seed = expression_random_seed
+	add_child(expression_system)
+	expression_system.set_random_enabled(expression_random_enabled)
+	_expression_state_adapter = PlayerExpressionStateAdapter.new()
+	_expression_state_adapter.configure(expression_system, get_presentation_state())
+	presentation_state_changed.connect(_expression_state_adapter.on_presentation_state_changed)
+	if avatar != null:
+		var display := avatar.head.get_node_or_null("FaceAccessorySocket/ElectronicMask")
+		if display != null and display.has_method("bind_expression_system"):
+			display.bind_expression_system(expression_system)
 
 
 func get_death_launch_direction() -> Vector3:

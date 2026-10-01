@@ -1,0 +1,443 @@
+{
+  "schema": 1,
+  "asset_id": "CHR-PLY-BUNNY01-FACE-ELECTRONIC-MASK",
+  "version": "v005",
+  "status": "active",
+  "classification": "version_increment",
+  "slot_id": "glasses",
+  "variant_id": "electronic_mask",
+  "skeleton_id": "SKEL-BUNNY01-004",
+  "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+  "source_model": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+  "dependency_contract": "Shared original skeleton and head pose; eight independent mesh child components. Separate expression owner, event adapter, mesh display; authored local blink/flicker curves retained.",
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_model_v005.blend",
+      "sha256": "4d70a9e65658a8e8617ad042b42a475b28dc12ec196d4b5fdb8443b93e98a288",
+      "bytes": 12045588,
+      "role": "output"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+      "sha256": "3862ecf93b49e6722b70f55446c5737b5fd9492c9f652945438884a5c022b8ca",
+      "bytes": 12086869,
+      "role": "output"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/components/chr_bunny01_electronic_mask_visual.glb",
+      "sha256": "2d9120571cb55e2ceed0d2748cec9c99bee6e4cb44fa6c8a20ff2ea8860c8625",
+      "bytes": 424180,
+      "role": "output"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/runtime/chr_bunny01_electronic_mask_animations.tres",
+      "sha256": "1661fd60ac07f06dc0b84ff8a3344fe310e1ecaeacb1b63891f3f3e96212f6ee",
+      "bytes": 2815,
+      "role": "output"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/components/chr_bunny01_electronic_mask_expression_curves.json",
+      "sha256": "591af5d8ad9cca3eda51051edc25d7d201d7a6a9f3bfe7151c873b171f188648",
+      "bytes": 3318,
+      "role": "output"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/components/chr_bunny01_expression_catalog.json",
+      "sha256": "66d06bce1b97501bfe670882e5080d2fa40519b3a58df5377b4c5cf0547ef0bd",
+      "bytes": 4092,
+      "role": "output"
+    },
+    {
+      "path": "src/presentation/expressions/CharacterExpressionCatalog.gd",
+      "sha256": "317238d4097979b0b400cb108c8123be52dc4f6a80148c215f729bc7282c3532",
+      "bytes": 3443,
+      "role": "runtime_catalog"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend",
+      "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711",
+      "bytes": 10282728,
+      "role": "dependency"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/animation/chr_bunny01_animation_v021.blend",
+      "sha256": "ca60df8d5345ea8a995edd7c65949e08df11ff8b086f645eb7c09097e1f66147",
+      "bytes": 37574256,
+      "role": "dependency"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/runtime/chr_bunny01_electronic_mask_root.tscn",
+      "sha256": "3775f317b0abc0ea1bff93150221ba3d0a26bd851520c230c0773ced52155628",
+      "bytes": 1158,
+      "role": "runtime_wrapper"
+    },
+    {
+      "path": "src/player3d/customization/ElectronicMaskExpression3D.gd",
+      "sha256": "28d3719c2a94638456ad5bd55ab8f0aecfe5d4537316b77d890e8e839cb69928",
+      "bytes": 2612,
+      "role": "adapter"
+    },
+    {
+      "path": "src/presentation/expressions/CharacterExpressionSystem.gd",
+      "sha256": "2dc13da3dc63ee19001aa864f1a39ab1b742a2b3bebe782b74884edf0ec656b9",
+      "bytes": 1996,
+      "role": "independent_owner"
+    },
+    {
+      "path": "src/player3d/PlayerExpressionStateAdapter.gd",
+      "sha256": "5ff3c07ac210eb22e99e7dc3ac22672ac24767ddd8aff1b8450ebfadd15d067a",
+      "bytes": 600,
+      "role": "state_adapter"
+    }
+  ],
+  "attachment_anchor": "VisualRoot/BunnyRig/HeadJoint/FaceAccessorySocket",
+  "blender_forward": "+Y",
+  "godot_forward": "-Z",
+  "root_scale": 1,
+  "forward_offset_m": 0.009,
+  "shell_thickness_m": 0.004,
+  "pixel_grid": [
+    2,
+    6,
+    15
+  ],
+  "pixel_count": 180,
+  "source_polygon_count": 1380,
+  "blender_local_bounds": [
+    [
+      -0.3166329264640808,
+      0.07464969903230667,
+      0.010511964559555054
+    ],
+    [
+      0.3138342499732971,
+      0.3315001428127289,
+      0.4894733726978302
+    ]
+  ],
+  "collision_owner": "scenes/Player3D.tscn",
+  "original_source_hashes_preserved": true,
+  "validation_status": "pass",
+  "runtime_consumer": "src/player3d/PlayerAvatar3D.gd",
+  "runtime_prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/runtime/chr_bunny01_electronic_mask_root.tscn",
+  "source_animation": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+  "pixel_cell_size_m": 0.0118,
+  "pixel_pitch_m": 0.014,
+  "eye_dimensions_m": [
+    0.0818,
+    0.2078
+  ],
+  "clips": {
+    "mask_idle": {
+      "duration": 12.0,
+      "loop": true,
+      "tracks": {
+        "mask_blink": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            2.8,
+            0.0
+          ],
+          [
+            2.89,
+            1.0
+          ],
+          [
+            2.96,
+            1.0
+          ],
+          [
+            3.06,
+            0.0
+          ],
+          [
+            7.2,
+            0.0
+          ],
+          [
+            7.29,
+            1.0
+          ],
+          [
+            7.36,
+            1.0
+          ],
+          [
+            7.46,
+            0.0
+          ],
+          [
+            12.0,
+            0.0
+          ]
+        ],
+        "mask_brightness": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            5.1,
+            1.0
+          ],
+          [
+            5.14,
+            0.18
+          ],
+          [
+            5.19,
+            1.0
+          ],
+          [
+            5.24,
+            0.35
+          ],
+          [
+            5.29,
+            1.0
+          ],
+          [
+            5.35,
+            0.55
+          ],
+          [
+            5.43,
+            1.0
+          ],
+          [
+            10.1,
+            1.0
+          ],
+          [
+            10.15,
+            0.4
+          ],
+          [
+            10.21,
+            1.0
+          ],
+          [
+            12.0,
+            1.0
+          ]
+        ]
+      },
+      "action": "mask_idle"
+    },
+    "mask_blink": {
+      "duration": 0.26,
+      "loop": false,
+      "tracks": {
+        "mask_blink": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.09,
+            1.0
+          ],
+          [
+            0.16,
+            1.0
+          ],
+          [
+            0.26,
+            0.0
+          ]
+        ],
+        "mask_brightness": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.26,
+            1.0
+          ]
+        ]
+      },
+      "action": "mask_blink"
+    },
+    "mask_flicker": {
+      "duration": 0.42,
+      "loop": false,
+      "tracks": {
+        "mask_blink": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.42,
+            0.0
+          ]
+        ],
+        "mask_brightness": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.04,
+            0.18
+          ],
+          [
+            0.09,
+            1.0
+          ],
+          [
+            0.14,
+            0.35
+          ],
+          [
+            0.19,
+            1.0
+          ],
+          [
+            0.25,
+            0.55
+          ],
+          [
+            0.33,
+            1.0
+          ],
+          [
+            0.42,
+            1.0
+          ]
+        ]
+      },
+      "action": "mask_flicker"
+    }
+  },
+  "reference_images": [
+    "references/electronic_mask_reference.png",
+    "references/electronic_mask_enlargement_reference.png",
+    "references/mouth_removal_fuller_elements.png"
+  ],
+  "expression_catalog": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/components/chr_bunny01_expression_catalog.json",
+  "expressions": [
+    {
+      "expression_id": "neutral",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-NEUTRAL",
+      "name": "平静",
+      "kind": "emotion",
+      "color": "#21bfff",
+      "blink_enabled": true,
+      "pixel_count": 180,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_neutral/runtime/chr_bunny01_expression_neutral_root_top3d.tscn",
+      "source_object": "SRC_Face_ElectronicMask_Pixels"
+    },
+    {
+      "expression_id": "happy",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-HAPPY",
+      "name": "开心",
+      "kind": "emotion",
+      "color": "#29e9ff",
+      "blink_enabled": true,
+      "pixel_count": 116,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_happy/runtime/chr_bunny01_expression_happy_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_happy"
+    },
+    {
+      "expression_id": "sad",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-SAD",
+      "name": "难过",
+      "kind": "emotion",
+      "color": "#777bff",
+      "blink_enabled": true,
+      "pixel_count": 102,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_sad/runtime/chr_bunny01_expression_sad_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_sad"
+    },
+    {
+      "expression_id": "angry",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-ANGRY",
+      "name": "生气",
+      "kind": "emotion",
+      "color": "#ff3028",
+      "blink_enabled": true,
+      "pixel_count": 112,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_angry/runtime/chr_bunny01_expression_angry_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_angry"
+    },
+    {
+      "expression_id": "surprised",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-SURPRISED",
+      "name": "惊讶",
+      "kind": "emotion",
+      "color": "#ffe45c",
+      "blink_enabled": true,
+      "pixel_count": 144,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_surprised/runtime/chr_bunny01_expression_surprised_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_surprised"
+    },
+    {
+      "expression_id": "love",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-LOVE",
+      "name": "爱心",
+      "kind": "emotion",
+      "color": "#ff6abb",
+      "blink_enabled": true,
+      "pixel_count": 148,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_love/runtime/chr_bunny01_expression_love_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_love"
+    },
+    {
+      "expression_id": "question",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-QUESTION",
+      "name": "疑问",
+      "kind": "symbol",
+      "color": "#ffd24a",
+      "blink_enabled": false,
+      "pixel_count": 112,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_question/runtime/chr_bunny01_expression_question_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_question"
+    },
+    {
+      "expression_id": "alert",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-ALERT",
+      "name": "警示",
+      "kind": "symbol",
+      "color": "#a1fff2",
+      "blink_enabled": false,
+      "pixel_count": 96,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_alert/runtime/chr_bunny01_expression_alert_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_alert"
+    }
+  ],
+  "expression_system": "src/presentation/expressions/CharacterExpressionSystem.gd",
+  "expression_policy": "Independent owner; background and state-event random selection; request_expression(id,hold_seconds); no gameplay writes",
+  "mouth_free": true,
+  "art_revision": "softer emission 1.25; fuller eyes/hearts/symbols; six emotion designs have no mouth",
+  "emission_strength": 1.25,
+  "duplicate_gate": {
+    "classification": "version_increment",
+    "passed": true,
+    "report": "outputs\\asset_guard\\CHR-PLY-BUNNY01-FACE-ELECTRONIC-MASK_electronic_mask.json",
+    "same_asset_id_count": 0,
+    "identical_registered_file_count": 26
+  },
+  "validation": {
+    "source": "source_validation.json",
+    "flow_scene": "tests/verification/verify_character_expression_flow.tscn",
+    "headless_exit": 0,
+    "headless_checks": 696,
+    "real_renderer": "Forward+",
+    "render_exit": 0,
+    "render_checks": 706,
+    "random_all_reachable": true,
+    "actual_state_machine_call": "pass",
+    "independent_owner": "CharacterExpressionSystem",
+    "collision_and_gameplay_unchanged": true,
+    "mouth_free": true,
+    "fuller_elements": true,
+    "emission_strength": 1.25,
+    "emission_reduction_percent": 75,
+    "date": "2026-10-01"
+  }
+}

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_angry/components/chr_bunny01_expression_angry_visual_top3d.glb" id="1_visual"]
+
+[node name="ExpressionVisual" type="Node3D"]
+metadata/asset_id = "CHR-PLY-BUNNY01-EXPR-ANGRY"
+metadata/asset_version = "v003"
+metadata/expression_id = "angry"
+metadata/presentation_only = true
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

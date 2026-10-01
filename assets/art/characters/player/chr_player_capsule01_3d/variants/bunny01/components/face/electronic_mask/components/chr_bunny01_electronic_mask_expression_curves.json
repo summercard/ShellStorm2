@@ -1,0 +1,194 @@
+{
+  "schema": 1,
+  "version": "v005",
+  "source_animation": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/source/chr_bunny01_electronic_mask_animation_v005.blend",
+  "fps": 100,
+  "interpolation": "LINEAR",
+  "clips": {
+    "mask_idle": {
+      "duration": 12.0,
+      "loop": true,
+      "tracks": {
+        "mask_blink": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            2.8,
+            0.0
+          ],
+          [
+            2.89,
+            1.0
+          ],
+          [
+            2.96,
+            1.0
+          ],
+          [
+            3.06,
+            0.0
+          ],
+          [
+            7.2,
+            0.0
+          ],
+          [
+            7.29,
+            1.0
+          ],
+          [
+            7.36,
+            1.0
+          ],
+          [
+            7.46,
+            0.0
+          ],
+          [
+            12.0,
+            0.0
+          ]
+        ],
+        "mask_brightness": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            5.1,
+            1.0
+          ],
+          [
+            5.14,
+            0.18
+          ],
+          [
+            5.19,
+            1.0
+          ],
+          [
+            5.24,
+            0.35
+          ],
+          [
+            5.29,
+            1.0
+          ],
+          [
+            5.35,
+            0.55
+          ],
+          [
+            5.43,
+            1.0
+          ],
+          [
+            10.1,
+            1.0
+          ],
+          [
+            10.15,
+            0.4
+          ],
+          [
+            10.21,
+            1.0
+          ],
+          [
+            12.0,
+            1.0
+          ]
+        ]
+      },
+      "action": "mask_idle"
+    },
+    "mask_blink": {
+      "duration": 0.26,
+      "loop": false,
+      "tracks": {
+        "mask_blink": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.09,
+            1.0
+          ],
+          [
+            0.16,
+            1.0
+          ],
+          [
+            0.26,
+            0.0
+          ]
+        ],
+        "mask_brightness": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.26,
+            1.0
+          ]
+        ]
+      },
+      "action": "mask_blink"
+    },
+    "mask_flicker": {
+      "duration": 0.42,
+      "loop": false,
+      "tracks": {
+        "mask_blink": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.42,
+            0.0
+          ]
+        ],
+        "mask_brightness": [
+          [
+            0.0,
+            1.0
+          ],
+          [
+            0.04,
+            0.18
+          ],
+          [
+            0.09,
+            1.0
+          ],
+          [
+            0.14,
+            0.35
+          ],
+          [
+            0.19,
+            1.0
+          ],
+          [
+            0.25,
+            0.55
+          ],
+          [
+            0.33,
+            1.0
+          ],
+          [
+            0.42,
+            1.0
+          ]
+        ]
+      },
+      "action": "mask_flicker"
+    }
+  }
+}

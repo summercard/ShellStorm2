@@ -1,0 +1,99 @@
+{
+  "version": "v005",
+  "source": {
+    "result": "pass",
+    "version": "v005",
+    "original_meshes_preserved": 11,
+    "original_geometry_uv_material_transform_weights_preserved": true,
+    "skeleton_signature": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+    "model_animation_rest_signatures_match": true,
+    "all_shell_vertices_copied_from_original": 1448,
+    "pixel_cells": 180,
+    "authored_animation_curves_match": true,
+    "collection_path": "01_部件/眼镜/眼镜__electronic_mask",
+    "source_hashes_match": true,
+    "mouth_free": true,
+    "pixel_cell_size_m": 0.0118,
+    "emission_strength": 1.25,
+    "all_emotion_morphs_close_fully": true,
+    "expression_meshes_verified": {
+      "neutral": 180,
+      "happy": 116,
+      "sad": 102,
+      "angry": 112,
+      "surprised": 144,
+      "love": 148,
+      "question": 112,
+      "alert": 96
+    }
+  },
+  "independent_expression_flow": {
+    "exit": 0,
+    "checks": 696,
+    "test": "verify_character_expression_flow"
+  },
+  "real_expression_render": {
+    "exit": 0,
+    "checks": 706,
+    "renderer": "Forward+",
+    "distinct_face_regions": 8,
+    "angry_red": "pass",
+    "overview": "previews/expressions_overview.png"
+  },
+  "existing_mask": {
+    "headless_exit": 0,
+    "headless_checks": 73,
+    "render_exit": 0,
+    "render_checks": 76
+  },
+  "regression": [],
+  "ledger": {
+    "asset_main_parent": 22,
+    "expression_assets": [
+      23,
+      30
+    ],
+    "component_rows": [
+      45,
+      52
+    ],
+    "prefab_rows": [
+      10,
+      17
+    ],
+    "expression_rows": [
+      53,
+      60
+    ],
+    "transfer_rows": [
+      79,
+      105
+    ],
+    "structure": "pass",
+    "split": "pass"
+  },
+  "asset_guard": "parent + eight expressions version_increment pass",
+  "expected_failures": [],
+  "unexpected_script_errors": [],
+  "unexecuted": [
+    "full game verification suite",
+    "mobile performance",
+    "five unrelated body regressions (material-only change)"
+  ],
+  "original_character_and_prior_sources_unchanged": true,
+  "global_limits": {
+    "documentation_exit": 1,
+    "unregistered_existing_tests": [
+      "verify_base99_swivel_chairs",
+      "verify_expedition01_spawn_ramp",
+      "verify_pushable_base_chairs"
+    ],
+    "registry_full_existing_issue": "unchanged chibi head r21 SHA mismatch",
+    "runtime_naming_existing_debt": true
+  },
+  "mouth_free": true,
+  "fuller_elements": true,
+  "emission_strength": 1.25,
+  "emission_reduction_percent": 75,
+  "date": "2026-10-01"
+}

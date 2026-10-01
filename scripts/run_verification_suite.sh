@@ -319,6 +319,8 @@ core_scenes=(
   verify_tower_camera_occlusion_flow
   verify_tower_runtime_restart_restore
   verify_wardrobe_preview_fill_flow
+  verify_electronic_mask_flow
+  verify_character_expression_flow
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.

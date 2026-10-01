@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "version": "v005",
+  "expressions": [
+    {
+      "expression_id": "neutral",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-NEUTRAL",
+      "name": "平静",
+      "kind": "emotion",
+      "color": "#21bfff",
+      "blink_enabled": true,
+      "pixel_count": 180,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_neutral/runtime/chr_bunny01_expression_neutral_root_top3d.tscn",
+      "source_object": "SRC_Face_ElectronicMask_Pixels"
+    },
+    {
+      "expression_id": "happy",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-HAPPY",
+      "name": "开心",
+      "kind": "emotion",
+      "color": "#29e9ff",
+      "blink_enabled": true,
+      "pixel_count": 116,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_happy/runtime/chr_bunny01_expression_happy_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_happy"
+    },
+    {
+      "expression_id": "sad",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-SAD",
+      "name": "难过",
+      "kind": "emotion",
+      "color": "#777bff",
+      "blink_enabled": true,
+      "pixel_count": 102,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_sad/runtime/chr_bunny01_expression_sad_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_sad"
+    },
+    {
+      "expression_id": "angry",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-ANGRY",
+      "name": "生气",
+      "kind": "emotion",
+      "color": "#ff3028",
+      "blink_enabled": true,
+      "pixel_count": 112,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_angry/runtime/chr_bunny01_expression_angry_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_angry"
+    },
+    {
+      "expression_id": "surprised",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-SURPRISED",
+      "name": "惊讶",
+      "kind": "emotion",
+      "color": "#ffe45c",
+      "blink_enabled": true,
+      "pixel_count": 144,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_surprised/runtime/chr_bunny01_expression_surprised_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_surprised"
+    },
+    {
+      "expression_id": "love",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-LOVE",
+      "name": "爱心",
+      "kind": "emotion",
+      "color": "#ff6abb",
+      "blink_enabled": true,
+      "pixel_count": 148,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_love/runtime/chr_bunny01_expression_love_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_love"
+    },
+    {
+      "expression_id": "question",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-QUESTION",
+      "name": "疑问",
+      "kind": "symbol",
+      "color": "#ffd24a",
+      "blink_enabled": false,
+      "pixel_count": 112,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_question/runtime/chr_bunny01_expression_question_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_question"
+    },
+    {
+      "expression_id": "alert",
+      "asset_id": "CHR-PLY-BUNNY01-EXPR-ALERT",
+      "name": "警示",
+      "kind": "symbol",
+      "color": "#a1fff2",
+      "blink_enabled": false,
+      "pixel_count": 96,
+      "scene": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/face/electronic_mask/expressions/chr_bunny01_expression_alert/runtime/chr_bunny01_expression_alert_root_top3d.tscn",
+      "source_object": "SRC_Face_Expression_alert"
+    }
+  ]
+}
