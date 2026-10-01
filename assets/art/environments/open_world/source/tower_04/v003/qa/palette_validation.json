@@ -1,0 +1,1968 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v003\\塔4_曲线天台商场_150x50m_v003.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 192,
+  "polygon_count": 208536,
+  "valid_island_polygon_count": 208536,
+  "uv_reports": [
+    {
+      "object": "Y形钢柱_00_底板节点连接_主体",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_00_底板节点连接_主体_制作源",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_01_底板节点连接_主体",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_01_底板节点连接_主体_制作源",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_02_底板节点连接_主体",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_02_底板节点连接_主体_制作源",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_03_底板节点连接_主体",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_03_底板节点连接_主体_制作源",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_04_底板节点连接_主体",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "Y形钢柱_04_底板节点连接_主体_制作源",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央右长形绿岛_分流口内侧_主体",
+      "polygon_count": 845,
+      "valid_island_polygon_count": 845,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央右长形绿岛_分流口内侧_主体_制作源",
+      "polygon_count": 845,
+      "valid_island_polygon_count": 845,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央右长形绿岛_分流口内侧_植被_主体",
+      "polygon_count": 1918,
+      "valid_island_polygon_count": 1918,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央右长形绿岛_分流口内侧_植被_主体_制作源",
+      "polygon_count": 1918,
+      "valid_island_polygon_count": 1918,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央左绿岛_跑道环绕_主体",
+      "polygon_count": 776,
+      "valid_island_polygon_count": 776,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央左绿岛_跑道环绕_主体_制作源",
+      "polygon_count": 776,
+      "valid_island_polygon_count": 776,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央左绿岛_跑道环绕_植被_主体",
+      "polygon_count": 3384,
+      "valid_island_polygon_count": 3384,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "中央左绿岛_跑道环绕_植被_主体_制作源",
+      "polygon_count": 3384,
+      "valid_island_polygon_count": 3384,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "分类垃圾箱_00_门缝投口踏板_主体",
+      "polygon_count": 86,
+      "valid_island_polygon_count": 86,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "分类垃圾箱_00_门缝投口踏板_主体_制作源",
+      "polygon_count": 86,
+      "valid_island_polygon_count": 86,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "分类垃圾箱_01_门缝投口踏板_主体",
+      "polygon_count": 86,
+      "valid_island_polygon_count": 86,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "分类垃圾箱_01_门缝投口踏板_主体_制作源",
+      "polygon_count": 86,
+      "valid_island_polygon_count": 86,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "右侧开放草坪_沿庭院边界保留雕塑_主体",
+      "polygon_count": 1307,
+      "valid_island_polygon_count": 1307,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "右侧开放草坪_沿庭院边界保留雕塑_主体_制作源",
+      "polygon_count": 1307,
+      "valid_island_polygon_count": 1307,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "后侧景观花园_棚尾玻璃亭之间_主体",
+      "polygon_count": 841,
+      "valid_island_polygon_count": 841,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "后侧景观花园_棚尾玻璃亭之间_主体_制作源",
+      "polygon_count": 841,
+      "valid_island_polygon_count": 841,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "后侧景观花园_棚尾玻璃亭之间_植被_主体",
+      "polygon_count": 3696,
+      "valid_island_polygon_count": 3696,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "后侧景观花园_棚尾玻璃亭之间_植被_主体_制作",
+      "polygon_count": 3696,
+      "valid_island_polygon_count": 3696,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台主步道_红色慢行带外侧通路_主体",
+      "polygon_count": 9715,
+      "valid_island_polygon_count": 9715,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台主步道_红色慢行带外侧通路_主体_制作源",
+      "polygon_count": 9715,
+      "valid_island_polygon_count": 9715,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台平台_保留月牙凹口与局部路线悬挑_主体",
+      "polygon_count": 2836,
+      "valid_island_polygon_count": 2836,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台平台_保留月牙凹口与局部路线悬挑_主体_制",
+      "polygon_count": 2836,
+      "valid_island_polygon_count": 2836,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台跑道_广场回环绿岛绕行与玻璃亭支路_主体",
+      "polygon_count": 11351,
+      "valid_island_polygon_count": 11351,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台跑道_广场回环绿岛绕行与玻璃亭支路_主体_",
+      "polygon_count": 11351,
+      "valid_island_polygon_count": 11351,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台边缘护栏_随平台保留左楼接口_主体",
+      "polygon_count": 17857,
+      "valid_island_polygon_count": 17857,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台边缘护栏_随平台保留左楼接口_主体_制作源",
+      "polygon_count": 17857,
+      "valid_island_polygon_count": 17857,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台铺装_回环跑道与分区地面_主体",
+      "polygon_count": 1890,
+      "valid_island_polygon_count": 1890,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "天台铺装_回环跑道与分区地面_主体_制作源",
+      "polygon_count": 1890,
+      "valid_island_polygon_count": 1890,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左侧广场分流绿岛_主体",
+      "polygon_count": 196,
+      "valid_island_polygon_count": 196,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左侧广场分流绿岛_主体_制作源",
+      "polygon_count": 196,
+      "valid_island_polygon_count": 196,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左侧广场分流绿岛_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左侧广场分流绿岛_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左楼屋顶_回旋缺口及同标高接口_主体",
+      "polygon_count": 2182,
+      "valid_island_polygon_count": 2182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左楼屋顶_回旋缺口及同标高接口_主体_制作源",
+      "polygon_count": 2182,
+      "valid_island_polygon_count": 2182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左楼玻璃栏杆_北侧接连廊留口_主体",
+      "polygon_count": 3905,
+      "valid_island_polygon_count": 3905,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左楼玻璃栏杆_北侧接连廊留口_主体_制作源",
+      "polygon_count": 3905,
+      "valid_island_polygon_count": 3905,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼五层弧形幕墙_主体",
+      "polygon_count": 1570,
+      "valid_island_polygon_count": 1570,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼五层弧形幕墙_主体_制作源",
+      "polygon_count": 1570,
+      "valid_island_polygon_count": 1570,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_01层_主体",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_01层_主体_制作源",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_02层_主体",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_02层_主体_制作源",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_03层_主体",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_03层_主体_制作源",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_04层_主体",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_04层_主体_制作源",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_05层_主体",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "左翼回旋商场_05层_主体_制作源",
+      "polygon_count": 1002,
+      "valid_island_polygon_count": 1002,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_00_主体",
+      "polygon_count": 319,
+      "valid_island_polygon_count": 319,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_00_主体_制作源",
+      "polygon_count": 319,
+      "valid_island_polygon_count": 319,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_00_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_00_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_01_主体",
+      "polygon_count": 578,
+      "valid_island_polygon_count": 578,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_01_主体_制作源",
+      "polygon_count": 578,
+      "valid_island_polygon_count": 578,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_01_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_01_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_02_主体",
+      "polygon_count": 246,
+      "valid_island_polygon_count": 246,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_02_主体_制作源",
+      "polygon_count": 246,
+      "valid_island_polygon_count": 246,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_02_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_02_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_03_主体",
+      "polygon_count": 246,
+      "valid_island_polygon_count": 246,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_03_主体_制作源",
+      "polygon_count": 246,
+      "valid_island_polygon_count": 246,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_03_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "广场外缘连续绿带_03_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院白兔雕塑_固定展示附件_主体",
+      "polygon_count": 1176,
+      "valid_island_polygon_count": 1176,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院白兔雕塑_固定展示附件_主体_制作源",
+      "polygon_count": 1176,
+      "valid_island_polygon_count": 1176,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_00_主体",
+      "polygon_count": 327,
+      "valid_island_polygon_count": 327,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_00_主体_制作源",
+      "polygon_count": 327,
+      "valid_island_polygon_count": 327,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_00_植被_主体",
+      "polygon_count": 670,
+      "valid_island_polygon_count": 670,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_00_植被_主体_制作源",
+      "polygon_count": 670,
+      "valid_island_polygon_count": 670,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_01_主体",
+      "polygon_count": 269,
+      "valid_island_polygon_count": 269,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_01_主体_制作源",
+      "polygon_count": 269,
+      "valid_island_polygon_count": 269,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_01_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_01_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_02_主体",
+      "polygon_count": 274,
+      "valid_island_polygon_count": 274,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_02_主体_制作源",
+      "polygon_count": 274,
+      "valid_island_polygon_count": 274,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_02_植被_主体",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_02_植被_主体_制作源",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_03_主体",
+      "polygon_count": 348,
+      "valid_island_polygon_count": 348,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_03_主体_制作源",
+      "polygon_count": 348,
+      "valid_island_polygon_count": 348,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_03_植被_主体",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_03_植被_主体_制作源",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_04_主体",
+      "polygon_count": 274,
+      "valid_island_polygon_count": 274,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_04_主体_制作源",
+      "polygon_count": 274,
+      "valid_island_polygon_count": 274,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_04_植被_主体",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_04_植被_主体_制作源",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_05_主体",
+      "polygon_count": 602,
+      "valid_island_polygon_count": 602,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_05_主体_制作源",
+      "polygon_count": 602,
+      "valid_island_polygon_count": 602,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_05_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "庭院边缘异形绿带_05_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "斜置玻璃活动盒子_天窗门扇和内构架_主体",
+      "polygon_count": 968,
+      "valid_island_polygon_count": 968,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "斜置玻璃活动盒子_天窗门扇和内构架_主体_制作",
+      "polygon_count": 968,
+      "valid_island_polygon_count": 968,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_00_格栅沉槽提手_主体",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_00_格栅沉槽提手_主体_制作源",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_01_格栅沉槽提手_主体",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_01_格栅沉槽提手_主体_制作源",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_02_格栅沉槽提手_主体",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_02_格栅沉槽提手_主体_制作源",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_03_格栅沉槽提手_主体",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "检修排水_03_格栅沉槽提手_主体_制作源",
+      "polygon_count": 188,
+      "valid_island_polygon_count": 188,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_00_主体",
+      "polygon_count": 195,
+      "valid_island_polygon_count": 195,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_00_主体_制作源",
+      "polygon_count": 195,
+      "valid_island_polygon_count": 195,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_00_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_00_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_01_主体",
+      "polygon_count": 317,
+      "valid_island_polygon_count": 317,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_01_主体_制作源",
+      "polygon_count": 317,
+      "valid_island_polygon_count": 317,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_01_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_01_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_02_主体",
+      "polygon_count": 275,
+      "valid_island_polygon_count": 275,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_02_主体_制作源",
+      "polygon_count": 275,
+      "valid_island_polygon_count": 275,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_02_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_02_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_03_主体",
+      "polygon_count": 226,
+      "valid_island_polygon_count": 226,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_03_主体_制作源",
+      "polygon_count": 226,
+      "valid_island_polygon_count": 226,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_03_植被_主体",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "棚边分段绿带_03_植被_主体_制作源",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_00_百叶透光基座_主体",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_00_百叶透光基座_主体_制作源",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_00_百叶透光基座_柔和自发光",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_00_百叶透光基座_柔和自发光_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_01_百叶透光基座_主体",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_01_百叶透光基座_主体_制作源",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_01_百叶透光基座_柔和自发光",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_01_百叶透光基座_柔和自发光_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_02_百叶透光基座_主体",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_02_百叶透光基座_主体_制作源",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_02_百叶透光基座_柔和自发光",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_02_百叶透光基座_柔和自发光_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_03_百叶透光基座_主体",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_03_百叶透光基座_主体_制作源",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_03_百叶透光基座_柔和自发光",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_03_百叶透光基座_柔和自发光_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_04_百叶透光基座_主体",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_04_百叶透光基座_主体_制作源",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_04_百叶透光基座_柔和自发光",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_04_百叶透光基座_柔和自发光_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_05_百叶透光基座_主体",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_05_百叶透光基座_主体_制作源",
+      "polygon_count": 60,
+      "valid_island_polygon_count": 60,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_05_百叶透光基座_柔和自发光",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "步道照明_05_百叶透光基座_柔和自发光_制作源",
+      "polygon_count": 10,
+      "valid_island_polygon_count": 10,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_00_弧背木条金属脚_主体",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_00_弧背木条金属脚_主体_制作源",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_01_弧背木条金属脚_主体",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_01_弧背木条金属脚_主体_制作源",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_02_弧背木条金属脚_主体",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_02_弧背木条金属脚_主体_制作源",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_03_弧背木条金属脚_主体",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_03_弧背木条金属脚_主体_制作源",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_04_弧背木条金属脚_主体",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "独立座椅_04_弧背木条金属脚_主体_制作源",
+      "polygon_count": 212,
+      "valid_island_polygon_count": 212,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "背侧空调_00_扇叶格栅柜门减振脚_主体",
+      "polygon_count": 1102,
+      "valid_island_polygon_count": 1102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "背侧空调_00_扇叶格栅柜门减振脚_主体_制作源",
+      "polygon_count": 1102,
+      "valid_island_polygon_count": 1102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "背侧空调_01_扇叶格栅柜门减振脚_主体",
+      "polygon_count": 1102,
+      "valid_island_polygon_count": 1102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "背侧空调_01_扇叶格栅柜门减振脚_主体_制作源",
+      "polygon_count": 1102,
+      "valid_island_polygon_count": 1102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "设备侧半高百叶屏风_不阻主步道_主体",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "设备侧半高百叶屏风_不阻主步道_主体_制作源",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_00_主体",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_00_主体_制作源",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_01_主体",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_01_主体_制作源",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_02_主体",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_02_主体_制作源",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_03_主体",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_03_主体_制作源",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_04_主体",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_04_主体_制作源",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_05_主体",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "连廊结构承重圆柱_05_主体_制作源",
+      "polygon_count": 140,
+      "valid_island_polygon_count": 140,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长曲线叶形顶棚_三角采光板及格构_主体",
+      "polygon_count": 6542,
+      "valid_island_polygon_count": 6542,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长曲线叶形顶棚_三角采光板及格构_主体_制作源",
+      "polygon_count": 6542,
+      "valid_island_polygon_count": 6542,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_01层_主体",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_01层_主体_制作源",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_02层_主体",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_02层_主体_制作源",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_03层_主体",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_03层_主体_制作源",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_04层_主体",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_04层_主体_制作源",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_05层_主体",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线商场_05层_主体_制作源",
+      "polygon_count": 1612,
+      "valid_island_polygon_count": 1612,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线幕墙_退缩框架_主体",
+      "polygon_count": 5875,
+      "valid_island_polygon_count": 5875,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长翼曲线幕墙_退缩框架_主体_制作源",
+      "polygon_count": 5875,
+      "valid_island_polygon_count": 5875,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

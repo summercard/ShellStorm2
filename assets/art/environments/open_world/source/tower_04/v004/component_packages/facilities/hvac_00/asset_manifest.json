@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/hvac_00",
+  "slug": "hvac_00",
+  "display_name": "背侧空调_00_扇叶格栅柜门减振脚",
+  "category": "facilities",
+  "version": "v004",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v004/塔4_曲线天台商场_150x50m_v004.blend",
+  "collection": "背侧空调_00_扇叶格栅柜门减振脚_资产包",
+  "source_collection": "背侧空调_00_扇叶格栅柜门减振脚_制作组件",
+  "objects": [
+    "背侧空调_00_扇叶格栅柜门减振脚_主体"
+  ],
+  "root_object": "背侧空调_00_扇叶格栅柜门减振脚_主体",
+  "world_position": [
+    -27.719999313354492,
+    12.119999885559082,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -28.884999999999998,
+    11.2075,
+    25.0
+  ],
+  "bounds_max": [
+    -26.555,
+    13.020000457763672,
+    26.770000457763672
+  ],
+  "dimensions": [
+    2.3299999999999983,
+    1.8125004577636723,
+    1.7700004577636719
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "hvac_unit",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "hvac_00.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v002"
+}

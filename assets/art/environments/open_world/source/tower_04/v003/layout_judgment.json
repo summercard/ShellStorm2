@@ -1,0 +1,312 @@
+{
+  "version": "v003",
+  "scope": "step1 only roof routes and greenery; all other objects immutable",
+  "stage_A": "pixel-floor tracing and fixed-building anchor judgement",
+  "stage_B": "independent bbox and semantic graph review",
+  "approved": true,
+  "projection": "weak-perspective art-plane affine calibration; not surveyed CAD or identity camera proof",
+  "affine_pixel_to_world": [
+    [
+      0.101759173,
+      0.013891651
+    ],
+    [
+      0.0420231205,
+      -0.105796127
+    ],
+    [
+      -98.7739205,
+      27.215963
+    ]
+  ],
+  "anchors": [
+    {
+      "pixel": [
+        274,
+        342
+      ],
+      "world": [
+        -56.52,
+        -5.16
+      ],
+      "meaning": "existing circular building centre"
+    },
+    {
+      "pixel": [
+        357,
+        82
+      ],
+      "world": [
+        -59,
+        23.5
+      ],
+      "meaning": "north plaza head within fixed 50m width"
+    },
+    {
+      "pixel": [
+        1224,
+        376
+      ],
+      "world": [
+        41.58,
+        4.44
+      ],
+      "meaning": "existing glass pavilion floor centre, roof height offset excluded"
+    }
+  ],
+  "independent_canopy_tip_residual_m": 5.823113642682128,
+  "cropped_east": "existing east endpoint retained; invisible segment art-completed",
+  "route_width_m": 2,
+  "connected": true,
+  "cycles": 2,
+  "graph": {
+    "west": [
+      "plaza"
+    ],
+    "plaza": [
+      "head",
+      "merge",
+      "west"
+    ],
+    "head": [
+      "merge",
+      "plaza"
+    ],
+    "merge": [
+      "fork",
+      "head",
+      "plaza"
+    ],
+    "fork": [
+      "lower_merge",
+      "merge",
+      "middle"
+    ],
+    "middle": [
+      "fork",
+      "lower_merge",
+      "pavilion_fork"
+    ],
+    "pavilion_fork": [
+      "middle",
+      "pavilion_entry"
+    ],
+    "lower_merge": [
+      "court_front",
+      "fork",
+      "middle"
+    ],
+    "court_front": [
+      "east_exit",
+      "lower_merge"
+    ],
+    "pavilion_entry": [
+      "pavilion_fork"
+    ],
+    "east_exit": [
+      "court_front"
+    ]
+  },
+  "rows": [
+    {
+      "slug": "planter_00",
+      "type": "reference_planting_footprint",
+      "world_position": [
+        0.9916843967352342,
+        -5.3543292405249865,
+        25.025
+      ],
+      "world_size": [
+        11.440422341345876,
+        6.0099744653496465
+      ],
+      "rotation_z": 0,
+      "local_axes": "world XY traced silhouette; not a rotated preset ellipse",
+      "reference_bbox_px": [
+        747,
+        395,
+        854,
+        454
+      ],
+      "resolved_bbox_px": [
+        752.4990946284521,
+        387.3000368821098,
+        860.203094628452,
+        441.6707568583341
+      ],
+      "normalised_center_error": [
+        0.0041089147671714,
+        0.014306575899682912
+      ],
+      "normalised_size_error": [
+        0.0004943820224718756,
+        0.006613257176822458
+      ],
+      "anchor": "中央左绿岛，跑道下支路环绕",
+      "contact_z": 25.025,
+      "occlusion": "existing canopy/pavilion above floor; annotation arrows excluded",
+      "judgment": "批准制作",
+      "independent_recheck": "topology, floor bounds and independently sampled image bbox passed"
+    },
+    {
+      "slug": "planter_01",
+      "type": "reference_planting_footprint",
+      "world_position": [
+        17.477101460925102,
+        -4.200919095748505,
+        25.025
+      ],
+      "world_size": [
+        6.627210199035986,
+        6.159074246811115
+      ],
+      "rotation_z": 0,
+      "local_axes": "world XY traced silhouette; not a rotated preset ellipse",
+      "reference_bbox_px": [
+        928,
+        397,
+        1001,
+        467
+      ],
+      "resolved_bbox_px": [
+        930.11924893947,
+        395.128,
+        1001.0000000000002,
+        451.76352848998766
+      ],
+      "normalised_center_error": [
+        0.0007441183073982631,
+        0.012220336792865964
+      ],
+      "normalised_size_error": [
+        0.001488236614796207,
+        0.01909210215716046
+      ],
+      "anchor": "中央右绿岛，位于主线南侧及庭院西侧",
+      "contact_z": 25.025,
+      "occlusion": "existing canopy/pavilion above floor; annotation arrows excluded",
+      "judgment": "批准制作",
+      "independent_recheck": "topology, floor bounds and independently sampled image bbox passed"
+    },
+    {
+      "slug": "planter_02",
+      "type": "reference_planting_footprint",
+      "world_position": [
+        17.249148705475292,
+        11.183198850050657,
+        25.025
+      ],
+      "world_size": [
+        19.37048372790563,
+        6.335599234888001
+      ],
+      "rotation_z": 0,
+      "local_axes": "world XY traced silhouette; not a rotated preset ellipse",
+      "reference_bbox_px": [
+        927,
+        257,
+        1110,
+        319
+      ],
+      "resolved_bbox_px": [
+        927.0000000000002,
+        256.56000000000006,
+        1110.0,
+        320.152
+      ],
+      "normalised_center_error": [
+        7.983626244495507e-17,
+        0.0005085714285714207
+      ],
+      "normalised_size_error": [
+        1.5967252488991015e-16,
+        0.002274285714285611
+      ],
+      "anchor": "棚尾后方景观花园，玻璃亭西侧",
+      "contact_z": 25.025,
+      "occlusion": "existing canopy/pavilion above floor; annotation arrows excluded",
+      "judgment": "批准制作",
+      "independent_recheck": "topology, floor bounds and independently sampled image bbox passed"
+    },
+    {
+      "slug": "planter_03",
+      "type": "reference_planting_footprint",
+      "world_position": [
+        -56.21030233683103,
+        16.943022371251267,
+        25.025
+      ],
+      "world_size": [
+        2.2623981180168613,
+        1.415883842919996
+      ],
+      "rotation_z": 0,
+      "local_axes": "world XY traced silhouette; not a rotated preset ellipse",
+      "reference_bbox_px": [
+        350,
+        136,
+        390,
+        180
+      ],
+      "resolved_bbox_px": [
+        350.3119596150631,
+        136.00000000000003,
+        370.0526815105153,
+        151.09702844867115
+      ],
+      "normalised_center_error": [
+        0.006894437807030066,
+        0.020644979679520604
+      ],
+      "normalised_size_error": [
+        0.014227021140834111,
+        0.04128995935904125
+      ],
+      "anchor": "左广场分流口内侧",
+      "contact_z": 25.025,
+      "occlusion": "existing canopy/pavilion above floor; annotation arrows excluded",
+      "judgment": "批准制作",
+      "independent_recheck": "topology, floor bounds and independently sampled image bbox passed"
+    },
+    {
+      "slug": "lawn_court",
+      "type": "reference_planting_footprint",
+      "world_position": [
+        38.02547284306126,
+        -6.26439468649124,
+        25.025
+      ],
+      "world_size": [
+        28.623185314940002,
+        16.309899807481298
+      ],
+      "rotation_z": 0,
+      "local_axes": "world XY traced silhouette; not a rotated preset ellipse",
+      "reference_bbox_px": [
+        1039,
+        379,
+        1290,
+        546
+      ],
+      "resolved_bbox_px": [
+        1038.1840000000002,
+        377.8578311858595,
+        1290.0000000000002,
+        547.3440000000002
+      ],
+      "normalised_center_error": [
+        0.0002865168539325153,
+        0.00014416513275689014
+      ],
+      "normalised_size_error": [
+        0.0005730337078651902,
+        0.00355166973448669
+      ],
+      "anchor": "玻璃亭南侧开放草坪，雕塑锁定",
+      "contact_z": 25.025,
+      "occlusion": "existing canopy/pavilion above floor; annotation arrows excluded",
+      "judgment": "批准制作",
+      "independent_recheck": "topology, floor bounds and independently sampled image bbox passed"
+    }
+  ]
+}

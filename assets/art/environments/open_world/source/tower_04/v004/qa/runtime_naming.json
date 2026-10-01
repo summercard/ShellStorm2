@@ -1,0 +1,45 @@
+{
+  "violations": true,
+  "stale_debt": false,
+  "new_versioned_files": [
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/exports/anim_bunny01_library_v022.glb",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022/exports/anim_bunny01_library_v022.glb.import",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v023/exports/anim_bunny01_library_v023.glb",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v023/exports/anim_bunny01_library_v023.glb.import",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024/exports/anim_bunny01_library_v024.glb",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024/exports/anim_bunny01_library_v024.glb.import",
+    "assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_base_visual_v004.glb",
+    "assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_base_visual_v004.glb.import",
+    "assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_swivel_visual_v004.glb",
+    "assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_swivel_visual_v004.glb.import",
+    "assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_base_visual_v004.glb",
+    "assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_base_visual_v004.glb.import",
+    "assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_swivel_visual_v004.glb",
+    "assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_swivel_visual_v004.glb.import"
+  ],
+  "new_versioned_dirs": [
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v022",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v023",
+    "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v024"
+  ],
+  "new_backup_residue": [],
+  "reference_count_increase": {
+    "tscn": [
+      93,
+      97
+    ]
+  },
+  "debt_paid_files": [],
+  "debt_paid_dirs": [],
+  "debt_paid_backup": [],
+  "reference_count_decrease": {},
+  "remaining": {
+    "versioned_files": 303,
+    "versioned_dirs": 16,
+    "backup_residue": 1,
+    "references": {
+      "gd": 23,
+      "tscn": 97
+    }
+  }
+}

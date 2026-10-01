@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/planter_03",
+  "slug": "planter_03",
+  "display_name": "左侧广场分流绿岛",
+  "category": "garden",
+  "version": "v003",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v003/塔4_曲线天台商场_150x50m_v003.blend",
+  "collection": "左侧广场分流绿岛_资产包",
+  "source_collection": "左侧广场分流绿岛_制作组件",
+  "objects": [
+    "左侧广场分流绿岛_主体"
+  ],
+  "root_object": "左侧广场分流绿岛_主体",
+  "world_position": [
+    -56.21030044555664,
+    16.943021774291992,
+    25.024999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -57.085147857666016,
+    16.317541122436523,
+    25.025
+  ],
+  "bounds_max": [
+    -54.75570297241211,
+    17.841289520263672,
+    25.625
+  ],
+  "dimensions": [
+    2.3294448852539062,
+    1.5237483978271484,
+    0.6000000000000014
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "traced_planter",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "planter_03.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v003"
+}

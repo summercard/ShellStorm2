@@ -1,0 +1,67 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/court_sculpture",
+  "slug": "court_sculpture",
+  "display_name": "庭院白兔雕塑_固定展示附件",
+  "category": "facilities",
+  "version": "v005",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v005/塔4_末世平台模块化_150x50m_v005.blend",
+  "collection": "庭院白兔雕塑_固定展示附件_资产包",
+  "source_collection": "庭院白兔雕塑_固定展示附件_制作组件",
+  "objects": [
+    "庭院白兔雕塑_固定展示附件_主体"
+  ],
+  "root_object": "庭院白兔雕塑_固定展示附件_主体",
+  "world_position": [
+    52.08000183105469,
+    -10.800000190734863,
+    25.1299991607666
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    50.730003356933594,
+    -12.15000057220459,
+    25.1299991607666
+  ],
+  "bounds_max": [
+    53.97999954223633,
+    -9.449999809265137,
+    28.989770889282227
+  ],
+  "dimensions": [
+    3.2499961853027344,
+    2.700000762939453,
+    3.859771728515625
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "fixed_display_sculpture",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "court_sculpture.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v005",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/court_sculpture",
+  "platform_scope": true
+}

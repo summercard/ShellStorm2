@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/terrace_rail_x04_y02",
+  "slug": "terrace_rail_x04_y02",
+  "display_name": "天台边缘护栏_随平台保留_区块04_02",
+  "category": "support",
+  "version": "v005",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v005/塔4_末世平台模块化_150x50m_v005.blend",
+  "collection": "天台边缘护栏_随平台保留_区块04_02_资产包",
+  "source_collection": "天台边缘护栏_随平台保留_区块04_02_制作组件",
+  "objects": [
+    "天台边缘护栏_随平台保留_区块04_02_主体"
+  ],
+  "root_object": "天台边缘护栏_随平台保留_区块04_02_主体",
+  "world_position": [
+    -30.0,
+    0.0,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -34.37188720703125,
+    1.5294499669091617,
+    25.0
+  ],
+  "bounds_max": [
+    -25.0,
+    5.0,
+    26.2450008392334
+  ],
+  "dimensions": [
+    9.37188720703125,
+    3.4705500330908383,
+    1.2450008392333984
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "glass_guardrail",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "terrace_rail_x04_y02.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v005",
+  "zone_id": "B",
+  "zone_name": "棚下西段",
+  "previous_package_id": "tower_04/terrace_rail",
+  "assembly_grid": [
+    4,
+    2
+  ],
+  "cut_bounds_xy": [
+    -35,
+    -5,
+    -25,
+    5
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "platform_scope": true
+}

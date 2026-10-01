@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/canopy_column_04",
+  "slug": "canopy_column_04",
+  "display_name": "Y形钢柱_04_底板节点连接",
+  "category": "support",
+  "version": "v003",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v003/塔4_曲线天台商场_150x50m_v003.blend",
+  "collection": "Y形钢柱_04_底板节点连接_资产包",
+  "source_collection": "Y形钢柱_04_底板节点连接_制作组件",
+  "objects": [
+    "Y形钢柱_04_底板节点连接_主体"
+  ],
+  "root_object": "Y形钢柱_04_底板节点连接_主体",
+  "world_position": [
+    29.399999618530273,
+    4.619999885559082,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    28.95,
+    3.260000019073486,
+    25.0
+  ],
+  "bounds_max": [
+    29.849999999999998,
+    5.980000228881836,
+    29.76708221435547
+  ],
+  "dimensions": [
+    0.8999999999999986,
+    2.7200002098083496,
+    4.767082214355469
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "forked_canopy_column",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "canopy_column_04.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v002"
+}

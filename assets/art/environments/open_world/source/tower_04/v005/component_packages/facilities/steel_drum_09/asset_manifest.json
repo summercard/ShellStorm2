@@ -1,0 +1,66 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/steel_drum_09",
+  "slug": "steel_drum_09",
+  "display_name": "金属储物桶_卷边加强圈与封口_09",
+  "category": "facilities",
+  "version": "v005",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v005/塔4_末世平台模块化_150x50m_v005.blend",
+  "collection": "金属储物桶_卷边加强圈与封口_09_资产包",
+  "source_collection": "金属储物桶_卷边加强圈与封口_09_制作组件",
+  "objects": [
+    "金属储物桶_卷边加强圈与封口_09_主体"
+  ],
+  "root_object": "金属储物桶_卷边加强圈与封口_09_主体",
+  "world_position": [
+    28.799999237060547,
+    -2.700000047683716,
+    25.12700080871582
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    28.422998428344727,
+    -3.077000141143799,
+    25.17099952697754
+  ],
+  "bounds_max": [
+    29.177000045776367,
+    -2.322999954223633,
+    26.222000122070312
+  ],
+  "dimensions": [
+    0.7540016174316406,
+    0.754000186920166,
+    1.0510005950927734
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "steel_drum",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "steel_drum_09.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v005",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "platform_scope": true
+}

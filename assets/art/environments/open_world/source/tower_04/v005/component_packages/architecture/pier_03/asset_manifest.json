@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/pier_03",
+  "slug": "pier_03",
+  "display_name": "连廊结构承重圆柱_03",
+  "category": "architecture",
+  "version": "v005",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v005/塔4_末世平台模块化_150x50m_v005.blend",
+  "collection": "连廊结构承重圆柱_03_资产包",
+  "source_collection": "连廊结构承重圆柱_03_制作组件",
+  "objects": [
+    "连廊结构承重圆柱_03_主体"
+  ],
+  "root_object": "连廊结构承重圆柱_03_主体",
+  "world_position": [
+    -13.079999923706055,
+    -12.960000038146973,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -13.809999465942383,
+    -13.678909301757812,
+    0.0
+  ],
+  "bounds_max": [
+    -12.350000381469727,
+    -12.241090774536133,
+    23.799999237060547
+  ],
+  "dimensions": [
+    1.4599990844726562,
+    1.4378185272216797,
+    23.799999237060547
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "terrace_pier",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "pier_03.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v002",
+  "platform_scope": false
+}

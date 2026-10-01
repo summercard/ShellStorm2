@@ -1,0 +1,76 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/slow_lane",
+  "slug": "slow_lane",
+  "display_name": "两米跑道_邻色分段与实体倒角压边",
+  "category": "floor",
+  "version": "v004",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v004/塔4_曲线天台商场_150x50m_v004.blend",
+  "collection": "两米跑道_邻色分段与实体倒角压边_资产包",
+  "source_collection": "两米跑道_邻色分段与实体倒角压边_制作组件",
+  "objects": [
+    "两米跑道_邻色分段与实体倒角压边_主体"
+  ],
+  "root_object": "两米跑道_邻色分段与实体倒角压边_主体",
+  "world_position": [
+    -3.9067447185516357,
+    -0.15043987333774567,
+    25.02400016784668
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -74.94055012764093,
+    -24.289962938793966,
+    25.024
+  ],
+  "bounds_max": [
+    74.74098881164846,
+    24.63820405753384,
+    25.064
+  ],
+  "dimensions": [
+    149.6815389392894,
+    48.9281669963278,
+    0.03999999999999915
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "two_adjacent_palette_segment_track",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "slow_lane.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v004",
+  "track_width_m": 2,
+  "track_palette_cells": [
+    [
+      7,
+      1
+    ],
+    [
+      8,
+      1
+    ]
+  ],
+  "station_segment_m": 7.5,
+  "attached_edge_width_m": 0.14
+}

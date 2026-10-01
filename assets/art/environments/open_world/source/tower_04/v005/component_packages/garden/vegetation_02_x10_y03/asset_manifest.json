@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/vegetation_02_x10_y03",
+  "slug": "vegetation_02_x10_y03",
+  "display_name": "后侧景观花园_棚尾玻璃亭_区块10_03",
+  "category": "garden",
+  "version": "v005",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v005/塔4_末世平台模块化_150x50m_v005.blend",
+  "collection": "后侧景观花园_棚尾玻璃亭_区块10_03_资产包.001",
+  "source_collection": "后侧景观花园_棚尾玻璃亭_区块10_03_制作组件.001",
+  "objects": [
+    "后侧景观花园_棚尾玻璃亭_区块10_03_主体.001"
+  ],
+  "root_object": "后侧景观花园_棚尾玻璃亭_区块10_03_主体.001",
+  "world_position": [
+    30.0,
+    10.0,
+    25.625
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    25.0,
+    10.112606048583984,
+    25.604204177856445
+  ],
+  "bounds_max": [
+    25.983402252197266,
+    10.85132884979248,
+    26.380796432495117
+  ],
+  "dimensions": [
+    0.9834022521972656,
+    0.7387228012084961,
+    0.7765922546386719
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "layered_planting",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "vegetation_02_x10_y03.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v005",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/vegetation_02",
+  "assembly_grid": [
+    10,
+    3
+  ],
+  "cut_bounds_xy": [
+    25,
+    5,
+    35,
+    15
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "platform_scope": true
+}

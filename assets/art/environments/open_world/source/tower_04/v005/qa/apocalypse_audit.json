@@ -1,0 +1,247 @@
+{
+  "passed": true,
+  "errors": [],
+  "changed_locked": [],
+  "locked_object_count": 50,
+  "footprints": {
+    "deck": {
+      "delta_m2": 1.3735213294860327e-05,
+      "area_m2": 3174.30234366301
+    },
+    "route": {
+      "delta_m2": 4.124904557987907e-05,
+      "area_m2": 540.5340423299571
+    },
+    "lawn_court": {
+      "delta_m2": 9.394735798254953e-07,
+      "area_m2": 302.6899853347503
+    }
+  },
+  "package_count": 1109,
+  "platform_package_count": 1091,
+  "module_max_xy_m": 10,
+  "prop_count": 54,
+  "vine_patch_count": 12,
+  "material_count": 4,
+  "new_materials": 0,
+  "mipmap_changes": 0,
+  "actual_prop_ground_checks": [
+    {
+      "slug": "camp_tent_00",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "ibc_water_tank_00",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "reinforced_supply_case_00",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_00",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "folding_solar_panel_00",
+      "ground_gap_m": 0.034999847412109375
+    },
+    {
+      "slug": "steel_drum_00",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "camp_tent_01",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "ibc_water_tank_01",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "reinforced_supply_case_01",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_01",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "folding_solar_panel_01",
+      "ground_gap_m": 0.034999847412109375
+    },
+    {
+      "slug": "steel_drum_01",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "camp_tent_02",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "ibc_water_tank_02",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "reinforced_supply_case_02",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_02",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "folding_solar_panel_02",
+      "ground_gap_m": 0.034999847412109375
+    },
+    {
+      "slug": "steel_drum_02",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "camp_tent_03",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "ibc_water_tank_03",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "reinforced_supply_case_03",
+      "ground_gap_m": 0.00999919128417659
+    },
+    {
+      "slug": "wood_supply_crate_03",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "folding_solar_panel_03",
+      "ground_gap_m": 0.034999847412109375
+    },
+    {
+      "slug": "steel_drum_03",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "camp_tent_04",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "ibc_water_tank_04",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "reinforced_supply_case_04",
+      "ground_gap_m": 0.00999919128417659
+    },
+    {
+      "slug": "wood_supply_crate_04",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "folding_solar_panel_04",
+      "ground_gap_m": 0.034999847412109375
+    },
+    {
+      "slug": "steel_drum_04",
+      "ground_gap_m": 0.04399871826171875
+    },
+    {
+      "slug": "camp_tent_05",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "ibc_water_tank_05",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "reinforced_supply_case_05",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_05",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "folding_solar_panel_05",
+      "ground_gap_m": 0.034999847412109375
+    },
+    {
+      "slug": "steel_drum_05",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "reinforced_supply_case_06",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_06",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "steel_drum_06",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "reinforced_supply_case_07",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_07",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "steel_drum_07",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "reinforced_supply_case_08",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_08",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "steel_drum_08",
+      "ground_gap_m": 0.04400062561035156
+    },
+    {
+      "slug": "reinforced_supply_case_09",
+      "ground_gap_m": 0.00999919128417659
+    },
+    {
+      "slug": "wood_supply_crate_09",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "steel_drum_09",
+      "ground_gap_m": 0.04399871826171875
+    },
+    {
+      "slug": "reinforced_supply_case_10",
+      "ground_gap_m": 0.00999919128417659
+    },
+    {
+      "slug": "wood_supply_crate_10",
+      "ground_gap_m": -8.087158214209467e-07
+    },
+    {
+      "slug": "steel_drum_10",
+      "ground_gap_m": 0.04399871826171875
+    },
+    {
+      "slug": "reinforced_supply_case_11",
+      "ground_gap_m": 0.009999694824216476
+    },
+    {
+      "slug": "wood_supply_crate_11",
+      "ground_gap_m": -3.051757815342171e-07
+    },
+    {
+      "slug": "steel_drum_11",
+      "ground_gap_m": 0.04400062561035156
+    }
+  ],
+  "source_only": true
+}

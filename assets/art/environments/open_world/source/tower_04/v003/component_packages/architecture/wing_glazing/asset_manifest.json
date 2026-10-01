@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/wing_glazing",
+  "slug": "wing_glazing",
+  "display_name": "长翼曲线幕墙_退缩框架",
+  "category": "architecture",
+  "version": "v003",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v003/塔4_曲线天台商场_150x50m_v003.blend",
+  "collection": "长翼曲线幕墙_退缩框架_资产包",
+  "source_collection": "长翼曲线幕墙_退缩框架_制作组件",
+  "objects": [
+    "长翼曲线幕墙_退缩框架_主体"
+  ],
+  "root_object": "长翼曲线幕墙_退缩框架_主体",
+  "world_position": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -74.8150634765625,
+    -24.815000534057617,
+    0.2149999886751175
+  ],
+  "bounds_max": [
+    74.83646392822266,
+    24.815000534057617,
+    24.799999237060547
+  ],
+  "dimensions": [
+    149.65152740478516,
+    49.630001068115234,
+    24.58499924838543
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "facade_curve",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "wing_glazing.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v002"
+}

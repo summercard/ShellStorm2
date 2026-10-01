@@ -1,0 +1,72 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/tile_r23_c37_0",
+  "slug": "tile_r23_c37_0",
+  "display_name": "天台板_23行_37列_0_倒角沉缝",
+  "category": "floor",
+  "version": "v005",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v005/塔4_末世平台模块化_150x50m_v005.blend",
+  "collection": "天台板_23行_37列_0_倒角沉缝_资产包",
+  "source_collection": "天台板_23行_37列_0_倒角沉缝_制作组件",
+  "objects": [
+    "天台板_23行_37列_0_倒角沉缝_主体"
+  ],
+  "root_object": "天台板_23行_37列_0_倒角沉缝_主体",
+  "world_position": [
+    38.117347717285156,
+    10.557171821594238,
+    25.02199935913086
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    36.3880500793457,
+    9.707515716552734,
+    25.02199935913086
+  ],
+  "bounds_max": [
+    38.981998443603516,
+    10.982000350952148,
+    25.06
+  ],
+  "dimensions": [
+    2.5939483642578125,
+    1.274484634399414,
+    0.038000640869139346
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "roof_paver_3x1p5",
+  "dependencies": [
+    "tower_04/roof_paving_x11_y03"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "tile_r23_c37_0.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v005",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/tile_r23_c37_0",
+  "platform_scope": true,
+  "tile_row": 23,
+  "tile_column": 37,
+  "tile_fragment": 0
+}

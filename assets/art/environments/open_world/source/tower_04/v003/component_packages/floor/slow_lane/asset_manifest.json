@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/slow_lane",
+  "slug": "slow_lane",
+  "display_name": "天台跑道_广场回环绿岛绕行与玻璃亭支路",
+  "category": "floor",
+  "version": "v003",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v003/塔4_曲线天台商场_150x50m_v003.blend",
+  "collection": "天台跑道_广场回环绿岛绕行与玻璃亭支路_资产",
+  "source_collection": "天台跑道_广场回环绿岛绕行与玻璃亭支路_制作",
+  "objects": [
+    "天台跑道_广场回环绿岛绕行与玻璃亭支路_主体"
+  ],
+  "root_object": "天台跑道_广场回环绿岛绕行与玻璃亭支路_主体",
+  "world_position": [
+    -3.9067435264587402,
+    -0.15044014155864716,
+    25.040000915527344
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -74.81741333007812,
+    -24.167810440063477,
+    25.04
+  ],
+  "bounds_max": [
+    74.61780548095703,
+    24.515350341796875,
+    25.077999114990234
+  ],
+  "dimensions": [
+    149.43521881103516,
+    48.68316078186035,
+    0.03799911499023523
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "roof_route_network",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "slow_lane.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及连续天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v003"
+}

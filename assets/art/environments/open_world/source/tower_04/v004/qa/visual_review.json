@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "reviewer": "Codex visual inspection of real saved-file Cycles renders",
+  "source_stage": "Blender source close-range only; not Godot gameplay acceptance",
+  "fixed_camera_previews": 6,
+  "close_range_pairs": 4,
+  "resolution": [1600, 1000],
+  "samples": 64,
+  "unchanged_lighting_exposure": true,
+  "checks": {
+    "paver_joints_and_beveled_edges_visible": true,
+    "two_adjacent_track_colors_have_readable_segments": true,
+    "physical_coping_follows_frozen_curve": true,
+    "no_visible_floor_z_fighting": true,
+    "grass_panels_and_contained_edge_tufts_readable": true,
+    "court_planter_coping_and_inner_lip_visible": true,
+    "bench_end_caps_supports_and_fasteners_readable": true,
+    "litter_bin_hinges_slots_and_bollard_details_readable": true,
+    "medium_stylized_detail_not_photorealistic": true,
+    "original_canopy_building_and_plant_positions_unchanged": true
+  },
+  "corrected_during_review": [
+    "Replaced independently clipped track fragments with two exhaustive complementary color regions, eliminating small junction holes.",
+    "Moved only two new inspection cameras onto the terrace; original cameras and railings remain locked.",
+    "Moved one unreferenced early-draft tile manifest and Blender auto-backup outside the repository; both recoverable."
+  ],
+  "limitations": ["No GLB, PackedScene, collision, navigation or LOD authored this stage."]
+}

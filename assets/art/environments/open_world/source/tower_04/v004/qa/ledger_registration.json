@@ -1,0 +1,22 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "row": 816,
+  "source_version": "v004",
+  "source_sha256": "686819a9da09de578a1e266c794d4530fea31252afc8063d780396f7c0ad613b",
+  "changed_cells": [
+    "M816",
+    "N816",
+    "O816",
+    "P816",
+    "Q816",
+    "T816",
+    "Y816"
+  ],
+  "other_rows_and_formulas_unchanged": true,
+  "styles_unchanged": true,
+  "unrelated_sheets_unchanged": true,
+  "other_baseline_assets_unchanged": true,
+  "asset_count_unchanged": true,
+  "prefab_pages_not_modified": true,
+  "backup": "I:\\工作项目\\shellstrom2\\_scratch\\tower04_v004_ledger_backup"
+}
