@@ -294,6 +294,7 @@ var _initial_loop_gate_armed := false
 var _initial_loop_gate_sealed := false
 var _initial_loop_retreat_overlay: Control = null
 var _expedition_exit_overlay: Control = null
+var _expedition_bootstrap_failed: bool = false
 
 # 远征关卡01：独立单层关卡，复用 Dungeon3D 的战斗/命运/掉落/撤离管线，
 # 但不含 100F 天台与 99F 基地，也不生成任何楼梯与电梯。
@@ -457,7 +458,20 @@ func _ready() -> void:
 		return_scene_path = GameDesignConfig.MAIN_SCENE
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
 	if not test_mode and not is_expedition() and BaseManager != null:
-		var resume_scene_path := get_runtime_resume_scene_path(BaseManager.get_active_run_checkpoint())
+		var checkpoint := BaseManager.get_active_run_checkpoint()
+		var explicit_base_return := (
+			str(_entry_context.get("reason", "")) == GameEntryFlow.REASON_ABORT_RETURN_99F
+			and str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_BASE_99F
+		)
+		# 失败场景返回不结算旧行动；只交接检查点的玩家所有权，不能再次跳回坏关卡。
+		if (
+			explicit_base_return
+			and BaseManager.get_pending_insurance_slots().is_empty()
+			and _is_combat_runtime_snapshot(checkpoint)
+			and not get_runtime_resume_scene_path(checkpoint).is_empty()
+		):
+			_runtime_departure_carry_snapshot = checkpoint
+		var resume_scene_path := "" if explicit_base_return else get_runtime_resume_scene_path(checkpoint)
 		if not resume_scene_path.is_empty():
 			# 主场景本身不是该行动的运行时提供者；此处必须在 super() 前转场，
 			# 防止它初始化后覆盖独立副本的检查点。
@@ -474,6 +488,9 @@ func _ready() -> void:
 		else:
 			base_art.visible = false
 	super()
+	if is_expedition() and _expedition_bootstrap_failed:
+		_fail_expedition_bootstrap("远征规划无效，拒绝启动")
+		return
 	# 新游戏开场要在 98F 最里面的房间落位，而那间房由 FloorBundle 创建 —— 现在就得提交。
 	var new_game_opening := _should_open_new_game_in_master_office()
 	var opening_ready := false
@@ -481,7 +498,9 @@ func _ready() -> void:
 	# 否则玩家虽然出生在安全房门口，前门后方却只有尚未实例化的目标房。
 	if is_expedition():
 		_ensure_expedition_block()
-		_commit_floor_bundle(EXPEDITION_LAYER_INDEX, "expedition_bootstrap")
+		if not _commit_floor_bundle(EXPEDITION_LAYER_INDEX, "expedition_bootstrap"):
+			_fail_expedition_bootstrap("远征楼层提交失败，拒绝启动")
+			return
 	elif new_game_opening:
 		# 与到达门事务同一条路（`_commit_floor_bundle(2, "arrival_gate")`），只是触发时机
 		# 提前到开局：98F 四房 + 97F 到达壳 + 下行竖直边一次落地。失败则 opening_ready
@@ -563,6 +582,56 @@ func _ready() -> void:
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
 	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
+
+
+func _mark_expedition_bootstrap_failed(reason: String) -> void:
+	if _expedition_bootstrap_failed:
+		return
+	_expedition_bootstrap_failed = true
+	push_warning("[TowerDescent3D] 远征启动失败: %s" % reason)
+
+
+func _fail_expedition_bootstrap(reason: String) -> void:
+	_expedition_bootstrap_failed = true
+	if player != null and is_instance_valid(player):
+		player.velocity = Vector3.ZERO
+		player.set_input_locked(true)
+		player.set_combat_enabled(false)
+		player.process_mode = Node.PROCESS_MODE_DISABLED
+	process_mode = Node.PROCESS_MODE_DISABLED
+	if title_label != null:
+		title_label.text = "弹壳风暴2 · 远征启动失败"
+		_show_expedition_failure_label(title_label)
+	if status_label != null:
+		status_label.text = "远征启动失败：%s。请通过暂停界面退出当前场景。" % reason
+		_show_expedition_failure_label(status_label)
+
+
+func _show_expedition_failure_label(label: Label) -> void:
+	# 常规 HUD 会隐藏外壳；失败态只恢复这条祖先链，不改变正常战局的显示策略。
+	var ancestor: Node = label
+	while ancestor != null and ancestor != self:
+		if ancestor is CanvasItem:
+			(ancestor as CanvasItem).show()
+		ancestor = ancestor.get_parent()
+
+
+func _can_finish_layout_bootstrap() -> bool:
+	return not _expedition_bootstrap_failed
+
+
+func _activate_runtime_persistence() -> void:
+	if _expedition_bootstrap_failed:
+		return
+	super()
+
+
+func _sync_player_input_lock() -> void:
+	if _expedition_bootstrap_failed:
+		if player != null and is_instance_valid(player):
+			player.set_input_locked(true)
+		return
+	super()
 
 
 func _resume_expedition_runtime_scene(scene_path: String, request_id: int) -> void:
@@ -828,6 +897,8 @@ func _clear_new_game_opening_loadout() -> void:
 
 
 func _process(delta: float) -> void:
+	if _expedition_bootstrap_failed:
+		return
 	super(delta)
 	_refresh_physical_location_authority()
 	_update_facility_combat_lock()
@@ -1739,8 +1810,20 @@ func _build_expedition_records() -> void:
 	# 复用 Dungeon3D 的 start 兼容位，避免重写上层房间索引逻辑。
 	_regenerate_floor_plans_for_current_seed()
 	var plan := _floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary
-	if plan.is_empty():
-		push_error("[TowerDescent3D] 远征关卡缺少单层规划")
+	if plan.is_empty() or not bool(plan.get("valid", false)):
+		_mark_expedition_bootstrap_failed(
+			"远征单层规划为空或校验失败: %s" % str(plan.get("validation_errors", []))
+		)
+		return
+	var entry_spec := _plan_spec(plan, "entry")
+	var first_main := _plan_spec(plan, "room_01")
+	if (
+		entry_spec.is_empty()
+		or first_main.is_empty()
+		or str(entry_spec.get("id", "")).is_empty()
+		or str(first_main.get("id", "")).is_empty()
+	):
+		_mark_expedition_bootstrap_failed("远征规划缺少入口安全房或 01 号房")
 		return
 	# 关卡级怪物掉落表与当前 plan 同寿命。奖励协调器持有编译结果，切关/重建时整表替换，
 	# 不塞进 MonsterInjector 静态状态，避免同进程多场景与测试之间串味。
@@ -1751,23 +1834,15 @@ func _build_expedition_records() -> void:
 		)
 		if not bool(drop_report.get("ok", false)):
 			push_error("[TowerDescent3D] 关卡怪物掉落表编译失败: %s" % str(drop_report.get("errors", [])))
-	var entry_spec := _plan_spec(plan, "entry")
-	if entry_spec.is_empty():
-		push_error("[TowerDescent3D] 远征关卡规划缺少入口安全房")
-		return
 	# 规划里的房间 ID 已经就是 start / room_01..05 / extraction；入口房直接落成 start。
 	_append_plan_room_record(plan, entry_spec, "")
 	var entry_record := _find_record(str(entry_spec.get("id", "")))
 	if entry_record.is_empty():
-		push_error("[TowerDescent3D] 远征关卡入口安全房记录缺失")
+		_mark_expedition_bootstrap_failed("远征关卡入口安全房记录缺失")
 		return
 	# v007 安全房是 15×15 单一双门布局，两扇门必须互相垂直。前门指向 01 号房，
 	# 另加一扇“传送抵达侧”的封闭气闸门：它不挂地图边、不参与房间拓扑、
 	# 也不伪造一条可走路线，只负责补齐安全房造型与“退出战局”交互位。
-	var first_main := _plan_spec(plan, "room_01")
-	if first_main.is_empty():
-		push_error("[TowerDescent3D] 远征关卡规划缺少 01 号房")
-		return
 	var front_direction := _direction_between(
 		entry_record.get("position", Vector3.ZERO) as Vector3,
 		_plan_world_position(plan, first_main)
@@ -1788,6 +1863,16 @@ func _build_expedition_records() -> void:
 	_validate_floor_layout_plans()
 
 
+## 未带朝向字段的进行中旧战局继续使用旧版，绝不迁移其世界坐标。
+## 新战局（没有恢复快照）使用北向版；其他关卡不受影响。
+func _expedition_rotation_for_checkpoint(snapshot: Dictionary) -> int:
+	if get_expedition_level_id() != "expedition_01":
+		return 0
+	if snapshot.is_empty():
+		return 180
+	return int((snapshot.get("world_state", {}) as Dictionary).get("expedition_global_rotation_deg", 0))
+
+
 func _regenerate_floor_plans_for_current_seed() -> void:
 	# 纯数据规划可提前计算和存档；场景节点只保留入口壳。
 	# 新战局也走同一入口，确保 run_seed、layout_id 与实际路线同步换代。
@@ -1801,17 +1886,31 @@ func _regenerate_floor_plans_for_current_seed() -> void:
 		# 否则新增关卡会静默套用远征关卡01 的房表。
 		var expedition_level_id := get_expedition_level_id()
 		var expedition_plan: Dictionary = {}
+		var expedition_rotation := _expedition_rotation_for_checkpoint(_runtime_restore_snapshot)
 		# 数据驱动接缝（05.2 §8 S3）：逐关卡开关，见 FloorPlanGenerator.data_driven_enabled()。
 		# 该关卡的设计源声明了 runtime_enabled=true 才走这条路；否则原样回退内置房表 ——
 		# 未登记的关卡行为与接入前一字不变（因此对既有存档零影响）。
 		if FLOOR_PLAN_GENERATOR.data_driven_enabled(expedition_level_id):
 			expedition_plan = FLOOR_PLAN_GENERATOR.generate_from_level_plan(
-				expedition_level_id, 0, run_seed
+				expedition_level_id, 0, run_seed, expedition_rotation
 			)
 			if expedition_plan.is_empty():
-				push_warning(
-					"[TowerDescent3D] 远征设计源不可用，已回退内置房表: %s" % expedition_level_id
-				)
+				if expedition_level_id == "expedition_01" and expedition_rotation != 0:
+					push_warning(
+						"[TowerDescent3D] 远征北向设计源不可用，拒绝回退内置房表: %s"
+						% expedition_level_id
+					)
+				else:
+					push_warning(
+						"[TowerDescent3D] 远征设计源不可用，已回退内置房表: %s"
+						% expedition_level_id
+					)
+		if expedition_plan.is_empty() and expedition_level_id == "expedition_01" and expedition_rotation != 0:
+			# 北向版没有可验证的内置降级版，拒绝静默进入随机朝向的旧七房地图。
+			expedition_plan = {
+				"valid": false, "rooms": [],
+				"validation_errors": ["expedition_north_design_source_unavailable"],
+			}
 		if expedition_plan.is_empty():
 			expedition_plan = FLOOR_PLAN_GENERATOR.generate_expedition({
 				"run_seed": run_seed,
@@ -5753,6 +5852,14 @@ func _current_floor_number() -> int:
 
 
 func get_return_to_base_context() -> Dictionary:
+	if _expedition_bootstrap_failed:
+		return {
+			"in_active_run": false,
+			"combat_active": false,
+			"transition_active": false,
+			"base_center_available": true,
+			"unavailable_reason": "",
+		}
 	var in_base_structure := is_player_inside_facility()
 	return {
 		"in_active_run": not in_base_structure,
@@ -5764,6 +5871,8 @@ func get_return_to_base_context() -> Dictionary:
 
 
 func can_return_player_to_base_center() -> bool:
+	if _expedition_bootstrap_failed:
+		return is_expedition() and is_inside_tree()
 	return (
 		player != null
 		and is_player_inside_facility()
@@ -5773,6 +5882,22 @@ func can_return_player_to_base_center() -> bool:
 
 
 func return_player_to_base_center_from_pause() -> Dictionary:
+	if _expedition_bootstrap_failed:
+		var request_id := GameEntryFlow.request_gameplay_entry(
+			GameEntryFlow.REASON_ABORT_RETURN_99F,
+			GameEntryFlow.SPAWN_BASE_99F
+		)
+		if test_mode:
+			return {"success": true, "reason": "测试模式已允许离开失败场景"}
+		var change_error := get_tree().change_scene_to_file(return_scene_path)
+		if change_error != OK:
+			if request_id > 0:
+				GameEntryFlow.cancel_request(request_id)
+			return {
+				"success": false,
+				"reason": "返回基地失败：%s" % error_string(change_error),
+			}
+		return {"success": true, "reason": "已离开远征启动失败场景"}
 	if not can_return_player_to_base_center():
 		return {"success": false, "reason": "战局中不可使用"}
 	var facility := _room_by_id.get("facility") as DungeonRoom3D
@@ -5937,7 +6062,7 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 			"event_resolved": _resolved_event_rooms.has(room_id),
 			"event_combat": _event_combat_rooms.has(room_id),
 		}
-	return RUN_PERSISTENCE_SERVICE.build_world_state(
+	var world_state := RUN_PERSISTENCE_SERVICE.build_world_state(
 		"tower_world_state_v1",
 		_segment_runtime_state,
 		{
@@ -5951,9 +6076,31 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 		"narrative_spawned_keys": _narrative_spawned_keys.duplicate(true),
 		}
 	)
+	if is_expedition() and get_expedition_level_id() == "expedition_01":
+		world_state["expedition_global_rotation_deg"] = int(
+			(_floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary).get("expedition_global_rotation_deg", 0)
+		)
+	return world_state
+
+
+func _expedition_checkpoint_layout_matches(snapshot: Dictionary) -> bool:
+	if not is_expedition() or get_expedition_level_id() != "expedition_01":
+		return true
+	var state := snapshot.get("world_state", {}) as Dictionary
+	var plan := _floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary
+	var rotation := _expedition_rotation_for_checkpoint(snapshot)
+	if rotation not in [0, 180] or rotation != int(plan.get("expedition_global_rotation_deg", 0)):
+		return false
+	var expected := str((state.get("floor_layout_ids", {}) as Dictionary).get("0", ""))
+	# 朝向相同不代表布局相同；无法证明历史几何一致时仅恢复携带物，不回灌世界坐标。
+	return not expected.is_empty() and expected == str(plan.get("layout_id", ""))
 
 
 func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
+	# 在任何房间进度或动态实体回灌之前检查远征0层。
+	if not _expedition_checkpoint_layout_matches(snapshot):
+		push_warning("[TowerDescent3D] 远征布局不匹配，拒绝恢复旧世界坐标")
+		return false
 	var world_state := snapshot.get("world_state", {}) as Dictionary
 	var committed_values: Array = []
 	if world_state.get("committed_floor_indices", []) is Array:

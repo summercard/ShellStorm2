@@ -335,6 +335,8 @@ func _ready() -> void:
 	if RuntimePerformanceManager != null:
 		RuntimePerformanceManager.register_atmosphere(self)
 	_generate_layout()
+	if not _can_finish_layout_bootstrap():
+		return
 	player.set_combat_enabled(true)
 	FateCardGameBridge.reset_run_state()
 	FateCardGameBridge.set_player(player)
@@ -366,6 +368,11 @@ func _ready() -> void:
 	_refresh_loot_label()
 	generation_completed.emit(get_generation_snapshot())
 	call_deferred("_activate_runtime_persistence")
+
+
+## 子类可在规划失败时阻止出生、生成完成信号与持久化激活。
+func _can_finish_layout_bootstrap() -> bool:
+	return true
 
 
 func _exit_tree() -> void:
@@ -587,6 +594,11 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 		snapshot["world_restore_failed"] = true
 		snapshot["current_room_id"] = ""
 		snapshot["player_position"] = []
+		# 世界被拒绝时路线、商人和撤离解锁也属于旧世界，不能混入新布局。
+		snapshot["edge_states"] = {}
+		snapshot.erase("merchant_stock")
+		snapshot["trade_extraction_unlocked"] = false
+		snapshot["trade_extraction_room_id"] = ""
 	_restore_carried_ownership(snapshot)
 	_restore_merchant_stock_from_snapshot(snapshot)
 	_trade_extraction_unlocked = bool(snapshot.get("trade_extraction_unlocked", false))

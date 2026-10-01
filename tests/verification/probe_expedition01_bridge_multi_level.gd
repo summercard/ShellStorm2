@@ -15,9 +15,9 @@
 ##   A. **纯规划级**（`_bridge_multi_level_plan()`，两种取向各跑一遍）：坑/桥矩形、深度、
 ##      三层件数、格线对齐、墙底标高、纵向拉伸比、桥口开在**桥实际贴到的那两条坑沿**上、
 ##      护栏沿**桥长轴**排、朝向合法性、确定性、非桥房返回空。
-##   B. **真实生成路径**（`_generate_constrained_floor()` → 房记录）：平台砖真扣了坑区、
-##      多层件真进了 `authored_layout_instances`、每个 component_id 都能在运行时注册表里
-##      解析成 prefab（ID 写错会在这里炸，而不是等到进游戏才炸）、两种取向都真出现过。
+##   B. **真实生成路径**（`_generate_constrained_floor()` → 房记录）：正式 v010 房型清单
+##      真进了 `authored_layout_instances`、角色数量符合 48 floor_tile + 158 room_type_component、
+##      每个 component_id 都能在运行时注册表里解析成 prefab，并配对验收 0°/180° 全局旋转。
 ##
 ## 「坑区一律保留承重、玩家无跳跃」是本环的设计前提（见 `FloorPlanGenerator` 第 6 环
 ## 头注释），因此承重归 `TowerFloorStage3D._build_support()` 不动 —— 本探针不测承重。
@@ -57,8 +57,16 @@ const EXPECTED_PLATFORM_TILES_DROPPED := 24
 ## 一件标准墙 11.9m 拉到「坑深 12m + 地面护栏 0.8m」。
 const EXPECTED_WALL_SCALE_Y := 12.8 / 11.9
 const EPS := 0.01
-## 真实生成路径的种子数：桥房按种子从内容池抽，「两种取向都真出现过」需要足够样本。
+## 真实生成路径的种子数：正式房型已钉死；这里用于重复验证清单与 0/180 配对。
 const RUNTIME_SEEDS := 24
+## 正式 v010 房型清单：48 块 floor_tile + 158 件 room_type_component = 206 件，
+## 另有 36 件正式 solid_wall，共 242 件；其中 room_type_component 包含 36 块坑底砖、
+## 8 块坑端壁、12 块坑侧壁与 2 件桥护栏。旧 multi_level_component 必须为 0。
+const EXPECTED_FORMAL_INSTANCES := 242
+const EXPECTED_FORMAL_FLOOR_TILES := 48
+const EXPECTED_FORMAL_ROOM_TYPE_COMPONENTS := 158
+const EXPECTED_FORMAL_SOLID_WALLS := 36
+const LEGACY_MULTI_LEVEL_ROLE := "multi_level_component"
 
 var failures: Array[String] = []
 var checks := 0
@@ -80,7 +88,7 @@ func _on_lane_lattice(value: float) -> bool:
 
 
 func _ready() -> void:
-	print("---- 远征01 通道桥多层几何 探针（本体 0° + 转置 90°）----")
+	print("---- 远征01 通道桥正式 v010 探针（规划单测 0°/90°；正式清单配对 0°/180°）----")
 	var templates := LOADER.load_room_templates(LEVEL)
 	if templates.is_empty():
 		print("PROBE_FAIL: room_templates 加载失败")
@@ -334,78 +342,177 @@ func _check_runtime_path(templates: Dictionary) -> void:
 	if level_plan.is_empty():
 		_check(false, "⑳ level_plan 加载失败")
 		return
-	var policy := level_plan.get("generation_policy", {}) as Dictionary
+	var policy := (level_plan.get("generation_policy", {}) as Dictionary).duplicate(true)
+	_check(
+		bool(policy.get("pin_content_templates", false)),
+		"⑳ level_plan 必须 pin_content_templates=true，正式 v010 房型清单才能稳定验收"
+	)
 	var normalized := LOADER.normalize_floor(LEVEL, 0)
-	# 按**取向**计数（同一张模板，0° 本体 / 90° 转置）—— 「两个模板 id」的时代已结束。
 	var rooms_by_pose := {BRIDGE_ROTATION_NATIVE: 0, BRIDGE_ROTATION_POSE: 0}
 	var catalog_ok := true
-	# 多个种子扫一遍：通道桥房是按种子从内容池抽的、姿态又按连接方向定，
-	# 单次抽样可能一次都不出现（或只出现一种取向）。
+	# `_generate_constrained_floor()` 是绕过外层 `generate_from_level_plan()` 的直接入口，
+	# 因而必须显式配对测 0°/180°；不依赖 24 个随机种子碰巧抽到 90°。
 	for index in range(RUNTIME_SEEDS):
 		var run_seed := 700000 + index * 7919
-		var generated := GENERATOR._generate_constrained_floor(
-			LEVEL, 0, run_seed, normalized, policy, templates
+		var zero_policy := policy.duplicate(true)
+		zero_policy["expedition_global_rotation_deg"] = 0
+		var rotated_policy := policy.duplicate(true)
+		rotated_policy["expedition_global_rotation_deg"] = 180
+		var generated_zero := GENERATOR._generate_constrained_floor(
+			LEVEL, 0, run_seed, normalized, zero_policy, templates
 		)
-		if generated.is_empty():
-			_check(false, "㉑ seed %d 生成为空" % run_seed)
+		var generated_rotated := GENERATOR._generate_constrained_floor(
+			LEVEL, 0, run_seed, normalized, rotated_policy, templates
+		)
+		if generated_zero.is_empty() or generated_rotated.is_empty():
+			_check(false, "㉑ seed %d 的 0°/180° 配对生成为空" % run_seed)
 			continue
-		var errors := VALIDATOR.validate_normalized(LEVEL, 0, generated, policy, templates)
-		if not errors.is_empty():
-			_check(false, "㉒ seed %d 校验失败 %s" % [run_seed, str(errors)])
-			continue
-		for value in generated.get("rooms", []) as Array:
-			var room_record := value as Dictionary
-			if str(room_record.get("template_id", "")) != BRIDGE_TEMPLATE:
+		var zero_errors := VALIDATOR.validate_normalized(
+			LEVEL, 0, generated_zero, zero_policy, templates
+		)
+		if not zero_errors.is_empty():
+			_check(false, "㉒ seed %d 0°校验失败 %s" % [run_seed, str(zero_errors)])
+		var rotated_errors := VALIDATOR.validate_normalized(
+			LEVEL, 0, generated_rotated, rotated_policy, templates
+		)
+		if not rotated_errors.is_empty():
+			_check(false, "㉓ seed %d 180°校验失败 %s" % [run_seed, str(rotated_errors)])
+		var zero_rooms := _bridge_rooms_by_key(generated_zero)
+		var rotated_rooms := _bridge_rooms_by_key(generated_rotated)
+		var room_keys_match := zero_rooms.keys().size() == rotated_rooms.keys().size()
+		for room_key in zero_rooms:
+			if not rotated_rooms.has(room_key):
+				room_keys_match = false
+		_check(room_keys_match, "㉔ seed %d：0°/180°桥房 key 集合必须一致" % run_seed)
+		for room_key in zero_rooms:
+			if not rotated_rooms.has(room_key):
 				continue
-			var template_id := str(room_record.get("template_id", ""))
-			var pose := int(round(float(room_record.get("rotation_deg", 0.0))))
-			var room_label := "%s@%d°" % [template_id, pose]
+			var zero_room := zero_rooms[room_key] as Dictionary
+			var rotated_room := rotated_rooms[room_key] as Dictionary
+			catalog_ok = _check_formal_bridge_layout(run_seed, room_key, zero_room) and catalog_ok
+			_check_rotated_bridge_instances(run_seed, room_key, zero_room, rotated_room)
+			var pose := int(round(float(zero_room.get("rotation_deg", 0.0))))
 			rooms_by_pose[pose] = int(rooms_by_pose.get(pose, 0)) + 1
-			var room_key := str(room_record.get("key", ""))
-			var instances := room_record.get("authored_layout_instances", []) as Array
-			var size := room_record.get("size", Vector2.ZERO) as Vector2
-			# 两取向的满铺格数同（12×10 / 10×12 = 120），坑区与桥面格数也同 ⇒ 扣数同。
-			var full_tiles := int(round(size.x / GRID)) * int(round(size.y / GRID))
-			var tile_count := 0
-			var multi_count := 0
-			for instance_value in instances:
-				var instance := instance_value as Dictionary
-				var role := str(instance.get("slot_role", ""))
-				if role == "floor_tile":
-					tile_count += 1
-				elif role == GENERATOR.MULTI_LEVEL_SLOT_ROLE:
-					multi_count += 1
-					if ROOM._authored_component_prefab(str(instance.get("component_id", ""))) == null:
-						catalog_ok = false
-			_check(
-				bool(room_record.get("authored_layout_multi_level_room", false)),
-				"㉓ seed %d %s(%s)：通道桥房必须标记 authored_layout_multi_level_room"
-				% [run_seed, room_key, room_label]
-			)
-			_check(
-				tile_count == full_tiles - EXPECTED_PLATFORM_TILES_DROPPED,
-				(
-					"㉔ seed %d %s(%s)：上层地砖应为满铺 %d − 坑区 %d = %d，实得 %d"
-					% [
-						run_seed, room_key, room_label, full_tiles, EXPECTED_PLATFORM_TILES_DROPPED,
-						full_tiles - EXPECTED_PLATFORM_TILES_DROPPED, tile_count,
-					]
-				)
-			)
-			_check(
-				multi_count == EXPECTED_PIT_WALLS + EXPECTED_PIT_TILES,
-				"㉕ seed %d %s(%s)：多层件应为 %d 件，实得 %d"
-				% [
-					run_seed, room_key, room_label,
-					EXPECTED_PIT_WALLS + EXPECTED_PIT_TILES, multi_count,
-				]
-			)
+	_check(catalog_ok, "㉕ 正式 v010 每个 component_id 都必须能在运行时注册表解析成 prefab")
 	_check(
-		int(rooms_by_pose[BRIDGE_ROTATION_NATIVE]) > 0,
-		"㉖ %d 个种子里应出现桥房本体（0°）（否则只测到转置）" % RUNTIME_SEEDS
+		int(rooms_by_pose[BRIDGE_ROTATION_NATIVE]) + int(rooms_by_pose[BRIDGE_ROTATION_POSE]) > 0,
+		"㉖ %d 个种子里应至少出现一个正式桥房" % RUNTIME_SEEDS
+	)
+
+
+func _bridge_rooms_by_key(generated: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	for value in generated.get("rooms", []) as Array:
+		var room := value as Dictionary
+		if str(room.get("template_id", "")) == BRIDGE_TEMPLATE:
+			result[str(room.get("key", ""))] = room
+	return result
+
+
+func _check_formal_bridge_layout(
+	run_seed: int, room_key: String, room: Dictionary
+) -> bool:
+	var instances := room.get("authored_layout_instances", []) as Array
+	var floor_tiles := 0
+	var lower_tiles := 0
+	var formal_components := 0
+	var solid_walls := 0
+	var pit_ends := 0
+	var pit_sides := 0
+	var guardrails := 0
+	var legacy_multi_level := 0
+	var catalog_failures := 0
+	for value in instances:
+		var instance := value as Dictionary
+		var component_id := str(instance.get("component_id", ""))
+		var role := str(instance.get("slot_role", ""))
+		if ROOM._authored_component_prefab(component_id) == null:
+			catalog_failures += 1
+		if role == "floor_tile":
+			floor_tiles += 1
+		elif role == "room_type_component":
+			formal_components += 1
+			if component_id == "ENV-EXPEDITION-L01-BRIDGE-TILE_LOWER":
+				lower_tiles += 1
+		elif role == "solid_wall":
+			solid_walls += 1
+		elif role == LEGACY_MULTI_LEVEL_ROLE:
+			legacy_multi_level += 1
+		if component_id == "ENV-EXPEDITION-L01-BRIDGE-PIT_END":
+			pit_ends += 1
+		elif component_id == "ENV-EXPEDITION-L01-BRIDGE-PIT_SIDE":
+			pit_sides += 1
+		elif component_id == "ENV-EXPEDITION-L01-BRIDGE-BRIDGE_GUARDRAIL":
+			guardrails += 1
+	_check(
+		instances.size() == EXPECTED_FORMAL_INSTANCES,
+		"㉗ seed %d %s：正式 v010 应有 %d 个计划实例，实得 %d"
+		% [run_seed, room_key, EXPECTED_FORMAL_INSTANCES, instances.size()]
 	)
 	_check(
-		int(rooms_by_pose[BRIDGE_ROTATION_POSE]) > 0,
-		"㉗ %d 个种子里应出现桥房转置（90°）（否则只测到本体）" % RUNTIME_SEEDS
+		floor_tiles == EXPECTED_FORMAL_FLOOR_TILES,
+		"㉘ seed %d %s：floor_tile 应为 %d，实得 %d"
+		% [run_seed, room_key, EXPECTED_FORMAL_FLOOR_TILES, floor_tiles]
 	)
-	_check(catalog_ok, "㉘ 多层件的 component_id 必须都能在运行时注册表解析成 prefab")
+	_check(
+		formal_components == EXPECTED_FORMAL_ROOM_TYPE_COMPONENTS,
+		"㉙ seed %d %s：room_type_component（含正式坑底砖）应为 %d，实得 %d"
+		% [run_seed, room_key, EXPECTED_FORMAL_ROOM_TYPE_COMPONENTS, formal_components]
+	)
+	_check(lower_tiles == EXPECTED_PIT_TILES, "㉚ seed %d %s：正式坑底砖应为 %d，实得 %d" % [run_seed, room_key, EXPECTED_PIT_TILES, lower_tiles])
+	_check(solid_walls == EXPECTED_FORMAL_SOLID_WALLS, "㉛ seed %d %s：正式墙段应为 %d，实得 %d" % [run_seed, room_key, EXPECTED_FORMAL_SOLID_WALLS, solid_walls])
+	_check(pit_ends == 8, "㉜ seed %d %s：正式坑端壁应为 8，实得 %d" % [run_seed, room_key, pit_ends])
+	_check(pit_sides == 12, "㉝ seed %d %s：正式坑侧壁应为 12，实得 %d" % [run_seed, room_key, pit_sides])
+	_check(guardrails == 2, "㉞ seed %d %s：正式桥侧护栏应为 2，实得 %d" % [run_seed, room_key, guardrails])
+	_check(legacy_multi_level == 0, "㉟ seed %d %s：旧 multi_level_component 必须为 0" % [run_seed, room_key])
+	_check(
+		bool(room.get("authored_layout_shell", false))
+			and bool(room.get("authored_layout_multi_level_room", false)),
+		"㊱ seed %d %s：正式桥房必须走 authored layout 标记" % [run_seed, room_key]
+	)
+	_check(catalog_failures == 0, "㊲ seed %d %s：正式组件 prefab 解析失败 %d 件" % [run_seed, room_key, catalog_failures])
+	return catalog_failures == 0
+
+
+func _check_rotated_bridge_instances(
+	run_seed: int, room_key: String, zero_room: Dictionary, rotated_room: Dictionary
+) -> void:
+	var zero_instances := _instances_by_name(zero_room.get("authored_layout_instances", []) as Array)
+	var rotated_instances := _instances_by_name(rotated_room.get("authored_layout_instances", []) as Array)
+	_check(
+		zero_instances.keys().size() == rotated_instances.keys().size(),
+		"㊱ seed %d %s：0°/180°逐件名称集合必须一致" % [run_seed, room_key]
+	)
+	for instance_name in zero_instances:
+		if not rotated_instances.has(instance_name):
+			_check(false, "㊲ seed %d %s：180°缺少实例 %s" % [run_seed, room_key, instance_name])
+			continue
+		var zero_instance := zero_instances[instance_name] as Dictionary
+		var rotated_instance := rotated_instances[instance_name] as Dictionary
+		var zero_position := zero_instance.get("position", Vector3.ZERO) as Vector3
+		var rotated_position := rotated_instance.get("position", Vector3.ZERO) as Vector3
+		var zero_yaw := float(zero_instance.get("rotation_y_deg", 0.0))
+		var rotated_yaw := float(rotated_instance.get("rotation_y_deg", 0.0))
+		_check(
+			str(zero_instance.get("component_id", "")) == str(rotated_instance.get("component_id", ""))
+				and str(zero_instance.get("slot_role", "")) == str(rotated_instance.get("slot_role", "")),
+			"㊳ seed %d %s/%s：180°名称对应的 ID/role 必须不变" % [run_seed, room_key, instance_name]
+		)
+		_check(
+			_approx(rotated_position.x, -zero_position.x)
+				and _approx(rotated_position.y, zero_position.y)
+				and _approx(rotated_position.z, -zero_position.z),
+			"㊴ seed %d %s/%s：180°位置必须 xz 取反、y 不变" % [run_seed, room_key, instance_name]
+		)
+		_check(
+			_approx(fposmod(rotated_yaw - zero_yaw, 360.0), 180.0),
+			"㊵ seed %d %s/%s：180°偏航必须比 0°增加 180°" % [run_seed, room_key, instance_name]
+		)
+
+
+func _instances_by_name(instances: Array) -> Dictionary:
+	var result: Dictionary = {}
+	for value in instances:
+		var instance := value as Dictionary
+		result[str(instance.get("name", ""))] = instance
+	return result

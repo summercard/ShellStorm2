@@ -1162,6 +1162,10 @@ func _build_connection_port_markers(parent: Node3D) -> void:
 	container.name = "ConnectionPorts"
 	container.set_meta("connection_port_count", connection_ports.size())
 	parent.add_child(container)
+	# 端口声明永远使用房间坐标。静态美术根可能带有烘焙/对齐变换，
+	# 所以把容器转回房间坐标，避免 marker 再被父 root 重复旋转。
+	if parent != self:
+		container.transform = parent.transform.affine_inverse()
 	for value in connection_ports:
 		var port := value as Dictionary
 		var port_id := str(port.get("port_id", ""))
@@ -1171,11 +1175,13 @@ func _build_connection_port_markers(parent: Node3D) -> void:
 			continue
 		var marker := Marker3D.new()
 		marker.name = "Port_%s" % port_id
-		marker.position = Vector3(float(raw_position[0]), 0.0, float(raw_position[1]))
+		var position := Vector2(float(raw_position[0]), float(raw_position[1]))
+		marker.position = Vector3(position.x, 0.0, position.y)
 		var outward := Vector2(float(raw_outward[0]), float(raw_outward[1])).normalized()
 		# Marker3D 的局部 +Z 统一指向房间外侧。
 		marker.rotation.y = atan2(outward.x, outward.y)
 		marker.set_meta("port_id", port_id)
+		marker.set_meta("position_m", position)
 		marker.set_meta("target_room_id", str(port.get("target_room_id", "")))
 		marker.set_meta("side", str(port.get("side", "")))
 		marker.set_meta("lane_m", float(port.get("lane_m", 0.0)))
@@ -1186,7 +1192,7 @@ func _build_connection_port_markers(parent: Node3D) -> void:
 
 ## 预烘焙静态场景里的端口 Marker 是否与本局端口声明对不上。
 ## 比对口径：Marker 数量、每个 `port_id` 是否存在、`target_room_id` 是否一致、
-## **Marker 局部坐标是否与当前端口坐标重合**。
+## **Marker 所表达的房间坐标与当前端口坐标是否重合**。
 ##
 ## 最后一条是必需的：房间节点自身的 `rotation` 恒为 0（朝向由端口坐标与实例清单
 ## 表达，不靠节点 transform），所以「本局 rotation 变了」在静态场景里**毫无痕迹** ——
@@ -1209,9 +1215,26 @@ func _build_connection_port_markers(parent: Node3D) -> void:
 func _align_static_layout_to_room(static_layout: Node3D) -> void:
 	var delta := _static_layout_alignment_delta_deg(static_layout)
 	if not is_zero_approx(delta):
-		static_layout.rotation.y += deg_to_rad(delta)
+		static_layout.transform = (
+			Transform3D(Basis(Vector3.UP, deg_to_rad(delta)), Vector3.ZERO)
+			* static_layout.transform
+		)
+		if static_layout.has_meta("safe_room_orientation_steps"):
+			var steps := posmod(
+				int(static_layout.get_meta("safe_room_orientation_steps")) + int(round(delta / 90.0)),
+				4
+			)
+			static_layout.set_meta("safe_room_orientation_steps", steps)
+			static_layout.set_meta("room_orientation_steps", steps)
 	_rehome_static_layout_door(static_layout)
 	_seal_stray_door_walls(static_layout)
+	for child in static_layout.get_children():
+		var module := child as Node3D
+		if module != null:
+			_apply_authored_room_type_wall_door_collision(
+				module, get_dimensions() * 0.5, static_layout.transform * module.transform
+			)
+	_sync_static_layout_connection_ports(static_layout)
 
 
 ## 把场景坐标转成本局坐标所需的 Y 轴旋转（度，90 的整数倍）。
@@ -1228,6 +1251,9 @@ func _align_static_layout_to_room(static_layout: Node3D) -> void:
 ##
 ## 一个实例都配不上时返回 0（保守：不转），宁可维持烘焙朝向也不瞎转。
 func _static_layout_alignment_delta_deg(static_layout: Node3D) -> float:
+	# 安全屋没有实例清单；元数据记的是历史方位，实体门槽才是当前事实。
+	if authored_layout_instances.is_empty() and static_layout.has_meta("safe_room_orientation_steps"):
+		return _static_layout_door_alignment_delta_deg(static_layout)
 	var scene_points := _static_layout_planar_points(static_layout)
 	var checklist_points := _checklist_planar_points()
 	if scene_points.is_empty() or checklist_points.is_empty():
@@ -1252,6 +1278,84 @@ func _static_layout_alignment_delta_deg(static_layout: Node3D) -> float:
 	return best_delta
 
 
+## 无清单安全屋按实体门墙匹配，不能使用烘焙 Marker 的局部位置或历史方向元数据。
+## 同时验证门槽位置与朝外法线，四个候选中只有唯一完整匹配才允许转动。
+func _static_layout_door_alignment_delta_deg(static_layout: Node3D) -> float:
+	var scene_slots: Array[Transform3D] = []
+	for child in static_layout.get_children():
+		var piece := child as Node3D
+		if piece != null and _is_door_wall_piece(piece):
+			scene_slots.append(static_layout.transform * piece.transform)
+	var expected_slots: Array[Dictionary] = []
+	if not connection_ports.is_empty():
+		for value in connection_ports:
+			var port := value as Dictionary
+			var raw_position := port.get("position_m", []) as Array
+			var raw_outward := port.get("outward", []) as Array
+			if raw_position.size() < 2 or raw_outward.size() < 2:
+				return 0.0
+			var position := Vector3(float(raw_position[0]), 0.0, float(raw_position[1]))
+			var outward := Vector3(float(raw_outward[0]), 0.0, float(raw_outward[1]))
+			if outward.is_zero_approx():
+				return 0.0
+			expected_slots.append({"position": position, "outward": outward.normalized()})
+	else:
+		var half := get_dimensions() * 0.5
+		for direction in doors:
+			var outward := Vector3.ZERO
+			var position := Vector3.ZERO
+			var offset := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
+			match direction:
+				"north":
+					outward = Vector3(0.0, 0.0, -1.0)
+					position = Vector3(offset, 0.0, -half.y)
+				"south":
+					outward = Vector3(0.0, 0.0, 1.0)
+					position = Vector3(offset, 0.0, half.y)
+				"east":
+					outward = Vector3(1.0, 0.0, 0.0)
+					position = Vector3(half.x, 0.0, offset)
+				"west":
+					outward = Vector3(-1.0, 0.0, 0.0)
+					position = Vector3(-half.x, 0.0, offset)
+				_:
+					return 0.0
+			expected_slots.append({"position": position, "outward": outward})
+	if scene_slots.is_empty() or scene_slots.size() != expected_slots.size():
+		return 0.0
+	var matching: Array[float] = []
+	for steps in range(4):
+		var delta := float(steps * 90)
+		var basis := Basis(Vector3.UP, deg_to_rad(delta))
+		var matched: Array[int] = []
+		var sides: Array[String] = []
+		for slot in scene_slots:
+			var position := basis * slot.origin
+			var outward := (basis * slot.basis.z).normalized()
+			# 门墙正反面均可入库；以房间中心判朝外符号，不信任旧 side 元数据。
+			if outward.dot(position) < 0.0:
+				outward = -outward
+			var side := _authored_wall_side_from_position(position, get_dimensions() * 0.5)
+			if side.is_empty():
+				break
+			sides.append(side)
+			for index in range(expected_slots.size()):
+				if index in matched:
+					continue
+				var expected := expected_slots[index]
+				var wanted := expected["position"] as Vector3
+				if (
+					Vector2(position.x, position.z).distance_to(Vector2(wanted.x, wanted.z))
+					<= DOOR_LANE_GUARD_TOLERANCE_M
+					and outward.dot(expected["outward"] as Vector3) > 0.99
+				):
+					matched.append(index)
+					break
+		if matched.size() == expected_slots.size() and _same_direction_set(sides, doors):
+			matching.append(delta)
+	return matching[0] if matching.size() == 1 else 0.0
+
+
 ## 场景里**真组件**实例的水平坐标。灯 / 开关 / 相机代理是脚本节点，`scene_file_path`
 ## 为空，天然被排除；剩下那批正是会跟着房间朝向走的美术件。
 func _static_layout_planar_points(static_layout: Node3D) -> Array[Vector2]:
@@ -1262,7 +1366,8 @@ func _static_layout_planar_points(static_layout: Node3D) -> Array[Vector2]:
 		var node := child as Node3D
 		if node.scene_file_path.is_empty():
 			continue
-		points.append(Vector2(node.position.x, node.position.z))
+		var position := static_layout.transform * node.position
+		points.append(Vector2(position.x, position.z))
 	return points
 
 
@@ -1314,7 +1419,9 @@ func _static_layout_name_vote_deg(static_layout: Node3D) -> float:
 		if instance_name.is_empty() or not scene_nodes.has(instance_name):
 			continue
 		var local_position := instance.get("position", Vector3.ZERO) as Vector3
-		var scene_position := (scene_nodes[instance_name] as Node3D).position
+		var scene_position := (
+			static_layout.transform * (scene_nodes[instance_name] as Node3D).position
+		)
 		# 贴原点的实例角度是噪声，跳过。
 		if Vector2(local_position.x, local_position.z).length() < 1.0:
 			continue
@@ -1358,6 +1465,7 @@ func _rehome_static_layout_door(static_layout: Node3D) -> void:
 		return
 	var half := get_dimensions() * 0.5
 	var target: Dictionary = {}
+	var target_side := ""
 	for value in authored_layout_instances:
 		var instance := value as Dictionary
 		# 门墙有两种来源：房表直接写 `slot_role=door_wall`，或实墙槽被**提升**
@@ -1366,14 +1474,28 @@ func _rehome_static_layout_door(static_layout: Node3D) -> void:
 		if str(instance.get("slot_role", "")) not in ["solid_wall", "door_wall"]:
 			continue
 		var local_position := instance.get("position", Vector3.ZERO) as Vector3
-		if _authored_wall_door_side(local_position, half).is_empty():
+		target_side = _authored_wall_door_side(local_position, half)
+		if target_side.is_empty():
 			continue
 		target = instance
 		break
 	if target.is_empty():
 		return
-	door_node.position = target.get("position", door_node.position) as Vector3
-	door_node.rotation.y = deg_to_rad(float(target.get("rotation_y_deg", 0.0)))
+	# 清单在房间帧；门墙在已对齐的美术根下，必须反变换，不能再次叠加根的旋转。
+	# 目标门墙的局部轴可能与源实墙不同，必须与动态 uses_door 分支使用同一门墙轴契约。
+	var source_rotation_y_deg := fposmod(float(target.get("rotation_y_deg", 0.0)), 360.0)
+	var target_rotation_y_deg := (
+		floorf(source_rotation_y_deg / 180.0) * 180.0
+		+ (0.0 if target_side in ["north", "south"] else 90.0)
+	)
+	var target_position := target.get("position", static_layout.transform * door_node.position) as Vector3
+	# 替换件原点为门洞底面，不继承源实墙为其自身几何烘焙的负标高。
+	target_position.y = 0.0
+	var room_transform := Transform3D(
+		Basis(Vector3.UP, deg_to_rad(target_rotation_y_deg)).scaled(door_node.scale),
+		target_position
+	)
+	door_node.transform = static_layout.transform.affine_inverse() * room_transform
 
 
 ## 门墙件 = 带**通透门洞**的那一件。只认组件来源：实测同一批场景里门墙件的来源既有
@@ -1449,6 +1571,23 @@ func _solid_wall_donor(
 	return fallback
 
 
+func _sync_static_layout_connection_ports(static_layout: Node3D) -> void:
+	var container := static_layout.find_child("ConnectionPorts", true, false) as Node3D
+	if not _static_layout_ports_mismatch(static_layout, connection_ports):
+		static_layout.set_meta("connection_port_count", connection_ports.size())
+		if container != null:
+			container.set_meta("connection_port_count", connection_ports.size())
+		return
+	if container != null:
+		static_layout.remove_child(container)
+		container.free()
+	_build_connection_port_markers(static_layout)
+	static_layout.set_meta("connection_port_count", connection_ports.size())
+	var rebuilt := static_layout.find_child("ConnectionPorts", true, false) as Node3D
+	if rebuilt != null:
+		rebuilt.set_meta("connection_port_count", connection_ports.size())
+
+
 static func _static_layout_ports_mismatch(static_layout: Node3D, expected: Array) -> bool:
 	if static_layout == null:
 		return false
@@ -1461,22 +1600,55 @@ static func _static_layout_ports_mismatch(static_layout: Node3D, expected: Array
 	for value in expected:
 		var port := value as Dictionary
 		var raw := port.get("position_m", []) as Array
-		var position := (
-			Vector2(float(raw[0]), float(raw[1])) if raw.size() >= 2 else Vector2.ZERO
-		)
+		if raw.size() < 2:
+			return true
+		var position := Vector2(float(raw[0]), float(raw[1]))
+		var outward_raw := port.get("outward", []) as Array
+		if outward_raw.size() < 2:
+			return true
+		var outward := Vector2(float(outward_raw[0]), float(outward_raw[1])).normalized()
 		expected_by_id[str(port.get("port_id", ""))] = {
 			"target": str(port.get("target_room_id", "")),
 			"position": position,
+			"outward": outward,
+			"side": str(port.get("side", "")),
+			"lane_m": float(port.get("lane_m", 0.0)),
+			"connected": not str(port.get("target_room_id", "")).is_empty(),
 		}
 	for child in container.get_children():
-		var port_id := str(child.get_meta("port_id", ""))
+		if not (child is Node3D):
+			return true
+		var marker := child as Node3D
+		var port_id := str(marker.get_meta("port_id", ""))
 		if not expected_by_id.has(port_id):
 			return true
 		var expect := expected_by_id[port_id] as Dictionary
-		if str(child.get_meta("target_room_id", "")) != str(expect["target"]):
+		if str(marker.get_meta("target_room_id", "")) != str(expect["target"]):
 			return true
-		var marker_position := Vector2(child.position.x, child.position.z)
-		if marker_position.distance_to(expect["position"] as Vector2) > 0.01:
+		if str(marker.get_meta("side", "")) != str(expect["side"]):
+			return true
+		if not is_equal_approx(
+				float(marker.get_meta("lane_m", 0.0)), float(expect["lane_m"])
+		):
+			return true
+		if bool(marker.get_meta("connected", false)) != bool(expect["connected"]):
+			return true
+		var expected_position := expect["position"] as Vector2
+		var expected_outward := expect["outward"] as Vector2
+		var marker_to_room := static_layout.transform * container.transform * marker.transform
+		var marker_position := Vector2(marker_to_room.origin.x, marker_to_room.origin.z)
+		var marker_outward := Vector2(marker_to_room.basis.z.x, marker_to_room.basis.z.z).normalized()
+		if marker_position.distance_to(expected_position) > 0.01:
+			return true
+		if marker_outward.dot(expected_outward) < 0.999:
+			return true
+		if not marker.has_meta("position_m"):
+			return true
+		var marker_position_meta: Variant = marker.get_meta("position_m")
+		if not (marker_position_meta is Vector2) or (marker_position_meta as Vector2).distance_to(expected_position) > 0.01:
+			return true
+		var marker_outward_meta := marker.get_meta("outward", Vector2.ZERO) as Vector2
+		if marker_outward_meta.normalized().dot(expected_outward) < 0.999:
 			return true
 	return false
 
@@ -2631,6 +2803,8 @@ func _spawn_authored_layout_wall(
 	if uses_door:
 		rotation_y_deg = 0.0 if wall_side in ["north", "south"] else 90.0
 	module.position = instance.get("position", Vector3.ZERO) as Vector3
+	if uses_door:
+		module.position.y = 0.0
 	module.rotation.y = deg_to_rad(rotation_y_deg)
 	module.scale = instance.get("scale", Vector3.ONE) as Vector3
 	var world_direction := wall_side
@@ -2652,6 +2826,8 @@ func _spawn_authored_layout_wall(
 	)
 	_set_geometry_shadow_casting(module, true)
 	module.set_meta("shadow_policy", "cast_and_receive")
+	# 墙皮也可声明为 solid_wall，不能仅在 room_type_component 分支裁门洞。
+	_apply_authored_room_type_wall_door_collision(module, get_dimensions() * 0.5, module.transform)
 	art_root.add_child(module)
 	if uses_door and world_direction in ["north", "south"]:
 		# 南北向门洞开门后不能留实体碰撞：与安全房 v007 同契约，补 camera-only 代理。
@@ -2718,7 +2894,7 @@ func _spawn_authored_layout_floor_tile(art_root: Node3D, instance: Dictionary) -
 
 
 ## 房型默认布局中的普通组件。位置、旋转、缩放都来自 Blender 组件实例清单；
-## PackedScene 负责碰撞与元数据，本函数不根据包络临时生成第二套碰撞。
+## PackedScene 负责碰撞与元数据；仅真实门槽的墙皮盒按门洞净空裁切，不叠加整墙碰撞。
 func _spawn_authored_room_type_component(art_root: Node3D, instance: Dictionary) -> bool:
 	var component_id := str(instance.get("component_id", ""))
 	var prefab := _authored_component_prefab(component_id)
@@ -2739,8 +2915,107 @@ func _spawn_authored_room_type_component(art_root: Node3D, instance: Dictionary)
 	module.set_meta("authored_component_id", component_id)
 	module.set_meta("authored_slot_role", "room_type_component")
 	_set_geometry_shadow_casting(module, true)
+	_apply_authored_room_type_wall_door_collision(module, get_dimensions() * 0.5, module.transform)
 	art_root.add_child(module)
 	return true
+
+
+## 只裁切真实连接门槽上的墙皮结构盒；保留两侧、门楣和门洞以下的原碰撞。
+## 使用组件语义与完整房间变换，不依赖房间编号、实例名称或烘焙 side 元数据。
+func _apply_authored_room_type_wall_door_collision(
+	module: Node3D, half: Vector2, module_to_room: Transform3D
+) -> void:
+	var slug := str(module.get_meta("component_slug", ""))
+	var policy := str(module.get_meta("collision_policy", ""))
+	if not slug.begins_with("wall_skin_"):
+		return
+	if policy != "structural_box_proxy":
+		return
+	for value in module.find_children("*", "CollisionShape3D", true, false):
+		var collision := value as CollisionShape3D
+		var body := collision.get_parent() as StaticBody3D
+		var box := collision.shape as BoxShape3D
+		if body == null or (body.collision_layer & 1) == 0 or box == null or collision.disabled:
+			continue
+		var shape_to_module := collision.transform
+		var ancestor := collision.get_parent() as Node3D
+		while ancestor != null and ancestor != module:
+			shape_to_module = ancestor.transform * shape_to_module
+			ancestor = ancestor.get_parent() as Node3D
+		if ancestor != module:
+			continue
+		var shape_to_room := module_to_room * shape_to_module
+		var long_axis := 2 if box.size.z > box.size.x else 0
+		var along_axis := shape_to_room.basis[long_axis]
+		var up_axis := shape_to_room.basis.y
+		var normal_axis := shape_to_room.basis[2 - long_axis]
+		# 非正交四向墙不猜裁切轴；源盒、作者缩放和镜像均按各自局部轴换算。
+		if along_axis.is_zero_approx() or up_axis.is_zero_approx() or normal_axis.is_zero_approx():
+			continue
+		if absf(up_axis.normalized().dot(Vector3.UP)) < 0.999:
+			continue
+		for side in doors:
+			var tangent := Vector3.RIGHT if side in ["north", "south"] else Vector3.BACK
+			var normal := Vector3.BACK if side in ["north", "south"] else Vector3.RIGHT
+			var center := shape_to_room.origin
+			var thickness := box.size[2 - long_axis] * normal_axis.length()
+			var door_offset := float(get_meta("tower_wall_door_offset_%s" % side, 0.0))
+			if absf(along_axis.normalized().dot(tangent)) < 0.999:
+				continue
+			if absf(normal_axis.normalized().dot(normal)) < 0.999:
+				continue
+			# 墙皮位于结构墙内侧；允许一层墙皮厚度的内缩，不能放宽全房门槽容差。
+			if (
+				absf(center.dot(normal) - door_plane_depth(side, half))
+				> thickness + DOOR_LANE_GUARD_TOLERANCE_M
+			):
+				continue
+			if absf(module_to_room.origin.dot(tangent) - door_offset) > DOOR_LANE_GUARD_TOLERANCE_M:
+				continue
+			var room_to_shape := shape_to_room.affine_inverse()
+			var door_bottom_room := tangent * door_offset + normal * center.dot(normal)
+			var door_bottom := room_to_shape * door_bottom_room
+			var door_top := room_to_shape * (
+				door_bottom_room + Vector3.UP * TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M
+			)
+			var lower := -box.size * 0.5
+			var upper := box.size * 0.5
+			var opening_half_width := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5 / along_axis.length()
+			var cut_min := maxf(lower[long_axis], door_bottom[long_axis] - opening_half_width)
+			var cut_max := minf(upper[long_axis], door_bottom[long_axis] + opening_half_width)
+			var cut_bottom := maxf(lower.y, minf(door_bottom.y, door_top.y))
+			var cut_top := minf(upper.y, maxf(door_bottom.y, door_top.y))
+			if cut_max - cut_min <= 0.001 or cut_top - cut_bottom <= 0.001:
+				continue
+			# 替换原盒而非仅 disabled：流送会重新启用形状，不能让整盒再次挡门。
+			for index in range(4):
+				var segment_min := lower
+				var segment_max := upper
+				match index:
+					0:
+						segment_max[long_axis] = cut_min
+					1:
+						segment_min[long_axis] = cut_max
+					2, 3:
+						segment_min[long_axis] = cut_min
+						segment_max[long_axis] = cut_max
+						if index == 2:
+							segment_max.y = cut_bottom
+						else:
+							segment_min.y = cut_top
+				var segment_size := segment_max - segment_min
+				if minf(segment_size.x, minf(segment_size.y, segment_size.z)) <= 0.001:
+					continue
+				var segment := CollisionShape3D.new()
+				segment.name = "%s_DoorSlot_%d" % [collision.name, index]
+				segment.transform = collision.transform * Transform3D(Basis.IDENTITY, (segment_min + segment_max) * 0.5)
+				var segment_shape := BoxShape3D.new()
+				segment_shape.size = segment_size
+				segment.shape = segment_shape
+				body.add_child(segment)
+			body.remove_child(collision)
+			collision.free()
+			break
 
 
 ## 授权**专属件**（Boss 房 6 件：地板底板 / 主屏 / 粗重桥架 / 北墙标识 / 南地标附件 / 碎屑）。

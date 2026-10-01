@@ -342,14 +342,19 @@ static func reward_slots_from_rooms(rooms: Array) -> Array[Dictionary]:
 ## 「内容类型分配保留现行行为」指的是随机性保留，不是序列逐位复现）。
 ##
 ## 设计源缺失或校验不通过时返回 {}（空字典），由调用方决定拒绝进入还是回退内置房表。
-static func generate_from_level_plan(level_id: String, floor_number: int, run_seed: int) -> Dictionary:
+static func generate_from_level_plan(
+	level_id: String, floor_number: int, run_seed: int, expedition_rotation_deg: int = 180
+) -> Dictionary:
 	var level_plan := LEVEL_PLAN_LOADER.load_level_plan(level_id)
 	if level_plan.is_empty():
 		return {}
 	var normalized := LEVEL_PLAN_LOADER.normalize_floor(level_id, floor_number)
 	if normalized.is_empty():
 		return {}
-	var policy := level_plan.get("generation_policy", {}) as Dictionary
+	var policy := (level_plan.get("generation_policy", {}) as Dictionary).duplicate(true)
+	# 只旋转远征01；旧战局显式传0。临时策略不写回设计源、不消费随机数。
+	var north_revision := level_id == "expedition_01" and expedition_rotation_deg == 180
+	policy["expedition_global_rotation_deg"] = 180 if north_revision else 0
 	var templates := LEVEL_PLAN_LOADER.load_room_templates(level_id)
 	var mode := str(normalized.get("mode", "authored"))
 	# —— mode = "constrained"：几何由「蓝图（L2 的房表/主路/支线挂法）+ 种子」现算 ——
@@ -369,6 +374,9 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 	var errors := LEVEL_PLAN_VALIDATOR.validate_normalized(
 		level_id, floor_number, floor_source, policy, templates
 	)
+	# 新北向战局禁止把非权威样例伪装为可通行版图。保留无旋转旧档的历史行为。
+	if north_revision and (used_fallback or mode != "constrained"):
+		errors.append("expedition_north_requires_generated_geometry")
 	var boss_floor := false
 	for value in floor_source.get("rooms", []):
 		var src := value as Dictionary
@@ -414,7 +422,14 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 		catalog[_size_catalog_key(dimensions)] = dimensions
 	var entry_side := str(floor_source.get("entry_side", "east"))
 	var plan := {
-		"layout_id": _data_driven_layout_id(level_id, floor_number, floor_source, mode, run_seed),
+		"layout_id": _data_driven_layout_id(
+			level_id,
+			floor_number,
+			floor_source,
+			mode,
+			run_seed,
+			int(policy.get("expedition_global_rotation_deg", 0))
+		),
 		"run_seed": run_seed,
 		"level_id": level_id,
 		"mode": mode,
@@ -446,6 +461,8 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 	plan["validation_errors"] = errors
 	plan["attempt_count"] = 1
 	plan["used_fallback"] = used_fallback
+	if level_id == "expedition_01":
+		plan["expedition_global_rotation_deg"] = 180 if north_revision else 0
 	return plan
 
 
@@ -453,7 +470,8 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 ## authored 模式几何与种子无关，故 canonical 不含 run_seed；
 ## constrained 模式随机与种子相关，必须含 —— 否则两局不同图会撞同一个 layout_id。
 static func _data_driven_layout_id(
-	level_id: String, floor_number: int, normalized: Dictionary, mode: String, run_seed: int
+	level_id: String, floor_number: int, normalized: Dictionary, mode: String, run_seed: int,
+	global_rotation_deg: int = 0
 ) -> String:
 	var rows: Array = []
 	for value in normalized.get("rooms", []):
@@ -485,6 +503,8 @@ static func _data_driven_layout_id(
 		"entry_side": str(normalized.get("entry_side", "")),
 		"rooms": rows,
 	}
+	if global_rotation_deg != 0:
+		canonical["global_rotation_deg"] = global_rotation_deg
 	if mode == "constrained":
 		canonical["run_seed"] = run_seed
 	return "f%02d_%s" % [floor_number, JSON.stringify(canonical, "", true).sha256_text().substr(0, 16)]
@@ -1147,6 +1167,154 @@ static func _rotated_spawn_placements(placements: Array, rotation_deg: float) ->
 	return result
 
 
+## 已完成 derive_ports、spawn_placements 与 authored shell 后，对整张 source 房表做
+## 一次不可分割的刚体旋转。先生成壳体再旋转是关键：壳体 builder 的 lane 合并、角件
+## 去重和 owner 都在世界侧做离散判定，提前旋转会把浮点边界/声明顺序暴露给它，导致
+## 同一份房表出现不同实例数。这里只搬运结果，不重新生成、不消费 RNG。
+static func _apply_final_global_rotation(rooms: Array, rotation_deg: float) -> void:
+	if rooms.is_empty() or is_zero_approx(fposmod(rotation_deg, 360.0)):
+		return
+	var pivot := Vector2.ZERO
+	var pivot_found := false
+	for value in rooms:
+		var room := value as Dictionary
+		if str(room.get("role", "")) == "stair_entry":
+			pivot = room.get("center", Vector2.ZERO) as Vector2
+			pivot_found = true
+			break
+	if not pivot_found:
+		pivot = (rooms[0] as Dictionary).get("center", Vector2.ZERO) as Vector2
+	for value in rooms:
+		var room := value as Dictionary
+		var center := room.get("center", Vector2.ZERO) as Vector2
+		room["center"] = pivot * 2.0 - center
+		room["rotation_deg"] = fposmod(float(room.get("rotation_deg", 0.0)) + rotation_deg, 360.0)
+		if room.has("template_rotation_deg"):
+			room["template_rotation_deg"] = fposmod(
+				float(room.get("template_rotation_deg", 0.0)) + rotation_deg, 360.0
+			)
+		room["connection_ports"] = _rotated_connection_ports(
+			room.get("connection_ports", []) as Array, rotation_deg
+		)
+		room["ports"] = _rotated_lane_ports(room.get("ports", []) as Array, rotation_deg)
+		room["derived_ports"] = _rotated_lane_ports(
+			room.get("derived_ports", []) as Array, rotation_deg
+		)
+		room["declared_ports"] = _rotated_lane_ports(
+			room.get("declared_ports", []) as Array, rotation_deg
+		)
+		room["spawn_placements"] = _rotated_spawn_placements(
+			room.get("spawn_placements", []) as Array, rotation_deg
+		)
+		room["authored_layout_instances"] = _rotated_authored_instances(
+			room.get("authored_layout_instances", []) as Array, rotation_deg
+		)
+		for rect_key in ["pit_rect", "bridge_rect", "sunken_pit_rect", "bridge_span_rect"]:
+			var raw_rect: Variant = room.get(rect_key, null)
+			if raw_rect is Rect2:
+				room[rect_key] = _rotated_rect_around_origin(raw_rect as Rect2, rotation_deg)
+		for instances_key in ["multi_level_instances", "authored_layout_multi_level_instances"]:
+			if room.has(instances_key):
+				room[instances_key] = _rotated_authored_instances(
+					room.get(instances_key, []) as Array, rotation_deg
+				)
+
+
+static func _rotated_lane_ports(ports: Array, rotation_deg: float) -> Array:
+	var result: Array = []
+	for value in ports:
+		if not value is Dictionary:
+			continue
+		var port := (value as Dictionary).duplicate(true)
+		var raw_position: Variant = port.get("position_m", null)
+		var has_position := raw_position is Array and (raw_position as Array).size() >= 2
+		var position := Vector2.ZERO
+		if has_position:
+			var raw_position_array := raw_position as Array
+			position = _rotate_port_vector(
+				Vector2(float(raw_position_array[0]), float(raw_position_array[1])), rotation_deg
+			)
+			port["position_m"] = [position.x, position.y]
+		var raw_outward: Variant = port.get("outward", null)
+		var has_outward := raw_outward is Array and (raw_outward as Array).size() >= 2
+		var outward := Vector2.ZERO
+		if has_outward:
+			var raw_outward_array := raw_outward as Array
+			outward = _rotate_port_vector(
+				Vector2(float(raw_outward_array[0]), float(raw_outward_array[1])), rotation_deg
+			).normalized()
+			port["outward"] = [outward.x, outward.y]
+		var side := str(port.get("side", ""))
+		if has_outward:
+			side = _side_from_outward(outward)
+		elif not side.is_empty():
+			side = _side_from_outward(
+				_rotate_port_vector(
+					Vector2.RIGHT if side == "east" else (
+						Vector2.LEFT if side == "west" else (
+						Vector2.UP if side == "north" else Vector2.DOWN
+						)
+					),
+					rotation_deg
+				).normalized()
+			)
+		if not side.is_empty():
+			port["side"] = side
+		if has_position:
+			port["lane_m"] = position.x if side in ["north", "south"] else position.y
+		else:
+			port["lane_m"] = -float(port.get("lane_m", 0.0)) if not is_zero_approx(
+				rotation_deg
+			) else float(port.get("lane_m", 0.0))
+		result.append(port)
+	return result
+
+
+static func _rotated_authored_instances(instances: Array, rotation_deg: float) -> Array:
+	var result: Array = []
+	for value in instances:
+		if not value is Dictionary:
+			continue
+		var instance := (value as Dictionary).duplicate(true)
+		var position: Variant = instance.get("position", null)
+		if position is Vector3:
+			var local := position as Vector3
+			local = Vector3(-local.x, local.y, -local.z) if is_equal_approx(
+				fposmod(rotation_deg, 360.0), 180.0
+			) else local.rotated(Vector3.UP, deg_to_rad(rotation_deg))
+			instance["position"] = local
+		if instance.has("rotation_y_deg"):
+			instance["rotation_y_deg"] = fposmod(
+				float(instance.get("rotation_y_deg", 0.0)) + rotation_deg, 360.0
+			)
+		if instance.has("rotation_z_deg"):
+			instance["rotation_z_deg"] = fposmod(
+				float(instance.get("rotation_z_deg", 0.0)) + rotation_deg, 360.0
+			)
+		result.append(instance)
+	return result
+
+
+static func _rotated_rect_around_origin(rect: Rect2, rotation_deg: float) -> Rect2:
+	if is_equal_approx(fposmod(rotation_deg, 360.0), 180.0):
+		return Rect2(
+			Vector2(-rect.position.x - rect.size.x, -rect.position.y - rect.size.y), rect.size
+		)
+	var corners := [
+		_rotate_port_vector(rect.position, rotation_deg),
+		_rotate_port_vector(rect.position + Vector2(rect.size.x, 0.0), rotation_deg),
+		_rotate_port_vector(rect.position + Vector2(0.0, rect.size.y), rotation_deg),
+		_rotate_port_vector(rect.position + rect.size, rotation_deg),
+	]
+	var min_corner := corners[0] as Vector2
+	var max_corner := min_corner
+	for value in corners:
+		var corner := value as Vector2
+		min_corner = Vector2(minf(min_corner.x, corner.x), minf(min_corner.y, corner.y))
+		max_corner = Vector2(maxf(max_corner.x, corner.x), maxf(max_corner.y, corner.y))
+	return Rect2(min_corner, max_corner - min_corner)
+
+
 ## 显式端口装配：父端口世界坐标 = 子端口世界坐标，且两端朝外法线相反。
 ##
 ## **拼接自由度就在这里**（「随机拼接」的随机源）：一个连接的可行解**不唯一** ——
@@ -1596,6 +1764,9 @@ static func _constrained_floor_from(
 	policy: Dictionary,
 	templates: Dictionary
 ) -> Dictionary:
+	# 生成、端口派生和壳体装配先完全沿用未旋转几何；最终刚体变换在壳体
+	# 清单已经确定后一次性兑现，避免世界侧门 owner / 浮点边界改变实例集合。
+	var global_rotation := int(policy.get("expedition_global_rotation_deg", 0))
 	var placed_by_key: Dictionary = {}
 	for value in placed:
 		var placed_room := value as Dictionary
@@ -1656,14 +1827,16 @@ static func _constrained_floor_from(
 		for room_value: Dictionary in rooms:
 			room_value["spawn_boxes_only"] = true
 	attach_authored_layout_shell(rooms, policy, templates)
+	if global_rotation == 180:
+		_apply_final_global_rotation(rooms, 180.0)
 	return {
 		"level_id": str(blueprint.get("level_id", "")),
 		"mode": "constrained",
 		"floor_number": int(blueprint.get("floor_number", floor_number)),
 		"floor_index": int(blueprint.get("floor_index", 0)),
 		"sequence_index": int(blueprint.get("sequence_index", 0)),
-		"entry_side": str(blueprint.get("entry_side", "east")),
-		"exit_side": str(blueprint.get("exit_side", "west")),
+		"entry_side": _opposite_side(str(blueprint.get("entry_side", "east"))) if global_rotation == 180 else str(blueprint.get("entry_side", "east")),
+		"exit_side": _opposite_side(str(blueprint.get("exit_side", "west"))) if global_rotation == 180 else str(blueprint.get("exit_side", "west")),
 		"reservations": blueprint.get("reservations", []),
 		"rooms": rooms,
 		"main_path": _string_array(blueprint.get("main_path", [])),
