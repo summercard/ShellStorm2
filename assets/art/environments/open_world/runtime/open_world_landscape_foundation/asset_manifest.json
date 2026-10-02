@@ -1,0 +1,27 @@
+{
+  "schema": "shellstorm2.openworld.landscape_foundation.v002",
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-FOUNDATION",
+  "version": "v002",
+  "category": "大地图场景景观",
+  "prefab": "assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn",
+  "visual_source": "Godot BoxMesh scene-assembly proxy; no Blender source and no new material resource",
+  "material_source": "assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres",
+  "collision": "visual_only",
+  "root_scale": [1, 1, 1],
+  "metadata_contract": ["target", "top_y", "ground_y", "footprint_source", "material_source", "future_optimization_space"],
+  "source_policy": "02b new scene assembly proxy; original tower and skyline Blender sources remain untouched",
+  "route_reference": "assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn",
+  "components": [
+    "foundation_tower1_box.tscn",
+    "foundation_tower2_box.tscn",
+    "foundation_tower3_box.tscn",
+    "foundation_skyline08_box.tscn",
+    "ground_plane_box.tscn",
+    "remote_tower2_a.tscn",
+    "remote_tower2_b.tscn",
+    "remote_tower3_a.tscn",
+    "remote_skyline08_a.tscn"
+  ],
+  "runtime_probe": "tests/verification/probe_open_world_landscape_foundation.tscn",
+  "geometry_check": "scripts/verify_landscape_foundation_geometry.py"
+}

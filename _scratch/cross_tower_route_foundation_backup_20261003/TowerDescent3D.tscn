@@ -1,0 +1,190 @@
+[gd_scene format=3 uid="uid://2r7opnx1o4s0"]
+
+[ext_resource type="PackedScene" path="res://scenes/Dungeon3D.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://daktvsf2n2llc" path="res://src/world3d/TowerDescent3D.gd" id="2_tower"]
+[ext_resource type="Resource" path="res://data/map_themes/iron_frontier.tres" id="3_gameplay"]
+[ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres" id="4_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn" id="5_base_art"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn" id="6_cross_tower"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/cloud_sea/vfx_env_cloud_sea_root_top3d.tscn" id="7_clouds"]
+
+[sub_resource type="Environment" id="Environment_editor_runtime_match"]
+background_mode = 1
+background_color = Color(0.58, 0.62, 0.64, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.45, 0.52, 0.6, 1)
+ambient_light_energy = 0.01
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 1.18
+fog_enabled = true
+fog_light_color = Color(0.4, 0.48, 0.55, 1)
+fog_light_energy = 0.36
+fog_density = 0.04
+
+[node name="TowerDescent3D" unique_id=1708992133 instance=ExtResource("1_base")]
+script = ExtResource("2_tower")
+expedition_mode = false
+expedition_run_id = ""
+expedition_plan_id = ""
+force_standard_floor_plan_for_test = false
+force_new_game_opening_for_test = false
+force_extraction_settlement_for_test = false
+gameplay_theme = ExtResource("3_gameplay")
+visual_theme = ExtResource("4_visual")
+return_scene_path = "res://scenes/TowerDescent3D.tscn"
+
+[node name="WorldEnvironment" parent="." index="0"]
+environment = SubResource("Environment_editor_runtime_match")
+
+[node name="DirectionalLight3D" parent="." index="1"]
+transform = Transform3D(-0.70710677, -0.61237246, 0.35355335, 0, 0.49999997, 0.86602545, -0.70710677, 0.61237246, -0.35355335, 0, 0, 0)
+
+[node name="OutdoorClouds" parent="." instance=ExtResource("7_clouds")]
+
+[node name="DungeonMinimap3D" parent="HUD" index="0"]
+layout_mode = 3
+
+[node name="Margin" parent="HUD/TopBar" index="0"]
+layout_mode = 2
+
+[node name="HBox" parent="HUD/TopBar/Margin" index="0"]
+layout_mode = 2
+
+[node name="TitleLabel" parent="HUD/TopBar/Margin/HBox" index="0"]
+layout_mode = 2
+
+[node name="SeedLabel" parent="HUD/TopBar/Margin/HBox" index="1"]
+layout_mode = 2
+
+[node name="HPLabel" parent="HUD/TopBar/Margin/HBox" index="2"]
+layout_mode = 2
+
+[node name="AmmoLabel" parent="HUD/TopBar/Margin/HBox" index="4"]
+layout_mode = 2
+
+[node name="RoomLabel" parent="HUD/TopBar/Margin/HBox" index="5"]
+layout_mode = 2
+
+[node name="LootLabel" parent="HUD/TopBar/Margin/HBox" index="6"]
+layout_mode = 2
+
+[node name="Margin" parent="HUD/StatusPanel" index="0"]
+layout_mode = 2
+
+[node name="StatusLabel" parent="HUD/StatusPanel/Margin" index="0"]
+layout_mode = 2
+
+[node name="Margin" parent="HUD/ExtractionPanel" index="0"]
+layout_mode = 2
+
+[node name="VBox" parent="HUD/ExtractionPanel/Margin" index="0"]
+layout_mode = 2
+
+[node name="Label" parent="HUD/ExtractionPanel/Margin/VBox" index="0"]
+layout_mode = 2
+
+[node name="ExtractionBar" parent="HUD/ExtractionPanel/Margin/VBox" index="1"]
+layout_mode = 2
+
+[node name="PauseOverlay" parent="HUD" index="7"]
+layout_mode = 3
+
+[node name="Blocks" type="Node3D" parent="." index="9" unique_id=1638559547]
+metadata/naming_contract = "WORLD-BLOCKS-r1"
+metadata/runtime_owner = "TowerDescent3D"
+
+[node name="Rooftop" type="Node3D" parent="Blocks" index="0" unique_id=1497301531]
+metadata/block_id = "rooftop"
+metadata/display_name = "天台区"
+metadata/floor_range = "100F"
+metadata/asset_ids = Array[String](["ENV-OPENWORLD-CROSS-TOWER-ROUTE"])
+metadata/facility_art_state = "removed_by_user"
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend", "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend"])
+
+[node name="CrossTowerRoute" parent="Blocks/Rooftop" instance=ExtResource("6_cross_tower")]
+
+[node name="Base" type="Node3D" parent="Blocks" index="1" unique_id=931883670]
+metadata/block_id = "base"
+metadata/display_name = "基地区"
+metadata/floor_range = "99F"
+metadata/asset_ids = Array[String](["ENV-BASE99-ART-LAYOUT-3D"])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"])
+
+[node name="Art" parent="Blocks/Base" index="0" unique_id=355486011 instance=ExtResource("5_base_art")]
+
+[node name="北墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -15)
+
+[node name="南墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 15)
+
+[node name="西墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.04, 0)
+
+[node name="东墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.04, 0)
+
+[node name="V026西北L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="0"]
+transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, -15, 0, -15)
+
+[node name="V026东北L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="1"]
+transform = Transform3D(-1, 0, -3.2584137e-07, 0, 1, 0, 3.2584137e-07, 0, -1, 15, 0, -15)
+
+[node name="V026西南L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 15)
+
+[node name="V026东南L型转角墙_仅视觉" parent="Blocks/Base/Art/基地结构组件_可移动旋转" index="3"]
+transform = Transform3D(3.1391647e-07, 0, 1, 0, 1, 0, -1, 0, 3.1391647e-07, 15, 0, 15)
+
+[node name="枪械工坊" parent="Blocks/Base/Art/设施交互节点_可移动旋转" index="0"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 2.8696804, 0, -31.346287)
+
+[node name="维修圆凳_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="2"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.3827412, 0, -2.6486073)
+
+[node name="战术指挥椅_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="3"]
+transform = Transform3D(0.47313932, 0, 0.5158868, 0, 0.7, 0, -0.5158868, 0, 0.47313932, 7.459879, 0, -1.9208963)
+
+[node name="中央冷色主灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.273571, 0)
+visible = true
+light_color = Color(0.6439318, 0.3917458, 0.07696823, 1)
+light_energy = 16.0
+light_indirect_energy = 7.112
+light_volumetric_fog_energy = 9.629
+light_size = 0.084
+
+[node name="西北紫色轮廓灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 3.4, -8.5)
+
+[node name="东南暖色轮廓灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 3.4, 8.5)
+
+[node name="99层电梯锚点" parent="Blocks/Base/Art/玩法锚点_只移动不删除" index="0"]
+transform = Transform3D(-1, 0, -3.2584137e-07, 0, 1, 0, 3.2584137e-07, 0, -1, 9, 0, 11.6)
+
+[node name="Battle" type="Node3D" parent="Blocks" index="2" unique_id=693240615]
+metadata/block_id = "battle"
+metadata/display_name = "局内关卡01-顶部数据库"
+metadata/level_code = "局内关卡01"
+metadata/level_number = 1
+metadata/setting_name = "顶部数据库"
+metadata/floor_range = "98F-95F"
+metadata/asset_ids = Array[String](["ENV-TOWER-DESCENT-KIT-3D"])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["source/art/whitebox/tower_zones/stairs/v011/blender/whitebox_tower_battle_stairs_v011.blend"])
+metadata/production_stage = "whitebox"
+
+[node name="Stairs" type="Node3D" parent="Blocks" index="3" unique_id=64635438]
+metadata/block_id = "stairs"
+metadata/display_name = "楼梯区"
+metadata/floor_range = "100F-99F;99F-98F"
+metadata/asset_ids = Array[String](["ENV-TOWER-STAIRWELL-ROOFTOP-12M", "ENV-TOWER-STAIRWELL-GENERIC-12M"])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend"])
+metadata/production_stage = "formal_blender_source"
+
+[editable path="Blocks/Base/Art"]

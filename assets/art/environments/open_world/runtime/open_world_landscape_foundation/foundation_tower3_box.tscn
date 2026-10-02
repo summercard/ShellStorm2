@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
+
+[sub_resource type="BoxMesh" id="BoxTower3"]
+size = Vector3(73.917942, 39.849998, 49.621033)
+material = ExtResource("1_material")
+
+[node name="Tower3FoundationBox" type="MeshInstance3D"]
+mesh = SubResource("BoxTower3")
+cast_shadow = 1
+metadata/target = "Tower3"
+metadata/top_y = -40.15
+metadata/ground_y = -80.0
+metadata/footprint_source = "tower_03 export/v001 full runtime mesh XZ bounds + 1m margin; asymmetric source bbox center retained"
+metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
+metadata/future_optimization_space = true
+metadata/collision_status = "visual_only"
+metadata/bottom_y = -80.0

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
+
+[sub_resource type="BoxMesh" id="BoxGround"]
+size = Vector3(290.999374, 0.2, 354.651886)
+material = ExtResource("1_material")
+
+[node name="OpenWorldGroundPlane" type="MeshInstance3D"]
+mesh = SubResource("BoxGround")
+cast_shadow = 1
+metadata/target = "AllOpenWorldTargets"
+metadata/top_y = -80.0
+metadata/ground_y = -80.0
+metadata/footprint_source = "all runtime target, foundation, bridge, deterministic city and remote proxy XZ envelopes + 20.25m boundary safety margin"
+metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
+metadata/future_optimization_space = true
+metadata/collision_status = "visual_only"
+metadata/plane_extent_x = "[-141.749374,149.250000]"
+metadata/plane_extent_z = "[-218.096664,136.555222]"
+metadata/plane_extent_source = "runtime target + bridge + 96 deterministic city AABBs + 4 foundations + 4 remote proxies, 20m requirement plus 0.25m float safety margin; conservative envelope"
+metadata/bottom_y = -80.2

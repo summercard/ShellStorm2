@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
+
+[sub_resource type="BoxMesh" id="BoxSkyline"]
+size = Vector3(27.93465, 20.345413, 35.02)
+material = ExtResource("1_material")
+
+[node name="Skyline08FoundationBox" type="MeshInstance3D"]
+mesh = SubResource("BoxSkyline")
+cast_shadow = 1
+metadata/target = "Skyline08"
+metadata/top_y = -59.654587
+metadata/ground_y = -80.0
+metadata/footprint_source = "skyline_08 export/v004 full runtime mesh bounds; full route Transform3D applied; world XZ envelope + 1m margin"
+metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
+metadata/future_optimization_space = true
+metadata/collision_status = "visual_only"
+metadata/bottom_y = -80.0
+metadata/preserved_target_transform = "full route Transform3D unchanged; position=(-17.305016,-59.654587,-121.18834)"

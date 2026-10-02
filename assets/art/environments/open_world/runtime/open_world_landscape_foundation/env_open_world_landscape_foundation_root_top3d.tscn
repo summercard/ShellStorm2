@@ -1,0 +1,49 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower1_box.tscn" id="1_tower1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower2_box.tscn" id="2_tower2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower3_box.tscn" id="3_tower3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_skyline08_box.tscn" id="4_skyline08"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/ground_plane_box.tscn" id="5_ground"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_tower2_a.tscn" id="6_remote_tower2_a"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_tower2_b.tscn" id="7_remote_tower2_b"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_tower3_a.tscn" id="8_remote_tower3_a"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_skyline08_a.tscn" id="9_remote_skyline08_a"]
+
+[node name="OpenWorldLandscapeFoundation" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-LANDSCAPE-FOUNDATION"
+metadata/asset_version = "v002"
+metadata/block_id = "open_world"
+metadata/collision_status = "none_visual_only"
+metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
+metadata/ground_y = -80.0
+metadata/future_optimization_space = true
+metadata/source_blend = "none_scene_assembly_proxy_only"
+metadata/source_policy = "02b_new_scene_assembly_proxy_no_blender_source_edit"
+
+[node name="Tower1FoundationBox" parent="." instance=ExtResource("1_tower1")]
+position = Vector3(0.0, -52.15, 5.0)
+
+[node name="Tower2FoundationBox" parent="." instance=ExtResource("2_tower2")]
+position = Vector3(40.0, -90.25, -90.0)
+
+[node name="Tower3FoundationBox" parent="." instance=ExtResource("3_tower3")]
+position = Vector3(-12.01462, -60.075001, -173.036148)
+
+[node name="Skyline08FoundationBox" parent="." instance=ExtResource("4_skyline08")]
+position = Vector3(-16.847691, -69.827294, -121.18834)
+
+[node name="OpenWorldGroundPlane" parent="." instance=ExtResource("5_ground")]
+position = Vector3(3.750313, -80.1, -40.770721)
+
+[node name="Tower2RemoteSilhouette_A" parent="." instance=ExtResource("6_remote_tower2_a")]
+position = Vector3(120.0, -49.0, -140.0)
+
+[node name="Tower2RemoteSilhouette_B" parent="." instance=ExtResource("7_remote_tower2_b")]
+position = Vector3(80.0, -56.0, -130.0)
+
+[node name="Tower3RemoteSilhouette_A" parent="." instance=ExtResource("8_remote_tower3_a")]
+position = Vector3(-70.0, -52.0, -173.0)
+
+[node name="Skyline08RemoteSilhouette_A" parent="." instance=ExtResource("9_remote_skyline08_a")]
+position = Vector3(-60.0, -59.0, -125.0)

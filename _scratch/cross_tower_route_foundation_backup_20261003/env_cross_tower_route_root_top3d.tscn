@@ -1,6 +1,5 @@
-[gd_scene load_steps=54 format=3]
+[gd_scene load_steps=53 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn" id="foundation"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn" id="tower2"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/env_skyline_08_root_top3d.tscn" id="skyline08"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn" id="tower3"]
@@ -147,17 +146,12 @@ size = Vector3(3.600000, 4.800000, 2.000000)
 [node name="CrossTowerRoute" type="Node3D"]
 metadata/asset_id = "ENV-OPENWORLD-CROSS-TOWER-ROUTE"
 metadata/asset_version = "v002"
-metadata/landscape_foundation_prefab = "res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn"
-metadata/landscape_foundation_ground_y = -80.0
-metadata/landscape_foundation_collision = "visual_only"
 metadata/north_bridge_opening_x = 20.0
 metadata/collision_owner = "CrossTowerRoute"
 metadata/tower2_accessible = false
 metadata/route_width_m = 1.65
 metadata/bridge_model_asset_id = "ENV-OPENWORLD-TOWER02-CRANE-00-JIB"
 metadata/bridge_section_pitch_m = 32.0
-
-[node name="LandscapeFoundation" parent="." instance=ExtResource("foundation")]
 
 [node name="Tower2" parent="." instance=ExtResource("tower2")]
 position = Vector3(40, -100.5, -90)

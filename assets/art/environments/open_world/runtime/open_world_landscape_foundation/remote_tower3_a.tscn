@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
+
+[sub_resource type="BoxMesh" id="BoxRemoteC"]
+size = Vector3(16.0, 56.0, 18.0)
+material = ExtResource("1_material")
+
+[node name="Tower3RemoteSilhouette_A" type="MeshInstance3D"]
+mesh = SubResource("BoxRemoteC")
+cast_shadow = 0
+metadata/target = "Tower3"
+metadata/top_y = -24.0
+metadata/ground_y = -80.0
+metadata/footprint_source = "TowerAtmosphere3D.build_city_layout() checked empty production slot; Tower3 west remote slot; 10m+ XZ clearance"
+metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
+metadata/future_optimization_space = true
+metadata/collision_status = "visual_only"
+metadata/bottom_y = -80.0

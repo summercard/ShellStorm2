@@ -1,0 +1,1790 @@
+{
+  "schema": "shellstorm2.openworld.landscape_foundation.footprint_check.v003",
+  "runtime_probe_dump": "I:\\工作项目\\shellstrom2\\_scratch\\landscape_runtime_geometry_final2.json",
+  "ground_y": -80.0,
+  "ground_top_y": -80.0,
+  "ground_thickness": 0.2,
+  "ground_margin_requirement_m": 20.0,
+  "ground_margin_used_m": 20.25,
+  "checked_object_count": 113,
+  "city_layout_count": 96,
+  "checked_objects": [
+    {
+      "name": "Tower1_rooftop_shell",
+      "x": [
+        -50.0,
+        50.0
+      ],
+      "z": [
+        -35.0,
+        45.0
+      ],
+      "kind": "target",
+      "target": "Tower1"
+    },
+    {
+      "name": "Skyline08",
+      "x": [
+        -29.8150157928467,
+        -3.8803653717041
+      ],
+      "z": [
+        -137.698333740234,
+        -104.678344726563
+      ],
+      "kind": "target",
+      "target": "Skyline08"
+    },
+    {
+      "name": "Tower2",
+      "x": [
+        -14.7348136901855,
+        106.118255615234
+      ],
+      "z": [
+        -117.750396728516,
+        -60.3453598022461
+      ],
+      "kind": "target",
+      "target": "Tower2"
+    },
+    {
+      "name": "Tower3",
+      "x": [
+        -47.9735908508301,
+        23.9443511962891
+      ],
+      "z": [
+        -196.846664428711,
+        -149.225631713867
+      ],
+      "kind": "target",
+      "target": "Tower3"
+    },
+    {
+      "name": "CraneJib_0_0",
+      "x": [
+        13.1229286193848,
+        26.9774799346924
+      ],
+      "z": [
+        -65.1170349121094,
+        -31.8652648925781
+      ],
+      "kind": "bridge",
+      "target": null
+    },
+    {
+      "name": "CraneJib_0_1",
+      "x": [
+        13.1229286193848,
+        26.9774799346924
+      ],
+      "z": [
+        -97.1170349121094,
+        -63.8652648925781
+      ],
+      "kind": "bridge",
+      "target": null
+    },
+    {
+      "name": "CraneJib_1_0",
+      "x": [
+        2.5913553237915,
+        21.5044555664063
+      ],
+      "z": [
+        -126.976448059082,
+        -93.7712326049805
+      ],
+      "kind": "bridge",
+      "target": null
+    },
+    {
+      "name": "CraneJib_1_1",
+      "x": [
+        -13.4086446762085,
+        5.50445556640625
+      ],
+      "z": [
+        -154.689254760742,
+        -121.484046936035
+      ],
+      "kind": "bridge",
+      "target": null
+    },
+    {
+      "name": "City[r0:i0]",
+      "x": [
+        -72.2759857177734,
+        -57.7240142822266
+      ],
+      "z": [
+        -62.0936584472656,
+        -50.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i1]",
+      "x": [
+        -50.6099166870117,
+        -39.3900833129883
+      ],
+      "z": [
+        -60.6118469238281,
+        -50.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i2]",
+      "x": [
+        -33.1491394042969,
+        -16.8508625030518
+      ],
+      "z": [
+        -67.5005798339844,
+        -50.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i3]",
+      "x": [
+        -13.3951416015625,
+        3.3951416015625
+      ],
+      "z": [
+        -66.4011764526367,
+        -50.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i4]",
+      "x": [
+        6.62582778930664,
+        23.3741722106934
+      ],
+      "z": [
+        -67.9831924438477,
+        -50.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i5]",
+      "x": [
+        29.4874744415283,
+        40.512523651123
+      ],
+      "z": [
+        -63.7718124389648,
+        -50.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i6]",
+      "x": [
+        46.183708190918,
+        63.816291809082
+      ],
+      "z": [
+        -61.7394943237305,
+        -50.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i7]",
+      "x": [
+        66.7378692626953,
+        79.8882904052734
+      ],
+      "z": [
+        -48.3130760192871,
+        -31.6869239807129
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i8]",
+      "x": [
+        65.2695083618164,
+        81.336540222168
+      ],
+      "z": [
+        -28.3030281066895,
+        -11.6969718933105
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i9]",
+      "x": [
+        61.4748420715332,
+        79.0500793457031
+      ],
+      "z": [
+        -5.26245975494385,
+        5.26245975494385
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i10]",
+      "x": [
+        64.8353118896484,
+        76.7071228027344
+      ],
+      "z": [
+        14.2287845611572,
+        25.7712154388428
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i11]",
+      "x": [
+        65.6734466552734,
+        78.1495361328125
+      ],
+      "z": [
+        33.088508605957,
+        46.911491394043
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i12]",
+      "x": [
+        56.6958808898926,
+        73.3041229248047
+      ],
+      "z": [
+        60.0,
+        77.4791717529297
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i13]",
+      "x": [
+        39.3004951477051,
+        50.6995048522949
+      ],
+      "z": [
+        60.0,
+        75.8149108886719
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i14]",
+      "x": [
+        19.9721908569336,
+        30.0278091430664
+      ],
+      "z": [
+        60.0,
+        73.5461120605469
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i15]",
+      "x": [
+        -0.723189830780029,
+        10.7231903076172
+      ],
+      "z": [
+        60.0,
+        76.6329498291016
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i16]",
+      "x": [
+        -22.0952320098877,
+        -7.9047679901123
+      ],
+      "z": [
+        59.9999961853027,
+        72.43359375
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i17]",
+      "x": [
+        -41.3667030334473,
+        -28.6332969665527
+      ],
+      "z": [
+        59.9999961853027,
+        77.078010559082
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i18]",
+      "x": [
+        -60.8631553649902,
+        -49.1368446350098
+      ],
+      "z": [
+        60.0,
+        75.7865142822266
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i19]",
+      "x": [
+        -77.2418441772461,
+        -66.3996047973633
+      ],
+      "z": [
+        43.1792755126953,
+        56.8207244873047
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i20]",
+      "x": [
+        -77.5910949707031,
+        -63.4871978759766
+      ],
+      "z": [
+        24.4608554840088,
+        35.5391426086426
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i21]",
+      "x": [
+        -76.008056640625,
+        -65.5420074462891
+      ],
+      "z": [
+        4.22497034072876,
+        15.7750282287598
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i22]",
+      "x": [
+        -80.2480316162109,
+        -62.3831634521484
+      ],
+      "z": [
+        -16.3155937194824,
+        -3.68440628051758
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r0:i23]",
+      "x": [
+        -80.1583251953125,
+        -65.6442260742188
+      ],
+      "z": [
+        -37.9012756347656,
+        -22.0987243652344
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i0]",
+      "x": [
+        -83.9634704589844,
+        -66.0365295410156
+      ],
+      "z": [
+        -81.7009887695313,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i1]",
+      "x": [
+        -61.6068572998047,
+        -48.3931427001953
+      ],
+      "z": [
+        -86.3715057373047,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i2]",
+      "x": [
+        -41.0221633911133,
+        -28.9778366088867
+      ],
+      "z": [
+        -85.0350952148438,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i3]",
+      "x": [
+        -22.5328712463379,
+        -7.46712875366211
+      ],
+      "z": [
+        -85.2518768310547,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i4]",
+      "x": [
+        -0.501067161560059,
+        10.5010671615601
+      ],
+      "z": [
+        -87.4911193847656,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i5]",
+      "x": [
+        18.9828586578369,
+        31.0171413421631
+      ],
+      "z": [
+        -87.4847564697266,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i6]",
+      "x": [
+        37.6358795166016,
+        52.3641204833984
+      ],
+      "z": [
+        -82.8854217529297,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i7]",
+      "x": [
+        56.3594055175781,
+        73.6405944824219
+      ],
+      "z": [
+        -84.4428100585938,
+        -70.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i8]",
+      "x": [
+        85.6991806030273,
+        97.0895309448242
+      ],
+      "z": [
+        -76.3943557739258,
+        -63.6056442260742
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i9]",
+      "x": [
+        86.8325119018555,
+        97.4181289672852
+      ],
+      "z": [
+        -57.1253204345703,
+        -42.8746795654297
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i10]",
+      "x": [
+        83.3365783691406,
+        98.2389221191406
+      ],
+      "z": [
+        -35.7877540588379,
+        -24.2122459411621
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i11]",
+      "x": [
+        84.9897155761719,
+        101.453170776367
+      ],
+      "z": [
+        -18.2214450836182,
+        -1.77855491638184
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i12]",
+      "x": [
+        81.3954086303711,
+        99.1561050415039
+      ],
+      "z": [
+        4.72424077987671,
+        15.2757587432861
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i13]",
+      "x": [
+        85.1435394287109,
+        96.23486328125
+      ],
+      "z": [
+        24.3107986450195,
+        35.6892013549805
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i14]",
+      "x": [
+        81.8216018676758,
+        98.4093551635742
+      ],
+      "z": [
+        44.884521484375,
+        55.115478515625
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i15]",
+      "x": [
+        83.5911102294922,
+        100.543960571289
+      ],
+      "z": [
+        62.9324645996094,
+        77.0675354003906
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i16]",
+      "x": [
+        68.6793441772461,
+        81.3206558227539
+      ],
+      "z": [
+        80.0,
+        95.6144714355469
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i17]",
+      "x": [
+        47.6281394958496,
+        62.3718605041504
+      ],
+      "z": [
+        80.0,
+        95.5060882568359
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i18]",
+      "x": [
+        29.278190612793,
+        40.721809387207
+      ],
+      "z": [
+        80.0,
+        90.6588897705078
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i19]",
+      "x": [
+        7.95897197723389,
+        22.0410270690918
+      ],
+      "z": [
+        80.0,
+        92.2252655029297
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i20]",
+      "x": [
+        -10.4587268829346,
+        0.45872688293457
+      ],
+      "z": [
+        80.0,
+        96.8540954589844
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i21]",
+      "x": [
+        -33.7112426757813,
+        -16.2887573242188
+      ],
+      "z": [
+        80.0,
+        93.2455902099609
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i22]",
+      "x": [
+        -51.8981666564941,
+        -38.1018333435059
+      ],
+      "z": [
+        80.0,
+        97.5512847900391
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i23]",
+      "x": [
+        -70.0092010498047,
+        -59.9907989501953
+      ],
+      "z": [
+        80.0,
+        93.7490539550781
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i24]",
+      "x": [
+        -100.984306335449,
+        -84.5083541870117
+      ],
+      "z": [
+        72.2536697387695,
+        87.7463302612305
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i25]",
+      "x": [
+        -98.5954513549805,
+        -87.9825210571289
+      ],
+      "z": [
+        51.7110137939453,
+        68.2889862060547
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i26]",
+      "x": [
+        -99.213981628418,
+        -87.8223495483398
+      ],
+      "z": [
+        31.4818363189697,
+        48.5181655883789
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i27]",
+      "x": [
+        -99.2581634521484,
+        -83.2633819580078
+      ],
+      "z": [
+        13.7392263412476,
+        26.2607727050781
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i28]",
+      "x": [
+        -97.8656539916992,
+        -84.9296035766602
+      ],
+      "z": [
+        -6.39762735366821,
+        6.39762735366821
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i29]",
+      "x": [
+        -100.198364257813,
+        -82.5559692382813
+      ],
+      "z": [
+        -26.3771705627441,
+        -13.6228303909302
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i30]",
+      "x": [
+        -99.6101989746094,
+        -87.192626953125
+      ],
+      "z": [
+        -48.4014129638672,
+        -31.5985851287842
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r1:i31]",
+      "x": [
+        -101.725875854492,
+        -84.1363677978516
+      ],
+      "z": [
+        -67.9311218261719,
+        -52.0688819885254
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i0]",
+      "x": [
+        -110.127342224121,
+        -99.8726577758789
+      ],
+      "z": [
+        -105.103134155273,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i1]",
+      "x": [
+        -92.1317672729492,
+        -77.8682327270508
+      ],
+      "z": [
+        -103.556198120117,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i2]",
+      "x": [
+        -72.6376571655273,
+        -57.3623466491699
+      ],
+      "z": [
+        -102.974365234375,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i3]",
+      "x": [
+        -52.3533554077148,
+        -37.6466445922852
+      ],
+      "z": [
+        -107.349548339844,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i4]",
+      "x": [
+        -30.0968627929688,
+        -19.9031372070313
+      ],
+      "z": [
+        -106.583999633789,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i5]",
+      "x": [
+        -11.7758665084839,
+        1.77586555480957
+      ],
+      "z": [
+        -101.401184082031,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i6]",
+      "x": [
+        8.77080059051514,
+        21.2291984558105
+      ],
+      "z": [
+        -104.468948364258,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i7]",
+      "x": [
+        28.6147155761719,
+        41.3852844238281
+      ],
+      "z": [
+        -107.372024536133,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i8]",
+      "x": [
+        49.3665771484375,
+        60.6334228515625
+      ],
+      "z": [
+        -103.76936340332,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i9]",
+      "x": [
+        67.5900039672852,
+        82.4099960327148
+      ],
+      "z": [
+        -101.665496826172,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i10]",
+      "x": [
+        87.5044403076172,
+        102.495559692383
+      ],
+      "z": [
+        -105.941696166992,
+        -90.0
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i11]",
+      "x": [
+        101.773025512695,
+        118.712921142578
+      ],
+      "z": [
+        -85.2429733276367,
+        -74.7570266723633
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i12]",
+      "x": [
+        103.795562744141,
+        120.737503051758
+      ],
+      "z": [
+        -67.2665328979492,
+        -52.7334671020508
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i13]",
+      "x": [
+        104.588554382324,
+        117.713356018066
+      ],
+      "z": [
+        -46.150951385498,
+        -33.849048614502
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i14]",
+      "x": [
+        105.523445129395,
+        116.587028503418
+      ],
+      "z": [
+        -26.0552368164063,
+        -13.9447622299194
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i15]",
+      "x": [
+        105.904014587402,
+        119.088676452637
+      ],
+      "z": [
+        -7.49634885787964,
+        7.49634885787964
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i16]",
+      "x": [
+        104.387519836426,
+        120.673133850098
+      ],
+      "z": [
+        12.4696760177612,
+        27.5303230285645
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i17]",
+      "x": [
+        101.33039855957,
+        119.142639160156
+      ],
+      "z": [
+        34.7634811401367,
+        45.2365188598633
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i18]",
+      "x": [
+        104.496513366699,
+        116.991996765137
+      ],
+      "z": [
+        54.2557487487793,
+        65.744255065918
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i19]",
+      "x": [
+        102.542381286621,
+        119.41332244873
+      ],
+      "z": [
+        74.0221481323242,
+        85.9778518676758
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i20]",
+      "x": [
+        97.7168579101563,
+        112.283142089844
+      ],
+      "z": [
+        100.0,
+        114.006546020508
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i21]",
+      "x": [
+        79.2750015258789,
+        90.7249984741211
+      ],
+      "z": [
+        100.0,
+        113.196060180664
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i22]",
+      "x": [
+        59.4934120178223,
+        70.506591796875
+      ],
+      "z": [
+        100.0,
+        114.039642333984
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i23]",
+      "x": [
+        37.3957595825195,
+        52.6042404174805
+      ],
+      "z": [
+        100.0,
+        116.305221557617
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i24]",
+      "x": [
+        19.6176700592041,
+        30.3823299407959
+      ],
+      "z": [
+        100.0,
+        111.382568359375
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i25]",
+      "x": [
+        -2.56086826324463,
+        12.5608682632446
+      ],
+      "z": [
+        100.0,
+        111.540100097656
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i26]",
+      "x": [
+        -23.7927150726318,
+        -6.20728492736816
+      ],
+      "z": [
+        100.0,
+        112.727157592773
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i27]",
+      "x": [
+        -43.7488288879395,
+        -26.2511711120605
+      ],
+      "z": [
+        100.0,
+        112.907485961914
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i28]",
+      "x": [
+        -62.9343414306641,
+        -47.0656585693359
+      ],
+      "z": [
+        100.0,
+        113.618347167969
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i29]",
+      "x": [
+        -80.5310592651367,
+        -69.4689407348633
+      ],
+      "z": [
+        100.0,
+        111.448547363281
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i30]",
+      "x": [
+        -102.619110107422,
+        -87.3808898925781
+      ],
+      "z": [
+        100.0,
+        112.040817260742
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i31]",
+      "x": [
+        -115.655426025391,
+        -105.491561889648
+      ],
+      "z": [
+        84.4265060424805,
+        95.5734939575195
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i32]",
+      "x": [
+        -118.802024841309,
+        -104.94034576416
+      ],
+      "z": [
+        63.1288146972656,
+        76.8711853027344
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i33]",
+      "x": [
+        -118.338188171387,
+        -102.590156555176
+      ],
+      "z": [
+        44.535831451416,
+        55.464168548584
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i34]",
+      "x": [
+        -117.85050201416,
+        -103.666725158691
+      ],
+      "z": [
+        24.2413883209229,
+        35.7586097717285
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i35]",
+      "x": [
+        -118.169281005859,
+        -106.691772460938
+      ],
+      "z": [
+        2.5694739818573,
+        17.4305267333984
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i36]",
+      "x": [
+        -118.03173828125,
+        -107.747131347656
+      ],
+      "z": [
+        -17.8894348144531,
+        -2.11056423187256
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i37]",
+      "x": [
+        -118.903579711914,
+        -106.144622802734
+      ],
+      "z": [
+        -37.524097442627,
+        -22.475902557373
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i38]",
+      "x": [
+        -121.499374389648,
+        -103.742553710938
+      ],
+      "z": [
+        -57.620964050293,
+        -42.379035949707
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "City[r2:i39]",
+      "x": [
+        -120.020034790039,
+        -103.137710571289
+      ],
+      "z": [
+        -76.5788726806641,
+        -63.4211311340332
+      ],
+      "kind": "city",
+      "target": null
+    },
+    {
+      "name": "Tower1FoundationBox",
+      "x": [
+        -52.0,
+        52.0
+      ],
+      "z": [
+        -37.0,
+        47.0
+      ],
+      "kind": "foundation",
+      "target": "Tower1"
+    },
+    {
+      "name": "Tower2FoundationBox",
+      "x": [
+        2.93500137329102,
+        77.0650024414063
+      ],
+      "z": [
+        -117.056289672852,
+        -62.9437103271484
+      ],
+      "kind": "foundation",
+      "target": "Tower2"
+    },
+    {
+      "name": "Tower3FoundationBox",
+      "x": [
+        -48.9735870361328,
+        24.9443492889404
+      ],
+      "z": [
+        -197.846664428711,
+        -148.225631713867
+      ],
+      "kind": "foundation",
+      "target": "Tower3"
+    },
+    {
+      "name": "Skyline08FoundationBox",
+      "x": [
+        -30.8150157928467,
+        -2.8803653717041
+      ],
+      "z": [
+        -138.698333740234,
+        -103.678337097168
+      ],
+      "kind": "foundation",
+      "target": "Skyline08"
+    },
+    {
+      "name": "OpenWorldGroundPlane",
+      "x": [
+        -141.749359130859,
+        149.25
+      ],
+      "z": [
+        -218.096664428711,
+        136.555221557617
+      ],
+      "kind": "ground",
+      "target": "AllOpenWorldTargets"
+    },
+    {
+      "name": "Tower2RemoteSilhouette_A",
+      "x": [
+        111.0,
+        129.0
+      ],
+      "z": [
+        -149.0,
+        -131.0
+      ],
+      "kind": "remote",
+      "target": "Tower2"
+    },
+    {
+      "name": "Tower2RemoteSilhouette_B",
+      "x": [
+        71.0,
+        89.0
+      ],
+      "z": [
+        -138.0,
+        -122.0
+      ],
+      "kind": "remote",
+      "target": "Tower2"
+    },
+    {
+      "name": "Tower3RemoteSilhouette_A",
+      "x": [
+        -78.0,
+        -62.0
+      ],
+      "z": [
+        -182.0,
+        -164.0
+      ],
+      "kind": "remote",
+      "target": "Tower3"
+    },
+    {
+      "name": "Skyline08RemoteSilhouette_A",
+      "x": [
+        -68.0,
+        -52.0
+      ],
+      "z": [
+        -133.0,
+        -117.0
+      ],
+      "kind": "remote",
+      "target": "Skyline08"
+    }
+  ],
+  "ground_extent": {
+    "x": [
+      -141.74937438964798,
+      149.25
+    ],
+    "z": [
+      -218.096664428711,
+      136.55522155761702
+    ]
+  },
+  "ground_size": [
+    290.999374389648,
+    0.2,
+    354.651885986328
+  ],
+  "intentional_target_foundation_overlaps": [
+    {
+      "a": "Tower1_rooftop_shell",
+      "b": "Tower1FoundationBox",
+      "classification": "intentional_target_foundation_envelope"
+    },
+    {
+      "a": "Skyline08",
+      "b": "Skyline08FoundationBox",
+      "classification": "intentional_target_foundation_envelope"
+    },
+    {
+      "a": "Tower2",
+      "b": "Tower2FoundationBox",
+      "classification": "intentional_target_foundation_envelope"
+    },
+    {
+      "a": "Tower3",
+      "b": "Tower3FoundationBox",
+      "classification": "intentional_target_foundation_envelope"
+    }
+  ],
+  "pairwise_aabb_xz_overlap": [
+    {
+      "a": "Tower1_rooftop_shell",
+      "b": "CraneJib_0_0",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Skyline08",
+      "b": "Tower2",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Skyline08",
+      "b": "CraneJib_1_1",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Skyline08",
+      "b": "City[r2:i4]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_0_0",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_0_1",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_1_0",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i3]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i4]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i5]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i6]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i3]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i4]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i5]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i6]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i7]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i8]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i5]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i6]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i7]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i8]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i9]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i10]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i11]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i12]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower2",
+      "b": "Skyline08FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "Tower3",
+      "b": "CraneJib_1_1",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "CraneJib_0_1",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "City[r0:i4]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "Tower1FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "CraneJib_1_0",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r0:i4]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r1:i5]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r2:i6]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "CraneJib_1_1",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "City[r2:i6]",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Tower3FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Skyline08FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r0:i3]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r0:i4]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r0:i5]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r1:i4]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r1:i5]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r1:i6]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r1:i7]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r2:i4]",
+      "b": "Skyline08FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r2:i6]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r2:i7]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r2:i8]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    },
+    {
+      "a": "City[r2:i9]",
+      "b": "Tower2FoundationBox",
+      "classification": "conservative_aabb_xz_overlap"
+    }
+  ],
+  "pairwise_aabb_xz_overlap_count": 53,
+  "all_pairwise_overlap_count_including_intentional": 57,
+  "triangle_geometry_note": "Only conservative runtime AABB/XZ envelope screening was executed. No triangle-level mesh intersection was run.",
+  "result": "blocked_by_conservative_aabb_xz_overlap"
+}

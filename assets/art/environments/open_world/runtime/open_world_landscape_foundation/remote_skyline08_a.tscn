@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
+
+[sub_resource type="BoxMesh" id="BoxRemoteD"]
+size = Vector3(16.0, 42.0, 16.0)
+material = ExtResource("1_material")
+
+[node name="Skyline08RemoteSilhouette_A" type="MeshInstance3D"]
+mesh = SubResource("BoxRemoteD")
+cast_shadow = 0
+metadata/target = "Skyline08"
+metadata/top_y = -38.0
+metadata/ground_y = -80.0
+metadata/footprint_source = "TowerAtmosphere3D.build_city_layout() checked empty production slot; Skyline08 west remote slot; 18m+ XZ clearance"
+metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
+metadata/future_optimization_space = true
+metadata/collision_status = "visual_only"
+metadata/bottom_y = -80.0
