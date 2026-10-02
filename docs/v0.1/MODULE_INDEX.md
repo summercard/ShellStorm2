@@ -1,5 +1,11 @@
 # v0.1 模块、功能与工程契约索引
 
+ASSET-PIPELINE [跨塔路线景观补全代理v002](development/2026-10-03_cross_tower_landscape_foundation.md)：正式路线接入 `ENV-OPENWORLD-LANDSCAPE-FOUNDATION`，根场景拆为4个基础、1个地表和4个远景 PackedScene；主塔98F最低视觉包络按生产地砖链修正为Y=-24.30，地表含基础并外扩20.25m。Godot导入/独立加载/运行时AABB探针通过；Tower2源底部Y=-100.5与地表Y=-80冲突、完整保守AABB/XZ仍有既有路线关系，未宣称全局无重叠；场景XLSX分账本未直接修改，真实截图和三角级检测未执行。
+
+ASSET-PIPELINE [07号物流建筑源v004](development/2026-10-03_logistics07_building_source.md)：独立参考图外观资产，334包、4材质、6张Cycles预览，源与色盘UV验收通过；场景账本824行登记。未导入Godot，用户视觉待复核，不提升总体完成状态。
+
+ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_tower04_landscape_damage.md)：与SKYLINE同级、独立母版；增加中段差异破坏、倾斜断柱与塌板，并保留两栋在建骨架。73实例，各组含植物2098/2334/2450/2098/2991三角不变；源、范围锁定、空洞与色盘验收通过，场景账本819–823行更新。用户视觉待复核，未导入Godot，不提升总体完成状态。
+
 工程版本：0.1.0。设计索引修订：r11（2026-09-30，房间生产流程与接入状态）。事实核对基线：`622d6c4a` + 当前工作区。
 后续验收快照：[`bda2c828`全局验收](audits/2026-09-24_global_acceptance.md)及[逐功能表](audits/2026-09-24_global_feature_matrix.md)。下表中的历史通过数/资产零问题不代表本轮通过，当前结果以新快照为准。
 本表建立追溯入口，不替代各模块设计，也不把现存实现自动认定为设计已批准。功能关系、解耦和文档补全见[执行计划](FEATURE_RELATIONSHIP_PLAN.md)与[逐项跟踪表](FEATURE_RELATIONSHIP_MATRIX.md)。[P0/P1/P2 后全项目完整复评](audits/2026-09-23_full_project_reassessment.md)保留其原时点证据；后续资产复核和开发记录优先于其中的旧数字。
