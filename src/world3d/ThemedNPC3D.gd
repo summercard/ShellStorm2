@@ -90,6 +90,16 @@ func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
 	_refresh_presentation()
 
 
+func get_interaction_dot_anchor() -> Vector3:
+	if _prompt_label != null and is_instance_valid(_prompt_label):
+		return _prompt_label.global_position
+	return global_position + Vector3.UP * 2.0
+
+
+func get_interaction_dot_accent() -> Color:
+	return accent_color
+
+
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 	if not _player_in_range:
 		return false
@@ -132,7 +142,8 @@ func _refresh_presentation() -> void:
 		_role_label.modulate = accent_color.lightened(0.2)
 	if _prompt_label != null:
 		_prompt_label.text = "[E] 交谈"
-		_prompt_label.visible = _interaction_focused
+		# 文字牌退役为纯文案载体；可见反馈由常驻圆点承担。
+		_prompt_label.visible = false
 	if _dialogue_label != null:
 		_dialogue_label.text = interaction_text
 		_dialogue_label.visible = _dialogue_visible

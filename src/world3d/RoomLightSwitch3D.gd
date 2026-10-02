@@ -132,9 +132,24 @@ func is_light_on() -> bool:
 	return true
 
 
-func set_prompt_visible(visible_state: bool) -> void:
-	if _prompt != null:
-		_prompt.visible = visible_state
+## 文字提示牌退役为纯文案载体（text 仍随灯状态更新）；可见反馈由常驻圆点承担。
+func set_prompt_visible(_visible_state: bool) -> void:
+	pass
+
+
+func get_interaction_dot_anchor() -> Vector3:
+	if _prompt != null and is_instance_valid(_prompt):
+		return _prompt.global_position
+	return global_position + Vector3.UP * 1.75
+
+
+## 没有任何受控灯时开关不可交互，圆点淡出。
+func is_interaction_dot_visible() -> bool:
+	return not _controlled_lights.is_empty()
+
+
+func get_interaction_dot_accent() -> Color:
+	return _prompt.modulate if _prompt != null else UIPalette.NEON_CYAN
 
 
 func get_snapshot() -> Dictionary:

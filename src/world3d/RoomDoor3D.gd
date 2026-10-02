@@ -151,9 +151,29 @@ func _on_motion_finished(opened: bool, target_y: float) -> void:
 	_refresh_prompt()
 
 
-func set_prompt_visible(show_prompt: bool) -> void:
-	if _prompt != null:
-		_prompt.visible = show_prompt
+## 文字提示牌退役为纯文案载体（`_prompt.text` 仍被候选协议与多枚探针读取）。
+## 可见反馈统一交给 PlayerInteractionController3D 的常驻圆点，圆点锚点取本牌位置。
+func set_prompt_visible(_show_prompt: bool) -> void:
+	pass
+
+
+## 常驻圆点锚点：沿用原提示牌的位置。
+func get_interaction_dot_anchor() -> Vector3:
+	if _prompt != null and is_instance_valid(_prompt):
+		return _prompt.global_position
+	return global_position + Vector3.UP * (TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M + 0.62)
+
+
+## 已开启且不允许手动关闭的门不再可交互 —— 圆点随之淡出，玩家一眼能看出哪扇门还能开。
+func is_interaction_dot_visible() -> bool:
+	if _transitioning:
+		return true
+	return not is_open or _manual_close_enabled
+
+
+## 圆点沿用文字牌的状态色：需要钥匙=金、可选命运=青、可开启=绿。
+func get_interaction_dot_accent() -> Color:
+	return _prompt.modulate if _prompt != null else Color(0.52, 0.94, 0.80)
 
 
 func get_interaction_prompt_text() -> String:

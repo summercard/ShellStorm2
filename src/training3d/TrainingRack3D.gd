@@ -41,9 +41,24 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 	}
 
 
-func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
-	if _prompt != null:
-		_prompt.visible = focused and _player_in_range
+## 文字提示牌退役为纯文案载体；可见反馈由常驻圆点承担。
+func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
+	pass
+
+
+func get_interaction_dot_anchor() -> Vector3:
+	if _prompt != null and is_instance_valid(_prompt):
+		return _prompt.global_position
+	return global_position + Vector3.UP * 1.85
+
+
+func get_interaction_dot_accent() -> Color:
+	return _accent_color()
+
+
+## 圆点与机架自发光共用同一个主色，避免两处各写一份色值后漂移。
+func _accent_color() -> Color:
+	return Color(0.28, 0.76, 1.0) if category == "gunbody" else Color(1.0, 0.56, 0.18)
 
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
@@ -73,7 +88,7 @@ func _on_body_exited(body: Node3D) -> void:
 
 func _build_visual() -> void:
 	var base_material := _material(Color(0.10, 0.12, 0.12), 0.72, 0.44)
-	var accent_color := Color(0.28, 0.76, 1.0) if category == "gunbody" else Color(1.0, 0.56, 0.18)
+	var accent_color := _accent_color()
 	_glow_material = _material(accent_color, 0.18, 0.28, true)
 	_add_box("Pedestal", Vector3(0, 0.35, 0), Vector3(1.7, 0.7, 1.0), base_material)
 	_add_box("GlowStrip", Vector3(0, 0.60, -0.52), Vector3(1.28, 0.10, 0.05), _glow_material)

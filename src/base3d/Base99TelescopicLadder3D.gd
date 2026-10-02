@@ -76,6 +76,17 @@ func get_interaction_candidate(player: Player3D) -> Dictionary:
 	return {}
 
 
+## 常驻圆点锚点：取梯子中段，玩家在任一端都能一眼看到。
+func get_interaction_dot_anchor() -> Vector3:
+	return to_global(Vector3(
+		0.0, TRAVEL_HEIGHT * 0.5, (TOP_LANDING_Z + BOTTOM_LANDING_Z) * 0.5
+	))
+
+
+func get_interaction_dot_accent() -> Color:
+	return Color(0.72, 0.88, 1.0)
+
+
 func perform_interaction(player: Player3D, candidate: Dictionary) -> bool:
 	match str(candidate.get("interaction_id", "")):
 		"deploy_ladder":

@@ -226,6 +226,10 @@ var _boss_panel: PanelContainer = null
 var _boss_label: Label = null
 var _boss_bar: ProgressBar = null
 var _active_boss: Enemy3D = null
+# 常驻交互圆点（门的锚点）单帧缓存：见 _refresh_interaction_dot_cache。
+var _dot_cache_frame := -1
+var _dot_anchor_cache := Vector3.ZERO
+var _dot_visible_cache := false
 var _reference_hud_root: Control = null
 var _hud_weapon_meta_label: Label = null
 var _hud_weapon_fate_label: Label = null
@@ -853,10 +857,43 @@ func get_interaction_candidate(interacting_player: Player3D) -> Dictionary:
 	)
 
 
+## 门的文字提示牌退役为纯文案载体；可见反馈统一由常驻圆点承担。
 func set_interaction_focus(candidate: Dictionary, focused: bool) -> void:
 	var door := candidate.get("door") as RoomDoor3D
 	if door != null and is_instance_valid(door):
 		door.set_prompt_visible(focused)
+
+
+## 房间门不是独立 provider，交互候选由本场景统一路由。因此门的常驻圆点也挂在本场景
+## 这个 provider 上：锚点取当前候选门的提示位置，没候选（或已通关）时圆点淡出。
+func get_interaction_dot_anchor() -> Vector3:
+	_refresh_interaction_dot_cache()
+	return _dot_anchor_cache
+
+
+func is_interaction_dot_visible() -> bool:
+	_refresh_interaction_dot_cache()
+	return _dot_visible_cache
+
+
+## 每帧最多解析一次候选（TowerDescent3D 的多门路由成本不低）。
+func _refresh_interaction_dot_cache() -> void:
+	var frame := Engine.get_process_frames()
+	if frame == _dot_cache_frame:
+		return
+	_dot_cache_frame = frame
+	var candidate := get_interaction_candidate(player) if player != null else {}
+	if candidate.is_empty():
+		_dot_visible_cache = false
+		_dot_anchor_cache = global_position
+		return
+	_dot_visible_cache = true
+	var raw: Variant = candidate.get("dot_anchor")
+	_dot_anchor_cache = (
+		raw as Vector3
+		if raw is Vector3 and (raw as Vector3).is_finite()
+		else global_position + Vector3.UP * 1.7
+	)
 
 
 func perform_interaction(
@@ -886,6 +923,8 @@ func _make_door_interaction_candidate(
 		"mode": mode,
 		"door": door,
 		"target_room_id": target_room_id,
+		# 供常驻圆点使用的精确锚点：门自己的提示牌位置。
+		"dot_anchor": door.get_interaction_dot_anchor(),
 	}
 
 

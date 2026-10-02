@@ -26,9 +26,6 @@ var _prompt: Label3D
 var _main_material: StandardMaterial3D
 var _searching := false
 var _search_elapsed := 0.0
-var _search_overlay: Control
-var _search_bar: ProgressBar
-var _search_label: Label
 
 
 func configure(config: Dictionary) -> void:
@@ -63,11 +60,38 @@ func _process(delta: float) -> void:
 		_cancel_search()
 		return
 	_search_elapsed += maxf(0.0, delta)
-	var progress := clampf(_search_elapsed / maxf(0.1, _effective_search_duration()), 0.0, 1.0)
-	_search_bar.value = progress * 100.0
-	_search_label.text = "正在搜索  %d%%" % int(round(progress * 100.0))
-	if progress >= 1.0:
+	if _search_progress() >= 1.0:
 		_complete_search()
+
+
+## 搜索读条进度（0..1）。UI 不再自己画进度条 —— 由 InteractionDot3D 的圆环消费。
+func _search_progress() -> float:
+	return clampf(_search_elapsed / maxf(0.1, _effective_search_duration()), 0.0, 1.0)
+
+
+## 交互圆点锚点：沿用原文字提示牌的位置，圆点出现在玩家原本看提示的地方。
+func get_interaction_dot_anchor() -> Vector3:
+	if _prompt != null and is_instance_valid(_prompt):
+		return _prompt.global_position
+	var dimensions: Vector3 = SIZE_DIMENSIONS.get(size_class, SIZE_DIMENSIONS["medium"])
+	return global_position + Vector3.UP * (dimensions.y + 0.58)
+
+
+## 已搜索完的容器不再可交互，圆点随之淡出。
+func is_interaction_dot_visible() -> bool:
+	return not _searched
+
+
+## 读条期间圆点外圈画进度环，圈满即完成。
+func get_interaction_progress() -> Dictionary:
+	return {
+		"active": _searching,
+		"progress": _search_progress() if _searching else 0.0,
+	}
+
+
+func get_interaction_dot_accent() -> Color:
+	return accent_color
 
 
 func get_interaction_candidate(_player: Player3D) -> Dictionary:
@@ -82,9 +106,10 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 	}
 
 
-func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
-	if _prompt != null:
-		_prompt.visible = focused and _player_in_range and not _searched and not _searching
+## 文字提示牌已退役为纯文案载体（`_prompt.text` 仍被候选协议与探针读取），
+## 可见反馈统一交给 InteractionDot3D 的常驻圆点，因此这里不再切换可见性。
+func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
+	pass
 
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
@@ -95,15 +120,9 @@ func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 
 
 func _start_search() -> void:
-	# 搜索HUD按需创建，避免每个房间家具都常驻一套CanvasLayer和控件。
-	# 同一时间玩家只能搜索一个家具，因此懒加载不改变交互语义。
-	if _search_overlay == null:
-		_build_search_overlay()
 	_searching = true
 	_search_elapsed = 0.0
 	_prompt.text = "搜索中 · 请保持靠近"
-	_search_bar.value = 0.0
-	_search_overlay.visible = true
 
 
 func _cancel_search() -> void:
@@ -111,7 +130,6 @@ func _cancel_search() -> void:
 		return
 	_searching = false
 	_search_elapsed = 0.0
-	_search_overlay.visible = false
 	if not _searched:
 		_prompt.text = "[E] 搜索 · %s" % size_class.to_upper()
 
@@ -120,7 +138,6 @@ func _complete_search() -> void:
 	if _searched:
 		return
 	_searching = false
-	_search_overlay.visible = false
 	_searched = true
 	_player_in_range = false
 	_prompt.text = "已搜索"
@@ -150,7 +167,6 @@ func restore_searched_state(searched_state: bool) -> void:
 	if _prompt != null:
 		_prompt.text = "已搜索" if _searched else "[E] 搜索 · %s" % size_class.to_upper()
 		_prompt.modulate = Color(0.55, 0.61, 0.62) if _searched else Color.WHITE
-		_prompt.visible = false
 	if _main_material != null and _searched:
 		_main_material.albedo_color = _main_material.albedo_color.darkened(0.28)
 
@@ -201,8 +217,6 @@ func _on_body_exited(body: Node3D) -> void:
 		return
 	_player_in_range = false
 	_cancel_search()
-	if _prompt != null:
-		_prompt.visible = false
 
 
 func _build_visual() -> void:
@@ -270,50 +284,11 @@ func _build_visual() -> void:
 	_prompt.pixel_size = 0.012
 	_prompt.modulate = accent_color.lightened(0.2)
 	_prompt.outline_size = 8
+	# 2026-10-02 主人要求：交互提示统一改为常驻圆点（InteractionDot3D）。
+	# 这块 Label3D 退役为**纯文案载体** —— 它的 text/modulate 仍按状态更新（候选协议
+	# 的 prompt 字段与多枚探针读它），但不再渲染；圆点锚点也取自它的位置。
 	_prompt.visible = false
 	add_child(_prompt)
-
-
-func _build_search_overlay() -> void:
-	var canvas := CanvasLayer.new()
-	canvas.name = "SearchProgressCanvas"
-	canvas.layer = 180
-	add_child(canvas)
-	_search_overlay = Control.new()
-	_search_overlay.name = "SearchProgressOverlay"
-	_search_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_search_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_search_overlay.visible = false
-	canvas.add_child(_search_overlay)
-	var panel := PanelContainer.new()
-	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	panel.position = Vector2(-210, -172)
-	panel.custom_minimum_size = Vector2(420, 78)
-	panel.add_theme_stylebox_override(
-		"panel",
-		UIStyleFactory.make_panel_with_border(0, UIPalette.NEON_CYAN, 7, 2)
-	)
-	_search_overlay.add_child(panel)
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 16)
-	margin.add_theme_constant_override("margin_top", 10)
-	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_bottom", 10)
-	panel.add_child(margin)
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 7)
-	margin.add_child(box)
-	_search_label = Label.new()
-	_search_label.text = "正在搜索  0%"
-	_search_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_search_label.add_theme_color_override("font_color", UIPalette.TEXT_PRIMARY)
-	box.add_child(_search_label)
-	_search_bar = ProgressBar.new()
-	_search_bar.show_percentage = false
-	_search_bar.custom_minimum_size.y = 14
-	_search_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_background())
-	_search_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(UIPalette.NEON_CYAN))
-	box.add_child(_search_bar)
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> void:

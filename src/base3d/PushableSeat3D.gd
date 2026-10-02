@@ -104,6 +104,17 @@ func get_interaction_candidate(player: Player3D) -> Dictionary:
 	return {"available": true, "interaction_id": "sit_on_seat", "prompt": "E 坐上座椅", "priority": 70, "position": get_seat_position()}
 
 
+## 常驻圆点锚点：座位上沿，跟随椅子移动/翻倒。
+func get_interaction_dot_anchor() -> Vector3:
+	if is_tipped():
+		return global_position + Vector3.UP * 0.45
+	return get_seat_position() + Vector3.UP * 0.95
+
+
+func get_interaction_dot_accent() -> Color:
+	return Color(1.0, 0.82, 0.34)
+
+
 func perform_interaction(player: Player3D, candidate: Dictionary) -> bool:
 	match str(candidate.get("interaction_id", "")):
 		"sit_on_seat":

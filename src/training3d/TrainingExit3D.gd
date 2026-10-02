@@ -28,9 +28,19 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 	}
 
 
-func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
-	if _prompt != null:
-		_prompt.visible = focused and _player_in_range
+## 文字提示牌退役为纯文案载体；可见反馈由常驻圆点承担。
+func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
+	pass
+
+
+func get_interaction_dot_anchor() -> Vector3:
+	if _prompt != null and is_instance_valid(_prompt):
+		return _prompt.global_position
+	return global_position + Vector3.UP * 3.05
+
+
+func get_interaction_dot_accent() -> Color:
+	return Color(0.45, 0.92, 1.0)
 
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:

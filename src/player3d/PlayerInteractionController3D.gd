@@ -4,10 +4,15 @@ extends Node
 ## 可交互对象只实现候选/聚焦/执行协议，不得自行读取E键。
 
 const PROVIDER_GROUP := "interaction_provider_3d"
+const INTERACTION_DOT_SCRIPT := preload("res://src/ui/InteractionDot3D.gd")
+## provider 没有提供锚点时的兜底高度：悬在对象原点上方，避免圆点埋进地板。
+const DOT_ANCHOR_FALLBACK_HEIGHT_M := 1.7
 
 var player: Player3D
 var _focused_provider: Node
 var _focused_candidate: Dictionary = {}
+## provider instance_id → InteractionDot3D。常驻圆点由控制器统一创建与驱动。
+var _dots: Dictionary = {}
 
 
 func configure(p_player: Player3D) -> void:
@@ -15,8 +20,17 @@ func configure(p_player: Player3D) -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_refresh_focused_candidate()
+	_sync_interaction_dots(delta)
+
+
+func _exit_tree() -> void:
+	for id in _dots.keys():
+		var dot: Variant = _dots.get(id)
+		if dot != null and is_instance_valid(dot):
+			(dot as Node).queue_free()
+	_dots.clear()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -35,9 +49,13 @@ func request_interaction() -> bool:
 		return false
 	if not _focused_provider.has_method("perform_interaction"):
 		return false
-	return bool(_focused_provider.call(
+	var performed := bool(_focused_provider.call(
 		"perform_interaction", player, _focused_candidate.duplicate()
 	))
+	if performed:
+		# 交互成功的一次性反馈：圆点放大脉冲。读条类交互由进度环触顶自己触发。
+		pulse_dot(_focused_provider)
+	return performed
 
 
 func get_focus_snapshot() -> Dictionary:
@@ -147,3 +165,130 @@ func _can_player_interact() -> bool:
 		and not player.input_locked
 		and player.current_hp > 0
 	)
+
+
+# ============================================================================
+# 常驻交互圆点
+# ----------------------------------------------------------------------------
+# 控制器是唯一知道「谁可交互、谁被聚焦、距离多远」的地方，所以圆点也在这里
+# 统一创建与驱动：provider 只按需暴露三个可选接口，不实现也能得到一个默认圆点。
+#   get_interaction_dot_anchor() -> Vector3    圆点世界锚点（缺省：原点上方）
+#   is_interaction_dot_visible() -> bool       圆点是否该常驻显示（缺省：true）
+#   get_interaction_progress() -> Dictionary   {"active": bool, "progress": float}
+#   get_interaction_dot_accent() -> Color      圆点主色（缺省：霓虹青）
+# ============================================================================
+
+func _sync_interaction_dots(delta: float) -> void:
+	if player == null or not is_instance_valid(player) or not is_inside_tree():
+		return
+	var tree := get_tree()
+	if tree == null:
+		return
+	# 暂停时停住动画时间，但位置与可见性继续跟随，暂停画面里圆点不会「卡在半空」。
+	var step := 0.0 if tree.paused else delta
+	var live_ids := {}
+	for value in tree.get_nodes_in_group(PROVIDER_GROUP):
+		var provider := value as Node
+		if not _provider_is_eligible(provider):
+			continue
+		var id := provider.get_instance_id()
+		live_ids[id] = true
+		var dot := _ensure_dot(provider, id)
+		if dot == null:
+			continue
+		var anchor := _dot_anchor(provider)
+		(dot as Node3D).global_position = anchor
+		var distance := player.global_position.distance_to(anchor)
+		var span := maxf(
+			0.001, INTERACTION_DOT_SCRIPT.FAR_DISTANCE_M - INTERACTION_DOT_SCRIPT.NEAR_DISTANCE_M
+		)
+		var clarity := clampf(
+			1.0 - (distance - INTERACTION_DOT_SCRIPT.NEAR_DISTANCE_M) / span, 0.0, 1.0
+		)
+		dot.call("set_visible_state", _dot_should_show(provider))
+		if provider.has_method("get_interaction_progress"):
+			var progress := provider.call("get_interaction_progress") as Dictionary
+			dot.call(
+				"set_progress",
+				bool(progress.get("active", false)),
+				float(progress.get("progress", 0.0))
+			)
+		dot.call("update_state", clarity, provider == _focused_provider, step)
+	_prune_dots(live_ids)
+
+
+## 让某个 provider 的圆点播一次放大脉冲。已在读条中的对象不必调用 ——
+## 进度环触顶时圆点会自己触发。
+func pulse_dot(provider: Node) -> void:
+	if provider == null or not is_instance_valid(provider):
+		return
+	var dot: Variant = _dots.get(provider.get_instance_id())
+	if dot != null and is_instance_valid(dot):
+		(dot as Node).call("play_confirm_pulse")
+
+
+func get_interaction_dot_snapshot(provider: Node) -> Dictionary:
+	if provider == null or not is_instance_valid(provider):
+		return {}
+	var dot: Variant = _dots.get(provider.get_instance_id())
+	if dot == null or not is_instance_valid(dot):
+		return {}
+	return (dot as Node).call("get_snapshot") as Dictionary
+
+
+func get_interaction_dot_count() -> int:
+	return _dots.size()
+
+
+func _ensure_dot(provider: Node, id: int) -> Node:
+	# provider 被 free 时圆点作为子节点一并释放，字典里可能留下悬垂引用，
+	# 所以先取 Variant 判定有效性 —— 直接 `as Node` 转换已释放对象会报 cast 错误。
+	var existing: Variant = _dots.get(id)
+	if existing != null and is_instance_valid(existing):
+		return existing as Node
+	# 用 preload + Node/动态调用，而不是全局类名类型标注：新增的 class_name 在
+	# .godot/global_script_class_cache.cfg 刷新前用全局名会 parse error（同
+	# LevelPlanValidator 的处理）。
+	var dot := INTERACTION_DOT_SCRIPT.new() as Node
+	dot.name = "InteractionDot3D"
+	provider.add_child(dot)
+	dot.call("configure", _dot_accent(provider))
+	_dots[id] = dot
+	return dot
+
+
+func _prune_dots(live_ids: Dictionary) -> void:
+	var stale: Array = []
+	for id in _dots.keys():
+		if live_ids.has(id):
+			continue
+		var dot: Variant = _dots.get(id)
+		if dot != null and is_instance_valid(dot):
+			(dot as Node).queue_free()
+		stale.append(id)
+	for id in stale:
+		_dots.erase(id)
+
+
+func _dot_anchor(provider: Node) -> Vector3:
+	if provider.has_method("get_interaction_dot_anchor"):
+		var raw: Variant = provider.call("get_interaction_dot_anchor")
+		if raw is Vector3 and (raw as Vector3).is_finite():
+			return raw as Vector3
+	if provider is Node3D:
+		return (provider as Node3D).global_position + Vector3.UP * DOT_ANCHOR_FALLBACK_HEIGHT_M
+	return Vector3.ZERO
+
+
+func _dot_should_show(provider: Node) -> bool:
+	if provider.has_method("is_interaction_dot_visible"):
+		return bool(provider.call("is_interaction_dot_visible"))
+	return true
+
+
+func _dot_accent(provider: Node) -> Color:
+	if provider.has_method("get_interaction_dot_accent"):
+		var raw: Variant = provider.call("get_interaction_dot_accent")
+		if raw is Color:
+			return raw as Color
+	return UIPalette.NEON_CYAN

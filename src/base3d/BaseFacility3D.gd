@@ -225,9 +225,19 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 	}
 
 
-func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
-	if prompt_label != null:
-		prompt_label.visible = focused and _player_in_range
+## 文字提示牌退役为纯文案载体（text 仍被候选协议读取）；可见反馈由常驻圆点承担。
+func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
+	pass
+
+
+func get_interaction_dot_anchor() -> Vector3:
+	if prompt_label != null and is_instance_valid(prompt_label):
+		return prompt_label.global_position
+	return global_position + Vector3.UP * 2.0
+
+
+func get_interaction_dot_accent() -> Color:
+	return facility_color.lightened(0.25)
 
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:

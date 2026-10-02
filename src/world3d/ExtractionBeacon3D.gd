@@ -68,9 +68,24 @@ func get_interaction_candidate(_player: Player3D) -> Dictionary:
 	}
 
 
-func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
-	if _prompt != null:
-		_prompt.visible = focused and _player_in_range and not _active
+## 文字提示牌退役为纯文案载体；可见反馈由常驻圆点承担。
+func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
+	pass
+
+
+func get_interaction_dot_anchor() -> Vector3:
+	if _prompt != null and is_instance_valid(_prompt):
+		return _prompt.global_position
+	return global_position + Vector3.UP * 2.75
+
+
+## 撤离同步进行中（或已锁定不可用时）不显示圆点。
+func is_interaction_dot_visible() -> bool:
+	return not _active
+
+
+func get_interaction_dot_accent() -> Color:
+	return accent_color
 
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:

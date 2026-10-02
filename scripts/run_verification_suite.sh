@@ -212,6 +212,7 @@ core_scenes=(
   verify_expedition_room_type_component_replay
   verify_test_level_99_flow
   verify_unified_player_interaction_flow
+  verify_interaction_dot_presentation
   verify_tower_floor_room_authority
   verify_base_rooftop_transit_door_motion
   verify_floor_visibility_shadow_patch
