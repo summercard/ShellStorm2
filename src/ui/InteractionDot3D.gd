@@ -4,7 +4,11 @@ extends MeshInstance3D
 ##
 ## 设计契约（2026-10-02 主人指定）：
 ## - **常驻**：可交互对象始终挂着这个圆点，不依赖玩家是否靠近。
-## - **接近变清晰**：距离越近，圆点越大、越不透明；近处叠加缓慢的「放大呼吸」。
+## - **接近变清晰**：距离越近，圆点越不透明；近处叠加缓慢的「放大呼吸」。
+## - **走近才变大**：尺寸走**自己那条窄窗口**（APPROACH_*），贴着「能不能按 e」来定 ——
+##   站在可操作距离上才是满尺寸，退出 APPROACH_FAR 回落到 FAR_SCALE 的常驻尺寸。
+##   尺寸与清晰度**故意分两条档**，理由见 APPROACH_* 的注释（2026-10-02 主人反馈
+##   「在远处还是很大，并没有缩小」后拆开）。
 ## - **统一白点**：全场只有一种颜色，不按对象类型分色（见 DOT_COLOR）。
 ## - **进度用圆环**：需要读条的交互（搜索容器）在圆点外圈画一圈，圈满即完成。
 ## - **完成/触发有反馈**：圈满或交互成功时播放一次「放大脉冲」。
@@ -43,14 +47,34 @@ const DISC_RING_ALPHAS := [1.0, 0.72, 0.0]
 ## 圆环起点：从 12 点方向开始，顺时针推进。
 const RING_START_ANGLE := PI * 0.5
 
-## 距离 → 清晰度映射：<= NEAR 全清晰，>= FAR 只剩 FAR_SCALE / FAR_ALPHA。
-## FAR_SCALE 是「常驻态相对接近态的比例」：2026-10-02 主人指定常驻缩到七成（原为 0.5）；
-## 接近后的 1.0 不变。
+## 距离 → **清晰度**映射：<= NEAR 全清晰，>= FAR 只剩 FAR_ALPHA 的透明度。
+## 这一档只管「亮不亮」和呼吸，**不再管大小** —— 大小看下面的 APPROACH_*。
 const NEAR_DISTANCE_M := 3.2
 const FAR_DISTANCE_M := 16.0
+## 常驻态相对接近态的尺寸比例：2026-10-02 主人指定常驻缩到七成（原为 0.5）。
 const FAR_SCALE := 0.7
 const FAR_ALPHA := 0.22
 const NEAR_ALPHA := 0.95
+
+## 距离 → **尺寸**映射。窗口按「能不能按 e」来定，与上面的清晰度窗口故意分开。
+##
+## 为什么要两条档（2026-10-02 主人反馈「战局内可搜索的设施在远处还是很大，并没有缩小，
+## 应该是走近到可以操作后变大」）：
+## 1. 本作相机几乎俯视 —— 塔内相机高 10.719m、后拉 4.038m，视轴偏离竖直只有 20.6°
+##    （见 TowerDescent3D 的 CAMERA_* 常量）。俯视下远处物体的**透视**几乎不缩：
+##    实测 12m 外的家具只比脚边小 1.37 倍。所以尺寸倍数才是唯一有效杠杆，指望透视
+##    帮忙是错的。
+## 2. 真实可操作半径远小于 16m：`RoomFurniture3D` 的交互盒是 `尺寸 + (1.4, 1.0, 1.4)`，
+##    medium 档半宽约 1.5m；`RoomLightSwitch3D.INTERACTION_RANGE` 是 2.2m。也就是说
+##    「能按 e」的距离不到 2m，而旧档把尺寸窗口开到 16m。
+## 3. 两者错配的结果：旧档下 6m 处已到满尺寸的 93%、12m 处还有 79% —— FAR_SCALE 0.7
+##    在房间里**永远走不到**，「远处还是很大」就是这么来的。
+##
+## 现在把尺寸窗口压到 2.6 → 5.2m：站到能操作的距离 = 满尺寸，退出 5.2m = 常驻七成。
+## 清晰度仍走 3.2 → 16m 的宽窗口，于是常驻圆点远处虽小、却还有 0.44 的亮度，
+## 不会「小到看不见」。
+const APPROACH_NEAR_DISTANCE_M := 2.6
+const APPROACH_FAR_DISTANCE_M := 5.2
 
 ## 放大呼吸：2.4 秒一个周期，幅度 ±12%；只在清晰度够高（也就是玩家确实靠近）时启用。
 const BREATH_PERIOD_S := 2.4
@@ -66,6 +90,8 @@ const PULSE_PEAK_SCALE := 1.65
 
 const VISIBLE_FADE_SPEED := 6.0
 const CLARITY_SMOOTH_SPEED := 9.0
+## 尺寸档平滑。比清晰度快一档：玩家走近时大小要立刻跟上，拖沓会显得「没反应」。
+const APPROACH_SMOOTH_SPEED := 12.0
 const FOCUS_SMOOTH_SPEED := 12.0
 const RING_REBUILD_EPSILON := 0.004
 
@@ -95,6 +121,10 @@ var _ring_instance: MeshInstance3D
 
 var _breath_time := 0.0
 var _clarity := 0.0
+## 尺寸档当前值与目标值。与 _clarity 分开平滑：清晰度是「亮不亮」，尺寸是「多大」，
+## 两条档各自的窗口长度差了一倍多，混用一条会把尺寸的过渡期拉长。
+var _approach := 0.0
+var _approach_target := 0.0
 var _focus_amount := 0.0
 ## 从 0 起：圆点随第一次 update_state 淡入，不会在生成那一帧闪一下。
 var _visible_amount := 0.0
@@ -117,6 +147,25 @@ var _prompt_verb := ""
 func _ready() -> void:
 	_build()
 	set_process(true)
+
+
+## 距离 → 清晰度（0 远 → 1 近）。宽窗口，喂透明度与呼吸。
+##
+## 这两个 static 是距离映射的**唯一真源**：控制器、探针、契约测试都调它们，
+## 谁都不许再自己抄一份算式（控制器以前就是这么干的，两处算式一旦漂移，
+## 「走近才变大」会静默失效 —— 画面看着还行，数字对人不上）。
+static func clarity_for_distance(distance_m: float) -> float:
+	return _distance_ramp(distance_m, NEAR_DISTANCE_M, FAR_DISTANCE_M)
+
+
+## 距离 → 尺寸档（0 远 → 1 近）。窄窗口，喂圆点大小。
+static func approach_for_distance(distance_m: float) -> float:
+	return _distance_ramp(distance_m, APPROACH_NEAR_DISTANCE_M, APPROACH_FAR_DISTANCE_M)
+
+
+static func _distance_ramp(distance_m: float, near_m: float, far_m: float) -> float:
+	var span := maxf(0.001, far_m - near_m)
+	return clampf(1.0 - (distance_m - near_m) / span, 0.0, 1.0)
 
 
 ## 从候选文案里抽出「按 e 做什么」。单一真源：各 provider 已有的 prompt 文案，
@@ -154,6 +203,7 @@ func set_prompt(raw: String) -> void:
 func update_state(clarity: float, focused: bool, delta: float) -> void:
 	var target_clarity := clampf(clarity, 0.0, 1.0)
 	_clarity = lerpf(_clarity, target_clarity, minf(1.0, delta * CLARITY_SMOOTH_SPEED))
+	_approach = lerpf(_approach, _approach_target, minf(1.0, delta * APPROACH_SMOOTH_SPEED))
 	_focus_amount = lerpf(
 		_focus_amount,
 		1.0 if focused else 0.0,
@@ -169,6 +219,11 @@ func update_state(clarity: float, focused: bool, delta: float) -> void:
 		_visible_amount = maxf(_visible_amount, 0.88)
 	_apply_visuals()
 	_sync_key_hint()
+
+
+## 有效尺寸档由控制器每帧推入。传距离，不传结果 —— 窗口口径只认上面两个 static。
+func set_approach_from_distance(distance_m: float) -> void:
+	_approach_target = approach_for_distance(distance_m)
 
 
 ## 常驻可见性开关（淡入淡出）。已搜索完的容器、已激活的撤离信标会关掉它。
@@ -205,6 +260,7 @@ func get_snapshot() -> Dictionary:
 		"is_3d": true,
 		"visible_amount": _visible_amount,
 		"clarity": _clarity,
+		"approach": _approach,
 		"focus_amount": _focus_amount,
 		"scale_multiplier": _last_applied_scale,
 		"alpha": _last_applied_alpha,
@@ -217,11 +273,14 @@ func get_snapshot() -> Dictionary:
 		"key_hint_text": hint_text,
 		"world_position": global_position,
 		"dot_radius_m": DOT_RADIUS_M,
+		"approach_near_distance_m": APPROACH_NEAR_DISTANCE_M,
+		"approach_far_distance_m": APPROACH_FAR_DISTANCE_M,
 	}
 
 
 func _apply_visuals() -> void:
-	var base_scale := lerpf(FAR_SCALE, 1.0, _clarity)
+	# 大小看 _approach（窄窗口，贴着可操作半径），亮度/呼吸看 _clarity（宽窗口）。
+	var base_scale := lerpf(FAR_SCALE, 1.0, _approach)
 	var breath := 1.0
 	if _clarity > BREATH_MIN_CLARITY:
 		var amount := (_clarity - BREATH_MIN_CLARITY) / (1.0 - BREATH_MIN_CLARITY)

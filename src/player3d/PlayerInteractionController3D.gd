@@ -218,13 +218,12 @@ func _sync_interaction_dots(delta: float) -> void:
 			continue
 		var anchor := _dot_anchor(provider)
 		(dot as Node3D).global_position = anchor
+		# 距离 →（尺寸档, 清晰度）的映射只有一处实现：圆点脚本里的两个 static。
+		# 控制器曾自己抄一份算式，两处口径一旦漂移，「走近才变大」会静默失效 ——
+		# 画面看着还行，数字却对不上。故收回成一个真源。
 		var distance := player.global_position.distance_to(anchor)
-		var span := maxf(
-			0.001, INTERACTION_DOT_SCRIPT.FAR_DISTANCE_M - INTERACTION_DOT_SCRIPT.NEAR_DISTANCE_M
-		)
-		var clarity := clampf(
-			1.0 - (distance - INTERACTION_DOT_SCRIPT.NEAR_DISTANCE_M) / span, 0.0, 1.0
-		)
+		dot.call("set_approach_from_distance", distance)
+		var clarity := INTERACTION_DOT_SCRIPT.clarity_for_distance(distance)
 		dot.call("set_visible_state", _dot_should_show(provider))
 		if provider.has_method("get_interaction_progress"):
 			var progress := provider.call("get_interaction_progress") as Dictionary

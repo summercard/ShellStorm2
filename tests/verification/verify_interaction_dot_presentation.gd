@@ -2,7 +2,7 @@ extends Node
 ## 常驻交互圆点契约（2026-10-02 随「交互提示统一改为圆点」新增；
 ## 同日二轮：统一白点、圆点变小、常驻态改七成、按键牌改「(e) 功能词」、基地设施退回文字牌）。
 ##
-## 盯住九条硬约束：
+## 盯住十条硬约束：
 ## 1. 每个可交互 provider 都会拿到一个圆点，且圆点**常驻**（不靠近也可见）。
 ##    例外只有基地设施，见第 9 条。
 ## 2. 距离越近越清晰：近处圆点的 clarity 明显高于远处。
@@ -18,6 +18,9 @@ extends Node
 ##    状态文案不显示按键牌 —— 不能空口承诺「按 e 能做某事」。
 ## 9. **基地设施（BaseFacility3D）没有圆点**，且它自己的黄色文字提示牌必须还能随聚焦
 ##    显隐。这是那次改动被整体回退的两半，任一半失效都要红。
+## 10. **尺寸档贴着可操作半径**（APPROACH_* 2.6 → 5.2m），与清晰度档（3.2 → 16m）
+##     分开：站到能按 e 的距离 = 满尺寸，走出 5.2m = FAR_SCALE 常驻尺寸。两档一旦
+##     重新合回一条，房间里就永远走不到常驻尺寸 —— 那正是「远处还是很大」的成因。
 ##
 ## 同时静态守住「旧搜索进度条 UI 已移除」这个已经明确的重构结果。
 
@@ -86,7 +89,8 @@ func _ready() -> void:
 	if failures.is_empty():
 		print(
 			"INTERACTION_DOT_PRESENTATION_OK: uniform white resident dots, distance clarity, "
-			+ "breathing, ring progress, pulse, (e) verb key hint, base facility reverted to its own prompt"
+			+ "approach sizing bracketed to the operable range, breathing, ring progress, pulse, "
+			+ "(e) verb key hint, base facility reverted to its own prompt"
 		)
 		get_tree().quit(0)
 		return
@@ -175,12 +179,76 @@ func _validate_dot_geometry(failures: Array[String]) -> void:
 			% [narrow, float(DOT_SCRIPT.FAR_SCALE)],
 		failures
 	)
-	for _step in range(60):
-		dot.call("update_state", 1.0, false, 0.033)
-	var wide := dot.scale.x
+
+	# ⑩ 尺寸档必须**贴着可操作半径**，不能挂在 16m 的清晰度窗口上。
+	#
+	# 盯的是主人 2026-10-02 的原话：「战局内可搜索的设施，在远处还是很大，并没有缩小，
+	# 应该是走近到可以操作后变大」。当时的缺陷正是尺寸跟着清晰度档走（3.2→16m）：
+	# 房间里永远到不了 FAR_SCALE，5m 处还有满尺寸的 85%。
+	var approach_near := float(DOT_SCRIPT.APPROACH_NEAR_DISTANCE_M)
+	var approach_far := float(DOT_SCRIPT.APPROACH_FAR_DISTANCE_M)
+	var clarity_near := float(DOT_SCRIPT.NEAR_DISTANCE_M)
+	var clarity_far := float(DOT_SCRIPT.FAR_DISTANCE_M)
 	_expect(
-		wide > narrow,
-		"圆点缩放没有随清晰度变化（near=%.3f far=%.3f）—— 缩放通道已失效" % [wide, narrow],
+		approach_near < approach_far,
+		"尺寸档窗口反了（near=%.2f far=%.2f）—— 会变成「走远反而变大」"
+			% [approach_near, approach_far],
+		failures
+	)
+	# 尺寸窗口必须是清晰度窗口的真子集，否则远处又缩不下去。
+	_expect(
+		approach_near < clarity_near and approach_far < clarity_far,
+		"尺寸档没有比清晰度档更贴边（尺寸 %.2f~%.2f vs 清晰度 %.2f~%.2f）—— 远处又会「还是很大」"
+			% [approach_near, approach_far, clarity_near, clarity_far],
+		failures
+	)
+	# 窗口远端一旦越过清晰度近端太多，中间会留出「已经能按 e、圆点却还没变大」的空档。
+	_expect(
+		approach_far <= clarity_near + 2.0,
+		"尺寸档远端 %.2f 离可操作距离（清晰度近端 %.2f）太远 —— 中间会出现已可操作但还没变大的空档"
+			% [approach_far, clarity_near],
+		failures
+	)
+	# 两端取代表值：站在可操作距离上必须满尺寸（家具交互盒半宽 ≈1.5m + 圆点架高 1.5m
+	# ⇒ 3D 距离 ≈2.2m）；走出 8m 必须落回常驻尺寸。
+	var readable_d := sqrt(1.6 * 1.6 + 1.5 * 1.5)
+	var readable_approach := float(DOT_SCRIPT.approach_for_distance(readable_d))
+	_expect(
+		readable_approach >= 0.9,
+		"站在可操作的距离上（3D %.2fm）圆点还不是满尺寸（approach=%.3f）" % [readable_d, readable_approach],
+		failures
+	)
+	var distant_d := sqrt(8.2 * 8.2 + 1.5 * 1.5)
+	var distant_approach := float(DOT_SCRIPT.approach_for_distance(distant_d))
+	_expect(
+		is_zero_approx(distant_approach),
+		"8m 外圆点没落到常驻尺寸（approach=%.3f）—— 远处还是很大" % distant_approach,
+		failures
+	)
+	# 单调：距离越远，尺寸档只能更小。写反了会变成「越走远越大」。
+	var monotonic := true
+	var previous := 2.0
+	for index in range(0, 41):
+		var value := float(DOT_SCRIPT.approach_for_distance(float(index) * 0.25))
+		if value > previous + 0.0001:
+			monotonic = false
+			break
+		previous = value
+	_expect(monotonic, "尺寸档不是单调递减 —— 距离越远反而越大", failures)
+
+	# 缩放通道要真的跟着尺寸档动：同一条 clarity 下喂近/喂远，必须量出两个不同的 scale。
+	for _step in range(60):
+		dot.call("set_approach_from_distance", distant_d)
+		dot.call("update_state", 0.0, false, 0.033)
+	var scaled_far := dot.scale.x
+	for _step in range(60):
+		dot.call("set_approach_from_distance", readable_d)
+		dot.call("update_state", 0.0, false, 0.033)
+	var scaled_near := dot.scale.x
+	_expect(
+		scaled_near > scaled_far + 0.1,
+		"尺寸档没有驱动缩放（近=%.3f 远=%.3f）——「走近才变大」失效（缩放通道已失效）"
+			% [scaled_near, scaled_far],
 		failures
 	)
 	dot.queue_free()
@@ -322,6 +390,17 @@ func _validate_dots(tower: TowerDescent3D, failures: Array[String]) -> void:
 	_expect(
 		near_clarity > far_clarity + 0.2,
 		"近处圆点没有比远处更清晰（near=%.3f far=%.3f）" % [near_clarity, far_clarity],
+		failures
+	)
+	# ⑩ 尺寸档：近处圆点必须**明显**大于远处。这条才是主人要的「走近到可以操作后变大」
+	# 在运行时层面的复核 —— 前面的几何断言只验了映射函数，这里验真实跑起来的圆点。
+	# 近处那个还叠着聚焦放大与呼吸，只会更大，所以阈值给 0.15 已留足余量。
+	var near_scale := float(near_dot.get("scale_multiplier", 0.0))
+	var far_scale := float(far_dot.get("scale_multiplier", 0.0))
+	_expect(
+		near_scale > far_scale + 0.15,
+		"近处圆点没有明显大于远处（近=%.3f 远=%.3f）——「走近才变大」没生效"
+			% [near_scale, far_scale],
 		failures
 	)
 	# ③ 呼吸：真实时间采样 1 秒，scale 必须有可观测波动。

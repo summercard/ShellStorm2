@@ -23,7 +23,9 @@ const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
 
 const DOT_HEIGHT_M := 1.5
-## 聚焦时喂给圆点的候选文案。用真实的容器文案，才能拍到「(e) 搜索」这张牌。
+## 圆点架高。探针里隐含的玩家站位在原点地面，所以「玩家 → 圆点」的 3D 距离是
+## `sqrt(水平² + DOT_HEIGHT_M²)` —— 与控制器 `player.global_position.distance_to(anchor)`
+## 同一口径。两档映射都吃这个 3D 距离，探针若直接拿水平距离去喂，会系统性偏乐观。
 const FOCUS_PROMPT := "[E] 搜索 · SMALL"
 const EXPECTED_FOCUS_KEY_HINT := "(e) 搜索"
 ## 三个采样距离（玩家到交互物的水平距离，米）。
@@ -135,14 +137,19 @@ func _build_dots() -> void:
 		_dots.append(dot)
 
 
-## 与 PlayerInteractionController3D 同样的距离→清晰度映射，避免探针自说自话。
+## 水平距离 → 3D 距离（玩家 → 圆点）。见 DOT_HEIGHT_M 的说明。
+func _ramp_distance_for(horizontal_m: float) -> float:
+	return sqrt(horizontal_m * horizontal_m + DOT_HEIGHT_M * DOT_HEIGHT_M)
+
+
+## 与 PlayerInteractionController3D 完全同一套映射：直接调圆点脚本的 static，
+## 不再各抄一份算式。尺寸档与清晰度档是两条独立窗口。
 func _clarity_for(distance: float) -> float:
-	var span := maxf(
-		0.001, float(DOT_SCRIPT.FAR_DISTANCE_M) - float(DOT_SCRIPT.NEAR_DISTANCE_M)
-	)
-	return clampf(
-		1.0 - (distance - float(DOT_SCRIPT.NEAR_DISTANCE_M)) / span, 0.0, 1.0
-	)
+	return DOT_SCRIPT.clarity_for_distance(_ramp_distance_for(distance))
+
+
+func _approach_for(distance: float) -> float:
+	return DOT_SCRIPT.approach_for_distance(_ramp_distance_for(distance))
 
 
 func _shoot(
@@ -160,8 +167,9 @@ func _shoot(
 		dot.call("set_progress", is_focus and ring_progress > 0.001, ring_progress)
 		# 功能词只喂给被聚焦那个：真实运行时也是只有聚焦候选才带 prompt。
 		dot.call("set_prompt", FOCUS_PROMPT if is_focus else "")
-		# 先把清晰度/聚焦/呼吸推到稳定态。
+		# 先把尺寸档/清晰度/聚焦/呼吸推到稳定态。与控制器一样每帧先喂距离再 update。
 		for _step in range(40):
+			dot.call("set_approach_from_distance", _ramp_distance_for(distance))
 			dot.call("update_state", _clarity_for(distance), is_focus, 0.033)
 		if pulse_age > 0.0 and is_focus:
 			# 脉冲要停在指定相位：播放后只推进 pulse_age 秒。
@@ -197,11 +205,13 @@ func _shoot(
 	var metric := _measure_dot(image, data, _baseline, center, expected_diameter_px * 0.5)
 	_dump_diff_mask(image, data, _baseline, slug)
 	print(
-		"PROBE_VISUAL\t%s\tfocus_m=%.1f\tclarity=%.3f\tscale=%.3f\talpha=%.3f\tring=%s\tverb=%s\thint=%s\texpect_d=%.1f\tdot_px=%d\tfill=%.2f\textra_px=%d\tbbox=%s\tcenter=%s\tframe_diff=%d\t%s"
+		"PROBE_VISUAL\t%s\tfocus_m=%.1f\tramp_d=%.2f\tclarity=%.3f\tapproach=%.3f\tscale=%.3f\talpha=%.3f\tring=%s\tverb=%s\thint=%s\texpect_d=%.1f\tdot_px=%d\tfill=%.2f\textra_px=%d\tbbox=%s\tcenter=%s\tframe_diff=%d\t%s"
 		% [
 			slug,
 			focus_distance,
+			_ramp_distance_for(focus_distance),
 			float(snapshot.get("clarity", 0.0)),
+			float(snapshot.get("approach", 0.0)),
 			float(snapshot.get("scale_multiplier", 0.0)),
 			float(snapshot.get("alpha", 0.0)),
 			str(snapshot.get("ring_visible", false)),
