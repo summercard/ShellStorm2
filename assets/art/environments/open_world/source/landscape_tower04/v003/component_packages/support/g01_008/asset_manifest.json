@@ -1,0 +1,55 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE04-01",
+  "package_id": "g01_008",
+  "slug": "g01_008",
+  "display_name": "01组_1栋_藤蔓3",
+  "category": "support",
+  "version": "v003",
+  "source_blend": "assets/art/environments/open_world/source/landscape_tower04/v003/景观建筑_塔4周边五组_倾斜断柱与塌板_v003.blend",
+  "collection": "01组_1栋_藤蔓3_资产包",
+  "objects": [
+    "01组_1栋_藤蔓3"
+  ],
+  "root_object": "01组_1栋_藤蔓3",
+  "component_definition": "carpet",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    -7.984135150909424,
+    1.3841360807418823,
+    83.0
+  ],
+  "rotation_z": -1.5707963267948966,
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_required_background",
+  "exported": false,
+  "expected_export": "g01_008.glb",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LANDSCAPE04-01",
+  "bounds_min": [
+    -9.022296905517578,
+    -5.695863723754883,
+    79.0562973022461
+  ],
+  "bounds_max": [
+    -7.234134674072266,
+    8.464136123657227,
+    84.0
+  ],
+  "dimensions": [
+    1.7881622314453125,
+    14.15999984741211,
+    4.943702697753906
+  ]
+}

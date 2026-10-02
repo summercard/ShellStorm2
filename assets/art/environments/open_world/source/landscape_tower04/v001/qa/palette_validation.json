@@ -1,0 +1,777 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\landscape_tower04\\v001\\景观建筑_塔4周边五组废墟藤蔓_v001.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 73,
+  "polygon_count": 7403,
+  "valid_island_polygon_count": 7403,
+  "uv_reports": [
+    {
+      "object": "01组_1栋_01至04层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_05至08层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_09至12层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_13至16层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_17至20层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_藤蔓4",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_藤蔓5",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "01组_1栋_藤蔓6",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_01至04层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_05至08层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_09至12层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_13至16层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_1栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_2栋_01至04层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_2栋_05至08层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_2栋_09至12层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_2栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_2栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_2栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02组_2栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_01至04层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_05至08层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_09至12层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_13至16层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_1栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_2栋_01至04层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_2栋_05至08层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_2栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_2栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_2栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03组_2栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_01至04层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_05至08层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_09至12层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_13至16层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_17至20层",
+      "polygon_count": 142,
+      "valid_island_polygon_count": 142,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_藤蔓4",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_藤蔓5",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04组_1栋_藤蔓6",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_1栋_01至04层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_1栋_05至08层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_1栋_09至12层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_1栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_1栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_1栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_1栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_2栋_01至04层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_2栋_05至08层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_2栋_09至12层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_2栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_2栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_2栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_2栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_3栋_01至04层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_3栋_05至08层",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_3栋_断顶",
+      "polygon_count": 134,
+      "valid_island_polygon_count": 134,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_3栋_藤蔓1",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_3栋_藤蔓2",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05组_3栋_藤蔓3",
+      "polygon_count": 75,
+      "valid_island_polygon_count": 75,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

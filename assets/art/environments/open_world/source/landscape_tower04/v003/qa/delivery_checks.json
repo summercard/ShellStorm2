@@ -1,0 +1,31 @@
+{
+  "checks": {
+    "ledger_full": {
+      "exit_code": 1
+    },
+    "ledger_structure": {
+      "exit_code": 0
+    },
+    "ledger_split": {
+      "exit_code": 0
+    },
+    "runtime_naming": {
+      "exit_code": 1
+    },
+    "documentation": {
+      "exit_code": 1
+    }
+  },
+  "full_ledger_issues_unchanged": true,
+  "preexisting_full_ledger_issue_counts": {
+    "sha_mismatch": 153
+  },
+  "documentation_issues": [
+    "Verification registry invalid: VERIFICATION_REGISTRY_FAILED\n- unregistered: verify_base99_swivel_chairs\n- unregistered: verify_expedition01_spawn_ramp\n- unregistered: verify_expedition_resume_entry\n- unregistered: verify_pushable_base_chairs"
+  ],
+  "new_asset_issues": [],
+  "source_audit_passed": true,
+  "palette_validation_passed": true,
+  "source_sha256": "fe649aa8823b118b2c16661fd83ecbe0b79852e3d305666eb13af9361449ff1e",
+  "runtime_imported": false
+}

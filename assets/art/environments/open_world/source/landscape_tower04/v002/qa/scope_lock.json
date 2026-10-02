@@ -1,0 +1,184 @@
+{
+  "passed": true,
+  "parent_sha256": "9404f8fc6f94c949a365ce522e29a591d59da9cab17ec4f25d5535d4065764d3",
+  "parent_source_unchanged": true,
+  "exact_group_triangle_counts": [
+    2098,
+    2334,
+    2450,
+    2098,
+    2991
+  ],
+  "changed_objects": [
+    {
+      "object": "01组_1栋_05至08层",
+      "old_definition": "narrow",
+      "new_definition": "narrow_corner_loss",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "01组_1栋_13至16层",
+      "old_definition": "narrow",
+      "new_definition": "narrow_floor_collapse",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "02组_1栋_05至08层",
+      "old_definition": "slim",
+      "new_definition": "slim_vertical_split",
+      "triangles_unchanged": 204
+    },
+    {
+      "object": "02组_2栋_01至04层",
+      "old_definition": "slim",
+      "new_definition": "frame_slim",
+      "triangles_unchanged": 204
+    },
+    {
+      "object": "02组_2栋_05至08层",
+      "old_definition": "slim",
+      "new_definition": "frame_slim",
+      "triangles_unchanged": 204
+    },
+    {
+      "object": "02组_2栋_09至12层",
+      "old_definition": "slim",
+      "new_definition": "frame_slim",
+      "triangles_unchanged": 204
+    },
+    {
+      "object": "02组_2栋_断顶",
+      "old_definition": "crown_slim",
+      "new_definition": "frame_crown_slim",
+      "triangles_unchanged": 228
+    },
+    {
+      "object": "03组_1栋_09至12层",
+      "old_definition": "narrow",
+      "new_definition": "narrow_vertical_split",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "03组_2栋_01至04层",
+      "old_definition": "slim",
+      "new_definition": "slim_corner_loss",
+      "triangles_unchanged": 204
+    },
+    {
+      "object": "04组_1栋_01至04层",
+      "old_definition": "wide",
+      "new_definition": "frame_wide",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "04组_1栋_05至08层",
+      "old_definition": "wide",
+      "new_definition": "frame_wide",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "04组_1栋_09至12层",
+      "old_definition": "wide",
+      "new_definition": "frame_wide",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "04组_1栋_13至16层",
+      "old_definition": "wide",
+      "new_definition": "frame_wide",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "04组_1栋_17至20层",
+      "old_definition": "wide",
+      "new_definition": "frame_wide",
+      "triangles_unchanged": 284
+    },
+    {
+      "object": "04组_1栋_断顶",
+      "old_definition": "crown_wide",
+      "new_definition": "frame_crown_wide",
+      "triangles_unchanged": 228
+    },
+    {
+      "object": "05组_1栋_05至08层",
+      "old_definition": "slim",
+      "new_definition": "slim_floor_collapse",
+      "triangles_unchanged": 204
+    },
+    {
+      "object": "05组_2栋_05至08层",
+      "old_definition": "slim",
+      "new_definition": "slim_corner_loss",
+      "triangles_unchanged": 204
+    },
+    {
+      "object": "05组_3栋_01至04层",
+      "old_definition": "slim",
+      "new_definition": "slim_vertical_split",
+      "triangles_unchanged": 204
+    }
+  ],
+  "locked_objects": {
+    "01组_1栋_01至04层": "946b8d3ee90f6c1a20397726da4aa0c5628bbb3f8f20e92f26e9cd3425568980",
+    "01组_1栋_09至12层": "e13d2097db865a0a51c1acba89248714c7b96f83bf6cb76e6bc60aa6ccbb55fe",
+    "01组_1栋_17至20层": "7860d6f9f16ac36b01d06049902dcdaef48d09eee34c7d824f37b3306e291a4e",
+    "01组_1栋_断顶": "e007e6370e489c686671a60b5bb77d80a4b8070a8bae25017ff18902879d4d1e",
+    "01组_1栋_藤蔓1": "66e96053f75ae3f3556f5c36735455bc6921e870ee1fe384d3cea049733928f8",
+    "01组_1栋_藤蔓2": "63f753a63fb750e0d6afba48eff15f52ab007984626822f8c5c64766053a0618",
+    "01组_1栋_藤蔓3": "69f65c00f33e31d8aa4d7e9c921be5885ceef23f42831470ea546faea782ebe8",
+    "01组_1栋_藤蔓4": "0c9f254e667d500490844d4167c85d12c8f761c61a62e72d927db289bb0cd401",
+    "01组_1栋_藤蔓5": "79808072b14a93ca09863c4037153d2ba19fbb2a06d72d7b589a0b3315c02f1c",
+    "01组_1栋_藤蔓6": "3cc232064b9f31a2acd226b600cc23aa54271f3193c0154f3d36e3328ff0bc09",
+    "02组_1栋_01至04层": "494e27faa3a3c4071335ae08f21f68695fdb79dd07437d4a5e6b127f31397b2c",
+    "02组_1栋_09至12层": "0029a104b1faab742ae91a428e0da8097495c6d5717bf740015322a08570ab88",
+    "02组_1栋_13至16层": "257087cf9b66c567889e679e778d238074ca1aa02d755ec823a3ca91f9321a3a",
+    "02组_1栋_断顶": "43a37e8321949c6096b1851a1d855b38030ed4c8a8ca36990a3b294cda78ff86",
+    "02组_1栋_藤蔓1": "361fbb8b60a8bc74efd03430df9be254f9444733b83323225787b47ea794457b",
+    "02组_1栋_藤蔓2": "b92101bc0acc498d1052b05fc23debe876bc12e04661a2e15492194fe4a56b48",
+    "02组_1栋_藤蔓3": "0941c046ed624f387f9f16dbabb53987e88d172e2a842f38c760f91ce503b9a5",
+    "02组_2栋_藤蔓1": "71fe073711402b309ace934e360a907bf7bdc63b8ce4b6997ae47566a7e547ec",
+    "02组_2栋_藤蔓2": "b9c93a13817f2e256a664adc5e49ed03e2916babf0cdb2455b7531e5f0a47e8e",
+    "02组_2栋_藤蔓3": "9c8a38755b44fd7b05121639c8e4df3d1a0c378314b2773f04417bc281f40968",
+    "03组_1栋_01至04层": "0458c48be4c385fba21cadad311334eabab4e7c5d1ef6f774d7680661414c954",
+    "03组_1栋_05至08层": "6668c79fc5b33adacf2c643a3f1394e26ac27f0c5abd5e0ef0b1cc261cd56e64",
+    "03组_1栋_13至16层": "db60e1f4f4998b1f35adf10c6faac06f47eb5c7cc35412772441da235596b569",
+    "03组_1栋_断顶": "7b2d8de4a57a1907cc9718fa31fe0a68bfb9efff86cc4f8c3929226ee9749a04",
+    "03组_1栋_藤蔓1": "087c053540c32d1e6069b52d1e107331fdf116215a95e9044cb2faaba93e7f65",
+    "03组_1栋_藤蔓2": "0d5281103542f0cf6dd58e4fb5cfb1050a9f284b765c5443fc88dfdfa3b128fe",
+    "03组_1栋_藤蔓3": "403a9bd63c9da27ae42270acf8988dcd7393b3f3cd15b75405ed8d1be9c9c94d",
+    "03组_2栋_05至08层": "a48b469c3775745c57084ddd086c6a0773d8c42435f715a1e43400b21d53b5c2",
+    "03组_2栋_断顶": "f059d1b8f7e63627f31f0d9f25f8508002034e6424a3c8d96867bd06deb49aea",
+    "03组_2栋_藤蔓1": "5f6448e5a2abd8571fb408cf5320559fa050430fc79ed3fadcb9fae29c591781",
+    "03组_2栋_藤蔓2": "6ac5a4d363928b75d47e68e6a81b752f5c6021e000666c69de36e480bc62d7cc",
+    "03组_2栋_藤蔓3": "e59da9104315a9327a9985d5e927e8ef9dade47a49abc5e36407d95eea202cd7",
+    "04组_1栋_藤蔓1": "6e3679f07d251b503639da4983533911c1f8c7d21854d6121616a30a63386f4c",
+    "04组_1栋_藤蔓2": "f2a5e35a9aeb18b7088fb941f31db6f1c6c11df0208b89fd8d15a7426893d8c6",
+    "04组_1栋_藤蔓3": "a59387f2c050646c131049a1e17fcab43ebe7a5feac7350de438885365361708",
+    "04组_1栋_藤蔓4": "bbd44e04c897df12380583a84b808ea378c19e26850e4358d4c742319d8b632f",
+    "04组_1栋_藤蔓5": "a395c1ddf4b89e46c9e3a26b1dbef373141de0e261dd47572121bfc0b6c8cbe2",
+    "04组_1栋_藤蔓6": "00d185849dde6009bbb6d0f5e941ee55799179cf795fe7beccb0775abfd4a1f3",
+    "05组_1栋_01至04层": "f8ff0c47e4bc4e5cd9d7c3b57feb15cd84ed9f0be4c58e48950fd078b350dd8a",
+    "05组_1栋_09至12层": "1035e8a1419642601cc8f72cc5dbbe73c781b92c1e3d45b5b7ab13cad212300e",
+    "05组_1栋_断顶": "1f8e6e27d1c6c9f56e49a69506953f9171f8799bfe7acb101654b3f295894ec0",
+    "05组_1栋_藤蔓1": "b26a6fb1607f42a5c0d3c34da599c7ff34d598808b399f389374e9d7b20a33fe",
+    "05组_1栋_藤蔓2": "16b8a31bf2dc0522a6a7fc33d27f73838607dbb14adebcdf3bdc56d12bfd7960",
+    "05组_1栋_藤蔓3": "4aa398b9e71ba154b0788ae304a709e166a4877ec0c983c449e2f015c25edc94",
+    "05组_2栋_01至04层": "bff734b9cee29e5768e704589e802f67294a172e491ec730af978e0f91583d68",
+    "05组_2栋_09至12层": "ed3962efc45b8b0c3d004d1b6894fc56a6e21668f093c1ba09756d116ce14eb0",
+    "05组_2栋_断顶": "3934b8ac982a8e3f61c9b0f6d10a6a352640b1ed709dd247be013c1cdbd023cf",
+    "05组_2栋_藤蔓1": "2ad5b77a4d938a6dfb4edd23be205906f989734fa30d1efba9c551b9c79b5806",
+    "05组_2栋_藤蔓2": "5d3b06f90665a2c421f454a41c5817c4c65e154328850a021bed13832019ddc1",
+    "05组_2栋_藤蔓3": "9d3983b81816d30b30082797d0cca9eb5ce0aa7abe4af0350c406fa9d2c5d032",
+    "05组_3栋_05至08层": "a9dbffb71440855816005561067b2441177134eeca44eb1c9fab392733fd045e",
+    "05组_3栋_断顶": "f0533150d799aafe07a337efc19106b79992f20620112fc6c77f0c0e89c40d6d",
+    "05组_3栋_藤蔓1": "a00ae78ff6cc4b74a09a8afbf8b5891e00767097e7e663f30078e5b8190dfdb5",
+    "05组_3栋_藤蔓2": "a2f9a0b07beadc43bfb71753a5e33a9d1dc2242b3ac9bd2117d3d3d384900d98",
+    "05组_3栋_藤蔓3": "f58f253b084af2df2a8d4ae034b12b2aa9271e1c6c67b68d4b32cb4e52b0bd5b"
+  },
+  "locked_objects_unchanged": true,
+  "construction_buildings": [
+    "02组_2栋",
+    "04组_1栋"
+  ]
+}

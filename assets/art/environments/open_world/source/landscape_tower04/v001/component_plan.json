@@ -1,0 +1,110 @@
+{
+  "scope": "独立景观建筑，skyline同级；塔4仅参考，不写入塔4母版",
+  "group_limit_triangles": 3000,
+  "definition_count": 9,
+  "definitions": [
+    {
+      "id": "narrow",
+      "name": "四层楼身_narrow",
+      "dimensions": [
+        16.62,
+        14.62,
+        16.0
+      ],
+      "triangles": 284,
+      "mesh": "narrow_网格"
+    },
+    {
+      "id": "wide",
+      "name": "四层楼身_wide",
+      "dimensions": [
+        25.62,
+        14.62,
+        16.0
+      ],
+      "triangles": 284,
+      "mesh": "wide_网格"
+    },
+    {
+      "id": "slim",
+      "name": "四层楼身_slim",
+      "dimensions": [
+        12.62,
+        12.62,
+        16.0
+      ],
+      "triangles": 204,
+      "mesh": "slim_网格"
+    },
+    {
+      "id": "crown_narrow",
+      "name": "断顶残墙_crown_narrow",
+      "dimensions": [
+        16.45,
+        14.5,
+        7.6075944900512695
+      ],
+      "triangles": 228,
+      "mesh": "crown_narrow_网格"
+    },
+    {
+      "id": "crown_wide",
+      "name": "断顶残墙_crown_wide",
+      "dimensions": [
+        25.45,
+        14.500000000000002,
+        7.6075944900512695
+      ],
+      "triangles": 228,
+      "mesh": "crown_wide_网格"
+    },
+    {
+      "id": "crown_slim",
+      "name": "断顶残墙_crown_slim",
+      "dimensions": [
+        12.45,
+        12.5,
+        7.6075944900512695
+      ],
+      "triangles": 228,
+      "mesh": "crown_slim_网格"
+    },
+    {
+      "id": "curtain",
+      "name": "大片藤蔓_curtain",
+      "dimensions": [
+        10.62,
+        1.7982712521211943,
+        13.020925461830426
+      ],
+      "triangles": 75,
+      "mesh": "curtain_网格"
+    },
+    {
+      "id": "cascade",
+      "name": "大片藤蔓_cascade",
+      "dimensions": [
+        8.516648768193576,
+        1.7979201992522174,
+        18.170032760174305
+      ],
+      "triangles": 75,
+      "mesh": "cascade_网格"
+    },
+    {
+      "id": "carpet",
+      "name": "大片藤蔓_carpet",
+      "dimensions": [
+        14.159999999999998,
+        1.7881618135014885,
+        4.943704600095458
+      ],
+      "triangles": 75,
+      "mesh": "carpet_网格"
+    }
+  ],
+  "floor_height": 4,
+  "module_floors": 4,
+  "material_contract": "existing shared palette and standard roles; no emission required",
+  "status": "frozen_before_instancing"
+}

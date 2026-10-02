@@ -1,0 +1,9 @@
+{
+  "version": "v003",
+  "date": "2026-10-03",
+  "rule": "vertex-only edits: topology and all group triangle counts unchanged",
+  "scope": "eight damaged middle-floor modules and seven ruined crowns; both construction buildings and all vegetation locked",
+  "slabs": "anchor rear portion; free edges sag and protrude irregularly",
+  "columns": "selected broken column islands lean with fixed foot; remaining columns stay aligned",
+  "parent_source": "assets/art/environments/open_world/source/landscape_tower04/v002/景观建筑_塔4周边五组_中段破损与在建骨架_v002.blend"
+}

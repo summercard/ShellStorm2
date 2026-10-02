@@ -1,0 +1,22 @@
+{
+  "version": "v002",
+  "source_reference": "assets/art/environments/open_world/source/landscape_tower04/v001/景观建筑_塔4周边五组废墟藤蔓_v001.blend",
+  "budget_rule": "Each group triangle count equals v001, including every repeated instance and vines.",
+  "construction_buildings": [
+    "02组_2栋",
+    "04组_1栋"
+  ],
+  "damage_types": [
+    "corner_loss",
+    "floor_collapse",
+    "vertical_split"
+  ],
+  "frozen_before_modeling": true,
+  "replacement_module_budgets": {
+    "narrow": 284,
+    "wide": 284,
+    "slim": 204,
+    "crown": 228
+  },
+  "unchanged_scope": "all vegetation, intact modules, group layout, materials, cameras"
+}

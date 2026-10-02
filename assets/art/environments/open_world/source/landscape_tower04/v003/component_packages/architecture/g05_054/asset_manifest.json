@@ -1,0 +1,55 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE04-05",
+  "package_id": "g05_054",
+  "slug": "g05_054",
+  "display_name": "05组_1栋_05至08层",
+  "category": "architecture",
+  "version": "v003",
+  "source_blend": "assets/art/environments/open_world/source/landscape_tower04/v003/景观建筑_塔4周边五组_倾斜断柱与塌板_v003.blend",
+  "collection": "05组_1栋_05至08层_资产包",
+  "objects": [
+    "05组_1栋_05至08层"
+  ],
+  "root_object": "05组_1栋_05至08层",
+  "component_definition": "slim_floor_collapse_deformed_54",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    -14.281675338745117,
+    2.0841355323791504,
+    16.0
+  ],
+  "rotation_z": 0,
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_required_background",
+  "exported": false,
+  "expected_export": "g05_054.glb",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LANDSCAPE04-05",
+  "bounds_min": [
+    -22.50918960571289,
+    -5.722626209259033,
+    16.0
+  ],
+  "bounds_max": [
+    -6.547180652618408,
+    8.394135475158691,
+    32.0
+  ],
+  "dimensions": [
+    15.962008953094482,
+    14.116761684417725,
+    16.0
+  ]
+}

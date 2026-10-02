@@ -1,0 +1,33 @@
+{
+  "updated": [
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-01",
+      "row": 819,
+      "triangles": 2098
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-02",
+      "row": 820,
+      "triangles": 2334
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-03",
+      "row": 821,
+      "triangles": 2450
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-04",
+      "row": 822,
+      "triangles": 2098
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-05",
+      "row": 823,
+      "triangles": 2991
+    }
+  ],
+  "unrelated_cells_unchanged": true,
+  "other_sheets_unchanged": true,
+  "source_sha256": "fe649aa8823b118b2c16661fd83ecbe0b79852e3d305666eb13af9361449ff1e",
+  "status": "Blender源已完成"
+}

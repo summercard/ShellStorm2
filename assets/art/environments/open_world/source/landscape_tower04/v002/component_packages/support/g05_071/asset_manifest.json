@@ -1,0 +1,55 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE04-05",
+  "package_id": "g05_071",
+  "slug": "g05_071",
+  "display_name": "05组_3栋_藤蔓2",
+  "category": "support",
+  "version": "v002",
+  "source_blend": "assets/art/environments/open_world/source/landscape_tower04/v002/景观建筑_塔4周边五组_中段破损与在建骨架_v002.blend",
+  "collection": "05组_3栋_藤蔓2_资产包",
+  "objects": [
+    "05组_3栋_藤蔓2"
+  ],
+  "root_object": "05组_3栋_藤蔓2",
+  "component_definition": "curtain",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    16.598323822021484,
+    -3.3158645629882812,
+    18.0
+  ],
+  "rotation_z": 0,
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_required_background",
+  "exported": false,
+  "expected_export": "g05_071.glb",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LANDSCAPE04-05",
+  "bounds_min": [
+    11.288324356079102,
+    -4.3641357421875,
+    5.979074478149414
+  ],
+  "bounds_max": [
+    21.908323287963867,
+    -2.5658645629882812,
+    19.0
+  ],
+  "dimensions": [
+    10.619998931884766,
+    1.7982711791992188,
+    13.020925521850586
+  ]
+}

@@ -1,0 +1,1154 @@
+{
+  "passed": true,
+  "parent_source": "assets/art/environments/open_world/source/landscape_tower04/v002/景观建筑_塔4周边五组_中段破损与在建骨架_v002.blend",
+  "parent_sha256": "493aa5d5fb2f85b9a12e14be8f61ac2277f2943ab3cf8e2fb58ac87944298328",
+  "parent_source_unchanged": true,
+  "changed_objects": [
+    {
+      "object": "01组_1栋_05至08层",
+      "old_definition": "narrow_corner_loss",
+      "new_definition": "narrow_corner_loss_deformed_01",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            4.300000190734863
+          ],
+          "front_drop_m": 1.5204420452156187,
+          "protrusion_m": 0.5674273805523314
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            8.300000190734863
+          ],
+          "front_drop_m": 0.9268815019278107,
+          "protrusion_m": 0.7930793955159228
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            12.300000190734863
+          ],
+          "front_drop_m": 1.5518902962389027,
+          "protrusion_m": 1.0773729952357298
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -8.0,
+            -7.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -1.4725086576427198,
+            -0.7972856150614893
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            8.0,
+            -7.0,
+            1.2000000476837158
+          ],
+          "top_shift_m": [
+            2.1708234319777677,
+            -1.4937912268774263
+          ]
+        }
+      ]
+    },
+    {
+      "object": "01组_1栋_13至16层",
+      "old_definition": "narrow_floor_collapse",
+      "new_definition": "narrow_floor_collapse_deformed_03",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            12.300000190734863
+          ],
+          "front_drop_m": 1.2646032330638284,
+          "protrusion_m": 0.9054056417461998
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -6.079999923706055,
+            0.0,
+            3.9499998092651367
+          ],
+          "front_drop_m": 1.147359010356843,
+          "protrusion_m": 1.0500181762741478
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            6.079999923706055,
+            0.0,
+            3.9499998092651367
+          ],
+          "front_drop_m": 0.8975200758006545,
+          "protrusion_m": 0.70814351719408
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -6.079999923706055,
+            0.0,
+            7.950000286102295
+          ],
+          "front_drop_m": 1.447253416336068,
+          "protrusion_m": 0.5026468700770114
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            6.079999923706055,
+            0.0,
+            7.950000286102295
+          ],
+          "front_drop_m": 1.6462747590694287,
+          "protrusion_m": 1.332425485109291
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -8.0,
+            -7.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -1.239073803356804,
+            -1.346244585047539
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            8.0,
+            -7.0,
+            8.0
+          ],
+          "top_shift_m": [
+            1.840177140973338,
+            -1.1637680022858317
+          ]
+        }
+      ]
+    },
+    {
+      "object": "01组_1栋_断顶",
+      "old_definition": "crown_narrow",
+      "new_definition": "crown_narrow_deformed_05",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            -7.0,
+            2.8312652111053467
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -7.199999809265137,
+            -7.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            -1.2160245086446582,
+            -1.1672971584970944
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            6.880000114440918,
+            -7.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            1.2524360983277336,
+            -0.8244891926139924
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            8.0,
+            0.0,
+            2.9229085445404053
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            7.0,
+            3.134895086288452
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            -8.0,
+            0.0,
+            3.13997220993042
+          ]
+        }
+      ]
+    },
+    {
+      "object": "02组_1栋_05至08层",
+      "old_definition": "slim_vertical_split",
+      "new_definition": "slim_vertical_split_deformed_13",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -4.204999923706055,
+            0.0,
+            4.125
+          ],
+          "front_drop_m": 1.4330408386486113,
+          "protrusion_m": 0.6296490784075613
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            4.204999923706055,
+            0.0,
+            4.125
+          ],
+          "front_drop_m": 1.0215992559975164,
+          "protrusion_m": 0.8982494192984591
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -3.9549999237060547,
+            0.0,
+            8.125
+          ],
+          "front_drop_m": 1.1155485986872833,
+          "protrusion_m": 0.6436079575008136
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            3.9549999237060547,
+            0.0,
+            8.125
+          ],
+          "front_drop_m": 1.4491407238560852,
+          "protrusion_m": 1.4418046470375687
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -4.204999923706055,
+            0.0,
+            12.125
+          ],
+          "front_drop_m": 0.8886709764122319,
+          "protrusion_m": 0.8410140107722841
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            4.204999923706055,
+            0.0,
+            12.125
+          ],
+          "front_drop_m": 0.9167149824698446,
+          "protrusion_m": 1.3138596891825447
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -1.3191971800151268,
+            -1.1579928999140168
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            1.781452556059179,
+            -1.177871128825086
+          ]
+        }
+      ]
+    },
+    {
+      "object": "02组_1栋_断顶",
+      "old_definition": "crown_slim",
+      "new_definition": "crown_slim_deformed_16",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            -6.0,
+            2.6499998569488525
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -5.399999618530273,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            -2.044808959885857,
+            -1.0245202665064506
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            5.159999847412109,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            2.2127462787433547,
+            -0.7779244045785269
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            6.0,
+            0.0,
+            3.120170831680298
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            6.0,
+            2.9381484985351562
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            -6.0,
+            0.0,
+            2.9904301166534424
+          ]
+        }
+      ]
+    },
+    {
+      "object": "03组_1栋_09至12层",
+      "old_definition": "narrow_vertical_split",
+      "new_definition": "narrow_vertical_split_deformed_29",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -5.565000057220459,
+            0.0,
+            4.125
+          ],
+          "front_drop_m": 0.8412370639542055,
+          "protrusion_m": 1.1084350397437015
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            5.565000057220459,
+            0.0,
+            4.125
+          ],
+          "front_drop_m": 1.1708246949465477,
+          "protrusion_m": 1.3219232620482302
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -5.315000057220459,
+            0.0,
+            8.125
+          ],
+          "front_drop_m": 1.574077510580131,
+          "protrusion_m": 0.5727265657412536
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            5.315000057220459,
+            0.0,
+            8.125
+          ],
+          "front_drop_m": 0.8745319470315058,
+          "protrusion_m": 1.1147584517906841
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -5.565000057220459,
+            0.0,
+            12.125
+          ],
+          "front_drop_m": 1.532726548302584,
+          "protrusion_m": 1.224228169155512
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            5.565000057220459,
+            0.0,
+            12.125
+          ],
+          "front_drop_m": 0.9512783880472261,
+          "protrusion_m": 0.6826392555718175
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -8.0,
+            -7.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -2.0368347705901417,
+            -1.1873282482569132
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            8.0,
+            -7.0,
+            8.0
+          ],
+          "top_shift_m": [
+            1.6688254875935642,
+            -0.7635169625655673
+          ]
+        }
+      ]
+    },
+    {
+      "object": "03组_1栋_断顶",
+      "old_definition": "crown_narrow",
+      "new_definition": "crown_narrow_deformed_31",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            -7.0,
+            2.8312652111053467
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -7.199999809265137,
+            -7.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            -1.357826017776018,
+            -0.7476939024656843
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            6.880000114440918,
+            -7.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            2.0905206184040046,
+            -0.9081984856048738
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            8.0,
+            0.0,
+            2.9229085445404053
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            7.0,
+            3.134895086288452
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            -8.0,
+            0.0,
+            3.13997220993042
+          ]
+        }
+      ]
+    },
+    {
+      "object": "03组_2栋_01至04层",
+      "old_definition": "slim_corner_loss",
+      "new_definition": "slim_corner_loss_deformed_35",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            4.300000190734863
+          ],
+          "front_drop_m": 1.4706592178728677,
+          "protrusion_m": 1.4495723470267559
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            8.300000190734863
+          ],
+          "front_drop_m": 1.3716272896475732,
+          "protrusion_m": 1.1379876123735992
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            12.300000190734863
+          ],
+          "front_drop_m": 1.1918772937555397,
+          "protrusion_m": 1.1158499357788532
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -1.9530790385315424,
+            -1.373484897954974
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            6.0,
+            -6.0,
+            1.2000000476837158
+          ],
+          "top_shift_m": [
+            2.1666903428261586,
+            -1.2735072772585991
+          ]
+        }
+      ]
+    },
+    {
+      "object": "03组_2栋_断顶",
+      "old_definition": "crown_slim",
+      "new_definition": "crown_slim_deformed_37",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            -6.0,
+            2.6499998569488525
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -5.399999618530273,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            -2.1331909384225867,
+            -1.0960529279087514
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            5.159999847412109,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            1.974166160832494,
+            -1.394533397728293
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            6.0,
+            0.0,
+            3.120170831680298
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            6.0,
+            2.9381484985351562
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            -6.0,
+            0.0,
+            2.9904301166534424
+          ]
+        }
+      ]
+    },
+    {
+      "object": "05组_1栋_05至08层",
+      "old_definition": "slim_floor_collapse",
+      "new_definition": "slim_floor_collapse_deformed_54",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            12.300000190734863
+          ],
+          "front_drop_m": 1.4840458601899456,
+          "protrusion_m": 1.3770078056129447
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -4.559999942779541,
+            0.0,
+            3.9499998092651367
+          ],
+          "front_drop_m": 0.8921115438970764,
+          "protrusion_m": 1.170645040462766
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            4.559999942779541,
+            0.0,
+            3.9499998092651367
+          ],
+          "front_drop_m": 1.6983456378311002,
+          "protrusion_m": 0.6375777589653309
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -4.559999942779541,
+            0.0,
+            7.950000286102295
+          ],
+          "front_drop_m": 1.1461527387269719,
+          "protrusion_m": 0.6626411233156213
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            4.559999942779541,
+            0.0,
+            7.950000286102295
+          ],
+          "front_drop_m": 1.38368920466742,
+          "protrusion_m": 1.0700492456993076
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -1.91751470025037,
+            -0.8088581810832137
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            1.424494822948883,
+            -1.4967616586460573
+          ]
+        }
+      ]
+    },
+    {
+      "object": "05组_1栋_断顶",
+      "old_definition": "crown_slim",
+      "new_definition": "crown_slim_deformed_56",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            -6.0,
+            2.6499998569488525
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -5.399999618530273,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            -1.3268702097474994,
+            -1.1205331884844112
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            5.159999847412109,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            1.9184506244620536,
+            -0.9723704077587492
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            6.0,
+            0.0,
+            3.120170831680298
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            6.0,
+            2.9381484985351562
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            -6.0,
+            0.0,
+            2.9904301166534424
+          ]
+        }
+      ]
+    },
+    {
+      "object": "05组_2栋_05至08层",
+      "old_definition": "slim_corner_loss",
+      "new_definition": "slim_corner_loss_deformed_61",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            4.300000190734863
+          ],
+          "front_drop_m": 1.0106859370967223,
+          "protrusion_m": 1.080504926365887
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            8.300000190734863
+          ],
+          "front_drop_m": 0.7492960378922426,
+          "protrusion_m": 1.036366920945219
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            0.0,
+            0.0,
+            12.300000190734863
+          ],
+          "front_drop_m": 0.9002522629300518,
+          "protrusion_m": 0.9598366958702247
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -2.2251767351805207,
+            -1.2566796403585352
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            6.0,
+            -6.0,
+            1.2000000476837158
+          ],
+          "top_shift_m": [
+            1.8764072545849924,
+            -1.3355871296905955
+          ]
+        }
+      ]
+    },
+    {
+      "object": "05组_2栋_断顶",
+      "old_definition": "crown_slim",
+      "new_definition": "crown_slim_deformed_63",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            -6.0,
+            2.6499998569488525
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -5.399999618530273,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            -1.983623013809941,
+            -0.7953334970242096
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            5.159999847412109,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            1.4034289136887972,
+            -1.190016869333227
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            6.0,
+            0.0,
+            3.120170831680298
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            6.0,
+            2.9381484985351562
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            -6.0,
+            0.0,
+            2.9904301166534424
+          ]
+        }
+      ]
+    },
+    {
+      "object": "05组_3栋_01至04层",
+      "old_definition": "slim_vertical_split",
+      "new_definition": "slim_vertical_split_deformed_67",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -4.204999923706055,
+            0.0,
+            4.125
+          ],
+          "front_drop_m": 0.9406551279332326,
+          "protrusion_m": 1.4163078321606406
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            4.204999923706055,
+            0.0,
+            4.125
+          ],
+          "front_drop_m": 1.5416780579128297,
+          "protrusion_m": 1.0101831419302
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -3.9549999237060547,
+            0.0,
+            8.125
+          ],
+          "front_drop_m": 1.274706874870497,
+          "protrusion_m": 0.8029209136522952
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            3.9549999237060547,
+            0.0,
+            8.125
+          ],
+          "front_drop_m": 1.1631372389418737,
+          "protrusion_m": 0.727914280127716
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            -4.204999923706055,
+            0.0,
+            12.125
+          ],
+          "front_drop_m": 1.1166265794596693,
+          "protrusion_m": 1.3050072774698185
+        },
+        {
+          "kind": "sagging_protruding_slab",
+          "center": [
+            4.204999923706055,
+            0.0,
+            12.125
+          ],
+          "front_drop_m": 0.7247523097119248,
+          "protrusion_m": 1.1282320777311983
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            -1.259148397262597,
+            -0.936018116550197
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            6.0,
+            -6.0,
+            8.0
+          ],
+          "top_shift_m": [
+            1.6641827830467868,
+            -1.1079862065623987
+          ]
+        }
+      ]
+    },
+    {
+      "object": "05组_3栋_断顶",
+      "old_definition": "crown_slim",
+      "new_definition": "crown_slim_deformed_69",
+      "topology_identical": true,
+      "deformations": [
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            -6.0,
+            2.6499998569488525
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            -5.399999618530273,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            -2.011660237203892,
+            -1.2443522965166438
+          ]
+        },
+        {
+          "kind": "leaning_broken_column",
+          "center": [
+            5.159999847412109,
+            -6.0,
+            3.5999999046325684
+          ],
+          "top_shift_m": [
+            2.1611590920978934,
+            -1.452677114686697
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            6.0,
+            0.0,
+            3.120170831680298
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            0.0,
+            6.0,
+            2.9381484985351562
+          ]
+        },
+        {
+          "kind": "leaning_roof_remnant",
+          "center": [
+            -6.0,
+            0.0,
+            2.9904301166534424
+          ]
+        }
+      ]
+    }
+  ],
+  "locked_objects": {
+    "01组_1栋_01至04层": "946b8d3ee90f6c1a20397726da4aa0c5628bbb3f8f20e92f26e9cd3425568980",
+    "01组_1栋_09至12层": "e13d2097db865a0a51c1acba89248714c7b96f83bf6cb76e6bc60aa6ccbb55fe",
+    "01组_1栋_17至20层": "7860d6f9f16ac36b01d06049902dcdaef48d09eee34c7d824f37b3306e291a4e",
+    "01组_1栋_藤蔓1": "66e96053f75ae3f3556f5c36735455bc6921e870ee1fe384d3cea049733928f8",
+    "01组_1栋_藤蔓2": "63f753a63fb750e0d6afba48eff15f52ab007984626822f8c5c64766053a0618",
+    "01组_1栋_藤蔓3": "69f65c00f33e31d8aa4d7e9c921be5885ceef23f42831470ea546faea782ebe8",
+    "01组_1栋_藤蔓4": "0c9f254e667d500490844d4167c85d12c8f761c61a62e72d927db289bb0cd401",
+    "01组_1栋_藤蔓5": "79808072b14a93ca09863c4037153d2ba19fbb2a06d72d7b589a0b3315c02f1c",
+    "01组_1栋_藤蔓6": "3cc232064b9f31a2acd226b600cc23aa54271f3193c0154f3d36e3328ff0bc09",
+    "02组_1栋_01至04层": "494e27faa3a3c4071335ae08f21f68695fdb79dd07437d4a5e6b127f31397b2c",
+    "02组_1栋_09至12层": "0029a104b1faab742ae91a428e0da8097495c6d5717bf740015322a08570ab88",
+    "02组_1栋_13至16层": "257087cf9b66c567889e679e778d238074ca1aa02d755ec823a3ca91f9321a3a",
+    "02组_1栋_藤蔓1": "361fbb8b60a8bc74efd03430df9be254f9444733b83323225787b47ea794457b",
+    "02组_1栋_藤蔓2": "b92101bc0acc498d1052b05fc23debe876bc12e04661a2e15492194fe4a56b48",
+    "02组_1栋_藤蔓3": "0941c046ed624f387f9f16dbabb53987e88d172e2a842f38c760f91ce503b9a5",
+    "02组_2栋_01至04层": "dc47f4bbd543d4db84b57364db6fb3e332a8a67e55d8b21a2587421e6de98815",
+    "02组_2栋_05至08层": "bbf8ebccd64fa6a22c2df4ee455845187fc6e3b5e68d5a337404ae00de2634aa",
+    "02组_2栋_09至12层": "5e0ef815245a153cc61d3c32898766c575ef63310e8aa6e128dc2229d08dd6f2",
+    "02组_2栋_断顶": "8ca005f4c0de1a8600f5ff0164dd02382a18e588d1dca8aeb65b2f1c1f69c384",
+    "02组_2栋_藤蔓1": "71fe073711402b309ace934e360a907bf7bdc63b8ce4b6997ae47566a7e547ec",
+    "02组_2栋_藤蔓2": "b9c93a13817f2e256a664adc5e49ed03e2916babf0cdb2455b7531e5f0a47e8e",
+    "02组_2栋_藤蔓3": "9c8a38755b44fd7b05121639c8e4df3d1a0c378314b2773f04417bc281f40968",
+    "03组_1栋_01至04层": "0458c48be4c385fba21cadad311334eabab4e7c5d1ef6f774d7680661414c954",
+    "03组_1栋_05至08层": "6668c79fc5b33adacf2c643a3f1394e26ac27f0c5abd5e0ef0b1cc261cd56e64",
+    "03组_1栋_13至16层": "db60e1f4f4998b1f35adf10c6faac06f47eb5c7cc35412772441da235596b569",
+    "03组_1栋_藤蔓1": "087c053540c32d1e6069b52d1e107331fdf116215a95e9044cb2faaba93e7f65",
+    "03组_1栋_藤蔓2": "0d5281103542f0cf6dd58e4fb5cfb1050a9f284b765c5443fc88dfdfa3b128fe",
+    "03组_1栋_藤蔓3": "403a9bd63c9da27ae42270acf8988dcd7393b3f3cd15b75405ed8d1be9c9c94d",
+    "03组_2栋_05至08层": "a48b469c3775745c57084ddd086c6a0773d8c42435f715a1e43400b21d53b5c2",
+    "03组_2栋_藤蔓1": "5f6448e5a2abd8571fb408cf5320559fa050430fc79ed3fadcb9fae29c591781",
+    "03组_2栋_藤蔓2": "6ac5a4d363928b75d47e68e6a81b752f5c6021e000666c69de36e480bc62d7cc",
+    "03组_2栋_藤蔓3": "e59da9104315a9327a9985d5e927e8ef9dade47a49abc5e36407d95eea202cd7",
+    "04组_1栋_01至04层": "596cf135631435fa2fd7be4dd1f2cc74cecd96dfe25d1b33bdcd6025495319e6",
+    "04组_1栋_05至08层": "d599fe7903175a325a72097150ef1329798d9cbd8bc3ab5882a1bc68857e9c35",
+    "04组_1栋_09至12层": "70c12f6b1c96b8869156bde27c28aa1c74eb2314c3cdff873461ad897e30e581",
+    "04组_1栋_13至16层": "31d370ee5bff949c0c7a9ce03ac23301765853cb2c61b357cd280592cc2bbb8c",
+    "04组_1栋_17至20层": "ddbe58c325ada13e8e0293da5604efe02b2b4e634e0ef167c9cde792c6719bef",
+    "04组_1栋_断顶": "5125d40cf24c4b450bff02fad1f844b73738aa72964f44960f6617c5bf2d1340",
+    "04组_1栋_藤蔓1": "6e3679f07d251b503639da4983533911c1f8c7d21854d6121616a30a63386f4c",
+    "04组_1栋_藤蔓2": "f2a5e35a9aeb18b7088fb941f31db6f1c6c11df0208b89fd8d15a7426893d8c6",
+    "04组_1栋_藤蔓3": "a59387f2c050646c131049a1e17fcab43ebe7a5feac7350de438885365361708",
+    "04组_1栋_藤蔓4": "bbd44e04c897df12380583a84b808ea378c19e26850e4358d4c742319d8b632f",
+    "04组_1栋_藤蔓5": "a395c1ddf4b89e46c9e3a26b1dbef373141de0e261dd47572121bfc0b6c8cbe2",
+    "04组_1栋_藤蔓6": "00d185849dde6009bbb6d0f5e941ee55799179cf795fe7beccb0775abfd4a1f3",
+    "05组_1栋_01至04层": "f8ff0c47e4bc4e5cd9d7c3b57feb15cd84ed9f0be4c58e48950fd078b350dd8a",
+    "05组_1栋_09至12层": "1035e8a1419642601cc8f72cc5dbbe73c781b92c1e3d45b5b7ab13cad212300e",
+    "05组_1栋_藤蔓1": "b26a6fb1607f42a5c0d3c34da599c7ff34d598808b399f389374e9d7b20a33fe",
+    "05组_1栋_藤蔓2": "16b8a31bf2dc0522a6a7fc33d27f73838607dbb14adebcdf3bdc56d12bfd7960",
+    "05组_1栋_藤蔓3": "4aa398b9e71ba154b0788ae304a709e166a4877ec0c983c449e2f015c25edc94",
+    "05组_2栋_01至04层": "bff734b9cee29e5768e704589e802f67294a172e491ec730af978e0f91583d68",
+    "05组_2栋_09至12层": "ed3962efc45b8b0c3d004d1b6894fc56a6e21668f093c1ba09756d116ce14eb0",
+    "05组_2栋_藤蔓1": "2ad5b77a4d938a6dfb4edd23be205906f989734fa30d1efba9c551b9c79b5806",
+    "05组_2栋_藤蔓2": "5d3b06f90665a2c421f454a41c5817c4c65e154328850a021bed13832019ddc1",
+    "05组_2栋_藤蔓3": "9d3983b81816d30b30082797d0cca9eb5ce0aa7abe4af0350c406fa9d2c5d032",
+    "05组_3栋_05至08层": "a9dbffb71440855816005561067b2441177134eeca44eb1c9fab392733fd045e",
+    "05组_3栋_藤蔓1": "a00ae78ff6cc4b74a09a8afbf8b5891e00767097e7e663f30078e5b8190dfdb5",
+    "05组_3栋_藤蔓2": "a2f9a0b07beadc43bfb71753a5e33a9d1dc2242b3ac9bd2117d3d3d384900d98",
+    "05组_3栋_藤蔓3": "f58f253b084af2df2a8d4ae034b12b2aa9271e1c6c67b68d4b32cb4e52b0bd5b"
+  },
+  "locked_objects_unchanged": true,
+  "construction_buildings": [
+    "02组_2栋",
+    "04组_1栋"
+  ],
+  "exact_group_triangle_counts": [
+    2098,
+    2334,
+    2450,
+    2098,
+    2991
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "passed": true,
+  "checks": {
+    "source_hash": true,
+    "five_independent_groups": true,
+    "manifest_count": true,
+    "nine_reusable_definitions": true,
+    "three_vine_variants": true,
+    "ENV-OPENWORLD-LANDSCAPE04-01_budget": true,
+    "ENV-OPENWORLD-LANDSCAPE04-01_origin": true,
+    "ENV-OPENWORLD-LANDSCAPE04-01_unique_package_ownership": true,
+    "ENV-OPENWORLD-LANDSCAPE04-02_budget": true,
+    "ENV-OPENWORLD-LANDSCAPE04-02_origin": true,
+    "ENV-OPENWORLD-LANDSCAPE04-02_unique_package_ownership": true,
+    "ENV-OPENWORLD-LANDSCAPE04-03_budget": true,
+    "ENV-OPENWORLD-LANDSCAPE04-03_origin": true,
+    "ENV-OPENWORLD-LANDSCAPE04-03_unique_package_ownership": true,
+    "ENV-OPENWORLD-LANDSCAPE04-04_budget": true,
+    "ENV-OPENWORLD-LANDSCAPE04-04_origin": true,
+    "ENV-OPENWORLD-LANDSCAPE04-04_unique_package_ownership": true,
+    "ENV-OPENWORLD-LANDSCAPE04-05_budget": true,
+    "ENV-OPENWORLD-LANDSCAPE04-05_origin": true,
+    "ENV-OPENWORLD-LANDSCAPE04-05_unique_package_ownership": true,
+    "g01_000_manifest": true,
+    "g01_001_manifest": true,
+    "g01_002_manifest": true,
+    "g01_003_manifest": true,
+    "g01_004_manifest": true,
+    "g01_005_manifest": true,
+    "g02_012_manifest": true,
+    "g02_013_manifest": true,
+    "g02_014_manifest": true,
+    "g02_015_manifest": true,
+    "g02_016_manifest": true,
+    "g02_020_manifest": true,
+    "g02_021_manifest": true,
+    "g02_022_manifest": true,
+    "g02_023_manifest": true,
+    "g03_027_manifest": true,
+    "g03_028_manifest": true,
+    "g03_029_manifest": true,
+    "g03_030_manifest": true,
+    "g03_031_manifest": true,
+    "g03_035_manifest": true,
+    "g03_036_manifest": true,
+    "g03_037_manifest": true,
+    "g04_041_manifest": true,
+    "g04_042_manifest": true,
+    "g04_043_manifest": true,
+    "g04_044_manifest": true,
+    "g04_045_manifest": true,
+    "g04_046_manifest": true,
+    "g05_053_manifest": true,
+    "g05_054_manifest": true,
+    "g05_055_manifest": true,
+    "g05_056_manifest": true,
+    "g05_060_manifest": true,
+    "g05_061_manifest": true,
+    "g05_062_manifest": true,
+    "g05_063_manifest": true,
+    "g05_067_manifest": true,
+    "g05_068_manifest": true,
+    "g05_069_manifest": true,
+    "g01_006_manifest": true,
+    "g01_007_manifest": true,
+    "g01_008_manifest": true,
+    "g01_009_manifest": true,
+    "g01_010_manifest": true,
+    "g01_011_manifest": true,
+    "g02_017_manifest": true,
+    "g02_018_manifest": true,
+    "g02_019_manifest": true,
+    "g02_024_manifest": true,
+    "g02_025_manifest": true,
+    "g02_026_manifest": true,
+    "g03_032_manifest": true,
+    "g03_033_manifest": true,
+    "g03_034_manifest": true,
+    "g03_038_manifest": true,
+    "g03_039_manifest": true,
+    "g03_040_manifest": true,
+    "g04_047_manifest": true,
+    "g04_048_manifest": true,
+    "g04_049_manifest": true,
+    "g04_050_manifest": true,
+    "g04_051_manifest": true,
+    "g04_052_manifest": true,
+    "g05_057_manifest": true,
+    "g05_058_manifest": true,
+    "g05_059_manifest": true,
+    "g05_064_manifest": true,
+    "g05_065_manifest": true,
+    "g05_066_manifest": true,
+    "g05_070_manifest": true,
+    "g05_071_manifest": true,
+    "g05_072_manifest": true,
+    "linked_module_meshes": true,
+    "no_unapplied_modifiers": true,
+    "external_palette": true
+  },
+  "groups": [
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-01",
+      "triangles": 2098,
+      "polygons": 1294,
+      "bounds_min": [
+        -9.8641357421875,
+        -8.46413516998291,
+        0.0
+      ],
+      "bounds_max": [
+        9.8641357421875,
+        8.464136123657227,
+        87.60759735107422
+      ],
+      "dimensions": [
+        19.728271484375,
+        16.928271293640137,
+        87.60759735107422
+      ],
+      "instances": 12
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-02",
+      "triangles": 2334,
+      "polygons": 1432,
+      "bounds_min": [
+        -15.9083251953125,
+        -9.3641357421875,
+        0.0
+      ],
+      "bounds_max": [
+        15.908323287963867,
+        9.3641357421875,
+        71.60759735107422
+      ],
+      "dimensions": [
+        31.816648483276367,
+        18.728271484375,
+        71.60759735107422
+      ],
+      "instances": 15
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-03",
+      "triangles": 2450,
+      "polygons": 1490,
+      "bounds_min": [
+        -16.8140811920166,
+        -10.96413516998291,
+        0.0
+      ],
+      "bounds_max": [
+        16.8140811920166,
+        10.96413516998291,
+        71.60759735107422
+      ],
+      "dimensions": [
+        33.6281623840332,
+        21.92827033996582,
+        71.60759735107422
+      ],
+      "instances": 14
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-04",
+      "triangles": 2098,
+      "polygons": 1294,
+      "bounds_min": [
+        -13.943216323852539,
+        -8.46413516998291,
+        0.0
+      ],
+      "bounds_max": [
+        13.943216323852539,
+        8.464136123657227,
+        87.60759735107422
+      ],
+      "dimensions": [
+        27.886432647705078,
+        16.928271293640137,
+        87.60759735107422
+      ],
+      "instances": 12
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-LANDSCAPE04-05",
+      "triangles": 2991,
+      "polygons": 1893,
+      "bounds_min": [
+        -21.908323287963867,
+        -11.3641357421875,
+        0.0
+      ],
+      "bounds_max": [
+        21.908323287963867,
+        11.364134788513184,
+        55.60759353637695
+      ],
+      "dimensions": [
+        43.816646575927734,
+        22.728270530700684,
+        55.60759353637695
+      ],
+      "instances": 20
+    }
+  ],
+  "status": "Blender source only; no runtime import or placement"
+}

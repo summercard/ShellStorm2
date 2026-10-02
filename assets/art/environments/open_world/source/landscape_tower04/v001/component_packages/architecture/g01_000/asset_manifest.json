@@ -1,0 +1,55 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE04-01",
+  "package_id": "g01_000",
+  "slug": "g01_000",
+  "display_name": "01组_1栋_01至04层",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/open_world/source/landscape_tower04/v001/景观建筑_塔4周边五组废墟藤蔓_v001.blend",
+  "collection": "01组_1栋_01至04层_资产包",
+  "objects": [
+    "01组_1栋_01至04层"
+  ],
+  "root_object": "01组_1栋_01至04层",
+  "component_definition": "narrow",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    0.4158644676208496,
+    -0.015863895416259766,
+    0.0
+  ],
+  "rotation_z": 0,
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_required_background",
+  "exported": false,
+  "expected_export": "g01_000.glb",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LANDSCAPE04-01",
+  "bounds_min": [
+    -7.89413595199585,
+    -7.325863838195801,
+    0.0
+  ],
+  "bounds_max": [
+    8.72586441040039,
+    7.294136047363281,
+    16.0
+  ],
+  "dimensions": [
+    16.62000036239624,
+    14.619999885559082,
+    16.0
+  ]
+}
