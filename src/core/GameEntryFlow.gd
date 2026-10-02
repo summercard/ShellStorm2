@@ -37,6 +37,20 @@ func request_gameplay_entry(reason: String, spawn_target := SPAWN_SAVED_PROGRESS
 	return _set_pending(KIND_GAMEPLAY, reason, spawn_target)
 
 
+## 续档跨场景只转交开始页意图；出生目标仍沿用原有 saved_progress 恢复契约。
+## 冷启动/显式主页显示菜单，局内恢复与重入仍直接进入玩法。
+func request_runtime_restore_entry(source_context: Dictionary) -> int:
+	var show_main_entry := (
+		str(source_context.get("kind", "")) == KIND_MAIN_ENTRY
+		and bool(source_context.get("show_main_entry", false))
+	)
+	return _set_pending(
+		KIND_MAIN_ENTRY if show_main_entry else KIND_GAMEPLAY,
+		REASON_RUNTIME_RESTORE,
+		SPAWN_SAVED_PROGRESS
+	)
+
+
 func consume_main_scene_entry() -> Dictionary:
 	var context: Dictionary
 	if not _pending_context.is_empty():

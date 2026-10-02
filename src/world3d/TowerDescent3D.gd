@@ -475,10 +475,8 @@ func _ready() -> void:
 		if not resume_scene_path.is_empty():
 			# 主场景本身不是该行动的运行时提供者；此处必须在 super() 前转场，
 			# 防止它初始化后覆盖独立副本的检查点。
-			var request_id := GameEntryFlow.request_gameplay_entry(
-				GameEntryFlow.REASON_RUNTIME_RESTORE,
-				GameEntryFlow.SPAWN_SAVED_PROGRESS
-			)
+			# 续档目的地继承本次上线的开始页意图，不改变存档恢复与出生规则。
+			var request_id := GameEntryFlow.request_runtime_restore_entry(_entry_context)
 			call_deferred("_resume_expedition_runtime_scene", resume_scene_path, request_id)
 			return
 	var base_art := get_node_or_null("Blocks/Base/Art") as Node3D
@@ -5437,10 +5435,7 @@ func _refresh_world_time_hud(snapshot: Dictionary = {}) -> void:
 
 
 func _install_main_entry_screen() -> void:
-	# 启动页只属于冷启动/显式返回主页；独立图直接进入玩法，不显示主页面。
-	if is_expedition():
-		return
-	# 启动页只属于冷启动/显式返回主页；死亡、撤离和场景恢复均直接进入玩法。
+	# 启动页跟随本次进程入口：远征上线续档也显示；基地出发、死亡、撤离与局内重入不显示。
 	if not _entry_context_requests_main_entry():
 		return
 	if test_mode or DisplayServer.get_name() == "headless" or _main_entry_screen != null:

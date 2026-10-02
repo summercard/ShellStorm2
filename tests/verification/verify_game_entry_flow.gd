@@ -30,6 +30,7 @@ func _verify_entry_intent_lifecycle(failures: Array[String]) -> void:
 		failures.append("死亡返回被错误分流到启动页")
 	if str(death_return.get("spawn_target", "")) != flow.SPAWN_BASE_99F:
 		failures.append("死亡返回没有保留99F基地出生契约")
+	_verify_runtime_restore_entry_routing(flow, failures)
 	flow.request_main_entry(flow.REASON_EXPLICIT_MAIN_ENTRY)
 	var explicit_main := flow.consume_main_scene_entry()
 	if not bool(explicit_main.get("show_main_entry", false)):
@@ -39,6 +40,122 @@ func _verify_entry_intent_lifecycle(failures: Array[String]) -> void:
 		failures.append("场景切换失败时无法撤销未消费的主页请求")
 	flow.free()
 
+
+func _verify_runtime_restore_entry_routing(flow: Node, failures: Array[String]) -> void:
+	_assert_runtime_restore_case(
+		flow,
+		{
+			"request_id": 77,
+			"kind": GameEntryFlow.KIND_GAMEPLAY,
+			"reason": GameEntryFlow.REASON_SCENE_REENTRY,
+			"spawn_target": GameEntryFlow.SPAWN_BASE_99F,
+			"show_main_entry": false,
+		},
+		GameEntryFlow.KIND_GAMEPLAY,
+		false,
+		"局内恢复",
+		failures
+	)
+	_assert_runtime_restore_case(
+		flow,
+		{
+			"request_id": 88,
+			"kind": GameEntryFlow.KIND_MAIN_ENTRY,
+			"reason": GameEntryFlow.REASON_COLD_START,
+			"spawn_target": GameEntryFlow.SPAWN_BASE_99F,
+			"show_main_entry": true,
+		},
+		GameEntryFlow.KIND_MAIN_ENTRY,
+		true,
+		"冷启动主页",
+		failures
+	)
+	_assert_runtime_restore_case(
+		flow,
+		{
+			"request_id": 89,
+			"kind": GameEntryFlow.KIND_MAIN_ENTRY,
+			"reason": GameEntryFlow.REASON_EXPLICIT_MAIN_ENTRY,
+			"spawn_target": GameEntryFlow.SPAWN_BASE_99F,
+			"show_main_entry": true,
+		},
+		GameEntryFlow.KIND_MAIN_ENTRY,
+		true,
+		"显式主页",
+		failures
+	)
+	_assert_runtime_restore_case(
+		flow,
+		{
+			"kind": GameEntryFlow.KIND_MAIN_ENTRY,
+			"reason": GameEntryFlow.REASON_EXPLICIT_MAIN_ENTRY,
+			"spawn_target": GameEntryFlow.SPAWN_BASE_99F,
+			"show_main_entry": false,
+		},
+		GameEntryFlow.KIND_GAMEPLAY,
+		false,
+		"隐藏主页的 main_entry",
+		failures
+	)
+	_assert_runtime_restore_case(
+		flow,
+		{
+			"kind": GameEntryFlow.KIND_GAMEPLAY,
+			"reason": GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT,
+			"spawn_target": GameEntryFlow.SPAWN_SAVED_PROGRESS,
+			"show_main_entry": false,
+		},
+		GameEntryFlow.KIND_GAMEPLAY,
+		false,
+		"基地远征出发",
+		failures
+	)
+	_assert_runtime_restore_case(
+		flow,
+		{
+			"kind": GameEntryFlow.KIND_GAMEPLAY,
+			"reason": GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT,
+			"spawn_target": GameEntryFlow.SPAWN_BASE_99F,
+			"show_main_entry": true,
+		},
+		GameEntryFlow.KIND_GAMEPLAY,
+		false,
+		"显示标志错误的 gameplay",
+		failures
+	)
+	_assert_runtime_restore_case(
+		flow,
+		{},
+		GameEntryFlow.KIND_GAMEPLAY,
+		false,
+		"空 source context",
+		failures
+	)
+
+
+func _assert_runtime_restore_case(
+	flow: Node,
+	source: Dictionary,
+	expected_kind: String,
+	expected_show_main_entry: bool,
+	label: String,
+	failures: Array[String],
+) -> void:
+	var source_before := source.duplicate(true)
+	var request_id: int = int(flow.request_runtime_restore_entry(source))
+	var restored: Dictionary = flow.consume_main_scene_entry()
+	if source != source_before:
+		failures.append("%s helper 修改了 source context" % label)
+	if request_id <= 0:
+		failures.append("%s helper 没有返回有效 request_id" % label)
+	if str(restored.get("kind", "")) != expected_kind:
+		failures.append("%s 没有转发为预期入口 kind" % label)
+	if bool(restored.get("show_main_entry", not expected_show_main_entry)) != expected_show_main_entry:
+		failures.append("%s 的 show_main_entry 不符合预期" % label)
+	if str(restored.get("reason", "")) != GameEntryFlow.REASON_RUNTIME_RESTORE:
+		failures.append("%s reason 不是 runtime_restore" % label)
+	if str(restored.get("spawn_target", "")) != GameEntryFlow.SPAWN_SAVED_PROGRESS:
+		failures.append("%s spawn 不是 saved_progress" % label)
 
 func _verify_tower_entry_gate(failures: Array[String]) -> void:
 	var tower := TowerDescent3D.new()
