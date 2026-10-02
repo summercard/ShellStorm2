@@ -1,0 +1,53 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "version": "v004",
+  "block_id": "open_world",
+  "floor_range": "三段立面及屋顶",
+  "design_scope": "参考图07号物流楼的完整外观、屋顶、广告及装卸展示区",
+  "dimensions_m": [
+    28,
+    20,
+    18
+  ],
+  "scale_basis": "独立外观资产美术尺度；参考图无尺寸，28×20×18m为明确制作假设，非可进入关卡或12m墙体模块",
+  "component_definition_count": 25,
+  "definitions": [
+    "wall_panel",
+    "corner_pier",
+    "floor_band",
+    "roof_tile",
+    "paving_tile",
+    "roof_rail",
+    "service_catwalk",
+    "rollup_dock",
+    "office_entry",
+    "entry_stairs",
+    "billboard",
+    "brand_sign",
+    "roof_hvac",
+    "wall_ac",
+    "utility_cabinet",
+    "duct",
+    "ladder",
+    "telecom_mast",
+    "conduit",
+    "bollard",
+    "planter",
+    "cargo_stack",
+    "truck_display",
+    "forklift_display",
+    "roof_hatch"
+  ],
+  "locked_existing_assets": "所有已有资产与运行时场景保持不动",
+  "reference_camera": "CAM_参考全景",
+  "scene_design_docs": [
+    "docs/v0.1/10_资产与内容规范.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07",
+  "reference_relationships": {
+    "front": "左侧办公室和竖幅海报；右侧01/02/03三联装卸门",
+    "roof": "六台空调、服务柜、通信塔、橙色栏杆、方形风道",
+    "attachments": "货车、叉车、托盘箱、花池独立包，均为静态展示"
+  }
+}

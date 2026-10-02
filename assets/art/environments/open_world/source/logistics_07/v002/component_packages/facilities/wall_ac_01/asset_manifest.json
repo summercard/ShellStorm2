@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/wall_ac_01",
+  "display_name": "空调机组_wall_ac_01",
+  "slug": "wall_ac_01",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v002\\env_logistics_07_source_v002.blend",
+  "collection": "空调机组_wall_ac_01_资产包",
+  "source_collection": "空调机组_wall_ac_01_制作组件",
+  "objects": [
+    "空调机组_wall_ac_01_主体"
+  ],
+  "root_object": "空调机组_wall_ac_01_主体",
+  "world_position": [
+    -3.6500000953674316,
+    -10.600000381469727,
+    7.800000190734863
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -4.335,
+    -11.110000610351562,
+    7.805000000000001
+  ],
+  "bounds_max": [
+    -2.965,
+    -10.19,
+    9.579999923706055
+  ],
+  "dimensions": [
+    1.37,
+    0.920000610351563,
+    1.774999923706054
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "wall_ac_01.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "wall_ac",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/apron_0_11",
+  "display_name": "装卸地坪_R0_C11",
+  "slug": "apron_0_11",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v001\\env_logistics_07_source_v001.blend",
+  "collection": "装卸地坪_R0_C11_资产包",
+  "source_collection": "装卸地坪_R0_C11_制作组件",
+  "objects": [
+    "装卸地坪_R0_C11_主体"
+  ],
+  "root_object": "装卸地坪_R0_C11_主体",
+  "world_position": [
+    8.0,
+    -11.0,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    7.01,
+    -11.99,
+    0.0
+  ],
+  "bounds_max": [
+    8.99,
+    -10.01,
+    0.18
+  ],
+  "dimensions": [
+    1.9800000000000004,
+    1.9800000000000004,
+    0.18
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "apron_0_11.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "paving_tile",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

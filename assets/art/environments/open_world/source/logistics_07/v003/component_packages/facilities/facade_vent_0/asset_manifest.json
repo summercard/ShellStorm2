@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/facade_vent_0",
+  "display_name": "立面百叶风口_0",
+  "slug": "facade_vent_0",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v003\\env_logistics_07_source_v003.blend",
+  "collection": "立面百叶风口_0_资产包",
+  "source_collection": "立面百叶风口_0_制作组件",
+  "objects": [
+    "立面百叶风口_0_主体"
+  ],
+  "root_object": "立面百叶风口_0_主体",
+  "world_position": [
+    -3.799999952316284,
+    -10.199999809265137,
+    13.600000381469727
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -4.68,
+    -10.3825,
+    13.695
+  ],
+  "bounds_max": [
+    -2.92,
+    -10.2,
+    15.504999999999999
+  ],
+  "dimensions": [
+    1.7599999999999998,
+    0.182500000000001,
+    1.8099999999999987
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "facade_vent_0.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "wall_ac",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

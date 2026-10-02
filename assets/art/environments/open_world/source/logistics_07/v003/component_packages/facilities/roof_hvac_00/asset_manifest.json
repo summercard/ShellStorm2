@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/roof_hvac_00",
+  "display_name": "空调机组_roof_hvac_00",
+  "slug": "roof_hvac_00",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v003\\env_logistics_07_source_v003.blend",
+  "collection": "空调机组_roof_hvac_00_资产包",
+  "source_collection": "空调机组_roof_hvac_00_制作组件",
+  "objects": [
+    "空调机组_roof_hvac_00_主体"
+  ],
+  "root_object": "空调机组_roof_hvac_00_主体",
+  "world_position": [
+    -10.0,
+    4.900000095367432,
+    18.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -11.46,
+    3.4149999618530273,
+    18.005000000000003
+  ],
+  "bounds_max": [
+    -8.54,
+    6.285,
+    21.3799991607666
+  ],
+  "dimensions": [
+    2.9200000000000017,
+    2.870000038146973,
+    3.374999160766599
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_hvac_00.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "roof_hvac",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

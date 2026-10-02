@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/bollard_0_1",
+  "display_name": "黄色防撞柱_0_1",
+  "slug": "bollard_0_1",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v002\\env_logistics_07_source_v002.blend",
+  "collection": "黄色防撞柱_0_1_资产包",
+  "source_collection": "黄色防撞柱_0_1_制作组件",
+  "objects": [
+    "黄色防撞柱_0_1_主体"
+  ],
+  "root_object": "黄色防撞柱_0_1_主体",
+  "world_position": [
+    -13.600000381469727,
+    -15.600000381469727,
+    0.20000000298023224
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -13.9,
+    -15.9,
+    0.185
+  ],
+  "bounds_max": [
+    -13.299999999999999,
+    -15.299999999999999,
+    1.4199999570846558
+  ],
+  "dimensions": [
+    0.6000000000000014,
+    0.6000000000000014,
+    1.2349999570846557
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "bollard_0_1.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "bollard",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

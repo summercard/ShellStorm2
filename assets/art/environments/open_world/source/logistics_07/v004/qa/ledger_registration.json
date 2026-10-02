@@ -1,0 +1,11 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "row": 824,
+  "ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "source_version": "v004",
+  "source_sha256": "5e658272c8043ae533c7c73b3f366620f7704c4522e770cfb5bafa201a526200",
+  "prior_asset_content_unchanged": true,
+  "prior_asset_fingerprints_unchanged": true,
+  "baseline_count": 1004,
+  "status": "Blender源已完成"
+}

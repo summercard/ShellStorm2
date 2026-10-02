@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/office_entry",
+  "display_name": "办公入口_玻璃双门与招牌",
+  "slug": "office_entry",
+  "category": "facilities",
+  "version": "v003",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v003\\env_logistics_07_source_v003.blend",
+  "collection": "办公入口_玻璃双门与招牌_资产包",
+  "source_collection": "办公入口_玻璃双门与招牌_制作组件",
+  "objects": [
+    "办公入口_玻璃双门与招牌_主体",
+    "办公入口_玻璃双门与招牌_柔和自发光"
+  ],
+  "root_object": "办公入口_玻璃双门与招牌_主体",
+  "world_position": [
+    -10.399999618530273,
+    -10.0,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -13.5,
+    -10.745,
+    0.050000000000000266
+  ],
+  "bounds_max": [
+    -7.255000000000001,
+    -9.725,
+    5.65
+  ],
+  "dimensions": [
+    6.244999999999999,
+    1.0199999999999996,
+    5.6
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "office_entry.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "office_entry",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

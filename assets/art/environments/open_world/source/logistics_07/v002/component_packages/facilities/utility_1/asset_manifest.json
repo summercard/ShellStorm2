@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/utility_1",
+  "display_name": "维修配电箱_1",
+  "slug": "utility_1",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v002\\env_logistics_07_source_v002.blend",
+  "collection": "维修配电箱_1_资产包",
+  "source_collection": "维修配电箱_1_制作组件",
+  "objects": [
+    "维修配电箱_1_主体",
+    "维修配电箱_1_柔和自发光"
+  ],
+  "root_object": "维修配电箱_1_主体",
+  "world_position": [
+    13.199999809265137,
+    -11.0,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    12.549999999999999,
+    -11.774999999999999,
+    0.0
+  ],
+  "bounds_max": [
+    13.85,
+    -10.55,
+    2.2350428104400635
+  ],
+  "dimensions": [
+    1.3000000000000007,
+    1.2249999999999979,
+    2.2350428104400635
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": true,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "utility_1.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "utility_cabinet",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

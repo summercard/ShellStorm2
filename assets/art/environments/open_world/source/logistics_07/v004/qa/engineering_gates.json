@@ -1,0 +1,31 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "source_audit_exit": 0,
+  "palette_exit": 0,
+  "ledger_structure_exit": 0,
+  "ledger_split_exit": 0,
+  "ledger_full_exit": 1,
+  "ledger_full_issue_counts": {
+    "sha_mismatch": 153
+  },
+  "prior_and_after_full_issues_identical": true,
+  "current_asset_issues": 0,
+  "source_sha_matches_ledger": true,
+  "runtime_naming_exit": 1,
+  "runtime_naming_scope": "No runtime paths created; reported bunny01 and mission_command_chair paths predate this task",
+  "not_executed": [
+    "GLB optimization/export",
+    "Godot import",
+    "collision",
+    "LOD",
+    "gameplay integration",
+    "user visual sign-off"
+  ],
+  "documentation_exit": 1,
+  "documentation_issues": [
+    "verify_base99_swivel_chairs",
+    "verify_expedition01_spawn_ramp",
+    "verify_expedition_resume_entry",
+    "verify_pushable_base_chairs"
+  ]
+}
