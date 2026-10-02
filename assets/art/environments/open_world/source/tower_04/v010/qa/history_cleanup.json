@@ -1,0 +1,60 @@
+{
+  "requested_cleanup": "保留最终源版本，删除历史源版本",
+  "retained": [
+    "tower_04/v010",
+    "tower_04_2/v002"
+  ],
+  "delete_directories": [
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v001",
+      "files": 134,
+      "bytes": 31788585
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v002",
+      "files": 118,
+      "bytes": 49167804
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v003",
+      "files": 128,
+      "bytes": 52958336
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v004",
+      "files": 838,
+      "bytes": 93191321
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v005",
+      "files": 1159,
+      "bytes": 204954968
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v006",
+      "files": 1157,
+      "bytes": 129195734
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v007",
+      "files": 1569,
+      "bytes": 355529253
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v008",
+      "files": 1727,
+      "bytes": 1231713107
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04\\v009",
+      "files": 1954,
+      "bytes": 1020202917
+    },
+    {
+      "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_04_2\\v001",
+      "files": 55,
+      "bytes": 16680296
+    }
+  ],
+  "total_bytes": 3185382321
+}
