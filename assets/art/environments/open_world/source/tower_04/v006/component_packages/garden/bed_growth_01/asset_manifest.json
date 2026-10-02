@@ -1,0 +1,67 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/bed_growth_01",
+  "slug": "bed_growth_01",
+  "display_name": "花池局部返野叶簇_01",
+  "category": "garden",
+  "version": "v006",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v006/塔4_末世平台模块化_150x50m_v006.blend",
+  "collection": "花池局部返野叶簇_01_资产包",
+  "source_collection": "花池局部返野叶簇_01_制作组件",
+  "objects": [
+    "花池局部返野叶簇_01_主体"
+  ],
+  "root_object": "花池局部返野叶簇_01_主体",
+  "world_position": [
+    17.469514846801758,
+    -4.154414653778076,
+    25.600000381469727
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    14.456938743591309,
+    -6.852761268615723,
+    25.649999618530273
+  ],
+  "bounds_max": [
+    20.091562271118164,
+    -1.1911523342132568,
+    25.875
+  ],
+  "dimensions": [
+    5.6346235275268555,
+    5.661608934402466,
+    0.22500038146972656
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "contained_bed_growth",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "bed_growth_01.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v006",
+  "zone_id": "C",
+  "zone_name": "中央花池与棚下东段",
+  "previous_package_id": "tower_04/planter_01",
+  "platform_scope": true
+}

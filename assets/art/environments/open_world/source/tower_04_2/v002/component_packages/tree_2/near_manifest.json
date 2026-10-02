@@ -1,0 +1,29 @@
+{
+  "slug": "tree_2",
+  "display_name": "庭院乔木_3",
+  "family": "tree",
+  "collection": "庭院乔木_3_定义",
+  "mesh": "庭院乔木_3_网格",
+  "origin": [
+    0.04708530753850937,
+    -0.006362755782902241,
+    -0.041241541504859924
+  ],
+  "dimensions": [
+    5.792346050756095,
+    5.6145010001478,
+    6.012599676355048
+  ],
+  "triangles": 2444,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "asset_id": "ENV-OPENWORLD-TOWER04-2",
+  "version": "v002",
+  "lod": "near",
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_近景庭院_v002.blend",
+  "collision_status": "not_authored",
+  "exported": false
+}

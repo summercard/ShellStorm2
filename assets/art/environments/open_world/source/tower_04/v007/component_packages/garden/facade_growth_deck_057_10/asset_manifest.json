@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/facade_growth_deck_057_10",
+  "slug": "facade_growth_deck_057_10",
+  "display_name": "deck_立面楼层生长带_057_10",
+  "category": "garden",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "deck_立面楼层生长带_057_10_资产包",
+  "source_collection": "deck_立面楼层生长带_057_10_制作组件",
+  "objects": [
+    "deck_立面楼层生长带_057_10_主体"
+  ],
+  "root_object": "deck_立面楼层生长带_057_10_主体",
+  "world_position": [
+    -40.1640625,
+    6.068332672119141,
+    10.149999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -41.28974151611328,
+    4.9304633140563965,
+    8.143569946289062
+  ],
+  "bounds_max": [
+    -39.15293884277344,
+    7.240246295928955,
+    10.778229713439941
+  ],
+  "dimensions": [
+    2.1368026733398438,
+    2.3097829818725586,
+    2.634659767150879
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "facade_hanging_garden",
+  "dependencies": [
+    "tower_04/wing_glazing"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "facade_growth_deck_057_10.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "facade_hanging_garden"
+}

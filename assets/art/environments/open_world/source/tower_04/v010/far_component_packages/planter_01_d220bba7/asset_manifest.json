@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/planter_01_d220bba7",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "中央右长形绿岛_分流口内侧_主体",
+  "collection": [
+    "中央右长形绿岛_分流口内侧_资产包"
+  ],
+  "source_package": "tower_04/planter_01",
+  "origin": [
+    17.446929931640625,
+    -4.071158409118652,
+    25.024999618530273
+  ],
+  "dimensions": [
+    6.720965385437012,
+    6.253246307373047,
+    0.6440190672874451
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    14.086446762084961,
+    -7.197781562805176,
+    25.024999618530273
+  ],
+  "bounds_max": [
+    20.807411193847656,
+    -0.944535493850708,
+    25.669017791748047
+  ],
+  "triangles": 308,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

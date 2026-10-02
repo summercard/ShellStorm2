@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "source_sha256": "3b37ed38e404fd8db648eaea4036279c0d71ce2696a720cfc8cb454cc68edb31",
+  "changed_objects": [
+    "天台边缘护栏_随平台保留_区块01_03_主体",
+    "天台边缘护栏_随平台保留_区块01_03_主体_制作源",
+    "天台边缘护栏_随平台保留_区块02_03_主体",
+    "天台边缘护栏_随平台保留_区块02_03_主体_制作源"
+  ],
+  "reason": "新增旋梯接口需要切开原连廊护栏",
+  "clear_width": 4.0,
+  "locked_match": true,
+  "locked_objects": 3693
+}

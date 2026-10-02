@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "errors": [],
+  "source_sha256": "6c3bbd212230b9155ced041c2f8f9bac8efae091bdea3a9baeaadc2c79cc7c00",
+  "protected_object_count": 2942,
+  "protected_changed": [],
+  "top_unchanged": true,
+  "materials_unchanged": true,
+  "package_count": 1911,
+  "new_lower_structure_packages": 375,
+  "output_mesh_count": 1923,
+  "output_polygons": 4985586,
+  "material_count": 4,
+  "definitions": 41,
+  "open_space_probes": [
+    {
+      "position": [
+        -56.5,
+        -5.16,
+        4
+      ],
+      "structural_bbox_candidates": []
+    },
+    {
+      "position": [
+        -28,
+        -8,
+        3
+      ],
+      "structural_bbox_candidates": []
+    },
+    {
+      "position": [
+        -20,
+        -6,
+        5
+      ],
+      "structural_bbox_candidates": []
+    }
+  ],
+  "interface_z_m": {
+    "roof": 25,
+    "existing_deck_bottom": 23.8,
+    "left_slabs": [
+      9,
+      14.3,
+      19.6
+    ],
+    "left_pier_top": 8.5,
+    "right_slabs": [
+      0.45,
+      7.8,
+      15.8,
+      23.8
+    ],
+    "lower_gallery": 9,
+    "gallery_ramp_end": 7.8
+  },
+  "source_only": true,
+  "runtime_verified": false
+}

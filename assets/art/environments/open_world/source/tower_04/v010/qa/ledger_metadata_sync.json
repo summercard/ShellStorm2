@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "only_asset_column_changed": "T816",
+  "source_sha256": "0bb75c204fbfee537c815bb58c3a8807fb1c3ee4b3dc43079ada888558ab3a98",
+  "reason": "补齐继承的第二展示场景，几何未改"
+}

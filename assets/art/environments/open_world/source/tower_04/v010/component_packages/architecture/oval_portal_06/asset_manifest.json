@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_portal_06",
+  "slug": "oval_portal_06",
+  "display_name": "左楼圆角跨层混凝土门形肋_06",
+  "category": "architecture",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "左楼圆角跨层混凝土门形肋_06_资产包",
+  "source_collection": "左楼圆角跨层混凝土门形肋_06_制作组件",
+  "objects": [
+    "左楼圆角跨层混凝土门形肋_06_主体"
+  ],
+  "root_object": "左楼圆角跨层混凝土门形肋_06_主体",
+  "world_position": [
+    -52.09552001953125,
+    -16.998199462890625,
+    14.300000190734863
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -55.307132720947266,
+    -17.964374542236328,
+    14.300000190734863
+  ],
+  "bounds_max": [
+    -48.883907318115234,
+    -16.032024383544922,
+    24.420000076293945
+  ],
+  "dimensions": [
+    6.423225402832031,
+    1.9323501586914062,
+    10.119999885559082
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "rounded_concrete_portal",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_portal_06.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_terrace_band_09",
+  "slug": "oval_terrace_band_09",
+  "display_name": "左楼突出环形退台栏板_09",
+  "category": "architecture",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "左楼突出环形退台栏板_09_资产包",
+  "source_collection": "左楼突出环形退台栏板_09_制作组件",
+  "objects": [
+    "左楼突出环形退台栏板_09_主体"
+  ],
+  "root_object": "左楼突出环形退台栏板_09_主体",
+  "world_position": [
+    -70.8357162475586,
+    -10.333712577819824,
+    13.5
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -71.4129638671875,
+    -14.56958293914795,
+    13.579999923706055
+  ],
+  "bounds_max": [
+    -67.24909973144531,
+    -10.421876907348633,
+    15.232909202575684
+  ],
+  "dimensions": [
+    4.1638641357421875,
+    4.147706031799316,
+    1.652909278869629
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "raised_curved_slab",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_terrace_band_09.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

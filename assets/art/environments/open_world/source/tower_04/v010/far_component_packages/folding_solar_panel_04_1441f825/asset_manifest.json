@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/folding_solar_panel_04_1441f825",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "折叠光伏板_分格电池与三角支架_04_主体",
+  "collection": [
+    "折叠光伏板_分格电池与三角支架_04_资产包"
+  ],
+  "source_package": "tower_04/folding_solar_panel_04",
+  "origin": [
+    44.79999923706055,
+    -10.70077133178711,
+    25.16200065612793
+  ],
+  "dimensions": [
+    1.8699951171875,
+    1.3284578323364258,
+    1.691598892211914
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    43.8650016784668,
+    -11.364999771118164,
+    25.16200065612793
+  ],
+  "bounds_max": [
+    45.7349967956543,
+    -10.036541938781738,
+    26.853599548339844
+  ],
+  "triangles": 274,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

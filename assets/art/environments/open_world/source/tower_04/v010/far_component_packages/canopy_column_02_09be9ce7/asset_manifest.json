@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/canopy_column_02_09be9ce7",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "Y形钢柱_02_底板节点连接_主体",
+  "collection": [
+    "Y形钢柱_02_底板节点连接_资产包"
+  ],
+  "source_package": "tower_04/canopy_column_02",
+  "origin": [
+    2.569920063018799,
+    6.456480026245117,
+    25.0
+  ],
+  "dimensions": [
+    0.9000000953674316,
+    4.392320156097412,
+    4.800262451171875
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    2.119920015335083,
+    4.26032018661499,
+    25.0
+  ],
+  "bounds_max": [
+    3.0199201107025146,
+    8.652640342712402,
+    29.800262451171875
+  ],
+  "triangles": 440,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_terrace_band_07_66b382ba",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "左楼突出环形退台栏板_07_主体",
+  "collection": [
+    "左楼突出环形退台栏板_07_资产包"
+  ],
+  "source_package": "tower_04/oval_terrace_band_07",
+  "origin": [
+    -72.13237762451172,
+    -2.4811854362487793,
+    13.579999923706055
+  ],
+  "dimensions": [
+    1.8545684814453125,
+    5.429880142211914,
+    1.652909278869629
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -73.05966186523438,
+    -5.196125507354736,
+    13.579999923706055
+  ],
+  "bounds_max": [
+    -71.20509338378906,
+    0.23375453054904938,
+    15.232909202575684
+  ],
+  "triangles": 77,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

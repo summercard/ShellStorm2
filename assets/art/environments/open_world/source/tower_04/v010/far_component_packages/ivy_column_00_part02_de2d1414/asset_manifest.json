@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/ivy_column_00_part02_de2d1414",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "Y柱攀缘根系与分叉叶簇_00_分段02_主体",
+  "collection": [
+    "Y柱攀缘根系与分叉叶簇_00_分段02_资产包"
+  ],
+  "source_package": "tower_04/ivy_column_00_part02",
+  "origin": [
+    -43.80482864379883,
+    14.804023742675781,
+    26.567062377929688
+  ],
+  "dimensions": [
+    0.5135726928710938,
+    2.534905433654785,
+    2.816652297973633
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -44.061614990234375,
+    13.53657054901123,
+    26.567062377929688
+  ],
+  "bounds_max": [
+    -43.54804229736328,
+    16.071475982666016,
+    29.38371467590332
+  ],
+  "triangles": 205,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

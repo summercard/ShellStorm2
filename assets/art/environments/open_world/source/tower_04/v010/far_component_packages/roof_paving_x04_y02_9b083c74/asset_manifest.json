@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/roof_paving_x04_y02_9b083c74",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "天台铺装基层_沉缝无叠面_区块04_02_主体",
+  "collection": [
+    "天台铺装基层_沉缝无叠面_区块04_02_资产包"
+  ],
+  "source_package": "tower_04/roof_paving_x04_y02",
+  "origin": [
+    -29.829370498657227,
+    3.204533815383911,
+    25.0
+  ],
+  "dimensions": [
+    9.658740997314453,
+    3.5909323692321777,
+    0.021999359130859375
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -34.65874099731445,
+    1.4090677499771118,
+    25.0
+  ],
+  "bounds_max": [
+    -25.0,
+    5.0,
+    25.02199935913086
+  ],
+  "triangles": 38,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

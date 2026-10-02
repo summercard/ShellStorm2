@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/bollard_00_7c99a4d1",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "步道照明_00_百叶透光基座_柔和自发光",
+  "collection": [
+    "步道照明_00_百叶透光基座_资产包"
+  ],
+  "source_package": "tower_04/bollard_00",
+  "origin": [
+    -51.0,
+    10.799999237060547,
+    25.950000762939453
+  ],
+  "dimensions": [
+    0.3000030517578125,
+    0.3000001907348633,
+    0.1999988555908203
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -51.150001525878906,
+    10.649999618530273,
+    25.950000762939453
+  ],
+  "bounds_max": [
+    -50.849998474121094,
+    10.949999809265137,
+    26.149999618530273
+  ],
+  "triangles": 28,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

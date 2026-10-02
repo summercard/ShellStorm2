@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "source_sha256": "6c3bbd212230b9155ced041c2f8f9bac8efae091bdea3a9baeaadc2c79cc7c00",
+  "review_date": "2026-10-02",
+  "review_scope": "制作方对用户可见下部结构的逐图复核；不代表单张图片提供了精确米制尺寸或背面信息",
+  "user_visual_confirmation": "pending",
+  "top_unchanged": true,
+  "images": [
+    {
+      "path": "previews/参考全景.png",
+      "sha256": "2888ed99fe63179bef3cb65595ef5c37e0c6645c335312ffdd2e601b421f3cad",
+      "observation": "原五层通底青色幕墙消失；左侧架空、圆弧退台与跨层肋，中央通透空间和右翼厚实墙/内退窗带均可见；顶层原轮廓保留。"
+    },
+    {
+      "path": "previews/俯视轮廓.png",
+      "sha256": "fa403af38ad151862033a1a881722d51fcdb5294494fea3d4604c1ccdbde2c24",
+      "observation": "屋面、路线、花池、棚架、设施和顶层植被保持原布局；下层走廊位于月牙凹口下部。"
+    },
+    {
+      "path": "previews/下部_左楼架空与退台.png",
+      "sha256": "ea5316d22e4a593175596516e12501912e176d0128b3da783bffe5daf40c27cf",
+      "observation": "独立大柱承托左楼，突出退台分出单层下段和跨层上段；窗洞可见真实内部楼板，无实心圆柱填充。"
+    },
+    {
+      "path": "previews/下部_右翼窗墙.png",
+      "sha256": "f5bb0dca47d39fe1dc52d3d2c4004c5b6c1d5bb8706e2477799590cb3bc8c6b5",
+      "observation": "宽竖向混凝土实墙、厚层间边梁、内退窗梃与缺片玻璃关系明确；三段不等高窗墙替代五排等高玻璃。"
+    },
+    {
+      "path": "previews/下部_中央架空.png",
+      "sha256": "c8c89de625815c3689159e928136ed3048fca43528c8a207762ef4362caa5000",
+      "observation": "中央原封闭体量打开；9m联系走廊连接左楼，末段下降至右翼7.8m接口，大柱与主平台相接。"
+    }
+  ],
+  "reference_structure_features": [
+    "架空弧形商场",
+    "突出环形退台",
+    "跨层圆角混凝土肋",
+    "细窗梃及破损开口",
+    "中央架空与下层连接",
+    "右翼厚混凝土及内退窗带"
+  ],
+  "comparison": {
+    "before": "../v008/previews/01_塔4_参考全景.png",
+    "after": "previews/参考全景.png",
+    "camera": "CAM_参考全景",
+    "unchanged_camera_and_lights": true,
+    "resolution": [
+      1600,
+      1000
+    ],
+    "cycles_samples": 48
+  },
+  "inferences": [
+    "左楼9/14.3/19.6m、右翼0.45/7.8/15.8m为依据原25m屋顶锚点推定的制作标高。",
+    "参考遮挡的背侧使用同一结构体系补足。",
+    "下层联系走廊的完整转折与坡段是连接既有两端标高的必要补全。"
+  ],
+  "limits": [
+    "原色盘/风格化材质保持，不声称照片级表面复刻。",
+    "背景城市、地面场地不属于本次红线建筑范围。",
+    "仅Blender源；未导入Godot或进行运行性能验收。"
+  ]
+}

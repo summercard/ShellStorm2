@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/ivy_column_04",
+  "slug": "ivy_column_04",
+  "display_name": "Y柱攀缘根系与分叉叶簇_04",
+  "category": "garden",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "Y柱攀缘根系与分叉叶簇_04_资产包",
+  "source_collection": "Y柱攀缘根系与分叉叶簇_04_制作组件",
+  "objects": [
+    "Y柱攀缘根系与分叉叶簇_04_主体"
+  ],
+  "root_object": "Y柱攀缘根系与分叉叶簇_04_主体",
+  "world_position": [
+    29.399999618530273,
+    4.619999885559082,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    27.986343383789062,
+    2.838097095489502,
+    25.04006004333496
+  ],
+  "bounds_max": [
+    30.72917366027832,
+    6.481130599975586,
+    30.18694305419922
+  ],
+  "dimensions": [
+    2.742830276489258,
+    3.643033504486084,
+    5.146883010864258
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "climbing_column_ivy",
+  "dependencies": [
+    "tower_04/canopy_column_04"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "ivy_column_04.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "climbing_column_ivy"
+}

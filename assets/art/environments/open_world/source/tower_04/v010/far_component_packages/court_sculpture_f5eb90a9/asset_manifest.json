@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/court_sculpture_f5eb90a9",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "庭院白兔雕塑_固定展示附件_主体",
+  "collection": [
+    "庭院白兔雕塑_固定展示附件_资产包"
+  ],
+  "source_package": "tower_04/court_sculpture",
+  "origin": [
+    52.355003356933594,
+    -10.800000190734863,
+    25.1299991607666
+  ],
+  "dimensions": [
+    3.2499961853027344,
+    2.734114646911621,
+    3.859900712966919
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    50.730003356933594,
+    -12.167057037353516,
+    25.1299991607666
+  ],
+  "bounds_max": [
+    53.97999954223633,
+    -9.432943344116211,
+    28.989900588989258
+  ],
+  "triangles": 401,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/terrace_shell_x04_y03_54c12cc5",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "天台平台_保留月牙凹口与_区块04_03_主体",
+  "collection": [
+    "天台平台_保留月牙凹口与_区块04_03_资产包"
+  ],
+  "source_package": "tower_04/terrace_shell_x04_y03",
+  "origin": [
+    -30.0,
+    10.0,
+    23.799999237060547
+  ],
+  "dimensions": [
+    10.0,
+    10.0,
+    1.2000007629394531
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -35.0,
+    5.0,
+    23.799999237060547
+  ],
+  "bounds_max": [
+    -25.0,
+    15.0,
+    25.0
+  ],
+  "triangles": 56,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

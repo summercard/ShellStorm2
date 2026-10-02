@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/lower_contact_ramp_d9a92d4f",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "下层联系走廊_9m至7米8接口_主体",
+  "collection": [
+    "下层联系走廊_9m至7米8接口_资产包"
+  ],
+  "source_package": "tower_04/lower_contact_ramp",
+  "origin": [
+    0.0,
+    -10.0,
+    7.320000171661377
+  ],
+  "dimensions": [
+    6.015285491943359,
+    4.389999866485596,
+    2.768214702606201
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -3.007642984390259,
+    -12.194999694824219,
+    7.320000171661377
+  ],
+  "bounds_max": [
+    3.0076427459716797,
+    -7.804999828338623,
+    10.088214874267578
+  ],
+  "triangles": 52,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

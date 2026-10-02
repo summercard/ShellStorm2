@@ -80,6 +80,12 @@ _scratch/*_backup/
 # Blender 自动保存的备份副本（与 .blend 同名只多一个 1，体积同款几十 MB，无版本价值）
 *.blend1
 
+# 开放世界的 Blender 源：单个 .blend 已达 0.9~1.1 GB，超 GitHub 100 MB 硬限，
+# 无法入库（2026-10-02 业主裁定「源不入库」）。几何源留在本地盘，
+# 仓库只留 catalog.json / qa 验收 / 预览图 / 构建脚本 / 账本，靠账本与脚本追溯。
+# 注意：v001–v005 的 .blend 此前已入库（历史不动），本规则只挡新增。
+assets/art/environments/open_world/source/**/*.blend
+
 # WorkBuddy 会话的临时探查脚本与运行日志（scratch，不入库；记忆与工具仍正常入库）
 .workbuddy/tmp/
 

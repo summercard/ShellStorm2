@@ -1,0 +1,21 @@
+{
+  "registered": true,
+  "asset_ids": [
+    "ENV-OPENWORLD-TOWER04",
+    "ENV-OPENWORLD-TOWER04-2",
+    "ENV-OPENWORLD-TOWER04-FAR"
+  ],
+  "rows": [
+    816,
+    817,
+    818
+  ],
+  "ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+  "backup": "I:\\工作项目\\shellstrom2\\_scratch\\tower04_v010\\ledger_backup",
+  "unrelated_asset_content_preserved": true,
+  "prefab_sheets_unchanged": true,
+  "old_last_row": 816,
+  "new_last_row": 818,
+  "formula_ranges_extended": true,
+  "user_visual_confirmation": "pending"
+}

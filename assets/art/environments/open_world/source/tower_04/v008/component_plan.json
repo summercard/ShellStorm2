@@ -1,0 +1,48 @@
+{
+  "version": "v008",
+  "reference_priority": "2026-10-02 用户纠正：高覆盖植被和破损的未来末世商城是视觉重点",
+  "replaces_prior_restrained_vine_limit": true,
+  "allowed": [
+    "新增密集屋顶及棚架边缘植被",
+    "立面垂挂和柱体攀缘植被",
+    "花池溢出生长与砖缝杂草",
+    "幕墙/玻璃亭/顶棚非承重面板破损",
+    "逐板磨损和碎屑"
+  ],
+  "locked": [
+    "建筑承重结构、层高和原平面轮廓",
+    "跑道中心线与主要通路",
+    "营地和固定设施摆位",
+    "原四材质、公共贴图、MipMap",
+    "原固定验收灯光/镜头"
+  ],
+  "new_component_definitions": [
+    "overgrown_canopy_edge",
+    "overgrown_roof_edge",
+    "climbing_column_ivy",
+    "facade_hanging_garden",
+    "planter_spill_growth",
+    "joint_weed_cluster"
+  ],
+  "plant_leaf_variants": 3,
+  "cluster_max_xy_m": 8,
+  "structural_footprint_m": [
+    150,
+    50
+  ],
+  "foliage_envelope_policy": "叶片及垂挂允许超出结构边缘最多2m；单独报告视觉包络，不改变150×50m建筑尺寸",
+  "density_design": {
+    "canopy": "双边连续但起伏变化的叶簇与1–3.5m垂挂；保留格构透空",
+    "roof": "屋顶及平台边缘大团块，并向立面垂挂3–9m",
+    "columns": "5根Y柱根部、主干及分叉均攀缘",
+    "facade": "逐层局部复生与上层连贯垂挂",
+    "ground": "花池向外溢出、砖缝生草，保留连续路线"
+  },
+  "component_definition_limit": 50,
+  "source_only": true,
+  "presentation_adjustments": [
+    "CAM_末世_平台总览",
+    "天空冷色柔光",
+    "末世夕阳"
+  ]
+}

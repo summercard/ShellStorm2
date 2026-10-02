@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-02",
+  "source_sha256": "f7ae1a6f5904bf23a06f9b8d3b574a7b6c724fb9df8397c23ad27d45d23a1ce1",
+  "source_checks_passed": true,
+  "commands": {
+    "saved_source_audit_and_12_renders": 0,
+    "palette_validator": 0,
+    "ledger_registration": 0,
+    "ledger_structure": 0,
+    "ledger_split": 0,
+    "ledger_scenes_full": 1,
+    "runtime_naming": 1,
+    "documentation_contracts": 1
+  },
+  "existing_failures": {
+    "ledger_issue_counts": {
+      "sha_mismatch": 153
+    },
+    "ledger_issues_identical_to_before": true,
+    "runtime_naming_identical_to_before": true,
+    "documentation_issues": [
+      "Verification registry invalid: VERIFICATION_REGISTRY_FAILED\n- unregistered: verify_base99_swivel_chairs\n- unregistered: verify_expedition01_spawn_ramp\n- unregistered: verify_pushable_base_chairs"
+    ],
+    "new_documentation_issues": false
+  },
+  "user_visual_confirmation": "pending",
+  "technical_pass_is_not_user_visual_approval": true,
+  "scope": "Blender source and existing scene ledger row only; no runtime export or commit",
+  "not_run": [
+    "Godot loading/rendering/performance",
+    "GLB/PackedScene import",
+    "LOD/collision/navigation verification"
+  ]
+}

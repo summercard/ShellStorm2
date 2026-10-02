@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/wing_internal_22_20",
+  "slug": "wing_internal_22_20",
+  "display_name": "wing_内部楼层柱梁_2_0",
+  "category": "architecture",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "wing_内部楼层柱梁_2_0_资产包",
+  "source_collection": "wing_内部楼层柱梁_2_0_制作组件",
+  "objects": [
+    "wing_内部楼层柱梁_2_0_主体"
+  ],
+  "root_object": "wing_内部楼层柱梁_2_0_主体",
+  "world_position": [
+    14.0,
+    0.0,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    12.25,
+    -0.325,
+    0.0
+  ],
+  "bounds_max": [
+    15.75,
+    0.325,
+    23.8
+  ],
+  "dimensions": [
+    3.5,
+    0.65,
+    23.8
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "retail_interior_structure",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "wing_internal_22_20.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

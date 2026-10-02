@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_roof_rail_x01_y03_ee0ab679",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "左楼玻璃栏杆_北侧接连廊_区块01_03_主体",
+  "collection": [
+    "左楼玻璃栏杆_北侧接连廊_区块01_03_资产包"
+  ],
+  "source_package": "tower_04/oval_roof_rail_x01_y03",
+  "origin": [
+    -62.59128952026367,
+    6.101459980010986,
+    30.0
+  ],
+  "dimensions": [
+    4.817420959472656,
+    1.5738897323608398,
+    1.2450008392333984
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -65.0,
+    5.314515113830566,
+    30.0
+  ],
+  "bounds_max": [
+    -60.182579040527344,
+    6.888404846191406,
+    31.2450008392334
+  ],
+  "triangles": 441,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

@@ -1,0 +1,66 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/folding_solar_panel_00",
+  "slug": "folding_solar_panel_00",
+  "display_name": "折叠光伏板_分格电池与三角支架_00",
+  "category": "facilities",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "折叠光伏板_分格电池与三角支架_00_资产包",
+  "source_collection": "折叠光伏板_分格电池与三角支架_00_制作组件",
+  "objects": [
+    "折叠光伏板_分格电池与三角支架_00_主体"
+  ],
+  "root_object": "折叠光伏板_分格电池与三角支架_00_主体",
+  "world_position": [
+    -60.20000076293945,
+    12.699999809265137,
+    25.05500030517578
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -61.1349983215332,
+    12.135000228881836,
+    25.09000015258789
+  ],
+  "bounds_max": [
+    -59.2650032043457,
+    13.463458061218262,
+    26.781599044799805
+  ],
+  "dimensions": [
+    1.8699951171875,
+    1.3284578323364258,
+    1.691598892211914
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "folding_solar_panel",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "folding_solar_panel_00.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "zone_id": "A",
+  "zone_name": "入口广场",
+  "platform_scope": true
+}

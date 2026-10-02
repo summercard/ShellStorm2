@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "errors": [],
+  "visible_triangles": 583247,
+  "max_package_xy": 10.018218994140625,
+  "package_instances": 3116,
+  "geometry_budget": 600000,
+  "hidden_high_meshes": false,
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "source_sha256": "6cd8f1c4002495f361e5671602eb4c44182317122fe175f9c00b22c68dd439f3",
+  "runtime_verified": false
+}

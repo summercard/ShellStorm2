@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/facade_growth_deck_024_5_899625cc",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "deck_立面楼层生长带_024_5_主体",
+  "collection": [
+    "deck_立面楼层生长带_024_5_资产包"
+  ],
+  "source_package": "tower_04/facade_growth_deck_024_5",
+  "origin": [
+    32.03815460205078,
+    12.047163009643555,
+    2.453528642654419
+  ],
+  "dimensions": [
+    2.426929473876953,
+    2.3193750381469727,
+    5.82855224609375
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    30.824687957763672,
+    10.88747501373291,
+    2.453528642654419
+  ],
+  "bounds_max": [
+    33.251617431640625,
+    13.206850051879883,
+    8.28208065032959
+  ],
+  "triangles": 764,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "errors": [],
+  "definitions": 23,
+  "instances": 1027,
+  "visible_triangles": 79435,
+  "geometry_budget": 80000,
+  "lod_placements_identical": true,
+  "independent_region": true,
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_远景组件_v002.blend",
+  "source_sha256": "dfd204d2289215978ef91954cd15912240f9870dfddf2af2aaeb551c3451fe5c",
+  "runtime_verified": false
+}

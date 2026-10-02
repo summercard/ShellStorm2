@@ -1,0 +1,6552 @@
+{
+  "passed": true,
+  "counts": {
+    "broken_glazing_faces": 256,
+    "weathered_packages": 750,
+    "weather_patches": 1836,
+    "leaves": 175532,
+    "joint_weeds": 1306,
+    "rubble_tiles": 188,
+    "vine_strands": 2097,
+    "roof_clusters": 127,
+    "canopy_clusters": 69,
+    "column_clusters": 5,
+    "facade_clusters": 98,
+    "bed_clusters": 115,
+    "roof_garden_clusters": 16
+  },
+  "new_foliage_packages": [
+    {
+      "slug": "overgrown_deck_edge_000",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -76.03919219970703,
+        -0.1584770232439041,
+        19.69647979736328
+      ],
+      "bounds_max": [
+        -73.30844116210938,
+        3.928769111633301,
+        26.166927337646484
+      ],
+      "polygons": 4189
+    },
+    {
+      "slug": "overgrown_deck_edge_001",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -76.15489196777344,
+        2.877119541168213,
+        18.32349395751953
+      ],
+      "bounds_max": [
+        -73.63906860351562,
+        6.797460079193115,
+        26.234548568725586
+      ],
+      "polygons": 5063
+    },
+    {
+      "slug": "overgrown_deck_edge_002",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -76.02932739257812,
+        6.0918989181518555,
+        19.207504272460938
+      ],
+      "bounds_max": [
+        -73.38691711425781,
+        10.228413581848145,
+        25.952598571777344
+      ],
+      "polygons": 4925
+    },
+    {
+      "slug": "overgrown_deck_edge_003",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -75.00204467773438,
+        9.278759002685547,
+        17.756521224975586
+      ],
+      "bounds_max": [
+        -72.13345336914062,
+        13.357807159423828,
+        26.161306381225586
+      ],
+      "polygons": 5178
+    },
+    {
+      "slug": "overgrown_deck_edge_004",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -73.89722442626953,
+        12.393420219421387,
+        19.10757064819336
+      ],
+      "bounds_max": [
+        -70.7352066040039,
+        16.29807472229004,
+        26.11017608642578
+      ],
+      "polygons": 4879
+    },
+    {
+      "slug": "overgrown_deck_edge_005",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -72.39458465576172,
+        15.139123916625977,
+        20.56498908996582
+      ],
+      "bounds_max": [
+        -69.60604858398438,
+        19.18375015258789,
+        26.291563034057617
+      ],
+      "polygons": 3959
+    },
+    {
+      "slug": "overgrown_deck_edge_006",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -73.3487319946289,
+        18.014068603515625,
+        17.56441879272461
+      ],
+      "bounds_max": [
+        -70.90496063232422,
+        22.182992935180664,
+        26.10643196105957
+      ],
+      "polygons": 5362
+    },
+    {
+      "slug": "overgrown_deck_edge_007",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -72.92900848388672,
+        21.210514068603516,
+        19.859987258911133
+      ],
+      "bounds_max": [
+        -69.32118225097656,
+        24.805625915527344,
+        26.374923706054688
+      ],
+      "polygons": 4074
+    },
+    {
+      "slug": "overgrown_deck_edge_008",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -70.24075317382812,
+        23.506977081298828,
+        19.548372268676758
+      ],
+      "bounds_max": [
+        -66.4908447265625,
+        25.920068740844727,
+        26.39345932006836
+      ],
+      "polygons": 4327
+    },
+    {
+      "slug": "overgrown_deck_edge_011",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -60.644927978515625,
+        23.706172943115234,
+        17.657249450683594
+      ],
+      "bounds_max": [
+        -56.32841873168945,
+        26.135425567626953,
+        26.145240783691406
+      ],
+      "polygons": 5500
+    },
+    {
+      "slug": "overgrown_deck_edge_012",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -57.261470794677734,
+        23.454429626464844,
+        21.228609085083008
+      ],
+      "bounds_max": [
+        -53.223079681396484,
+        26.034229278564453,
+        26.454076766967773
+      ],
+      "polygons": 3407
+    },
+    {
+      "slug": "overgrown_deck_edge_013",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -53.85807800292969,
+        23.104705810546875,
+        22.14434242248535
+      ],
+      "bounds_max": [
+        -50.022159576416016,
+        25.440006256103516,
+        26.203163146972656
+      ],
+      "polygons": 3131
+    },
+    {
+      "slug": "overgrown_deck_edge_014",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -50.807159423828125,
+        22.61215591430664,
+        20.945659637451172
+      ],
+      "bounds_max": [
+        -46.46797180175781,
+        25.149738311767578,
+        26.036273956298828
+      ],
+      "polygons": 3614
+    },
+    {
+      "slug": "overgrown_deck_edge_015",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -47.461524963378906,
+        21.7479190826416,
+        20.645864486694336
+      ],
+      "bounds_max": [
+        -43.70545959472656,
+        24.48284339904785,
+        26.468008041381836
+      ],
+      "polygons": 3683
+    },
+    {
+      "slug": "overgrown_deck_edge_016",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -44.62628936767578,
+        19.81869888305664,
+        21.59536361694336
+      ],
+      "bounds_max": [
+        -40.957820892333984,
+        23.104368209838867,
+        26.3217830657959
+      ],
+      "polygons": 3384
+    },
+    {
+      "slug": "overgrown_deck_edge_017",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -41.88461685180664,
+        18.575115203857422,
+        17.611921310424805
+      ],
+      "bounds_max": [
+        -37.98994827270508,
+        20.997446060180664,
+        26.21050262451172
+      ],
+      "polygons": 5270
+    },
+    {
+      "slug": "overgrown_deck_edge_018",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -38.59931564331055,
+        17.776386260986328,
+        19.43350601196289
+      ],
+      "bounds_max": [
+        -34.92815399169922,
+        20.186513900756836,
+        26.39966583251953
+      ],
+      "polygons": 4649
+    },
+    {
+      "slug": "overgrown_deck_edge_019",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -35.63949966430664,
+        16.87004852294922,
+        20.0755615234375
+      ],
+      "bounds_max": [
+        -31.337200164794922,
+        19.660995483398438,
+        26.30745506286621
+      ],
+      "polygons": 4281
+    },
+    {
+      "slug": "overgrown_deck_edge_020",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -32.41306686401367,
+        15.853243827819824,
+        21.196006774902344
+      ],
+      "bounds_max": [
+        -28.35531997680664,
+        18.548952102661133,
+        26.452617645263672
+      ],
+      "polygons": 3522
+    },
+    {
+      "slug": "overgrown_deck_edge_021",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -28.965791702270508,
+        14.919426918029785,
+        20.494918823242188
+      ],
+      "bounds_max": [
+        -25.085622787475586,
+        17.564302444458008,
+        26.343273162841797
+      ],
+      "polygons": 3890
+    },
+    {
+      "slug": "overgrown_deck_edge_024",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -19.65020179748535,
+        12.088150978088379,
+        18.094532012939453
+      ],
+      "bounds_max": [
+        -15.591287612915039,
+        14.79456901550293,
+        25.986059188842773
+      ],
+      "polygons": 5109
+    },
+    {
+      "slug": "overgrown_deck_edge_025",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -16.48011589050293,
+        11.361937522888184,
+        18.1859073638916
+      ],
+      "bounds_max": [
+        -12.67227840423584,
+        13.704959869384766,
+        26.02512550354004
+      ],
+      "polygons": 5017
+    },
+    {
+      "slug": "overgrown_deck_edge_026",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -13.559259414672852,
+        10.18962287902832,
+        21.624561309814453
+      ],
+      "bounds_max": [
+        -9.366692543029785,
+        13.122121810913086,
+        26.306039810180664
+      ],
+      "polygons": 3246
+    },
+    {
+      "slug": "overgrown_deck_edge_027",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -10.207310676574707,
+        9.232004165649414,
+        19.384689331054688
+      ],
+      "bounds_max": [
+        -6.18189811706543,
+        11.946990966796875,
+        26.187164306640625
+      ],
+      "polygons": 4419
+    },
+    {
+      "slug": "overgrown_deck_edge_028",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -7.019438743591309,
+        8.557129859924316,
+        21.300264358520508
+      ],
+      "bounds_max": [
+        -2.8476955890655518,
+        11.140664100646973,
+        26.226497650146484
+      ],
+      "polygons": 3430
+    },
+    {
+      "slug": "overgrown_deck_edge_029",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -3.990236282348633,
+        7.911007881164551,
+        17.99798583984375
+      ],
+      "bounds_max": [
+        0.07569566369056702,
+        10.401190757751465,
+        25.834653854370117
+      ],
+      "polygons": 5201
+    },
+    {
+      "slug": "overgrown_deck_edge_030",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -0.6061246991157532,
+        7.219712734222412,
+        21.143077850341797
+      ],
+      "bounds_max": [
+        3.391775131225586,
+        9.601001739501953,
+        26.195987701416016
+      ],
+      "polygons": 3614
+    },
+    {
+      "slug": "overgrown_deck_edge_031",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        2.3491697311401367,
+        7.609303951263428,
+        19.31265640258789
+      ],
+      "bounds_max": [
+        6.3808088302612305,
+        10.653911590576172,
+        26.178504943847656
+      ],
+      "polygons": 4327
+    },
+    {
+      "slug": "overgrown_deck_edge_032",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        5.601947784423828,
+        9.233746528625488,
+        17.62185287475586
+      ],
+      "bounds_max": [
+        9.04903507232666,
+        12.668932914733887,
+        25.862468719482422
+      ],
+      "polygons": 5661
+    },
+    {
+      "slug": "overgrown_deck_edge_033",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        7.465353012084961,
+        11.55555534362793,
+        20.366100311279297
+      ],
+      "bounds_max": [
+        10.710077285766602,
+        15.184645652770996,
+        26.32541847229004
+      ],
+      "polygons": 3936
+    },
+    {
+      "slug": "overgrown_deck_edge_034",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        10.072988510131836,
+        13.726798057556152,
+        20.547868728637695
+      ],
+      "bounds_max": [
+        14.132105827331543,
+        16.098834991455078,
+        26.446760177612305
+      ],
+      "polygons": 3867
+    },
+    {
+      "slug": "overgrown_deck_edge_037",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        19.77178192138672,
+        13.326062202453613,
+        19.870386123657227
+      ],
+      "bounds_max": [
+        23.920557022094727,
+        15.688699722290039,
+        26.21331024169922
+      ],
+      "polygons": 4258
+    },
+    {
+      "slug": "overgrown_deck_edge_038",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        22.881303787231445,
+        12.482710838317871,
+        21.19124412536621
+      ],
+      "bounds_max": [
+        27.22772789001465,
+        15.343488693237305,
+        26.37482261657715
+      ],
+      "polygons": 3660
+    },
+    {
+      "slug": "overgrown_deck_edge_039",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        26.125686645507812,
+        10.889496803283691,
+        20.038976669311523
+      ],
+      "bounds_max": [
+        29.834457397460938,
+        14.251387596130371,
+        26.11488151550293
+      ],
+      "polygons": 4235
+    },
+    {
+      "slug": "overgrown_deck_edge_040",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        26.554168701171875,
+        8.060096740722656,
+        19.746721267700195
+      ],
+      "bounds_max": [
+        29.41021728515625,
+        11.558149337768555,
+        26.24675178527832
+      ],
+      "polygons": 4442
+    },
+    {
+      "slug": "overgrown_deck_edge_041",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        24.50435447692871,
+        6.1594038009643555,
+        21.04174041748047
+      ],
+      "bounds_max": [
+        27.705568313598633,
+        9.220443725585938,
+        26.15445899963379
+      ],
+      "polygons": 3775
+    },
+    {
+      "slug": "overgrown_deck_edge_042",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        25.733463287353516,
+        6.811838150024414,
+        20.374011993408203
+      ],
+      "bounds_max": [
+        29.438203811645508,
+        9.986690521240234,
+        26.10504913330078
+      ],
+      "polygons": 3890
+    },
+    {
+      "slug": "overgrown_deck_edge_043",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        28.26769256591797,
+        8.984214782714844,
+        20.92982292175293
+      ],
+      "bounds_max": [
+        30.676183700561523,
+        12.918980598449707,
+        26.138532638549805
+      ],
+      "polygons": 3683
+    },
+    {
+      "slug": "overgrown_deck_edge_044",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        28.988658905029297,
+        11.80322265625,
+        21.848705291748047
+      ],
+      "bounds_max": [
+        32.839019775390625,
+        15.156940460205078,
+        26.196767807006836
+      ],
+      "polygons": 3039
+    },
+    {
+      "slug": "overgrown_deck_edge_045",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        31.979536056518555,
+        12.259586334228516,
+        17.85499382019043
+      ],
+      "bounds_max": [
+        35.982200622558594,
+        14.787497520446777,
+        26.205202102661133
+      ],
+      "polygons": 5431
+    },
+    {
+      "slug": "overgrown_deck_edge_046",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        34.937255859375,
+        11.020476341247559,
+        20.583337783813477
+      ],
+      "bounds_max": [
+        38.73941421508789,
+        13.978055953979492,
+        26.473575592041016
+      ],
+      "polygons": 4005
+    },
+    {
+      "slug": "overgrown_deck_edge_047",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        38.01475143432617,
+        9.488637924194336,
+        18.30918312072754
+      ],
+      "bounds_max": [
+        41.74777603149414,
+        12.46030044555664,
+        26.193387985229492
+      ],
+      "polygons": 4764
+    },
+    {
+      "slug": "overgrown_deck_edge_050",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        46.75126647949219,
+        4.527249336242676,
+        21.050325393676758
+      ],
+      "bounds_max": [
+        50.583919525146484,
+        7.554743766784668,
+        26.255277633666992
+      ],
+      "polygons": 3729
+    },
+    {
+      "slug": "overgrown_deck_edge_051",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        49.77117156982422,
+        2.942051649093628,
+        18.38298988342285
+      ],
+      "bounds_max": [
+        53.325401306152344,
+        5.9774489402771,
+        26.096080780029297
+      ],
+      "polygons": 5569
+    },
+    {
+      "slug": "overgrown_deck_edge_052",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        52.27006149291992,
+        0.5824599862098694,
+        21.50811767578125
+      ],
+      "bounds_max": [
+        55.65205764770508,
+        4.102291107177734,
+        26.23307991027832
+      ],
+      "polygons": 3453
+    },
+    {
+      "slug": "overgrown_deck_edge_053",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        54.19679260253906,
+        -2.5275473594665527,
+        17.364582061767578
+      ],
+      "bounds_max": [
+        56.67926788330078,
+        1.414798617362976,
+        26.32480812072754
+      ],
+      "polygons": 5868
+    },
+    {
+      "slug": "overgrown_deck_edge_054",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        54.657833099365234,
+        -5.970208168029785,
+        21.426485061645508
+      ],
+      "bounds_max": [
+        57.0932502746582,
+        -1.8720366954803467,
+        26.307708740234375
+      ],
+      "polygons": 3729
+    },
+    {
+      "slug": "overgrown_deck_edge_055",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        54.845577239990234,
+        -8.98372745513916,
+        21.63059425354004
+      ],
+      "bounds_max": [
+        57.2054328918457,
+        -5.012067794799805,
+        26.086841583251953
+      ],
+      "polygons": 3200
+    },
+    {
+      "slug": "overgrown_deck_edge_056",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        54.92633056640625,
+        -12.494744300842285,
+        18.42932891845703
+      ],
+      "bounds_max": [
+        57.34883117675781,
+        -8.350236892700195,
+        26.170148849487305
+      ],
+      "polygons": 5224
+    },
+    {
+      "slug": "overgrown_deck_edge_057",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        55.676177978515625,
+        -15.340486526489258,
+        19.453474044799805
+      ],
+      "bounds_max": [
+        58.958038330078125,
+        -11.508491516113281,
+        26.364423751831055
+      ],
+      "polygons": 4718
+    },
+    {
+      "slug": "overgrown_deck_edge_058",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        57.81575393676758,
+        -17.68707275390625,
+        17.794403076171875
+      ],
+      "bounds_max": [
+        61.011871337890625,
+        -14.422643661499023,
+        26.244613647460938
+      ],
+      "polygons": 5017
+    },
+    {
+      "slug": "overgrown_deck_edge_059",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        60.31578826904297,
+        -19.330862045288086,
+        22.152151107788086
+      ],
+      "bounds_max": [
+        64.20594787597656,
+        -16.41786003112793,
+        26.28382682800293
+      ],
+      "polygons": 3039
+    },
+    {
+      "slug": "overgrown_deck_edge_060",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        63.160003662109375,
+        -19.4843692779541,
+        19.70729637145996
+      ],
+      "bounds_max": [
+        67.37474822998047,
+        -17.200944900512695,
+        26.054058074951172
+      ],
+      "polygons": 4212
+    },
+    {
+      "slug": "overgrown_deck_edge_063",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        73.08253479003906,
+        -20.81263542175293,
+        21.813657760620117
+      ],
+      "bounds_max": [
+        76.13510131835938,
+        -17.23714828491211,
+        26.208345413208008
+      ],
+      "polygons": 3131
+    },
+    {
+      "slug": "overgrown_deck_edge_064",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        73.73627471923828,
+        -24.0242977142334,
+        17.796772003173828
+      ],
+      "bounds_max": [
+        76.16796875,
+        -20.14533805847168,
+        26.275508880615234
+      ],
+      "polygons": 5592
+    },
+    {
+      "slug": "overgrown_deck_edge_065",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        72.83003997802734,
+        -26.19731330871582,
+        18.64834213256836
+      ],
+      "bounds_max": [
+        75.9051284790039,
+        -23.527498245239258,
+        26.238012313842773
+      ],
+      "polygons": 5017
+    },
+    {
+      "slug": "overgrown_deck_edge_066",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        69.0586166381836,
+        -26.059906005859375,
+        19.325443267822266
+      ],
+      "bounds_max": [
+        73.17306518554688,
+        -23.763917922973633,
+        26.44908905029297
+      ],
+      "polygons": 4695
+    },
+    {
+      "slug": "overgrown_deck_edge_067",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        65.83163452148438,
+        -26.254648208618164,
+        20.260141372680664
+      ],
+      "bounds_max": [
+        70.05474853515625,
+        -23.716556549072266,
+        26.224987030029297
+      ],
+      "polygons": 4465
+    },
+    {
+      "slug": "overgrown_deck_edge_068",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        62.410892486572266,
+        -26.065879821777344,
+        17.5307674407959
+      ],
+      "bounds_max": [
+        66.68269348144531,
+        -23.833982467651367,
+        26.07568359375
+      ],
+      "polygons": 5615
+    },
+    {
+      "slug": "overgrown_deck_edge_069",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        59.30256271362305,
+        -26.159282684326172,
+        19.583017349243164
+      ],
+      "bounds_max": [
+        63.40846633911133,
+        -23.813108444213867,
+        26.234294891357422
+      ],
+      "polygons": 4350
+    },
+    {
+      "slug": "overgrown_deck_edge_070",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        55.95549774169922,
+        -26.11819839477539,
+        19.058534622192383
+      ],
+      "bounds_max": [
+        60.05672073364258,
+        -23.77312469482422,
+        26.26868438720703
+      ],
+      "polygons": 4465
+    },
+    {
+      "slug": "overgrown_deck_edge_071",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        52.80309295654297,
+        -26.009084701538086,
+        21.72421646118164
+      ],
+      "bounds_max": [
+        56.6977653503418,
+        -23.818214416503906,
+        26.444637298583984
+      ],
+      "polygons": 3292
+    },
+    {
+      "slug": "overgrown_deck_edge_072",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        49.34403610229492,
+        -26.071298599243164,
+        18.286149978637695
+      ],
+      "bounds_max": [
+        53.46536636352539,
+        -23.787580490112305,
+        26.34410285949707
+      ],
+      "polygons": 5247
+    },
+    {
+      "slug": "overgrown_deck_edge_073",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        46.03731155395508,
+        -26.125762939453125,
+        20.366275787353516
+      ],
+      "bounds_max": [
+        50.345008850097656,
+        -23.832496643066406,
+        26.28211784362793
+      ],
+      "polygons": 3890
+    },
+    {
+      "slug": "overgrown_deck_edge_076",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        36.34500503540039,
+        -25.51427459716797,
+        18.582561492919922
+      ],
+      "bounds_max": [
+        40.2987174987793,
+        -22.840707778930664,
+        26.187532424926758
+      ],
+      "polygons": 5109
+    },
+    {
+      "slug": "overgrown_deck_edge_077",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        33.299373626708984,
+        -24.51572036743164,
+        19.155447006225586
+      ],
+      "bounds_max": [
+        37.12997055053711,
+        -21.43816566467285,
+        26.146610260009766
+      ],
+      "polygons": 4787
+    },
+    {
+      "slug": "overgrown_deck_edge_078",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        30.41128921508789,
+        -23.020000457763672,
+        18.26683807373047
+      ],
+      "bounds_max": [
+        34.18050003051758,
+        -20.030174255371094,
+        26.11829376220703
+      ],
+      "polygons": 5431
+    },
+    {
+      "slug": "overgrown_deck_edge_079",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        27.430545806884766,
+        -21.57685089111328,
+        20.235443115234375
+      ],
+      "bounds_max": [
+        31.126609802246094,
+        -18.928760528564453,
+        25.92970085144043
+      ],
+      "polygons": 4304
+    },
+    {
+      "slug": "overgrown_deck_edge_080",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        24.380664825439453,
+        -20.4604434967041,
+        19.017440795898438
+      ],
+      "bounds_max": [
+        28.240381240844727,
+        -17.664522171020508,
+        26.200258255004883
+      ],
+      "polygons": 5178
+    },
+    {
+      "slug": "overgrown_deck_edge_081",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        21.249643325805664,
+        -19.38422203063965,
+        19.45244598388672
+      ],
+      "bounds_max": [
+        25.106979370117188,
+        -16.663782119750977,
+        26.39480972290039
+      ],
+      "polygons": 4373
+    },
+    {
+      "slug": "overgrown_deck_edge_082",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        18.147979736328125,
+        -17.979305267333984,
+        20.83697509765625
+      ],
+      "bounds_max": [
+        21.888776779174805,
+        -14.989084243774414,
+        26.324827194213867
+      ],
+      "polygons": 3752
+    },
+    {
+      "slug": "overgrown_deck_edge_083",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        15.943612098693848,
+        -16.199249267578125,
+        18.971206665039062
+      ],
+      "bounds_max": [
+        19.231260299682617,
+        -12.903618812561035,
+        26.30817222595215
+      ],
+      "polygons": 4764
+    },
+    {
+      "slug": "overgrown_deck_edge_084",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        12.620532035827637,
+        -14.535091400146484,
+        20.422311782836914
+      ],
+      "bounds_max": [
+        16.706308364868164,
+        -12.177077293395996,
+        26.293325424194336
+      ],
+      "polygons": 4281
+    },
+    {
+      "slug": "overgrown_deck_edge_085",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        9.279214859008789,
+        -14.497970581054688,
+        21.245742797851562
+      ],
+      "bounds_max": [
+        13.5241060256958,
+        -12.196043014526367,
+        26.07388687133789
+      ],
+      "polygons": 3407
+    },
+    {
+      "slug": "overgrown_deck_edge_086",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        5.844512462615967,
+        -14.591727256774902,
+        18.00437355041504
+      ],
+      "bounds_max": [
+        10.17483139038086,
+        -12.181968688964844,
+        25.979522705078125
+      ],
+      "polygons": 5615
+    },
+    {
+      "slug": "overgrown_deck_edge_089",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -3.657001256942749,
+        -15.222138404846191,
+        20.70724105834961
+      ],
+      "bounds_max": [
+        0.331170916557312,
+        -12.908307075500488,
+        26.325300216674805
+      ],
+      "polygons": 3890
+    },
+    {
+      "slug": "overgrown_deck_edge_090",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -7.267244338989258,
+        -15.4912109375,
+        18.394126892089844
+      ],
+      "bounds_max": [
+        -2.974536180496216,
+        -13.041993141174316,
+        26.397907257080078
+      ],
+      "polygons": 5362
+    },
+    {
+      "slug": "overgrown_deck_edge_091",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -10.292879104614258,
+        -15.39462661743164,
+        18.002878189086914
+      ],
+      "bounds_max": [
+        -6.347987651824951,
+        -13.356219291687012,
+        26.246356964111328
+      ],
+      "polygons": 5316
+    },
+    {
+      "slug": "overgrown_deck_edge_092",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -13.849287033081055,
+        -15.497811317443848,
+        19.403087615966797
+      ],
+      "bounds_max": [
+        -9.660327911376953,
+        -12.943553924560547,
+        26.379390716552734
+      ],
+      "polygons": 4672
+    },
+    {
+      "slug": "overgrown_deck_edge_093",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -16.028141021728516,
+        -14.882494926452637,
+        19.947975158691406
+      ],
+      "bounds_max": [
+        -12.889608383178711,
+        -11.274462699890137,
+        26.2996883392334
+      ],
+      "polygons": 4235
+    },
+    {
+      "slug": "overgrown_deck_edge_094",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -16.303810119628906,
+        -11.840991020202637,
+        17.52981185913086
+      ],
+      "bounds_max": [
+        -13.959638595581055,
+        -7.839888572692871,
+        26.396638870239258
+      ],
+      "polygons": 5362
+    },
+    {
+      "slug": "overgrown_deck_edge_095",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -16.35149574279785,
+        -8.858438491821289,
+        21.42042350769043
+      ],
+      "bounds_max": [
+        -13.90145492553711,
+        -4.829115390777588,
+        26.31472396850586
+      ],
+      "polygons": 3407
+    },
+    {
+      "slug": "overgrown_deck_edge_096",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -17.77530288696289,
+        -5.282448768615723,
+        21.02526092529297
+      ],
+      "bounds_max": [
+        -14.879918098449707,
+        -1.786672592163086,
+        26.22125244140625
+      ],
+      "polygons": 3660
+    },
+    {
+      "slug": "overgrown_deck_edge_097",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -20.39194679260254,
+        -2.8434619903564453,
+        19.109249114990234
+      ],
+      "bounds_max": [
+        -16.565811157226562,
+        0.5846787691116333,
+        26.292264938354492
+      ],
+      "polygons": 4580
+    },
+    {
+      "slug": "overgrown_deck_edge_098",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -22.78632164001465,
+        -0.9219769835472107,
+        17.4235897064209
+      ],
+      "bounds_max": [
+        -19.098421096801758,
+        2.325059413909912,
+        26.245683670043945
+      ],
+      "polygons": 5684
+    },
+    {
+      "slug": "overgrown_deck_edge_099",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -26.116661071777344,
+        -0.15385867655277252,
+        20.430084228515625
+      ],
+      "bounds_max": [
+        -21.939619064331055,
+        2.559001922607422,
+        26.209579467773438
+      ],
+      "polygons": 3591
+    },
+    {
+      "slug": "overgrown_deck_edge_102",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -35.22983932495117,
+        3.162224769592285,
+        18.546375274658203
+      ],
+      "bounds_max": [
+        -31.3504695892334,
+        5.914873123168945,
+        26.39531707763672
+      ],
+      "polygons": 5523
+    },
+    {
+      "slug": "overgrown_deck_edge_103",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -38.194366455078125,
+        4.139559268951416,
+        21.114360809326172
+      ],
+      "bounds_max": [
+        -34.37435531616211,
+        6.88352632522583,
+        26.044248580932617
+      ],
+      "polygons": 3430
+    },
+    {
+      "slug": "overgrown_deck_edge_104",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -41.64577102661133,
+        4.885908126831055,
+        19.48648452758789
+      ],
+      "bounds_max": [
+        -37.3913688659668,
+        7.371039867401123,
+        26.241178512573242
+      ],
+      "polygons": 4304
+    },
+    {
+      "slug": "overgrown_deck_edge_105",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -44.607200622558594,
+        3.6122822761535645,
+        19.37051010131836
+      ],
+      "bounds_max": [
+        -40.85894012451172,
+        6.669555187225342,
+        26.252460479736328
+      ],
+      "polygons": 4902
+    },
+    {
+      "slug": "overgrown_deck_edge_106",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -47.326751708984375,
+        2.269357442855835,
+        18.00006103515625
+      ],
+      "bounds_max": [
+        -43.30149459838867,
+        4.988661289215088,
+        26.341257095336914
+      ],
+      "polygons": 5523
+    },
+    {
+      "slug": "overgrown_deck_edge_107",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -49.66510772705078,
+        3.575190782546997,
+        20.252487182617188
+      ],
+      "bounds_max": [
+        -46.21778869628906,
+        7.07039213180542,
+        26.275880813598633
+      ],
+      "polygons": 4258
+    },
+    {
+      "slug": "overgrown_deck_edge_108",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -52.250205993652344,
+        5.734562873840332,
+        18.34678077697754
+      ],
+      "bounds_max": [
+        -48.41062545776367,
+        8.889897346496582,
+        26.400192260742188
+      ],
+      "polygons": 5063
+    },
+    {
+      "slug": "overgrown_deck_edge_109",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -55.536617279052734,
+        7.329381942749023,
+        19.448421478271484
+      ],
+      "bounds_max": [
+        -51.54819869995117,
+        9.844400405883789,
+        26.033666610717773
+      ],
+      "polygons": 4856
+    },
+    {
+      "slug": "overgrown_deck_edge_110",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -58.84663009643555,
+        7.528447151184082,
+        20.879920959472656
+      ],
+      "bounds_max": [
+        -54.74583053588867,
+        10.13341999053955,
+        26.06099510192871
+      ],
+      "polygons": 3522
+    },
+    {
+      "slug": "overgrown_deck_edge_111",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -61.9089241027832,
+        7.293173789978027,
+        20.010541915893555
+      ],
+      "bounds_max": [
+        -57.84833908081055,
+        9.879115104675293,
+        26.15972328186035
+      ],
+      "polygons": 4074
+    },
+    {
+      "slug": "overgrown_deck_edge_112",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -65.1123046875,
+        6.2737250328063965,
+        19.36397933959961
+      ],
+      "bounds_max": [
+        -61.014678955078125,
+        9.186352729797363,
+        26.182266235351562
+      ],
+      "polygons": 4419
+    },
+    {
+      "slug": "overgrown_deck_edge_115",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -72.0465316772461,
+        -0.2958245873451233,
+        19.356122970581055
+      ],
+      "bounds_max": [
+        -69.21250915527344,
+        3.321585178375244,
+        26.0788516998291
+      ],
+      "polygons": 4373
+    },
+    {
+      "slug": "overgrown_deck_edge_116",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -73.5732421875,
+        -3.214632511138916,
+        19.574281692504883
+      ],
+      "bounds_max": [
+        -70.48528289794922,
+        0.7058586478233337,
+        26.306730270385742
+      ],
+      "polygons": 4488
+    },
+    {
+      "slug": "overgrown_deck_edge_117",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -75.80998229980469,
+        -4.188754081726074,
+        21.50597381591797
+      ],
+      "bounds_max": [
+        -72.5715560913086,
+        -0.7507394552230835,
+        26.1779727935791
+      ],
+      "polygons": 3453
+    },
+    {
+      "slug": "overgrown_oval_edge_000",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -41.250709533691406,
+        -5.911614418029785,
+        18.542797088623047
+      ],
+      "bounds_max": [
+        -38.918697357177734,
+        -2.041126251220703,
+        26.531164169311523
+      ],
+      "polygons": 5477
+    },
+    {
+      "slug": "overgrown_oval_edge_001",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -42.472503662109375,
+        -2.694370985031128,
+        21.21092987060547
+      ],
+      "bounds_max": [
+        -39.571163177490234,
+        1.037555456161499,
+        26.44416046142578
+      ],
+      "polygons": 3522
+    },
+    {
+      "slug": "overgrown_oval_edge_002",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -44.41908645629883,
+        -0.1962396651506424,
+        17.844863891601562
+      ],
+      "bounds_max": [
+        -41.214813232421875,
+        3.50689435005188,
+        26.270435333251953
+      ],
+      "polygons": 5592
+    },
+    {
+      "slug": "overgrown_oval_edge_003",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -47.370304107666016,
+        2.323089122772217,
+        19.71773338317871
+      ],
+      "bounds_max": [
+        -43.397220611572266,
+        5.720242500305176,
+        26.54747772216797
+      ],
+      "polygons": 4235
+    },
+    {
+      "slug": "overgrown_oval_edge_004",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -50.121925354003906,
+        4.2157368659973145,
+        18.106884002685547
+      ],
+      "bounds_max": [
+        -46.383705139160156,
+        7.042739391326904,
+        26.283842086791992
+      ],
+      "polygons": 5270
+    },
+    {
+      "slug": "overgrown_oval_edge_005",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -53.22726058959961,
+        5.4516754150390625,
+        19.00249481201172
+      ],
+      "bounds_max": [
+        -49.30772399902344,
+        7.894209384918213,
+        26.293336868286133
+      ],
+      "polygons": 4948
+    },
+    {
+      "slug": "overgrown_oval_edge_006",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -56.5138053894043,
+        6.020534515380859,
+        20.64906883239746
+      ],
+      "bounds_max": [
+        -52.619956970214844,
+        8.264934539794922,
+        26.3436336517334
+      ],
+      "polygons": 4097
+    },
+    {
+      "slug": "overgrown_oval_edge_007",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -59.91693878173828,
+        6.191514492034912,
+        20.321924209594727
+      ],
+      "bounds_max": [
+        -55.95840072631836,
+        8.450814247131348,
+        26.21453285217285
+      ],
+      "polygons": 4097
+    },
+    {
+      "slug": "overgrown_oval_edge_008",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -63.063297271728516,
+        5.448384761810303,
+        20.962688446044922
+      ],
+      "bounds_max": [
+        -59.157073974609375,
+        8.042937278747559,
+        26.474273681640625
+      ],
+      "polygons": 4074
+    },
+    {
+      "slug": "overgrown_oval_edge_009",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -66.1257095336914,
+        4.51878023147583,
+        21.402938842773438
+      ],
+      "bounds_max": [
+        -62.396175384521484,
+        7.241065502166748,
+        26.18111228942871
+      ],
+      "polygons": 3499
+    },
+    {
+      "slug": "overgrown_oval_edge_010",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -69.05858612060547,
+        2.9811549186706543,
+        21.228103637695312
+      ],
+      "bounds_max": [
+        -65.39051818847656,
+        5.889753341674805,
+        26.099748611450195
+      ],
+      "polygons": 3637
+    },
+    {
+      "slug": "overgrown_oval_edge_011",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -71.41454315185547,
+        0.5533558130264282,
+        17.680450439453125
+      ],
+      "bounds_max": [
+        -68.00728607177734,
+        3.953368663787842,
+        26.33686065673828
+      ],
+      "polygons": 5017
+    },
+    {
+      "slug": "overgrown_oval_edge_012",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -73.3158950805664,
+        -2.328612804412842,
+        19.52004051208496
+      ],
+      "bounds_max": [
+        -70.22773742675781,
+        1.4468090534210205,
+        26.339962005615234
+      ],
+      "polygons": 4810
+    },
+    {
+      "slug": "overgrown_oval_edge_013",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -74.01637268066406,
+        -5.428161144256592,
+        20.311765670776367
+      ],
+      "bounds_max": [
+        -71.42442321777344,
+        -1.4947489500045776,
+        26.074203491210938
+      ],
+      "polygons": 4120
+    },
+    {
+      "slug": "overgrown_oval_edge_014",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -74.01459503173828,
+        -8.823347091674805,
+        22.470151901245117
+      ],
+      "bounds_max": [
+        -71.50827026367188,
+        -4.830297470092773,
+        26.048974990844727
+      ],
+      "polygons": 3085
+    },
+    {
+      "slug": "overgrown_oval_edge_015",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -73.29686737060547,
+        -11.843701362609863,
+        17.766441345214844
+      ],
+      "bounds_max": [
+        -70.20955657958984,
+        -7.838495254516602,
+        26.397869110107422
+      ],
+      "polygons": 5684
+    },
+    {
+      "slug": "overgrown_oval_edge_016",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -71.48761749267578,
+        -14.181529998779297,
+        21.984046936035156
+      ],
+      "bounds_max": [
+        -68.18903350830078,
+        -10.73675537109375,
+        26.335569381713867
+      ],
+      "polygons": 3039
+    },
+    {
+      "slug": "overgrown_oval_edge_017",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -69.30770111083984,
+        -16.243606567382812,
+        20.282451629638672
+      ],
+      "bounds_max": [
+        -65.2744140625,
+        -12.999263763427734,
+        26.289878845214844
+      ],
+      "polygons": 4189
+    },
+    {
+      "slug": "overgrown_oval_edge_018",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -66.36822509765625,
+        -17.4094181060791,
+        20.987606048583984
+      ],
+      "bounds_max": [
+        -62.33260726928711,
+        -14.694670677185059,
+        26.414165496826172
+      ],
+      "polygons": 3568
+    },
+    {
+      "slug": "overgrown_oval_edge_019",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -63.37239456176758,
+        -18.374732971191406,
+        21.1749267578125
+      ],
+      "bounds_max": [
+        -59.22724914550781,
+        -15.942086219787598,
+        26.100849151611328
+      ],
+      "polygons": 3453
+    },
+    {
+      "slug": "overgrown_oval_edge_020",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -60.28388214111328,
+        -18.722002029418945,
+        18.696453094482422
+      ],
+      "bounds_max": [
+        -55.841426849365234,
+        -16.433700561523438,
+        26.125019073486328
+      ],
+      "polygons": 4672
+    },
+    {
+      "slug": "overgrown_oval_edge_021",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -56.90743637084961,
+        -18.78990364074707,
+        17.479204177856445
+      ],
+      "bounds_max": [
+        -52.61688995361328,
+        -16.27192497253418,
+        25.984811782836914
+      ],
+      "polygons": 5615
+    },
+    {
+      "slug": "overgrown_oval_edge_022",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -53.41987609863281,
+        -18.21922492980957,
+        18.510150909423828
+      ],
+      "bounds_max": [
+        -49.49762725830078,
+        -15.854692459106445,
+        25.985525131225586
+      ],
+      "polygons": 4649
+    },
+    {
+      "slug": "overgrown_oval_edge_023",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -50.264305114746094,
+        -17.425634384155273,
+        18.16655921936035
+      ],
+      "bounds_max": [
+        -46.2730827331543,
+        -14.509432792663574,
+        26.3228759765625
+      ],
+      "polygons": 5293
+    },
+    {
+      "slug": "overgrown_oval_edge_024",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -47.45615005493164,
+        -16.098539352416992,
+        17.665864944458008
+      ],
+      "bounds_max": [
+        -43.50240707397461,
+        -12.722309112548828,
+        26.285709381103516
+      ],
+      "polygons": 5155
+    },
+    {
+      "slug": "overgrown_oval_edge_025",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -44.76062774658203,
+        -14.043476104736328,
+        18.10453224182129
+      ],
+      "bounds_max": [
+        -41.281982421875,
+        -10.441383361816406,
+        26.10738182067871
+      ],
+      "polygons": 5615
+    },
+    {
+      "slug": "overgrown_oval_edge_026",
+      "definition": "overgrown_roof_edge",
+      "bounds_min": [
+        -42.53569793701172,
+        -11.319235801696777,
+        19.128576278686523
+      ],
+      "bounds_max": [
+        -39.72470474243164,
+        -7.8400983810424805,
+        26.558361053466797
+      ],
+      "polygons": 4695
+    },
+    {
+      "slug": "overgrown_canopy_north_000",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -56.227622985839844,
+        21.652299880981445,
+        26.202016830444336
+      ],
+      "bounds_max": [
+        -52.93307113647461,
+        23.781471252441406,
+        30.622896194458008
+      ],
+      "polygons": 3430
+    },
+    {
+      "slug": "overgrown_canopy_north_001",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -53.900962829589844,
+        21.035804748535156,
+        27.67795753479004
+      ],
+      "bounds_max": [
+        -50.404762268066406,
+        23.208696365356445,
+        30.62843894958496
+      ],
+      "polygons": 2625
+    },
+    {
+      "slug": "overgrown_canopy_north_002",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -51.320159912109375,
+        20.5471248626709,
+        28.225385665893555
+      ],
+      "bounds_max": [
+        -48.04853057861328,
+        22.605085372924805,
+        30.64828872680664
+      ],
+      "polygons": 2188
+    },
+    {
+      "slug": "overgrown_canopy_north_003",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -48.816532135009766,
+        20.112831115722656,
+        27.104860305786133
+      ],
+      "bounds_max": [
+        -45.61537551879883,
+        22.289697647094727,
+        30.604677200317383
+      ],
+      "polygons": 3016
+    },
+    {
+      "slug": "overgrown_canopy_north_004",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -46.40337371826172,
+        19.569494247436523,
+        26.620023727416992
+      ],
+      "bounds_max": [
+        -43.14982223510742,
+        21.640548706054688,
+        30.55066680908203
+      ],
+      "polygons": 3131
+    },
+    {
+      "slug": "overgrown_canopy_north_005",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -44.03813552856445,
+        19.18325424194336,
+        27.6041259765625
+      ],
+      "bounds_max": [
+        -40.64311218261719,
+        21.319305419921875,
+        30.578266143798828
+      ],
+      "polygons": 2648
+    },
+    {
+      "slug": "overgrown_canopy_north_006",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -41.50238037109375,
+        18.608375549316406,
+        28.65541648864746
+      ],
+      "bounds_max": [
+        -38.172027587890625,
+        20.617332458496094,
+        30.587020874023438
+      ],
+      "polygons": 2073
+    },
+    {
+      "slug": "overgrown_canopy_north_007",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -38.954063415527344,
+        17.99785041809082,
+        27.899328231811523
+      ],
+      "bounds_max": [
+        -35.81951141357422,
+        20.21125602722168,
+        30.67479133605957
+      ],
+      "polygons": 2533
+    },
+    {
+      "slug": "overgrown_canopy_north_008",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -36.69303512573242,
+        17.58565330505371,
+        27.368215560913086
+      ],
+      "bounds_max": [
+        -33.30678939819336,
+        19.772653579711914,
+        30.5478515625
+      ],
+      "polygons": 2878
+    },
+    {
+      "slug": "overgrown_canopy_north_009",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -34.2024040222168,
+        16.93451499938965,
+        26.014184951782227
+      ],
+      "bounds_max": [
+        -30.889894485473633,
+        19.127037048339844,
+        30.515243530273438
+      ],
+      "polygons": 3660
+    },
+    {
+      "slug": "overgrown_canopy_north_010",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -31.79539680480957,
+        16.36174964904785,
+        28.156768798828125
+      ],
+      "bounds_max": [
+        -28.521644592285156,
+        18.58285140991211,
+        30.670759201049805
+      ],
+      "polygons": 2326
+    },
+    {
+      "slug": "overgrown_canopy_north_011",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -29.380329132080078,
+        15.731481552124023,
+        27.614303588867188
+      ],
+      "bounds_max": [
+        -26.02110481262207,
+        17.852582931518555,
+        30.61315155029297
+      ],
+      "polygons": 2694
+    },
+    {
+      "slug": "overgrown_canopy_north_012",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -26.923189163208008,
+        15.091767311096191,
+        26.69918441772461
+      ],
+      "bounds_max": [
+        -23.732196807861328,
+        17.319608688354492,
+        30.57133674621582
+      ],
+      "polygons": 3154
+    },
+    {
+      "slug": "overgrown_canopy_north_013",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -24.504179000854492,
+        14.391575813293457,
+        27.390663146972656
+      ],
+      "bounds_max": [
+        -21.214672088623047,
+        16.565378189086914,
+        30.530759811401367
+      ],
+      "polygons": 2855
+    },
+    {
+      "slug": "overgrown_canopy_north_014",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -22.061983108520508,
+        13.68664836883545,
+        28.56568717956543
+      ],
+      "bounds_max": [
+        -18.7674560546875,
+        15.931589126586914,
+        30.56947135925293
+      ],
+      "polygons": 2073
+    },
+    {
+      "slug": "overgrown_canopy_north_015",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -19.775114059448242,
+        12.89370346069336,
+        26.369768142700195
+      ],
+      "bounds_max": [
+        -16.50734519958496,
+        15.203734397888184,
+        30.640830993652344
+      ],
+      "polygons": 3453
+    },
+    {
+      "slug": "overgrown_canopy_north_016",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -17.40867042541504,
+        12.344156265258789,
+        26.952363967895508
+      ],
+      "bounds_max": [
+        -14.00322437286377,
+        14.437841415405273,
+        30.60569190979004
+      ],
+      "polygons": 3039
+    },
+    {
+      "slug": "overgrown_canopy_north_017",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -14.789237022399902,
+        11.488142013549805,
+        28.02132797241211
+      ],
+      "bounds_max": [
+        -11.651741981506348,
+        13.744512557983398,
+        30.557275772094727
+      ],
+      "polygons": 2257
+    },
+    {
+      "slug": "overgrown_canopy_north_018",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -12.541210174560547,
+        10.93596363067627,
+        28.644977569580078
+      ],
+      "bounds_max": [
+        -9.35946273803711,
+        13.073962211608887,
+        30.595537185668945
+      ],
+      "polygons": 2073
+    },
+    {
+      "slug": "overgrown_canopy_north_019",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -10.037980079650879,
+        10.084774017333984,
+        26.262779235839844
+      ],
+      "bounds_max": [
+        -6.887292861938477,
+        12.471633911132812,
+        30.554370880126953
+      ],
+      "polygons": 3453
+    },
+    {
+      "slug": "overgrown_canopy_north_020",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -7.707143783569336,
+        9.424138069152832,
+        28.096757888793945
+      ],
+      "bounds_max": [
+        -4.359198570251465,
+        11.599783897399902,
+        30.603418350219727
+      ],
+      "polygons": 2234
+    },
+    {
+      "slug": "overgrown_canopy_north_021",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -5.418684482574463,
+        8.879919052124023,
+        27.786375045776367
+      ],
+      "bounds_max": [
+        -2.0039548873901367,
+        11.07052993774414,
+        30.514652252197266
+      ],
+      "polygons": 2510
+    },
+    {
+      "slug": "overgrown_canopy_north_022",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -2.8125486373901367,
+        8.396678924560547,
+        28.509666442871094
+      ],
+      "bounds_max": [
+        0.3047279119491577,
+        10.342547416687012,
+        30.67375373840332
+      ],
+      "polygons": 2096
+    },
+    {
+      "slug": "overgrown_canopy_north_023",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -0.39627960324287415,
+        7.724437713623047,
+        27.708765029907227
+      ],
+      "bounds_max": [
+        2.7493700981140137,
+        9.82617473602295,
+        30.552461624145508
+      ],
+      "polygons": 2418
+    },
+    {
+      "slug": "overgrown_canopy_north_024",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        2.014317750930786,
+        7.058259010314941,
+        27.34834861755371
+      ],
+      "bounds_max": [
+        5.261761665344238,
+        9.178823471069336,
+        30.54723358154297
+      ],
+      "polygons": 2602
+    },
+    {
+      "slug": "overgrown_canopy_north_025",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        4.417539119720459,
+        6.6724324226379395,
+        26.94093894958496
+      ],
+      "bounds_max": [
+        7.690438747406006,
+        8.688611030578613,
+        30.52672004699707
+      ],
+      "polygons": 2947
+    },
+    {
+      "slug": "overgrown_canopy_north_026",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        7.028646945953369,
+        6.209515571594238,
+        27.66579818725586
+      ],
+      "bounds_max": [
+        10.19556999206543,
+        8.22226619720459,
+        30.625701904296875
+      ],
+      "polygons": 2579
+    },
+    {
+      "slug": "overgrown_canopy_north_027",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        9.299704551696777,
+        5.739744186401367,
+        28.061859130859375
+      ],
+      "bounds_max": [
+        12.576568603515625,
+        7.7949604988098145,
+        30.52580451965332
+      ],
+      "polygons": 2349
+    },
+    {
+      "slug": "overgrown_canopy_north_028",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        11.717779159545898,
+        5.507404327392578,
+        27.189916610717773
+      ],
+      "bounds_max": [
+        15.172492980957031,
+        7.480620861053467,
+        30.54485321044922
+      ],
+      "polygons": 2763
+    },
+    {
+      "slug": "overgrown_canopy_north_029",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        14.24318790435791,
+        5.291234016418457,
+        27.778257369995117
+      ],
+      "bounds_max": [
+        17.690034866333008,
+        7.185159206390381,
+        30.55198860168457
+      ],
+      "polygons": 2602
+    },
+    {
+      "slug": "overgrown_canopy_north_030",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        16.75209617614746,
+        5.169653415679932,
+        27.578033447265625
+      ],
+      "bounds_max": [
+        20.113847732543945,
+        7.084400177001953,
+        30.554119110107422
+      ],
+      "polygons": 2671
+    },
+    {
+      "slug": "overgrown_canopy_north_031",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        19.2706356048584,
+        5.333884239196777,
+        28.090808868408203
+      ],
+      "bounds_max": [
+        22.566232681274414,
+        7.358264923095703,
+        30.623092651367188
+      ],
+      "polygons": 2280
+    },
+    {
+      "slug": "overgrown_canopy_north_032",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        21.645750045776367,
+        5.651472091674805,
+        28.340496063232422
+      ],
+      "bounds_max": [
+        25.08336639404297,
+        7.622077941894531,
+        30.659536361694336
+      ],
+      "polygons": 2211
+    },
+    {
+      "slug": "overgrown_canopy_north_033",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        24.27472686767578,
+        5.636498928070068,
+        27.279972076416016
+      ],
+      "bounds_max": [
+        27.531204223632812,
+        7.565117359161377,
+        30.570762634277344
+      ],
+      "polygons": 2832
+    },
+    {
+      "slug": "overgrown_canopy_north_034",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        26.747711181640625,
+        4.983804702758789,
+        28.64356231689453
+      ],
+      "bounds_max": [
+        29.889829635620117,
+        7.249988079071045,
+        30.529006958007812
+      ],
+      "polygons": 2073
+    },
+    {
+      "slug": "overgrown_canopy_south_000",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -56.23084259033203,
+        14.139092445373535,
+        26.483049392700195
+      ],
+      "bounds_max": [
+        -53.046932220458984,
+        16.203487396240234,
+        30.598291397094727
+      ],
+      "polygons": 3315
+    },
+    {
+      "slug": "overgrown_canopy_south_001",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -53.77117156982422,
+        13.527959823608398,
+        27.847139358520508
+      ],
+      "bounds_max": [
+        -50.402870178222656,
+        15.766018867492676,
+        30.567665100097656
+      ],
+      "polygons": 2372
+    },
+    {
+      "slug": "overgrown_canopy_south_002",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -51.41734313964844,
+        13.034910202026367,
+        26.83631706237793
+      ],
+      "bounds_max": [
+        -47.95634841918945,
+        15.247739791870117,
+        30.578927993774414
+      ],
+      "polygons": 2993
+    },
+    {
+      "slug": "overgrown_canopy_south_003",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -48.90122604370117,
+        12.554961204528809,
+        26.191164016723633
+      ],
+      "bounds_max": [
+        -45.73786926269531,
+        14.736976623535156,
+        30.550586700439453
+      ],
+      "polygons": 3499
+    },
+    {
+      "slug": "overgrown_canopy_south_004",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -46.37993240356445,
+        12.22359848022461,
+        26.751604080200195
+      ],
+      "bounds_max": [
+        -43.219547271728516,
+        14.27906322479248,
+        30.502077102661133
+      ],
+      "polygons": 3223
+    },
+    {
+      "slug": "overgrown_canopy_south_005",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -43.9956169128418,
+        11.993243217468262,
+        27.027803421020508
+      ],
+      "bounds_max": [
+        -40.608551025390625,
+        14.044254302978516,
+        30.542057037353516
+      ],
+      "polygons": 2947
+    },
+    {
+      "slug": "overgrown_canopy_south_006",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -41.36491394042969,
+        11.829314231872559,
+        26.85667610168457
+      ],
+      "bounds_max": [
+        -38.15617752075195,
+        13.755615234375,
+        30.52187156677246
+      ],
+      "polygons": 3085
+    },
+    {
+      "slug": "overgrown_canopy_south_007",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -39.033634185791016,
+        11.652220726013184,
+        26.64088249206543
+      ],
+      "bounds_max": [
+        -35.68483352661133,
+        13.6290864944458,
+        30.609264373779297
+      ],
+      "polygons": 3338
+    },
+    {
+      "slug": "overgrown_canopy_south_008",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -36.4404296875,
+        11.418487548828125,
+        26.10906410217285
+      ],
+      "bounds_max": [
+        -33.15719223022461,
+        13.462117195129395,
+        30.4619197845459
+      ],
+      "polygons": 3752
+    },
+    {
+      "slug": "overgrown_canopy_south_009",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -34.054420471191406,
+        11.148632049560547,
+        26.29537582397461
+      ],
+      "bounds_max": [
+        -30.690837860107422,
+        13.251317024230957,
+        30.558034896850586
+      ],
+      "polygons": 3453
+    },
+    {
+      "slug": "overgrown_canopy_south_010",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -31.552278518676758,
+        10.97111988067627,
+        28.583925247192383
+      ],
+      "bounds_max": [
+        -28.25819969177246,
+        12.90754508972168,
+        30.571069717407227
+      ],
+      "polygons": 2073
+    },
+    {
+      "slug": "overgrown_canopy_south_011",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -29.116416931152344,
+        10.596414566040039,
+        26.157896041870117
+      ],
+      "bounds_max": [
+        -25.661054611206055,
+        12.645264625549316,
+        30.65542984008789
+      ],
+      "polygons": 3660
+    },
+    {
+      "slug": "overgrown_canopy_south_012",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -26.53783416748047,
+        10.193103790283203,
+        26.557050704956055
+      ],
+      "bounds_max": [
+        -23.269935607910156,
+        12.241497039794922,
+        30.5907039642334
+      ],
+      "polygons": 3292
+    },
+    {
+      "slug": "overgrown_canopy_south_013",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -24.155555725097656,
+        9.758575439453125,
+        28.04192352294922
+      ],
+      "bounds_max": [
+        -20.753376007080078,
+        11.891210556030273,
+        30.571441650390625
+      ],
+      "polygons": 2257
+    },
+    {
+      "slug": "overgrown_canopy_south_014",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -21.591672897338867,
+        9.344411849975586,
+        28.533740997314453
+      ],
+      "bounds_max": [
+        -18.355201721191406,
+        11.29833984375,
+        30.521421432495117
+      ],
+      "polygons": 2096
+    },
+    {
+      "slug": "overgrown_canopy_south_015",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -19.218364715576172,
+        8.700479507446289,
+        28.094749450683594
+      ],
+      "bounds_max": [
+        -15.83928108215332,
+        10.85192584991455,
+        30.555564880371094
+      ],
+      "polygons": 2395
+    },
+    {
+      "slug": "overgrown_canopy_south_016",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -16.634307861328125,
+        8.153047561645508,
+        26.909284591674805
+      ],
+      "bounds_max": [
+        -13.49032211303711,
+        10.372021675109863,
+        30.59992027282715
+      ],
+      "polygons": 2993
+    },
+    {
+      "slug": "overgrown_canopy_south_017",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -14.318897247314453,
+        7.425278663635254,
+        28.519577026367188
+      ],
+      "bounds_max": [
+        -11.033866882324219,
+        9.71893310546875,
+        30.58844566345215
+      ],
+      "polygons": 2096
+    },
+    {
+      "slug": "overgrown_canopy_south_018",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -11.845382690429688,
+        6.7659687995910645,
+        27.554655075073242
+      ],
+      "bounds_max": [
+        -8.579164505004883,
+        9.180240631103516,
+        30.522239685058594
+      ],
+      "polygons": 2717
+    },
+    {
+      "slug": "overgrown_canopy_south_019",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -9.516579627990723,
+        6.27760648727417,
+        28.17662239074707
+      ],
+      "bounds_max": [
+        -6.276989459991455,
+        8.491796493530273,
+        30.534019470214844
+      ],
+      "polygons": 2280
+    },
+    {
+      "slug": "overgrown_canopy_south_020",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -7.0667405128479,
+        5.619899272918701,
+        26.99506187438965
+      ],
+      "bounds_max": [
+        -3.951720714569092,
+        7.681820392608643,
+        30.525516510009766
+      ],
+      "polygons": 3039
+    },
+    {
+      "slug": "overgrown_canopy_south_021",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -4.73345422744751,
+        4.80517578125,
+        27.33262062072754
+      ],
+      "bounds_max": [
+        -1.311866044998169,
+        7.090856552124023,
+        30.480005264282227
+      ],
+      "polygons": 2809
+    },
+    {
+      "slug": "overgrown_canopy_south_022",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        -2.2579267024993896,
+        4.267571449279785,
+        27.553245544433594
+      ],
+      "bounds_max": [
+        1.0283310413360596,
+        6.427481174468994,
+        30.554725646972656
+      ],
+      "polygons": 2648
+    },
+    {
+      "slug": "overgrown_canopy_south_023",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        0.20552238821983337,
+        3.7177844047546387,
+        26.899545669555664
+      ],
+      "bounds_max": [
+        3.5247387886047363,
+        5.75375509262085,
+        30.508453369140625
+      ],
+      "polygons": 2970
+    },
+    {
+      "slug": "overgrown_canopy_south_024",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        2.6314327716827393,
+        2.9881510734558105,
+        26.43067741394043
+      ],
+      "bounds_max": [
+        5.769725322723389,
+        5.197282791137695,
+        30.58775520324707
+      ],
+      "polygons": 3384
+    },
+    {
+      "slug": "overgrown_canopy_south_025",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        5.091177463531494,
+        2.622185468673706,
+        27.951828002929688
+      ],
+      "bounds_max": [
+        8.301989555358887,
+        4.66218900680542,
+        30.539934158325195
+      ],
+      "polygons": 2418
+    },
+    {
+      "slug": "overgrown_canopy_south_026",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        7.5013041496276855,
+        2.2063615322113037,
+        27.499025344848633
+      ],
+      "bounds_max": [
+        10.862548828125,
+        4.281713962554932,
+        30.49349594116211
+      ],
+      "polygons": 2740
+    },
+    {
+      "slug": "overgrown_canopy_south_027",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        9.959325790405273,
+        2.035045623779297,
+        28.273221969604492
+      ],
+      "bounds_max": [
+        13.318092346191406,
+        4.101887226104736,
+        30.580490112304688
+      ],
+      "polygons": 2234
+    },
+    {
+      "slug": "overgrown_canopy_south_028",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        12.510107040405273,
+        1.982381820678711,
+        28.4180850982666
+      ],
+      "bounds_max": [
+        15.93214225769043,
+        3.8994009494781494,
+        30.614534378051758
+      ],
+      "polygons": 2096
+    },
+    {
+      "slug": "overgrown_canopy_south_029",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        14.939906120300293,
+        1.8042491674423218,
+        28.308902740478516
+      ],
+      "bounds_max": [
+        18.350048065185547,
+        3.700700283050537,
+        30.6134090423584
+      ],
+      "polygons": 2234
+    },
+    {
+      "slug": "overgrown_canopy_south_030",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        17.525009155273438,
+        1.7500885725021362,
+        28.104827880859375
+      ],
+      "bounds_max": [
+        20.69721221923828,
+        3.66648006439209,
+        30.501874923706055
+      ],
+      "polygons": 2372
+    },
+    {
+      "slug": "overgrown_canopy_south_031",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        19.939828872680664,
+        1.7293035984039307,
+        27.36709213256836
+      ],
+      "bounds_max": [
+        23.173288345336914,
+        3.651820182800293,
+        30.518314361572266
+      ],
+      "polygons": 2694
+    },
+    {
+      "slug": "overgrown_canopy_south_032",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        22.402544021606445,
+        1.7608320713043213,
+        27.926319122314453
+      ],
+      "bounds_max": [
+        25.829652786254883,
+        3.748021125793457,
+        30.56007194519043
+      ],
+      "polygons": 2510
+    },
+    {
+      "slug": "overgrown_canopy_south_033",
+      "definition": "overgrown_canopy_edge",
+      "bounds_min": [
+        24.924068450927734,
+        1.9294884204864502,
+        27.984668731689453
+      ],
+      "bounds_max": [
+        28.358203887939453,
+        3.912471055984497,
+        30.594045639038086
+      ],
+      "polygons": 2211
+    },
+    {
+      "slug": "ivy_column_00_part00",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        -44.1314697265625,
+        15.918505668640137,
+        25.04006004333496
+      ],
+      "bounds_max": [
+        -42.7955436706543,
+        20.06963348388672,
+        30.127164840698242
+      ],
+      "polygons": 3638
+    },
+    {
+      "slug": "ivy_column_00_part01",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        -45.24307632446289,
+        15.91306209564209,
+        25.04006004333496
+      ],
+      "bounds_max": [
+        -43.8704719543457,
+        20.031234741210938,
+        29.608150482177734
+      ],
+      "polygons": 3166
+    },
+    {
+      "slug": "ivy_column_00_part02",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        -45.28541564941406,
+        12.563936233520508,
+        25.15804100036621
+      ],
+      "bounds_max": [
+        -43.91163635253906,
+        16.06500816345215,
+        30.17279815673828
+      ],
+      "polygons": 1090
+    },
+    {
+      "slug": "ivy_column_00_part03",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        -44.08058166503906,
+        12.948079109191895,
+        25.122140884399414
+      ],
+      "bounds_max": [
+        -43.51803970336914,
+        16.088422775268555,
+        29.84769058227539
+      ],
+      "polygons": 191
+    },
+    {
+      "slug": "ivy_column_00_part04",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        -44.081199645996094,
+        19.92615509033203,
+        29.28728675842285
+      ],
+      "bounds_max": [
+        -43.00580978393555,
+        21.05939292907715,
+        30.162302017211914
+      ],
+      "polygons": 251
+    },
+    {
+      "slug": "ivy_column_00_part05",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        -44.241920471191406,
+        19.934677124023438,
+        29.343902587890625
+      ],
+      "bounds_max": [
+        -43.913978576660156,
+        20.982959747314453,
+        30.042619705200195
+      ],
+      "polygons": 30
+    },
+    {
+      "slug": "ivy_column_01",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        -21.42963981628418,
+        9.826386451721191,
+        25.04006004333496
+      ],
+      "bounds_max": [
+        -18.697265625,
+        15.209077835083008,
+        30.204360961914062
+      ],
+      "polygons": 8366
+    },
+    {
+      "slug": "ivy_column_02",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        1.3554024696350098,
+        3.8071324825286865,
+        25.04006004333496
+      ],
+      "bounds_max": [
+        3.9140281677246094,
+        9.018388748168945,
+        30.14535903930664
+      ],
+      "polygons": 8366
+    },
+    {
+      "slug": "ivy_column_03",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        19.0187931060791,
+        2.0581724643707275,
+        25.04006004333496
+      ],
+      "bounds_max": [
+        21.636293411254883,
+        7.006326198577881,
+        30.25369644165039
+      ],
+      "polygons": 8366
+    },
+    {
+      "slug": "ivy_column_04",
+      "definition": "climbing_column_ivy",
+      "bounds_min": [
+        27.986343383789062,
+        2.838097095489502,
+        25.04006004333496
+      ],
+      "bounds_max": [
+        30.72917366027832,
+        6.481130599975586,
+        30.18694305419922
+      ],
+      "polygons": 8366
+    },
+    {
+      "slug": "facade_growth_deck_000_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -75.62391662597656,
+        2.473907709121704,
+        6.947017669677734
+      ],
+      "bounds_max": [
+        -73.49634552001953,
+        4.570766925811768,
+        10.820836067199707
+      ],
+      "polygons": 1671
+    },
+    {
+      "slug": "facade_growth_deck_000_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -75.61664581298828,
+        2.4625351428985596,
+        16.682905197143555
+      ],
+      "bounds_max": [
+        -73.54942321777344,
+        4.578280925750732,
+        20.840131759643555
+      ],
+      "polygons": 2016
+    },
+    {
+      "slug": "facade_growth_deck_001_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -75.47102355957031,
+        8.257024765014648,
+        7.595677852630615
+      ],
+      "bounds_max": [
+        -73.4286880493164,
+        10.480611801147461,
+        10.825034141540527
+      ],
+      "polygons": 1533
+    },
+    {
+      "slug": "facade_growth_deck_001_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -75.51826477050781,
+        8.283832550048828,
+        18.148386001586914
+      ],
+      "bounds_max": [
+        -73.33688354492188,
+        10.467733383178711,
+        20.94451141357422
+      ],
+      "polygons": 1349
+    },
+    {
+      "slug": "facade_growth_deck_002_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -72.99421691894531,
+        13.736472129821777,
+        6.772581577301025
+      ],
+      "bounds_max": [
+        -70.90562438964844,
+        15.957469940185547,
+        10.816933631896973
+      ],
+      "polygons": 1924
+    },
+    {
+      "slug": "facade_growth_deck_002_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -73.21695709228516,
+        13.766315460205078,
+        16.27010154724121
+      ],
+      "bounds_max": [
+        -70.87635040283203,
+        15.965582847595215,
+        20.76270866394043
+      ],
+      "polygons": 2062
+    },
+    {
+      "slug": "facade_growth_deck_004_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -69.92666625976562,
+        23.505647659301758,
+        7.889636993408203
+      ],
+      "bounds_max": [
+        -67.78882598876953,
+        25.77281379699707,
+        10.8246431350708
+      ],
+      "polygons": 1556
+    },
+    {
+      "slug": "facade_growth_deck_004_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -70.03846740722656,
+        23.570301055908203,
+        17.28731918334961
+      ],
+      "bounds_max": [
+        -67.81779479980469,
+        25.649633407592773,
+        20.79830551147461
+      ],
+      "polygons": 1625
+    },
+    {
+      "slug": "facade_growth_deck_005_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -64.0973129272461,
+        23.925846099853516,
+        17.774322509765625
+      ],
+      "bounds_max": [
+        -61.85108947753906,
+        26.110519409179688,
+        20.946752548217773
+      ],
+      "polygons": 1464
+    },
+    {
+      "slug": "facade_growth_deck_006_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -58.14775848388672,
+        23.87346649169922,
+        17.520048141479492
+      ],
+      "bounds_max": [
+        -55.88017272949219,
+        26.03487777709961,
+        20.954317092895508
+      ],
+      "polygons": 1602
+    },
+    {
+      "slug": "facade_growth_deck_008_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -46.2655029296875,
+        21.95543098449707,
+        8.099215507507324
+      ],
+      "bounds_max": [
+        -44.143150329589844,
+        24.00749397277832,
+        10.919675827026367
+      ],
+      "polygons": 1372
+    },
+    {
+      "slug": "facade_growth_deck_008_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -46.20600891113281,
+        21.931272506713867,
+        16.676639556884766
+      ],
+      "bounds_max": [
+        -44.167545318603516,
+        24.045677185058594,
+        20.91412925720215
+      ],
+      "polygons": 2016
+    },
+    {
+      "slug": "facade_growth_deck_009_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -41.258941650390625,
+        18.80027198791504,
+        6.431795120239258
+      ],
+      "bounds_max": [
+        -39.16254425048828,
+        20.948331832885742,
+        10.894923210144043
+      ],
+      "polygons": 1993
+    },
+    {
+      "slug": "facade_growth_deck_009_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -41.184627532958984,
+        18.877851486206055,
+        16.29649543762207
+      ],
+      "bounds_max": [
+        -39.00067138671875,
+        21.05679702758789,
+        20.893861770629883
+      ],
+      "polygons": 2131
+    },
+    {
+      "slug": "facade_growth_deck_010_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -35.473243713378906,
+        17.354618072509766,
+        7.644200325012207
+      ],
+      "bounds_max": [
+        -33.257545471191406,
+        19.406469345092773,
+        10.862889289855957
+      ],
+      "polygons": 1625
+    },
+    {
+      "slug": "facade_growth_deck_010_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -35.40950393676758,
+        17.40190887451172,
+        16.997087478637695
+      ],
+      "bounds_max": [
+        -33.330020904541016,
+        19.469282150268555,
+        20.886201858520508
+      ],
+      "polygons": 1855
+    },
+    {
+      "slug": "facade_growth_deck_012_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -23.907798767089844,
+        13.985432624816895,
+        7.4721903800964355
+      ],
+      "bounds_max": [
+        -21.86157989501953,
+        16.129899978637695,
+        10.789350509643555
+      ],
+      "polygons": 1717
+    },
+    {
+      "slug": "facade_growth_deck_013_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -18.152244567871094,
+        12.275016784667969,
+        7.221155643463135
+      ],
+      "bounds_max": [
+        -15.964338302612305,
+        14.498554229736328,
+        10.905831336975098
+      ],
+      "polygons": 1832
+    },
+    {
+      "slug": "facade_growth_deck_013_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -18.24571990966797,
+        12.316168785095215,
+        16.39495849609375
+      ],
+      "bounds_max": [
+        -16.01673126220703,
+        14.455899238586426,
+        20.802167892456055
+      ],
+      "polygons": 1855
+    },
+    {
+      "slug": "facade_growth_deck_014_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -12.401887893676758,
+        10.589415550231934,
+        8.145673751831055
+      ],
+      "bounds_max": [
+        -10.335947036743164,
+        12.742976188659668,
+        10.881474494934082
+      ],
+      "polygons": 1395
+    },
+    {
+      "slug": "facade_growth_deck_014_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -12.489171028137207,
+        10.45984935760498,
+        17.750070571899414
+      ],
+      "bounds_max": [
+        -10.283035278320312,
+        12.723424911499023,
+        20.784730911254883
+      ],
+      "polygons": 1579
+    },
+    {
+      "slug": "facade_growth_deck_016_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -0.8695055842399597,
+        7.628320217132568,
+        17.183183670043945
+      ],
+      "bounds_max": [
+        1.3445043563842773,
+        9.668305397033691,
+        20.900827407836914
+      ],
+      "polygons": 1694
+    },
+    {
+      "slug": "facade_growth_deck_017_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        4.8342695236206055,
+        8.644665718078613,
+        7.755939483642578
+      ],
+      "bounds_max": [
+        6.874239921569824,
+        10.775904655456543,
+        10.7900972366333
+      ],
+      "polygons": 1441
+    },
+    {
+      "slug": "facade_growth_deck_018_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        8.763129234313965,
+        13.030109405517578,
+        8.646387100219727
+      ],
+      "bounds_max": [
+        10.832842826843262,
+        15.180815696716309,
+        10.929522514343262
+      ],
+      "polygons": 1234
+    },
+    {
+      "slug": "facade_growth_deck_018_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        8.68901252746582,
+        12.996021270751953,
+        16.54051971435547
+      ],
+      "bounds_max": [
+        10.783775329589844,
+        15.199646949768066,
+        20.881681442260742
+      ],
+      "polygons": 1924
+    },
+    {
+      "slug": "facade_growth_deck_020_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        20.516815185546875,
+        13.536428451538086,
+        7.625596046447754
+      ],
+      "bounds_max": [
+        22.635957717895508,
+        15.625787734985352,
+        10.78183364868164
+      ],
+      "polygons": 1418
+    },
+    {
+      "slug": "facade_growth_deck_020_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        20.47804832458496,
+        13.555983543395996,
+        17.9104061126709
+      ],
+      "bounds_max": [
+        22.57975959777832,
+        15.755130767822266,
+        20.846391677856445
+      ],
+      "polygons": 1510
+    },
+    {
+      "slug": "facade_growth_deck_021_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        26.308820724487305,
+        12.169581413269043,
+        8.19235610961914
+      ],
+      "bounds_max": [
+        28.50789451599121,
+        14.241510391235352,
+        10.822847366333008
+      ],
+      "polygons": 1441
+    },
+    {
+      "slug": "facade_growth_deck_021_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        26.254566192626953,
+        12.070596694946289,
+        18.57143783569336
+      ],
+      "bounds_max": [
+        28.414875030517578,
+        14.30921459197998,
+        20.822851181030273
+      ],
+      "polygons": 1257
+    },
+    {
+      "slug": "facade_growth_deck_022_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        26.092796325683594,
+        7.304884433746338,
+        8.289484024047852
+      ],
+      "bounds_max": [
+        28.101343154907227,
+        9.469614028930664,
+        10.847607612609863
+      ],
+      "polygons": 1234
+    },
+    {
+      "slug": "facade_growth_deck_022_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        25.955089569091797,
+        7.210588455200195,
+        17.922374725341797
+      ],
+      "bounds_max": [
+        28.278032302856445,
+        9.42919921875,
+        20.856889724731445
+      ],
+      "polygons": 1510
+    },
+    {
+      "slug": "facade_growth_deck_024_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        30.28542137145996,
+        12.908244132995605,
+        8.189035415649414
+      ],
+      "bounds_max": [
+        32.47248840332031,
+        15.103214263916016,
+        10.85864543914795
+      ],
+      "polygons": 1441
+    },
+    {
+      "slug": "facade_growth_deck_024_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        30.32627296447754,
+        12.93435001373291,
+        17.735517501831055
+      ],
+      "bounds_max": [
+        32.58976745605469,
+        15.082165718078613,
+        20.93865394592285
+      ],
+      "polygons": 1602
+    },
+    {
+      "slug": "facade_growth_deck_025_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        35.899288177490234,
+        11.236875534057617,
+        8.143468856811523
+      ],
+      "bounds_max": [
+        38.12852096557617,
+        13.443679809570312,
+        10.850964546203613
+      ],
+      "polygons": 1464
+    },
+    {
+      "slug": "facade_growth_deck_026_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        41.17913818359375,
+        8.50165843963623,
+        6.731977462768555
+      ],
+      "bounds_max": [
+        43.42873001098633,
+        10.643035888671875,
+        10.817970275878906
+      ],
+      "polygons": 1970
+    },
+    {
+      "slug": "facade_growth_deck_026_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        41.18239974975586,
+        8.55462646484375,
+        18.158645629882812
+      ],
+      "bounds_max": [
+        43.427406311035156,
+        10.630300521850586,
+        20.902118682861328
+      ],
+      "polygons": 1349
+    },
+    {
+      "slug": "facade_growth_deck_028_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        51.60179901123047,
+        2.3961429595947266,
+        7.46857213973999
+      ],
+      "bounds_max": [
+        53.780853271484375,
+        4.671945571899414,
+        10.81630802154541
+      ],
+      "polygons": 1625
+    },
+    {
+      "slug": "facade_growth_deck_028_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        51.55270004272461,
+        2.4296252727508545,
+        17.480871200561523
+      ],
+      "bounds_max": [
+        53.71177291870117,
+        4.661641597747803,
+        20.841663360595703
+      ],
+      "polygons": 1579
+    },
+    {
+      "slug": "facade_growth_deck_029_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        54.55909729003906,
+        -2.6508326530456543,
+        17.265666961669922
+      ],
+      "bounds_max": [
+        56.70185089111328,
+        -0.43394219875335693,
+        20.861469268798828
+      ],
+      "polygons": 1671
+    },
+    {
+      "slug": "facade_growth_deck_030_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        54.849586486816406,
+        -8.558647155761719,
+        6.288443088531494
+      ],
+      "bounds_max": [
+        57.197078704833984,
+        -6.360085964202881,
+        10.96341323852539
+      ],
+      "polygons": 2108
+    },
+    {
+      "slug": "facade_growth_deck_030_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        54.85520935058594,
+        -8.549317359924316,
+        16.33763313293457
+      ],
+      "bounds_max": [
+        57.02763748168945,
+        -6.335257530212402,
+        20.85515785217285
+      ],
+      "polygons": 2177
+    },
+    {
+      "slug": "facade_growth_deck_033_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        66.11590576171875,
+        -19.46584129333496,
+        16.38025665283203
+      ],
+      "bounds_max": [
+        68.14591217041016,
+        -17.47418212890625,
+        20.852846145629883
+      ],
+      "polygons": 2039
+    },
+    {
+      "slug": "facade_growth_deck_034_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        72.03961181640625,
+        -19.255842208862305,
+        8.08358383178711
+      ],
+      "bounds_max": [
+        74.08289337158203,
+        -17.0849666595459,
+        10.837868690490723
+      ],
+      "polygons": 1441
+    },
+    {
+      "slug": "facade_growth_deck_034_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        72.13235473632812,
+        -19.225767135620117,
+        18.617584228515625
+      ],
+      "bounds_max": [
+        74.23269653320312,
+        -17.201417922973633,
+        20.813112258911133
+      ],
+      "polygons": 1280
+    },
+    {
+      "slug": "facade_growth_deck_036_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        70.14409637451172,
+        -26.0069637298584,
+        17.997282028198242
+      ],
+      "bounds_max": [
+        72.35832977294922,
+        -23.897436141967773,
+        20.83772087097168
+      ],
+      "polygons": 1418
+    },
+    {
+      "slug": "facade_growth_deck_037_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        64.10482025146484,
+        -26.04822540283203,
+        7.804044246673584
+      ],
+      "bounds_max": [
+        66.24179077148438,
+        -23.798294067382812,
+        10.783946990966797
+      ],
+      "polygons": 1579
+    },
+    {
+      "slug": "facade_growth_deck_037_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        64.05281066894531,
+        -26.01653289794922,
+        17.981094360351562
+      ],
+      "bounds_max": [
+        66.24491882324219,
+        -23.86988067626953,
+        20.884105682373047
+      ],
+      "polygons": 1487
+    },
+    {
+      "slug": "facade_growth_deck_038_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        58.1805534362793,
+        -26.03264617919922,
+        8.360335350036621
+      ],
+      "bounds_max": [
+        60.353702545166016,
+        -23.864501953125,
+        10.792702674865723
+      ],
+      "polygons": 1326
+    },
+    {
+      "slug": "facade_growth_deck_040_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        46.06607437133789,
+        -26.023170471191406,
+        17.46470069885254
+      ],
+      "bounds_max": [
+        48.15742874145508,
+        -23.924678802490234,
+        20.788806915283203
+      ],
+      "polygons": 1717
+    },
+    {
+      "slug": "facade_growth_deck_041_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        40.03165054321289,
+        -26.053146362304688,
+        7.128110885620117
+      ],
+      "bounds_max": [
+        42.24769592285156,
+        -23.893781661987305,
+        10.949848175048828
+      ],
+      "polygons": 1763
+    },
+    {
+      "slug": "facade_growth_deck_041_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        40.08256149291992,
+        -26.082237243652344,
+        17.958209991455078
+      ],
+      "bounds_max": [
+        42.23731994628906,
+        -24.056209564208984,
+        20.911184310913086
+      ],
+      "polygons": 1464
+    },
+    {
+      "slug": "facade_growth_deck_042_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        34.444007873535156,
+        -24.1861515045166,
+        8.79371166229248
+      ],
+      "bounds_max": [
+        36.494991302490234,
+        -22.051713943481445,
+        10.897422790527344
+      ],
+      "polygons": 1119
+    },
+    {
+      "slug": "facade_growth_deck_042_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        34.34042739868164,
+        -24.219743728637695,
+        17.176054000854492
+      ],
+      "bounds_max": [
+        36.515682220458984,
+        -22.041912078857422,
+        20.894773483276367
+      ],
+      "polygons": 1740
+    },
+    {
+      "slug": "facade_growth_deck_044_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        23.383018493652344,
+        -19.483552932739258,
+        18.401039123535156
+      ],
+      "bounds_max": [
+        25.5581111907959,
+        -17.31253433227539,
+        20.878328323364258
+      ],
+      "polygons": 1234
+    },
+    {
+      "slug": "facade_growth_deck_045_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        18.057329177856445,
+        -17.035316467285156,
+        6.762269020080566
+      ],
+      "bounds_max": [
+        20.169099807739258,
+        -14.99009895324707,
+        10.939419746398926
+      ],
+      "polygons": 1993
+    },
+    {
+      "slug": "facade_growth_deck_046_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        12.987759590148926,
+        -14.419322967529297,
+        6.453537464141846
+      ],
+      "bounds_max": [
+        15.166032791137695,
+        -12.286365509033203,
+        10.879667282104492
+      ],
+      "polygons": 2154
+    },
+    {
+      "slug": "facade_growth_deck_046_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        12.989943504333496,
+        -14.477017402648926,
+        17.386066436767578
+      ],
+      "bounds_max": [
+        15.104270935058594,
+        -12.318472862243652,
+        20.80686378479004
+      ],
+      "polygons": 1602
+    },
+    {
+      "slug": "facade_growth_deck_048_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        1.0339155197143555,
+        -14.86800765991211,
+        6.402800559997559
+      ],
+      "bounds_max": [
+        3.165065288543701,
+        -12.722555160522461,
+        10.858561515808105
+      ],
+      "polygons": 2016
+    },
+    {
+      "slug": "facade_growth_deck_048_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        1.0170152187347412,
+        -14.949674606323242,
+        17.443145751953125
+      ],
+      "bounds_max": [
+        3.0927014350891113,
+        -12.805205345153809,
+        20.910886764526367
+      ],
+      "polygons": 1648
+    },
+    {
+      "slug": "facade_growth_deck_049_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -5.0253496170043945,
+        -15.242709159851074,
+        6.651669025421143
+      ],
+      "bounds_max": [
+        -2.875307559967041,
+        -13.169490814208984,
+        10.937661170959473
+      ],
+      "polygons": 1878
+    },
+    {
+      "slug": "facade_growth_deck_049_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -5.052346706390381,
+        -15.321364402770996,
+        17.21457862854004
+      ],
+      "bounds_max": [
+        -2.8254692554473877,
+        -13.197928428649902,
+        20.858604431152344
+      ],
+      "polygons": 1855
+    },
+    {
+      "slug": "facade_growth_deck_050_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -10.997725486755371,
+        -15.4500150680542,
+        7.845564365386963
+      ],
+      "bounds_max": [
+        -8.869125366210938,
+        -13.304657936096191,
+        10.881181716918945
+      ],
+      "polygons": 1533
+    },
+    {
+      "slug": "facade_growth_deck_050_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -10.997918128967285,
+        -15.489917755126953,
+        16.60821533203125
+      ],
+      "bounds_max": [
+        -8.868010520935059,
+        -13.337332725524902,
+        20.954336166381836
+      ],
+      "polygons": 1924
+    },
+    {
+      "slug": "facade_growth_deck_052_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -16.214008331298828,
+        -7.4273247718811035,
+        8.53986930847168
+      ],
+      "bounds_max": [
+        -14.034897804260254,
+        -5.5161614418029785,
+        10.794358253479004
+      ],
+      "polygons": 1257
+    },
+    {
+      "slug": "facade_growth_deck_052_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -16.206336975097656,
+        -7.4950385093688965,
+        16.258909225463867
+      ],
+      "bounds_max": [
+        -14.052430152893066,
+        -5.240714073181152,
+        20.819719314575195
+      ],
+      "polygons": 1947
+    },
+    {
+      "slug": "facade_growth_deck_053_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -19.28841209411621,
+        -2.3856186866760254,
+        17.386581420898438
+      ],
+      "bounds_max": [
+        -17.060832977294922,
+        -0.23541581630706787,
+        20.87898063659668
+      ],
+      "polygons": 1717
+    },
+    {
+      "slug": "facade_growth_deck_054_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -24.203588485717773,
+        -0.18032652139663696,
+        7.287670612335205
+      ],
+      "bounds_max": [
+        -21.991151809692383,
+        2.0890116691589355,
+        10.853692054748535
+      ],
+      "polygons": 1717
+    },
+    {
+      "slug": "facade_growth_deck_054_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -24.21973991394043,
+        -0.06662264466285706,
+        17.355606079101562
+      ],
+      "bounds_max": [
+        -22.058469772338867,
+        2.009890556335449,
+        20.86412811279297
+      ],
+      "polygons": 1648
+    },
+    {
+      "slug": "facade_growth_deck_056_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -35.550628662109375,
+        3.8121795654296875,
+        7.112450122833252
+      ],
+      "bounds_max": [
+        -33.295989990234375,
+        5.994585037231445,
+        10.958512306213379
+      ],
+      "polygons": 1740
+    },
+    {
+      "slug": "facade_growth_deck_056_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -35.474952697753906,
+        3.829684257507324,
+        17.384197235107422
+      ],
+      "bounds_max": [
+        -33.274330139160156,
+        6.043109893798828,
+        20.84149742126465
+      ],
+      "polygons": 1671
+    },
+    {
+      "slug": "facade_growth_deck_057_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -41.28974151611328,
+        4.9304633140563965,
+        8.143569946289062
+      ],
+      "bounds_max": [
+        -39.15293884277344,
+        7.240246295928955,
+        10.778229713439941
+      ],
+      "polygons": 1395
+    },
+    {
+      "slug": "facade_growth_deck_057_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -41.24887466430664,
+        5.049640655517578,
+        18.170061111450195
+      ],
+      "bounds_max": [
+        -39.0947265625,
+        7.129469871520996,
+        20.88816261291504
+      ],
+      "polygons": 1349
+    },
+    {
+      "slug": "facade_growth_deck_058_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -46.367374420166016,
+        2.32312273979187,
+        7.031445503234863
+      ],
+      "bounds_max": [
+        -44.34648895263672,
+        4.520323276519775,
+        10.809518814086914
+      ],
+      "polygons": 1763
+    },
+    {
+      "slug": "facade_growth_deck_058_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -46.45569610595703,
+        2.319495439529419,
+        17.69568634033203
+      ],
+      "bounds_max": [
+        -44.289329528808594,
+        4.48248291015625,
+        20.807016372680664
+      ],
+      "polygons": 1602
+    },
+    {
+      "slug": "facade_growth_deck_060_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -56.64144515991211,
+        7.746981143951416,
+        17.20405387878418
+      ],
+      "bounds_max": [
+        -54.49004364013672,
+        9.939007759094238,
+        20.833269119262695
+      ],
+      "polygons": 1763
+    },
+    {
+      "slug": "facade_growth_deck_061_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -62.58995056152344,
+        7.133162498474121,
+        7.12297248840332
+      ],
+      "bounds_max": [
+        -60.3509635925293,
+        9.303033828735352,
+        10.86370849609375
+      ],
+      "polygons": 1809
+    },
+    {
+      "slug": "facade_growth_deck_061_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -62.438621520996094,
+        7.105179786682129,
+        17.42413330078125
+      ],
+      "bounds_max": [
+        -60.37529373168945,
+        9.258980751037598,
+        20.886510848999023
+      ],
+      "polygons": 1717
+    },
+    {
+      "slug": "facade_growth_deck_062_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -67.930908203125,
+        4.611819744110107,
+        6.331763744354248
+      ],
+      "bounds_max": [
+        -65.77179718017578,
+        6.7219767570495605,
+        10.816972732543945
+      ],
+      "polygons": 2108
+    },
+    {
+      "slug": "facade_growth_deck_062_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -67.9486083984375,
+        4.693729877471924,
+        17.5811767578125
+      ],
+      "bounds_max": [
+        -65.92667388916016,
+        6.806492805480957,
+        20.811538696289062
+      ],
+      "polygons": 1648
+    },
+    {
+      "slug": "facade_growth_deck_064_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -75.17950439453125,
+        -3.954627513885498,
+        8.086935997009277
+      ],
+      "bounds_max": [
+        -72.99701690673828,
+        -1.7628908157348633,
+        10.799432754516602
+      ],
+      "polygons": 1349
+    },
+    {
+      "slug": "facade_growth_deck_064_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -75.01183319091797,
+        -3.9024252891540527,
+        17.959104537963867
+      ],
+      "bounds_max": [
+        -72.97954559326172,
+        -1.7805665731430054,
+        20.851442337036133
+      ],
+      "polygons": 1418
+    },
+    {
+      "slug": "facade_growth_oval_000_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -41.62746810913086,
+        -3.3089892864227295,
+        7.428500175476074
+      ],
+      "bounds_max": [
+        -39.36247253417969,
+        -1.150992512702942,
+        10.855438232421875
+      ],
+      "polygons": 1671
+    },
+    {
+      "slug": "facade_growth_oval_000_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -41.53996658325195,
+        -3.3636648654937744,
+        17.605308532714844
+      ],
+      "bounds_max": [
+        -39.37708282470703,
+        -1.0592856407165527,
+        20.839893341064453
+      ],
+      "polygons": 1533
+    },
+    {
+      "slug": "facade_growth_oval_001_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -44.84368896484375,
+        1.71723210811615,
+        8.215517044067383
+      ],
+      "bounds_max": [
+        -42.7160758972168,
+        3.89487361907959,
+        10.815828323364258
+      ],
+      "polygons": 1303
+    },
+    {
+      "slug": "facade_growth_oval_001_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -44.700340270996094,
+        1.6698881387710571,
+        17.280261993408203
+      ],
+      "bounds_max": [
+        -42.70836639404297,
+        3.863678455352783,
+        20.853063583374023
+      ],
+      "polygons": 1671
+    },
+    {
+      "slug": "facade_growth_oval_002_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -49.97896194458008,
+        4.84550666809082,
+        7.784555435180664
+      ],
+      "bounds_max": [
+        -47.68536376953125,
+        6.822479248046875,
+        10.82882022857666
+      ],
+      "polygons": 1395
+    },
+    {
+      "slug": "facade_growth_oval_004_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -61.74458694458008,
+        5.851022720336914,
+        8.20059585571289
+      ],
+      "bounds_max": [
+        -59.491085052490234,
+        7.9900898933410645,
+        10.890840530395508
+      ],
+      "polygons": 1395
+    },
+    {
+      "slug": "facade_growth_oval_005_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -67.33341217041016,
+        3.8642008304595947,
+        8.533906936645508
+      ],
+      "bounds_max": [
+        -65.21427154541016,
+        5.968430042266846,
+        10.83113956451416
+      ],
+      "polygons": 1188
+    },
+    {
+      "slug": "facade_growth_oval_006_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -71.95550537109375,
+        0.052670419216156006,
+        18.62385368347168
+      ],
+      "bounds_max": [
+        -69.78607177734375,
+        2.181485176086426,
+        20.914398193359375
+      ],
+      "polygons": 1188
+    },
+    {
+      "slug": "facade_growth_oval_008_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -72.75570678710938,
+        -11.246386528015137,
+        8.33465576171875
+      ],
+      "bounds_max": [
+        -70.58878326416016,
+        -9.0220365524292,
+        10.792235374450684
+      ],
+      "polygons": 1303
+    },
+    {
+      "slug": "facade_growth_oval_008_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -72.68849182128906,
+        -11.238576889038086,
+        16.116863250732422
+      ],
+      "bounds_max": [
+        -70.53520965576172,
+        -9.090143203735352,
+        20.824907302856445
+      ],
+      "polygons": 2062
+    },
+    {
+      "slug": "facade_growth_oval_009_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -68.55722045898438,
+        -15.447516441345215,
+        6.873833656311035
+      ],
+      "bounds_max": [
+        -66.48605346679688,
+        -13.279970169067383,
+        10.899965286254883
+      ],
+      "polygons": 1855
+    },
+    {
+      "slug": "facade_growth_oval_009_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -68.54778289794922,
+        -15.38332462310791,
+        18.074655532836914
+      ],
+      "bounds_max": [
+        -66.52611541748047,
+        -13.36612319946289,
+        20.91317367553711
+      ],
+      "polygons": 1418
+    },
+    {
+      "slug": "facade_growth_oval_010_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -63.16320037841797,
+        -17.96413230895996,
+        7.667498588562012
+      ],
+      "bounds_max": [
+        -61.088436126708984,
+        -15.89987850189209,
+        10.862564086914062
+      ],
+      "polygons": 1556
+    },
+    {
+      "slug": "facade_growth_oval_010_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -63.065757751464844,
+        -18.048189163208008,
+        17.040456771850586
+      ],
+      "bounds_max": [
+        -61.11343765258789,
+        -15.887439727783203,
+        20.812673568725586
+      ],
+      "polygons": 1878
+    },
+    {
+      "slug": "facade_growth_oval_012_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -51.33336639404297,
+        -17.70858383178711,
+        7.356337070465088
+      ],
+      "bounds_max": [
+        -49.08512878417969,
+        -15.599621772766113,
+        10.796216011047363
+      ],
+      "polygons": 1625
+    },
+    {
+      "slug": "facade_growth_oval_013_10",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -45.87607955932617,
+        -15.12992000579834,
+        8.637206077575684
+      ],
+      "bounds_max": [
+        -43.888484954833984,
+        -13.012675285339355,
+        10.931861877441406
+      ],
+      "polygons": 1211
+    },
+    {
+      "slug": "facade_growth_oval_014_20",
+      "definition": "facade_hanging_garden",
+      "bounds_min": [
+        -42.02857208251953,
+        -10.615134239196777,
+        16.014768600463867
+      ],
+      "bounds_max": [
+        -39.992950439453125,
+        -8.345178604125977,
+        20.794300079345703
+      ],
+      "polygons": 2154
+    },
+    {
+      "slug": "bed_spill_02_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -3.4634552001953125,
+        -4.508963108062744,
+        25.068191528320312
+      ],
+      "bounds_max": [
+        -1.0610378980636597,
+        -2.264690399169922,
+        26.32564353942871
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -0.8736971020698547,
+        -3.2247872352600098,
+        25.0006103515625
+      ],
+      "bounds_max": [
+        1.1778910160064697,
+        -1.2097007036209106,
+        26.309223175048828
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        1.6135036945343018,
+        -3.4729740619659424,
+        24.973995208740234
+      ],
+      "bounds_max": [
+        3.870833158493042,
+        -0.9895926117897034,
+        26.36382293701172
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        3.9065043926239014,
+        -4.6501641273498535,
+        25.021215438842773
+      ],
+      "bounds_max": [
+        6.082835674285889,
+        -2.6131393909454346,
+        26.357833862304688
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        5.183109283447266,
+        -6.8500776290893555,
+        24.987375259399414
+      ],
+      "bounds_max": [
+        7.283570766448975,
+        -4.94903039932251,
+        26.369413375854492
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        3.5303308963775635,
+        -8.331733703613281,
+        25.14647102355957
+      ],
+      "bounds_max": [
+        5.637060642242432,
+        -6.410552501678467,
+        26.329383850097656
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_006",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        1.0725646018981934,
+        -9.012474060058594,
+        25.12217140197754
+      ],
+      "bounds_max": [
+        3.0440545082092285,
+        -7.028848648071289,
+        26.43593406677246
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_007",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -1.59334397315979,
+        -9.348034858703613,
+        25.00642967224121
+      ],
+      "bounds_max": [
+        0.577045202255249,
+        -6.943617343902588,
+        26.37466812133789
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_008",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -4.002400875091553,
+        -8.441726684570312,
+        24.987106323242188
+      ],
+      "bounds_max": [
+        -1.771139144897461,
+        -6.178301811218262,
+        26.389562606811523
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_02_009",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -5.870502948760986,
+        -7.101871490478516,
+        25.0441951751709
+      ],
+      "bounds_max": [
+        -3.804497480392456,
+        -4.667905807495117,
+        26.324283599853516
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_03_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        13.322988510131836,
+        -5.317713737487793,
+        25.136884689331055
+      ],
+      "bounds_max": [
+        15.362099647521973,
+        -3.2419538497924805,
+        26.444726943969727
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_03_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        13.985661506652832,
+        -3.2391977310180664,
+        25.07023811340332
+      ],
+      "bounds_max": [
+        16.306028366088867,
+        -0.706589937210083,
+        26.424755096435547
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_03_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        16.589740753173828,
+        -2.0759482383728027,
+        25.12826156616211
+      ],
+      "bounds_max": [
+        18.78518295288086,
+        0.1611711084842682,
+        26.47615623474121
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_03_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        18.898189544677734,
+        -3.075688362121582,
+        25.04551887512207
+      ],
+      "bounds_max": [
+        21.02234649658203,
+        -0.8336250185966492,
+        26.461694717407227
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_03_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        19.87668800354004,
+        -5.424162864685059,
+        25.10402488708496
+      ],
+      "bounds_max": [
+        21.809293746948242,
+        -3.174682140350342,
+        26.291900634765625
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_03_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        18.775861740112305,
+        -8.038844108581543,
+        25.038162231445312
+      ],
+      "bounds_max": [
+        20.74578285217285,
+        -5.457370758056641,
+        26.28526496887207
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_03_006",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        16.288593292236328,
+        -8.147238731384277,
+        25.007110595703125
+      ],
+      "bounds_max": [
+        18.641754150390625,
+        -5.868173599243164,
+        26.284042358398438
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        6.612518787384033,
+        9.019176483154297,
+        25.024749755859375
+      ],
+      "bounds_max": [
+        8.56661319732666,
+        11.117769241333008,
+        26.402067184448242
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        8.022749900817871,
+        11.224629402160645,
+        25.112545013427734
+      ],
+      "bounds_max": [
+        10.10106372833252,
+        13.444706916809082,
+        26.49491310119629
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        9.852653503417969,
+        12.274601936340332,
+        25.021841049194336
+      ],
+      "bounds_max": [
+        12.318977355957031,
+        14.304445266723633,
+        26.400787353515625
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        12.611407279968262,
+        12.729887008666992,
+        25.03978729248047
+      ],
+      "bounds_max": [
+        14.922253608703613,
+        15.056068420410156,
+        26.353363037109375
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        15.277068138122559,
+        12.947440147399902,
+        25.00372886657715
+      ],
+      "bounds_max": [
+        17.566997528076172,
+        15.114559173583984,
+        26.374269485473633
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        17.671926498413086,
+        12.898300170898438,
+        25.008342742919922
+      ],
+      "bounds_max": [
+        19.79634666442871,
+        14.780072212219238,
+        26.37702751159668
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_006",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        20.59771156311035,
+        12.036019325256348,
+        25.04629135131836
+      ],
+      "bounds_max": [
+        22.74518394470215,
+        14.16796875,
+        26.315658569335938
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_007",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        22.75978660583496,
+        11.389598846435547,
+        24.999828338623047
+      ],
+      "bounds_max": [
+        24.974119186401367,
+        13.672782897949219,
+        26.40169334411621
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_008",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        25.316438674926758,
+        10.389078140258789,
+        25.068092346191406
+      ],
+      "bounds_max": [
+        27.65220832824707,
+        12.463376998901367,
+        26.403684616088867
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_009",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        25.28884506225586,
+        8.034894943237305,
+        25.07550048828125
+      ],
+      "bounds_max": [
+        27.526805877685547,
+        10.431368827819824,
+        26.406282424926758
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_010",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        22.75311279296875,
+        7.135387897491455,
+        25.037031173706055
+      ],
+      "bounds_max": [
+        24.835683822631836,
+        9.284307479858398,
+        26.39705467224121
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_011",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        20.157207489013672,
+        7.828466415405273,
+        24.948373794555664
+      ],
+      "bounds_max": [
+        22.332767486572266,
+        9.630128860473633,
+        26.42182159423828
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_012",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        17.802120208740234,
+        8.294307708740234,
+        24.988985061645508
+      ],
+      "bounds_max": [
+        19.826189041137695,
+        10.653554916381836,
+        26.353254318237305
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_013",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        15.283918380737305,
+        9.073198318481445,
+        25.0161190032959
+      ],
+      "bounds_max": [
+        17.42945098876953,
+        11.636624336242676,
+        26.38886260986328
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_014",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        12.602405548095703,
+        9.658401489257812,
+        25.061389923095703
+      ],
+      "bounds_max": [
+        14.748888969421387,
+        11.611163139343262,
+        26.381834030151367
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_015",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        10.7567138671875,
+        8.23568058013916,
+        25.05306625366211
+      ],
+      "bounds_max": [
+        13.032333374023438,
+        10.626360893249512,
+        26.448598861694336
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_04_016",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        9.040534973144531,
+        6.508065223693848,
+        25.09159278869629
+      ],
+      "bounds_max": [
+        11.12412166595459,
+        8.959599494934082,
+        26.47586441040039
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_05_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -57.87187194824219,
+        16.634544372558594,
+        25.056249618530273
+      ],
+      "bounds_max": [
+        -55.64830017089844,
+        18.73419952392578,
+        26.37809181213379
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_05_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -55.91769027709961,
+        15.249720573425293,
+        25.166580200195312
+      ],
+      "bounds_max": [
+        -53.71015167236328,
+        17.67653465270996,
+        26.370128631591797
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_06_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -43.10990905761719,
+        18.41463279724121,
+        24.99842071533203
+      ],
+      "bounds_max": [
+        -40.69275665283203,
+        20.4628963470459,
+        26.36591911315918
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_06_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -41.69466018676758,
+        18.492679595947266,
+        25.08635711669922
+      ],
+      "bounds_max": [
+        -39.59177780151367,
+        20.57886505126953,
+        26.363943099975586
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_06_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -39.12748718261719,
+        17.81312370300293,
+        24.98488426208496
+      ],
+      "bounds_max": [
+        -37.13860321044922,
+        20.110855102539062,
+        26.361682891845703
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_06_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -36.634307861328125,
+        17.13730812072754,
+        25.10224723815918
+      ],
+      "bounds_max": [
+        -34.3194694519043,
+        19.305463790893555,
+        26.38227653503418
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_06_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -38.862430572509766,
+        17.07777214050293,
+        25.03392791748047
+      ],
+      "bounds_max": [
+        -36.59483337402344,
+        19.5029239654541,
+        26.463319778442383
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -19.34847640991211,
+        7.979941368103027,
+        25.00615692138672
+      ],
+      "bounds_max": [
+        -17.041906356811523,
+        10.281457901000977,
+        26.38311195373535
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -21.91117286682129,
+        8.462211608886719,
+        25.018091201782227
+      ],
+      "bounds_max": [
+        -19.801177978515625,
+        10.604034423828125,
+        26.33560562133789
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -24.558345794677734,
+        9.295594215393066,
+        25.032724380493164
+      ],
+      "bounds_max": [
+        -22.45110511779785,
+        11.356672286987305,
+        26.397380828857422
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -26.714763641357422,
+        9.547674179077148,
+        25.001359939575195
+      ],
+      "bounds_max": [
+        -24.391511917114258,
+        12.039795875549316,
+        26.318918228149414
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -24.41423797607422,
+        9.996322631835938,
+        25.0488338470459
+      ],
+      "bounds_max": [
+        -22.483457565307617,
+        11.905657768249512,
+        26.336551666259766
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -22.00763702392578,
+        9.198925018310547,
+        25.040128707885742
+      ],
+      "bounds_max": [
+        -19.845651626586914,
+        11.34543514251709,
+        26.393604278564453
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_006",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -19.4975643157959,
+        8.538308143615723,
+        25.1950740814209
+      ],
+      "bounds_max": [
+        -17.25176429748535,
+        10.856819152832031,
+        26.346939086914062
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_007",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -16.66788673400879,
+        8.070046424865723,
+        25.036605834960938
+      ],
+      "bounds_max": [
+        -14.607706069946289,
+        10.470073699951172,
+        26.403156280517578
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_008",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -14.08533763885498,
+        7.385323524475098,
+        25.079605102539062
+      ],
+      "bounds_max": [
+        -12.152907371520996,
+        9.695006370544434,
+        26.273208618164062
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_009",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -11.940600395202637,
+        6.846170425415039,
+        24.965770721435547
+      ],
+      "bounds_max": [
+        -9.751119613647461,
+        9.115297317504883,
+        26.408178329467773
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_010",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -9.08011531829834,
+        6.237114906311035,
+        25.07346534729004
+      ],
+      "bounds_max": [
+        -7.151268005371094,
+        8.324487686157227,
+        26.336078643798828
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_011",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -8.016498565673828,
+        4.954725742340088,
+        25.00532341003418
+      ],
+      "bounds_max": [
+        -5.67234468460083,
+        7.17355489730835,
+        26.328664779663086
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_012",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -10.577848434448242,
+        6.091965675354004,
+        25.01860237121582
+      ],
+      "bounds_max": [
+        -8.28345012664795,
+        8.002152442932129,
+        26.356884002685547
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_013",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -13.074078559875488,
+        6.781136989593506,
+        25.049489974975586
+      ],
+      "bounds_max": [
+        -10.67837142944336,
+        8.739614486694336,
+        26.33382225036621
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_07_014",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -15.319474220275879,
+        7.3293609619140625,
+        25.0048885345459
+      ],
+      "bounds_max": [
+        -13.28665828704834,
+        9.506688117980957,
+        26.328535079956055
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        4.825591087341309,
+        2.129378080368042,
+        24.979530334472656
+      ],
+      "bounds_max": [
+        7.153512001037598,
+        4.1156134605407715,
+        26.38648796081543
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        2.406893014907837,
+        2.3218305110931396,
+        25.035202026367188
+      ],
+      "bounds_max": [
+        4.5506415367126465,
+        4.523203372955322,
+        26.476655960083008
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        2.5285229682922363,
+        2.7289552688598633,
+        25.000478744506836
+      ],
+      "bounds_max": [
+        4.808775424957275,
+        4.873193264007568,
+        26.466455459594727
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        4.948418140411377,
+        2.264146327972412,
+        25.0423641204834
+      ],
+      "bounds_max": [
+        7.4458699226379395,
+        4.628821849822998,
+        26.3383846282959
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        7.659926414489746,
+        2.186260461807251,
+        24.954471588134766
+      ],
+      "bounds_max": [
+        9.830760955810547,
+        4.314419269561768,
+        26.33397102355957
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        10.164921760559082,
+        1.8460502624511719,
+        25.082698822021484
+      ],
+      "bounds_max": [
+        12.322210311889648,
+        3.8882510662078857,
+        26.342636108398438
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_006",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        13.151640892028809,
+        1.9518014192581177,
+        25.028133392333984
+      ],
+      "bounds_max": [
+        15.220294952392578,
+        3.919463872909546,
+        26.38146209716797
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_007",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        13.059176445007324,
+        1.0406906604766846,
+        25.015457153320312
+      ],
+      "bounds_max": [
+        14.975571632385254,
+        3.067500591278076,
+        26.29973030090332
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_008",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        10.068187713623047,
+        0.9705929756164551,
+        25.08273696899414
+      ],
+      "bounds_max": [
+        12.319502830505371,
+        3.351053476333618,
+        26.37043571472168
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_08_009",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        7.525425910949707,
+        1.1618486642837524,
+        25.078338623046875
+      ],
+      "bounds_max": [
+        9.549077987670898,
+        3.644796371459961,
+        26.407943725585938
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_09_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        24.458995819091797,
+        1.9799413681030273,
+        25.064756393432617
+      ],
+      "bounds_max": [
+        26.418807983398438,
+        3.8911993503570557,
+        26.361425399780273
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_09_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        25.738780975341797,
+        0.7959027290344238,
+        25.02407455444336
+      ],
+      "bounds_max": [
+        27.687551498413086,
+        2.9767820835113525,
+        26.49413299560547
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_10_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -70.78421783447266,
+        20.38654327392578,
+        25.01649284362793
+      ],
+      "bounds_max": [
+        -68.66143035888672,
+        22.792268753051758,
+        26.37608528137207
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_10_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -68.32723236083984,
+        22.125276565551758,
+        25.047407150268555
+      ],
+      "bounds_max": [
+        -66.1721420288086,
+        24.165475845336914,
+        26.2938232421875
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_10_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -66.26734161376953,
+        23.097854614257812,
+        25.079532623291016
+      ],
+      "bounds_max": [
+        -63.90785598754883,
+        25.36492347717285,
+        26.397619247436523
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_10_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -63.860877990722656,
+        23.12533950805664,
+        25.112306594848633
+      ],
+      "bounds_max": [
+        -61.738746643066406,
+        25.243986129760742,
+        26.343765258789062
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_10_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -65.48321533203125,
+        21.62703514099121,
+        25.101625442504883
+      ],
+      "bounds_max": [
+        -63.27024459838867,
+        23.83539390563965,
+        26.360477447509766
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_10_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -67.53941345214844,
+        19.898422241210938,
+        24.96906089782715
+      ],
+      "bounds_max": [
+        -65.43229675292969,
+        22.25604248046875,
+        26.332304000854492
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_11_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -55.156639099121094,
+        22.7210693359375,
+        24.996423721313477
+      ],
+      "bounds_max": [
+        -53.06985855102539,
+        25.113739013671875,
+        26.399795532226562
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_11_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -53.32669448852539,
+        22.55741310119629,
+        25.0219783782959
+      ],
+      "bounds_max": [
+        -51.292938232421875,
+        24.843767166137695,
+        26.390369415283203
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_11_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -50.69083786010742,
+        22.42438507080078,
+        25.142492294311523
+      ],
+      "bounds_max": [
+        -48.56834411621094,
+        24.465225219726562,
+        26.36484146118164
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_11_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -48.76700210571289,
+        21.600021362304688,
+        25.067468643188477
+      ],
+      "bounds_max": [
+        -46.71752166748047,
+        23.616880416870117,
+        26.373170852661133
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_11_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -51.35477066040039,
+        21.812198638916016,
+        25.019786834716797
+      ],
+      "bounds_max": [
+        -48.99250793457031,
+        24.228939056396484,
+        26.374441146850586
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_12_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -71.14369201660156,
+        14.684678077697754,
+        25.040035247802734
+      ],
+      "bounds_max": [
+        -69.09576416015625,
+        16.98455047607422,
+        26.444297790527344
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_12_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -69.92527770996094,
+        16.877605438232422,
+        25.00591468811035
+      ],
+      "bounds_max": [
+        -67.53953552246094,
+        19.31589698791504,
+        26.45993995666504
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_13_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -72.9131088256836,
+        4.0009026527404785,
+        24.98778533935547
+      ],
+      "bounds_max": [
+        -70.80392456054688,
+        6.007421970367432,
+        26.35913848876953
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_13_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -70.8933334350586,
+        5.537306308746338,
+        25.06857681274414
+      ],
+      "bounds_max": [
+        -68.55802917480469,
+        7.547478675842285,
+        26.309253692626953
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_14_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        23.47690773010254,
+        -2.7399516105651855,
+        24.99732208251953
+      ],
+      "bounds_max": [
+        25.495136260986328,
+        -0.6066610217094421,
+        26.308013916015625
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_14_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        23.179550170898438,
+        -0.33494460582733154,
+        24.949541091918945
+      ],
+      "bounds_max": [
+        25.563888549804688,
+        1.7202916145324707,
+        26.39240264892578
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_14_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        25.37030792236328,
+        0.5661362409591675,
+        25.072620391845703
+      ],
+      "bounds_max": [
+        27.95582389831543,
+        2.894127130508423,
+        26.314645767211914
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_14_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        26.962116241455078,
+        -1.1603529453277588,
+        25.15391731262207
+      ],
+      "bounds_max": [
+        29.14838981628418,
+        0.880121648311615,
+        26.365032196044922
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_14_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        25.666223526000977,
+        -3.6744513511657715,
+        25.047313690185547
+      ],
+      "bounds_max": [
+        28.052295684814453,
+        -1.3366998434066772,
+        26.43170738220215
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_15_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        25.628246307373047,
+        -9.053088188171387,
+        25.008466720581055
+      ],
+      "bounds_max": [
+        28.079498291015625,
+        -6.929056167602539,
+        26.33411407470703
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_15_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        25.056928634643555,
+        -7.065119743347168,
+        24.99873924255371
+      ],
+      "bounds_max": [
+        26.930334091186523,
+        -5.147454738616943,
+        26.410608291625977
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_15_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        26.795555114746094,
+        -8.90585994720459,
+        25.010290145874023
+      ],
+      "bounds_max": [
+        28.88206672668457,
+        -6.740853309631348,
+        26.41661834716797
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_15_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        29.17874526977539,
+        -9.782514572143555,
+        25.027772903442383
+      ],
+      "bounds_max": [
+        31.649370193481445,
+        -7.681352138519287,
+        26.412220001220703
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_15_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        28.191207885742188,
+        -11.125728607177734,
+        25.036479949951172
+      ],
+      "bounds_max": [
+        30.200719833374023,
+        -8.780349731445312,
+        26.453134536743164
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_16_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        34.03448486328125,
+        -12.334003448486328,
+        25.00444221496582
+      ],
+      "bounds_max": [
+        36.087955474853516,
+        -10.226221084594727,
+        26.380807876586914
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_16_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        35.15032196044922,
+        -11.533185958862305,
+        24.965238571166992
+      ],
+      "bounds_max": [
+        37.27297592163086,
+        -9.432618141174316,
+        26.39870834350586
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_16_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        37.551353454589844,
+        -12.13659954071045,
+        25.06174087524414
+      ],
+      "bounds_max": [
+        39.50904846191406,
+        -10.056556701660156,
+        26.38663101196289
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_16_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        40.09625244140625,
+        -12.817651748657227,
+        25.02755355834961
+      ],
+      "bounds_max": [
+        42.08125305175781,
+        -10.566786766052246,
+        26.414077758789062
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_16_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        39.96843719482422,
+        -13.828967094421387,
+        25.137775421142578
+      ],
+      "bounds_max": [
+        42.03230285644531,
+        -11.620585441589355,
+        26.44918441772461
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_16_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        37.7886962890625,
+        -13.81636905670166,
+        25.032480239868164
+      ],
+      "bounds_max": [
+        39.79999542236328,
+        -11.606165885925293,
+        26.39305877685547
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_17_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        45.12675094604492,
+        -12.900166511535645,
+        25.021642684936523
+      ],
+      "bounds_max": [
+        47.01852798461914,
+        -11.078314781188965,
+        26.38978385925293
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_17_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        47.409019470214844,
+        -11.786751747131348,
+        25.04837417602539
+      ],
+      "bounds_max": [
+        49.2745246887207,
+        -9.547229766845703,
+        26.388696670532227
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_17_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        49.09508514404297,
+        -10.60068130493164,
+        25.0911808013916
+      ],
+      "bounds_max": [
+        51.28681564331055,
+        -8.609803199768066,
+        26.36036491394043
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_17_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        48.99739456176758,
+        -12.451367378234863,
+        25.034364700317383
+      ],
+      "bounds_max": [
+        51.032833099365234,
+        -10.299781799316406,
+        26.39448356628418
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_17_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        47.380455017089844,
+        -14.385456085205078,
+        25.023365020751953
+      ],
+      "bounds_max": [
+        49.50389099121094,
+        -12.400463104248047,
+        26.406391143798828
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_18_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        48.45246505737305,
+        -8.546819686889648,
+        25.049835205078125
+      ],
+      "bounds_max": [
+        50.559661865234375,
+        -6.6532673835754395,
+        26.382551193237305
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_18_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        47.62002182006836,
+        -6.513460159301758,
+        25.082176208496094
+      ],
+      "bounds_max": [
+        49.760406494140625,
+        -4.454412460327148,
+        26.343013763427734
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_18_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        49.632774353027344,
+        -5.576739311218262,
+        24.979644775390625
+      ],
+      "bounds_max": [
+        51.88941192626953,
+        -3.6506595611572266,
+        26.43425750732422
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_18_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        50.79080581665039,
+        -8.193811416625977,
+        24.994550704956055
+      ],
+      "bounds_max": [
+        52.817081451416016,
+        -5.967037677764893,
+        26.34817123413086
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_19_000",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        30.404077529907227,
+        -0.3209250271320343,
+        25.09440040588379
+      ],
+      "bounds_max": [
+        32.679786682128906,
+        1.7011523246765137,
+        26.377470016479492
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_19_001",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        30.372114181518555,
+        0.90059894323349,
+        25.034902572631836
+      ],
+      "bounds_max": [
+        32.352718353271484,
+        2.9023783206939697,
+        26.451065063476562
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_19_002",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        33.057884216308594,
+        0.21755725145339966,
+        24.980573654174805
+      ],
+      "bounds_max": [
+        35.044918060302734,
+        2.271249294281006,
+        26.29722023010254
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_19_003",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        35.43734359741211,
+        -1.0665515661239624,
+        25.05055046081543
+      ],
+      "bounds_max": [
+        37.51805114746094,
+        1.0571022033691406,
+        26.337980270385742
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_19_004",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        37.372291564941406,
+        -2.4142816066741943,
+        24.99766731262207
+      ],
+      "bounds_max": [
+        39.829402923583984,
+        -0.040642619132995605,
+        26.455209732055664
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_19_005",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        37.190635681152344,
+        -2.7462689876556396,
+        25.06229019165039
+      ],
+      "bounds_max": [
+        39.75567626953125,
+        -0.2958313822746277,
+        26.38995361328125
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "bed_spill_19_006",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        34.79560470581055,
+        -1.5492534637451172,
+        25.10230255126953
+      ],
+      "bounds_max": [
+        36.94004440307617,
+        0.3452867865562439,
+        26.34847068786621
+      ],
+      "polygons": 1902
+    },
+    {
+      "slug": "oval_roof_rewild_00",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -47.57597732543945,
+        -6.208865165710449,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -45.013282775878906,
+        -3.8414931297302246,
+        25.93170738220215
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_01",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -48.04624557495117,
+        -3.720005989074707,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -45.048641204833984,
+        -0.7708654403686523,
+        25.934534072875977
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_02",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -50.347137451171875,
+        -0.7828619480133057,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -47.35694122314453,
+        1.9635809659957886,
+        25.90918731689453
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_03",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -54.64265060424805,
+        -0.8529840707778931,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -51.69303512573242,
+        2.2304487228393555,
+        26.031190872192383
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_04",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -58.01377487182617,
+        2.442473888397217,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -54.866050720214844,
+        5.742746829986572,
+        25.931324005126953
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_05",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -61.69723129272461,
+        0.15874147415161133,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -58.620609283447266,
+        3.1562728881835938,
+        25.854652404785156
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_06",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -66.66028594970703,
+        -0.15369345247745514,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -63.899837493896484,
+        2.436190605163574,
+        25.86890983581543
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_07",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -66.98589324951172,
+        -3.9081625938415527,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -64.15596771240234,
+        -1.2019314765930176,
+        25.971452713012695
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_08",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -68.66371154785156,
+        -6.624048233032227,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -65.71247100830078,
+        -3.827670097351074,
+        25.955955505371094
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_09",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -65.64702606201172,
+        -8.951950073242188,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -63.06599044799805,
+        -5.915859699249268,
+        25.95362663269043
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_10",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -66.11700439453125,
+        -13.032740592956543,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -63.330528259277344,
+        -10.446402549743652,
+        25.90562629699707
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_11",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -62.25129699707031,
+        -14.785892486572266,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -59.54152297973633,
+        -12.295138359069824,
+        25.92571258544922
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_12",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -56.995887756347656,
+        -13.124570846557617,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -54.87403106689453,
+        -9.929319381713867,
+        26.035873413085938
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_13",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -54.070735931396484,
+        -14.034339904785156,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -51.20867919921875,
+        -11.110776901245117,
+        25.969057083129883
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_14",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -51.91996383666992,
+        -11.399490356445312,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -49.040531158447266,
+        -8.090642929077148,
+        25.971912384033203
+      ],
+      "polygons": 2090
+    },
+    {
+      "slug": "oval_roof_rewild_15",
+      "definition": "planter_spill_growth",
+      "bounds_min": [
+        -47.41064453125,
+        -10.018911361694336,
+        25.02147102355957
+      ],
+      "bounds_max": [
+        -44.51124572753906,
+        -7.325290203094482,
+        26.011934280395508
+      ],
+      "polygons": 2090
+    }
+  ],
+  "locked_object_count": 764,
+  "locked_match": true,
+  "materials_unchanged": true,
+  "source_sha256": "a326cfc66225cb166c8550c7fd5e95f179242c169cf3b121af89e5213ddc6a3c",
+  "package_count": 1544,
+  "definitions": 37,
+  "visual_acceptance": "pending"
+}

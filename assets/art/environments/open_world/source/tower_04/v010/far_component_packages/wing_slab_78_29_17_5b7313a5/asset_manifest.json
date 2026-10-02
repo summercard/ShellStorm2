@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/wing_slab_78_29_17_5b7313a5",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "wing_slab_78_独立楼板_9_-3_主体",
+  "collection": [
+    "wing_slab_78_独立楼板_9_-3_资产包"
+  ],
+  "source_package": "tower_04/wing_slab_78_29_17",
+  "origin": [
+    72.42500305175781,
+    -21.566936492919922,
+    7.300000190734863
+  ],
+  "dimensions": [
+    0.8499984741210938,
+    2.566129684448242,
+    0.5
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    72.0,
+    -22.850000381469727,
+    7.300000190734863
+  ],
+  "bounds_max": [
+    72.8499984741211,
+    -20.283870697021484,
+    7.800000190734863
+  ],
+  "triangles": 12,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

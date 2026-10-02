@@ -1,0 +1,66 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/wood_supply_crate_05",
+  "slug": "wood_supply_crate_05",
+  "display_name": "木质补给箱_板缝斜撑护角_05",
+  "category": "facilities",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "木质补给箱_板缝斜撑护角_05_资产包",
+  "source_collection": "木质补给箱_板缝斜撑护角_05_制作组件",
+  "objects": [
+    "木质补给箱_板缝斜撑护角_05_主体"
+  ],
+  "root_object": "木质补给箱_板缝斜撑护角_05_主体",
+  "world_position": [
+    51.599998474121094,
+    -17.0,
+    25.05500030517578
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    51.04,
+    -17.578001022338867,
+    25.055
+  ],
+  "bounds_max": [
+    52.160000000000004,
+    -16.482,
+    26.141
+  ],
+  "dimensions": [
+    1.1200000000000045,
+    1.0960010223388679,
+    1.0859999999999985
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "wood_supply_crate",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "wood_supply_crate_05.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "platform_scope": true
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/spiral_rail_inner_09_86ab6ba8",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "旋梯inner扶手_10",
+  "collection": [
+    "旋梯inner扶手_10_资产包"
+  ],
+  "source_package": "tower_04/spiral_rail_inner_09",
+  "origin": [
+    -55.675689697265625,
+    10.726472854614258,
+    26.840713500976562
+  ],
+  "dimensions": [
+    0.18931198120117188,
+    0.25099658966064453,
+    1.3082828521728516
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -55.77034378051758,
+    10.600974082946777,
+    26.840713500976562
+  ],
+  "bounds_max": [
+    -55.581031799316406,
+    10.851970672607422,
+    28.148996353149414
+  ],
+  "triangles": 76,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

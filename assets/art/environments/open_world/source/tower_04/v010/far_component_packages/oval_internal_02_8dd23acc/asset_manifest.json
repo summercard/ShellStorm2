@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_internal_02_8dd23acc",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "弧形商场内部贯通柱_02_主体",
+  "collection": [
+    "弧形商场内部贯通柱_02_资产包"
+  ],
+  "source_package": "tower_04/oval_internal_02",
+  "origin": [
+    -60.47999954223633,
+    0.036152422428131104,
+    9.0
+  ],
+  "dimensions": [
+    0.5,
+    0.5,
+    15.620000839233398
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -60.72999954223633,
+    -0.2138475775718689,
+    9.0
+  ],
+  "bounds_max": [
+    -60.22999954223633,
+    0.2861524224281311,
+    24.6200008392334
+  ],
+  "triangles": 44,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

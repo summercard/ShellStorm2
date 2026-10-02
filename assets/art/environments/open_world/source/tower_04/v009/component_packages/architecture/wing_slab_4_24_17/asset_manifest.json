@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/wing_slab_4_24_17",
+  "slug": "wing_slab_4_24_17",
+  "display_name": "wing_slab_4_独立楼板_4_-3",
+  "category": "architecture",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "wing_slab_4_独立楼板_4_-3_资产包",
+  "source_collection": "wing_slab_4_独立楼板_4_-3_制作组件",
+  "objects": [
+    "wing_slab_4_独立楼板_4_-3_主体"
+  ],
+  "root_object": "wing_slab_4_独立楼板_4_-3_主体",
+  "world_position": [
+    36.0,
+    -20.0,
+    -0.05000000074505806
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    32.0,
+    -22.573810577392578,
+    -0.04999999999999999
+  ],
+  "bounds_max": [
+    40.0,
+    -16.0,
+    0.45
+  ],
+  "dimensions": [
+    8.0,
+    6.573810577392578,
+    0.5
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "recessed_retail_slab",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "wing_slab_4_24_17.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

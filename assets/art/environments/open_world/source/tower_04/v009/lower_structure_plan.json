@@ -1,0 +1,55 @@
+{
+  "version": "v009",
+  "design_revision": "r8",
+  "reference": "参考_下部结构真值.png",
+  "locked": "v008顶层屋面、平台壳、路线、设施、屋顶植被、原相机灯光和四材质，逐对象完整签名",
+  "editable": [
+    "oval_level_*",
+    "wing_level_*",
+    "oval_glazing",
+    "wing_glazing",
+    "pier_*",
+    "facade_growth_*"
+  ],
+  "reference_facts": [
+    "左楼架空大柱",
+    "弧形窗墙与突出中间退台",
+    "跨层圆角混凝土门形肋",
+    "中部通透连廊下大柱",
+    "右翼混凝土实墙与内退窗带"
+  ],
+  "inferred_dimensions": {
+    "roof_z": 25,
+    "existing_platform_bottom": 23.8,
+    "left_slabs": [
+      9,
+      14.3,
+      19.6
+    ],
+    "right_slabs": [
+      0,
+      7.8,
+      15.8,
+      23.8
+    ],
+    "left_pilotis_clear_height": 8.5
+  },
+  "not_inferred_as_reference_fact": [
+    "遮挡背面结构",
+    "米制楼层尺寸",
+    "背景城市"
+  ],
+  "new_component_definitions": [
+    "raised_curved_slab",
+    "recessed_window_bay",
+    "rounded_concrete_portal",
+    "exposed_pilotis",
+    "recessed_retail_slab",
+    "concrete_facade_bay",
+    "lower_link_gallery",
+    "retail_interior_structure"
+  ],
+  "max_definitions": 50,
+  "new_lower_package_max_xy": 10,
+  "source_only": true
+}

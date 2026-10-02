@@ -1,0 +1,72 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/tile_r25_c27_0",
+  "slug": "tile_r25_c27_0",
+  "display_name": "天台板_25行_27列_0_倒角沉缝",
+  "category": "floor",
+  "version": "v008",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v008/塔4_植被侵占破损商城_150x50m_v008.blend",
+  "collection": "天台板_25行_27列_0_倒角沉缝_资产包",
+  "source_collection": "天台板_25行_27列_0_倒角沉缝_制作组件",
+  "objects": [
+    "天台板_25行_27列_0_倒角沉缝_主体"
+  ],
+  "root_object": "天台板_25行_27列_0_倒角沉缝_主体",
+  "world_position": [
+    8.806153297424316,
+    12.832987785339355,
+    25.02199935913086
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    8.448001861572266,
+    12.517999649047852,
+    25.02199935913086
+  ],
+  "bounds_max": [
+    8.982000350952148,
+    13.41335391998291,
+    25.20560073852539
+  ],
+  "dimensions": [
+    0.5339984893798828,
+    0.8953542709350586,
+    0.18360137939453125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "roof_paver_3x1p5",
+  "dependencies": [
+    "tower_04/roof_paving_x08_y03"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "tile_r25_c27_0.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "C",
+  "zone_name": "中央花池与棚下东段",
+  "platform_scope": true,
+  "tile_row": 25,
+  "tile_column": 27,
+  "tile_fragment": 0,
+  "previous_package_id": "tower_04/tile_r25_c27_0"
+}

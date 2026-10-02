@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "errors": [],
+  "definitions": 23,
+  "instances": 1027,
+  "visible_triangles": 1188174,
+  "geometry_budget": null,
+  "lod_placements_identical": true,
+  "independent_region": true,
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_近景庭院_v002.blend",
+  "source_sha256": "211c8dc5ee546299f5478c9d23f3a219f2b7e3488868ad503f8dfbc459ce7da2",
+  "runtime_verified": false
+}

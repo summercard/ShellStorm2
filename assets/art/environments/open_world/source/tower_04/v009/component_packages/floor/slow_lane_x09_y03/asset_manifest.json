@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/slow_lane_x09_y03",
+  "slug": "slow_lane_x09_y03",
+  "display_name": "两米跑道_邻色分段与实体_区块09_03",
+  "category": "floor",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "两米跑道_邻色分段与实体_区块09_03_资产包",
+  "source_collection": "两米跑道_邻色分段与实体_区块09_03_制作组件",
+  "objects": [
+    "两米跑道_邻色分段与实体_区块09_03_主体"
+  ],
+  "root_object": "两米跑道_邻色分段与实体_区块09_03_主体",
+  "world_position": [
+    20.0,
+    10.0,
+    25.02400016784668
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    23.445621490478516,
+    5.0,
+    25.02400016784668
+  ],
+  "bounds_max": [
+    25.0,
+    6.23074197769165,
+    25.231964111328125
+  ],
+  "dimensions": [
+    1.5543785095214844,
+    1.2307419776916504,
+    0.2079639434814453
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "two_adjacent_palette_segment_track",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "slow_lane_x09_y03.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "C",
+  "zone_name": "中央花池与棚下东段",
+  "platform_scope": true,
+  "assembly_grid": [
+    9,
+    3
+  ],
+  "cut_bounds_xy": [
+    15,
+    5,
+    25,
+    15
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "previous_package_id": "tower_04/slow_lane"
+}

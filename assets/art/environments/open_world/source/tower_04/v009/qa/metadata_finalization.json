@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "prior_sha256": "b2fa11f409b46449c605560ba048158a7abb582ebf5d4d16fb15309e059ff03c",
+  "source_sha256": "6c3bbd212230b9155ced041c2f8f9bac8efae091bdea3a9baeaadc2c79cc7c00",
+  "all_objects_unchanged": 3871,
+  "change": "scene level metadata only; existing renders remain geometrically identical"
+}

@@ -78,7 +78,9 @@
 
 ## 3. 开发记录定位
 
-ASSET-PIPELINE补充：[塔4商场源契约](design/tower04_mall_source.md)与[v005末世平台记录](development/2026-10-01_tower04_apocalypse_platform.md)。150×50m、五层；1109独立包，平台按五区及XY≤10m模块管理；54独立营地设施、12局部藤蔓，保留694地板及原流线。四材质/公共贴图/MipMap不变，下部主体锁定。仅Blender源，未导入运行时；v001–v004保留。[v004近景地表](development/2026-10-01_tower04_surface_step2.md)、[v003路线](development/2026-10-01_tower04_routes_step1.md)及[v002记录](development/2026-10-01_tower04_plan_refinement.md)保留原时点事实。
+ASSET-PIPELINE当前补充：[塔4-2与圆形屋面升层](design/tower04_ground_court.md)已形成塔4 v010、独立庭院近景v002及远景合景。圆形屋面升高5m并增加28级旋梯；庭院23种组件/1027实例，远景合景583247三角。三项资产已登记，结构/UV源验收通过；未导入引擎，详见[交付记录](development/2026-10-02_tower04_ground_court.md)。
+
+ASSET-PIPELINE历史补充：[塔4商场源契约](design/tower04_mall_source.md)与[v005末世平台记录](development/2026-10-01_tower04_apocalypse_platform.md)。150×50m、五层；1109独立包，平台按五区及XY≤10m模块管理；54独立营地设施、12局部藤蔓，保留694地板及原流线。四材质/公共贴图/MipMap不变，下部主体锁定。仅Blender源，未导入运行时；v001–v004保留。[v004近景地表](development/2026-10-01_tower04_surface_step2.md)、[v003路线](development/2026-10-01_tower04_routes_step1.md)及[v002记录](development/2026-10-01_tower04_plan_refinement.md)保留原时点事实。
 
 当前全部功能共同关联[本次审计记录](development/2026-09-12_documentation_audit.md)，它只记录审计，不冒充功能开发史。既有功能的原始开发记录按下列位置回溯：
 

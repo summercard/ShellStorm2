@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/spiral_landing_0_f9877778",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "旋梯对接平台_0",
+  "collection": [
+    "旋梯对接平台_0_资产包"
+  ],
+  "source_package": "tower_04/spiral_landing_0",
+  "origin": [
+    -56.52000045776367,
+    7.800000190734863,
+    24.80500030517578
+  ],
+  "dimensions": [
+    4.480003356933594,
+    2.799999713897705,
+    1.3900012969970703
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -58.76000213623047,
+    6.400000095367432,
+    24.80500030517578
+  ],
+  "bounds_max": [
+    -54.279998779296875,
+    9.199999809265137,
+    26.19500160217285
+  ],
+  "triangles": 84,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/reinforced_supply_case_05_18dc94ad",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "护角物资箱_箱盖扣件与把手_05_主体",
+  "collection": [
+    "护角物资箱_箱盖扣件与把手_05_资产包"
+  ],
+  "source_package": "tower_04/reinforced_supply_case_05",
+  "origin": [
+    51.5,
+    -18.627498626708984,
+    25.065000534057617
+  ],
+  "dimensions": [
+    1.4199981689453125,
+    0.9950008392333984,
+    0.9750003814697266
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    50.790000915527344,
+    -19.125,
+    25.065000534057617
+  ],
+  "bounds_max": [
+    52.209999084472656,
+    -18.1299991607666,
+    26.040000915527344
+  ],
+  "triangles": 416,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

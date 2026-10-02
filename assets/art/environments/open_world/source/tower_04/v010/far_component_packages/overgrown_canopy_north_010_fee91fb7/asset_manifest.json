@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/overgrown_canopy_north_010_fee91fb7",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "棚架north_浓密叶簇垂挂_010_主体",
+  "collection": [
+    "棚架north_浓密叶簇垂挂_010_资产包"
+  ],
+  "source_package": "tower_04/overgrown_canopy_north_010",
+  "origin": [
+    -29.41509246826172,
+    17.066455841064453,
+    27.484615325927734
+  ],
+  "dimensions": [
+    3.5370101928710938,
+    2.1251163482666016,
+    2.968690872192383
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -31.183597564697266,
+    16.00389862060547,
+    27.484615325927734
+  ],
+  "bounds_max": [
+    -27.646587371826172,
+    18.12901496887207,
+    30.453306198120117
+  ],
+  "triangles": 540,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

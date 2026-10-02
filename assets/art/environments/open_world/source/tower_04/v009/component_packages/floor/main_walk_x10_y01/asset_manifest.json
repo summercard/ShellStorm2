@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/main_walk_x10_y01",
+  "slug": "main_walk_x10_y01",
+  "display_name": "主步道花池贴边_齐平灰色_区块10_01",
+  "category": "floor",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "主步道花池贴边_齐平灰色_区块10_01_资产包",
+  "source_collection": "主步道花池贴边_齐平灰色_区块10_01_制作组件",
+  "objects": [
+    "主步道花池贴边_齐平灰色_区块10_01_主体"
+  ],
+  "root_object": "主步道花池贴边_齐平灰色_区块10_01_主体",
+  "world_position": [
+    30.0,
+    -10.0,
+    25.02199935913086
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    25.66256332397461,
+    -10.249813079833984,
+    25.02199935913086
+  ],
+  "bounds_max": [
+    29.798648834228516,
+    -5.8299946784973145,
+    25.054000854492188
+  ],
+  "dimensions": [
+    4.136085510253906,
+    4.41981840133667,
+    0.032001495361328125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "walkway_planter_apron",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "main_walk_x10_y01.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/main_walk",
+  "assembly_grid": [
+    10,
+    1
+  ],
+  "cut_bounds_xy": [
+    25,
+    -15,
+    35,
+    -5
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "platform_scope": true
+}

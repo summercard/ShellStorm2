@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_roof_x00_y02_8d1fde22",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "左楼屋顶_回旋缺口及同标_区块00_02_主体",
+  "collection": [
+    "左楼屋顶_回旋缺口及同标_区块00_02_资产包"
+  ],
+  "source_package": "tower_04/oval_roof_x00_y02",
+  "origin": [
+    -69.03038787841797,
+    -2.384185791015625e-07,
+    29.780000686645508
+  ],
+  "dimensions": [
+    8.060775756835938,
+    10.0,
+    0.3299980163574219
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -73.06077575683594,
+    -5.000000476837158,
+    29.780000686645508
+  ],
+  "bounds_max": [
+    -65.0,
+    5.0,
+    30.10999870300293
+  ],
+  "triangles": 354,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

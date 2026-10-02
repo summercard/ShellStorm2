@@ -1,0 +1,8181 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04-2",
+  "version": "v001",
+  "lod": "far",
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v001/塔4-2_远景组件_v001.blend",
+  "definitions": [
+    {
+      "slug": "paving_0",
+      "display_name": "庭院铺地6米_整洁残留",
+      "family": "paving",
+      "collection": "庭院铺地6米_整洁残留_定义",
+      "mesh": "庭院铺地6米_整洁残留_网格",
+      "origin": [
+        0.0,
+        0.0,
+        -0.23999999463558197
+      ],
+      "dimensions": [
+        6.0,
+        6.0,
+        0.24
+      ],
+      "triangles": 12,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "paving_1",
+      "display_name": "庭院铺地6米_开裂",
+      "family": "paving",
+      "collection": "庭院铺地6米_开裂_定义",
+      "mesh": "庭院铺地6米_开裂_网格",
+      "origin": [
+        0.0,
+        0.0,
+        -0.23999999463558197
+      ],
+      "dimensions": [
+        6.0,
+        6.0,
+        0.24
+      ],
+      "triangles": 12,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "paving_2",
+      "display_name": "庭院铺地6米_返野积水",
+      "family": "paving",
+      "collection": "庭院铺地6米_返野积水_定义",
+      "mesh": "庭院铺地6米_返野积水_网格",
+      "origin": [
+        0.0,
+        0.0,
+        -0.23999999463558197
+      ],
+      "dimensions": [
+        6.0,
+        6.0,
+        0.243
+      ],
+      "triangles": 14,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "soil",
+      "display_name": "种植土壤6米",
+      "family": "soil",
+      "collection": "种植土壤6米_定义",
+      "mesh": "种植土壤6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        -0.25999999046325684
+      ],
+      "dimensions": [
+        6.0,
+        6.0,
+        0.26
+      ],
+      "triangles": 12,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "water",
+      "display_name": "浅积水池6米",
+      "family": "water",
+      "collection": "浅积水池6米_定义",
+      "mesh": "浅积水池6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        -0.38999998569488525
+      ],
+      "dimensions": [
+        6.0,
+        6.0,
+        0.29000000000000004
+      ],
+      "triangles": 14,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "curb",
+      "display_name": "池岸压顶6米",
+      "family": "curb",
+      "collection": "池岸压顶6米_定义",
+      "mesh": "池岸压顶6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "dimensions": [
+        6.0,
+        0.38,
+        0.28
+      ],
+      "triangles": 28,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "drain",
+      "display_name": "排水槽6米",
+      "family": "drain",
+      "collection": "排水槽6米_定义",
+      "mesh": "排水槽6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        -0.10000000149011612
+      ],
+      "dimensions": [
+        6.0,
+        0.35,
+        0.12250000000000001
+      ],
+      "triangles": 132,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "planter",
+      "display_name": "带状返野花池6米",
+      "family": "planter",
+      "collection": "带状返野花池6米_定义",
+      "mesh": "带状返野花池6米_网格",
+      "origin": [
+        0.025302430614829063,
+        -0.07150457054376602,
+        0.0
+      ],
+      "dimensions": [
+        6.050604862566315,
+        1.8046671914434333,
+        1.4165786392697977
+      ],
+      "triangles": 236,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "wall",
+      "display_name": "低层店铺实墙6米",
+      "family": "wall",
+      "collection": "低层店铺实墙6米_定义",
+      "mesh": "低层店铺实墙6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "dimensions": [
+        6.0,
+        0.36,
+        3.5
+      ],
+      "triangles": 28,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "window",
+      "display_name": "破损玻璃店面6米",
+      "family": "window",
+      "collection": "破损玻璃店面6米_定义",
+      "mesh": "破损玻璃店面6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "dimensions": [
+        6.35,
+        0.48,
+        3.5
+      ],
+      "triangles": 188,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "roof",
+      "display_name": "低层屋顶6米",
+      "family": "roof",
+      "collection": "低层屋顶6米_定义",
+      "mesh": "低层屋顶6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        3.494999885559082
+      ],
+      "dimensions": [
+        6.0,
+        6.0,
+        0.6299999999999999
+      ],
+      "triangles": 84,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "column",
+      "display_name": "廊架立柱",
+      "family": "column",
+      "collection": "廊架立柱_定义",
+      "mesh": "廊架立柱_网格",
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "dimensions": [
+        0.75,
+        0.75,
+        3.6
+      ],
+      "triangles": 56,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "pergola",
+      "display_name": "透空廊架顶6米",
+      "family": "pergola",
+      "collection": "透空廊架顶6米_定义",
+      "mesh": "透空廊架顶6米_网格",
+      "origin": [
+        0.0,
+        0.0,
+        3.3399999141693115
+      ],
+      "dimensions": [
+        6.14,
+        6.0,
+        0.4400000000000004
+      ],
+      "triangles": 140,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "tree_0",
+      "display_name": "庭院乔木_1",
+      "family": "tree",
+      "collection": "庭院乔木_1_定义",
+      "mesh": "庭院乔木_1_网格",
+      "origin": [
+        0.23770567774772644,
+        -0.13749828934669495,
+        -0.00908986758440733
+      ],
+      "dimensions": [
+        5.9691996285319995,
+        6.403787862308258,
+        6.92131677997221
+      ],
+      "triangles": 440,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "tree_1",
+      "display_name": "庭院乔木_2",
+      "family": "tree",
+      "collection": "庭院乔木_2_定义",
+      "mesh": "庭院乔木_2_网格",
+      "origin": [
+        0.2272530198097229,
+        0.07334589958190918,
+        -0.007540053687989712
+      ],
+      "dimensions": [
+        6.9494902661817,
+        6.0780363887567805,
+        7.949191486895065
+      ],
+      "triangles": 440,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "tree_2",
+      "display_name": "庭院乔木_3",
+      "family": "tree",
+      "collection": "庭院乔木_3_定义",
+      "mesh": "庭院乔木_3_网格",
+      "origin": [
+        -0.07415226846933365,
+        -0.002329748123884201,
+        -0.011233051307499409
+      ],
+      "dimensions": [
+        5.494604315459851,
+        5.745620099454743,
+        5.873096405605404
+      ],
+      "triangles": 440,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "bush_0",
+      "display_name": "地被灌木_1",
+      "family": "bush",
+      "collection": "地被灌木_1_定义",
+      "mesh": "地被灌木_1_网格",
+      "origin": [
+        -0.08046156913042068,
+        0.0009624859667383134,
+        0.13168498873710632
+      ],
+      "dimensions": [
+        2.628440238686281,
+        2.637671388748066,
+        0.8167874615832451
+      ],
+      "triangles": 56,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "bush_1",
+      "display_name": "地被灌木_2",
+      "family": "bush",
+      "collection": "地被灌木_2_定义",
+      "mesh": "地被灌木_2_网格",
+      "origin": [
+        0.09739971160888672,
+        0.21947340667247772,
+        0.28543493151664734
+      ],
+      "dimensions": [
+        3.7357176482674412,
+        2.7177289817787598,
+        1.0527008379082434
+      ],
+      "triangles": 56,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "bush_2",
+      "display_name": "地被灌木_3",
+      "family": "bush",
+      "collection": "地被灌木_3_定义",
+      "mesh": "地被灌木_3_网格",
+      "origin": [
+        0.007253578864037991,
+        -0.22638562321662903,
+        0.3273720145225525
+      ],
+      "dimensions": [
+        4.835396437831763,
+        3.780747234849868,
+        1.2221813999065567
+      ],
+      "triangles": 56,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "vine_0",
+      "display_name": "廊檐垂挂藤蔓_A",
+      "family": "vine",
+      "collection": "廊檐垂挂藤蔓_A_定义",
+      "mesh": "廊檐垂挂藤蔓_A_网格",
+      "origin": [
+        -0.063371442258358,
+        -0.006964473985135555,
+        0.6442879438400269
+      ],
+      "dimensions": [
+        4.65902556769624,
+        1.426653327673958,
+        3.163179326986551
+      ],
+      "triangles": 1872,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "vine_1",
+      "display_name": "廊檐垂挂藤蔓_B",
+      "family": "vine",
+      "collection": "廊檐垂挂藤蔓_B_定义",
+      "mesh": "廊檐垂挂藤蔓_B_网格",
+      "origin": [
+        -0.063371442258358,
+        -0.006964473985135555,
+        0.6479092240333557
+      ],
+      "dimensions": [
+        4.65902556769624,
+        1.426653327673958,
+        3.1525279634214147
+      ],
+      "triangles": 1872,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "bench",
+      "display_name": "固定花园木坐凳",
+      "family": "bench",
+      "collection": "固定花园木坐凳_定义",
+      "mesh": "固定花园木坐凳_网格",
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "dimensions": [
+        3.0,
+        0.72,
+        0.54
+      ],
+      "triangles": 196,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    {
+      "slug": "pot",
+      "display_name": "固定展示种植盆",
+      "family": "pot",
+      "collection": "固定展示种植盆_定义",
+      "mesh": "固定展示种植盆_网格",
+      "origin": [
+        0.06478490680456161,
+        0.0855276957154274,
+        0.05999999865889549
+      ],
+      "dimensions": [
+        1.8914163375471906,
+        1.6152970782815852,
+        1.4106200799473771
+      ],
+      "triangles": 92,
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "instance_id": "T42-0000",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0000",
+      "position": [
+        -75,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0001",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0001",
+      "position": [
+        -75,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0002",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0002",
+      "position": [
+        -75,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0003",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0003",
+      "position": [
+        -75,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0004",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0004",
+      "position": [
+        -75,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0005",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0005",
+      "position": [
+        -75,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0006",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0006",
+      "position": [
+        -75,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0007",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0007",
+      "position": [
+        -75,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0008",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0008",
+      "position": [
+        -75,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0009",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0009",
+      "position": [
+        -75,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0010",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0010",
+      "position": [
+        -75,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0011",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0011",
+      "position": [
+        -75,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0012",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0012",
+      "position": [
+        -75,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0013",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0013",
+      "position": [
+        -75,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0014",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0014",
+      "position": [
+        -75,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0015",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0015",
+      "position": [
+        -75,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0016",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0016",
+      "position": [
+        -69,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0017",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0017",
+      "position": [
+        -69,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0018",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0018",
+      "position": [
+        -69,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0019",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0019",
+      "position": [
+        -69,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0020",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0020",
+      "position": [
+        -69,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0021",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0021",
+      "position": [
+        -69,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0022",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0022",
+      "position": [
+        -69,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0023",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0023",
+      "position": [
+        -69,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0024",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0024",
+      "position": [
+        -69,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0025",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0025",
+      "position": [
+        -69,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0026",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0026",
+      "position": [
+        -69,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0027",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0027",
+      "position": [
+        -69,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0028",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0028",
+      "position": [
+        -69,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0029",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0029",
+      "position": [
+        -69,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0030",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0030",
+      "position": [
+        -69,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0031",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0031",
+      "position": [
+        -69,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0032",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0032",
+      "position": [
+        -63,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0033",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0033",
+      "position": [
+        -63,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0034",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0034",
+      "position": [
+        -63,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0035",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0035",
+      "position": [
+        -63,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0036",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0036",
+      "position": [
+        -63,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0037",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0037",
+      "position": [
+        -63,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0038",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0038",
+      "position": [
+        -63,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0039",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0039",
+      "position": [
+        -63,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0040",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0040",
+      "position": [
+        -63,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0041",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0041",
+      "position": [
+        -63,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0042",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0042",
+      "position": [
+        -63,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0043",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0043",
+      "position": [
+        -63,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0044",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0044",
+      "position": [
+        -63,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0045",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0045",
+      "position": [
+        -63,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0046",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0046",
+      "position": [
+        -63,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0047",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0047",
+      "position": [
+        -63,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0048",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0048",
+      "position": [
+        -57,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0049",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0049",
+      "position": [
+        -57,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0050",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0050",
+      "position": [
+        -57,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0051",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0051",
+      "position": [
+        -57,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0052",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0052",
+      "position": [
+        -57,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0053",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0053",
+      "position": [
+        -57,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0054",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0054",
+      "position": [
+        -57,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0055",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0055",
+      "position": [
+        -57,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0056",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0056",
+      "position": [
+        -57,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0057",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0057",
+      "position": [
+        -57,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0058",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0058",
+      "position": [
+        -57,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0059",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0059",
+      "position": [
+        -57,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0060",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0060",
+      "position": [
+        -57,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0061",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0061",
+      "position": [
+        -57,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0062",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0062",
+      "position": [
+        -57,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0063",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0063",
+      "position": [
+        -57,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0064",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0064",
+      "position": [
+        -51,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0065",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0065",
+      "position": [
+        -51,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0066",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0066",
+      "position": [
+        -51,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0067",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0067",
+      "position": [
+        -51,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0068",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0068",
+      "position": [
+        -51,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0069",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0069",
+      "position": [
+        -51,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0070",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0070",
+      "position": [
+        -51,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0071",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0071",
+      "position": [
+        -51,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0072",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0072",
+      "position": [
+        -51,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0073",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0073",
+      "position": [
+        -51,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0074",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0074",
+      "position": [
+        -51,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0075",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0075",
+      "position": [
+        -51,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0076",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0076",
+      "position": [
+        -51,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0077",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0077",
+      "position": [
+        -51,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0078",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0078",
+      "position": [
+        -51,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0079",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0079",
+      "position": [
+        -51,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0080",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0080",
+      "position": [
+        -45,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0081",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0081",
+      "position": [
+        -45,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0082",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0082",
+      "position": [
+        -45,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0083",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0083",
+      "position": [
+        -45,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0084",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0084",
+      "position": [
+        -45,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0085",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0085",
+      "position": [
+        -45,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0086",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0086",
+      "position": [
+        -45,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0087",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0087",
+      "position": [
+        -45,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0088",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0088",
+      "position": [
+        -45,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0089",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0089",
+      "position": [
+        -45,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0090",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0090",
+      "position": [
+        -45,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0091",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0091",
+      "position": [
+        -45,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0092",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0092",
+      "position": [
+        -45,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0093",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0093",
+      "position": [
+        -45,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0094",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0094",
+      "position": [
+        -45,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0095",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0095",
+      "position": [
+        -45,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0096",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0096",
+      "position": [
+        -39,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0097",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0097",
+      "position": [
+        -39,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0098",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0098",
+      "position": [
+        -39,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0099",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0099",
+      "position": [
+        -39,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0100",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0100",
+      "position": [
+        -39,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0101",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0101",
+      "position": [
+        -39,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0102",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0102",
+      "position": [
+        -39,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0103",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0103",
+      "position": [
+        -39,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0104",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0104",
+      "position": [
+        -39,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0105",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0105",
+      "position": [
+        -39,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0106",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0106",
+      "position": [
+        -39,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0107",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0107",
+      "position": [
+        -39,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0108",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0108",
+      "position": [
+        -39,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0109",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0109",
+      "position": [
+        -39,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0110",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0110",
+      "position": [
+        -39,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0111",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0111",
+      "position": [
+        -39,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0112",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0112",
+      "position": [
+        -33,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0113",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0113",
+      "position": [
+        -33,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0114",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0114",
+      "position": [
+        -33,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0115",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0115",
+      "position": [
+        -33,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0116",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0116",
+      "position": [
+        -33,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0117",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0117",
+      "position": [
+        -33,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0118",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0118",
+      "position": [
+        -33,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0119",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0119",
+      "position": [
+        -33,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0120",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0120",
+      "position": [
+        -33,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0121",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0121",
+      "position": [
+        -33,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0122",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0122",
+      "position": [
+        -33,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0123",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0123",
+      "position": [
+        -33,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0124",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0124",
+      "position": [
+        -33,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0125",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0125",
+      "position": [
+        -33,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0126",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0126",
+      "position": [
+        -33,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0127",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0127",
+      "position": [
+        -33,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0128",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0128",
+      "position": [
+        -27,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0129",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0129",
+      "position": [
+        -27,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0130",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0130",
+      "position": [
+        -27,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0131",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0131",
+      "position": [
+        -27,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0132",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0132",
+      "position": [
+        -27,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0133",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0133",
+      "position": [
+        -27,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0134",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0134",
+      "position": [
+        -27,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0135",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0135",
+      "position": [
+        -27,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0136",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0136",
+      "position": [
+        -27,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0137",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0137",
+      "position": [
+        -27,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0138",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0138",
+      "position": [
+        -27,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0139",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0139",
+      "position": [
+        -27,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0140",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0140",
+      "position": [
+        -27,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0141",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0141",
+      "position": [
+        -27,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0142",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0142",
+      "position": [
+        -27,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0143",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0143",
+      "position": [
+        -27,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0144",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0144",
+      "position": [
+        -21,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0145",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0145",
+      "position": [
+        -21,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0146",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0146",
+      "position": [
+        -21,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0147",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0147",
+      "position": [
+        -21,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0148",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0148",
+      "position": [
+        -21,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0149",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0149",
+      "position": [
+        -21,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0150",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0150",
+      "position": [
+        -21,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0151",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0151",
+      "position": [
+        -21,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0152",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0152",
+      "position": [
+        -21,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0153",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0153",
+      "position": [
+        -21,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0154",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0154",
+      "position": [
+        -21,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0155",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0155",
+      "position": [
+        -21,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0156",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0156",
+      "position": [
+        -21,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0157",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0157",
+      "position": [
+        -21,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0158",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0158",
+      "position": [
+        -21,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0159",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0159",
+      "position": [
+        -21,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0160",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0160",
+      "position": [
+        -15,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0161",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0161",
+      "position": [
+        -15,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0162",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0162",
+      "position": [
+        -15,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0163",
+      "definition": "water",
+      "object": "浅积水池6米_实例0163",
+      "position": [
+        -15,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0164",
+      "definition": "water",
+      "object": "浅积水池6米_实例0164",
+      "position": [
+        -15,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0165",
+      "definition": "water",
+      "object": "浅积水池6米_实例0165",
+      "position": [
+        -15,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0166",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0166",
+      "position": [
+        -15,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0167",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0167",
+      "position": [
+        -15,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0168",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0168",
+      "position": [
+        -15,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0169",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0169",
+      "position": [
+        -15,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0170",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0170",
+      "position": [
+        -15,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0171",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0171",
+      "position": [
+        -15,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0172",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0172",
+      "position": [
+        -15,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0173",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0173",
+      "position": [
+        -15,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0174",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0174",
+      "position": [
+        -15,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0175",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0175",
+      "position": [
+        -15,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0176",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0176",
+      "position": [
+        -9,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0177",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0177",
+      "position": [
+        -9,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0178",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0178",
+      "position": [
+        -9,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0179",
+      "definition": "water",
+      "object": "浅积水池6米_实例0179",
+      "position": [
+        -9,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0180",
+      "definition": "water",
+      "object": "浅积水池6米_实例0180",
+      "position": [
+        -9,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0181",
+      "definition": "water",
+      "object": "浅积水池6米_实例0181",
+      "position": [
+        -9,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0182",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0182",
+      "position": [
+        -9,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0183",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0183",
+      "position": [
+        -9,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0184",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0184",
+      "position": [
+        -9,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0185",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0185",
+      "position": [
+        -9,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0186",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0186",
+      "position": [
+        -9,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0187",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0187",
+      "position": [
+        -9,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0188",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0188",
+      "position": [
+        -9,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0189",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0189",
+      "position": [
+        -9,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0190",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0190",
+      "position": [
+        -9,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0191",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0191",
+      "position": [
+        -9,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0192",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0192",
+      "position": [
+        -3,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0193",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0193",
+      "position": [
+        -3,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0194",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0194",
+      "position": [
+        -3,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0195",
+      "definition": "water",
+      "object": "浅积水池6米_实例0195",
+      "position": [
+        -3,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0196",
+      "definition": "water",
+      "object": "浅积水池6米_实例0196",
+      "position": [
+        -3,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0197",
+      "definition": "water",
+      "object": "浅积水池6米_实例0197",
+      "position": [
+        -3,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0198",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0198",
+      "position": [
+        -3,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0199",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0199",
+      "position": [
+        -3,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0200",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0200",
+      "position": [
+        -3,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0201",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0201",
+      "position": [
+        -3,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0202",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0202",
+      "position": [
+        -3,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0203",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0203",
+      "position": [
+        -3,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0204",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0204",
+      "position": [
+        -3,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0205",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0205",
+      "position": [
+        -3,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0206",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0206",
+      "position": [
+        -3,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0207",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0207",
+      "position": [
+        -3,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0208",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0208",
+      "position": [
+        3,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0209",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0209",
+      "position": [
+        3,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0210",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0210",
+      "position": [
+        3,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0211",
+      "definition": "water",
+      "object": "浅积水池6米_实例0211",
+      "position": [
+        3,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0212",
+      "definition": "water",
+      "object": "浅积水池6米_实例0212",
+      "position": [
+        3,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0213",
+      "definition": "water",
+      "object": "浅积水池6米_实例0213",
+      "position": [
+        3,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0214",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0214",
+      "position": [
+        3,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0215",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0215",
+      "position": [
+        3,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0216",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0216",
+      "position": [
+        3,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0217",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0217",
+      "position": [
+        3,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0218",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0218",
+      "position": [
+        3,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0219",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0219",
+      "position": [
+        3,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0220",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0220",
+      "position": [
+        3,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0221",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0221",
+      "position": [
+        3,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0222",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0222",
+      "position": [
+        3,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0223",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0223",
+      "position": [
+        3,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0224",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0224",
+      "position": [
+        9,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0225",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0225",
+      "position": [
+        9,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0226",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0226",
+      "position": [
+        9,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0227",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0227",
+      "position": [
+        9,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0228",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0228",
+      "position": [
+        9,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0229",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0229",
+      "position": [
+        9,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0230",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0230",
+      "position": [
+        9,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0231",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0231",
+      "position": [
+        9,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0232",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0232",
+      "position": [
+        9,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0233",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0233",
+      "position": [
+        9,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0234",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0234",
+      "position": [
+        9,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0235",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0235",
+      "position": [
+        9,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0236",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0236",
+      "position": [
+        9,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0237",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0237",
+      "position": [
+        9,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0238",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0238",
+      "position": [
+        9,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0239",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0239",
+      "position": [
+        9,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0240",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0240",
+      "position": [
+        15,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0241",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0241",
+      "position": [
+        15,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0242",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0242",
+      "position": [
+        15,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0243",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0243",
+      "position": [
+        15,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0244",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0244",
+      "position": [
+        15,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0245",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0245",
+      "position": [
+        15,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0246",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0246",
+      "position": [
+        15,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0247",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0247",
+      "position": [
+        15,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0248",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0248",
+      "position": [
+        15,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0249",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0249",
+      "position": [
+        15,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0250",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0250",
+      "position": [
+        15,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0251",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0251",
+      "position": [
+        15,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0252",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0252",
+      "position": [
+        15,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0253",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0253",
+      "position": [
+        15,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0254",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0254",
+      "position": [
+        15,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0255",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0255",
+      "position": [
+        15,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0256",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0256",
+      "position": [
+        21,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0257",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0257",
+      "position": [
+        21,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0258",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0258",
+      "position": [
+        21,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0259",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0259",
+      "position": [
+        21,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0260",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0260",
+      "position": [
+        21,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0261",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0261",
+      "position": [
+        21,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0262",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0262",
+      "position": [
+        21,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0263",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0263",
+      "position": [
+        21,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0264",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0264",
+      "position": [
+        21,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0265",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0265",
+      "position": [
+        21,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0266",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0266",
+      "position": [
+        21,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0267",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0267",
+      "position": [
+        21,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0268",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0268",
+      "position": [
+        21,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0269",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0269",
+      "position": [
+        21,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0270",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0270",
+      "position": [
+        21,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0271",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0271",
+      "position": [
+        21,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "E_柱下铺地"
+    },
+    {
+      "instance_id": "T42-0272",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0272",
+      "position": [
+        27,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0273",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0273",
+      "position": [
+        27,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0274",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0274",
+      "position": [
+        27,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0275",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0275",
+      "position": [
+        27,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0276",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0276",
+      "position": [
+        27,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0277",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0277",
+      "position": [
+        27,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0278",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0278",
+      "position": [
+        27,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0279",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0279",
+      "position": [
+        27,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0280",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0280",
+      "position": [
+        27,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0281",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0281",
+      "position": [
+        27,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0282",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0282",
+      "position": [
+        27,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0283",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0283",
+      "position": [
+        27,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0284",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0284",
+      "position": [
+        27,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0285",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0285",
+      "position": [
+        27,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0286",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0286",
+      "position": [
+        27,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0287",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0287",
+      "position": [
+        27,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0288",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0288",
+      "position": [
+        33,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0289",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0289",
+      "position": [
+        33,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0290",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0290",
+      "position": [
+        33,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0291",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0291",
+      "position": [
+        33,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0292",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0292",
+      "position": [
+        33,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0293",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0293",
+      "position": [
+        33,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0294",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0294",
+      "position": [
+        33,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0295",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0295",
+      "position": [
+        33,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0296",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0296",
+      "position": [
+        33,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0297",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0297",
+      "position": [
+        33,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0298",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0298",
+      "position": [
+        33,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0299",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0299",
+      "position": [
+        33,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0300",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0300",
+      "position": [
+        33,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0301",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0301",
+      "position": [
+        33,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0302",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0302",
+      "position": [
+        33,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0303",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0303",
+      "position": [
+        33,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0304",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0304",
+      "position": [
+        39,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0305",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0305",
+      "position": [
+        39,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0306",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0306",
+      "position": [
+        39,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0307",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0307",
+      "position": [
+        39,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0308",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0308",
+      "position": [
+        39,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0309",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0309",
+      "position": [
+        39,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0310",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0310",
+      "position": [
+        39,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0311",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0311",
+      "position": [
+        39,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0312",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0312",
+      "position": [
+        39,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0313",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0313",
+      "position": [
+        39,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0314",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0314",
+      "position": [
+        39,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0315",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0315",
+      "position": [
+        39,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0316",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0316",
+      "position": [
+        39,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0317",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0317",
+      "position": [
+        39,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0318",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0318",
+      "position": [
+        39,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0319",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0319",
+      "position": [
+        39,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0320",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0320",
+      "position": [
+        45,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0321",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0321",
+      "position": [
+        45,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0322",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0322",
+      "position": [
+        45,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0323",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0323",
+      "position": [
+        45,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0324",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0324",
+      "position": [
+        45,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0325",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0325",
+      "position": [
+        45,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0326",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0326",
+      "position": [
+        45,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0327",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0327",
+      "position": [
+        45,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0328",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0328",
+      "position": [
+        45,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0329",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0329",
+      "position": [
+        45,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0330",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0330",
+      "position": [
+        45,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0331",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0331",
+      "position": [
+        45,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0332",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0332",
+      "position": [
+        45,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0333",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0333",
+      "position": [
+        45,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0334",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0334",
+      "position": [
+        45,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0335",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0335",
+      "position": [
+        45,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0336",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0336",
+      "position": [
+        51,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0337",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0337",
+      "position": [
+        51,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0338",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0338",
+      "position": [
+        51,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0339",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0339",
+      "position": [
+        51,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0340",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0340",
+      "position": [
+        51,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0341",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0341",
+      "position": [
+        51,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0342",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0342",
+      "position": [
+        51,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0343",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0343",
+      "position": [
+        51,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0344",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0344",
+      "position": [
+        51,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0345",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0345",
+      "position": [
+        51,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0346",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0346",
+      "position": [
+        51,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0347",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0347",
+      "position": [
+        51,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0348",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0348",
+      "position": [
+        51,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0349",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0349",
+      "position": [
+        51,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0350",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0350",
+      "position": [
+        51,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0351",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0351",
+      "position": [
+        51,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0352",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0352",
+      "position": [
+        57,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0353",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0353",
+      "position": [
+        57,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0354",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0354",
+      "position": [
+        57,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0355",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0355",
+      "position": [
+        57,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0356",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0356",
+      "position": [
+        57,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0357",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0357",
+      "position": [
+        57,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0358",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0358",
+      "position": [
+        57,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0359",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0359",
+      "position": [
+        57,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0360",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0360",
+      "position": [
+        57,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0361",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0361",
+      "position": [
+        57,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0362",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0362",
+      "position": [
+        57,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0363",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0363",
+      "position": [
+        57,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0364",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0364",
+      "position": [
+        57,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0365",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0365",
+      "position": [
+        57,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0366",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0366",
+      "position": [
+        57,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0367",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0367",
+      "position": [
+        57,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0368",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0368",
+      "position": [
+        63,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0369",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0369",
+      "position": [
+        63,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0370",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0370",
+      "position": [
+        63,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0371",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0371",
+      "position": [
+        63,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0372",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0372",
+      "position": [
+        63,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0373",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0373",
+      "position": [
+        63,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0374",
+      "definition": "soil",
+      "object": "种植土壤6米_实例0374",
+      "position": [
+        63,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0375",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0375",
+      "position": [
+        63,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0376",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0376",
+      "position": [
+        63,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0377",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0377",
+      "position": [
+        63,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0378",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0378",
+      "position": [
+        63,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0379",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0379",
+      "position": [
+        63,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0380",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0380",
+      "position": [
+        63,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0381",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0381",
+      "position": [
+        63,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0382",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0382",
+      "position": [
+        63,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0383",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0383",
+      "position": [
+        63,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0384",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0384",
+      "position": [
+        69,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0385",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0385",
+      "position": [
+        69,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0386",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0386",
+      "position": [
+        69,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0387",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0387",
+      "position": [
+        69,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0388",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0388",
+      "position": [
+        69,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0389",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0389",
+      "position": [
+        69,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0390",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0390",
+      "position": [
+        69,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0391",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0391",
+      "position": [
+        69,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0392",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0392",
+      "position": [
+        69,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0393",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0393",
+      "position": [
+        69,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0394",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0394",
+      "position": [
+        69,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0395",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0395",
+      "position": [
+        69,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0396",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0396",
+      "position": [
+        69,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0397",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0397",
+      "position": [
+        69,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0398",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0398",
+      "position": [
+        69,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0399",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0399",
+      "position": [
+        69,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0400",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0400",
+      "position": [
+        75,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0401",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0401",
+      "position": [
+        75,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0402",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0402",
+      "position": [
+        75,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0403",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0403",
+      "position": [
+        75,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0404",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0404",
+      "position": [
+        75,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0405",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0405",
+      "position": [
+        75,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0406",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0406",
+      "position": [
+        75,
+        -27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0407",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0407",
+      "position": [
+        75,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0408",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0408",
+      "position": [
+        75,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0409",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0409",
+      "position": [
+        75,
+        -9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0410",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0410",
+      "position": [
+        75,
+        -3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0411",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0411",
+      "position": [
+        75,
+        3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0412",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0412",
+      "position": [
+        75,
+        9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0413",
+      "definition": "paving_1",
+      "object": "庭院铺地6米_开裂_实例0413",
+      "position": [
+        75,
+        15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0414",
+      "definition": "paving_0",
+      "object": "庭院铺地6米_整洁残留_实例0414",
+      "position": [
+        75,
+        21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0415",
+      "definition": "paving_2",
+      "object": "庭院铺地6米_返野积水_实例0415",
+      "position": [
+        75,
+        27,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0416",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0416",
+      "position": [
+        -15,
+        -48,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0417",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0417",
+      "position": [
+        -9,
+        -48,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0418",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0418",
+      "position": [
+        -3,
+        -48,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0419",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0419",
+      "position": [
+        3,
+        -48,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0420",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0420",
+      "position": [
+        -15,
+        -30,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0421",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0421",
+      "position": [
+        -9,
+        -30,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0422",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0422",
+      "position": [
+        -3,
+        -30,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0423",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0423",
+      "position": [
+        3,
+        -30,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0424",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0424",
+      "position": [
+        -18,
+        -45,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0425",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0425",
+      "position": [
+        -18,
+        -39,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0426",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0426",
+      "position": [
+        -18,
+        -33,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0427",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0427",
+      "position": [
+        6,
+        -45,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0428",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0428",
+      "position": [
+        6,
+        -39,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0429",
+      "definition": "curb",
+      "object": "池岸压顶6米_实例0429",
+      "position": [
+        6,
+        -33,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0430",
+      "definition": "drain",
+      "object": "排水槽6米_实例0430",
+      "position": [
+        -69,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0431",
+      "definition": "drain",
+      "object": "排水槽6米_实例0431",
+      "position": [
+        -69,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0432",
+      "definition": "drain",
+      "object": "排水槽6米_实例0432",
+      "position": [
+        -63,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0433",
+      "definition": "drain",
+      "object": "排水槽6米_实例0433",
+      "position": [
+        -63,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0434",
+      "definition": "drain",
+      "object": "排水槽6米_实例0434",
+      "position": [
+        -57,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0435",
+      "definition": "drain",
+      "object": "排水槽6米_实例0435",
+      "position": [
+        -57,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0436",
+      "definition": "drain",
+      "object": "排水槽6米_实例0436",
+      "position": [
+        -51,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0437",
+      "definition": "drain",
+      "object": "排水槽6米_实例0437",
+      "position": [
+        -51,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0438",
+      "definition": "drain",
+      "object": "排水槽6米_实例0438",
+      "position": [
+        -45,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0439",
+      "definition": "drain",
+      "object": "排水槽6米_实例0439",
+      "position": [
+        -45,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0440",
+      "definition": "drain",
+      "object": "排水槽6米_实例0440",
+      "position": [
+        -39,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0441",
+      "definition": "drain",
+      "object": "排水槽6米_实例0441",
+      "position": [
+        -39,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0442",
+      "definition": "drain",
+      "object": "排水槽6米_实例0442",
+      "position": [
+        -33,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0443",
+      "definition": "drain",
+      "object": "排水槽6米_实例0443",
+      "position": [
+        -33,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0444",
+      "definition": "drain",
+      "object": "排水槽6米_实例0444",
+      "position": [
+        -27,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0445",
+      "definition": "drain",
+      "object": "排水槽6米_实例0445",
+      "position": [
+        -27,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0446",
+      "definition": "drain",
+      "object": "排水槽6米_实例0446",
+      "position": [
+        -21,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0447",
+      "definition": "drain",
+      "object": "排水槽6米_实例0447",
+      "position": [
+        -21,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0448",
+      "definition": "drain",
+      "object": "排水槽6米_实例0448",
+      "position": [
+        -15,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0449",
+      "definition": "drain",
+      "object": "排水槽6米_实例0449",
+      "position": [
+        -15,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0450",
+      "definition": "drain",
+      "object": "排水槽6米_实例0450",
+      "position": [
+        -9,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0451",
+      "definition": "drain",
+      "object": "排水槽6米_实例0451",
+      "position": [
+        -9,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0452",
+      "definition": "drain",
+      "object": "排水槽6米_实例0452",
+      "position": [
+        -3,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0453",
+      "definition": "drain",
+      "object": "排水槽6米_实例0453",
+      "position": [
+        -3,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0454",
+      "definition": "drain",
+      "object": "排水槽6米_实例0454",
+      "position": [
+        3,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0455",
+      "definition": "drain",
+      "object": "排水槽6米_实例0455",
+      "position": [
+        3,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0456",
+      "definition": "drain",
+      "object": "排水槽6米_实例0456",
+      "position": [
+        9,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0457",
+      "definition": "drain",
+      "object": "排水槽6米_实例0457",
+      "position": [
+        9,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0458",
+      "definition": "drain",
+      "object": "排水槽6米_实例0458",
+      "position": [
+        15,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0459",
+      "definition": "drain",
+      "object": "排水槽6米_实例0459",
+      "position": [
+        15,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0460",
+      "definition": "drain",
+      "object": "排水槽6米_实例0460",
+      "position": [
+        21,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0461",
+      "definition": "drain",
+      "object": "排水槽6米_实例0461",
+      "position": [
+        21,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0462",
+      "definition": "drain",
+      "object": "排水槽6米_实例0462",
+      "position": [
+        27,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0463",
+      "definition": "drain",
+      "object": "排水槽6米_实例0463",
+      "position": [
+        27,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0464",
+      "definition": "drain",
+      "object": "排水槽6米_实例0464",
+      "position": [
+        33,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0465",
+      "definition": "drain",
+      "object": "排水槽6米_实例0465",
+      "position": [
+        33,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0466",
+      "definition": "drain",
+      "object": "排水槽6米_实例0466",
+      "position": [
+        39,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0467",
+      "definition": "drain",
+      "object": "排水槽6米_实例0467",
+      "position": [
+        39,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0468",
+      "definition": "drain",
+      "object": "排水槽6米_实例0468",
+      "position": [
+        45,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0469",
+      "definition": "drain",
+      "object": "排水槽6米_实例0469",
+      "position": [
+        45,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0470",
+      "definition": "drain",
+      "object": "排水槽6米_实例0470",
+      "position": [
+        51,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0471",
+      "definition": "drain",
+      "object": "排水槽6米_实例0471",
+      "position": [
+        51,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0472",
+      "definition": "drain",
+      "object": "排水槽6米_实例0472",
+      "position": [
+        57,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0473",
+      "definition": "drain",
+      "object": "排水槽6米_实例0473",
+      "position": [
+        57,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0474",
+      "definition": "drain",
+      "object": "排水槽6米_实例0474",
+      "position": [
+        63,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0475",
+      "definition": "drain",
+      "object": "排水槽6米_实例0475",
+      "position": [
+        63,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0476",
+      "definition": "drain",
+      "object": "排水槽6米_实例0476",
+      "position": [
+        69,
+        -24,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0477",
+      "definition": "drain",
+      "object": "排水槽6米_实例0477",
+      "position": [
+        69,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0478",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0478",
+      "position": [
+        -66,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0479",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0479",
+      "position": [
+        -66,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0480",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0480",
+      "position": [
+        -66,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0481",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0481",
+      "position": [
+        -69,
+        -63,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0482",
+      "definition": "vine_0",
+      "object": "廊檐垂挂藤蔓_A_实例0482",
+      "position": [
+        -66,
+        -59.7,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0483",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0483",
+      "position": [
+        -60,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0484",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0484",
+      "position": [
+        -60,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0485",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0485",
+      "position": [
+        -60,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0486",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0486",
+      "position": [
+        -54,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0487",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0487",
+      "position": [
+        -54,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0488",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0488",
+      "position": [
+        -54,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0489",
+      "definition": "vine_0",
+      "object": "廊檐垂挂藤蔓_A_实例0489",
+      "position": [
+        -54,
+        -59.7,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0490",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0490",
+      "position": [
+        -48,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0491",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0491",
+      "position": [
+        -48,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0492",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0492",
+      "position": [
+        -48,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0493",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0493",
+      "position": [
+        -42,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0494",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0494",
+      "position": [
+        -42,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0495",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0495",
+      "position": [
+        -42,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0496",
+      "definition": "vine_0",
+      "object": "廊檐垂挂藤蔓_A_实例0496",
+      "position": [
+        -42,
+        -59.7,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0497",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0497",
+      "position": [
+        -36,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0498",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0498",
+      "position": [
+        -36,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0499",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0499",
+      "position": [
+        -36,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0500",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0500",
+      "position": [
+        -33,
+        -63,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0501",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0501",
+      "position": [
+        -66,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0502",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0502",
+      "position": [
+        -60,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0503",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0503",
+      "position": [
+        -54,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0504",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0504",
+      "position": [
+        -48,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0505",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0505",
+      "position": [
+        -42,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0506",
+      "definition": "column",
+      "object": "廊架立柱_实例0506",
+      "position": [
+        -69,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0507",
+      "definition": "column",
+      "object": "廊架立柱_实例0507",
+      "position": [
+        -69,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0508",
+      "definition": "column",
+      "object": "廊架立柱_实例0508",
+      "position": [
+        -63,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0509",
+      "definition": "column",
+      "object": "廊架立柱_实例0509",
+      "position": [
+        -63,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0510",
+      "definition": "column",
+      "object": "廊架立柱_实例0510",
+      "position": [
+        -57,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0511",
+      "definition": "column",
+      "object": "廊架立柱_实例0511",
+      "position": [
+        -57,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0512",
+      "definition": "column",
+      "object": "廊架立柱_实例0512",
+      "position": [
+        -51,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0513",
+      "definition": "column",
+      "object": "廊架立柱_实例0513",
+      "position": [
+        -51,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0514",
+      "definition": "column",
+      "object": "廊架立柱_实例0514",
+      "position": [
+        -45,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0515",
+      "definition": "column",
+      "object": "廊架立柱_实例0515",
+      "position": [
+        -45,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0516",
+      "definition": "column",
+      "object": "廊架立柱_实例0516",
+      "position": [
+        -39,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0517",
+      "definition": "column",
+      "object": "廊架立柱_实例0517",
+      "position": [
+        -39,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0518",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0518",
+      "position": [
+        24,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0519",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0519",
+      "position": [
+        24,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0520",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0520",
+      "position": [
+        24,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0521",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0521",
+      "position": [
+        21,
+        -63,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0522",
+      "definition": "vine_0",
+      "object": "廊檐垂挂藤蔓_A_实例0522",
+      "position": [
+        24,
+        -59.7,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0523",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0523",
+      "position": [
+        30,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0524",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0524",
+      "position": [
+        30,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0525",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0525",
+      "position": [
+        30,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0526",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0526",
+      "position": [
+        36,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0527",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0527",
+      "position": [
+        36,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0528",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0528",
+      "position": [
+        36,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0529",
+      "definition": "vine_0",
+      "object": "廊檐垂挂藤蔓_A_实例0529",
+      "position": [
+        36,
+        -59.7,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0530",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0530",
+      "position": [
+        42,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0531",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0531",
+      "position": [
+        42,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0532",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0532",
+      "position": [
+        42,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0533",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0533",
+      "position": [
+        48,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0534",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0534",
+      "position": [
+        48,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0535",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0535",
+      "position": [
+        48,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0536",
+      "definition": "vine_0",
+      "object": "廊檐垂挂藤蔓_A_实例0536",
+      "position": [
+        48,
+        -59.7,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0537",
+      "definition": "roof",
+      "object": "低层屋顶6米_实例0537",
+      "position": [
+        54,
+        -63,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0538",
+      "definition": "window",
+      "object": "破损玻璃店面6米_实例0538",
+      "position": [
+        54,
+        -60,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0539",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0539",
+      "position": [
+        54,
+        -66,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0540",
+      "definition": "wall",
+      "object": "低层店铺实墙6米_实例0540",
+      "position": [
+        57,
+        -63,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0541",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0541",
+      "position": [
+        24,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0542",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0542",
+      "position": [
+        30,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0543",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0543",
+      "position": [
+        36,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0544",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0544",
+      "position": [
+        42,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0545",
+      "definition": "pergola",
+      "object": "透空廊架顶6米_实例0545",
+      "position": [
+        48,
+        -54,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0546",
+      "definition": "column",
+      "object": "廊架立柱_实例0546",
+      "position": [
+        21,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0547",
+      "definition": "column",
+      "object": "廊架立柱_实例0547",
+      "position": [
+        21,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0548",
+      "definition": "column",
+      "object": "廊架立柱_实例0548",
+      "position": [
+        27,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0549",
+      "definition": "column",
+      "object": "廊架立柱_实例0549",
+      "position": [
+        27,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0550",
+      "definition": "column",
+      "object": "廊架立柱_实例0550",
+      "position": [
+        33,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0551",
+      "definition": "column",
+      "object": "廊架立柱_实例0551",
+      "position": [
+        33,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0552",
+      "definition": "column",
+      "object": "廊架立柱_实例0552",
+      "position": [
+        39,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0553",
+      "definition": "column",
+      "object": "廊架立柱_实例0553",
+      "position": [
+        39,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0554",
+      "definition": "column",
+      "object": "廊架立柱_实例0554",
+      "position": [
+        45,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0555",
+      "definition": "column",
+      "object": "廊架立柱_实例0555",
+      "position": [
+        45,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0556",
+      "definition": "column",
+      "object": "廊架立柱_实例0556",
+      "position": [
+        51,
+        -57,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0557",
+      "definition": "column",
+      "object": "廊架立柱_实例0557",
+      "position": [
+        51,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "C_南缘低层连廊"
+    },
+    {
+      "instance_id": "T42-0558",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0558",
+      "position": [
+        -66,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0559",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0559",
+      "position": [
+        -68.4,
+        -43.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0560",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0560",
+      "position": [
+        -63.9,
+        -46.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0561",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0561",
+      "position": [
+        -65.7,
+        -42.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0562",
+      "definition": "tree_1",
+      "object": "庭院乔木_2_实例0562",
+      "position": [
+        -66,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0563",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0563",
+      "position": [
+        -68.4,
+        -31.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0564",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0564",
+      "position": [
+        -63.9,
+        -34.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0565",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0565",
+      "position": [
+        -65.7,
+        -30.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0566",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0566",
+      "position": [
+        -54,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0567",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0567",
+      "position": [
+        -56.4,
+        -43.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0568",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0568",
+      "position": [
+        -51.9,
+        -46.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0569",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0569",
+      "position": [
+        -53.7,
+        -42.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0570",
+      "definition": "tree_1",
+      "object": "庭院乔木_2_实例0570",
+      "position": [
+        -54,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0571",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0571",
+      "position": [
+        -56.4,
+        -31.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0572",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0572",
+      "position": [
+        -51.9,
+        -34.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0573",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0573",
+      "position": [
+        -53.7,
+        -30.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0574",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0574",
+      "position": [
+        30,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0575",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0575",
+      "position": [
+        27.6,
+        -43.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0576",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0576",
+      "position": [
+        32.1,
+        -46.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0577",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0577",
+      "position": [
+        30.3,
+        -42.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0578",
+      "definition": "tree_1",
+      "object": "庭院乔木_2_实例0578",
+      "position": [
+        30,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0579",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0579",
+      "position": [
+        27.6,
+        -31.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0580",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0580",
+      "position": [
+        32.1,
+        -34.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0581",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0581",
+      "position": [
+        30.3,
+        -30.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0582",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0582",
+      "position": [
+        42,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0583",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0583",
+      "position": [
+        39.6,
+        -43.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0584",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0584",
+      "position": [
+        44.1,
+        -46.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0585",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0585",
+      "position": [
+        42.3,
+        -42.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0586",
+      "definition": "tree_1",
+      "object": "庭院乔木_2_实例0586",
+      "position": [
+        42,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0587",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0587",
+      "position": [
+        39.6,
+        -31.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0588",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0588",
+      "position": [
+        44.1,
+        -34.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0589",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0589",
+      "position": [
+        42.3,
+        -30.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0590",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0590",
+      "position": [
+        54,
+        -45,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0591",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0591",
+      "position": [
+        51.6,
+        -43.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0592",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0592",
+      "position": [
+        56.1,
+        -46.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0593",
+      "definition": "bush_0",
+      "object": "地被灌木_1_实例0593",
+      "position": [
+        54.3,
+        -42.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0594",
+      "definition": "tree_1",
+      "object": "庭院乔木_2_实例0594",
+      "position": [
+        54,
+        -33,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0595",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0595",
+      "position": [
+        51.6,
+        -31.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0596",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0596",
+      "position": [
+        56.1,
+        -34.9,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0597",
+      "definition": "bush_1",
+      "object": "地被灌木_2_实例0597",
+      "position": [
+        54.3,
+        -30.2,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0598",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0598",
+      "position": [
+        -69,
+        -12,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0599",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0599",
+      "position": [
+        -57,
+        -12,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0600",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0600",
+      "position": [
+        -45,
+        -12,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0601",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0601",
+      "position": [
+        -69,
+        0,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0602",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0602",
+      "position": [
+        -45,
+        0,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "A_圆楼柱下花园"
+    },
+    {
+      "instance_id": "T42-0603",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0603",
+      "position": [
+        15,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0604",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0604",
+      "position": [
+        15,
+        -51,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0605",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0605",
+      "position": [
+        69,
+        -39,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0606",
+      "definition": "tree_0",
+      "object": "庭院乔木_1_实例0606",
+      "position": [
+        69,
+        -15,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "D_东侧林荫步道"
+    },
+    {
+      "instance_id": "T42-0607",
+      "definition": "planter",
+      "object": "带状返野花池6米_实例0607",
+      "position": [
+        -66,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0608",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0608",
+      "position": [
+        -66,
+        -19.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0609",
+      "definition": "planter",
+      "object": "带状返野花池6米_实例0609",
+      "position": [
+        -54,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0610",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0610",
+      "position": [
+        -54,
+        -19.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0611",
+      "definition": "planter",
+      "object": "带状返野花池6米_实例0611",
+      "position": [
+        -42,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0612",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0612",
+      "position": [
+        -42,
+        -19.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0613",
+      "definition": "planter",
+      "object": "带状返野花池6米_实例0613",
+      "position": [
+        24,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0614",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0614",
+      "position": [
+        24,
+        -19.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0615",
+      "definition": "planter",
+      "object": "带状返野花池6米_实例0615",
+      "position": [
+        36,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0616",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0616",
+      "position": [
+        36,
+        -19.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0617",
+      "definition": "planter",
+      "object": "带状返野花池6米_实例0617",
+      "position": [
+        48,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0618",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0618",
+      "position": [
+        48,
+        -19.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0619",
+      "definition": "planter",
+      "object": "带状返野花池6米_实例0619",
+      "position": [
+        60,
+        -21,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0620",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0620",
+      "position": [
+        60,
+        -19.3,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0621",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0621",
+      "position": [
+        -30,
+        -51,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0622",
+      "definition": "pot",
+      "object": "固定展示种植盆_实例0622",
+      "position": [
+        -30,
+        -48.8,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0623",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0623",
+      "position": [
+        -30,
+        -39,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0624",
+      "definition": "pot",
+      "object": "固定展示种植盆_实例0624",
+      "position": [
+        -30,
+        -36.8,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0625",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0625",
+      "position": [
+        -30,
+        -27,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0626",
+      "definition": "pot",
+      "object": "固定展示种植盆_实例0626",
+      "position": [
+        -30,
+        -24.8,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0627",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0627",
+      "position": [
+        18,
+        -51,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0628",
+      "definition": "pot",
+      "object": "固定展示种植盆_实例0628",
+      "position": [
+        18,
+        -48.8,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0629",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0629",
+      "position": [
+        18,
+        -39,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0630",
+      "definition": "pot",
+      "object": "固定展示种植盆_实例0630",
+      "position": [
+        18,
+        -36.8,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0631",
+      "definition": "bench",
+      "object": "固定花园木坐凳_实例0631",
+      "position": [
+        18,
+        -27,
+        0
+      ],
+      "rotation_z": 1.5707963267948966,
+      "zone": "B_中央积水庭院"
+    },
+    {
+      "instance_id": "T42-0632",
+      "definition": "pot",
+      "object": "固定展示种植盆_实例0632",
+      "position": [
+        18,
+        -24.8,
+        0
+      ],
+      "rotation_z": 0,
+      "zone": "B_中央积水庭院"
+    }
+  ],
+  "definition_count": 23,
+  "instance_count": 633,
+  "visible_triangles": 44444,
+  "bounds": [
+    [
+      -78,
+      -66,
+      -0.5
+    ],
+    [
+      78,
+      30,
+      10
+    ]
+  ],
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_ground_court.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-2",
+  "block_id": "open_world",
+  "floor_range": "地面庭院Z=0",
+  "runtime_verified": false,
+  "source_sha256": "f4f212b30eac0fba349e1e13235cdd8b95f5566082fe3eb98095976fa0daa6b8"
+}

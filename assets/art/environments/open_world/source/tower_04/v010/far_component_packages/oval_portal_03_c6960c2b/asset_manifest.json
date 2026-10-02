@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_portal_03_c6960c2b",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "左楼圆角跨层混凝土门形肋_03_主体",
+  "collection": [
+    "左楼圆角跨层混凝土门形肋_03_资产包"
+  ],
+  "source_package": "tower_04/oval_portal_03",
+  "origin": [
+    -70.74168395996094,
+    0.8500412702560425,
+    14.300000190734863
+  ],
+  "dimensions": [
+    4.3107147216796875,
+    5.53530216217041,
+    10.119999885559082
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -72.89704132080078,
+    -1.9176098108291626,
+    14.300000190734863
+  ],
+  "bounds_max": [
+    -68.5863265991211,
+    3.617692470550537,
+    24.420000076293945
+  ],
+  "triangles": 228,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

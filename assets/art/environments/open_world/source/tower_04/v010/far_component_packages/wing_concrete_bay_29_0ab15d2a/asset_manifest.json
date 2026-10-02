@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/wing_concrete_bay_29_0ab15d2a",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "wing_内退窗带与宽混凝土实墙_29_主体",
+  "collection": [
+    "wing_内退窗带与宽混凝土实墙_29_资产包"
+  ],
+  "source_package": "tower_04/wing_concrete_bay_29",
+  "origin": [
+    2.210080862045288,
+    3.241001844406128,
+    0.0
+  ],
+  "dimensions": [
+    2.214484691619873,
+    5.744311809539795,
+    23.799999237060547
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    1.1028385162353516,
+    0.36884593963623047,
+    0.0
+  ],
+  "bounds_max": [
+    3.3173232078552246,
+    6.113157749176025,
+    23.799999237060547
+  ],
+  "triangles": 523,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

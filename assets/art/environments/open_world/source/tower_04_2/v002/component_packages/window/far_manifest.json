@@ -1,0 +1,29 @@
+{
+  "slug": "window",
+  "display_name": "破损玻璃店面6米",
+  "family": "window",
+  "collection": "破损玻璃店面6米_定义",
+  "mesh": "破损玻璃店面6米_网格",
+  "origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "dimensions": [
+    6.35,
+    0.48,
+    3.5
+  ],
+  "triangles": 188,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "asset_id": "ENV-OPENWORLD-TOWER04-2",
+  "version": "v002",
+  "lod": "far",
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_远景组件_v002.blend",
+  "collision_status": "not_authored",
+  "exported": false
+}

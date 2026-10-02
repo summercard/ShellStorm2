@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "sources": [
+    {
+      "path": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+      "sha256": "0bb75c204fbfee537c815bb58c3a8807fb1c3ee4b3dc43079ada888558ab3a98",
+      "bytes": 974274986
+    },
+    {
+      "path": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+      "sha256": "6cd8f1c4002495f361e5671602eb4c44182317122fe175f9c00b22c68dd439f3",
+      "bytes": 67122422
+    },
+    {
+      "path": "assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_近景庭院_v002.blend",
+      "sha256": "211c8dc5ee546299f5478c9d23f3a219f2b7e3488868ad503f8dfbc459ce7da2",
+      "bytes": 6449578
+    },
+    {
+      "path": "assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_远景组件_v002.blend",
+      "sha256": "dfd204d2289215978ef91954cd15912240f9870dfddf2af2aaeb551c3451fe5c",
+      "bytes": 3476680
+    }
+  ],
+  "scope": "Blender制作源及优化LOD源；不包含Godot接入",
+  "checks": {
+    "saved_structure_and_uv": true,
+    "ledger_structure_exit_code": 0,
+    "ledger_split_exit_code": 0,
+    "existing_full_ledger_sha_issues_unchanged": 153,
+    "documentation_remaining": [
+      "verify_base99_swivel_chairs未登记",
+      "verify_expedition01_spawn_ramp未登记",
+      "verify_pushable_base_chairs未登记"
+    ],
+    "runtime_naming_existing_versioned_files": 14
+  },
+  "notes": [
+    "同一轮新增文件以当前catalog/source_sha256为准。",
+    "v009与庭院v001保留；过程备份位于_scratch/tower04_v010。",
+    "geometry预算通过不是游戏帧率验收。"
+  ]
+}

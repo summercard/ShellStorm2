@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/steel_drum_06_98ec0c75",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "金属储物桶_卷边加强圈与封口_06_主体",
+  "collection": [
+    "金属储物桶_卷边加强圈与封口_06_资产包"
+  ],
+  "source_package": "tower_04/steel_drum_06",
+  "origin": [
+    -65.69999694824219,
+    20.299999237060547,
+    25.099000930786133
+  ],
+  "dimensions": [
+    0.753997802734375,
+    0.7540016174316406,
+    1.0509986877441406
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -66.07699584960938,
+    19.922998428344727,
+    25.099000930786133
+  ],
+  "bounds_max": [
+    -65.322998046875,
+    20.677000045776367,
+    26.149999618530273
+  ],
+  "triangles": 419,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

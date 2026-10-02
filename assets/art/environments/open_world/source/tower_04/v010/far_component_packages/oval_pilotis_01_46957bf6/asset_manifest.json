@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_pilotis_01_46957bf6",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "架空混凝土大柱_oval_pilotis_01_主体",
+  "collection": [
+    "架空混凝土大柱_oval_pilotis_01_资产包"
+  ],
+  "source_package": "tower_04/oval_pilotis_01",
+  "origin": [
+    -56.52000045776367,
+    3.2149996757507324,
+    0.03999999910593033
+  ],
+  "dimensions": [
+    2.5400009155273438,
+    2.5399997234344482,
+    8.460000038146973
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -57.790000915527344,
+    1.9449999332427979,
+    0.03999999910593033
+  ],
+  "bounds_max": [
+    -55.25,
+    4.484999656677246,
+    8.5
+  ],
+  "triangles": 460,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

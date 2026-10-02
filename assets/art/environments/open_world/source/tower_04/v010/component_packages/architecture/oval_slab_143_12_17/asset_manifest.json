@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_slab_143_12_17",
+  "slug": "oval_slab_143_12_17",
+  "display_name": "oval_slab_143_独立楼板_-8_-3",
+  "category": "architecture",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "oval_slab_143_独立楼板_-8_-3_资产包",
+  "source_collection": "oval_slab_143_独立楼板_-8_-3_制作组件",
+  "objects": [
+    "oval_slab_143_独立楼板_-8_-3_主体"
+  ],
+  "root_object": "oval_slab_143_独立楼板_-8_-3_主体",
+  "world_position": [
+    -60.0,
+    -20.0,
+    13.5
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -64.0,
+    -17.680105209350586,
+    13.5
+  ],
+  "bounds_max": [
+    -56.0,
+    -16.0,
+    14.3
+  ],
+  "dimensions": [
+    8.0,
+    1.680105209350586,
+    0.8000000000000007
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "raised_curved_slab",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_slab_143_12_17.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

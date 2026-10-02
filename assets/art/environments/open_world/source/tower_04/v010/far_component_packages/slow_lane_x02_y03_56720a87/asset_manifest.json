@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/slow_lane_x02_y03_56720a87",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "两米跑道_邻色分段与实体_区块02_03_主体",
+  "collection": [
+    "两米跑道_邻色分段与实体_区块02_03_资产包"
+  ],
+  "source_package": "tower_04/slow_lane_x02_y03",
+  "origin": [
+    -49.994056701660156,
+    13.58781623840332,
+    25.0059871673584
+  ],
+  "dimensions": [
+    10.015439987182617,
+    2.858227252960205,
+    0.22799204289913177
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -55.001773834228516,
+    12.158702850341797,
+    25.0059871673584
+  ],
+  "bounds_max": [
+    -44.98633575439453,
+    15.016929626464844,
+    25.233978271484375
+  ],
+  "triangles": 205,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

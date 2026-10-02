@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/overgrown_oval_edge_000",
+  "slug": "overgrown_oval_edge_000",
+  "display_name": "oval_屋顶侵占与垂挂_000",
+  "category": "garden",
+  "version": "v008",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v008/塔4_植被侵占破损商城_150x50m_v008.blend",
+  "collection": "oval_屋顶侵占与垂挂_000_资产包",
+  "source_collection": "oval_屋顶侵占与垂挂_000_制作组件",
+  "objects": [
+    "oval_屋顶侵占与垂挂_000_主体"
+  ],
+  "root_object": "oval_屋顶侵占与垂挂_000_主体",
+  "world_position": [
+    -40.11201477050781,
+    -3.8440418243408203,
+    25.18000030517578
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -41.76886749267578,
+    -5.937528610229492,
+    18.98876190185547
+  ],
+  "bounds_max": [
+    -38.7043342590332,
+    -1.3022233247756958,
+    26.216991424560547
+  ],
+  "dimensions": [
+    3.064533233642578,
+    4.635305285453796,
+    7.228229522705078
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "overgrown_roof_edge",
+  "dependencies": [
+    "tower_04/oval_roof_x03_y02"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "overgrown_oval_edge_000.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "overgrown_roof_edge"
+}

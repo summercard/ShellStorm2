@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/main_walk_x00_y04",
+  "slug": "main_walk_x00_y04",
+  "display_name": "主步道花池贴边_齐平灰色_区块00_04",
+  "category": "floor",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "主步道花池贴边_齐平灰色_区块00_04_资产包",
+  "source_collection": "主步道花池贴边_齐平灰色_区块00_04_制作组件",
+  "objects": [
+    "主步道花池贴边_齐平灰色_区块00_04_主体"
+  ],
+  "root_object": "主步道花池贴边_齐平灰色_区块00_04_主体",
+  "world_position": [
+    -70.0,
+    20.0,
+    25.02199935913086
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -70.56658935546875,
+    15.03341293334961,
+    25.02199935913086
+  ],
+  "bounds_max": [
+    -65.0,
+    24.514845117249735,
+    25.054000854492188
+  ],
+  "dimensions": [
+    5.56658935546875,
+    9.481432183900125,
+    0.032001495361328125
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "walkway_planter_apron",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "main_walk_x00_y04.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "zone_id": "A",
+  "zone_name": "入口广场",
+  "previous_package_id": "tower_04/main_walk",
+  "assembly_grid": [
+    0,
+    4
+  ],
+  "cut_bounds_xy": [
+    -75,
+    15,
+    -65,
+    25
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "platform_scope": true
+}

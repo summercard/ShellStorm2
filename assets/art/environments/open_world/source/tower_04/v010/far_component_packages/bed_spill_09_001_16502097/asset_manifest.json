@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/bed_spill_09_001_16502097",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "花池溢生叶丛_09_001_主体",
+  "collection": [
+    "花池溢生叶丛_09_001_资产包"
+  ],
+  "source_package": "tower_04/bed_spill_09_001",
+  "origin": [
+    26.9447021484375,
+    1.9833428859710693,
+    24.982574462890625
+  ],
+  "dimensions": [
+    2.3595542907714844,
+    1.9406195878982544,
+    1.2728843688964844
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    25.764925003051758,
+    1.0130330324172974,
+    24.982574462890625
+  ],
+  "bounds_max": [
+    28.124479293823242,
+    2.9536526203155518,
+    26.25545883178711
+  ],
+  "triangles": 304,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

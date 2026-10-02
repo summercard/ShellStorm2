@@ -1,0 +1,68 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/bollard_03",
+  "slug": "bollard_03",
+  "display_name": "步道照明_03_百叶透光基座",
+  "category": "facilities",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "步道照明_03_百叶透光基座_资产包",
+  "source_collection": "步道照明_03_百叶透光基座_制作组件",
+  "objects": [
+    "步道照明_03_百叶透光基座_主体",
+    "步道照明_03_百叶透光基座_柔和自发光"
+  ],
+  "root_object": "步道照明_03_百叶透光基座_主体",
+  "world_position": [
+    20.040000915527344,
+    -14.399999618530273,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    19.790000915527344,
+    -14.649999618530273,
+    25.0
+  ],
+  "bounds_max": [
+    20.290000915527344,
+    -14.149999618530273,
+    26.229999542236328
+  ],
+  "dimensions": [
+    0.5,
+    0.5,
+    1.2299995422363281
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": true,
+  "component_definition": "lighting_bollard",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "bollard_03.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "C",
+  "zone_name": "中央花池与棚下东段",
+  "previous_package_id": "tower_04/bollard_03",
+  "platform_scope": true
+}

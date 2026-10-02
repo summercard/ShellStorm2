@@ -1,0 +1,58 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/raised_bay_22",
+  "slug": "raised_bay_22",
+  "display_name": "圆楼加层窗墙开间_22",
+  "category": "architecture",
+  "version": "v010",
+  "component_revision": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "圆楼加层窗墙开间_22_资产包",
+  "source_collection": "圆楼加层窗墙开间_22_制作源",
+  "objects": [
+    "圆楼加层窗墙开间_22"
+  ],
+  "root_object": "圆楼加层窗墙开间_22",
+  "world_position": [
+    -41.63539505004883,
+    -9.80776596069336,
+    25.05500030517578
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "dimensions": [
+    2.009002685546875,
+    3.314467430114746,
+    4.774232864379883
+  ],
+  "bounds_min": [
+    -42.639896392822266,
+    -11.464999675750732,
+    25.05500030517578
+  ],
+  "bounds_max": [
+    -40.63089370727539,
+    -8.150532245635986,
+    29.829233169555664
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "component_definition": "raised_storey_window",
+  "dependencies": [],
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "floor_range": "25–30m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_ground_court.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

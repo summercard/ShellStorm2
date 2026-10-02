@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_roof_x02_y03",
+  "slug": "oval_roof_x02_y03",
+  "display_name": "左楼屋顶_回旋缺口及同标_区块02_03",
+  "category": "floor",
+  "version": "v006",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v006/塔4_末世平台模块化_150x50m_v006.blend",
+  "collection": "左楼屋顶_回旋缺口及同标_区块02_03_资产包",
+  "source_collection": "左楼屋顶_回旋缺口及同标_区块02_03_制作组件",
+  "objects": [
+    "左楼屋顶_回旋缺口及同标_区块02_03_主体"
+  ],
+  "root_object": "左楼屋顶_回旋缺口及同标_区块02_03_主体",
+  "world_position": [
+    -50.0,
+    10.0,
+    24.780000686645508
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -55.0,
+    5.0,
+    24.780000686645508
+  ],
+  "bounds_max": [
+    -46.81998424837156,
+    7.334482458471397,
+    25.10999870300293
+  ],
+  "dimensions": [
+    8.180015751628439,
+    2.3344824584713972,
+    0.3299980163574219
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "elliptic_roof_curb",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_roof_x02_y03.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v006",
+  "zone_id": "A",
+  "zone_name": "入口广场",
+  "previous_package_id": "tower_04/oval_roof",
+  "assembly_grid": [
+    2,
+    3
+  ],
+  "cut_bounds_xy": [
+    -55,
+    5,
+    -45,
+    15
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "platform_scope": true
+}

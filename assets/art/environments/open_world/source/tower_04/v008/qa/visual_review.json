@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "scope": "制作方对本轮高覆盖植被修订的自检；不代表用户认可或与效果图完全一致",
+  "review_date": "2026-10-02",
+  "source_sha256": "f7ae1a6f5904bf23a06f9b8d3b574a7b6c724fb9df8397c23ad27d45d23a1ce1",
+  "user_visual_confirmation": "pending",
+  "full_reference_match": false,
+  "criteria": {
+    "dense_canopy_is_visual_focus": true,
+    "column_roof_facade_growth": true,
+    "irregular_broadleaf_drapes": true,
+    "visible_nonstructural_damage": true,
+    "original_routes_readable": true
+  },
+  "images": [
+    {
+      "path": "previews/01_塔4_参考全景.png",
+      "sha256": "be0883922a44c8b3b738eb76fba7120e572d515f95fc8f56e24d42c2b3bdeb10",
+      "observation": "五层和月牙凹口完整；外缘绿带与多层垂挂可读，整体仍为游戏化建筑。"
+    },
+    {
+      "path": "previews/02_塔4_俯视轮廓.png",
+      "sha256": "8c80705cccdd00a03a8f36ffb3470acf49cc380b75b09f1387e140a997b180eb",
+      "observation": "路线连续、棚架有透空；圆楼屋顶是不规则片状绿团，未封死通路。"
+    },
+    {
+      "path": "previews/03_塔4_天台花园.png",
+      "sha256": "aa94ac74c2712e5da167067655d41ba487fc91d5c01edbf52fc6560564bc54b6",
+      "observation": "花池向边缘溢生，绿团与营地分层；中央开敞铺装仍保留。"
+    },
+    {
+      "path": "previews/04_塔4_椭圆左翼.png",
+      "sha256": "19c1f4c606c6c7fb281aedf76c0f0010ff9e36cd791ee332eb0e9c5f170af5b4",
+      "observation": "四层返野带、长藤与缺损幕墙同时可见；结构楼板保持原形。"
+    },
+    {
+      "path": "previews/05_塔4_玻璃亭与遮阳棚.png",
+      "sha256": "ae39c97cef41916f9762b22b22b5fe9796720b1caf54e17d1cbfecf24fc1b032",
+      "observation": "棚边密集、锈色框架清楚，玻璃亭缺片；原材质呈风格化反光，非写实透明玻璃。"
+    },
+    {
+      "path": "previews/06_塔4_近景设备与节点.png",
+      "sha256": "5f26035ca4a588be2a5385056c23a33c72a81c59e7e906affc34e3006d67df9f",
+      "observation": "设备位置不变，藤叶覆盖立柱和棚边，叶团与骨架有分层。"
+    },
+    {
+      "path": "mood/末世_平台总览.png",
+      "sha256": "eb9e4051d7647246dc4dd000bf30b6e2bcfaaaa6cb700afbbce6ee4f4d32e0c2",
+      "observation": "完整建筑入镜，棕雾已降低；棚边和立面植被成为显著轮廓。"
+    },
+    {
+      "path": "mood/末世_棚下主街.png",
+      "sha256": "3a9e680aa50240e4c092fe00c3b8b8861e42a391e852fa45cca721bc7191405b",
+      "observation": "头顶形成浓密叶冠、疏密不一垂挂，右侧花池溢生；主线可读。"
+    },
+    {
+      "path": "mood/末世_右侧营地.png",
+      "sha256": "8a170bf2c4bb9f2b18f7126d570643eabdf14bb365cdb96a5680d21b36349695",
+      "observation": "营地被成片植被包围，原兔雕塑和设施可辨，未扩大玩法范围。"
+    },
+    {
+      "path": "mood/末世_棚柱节点.png",
+      "sha256": "4f53f96b3fd0459bd840eaaf748d9447ca754a73aaffbae90d11288d0fe49a21",
+      "observation": "主干、分叉、棚边相连，三种阔叶形态与不同长度枝条可读。"
+    },
+    {
+      "path": "mood/末世_营地设施近景.png",
+      "sha256": "da4f7d5af2d5b4a31e65ab7ef07be8c3c128ed32932055e378b5a76e1c014bf3",
+      "observation": "帐篷、水箱、太阳能板前后有叶团，棚架占据画面上部；设施仍偏整洁。"
+    },
+    {
+      "path": "mood/末世_地表近景.png",
+      "sha256": "9661fce4bb799a35a5917a7c88c3166b27303a6dc7e73cf6cbee8311ce715555",
+      "observation": "砖缝植物、碎屑、细小剥落与既有裂纹可见；地面比参考干净，未做写实积垢贴图。"
+    }
+  ],
+  "limits": [
+    "保留原低多边形/公共色盘美术语言，不冒充照片级效果图复刻。",
+    "参考中的密集城市背景未制作。",
+    "局部设备和地面仍比参考整洁；没有额外写实积垢纹理。",
+    "高密Blender源约608万输出面；未做引擎导入、LOD、碰撞、导航或运行性能验收。"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_window_06_0",
+  "slug": "oval_window_06_0",
+  "display_name": "左楼内退弧形窗墙_06_0",
+  "category": "architecture",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "左楼内退弧形窗墙_06_0_资产包",
+  "source_collection": "左楼内退弧形窗墙_06_0_制作组件",
+  "objects": [
+    "左楼内退弧形窗墙_06_0_主体"
+  ],
+  "root_object": "左楼内退弧形窗墙_06_0_主体",
+  "world_position": [
+    -66.94337463378906,
+    3.8215675354003906,
+    9.199999809265137
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -70.8827133178711,
+    -0.026990309357643127,
+    9.161028861999512
+  ],
+  "bounds_max": [
+    -66.89637756347656,
+    3.8622708320617676,
+    13.938970565795898
+  ],
+  "dimensions": [
+    3.9863357543945312,
+    3.8892611414194107,
+    4.777941703796387
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "recessed_window_bay",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_window_06_0.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

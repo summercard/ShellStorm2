@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/planter_00_x06_y01_c5630bf8",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "中央左绿岛_跑道环绕_区块06_01_主体",
+  "collection": [
+    "中央左绿岛_跑道环绕_区块06_01_资产包"
+  ],
+  "source_package": "tower_04/planter_00_x06_y01",
+  "origin": [
+    -5.042232036590576,
+    -5.579251289367676,
+    25.024999618530273
+  ],
+  "dimensions": [
+    0.08446407318115234,
+    0.36283159255981445,
+    0.6000003814697266
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -5.084464073181152,
+    -5.760666847229004,
+    25.024999618530273
+  ],
+  "bounds_max": [
+    -5.0,
+    -5.3978352546691895,
+    25.625
+  ],
+  "triangles": 34,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

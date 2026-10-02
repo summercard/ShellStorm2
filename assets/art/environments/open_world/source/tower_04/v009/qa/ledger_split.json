@@ -1,0 +1,21 @@
+{
+  "baseline_assets": 996,
+  "baseline_captured_at": "2026-10-01",
+  "ledger_totals": {
+    "characters": 25,
+    "enemies": 13,
+    "scenes": 811,
+    "props": 21,
+    "weapons": 36,
+    "vfx": 17,
+    "ui": 16,
+    "audio": 48,
+    "music": 9
+  },
+  "union_assets": 996,
+  "missing_assets": [],
+  "extra_assets": [],
+  "column_digest_drift": [],
+  "failure_count": 0,
+  "failures": []
+}

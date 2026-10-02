@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/court_planter_01_d2dd329a",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "庭院边缘异形绿带_01_主体",
+  "collection": [
+    "庭院边缘异形绿带_01_资产包"
+  ],
+  "source_package": "tower_04/court_planter_01",
+  "origin": [
+    28.130197525024414,
+    -8.038049697875977,
+    25.1299991607666
+  ],
+  "dimensions": [
+    4.806886672973633,
+    4.215163230895996,
+    0.4387950897216797
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    25.72675323486328,
+    -10.145630836486816,
+    25.1299991607666
+  ],
+  "bounds_max": [
+    30.533639907836914,
+    -5.93046760559082,
+    25.56879425048828
+  ],
+  "triangles": 274,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

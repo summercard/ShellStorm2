@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_window_07_0_48cb3d6d",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "左楼内退弧形窗墙_07_0_主体",
+  "collection": [
+    "左楼内退弧形窗墙_07_0_资产包"
+  ],
+  "source_package": "tower_04/oval_window_07_0",
+  "origin": [
+    -71.62785339355469,
+    -2.573143482208252,
+    9.161028861999512
+  ],
+  "dimensions": [
+    1.6782760620117188,
+    5.255119323730469,
+    4.777941703796387
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -72.46699523925781,
+    -5.200703144073486,
+    9.161028861999512
+  ],
+  "bounds_max": [
+    -70.7887191772461,
+    0.05441597104072571,
+    13.938970565795898
+  ],
+  "triangles": 167,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

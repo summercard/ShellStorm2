@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/camp_tent_00_860121b5",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "营地帆布棚_脊梁垂边拉绳与支脚_00_主体",
+  "collection": [
+    "营地帆布棚_脊梁垂边拉绳与支脚_00_资产包"
+  ],
+  "source_package": "tower_04/camp_tent_00",
+  "origin": [
+    -64.5,
+    18.0,
+    25.05500030517578
+  ],
+  "dimensions": [
+    3.8003382682800293,
+    2.6256558895111084,
+    2.69755482673645
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -66.4001693725586,
+    16.687171936035156,
+    25.05500030517578
+  ],
+  "bounds_max": [
+    -62.59983444213867,
+    19.312828063964844,
+    27.75255584716797
+  ],
+  "triangles": 406,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

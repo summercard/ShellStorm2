@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/terrace_shell_x12_y02",
+  "slug": "terrace_shell_x12_y02",
+  "display_name": "天台平台_保留月牙凹口与_区块12_02",
+  "category": "architecture",
+  "version": "v006",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v006/塔4_末世平台模块化_150x50m_v006.blend",
+  "collection": "天台平台_保留月牙凹口与_区块12_02_资产包",
+  "source_collection": "天台平台_保留月牙凹口与_区块12_02_制作组件",
+  "objects": [
+    "天台平台_保留月牙凹口与_区块12_02_主体"
+  ],
+  "root_object": "天台平台_保留月牙凹口与_区块12_02_主体",
+  "world_position": [
+    50.0,
+    0.0,
+    23.799999237060547
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    45.0,
+    -5.0,
+    23.799999237060547
+  ],
+  "bounds_max": [
+    55.0,
+    5.0,
+    25.0
+  ],
+  "dimensions": [
+    10.0,
+    10.0,
+    1.2000007629394531
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "traced_roof_deck",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "terrace_shell_x12_y02.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v006",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/terrace_shell",
+  "assembly_grid": [
+    12,
+    2
+  ],
+  "cut_bounds_xy": [
+    45,
+    -5,
+    55,
+    5
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "platform_scope": true
+}

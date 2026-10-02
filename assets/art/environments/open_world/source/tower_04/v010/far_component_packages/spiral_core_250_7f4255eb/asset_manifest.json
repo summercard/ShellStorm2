@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/spiral_core_250_7f4255eb",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "旋梯承重芯柱_25.0",
+  "collection": [
+    "旋梯承重芯柱_25.0_资产包"
+  ],
+  "source_package": "tower_04/spiral_core_250",
+  "origin": [
+    -56.52000045776367,
+    10.199999809265137,
+    25.0
+  ],
+  "dimensions": [
+    0.5400009155273438,
+    0.5400009155273438,
+    2.5
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -56.790000915527344,
+    9.929999351501465,
+    25.0
+  ],
+  "bounds_max": [
+    -56.25,
+    10.470000267028809,
+    27.5
+  ],
+  "triangles": 76,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

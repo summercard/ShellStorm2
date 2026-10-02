@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/wing_concrete_bay_12",
+  "slug": "wing_concrete_bay_12",
+  "display_name": "wing_内退窗带与宽混凝土实墙_12",
+  "category": "architecture",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "wing_内退窗带与宽混凝土实墙_12_资产包",
+  "source_collection": "wing_内退窗带与宽混凝土实墙_12_制作组件",
+  "objects": [
+    "wing_内退窗带与宽混凝土实墙_12_主体"
+  ],
+  "root_object": "wing_内退窗带与宽混凝土实墙_12_主体",
+  "world_position": [
+    53.53565216064453,
+    -3.8471715450286865,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    52.748252868652344,
+    -7.484063625335693,
+    0.0
+  ],
+  "bounds_max": [
+    54.32305145263672,
+    -0.21027931571006775,
+    23.799999237060547
+  ],
+  "dimensions": [
+    1.574798583984375,
+    7.273784309625626,
+    23.799999237060547
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "concrete_facade_bay",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "wing_concrete_bay_12.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

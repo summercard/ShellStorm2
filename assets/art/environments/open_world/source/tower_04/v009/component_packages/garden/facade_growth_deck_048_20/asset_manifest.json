@@ -1,0 +1,70 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/facade_growth_deck_048_20",
+  "slug": "facade_growth_deck_048_20",
+  "display_name": "deck_立面楼层生长带_048_20",
+  "category": "garden",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "deck_立面楼层生长带_048_20_资产包",
+  "source_collection": "deck_立面楼层生长带_048_20_制作组件",
+  "objects": [
+    "deck_立面楼层生长带_048_20_主体"
+  ],
+  "root_object": "deck_立面楼层生长带_048_20_主体",
+  "world_position": [
+    1.8743206709623337,
+    -11.722135782241821,
+    23.40000009536743
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    0.309585765004158,
+    -12.947262048721313,
+    18.86719274520874
+  ],
+  "bounds_max": [
+    3.282589837908745,
+    -10.578723192214966,
+    24.0169358253479
+  ],
+  "dimensions": [
+    2.973004072904587,
+    2.3685388565063477,
+    5.14974308013916
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "facade_hanging_garden",
+  "dependencies": [
+    "tower_04/wing_concrete_bay_27"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "facade_growth_deck_048_20.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "facade_hanging_garden",
+  "rehosted_lower_vegetation": true
+}

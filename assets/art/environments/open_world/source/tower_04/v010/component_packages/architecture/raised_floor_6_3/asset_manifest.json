@@ -1,0 +1,58 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/raised_floor_6_3",
+  "slug": "raised_floor_6_3",
+  "display_name": "升层下楼板_6_3",
+  "category": "architecture",
+  "version": "v010",
+  "component_revision": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "升层下楼板_6_3_资产包",
+  "source_collection": "升层下楼板_6_3_制作源",
+  "objects": [
+    "升层下楼板_6_3"
+  ],
+  "root_object": "升层下楼板_6_3",
+  "world_position": [
+    -41.748130798339844,
+    0.3874265253543854,
+    24.649999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "dimensions": [
+    0.5037422180175781,
+    0.7748530507087708,
+    0.40500000000000114
+  ],
+  "bounds_min": [
+    -42.00000190734863,
+    0.0,
+    24.649999618530273
+  ],
+  "bounds_max": [
+    -41.496259689331055,
+    0.7748530507087708,
+    25.054999618530275
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "component_definition": "raised_storey_floor",
+  "dependencies": [],
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "floor_range": "25–30m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_ground_court.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/litter_bin_00_bbff08d0",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "分类垃圾箱_00_门缝投口踏板_主体",
+  "collection": [
+    "分类垃圾箱_00_门缝投口踏板_资产包"
+  ],
+  "source_package": "tower_04/litter_bin_00",
+  "origin": [
+    -43.68000030517578,
+    8.772500038146973,
+    25.0
+  ],
+  "dimensions": [
+    1.25,
+    0.8649997711181641,
+    1.375
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -44.30500030517578,
+    8.34000015258789,
+    25.0
+  ],
+  "bounds_max": [
+    -43.05500030517578,
+    9.204999923706055,
+    26.375
+  ],
+  "triangles": 212,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

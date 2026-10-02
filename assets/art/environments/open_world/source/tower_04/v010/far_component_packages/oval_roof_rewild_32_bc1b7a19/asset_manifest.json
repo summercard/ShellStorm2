@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/oval_roof_rewild_32_bc1b7a19",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "圆楼屋顶返野花园_32_主体",
+  "collection": [
+    "圆楼屋顶返野花园_32_资产包"
+  ],
+  "source_package": "tower_04/oval_roof_rewild_32",
+  "origin": [
+    -46.33899688720703,
+    0.03175151348114014,
+    29.842899322509766
+  ],
+  "dimensions": [
+    3.3404808044433594,
+    3.018669843673706,
+    1.526885986328125
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -48.00923538208008,
+    -1.477583408355713,
+    29.842899322509766
+  ],
+  "bounds_max": [
+    -44.66875457763672,
+    1.5410864353179932,
+    31.36978530883789
+  ],
+  "triangles": 432,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

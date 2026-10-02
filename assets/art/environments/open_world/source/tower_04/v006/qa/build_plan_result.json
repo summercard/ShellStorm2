@@ -1,0 +1,3680 @@
+{
+  "stage": "built_pending_reopen",
+  "locked_objects": 50,
+  "locked_match": true,
+  "decomposition": {
+    "terrace_shell": [
+      "terrace_shell_x00_y02",
+      "terrace_shell_x00_y03",
+      "terrace_shell_x00_y04",
+      "terrace_shell_x01_y03",
+      "terrace_shell_x01_y04",
+      "terrace_shell_x02_y02",
+      "terrace_shell_x02_y03",
+      "terrace_shell_x02_y04",
+      "terrace_shell_x03_y02",
+      "terrace_shell_x03_y03",
+      "terrace_shell_x03_y04",
+      "terrace_shell_x04_y02",
+      "terrace_shell_x04_y03",
+      "terrace_shell_x04_y04",
+      "terrace_shell_x05_y01",
+      "terrace_shell_x05_y02",
+      "terrace_shell_x05_y03",
+      "terrace_shell_x05_y04",
+      "terrace_shell_x06_y01",
+      "terrace_shell_x06_y02",
+      "terrace_shell_x06_y03",
+      "terrace_shell_x07_y01",
+      "terrace_shell_x07_y02",
+      "terrace_shell_x07_y03",
+      "terrace_shell_x08_y01",
+      "terrace_shell_x08_y02",
+      "terrace_shell_x08_y03",
+      "terrace_shell_x08_y04",
+      "terrace_shell_x09_y00",
+      "terrace_shell_x09_y01",
+      "terrace_shell_x09_y02",
+      "terrace_shell_x09_y03",
+      "terrace_shell_x09_y04",
+      "terrace_shell_x10_y00",
+      "terrace_shell_x10_y01",
+      "terrace_shell_x10_y02",
+      "terrace_shell_x10_y03",
+      "terrace_shell_x11_y00",
+      "terrace_shell_x11_y01",
+      "terrace_shell_x11_y02",
+      "terrace_shell_x11_y03",
+      "terrace_shell_x12_y00",
+      "terrace_shell_x12_y01",
+      "terrace_shell_x12_y02",
+      "terrace_shell_x12_y03",
+      "terrace_shell_x13_y00",
+      "terrace_shell_x13_y01",
+      "terrace_shell_x13_y02",
+      "terrace_shell_x14_y00"
+    ],
+    "oval_roof": [
+      "oval_roof_x00_y00",
+      "oval_roof_x00_y01",
+      "oval_roof_x00_y02",
+      "oval_roof_x00_y03",
+      "oval_roof_x01_y00",
+      "oval_roof_x01_y01",
+      "oval_roof_x01_y02",
+      "oval_roof_x01_y03",
+      "oval_roof_x02_y00",
+      "oval_roof_x02_y01",
+      "oval_roof_x02_y02",
+      "oval_roof_x02_y03",
+      "oval_roof_x03_y01",
+      "oval_roof_x03_y02"
+    ],
+    "oval_roof_rail": [
+      "oval_roof_rail_x00_y00",
+      "oval_roof_rail_x00_y01",
+      "oval_roof_rail_x00_y02",
+      "oval_roof_rail_x00_y03",
+      "oval_roof_rail_x01_y00",
+      "oval_roof_rail_x01_y03",
+      "oval_roof_rail_x02_y00",
+      "oval_roof_rail_x02_y01",
+      "oval_roof_rail_x03_y01",
+      "oval_roof_rail_x03_y02"
+    ],
+    "terrace_rail": [
+      "terrace_rail_x00_y02",
+      "terrace_rail_x00_y03",
+      "terrace_rail_x00_y04",
+      "terrace_rail_x01_y03",
+      "terrace_rail_x01_y04",
+      "terrace_rail_x02_y03",
+      "terrace_rail_x02_y04",
+      "terrace_rail_x03_y02",
+      "terrace_rail_x03_y03",
+      "terrace_rail_x03_y04",
+      "terrace_rail_x04_y02",
+      "terrace_rail_x04_y03",
+      "terrace_rail_x04_y04",
+      "terrace_rail_x05_y01",
+      "terrace_rail_x05_y02",
+      "terrace_rail_x05_y03",
+      "terrace_rail_x05_y04",
+      "terrace_rail_x06_y01",
+      "terrace_rail_x06_y03",
+      "terrace_rail_x07_y01",
+      "terrace_rail_x07_y03",
+      "terrace_rail_x08_y01",
+      "terrace_rail_x08_y03",
+      "terrace_rail_x08_y04",
+      "terrace_rail_x09_y00",
+      "terrace_rail_x09_y01",
+      "terrace_rail_x09_y03",
+      "terrace_rail_x09_y04",
+      "terrace_rail_x10_y00",
+      "terrace_rail_x10_y03",
+      "terrace_rail_x11_y00",
+      "terrace_rail_x11_y03",
+      "terrace_rail_x12_y00",
+      "terrace_rail_x12_y02",
+      "terrace_rail_x12_y03",
+      "terrace_rail_x13_y00",
+      "terrace_rail_x13_y01",
+      "terrace_rail_x13_y02",
+      "terrace_rail_x14_y00"
+    ],
+    "leaf_canopy": [
+      "leaf_canopy_x01_y04",
+      "leaf_canopy_x02_y03",
+      "leaf_canopy_x02_y04",
+      "leaf_canopy_x03_y03",
+      "leaf_canopy_x03_y04",
+      "leaf_canopy_x04_y03",
+      "leaf_canopy_x04_y04",
+      "leaf_canopy_x05_y03",
+      "leaf_canopy_x05_y04",
+      "leaf_canopy_x06_y03",
+      "leaf_canopy_x07_y02",
+      "leaf_canopy_x07_y03",
+      "leaf_canopy_x08_y02",
+      "leaf_canopy_x08_y03",
+      "leaf_canopy_x09_y02",
+      "leaf_canopy_x09_y03",
+      "leaf_canopy_x10_y02",
+      "leaf_canopy_x10_y03"
+    ],
+    "canopy_column_00": [
+      "canopy_column_00"
+    ],
+    "canopy_column_01": [
+      "canopy_column_01"
+    ],
+    "canopy_column_02": [
+      "canopy_column_02"
+    ],
+    "canopy_column_03": [
+      "canopy_column_03"
+    ],
+    "canopy_column_04": [
+      "canopy_column_04"
+    ],
+    "planter_00": [
+      "planter_00_x06_y01",
+      "planter_00_x07_y01",
+      "planter_00_x07_y02",
+      "planter_00_x08_y01",
+      "planter_00_x08_y02"
+    ],
+    "vegetation_00": [
+      "vegetation_00"
+    ],
+    "planter_01": [
+      "planter_01"
+    ],
+    "vegetation_01": [
+      "vegetation_01"
+    ],
+    "planter_02": [
+      "planter_02_x08_y03",
+      "planter_02_x09_y03",
+      "planter_02_x10_y03"
+    ],
+    "vegetation_02": [
+      "vegetation_02_x08_y03",
+      "vegetation_02_x09_y03",
+      "vegetation_02_x10_y03"
+    ],
+    "planter_03": [
+      "planter_03"
+    ],
+    "vegetation_03": [
+      "vegetation_03"
+    ],
+    "canopy_planter_00": [
+      "canopy_planter_00"
+    ],
+    "canopy_green_00": [
+      "canopy_green_00"
+    ],
+    "canopy_planter_01": [
+      "canopy_planter_01_x04_y03",
+      "canopy_planter_01_x05_y03",
+      "canopy_planter_01_x06_y03"
+    ],
+    "canopy_green_01": [
+      "canopy_green_01"
+    ],
+    "canopy_planter_02": [
+      "canopy_planter_02_x07_y02",
+      "canopy_planter_02_x08_y02"
+    ],
+    "canopy_green_02": [
+      "canopy_green_02"
+    ],
+    "canopy_planter_03": [
+      "canopy_planter_03"
+    ],
+    "canopy_green_03": [
+      "canopy_green_03"
+    ],
+    "plaza_planter_00": [
+      "plaza_planter_00"
+    ],
+    "plaza_green_00": [
+      "plaza_green_00"
+    ],
+    "plaza_planter_01": [
+      "plaza_planter_01"
+    ],
+    "plaza_green_01": [
+      "plaza_green_01"
+    ],
+    "plaza_planter_02": [
+      "plaza_planter_02"
+    ],
+    "plaza_green_02": [
+      "plaza_green_02"
+    ],
+    "plaza_planter_03": [
+      "plaza_planter_03"
+    ],
+    "plaza_green_03": [
+      "plaza_green_03"
+    ],
+    "court_vegetation_00": [
+      "court_vegetation_00"
+    ],
+    "court_vegetation_01": [
+      "court_vegetation_01"
+    ],
+    "court_vegetation_02": [
+      "court_vegetation_02"
+    ],
+    "court_vegetation_03": [
+      "court_vegetation_03"
+    ],
+    "court_vegetation_04": [
+      "court_vegetation_04"
+    ],
+    "court_vegetation_05": [
+      "court_vegetation_05"
+    ],
+    "glass_pavilion": [
+      "glass_pavilion_x10_y02",
+      "glass_pavilion_x10_y03",
+      "glass_pavilion_x11_y02",
+      "glass_pavilion_x11_y03",
+      "glass_pavilion_x12_y02",
+      "glass_pavilion_x12_y03"
+    ],
+    "court_sculpture": [
+      "court_sculpture"
+    ],
+    "garden_bench_00": [
+      "garden_bench_00"
+    ],
+    "garden_bench_01": [
+      "garden_bench_01"
+    ],
+    "garden_bench_02": [
+      "garden_bench_02"
+    ],
+    "garden_bench_03": [
+      "garden_bench_03"
+    ],
+    "bollard_00": [
+      "bollard_00"
+    ],
+    "bollard_01": [
+      "bollard_01"
+    ],
+    "bollard_02": [
+      "bollard_02"
+    ],
+    "bollard_03": [
+      "bollard_03"
+    ],
+    "litter_bin_00": [
+      "litter_bin_00"
+    ],
+    "hvac_00": [
+      "hvac_00"
+    ],
+    "hvac_01": [
+      "hvac_01"
+    ],
+    "service_screen": [
+      "service_screen"
+    ],
+    "drain_00": [
+      "drain_00"
+    ],
+    "drain_01": [
+      "drain_01"
+    ],
+    "drain_02": [
+      "drain_02"
+    ],
+    "drain_03": [
+      "drain_03"
+    ],
+    "roof_paving": [
+      "roof_paving_x00_y02",
+      "roof_paving_x00_y03",
+      "roof_paving_x00_y04",
+      "roof_paving_x01_y03",
+      "roof_paving_x01_y04",
+      "roof_paving_x02_y02",
+      "roof_paving_x02_y03",
+      "roof_paving_x02_y04",
+      "roof_paving_x03_y02",
+      "roof_paving_x03_y03",
+      "roof_paving_x03_y04",
+      "roof_paving_x04_y02",
+      "roof_paving_x04_y03",
+      "roof_paving_x04_y04",
+      "roof_paving_x05_y01",
+      "roof_paving_x05_y02",
+      "roof_paving_x05_y03",
+      "roof_paving_x05_y04",
+      "roof_paving_x06_y01",
+      "roof_paving_x06_y02",
+      "roof_paving_x06_y03",
+      "roof_paving_x07_y01",
+      "roof_paving_x07_y02",
+      "roof_paving_x07_y03",
+      "roof_paving_x08_y01",
+      "roof_paving_x08_y02",
+      "roof_paving_x08_y03",
+      "roof_paving_x08_y04",
+      "roof_paving_x09_y00",
+      "roof_paving_x09_y01",
+      "roof_paving_x09_y02",
+      "roof_paving_x09_y03",
+      "roof_paving_x09_y04",
+      "roof_paving_x10_y00",
+      "roof_paving_x10_y01",
+      "roof_paving_x10_y02",
+      "roof_paving_x10_y03",
+      "roof_paving_x11_y00",
+      "roof_paving_x11_y01",
+      "roof_paving_x11_y02",
+      "roof_paving_x11_y03",
+      "roof_paving_x12_y00",
+      "roof_paving_x12_y01",
+      "roof_paving_x12_y02",
+      "roof_paving_x12_y03",
+      "roof_paving_x13_y00",
+      "roof_paving_x13_y01",
+      "roof_paving_x13_y02",
+      "roof_paving_x14_y00"
+    ],
+    "tile_r00_c37_0": [
+      "tile_r00_c37_0"
+    ],
+    "tile_r00_c38_0": [
+      "tile_r00_c38_0"
+    ],
+    "tile_r00_c39_0": [
+      "tile_r00_c39_0"
+    ],
+    "tile_r00_c40_0": [
+      "tile_r00_c40_0"
+    ],
+    "tile_r00_c41_0": [
+      "tile_r00_c41_0"
+    ],
+    "tile_r00_c42_0": [
+      "tile_r00_c42_0"
+    ],
+    "tile_r00_c43_0": [
+      "tile_r00_c43_0"
+    ],
+    "tile_r00_c44_0": [
+      "tile_r00_c44_0"
+    ],
+    "tile_r00_c45_0": [
+      "tile_r00_c45_0"
+    ],
+    "tile_r00_c46_0": [
+      "tile_r00_c46_0"
+    ],
+    "tile_r00_c47_0": [
+      "tile_r00_c47_0"
+    ],
+    "tile_r00_c48_0": [
+      "tile_r00_c48_0"
+    ],
+    "tile_r00_c49_0": [
+      "tile_r00_c49_0"
+    ],
+    "tile_r00_c50_0": [
+      "tile_r00_c50_0"
+    ],
+    "tile_r01_c36_0": [
+      "tile_r01_c36_0"
+    ],
+    "tile_r01_c37_0": [
+      "tile_r01_c37_0"
+    ],
+    "tile_r01_c38_0": [
+      "tile_r01_c38_0"
+    ],
+    "tile_r01_c49_0": [
+      "tile_r01_c49_0"
+    ],
+    "tile_r02_c35_0": [
+      "tile_r02_c35_0"
+    ],
+    "tile_r02_c36_0": [
+      "tile_r02_c36_0"
+    ],
+    "tile_r02_c37_0": [
+      "tile_r02_c37_0"
+    ],
+    "tile_r02_c38_0": [
+      "tile_r02_c38_0"
+    ],
+    "tile_r02_c39_0": [
+      "tile_r02_c39_0"
+    ],
+    "tile_r02_c40_0": [
+      "tile_r02_c40_0"
+    ],
+    "tile_r02_c41_0": [
+      "tile_r02_c41_0"
+    ],
+    "tile_r02_c42_0": [
+      "tile_r02_c42_0"
+    ],
+    "tile_r02_c43_0": [
+      "tile_r02_c43_0"
+    ],
+    "tile_r02_c44_0": [
+      "tile_r02_c44_0"
+    ],
+    "tile_r02_c45_0": [
+      "tile_r02_c45_0"
+    ],
+    "tile_r02_c46_0": [
+      "tile_r02_c46_0"
+    ],
+    "tile_r02_c47_0": [
+      "tile_r02_c47_0"
+    ],
+    "tile_r02_c48_0": [
+      "tile_r02_c48_0"
+    ],
+    "tile_r02_c49_0": [
+      "tile_r02_c49_0"
+    ],
+    "tile_r02_c50_0": [
+      "tile_r02_c50_0"
+    ],
+    "tile_r03_c33_0": [
+      "tile_r03_c33_0"
+    ],
+    "tile_r03_c34_0": [
+      "tile_r03_c34_0"
+    ],
+    "tile_r03_c35_0": [
+      "tile_r03_c35_0"
+    ],
+    "tile_r03_c36_0": [
+      "tile_r03_c36_0"
+    ],
+    "tile_r03_c37_0": [
+      "tile_r03_c37_0"
+    ],
+    "tile_r03_c38_0": [
+      "tile_r03_c38_0"
+    ],
+    "tile_r03_c39_0": [
+      "tile_r03_c39_0"
+    ],
+    "tile_r03_c40_0": [
+      "tile_r03_c40_0"
+    ],
+    "tile_r03_c41_0": [
+      "tile_r03_c41_0"
+    ],
+    "tile_r03_c42_0": [
+      "tile_r03_c42_0"
+    ],
+    "tile_r03_c43_0": [
+      "tile_r03_c43_0"
+    ],
+    "tile_r03_c44_0": [
+      "tile_r03_c44_0"
+    ],
+    "tile_r03_c45_0": [
+      "tile_r03_c45_0"
+    ],
+    "tile_r03_c46_0": [
+      "tile_r03_c46_0"
+    ],
+    "tile_r03_c47_0": [
+      "tile_r03_c47_0"
+    ],
+    "tile_r03_c48_0": [
+      "tile_r03_c48_0"
+    ],
+    "tile_r03_c49_0": [
+      "tile_r03_c49_0"
+    ],
+    "tile_r04_c33_0": [
+      "tile_r04_c33_0"
+    ],
+    "tile_r04_c34_0": [
+      "tile_r04_c34_0"
+    ],
+    "tile_r04_c35_0": [
+      "tile_r04_c35_0"
+    ],
+    "tile_r04_c36_0": [
+      "tile_r04_c36_0"
+    ],
+    "tile_r04_c37_0": [
+      "tile_r04_c37_0"
+    ],
+    "tile_r04_c38_0": [
+      "tile_r04_c38_0"
+    ],
+    "tile_r04_c39_0": [
+      "tile_r04_c39_0"
+    ],
+    "tile_r04_c40_0": [
+      "tile_r04_c40_0"
+    ],
+    "tile_r04_c41_0": [
+      "tile_r04_c41_0"
+    ],
+    "tile_r04_c42_0": [
+      "tile_r04_c42_0"
+    ],
+    "tile_r04_c43_0": [
+      "tile_r04_c43_0"
+    ],
+    "tile_r04_c44_0": [
+      "tile_r04_c44_0"
+    ],
+    "tile_r04_c45_0": [
+      "tile_r04_c45_0"
+    ],
+    "tile_r04_c46_0": [
+      "tile_r04_c46_0"
+    ],
+    "tile_r04_c47_0": [
+      "tile_r04_c47_0"
+    ],
+    "tile_r04_c48_0": [
+      "tile_r04_c48_0"
+    ],
+    "tile_r04_c49_0": [
+      "tile_r04_c49_0"
+    ],
+    "tile_r04_c50_0": [
+      "tile_r04_c50_0"
+    ],
+    "tile_r05_c31_0": [
+      "tile_r05_c31_0"
+    ],
+    "tile_r05_c32_0": [
+      "tile_r05_c32_0"
+    ],
+    "tile_r05_c33_0": [
+      "tile_r05_c33_0"
+    ],
+    "tile_r05_c34_1": [
+      "tile_r05_c34_1"
+    ],
+    "tile_r05_c35_0": [
+      "tile_r05_c35_0"
+    ],
+    "tile_r05_c35_1": [
+      "tile_r05_c35_1"
+    ],
+    "tile_r05_c36_0": [
+      "tile_r05_c36_0"
+    ],
+    "tile_r05_c37_0": [
+      "tile_r05_c37_0"
+    ],
+    "tile_r05_c38_0": [
+      "tile_r05_c38_0"
+    ],
+    "tile_r05_c39_0": [
+      "tile_r05_c39_0"
+    ],
+    "tile_r05_c40_0": [
+      "tile_r05_c40_0"
+    ],
+    "tile_r05_c41_0": [
+      "tile_r05_c41_0"
+    ],
+    "tile_r05_c42_0": [
+      "tile_r05_c42_0"
+    ],
+    "tile_r05_c43_0": [
+      "tile_r05_c43_0"
+    ],
+    "tile_r05_c44_0": [
+      "tile_r05_c44_0"
+    ],
+    "tile_r05_c45_0": [
+      "tile_r05_c45_0"
+    ],
+    "tile_r06_c31_0": [
+      "tile_r06_c31_0"
+    ],
+    "tile_r06_c32_0": [
+      "tile_r06_c32_0"
+    ],
+    "tile_r06_c33_0": [
+      "tile_r06_c33_0"
+    ],
+    "tile_r06_c34_0": [
+      "tile_r06_c34_0"
+    ],
+    "tile_r06_c35_0": [
+      "tile_r06_c35_0"
+    ],
+    "tile_r06_c36_0": [
+      "tile_r06_c36_0"
+    ],
+    "tile_r06_c37_0": [
+      "tile_r06_c37_0"
+    ],
+    "tile_r06_c38_0": [
+      "tile_r06_c38_0"
+    ],
+    "tile_r06_c39_0": [
+      "tile_r06_c39_0"
+    ],
+    "tile_r06_c40_0": [
+      "tile_r06_c40_0"
+    ],
+    "tile_r06_c41_0": [
+      "tile_r06_c41_0"
+    ],
+    "tile_r06_c42_0": [
+      "tile_r06_c42_0"
+    ],
+    "tile_r06_c43_0": [
+      "tile_r06_c43_0"
+    ],
+    "tile_r06_c44_0": [
+      "tile_r06_c44_0"
+    ],
+    "tile_r06_c45_0": [
+      "tile_r06_c45_0"
+    ],
+    "tile_r07_c20_0": [
+      "tile_r07_c20_0"
+    ],
+    "tile_r07_c21_0": [
+      "tile_r07_c21_0"
+    ],
+    "tile_r07_c22_0": [
+      "tile_r07_c22_0"
+    ],
+    "tile_r07_c23_0": [
+      "tile_r07_c23_0"
+    ],
+    "tile_r07_c24_0": [
+      "tile_r07_c24_0"
+    ],
+    "tile_r07_c25_0": [
+      "tile_r07_c25_0"
+    ],
+    "tile_r07_c26_0": [
+      "tile_r07_c26_0"
+    ],
+    "tile_r07_c27_0": [
+      "tile_r07_c27_0"
+    ],
+    "tile_r07_c28_0": [
+      "tile_r07_c28_0"
+    ],
+    "tile_r07_c29_0": [
+      "tile_r07_c29_0"
+    ],
+    "tile_r07_c30_0": [
+      "tile_r07_c30_0"
+    ],
+    "tile_r07_c31_0": [
+      "tile_r07_c31_0"
+    ],
+    "tile_r07_c32_0": [
+      "tile_r07_c32_0"
+    ],
+    "tile_r07_c33_0": [
+      "tile_r07_c33_0"
+    ],
+    "tile_r07_c34_0": [
+      "tile_r07_c34_0"
+    ],
+    "tile_r07_c35_0": [
+      "tile_r07_c35_0"
+    ],
+    "tile_r07_c36_0": [
+      "tile_r07_c36_0"
+    ],
+    "tile_r07_c37_0": [
+      "tile_r07_c37_0"
+    ],
+    "tile_r07_c38_0": [
+      "tile_r07_c38_0"
+    ],
+    "tile_r07_c39_0": [
+      "tile_r07_c39_0"
+    ],
+    "tile_r07_c40_0": [
+      "tile_r07_c40_0"
+    ],
+    "tile_r07_c41_0": [
+      "tile_r07_c41_0"
+    ],
+    "tile_r07_c42_0": [
+      "tile_r07_c42_0"
+    ],
+    "tile_r07_c43_0": [
+      "tile_r07_c43_0"
+    ],
+    "tile_r07_c44_0": [
+      "tile_r07_c44_0"
+    ],
+    "tile_r08_c20_0": [
+      "tile_r08_c20_0"
+    ],
+    "tile_r08_c21_0": [
+      "tile_r08_c21_0"
+    ],
+    "tile_r08_c22_0": [
+      "tile_r08_c22_0"
+    ],
+    "tile_r08_c23_0": [
+      "tile_r08_c23_0"
+    ],
+    "tile_r08_c24_0": [
+      "tile_r08_c24_0"
+    ],
+    "tile_r08_c25_0": [
+      "tile_r08_c25_0"
+    ],
+    "tile_r08_c26_0": [
+      "tile_r08_c26_0"
+    ],
+    "tile_r08_c27_0": [
+      "tile_r08_c27_0"
+    ],
+    "tile_r08_c28_0": [
+      "tile_r08_c28_0"
+    ],
+    "tile_r08_c29_0": [
+      "tile_r08_c29_0"
+    ],
+    "tile_r08_c30_0": [
+      "tile_r08_c30_0"
+    ],
+    "tile_r08_c31_0": [
+      "tile_r08_c31_0"
+    ],
+    "tile_r08_c32_0": [
+      "tile_r08_c32_0"
+    ],
+    "tile_r08_c33_0": [
+      "tile_r08_c33_0"
+    ],
+    "tile_r08_c34_0": [
+      "tile_r08_c34_0"
+    ],
+    "tile_r08_c35_0": [
+      "tile_r08_c35_0"
+    ],
+    "tile_r08_c36_0": [
+      "tile_r08_c36_0"
+    ],
+    "tile_r08_c37_0": [
+      "tile_r08_c37_0"
+    ],
+    "tile_r08_c38_0": [
+      "tile_r08_c38_0"
+    ],
+    "tile_r08_c42_0": [
+      "tile_r08_c42_0"
+    ],
+    "tile_r08_c43_0": [
+      "tile_r08_c43_0"
+    ],
+    "tile_r08_c44_0": [
+      "tile_r08_c44_0"
+    ],
+    "tile_r09_c19_0": [
+      "tile_r09_c19_0"
+    ],
+    "tile_r09_c20_0": [
+      "tile_r09_c20_0"
+    ],
+    "tile_r09_c21_0": [
+      "tile_r09_c21_0"
+    ],
+    "tile_r09_c22_0": [
+      "tile_r09_c22_0"
+    ],
+    "tile_r09_c23_0": [
+      "tile_r09_c23_0"
+    ],
+    "tile_r09_c24_0": [
+      "tile_r09_c24_0"
+    ],
+    "tile_r09_c25_0": [
+      "tile_r09_c25_0"
+    ],
+    "tile_r09_c26_0": [
+      "tile_r09_c26_0"
+    ],
+    "tile_r09_c27_0": [
+      "tile_r09_c27_0"
+    ],
+    "tile_r09_c28_0": [
+      "tile_r09_c28_0"
+    ],
+    "tile_r09_c29_0": [
+      "tile_r09_c29_0"
+    ],
+    "tile_r09_c30_0": [
+      "tile_r09_c30_0"
+    ],
+    "tile_r09_c31_0": [
+      "tile_r09_c31_0"
+    ],
+    "tile_r09_c32_0": [
+      "tile_r09_c32_0"
+    ],
+    "tile_r09_c33_0": [
+      "tile_r09_c33_0"
+    ],
+    "tile_r09_c34_0": [
+      "tile_r09_c34_0"
+    ],
+    "tile_r09_c35_0": [
+      "tile_r09_c35_0"
+    ],
+    "tile_r09_c41_0": [
+      "tile_r09_c41_0"
+    ],
+    "tile_r09_c42_0": [
+      "tile_r09_c42_0"
+    ],
+    "tile_r09_c43_0": [
+      "tile_r09_c43_0"
+    ],
+    "tile_r10_c20_0": [
+      "tile_r10_c20_0"
+    ],
+    "tile_r10_c21_0": [
+      "tile_r10_c21_0"
+    ],
+    "tile_r10_c22_0": [
+      "tile_r10_c22_0"
+    ],
+    "tile_r10_c23_0": [
+      "tile_r10_c23_0"
+    ],
+    "tile_r10_c25_0": [
+      "tile_r10_c25_0"
+    ],
+    "tile_r10_c26_0": [
+      "tile_r10_c26_0"
+    ],
+    "tile_r10_c27_0": [
+      "tile_r10_c27_0"
+    ],
+    "tile_r10_c30_0": [
+      "tile_r10_c30_0"
+    ],
+    "tile_r10_c31_0": [
+      "tile_r10_c31_0"
+    ],
+    "tile_r10_c32_0": [
+      "tile_r10_c32_0"
+    ],
+    "tile_r10_c33_0": [
+      "tile_r10_c33_0"
+    ],
+    "tile_r10_c34_0": [
+      "tile_r10_c34_0"
+    ],
+    "tile_r10_c42_0": [
+      "tile_r10_c42_0"
+    ],
+    "tile_r10_c43_0": [
+      "tile_r10_c43_0"
+    ],
+    "tile_r10_c44_0": [
+      "tile_r10_c44_0"
+    ],
+    "tile_r11_c20_0": [
+      "tile_r11_c20_0"
+    ],
+    "tile_r11_c21_0": [
+      "tile_r11_c21_0"
+    ],
+    "tile_r11_c22_0": [
+      "tile_r11_c22_0"
+    ],
+    "tile_r11_c23_0": [
+      "tile_r11_c23_0"
+    ],
+    "tile_r11_c24_0": [
+      "tile_r11_c24_0"
+    ],
+    "tile_r11_c25_0": [
+      "tile_r11_c25_0"
+    ],
+    "tile_r11_c26_0": [
+      "tile_r11_c26_0"
+    ],
+    "tile_r11_c27_0": [
+      "tile_r11_c27_0"
+    ],
+    "tile_r11_c28_0": [
+      "tile_r11_c28_0"
+    ],
+    "tile_r11_c29_0": [
+      "tile_r11_c29_0"
+    ],
+    "tile_r11_c30_0": [
+      "tile_r11_c30_0"
+    ],
+    "tile_r11_c31_0": [
+      "tile_r11_c31_0"
+    ],
+    "tile_r11_c32_0": [
+      "tile_r11_c32_0"
+    ],
+    "tile_r11_c33_0": [
+      "tile_r11_c33_0"
+    ],
+    "tile_r11_c42_0": [
+      "tile_r11_c42_0"
+    ],
+    "tile_r11_c43_0": [
+      "tile_r11_c43_0"
+    ],
+    "tile_r12_c20_0": [
+      "tile_r12_c20_0"
+    ],
+    "tile_r12_c21_0": [
+      "tile_r12_c21_0"
+    ],
+    "tile_r12_c22_0": [
+      "tile_r12_c22_0"
+    ],
+    "tile_r12_c23_0": [
+      "tile_r12_c23_0"
+    ],
+    "tile_r12_c24_0": [
+      "tile_r12_c24_0"
+    ],
+    "tile_r12_c27_0": [
+      "tile_r12_c27_0"
+    ],
+    "tile_r12_c28_0": [
+      "tile_r12_c28_0"
+    ],
+    "tile_r12_c29_1": [
+      "tile_r12_c29_1"
+    ],
+    "tile_r12_c30_0": [
+      "tile_r12_c30_0"
+    ],
+    "tile_r12_c32_0": [
+      "tile_r12_c32_0"
+    ],
+    "tile_r12_c33_0": [
+      "tile_r12_c33_0"
+    ],
+    "tile_r12_c34_0": [
+      "tile_r12_c34_0"
+    ],
+    "tile_r12_c43_0": [
+      "tile_r12_c43_0"
+    ],
+    "tile_r12_c44_0": [
+      "tile_r12_c44_0"
+    ],
+    "tile_r13_c19_0": [
+      "tile_r13_c19_0"
+    ],
+    "tile_r13_c20_0": [
+      "tile_r13_c20_0"
+    ],
+    "tile_r13_c21_0": [
+      "tile_r13_c21_0"
+    ],
+    "tile_r13_c22_0": [
+      "tile_r13_c22_0"
+    ],
+    "tile_r13_c23_0": [
+      "tile_r13_c23_0"
+    ],
+    "tile_r13_c27_0": [
+      "tile_r13_c27_0"
+    ],
+    "tile_r13_c28_0": [
+      "tile_r13_c28_0"
+    ],
+    "tile_r13_c29_0": [
+      "tile_r13_c29_0"
+    ],
+    "tile_r13_c31_0": [
+      "tile_r13_c31_0"
+    ],
+    "tile_r13_c32_0": [
+      "tile_r13_c32_0"
+    ],
+    "tile_r13_c33_0": [
+      "tile_r13_c33_0"
+    ],
+    "tile_r13_c41_0": [
+      "tile_r13_c41_0"
+    ],
+    "tile_r13_c42_0": [
+      "tile_r13_c42_0"
+    ],
+    "tile_r13_c43_0": [
+      "tile_r13_c43_0"
+    ],
+    "tile_r14_c00_0": [
+      "tile_r14_c00_0"
+    ],
+    "tile_r14_c01_0": [
+      "tile_r14_c01_0"
+    ],
+    "tile_r14_c19_0": [
+      "tile_r14_c19_0"
+    ],
+    "tile_r14_c20_0": [
+      "tile_r14_c20_0"
+    ],
+    "tile_r14_c21_0": [
+      "tile_r14_c21_0"
+    ],
+    "tile_r14_c22_0": [
+      "tile_r14_c22_0"
+    ],
+    "tile_r14_c23_0": [
+      "tile_r14_c23_0"
+    ],
+    "tile_r14_c24_0": [
+      "tile_r14_c24_0"
+    ],
+    "tile_r14_c26_0": [
+      "tile_r14_c26_0"
+    ],
+    "tile_r14_c27_0": [
+      "tile_r14_c27_0"
+    ],
+    "tile_r14_c28_0": [
+      "tile_r14_c28_0"
+    ],
+    "tile_r14_c29_0": [
+      "tile_r14_c29_0"
+    ],
+    "tile_r14_c29_1": [
+      "tile_r14_c29_1"
+    ],
+    "tile_r14_c30_0": [
+      "tile_r14_c30_0"
+    ],
+    "tile_r14_c32_0": [
+      "tile_r14_c32_0"
+    ],
+    "tile_r14_c33_0": [
+      "tile_r14_c33_0"
+    ],
+    "tile_r14_c40_0": [
+      "tile_r14_c40_0"
+    ],
+    "tile_r14_c41_0": [
+      "tile_r14_c41_0"
+    ],
+    "tile_r14_c42_0": [
+      "tile_r14_c42_0"
+    ],
+    "tile_r14_c43_0": [
+      "tile_r14_c43_0"
+    ],
+    "tile_r14_c44_0": [
+      "tile_r14_c44_0"
+    ],
+    "tile_r15_c00_0": [
+      "tile_r15_c00_0"
+    ],
+    "tile_r15_c18_0": [
+      "tile_r15_c18_0"
+    ],
+    "tile_r15_c19_0": [
+      "tile_r15_c19_0"
+    ],
+    "tile_r15_c20_0": [
+      "tile_r15_c20_0"
+    ],
+    "tile_r15_c21_0": [
+      "tile_r15_c21_0"
+    ],
+    "tile_r15_c22_0": [
+      "tile_r15_c22_0"
+    ],
+    "tile_r15_c23_0": [
+      "tile_r15_c23_0"
+    ],
+    "tile_r15_c25_0": [
+      "tile_r15_c25_0"
+    ],
+    "tile_r15_c26_0": [
+      "tile_r15_c26_0"
+    ],
+    "tile_r15_c27_0": [
+      "tile_r15_c27_0"
+    ],
+    "tile_r15_c28_0": [
+      "tile_r15_c28_0"
+    ],
+    "tile_r15_c29_0": [
+      "tile_r15_c29_0"
+    ],
+    "tile_r15_c30_0": [
+      "tile_r15_c30_0"
+    ],
+    "tile_r15_c31_0": [
+      "tile_r15_c31_0"
+    ],
+    "tile_r15_c32_0": [
+      "tile_r15_c32_0"
+    ],
+    "tile_r15_c33_0": [
+      "tile_r15_c33_0"
+    ],
+    "tile_r15_c38_0": [
+      "tile_r15_c38_0"
+    ],
+    "tile_r15_c39_0": [
+      "tile_r15_c39_0"
+    ],
+    "tile_r15_c40_0": [
+      "tile_r15_c40_0"
+    ],
+    "tile_r15_c42_0": [
+      "tile_r15_c42_0"
+    ],
+    "tile_r15_c43_0": [
+      "tile_r15_c43_0"
+    ],
+    "tile_r16_c00_0": [
+      "tile_r16_c00_0"
+    ],
+    "tile_r16_c01_0": [
+      "tile_r16_c01_0"
+    ],
+    "tile_r16_c18_0": [
+      "tile_r16_c18_0"
+    ],
+    "tile_r16_c19_0": [
+      "tile_r16_c19_0"
+    ],
+    "tile_r16_c20_0": [
+      "tile_r16_c20_0"
+    ],
+    "tile_r16_c21_0": [
+      "tile_r16_c21_0"
+    ],
+    "tile_r16_c22_0": [
+      "tile_r16_c22_0"
+    ],
+    "tile_r16_c23_0": [
+      "tile_r16_c23_0"
+    ],
+    "tile_r16_c24_0": [
+      "tile_r16_c24_0"
+    ],
+    "tile_r16_c25_0": [
+      "tile_r16_c25_0"
+    ],
+    "tile_r16_c26_0": [
+      "tile_r16_c26_0"
+    ],
+    "tile_r16_c30_0": [
+      "tile_r16_c30_0"
+    ],
+    "tile_r16_c31_0": [
+      "tile_r16_c31_0"
+    ],
+    "tile_r16_c32_0": [
+      "tile_r16_c32_0"
+    ],
+    "tile_r16_c32_1": [
+      "tile_r16_c32_1"
+    ],
+    "tile_r16_c33_0": [
+      "tile_r16_c33_0"
+    ],
+    "tile_r16_c37_0": [
+      "tile_r16_c37_0"
+    ],
+    "tile_r16_c38_0": [
+      "tile_r16_c38_0"
+    ],
+    "tile_r16_c38_2": [
+      "tile_r16_c38_2"
+    ],
+    "tile_r16_c39_0": [
+      "tile_r16_c39_0"
+    ],
+    "tile_r16_c40_0": [
+      "tile_r16_c40_0"
+    ],
+    "tile_r16_c42_0": [
+      "tile_r16_c42_0"
+    ],
+    "tile_r16_c43_0": [
+      "tile_r16_c43_0"
+    ],
+    "tile_r17_c00_0": [
+      "tile_r17_c00_0"
+    ],
+    "tile_r17_c01_0": [
+      "tile_r17_c01_0"
+    ],
+    "tile_r17_c16_0": [
+      "tile_r17_c16_0"
+    ],
+    "tile_r17_c17_0": [
+      "tile_r17_c17_0"
+    ],
+    "tile_r17_c18_0": [
+      "tile_r17_c18_0"
+    ],
+    "tile_r17_c19_0": [
+      "tile_r17_c19_0"
+    ],
+    "tile_r17_c20_0": [
+      "tile_r17_c20_0"
+    ],
+    "tile_r17_c21_0": [
+      "tile_r17_c21_0"
+    ],
+    "tile_r17_c22_0": [
+      "tile_r17_c22_0"
+    ],
+    "tile_r17_c23_0": [
+      "tile_r17_c23_0"
+    ],
+    "tile_r17_c24_0": [
+      "tile_r17_c24_0"
+    ],
+    "tile_r17_c25_0": [
+      "tile_r17_c25_0"
+    ],
+    "tile_r17_c26_0": [
+      "tile_r17_c26_0"
+    ],
+    "tile_r17_c27_0": [
+      "tile_r17_c27_0"
+    ],
+    "tile_r17_c28_0": [
+      "tile_r17_c28_0"
+    ],
+    "tile_r17_c29_0": [
+      "tile_r17_c29_0"
+    ],
+    "tile_r17_c30_0": [
+      "tile_r17_c30_0"
+    ],
+    "tile_r17_c31_0": [
+      "tile_r17_c31_0"
+    ],
+    "tile_r17_c32_0": [
+      "tile_r17_c32_0"
+    ],
+    "tile_r17_c33_0": [
+      "tile_r17_c33_0"
+    ],
+    "tile_r17_c34_0": [
+      "tile_r17_c34_0"
+    ],
+    "tile_r17_c35_0": [
+      "tile_r17_c35_0"
+    ],
+    "tile_r17_c35_1": [
+      "tile_r17_c35_1"
+    ],
+    "tile_r17_c36_0": [
+      "tile_r17_c36_0"
+    ],
+    "tile_r17_c37_0": [
+      "tile_r17_c37_0"
+    ],
+    "tile_r17_c38_0": [
+      "tile_r17_c38_0"
+    ],
+    "tile_r17_c42_0": [
+      "tile_r17_c42_0"
+    ],
+    "tile_r17_c43_0": [
+      "tile_r17_c43_0"
+    ],
+    "tile_r18_c00_0": [
+      "tile_r18_c00_0"
+    ],
+    "tile_r18_c01_0": [
+      "tile_r18_c01_0"
+    ],
+    "tile_r18_c02_0": [
+      "tile_r18_c02_0"
+    ],
+    "tile_r18_c10_0": [
+      "tile_r18_c10_0"
+    ],
+    "tile_r18_c15_0": [
+      "tile_r18_c15_0"
+    ],
+    "tile_r18_c16_0": [
+      "tile_r18_c16_0"
+    ],
+    "tile_r18_c17_0": [
+      "tile_r18_c17_0"
+    ],
+    "tile_r18_c18_0": [
+      "tile_r18_c18_0"
+    ],
+    "tile_r18_c21_0": [
+      "tile_r18_c21_0"
+    ],
+    "tile_r18_c22_0": [
+      "tile_r18_c22_0"
+    ],
+    "tile_r18_c23_0": [
+      "tile_r18_c23_0"
+    ],
+    "tile_r18_c24_0": [
+      "tile_r18_c24_0"
+    ],
+    "tile_r18_c25_0": [
+      "tile_r18_c25_0"
+    ],
+    "tile_r18_c26_0": [
+      "tile_r18_c26_0"
+    ],
+    "tile_r18_c27_0": [
+      "tile_r18_c27_0"
+    ],
+    "tile_r18_c28_0": [
+      "tile_r18_c28_0"
+    ],
+    "tile_r18_c28_1": [
+      "tile_r18_c28_1"
+    ],
+    "tile_r18_c29_0": [
+      "tile_r18_c29_0"
+    ],
+    "tile_r18_c29_1": [
+      "tile_r18_c29_1"
+    ],
+    "tile_r18_c30_0": [
+      "tile_r18_c30_0"
+    ],
+    "tile_r18_c31_0": [
+      "tile_r18_c31_0"
+    ],
+    "tile_r18_c32_0": [
+      "tile_r18_c32_0"
+    ],
+    "tile_r18_c33_0": [
+      "tile_r18_c33_0"
+    ],
+    "tile_r18_c34_0": [
+      "tile_r18_c34_0"
+    ],
+    "tile_r18_c36_0": [
+      "tile_r18_c36_0"
+    ],
+    "tile_r18_c37_0": [
+      "tile_r18_c37_0"
+    ],
+    "tile_r18_c38_0": [
+      "tile_r18_c38_0"
+    ],
+    "tile_r18_c42_0": [
+      "tile_r18_c42_0"
+    ],
+    "tile_r18_c43_0": [
+      "tile_r18_c43_0"
+    ],
+    "tile_r19_c00_0": [
+      "tile_r19_c00_0"
+    ],
+    "tile_r19_c01_0": [
+      "tile_r19_c01_0"
+    ],
+    "tile_r19_c02_0": [
+      "tile_r19_c02_0"
+    ],
+    "tile_r19_c09_0": [
+      "tile_r19_c09_0"
+    ],
+    "tile_r19_c10_0": [
+      "tile_r19_c10_0"
+    ],
+    "tile_r19_c13_0": [
+      "tile_r19_c13_0"
+    ],
+    "tile_r19_c14_0": [
+      "tile_r19_c14_0"
+    ],
+    "tile_r19_c15_0": [
+      "tile_r19_c15_0"
+    ],
+    "tile_r19_c17_0": [
+      "tile_r19_c17_0"
+    ],
+    "tile_r19_c18_0": [
+      "tile_r19_c18_0"
+    ],
+    "tile_r19_c19_0": [
+      "tile_r19_c19_0"
+    ],
+    "tile_r19_c20_0": [
+      "tile_r19_c20_0"
+    ],
+    "tile_r19_c21_0": [
+      "tile_r19_c21_0"
+    ],
+    "tile_r19_c22_0": [
+      "tile_r19_c22_0"
+    ],
+    "tile_r19_c23_0": [
+      "tile_r19_c23_0"
+    ],
+    "tile_r19_c24_0": [
+      "tile_r19_c24_0"
+    ],
+    "tile_r19_c25_0": [
+      "tile_r19_c25_0"
+    ],
+    "tile_r19_c26_0": [
+      "tile_r19_c26_0"
+    ],
+    "tile_r19_c27_0": [
+      "tile_r19_c27_0"
+    ],
+    "tile_r19_c28_0": [
+      "tile_r19_c28_0"
+    ],
+    "tile_r19_c29_0": [
+      "tile_r19_c29_0"
+    ],
+    "tile_r19_c30_0": [
+      "tile_r19_c30_0"
+    ],
+    "tile_r19_c31_0": [
+      "tile_r19_c31_0"
+    ],
+    "tile_r19_c32_0": [
+      "tile_r19_c32_0"
+    ],
+    "tile_r19_c33_0": [
+      "tile_r19_c33_0"
+    ],
+    "tile_r19_c34_0": [
+      "tile_r19_c34_0"
+    ],
+    "tile_r19_c35_0": [
+      "tile_r19_c35_0"
+    ],
+    "tile_r19_c35_1": [
+      "tile_r19_c35_1"
+    ],
+    "tile_r19_c36_0": [
+      "tile_r19_c36_0"
+    ],
+    "tile_r19_c41_0": [
+      "tile_r19_c41_0"
+    ],
+    "tile_r19_c42_0": [
+      "tile_r19_c42_0"
+    ],
+    "tile_r20_c00_0": [
+      "tile_r20_c00_0"
+    ],
+    "tile_r20_c01_0": [
+      "tile_r20_c01_0"
+    ],
+    "tile_r20_c02_0": [
+      "tile_r20_c02_0"
+    ],
+    "tile_r20_c03_0": [
+      "tile_r20_c03_0"
+    ],
+    "tile_r20_c09_0": [
+      "tile_r20_c09_0"
+    ],
+    "tile_r20_c10_0": [
+      "tile_r20_c10_0"
+    ],
+    "tile_r20_c11_0": [
+      "tile_r20_c11_0"
+    ],
+    "tile_r20_c12_0": [
+      "tile_r20_c12_0"
+    ],
+    "tile_r20_c13_0": [
+      "tile_r20_c13_0"
+    ],
+    "tile_r20_c14_0": [
+      "tile_r20_c14_0"
+    ],
+    "tile_r20_c15_0": [
+      "tile_r20_c15_0"
+    ],
+    "tile_r20_c17_0": [
+      "tile_r20_c17_0"
+    ],
+    "tile_r20_c18_0": [
+      "tile_r20_c18_0"
+    ],
+    "tile_r20_c19_0": [
+      "tile_r20_c19_0"
+    ],
+    "tile_r20_c20_0": [
+      "tile_r20_c20_0"
+    ],
+    "tile_r20_c21_0": [
+      "tile_r20_c21_0"
+    ],
+    "tile_r20_c22_0": [
+      "tile_r20_c22_0"
+    ],
+    "tile_r20_c23_0": [
+      "tile_r20_c23_0"
+    ],
+    "tile_r20_c24_0": [
+      "tile_r20_c24_0"
+    ],
+    "tile_r20_c25_0": [
+      "tile_r20_c25_0"
+    ],
+    "tile_r20_c26_0": [
+      "tile_r20_c26_0"
+    ],
+    "tile_r20_c27_0": [
+      "tile_r20_c27_0"
+    ],
+    "tile_r20_c28_0": [
+      "tile_r20_c28_0"
+    ],
+    "tile_r20_c29_0": [
+      "tile_r20_c29_0"
+    ],
+    "tile_r20_c30_0": [
+      "tile_r20_c30_0"
+    ],
+    "tile_r20_c31_0": [
+      "tile_r20_c31_0"
+    ],
+    "tile_r20_c32_0": [
+      "tile_r20_c32_0"
+    ],
+    "tile_r20_c33_0": [
+      "tile_r20_c33_0"
+    ],
+    "tile_r20_c35_0": [
+      "tile_r20_c35_0"
+    ],
+    "tile_r20_c36_0": [
+      "tile_r20_c36_0"
+    ],
+    "tile_r20_c40_0": [
+      "tile_r20_c40_0"
+    ],
+    "tile_r20_c41_0": [
+      "tile_r20_c41_0"
+    ],
+    "tile_r20_c42_0": [
+      "tile_r20_c42_0"
+    ],
+    "tile_r21_c00_1": [
+      "tile_r21_c00_1"
+    ],
+    "tile_r21_c01_0": [
+      "tile_r21_c01_0"
+    ],
+    "tile_r21_c02_0": [
+      "tile_r21_c02_0"
+    ],
+    "tile_r21_c03_0": [
+      "tile_r21_c03_0"
+    ],
+    "tile_r21_c04_0": [
+      "tile_r21_c04_0"
+    ],
+    "tile_r21_c07_0": [
+      "tile_r21_c07_0"
+    ],
+    "tile_r21_c08_0": [
+      "tile_r21_c08_0"
+    ],
+    "tile_r21_c09_0": [
+      "tile_r21_c09_0"
+    ],
+    "tile_r21_c10_0": [
+      "tile_r21_c10_0"
+    ],
+    "tile_r21_c11_0": [
+      "tile_r21_c11_0"
+    ],
+    "tile_r21_c12_0": [
+      "tile_r21_c12_0"
+    ],
+    "tile_r21_c13_0": [
+      "tile_r21_c13_0"
+    ],
+    "tile_r21_c14_0": [
+      "tile_r21_c14_0"
+    ],
+    "tile_r21_c16_0": [
+      "tile_r21_c16_0"
+    ],
+    "tile_r21_c17_0": [
+      "tile_r21_c17_0"
+    ],
+    "tile_r21_c18_0": [
+      "tile_r21_c18_0"
+    ],
+    "tile_r21_c19_0": [
+      "tile_r21_c19_0"
+    ],
+    "tile_r21_c20_0": [
+      "tile_r21_c20_0"
+    ],
+    "tile_r21_c21_0": [
+      "tile_r21_c21_0"
+    ],
+    "tile_r21_c21_1": [
+      "tile_r21_c21_1"
+    ],
+    "tile_r21_c22_0": [
+      "tile_r21_c22_0"
+    ],
+    "tile_r21_c23_0": [
+      "tile_r21_c23_0"
+    ],
+    "tile_r21_c24_0": [
+      "tile_r21_c24_0"
+    ],
+    "tile_r21_c25_0": [
+      "tile_r21_c25_0"
+    ],
+    "tile_r21_c26_0": [
+      "tile_r21_c26_0"
+    ],
+    "tile_r21_c27_0": [
+      "tile_r21_c27_0"
+    ],
+    "tile_r21_c28_0": [
+      "tile_r21_c28_0"
+    ],
+    "tile_r21_c29_0": [
+      "tile_r21_c29_0"
+    ],
+    "tile_r21_c30_0": [
+      "tile_r21_c30_0"
+    ],
+    "tile_r21_c31_0": [
+      "tile_r21_c31_0"
+    ],
+    "tile_r21_c32_0": [
+      "tile_r21_c32_0"
+    ],
+    "tile_r21_c33_0": [
+      "tile_r21_c33_0"
+    ],
+    "tile_r21_c34_0": [
+      "tile_r21_c34_0"
+    ],
+    "tile_r21_c35_0": [
+      "tile_r21_c35_0"
+    ],
+    "tile_r21_c39_0": [
+      "tile_r21_c39_0"
+    ],
+    "tile_r21_c40_0": [
+      "tile_r21_c40_0"
+    ],
+    "tile_r22_c00_0": [
+      "tile_r22_c00_0"
+    ],
+    "tile_r22_c01_0": [
+      "tile_r22_c01_0"
+    ],
+    "tile_r22_c01_1": [
+      "tile_r22_c01_1"
+    ],
+    "tile_r22_c02_0": [
+      "tile_r22_c02_0"
+    ],
+    "tile_r22_c03_0": [
+      "tile_r22_c03_0"
+    ],
+    "tile_r22_c04_0": [
+      "tile_r22_c04_0"
+    ],
+    "tile_r22_c05_0": [
+      "tile_r22_c05_0"
+    ],
+    "tile_r22_c06_0": [
+      "tile_r22_c06_0"
+    ],
+    "tile_r22_c07_0": [
+      "tile_r22_c07_0"
+    ],
+    "tile_r22_c08_0": [
+      "tile_r22_c08_0"
+    ],
+    "tile_r22_c09_0": [
+      "tile_r22_c09_0"
+    ],
+    "tile_r22_c10_0": [
+      "tile_r22_c10_0"
+    ],
+    "tile_r22_c11_0": [
+      "tile_r22_c11_0"
+    ],
+    "tile_r22_c12_0": [
+      "tile_r22_c12_0"
+    ],
+    "tile_r22_c13_0": [
+      "tile_r22_c13_0"
+    ],
+    "tile_r22_c14_0": [
+      "tile_r22_c14_0"
+    ],
+    "tile_r22_c15_0": [
+      "tile_r22_c15_0"
+    ],
+    "tile_r22_c16_0": [
+      "tile_r22_c16_0"
+    ],
+    "tile_r22_c17_0": [
+      "tile_r22_c17_0"
+    ],
+    "tile_r22_c18_0": [
+      "tile_r22_c18_0"
+    ],
+    "tile_r22_c19_0": [
+      "tile_r22_c19_0"
+    ],
+    "tile_r22_c20_0": [
+      "tile_r22_c20_0"
+    ],
+    "tile_r22_c20_1": [
+      "tile_r22_c20_1"
+    ],
+    "tile_r22_c21_0": [
+      "tile_r22_c21_0"
+    ],
+    "tile_r22_c22_0": [
+      "tile_r22_c22_0"
+    ],
+    "tile_r22_c23_0": [
+      "tile_r22_c23_0"
+    ],
+    "tile_r22_c24_0": [
+      "tile_r22_c24_0"
+    ],
+    "tile_r22_c25_0": [
+      "tile_r22_c25_0"
+    ],
+    "tile_r22_c26_0": [
+      "tile_r22_c26_0"
+    ],
+    "tile_r22_c27_0": [
+      "tile_r22_c27_0"
+    ],
+    "tile_r22_c28_0": [
+      "tile_r22_c28_0"
+    ],
+    "tile_r22_c29_0": [
+      "tile_r22_c29_0"
+    ],
+    "tile_r22_c30_0": [
+      "tile_r22_c30_0"
+    ],
+    "tile_r22_c31_0": [
+      "tile_r22_c31_0"
+    ],
+    "tile_r22_c32_0": [
+      "tile_r22_c32_0"
+    ],
+    "tile_r22_c33_0": [
+      "tile_r22_c33_0"
+    ],
+    "tile_r22_c34_0": [
+      "tile_r22_c34_0"
+    ],
+    "tile_r22_c34_1": [
+      "tile_r22_c34_1"
+    ],
+    "tile_r22_c35_0": [
+      "tile_r22_c35_0"
+    ],
+    "tile_r22_c38_0": [
+      "tile_r22_c38_0"
+    ],
+    "tile_r22_c39_0": [
+      "tile_r22_c39_0"
+    ],
+    "tile_r22_c40_0": [
+      "tile_r22_c40_0"
+    ],
+    "tile_r23_c00_0": [
+      "tile_r23_c00_0"
+    ],
+    "tile_r23_c01_0": [
+      "tile_r23_c01_0"
+    ],
+    "tile_r23_c02_0": [
+      "tile_r23_c02_0"
+    ],
+    "tile_r23_c03_0": [
+      "tile_r23_c03_0"
+    ],
+    "tile_r23_c04_0": [
+      "tile_r23_c04_0"
+    ],
+    "tile_r23_c05_0": [
+      "tile_r23_c05_0"
+    ],
+    "tile_r23_c06_0": [
+      "tile_r23_c06_0"
+    ],
+    "tile_r23_c07_0": [
+      "tile_r23_c07_0"
+    ],
+    "tile_r23_c08_0": [
+      "tile_r23_c08_0"
+    ],
+    "tile_r23_c09_0": [
+      "tile_r23_c09_0"
+    ],
+    "tile_r23_c10_0": [
+      "tile_r23_c10_0"
+    ],
+    "tile_r23_c11_0": [
+      "tile_r23_c11_0"
+    ],
+    "tile_r23_c12_0": [
+      "tile_r23_c12_0"
+    ],
+    "tile_r23_c13_0": [
+      "tile_r23_c13_0"
+    ],
+    "tile_r23_c14_0": [
+      "tile_r23_c14_0"
+    ],
+    "tile_r23_c15_0": [
+      "tile_r23_c15_0"
+    ],
+    "tile_r23_c16_0": [
+      "tile_r23_c16_0"
+    ],
+    "tile_r23_c17_0": [
+      "tile_r23_c17_0"
+    ],
+    "tile_r23_c17_1": [
+      "tile_r23_c17_1"
+    ],
+    "tile_r23_c18_0": [
+      "tile_r23_c18_0"
+    ],
+    "tile_r23_c19_0": [
+      "tile_r23_c19_0"
+    ],
+    "tile_r23_c20_0": [
+      "tile_r23_c20_0"
+    ],
+    "tile_r23_c21_0": [
+      "tile_r23_c21_0"
+    ],
+    "tile_r23_c22_0": [
+      "tile_r23_c22_0"
+    ],
+    "tile_r23_c23_0": [
+      "tile_r23_c23_0"
+    ],
+    "tile_r23_c26_0": [
+      "tile_r23_c26_0"
+    ],
+    "tile_r23_c27_0": [
+      "tile_r23_c27_0"
+    ],
+    "tile_r23_c29_0": [
+      "tile_r23_c29_0"
+    ],
+    "tile_r23_c30_0": [
+      "tile_r23_c30_0"
+    ],
+    "tile_r23_c31_0": [
+      "tile_r23_c31_0"
+    ],
+    "tile_r23_c33_0": [
+      "tile_r23_c33_0"
+    ],
+    "tile_r23_c34_0": [
+      "tile_r23_c34_0"
+    ],
+    "tile_r23_c34_1": [
+      "tile_r23_c34_1"
+    ],
+    "tile_r23_c35_0": [
+      "tile_r23_c35_0"
+    ],
+    "tile_r23_c37_0": [
+      "tile_r23_c37_0"
+    ],
+    "tile_r23_c38_0": [
+      "tile_r23_c38_0"
+    ],
+    "tile_r24_c00_0": [
+      "tile_r24_c00_0"
+    ],
+    "tile_r24_c01_0": [
+      "tile_r24_c01_0"
+    ],
+    "tile_r24_c02_1": [
+      "tile_r24_c02_1"
+    ],
+    "tile_r24_c03_0": [
+      "tile_r24_c03_0"
+    ],
+    "tile_r24_c04_0": [
+      "tile_r24_c04_0"
+    ],
+    "tile_r24_c05_0": [
+      "tile_r24_c05_0"
+    ],
+    "tile_r24_c06_0": [
+      "tile_r24_c06_0"
+    ],
+    "tile_r24_c07_0": [
+      "tile_r24_c07_0"
+    ],
+    "tile_r24_c08_0": [
+      "tile_r24_c08_0"
+    ],
+    "tile_r24_c09_0": [
+      "tile_r24_c09_0"
+    ],
+    "tile_r24_c10_0": [
+      "tile_r24_c10_0"
+    ],
+    "tile_r24_c11_0": [
+      "tile_r24_c11_0"
+    ],
+    "tile_r24_c13_0": [
+      "tile_r24_c13_0"
+    ],
+    "tile_r24_c14_0": [
+      "tile_r24_c14_0"
+    ],
+    "tile_r24_c15_0": [
+      "tile_r24_c15_0"
+    ],
+    "tile_r24_c16_0": [
+      "tile_r24_c16_0"
+    ],
+    "tile_r24_c17_0": [
+      "tile_r24_c17_0"
+    ],
+    "tile_r24_c18_0": [
+      "tile_r24_c18_0"
+    ],
+    "tile_r24_c19_0": [
+      "tile_r24_c19_0"
+    ],
+    "tile_r24_c20_0": [
+      "tile_r24_c20_0"
+    ],
+    "tile_r24_c21_0": [
+      "tile_r24_c21_0"
+    ],
+    "tile_r24_c22_0": [
+      "tile_r24_c22_0"
+    ],
+    "tile_r24_c28_0": [
+      "tile_r24_c28_0"
+    ],
+    "tile_r24_c33_0": [
+      "tile_r24_c33_0"
+    ],
+    "tile_r24_c34_0": [
+      "tile_r24_c34_0"
+    ],
+    "tile_r24_c35_0": [
+      "tile_r24_c35_0"
+    ],
+    "tile_r24_c35_1": [
+      "tile_r24_c35_1"
+    ],
+    "tile_r24_c36_0": [
+      "tile_r24_c36_0"
+    ],
+    "tile_r24_c36_1": [
+      "tile_r24_c36_1"
+    ],
+    "tile_r24_c37_0": [
+      "tile_r24_c37_0"
+    ],
+    "tile_r24_c38_0": [
+      "tile_r24_c38_0"
+    ],
+    "tile_r25_c00_0": [
+      "tile_r25_c00_0"
+    ],
+    "tile_r25_c01_0": [
+      "tile_r25_c01_0"
+    ],
+    "tile_r25_c02_0": [
+      "tile_r25_c02_0"
+    ],
+    "tile_r25_c03_0": [
+      "tile_r25_c03_0"
+    ],
+    "tile_r25_c04_0": [
+      "tile_r25_c04_0"
+    ],
+    "tile_r25_c05_0": [
+      "tile_r25_c05_0"
+    ],
+    "tile_r25_c06_0": [
+      "tile_r25_c06_0"
+    ],
+    "tile_r25_c07_0": [
+      "tile_r25_c07_0"
+    ],
+    "tile_r25_c08_0": [
+      "tile_r25_c08_0"
+    ],
+    "tile_r25_c09_0": [
+      "tile_r25_c09_0"
+    ],
+    "tile_r25_c10_0": [
+      "tile_r25_c10_0"
+    ],
+    "tile_r25_c11_0": [
+      "tile_r25_c11_0"
+    ],
+    "tile_r25_c12_0": [
+      "tile_r25_c12_0"
+    ],
+    "tile_r25_c12_1": [
+      "tile_r25_c12_1"
+    ],
+    "tile_r25_c13_0": [
+      "tile_r25_c13_0"
+    ],
+    "tile_r25_c14_0": [
+      "tile_r25_c14_0"
+    ],
+    "tile_r25_c15_0": [
+      "tile_r25_c15_0"
+    ],
+    "tile_r25_c16_0": [
+      "tile_r25_c16_0"
+    ],
+    "tile_r25_c17_0": [
+      "tile_r25_c17_0"
+    ],
+    "tile_r25_c18_0": [
+      "tile_r25_c18_0"
+    ],
+    "tile_r25_c19_0": [
+      "tile_r25_c19_0"
+    ],
+    "tile_r25_c20_0": [
+      "tile_r25_c20_0"
+    ],
+    "tile_r25_c27_0": [
+      "tile_r25_c27_0"
+    ],
+    "tile_r25_c28_0": [
+      "tile_r25_c28_0"
+    ],
+    "tile_r25_c29_0": [
+      "tile_r25_c29_0"
+    ],
+    "tile_r25_c31_0": [
+      "tile_r25_c31_0"
+    ],
+    "tile_r25_c32_0": [
+      "tile_r25_c32_0"
+    ],
+    "tile_r25_c33_0": [
+      "tile_r25_c33_0"
+    ],
+    "tile_r25_c34_1": [
+      "tile_r25_c34_1"
+    ],
+    "tile_r25_c35_0": [
+      "tile_r25_c35_0"
+    ],
+    "tile_r25_c36_0": [
+      "tile_r25_c36_0"
+    ],
+    "tile_r25_c37_0": [
+      "tile_r25_c37_0"
+    ],
+    "tile_r26_c01_0": [
+      "tile_r26_c01_0"
+    ],
+    "tile_r26_c02_0": [
+      "tile_r26_c02_0"
+    ],
+    "tile_r26_c03_0": [
+      "tile_r26_c03_0"
+    ],
+    "tile_r26_c04_0": [
+      "tile_r26_c04_0"
+    ],
+    "tile_r26_c05_0": [
+      "tile_r26_c05_0"
+    ],
+    "tile_r26_c09_0": [
+      "tile_r26_c09_0"
+    ],
+    "tile_r26_c10_0": [
+      "tile_r26_c10_0"
+    ],
+    "tile_r26_c11_0": [
+      "tile_r26_c11_0"
+    ],
+    "tile_r26_c12_1": [
+      "tile_r26_c12_1"
+    ],
+    "tile_r26_c13_0": [
+      "tile_r26_c13_0"
+    ],
+    "tile_r26_c14_0": [
+      "tile_r26_c14_0"
+    ],
+    "tile_r26_c15_0": [
+      "tile_r26_c15_0"
+    ],
+    "tile_r26_c16_0": [
+      "tile_r26_c16_0"
+    ],
+    "tile_r26_c17_0": [
+      "tile_r26_c17_0"
+    ],
+    "tile_r26_c18_0": [
+      "tile_r26_c18_0"
+    ],
+    "tile_r26_c28_0": [
+      "tile_r26_c28_0"
+    ],
+    "tile_r26_c29_0": [
+      "tile_r26_c29_0"
+    ],
+    "tile_r26_c30_0": [
+      "tile_r26_c30_0"
+    ],
+    "tile_r26_c31_0": [
+      "tile_r26_c31_0"
+    ],
+    "tile_r26_c32_0": [
+      "tile_r26_c32_0"
+    ],
+    "tile_r26_c33_0": [
+      "tile_r26_c33_0"
+    ],
+    "tile_r26_c36_0": [
+      "tile_r26_c36_0"
+    ],
+    "tile_r27_c01_0": [
+      "tile_r27_c01_0"
+    ],
+    "tile_r27_c01_1": [
+      "tile_r27_c01_1"
+    ],
+    "tile_r27_c02_0": [
+      "tile_r27_c02_0"
+    ],
+    "tile_r27_c03_0": [
+      "tile_r27_c03_0"
+    ],
+    "tile_r27_c04_0": [
+      "tile_r27_c04_0"
+    ],
+    "tile_r27_c05_0": [
+      "tile_r27_c05_0"
+    ],
+    "tile_r27_c06_0": [
+      "tile_r27_c06_0"
+    ],
+    "tile_r27_c07_0": [
+      "tile_r27_c07_0"
+    ],
+    "tile_r27_c08_0": [
+      "tile_r27_c08_0"
+    ],
+    "tile_r27_c09_0": [
+      "tile_r27_c09_0"
+    ],
+    "tile_r27_c10_0": [
+      "tile_r27_c10_0"
+    ],
+    "tile_r27_c11_1": [
+      "tile_r27_c11_1"
+    ],
+    "tile_r27_c12_0": [
+      "tile_r27_c12_0"
+    ],
+    "tile_r27_c13_0": [
+      "tile_r27_c13_0"
+    ],
+    "tile_r27_c14_0": [
+      "tile_r27_c14_0"
+    ],
+    "tile_r27_c15_0": [
+      "tile_r27_c15_0"
+    ],
+    "tile_r27_c16_0": [
+      "tile_r27_c16_0"
+    ],
+    "tile_r28_c01_0": [
+      "tile_r28_c01_0"
+    ],
+    "tile_r28_c02_0": [
+      "tile_r28_c02_0"
+    ],
+    "tile_r28_c03_0": [
+      "tile_r28_c03_0"
+    ],
+    "tile_r28_c04_0": [
+      "tile_r28_c04_0"
+    ],
+    "tile_r28_c05_0": [
+      "tile_r28_c05_0"
+    ],
+    "tile_r28_c06_0": [
+      "tile_r28_c06_0"
+    ],
+    "tile_r28_c07_0": [
+      "tile_r28_c07_0"
+    ],
+    "tile_r28_c08_0": [
+      "tile_r28_c08_0"
+    ],
+    "tile_r28_c09_0": [
+      "tile_r28_c09_0"
+    ],
+    "tile_r28_c10_0": [
+      "tile_r28_c10_0"
+    ],
+    "tile_r28_c11_0": [
+      "tile_r28_c11_0"
+    ],
+    "tile_r28_c11_1": [
+      "tile_r28_c11_1"
+    ],
+    "tile_r28_c12_0": [
+      "tile_r28_c12_0"
+    ],
+    "tile_r28_c13_0": [
+      "tile_r28_c13_0"
+    ],
+    "tile_r28_c14_0": [
+      "tile_r28_c14_0"
+    ],
+    "tile_r28_c15_0": [
+      "tile_r28_c15_0"
+    ],
+    "tile_r29_c01_0": [
+      "tile_r29_c01_0"
+    ],
+    "tile_r29_c02_0": [
+      "tile_r29_c02_0"
+    ],
+    "tile_r29_c03_0": [
+      "tile_r29_c03_0"
+    ],
+    "tile_r29_c04_0": [
+      "tile_r29_c04_0"
+    ],
+    "tile_r29_c05_0": [
+      "tile_r29_c05_0"
+    ],
+    "tile_r29_c06_0": [
+      "tile_r29_c06_0"
+    ],
+    "tile_r29_c07_0": [
+      "tile_r29_c07_0"
+    ],
+    "tile_r29_c08_0": [
+      "tile_r29_c08_0"
+    ],
+    "tile_r29_c09_0": [
+      "tile_r29_c09_0"
+    ],
+    "tile_r29_c10_0": [
+      "tile_r29_c10_0"
+    ],
+    "tile_r29_c11_0": [
+      "tile_r29_c11_0"
+    ],
+    "tile_r29_c11_1": [
+      "tile_r29_c11_1"
+    ],
+    "tile_r29_c12_0": [
+      "tile_r29_c12_0"
+    ],
+    "tile_r29_c13_0": [
+      "tile_r29_c13_0"
+    ],
+    "tile_r30_c01_0": [
+      "tile_r30_c01_0"
+    ],
+    "tile_r30_c02_0": [
+      "tile_r30_c02_0"
+    ],
+    "tile_r30_c03_0": [
+      "tile_r30_c03_0"
+    ],
+    "tile_r30_c04_0": [
+      "tile_r30_c04_0"
+    ],
+    "tile_r30_c05_0": [
+      "tile_r30_c05_0"
+    ],
+    "tile_r30_c06_0": [
+      "tile_r30_c06_0"
+    ],
+    "tile_r30_c07_0": [
+      "tile_r30_c07_0"
+    ],
+    "tile_r30_c08_0": [
+      "tile_r30_c08_0"
+    ],
+    "tile_r30_c09_0": [
+      "tile_r30_c09_0"
+    ],
+    "tile_r30_c10_0": [
+      "tile_r30_c10_0"
+    ],
+    "tile_r30_c11_0": [
+      "tile_r30_c11_0"
+    ],
+    "tile_r31_c01_0": [
+      "tile_r31_c01_0"
+    ],
+    "tile_r31_c02_0": [
+      "tile_r31_c02_0"
+    ],
+    "tile_r31_c03_0": [
+      "tile_r31_c03_0"
+    ],
+    "tile_r31_c04_0": [
+      "tile_r31_c04_0"
+    ],
+    "tile_r31_c05_0": [
+      "tile_r31_c05_0"
+    ],
+    "tile_r31_c06_0": [
+      "tile_r31_c06_0"
+    ],
+    "tile_r31_c08_0": [
+      "tile_r31_c08_0"
+    ],
+    "tile_r31_c09_0": [
+      "tile_r31_c09_0"
+    ],
+    "tile_r31_c10_0": [
+      "tile_r31_c10_0"
+    ],
+    "tile_r32_c01_0": [
+      "tile_r32_c01_0"
+    ],
+    "tile_r32_c02_0": [
+      "tile_r32_c02_0"
+    ],
+    "tile_r32_c03_0": [
+      "tile_r32_c03_0"
+    ],
+    "tile_r32_c04_0": [
+      "tile_r32_c04_0"
+    ],
+    "tile_r32_c05_0": [
+      "tile_r32_c05_0"
+    ],
+    "tile_r32_c06_0": [
+      "tile_r32_c06_0"
+    ],
+    "tile_r32_c07_0": [
+      "tile_r32_c07_0"
+    ],
+    "tile_r32_c08_0": [
+      "tile_r32_c08_0"
+    ],
+    "tile_r32_c08_1": [
+      "tile_r32_c08_1"
+    ],
+    "tile_r32_c09_0": [
+      "tile_r32_c09_0"
+    ],
+    "tile_r32_c10_0": [
+      "tile_r32_c10_0"
+    ],
+    "tile_r33_c02_0": [
+      "tile_r33_c02_0"
+    ],
+    "tile_r33_c03_0": [
+      "tile_r33_c03_0"
+    ],
+    "tile_r33_c04_0": [
+      "tile_r33_c04_0"
+    ],
+    "tile_r33_c05_0": [
+      "tile_r33_c05_0"
+    ],
+    "tile_r33_c06_0": [
+      "tile_r33_c06_0"
+    ],
+    "main_walk": [
+      "main_walk_x00_y02",
+      "main_walk_x00_y03",
+      "main_walk_x00_y04",
+      "main_walk_x01_y04",
+      "main_walk_x02_y04",
+      "main_walk_x03_y04",
+      "main_walk_x04_y03",
+      "main_walk_x05_y03",
+      "main_walk_x06_y01",
+      "main_walk_x06_y03",
+      "main_walk_x07_y01",
+      "main_walk_x07_y02",
+      "main_walk_x08_y01",
+      "main_walk_x08_y02",
+      "main_walk_x08_y03",
+      "main_walk_x09_y01",
+      "main_walk_x09_y02",
+      "main_walk_x09_y03",
+      "main_walk_x10_y01",
+      "main_walk_x10_y02",
+      "main_walk_x10_y03",
+      "main_walk_x11_y02",
+      "main_walk_x12_y01"
+    ],
+    "slow_lane": [
+      "slow_lane_x00_y02",
+      "slow_lane_x00_y03",
+      "slow_lane_x01_y03",
+      "slow_lane_x01_y04",
+      "slow_lane_x02_y03",
+      "slow_lane_x02_y04",
+      "slow_lane_x03_y03",
+      "slow_lane_x03_y04",
+      "slow_lane_x04_y02",
+      "slow_lane_x04_y03",
+      "slow_lane_x05_y02",
+      "slow_lane_x05_y03",
+      "slow_lane_x06_y01",
+      "slow_lane_x06_y02",
+      "slow_lane_x07_y01",
+      "slow_lane_x07_y02",
+      "slow_lane_x08_y01",
+      "slow_lane_x08_y02",
+      "slow_lane_x09_y01",
+      "slow_lane_x09_y02",
+      "slow_lane_x09_y03",
+      "slow_lane_x10_y00",
+      "slow_lane_x10_y01",
+      "slow_lane_x10_y02",
+      "slow_lane_x10_y03",
+      "slow_lane_x11_y00",
+      "slow_lane_x11_y02",
+      "slow_lane_x12_y00",
+      "slow_lane_x13_y00",
+      "slow_lane_x14_y00"
+    ],
+    "lawn_court": [
+      "lawn_court_x09_y02",
+      "lawn_court_x10_y01",
+      "lawn_court_x10_y02",
+      "lawn_court_x11_y01",
+      "lawn_court_x11_y02",
+      "lawn_court_x12_y01",
+      "lawn_court_x12_y02"
+    ],
+    "litter_bin_01": [
+      "litter_bin_01"
+    ],
+    "court_planter_03": [
+      "court_planter_03"
+    ],
+    "court_planter_01": [
+      "court_planter_01"
+    ],
+    "court_planter_04": [
+      "court_planter_04"
+    ],
+    "court_planter_05": [
+      "court_planter_05"
+    ],
+    "garden_bench_04": [
+      "garden_bench_04"
+    ],
+    "court_planter_02": [
+      "court_planter_02"
+    ],
+    "bollard_05": [
+      "bollard_05"
+    ],
+    "bollard_04": [
+      "bollard_04"
+    ],
+    "court_planter_00": [
+      "court_planter_00"
+    ],
+    "bed_growth_00": [
+      "bed_growth_00"
+    ],
+    "bed_growth_01": [
+      "bed_growth_01"
+    ],
+    "bed_growth_02": [
+      "bed_growth_02_x08_y03",
+      "bed_growth_02_x09_y03",
+      "bed_growth_02_x10_y03"
+    ],
+    "bed_growth_07": [
+      "bed_growth_07"
+    ],
+    "bed_growth_08": [
+      "bed_growth_08"
+    ],
+    "bed_growth_11": [
+      "bed_growth_11"
+    ],
+    "bed_growth_12": [
+      "bed_growth_12"
+    ],
+    "bed_growth_13": [
+      "bed_growth_13"
+    ],
+    "bed_growth_14": [
+      "bed_growth_14"
+    ],
+    "bed_growth_15": [
+      "bed_growth_15"
+    ],
+    "bed_growth_16": [
+      "bed_growth_16"
+    ]
+  },
+  "placements": [
+    {
+      "asset": "camp_00",
+      "position": [
+        -64.5,
+        18.0,
+        25.055
+      ],
+      "bounds": [
+        -66.45,
+        16.55,
+        -62.55,
+        19.45
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_prop_0",
+      "position": [
+        -62.2,
+        20.5,
+        25.055
+      ],
+      "bounds": [
+        -62.975,
+        19.725,
+        -61.425000000000004,
+        21.275
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_prop_1",
+      "position": [
+        -67.5,
+        16.4,
+        25.055
+      ],
+      "bounds": [
+        -68.25,
+        15.849999999999998,
+        -66.75,
+        16.95
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_prop_2",
+      "position": [
+        -67.9,
+        19.0,
+        25.055
+      ],
+      "bounds": [
+        -68.5,
+        18.4,
+        -67.30000000000001,
+        19.6
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_prop_3",
+      "position": [
+        -60.2,
+        12.7,
+        25.055
+      ],
+      "bounds": [
+        -61.175000000000004,
+        11.799999999999999,
+        -59.225,
+        13.6
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_prop_4",
+      "position": [
+        -67.2,
+        14.8,
+        25.055
+      ],
+      "bounds": [
+        -67.625,
+        14.375,
+        -66.775,
+        15.225000000000001
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01",
+      "position": [
+        -32.0,
+        14.0,
+        25.055
+      ],
+      "bounds": [
+        -33.95,
+        12.55,
+        -30.05,
+        15.45
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_prop_0",
+      "position": [
+        -28.2,
+        14.0,
+        25.055
+      ],
+      "bounds": [
+        -28.974999999999998,
+        13.225,
+        -27.425,
+        14.775
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_prop_1",
+      "position": [
+        -35.0,
+        14.4,
+        25.055
+      ],
+      "bounds": [
+        -35.75,
+        13.85,
+        -34.25,
+        14.950000000000001
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_prop_2",
+      "position": [
+        -35.4,
+        16.0,
+        25.055
+      ],
+      "bounds": [
+        -36.0,
+        15.4,
+        -34.8,
+        16.6
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_prop_3",
+      "position": [
+        -26.2,
+        9.2,
+        25.055
+      ],
+      "bounds": [
+        -27.175,
+        8.299999999999999,
+        -25.224999999999998,
+        10.1
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_prop_4",
+      "position": [
+        -35.7,
+        8.8,
+        25.055
+      ],
+      "bounds": [
+        -36.125,
+        8.375,
+        -35.275000000000006,
+        9.225000000000001
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02",
+      "position": [
+        -6.5,
+        4.0,
+        25.055
+      ],
+      "bounds": [
+        -8.45,
+        2.55,
+        -4.55,
+        5.45
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_prop_0",
+      "position": [
+        -2.7,
+        4.0,
+        25.055
+      ],
+      "bounds": [
+        -3.475,
+        3.225,
+        -1.9250000000000003,
+        4.775
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_prop_1",
+      "position": [
+        -10.0,
+        3.9,
+        25.055
+      ],
+      "bounds": [
+        -10.75,
+        3.3499999999999996,
+        -9.25,
+        4.45
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_prop_2",
+      "position": [
+        -9.9,
+        5.5,
+        25.055
+      ],
+      "bounds": [
+        -10.5,
+        4.9,
+        -9.3,
+        6.1
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_prop_3",
+      "position": [
+        -1.7000000000000002,
+        1.7000000000000002,
+        25.055
+      ],
+      "bounds": [
+        -2.6750000000000003,
+        0.8000000000000002,
+        -0.7250000000000002,
+        2.6
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_prop_4",
+      "position": [
+        -9.7,
+        -0.7000000000000002,
+        25.055
+      ],
+      "bounds": [
+        -10.125,
+        -1.1250000000000002,
+        -9.274999999999999,
+        -0.2750000000000002
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03",
+      "position": [
+        31.0,
+        -6.0,
+        25.127
+      ],
+      "bounds": [
+        29.05,
+        -7.45,
+        32.95,
+        -4.55
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_prop_0",
+      "position": [
+        34.8,
+        -6.5,
+        25.127
+      ],
+      "bounds": [
+        34.025,
+        -7.275,
+        35.574999999999996,
+        -5.725
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_prop_1",
+      "position": [
+        27.5,
+        -6.1,
+        25.127
+      ],
+      "bounds": [
+        26.75,
+        -6.6499999999999995,
+        28.25,
+        -5.55
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_prop_2",
+      "position": [
+        27.6,
+        -4.5,
+        25.127
+      ],
+      "bounds": [
+        27.0,
+        -5.1,
+        28.200000000000003,
+        -3.9
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_prop_3",
+      "position": [
+        33.8,
+        -8.8,
+        25.127
+      ],
+      "bounds": [
+        32.824999999999996,
+        -9.700000000000001,
+        34.775,
+        -7.9
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_prop_4",
+      "position": [
+        27.8,
+        -10.2,
+        25.055
+      ],
+      "bounds": [
+        27.375,
+        -10.625,
+        28.225,
+        -9.774999999999999
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04",
+      "position": [
+        43.0,
+        -8.0,
+        25.127
+      ],
+      "bounds": [
+        41.05,
+        -9.45,
+        44.95,
+        -6.55
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_prop_0",
+      "position": [
+        46.8,
+        -8.0,
+        25.127
+      ],
+      "bounds": [
+        46.025,
+        -8.775,
+        47.574999999999996,
+        -7.225
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_prop_1",
+      "position": [
+        39.5,
+        -8.6,
+        25.127
+      ],
+      "bounds": [
+        38.75,
+        -9.15,
+        40.25,
+        -8.049999999999999
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_prop_2",
+      "position": [
+        39.6,
+        -7.0,
+        25.127
+      ],
+      "bounds": [
+        39.0,
+        -7.6,
+        40.2,
+        -6.4
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_prop_3",
+      "position": [
+        44.8,
+        -10.8,
+        25.127
+      ],
+      "bounds": [
+        43.824999999999996,
+        -11.700000000000001,
+        45.775,
+        -9.9
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_prop_4",
+      "position": [
+        40.3,
+        -10.7,
+        25.127
+      ],
+      "bounds": [
+        39.875,
+        -11.125,
+        40.724999999999994,
+        -10.274999999999999
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05",
+      "position": [
+        55.0,
+        -18.0,
+        25.055
+      ],
+      "bounds": [
+        53.05,
+        -19.45,
+        56.95,
+        -16.55
+      ],
+      "zone_id": "E",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_prop_0",
+      "position": [
+        58.8,
+        -18.0,
+        25.055
+      ],
+      "bounds": [
+        58.025,
+        -18.775,
+        59.574999999999996,
+        -17.225
+      ],
+      "zone_id": "E",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_prop_1",
+      "position": [
+        51.5,
+        -18.6,
+        25.055
+      ],
+      "bounds": [
+        50.75,
+        -19.150000000000002,
+        52.25,
+        -18.05
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_prop_2",
+      "position": [
+        51.6,
+        -17.0,
+        25.055
+      ],
+      "bounds": [
+        51.0,
+        -17.6,
+        52.2,
+        -16.4
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_prop_3",
+      "position": [
+        58.3,
+        -20.3,
+        25.055
+      ],
+      "bounds": [
+        57.324999999999996,
+        -21.2,
+        59.275,
+        -19.400000000000002
+      ],
+      "zone_id": "E",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_prop_4",
+      "position": [
+        52.3,
+        -20.7,
+        25.055
+      ],
+      "bounds": [
+        51.875,
+        -21.125,
+        52.724999999999994,
+        -20.275
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_secondary_0",
+      "position": [
+        -61.9,
+        22.3,
+        25.055
+      ],
+      "bounds": [
+        -62.65,
+        21.75,
+        -61.15,
+        22.85
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_secondary_1",
+      "position": [
+        -64.3,
+        20.8,
+        25.055
+      ],
+      "bounds": [
+        -64.89999999999999,
+        20.2,
+        -63.699999999999996,
+        21.400000000000002
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_00_secondary_2",
+      "position": [
+        -65.7,
+        20.3,
+        25.055
+      ],
+      "bounds": [
+        -66.3,
+        19.7,
+        -65.10000000000001,
+        20.900000000000002
+      ],
+      "zone_id": "A",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_secondary_0",
+      "position": [
+        -30.9,
+        16.3,
+        25.055
+      ],
+      "bounds": [
+        -31.65,
+        15.75,
+        -30.15,
+        16.85
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_secondary_1",
+      "position": [
+        -32.8,
+        16.8,
+        25.055
+      ],
+      "bounds": [
+        -33.4,
+        16.2,
+        -32.199999999999996,
+        17.400000000000002
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_01_secondary_2",
+      "position": [
+        -37.199999999999996,
+        16.8,
+        25.055
+      ],
+      "bounds": [
+        -37.8,
+        16.2,
+        -36.599999999999994,
+        17.400000000000002
+      ],
+      "zone_id": "B",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_secondary_0",
+      "position": [
+        -3.9,
+        6.8,
+        25.055
+      ],
+      "bounds": [
+        -4.65,
+        6.25,
+        -3.15,
+        7.35
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_secondary_1",
+      "position": [
+        -6.3,
+        7.8,
+        25.055
+      ],
+      "bounds": [
+        -6.8999999999999995,
+        7.2,
+        -5.7,
+        8.4
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_02_secondary_2",
+      "position": [
+        -8.7,
+        8.3,
+        25.055
+      ],
+      "bounds": [
+        -9.299999999999999,
+        7.700000000000001,
+        -8.1,
+        8.9
+      ],
+      "zone_id": "C",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_secondary_0",
+      "position": [
+        33.6,
+        -3.2,
+        25.127
+      ],
+      "bounds": [
+        32.85,
+        -3.75,
+        34.35,
+        -2.6500000000000004
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_secondary_1",
+      "position": [
+        30.200000000000003,
+        -3.2,
+        25.127
+      ],
+      "bounds": [
+        29.6,
+        -3.8000000000000003,
+        30.800000000000004,
+        -2.6
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_03_secondary_2",
+      "position": [
+        28.8,
+        -2.7,
+        25.127
+      ],
+      "bounds": [
+        28.2,
+        -3.3000000000000003,
+        29.400000000000002,
+        -2.1
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_secondary_0",
+      "position": [
+        45.6,
+        -5.2,
+        25.127
+      ],
+      "bounds": [
+        44.85,
+        -5.75,
+        46.35,
+        -4.65
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_secondary_1",
+      "position": [
+        43.2,
+        -5.2,
+        25.127
+      ],
+      "bounds": [
+        42.6,
+        -5.8,
+        43.800000000000004,
+        -4.6000000000000005
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_04_secondary_2",
+      "position": [
+        40.800000000000004,
+        -5.2,
+        25.127
+      ],
+      "bounds": [
+        40.2,
+        -5.8,
+        41.400000000000006,
+        -4.6000000000000005
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_secondary_0",
+      "position": [
+        57.1,
+        -15.7,
+        25.055
+      ],
+      "bounds": [
+        56.35,
+        -16.25,
+        57.85,
+        -15.149999999999999
+      ],
+      "zone_id": "E",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_secondary_1",
+      "position": [
+        55.2,
+        -15.2,
+        25.055
+      ],
+      "bounds": [
+        54.6,
+        -15.799999999999999,
+        55.800000000000004,
+        -14.6
+      ],
+      "zone_id": "E",
+      "route_overlap_m2": 0.0
+    },
+    {
+      "asset": "camp_05_secondary_2",
+      "position": [
+        52.800000000000004,
+        -15.2,
+        25.055
+      ],
+      "bounds": [
+        52.2,
+        -15.799999999999999,
+        53.400000000000006,
+        -14.6
+      ],
+      "zone_id": "D",
+      "route_overlap_m2": 0.0
+    }
+  ],
+  "camp_centers": [
+    [
+      -64.5,
+      18.0
+    ],
+    [
+      -32.0,
+      14.0
+    ],
+    [
+      -6.5,
+      4.0
+    ],
+    [
+      31.0,
+      -6.0
+    ],
+    [
+      43.0,
+      -8.0
+    ],
+    [
+      55.0,
+      -18.0
+    ]
+  ],
+  "new_prop_packages": [
+    "camp_tent_00",
+    "ibc_water_tank_00",
+    "reinforced_supply_case_00",
+    "wood_supply_crate_00",
+    "folding_solar_panel_00",
+    "steel_drum_00",
+    "camp_tent_01",
+    "ibc_water_tank_01",
+    "reinforced_supply_case_01",
+    "wood_supply_crate_01",
+    "folding_solar_panel_01",
+    "steel_drum_01",
+    "camp_tent_02",
+    "ibc_water_tank_02",
+    "reinforced_supply_case_02",
+    "wood_supply_crate_02",
+    "folding_solar_panel_02",
+    "steel_drum_02",
+    "camp_tent_03",
+    "ibc_water_tank_03",
+    "reinforced_supply_case_03",
+    "wood_supply_crate_03",
+    "folding_solar_panel_03",
+    "steel_drum_03",
+    "camp_tent_04",
+    "ibc_water_tank_04",
+    "reinforced_supply_case_04",
+    "wood_supply_crate_04",
+    "folding_solar_panel_04",
+    "steel_drum_04",
+    "camp_tent_05",
+    "ibc_water_tank_05",
+    "reinforced_supply_case_05",
+    "wood_supply_crate_05",
+    "folding_solar_panel_05",
+    "steel_drum_05",
+    "reinforced_supply_case_06",
+    "wood_supply_crate_06",
+    "steel_drum_06",
+    "reinforced_supply_case_07",
+    "wood_supply_crate_07",
+    "steel_drum_07",
+    "reinforced_supply_case_08",
+    "wood_supply_crate_08",
+    "steel_drum_08",
+    "reinforced_supply_case_09",
+    "wood_supply_crate_09",
+    "steel_drum_09",
+    "reinforced_supply_case_10",
+    "wood_supply_crate_10",
+    "steel_drum_10",
+    "reinforced_supply_case_11",
+    "wood_supply_crate_11",
+    "steel_drum_11"
+  ],
+  "vine_patches": [
+    {
+      "slug": "vine_patch_00",
+      "host": "canopy_column_00",
+      "position": [
+        -44.1,
+        16.85,
+        28.25
+      ],
+      "length_m": 2.35
+    },
+    {
+      "slug": "vine_patch_01",
+      "host": "canopy_column_03",
+      "position": [
+        20.4,
+        4.5,
+        28.25
+      ],
+      "length_m": 2.1
+    },
+    {
+      "slug": "vine_patch_02",
+      "host": "leaf_canopy",
+      "position": [
+        -43,
+        19.8,
+        29.75
+      ],
+      "length_m": 1.8
+    },
+    {
+      "slug": "vine_patch_03",
+      "host": "leaf_canopy",
+      "position": [
+        -16,
+        11.9,
+        29.75
+      ],
+      "length_m": 1.5
+    },
+    {
+      "slug": "vine_patch_04",
+      "host": "leaf_canopy",
+      "position": [
+        11,
+        5.7,
+        29.75
+      ],
+      "length_m": 1.45
+    },
+    {
+      "slug": "vine_patch_05",
+      "host": "leaf_canopy",
+      "position": [
+        28,
+        4.7,
+        29.75
+      ],
+      "length_m": 1.7
+    },
+    {
+      "slug": "vine_patch_06",
+      "host": "terrace_shell",
+      "position": [
+        -71.16964271148923,
+        19.0955476972762,
+        25.15
+      ],
+      "length_m": 1.3
+    },
+    {
+      "slug": "vine_patch_07",
+      "host": "terrace_shell",
+      "position": [
+        -42.25655084743761,
+        20.205331910252028,
+        25.15
+      ],
+      "length_m": 1.3
+    },
+    {
+      "slug": "vine_patch_08",
+      "host": "terrace_shell",
+      "position": [
+        -2.942722019590483,
+        8.80533313030611,
+        25.15
+      ],
+      "length_m": 1.3
+    },
+    {
+      "slug": "vine_patch_09",
+      "host": "terrace_shell",
+      "position": [
+        31.17515976727389,
+        13.351883000710684,
+        25.15
+      ],
+      "length_m": 1.3
+    },
+    {
+      "slug": "vine_patch_10",
+      "host": "terrace_shell",
+      "position": [
+        55.672685952527935,
+        -11.073049467018718,
+        25.15
+      ],
+      "length_m": 1.3
+    },
+    {
+      "slug": "vine_patch_11",
+      "host": "terrace_shell",
+      "position": [
+        48.33724000981137,
+        -24.400000762939452,
+        25.15
+      ],
+      "length_m": 1.3
+    }
+  ],
+  "counters": {
+    "canopy_infill_removed": 130,
+    "pavilion_panes_broken": 16,
+    "cracked_tiles": 302,
+    "scuffed_tiles": 239,
+    "weed_tiles": 53,
+    "puddle_tiles": 39,
+    "camp_tent": 6,
+    "ibc_water_tank": 6,
+    "reinforced_supply_case": 12,
+    "wood_supply_crate": 12,
+    "folding_solar_panel": 6,
+    "steel_drum": 12
+  },
+  "module_limit_xy_m": 10,
+  "materials": 4,
+  "new_materials": 0,
+  "original_files": {
+    "assets/art/environments/open_world/source/tower_04/v004/塔4_曲线天台商场_150x50m_v004.blend": "686819a9da09de578a1e266c794d4530fea31252afc8063d780396f7c0ad613b",
+    "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend": "91b2f8f7d7ccfd483e76799e4b0a7573492b1741021eb3f7b34e5bfc24ec631e",
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import": "1d229b7fe77409c3c7c6b97a90c7ec6ad24b7a8f0222ab01d251c0aadf9b4cb2",
+    "assets/art/environments/open_world/source/tower_04/v004/route_centerlines.json": "0bddfbf91717089608b9b854ec8e0a5a17089a2b05776a50e029b10b952123cf"
+  }
+}

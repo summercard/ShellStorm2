@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/bed_growth_13",
+  "slug": "bed_growth_13",
+  "display_name": "花池局部返野叶簇_13",
+  "category": "garden",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "花池局部返野叶簇_13_资产包",
+  "source_collection": "花池局部返野叶簇_13_制作组件",
+  "objects": [
+    "花池局部返野叶簇_13_主体"
+  ],
+  "root_object": "花池局部返野叶簇_13_主体",
+  "world_position": [
+    27.542255401611328,
+    -7.928281784057617,
+    25.600000381469727
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    27.969833374023438,
+    -9.478832244873047,
+    25.520000457763672
+  ],
+  "bounds_max": [
+    28.529834747314453,
+    -8.61280632019043,
+    25.7450008392334
+  ],
+  "dimensions": [
+    0.5600013732910156,
+    0.8660259246826172,
+    0.22500038146972656
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "contained_bed_growth",
+  "dependencies": [
+    "tower_04/lawn_court_x10_y01"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "bed_growth_13.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/court_planter_01",
+  "platform_scope": true
+}

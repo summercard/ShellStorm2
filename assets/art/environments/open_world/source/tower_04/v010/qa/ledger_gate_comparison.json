@@ -1,0 +1,10 @@
+{
+  "before_issue_counts": {
+    "sha_mismatch": 153
+  },
+  "after_issue_counts": {
+    "sha_mismatch": 153
+  },
+  "existing_issues_identical": true,
+  "new_assets_have_no_issues": true
+}

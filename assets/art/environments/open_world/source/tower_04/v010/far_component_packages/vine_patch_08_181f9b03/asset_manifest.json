@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/vine_patch_08_181f9b03",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "局部藤蔓_08_宿主挂点_主体",
+  "collection": [
+    "局部藤蔓_08_宿主挂点_资产包"
+  ],
+  "source_package": "tower_04/vine_patch_08",
+  "origin": [
+    -2.8695731163024902,
+    8.841540336608887,
+    23.849773406982422
+  ],
+  "dimensions": [
+    1.0079530477523804,
+    0.7205829620361328,
+    1.3139817714691162
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -3.373549461364746,
+    8.48124885559082,
+    23.849773406982422
+  ],
+  "bounds_max": [
+    -2.3655965328216553,
+    9.201831817626953,
+    25.163755416870117
+  ],
+  "triangles": 262,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

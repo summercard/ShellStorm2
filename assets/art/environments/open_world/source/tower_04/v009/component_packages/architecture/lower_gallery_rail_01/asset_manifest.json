@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/lower_gallery_rail_01",
+  "slug": "lower_gallery_rail_01",
+  "display_name": "下层联系走廊_栏杆与边梁_01",
+  "category": "architecture",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "下层联系走廊_栏杆与边梁_01_资产包",
+  "source_collection": "下层联系走廊_栏杆与边梁_01_制作组件",
+  "objects": [
+    "下层联系走廊_栏杆与边梁_01_主体"
+  ],
+  "root_object": "下层联系走廊_栏杆与边梁_01_主体",
+  "world_position": [
+    -19.513246536254883,
+    -0.4461940824985504,
+    8.5
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -19.571386337280273,
+    -4.949973106384277,
+    8.34999942779541
+  ],
+  "bounds_max": [
+    -14.71789264678955,
+    -0.3841875493526459,
+    10.08290958404541
+  ],
+  "dimensions": [
+    4.853493690490723,
+    4.5657855570316315,
+    1.73291015625
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "lower_link_gallery",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lower_gallery_rail_01.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

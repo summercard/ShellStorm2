@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/main_walk_x00_y04_2c30cc0b",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "主步道花池贴边_齐平灰色_区块00_04_主体",
+  "collection": [
+    "主步道花池贴边_齐平灰色_区块00_04_资产包"
+  ],
+  "source_package": "tower_04/main_walk_x00_y04",
+  "origin": [
+    -67.78321838378906,
+    19.774206161499023,
+    25.02199935913086
+  ],
+  "dimensions": [
+    5.566436767578125,
+    9.481279373168945,
+    0.032001495361328125
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -70.56643676757812,
+    15.033565521240234,
+    25.02199935913086
+  ],
+  "bounds_max": [
+    -65.0,
+    24.51484489440918,
+    25.054000854492188
+  ],
+  "triangles": 241,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

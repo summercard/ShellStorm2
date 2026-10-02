@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_pilotis_01",
+  "slug": "oval_pilotis_01",
+  "display_name": "架空混凝土大柱_oval_pilotis_01",
+  "category": "architecture",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "架空混凝土大柱_oval_pilotis_01_资产包",
+  "source_collection": "架空混凝土大柱_oval_pilotis_01_制作组件",
+  "objects": [
+    "架空混凝土大柱_oval_pilotis_01_主体"
+  ],
+  "root_object": "架空混凝土大柱_oval_pilotis_01_主体",
+  "world_position": [
+    -56.52000045776367,
+    3.2149999141693115,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -57.790000915527344,
+    1.9449999332427979,
+    0.03999999910593033
+  ],
+  "bounds_max": [
+    -55.25,
+    4.484999656677246,
+    8.5
+  ],
+  "dimensions": [
+    2.5400009155273438,
+    2.5399997234344482,
+    8.46000000089407
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "exposed_pilotis",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_pilotis_01.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

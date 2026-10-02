@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "old_sha256": "3b37ed38e404fd8db648eaea4036279c0d71ce2696a720cfc8cb454cc68edb31",
+  "source_sha256": "0bb75c204fbfee537c815bb58c3a8807fb1c3ee4b3dc43079ada888558ab3a98",
+  "linked_scenes": [
+    "塔4_黄昏末世氛围"
+  ],
+  "geometry_changed": false
+}

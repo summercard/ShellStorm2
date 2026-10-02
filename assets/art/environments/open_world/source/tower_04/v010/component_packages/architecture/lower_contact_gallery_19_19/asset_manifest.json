@@ -1,0 +1,64 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/lower_contact_gallery_19_19",
+  "slug": "lower_contact_gallery_19_19",
+  "display_name": "lower_contact_gallery_独立楼板_-1_-1",
+  "category": "architecture",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "lower_contact_gallery_独立楼板_-1_-1_资产包",
+  "source_collection": "lower_contact_gallery_独立楼板_-1_-1_制作组件",
+  "objects": [
+    "lower_contact_gallery_独立楼板_-1_-1_主体"
+  ],
+  "root_object": "lower_contact_gallery_独立楼板_-1_-1_主体",
+  "world_position": [
+    -4.0,
+    -4.0,
+    8.520000457763672
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -8.0,
+    -8.0,
+    8.52
+  ],
+  "bounds_max": [
+    -3.0,
+    -7.849999904632568,
+    9
+  ],
+  "dimensions": [
+    5.0,
+    0.15000009536743164,
+    0.4800000000000004
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "lower_link_gallery",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "lower_contact_gallery_19_19.glb",
+  "block_id": "open_world",
+  "floor_range": "参考图错层架空下部",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v009",
+  "lower_structure": true
+}

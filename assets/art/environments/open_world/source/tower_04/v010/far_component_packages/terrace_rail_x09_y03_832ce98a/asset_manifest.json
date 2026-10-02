@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/terrace_rail_x09_y03_832ce98a",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "天台边缘护栏_随平台保留_区块09_03_主体",
+  "collection": [
+    "天台边缘护栏_随平台保留_区块09_03_资产包"
+  ],
+  "source_package": "tower_04/terrace_rail_x09_y03",
+  "origin": [
+    19.999998092651367,
+    14.370441436767578,
+    25.0
+  ],
+  "dimensions": [
+    10.000017166137695,
+    1.2591323852539062,
+    1.2450008392333984
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    14.999988555908203,
+    13.740875244140625,
+    25.0
+  ],
+  "bounds_max": [
+    25.0000057220459,
+    15.000007629394531,
+    26.2450008392334
+  ],
+  "triangles": 452,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

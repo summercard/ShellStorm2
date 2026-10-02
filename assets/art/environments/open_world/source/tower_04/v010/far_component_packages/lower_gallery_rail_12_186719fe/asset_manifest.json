@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/lower_gallery_rail_12_186719fe",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "下层联系走廊_栏杆与边梁_12_主体",
+  "collection": [
+    "下层联系走廊_栏杆与边梁_12_资产包"
+  ],
+  "source_package": "tower_04/lower_gallery_rail_12",
+  "origin": [
+    -38.81507873535156,
+    0.9009578227996826,
+    8.34999942779541
+  ],
+  "dimensions": [
+    5.602092742919922,
+    3.5891528129577637,
+    1.73291015625
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -41.616127014160156,
+    -0.8936185240745544,
+    8.34999942779541
+  ],
+  "bounds_max": [
+    -36.014034271240234,
+    2.6955342292785645,
+    10.08290958404541
+  ],
+  "triangles": 72,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

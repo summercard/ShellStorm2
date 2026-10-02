@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "errors": [],
+  "locked_objects": 3693,
+  "locked_match": true,
+  "portal_changed_objects": [
+    "天台边缘护栏_随平台保留_区块01_03_主体",
+    "天台边缘护栏_随平台保留_区块01_03_主体_制作源",
+    "天台边缘护栏_随平台保留_区块02_03_主体",
+    "天台边缘护栏_随平台保留_区块02_03_主体_制作源"
+  ],
+  "stairs_count": 28,
+  "stair_bottom": 25.055,
+  "stair_top": 30.05500030517578,
+  "riser_min": 0.17856979370117188,
+  "riser_max": 0.17857200622558622,
+  "component_package_count": 2051,
+  "new_components_max_xy": 8,
+  "visible_triangles": 5577479,
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "source_sha256": "0bb75c204fbfee537c815bb58c3a8807fb1c3ee4b3dc43079ada888558ab3a98",
+  "runtime_verified": false
+}

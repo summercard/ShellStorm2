@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/service_screen_47d1335f",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "设备侧半高百叶屏风_不阻主步道_主体",
+  "collection": [
+    "设备侧半高百叶屏风_不阻主步道_资产包"
+  ],
+  "source_package": "tower_04/service_screen",
+  "origin": [
+    -26.040000915527344,
+    10.440000534057617,
+    25.0
+  ],
+  "dimensions": [
+    6.14000129699707,
+    0.19999980926513672,
+    1.6399993896484375
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -29.110000610351562,
+    10.34000015258789,
+    25.0
+  ],
+  "bounds_max": [
+    -22.969999313354492,
+    10.539999961853027,
+    26.639999389648438
+  ],
+  "triangles": 364,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

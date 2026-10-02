@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/hvac_00_1d136367",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "背侧空调_00_扇叶格栅柜门减振脚_主体",
+  "collection": [
+    "背侧空调_00_扇叶格栅柜门减振脚_资产包"
+  ],
+  "source_package": "tower_04/hvac_00",
+  "origin": [
+    -27.720001220703125,
+    12.113750457763672,
+    25.0
+  ],
+  "dimensions": [
+    2.3299999237060547,
+    1.8125,
+    1.7700004577636719
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -28.885000228881836,
+    11.207500457763672,
+    25.0
+  ],
+  "bounds_max": [
+    -26.55500030517578,
+    13.020000457763672,
+    26.770000457763672
+  ],
+  "triangles": 401,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

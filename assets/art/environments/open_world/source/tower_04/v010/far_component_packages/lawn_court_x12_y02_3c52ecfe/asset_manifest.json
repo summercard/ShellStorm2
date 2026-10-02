@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/lawn_court_x12_y02_3c52ecfe",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "开放草坪_分带草皮沉边与_区块12_02_主体",
+  "collection": [
+    "开放草坪_分带草皮沉边与_区块12_02_资产包"
+  ],
+  "source_package": "tower_04/lawn_court_x12_y02",
+  "origin": [
+    48.510040283203125,
+    -3.7910826206207275,
+    25.027000427246094
+  ],
+  "dimensions": [
+    7.020076751708984,
+    2.417834758758545,
+    0.28299903869628906
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    45.0,
+    -5.0,
+    25.027000427246094
+  ],
+  "bounds_max": [
+    52.020076751708984,
+    -2.582165241241455,
+    25.309999465942383
+  ],
+  "triangles": 256,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

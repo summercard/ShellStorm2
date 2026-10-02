@@ -1,0 +1,67 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/canopy_planter_03",
+  "slug": "canopy_planter_03",
+  "display_name": "棚边分段绿带_03",
+  "category": "garden",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "棚边分段绿带_03_资产包",
+  "source_collection": "棚边分段绿带_03_制作组件",
+  "objects": [
+    "棚边分段绿带_03_主体"
+  ],
+  "root_object": "棚边分段绿带_03_主体",
+  "world_position": [
+    25.5846004486084,
+    2.2459123134613037,
+    25.024999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    23.917943954467773,
+    1.8049206733703613,
+    25.024999618530273
+  ],
+  "bounds_max": [
+    27.22449493408203,
+    2.7467808723449707,
+    25.625
+  ],
+  "dimensions": [
+    3.306550979614258,
+    0.9418601989746094,
+    0.6000003814697266
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "traced_planter",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "canopy_planter_03.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/canopy_planter_03",
+  "platform_scope": true
+}

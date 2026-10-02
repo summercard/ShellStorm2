@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/bed_spill_19_004",
+  "slug": "bed_spill_19_004",
+  "display_name": "花池溢生叶丛_19_004",
+  "category": "garden",
+  "version": "v008",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v008/塔4_植被侵占破损商城_150x50m_v008.blend",
+  "collection": "花池溢生叶丛_19_004_资产包",
+  "source_collection": "花池溢生叶丛_19_004_制作组件",
+  "objects": [
+    "花池溢生叶丛_19_004_主体"
+  ],
+  "root_object": "花池溢生叶丛_19_004_主体",
+  "world_position": [
+    38.643795013427734,
+    -1.1679191589355469,
+    25.600000381469727
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    37.69137191772461,
+    -2.329383611679077,
+    24.90340232849121
+  ],
+  "bounds_max": [
+    39.77217102050781,
+    -0.17350485920906067,
+    26.40523338317871
+  ],
+  "dimensions": [
+    2.080799102783203,
+    2.1558787524700165,
+    1.5018310546875
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "planter_spill_growth",
+  "dependencies": [
+    "tower_04/terrace_shell_x11_y02"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "bed_spill_19_004.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "planter_spill_growth"
+}

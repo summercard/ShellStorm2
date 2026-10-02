@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/overgrown_canopy_north_026",
+  "slug": "overgrown_canopy_north_026",
+  "display_name": "棚架north_浓密叶簇垂挂_026",
+  "category": "garden",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "棚架north_浓密叶簇垂挂_026_资产包",
+  "source_collection": "棚架north_浓密叶簇垂挂_026_制作组件",
+  "objects": [
+    "棚架north_浓密叶簇垂挂_026_主体"
+  ],
+  "root_object": "棚架north_浓密叶簇垂挂_026_主体",
+  "world_position": [
+    8.762862205505371,
+    7.179540157318115,
+    29.799999237060547
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    7.028646945953369,
+    6.209515571594238,
+    27.66579818725586
+  ],
+  "bounds_max": [
+    10.19556999206543,
+    8.22226619720459,
+    30.625701904296875
+  ],
+  "dimensions": [
+    3.1669230461120605,
+    2.0127506256103516,
+    2.9599037170410156
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "overgrown_canopy_edge",
+  "dependencies": [
+    "tower_04/leaf_canopy_x08_y03"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "overgrown_canopy_north_026.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "overgrown_canopy_edge"
+}

@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/slow_lane_x09_y01",
+  "slug": "slow_lane_x09_y01",
+  "display_name": "两米跑道_邻色分段与实体_区块09_01",
+  "category": "floor",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "两米跑道_邻色分段与实体_区块09_01_资产包",
+  "source_collection": "两米跑道_邻色分段与实体_区块09_01_制作组件",
+  "objects": [
+    "两米跑道_邻色分段与实体_区块09_01_主体"
+  ],
+  "root_object": "两米跑道_邻色分段与实体_区块09_01_主体",
+  "world_position": [
+    20.0,
+    -10.0,
+    25.02400016784668
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    14.913980484008789,
+    -13.852205276489258,
+    25.02028465270996
+  ],
+  "bounds_max": [
+    25.089656829833984,
+    -6.649664402008057,
+    25.242029190063477
+  ],
+  "dimensions": [
+    10.175676345825195,
+    7.202540874481201,
+    0.22174453735351562
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "two_adjacent_palette_segment_track",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "slow_lane_x09_y01.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "C",
+  "zone_name": "中央花池与棚下东段",
+  "platform_scope": true,
+  "assembly_grid": [
+    9,
+    1
+  ],
+  "cut_bounds_xy": [
+    15,
+    -15,
+    25,
+    -5
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "previous_package_id": "tower_04/slow_lane"
+}

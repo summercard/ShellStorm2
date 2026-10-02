@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/raised_floor_1_0_e8e28921",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "升层下楼板_1_0",
+  "collection": [
+    "升层下楼板_1_0_资产包"
+  ],
+  "source_package": "tower_04/raised_floor_1_0",
+  "origin": [
+    -68.1633529663086,
+    -13.693161010742188,
+    24.649999618530273
+  ],
+  "dimensions": [
+    4.3267059326171875,
+    3.386322021484375,
+    0.4050006866455078
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -70.32670593261719,
+    -15.386322021484375,
+    24.649999618530273
+  ],
+  "bounds_max": [
+    -66.0,
+    -12.0,
+    25.05500030517578
+  ],
+  "triangles": 40,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

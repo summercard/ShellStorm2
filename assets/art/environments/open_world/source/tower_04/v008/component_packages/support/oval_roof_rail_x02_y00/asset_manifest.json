@@ -1,0 +1,78 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_roof_rail_x02_y00",
+  "slug": "oval_roof_rail_x02_y00",
+  "display_name": "左楼玻璃栏杆_北侧接连廊_区块02_00",
+  "category": "support",
+  "version": "v008",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v008/塔4_植被侵占破损商城_150x50m_v008.blend",
+  "collection": "左楼玻璃栏杆_北侧接连廊_区块02_00_资产包",
+  "source_collection": "左楼玻璃栏杆_北侧接连廊_区块02_00_制作组件",
+  "objects": [
+    "左楼玻璃栏杆_北侧接连廊_区块02_00_主体"
+  ],
+  "root_object": "左楼玻璃栏杆_北侧接连廊_区块02_00_主体",
+  "world_position": [
+    -50.0,
+    -20.0,
+    25.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -55.0,
+    -17.467362467664195,
+    25.0
+  ],
+  "bounds_max": [
+    -46.61234005494771,
+    -15.0,
+    26.2450008392334
+  ],
+  "dimensions": [
+    8.387659945052292,
+    2.467362467664195,
+    1.2450008392333984
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "glass_guardrail",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_roof_rail_x02_y00.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "A",
+  "zone_name": "入口广场",
+  "previous_package_id": "tower_04/oval_roof_rail",
+  "assembly_grid": [
+    2,
+    0
+  ],
+  "cut_bounds_xy": [
+    -55,
+    -25,
+    -45,
+    -15
+  ],
+  "interfaces": "shared exact world cut planes; visible surface continuity preserved",
+  "platform_scope": true
+}

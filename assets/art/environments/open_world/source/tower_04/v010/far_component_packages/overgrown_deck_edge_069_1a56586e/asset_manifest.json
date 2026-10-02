@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/overgrown_deck_edge_069_1a56586e",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "deck_屋顶侵占与垂挂_069_主体",
+  "collection": [
+    "deck_屋顶侵占与垂挂_069_资产包"
+  ],
+  "source_package": "tower_04/overgrown_deck_edge_069",
+  "origin": [
+    60.625328063964844,
+    -25.107404708862305,
+    16.511272430419922
+  ],
+  "dimensions": [
+    4.2360076904296875,
+    2.057720184326172,
+    9.64352035522461
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    58.50732421875,
+    -26.13626480102539,
+    16.511272430419922
+  ],
+  "bounds_max": [
+    62.74333190917969,
+    -24.07854461669922,
+    26.15479278564453
+  ],
+  "triangles": 1296,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

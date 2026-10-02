@@ -1,0 +1,30 @@
+{
+  "slug": "bush_2",
+  "display_name": "地被灌木_3",
+  "family": "bush",
+  "collection": "地被灌木_3_定义",
+  "mesh": "地被灌木_3_网格",
+  "origin": [
+    0.009890117682516575,
+    -0.0511777363717556,
+    0.2750469148159027
+  ],
+  "dimensions": [
+    4.662195928580801,
+    4.25920051834419,
+    1.3832075048070667
+  ],
+  "triangles": 360,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "asset_id": "ENV-OPENWORLD-TOWER04-2",
+  "version": "v001",
+  "lod": "near",
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v001/塔4-2_近景庭院_v001.blend",
+  "collision_status": "not_authored",
+  "exported": false
+}

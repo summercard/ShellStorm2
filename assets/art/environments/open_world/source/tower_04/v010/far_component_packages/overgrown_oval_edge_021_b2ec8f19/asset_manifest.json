@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/overgrown_oval_edge_021_b2ec8f19",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "oval_屋顶侵占与垂挂_021_主体",
+  "collection": [
+    "oval_屋顶侵占与垂挂_021_资产包"
+  ],
+  "source_package": "tower_04/overgrown_oval_edge_021",
+  "origin": [
+    -54.72236251831055,
+    -17.635942459106445,
+    21.723466873168945
+  ],
+  "dimensions": [
+    4.502838134765625,
+    2.2453765869140625,
+    9.364131927490234
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -56.97378158569336,
+    -18.758630752563477,
+    21.723466873168945
+  ],
+  "bounds_max": [
+    -52.470943450927734,
+    -16.513254165649414,
+    31.08759880065918
+  ],
+  "triangles": 1536,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

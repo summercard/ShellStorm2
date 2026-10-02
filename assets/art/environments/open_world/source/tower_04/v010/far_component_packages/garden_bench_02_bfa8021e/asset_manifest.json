@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/garden_bench_02_bfa8021e",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "独立座椅_02_弧背木条金属脚_主体",
+  "collection": [
+    "独立座椅_02_弧背木条金属脚_资产包"
+  ],
+  "source_package": "tower_04/garden_bench_02",
+  "origin": [
+    -1.6800000667572021,
+    -11.797500610351562,
+    25.0
+  ],
+  "dimensions": [
+    3.1999998092651367,
+    1.0549993515014648,
+    1.3378543853759766
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -3.2799999713897705,
+    -12.324999809265137,
+    25.0
+  ],
+  "bounds_max": [
+    -0.08000004291534424,
+    -11.270000457763672,
+    26.337854385375977
+  ],
+  "triangles": 584,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

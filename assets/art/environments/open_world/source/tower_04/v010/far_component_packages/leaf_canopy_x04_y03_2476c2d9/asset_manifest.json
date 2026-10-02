@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/leaf_canopy_x04_y03_2476c2d9",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "长曲线叶形顶棚_三角采光_区块04_03_主体",
+  "collection": [
+    "长曲线叶形顶棚_三角采光_区块04_03_资产包"
+  ],
+  "source_package": "tower_04/leaf_canopy_x04_y03",
+  "origin": [
+    -30.0,
+    13.042856216430664,
+    29.647830963134766
+  ],
+  "dimensions": [
+    10.000003814697266,
+    3.914299964904785,
+    0.5421695709228516
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -35.000003814697266,
+    11.08570671081543,
+    29.647830963134766
+  ],
+  "bounds_max": [
+    -24.999998092651367,
+    15.000006675720215,
+    30.190000534057617
+  ],
+  "triangles": 404,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

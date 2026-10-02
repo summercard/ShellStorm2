@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "geometry_meshes_unchanged": 2242,
+  "locked_objects_unchanged": 50,
+  "four_original_materials_unchanged": true,
+  "v005_source_sha256": "d5cc1b57e2f704b91df9b145ed3dbeac24010d0b4e804a5e4a9836cd62d1127f",
+  "v006_source_sha256": "c61ef94088f8d12ad1dce2386f85aed38b872e3a2c4071f405d208447ba5801a",
+  "neutral_previews_inherited_unchanged": 6,
+  "changes": [
+    "12 degree golden-hour sun",
+    "Nishita sky",
+    "subtle distance mist compositor"
+  ],
+  "no_new_game_geometry": true,
+  "no_new_materials": true
+}

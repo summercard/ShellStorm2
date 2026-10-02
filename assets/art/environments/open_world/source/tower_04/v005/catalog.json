@@ -80854,7 +80854,7 @@
     "03_清漆反光_紫粉点缀",
     "04_柔和自发光_UI灯光"
   ],
-  "source_status": "apocalypse_platform_pending_validation",
+  "source_status": "user_visual_rejected_sparse_overgrowth",
   "runtime_status": "not_exported_not_integrated",
   "block_id": "open_world",
   "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
@@ -80875,5 +80875,7 @@
     "参考图为带透视的示意平面，未提供CAD；局部尺寸链不等于整体150m",
     "东侧裁切范围外为补全；不可见内部商铺未制作"
   ],
-  "scope": "platform at z>=23.8; lower architecture locked"
+  "scope": "platform at z>=23.8; lower architecture locked",
+  "visual_review": "qa/visual_review.json",
+  "reference_atmosphere_status": "partial_warm_light_asset_preview"
 }

@@ -1,0 +1,40 @@
+{
+  "review_date": "2026-10-02",
+  "reviewer": "Codex",
+  "user_visual_confirmation": "pending",
+  "scope": "制作方对实际Blender渲染的视觉复核",
+  "passed": true,
+  "observations": [
+    "顶部圆形屋面升高一层，原下部结构和主连廊保持。",
+    "旋梯近景可见连续踏步、两侧扶手和顶部平台，入口护栏已切开。",
+    "庭院近景具有铺地拼缝、破损、积水、排水、花园和规整廊架，分区独立。",
+    "远景维持建筑、庭院和树冠轮廓，地砖微细节和叶片密度有所简化。"
+  ],
+  "limits": [
+    "沿用工程色盘风格，不是照片级表面复刻。",
+    "参考图遮挡区域和米制尺寸为制作补全。",
+    "没有Godot碰撞、导航或帧率验证。"
+  ],
+  "images": [
+    {
+      "path": "previews/庭院与圆楼空间关系.png",
+      "sha256": "bd01734cd8452a18bccca700704a828e9194718bfd9d671a780a6199a4dd13e3"
+    },
+    {
+      "path": "previews/庭院俯视.png",
+      "sha256": "0a15faae2af94665271e2f71ff5a8800d498f5db09aee27f614e86dde6772cc4"
+    },
+    {
+      "path": "previews/庭院全景.png",
+      "sha256": "19d163026dc097edfbb65424dbc5fc013c18a97bb952e3230108abef5269a9f9"
+    },
+    {
+      "path": "previews/柱下花园.png",
+      "sha256": "83414e0cba8d5d19eaf950b1b517773a518e1471a28af3a104e350101ca226f0"
+    },
+    {
+      "path": "previews/积水与廊架.png",
+      "sha256": "904f867d27b43a802df0582600a4e8f17f988746b3317f3eed1127a6d0343eb1"
+    }
+  ]
+}

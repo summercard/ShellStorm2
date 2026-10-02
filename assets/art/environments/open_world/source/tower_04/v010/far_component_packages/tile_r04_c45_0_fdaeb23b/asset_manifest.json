@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/tile_r04_c45_0_fdaeb23b",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "天台板_04行_45列_0_倒角沉缝_主体",
+  "collection": [
+    "天台板_04行_45列_0_倒角沉缝_资产包"
+  ],
+  "source_package": "tower_04/tile_r04_c45_0",
+  "origin": [
+    60.024749755859375,
+    -18.255638122558594,
+    25.015151977539062
+  ],
+  "dimensions": [
+    3.01348876953125,
+    1.6093482971191406,
+    0.210845947265625
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    58.51800537109375,
+    -19.060312271118164,
+    25.015151977539062
+  ],
+  "bounds_max": [
+    61.531494140625,
+    -17.450963973999023,
+    25.225997924804688
+  ],
+  "triangles": 12,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

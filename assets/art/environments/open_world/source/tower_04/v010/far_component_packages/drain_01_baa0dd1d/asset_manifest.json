@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/drain_01_baa0dd1d",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "检修排水_01_格栅沉槽提手_主体",
+  "collection": [
+    "检修排水_01_格栅沉槽提手_资产包"
+  ],
+  "source_package": "tower_04/drain_01",
+  "origin": [
+    -0.9324999451637268,
+    -14.039999961853027,
+    25.00749969482422
+  ],
+  "dimensions": [
+    2.875,
+    0.6499996185302734,
+    0.08915138244628906
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -2.369999885559082,
+    -14.364999771118164,
+    25.00749969482422
+  ],
+  "bounds_max": [
+    0.5049999952316284,
+    -13.71500015258789,
+    25.096651077270508
+  ],
+  "triangles": 524,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

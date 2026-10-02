@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/overgrown_deck_edge_059",
+  "slug": "overgrown_deck_edge_059",
+  "display_name": "deck_屋顶侵占与垂挂_059",
+  "category": "garden",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "deck_屋顶侵占与垂挂_059_资产包",
+  "source_collection": "deck_屋顶侵占与垂挂_059_制作组件",
+  "objects": [
+    "deck_屋顶侵占与垂挂_059_主体"
+  ],
+  "root_object": "deck_屋顶侵占与垂挂_059_主体",
+  "world_position": [
+    62.20604705810547,
+    -17.92123031616211,
+    25.149999618530273
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    60.2478141784668,
+    -19.275497436523438,
+    20.183578491210938
+  ],
+  "bounds_max": [
+    64.82630920410156,
+    -16.53470230102539,
+    26.297847747802734
+  ],
+  "dimensions": [
+    4.578495025634766,
+    2.740795135498047,
+    6.114269256591797
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "overgrown_roof_edge",
+  "dependencies": [
+    "tower_04/terrace_shell_x13_y00"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "overgrown_deck_edge_059.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "overgrown_roof_edge"
+}

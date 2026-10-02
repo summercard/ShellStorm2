@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-02",
+  "source_sha256": "6c3bbd212230b9155ced041c2f8f9bac8efae091bdea3a9baeaadc2c79cc7c00",
+  "source_checks_passed": true,
+  "top_unchanged": true,
+  "protected_objects": 2942,
+  "commands": {
+    "saved_source_audit_and_5_renders": 0,
+    "palette_validator": 0,
+    "ledger_registration": 0,
+    "ledger_structure": 0,
+    "ledger_split": 0,
+    "ledger_scenes_full": 1,
+    "runtime_naming": 1,
+    "documentation_contracts": 1
+  },
+  "existing_failures": {
+    "ledger_issue_counts": {
+      "sha_mismatch": 153
+    },
+    "ledger_issues_identical_to_v008": true,
+    "runtime_naming_identical_to_v008": true,
+    "documentation_issues": [
+      "Verification registry invalid: VERIFICATION_REGISTRY_FAILED\n- unregistered: verify_base99_swivel_chairs\n- unregistered: verify_expedition01_spawn_ramp\n- unregistered: verify_pushable_base_chairs"
+    ],
+    "new_documentation_issues": false
+  },
+  "user_visual_confirmation": "pending",
+  "inference_limits": "single-view reference; metric heights anchored to existing 25m roof; occluded back and complete lower gallery connections inferred",
+  "not_run": [
+    "Godot import/loading/render/performance",
+    "LOD/collision/navigation",
+    "runtime pedestrian traversal"
+  ],
+  "scope": "Blender lower structure, exact protected roof, existing ledger row; no runtime export or commit"
+}

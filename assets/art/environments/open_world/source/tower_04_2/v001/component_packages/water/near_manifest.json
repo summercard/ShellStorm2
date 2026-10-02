@@ -1,0 +1,30 @@
+{
+  "slug": "water",
+  "display_name": "浅积水池6米",
+  "family": "water",
+  "collection": "浅积水池6米_定义",
+  "mesh": "浅积水池6米_网格",
+  "origin": [
+    0.0,
+    0.0,
+    -0.38999998569488525
+  ],
+  "dimensions": [
+    6.0,
+    6.0,
+    0.365
+  ],
+  "triangles": 98,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "asset_id": "ENV-OPENWORLD-TOWER04-2",
+  "version": "v001",
+  "lod": "near",
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v001/塔4-2_近景庭院_v001.blend",
+  "collision_status": "not_authored",
+  "exported": false
+}

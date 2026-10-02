@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/spiral_step_18_7fd5ae78",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "旋梯踏步_19",
+  "collection": [
+    "旋梯踏步_19_资产包"
+  ],
+  "source_package": "tower_04/spiral_step_18",
+  "origin": [
+    -58.28715515136719,
+    11.408760070800781,
+    28.16156578063965
+  ],
+  "dimensions": [
+    2.0517005920410156,
+    1.5497541427612305,
+    0.28629112243652344
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -59.31300354003906,
+    10.633883476257324,
+    28.16156578063965
+  ],
+  "bounds_max": [
+    -57.26130294799805,
+    12.183637619018555,
+    28.447856903076172
+  ],
+  "triangles": 32,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

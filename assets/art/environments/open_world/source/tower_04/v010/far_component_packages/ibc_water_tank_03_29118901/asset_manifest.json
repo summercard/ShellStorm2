@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/ibc_water_tank_03_29118901",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "笼式储水箱_托盘阀门水管_03_主体",
+  "collection": [
+    "笼式储水箱_托盘阀门水管_03_资产包"
+  ],
+  "source_package": "tower_04/ibc_water_tank_03",
+  "origin": [
+    34.79999923706055,
+    -6.578831672668457,
+    25.12700080871582
+  ],
+  "dimensions": [
+    1.4199981689453125,
+    1.3776638507843018,
+    1.5499992370605469
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    34.09000015258789,
+    -7.267663478851318,
+    25.12700080871582
+  ],
+  "bounds_max": [
+    35.5099983215332,
+    -5.889999866485596,
+    26.677000045776367
+  ],
+  "triangles": 438,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

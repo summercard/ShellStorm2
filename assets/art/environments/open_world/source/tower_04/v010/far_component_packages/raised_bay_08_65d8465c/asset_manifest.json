@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/raised_bay_08_65d8465c",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "圆楼加层窗墙开间_08",
+  "collection": [
+    "圆楼加层窗墙开间_08_资产包"
+  ],
+  "source_package": "tower_04/raised_bay_08",
+  "origin": [
+    -66.32774353027344,
+    4.475434303283691,
+    25.05500030517578
+  ],
+  "dimensions": [
+    3.7254867553710938,
+    2.327623128890991,
+    4.774232864379883
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -68.19048309326172,
+    3.3116228580474854,
+    25.05500030517578
+  ],
+  "bounds_max": [
+    -64.46499633789062,
+    5.639245986938477,
+    29.829233169555664
+  ],
+  "triangles": 248,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

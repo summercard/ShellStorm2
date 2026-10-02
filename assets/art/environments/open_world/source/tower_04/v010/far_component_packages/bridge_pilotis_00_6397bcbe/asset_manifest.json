@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/bridge_pilotis_00_6397bcbe",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "架空混凝土大柱_bridge_pilotis_00_主体",
+  "collection": [
+    "架空混凝土大柱_bridge_pilotis_00_资产包"
+  ],
+  "source_package": "tower_04/bridge_pilotis_00",
+  "origin": [
+    -64.0,
+    16.0,
+    0.03999999910593033
+  ],
+  "dimensions": [
+    2.3000030517578125,
+    2.299999237060547,
+    23.759998321533203
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -65.1500015258789,
+    14.850000381469727,
+    0.03999999910593033
+  ],
+  "bounds_max": [
+    -62.849998474121094,
+    17.149999618530273,
+    23.799999237060547
+  ],
+  "triangles": 636,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

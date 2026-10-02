@@ -1,0 +1,58 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/spiral_rail_outer_11",
+  "slug": "spiral_rail_outer_11",
+  "display_name": "旋梯outer扶手_12",
+  "category": "support",
+  "version": "v010",
+  "component_revision": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "旋梯outer扶手_12_资产包",
+  "source_collection": "旋梯outer扶手_12_制作源",
+  "objects": [
+    "旋梯outer扶手_12"
+  ],
+  "root_object": "旋梯outer扶手_12",
+  "world_position": [
+    -54.8721809387207,
+    12.807973861694336,
+    27.197856903076172
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "dimensions": [
+    0.64599609375,
+    0.43441104888916016,
+    1.3153743743896484
+  ],
+  "bounds_min": [
+    -55.1951789855957,
+    12.590768337249756,
+    27.197856903076172
+  ],
+  "bounds_max": [
+    -54.5491828918457,
+    13.025179386138916,
+    28.51323127746582
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "component_definition": "spiral_stair_rail",
+  "dependencies": [],
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "floor_range": "25–30m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_ground_court.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

@@ -1,0 +1,58 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/spiral_step_23",
+  "slug": "spiral_step_23",
+  "display_name": "旋梯踏步_24",
+  "category": "architecture",
+  "version": "v010",
+  "component_revision": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "旋梯踏步_24_资产包",
+  "source_collection": "旋梯踏步_24_制作源",
+  "objects": [
+    "旋梯踏步_24"
+  ],
+  "root_object": "旋梯踏步_24",
+  "world_position": [
+    -58.32151794433594,
+    9.045930862426758,
+    29.05442237854004
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "dimensions": [
+    2.0393753051757812,
+    1.5574979782104492,
+    0.28629190717424535
+  ],
+  "bounds_min": [
+    -59.34120559692383,
+    8.267181873321533,
+    29.05442237854004
+  ],
+  "bounds_max": [
+    -57.30183029174805,
+    9.824679851531982,
+    29.340714285714284
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "component_definition": "spiral_stair_tread",
+  "dependencies": [],
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "floor_range": "25–30m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_ground_court.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04"
+}

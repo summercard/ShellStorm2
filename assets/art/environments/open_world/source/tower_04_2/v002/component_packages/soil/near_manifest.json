@@ -1,0 +1,29 @@
+{
+  "slug": "soil",
+  "display_name": "种植土壤6米",
+  "family": "soil",
+  "collection": "种植土壤6米_定义",
+  "mesh": "种植土壤6米_网格",
+  "origin": [
+    0.028522750362753868,
+    0.014770029112696648,
+    -0.25999999046325684
+  ],
+  "dimensions": [
+    6.632992872701044,
+    6.208773753168501,
+    0.7696069382776449
+  ],
+  "triangles": 2532,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "asset_id": "ENV-OPENWORLD-TOWER04-2",
+  "version": "v002",
+  "lod": "near",
+  "source_blend": "assets/art/environments/open_world/source/tower_04_2/v002/塔4-2_近景庭院_v002.blend",
+  "collision_status": "not_authored",
+  "exported": false
+}

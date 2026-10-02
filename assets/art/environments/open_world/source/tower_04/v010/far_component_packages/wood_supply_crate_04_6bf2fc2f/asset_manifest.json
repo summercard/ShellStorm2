@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/wood_supply_crate_04_6bf2fc2f",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "木质补给箱_板缝斜撑护角_04_主体",
+  "collection": [
+    "木质补给箱_板缝斜撑护角_04_资产包"
+  ],
+  "source_package": "tower_04/wood_supply_crate_04",
+  "origin": [
+    39.599998474121094,
+    -7.029999732971191,
+    25.12700080871582
+  ],
+  "dimensions": [
+    1.1199989318847656,
+    1.0960001945495605,
+    1.08599853515625
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    39.040000915527344,
+    -7.578000068664551,
+    25.12700080871582
+  ],
+  "bounds_max": [
+    40.15999984741211,
+    -6.48199987411499,
+    26.21299934387207
+  ],
+  "triangles": 348,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

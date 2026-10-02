@@ -1,0 +1,67 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/court_vegetation_03",
+  "slug": "court_vegetation_03",
+  "display_name": "庭院边缘异形绿带_03_植被",
+  "category": "garden",
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v007/塔4_植被侵占破损商城_150x50m_v007.blend",
+  "collection": "庭院边缘异形绿带_03_植被_资产包",
+  "source_collection": "庭院边缘异形绿带_03_植被_制作组件",
+  "objects": [
+    "庭院边缘异形绿带_03_植被_主体"
+  ],
+  "root_object": "庭院边缘异形绿带_03_植被_主体",
+  "world_position": [
+    48.46427536010742,
+    -11.70496654510498,
+    25.5049991607666
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    48.93915939331055,
+    -11.448939323425293,
+    25.484203338623047
+  ],
+  "bounds_max": [
+    49.938087463378906,
+    -10.710216522216797,
+    26.26079559326172
+  ],
+  "dimensions": [
+    0.9989280700683594,
+    0.7387228012084961,
+    0.7765922546386719
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "layered_planting",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "court_vegetation_03.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v007",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/court_vegetation_03",
+  "platform_scope": true
+}

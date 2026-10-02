@@ -1,0 +1,66 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/reinforced_supply_case_06",
+  "slug": "reinforced_supply_case_06",
+  "display_name": "护角物资箱_箱盖扣件与把手_06",
+  "category": "facilities",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "护角物资箱_箱盖扣件与把手_06_资产包",
+  "source_collection": "护角物资箱_箱盖扣件与把手_06_制作组件",
+  "objects": [
+    "护角物资箱_箱盖扣件与把手_06_主体"
+  ],
+  "root_object": "护角物资箱_箱盖扣件与把手_06_主体",
+  "world_position": [
+    -61.900001525878906,
+    22.299999237060547,
+    25.05500030517578
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -62.61,
+    21.774999618530273,
+    25.064999999999998
+  ],
+  "bounds_max": [
+    -61.19,
+    22.77,
+    26.040000915527344
+  ],
+  "dimensions": [
+    1.4200000000000017,
+    0.9950003814697261,
+    0.975000915527346
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "reinforced_supply_case",
+  "dependencies": [],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "reinforced_supply_case_06.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "A",
+  "zone_name": "入口广场",
+  "platform_scope": true
+}

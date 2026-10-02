@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/glass_pavilion_x12_y02_295aa66b",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "斜置玻璃活动盒子_天窗门_区块12_02_主体",
+  "collection": [
+    "斜置玻璃活动盒子_天窗门_区块12_02_资产包"
+  ],
+  "source_package": "tower_04/glass_pavilion_x12_y02",
+  "origin": [
+    49.34805679321289,
+    0.49983954429626465,
+    25.0
+  ],
+  "dimensions": [
+    8.696117401123047,
+    9.016948699951172,
+    4.29667329788208
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    45.0,
+    -4.0086350440979,
+    25.0
+  ],
+  "bounds_max": [
+    53.69611740112305,
+    5.00831413269043,
+    29.296672821044922
+  ],
+  "triangles": 470,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

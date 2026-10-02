@@ -1,0 +1,70 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/court_planter_02",
+  "slug": "court_planter_02",
+  "display_name": "庭院边缘异形绿带_02",
+  "category": "garden",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "庭院边缘异形绿带_02_资产包",
+  "source_collection": "庭院边缘异形绿带_02_制作组件",
+  "objects": [
+    "庭院边缘异形绿带_02_主体"
+  ],
+  "root_object": "庭院边缘异形绿带_02_主体",
+  "world_position": [
+    38.289100646972656,
+    -11.806046485900879,
+    25.1299991607666
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    34.587642669677734,
+    -13.03659725189209,
+    25.1299991607666
+  ],
+  "bounds_max": [
+    42.38531494140625,
+    -10.345290184020996,
+    25.56879425048828
+  ],
+  "dimensions": [
+    7.797672271728516,
+    2.6913070678710938,
+    0.4387950897216797
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "traced_planter",
+  "dependencies": [
+    "tower_04/lawn_court_x10_y01",
+    "tower_04/lawn_court_x11_y01"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "court_planter_02.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "D",
+  "zone_name": "右侧庭院营地",
+  "previous_package_id": "tower_04/court_planter_02",
+  "platform_scope": true
+}

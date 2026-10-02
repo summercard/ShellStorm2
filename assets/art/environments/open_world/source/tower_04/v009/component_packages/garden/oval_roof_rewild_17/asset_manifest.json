@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/oval_roof_rewild_17",
+  "slug": "oval_roof_rewild_17",
+  "display_name": "圆楼屋顶返野花园_17",
+  "category": "garden",
+  "version": "v009",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v009/塔4_架空退台商城下部结构_150x50m_v009.blend",
+  "collection": "圆楼屋顶返野花园_17_资产包",
+  "source_collection": "圆楼屋顶返野花园_17_制作组件",
+  "objects": [
+    "圆楼屋顶返野花园_17_主体"
+  ],
+  "root_object": "圆楼屋顶返野花园_17_主体",
+  "world_position": [
+    -50.281490325927734,
+    -8.58614730834961,
+    25.079999923706055
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -52.10065460205078,
+    -9.854021072387695,
+    24.832698822021484
+  ],
+  "bounds_max": [
+    -48.21034240722656,
+    -7.135842323303223,
+    26.149736404418945
+  ],
+  "dimensions": [
+    3.8903121948242188,
+    2.7181787490844727,
+    1.317037582397461
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "planter_spill_growth",
+  "dependencies": [
+    "tower_04/oval_roof_x02_y01"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "oval_roof_rewild_17.glb",
+  "block_id": "open_world",
+  "floor_range": "1F–5F及25m天台",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "platform_scope": true,
+  "visual_overlay": true,
+  "vegetation": true,
+  "coverage_role": "planter_spill_growth"
+}

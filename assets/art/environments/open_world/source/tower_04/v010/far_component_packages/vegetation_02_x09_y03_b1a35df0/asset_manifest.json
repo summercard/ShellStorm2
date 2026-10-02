@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/vegetation_02_x09_y03_b1a35df0",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "后侧景观花园_棚尾玻璃亭_区块09_03_主体.001",
+  "collection": [
+    "后侧景观花园_棚尾玻璃亭_区块09_03_资产包.001"
+  ],
+  "source_package": "tower_04/vegetation_02_x09_y03",
+  "origin": [
+    19.997425079345703,
+    10.94567584991455,
+    25.60382080078125
+  ],
+  "dimensions": [
+    10.005147933959961,
+    4.491785049438477,
+    3.1982710361480713
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    14.994852066040039,
+    8.699783325195312,
+    25.60382080078125
+  ],
+  "bounds_max": [
+    25.0,
+    13.191568374633789,
+    28.802091598510742
+  ],
+  "triangles": 407,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}

@@ -1,0 +1,68 @@
+{
+  "asset_id": "ENV-OPENWORLD-TOWER04",
+  "package_id": "tower_04/vine_patch_04",
+  "slug": "vine_patch_04",
+  "display_name": "局部藤蔓_04_宿主挂点",
+  "category": "garden",
+  "version": "v010",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4_圆形屋面升层与旋转楼梯_v010.blend",
+  "collection": "局部藤蔓_04_宿主挂点_资产包",
+  "source_collection": "局部藤蔓_04_宿主挂点_制作组件",
+  "objects": [
+    "局部藤蔓_04_宿主挂点_主体"
+  ],
+  "root_object": "局部藤蔓_04_宿主挂点_主体",
+  "world_position": [
+    11.0,
+    5.699999809265137,
+    28.299999237060547
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    10.589603424072266,
+    5.354677200317383,
+    28.2907657623291
+  ],
+  "bounds_max": [
+    11.58592414855957,
+    6.057227611541748,
+    29.758167266845703
+  ],
+  "dimensions": [
+    0.9963207244873047,
+    0.7025504112243652,
+    1.4674015045166016
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_source": "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+  "animation": false,
+  "emissive": false,
+  "component_definition": "contained_vine_patch",
+  "dependencies": [
+    "tower_04/leaf_canopy_x08_y03"
+  ],
+  "fixed_display_attachment": true,
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "vine_patch_04.glb",
+  "block_id": "open_world",
+  "floor_range": "连续天台25m",
+  "scene_design_docs": [
+    "docs/v0.1/design/tower04_mall_source.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04",
+  "component_revision": "v008",
+  "zone_id": "C",
+  "zone_name": "中央花池与棚下东段",
+  "platform_scope": true
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "tower04_far/plaza_planter_02_2011091a",
+  "asset_id": "ENV-OPENWORLD-TOWER04-FAR",
+  "source_blend": "assets/art/environments/open_world/source/tower_04/v010/塔4与塔4-2_远景优化合景_v010.blend",
+  "version": "v010",
+  "lod": "far",
+  "object": "广场外缘连续绿带_02_主体",
+  "collection": [
+    "广场外缘连续绿带_02_资产包"
+  ],
+  "source_package": "tower_04/plaza_planter_02",
+  "origin": [
+    -69.4000015258789,
+    16.650001525878906,
+    25.024999618530273
+  ],
+  "dimensions": [
+    2.1424102783203125,
+    3.042416572570801,
+    0.6000003814697266
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -70.47120666503906,
+    15.128792762756348,
+    25.024999618530273
+  ],
+  "bounds_max": [
+    -68.32879638671875,
+    18.17120933532715,
+    25.625
+  ],
+  "triangles": 305,
+  "exported": false,
+  "collision_status": "not_authored",
+  "block_id": "open_world",
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-TOWER04-FAR"
+}
