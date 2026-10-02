@@ -64,9 +64,6 @@ func get_interaction_dot_anchor() -> Vector3:
 	return global_position + Vector3.UP * 2.0
 
 
-func get_interaction_dot_accent() -> Color:
-	return entrance_color.lightened(0.25)
-
 
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 	if not _player_in_range:

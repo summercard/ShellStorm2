@@ -52,15 +52,6 @@ func get_interaction_dot_anchor() -> Vector3:
 	return global_position + Vector3.UP * 1.85
 
 
-func get_interaction_dot_accent() -> Color:
-	return _accent_color()
-
-
-## 圆点与机架自发光共用同一个主色，避免两处各写一份色值后漂移。
-func _accent_color() -> Color:
-	return Color(0.28, 0.76, 1.0) if category == "gunbody" else Color(1.0, 0.56, 0.18)
-
-
 func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 	if not _player_in_range:
 		return false
@@ -88,7 +79,7 @@ func _on_body_exited(body: Node3D) -> void:
 
 func _build_visual() -> void:
 	var base_material := _material(Color(0.10, 0.12, 0.12), 0.72, 0.44)
-	var accent_color := _accent_color()
+	var accent_color := Color(0.28, 0.76, 1.0) if category == "gunbody" else Color(1.0, 0.56, 0.18)
 	_glow_material = _material(accent_color, 0.18, 0.28, true)
 	_add_box("Pedestal", Vector3(0, 0.35, 0), Vector3(1.7, 0.7, 1.0), base_material)
 	_add_box("GlowStrip", Vector3(0, 0.60, -0.52), Vector3(1.28, 0.10, 0.05), _glow_material)

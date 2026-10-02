@@ -7,6 +7,18 @@ const PROVIDER_GROUP := "interaction_provider_3d"
 const INTERACTION_DOT_SCRIPT := preload("res://src/ui/InteractionDot3D.gd")
 ## provider 没有提供锚点时的兜底高度：悬在对象原点上方，避免圆点埋进地板。
 const DOT_ANCHOR_FALLBACK_HEIGHT_M := 1.7
+## 不挂圆点的 provider（2026-10-02 主人指定）。
+##
+## 基地设施保留自己那套「黄色文字提示牌」：牌子的显隐由 BaseFacility3D 自己的
+## set_interaction_focus() 负责，这里再挂一个圆点就成了双份提示。
+##
+## 用脚本路径、而不是 `provider is BaseFacility3D`：控制器在 player3d/ 下，
+## 不该为了一条表现策略反向依赖 base3d/。
+## 代价是改了文件名会**静默**失效，所以由 verify_interaction_dot_presentation 的
+## 「基地设施不挂圆点」断言盯着 —— 谁动了这条路径，测试当场变红。
+const DOT_EXCLUDED_PROVIDER_SCRIPTS := [
+	"res://src/base3d/BaseFacility3D.gd",
+]
 
 var player: Player3D
 var _focused_provider: Node
@@ -107,6 +119,14 @@ func _provider_is_eligible(provider: Node) -> bool:
 	return true
 
 
+## 这个 provider 该不该拿圆点。见 DOT_EXCLUDED_PROVIDER_SCRIPTS 的说明。
+func _provider_uses_dot(provider: Node) -> bool:
+	var script := provider.get_script() as Script
+	if script == null:
+		return true
+	return not DOT_EXCLUDED_PROVIDER_SCRIPTS.has(script.resource_path)
+
+
 func _candidate_is_better(
 	candidate: Dictionary,
 	provider: Node,
@@ -170,12 +190,12 @@ func _can_player_interact() -> bool:
 # ============================================================================
 # 常驻交互圆点
 # ----------------------------------------------------------------------------
-# 控制器是唯一知道「谁可交互、谁被聚焦、距离多远」的地方，所以圆点也在这里
-# 统一创建与驱动：provider 只按需暴露三个可选接口，不实现也能得到一个默认圆点。
+# 控制器是唯一知道「谁可交互、谁被聚焦、距离多远、按 e 能做什么」的地方，所以圆点
+# 也在这里统一创建与驱动：provider 只按需暴露三个可选接口，不实现也能得到一个默认圆点。
 #   get_interaction_dot_anchor() -> Vector3    圆点世界锚点（缺省：原点上方）
 #   is_interaction_dot_visible() -> bool       圆点是否该常驻显示（缺省：true）
 #   get_interaction_progress() -> Dictionary   {"active": bool, "progress": float}
-#   get_interaction_dot_accent() -> Color      圆点主色（缺省：霓虹青）
+# 圆点主色**不在这里分派**：全场是同一个白点，见 InteractionDot3D.DOT_COLOR。
 # ============================================================================
 
 func _sync_interaction_dots(delta: float) -> void:
@@ -189,7 +209,7 @@ func _sync_interaction_dots(delta: float) -> void:
 	var live_ids := {}
 	for value in tree.get_nodes_in_group(PROVIDER_GROUP):
 		var provider := value as Node
-		if not _provider_is_eligible(provider):
+		if not _provider_is_eligible(provider) or not _provider_uses_dot(provider):
 			continue
 		var id := provider.get_instance_id()
 		live_ids[id] = true
@@ -213,6 +233,12 @@ func _sync_interaction_dots(delta: float) -> void:
 				bool(progress.get("active", false)),
 				float(progress.get("progress", 0.0))
 			)
+		# 按键牌的功能词只在被聚焦的那个圆点上显示；其余圆点清空，
+		# 免得残留上一句文案（聚焦量平滑衰减期间牌子上会挂着旧词）。
+		var prompt_text := ""
+		if provider == _focused_provider:
+			prompt_text = str(_focused_candidate.get("prompt", ""))
+		dot.call("set_prompt", prompt_text)
 		dot.call("update_state", clarity, provider == _focused_provider, step)
 	_prune_dots(live_ids)
 
@@ -252,7 +278,6 @@ func _ensure_dot(provider: Node, id: int) -> Node:
 	var dot := INTERACTION_DOT_SCRIPT.new() as Node
 	dot.name = "InteractionDot3D"
 	provider.add_child(dot)
-	dot.call("configure", _dot_accent(provider))
 	_dots[id] = dot
 	return dot
 
@@ -284,11 +309,3 @@ func _dot_should_show(provider: Node) -> bool:
 	if provider.has_method("is_interaction_dot_visible"):
 		return bool(provider.call("is_interaction_dot_visible"))
 	return true
-
-
-func _dot_accent(provider: Node) -> Color:
-	if provider.has_method("get_interaction_dot_accent"):
-		var raw: Variant = provider.call("get_interaction_dot_accent")
-		if raw is Color:
-			return raw as Color
-	return UIPalette.NEON_CYAN

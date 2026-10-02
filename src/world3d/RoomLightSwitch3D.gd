@@ -148,9 +148,6 @@ func is_interaction_dot_visible() -> bool:
 	return not _controlled_lights.is_empty()
 
 
-func get_interaction_dot_accent() -> Color:
-	return _prompt.modulate if _prompt != null else UIPalette.NEON_CYAN
-
 
 func get_snapshot() -> Dictionary:
 	return {

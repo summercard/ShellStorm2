@@ -111,9 +111,6 @@ func get_interaction_dot_anchor() -> Vector3:
 	return get_seat_position() + Vector3.UP * 0.95
 
 
-func get_interaction_dot_accent() -> Color:
-	return Color(1.0, 0.82, 0.34)
-
 
 func perform_interaction(player: Player3D, candidate: Dictionary) -> bool:
 	match str(candidate.get("interaction_id", "")):

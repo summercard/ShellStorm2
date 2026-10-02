@@ -5,12 +5,18 @@ extends MeshInstance3D
 ## 设计契约（2026-10-02 主人指定）：
 ## - **常驻**：可交互对象始终挂着这个圆点，不依赖玩家是否靠近。
 ## - **接近变清晰**：距离越近，圆点越大、越不透明；近处叠加缓慢的「放大呼吸」。
+## - **统一白点**：全场只有一种颜色，不按对象类型分色（见 DOT_COLOR）。
 ## - **进度用圆环**：需要读条的交互（搜索容器）在圆点外圈画一圈，圈满即完成。
 ## - **完成/触发有反馈**：圈满或交互成功时播放一次「放大脉冲」。
+## - **聚焦显示功能词**：被聚焦时在圆点下方显示「(e) 搜索」这类提示，词从 provider
+##   自己的 prompt 文案抽（见 extract_action_verb）。
 ##
 ## 位置由 PlayerInteractionController3D 每帧写入锚点世界坐标；本组件只负责表现。
 ## `top_level = true`：脱离 provider 的缩放（BaseFacility3D 会整体缩到 0.7），
 ## 否则圆点尺寸会随宿主缩放漂移。
+##
+## 例外：基地设施（BaseFacility3D）**不用这套圆点**，它保留自己的黄色文字提示牌，
+## 由 PlayerInteractionController3D 的 DOT_EXCLUDED_PROVIDER_SCRIPTS 挡掉。
 
 const DOT_SEGMENTS := 40
 const RING_SEGMENTS := 48
@@ -20,13 +26,14 @@ const RING_SEGMENTS := 48
 ## 尺寸标定依据（别凭手感改）：本作窗口 1280x720，塔内相机高 10.719m、后拉 4.038m、
 ## FOV 65°（见 TowerDescent3D 的 CAMERA_* 常量）。交互物常挂在地面上方 ~1.5m，
 ## 镜头到它的**视轴深度**约 10.7m，于是屏幕比例 ≈ 52.6 px/m。
-## 直径 0.38m → 几何 20px，实测渲染 20.5px、带呼吸时 22px、`FAR_SCALE` 下 11.6px。
-## 这个尺寸在真实机位下读得清、又不至于盖住它旁边的货箱和门。改之前先拍
-## tests/verification/probe_interaction_dot_visual.tscn 复核。
-const DOT_RADIUS_M := 0.19
-## 圆环比圆盘外扩一档，留出干净的缝隙；环带本身 0.07m ≈ 3.7px。
-const RING_OUTER_RADIUS_M := 0.315
-const RING_INNER_RADIUS_M := 0.245
+## 直径 0.32m → 几何 17px。2026-10-02 主人要求「再小一点」，从 0.19 收到 0.16。
+## 改之前先拍 tests/verification/probe_interaction_dot_visual.tscn 复核。
+const DOT_RADIUS_M := 0.16
+## 圆环比圆盘外扩一档，留出干净的缝隙。半径必须跟着 DOT_RADIUS_M 等比走
+## （原 0.19 档是 0.315 / 0.245，这里各乘 0.16/0.19）：只缩圆盘不缩环，缝隙会被吃掉、
+## 环会贴到圆盘边上。
+const RING_OUTER_RADIUS_M := 0.265
+const RING_INNER_RADIUS_M := 0.206
 ## 圆盘径向剖面：中心实心核 → 两档柔和收边。
 ## 不写成「中心 → 边缘」一根线插值：那样整块都是半透明，看起来像雾不像点。
 ## 收边必须留：本项目图形档位最低一档 MSAA 是关的，硬边会出锯齿。
@@ -37,9 +44,11 @@ const DISC_RING_ALPHAS := [1.0, 0.72, 0.0]
 const RING_START_ANGLE := PI * 0.5
 
 ## 距离 → 清晰度映射：<= NEAR 全清晰，>= FAR 只剩 FAR_SCALE / FAR_ALPHA。
+## FAR_SCALE 是「常驻态相对接近态的比例」：2026-10-02 主人指定常驻缩到七成（原为 0.5）；
+## 接近后的 1.0 不变。
 const NEAR_DISTANCE_M := 3.2
 const FAR_DISTANCE_M := 16.0
-const FAR_SCALE := 0.5
+const FAR_SCALE := 0.7
 const FAR_ALPHA := 0.22
 const NEAR_ALPHA := 0.95
 
@@ -60,15 +69,25 @@ const CLARITY_SMOOTH_SPEED := 9.0
 const FOCUS_SMOOTH_SPEED := 12.0
 const RING_REBUILD_EPSILON := 0.004
 
-## 聚焦时在圆点下方显示按键符。不想要键位提示就把这里关掉。
+## 聚焦时在圆点下方显示「(e) 功能词」。不想要按键提示就把这里关掉。
+##
+## 功能词不另立一份动词表：直接从 provider 候选文案的 prompt 里抽（见 extract_action_verb）。
+## 两处各写一份动词，迟早会打架。
 const SHOW_KEY_HINT := true
-const KEY_HINT_TEXT := "E"
-const KEY_HINT_FONT_SIZE := 34
+const KEY_HINT_PREFIX := "(e) "
+## 字号比退役前的纯键位牌（34）小一档：牌子上现在是「(e) + 功能词」而不是单个字符，
+## 沿用 34 会让长文案（如「(e) 开启入口」）横向铺得过宽。
+const KEY_HINT_FONT_SIZE := 28
 const KEY_HINT_PIXEL_SIZE := 0.0105
-## 压到圆盘下方：半径 0.19 之外再留 0.26 的呼吸位。
+## 压到圆盘下方：半径 0.16 之外再留足呼吸位。
 const KEY_HINT_OFFSET_Y := -0.45
 
-var accent_color: Color = UIPalette.NEON_CYAN
+## 统一色：所有可交互物共用同一个白点（2026-10-02 主人指定）。
+##
+## 此前每个 provider 通过 get_interaction_dot_accent() 各给一个主色 —— 门是门牌色、
+## 座椅是暖黄、梯子是淡蓝、基地设施是设施色 —— 画面上并不统一。那一层已整块删除。
+## 别再引入按类型分色的分支：要区分对象，靠按键牌上的功能词。
+const DOT_COLOR := Color(1.0, 1.0, 1.0)
 
 var _dot_material: StandardMaterial3D
 var _key_label: Label3D
@@ -90,18 +109,45 @@ var _ring_hold := false
 var _last_applied_scale := 1.0
 var _last_applied_alpha := 1.0
 
+## 聚焦候选的原始 prompt 文案，以及从它抽出的功能词（见 set_prompt / extract_action_verb）。
+var _prompt_raw := ""
+var _prompt_verb := ""
+
 
 func _ready() -> void:
 	_build()
 	set_process(true)
 
 
-func configure(color: Color) -> void:
-	accent_color = color
-	if _dot_material != null:
-		_apply_tint()
-	if _key_label != null:
-		_key_label.modulate = accent_color.lightened(0.25)
+## 从候选文案里抽出「按 e 做什么」。单一真源：各 provider 已有的 prompt 文案，
+## 不另立动词表。格式约定见下方用例。
+static func extract_action_verb(raw: String) -> String:
+	var text := raw.strip_edges()
+	if text.is_empty():
+		return ""
+	# 只认带按键标记的文案，形如 "[E] 搜索 · SMALL" 或 "E 坐上座椅"。
+	if text.begins_with("[E]") or text.begins_with("[e]"):
+		text = text.substr(3)
+	elif text.begins_with("E ") or text.begins_with("e "):
+		text = text.substr(2)
+	else:
+		# 没有按键标记的是**状态文案**（如「通道开启中…」「Boss 信号仍在干扰」）。
+		# 那些文案没有承诺「按 e 能做某事」，挂上 (e) 前缀等于撒谎 —— 返回空，按键牌不显示。
+		return ""
+	text = text.strip_edges()
+	# 砍掉「 · 补充说明」的尾巴。
+	var separator := text.find(" · ")
+	if separator >= 0:
+		text = text.substr(0, separator)
+	return text.strip_edges()
+
+
+## 控制器每帧传入当前聚焦候选的 prompt。只在文案真的变了才重算功能词。
+func set_prompt(raw: String) -> void:
+	if raw == _prompt_raw:
+		return
+	_prompt_raw = raw
+	_prompt_verb = extract_action_verb(raw)
 
 
 ## 由控制器每帧驱动。clarity 0..1（远→近），focused 表示当前被选中的交互目标。
@@ -150,6 +196,11 @@ func play_confirm_pulse() -> void:
 
 
 func get_snapshot() -> Dictionary:
+	var hint_text := ""
+	var hint_visible := false
+	if _key_label != null and is_instance_valid(_key_label):
+		hint_text = _key_label.text
+		hint_visible = _key_label.visible
 	return {
 		"is_3d": true,
 		"visible_amount": _visible_amount,
@@ -157,9 +208,13 @@ func get_snapshot() -> Dictionary:
 		"focus_amount": _focus_amount,
 		"scale_multiplier": _last_applied_scale,
 		"alpha": _last_applied_alpha,
+		"color": DOT_COLOR,
 		"pulsing": _pulse_time > 0.0,
 		"ring_visible": _ring_instance != null and is_instance_valid(_ring_instance) and _ring_instance.visible,
 		"ring_progress": _progress,
+		"action_verb": _prompt_verb,
+		"key_hint_visible": hint_visible,
+		"key_hint_text": hint_text,
 		"world_position": global_position,
 		"dot_radius_m": DOT_RADIUS_M,
 	}
@@ -215,23 +270,17 @@ func _apply_placement(multiplier: float) -> void:
 
 
 func _apply_tint() -> void:
-	var alpha := _last_applied_alpha
+	# 统一白点：圆盘与进度环共用同一个色，只有透明度随距离/聚焦/脉冲变。
+	var color := DOT_COLOR
+	color.a = _last_applied_alpha
 	if _dot_material != null:
-		var color := accent_color
-		color.a = alpha
-		# 聚焦时向白偏一点，让「当前目标」在多个圆点里跳出来。
-		if _focus_amount > 0.0:
-			color = color.lerp(Color(1.0, 1.0, 1.0, alpha), _focus_amount * 0.35)
-			color.a = alpha
 		_dot_material.albedo_color = color
 		_dot_material.emission = color
 	if _ring_instance != null and is_instance_valid(_ring_instance):
 		var ring_material := _ring_instance.material_override as StandardMaterial3D
 		if ring_material != null:
-			var ring_color := accent_color.lightened(0.2)
-			ring_color.a = alpha
-			ring_material.albedo_color = ring_color
-			ring_material.emission = ring_color
+			ring_material.albedo_color = color
+			ring_material.emission = color
 
 
 func _sync_key_hint() -> void:
@@ -239,15 +288,20 @@ func _sync_key_hint() -> void:
 		return
 	# 读条期间不显示按键牌：玩家已经在按了，而且它会压到进度环上（实测重叠 6px）。
 	var ring_showing := _progress_active or _ring_hold
-	var want := _focus_amount > 0.35 and _visible_amount > 0.35 and not ring_showing
+	# 没有功能词就不显示 —— 状态类文案不承诺「按 e 能做某事」。
+	var want := (
+		not _prompt_verb.is_empty()
+		and _focus_amount > 0.35
+		and _visible_amount > 0.35
+		and not ring_showing
+	)
 	if not want and _key_label == null:
 		return
 	var label := _ensure_key_label()
+	label.text = KEY_HINT_PREFIX + _prompt_verb
 	label.visible = want
 	if want:
-		var color := accent_color.lightened(0.3)
-		color.a = clampf(_focus_amount, 0.0, 1.0)
-		label.modulate = color
+		label.modulate = Color(1.0, 1.0, 1.0, clampf(_focus_amount, 0.0, 1.0))
 
 
 func _refresh_ring() -> void:
@@ -301,7 +355,7 @@ func _ensure_key_label() -> Label3D:
 		return _key_label
 	_key_label = Label3D.new()
 	_key_label.name = "KeyHint"
-	_key_label.text = KEY_HINT_TEXT
+	# 文案由 _sync_key_hint() 每帧按当前功能词写入，构造时不预设。
 	_key_label.font_size = KEY_HINT_FONT_SIZE
 	_key_label.pixel_size = KEY_HINT_PIXEL_SIZE
 	_key_label.position = Vector3(0.0, KEY_HINT_OFFSET_Y, 0.0)

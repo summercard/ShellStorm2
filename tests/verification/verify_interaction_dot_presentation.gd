@@ -1,8 +1,10 @@
 extends Node
-## 常驻交互圆点契约（2026-10-02 随「交互提示统一改为圆点」新增）。
+## 常驻交互圆点契约（2026-10-02 随「交互提示统一改为圆点」新增；
+## 同日二轮：统一白点、圆点变小、常驻态改七成、按键牌改「(e) 功能词」、基地设施退回文字牌）。
 ##
-## 盯住六条硬约束：
+## 盯住九条硬约束：
 ## 1. 每个可交互 provider 都会拿到一个圆点，且圆点**常驻**（不靠近也可见）。
+##    例外只有基地设施，见第 9 条。
 ## 2. 距离越近越清晰：近处圆点的 clarity 明显高于远处。
 ## 3. 近处圆点播放**放大呼吸**动画（scale 随时间波动）。
 ## 4. 读条类交互走**圆环**：进度跨过 1.0 时自动播一次放大脉冲；
@@ -11,10 +13,17 @@ extends Node
 ##    整块剔除：圆点只剩内核（直径凭空少一半），而 visible / AABB / surfaces 全都正常。
 ## 6. 圆点材质**不许开 billboard**。着色器 billboard 会归一化模型基向量、连带吃掉
 ##    node.scale —— 呼吸与脉冲会静默失效（实测倍率 1.071→0.5、渲染面积纹丝不动）。
+## 7. **全场统一白点**：所有圆点色值必须一致且为白，不许按对象类型分色。
+## 8. 按键牌是「(e) + 功能词」，功能词从 provider 的 prompt 抽；没有 `[E]` 标记的
+##    状态文案不显示按键牌 —— 不能空口承诺「按 e 能做某事」。
+## 9. **基地设施（BaseFacility3D）没有圆点**，且它自己的黄色文字提示牌必须还能随聚焦
+##    显隐。这是那次改动被整体回退的两半，任一半失效都要红。
 ##
 ## 同时静态守住「旧搜索进度条 UI 已移除」这个已经明确的重构结果。
 
 const DOT_SCRIPT := preload("res://src/ui/InteractionDot3D.gd")
+## 与控制器里的豁免清单必须一致；控制器改了而这里没改，第 9 条会当场变红。
+const EXCLUDED_PROVIDER_SCRIPT := "res://src/base3d/BaseFacility3D.gd"
 
 
 class DotProbe:
@@ -37,7 +46,8 @@ class DotProbe:
 			"interaction_id": probe_id,
 			"position": global_position,
 			"priority": priority,
-			"prompt": probe_id,
+			# 真实的容器文案：用来验「[E] 搜索 · SMALL → (e) 搜索」这条抽取链。
+			"prompt": "[E] 搜索 · SMALL",
 		}
 
 	func set_interaction_focus(_candidate: Dictionary, _focused: bool) -> void:
@@ -57,6 +67,7 @@ class DotProbe:
 func _ready() -> void:
 	var failures: Array[String] = []
 	_validate_legacy_search_ui_removed(failures)
+	_validate_action_verb_extraction(failures)
 	_validate_dot_geometry(failures)
 
 	var packed := load("res://scenes/TowerDescent3D.tscn") as PackedScene
@@ -73,7 +84,10 @@ func _ready() -> void:
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("INTERACTION_DOT_PRESENTATION_OK: resident dots, distance clarity, breathing, ring progress and pulse")
+		print(
+			"INTERACTION_DOT_PRESENTATION_OK: uniform white resident dots, distance clarity, "
+			+ "breathing, ring progress, pulse, (e) verb key hint, base facility reverted to its own prompt"
+		)
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -119,13 +133,19 @@ func _validate_dot_geometry(failures: Array[String]) -> void:
 	else:
 		_expect(false, "进度环没有生成网格", failures)
 
-	# 材质不许开 billboard：它归一化模型基向量，node.scale 会被丢掉。
+	# ⑦ 统一白点：圆盘必须就是白色，色值不许按对象类型走。
 	var disc_material := dot.material_override as StandardMaterial3D
 	_expect(disc_material != null, "圆盘没有材质", failures)
 	if disc_material != null:
 		_expect(
 			disc_material.billboard_mode == BaseMaterial3D.BILLBOARD_DISABLED,
 			"圆盘材质开了 billboard —— 会把 node.scale 归一化掉，呼吸与脉冲会静默失效",
+			failures
+		)
+		var albedo := disc_material.albedo_color
+		_expect(
+			absf(albedo.r - 1.0) < 0.001 and absf(albedo.g - 1.0) < 0.001 and absf(albedo.b - 1.0) < 0.001,
+			"圆盘不是白点（albedo=%s）—— 又按对象类型分色了" % str(albedo),
 			failures
 		)
 	if ring != null and ring.material_override is StandardMaterial3D:
@@ -135,20 +155,69 @@ func _validate_dot_geometry(failures: Array[String]) -> void:
 			"进度环材质开了 billboard —— 会吃掉 node.scale",
 			failures
 		)
+	# 进度环必须画在圆盘**外面**：内径大于圆盘半径，否则环会压在盘上糊成一坨。
+	_expect(
+		float(DOT_SCRIPT.RING_INNER_RADIUS_M) > float(DOT_SCRIPT.DOT_RADIUS_M),
+		"进度环内径（%.3f）不大于圆盘半径（%.3f）—— 环会压在圆盘上"
+			% [float(DOT_SCRIPT.RING_INNER_RADIUS_M), float(DOT_SCRIPT.DOT_RADIUS_M)],
+		failures
+	)
 
-	# 缩放通道必须是活的：clarity 1.0 与 0.0 的 base_scale 应当差一倍（FAR_SCALE=0.5）。
-	for _step in range(40):
-		dot.call("update_state", 1.0, false, 0.033)
-	var wide := dot.scale.x
-	for _step in range(40):
+	# 缩放通道必须活着，且常驻比例就是 FAR_SCALE（2026-10-02 主人指定为接近态的七成）。
+	# clarity 0.0 时呼吸是关的（见 BREATH_MIN_CLARITY），所以这里应当**精确**等于 FAR_SCALE，
+	# 不是「大概差不多」—— 常驻比例被谁动了，这条当场红。
+	for _step in range(60):
 		dot.call("update_state", 0.0, false, 0.033)
 	var narrow := dot.scale.x
 	_expect(
-		wide > narrow * 1.5,
+		absf(narrow - float(DOT_SCRIPT.FAR_SCALE)) < 0.005,
+		"常驻态缩放不等于 FAR_SCALE（narrow=%.4f 期望=%.4f）—— 常驻比例被改动过"
+			% [narrow, float(DOT_SCRIPT.FAR_SCALE)],
+		failures
+	)
+	for _step in range(60):
+		dot.call("update_state", 1.0, false, 0.033)
+	var wide := dot.scale.x
+	_expect(
+		wide > narrow,
 		"圆点缩放没有随清晰度变化（near=%.3f far=%.3f）—— 缩放通道已失效" % [wide, narrow],
 		failures
 	)
 	dot.queue_free()
+
+
+## ⑧ 功能词抽取。用例全是场上真实存在的文案，改坏了会直接体现在玩家看到的牌子上。
+func _validate_action_verb_extraction(failures: Array[String]) -> void:
+	var cases := [
+		["[E] 搜索 · SMALL", "搜索"],
+		["[E] 搜索", "搜索"],
+		["[E] 开启入口 · 选择命运", "开启入口"],
+		["[E] 开启通道", "开启通道"],
+		["[E] 切换中央灯", "切换中央灯"],
+		["[E] 使用房间钥匙", "使用房间钥匙"],
+		["[E] 交谈", "交谈"],
+		["[E] 返回3D基地", "返回3D基地"],
+		["[e] 搜索", "搜索"],
+		["E 坐上座椅", "坐上座椅"],
+		["E 放下伸缩梯", "放下伸缩梯"],
+		["E 扶正座椅", "扶正座椅"],
+		# 状态类文案：没有按键标记，不该冒出一个 (e) 前缀。
+		["通道开启中…", ""],
+		["通道已开启", ""],
+		["已搜索", ""],
+		["搜索中 · 请保持靠近", ""],
+		["Boss 信号仍在干扰", ""],
+		["", ""],
+	]
+	for entry in cases:
+		var raw := str(entry[0])
+		var expected := str(entry[1])
+		var actual := str(DOT_SCRIPT.extract_action_verb(raw))
+		_expect(
+			actual == expected,
+			"功能词抽取不对：「%s」→「%s」，期望「%s」" % [raw, actual, expected],
+			failures
+		)
 
 
 ## 首三角的法线 z 分量。同平面网格比大小即可判定绕序是否同向 —— 不依赖引擎的正反面约定。
@@ -199,7 +268,9 @@ func _validate_dots(tower: TowerDescent3D, failures: Array[String]) -> void:
 
 	var near := DotProbe.new()
 	near.position = player.global_position + Vector3(1.0, 0.0, 0.0)
-	near.configure("near_dot_probe", 90)
+	# 优先级给到远超场内真实 provider（最高 120）的档位：下面要验「聚焦那个圆点的按键牌」，
+	# 不能让它被别的候选抢走焦点。
+	near.configure("near_dot_probe", 900)
 	tower.add_child(near)
 
 	var far := DotProbe.new()
@@ -224,6 +295,20 @@ func _validate_dots(tower: TowerDescent3D, failures: Array[String]) -> void:
 	_expect(not progress_dot.is_empty(), "读条 provider 没有拿到圆点", failures)
 	if near_dot.is_empty() or far_dot.is_empty():
 		return
+
+	# ⑦ 统一白点：场上所有圆点的色值必须完全一致，而且就是白。
+	var near_color: Color = near_dot.get("color", Color.BLACK)
+	var far_color: Color = far_dot.get("color", Color.BLACK)
+	_expect(
+		near_color == far_color,
+		"场上圆点颜色不一致（near=%s far=%s）—— 不是统一白点" % [str(near_color), str(far_color)],
+		failures
+	)
+	_expect(
+		near_color == Color(1.0, 1.0, 1.0),
+		"圆点不是白色（%s）" % str(near_color),
+		failures
+	)
 
 	# ① 常驻：远处圆点也必须可见。
 	_expect(
@@ -251,6 +336,23 @@ func _validate_dots(tower: TowerDescent3D, failures: Array[String]) -> void:
 	_expect(
 		highest - lowest > 0.02,
 		"近处圆点没有放大呼吸动画（波动 %.4f）" % (highest - lowest),
+		failures
+	)
+
+	# ⑧ 按键牌：聚焦那个圆点必须挂出从 prompt 抽出来的功能词。
+	_expect(
+		str(near_dot.get("action_verb", "")) == "搜索",
+		"聚焦圆点没有抽出功能词（action_verb=「%s」）" % str(near_dot.get("action_verb", "")),
+		failures
+	)
+	_expect(
+		str(near_dot.get("key_hint_text", "")) == "(e) 搜索",
+		"聚焦圆点的按键牌文案不对（「%s」，期望「(e) 搜索」）" % str(near_dot.get("key_hint_text", "")),
+		failures
+	)
+	_expect(
+		not str(far_dot.get("key_hint_text", "")).begins_with("(e)"),
+		"未聚焦的圆点也挂了按键牌（「%s」）—— 牌子上只该有一个功能词" % str(far_dot.get("key_hint_text", "")),
 		failures
 	)
 
@@ -291,12 +393,62 @@ func _validate_dots(tower: TowerDescent3D, failures: Array[String]) -> void:
 		failures
 	)
 
-	# ⑦ 圆点数量应覆盖场上全部 provider（含真实关卡对象）。
+	# 圆点数量应覆盖场上全部 provider（含真实关卡对象）。
 	_expect(
 		controller.get_interaction_dot_count() >= 3,
 		"圆点数量少于已注册 provider（%d）" % controller.get_interaction_dot_count(),
 		failures
 	)
+
+	# ⑨ 基地设施整体退回原版：它没有圆点，且自己的文字提示牌还能随聚焦显隐。
+	await _validate_base_facility_reverted(tower, controller, failures)
+
+
+## ⑨ 基地设施（BaseFacility3D）被整体退回原版。两半都要验 ——
+## 只验一半的话，「又给它挂回圆点」或「把它的提示牌永久藏起来」都会溜过去。
+func _validate_base_facility_reverted(
+	tower: TowerDescent3D, controller: PlayerInteractionController3D, failures: Array[String]
+) -> void:
+	# 先在源码层点名：路径写到别处去了，下面的行为断言只会给出一句含糊的
+	# 「基地设施被挂上了圆点」，这里直接把「清单里没有这个路径」说清楚。
+	var controller_source := FileAccess.get_file_as_string(
+		"res://src/player3d/PlayerInteractionController3D.gd"
+	)
+	_expect(
+		controller_source.contains(EXCLUDED_PROVIDER_SCRIPT),
+		"控制器的圆点豁免清单里没有 %s" % EXCLUDED_PROVIDER_SCRIPT,
+		failures
+	)
+
+	var facility := BaseFacility3D.new()
+	facility.display_name = "单元测试设施"
+	# BaseFacility3D 用 @onready $NameLabel / $PromptLabel，所以子节点必须在入树前挂好。
+	var name_label := Label3D.new()
+	name_label.name = "NameLabel"
+	facility.add_child(name_label)
+	var prompt_label := Label3D.new()
+	prompt_label.name = "PromptLabel"
+	facility.add_child(prompt_label)
+	facility.position = tower.player.global_position + Vector3(2.6, 0.0, 0.0)
+	tower.add_child(facility)
+	for _index in range(4):
+		await get_tree().process_frame
+
+	_expect(
+		controller.get_interaction_dot_snapshot(facility).is_empty(),
+		"基地设施被挂上了圆点 —— 会与它自己的黄色文字提示牌叠成双份提示",
+		failures
+	)
+
+	# 原版行为：聚焦且玩家在范围内 → 提示牌显示；退出聚焦 → 隐藏。
+	facility.set("_player_in_range", true)
+	facility.call("set_interaction_focus", {}, true)
+	_expect(prompt_label.visible, "基地设施的文字提示牌没有随聚焦显示 —— 回退不完整", failures)
+	facility.call("set_interaction_focus", {}, false)
+	_expect(not prompt_label.visible, "基地设施的文字提示牌退出聚焦后没有隐藏", failures)
+
+	facility.queue_free()
+	await get_tree().process_frame
 
 
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:

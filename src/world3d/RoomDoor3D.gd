@@ -171,10 +171,6 @@ func is_interaction_dot_visible() -> bool:
 	return not is_open or _manual_close_enabled
 
 
-## 圆点沿用文字牌的状态色：需要钥匙=金、可选命运=青、可开启=绿。
-func get_interaction_dot_accent() -> Color:
-	return _prompt.modulate if _prompt != null else Color(0.52, 0.94, 0.80)
-
 
 func get_interaction_prompt_text() -> String:
 	return _prompt.text if _prompt != null else "[E] 开启通道"

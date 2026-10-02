@@ -90,9 +90,6 @@ func get_interaction_progress() -> Dictionary:
 	}
 
 
-func get_interaction_dot_accent() -> Color:
-	return accent_color
-
 
 func get_interaction_candidate(_player: Player3D) -> Dictionary:
 	if not searchable or _searched or _searching or not _player_in_range:
