@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "asset_id": "ENM-NORMAL-FAT-ZOMBIE03",
+  "content_id": "fat_zombie03",
+  "source_number": "03",
+  "version": "v001",
+  "status": "exported_pending_godot_validation",
+  "validation_scope": "static_model_load_passed; full_character_contract_pending",
+  "model_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v001.blend",
+  "animation_source": null,
+  "skeleton_signature": "7b42befdb500c252b4b62ead1041691fac4e1ccc5df4d1c89270fe9e9fbc7c57",
+  "clips": [],
+  "missing_clips": [
+    "idle",
+    "walking",
+    "running",
+    "attack",
+    "hurt",
+    "dead"
+  ],
+  "files": [
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v001.blend",
+      "sha256": "4fd0de7d2c8fef10a07bd21a6714fdbf7871cdb2fe40ebfb122a8b3735f5acbb"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb",
+      "sha256": "3331d07d81fcd48862cc3e00ac913f0ab971b5d8119b195230e5e416a4f705f6"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
+      "sha256": "410cba817fd680f142ae910c53850d7e6d4a179267f1138dfe4c8a83fca2da53"
+    }
+  ],
+  "source_zip": "I:/工作项目/桌面文件备份/僵尸_项目素材_20260922/胖子僵尸.zip",
+  "source_zip_sha256": "89a36a545512fc0de9ef63d4fd034fcdb40177b86da1c6b54792995f10ee5db5",
+  "consumer": "independent PackedScene only; Enemy3D not bound",
+  "rollback": "remove newly created fat_zombie03 package; restore ledger_before.xlsx and baseline_before.json",
+  "notes": "源编号03；模型入库及Godot独立加载通过，非完整怪物验收。65骨Mixamo骨名未对齐项目，缺Root；无动画，待idle/walking/running/attack/hurt/dead六段与动作母版、状态绑定。未配置AI/伤害/掉落/碰撞或投放。T姿势宽度不作为碰撞尺寸。来源许可待确认。",
+  "duplicate_gate": {
+    "classification": null,
+    "passed": true,
+    "report": "outputs\\asset_guard\\ENM-NORMAL-FAT-ZOMBIE03_fat_zombie03.json",
+    "same_asset_id_count": 0,
+    "identical_registered_file_count": 0
+  }
+}

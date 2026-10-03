@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb" id="1"]
+
+[node name="FatZombie03" type="Node3D"]
+metadata/asset_id = "ENM-NORMAL-FAT-ZOMBIE03"
+metadata/content_id = "fat_zombie03"
+metadata/source_number = "03"
+metadata/asset_version = "v001"
+metadata/presentation_only = true
+metadata/collision_owner = "Enemy3D"
+metadata/godot_forward = "-Z"
+metadata/validation_status = "imported_pending_rig_and_animation"
+
+[node name="Visual" parent="." instance=ExtResource("1")]

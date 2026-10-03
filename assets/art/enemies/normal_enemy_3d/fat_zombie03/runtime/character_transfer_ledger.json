@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "asset_id": "ENM-NORMAL-FAT-ZOMBIE03",
+  "content_id": "fat_zombie03",
+  "source_number": "03",
+  "version": "v002",
+  "status": "exported_pending_godot_validation",
+  "validation_scope": "model_rig_texture_static_load_verified; animations_design_only",
+  "model_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v002.blend",
+  "animation_source": null,
+  "skeleton_signature": "e5d43d75f0b15522430838db1242c3fc2bd586c8b6dae11367ca0d60146bb1db",
+  "clips": [],
+  "missing_clips": [
+    "idle",
+    "walking",
+    "running",
+    "attack",
+    "hurt",
+    "dead",
+    "awaken",
+    "alert",
+    "turn_l",
+    "turn_r",
+    "move_start",
+    "move_stop",
+    "hit_light"
+  ],
+  "files": [
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v002.blend",
+      "sha256": "4771ee4f04b17d272af8c77b256eb451051ffc05b46b770ec9b6750b540e8186"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/textures/enm_normal_fat_zombie03_basecolor_v002.png",
+      "sha256": "019f80e6a4e38253c730c1385734030b9a1ca172d6ed86abc102473e42d5913c"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb",
+      "sha256": "20795422cc1fd77d3e9d3f7b7982f28e458b9de9b000d3d0018d715abbc67623"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
+      "sha256": "2d755e03b237dc629face17fefc46b4dd0db9e453c3054308888136abae7f65a"
+    }
+  ],
+  "source_zip": "I:/工作项目/桌面文件备份/僵尸_项目素材_20260922/胖子僵尸.zip",
+  "source_zip_sha256": "89a36a545512fc0de9ef63d4fd034fcdb40177b86da1c6b54792995f10ee5db5",
+  "consumer": "independent PackedScene only; Enemy3D not bound",
+  "rollback": "v001 source retained for history only (known skeleton defect); transaction backups _scratch/fat_zombie03/v002_backup",
+  "notes": "编号03；v002从原始FBX重建，修正v001连接骨重复变换。36核心骨名齐全+30原有附加骨=66；Root无父级、Hip→Root；保留全部权重。512²贴图；游戏高2.2m（源3.142857m×0.70，kind/variant=1）。动作设计r1为13段，动画尚未制作或绑定，未投放。独立骨架签名，不声称共享静止姿态。",
+  "skeleton_id": "SKEL-FAT-ZOMBIE03-002",
+  "planned_clips": [
+    {
+      "name": "idle",
+      "fps": 30,
+      "last_frame": 96,
+      "duration_s": 3.2,
+      "loop": true,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "walking",
+      "fps": 30,
+      "last_frame": 60,
+      "duration_s": 2.0,
+      "loop": true,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "running",
+      "fps": 30,
+      "last_frame": 36,
+      "duration_s": 1.2,
+      "loop": true,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "attack",
+      "fps": 30,
+      "last_frame": 75,
+      "duration_s": 2.5,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "hurt",
+      "fps": 30,
+      "last_frame": 24,
+      "duration_s": 0.8,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "dead",
+      "fps": 30,
+      "last_frame": 78,
+      "duration_s": 2.6,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "awaken",
+      "fps": 30,
+      "last_frame": 36,
+      "duration_s": 1.2,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "alert",
+      "fps": 30,
+      "last_frame": 18,
+      "duration_s": 0.6,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "turn_l",
+      "fps": 30,
+      "last_frame": 24,
+      "duration_s": 0.8,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "turn_r",
+      "fps": 30,
+      "last_frame": 24,
+      "duration_s": 0.8,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "move_start",
+      "fps": 30,
+      "last_frame": 12,
+      "duration_s": 0.4,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "move_stop",
+      "fps": 30,
+      "last_frame": 18,
+      "duration_s": 0.6,
+      "loop": false,
+      "status": "designed_not_authored"
+    },
+    {
+      "name": "hit_light",
+      "fps": 30,
+      "last_frame": 9,
+      "duration_s": 0.3,
+      "loop": false,
+      "status": "designed_not_authored"
+    }
+  ],
+  "action_design": {
+    "path": "docs/v0.1/design/胖子僵尸03动作设计.md",
+    "revision": "r1",
+    "sha256": "4a3c02968b38e4b6a9930888c7b253a9bb329e2e0fcbfc5d746195bfa52ea5e5",
+    "character_count": 4213
+  },
+  "duplicate_gate": {
+    "classification": "version_increment",
+    "passed": true,
+    "report": "outputs\\asset_guard\\ENM-NORMAL-FAT-ZOMBIE03_fat_zombie03.json",
+    "same_asset_id_count": 0,
+    "identical_registered_file_count": 0
+  }
+}

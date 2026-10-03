@@ -1,0 +1,24 @@
+{
+  "ledger_structure": {
+    "exit_code": 0
+  },
+  "ledger_full": {
+    "exit_code": 1
+  },
+  "ledger_split": {
+    "exit_code": 0
+  },
+  "asset_guard": {
+    "exit_code": 0
+  },
+  "runtime_naming": {
+    "exit_code": 1
+  },
+  "documentation": {
+    "exit_code": 1
+  },
+  "ledger_existing_issues_identical": true,
+  "design_chars": 4213,
+  "planned_actions": 13,
+  "godot_rig_texture_passed": true
+}

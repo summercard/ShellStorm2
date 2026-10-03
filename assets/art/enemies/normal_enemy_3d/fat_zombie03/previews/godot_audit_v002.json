@@ -1,0 +1,34 @@
+{
+	"animation_count": 0,
+	"bones": 66,
+	"collision_nodes": 0,
+	"hip_parent": "Root",
+	"mesh_bounds": [
+		{
+			"origin": [
+				-2.6258909702301,
+				-0.000000407973686833429,
+				-1.02752280235291
+			],
+			"size": [
+				5.25178146362305,
+				3.14285802841187,
+				2.05504512786865
+			]
+		}
+	],
+	"meshes": 1,
+	"missing_core": [],
+	"root_parent": -1,
+	"root_scale": [
+		1.0,
+		1.0,
+		1.0
+	],
+	"textures": [
+		[
+			512,
+			512
+		]
+	]
+}
