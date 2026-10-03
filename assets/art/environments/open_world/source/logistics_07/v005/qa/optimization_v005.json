@@ -1,0 +1,116 @@
+{
+  "passed": true,
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "source_before": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\logistics_07\\v004\\env_logistics_07_source_v004.blend",
+  "source_after": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\logistics_07\\v005\\env_logistics_07_source_v005.blend",
+  "source_before_sha256": "5e658272c8043ae533c7c73b3f366620f7704c4522e770cfb5bafa201a526200",
+  "source_after_sha256": "8c7ff538bfbe00d94cbd1f9a716644611496aed0522152c9f9c421e0f99c1168",
+  "total_triangles_before": 116011,
+  "total_triangles_after": 87939,
+  "hvac_triangles_before": 46723,
+  "hvac_triangles_after": 18651,
+  "optimized_hvac_count": 11,
+  "unchanged_package_count": 323,
+  "optimized_hvac": [
+    {
+      "slug": "roof_hvac_00",
+      "triangles_before": 4313,
+      "triangles_after": 1761,
+      "triangle_reduction": 0.5917,
+      "polygons_before": 1995,
+      "polygons_after": 775,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "roof_hvac_01",
+      "triangles_before": 4313,
+      "triangles_after": 1761,
+      "triangle_reduction": 0.5917,
+      "polygons_before": 1995,
+      "polygons_after": 775,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "roof_hvac_02",
+      "triangles_before": 4313,
+      "triangles_after": 1761,
+      "triangle_reduction": 0.5917,
+      "polygons_before": 1995,
+      "polygons_after": 775,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "roof_hvac_03",
+      "triangles_before": 4313,
+      "triangles_after": 1761,
+      "triangle_reduction": 0.5917,
+      "polygons_before": 1995,
+      "polygons_after": 775,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "roof_hvac_04",
+      "triangles_before": 4313,
+      "triangles_after": 1761,
+      "triangle_reduction": 0.5917,
+      "polygons_before": 1995,
+      "polygons_after": 775,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "roof_hvac_05",
+      "triangles_before": 4313,
+      "triangles_after": 1761,
+      "triangle_reduction": 0.5917,
+      "polygons_before": 1995,
+      "polygons_after": 775,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "wall_ac_00",
+      "triangles_before": 4169,
+      "triangles_after": 1617,
+      "triangle_reduction": 0.612137,
+      "polygons_before": 1923,
+      "polygons_after": 703,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "wall_ac_01",
+      "triangles_before": 4169,
+      "triangles_after": 1617,
+      "triangle_reduction": 0.612137,
+      "polygons_before": 1923,
+      "polygons_after": 703,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "wall_ac_02",
+      "triangles_before": 4169,
+      "triangles_after": 1617,
+      "triangle_reduction": 0.612137,
+      "polygons_before": 1923,
+      "polygons_after": 703,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "wall_ac_03",
+      "triangles_before": 4169,
+      "triangles_after": 1617,
+      "triangle_reduction": 0.612137,
+      "polygons_before": 1923,
+      "polygons_after": 703,
+      "max_bounds_delta_m": 0.0
+    },
+    {
+      "slug": "wall_ac_04",
+      "triangles_before": 4169,
+      "triangles_after": 1617,
+      "triangle_reduction": 0.612137,
+      "polygons_before": 1923,
+      "polygons_after": 703,
+      "max_bounds_delta_m": 0.0
+    }
+  ],
+  "errors": []
+}

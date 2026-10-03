@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/planter_0",
+  "display_name": "入口绿植花池_0",
+  "slug": "planter_0",
+  "category": "facilities",
+  "version": "v005",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v005\\env_logistics_07_source_v005.blend",
+  "collection": "入口绿植花池_0_资产包",
+  "source_collection": "入口绿植花池_0_制作组件",
+  "objects": [
+    "入口绿植花池_0_主体"
+  ],
+  "root_object": "入口绿植花池_0_主体",
+  "world_position": [
+    -13.850000381469727,
+    -11.800000190734863,
+    0.20000000298023224
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -14.463720996018372,
+    -12.75,
+    0.19999999999999996
+  ],
+  "bounds_max": [
+    -13.202931013502143,
+    -10.850000000000001,
+    2.221393149535714
+  ],
+  "dimensions": [
+    1.2607899825162292,
+    1.8999999999999986,
+    2.0213931495357143
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "planter_0.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "planter",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

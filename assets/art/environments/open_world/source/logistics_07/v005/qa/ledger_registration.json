@@ -1,0 +1,12 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "row": 824,
+  "version": "v005",
+  "source_sha256": "8c7ff538bfbe00d94cbd1f9a716644611496aed0522152c9f9c421e0f99c1168",
+  "previous_version": "v004",
+  "previous_sha256": "5e658272c8043ae533c7c73b3f366620f7704c4522e770cfb5bafa201a526200",
+  "other_asset_rows_unchanged": true,
+  "other_asset_fingerprints_unchanged": true,
+  "backup_directory": "I:\\工作项目\\shellstrom2\\ShellStorm2\\_scratch\\logistics07_v005_ledger_backup",
+  "log_version": "v0.1.44"
+}

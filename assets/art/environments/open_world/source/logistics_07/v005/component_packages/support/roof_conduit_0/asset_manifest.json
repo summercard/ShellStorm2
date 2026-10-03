@@ -1,0 +1,62 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "package_id": "logistics_07/roof_conduit_0",
+  "display_name": "屋顶钢管布线_0",
+  "slug": "roof_conduit_0",
+  "category": "support",
+  "version": "v005",
+  "source_blend": "assets\\art\\environments\\open_world\\source\\logistics_07\\v005\\env_logistics_07_source_v005.blend",
+  "collection": "屋顶钢管布线_0_资产包",
+  "source_collection": "屋顶钢管布线_0_制作组件",
+  "objects": [
+    "屋顶钢管布线_0_主体"
+  ],
+  "root_object": "屋顶钢管布线_0_主体",
+  "world_position": [
+    -10.0,
+    5.0,
+    18.1299991607666
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_min": [
+    -10.0,
+    -4.5,
+    18.049999237060547
+  ],
+  "bounds_max": [
+    -0.48000001907348633,
+    5.079999923706055,
+    18.209999084472656
+  ],
+  "dimensions": [
+    9.519999980926514,
+    9.579999923706055,
+    0.15999984741210938
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "animation": false,
+  "emissive": false,
+  "dependencies": [],
+  "collision_status": "not_authored",
+  "exported": false,
+  "expected_export": "roof_conduit_0.glb",
+  "fixed_display_attachment": true,
+  "component_definition": "conduit",
+  "block_id": "open_world",
+  "floor_range": "三段立面＋屋顶",
+  "scene_design_docs": [
+    "用户参考图；独立外观资产，尺寸为美术尺度，不建立玩法层高",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "scenes::资产主表::ENV-OPENWORLD-LOGISTICS07"
+}

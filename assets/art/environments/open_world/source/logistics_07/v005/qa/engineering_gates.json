@@ -1,0 +1,33 @@
+{
+  "asset_id": "ENV-OPENWORLD-LOGISTICS07",
+  "source_version": "v005",
+  "optimization_audit_exit": 0,
+  "source_audit_exit": 0,
+  "palette_validation_exit": 0,
+  "ledger_structure_exit": 0,
+  "ledger_split_exit": 0,
+  "ledger_full_exit": 1,
+  "ledger_full_issue_counts": {
+    "sha_mismatch": 153
+  },
+  "ledger_full_issue_count_matches_v004": true,
+  "current_asset_issues": 0,
+  "runtime_naming_exit": 1,
+  "runtime_naming_scope": "No runtime paths created; pre-existing versioned runtime paths remain",
+  "documentation_exit": 1,
+  "documentation_issues": [
+    "verify_base99_swivel_chairs unregistered",
+    "verify_expedition01_spawn_ramp unregistered",
+    "verify_expedition_resume_entry unregistered",
+    "verify_pushable_base_chairs unregistered",
+    "python3 child launcher lacks openpyxl for check_media_asset_domains"
+  ],
+  "not_executed": [
+    "GLB optimization/export",
+    "Godot import",
+    "collision",
+    "LOD",
+    "runtime performance profiling",
+    "user visual sign-off"
+  ]
+}
