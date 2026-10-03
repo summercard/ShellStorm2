@@ -93,6 +93,9 @@ assets/art/environments/open_world/source/**/*.blend
 _godot_appdata*/
 _scratch/probe_appdata/
 _scratch/*_appdata/
+# 同上，但探针把 appdata 落在了 _scratch/<子目录>/ 里（如 _scratch/fat_zombie03/isolated_appdata/）。
+# 这类目录里是 editor_settings 之类的机器本地配置，含绝对路径，不是资产。
+_scratch/**/*_appdata/
 isolated_userdata/
 
 # 重新导出前的旧组件副本（内容与 HEAD 里那份逐字节相同，纯对照用，重导出完即弃）
