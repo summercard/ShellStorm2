@@ -22,6 +22,10 @@ uniform int ray_steps = 96;
 uniform int light_steps = 4;
 uniform vec4 fallback_regions[32];
 uniform int fallback_count = 0;
+// 每格最多一栋；邻域查询保留街道云，不新增材质资源。
+uniform bool procedural_city_enabled = false;
+uniform sampler2D procedural_city_boxes : filter_nearest, repeat_disable;
+uniform vec4 procedural_city_grid = vec4(0.0, 0.0, 25.0, 20.0);
 varying vec3 local_surface;
 varying vec3 local_camera;
 
@@ -38,6 +42,23 @@ float building_clearance(vec3 w) {
         vec3 hi = fallback_regions[i * 2 + 1].xyz;
         vec3 outside = max(max(lo - w, w - hi), vec3(0.0));
         distance_to_model = min(distance_to_model, length(outside));
+    }
+    if (procedural_city_enabled) {
+        ivec2 cell = ivec2(floor((w.xz - procedural_city_grid.xy) / procedural_city_grid.z));
+        int grid = int(procedural_city_grid.w);
+        for (int dz = -1; dz <= 1; dz++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                ivec2 slot = cell + ivec2(dx, dz);
+                if (slot.x < 0 || slot.y < 0 || slot.x >= grid || slot.y >= grid) { continue; }
+                vec4 height = texelFetch(procedural_city_boxes, slot + ivec2(0, grid), 0);
+                if (height.z < 0.5) { continue; }
+                vec4 footprint = texelFetch(procedural_city_boxes, slot, 0);
+                vec3 lo = vec3(footprint.x, height.x, footprint.y);
+                vec3 hi = vec3(footprint.z, height.y, footprint.w);
+                vec3 outside = max(max(lo - w, w - hi), vec3(0.0));
+                distance_to_model = min(distance_to_model, length(outside));
+            }
+        }
     }
     return distance_to_model;
 }

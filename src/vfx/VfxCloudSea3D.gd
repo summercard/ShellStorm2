@@ -21,6 +21,9 @@ var _quality_profile := "high"
 var _keepout_regions: Array[String] = []
 var _geometry_regions: Dictionary = {}
 var _fallback_bounds: Array[AABB] = []
+var _procedural_city_bounds: Array[AABB] = []
+var _procedural_city_texture: ImageTexture
+var _procedural_city_grid := Vector4.ZERO
 
 
 func _ready() -> void:
@@ -78,6 +81,29 @@ func _on_configure(context: Dictionary) -> void:
 	_sync_materials()
 
 
+# 全域城市每格最多一栋：上传格点足迹/高度，避免合并成整片城市超级禁云盒。
+func set_procedural_city_layout(layout: Array[Dictionary], config: Dictionary) -> void:
+	var grid := int(float(config["extent_m"]) / float(config["spacing_m"]))
+	var image := Image.create(grid, grid * 2, false, Image.FORMAT_RGBAF)
+	image.fill(Color(0, 0, 0, 0))
+	_procedural_city_bounds.clear()
+	for placement in layout:
+		var transform: Transform3D = placement["transform"]
+		var box := _transformed_box(AABB(Vector3.ONE * -0.5, Vector3.ONE), transform).grow(BUILDING_CLEARANCE_M)
+		_procedural_city_bounds.append(box)
+		var x: int = placement["grid_x"]
+		var z: int = placement["grid_z"]
+		image.set_pixel(x, z, Color(box.position.x, box.position.z, box.end.x, box.end.z))
+		image.set_pixel(x, z + grid, Color(box.position.y, box.end.y, 1.0, 0.0))
+	_procedural_city_texture = ImageTexture.create_from_image(image)
+	var center: Array = config["center_xz"]
+	var half := float(config["extent_m"]) * 0.5
+	_procedural_city_grid = Vector4(center[0] - half, center[1] - half, float(config["spacing_m"]), grid)
+	_sync_materials()
+
+func get_procedural_city_exclusion_bounds() -> Array[AABB]:
+	return _procedural_city_bounds.duplicate()
+
 func _record_keepout(bounds: AABB, region: String) -> void:
 	_keepouts.append(bounds)
 	_keepout_regions.append(region)
@@ -85,6 +111,11 @@ func _record_keepout(bounds: AABB, region: String) -> void:
 
 
 func _collect_model_bounds(node: Node, region: String) -> void:
+	# 地表不是整座城市禁云区；景观部件分开记录，禁止按父级合并巨大包络。
+	if node.name == "OpenWorldGroundPlane":
+		return
+	if node.get_parent() != null and node.get_parent().name == "LandscapeFoundation":
+		region += "/" + str(node.name)
 	# Hidden rails are still excluded: a model visibility change must never permit clouds inside.
 	if node is MeshInstance3D:
 		var mesh_node := node as MeshInstance3D
@@ -169,6 +200,10 @@ func _sync_materials() -> void:
 			material.set_shader_parameter("light_direction", _sun.global_basis.z.normalized() if is_instance_valid(_sun) else Vector3(-0.4, 0.8, 0.3).normalized())
 			material.set_shader_parameter("fallback_regions", regions)
 			material.set_shader_parameter("fallback_count", _fallback_bounds.size())
+			material.set_shader_parameter("procedural_city_enabled", _procedural_city_texture != null)
+			if _procedural_city_texture != null:
+				material.set_shader_parameter("procedural_city_boxes", _procedural_city_texture)
+				material.set_shader_parameter("procedural_city_grid", _procedural_city_grid)
 
 
 func apply_performance_quality(profile: String) -> void:
