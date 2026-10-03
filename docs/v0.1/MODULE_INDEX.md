@@ -1,8 +1,10 @@
 # v0.1 模块、功能与工程契约索引
 
-ASSET-PIPELINE [跨塔路线景观补全代理v002](development/2026-10-03_cross_tower_landscape_foundation.md)：正式路线接入 `ENV-OPENWORLD-LANDSCAPE-FOUNDATION`，根场景拆为4个基础、1个地表和4个远景 PackedScene；主塔98F最低视觉包络按生产地砖链修正为Y=-24.30，地表含基础并外扩20.25m。Godot导入/独立加载/运行时AABB探针通过；Tower2源底部Y=-100.5与地表Y=-80冲突、完整保守AABB/XZ仍有既有路线关系，未宣称全局无重叠；场景XLSX分账本未直接修改，真实截图和三角级检测未执行。
+ASSET-PIPELINE / WORLD-BLOCKS [500米地表与程序城市v004](development/2026-10-03_cross_tower_landscape_foundation.md#500米地表与全域城市v004后续交付)：200新楼/23非空批次，25分区包含旧城总覆盖；96原实例与塔桥完整矩阵保持。真实Forward+665项与登记/门禁/快照7项合计672项、云海30,209项通过；主表825/Prefab专表717受控登记及无损基线通过。中央两区新增0，玩家和诊断四图分开；工程既有红项与移动端/LOD未验单列，不提升总体完成状态。
 
-ASSET-PIPELINE [07号物流建筑源v004](development/2026-10-03_logistics07_building_source.md)：独立参考图外观资产，334包、4材质、6张Cycles预览，源与色盘UV验收通过；场景账本824行登记。未导入Godot，用户视觉待复核，不提升总体完成状态。
+ASSET-PIPELINE [跨塔路线景观补全代理v003](development/2026-10-03_cross_tower_landscape_foundation.md)：正式接入4基础、1地表、4新远景、2原城市下延段，共11独立PackedScene；当前100F/99F/98F完整运行时主塔实测最低-24.30；地表顶-80、厚0.2、余量20.25m。96原城市顶面/实例不变，仅2栋补长；Tower2原底低于地表，独立box向更深底面延续，不抬楼。264项几何/保护/材质/截图专项通过，真实六机位图和报告见outputs/landscape_completion_20261003。新增地上包络冲突0，34对既有关系及8对地下交叠单列；未进行三角检测、XLSX转正或全工程验收，不提升整个ASSET-PIPELINE完成状态。
+
+ASSET-PIPELINE [07号物流建筑源v005](development/2026-10-03_logistics07_hvac_optimization_v005.md)：11台空调逐台减面59%–61%，整栋输出降至87,939三角面；334包、4材质、6张Cycles预览，源与色盘UV验收通过；场景账本824行已更新。原始制作记录见[v004](development/2026-10-03_logistics07_building_source.md)。未导入Godot，用户视觉待复核，不提升总体完成状态。
 
 ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_tower04_landscape_damage.md)：与SKYLINE同级、独立母版；增加中段差异破坏、倾斜断柱与塌板，并保留两栋在建骨架。73实例，各组含植物2098/2334/2450/2098/2991三角不变；源、范围锁定、空洞与色盘验收通过，场景账本819–823行更新。用户视觉待复核，未导入Godot，不提升总体完成状态。
 
@@ -114,3 +116,5 @@ ASSET-PIPELINE 新增独立 [SKYLINE 8层大楼及景观接入](development/2026
 ## CHARACTER-EXPRESSION · 独立表情模块
 
 Owner：`CharacterExpressionSystem`；[设计与接口](design/character_expression_system.md)。选择/随机/保持在独立模块，Player状态事件只经过适配器发命令；网格显示不反向写玩法、衣柜或角色动作。入口`verify_character_expression_flow`，当前制作与验收见[自发光减弱](development/2026-10-01_character_expression_soft_emission.md)；[无嘴部深化](development/2026-10-01_character_expression_mouth_free.md)保留历史，[初版8种表达记录](development/2026-10-01_character_expression_system.md)保留历史。
+
+ASSET-PIPELINE / ENEMY-AI [胖子僵尸03](design/胖子僵尸03动作设计.md)：v002修正36核心骨+附加骨、Root与蒙皮比例；512贴图、游戏高2.2m，源重开及Godot静态加载通过。13段动作设计已录入[怪物设计](design/怪物设计.md)，Action与状态绑定待制作，未投放；见[交付记录](development/2026-10-03_fat_zombie03_rig_and_action_design.md)。
