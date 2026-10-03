@@ -3,7 +3,7 @@
 [ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
 
 [sub_resource type="BoxMesh" id="BoxGround"]
-size = Vector3(290.999374, 0.2, 354.651886)
+size = Vector3(500.0, 0.2, 500.0)
 material = ExtResource("1_material")
 
 [node name="OpenWorldGroundPlane" type="MeshInstance3D"]
@@ -12,11 +12,11 @@ cast_shadow = 1
 metadata/target = "AllOpenWorldTargets"
 metadata/top_y = -80.0
 metadata/ground_y = -80.0
-metadata/footprint_source = "all runtime target, foundation, bridge, deterministic city and remote proxy XZ envelopes + 20.25m boundary safety margin"
+metadata/footprint_source = "用户授权有限500x500m；保持原中心XZ，包含塔3外围；新楼边缘安全带10m"
 metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
 metadata/future_optimization_space = true
 metadata/collision_status = "visual_only"
-metadata/plane_extent_x = "[-141.749374,149.250000]"
-metadata/plane_extent_z = "[-218.096664,136.555222]"
-metadata/plane_extent_source = "runtime target + bridge + 96 deterministic city AABBs + 4 foundations + 4 remote proxies, 20m requirement plus 0.25m float safety margin; conservative envelope"
+metadata/plane_extent_x = "[-246.249687,253.750313]"
+metadata/plane_extent_z = "[-290.770721,209.229279]"
+metadata/plane_extent_source = "city_generation_parameters.json：center_xz与extent_m；不无限扩地"
 metadata/bottom_y = -80.2

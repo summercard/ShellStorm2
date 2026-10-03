@@ -12,7 +12,7 @@ cast_shadow = 1
 metadata/target = "Tower1"
 metadata/top_y = -24.3
 metadata/ground_y = -80.0
-metadata/footprint_source = "TowerFloorStage3D.TOWER_SHELL_WORLD_RECT x[-50,50], z[-35,45] + 2m margin; 98F floor stage index 2 at y=-24.0, polished tile visual offset -0.15 and local asset minimum -0.15 => lowest visual y=-24.30"
+metadata/footprint_source = "真实渲染器完整当前100F/99F/98F楼层、房间、楼梯与Mesh/MultiMesh包络：X[-50.157082,50.157082] Z[-35.157082,45.157082]，最低-24.299999；104x84基础完整覆盖，保留原主塔变换"
 metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
 metadata/future_optimization_space = true
 metadata/collision_status = "visual_only"

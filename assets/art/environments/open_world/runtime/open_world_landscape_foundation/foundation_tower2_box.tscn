@@ -3,19 +3,21 @@
 [ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
 
 [sub_resource type="BoxMesh" id="BoxTower2"]
-size = Vector3(74.13, 20.5, 54.112583)
+size = Vector3(70.130005, 20.0, 50.112579)
 material = ExtResource("1_material")
 
 [node name="Tower2FoundationBox" type="MeshInstance3D"]
 mesh = SubResource("BoxTower2")
 cast_shadow = 1
 metadata/target = "Tower2"
-metadata/top_y = -80.0
+metadata/top_y = -100.5
 metadata/ground_y = -80.0
-metadata/footprint_source = "tower_02 export/v003 floor_00 bounds 70.13x50.11 + 2m margin; crane excluded; source floor bottom y=-100.5 is recorded separately"
+metadata/footprint_source = "真实Godot Tower2/architecture递归网格包络，X[4.935001,75.065002] Z[-115.056290,-64.943710]；排除塔吊、设施和脚手架，不外扩楼身"
+metadata/positive_extension_required = false
 metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
 metadata/future_optimization_space = true
 metadata/collision_status = "visual_only"
 metadata/source_building_bottom_y = -100.5
-metadata/bottom_y = -100.5
-metadata/ground_relation = "foundation spans source building bottom y=-100.5 to requested ground top y=-80.0; target root remains at original transform"
+metadata/bottom_y = -120.5
+metadata/ground_relation = "楼身已低于-80地表，无正向补长需求；本独立box仅在原底-100.5以下延续20m至-120.5，地表允许穿过既有下部，楼根不移动"
+metadata/deeper_continuation_m = 20.0

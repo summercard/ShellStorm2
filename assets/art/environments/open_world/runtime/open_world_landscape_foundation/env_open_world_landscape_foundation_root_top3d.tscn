@@ -1,4 +1,10 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_ring0_index2_extension.tscn" id="city2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_ring0_index8_extension.tscn" id="city8"]
+
+[ext_resource type="Script" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/landscape_visual_material_binding.gd" id="binding"]
+[ext_resource type="Script" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/procedural_city.gd" id="city_generator"]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower1_box.tscn" id="1_tower1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower2_box.tscn" id="2_tower2"]
@@ -11,8 +17,9 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_skyline08_a.tscn" id="9_remote_skyline08_a"]
 
 [node name="OpenWorldLandscapeFoundation" type="Node3D"]
+script = ExtResource("binding")
 metadata/asset_id = "ENV-OPENWORLD-LANDSCAPE-FOUNDATION"
-metadata/asset_version = "v002"
+metadata/asset_version = "v004"
 metadata/block_id = "open_world"
 metadata/collision_status = "none_visual_only"
 metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
@@ -25,13 +32,13 @@ metadata/source_policy = "02b_new_scene_assembly_proxy_no_blender_source_edit"
 position = Vector3(0.0, -52.15, 5.0)
 
 [node name="Tower2FoundationBox" parent="." instance=ExtResource("2_tower2")]
-position = Vector3(40.0, -90.25, -90.0)
+position = Vector3(40.0, -110.5, -90.0)
 
 [node name="Tower3FoundationBox" parent="." instance=ExtResource("3_tower3")]
 position = Vector3(-12.01462, -60.075001, -173.036148)
 
 [node name="Skyline08FoundationBox" parent="." instance=ExtResource("4_skyline08")]
-position = Vector3(-16.847691, -69.827294, -121.18834)
+position = Vector3(-17.305016, -69.827294, -122.641167)
 
 [node name="OpenWorldGroundPlane" parent="." instance=ExtResource("5_ground")]
 position = Vector3(3.750313, -80.1, -40.770721)
@@ -47,3 +54,15 @@ position = Vector3(-70.0, -52.0, -173.0)
 
 [node name="Skyline08RemoteSilhouette_A" parent="." instance=ExtResource("9_remote_skyline08_a")]
 position = Vector3(-60.0, -59.0, -125.0)
+
+[node name="CityRing0Index2Extension" parent="." instance=ExtResource("city2")]
+position = Vector3(-25, -76.7334747314453, -58.7502899169922)
+
+[node name="CityRing0Index8Extension" parent="." instance=ExtResource("city8")]
+position = Vector3(73.3030242919922, -78.626953125, -20)
+
+[node name="ProceduralCity500" type="Node3D" parent="."]
+script = ExtResource("city_generator")
+metadata/visual_only = true
+metadata/future_optimization_space = true
+metadata/parameters_source = "res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_generation_parameters.json"

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="preview"]
+
+[sub_resource type="BoxMesh" id="Extension"]
+size = Vector3(16.0670319, 2.74609375, 16.6060562)
+material = ExtResource("preview")
+
+[node name="CityRing0Index8Extension" type="MeshInstance3D"]
+mesh = SubResource("Extension")
+cast_shadow = 0
+metadata/target = "City[r0:i8]"
+metadata/top_y = -77.25390625
+metadata/bottom_y = -80.0
+metadata/ground_y = -80.0
+metadata/source_building_top_y = -20.0
+metadata/source_building_bottom_y = -77.25390625
+metadata/footprint_source = "生产城市r0:i8实际包络；只接在原底部以下，不移动或截短原实例"
+metadata/material_source = "TowerAtmosphere3D/RooftopCityBelow/CityBuildingSilhouettes.multimesh.mesh.surface[0]；运行时复用同一个现有材质对象，编辑器预览使用既有墙材质"
+metadata/future_optimization_space = true
+metadata/reuse_city_material = true
+metadata/collision_status = "visual_only"

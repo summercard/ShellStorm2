@@ -1,1790 +1,5043 @@
 {
-  "schema": "shellstorm2.openworld.landscape_foundation.footprint_check.v003",
-  "runtime_probe_dump": "I:\\工作项目\\shellstrom2\\_scratch\\landscape_runtime_geometry_final2.json",
-  "ground_y": -80.0,
-  "ground_top_y": -80.0,
-  "ground_thickness": 0.2,
-  "ground_margin_requirement_m": 20.0,
-  "ground_margin_used_m": 20.25,
-  "checked_object_count": 113,
+  "schema": "shellstorm2.openworld.landscape_foundation.footprint_check.v004",
+  "runtime_probe_dump": "I:\\工作项目\\shellstrom2\\ShellStorm2\\outputs\\landscape_completion_20261003\\runtime_final.json",
+  "checks": [
+    {
+      "name": "Tower1FoundationBox:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower1FoundationBox:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower1FoundationBox:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2FoundationBox:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2FoundationBox:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2FoundationBox:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3FoundationBox:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3FoundationBox:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3FoundationBox:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08FoundationBox:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08FoundationBox:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08FoundationBox:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "OpenWorldGroundPlane:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "OpenWorldGroundPlane:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "OpenWorldGroundPlane:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_A:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_A:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_A:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_A:同一现有城市材质对象",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_B:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_B:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_B:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2RemoteSilhouette_B:同一现有城市材质对象",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3RemoteSilhouette_A:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3RemoteSilhouette_A:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3RemoteSilhouette_A:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3RemoteSilhouette_A:同一现有城市材质对象",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08RemoteSilhouette_A:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08RemoteSilhouette_A:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08RemoteSilhouette_A:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08RemoteSilhouette_A:同一现有城市材质对象",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index2Extension:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index2Extension:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index2Extension:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index2Extension:同一现有城市材质对象",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index8Extension:六项metadata",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index8Extension:正尺寸",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index8Extension:top_bottom一致",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "CityRing0Index8Extension:同一现有城市材质对象",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "独立PackedScene加载12项",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "景观无新增碰撞",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "完整当前多层主塔",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "地表顶-80厚0.2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "完整景观包络至少20m余量",
+      "passed": true,
+      "detail": {
+        "west": 20.24998474121101,
+        "east": 20.25,
+        "north": 20.25,
+        "south": 20.249999999999986
+      }
+    },
+    {
+      "name": "城市96栋生产布局逐字段不变",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "真实渲染器回读96城市",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i0]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i0]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i1]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i1]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i2]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i2]:补长接缝",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i2]:原XZ完全保留",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i2]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i3]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i3]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i4]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i4]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i5]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i5]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i6]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i6]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i7]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i7]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i8]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i8]:补长接缝",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i8]:原XZ完全保留",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i8]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i9]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i9]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i10]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i10]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i11]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i11]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i12]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i12]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i13]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i13]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i14]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i14]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i15]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i15]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i16]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i16]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i17]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i17]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i18]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i18]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i19]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i19]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i20]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i20]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i21]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i21]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i22]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i22]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i23]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r0:i23]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i0]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i0]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i1]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i1]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i2]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i2]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i3]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i3]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i4]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i4]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i5]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i5]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i6]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i6]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i7]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i7]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i8]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i8]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i9]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i9]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i10]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i10]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i11]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i11]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i12]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i12]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i13]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i13]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i14]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i14]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i15]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i15]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i16]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i16]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i17]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i17]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i18]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i18]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i19]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i19]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i20]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i20]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i21]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i21]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i22]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i22]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i23]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i23]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i24]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i24]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i25]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i25]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i26]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i26]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i27]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i27]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i28]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i28]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i29]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i29]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i30]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i30]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i31]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r1:i31]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i0]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i0]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i1]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i1]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i2]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i2]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i3]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i3]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i4]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i4]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i5]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i5]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i6]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i6]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i7]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i7]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i8]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i8]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i9]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i9]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i10]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i10]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i11]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i11]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i12]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i12]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i13]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i13]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i14]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i14]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i15]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i15]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i16]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i16]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i17]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i17]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i18]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i18]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i19]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i19]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i20]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i20]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i21]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i21]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i22]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i22]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i23]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i23]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i24]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i24]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i25]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i25]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i26]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i26]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i27]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i27]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i28]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i28]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i29]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i29]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i30]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i30]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i31]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i31]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i32]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i32]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i33]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i33]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i34]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i34]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i35]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i35]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i36]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i36]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i37]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i37]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i38]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i38]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i39]:仅未接地者补长",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "City[r2:i39]:真实MultiMesh未改顶部和包络",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2:完整矩阵不变",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2:楼顶和网格包络不变",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3:完整矩阵不变",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3:楼顶和网格包络不变",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08:完整矩阵不变",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08:楼顶和网格包络不变",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2原底低于地表的非负向下延续",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower2基础排除塔吊",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower1FoundationBox:接原建筑最低点",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Tower3FoundationBox:接原建筑最低点",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Skyline08FoundationBox:接原建筑最低点",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "新增远景留空净距至少1m",
+      "passed": true,
+      "detail": {
+        "a": "Tower2",
+        "b": "Tower2RemoteSilhouette_B",
+        "xz_gap_m": 4.2496032714840055
+      }
+    },
+    {
+      "name": "无新增地表以上非自身几何包络冲突",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "保护正式塔楼场景布局及生产算法",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "六张真实渲染截图",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overview.png:真实图像非空分层",
+      "passed": true,
+      "detail": {
+        "color_levels": 2504,
+        "size": [
+          1600,
+          1000
+        ]
+      }
+    },
+    {
+      "name": "tower2_ground.png:真实图像非空分层",
+      "passed": true,
+      "detail": {
+        "color_levels": 3738,
+        "size": [
+          1600,
+          1000
+        ]
+      }
+    },
+    {
+      "name": "tower3_skyline.png:真实图像非空分层",
+      "passed": true,
+      "detail": {
+        "color_levels": 2530,
+        "size": [
+          1600,
+          1000
+        ]
+      }
+    },
+    {
+      "name": "city_downward_extensions.png:真实图像非空分层",
+      "passed": true,
+      "detail": {
+        "color_levels": 4207,
+        "size": [
+          1600,
+          1000
+        ]
+      }
+    },
+    {
+      "name": "city_r0_i2_contact.png:真实图像非空分层",
+      "passed": true,
+      "detail": {
+        "color_levels": 271,
+        "size": [
+          1600,
+          1000
+        ]
+      }
+    },
+    {
+      "name": "city_r0_i8_contact.png:真实图像非空分层",
+      "passed": true,
+      "detail": {
+        "color_levels": 312,
+        "size": [
+          1600,
+          1000
+        ]
+      }
+    },
+    {
+      "name": "整体机位全部景观部件中心在画内",
+      "passed": true,
+      "detail": [
+        {
+          "in_frame": true,
+          "name": "Tower1FoundationBox",
+          "normalized_projection": [
+            0.440219926834106,
+            0.560149765014648
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "Tower2FoundationBox",
+          "normalized_projection": [
+            0.604487133026123,
+            0.631709823608398
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "Tower3FoundationBox",
+          "normalized_projection": [
+            0.629694223403931,
+            0.363196220397949
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "Skyline08FoundationBox",
+          "normalized_projection": [
+            0.564233016967773,
+            0.439585456848145
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "OpenWorldGroundPlane",
+          "normalized_projection": [
+            0.498239040374756,
+            0.579089164733887
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "Tower2RemoteSilhouette_A",
+          "normalized_projection": [
+            0.771168994903565,
+            0.503044815063477
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "Tower2RemoteSilhouette_B",
+          "normalized_projection": [
+            0.705169439315796,
+            0.49249828338623
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "Tower3RemoteSilhouette_A",
+          "normalized_projection": [
+            0.550736284255981,
+            0.287066345214844
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "Skyline08RemoteSilhouette_A",
+          "normalized_projection": [
+            0.508853578567505,
+            0.368941116333008
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "CityRing0Index2Extension",
+          "normalized_projection": [
+            0.479896831512451,
+            0.522219657897949
+          ]
+        },
+        {
+          "in_frame": true,
+          "name": "CityRing0Index8Extension",
+          "normalized_projection": [
+            0.568885135650635,
+            0.667222747802734
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "result": "pass",
+  "checked_object_count": 115,
+  "component_count": 11,
   "city_layout_count": 96,
-  "checked_objects": [
-    {
-      "name": "Tower1_rooftop_shell",
-      "x": [
-        -50.0,
-        50.0
-      ],
-      "z": [
-        -35.0,
-        45.0
-      ],
-      "kind": "target",
-      "target": "Tower1"
-    },
-    {
-      "name": "Skyline08",
-      "x": [
-        -29.8150157928467,
-        -3.8803653717041
-      ],
-      "z": [
-        -137.698333740234,
-        -104.678344726563
-      ],
-      "kind": "target",
-      "target": "Skyline08"
-    },
-    {
-      "name": "Tower2",
-      "x": [
-        -14.7348136901855,
-        106.118255615234
-      ],
-      "z": [
-        -117.750396728516,
-        -60.3453598022461
-      ],
-      "kind": "target",
-      "target": "Tower2"
-    },
-    {
-      "name": "Tower3",
-      "x": [
-        -47.9735908508301,
-        23.9443511962891
-      ],
-      "z": [
-        -196.846664428711,
-        -149.225631713867
-      ],
-      "kind": "target",
-      "target": "Tower3"
-    },
-    {
-      "name": "CraneJib_0_0",
-      "x": [
-        13.1229286193848,
-        26.9774799346924
-      ],
-      "z": [
-        -65.1170349121094,
-        -31.8652648925781
-      ],
-      "kind": "bridge",
-      "target": null
-    },
-    {
-      "name": "CraneJib_0_1",
-      "x": [
-        13.1229286193848,
-        26.9774799346924
-      ],
-      "z": [
-        -97.1170349121094,
-        -63.8652648925781
-      ],
-      "kind": "bridge",
-      "target": null
-    },
-    {
-      "name": "CraneJib_1_0",
-      "x": [
-        2.5913553237915,
-        21.5044555664063
-      ],
-      "z": [
-        -126.976448059082,
-        -93.7712326049805
-      ],
-      "kind": "bridge",
-      "target": null
-    },
-    {
-      "name": "CraneJib_1_1",
-      "x": [
-        -13.4086446762085,
-        5.50445556640625
-      ],
-      "z": [
-        -154.689254760742,
-        -121.484046936035
-      ],
-      "kind": "bridge",
-      "target": null
-    },
+  "city_top_bottom_proof": [
     {
       "name": "City[r0:i0]",
-      "x": [
-        -72.2759857177734,
-        -57.7240142822266
-      ],
-      "z": [
-        -62.0936584472656,
-        -50.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -101.232284545898,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -101.232284545898,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i1]",
-      "x": [
-        -50.6099166870117,
-        -39.3900833129883
-      ],
-      "z": [
-        -60.6118469238281,
-        -50.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -123.811340332031,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -123.811340332031,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i2]",
-      "x": [
-        -33.1491394042969,
-        -16.8508625030518
-      ],
-      "z": [
-        -67.5005798339844,
-        -50.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -73.4669494628906,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -80.0,
+      "operation": "独立下延段",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i3]",
-      "x": [
-        -13.3951416015625,
-        3.3951416015625
-      ],
-      "z": [
-        -66.4011764526367,
-        -50.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -111.424102783203,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -111.424102783203,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i4]",
-      "x": [
-        6.62582778930664,
-        23.3741722106934
-      ],
-      "z": [
-        -67.9831924438477,
-        -50.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -86.1241683959961,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -86.1241683959961,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i5]",
-      "x": [
-        29.4874744415283,
-        40.512523651123
-      ],
-      "z": [
-        -63.7718124389648,
-        -50.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -132.819427490234,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -132.819427490234,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i6]",
-      "x": [
-        46.183708190918,
-        63.816291809082
-      ],
-      "z": [
-        -61.7394943237305,
-        -50.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -128.703948974609,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -128.703948974609,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i7]",
-      "x": [
-        66.7378692626953,
-        79.8882904052734
-      ],
-      "z": [
-        -48.3130760192871,
-        -31.6869239807129
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -135.027893066406,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -135.027893066406,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i8]",
-      "x": [
-        65.2695083618164,
-        81.336540222168
-      ],
-      "z": [
-        -28.3030281066895,
-        -11.6969718933105
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -77.25390625,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -80.0,
+      "operation": "独立下延段",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i9]",
-      "x": [
-        61.4748420715332,
-        79.0500793457031
-      ],
-      "z": [
-        -5.26245975494385,
-        5.26245975494385
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -118.638565063477,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -118.638565063477,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i10]",
-      "x": [
-        64.8353118896484,
-        76.7071228027344
-      ],
-      "z": [
-        14.2287845611572,
-        25.7712154388428
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -95.1922073364258,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -95.1922073364258,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i11]",
-      "x": [
-        65.6734466552734,
-        78.1495361328125
-      ],
-      "z": [
-        33.088508605957,
-        46.911491394043
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -141.445526123047,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -141.445526123047,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i12]",
-      "x": [
-        56.6958808898926,
-        73.3041229248047
-      ],
-      "z": [
-        60.0,
-        77.4791717529297
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -129.957550048828,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -129.957550048828,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i13]",
-      "x": [
-        39.3004951477051,
-        50.6995048522949
-      ],
-      "z": [
-        60.0,
-        75.8149108886719
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -122.175674438477,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -122.175674438477,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i14]",
-      "x": [
-        19.9721908569336,
-        30.0278091430664
-      ],
-      "z": [
-        60.0,
-        73.5461120605469
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -157.587677001953,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -157.587677001953,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i15]",
-      "x": [
-        -0.723189830780029,
-        10.7231903076172
-      ],
-      "z": [
-        60.0,
-        76.6329498291016
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0000038146973,
+      "original_bottom_y": -100.716918945313,
+      "final_visual_top_y": -44.0000038146973,
+      "final_visual_bottom_y": -100.716918945313,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i16]",
-      "x": [
-        -22.0952320098877,
-        -7.9047679901123
-      ],
-      "z": [
-        59.9999961853027,
-        72.43359375
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -144.770065307617,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -144.770065307617,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i17]",
-      "x": [
-        -41.3667030334473,
-        -28.6332969665527
-      ],
-      "z": [
-        59.9999961853027,
-        77.078010559082
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -91.0976257324219,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -91.0976257324219,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i18]",
-      "x": [
-        -60.8631553649902,
-        -49.1368446350098
-      ],
-      "z": [
-        60.0,
-        75.7865142822266
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -101.295150756836,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -101.295150756836,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i19]",
-      "x": [
-        -77.2418441772461,
-        -66.3996047973633
-      ],
-      "z": [
-        43.1792755126953,
-        56.8207244873047
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -89.3772735595703,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -89.3772735595703,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i20]",
-      "x": [
-        -77.5910949707031,
-        -63.4871978759766
-      ],
-      "z": [
-        24.4608554840088,
-        35.5391426086426
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -84.4024505615234,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -84.4024505615234,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i21]",
-      "x": [
-        -76.008056640625,
-        -65.5420074462891
-      ],
-      "z": [
-        4.22497034072876,
-        15.7750282287598
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -43.9999961853027,
+      "original_bottom_y": -104.291290283203,
+      "final_visual_top_y": -43.9999961853027,
+      "final_visual_bottom_y": -104.291290283203,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i22]",
-      "x": [
-        -80.2480316162109,
-        -62.3831634521484
-      ],
-      "z": [
-        -16.3155937194824,
-        -3.68440628051758
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -20.0,
+      "original_bottom_y": -100.83381652832,
+      "final_visual_top_y": -20.0,
+      "final_visual_bottom_y": -100.83381652832,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r0:i23]",
-      "x": [
-        -80.1583251953125,
-        -65.6442260742188
-      ],
-      "z": [
-        -37.9012756347656,
-        -22.0987243652344
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -44.0,
+      "original_bottom_y": -162.768005371094,
+      "final_visual_top_y": -44.0,
+      "final_visual_bottom_y": -162.768005371094,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i0]",
-      "x": [
-        -83.9634704589844,
-        -66.0365295410156
-      ],
-      "z": [
-        -81.7009887695313,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -188.71435546875,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -188.71435546875,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i1]",
-      "x": [
-        -61.6068572998047,
-        -48.3931427001953
-      ],
-      "z": [
-        -86.3715057373047,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -137.938415527344,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -137.938415527344,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i2]",
-      "x": [
-        -41.0221633911133,
-        -28.9778366088867
-      ],
-      "z": [
-        -85.0350952148438,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -128.759719848633,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -128.759719848633,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i3]",
-      "x": [
-        -22.5328712463379,
-        -7.46712875366211
-      ],
-      "z": [
-        -85.2518768310547,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -114.122924804688,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -114.122924804688,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i4]",
-      "x": [
-        -0.501067161560059,
-        10.5010671615601
-      ],
-      "z": [
-        -87.4911193847656,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -149.879333496094,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -149.879333496094,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i5]",
-      "x": [
-        18.9828586578369,
-        31.0171413421631
-      ],
-      "z": [
-        -87.4847564697266,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -185.27587890625,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -185.27587890625,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i6]",
-      "x": [
-        37.6358795166016,
-        52.3641204833984
-      ],
-      "z": [
-        -82.8854217529297,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -203.840209960938,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -203.840209960938,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i7]",
-      "x": [
-        56.3594055175781,
-        73.6405944824219
-      ],
-      "z": [
-        -84.4428100585938,
-        -70.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -132.045639038086,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -132.045639038086,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i8]",
-      "x": [
-        85.6991806030273,
-        97.0895309448242
-      ],
-      "z": [
-        -76.3943557739258,
-        -63.6056442260742
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -118.923217773438,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -118.923217773438,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i9]",
-      "x": [
-        86.8325119018555,
-        97.4181289672852
-      ],
-      "z": [
-        -57.1253204345703,
-        -42.8746795654297
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -162.3076171875,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -162.3076171875,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i10]",
-      "x": [
-        83.3365783691406,
-        98.2389221191406
-      ],
-      "z": [
-        -35.7877540588379,
-        -24.2122459411621
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -61.9999961853027,
+      "original_bottom_y": -116.080047607422,
+      "final_visual_top_y": -61.9999961853027,
+      "final_visual_bottom_y": -116.080047607422,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i11]",
-      "x": [
-        84.9897155761719,
-        101.453170776367
-      ],
-      "z": [
-        -18.2214450836182,
-        -1.77855491638184
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -149.903991699219,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -149.903991699219,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i12]",
-      "x": [
-        81.3954086303711,
-        99.1561050415039
-      ],
-      "z": [
-        4.72424077987671,
-        15.2757587432861
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -164.820159912109,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -164.820159912109,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i13]",
-      "x": [
-        85.1435394287109,
-        96.23486328125
-      ],
-      "z": [
-        24.3107986450195,
-        35.6892013549805
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -106.280853271484,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -106.280853271484,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i14]",
-      "x": [
-        81.8216018676758,
-        98.4093551635742
-      ],
-      "z": [
-        44.884521484375,
-        55.115478515625
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -129.664337158203,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -129.664337158203,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i15]",
-      "x": [
-        83.5911102294922,
-        100.543960571289
-      ],
-      "z": [
-        62.9324645996094,
-        77.0675354003906
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -164.391326904297,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -164.391326904297,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i16]",
-      "x": [
-        68.6793441772461,
-        81.3206558227539
-      ],
-      "z": [
-        80.0,
-        95.6144714355469
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -122.273529052734,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -122.273529052734,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i17]",
-      "x": [
-        47.6281394958496,
-        62.3718605041504
-      ],
-      "z": [
-        80.0,
-        95.5060882568359
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -132.965179443359,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -132.965179443359,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i18]",
-      "x": [
-        29.278190612793,
-        40.721809387207
-      ],
-      "z": [
-        80.0,
-        90.6588897705078
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -134.542877197266,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -134.542877197266,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i19]",
-      "x": [
-        7.95897197723389,
-        22.0410270690918
-      ],
-      "z": [
-        80.0,
-        92.2252655029297
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -37.9999961853027,
+      "original_bottom_y": -98.0812683105469,
+      "final_visual_top_y": -37.9999961853027,
+      "final_visual_bottom_y": -98.0812683105469,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i20]",
-      "x": [
-        -10.4587268829346,
-        0.45872688293457
-      ],
-      "z": [
-        80.0,
-        96.8540954589844
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -163.769012451172,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -163.769012451172,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i21]",
-      "x": [
-        -33.7112426757813,
-        -16.2887573242188
-      ],
-      "z": [
-        80.0,
-        93.2455902099609
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -173.105682373047,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -173.105682373047,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i22]",
-      "x": [
-        -51.8981666564941,
-        -38.1018333435059
-      ],
-      "z": [
-        80.0,
-        97.5512847900391
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -135.880249023438,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -135.880249023438,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i23]",
-      "x": [
-        -70.0092010498047,
-        -59.9907989501953
-      ],
-      "z": [
-        80.0,
-        93.7490539550781
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -135.191009521484,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -135.191009521484,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i24]",
-      "x": [
-        -100.984306335449,
-        -84.5083541870117
-      ],
-      "z": [
-        72.2536697387695,
-        87.7463302612305
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -183.051574707031,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -183.051574707031,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i25]",
-      "x": [
-        -98.5954513549805,
-        -87.9825210571289
-      ],
-      "z": [
-        51.7110137939453,
-        68.2889862060547
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -154.471893310547,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -154.471893310547,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i26]",
-      "x": [
-        -99.213981628418,
-        -87.8223495483398
-      ],
-      "z": [
-        31.4818363189697,
-        48.5181655883789
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -203.465911865234,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -203.465911865234,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i27]",
-      "x": [
-        -99.2581634521484,
-        -83.2633819580078
-      ],
-      "z": [
-        13.7392263412476,
-        26.2607727050781
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -104.348983764648,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -104.348983764648,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i28]",
-      "x": [
-        -97.8656539916992,
-        -84.9296035766602
-      ],
-      "z": [
-        -6.39762735366821,
-        6.39762735366821
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0,
+      "original_bottom_y": -191.006622314453,
+      "final_visual_top_y": -62.0,
+      "final_visual_bottom_y": -191.006622314453,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i29]",
-      "x": [
-        -100.198364257813,
-        -82.5559692382813
-      ],
-      "z": [
-        -26.3771705627441,
-        -13.6228303909302
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -90.9419708251953,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -90.9419708251953,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i30]",
-      "x": [
-        -99.6101989746094,
-        -87.192626953125
-      ],
-      "z": [
-        -48.4014129638672,
-        -31.5985851287842
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -62.0000038146973,
+      "original_bottom_y": -125.259887695313,
+      "final_visual_top_y": -62.0000038146973,
+      "final_visual_bottom_y": -125.259887695313,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r1:i31]",
-      "x": [
-        -101.725875854492,
-        -84.1363677978516
-      ],
-      "z": [
-        -67.9311218261719,
-        -52.0688819885254
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -38.0,
+      "original_bottom_y": -116.177978515625,
+      "final_visual_top_y": -38.0,
+      "final_visual_bottom_y": -116.177978515625,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i0]",
-      "x": [
-        -110.127342224121,
-        -99.8726577758789
-      ],
-      "z": [
-        -105.103134155273,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -150.309265136719,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -150.309265136719,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i1]",
-      "x": [
-        -92.1317672729492,
-        -77.8682327270508
-      ],
-      "z": [
-        -103.556198120117,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -138.045654296875,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -138.045654296875,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i2]",
-      "x": [
-        -72.6376571655273,
-        -57.3623466491699
-      ],
-      "z": [
-        -102.974365234375,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -134.752090454102,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -134.752090454102,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i3]",
-      "x": [
-        -52.3533554077148,
-        -37.6466445922852
-      ],
-      "z": [
-        -107.349548339844,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -153.857818603516,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -153.857818603516,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i4]",
-      "x": [
-        -30.0968627929688,
-        -19.9031372070313
-      ],
-      "z": [
-        -106.583999633789,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -162.09977722168,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -162.09977722168,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i5]",
-      "x": [
-        -11.7758665084839,
-        1.77586555480957
-      ],
-      "z": [
-        -101.401184082031,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0000076293945,
+      "original_bottom_y": -185.130920410156,
+      "final_visual_top_y": -80.0000076293945,
+      "final_visual_bottom_y": -185.130920410156,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i6]",
-      "x": [
-        8.77080059051514,
-        21.2291984558105
-      ],
-      "z": [
-        -104.468948364258,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -187.368362426758,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -187.368362426758,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i7]",
-      "x": [
-        28.6147155761719,
-        41.3852844238281
-      ],
-      "z": [
-        -107.372024536133,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -221.702758789063,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -221.702758789063,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i8]",
-      "x": [
-        49.3665771484375,
-        60.6334228515625
-      ],
-      "z": [
-        -103.76936340332,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -125.987060546875,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -125.987060546875,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i9]",
-      "x": [
-        67.5900039672852,
-        82.4099960327148
-      ],
-      "z": [
-        -101.665496826172,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -154.026550292969,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -154.026550292969,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i10]",
-      "x": [
-        87.5044403076172,
-        102.495559692383
-      ],
-      "z": [
-        -105.941696166992,
-        -90.0
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -101.703643798828,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -101.703643798828,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i11]",
-      "x": [
-        101.773025512695,
-        118.712921142578
-      ],
-      "z": [
-        -85.2429733276367,
-        -74.7570266723633
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -207.723724365234,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -207.723724365234,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i12]",
-      "x": [
-        103.795562744141,
-        120.737503051758
-      ],
-      "z": [
-        -67.2665328979492,
-        -52.7334671020508
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -128.481399536133,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -128.481399536133,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i13]",
-      "x": [
-        104.588554382324,
-        117.713356018066
-      ],
-      "z": [
-        -46.150951385498,
-        -33.849048614502
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -229.008544921875,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -229.008544921875,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i14]",
-      "x": [
-        105.523445129395,
-        116.587028503418
-      ],
-      "z": [
-        -26.0552368164063,
-        -13.9447622299194
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -168.30680847168,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -168.30680847168,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i15]",
-      "x": [
-        105.904014587402,
-        119.088676452637
-      ],
-      "z": [
-        -7.49634885787964,
-        7.49634885787964
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -154.240692138672,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -154.240692138672,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i16]",
-      "x": [
-        104.387519836426,
-        120.673133850098
-      ],
-      "z": [
-        12.4696760177612,
-        27.5303230285645
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -103.015533447266,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -103.015533447266,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i17]",
-      "x": [
-        101.33039855957,
-        119.142639160156
-      ],
-      "z": [
-        34.7634811401367,
-        45.2365188598633
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -152.809783935547,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -152.809783935547,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i18]",
-      "x": [
-        104.496513366699,
-        116.991996765137
-      ],
-      "z": [
-        54.2557487487793,
-        65.744255065918
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -136.527389526367,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -136.527389526367,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i19]",
-      "x": [
-        102.542381286621,
-        119.41332244873
-      ],
-      "z": [
-        74.0221481323242,
-        85.9778518676758
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -149.488693237305,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -149.488693237305,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i20]",
-      "x": [
-        97.7168579101563,
-        112.283142089844
-      ],
-      "z": [
-        100.0,
-        114.006546020508
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -174.557571411133,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -174.557571411133,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i21]",
-      "x": [
-        79.2750015258789,
-        90.7249984741211
-      ],
-      "z": [
-        100.0,
-        113.196060180664
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -201.741912841797,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -201.741912841797,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i22]",
-      "x": [
-        59.4934120178223,
-        70.506591796875
-      ],
-      "z": [
-        100.0,
-        114.039642333984
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -115.413040161133,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -115.413040161133,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i23]",
-      "x": [
-        37.3957595825195,
-        52.6042404174805
-      ],
-      "z": [
-        100.0,
-        116.305221557617
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -132.640289306641,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -132.640289306641,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i24]",
-      "x": [
-        19.6176700592041,
-        30.3823299407959
-      ],
-      "z": [
-        100.0,
-        111.382568359375
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -141.185546875,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -141.185546875,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i25]",
-      "x": [
-        -2.56086826324463,
-        12.5608682632446
-      ],
-      "z": [
-        100.0,
-        111.540100097656
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -137.287048339844,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -137.287048339844,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i26]",
-      "x": [
-        -23.7927150726318,
-        -6.20728492736816
-      ],
-      "z": [
-        100.0,
-        112.727157592773
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -128.138793945313,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -128.138793945313,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i27]",
-      "x": [
-        -43.7488288879395,
-        -26.2511711120605
-      ],
-      "z": [
-        100.0,
-        112.907485961914
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -152.23046875,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -152.23046875,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i28]",
-      "x": [
-        -62.9343414306641,
-        -47.0656585693359
-      ],
-      "z": [
-        100.0,
-        113.618347167969
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -180.816284179688,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -180.816284179688,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i29]",
-      "x": [
-        -80.5310592651367,
-        -69.4689407348633
-      ],
-      "z": [
-        100.0,
-        111.448547363281
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0000076293945,
+      "original_bottom_y": -203.393981933594,
+      "final_visual_top_y": -80.0000076293945,
+      "final_visual_bottom_y": -203.393981933594,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i30]",
-      "x": [
-        -102.619110107422,
-        -87.3808898925781
-      ],
-      "z": [
-        100.0,
-        112.040817260742
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -109.561569213867,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -109.561569213867,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i31]",
-      "x": [
-        -115.655426025391,
-        -105.491561889648
-      ],
-      "z": [
-        84.4265060424805,
-        95.5734939575195
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0000076293945,
+      "original_bottom_y": -204.873352050781,
+      "final_visual_top_y": -80.0000076293945,
+      "final_visual_bottom_y": -204.873352050781,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i32]",
-      "x": [
-        -118.802024841309,
-        -104.94034576416
-      ],
-      "z": [
-        63.1288146972656,
-        76.8711853027344
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -125.171020507813,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -125.171020507813,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i33]",
-      "x": [
-        -118.338188171387,
-        -102.590156555176
-      ],
-      "z": [
-        44.535831451416,
-        55.464168548584
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -217.335418701172,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -217.335418701172,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i34]",
-      "x": [
-        -117.85050201416,
-        -103.666725158691
-      ],
-      "z": [
-        24.2413883209229,
-        35.7586097717285
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -183.415023803711,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -183.415023803711,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i35]",
-      "x": [
-        -118.169281005859,
-        -106.691772460938
-      ],
-      "z": [
-        2.5694739818573,
-        17.4305267333984
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -180.574005126953,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -180.574005126953,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i36]",
-      "x": [
-        -118.03173828125,
-        -107.747131347656
-      ],
-      "z": [
-        -17.8894348144531,
-        -2.11056423187256
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -186.453231811523,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -186.453231811523,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i37]",
-      "x": [
-        -118.903579711914,
-        -106.144622802734
-      ],
-      "z": [
-        -37.524097442627,
-        -22.475902557373
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -80.0,
+      "original_bottom_y": -189.669067382813,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -189.669067382813,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i38]",
-      "x": [
-        -121.499374389648,
-        -103.742553710938
-      ],
-      "z": [
-        -57.620964050293,
-        -42.379035949707
-      ],
-      "kind": "city",
-      "target": null
+      "original_top_y": -56.0,
+      "original_bottom_y": -204.211761474609,
+      "final_visual_top_y": -56.0,
+      "final_visual_bottom_y": -204.211761474609,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     },
     {
       "name": "City[r2:i39]",
-      "x": [
-        -120.020034790039,
-        -103.137710571289
-      ],
-      "z": [
-        -76.5788726806641,
-        -63.4211311340332
-      ],
-      "kind": "city",
-      "target": null
-    },
-    {
-      "name": "Tower1FoundationBox",
-      "x": [
-        -52.0,
-        52.0
-      ],
-      "z": [
-        -37.0,
-        47.0
-      ],
-      "kind": "foundation",
-      "target": "Tower1"
-    },
-    {
-      "name": "Tower2FoundationBox",
-      "x": [
-        2.93500137329102,
-        77.0650024414063
-      ],
-      "z": [
-        -117.056289672852,
-        -62.9437103271484
-      ],
-      "kind": "foundation",
-      "target": "Tower2"
-    },
-    {
-      "name": "Tower3FoundationBox",
-      "x": [
-        -48.9735870361328,
-        24.9443492889404
-      ],
-      "z": [
-        -197.846664428711,
-        -148.225631713867
-      ],
-      "kind": "foundation",
-      "target": "Tower3"
-    },
-    {
-      "name": "Skyline08FoundationBox",
-      "x": [
-        -30.8150157928467,
-        -2.8803653717041
-      ],
-      "z": [
-        -138.698333740234,
-        -103.678337097168
-      ],
-      "kind": "foundation",
-      "target": "Skyline08"
-    },
-    {
-      "name": "OpenWorldGroundPlane",
-      "x": [
-        -141.749359130859,
-        149.25
-      ],
-      "z": [
-        -218.096664428711,
-        136.555221557617
-      ],
-      "kind": "ground",
-      "target": "AllOpenWorldTargets"
-    },
-    {
-      "name": "Tower2RemoteSilhouette_A",
-      "x": [
-        111.0,
-        129.0
-      ],
-      "z": [
-        -149.0,
-        -131.0
-      ],
-      "kind": "remote",
-      "target": "Tower2"
-    },
-    {
-      "name": "Tower2RemoteSilhouette_B",
-      "x": [
-        71.0,
-        89.0
-      ],
-      "z": [
-        -138.0,
-        -122.0
-      ],
-      "kind": "remote",
-      "target": "Tower2"
-    },
-    {
-      "name": "Tower3RemoteSilhouette_A",
-      "x": [
-        -78.0,
-        -62.0
-      ],
-      "z": [
-        -182.0,
-        -164.0
-      ],
-      "kind": "remote",
-      "target": "Tower3"
-    },
-    {
-      "name": "Skyline08RemoteSilhouette_A",
-      "x": [
-        -68.0,
-        -52.0
-      ],
-      "z": [
-        -133.0,
-        -117.0
-      ],
-      "kind": "remote",
-      "target": "Skyline08"
+      "original_top_y": -80.0,
+      "original_bottom_y": -206.94384765625,
+      "final_visual_top_y": -80.0,
+      "final_visual_bottom_y": -206.94384765625,
+      "operation": "不动，原底已低于地表",
+      "xz_and_original_instance_unchanged": true
     }
   ],
   "ground_extent": {
     "x": [
-      -141.74937438964798,
+      -141.749359130859,
       149.25
     ],
     "z": [
       -218.096664428711,
-      136.55522155761702
+      136.555221557617
     ]
   },
-  "ground_size": [
-    290.999374389648,
-    0.2,
-    354.651885986328
-  ],
-  "intentional_target_foundation_overlaps": [
+  "ground_top_y": -80.0,
+  "ground_thickness": 0.199996948242188,
+  "ground_margins": {
+    "west": 20.24998474121101,
+    "east": 20.25,
+    "north": 20.25,
+    "south": 20.249999999999986
+  },
+  "remote_clearances": [
     {
-      "a": "Tower1_rooftop_shell",
-      "b": "Tower1FoundationBox",
-      "classification": "intentional_target_foundation_envelope"
+      "a": "Skyline08",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 114.8803653717041
     },
     {
       "a": "Skyline08",
-      "b": "Skyline08FoundationBox",
-      "classification": "intentional_target_foundation_envelope"
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 74.8803653717041
+    },
+    {
+      "a": "Skyline08",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 41.56501962533905
+    },
+    {
+      "a": "Skyline08",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 22.1849842071533
+    },
+    {
+      "a": "Tower1",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 113.52411957642926
+    },
+    {
+      "a": "Tower1",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 89.30912452149438
+    },
+    {
+      "a": "Tower1",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 129.38605928357015
+    },
+    {
+      "a": "Tower1",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 81.86366495453265
     },
     {
       "a": "Tower2",
-      "b": "Tower2FoundationBox",
-      "classification": "intentional_target_foundation_envelope"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 14.12031922762067
+    },
+    {
+      "a": "Tower2",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 4.2496032714840055
+    },
+    {
+      "a": "Tower2",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 66.12884120919661
+    },
+    {
+      "a": "Tower2",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 37.265186309814496
     },
     {
       "a": "Tower3",
-      "b": "Tower3FoundationBox",
-      "classification": "intentional_target_foundation_envelope"
-    }
-  ],
-  "pairwise_aabb_xz_overlap": [
-    {
-      "a": "Tower1_rooftop_shell",
-      "b": "CraneJib_0_0",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Skyline08",
-      "b": "Tower2",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Skyline08",
-      "b": "CraneJib_1_1",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Skyline08",
-      "b": "City[r2:i4]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "CraneJib_0_0",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "CraneJib_0_1",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "CraneJib_1_0",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r0:i3]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r0:i4]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r0:i5]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r0:i6]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r1:i3]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r1:i4]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r1:i5]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r1:i6]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r1:i7]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r1:i8]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i5]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i6]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i7]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i8]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i9]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i10]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i11]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "City[r2:i12]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "Tower2",
-      "b": "Skyline08FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 87.05594120050252
     },
     {
       "a": "Tower3",
-      "b": "CraneJib_1_1",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 48.37611902285626
+    },
+    {
+      "a": "Tower3",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 14.0264091491699
+    },
+    {
+      "a": "Tower3",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 16.717747909050587
     },
     {
       "a": "CraneJib_0_0",
-      "b": "CraneJib_0_1",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 106.77241669503051
     },
     {
       "a": "CraneJib_0_0",
-      "b": "City[r0:i4]",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 71.92811682569335
     },
     {
       "a": "CraneJib_0_0",
-      "b": "Tower1FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 124.18250758027949
     },
     {
       "a": "CraneJib_0_0",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 83.26366493421222
     },
     {
       "a": "CraneJib_0_1",
-      "b": "CraneJib_1_0",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 90.59712578924473
     },
     {
       "a": "CraneJib_0_1",
-      "b": "City[r0:i4]",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 50.56821357795421
     },
     {
       "a": "CraneJib_0_1",
-      "b": "City[r1:i5]",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 100.58223214515164
     },
     {
       "a": "CraneJib_0_1",
-      "b": "City[r2:i6]",
-      "classification": "conservative_aabb_xz_overlap"
-    },
-    {
-      "a": "CraneJib_0_1",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 68.09058769500939
     },
     {
       "a": "CraneJib_1_0",
-      "b": "CraneJib_1_1",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 89.58594445384057
     },
     {
       "a": "CraneJib_1_0",
-      "b": "City[r2:i6]",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 49.4955444335937
     },
     {
       "a": "CraneJib_1_0",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 74.44989308848027
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 54.5913553237915
     },
     {
       "a": "CraneJib_1_1",
-      "b": "Tower3FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 105.49554443359375
     },
     {
       "a": "CraneJib_1_1",
-      "b": "Skyline08FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 65.49554443359375
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 49.47534526522606
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 38.591355323791504
+    },
+    {
+      "a": "City[r0:i0]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 182.25223428449675
+    },
+    {
+      "a": "City[r0:i0]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 141.98113118004008
+    },
+    {
+      "a": "City[r0:i0]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 101.9063415527344
+    },
+    {
+      "a": "City[r0:i0]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 54.9063415527344
+    },
+    {
+      "a": "City[r0:i1]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 166.04718983578786
+    },
+    {
+      "a": "City[r0:i1]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 126.31102814858255
+    },
+    {
+      "a": "City[r0:i1]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 104.01367311261903
+    },
+    {
+      "a": "City[r0:i1]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 56.40528467226137
+    },
+    {
+      "a": "City[r0:i2]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 142.75160035598356
+    },
+    {
+      "a": "City[r0:i2]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 103.38259447780376
+    },
+    {
+      "a": "City[r0:i2]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 100.71995953876228
+    },
+    {
+      "a": "City[r0:i2]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 52.96741962726128
     },
     {
       "a": "City[r0:i3]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 125.50622914680834
+    },
+    {
+      "a": "City[r0:i3]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 87.53082919134049
+    },
+    {
+      "a": "City[r0:i3]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 109.03193393571223
+    },
+    {
+      "a": "City[r0:i3]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 63.644135914792784
     },
     {
       "a": "City[r0:i4]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 107.93240352336434
+    },
+    {
+      "a": "City[r0:i4]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 72.01413035769495
+    },
+    {
+      "a": "City[r0:i4]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 118.02004733536907
+    },
+    {
+      "a": "City[r0:i4]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 76.41750523916826
     },
     {
       "a": "City[r0:i5]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 97.4069480313146
+    },
+    {
+      "a": "City[r0:i5]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 65.72676806877415
+    },
+    {
+      "a": "City[r0:i5]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 135.70426508205017
+    },
+    {
+      "a": "City[r0:i5]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 97.33164152469365
+    },
+    {
+      "a": "City[r0:i6]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 83.80525022442366
+    },
+    {
+      "a": "City[r0:i6]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 60.687183224565395
+    },
+    {
+      "a": "City[r0:i6]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 148.865461874486
+    },
+    {
+      "a": "City[r0:i6]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 112.6666057077977
+    },
+    {
+      "a": "City[r0:i7]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 88.34628385675764
+    },
+    {
+      "a": "City[r0:i7]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 73.68692398071289
+    },
+    {
+      "a": "City[r0:i7]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 173.08062676804147
+    },
+    {
+      "a": "City[r0:i7]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 137.17352194566251
+    },
+    {
+      "a": "City[r0:i8]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 106.89522385049047
+    },
+    {
+      "a": "City[r0:i8]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 93.6969718933105
+    },
+    {
+      "a": "City[r0:i8]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 186.04084481551988
+    },
+    {
+      "a": "City[r0:i8]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 147.03499724373393
+    },
+    {
+      "a": "City[r0:i9]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 129.73328970119036
+    },
+    {
+      "a": "City[r0:i9]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 116.73754024505615
+    },
+    {
+      "a": "City[r0:i9]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 201.10604990313166
+    },
+    {
+      "a": "City[r0:i9]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 159.2539408717252
+    },
+    {
+      "a": "City[r0:i10]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 149.2226567635684
+    },
+    {
+      "a": "City[r0:i10]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 136.2287845611572
+    },
+    {
+      "a": "City[r0:i10]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 218.75259081503873
+    },
+    {
+      "a": "City[r0:i10]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 175.70282866746916
+    },
+    {
+      "a": "City[r0:i11]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 167.3445297367578
+    },
+    {
+      "a": "City[r0:i11]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 155.088508605957
+    },
+    {
+      "a": "City[r0:i11]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 234.8284250369987
+    },
+    {
+      "a": "City[r0:i11]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 190.71864214935022
+    },
+    {
+      "a": "City[r0:i12]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 194.6843063743666
+    },
+    {
+      "a": "City[r0:i12]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 182.0
+    },
+    {
+      "a": "City[r0:i12]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 253.50485624584704
+    },
+    {
+      "a": "City[r0:i12]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 207.71084353598326
+    },
+    {
+      "a": "City[r0:i13]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 200.2926601627189
+    },
+    {
+      "a": "City[r0:i13]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 183.12867089356052
+    },
+    {
+      "a": "City[r0:i13]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 245.8409858367197
+    },
+    {
+      "a": "City[r0:i13]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 199.16018782431422
+    },
+    {
+      "a": "City[r0:i14]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 207.45480397467705
+    },
+    {
+      "a": "City[r0:i14]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 186.5548724199317
+    },
+    {
+      "a": "City[r0:i14]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 238.527650543675
+    },
+    {
+      "a": "City[r0:i14]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 191.07327457482606
+    },
+    {
+      "a": "City[r0:i15]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 215.72305987557834
+    },
+    {
+      "a": "City[r0:i15]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 191.72191785680565
+    },
+    {
+      "a": "City[r0:i15]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 232.23016054017322
+    },
+    {
+      "a": "City[r0:i15]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 184.27781000741848
+    },
+    {
+      "a": "City[r0:i16]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 224.9874271899834
+    },
+    {
+      "a": "City[r0:i16]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 198.36824600480705
+    },
+    {
+      "a": "City[r0:i16]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 227.52667711580617
+    },
+    {
+      "a": "City[r0:i16]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 179.5084783461205
+    },
+    {
+      "a": "City[r0:i17]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 236.5976672846441
+    },
+    {
+      "a": "City[r0:i17]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 207.48684892270998
+    },
+    {
+      "a": "City[r0:i17]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 224.9482856896793
+    },
+    {
+      "a": "City[r0:i17]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 177.3191068497021
+    },
+    {
+      "a": "City[r0:i18]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 249.2484884801857
+    },
+    {
+      "a": "City[r0:i18]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 218.0753572480313
+    },
+    {
+      "a": "City[r0:i18]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 224.00288483795057
+    },
+    {
+      "a": "City[r0:i18]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 177.0
+    },
+    {
+      "a": "City[r0:i19]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 248.6142389333083
+    },
+    {
+      "a": "City[r0:i19]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 214.85540360291273
+    },
+    {
+      "a": "City[r0:i19]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 207.1792755126953
+    },
+    {
+      "a": "City[r0:i19]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 160.1792755126953
+    },
+    {
+      "a": "City[r0:i20]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 233.69608428561673
+    },
+    {
+      "a": "City[r0:i20]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 198.84061099694847
+    },
+    {
+      "a": "City[r0:i20]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 188.4608554840088
+    },
+    {
+      "a": "City[r0:i20]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 141.4608554840088
+    },
+    {
+      "a": "City[r0:i21]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 222.3800193291128
+    },
+    {
+      "a": "City[r0:i21]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 185.9474735912815
+    },
+    {
+      "a": "City[r0:i21]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 168.22497034072876
+    },
+    {
+      "a": "City[r0:i21]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 121.22497034072876
+    },
+    {
+      "a": "City[r0:i22]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 207.8803367627377
+    },
+    {
+      "a": "City[r0:i22]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 170.17714894593823
+    },
+    {
+      "a": "City[r0:i22]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 147.6844062805176
+    },
+    {
+      "a": "City[r0:i22]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 100.6844062805176
+    },
+    {
+      "a": "City[r0:i23]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 199.67612547271045
+    },
+    {
+      "a": "City[r0:i23]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 160.45011673190484
+    },
+    {
+      "a": "City[r0:i23]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 126.0987243652344
+    },
+    {
+      "a": "City[r0:i23]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 79.0987243652344
+    },
+    {
+      "a": "City[r1:i0]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 183.77248243474529
+    },
+    {
+      "a": "City[r1:i0]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 142.83914286636937
+    },
+    {
+      "a": "City[r1:i0]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 82.2990112304687
+    },
+    {
+      "a": "City[r1:i0]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 35.29901123046869
+    },
+    {
+      "a": "City[r1:i1]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 165.52303900061844
+    },
+    {
+      "a": "City[r1:i1]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 124.5957949822389
+    },
+    {
+      "a": "City[r1:i1]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 77.62948977467283
+    },
+    {
+      "a": "City[r1:i1]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 30.6284942626953
+    },
+    {
+      "a": "City[r1:i2]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 147.33148751578074
+    },
+    {
+      "a": "City[r1:i2]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 106.59255132873454
+    },
+    {
+      "a": "City[r1:i2]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 81.70389107330159
+    },
+    {
+      "a": "City[r1:i2]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 33.797456036446206
+    },
+    {
+      "a": "City[r1:i3]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 126.9935091593966
+    },
+    {
+      "a": "City[r1:i3]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 86.64591652976937
+    },
+    {
+      "a": "City[r1:i3]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 88.08473848907948
+    },
+    {
+      "a": "City[r1:i3]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 43.31575927691238
     },
     {
       "a": "City[r1:i4]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 109.51282205320057
+    },
+    {
+      "a": "City[r1:i4]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 69.64900369643892
+    },
+    {
+      "a": "City[r1:i4]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 98.16174180027134
+    },
+    {
+      "a": "City[r1:i4]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 59.354141545997486
     },
     {
       "a": "City[r1:i5]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 91.0540174763229
+    },
+    {
+      "a": "City[r1:i5]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 52.81979763693385
+    },
+    {
+      "a": "City[r1:i5]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 111.41277255724424
+    },
+    {
+      "a": "City[r1:i5]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 76.87467608965774
     },
     {
       "a": "City[r1:i6]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 75.84971329266097
+    },
+    {
+      "a": "City[r1:i6]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 43.32719973415632
+    },
+    {
+      "a": "City[r1:i6]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 128.4791161677525
+    },
+    {
+      "a": "City[r1:i6]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 95.90826526264668
     },
     {
       "a": "City[r1:i7]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 59.69335906000783
+    },
+    {
+      "a": "City[r1:i7]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 37.55718994140619
+    },
+    {
+      "a": "City[r1:i7]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 142.61239548457027
+    },
+    {
+      "a": "City[r1:i7]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 113.14473642641859
+    },
+    {
+      "a": "City[r1:i8]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 56.349600980659964
+    },
+    {
+      "a": "City[r1:i8]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 45.605644226074205
+    },
+    {
+      "a": "City[r1:i8]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 171.7259352895513
+    },
+    {
+      "a": "City[r1:i8]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 143.56142476918944
+    },
+    {
+      "a": "City[r1:i9]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 75.11281849088219
+    },
+    {
+      "a": "City[r1:i9]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 64.8746795654297
+    },
+    {
+      "a": "City[r1:i9]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 183.23022057299727
+    },
+    {
+      "a": "City[r1:i9]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 151.19339805044973
+    },
+    {
+      "a": "City[r1:i10]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 96.06360854060033
+    },
+    {
+      "a": "City[r1:i10]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 86.21224594116211
+    },
+    {
+      "a": "City[r1:i10]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 193.80686525850004
+    },
+    {
+      "a": "City[r1:i10]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 157.83351461421094
+    },
+    {
+      "a": "City[r1:i11]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 113.18190843616554
+    },
+    {
+      "a": "City[r1:i11]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 103.77855491638181
+    },
+    {
+      "a": "City[r1:i11]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 207.02020084685566
+    },
+    {
+      "a": "City[r1:i11]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 168.88867660387754
+    },
+    {
+      "a": "City[r1:i12]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 136.24003590377475
+    },
+    {
+      "a": "City[r1:i12]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 126.72424077987671
+    },
+    {
+      "a": "City[r1:i12]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 221.42744329241782
+    },
+    {
+      "a": "City[r1:i12]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 180.58550838065906
+    },
+    {
+      "a": "City[r1:i13]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 156.01106831913296
+    },
+    {
+      "a": "City[r1:i13]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 146.3107986450195
+    },
+    {
+      "a": "City[r1:i13]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 238.9815433918144
+    },
+    {
+      "a": "City[r1:i13]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 196.91899913600926
+    },
+    {
+      "a": "City[r1:i14]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 176.3345945502033
+    },
+    {
+      "a": "City[r1:i14]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 166.884521484375
+    },
+    {
+      "a": "City[r1:i14]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 253.60874685140607
+    },
+    {
+      "a": "City[r1:i14]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 210.0352813759055
+    },
+    {
+      "a": "City[r1:i15]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 194.21413333280745
+    },
+    {
+      "a": "City[r1:i15]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 184.9324645996094
+    },
+    {
+      "a": "City[r1:i15]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 269.6203161245627
+    },
+    {
+      "a": "City[r1:i15]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 225.30122278886103
+    },
+    {
+      "a": "City[r1:i16]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 213.07713033263667
+    },
+    {
+      "a": "City[r1:i16]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 202.0
+    },
+    {
+      "a": "City[r1:i16]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 276.79069889466143
+    },
+    {
+      "a": "City[r1:i16]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 231.02489933132796
+    },
+    {
+      "a": "City[r1:i17]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 216.5310507775451
+    },
+    {
+      "a": "City[r1:i17]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 202.18418531418286
+    },
+    {
+      "a": "City[r1:i17]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 267.49640926435154
+    },
+    {
+      "a": "City[r1:i17]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 220.75952115232644
+    },
+    {
+      "a": "City[r1:i18]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 222.39609725849073
+    },
+    {
+      "a": "City[r1:i18]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 204.25662492752744
+    },
+    {
+      "a": "City[r1:i18]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 260.51431454249376
+    },
+    {
+      "a": "City[r1:i18]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 213.10829235224404
+    },
+    {
+      "a": "City[r1:i19]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 228.98624164984685
+    },
+    {
+      "a": "City[r1:i19]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 207.84845688734234
+    },
+    {
+      "a": "City[r1:i19]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 253.83115994714163
+    },
+    {
+      "a": "City[r1:i19]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 205.9225056193876
+    },
+    {
+      "a": "City[r1:i20]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 238.20237837255456
+    },
+    {
+      "a": "City[r1:i20]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 213.9627799711352
+    },
+    {
+      "a": "City[r1:i20]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 249.38424736644438
+    },
+    {
+      "a": "City[r1:i20]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 201.3322561642486
+    },
+    {
+      "a": "City[r1:i21]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 246.42124044234473
+    },
+    {
+      "a": "City[r1:i21]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 220.05300987536245
+    },
+    {
+      "a": "City[r1:i21]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 245.63439048909365
+    },
+    {
+      "a": "City[r1:i21]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 197.84710926486684
+    },
+    {
+      "a": "City[r1:i22]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 258.3647745076612
+    },
+    {
+      "a": "City[r1:i22]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 229.58050883930485
+    },
+    {
+      "a": "City[r1:i22]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 244.20902325037042
+    },
+    {
+      "a": "City[r1:i22]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 197.00002631987095
+    },
+    {
+      "a": "City[r1:i23]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 271.58581208455297
+    },
+    {
+      "a": "City[r1:i23]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 240.75420953663613
+    },
+    {
+      "a": "City[r1:i23]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 244.0
+    },
+    {
+      "a": "City[r1:i23]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 197.0
+    },
+    {
+      "a": "City[r1:i24]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 282.02051489065616
+    },
+    {
+      "a": "City[r1:i24]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 248.83194414892156
+    },
+    {
+      "a": "City[r1:i24]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 236.34329933226195
+    },
+    {
+      "a": "City[r1:i24]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 189.97230658060417
+    },
+    {
+      "a": "City[r1:i25]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 270.1432180304773
+    },
+    {
+      "a": "City[r1:i25]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 235.48027160465205
+    },
+    {
+      "a": "City[r1:i25]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 215.94187226813537
+    },
+    {
+      "a": "City[r1:i25]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 169.8902802492815
+    },
+    {
+      "a": "City[r1:i26]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 256.76969021577816
+    },
+    {
+      "a": "City[r1:i26]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 220.86469341182178
+    },
+    {
+      "a": "City[r1:i26]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 195.72845189518623
+    },
+    {
+      "a": "City[r1:i26]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 149.7991363735782
+    },
+    {
+      "a": "City[r1:i27]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 242.25545445175374
+    },
+    {
+      "a": "City[r1:i27]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 205.4807255701679
+    },
+    {
+      "a": "City[r1:i27]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 177.8171413841228
+    },
+    {
+      "a": "City[r1:i27]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 131.6271861474825
+    },
+    {
+      "a": "City[r1:i28]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 232.1942308215313
+    },
+    {
+      "a": "City[r1:i28]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 194.10808801550687
+    },
+    {
+      "a": "City[r1:i28]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 157.75464262418046
+    },
+    {
+      "a": "City[r1:i28]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 111.89055506279745
+    },
+    {
+      "a": "City[r1:i29]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 220.02238446855273
+    },
+    {
+      "a": "City[r1:i29]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 180.89544272395182
+    },
+    {
+      "a": "City[r1:i29]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 137.69822089633618
+    },
+    {
+      "a": "City[r1:i29]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 91.78438568558252
+    },
+    {
+      "a": "City[r1:i30]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 214.71572825237135
+    },
+    {
+      "a": "City[r1:i30]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 174.47538289410855
+    },
+    {
+      "a": "City[r1:i30]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 115.96351889732257
+    },
+    {
+      "a": "City[r1:i30]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 71.23287915503421
+    },
+    {
+      "a": "City[r1:i31]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 205.07531648505042
+    },
+    {
+      "a": "City[r1:i31]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 164.2885759889791
+    },
+    {
+      "a": "City[r1:i31]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 96.26465791415006
+    },
+    {
+      "a": "City[r1:i31]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 51.65401408356882
+    },
+    {
+      "a": "City[r2:i0]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 212.45687905559268
+    },
+    {
+      "a": "City[r2:i0]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 171.70605478773115
+    },
+    {
+      "a": "City[r2:i0]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 62.82717536633719
+    },
+    {
+      "a": "City[r2:i0]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 34.020607440575276
+    },
+    {
+      "a": "City[r2:i1]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 190.85170052965648
+    },
+    {
+      "a": "City[r2:i1]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 150.00641500635808
+    },
+    {
+      "a": "City[r2:i1]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 60.443801879883
+    },
+    {
+      "a": "City[r2:i1]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 16.676864997378313
+    },
+    {
+      "a": "City[r2:i2]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 170.67898515409405
+    },
+    {
+      "a": "City[r2:i2]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 129.76465934728384
+    },
+    {
+      "a": "City[r2:i2]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 61.025634765625
+    },
+    {
+      "a": "City[r2:i2]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 14.025634765625
+    },
+    {
+      "a": "City[r2:i3]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 150.51634068191575
+    },
+    {
+      "a": "City[r2:i3]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 109.62996449424264
+    },
+    {
+      "a": "City[r2:i3]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 57.46591533413121
+    },
+    {
+      "a": "City[r2:i3]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 9.650451660155994
     },
     {
       "a": "City[r2:i4]",
-      "b": "Skyline08FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 133.16070142698138
+    },
+    {
+      "a": "City[r2:i4]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 92.20104891687176
+    },
+    {
+      "a": "City[r2:i4]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 65.6841477200047
+    },
+    {
+      "a": "City[r2:i4]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 24.25366947781185
+    },
+    {
+      "a": "City[r2:i5]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 113.1636047899096
+    },
+    {
+      "a": "City[r2:i5]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 72.2239019086353
+    },
+    {
+      "a": "City[r2:i5]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 80.2563102771701
+    },
+    {
+      "a": "City[r2:i5]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 43.14283223417292
     },
     {
       "a": "City[r2:i6]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 93.60925974915443
+    },
+    {
+      "a": "City[r2:i6]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 52.768081809045775
+    },
+    {
+      "a": "City[r2:i6]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 92.47946974912777
+    },
+    {
+      "a": "City[r2:i6]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 62.04931473843839
     },
     {
       "a": "City[r2:i7]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 73.5152354908315
+    },
+    {
+      "a": "City[r2:i7]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 33.03042604673839
+    },
+    {
+      "a": "City[r2:i7]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 106.8538922271288
+    },
+    {
+      "a": "City[r2:i7]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 81.1876239272952
     },
     {
       "a": "City[r2:i8]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 57.2564377438027
+    },
+    {
+      "a": "City[r2:i8]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 20.971934400400805
+    },
+    {
+      "a": "City[r2:i8]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 126.61060022999737
+    },
+    {
+      "a": "City[r2:i8]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 102.22637970476868
     },
     {
       "a": "City[r2:i9]",
-      "b": "Tower2FoundationBox",
-      "classification": "conservative_aabb_xz_overlap"
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 40.962194805756056
+    },
+    {
+      "a": "City[r2:i9]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 20.334503173827997
+    },
+    {
+      "a": "City[r2:i9]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 143.8025014183306
+    },
+    {
+      "a": "City[r2:i9]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 120.56913384645107
+    },
+    {
+      "a": "City[r2:i10]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 26.462125688106845
+    },
+    {
+      "a": "City[r2:i10]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 16.058303833007997
+    },
+    {
+      "a": "City[r2:i10]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 160.38187028358206
+    },
+    {
+      "a": "City[r2:i10]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 139.94204139287325
+    },
+    {
+      "a": "City[r2:i11]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 45.757026672363295
+    },
+    {
+      "a": "City[r2:i11]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 38.9130979303985
+    },
+    {
+      "a": "City[r2:i11]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 181.72581857252203
+    },
+    {
+      "a": "City[r2:i11]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 157.0179993452889
+    },
+    {
+      "a": "City[r2:i12]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 63.733467102050795
+    },
+    {
+      "a": "City[r2:i12]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 56.697981427270314
+    },
+    {
+      "a": "City[r2:i12]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 191.9519009627931
+    },
+    {
+      "a": "City[r2:i12]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 163.5410502618665
+    },
+    {
+      "a": "City[r2:i13]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 84.84904861450201
+    },
+    {
+      "a": "City[r2:i13]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 77.43436706951096
+    },
+    {
+      "a": "City[r2:i13]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 204.05916963110425
+    },
+    {
+      "a": "City[r2:i13]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 171.87077428442018
+    },
+    {
+      "a": "City[r2:i14]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 104.9447631835937
+    },
+    {
+      "a": "City[r2:i14]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 97.35718679840745
+    },
+    {
+      "a": "City[r2:i14]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 217.0088992594524
+    },
+    {
+      "a": "City[r2:i14]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 181.89168676977366
+    },
+    {
+      "a": "City[r2:i15]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 123.50365114212036
+    },
+    {
+      "a": "City[r2:i15]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 115.74468382628855
+    },
+    {
+      "a": "City[r2:i15]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 229.5324616157397
+    },
+    {
+      "a": "City[r2:i15]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 192.15807928961422
+    },
+    {
+      "a": "City[r2:i16]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 143.4696760177612
+    },
+    {
+      "a": "City[r2:i16]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 135.34721842371962
+    },
+    {
+      "a": "City[r2:i16]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 242.54144658414705
+    },
+    {
+      "a": "City[r2:i16]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 203.02574558102867
+    },
+    {
+      "a": "City[r2:i17]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 165.7634811401367
+    },
+    {
+      "a": "City[r2:i17]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 157.24766372767462
+    },
+    {
+      "a": "City[r2:i17]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 257.2620075498391
+    },
+    {
+      "a": "City[r2:i17]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 215.73679642149415
+    },
+    {
+      "a": "City[r2:i18]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 185.2557487487793
+    },
+    {
+      "a": "City[r2:i18]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 176.93566879947383
+    },
+    {
+      "a": "City[r2:i18]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 274.5116770287881
+    },
+    {
+      "a": "City[r2:i18]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 231.9907113990524
+    },
+    {
+      "a": "City[r2:i19]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 205.02214813232422
+    },
+    {
+      "a": "City[r2:i19]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 196.48938558945895
+    },
+    {
+      "a": "City[r2:i19]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 289.3591855134339
+    },
+    {
+      "a": "City[r2:i19]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 245.70878838744648
+    },
+    {
+      "a": "City[r2:i20]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 231.0
+    },
+    {
+      "a": "City[r2:i20]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 222.17106835010236
+    },
+    {
+      "a": "City[r2:i20]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 308.5538440867219
+    },
+    {
+      "a": "City[r2:i20]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 263.6363737091108
+    },
+    {
+      "a": "City[r2:i21]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 231.88806715067162
+    },
+    {
+      "a": "City[r2:i21]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 222.0
+    },
+    {
+      "a": "City[r2:i21]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 299.42382346122207
+    },
+    {
+      "a": "City[r2:i21]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 253.61807117321018
+    },
+    {
+      "a": "City[r2:i22]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 234.52231473338503
+    },
+    {
+      "a": "City[r2:i22]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 222.00054831386095
+    },
+    {
+      "a": "City[r2:i22]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 290.6142618037393
+    },
+    {
+      "a": "City[r2:i22]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 243.96676192337324
+    },
+    {
+      "a": "City[r2:i23]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 238.26679319036344
+    },
+    {
+      "a": "City[r2:i23]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 222.76086723349292
+    },
+    {
+      "a": "City[r2:i23]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 282.09132745085594
+    },
+    {
+      "a": "City[r2:i23]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 234.69256876035854
+    },
+    {
+      "a": "City[r2:i24]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 244.66346013611164
+    },
+    {
+      "a": "City[r2:i24]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 225.68516814588938
+    },
+    {
+      "a": "City[r2:i24]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 276.32850751577024
+    },
+    {
+      "a": "City[r2:i24]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 228.51278009054334
+    },
+    {
+      "a": "City[r2:i25]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 251.10010485279827
+    },
+    {
+      "a": "City[r2:i25]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 229.56291538082942
+    },
+    {
+      "a": "City[r2:i25]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 270.60859258645013
+    },
+    {
+      "a": "City[r2:i25]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 222.560615893478
+    },
+    {
+      "a": "City[r2:i26]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 259.0338735378932
+    },
+    {
+      "a": "City[r2:i26]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 235.0424745569528
+    },
+    {
+      "a": "City[r2:i26]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 266.75043884035335
+    },
+    {
+      "a": "City[r2:i26]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 218.82561761131564
+    },
+    {
+      "a": "City[r2:i27]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 268.69850012910774
+    },
+    {
+      "a": "City[r2:i27]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 242.36705692537356
+    },
+    {
+      "a": "City[r2:i27]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 264.63012913680427
+    },
+    {
+      "a": "City[r2:i27]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 217.1568139035027
+    },
+    {
+      "a": "City[r2:i28]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 279.90311255675215
+    },
+    {
+      "a": "City[r2:i28]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 251.4428359158618
+    },
+    {
+      "a": "City[r2:i28]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 264.0
+    },
+    {
+      "a": "City[r2:i28]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 217.0
+    },
+    {
+      "a": "City[r2:i29]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 293.1382584548861
+    },
+    {
+      "a": "City[r2:i29]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 262.70805718739297
+    },
+    {
+      "a": "City[r2:i29]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 264.0
+    },
+    {
+      "a": "City[r2:i29]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 217.00497180222055
+    },
+    {
+      "a": "City[r2:i30]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 304.4929842780802
+    },
+    {
+      "a": "City[r2:i30]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 272.7058970450858
+    },
+    {
+      "a": "City[r2:i30]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 264.1666161633159
+    },
+    {
+      "a": "City[r2:i30]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 217.8637622300419
+    },
+    {
+      "a": "City[r2:i31]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 305.413123285641
+    },
+    {
+      "a": "City[r2:i31]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 271.5900841620579
+    },
+    {
+      "a": "City[r2:i31]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 249.94302326651757
+    },
+    {
+      "a": "City[r2:i31]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 204.8859549832705
+    },
+    {
+      "a": "City[r2:i32]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 290.37257037211737
+    },
+    {
+      "a": "City[r2:i32]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 255.3971090259768
+    },
+    {
+      "a": "City[r2:i32]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 228.72096689126974
+    },
+    {
+      "a": "City[r2:i32]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 183.87761970783052
+    },
+    {
+      "a": "City[r2:i33]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 276.4662422441563
+    },
+    {
+      "a": "City[r2:i33]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 240.55711506846967
+    },
+    {
+      "a": "City[r2:i33]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 209.98063910404085
+    },
+    {
+      "a": "City[r2:i33]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 165.1977716956614
+    },
+    {
+      "a": "City[r2:i34]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 264.91827331870593
+    },
+    {
+      "a": "City[r2:i34]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 227.80475968621172
+    },
+    {
+      "a": "City[r2:i34]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 189.98315993097987
+    },
+    {
+      "a": "City[r2:i34]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 145.67513534700197
+    },
+    {
+      "a": "City[r2:i35]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 255.40264716125176
+    },
+    {
+      "a": "City[r2:i35]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 217.00672765706227
+    },
+    {
+      "a": "City[r2:i35]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 169.02250580778548
+    },
+    {
+      "a": "City[r2:i35]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 125.67383325285758
+    },
+    {
+      "a": "City[r2:i36]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 246.260649372616
+    },
+    {
+      "a": "City[r2:i36]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 206.8563432633145
+    },
+    {
+      "a": "City[r2:i36]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 149.1079779296019
+    },
+    {
+      "a": "City[r2:i36]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 106.7836063343356
+    },
+    {
+      "a": "City[r2:i37]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 236.4096689457881
+    },
+    {
+      "a": "City[r2:i37]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 196.25594386108585
+    },
+    {
+      "a": "City[r2:i37]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 129.56957096637422
+    },
+    {
+      "a": "City[r2:i37]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 88.15572208354885
+    },
+    {
+      "a": "City[r2:i38]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 226.9335746230678
+    },
+    {
+      "a": "City[r2:i38]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 186.2246502137505
+    },
+    {
+      "a": "City[r2:i38]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 109.44943289551382
+    },
+    {
+      "a": "City[r2:i38]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 69.30656575026556
+    },
+    {
+      "a": "City[r2:i39]",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 220.94483064199648
+    },
+    {
+      "a": "City[r2:i39]",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 179.9639437497671
+    },
+    {
+      "a": "City[r2:i39]",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 90.96349814375782
+    },
+    {
+      "a": "City[r2:i39]",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 53.55862430979382
+    },
+    {
+      "a": "Tower1FoundationBox",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 110.98198051936178
+    },
+    {
+      "a": "Tower1FoundationBox",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 87.0976463516667
+    },
+    {
+      "a": "Tower1FoundationBox",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 127.39309243440164
+    },
+    {
+      "a": "Tower1FoundationBox",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 80.0
+    },
+    {
+      "a": "Tower2FoundationBox",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 39.31317779742742
+    },
+    {
+      "a": "Tower2FoundationBox",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 6.943710327147997
+    },
+    {
+      "a": "Tower2FoundationBox",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 82.92032729528222
+    },
+    {
+      "a": "Tower2FoundationBox",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 56.96816617052841
+    },
+    {
+      "a": "Tower3FoundationBox",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 86.0556507110596
+    },
+    {
+      "a": "Tower3FoundationBox",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 47.17718205199169
+    },
+    {
+      "a": "Tower3FoundationBox",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 13.026412963867202
+    },
+    {
+      "a": "Tower3FoundationBox",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 15.523499493161188
+    },
+    {
+      "a": "Skyline08FoundationBox",
+      "b": "Tower2RemoteSilhouette_A",
+      "xz_gap_m": 115.79501533508301
+    },
+    {
+      "a": "Skyline08FoundationBox",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 75.79501533508301
+    },
+    {
+      "a": "Skyline08FoundationBox",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 41.56501962533905
+    },
+    {
+      "a": "Skyline08FoundationBox",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 22.1849842071533
+    },
+    {
+      "a": "Tower2RemoteSilhouette_A",
+      "b": "Tower2RemoteSilhouette_B",
+      "xz_gap_m": 22.0
+    },
+    {
+      "a": "Tower2RemoteSilhouette_A",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 173.64907140552177
+    },
+    {
+      "a": "Tower2RemoteSilhouette_A",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 163.0
+    },
+    {
+      "a": "Tower2RemoteSilhouette_A",
+      "b": "CityRing0Index2Extension",
+      "xz_gap_m": 142.75159864772826
+    },
+    {
+      "a": "Tower2RemoteSilhouette_A",
+      "b": "CityRing0Index8Extension",
+      "xz_gap_m": 106.89522385049047
+    },
+    {
+      "a": "Tower2RemoteSilhouette_B",
+      "b": "Tower3RemoteSilhouette_A",
+      "xz_gap_m": 135.51752654177244
+    },
+    {
+      "a": "Tower2RemoteSilhouette_B",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 123.0
+    },
+    {
+      "a": "Tower2RemoteSilhouette_B",
+      "b": "CityRing0Index2Extension",
+      "xz_gap_m": 103.38259285700647
+    },
+    {
+      "a": "Tower2RemoteSilhouette_B",
+      "b": "CityRing0Index8Extension",
+      "xz_gap_m": 93.6969718933105
+    },
+    {
+      "a": "Tower3RemoteSilhouette_A",
+      "b": "Skyline08RemoteSilhouette_A",
+      "xz_gap_m": 31.0
+    },
+    {
+      "a": "Tower3RemoteSilhouette_A",
+      "b": "CityRing0Index2Extension",
+      "xz_gap_m": 100.71995953876228
+    },
+    {
+      "a": "Tower3RemoteSilhouette_A",
+      "b": "CityRing0Index8Extension",
+      "xz_gap_m": 186.04084481551988
+    },
+    {
+      "a": "Skyline08RemoteSilhouette_A",
+      "b": "CityRing0Index2Extension",
+      "xz_gap_m": 52.96741962726128
+    },
+    {
+      "a": "Skyline08RemoteSilhouette_A",
+      "b": "CityRing0Index8Extension",
+      "xz_gap_m": 147.03499724373393
     }
   ],
-  "pairwise_aabb_xz_overlap_count": 53,
-  "all_pairwise_overlap_count_including_intentional": 57,
-  "triangle_geometry_note": "Only conservative runtime AABB/XZ envelope screening was executed. No triangle-level mesh intersection was run.",
-  "result": "blocked_by_conservative_aabb_xz_overlap"
+  "all_xz_pairs": [
+    {
+      "a": "Skyline08",
+      "b": "Tower2"
+    },
+    {
+      "a": "Skyline08",
+      "b": "CraneJib_1_1"
+    },
+    {
+      "a": "Skyline08",
+      "b": "City[r2:i4]"
+    },
+    {
+      "a": "Skyline08",
+      "b": "Skyline08FoundationBox"
+    },
+    {
+      "a": "Tower1",
+      "b": "CraneJib_0_0"
+    },
+    {
+      "a": "Tower1",
+      "b": "Tower1FoundationBox"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_0_0"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_0_1"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_1_0"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i3]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i4]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i5]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i6]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i3]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i4]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i5]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i6]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i7]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i8]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i5]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i6]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i7]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i8]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i9]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i10]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i11]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i12]"
+    },
+    {
+      "a": "Tower2",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "Tower2",
+      "b": "Skyline08FoundationBox"
+    },
+    {
+      "a": "Tower3",
+      "b": "CraneJib_1_1"
+    },
+    {
+      "a": "Tower3",
+      "b": "Tower3FoundationBox"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "CraneJib_0_1"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "City[r0:i4]"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "Tower1FoundationBox"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "CraneJib_1_0"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r0:i4]"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r1:i5]"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r2:i6]"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "CraneJib_1_1"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "City[r2:i6]"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Tower3FoundationBox"
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Skyline08FoundationBox"
+    },
+    {
+      "a": "City[r0:i2]",
+      "b": "CityRing0Index2Extension"
+    },
+    {
+      "a": "City[r0:i4]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r0:i8]",
+      "b": "CityRing0Index8Extension"
+    },
+    {
+      "a": "City[r1:i4]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r1:i5]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r1:i6]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r1:i7]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i6]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i7]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i8]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i9]",
+      "b": "Tower2FoundationBox"
+    }
+  ],
+  "existing_relationships_not_modified": [
+    {
+      "a": "Skyline08",
+      "b": "Tower2"
+    },
+    {
+      "a": "Skyline08",
+      "b": "CraneJib_1_1"
+    },
+    {
+      "a": "Skyline08",
+      "b": "City[r2:i4]"
+    },
+    {
+      "a": "Tower1",
+      "b": "CraneJib_0_0"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_0_0"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_0_1"
+    },
+    {
+      "a": "Tower2",
+      "b": "CraneJib_1_0"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i3]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i4]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i5]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r0:i6]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i3]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i4]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i5]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i6]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i7]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r1:i8]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i5]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i6]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i7]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i8]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i9]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i10]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i11]"
+    },
+    {
+      "a": "Tower2",
+      "b": "City[r2:i12]"
+    },
+    {
+      "a": "Tower3",
+      "b": "CraneJib_1_1"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "CraneJib_0_1"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "City[r0:i4]"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "CraneJib_1_0"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r0:i4]"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r1:i5]"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "City[r2:i6]"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "CraneJib_1_1"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "City[r2:i6]"
+    }
+  ],
+  "vertical_or_per_mesh_separated": [
+    {
+      "a": "Skyline08",
+      "b": "Skyline08FoundationBox"
+    },
+    {
+      "a": "Tower1",
+      "b": "Tower1FoundationBox"
+    },
+    {
+      "a": "Tower2",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "Tower2",
+      "b": "Skyline08FoundationBox",
+      "reason": "逐mesh包络排除整楼AABB误报"
+    },
+    {
+      "a": "Tower3",
+      "b": "Tower3FoundationBox"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "Tower1FoundationBox"
+    },
+    {
+      "a": "CraneJib_0_0",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "CraneJib_0_1",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "CraneJib_1_0",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Tower3FoundationBox"
+    },
+    {
+      "a": "CraneJib_1_1",
+      "b": "Skyline08FoundationBox"
+    },
+    {
+      "a": "City[r0:i2]",
+      "b": "CityRing0Index2Extension"
+    },
+    {
+      "a": "City[r0:i4]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r0:i8]",
+      "b": "CityRing0Index8Extension"
+    }
+  ],
+  "intentional_same_target": [],
+  "underground_overlap_below_ground": [
+    {
+      "a": "City[r1:i4]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r1:i5]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r1:i6]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r1:i7]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i6]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i7]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i8]",
+      "b": "Tower2FoundationBox"
+    },
+    {
+      "a": "City[r2:i9]",
+      "b": "Tower2FoundationBox"
+    }
+  ],
+  "new_above_ground_conflicts": [],
+  "protected_file_count": 574,
+  "protected_file_changes": [],
+  "geometry_boundary": "XZ及三维AABB，非规则楼体逐mesh包络细筛；未进行三角级相交。地下延续盒的既有城市重叠单列，不冒称全世界无交叠。"
 }

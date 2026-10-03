@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/verification/probe_landscape_500_city.gd" id="probe"]
+
+[node name="Landscape500CityProbe" type="Node"]
+script = ExtResource("probe")

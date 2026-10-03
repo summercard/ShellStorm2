@@ -1,61 +1,106 @@
 # Cross Tower 路线景观补全交付记录
 
-- 功能/资产：`ENV-OPENWORLD-LANDSCAPE-FOUNDATION`
-- 正式路线：`assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn`
-- 日期：2026-10-03
-- 范围：只做 Godot 正式路线的场景装配代理；不改玩法规则、不改原始塔楼/skyline Blender、不改 `TowerAtmosphere3D.gd`、不新建材质资源。
-- 02b 边界：本次是 `BoxMesh` 视觉代理和正式 PackedScene 装配，不宣称 Blender 源资产导入优化验收；后续替换为美术模块必须另走独立优化文件、GLB、重导入和保真门禁。
+- 功能/资产：`ASSET-PIPELINE / ENV-OPENWORLD-LANDSCAPE-FOUNDATION`，景观v003。
+- 日期：2026-10-03；项目版本不变，0.1.0。
+- 正式引用：`scenes/TowerDescent3D.tscn` → `Blocks/Rooftop/CrossTowerRoute/LandscapeFoundation`。
+- 稳定目录：`assets/art/environments/open_world/runtime/open_world_landscape_foundation/`。
+- 本次只做Godot BoxMesh视觉装配和材质对象认领；不宣称Blender优化/GLB导出，不改玩法、城市生成规则、原始源文件或正式建筑摆位，不新增材质资源、不提交Git。
 
-## 实施结果
+## 用户最新契约与纠正
 
-1. 正式路线保留 `LandscapeFoundation` 引用；Tower2、Tower3、Skyline08 和 Skyline08 完整 `Transform3D` 未改。
-2. 景观根场景拆为 9 个可独立编辑 PackedScene：4 个基础、1 个地表、4 个远景代理；根场景只保存实例位置和正式引用。
-3. 全部视觉代理根 `scale` 为 1、无碰撞；材质统一复用 `res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres`。
-4. 每个补全对象保留 `target/top_y/ground_y/footprint_source/material_source/future_optimization_space` 六项 metadata。
-5. 主塔基础按生产链修正为 98F stage `y=-24.0` + polished tile visual offset `-0.15` + 局部资产最低点 `-0.15`，最低视觉包络 `Y=-24.30`。
-6. 地表厚度 `0.2m`、顶面 `Y=-80.0`；范围纳入目标、桥、城市、基础和远景，使用 `20.25m`（满足至少20m并保留浮点余量）。
-7. `Tower2RemoteSilhouette_A` 移到确定性生产布局筛出的空槽中心 `(120,-140)`；不修改城市生成算法。
+原城市顶部和原实例均保持；仅原底高于-80者向下补长，原底更低者绝不截短。Tower2原底-100.5低于地表，允许地表穿过下部，不抬楼，不生成负尺寸。本次用独立box在原底以下继续20m，而非把-100.5至-80重复填成基础。
 
-## 精确模块
+撤回上一稿的三项错误口径：98F地砖推导不是整塔测量；人工筛查位置不是生产算法空槽；Tower2低于地表不再是待批准阻塞。上一稿53对XZ包络不代表53对真实相交。
 
-| 节点 | 中心坐标 | 尺寸 | 顶面/底面 | 备注 |
-|---|---:|---:|---:|---|
-| Tower1FoundationBox | (0, -52.15, 5) | (104, 55.7, 84) | -24.3 / -80 | 主塔壳体 `[-50,50]×[-35,45]` 外扩2m；按98F生产地砖链核算 |
-| Tower2FoundationBox | (40, -90.25, -90) | (74.13, 20.5, 54.112583) | -80 / -100.5 | 按楼身 floor_00 包络+2m；不包塔吊；源楼身底部仍低于地表 |
-| Tower3FoundationBox | (-12.01462, -60.075001, -173.036148) | (73.917942, 39.849998, 49.621033) | -40.15 / -80 | 按运行时完整网格XZ包络+1m，保留非对称源bbox中心 |
-| Skyline08FoundationBox | (-16.847691, -69.827294, -121.18834) | (27.93465, 20.345413, 35.02) | -59.654587 / -80 | 完整运行时bbox+1m；目标路线矩阵不变 |
-| OpenWorldGroundPlane | (3.750313, -80.1, -40.770721) | (290.999374, 0.2, 354.651886) | -80 / -80.2 | X[-141.749374,149.25]，Z[-218.096664,136.555222]；含基础及20.25m余量 |
-| Tower2RemoteSilhouette_A | (120, -49, -140) | (18,62,18) | -18 / -80 | 生产算法空槽；已消除与 `City[r2:i11]` 的重叠 |
-| Tower2RemoteSilhouette_B | (80, -56, -130) | (18,48,16) | -32 / -80 | 生产算法筛查的远景槽 |
-| Tower3RemoteSilhouette_A | (-70,-52,-173) | (16,56,18) | -24 / -80 | 生产算法筛查的远景槽 |
-| Skyline08RemoteSilhouette_A | (-60,-59,-125) | (16,42,16) | -38 / -80 | 生产算法筛查的远景槽 |
+## 实际运行时测量
 
-## 垂向契约
+通过真实OpenGL渲染器读回Mesh/MultiMesh。当前生产代码`DEEPEST_PLANNED_FLOOR=98`，提交所有当前计划、构建房间壳体，测量100F/99F/98F以及房间、楼梯和块结构；未伪造未启用的95F楼层。
 
-Tower2 导出楼身的运行时底部是 `Y=-100.5`，低于请求地表 `Y=-80`。本次不移动 Tower2 根节点、不改变上部建筑，因此基础盒真实跨越 `[-100.5,-80]`；组件 metadata 同时记录 `top_y=-80.0`、`ground_y=-80.0` 和 `source_building_bottom_y=-100.5`。这仍是待美术确认的设计冲突，不宣称已统一为同一地表标高。
+主塔完整当前包络：X[-50.157082,50.157082]、Y[-24.299999,12.300000]、Z[-35.157082,45.157082]。4个基础、1个地表、4个新增远景和2个原城市下延段，共11个独立PackedScene。
 
-## AABB/XZ 检查边界
+| 部件 | 中心XYZ（m） | 尺寸XYZ（m） | top / bottom Y |
+|---|---|---|---|
+| Tower1FoundationBox | (0,-52.15,5) | (104,55.7,84) | -24.3 / -80 |
+| Tower2FoundationBox | (40,-110.5,-90) | (70.130005,20,50.112579) | -100.5 / -120.5 |
+| Tower3FoundationBox | (-12.014620,-60.075001,-173.036148) | (73.917938,39.849998,49.621033) | -40.15 / -80 |
+| Skyline08FoundationBox | (-17.305016,-69.827293,-122.641167) | (25.02,20.345413,30.114334) | -59.654587 / -80 |
+| OpenWorldGroundPlane | (3.750313,-80.1,-40.770721) | (290.999359,0.2,354.651886) | -80 / -80.2 |
+| Tower2RemoteSilhouette_A | (120,-49,-140) | (18,62,18) | -18 / -80 |
+| Tower2RemoteSilhouette_B | (80,-56,-130) | (18,48,16) | -32 / -80 |
+| Tower3RemoteSilhouette_A | (-70,-52,-173) | (16,56,18) | -24 / -80 |
+| Skyline08RemoteSilhouette_A | (-60,-59,-125) | (16,42,16) | -38 / -80 |
+| CityRing0Index2Extension | (-25,-76.733475,-58.750290) | (16.298279,6.533051,17.500580) | -73.466949 / -80 |
+| CityRing0Index8Extension | (73.303024,-78.626953,-20) | (16.067032,2.746094,16.606056) | -77.253906 / -80 |
 
-- 检查脚本：`scripts/verify_landscape_foundation_geometry.py`。
-- 输入：Godot 运行时 dump `I:/工作项目/shellstrom2/_scratch/landscape_runtime_geometry_final2.json`、正式目标/桥包络、96栋生产城市布局和9个景观实例。
-- 检查对象：113；城市布局：96；基础与远景均纳入。
-- 预期目标-基础包络交叠：4对，单列为 `intentional_target_foundation_overlaps`。
-- 其他保守 AABB/XZ 重叠：53对，仍阻塞全局“无重叠”结论；其中包括既有塔楼/桥/城市关系、基础与既有路线/城市关系，不等同新增远景三角相交。
-- `Tower2RemoteSilhouette_A` 与 `City[r2:i11]` 的旧重叠已消除；当前没有执行三角级 mesh intersection，因此不声称三角级通过。
+Tower2楼身只测`architecture`：X[4.935001,75.065002]、Z[-115.056290,-64.943710]、底-100.5；塔吊、设施和脚手架不进入基础footprint，未新增碰撞。Skyline基础不再按全楼外包络外扩；在楼身内收约2.906m避让既有City[r2:i4]，该边楼板保持外挑，基础与城市净距1m，建筑矩阵不动。
 
-## 资产登记与验证证据
+地表X[-141.749374,149.25]、Z[-218.096664,136.555222]，顶-80、厚0.2；完整运行时包络的四边余量约20.25m（最小20.249985），满足至少20m。有限地表外仍是背景，不承诺无限世界地面。
 
-- 运行 manifest：`assets/art/environments/open_world/runtime/open_world_landscape_foundation/asset_manifest.json`，版本 `v002`。
-- 运行场景：`assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn`。
-- Godot：4.6.3；导入退出码0，日志 `I:/工作项目/shellstrom2/_scratch/landscape_import_final.log`。
-- 运行探针退出码0，输出 `LANDSCAPE_RUNTIME_DUMP_OK city=96 foundation=9`；最新 dump `I:/工作项目/shellstrom2/_scratch/landscape_runtime_geometry_final2.json`。
-- 根场景及9个独立 PackedScene 均 `loaded=true`；警告仅为项目已有 palette invalid UID 回退文本路径，不是本次景观资源加载失败。
-- 真实渲染截图、三角级相交、全工程玩法长测和Blender导出/优化门禁本次未执行。`tests/verification` 中未发现现成的跨塔景观窗口渲染探针；本次没有为了截图新建临时相机/窗口场景，因此不把 headless 结构dump冒充真实渲染证据。
-- 未直接修改 XLSX 分账本；`ledger_index.json` 的 scenes 域登记仍需按既有 `shellstorm2-asset-ledger-row-authoring` 流程完成。
+## 原城市顶部不变证明
 
-## 当前阻塞
+96栋生产布局逐字段与本次修改前dump相同；真实渲染器96个MultiMesh回读与生产布局一致。仅r0:i2原底-73.466949、r0:i8原底-77.253906需要下延，两者原顶均-20，原节点/实例没有移动。其余94栋原底低于-80，不截短不伸长。逐栋top/bottom见`geometry_final.json`的`city_top_bottom_proof`。
 
-1. Tower2 源楼身底部 `Y=-100.5` 与地表 `Y=-80` 的契约冲突未获用户批准，故保留并标红。
-2. 53 对保守 AABB/XZ 重叠中包含既有路线、城市、桥和基础包络关系，尚不能把整组声明为“无重叠”；三角级未执行。
-3. 尚未执行带窗口真实渲染截图，也未完成场景分账本登记、MODULE_INDEX/CHANGELOG 定点登记和Git提交（按要求不提交）。
-4. 本次修改前快照与哈希见 `I:/工作项目/shellstrom2/_scratch/landscape_pre_geometry_fix/baseline.json`；其范围只覆盖本轮修改前三个目标文件，不代表任务起始全工程备份。
+城市材质是生产代码运行时创建的对象，没有稳定.tres。`landscape_visual_material_binding.gd`在正式装配中将4个新剪影和2个下延段的material_override指向同一个现有城市材质对象，未复制或新建材质。独立编辑器预览没有城市时使用原有墙材质；正式绑定由专项断言确认。基础/地表继续复用已有`mat_tower_wall_solid_a_v001.tres`。
+
+## 重叠边界与专项门禁
+
+- `scripts/verify_landscape_foundation_geometry.py`：264项断言通过，失败会退出1，不再把正常生成报告的exit0冒称验收。
+- 新远景与目标、桥、96城市、基础、下延段和其他新远景的XZ最小净距4.249603m，超过1m门禁。
+- 地表以上新增非自身三维/逐mesh包络冲突0。
+- 34对既有目标/桥/城市XZ关系未改；8对Tower2深地下延续盒与既有城市包络交叠单列。地下盒在地表以下，不改碰撞、不影响地上新增远景；不是全世界零重叠证明。
+- 独立根场景加11组件，共12项独立加载成功；所有六项metadata、正尺寸、top/bottom、地表范围、材质对象复用和零新增碰撞均断言。
+- 正式路线、塔2/塔3/Skyline组件、主塔入口和生产算法等574个保护文件SHA256不变。Tower2/Tower3/Skyline完整矩阵、楼顶和包络与本轮基线一致。
+- 未执行三角级相交、全工程玩法长测、移动端性能/LOD、用户最终美术观感确认。
+
+## 真实截图和证据
+
+完整证据目录：`outputs/landscape_completion_20261003/`。包括本次586文件快照`before/`和`baseline_hashes.json`，修改前dump、最终`runtime_final.json`、`geometry_final.json`、导入/渲染/几何日志及6张PNG。展示入口`acceptance_report.html`。
+
+截图采用真实窗口渲染器，整体与Tower2、Tower3/Skyline、原城市下延段总览及两处接地近景六机位；验收临时关闭雾云/HUD，提高环境亮度并取消城市远距离裁剪方便观察，不写回正式场景。整体部件中心取景及图像颜色分层有断言，不以headless结果替代图片。两张接地近景临时只展示原城市单栋、其下延段和地表，以排除既有城市遮挡，使用相同网格/变换/材质，不写回正式布局。
+
+Godot4.6.3导入和真实渲染运行成功；最终日志没有非预期ERROR/SCRIPT ERROR，保留原色盘UID回退警告。工程文档门禁仍因4个其他验收入口未登记而失败；资产命名门禁仍列出玩家v022-v024和基地椅凳带版本文件/引用，不处理本次范围外资产，不宣称全工程通过。未直接改XLSX，运行时接入与manifest登记已完成，分账本转正仍需专门授权/流程。
+
+本次没有覆盖工作摆位场景；正式稳定景观根可直接在编辑器独立打开调整，正式route已有引用。所有记录为本次文件快照，后续用户手改后需重新验收。
+
+## 500米地表与全域城市v004后续交付
+
+本节是2026-10-03后续授权的新快照；上文v003尺寸、264项与未登记状态保留为历史，不代表本节当前结果。功能归属ASSET-PIPELINE / WORLD-BLOCKS，游戏版本仍0.1.0；未提交Git。
+
+### 正式变更与所有权
+
+- 地表扩大为500×500m，中心XZ=(3.750313,-40.770721)，X[-246.249687,253.750313]、Z[-290.770721,209.229279]；顶Y=-80、厚0.2m。
+- 独立ProceduralCity500仅生成自己子树，参数位于稳定runtime目录city_generation_parameters.json；seed=500990095，20×20候选/25m间隔，25个100m分区。真实接受200、拒绝200，仅23个非空新增分区创建MultiMesh。
+- 宽深10–18m、抖动1.5m，顶Y[-68,-20]、底Y=-80；近高远低并交错。原96实例、顶部、XZ及94个低于地表的原底不变，已有两接地延段保留。
+- 新楼共享生产旧城同一mesh及material对象，无新增材质；四基础、四剪影、塔1/2/3/Skyline和桥不重生成、不回填工作场景、不改Blender、碰撞、导航、玩法或存档。仅Godot程序网格装配，不宣称DCC优化或新GLB导出。
+- 楼身、塔吊、桥按世界逐Mesh足迹避让，景观及旧楼另外保护。桥吊臂优先按bridge分类，景观按landscape分类；分类修正前后200楼全部变换相同。
+- 云海新增逐栋1.5m保留区，20×40 RGBAF纹理；不以地表/整片城市超级AABB禁云。正式雾云和520m距离裁剪保持。
+
+### 真实验收结果
+
+Godot4.6.3 / Vulkan 1.4.341 / Forward+ / NVIDIA GeForce RTX 4060 Ti。APPDATA隔离；在outputs下独立工程快照运行，不共享编辑器.godot。before回退本次修改前资产，但使用补齐桥与stage矩阵字段的相同测试schema；不把最终资产混入基线。
+
+| 验收 | 退出码 / 结果 |
+|---|---|
+| run_probe.py runtime_before | 0；真实基线，无非预期ERROR/SCRIPT ERROR |
+| run_probe.py runtime_final | 0；真实回读96旧楼、200新楼及GPU纹理 |
+| scripts/verify_landscape_500_city.py | 0；665项通过，失败0 |
+| run_probe.py cloud_regression | 0；OUTDOOR_CLOUDS_OK，30,209项；2个负向对照；无非预期错误 |
+| verify_ledger_split.py（主表后、Prefab事务后） | 均0；1006资产/9域；failure_count=0 |
+
+665项涵盖原96完整变换、四基础/剪影/延段、塔2/3/Skyline与桥完整矩阵、当前主塔楼层矩阵和完整可视包络、500m地表、同对象材质、接地、净距、25区旧新计数、400候选核算、重复生成、负向覆盖/重叠对照、GPU纹理逐栋足迹高度、12项独立加载、零新增碰撞和真实截图取景。保护文件hash按本轮基线精确比较。
+
+最小净距（m）：楼身5.404961、塔吊10.377342、桥11.970894、景观6.867863、旧城6.164078；新楼互距5.208080，边缘27.612518。新楼足迹38,699.267m²，占地表15.48%；不是100%挤满。塔3新增四侧计数北16、南2、西42、东51（方向窗口独立统计，不求和作为总楼数）。
+
+中央分区(2,2)/(2,3)新楼均0，旧楼分别10/15，其16个候选均被保护拒绝。25区总覆盖包含旧城，绝不表述为每区都新增楼；保留街道与保护区是对用户全域城市分布要求的实施解释，不是另获批准的数值豁免。原城市既有交叠不调整。
+
+云海旧回归实测原独立障碍列表、正式玩家像素差、流动/暂停、质量档及距离裁剪，不冒称逐栋新增城市像素排除全证明；新增200栋由665项中的真实GPU纹理回读与1.5m边界断言验证。
+
+### 登记与证据
+
+按ledger_index.json解析场景域，资产主表825行新增ENV-OPENWORLD-LANDSCAPE-FOUNDATION，状态正式美术已接入、v004；域日志v0.1.45。R/S用权威函数、总览10格（常规8格及本账本额外B12/C12）与C/K/L下拉扩到825，zip层DV复核；旧主表除S派生区间与总览外逐格内容/样式保持。独立第二事务在3D-场景通用717行登记正式Prefab，只更新该专表digest，其余sheet保持。两事务各有账本/无损基线备份，其他资产指纹不改。
+
+完整证据目录outputs/landscape_500_city_20261003：acceptance_report.html、runtime_before/final.json与log、geometry_validation.json、cloud_regression.log、ledger_registration.json、ledger_backup_main/prefab、门禁日志及四张PNG。主代理看过全域与塔3图：原城材质呈黑色剪影，布局范围/间隙可见，但不能据此签署立面细节美术验收。
+
+玩家两图使用实际Camera3D和正式环境，仅测试传送、冻结；概览两图临时关闭雾云/HUD、提高环境及太阳亮度并调整太阳角度、取消批次距离裁剪，结束逐项恢复，未写回正式环境。诊断图不是玩家视觉；不承诺玩家相机同时看见500m全域。
+
+最终汇总672项（665几何专项+7登记/门禁/运行快照检查）通过。登记前后账本structure均exit0，split均exit0；场景full均exit1，153条sha_mismatch的AssetID、登记hash及实际hash逐条相同。文档均exit1，仅保留4个既有未注册入口；命名均exit1，GBK日志字节内容一致。登记过程中新增总览B12/C12区间错误及probe作为套件scene的追溯错误均已修复，最终无本次新增红项。完整对照位于gates_before/after.json及ledger_full_before/after.json；当前运行文件与真实renderer快照SHA一致。只为本目标新增登记，不批量接受153条其他资产SHA漂移。未执行移动端性能、LOD、全玩法长测、三角级相交与用户最终视觉确认；专项通过不提升ASSET-PIPELINE总体完成度。所有记录为快照，正式文件再次保存后需重验。

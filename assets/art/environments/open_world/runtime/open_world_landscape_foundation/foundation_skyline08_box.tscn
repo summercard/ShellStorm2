@@ -3,7 +3,7 @@
 [ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="1_material"]
 
 [sub_resource type="BoxMesh" id="BoxSkyline"]
-size = Vector3(27.93465, 20.345413, 35.02)
+size = Vector3(25.02, 20.345413, 30.114334)
 material = ExtResource("1_material")
 
 [node name="Skyline08FoundationBox" type="MeshInstance3D"]
@@ -12,7 +12,8 @@ cast_shadow = 1
 metadata/target = "Skyline08"
 metadata/top_y = -59.654587
 metadata/ground_y = -80.0
-metadata/footprint_source = "skyline_08 export/v004 full runtime mesh bounds; full route Transform3D applied; world XZ envelope + 1m margin"
+metadata/footprint_source = "Skyline08/architecture真实包络内独立基础box，X[-29.815016,-4.795016] Z[-137.698334,-107.584000]；面对既有City[r2:i4]边缘内收，保持1m净距，原楼体不动；余下约2.906m边缘为既有楼板外挑，不用基础覆盖城市"
+metadata/city_clearance_m = 1.0
 metadata/material_source = "res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
 metadata/future_optimization_space = true
 metadata/collision_status = "visual_only"
