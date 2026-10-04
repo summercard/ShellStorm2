@@ -1,6 +1,9 @@
 from pathlib import Path
 import json,shutil,sys
 root=Path.cwd();backup=root/'_scratch/fat_zombie03/shielded_retirement_backup';backup.mkdir(exist_ok=True)
+# 备份目录在 Godot 工程内，若被编辑器扫描会与 src/ 抢注同名全局类（Enemy3D 等）而报
+# "Class hides a global script class"。放 .gdignore 让引擎整目录跳过。
+(backup/'.gdignore').touch(exist_ok=True)
 def save(path,s):
  p=root/path;b=backup/path;b.parent.mkdir(parents=True,exist_ok=True)
  if not b.exists():shutil.copy2(p,b)
