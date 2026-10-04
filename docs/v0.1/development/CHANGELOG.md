@@ -1,5 +1,22 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-10-05｜Boss002夸张攻击v015
+
+- BOSS-STAGES / ASSET-PIPELINE：特效放大1.65倍与持线右手反向大幅后摆，源级31项通过；见[记录](2026-10-03_boss002_monitor_source.md)。
+
+## 2026-10-05｜Boss002前方平拍v014
+
+- BOSS-STAGES / ASSET-PIPELINE：键盘身前平拍、五官放大与2D手绘赛博特效，源级28项验收；见[制作记录](2026-10-03_boss002_monitor_source.md)。
+
+## 2026-10-04｜死亡动画游戏内被隐藏修复
+
+- 尸体退出AI空间桶后继续由独立视野组管理，避免直接消失；表现时钟独立于物理AI，完整播放2.6秒后回收。
+- 玩家视野、真实渲染、负向及普通怪专项回归通过；见[修复记录](2026-10-04_fat_zombie03_death_visibility.md)。
+
+## 2026-10-04｜Boss002键盘攻击v012
+
+- BOSS-STAGES / ASSET-PIPELINE：新增melee_keyboard与表情流，保留idle/move，修正末端蒙皮；见[记录](2026-10-03_boss002_monitor_source.md)。
+
 VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_deep_diagnosis.md)。同场景云海当前→历史→当前复验：旧版P95约16.8ms，当前54.7～64.3ms；历史排云覆盖改变是关键差异，不能无损回滚。正式逻辑计时支持周期保存短顿，生产修复未实施。
 
 ## 2026-10-04｜楼顶与吊桥卡顿复查
@@ -1980,3 +1997,7 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 - 2026-10-03：胖子僵尸03死亡解除脚锁，增加翻腿、主回弹和衰减余震。见[死亡修正](2026-10-03_fat_zombie03_death_bounce.md)。
 
 - 2026-10-03：胖子僵尸03死亡新增腹部接地压扁、侧向展开与姿态降低。见[腹部接地](2026-10-03_fat_zombie03_belly_contact.md)。
+
+- 2026-10-04：换弹表现由**头顶横向进度条**改为**角色脚下平铺圆环**，进度改按角度裁切网格（退役 `fill.scale.x`）；新增 `src/ui/RingProgressGeometry.gd` 作绘圆几何唯一真源，搜索读条环（`InteractionDot3D`）同批改为调它。顺带修掉交互圆点豁免只比脚本路径相等的漏洞 —— 基地设施**子类**（99F 远征情报室全息平台、衣柜设施）会重新长出圆点。验收 `verify_3d_reload_state_flow` / `verify_interaction_dot_presentation` 跑绿。见 [v0.2/PLAN](../../v0.2/PLAN.md) 的 0.2-PLAYER-001。
+
+- 2026-10-05：修掉景观地基「认领城市材质」在**引导场景被顶掉**时的报错 —— `ERROR: Parameter "data.tree" is null.` 与紧随其后的 `SCRIPT ERROR: Invalid access to property or key 'root' on a base object of type 'null instance'`。根因：`_ready` 排的 `call_deferred` 至少隔一帧才跑，而带**未完成续局**的存档启动时，引导用的 `TowerDescent3D` 会在第 1 帧被 `_resume_expedition_runtime_scene()` 的 `change_scene_to_file` 顶掉；地基已出树，120 帧轮询却还在跑。修法：每轮先 `is_inside_tree()` 再取 `get_tree()` —— 只判 `get_tree()` 的返回值不够，它自身带 `ERR_FAIL_NULL_V`，出树时照样打日志。改动文件 `assets/art/environments/open_world/runtime/open_world_landscape_foundation/landscape_visual_material_binding.gd`。A/B/C 三组对照（同一份真实存档、各自全新副本）：原版 2 条报错 / 只判返回值版 1 条 / 最终版 0 条，三组都正常进局。
