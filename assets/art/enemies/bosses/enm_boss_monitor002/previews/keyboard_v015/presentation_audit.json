@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "checks": {
+    "idle_move_curves_preserved": true,
+    "right_hand_backward_swing": true,
+    "right_hand_vertical_swing": true,
+    "right_hand_returns": true,
+    "quarter_frame_no_ground_penetration": true,
+    "fx_quiet_before_and_after": true,
+    "fx_anticipation_swing_impact": true,
+    "all_fx_export_excluded": true
+  },
+  "right_hand_y_range": [
+    -2.009640693664551,
+    -0.05624554306268692
+  ],
+  "right_hand_z_range": [
+    2.1104962825775146,
+    3.0500001907348633
+  ],
+  "quarter_frame_min_z": 0.024999819695949554,
+  "visible_fx_counts": {
+    "1": 0,
+    "22": 0,
+    "24": 4,
+    "29": 2,
+    "33": 10,
+    "36": 7,
+    "44": 0,
+    "55": 0
+  }
+}

@@ -1,6 +1,32 @@
 # Boss 002 · MONITOR.EXE
 
-## 当前交付 v011（左右挪动移动动画）
+## 当前交付 v015（夸张特效与持线手后摆）
+
+动作 `source/enm_boss_monitor002_animation_v015.blend`，模型 `source/enm_boss_monitor002_model_v015.blend`。默认BOSS002_STUDIO场景，1—55帧播放。手绘爆点、冲击环及蓝/玫红干扰统一放大至v014的1.65倍。持线右手蓄力向后上方拉开，下砸后继续后摆、稍滞后达到极值，再收回；前后行程约1.95m、上下约0.94m。数据线增加逐节延迟摆动。
+
+身前平拍、五官22%放大、idle/move曲线保留。动作23项与表现8项通过，217个细分帧检查双手、键盘、数据线与插头不穿地，收招无特效残留。证据与视频 `previews/keyboard_v015/`。复用v014的image-2贴图，未导出或接入Godot。v014保留回退。
+
+## 历史交付 v014（身前平拍与手绘赛博特效）
+
+打开 `source/enm_boss_monitor002_animation_v014.blend`，默认 BOSS002_STUDIO 场景，播放1—55帧。模型母版 `source/enm_boss_monitor002_model_v014.blend`。v012/v013保留回退。
+
+键盘宽面水平向下拍在身前约3.2米处；举高停顿、快速下砸、低位停留和收回保留。修正接触阶段四指握姿；五官以原中心放大22%。idle/move动作曲线与v012完全一致。
+
+image-2制作透明图集 `textures/impact_v014/impact_atlas.png`：手绘白色尖角爆点、贴地冲击环、蓝色挥击笔触、玫红电子碎片。挥击28—34帧点缀，命中33帧触发，44帧前全部消失；独立 `BOSS002_IMPACT_PREVIEW` 集合，角色源场景不含特效。角色仍18,684三角面、64骨、3材质，预览另有3个特效材质。
+
+动作23项与表现5项检查通过，四分之一帧检查无键盘/左手穿地；证据 `previews/keyboard_v014/audit.json`、`presentation_audit.json`。预览 `melee_keyboard.mp4`。仅源级交付，未导出GLB、未接入Godot/伤害事件。
+
+## 历史交付 v012（键盘普通攻击）
+
+动画文件 `source/enm_boss_monitor002_animation_v012.blend` 默认 `melee_keyboard`，并保留idle/move。静态母版 `source/enm_boss_monitor002_model_v012.blend`。64骨、18,684三角面、3材质；骨架拓扑保持，修正弹簧末端握点连接权重。
+
+单次1.8秒/30fps：设计F0对应Blender帧1，F22=23帧蓄力停顿、F26=27帧启动快速下砸、F32=33帧命中、F40=41帧低位暴露结束、F54=55帧回待机。左手握键盘中段，由外侧举高后向前下方砸落；右手持线避让，末帧保持，不循环。代码UV持续上升。
+
+表情统一由Boss002_Rig自定义属性expression_state驱动（0默认/1怀疑/2愤怒/3困倦/4挑衅/5故障）。攻击按阶段切换，idle/move均设默认，静态模型可手调此属性。ExpressionController.expression_index现在跟随该属性，不再直接手调。
+
+证据 `previews/keyboard_v012/audit.json`，视频 `melee_keyboard.mp4`，六张关键姿态渲染。未制作冲击特效、伤害/碰撞判定或Godot接入；候选命中帧只用于后续同步。数据线甩击是另外的动作，本次未制作。
+
+## 历史交付 v011（左右挪动移动动画）
 
 动画 `source/enm_boss_monitor002_animation_v011.blend` 包含idle与move，默认move。静态T Pose模型 `source/enm_boss_monitor002_model_v011.blend`。新增pedestal_motion视觉骨，64骨、SKEL-MONITOR002-005，双母版同签名；18,684三角面、3材质保持。
 

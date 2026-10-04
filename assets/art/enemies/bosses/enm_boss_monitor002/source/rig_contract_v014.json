@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENM-BOSS-MONITOR002-3D",
+  "version": "v014",
+  "skeleton_id": "SKEL-MONITOR002-005",
+  "skeleton_signature": "696f6dc701f5ddccd3eb7324f534ba5fa96580daead8e4873fdf923d078b3539",
+  "bone_count": 64,
+  "triangles": 18684,
+  "materials": [
+    "BOSS002_01_BodyPalette",
+    "BOSS002_02_ExpressionAtlas",
+    "BOSS002_03_ScrollingCode"
+  ],
+  "pivot": [
+    0,
+    -0.52,
+    2.02
+  ],
+  "arm_segments_per_side": 6,
+  "runtime_integration": false,
+  "expression_states": {
+    "default": 0,
+    "suspicious": 1,
+    "angry": 2,
+    "sleepy": 3,
+    "taunting": 4,
+    "glitched": 5
+  },
+  "controls": "rear_axle: shared rear pivot; monitor_spin local Y: independent screen roll; arm_01..06.L/R: FK bend; stretch_L/R: spring length; support_01..03: stand bend; code_scroll: upward UV motion",
+  "export_note": "Bake bone drivers/constraints for GLB. Shared expression attribute and scrolling UV require runtime shader adapter; not yet integrated.",
+  "formal_animations_authored": [
+    "idle",
+    "move",
+    "melee_keyboard"
+  ],
+  "idle": {
+    "fps": 30,
+    "start": 1,
+    "end": 96,
+    "closure": 97,
+    "duration_seconds": 3.2
+  },
+  "face_layout": "restored exactly to v006",
+  "grip": "keyboard center grip; doubled hanging cable with downward plug",
+  "cable_bones": 16,
+  "move": {
+    "fps": 30,
+    "start": 1,
+    "end": 48,
+    "closure": 49,
+    "duration_seconds": 1.6,
+    "root_motion": false,
+    "pedestal_roll_degrees": 23,
+    "pedestal_lateral_range": 0.46
+  },
+  "melee_keyboard": {
+    "fps": 30,
+    "start": 1,
+    "end": 55,
+    "duration_seconds": 1.8,
+    "impact_frame": 33,
+    "state_property": "Boss002_Rig.expression_state",
+    "gameplay_damage": false,
+    "flat_ground_contact": true,
+    "expression_scale": 1.22,
+    "contact_forward_m": 3.0,
+    "vfx_style": "image-2 hand drawn atlas; cyan magenta cyber accents",
+    "impact_vfx": "BOSS002_IMPACT_PREVIEW collection; source preview only"
+  }
+}

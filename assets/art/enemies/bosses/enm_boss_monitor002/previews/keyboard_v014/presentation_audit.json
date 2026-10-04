@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "checks": {
+    "idle_move_curves_preserved": true,
+    "quarter_frame_no_ground_penetration": true,
+    "fx_quiet_before_and_after": true,
+    "fx_anticipation_swing_impact": true,
+    "all_fx_export_excluded": true
+  },
+  "quarter_frame_min_z": 0.024999819695949554,
+  "visible_fx_counts": {
+    "1": 0,
+    "22": 0,
+    "24": 4,
+    "29": 2,
+    "33": 10,
+    "36": 7,
+    "44": 0,
+    "55": 0
+  }
+}
