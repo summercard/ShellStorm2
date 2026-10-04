@@ -1,0 +1,691 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Mesh" path="res://scenes/open_world_layout_edit/open_world_chunk_shared_unit_box.tres" id="city_mesh"]
+
+[node name="open_world_chunk_02" type="Node3D"]
+visible = true
+metadata/chunk_id = "open_world_chunk_02"
+metadata/chunk_index = 1
+metadata/building_count = 53
+metadata/purpose = "楼房区块静态城市运行快照；不含地表；不是正式替换；只拖动区块根"
+metadata/_edit_lock_ = false
+metadata/auto_sync = false
+metadata/writeback_allowed = false
+metadata/snapshot_only = true
+metadata/visual_only = true
+metadata/collision_status = "none_visual_only"
+metadata/world_bounds = AABB(-192.9762395, -80.000004, -262.2329565, 68.7988965, 50.3602795, 441.3995625)
+metadata/local_bounds = AABB(-34.2265525, -0.000004, -221.4622355, 68.7988965, 50.3602795, 441.3995625)
+metadata/visibility_bounds = AABB(-34.2265525, -0.000004, -221.4622355, 68.7988965, 50.3602795, 441.3995625)
+metadata/world_bounds_space = "初始总场景世界坐标快照；手调后用根global_transform乘local_bounds重算"
+metadata/visibility_bounds_space = "区块根局部坐标，仅包住全部楼，不含独立地表；后续按实际global_transform转世界AABB"
+metadata/baseline_world_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -158.749687, -80, -40.770721)
+metadata/visibility_control = "根Node3D.visible启用/隐藏整块；没有新增运行时剔除逻辑"
+metadata/cloud_handoff = "用户确认最终摆位后，主代理只读采集地表和各楼世界AABB再更新云；本轮不写正式云"
+metadata/source_seed = 500990095
+metadata/source_snapshot = "outputs/landscape_500_city_20261003/runtime_final.json；588个相关源文件哈希与当前一致"
+metadata/material_policy = "所有楼引用同一单位BoxMesh和同一原生产材质字段快照；区块不含地表或地表材质引用"
+metadata/building_scale_policy = "逐栋缩放复刻原程序BoxMesh尺寸，区块根单位缩放"
+
+[node name="buildings" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="building_001" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(17.380459, 0, 0, 0, 22.839708, 0, 0, 0, 16.938053, -25.536323, 11.41985, -212.993209)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 1
+metadata/source_grid = Vector2i(2, 1)
+metadata/source_sector = Vector2i(0, 0)
+metadata/source_world_transform = Transform3D(17.380459, 0, 0, 0, 22.839708, 0, 0, 0, 16.938053, -184.28601, -68.58015, -253.76393)
+
+[node name="building_002" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.61315, 0, 0, 0, 22.034212, 0, 0, 0, 14.797531, 1.339367, 11.017105, -213.770159)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 2
+metadata/source_grid = Vector2i(3, 1)
+metadata/source_sector = Vector2i(0, 0)
+metadata/source_world_transform = Transform3D(14.61315, 0, 0, 0, 22.034212, 0, 0, 0, 14.797531, -157.41032, -68.982895, -254.54088)
+
+[node name="building_003" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12.638017, 0, 0, 0, 27.142271, 0, 0, 0, 13.919424, 25.322727, 13.57114, -213.868499)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 3
+metadata/source_grid = Vector2i(4, 1)
+metadata/source_sector = Vector2i(1, 0)
+metadata/source_world_transform = Transform3D(12.638017, 0, 0, 0, 27.142271, 0, 0, 0, 13.919424, -133.42696, -66.42886, -254.63922)
+
+[node name="building_019" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(13.3673935, 0, 0, 0, 36.67015, 0, 0, 0, 12.115303, -26.335293, 18.335075, -188.250949)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 19
+metadata/source_grid = Vector2i(2, 2)
+metadata/source_sector = Vector2i(0, 0)
+metadata/source_world_transform = Transform3D(13.3673935, 0, 0, 0, 36.67015, 0, 0, 0, 12.115303, -185.08498, -61.664925, -229.02167)
+
+[node name="building_020" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.1565, 0, 0, 0, 31.422573, 0, 0, 0, 15.217412, 0.468777, 15.71129, -187.823149)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 20
+metadata/source_grid = Vector2i(3, 2)
+metadata/source_sector = Vector2i(0, 0)
+metadata/source_world_transform = Transform3D(11.1565, 0, 0, 0, 31.422573, 0, 0, 0, 15.217412, -158.28091, -64.28871, -228.59387)
+
+[node name="building_021" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10.400651, 0, 0, 0, 32.63171, 0, 0, 0, 12.949329, 25.011377, 16.315857, -188.794619)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 21
+metadata/source_grid = Vector2i(4, 2)
+metadata/source_sector = Vector2i(1, 0)
+metadata/source_world_transform = Transform3D(10.400651, 0, 0, 0, 32.63171, 0, 0, 0, 12.949329, -133.73831, -63.684143, -229.56534)
+
+[node name="building_037" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(13.945141, 0, 0, 0, 22.062843, 0, 0, 0, 16.109507, -25.534403, 11.03142, -162.674619)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 37
+metadata/source_grid = Vector2i(2, 3)
+metadata/source_sector = Vector2i(0, 0)
+metadata/source_world_transform = Transform3D(13.945141, 0, 0, 0, 22.062843, 0, 0, 0, 16.109507, -184.28409, -68.96858, -203.44534)
+
+[node name="building_038" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(16.988445, 0, 0, 0, 24.454268, 0, 0, 0, 11.261076, -1.393063, 12.227135, -161.579779)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 38
+metadata/source_grid = Vector2i(3, 3)
+metadata/source_sector = Vector2i(0, 0)
+metadata/source_world_transform = Transform3D(16.988445, 0, 0, 0, 24.454268, 0, 0, 0, 11.261076, -160.14275, -67.772865, -202.3505)
+
+[node name="building_039" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.756453, 0, 0, 0, 50.360275, 0, 0, 0, 11.144844, 26.115657, 25.180138, -163.283429)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 39
+metadata/source_grid = Vector2i(4, 3)
+metadata/source_sector = Vector2i(1, 0)
+metadata/source_world_transform = Transform3D(11.756453, 0, 0, 0, 50.360275, 0, 0, 0, 11.144844, -132.63403, -54.819862, -204.05415)
+
+[node name="building_051" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10.329192, 0, 0, 0, 31.123154, 0, 0, 0, 12.58023, -25.013013, 15.56158, -136.104909)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 51
+metadata/source_grid = Vector2i(2, 4)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(10.329192, 0, 0, 0, 31.123154, 0, 0, 0, 12.58023, -183.7627, -64.43842, -176.87563)
+
+[node name="building_052" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(15.057997, 0, 0, 0, 45.823322, 0, 0, 0, 13.252708, 0.141807, 22.911663, -138.452479)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 52
+metadata/source_grid = Vector2i(3, 4)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(15.057997, 0, 0, 0, 45.823322, 0, 0, 0, 13.252708, -158.60788, -57.088337, -179.2232)
+
+[node name="building_053" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(13.458742, 0, 0, 0, 33.00628, 0, 0, 0, 10.329075, 25.576387, 16.50314, -138.984819)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 53
+metadata/source_grid = Vector2i(4, 4)
+metadata/source_sector = Vector2i(1, 1)
+metadata/source_world_transform = Transform3D(13.458742, 0, 0, 0, 33.00628, 0, 0, 0, 10.329075, -133.1733, -63.49686, -179.75554)
+
+[node name="building_064" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12.752567, 0, 0, 0, 16.860252, 0, 0, 0, 11.656798, -24.137943, 8.43013, -112.381619)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 64
+metadata/source_grid = Vector2i(2, 5)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(12.752567, 0, 0, 0, 16.860252, 0, 0, 0, 11.656798, -182.88763, -71.56987, -153.15234)
+
+[node name="building_065" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.655533, 0, 0, 0, 45.053936, 0, 0, 0, 16.705223, -0.151983, 22.52697, -111.443159)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 65
+metadata/source_grid = Vector2i(3, 5)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(14.655533, 0, 0, 0, 45.053936, 0, 0, 0, 16.705223, -158.90167, -57.47303, -152.21388)
+
+[node name="building_066" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(17.388016, 0, 0, 0, 34.025047, 0, 0, 0, 17.43724, 25.523877, 17.012524, -113.040189)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 66
+metadata/source_grid = Vector2i(4, 5)
+metadata/source_sector = Vector2i(1, 1)
+metadata/source_world_transform = Transform3D(17.388016, 0, 0, 0, 34.025047, 0, 0, 0, 17.43724, -133.22581, -62.987476, -153.81091)
+
+[node name="building_076" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.837793, 0, 0, 0, 28.951569, 0, 0, 0, 16.111443, -24.411763, 14.475784, -88.729359)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 76
+metadata/source_grid = Vector2i(2, 6)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(14.837793, 0, 0, 0, 28.951569, 0, 0, 0, 16.111443, -183.16145, -65.524216, -129.50008)
+
+[node name="building_077" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(17.344559, 0, 0, 0, 24.986813, 0, 0, 0, 14.2628145, 0.641517, 12.49341, -88.631139)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 77
+metadata/source_grid = Vector2i(3, 6)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(17.344559, 0, 0, 0, 24.986813, 0, 0, 0, 14.2628145, -158.10817, -67.50659, -129.40186)
+
+[node name="building_078" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(15.164789, 0, 0, 0, 40.819508, 0, 0, 0, 10.072874, 25.883747, 20.409756, -87.946639)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 78
+metadata/source_grid = Vector2i(4, 6)
+metadata/source_sector = Vector2i(1, 1)
+metadata/source_world_transform = Transform3D(15.164789, 0, 0, 0, 40.819508, 0, 0, 0, 10.072874, -132.86594, -59.590244, -128.71736)
+
+[node name="building_086" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12.527512, 0, 0, 0, 15.719683, 0, 0, 0, 17.64798, -24.886053, 7.85984, -62.529319)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 86
+metadata/source_grid = Vector2i(2, 7)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(12.527512, 0, 0, 0, 15.719683, 0, 0, 0, 17.64798, -183.63574, -72.14016, -103.30004)
+
+[node name="building_087" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(15.044003, 0, 0, 0, 35.680805, 0, 0, 0, 16.757593, -0.303553, 17.8404, -63.167419)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 87
+metadata/source_grid = Vector2i(3, 7)
+metadata/source_sector = Vector2i(0, 1)
+metadata/source_world_transform = Transform3D(15.044003, 0, 0, 0, 35.680805, 0, 0, 0, 16.757593, -159.05324, -62.1596, -103.93814)
+
+[node name="building_088" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12.971937, 0, 0, 0, 44.221912, 0, 0, 0, 11.213429, 23.803317, 22.11096, -62.556609)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 88
+metadata/source_grid = Vector2i(4, 7)
+metadata/source_sector = Vector2i(1, 1)
+metadata/source_world_transform = Transform3D(12.971937, 0, 0, 0, 44.221912, 0, 0, 0, 11.213429, -134.94637, -57.88904, -103.32733)
+
+[node name="building_094" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.745993, 0, 0, 0, 32.76949, 0, 0, 0, 14.850096, -25.334113, 16.384743, -38.810729)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 94
+metadata/source_grid = Vector2i(2, 8)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(11.745993, 0, 0, 0, 32.76949, 0, 0, 0, 14.850096, -184.0838, -63.615257, -79.58145)
+
+[node name="building_095" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(17.462765, 0, 0, 0, 38.077072, 0, 0, 0, 14.916272, 0.885107, 19.038536, -38.231484)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 95
+metadata/source_grid = Vector2i(3, 8)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(17.462765, 0, 0, 0, 38.077072, 0, 0, 0, 14.916272, -157.86458, -60.961464, -79.002205)
+
+[node name="building_101" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.484304, 0, 0, 0, 17.732231, 0, 0, 0, 11.965148, -26.149483, 8.86612, -11.209393)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 101
+metadata/source_grid = Vector2i(2, 9)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(11.484304, 0, 0, 0, 17.732231, 0, 0, 0, 11.965148, -184.89917, -71.13388, -51.980114)
+
+[node name="building_102" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.498574, 0, 0, 0, 28.204714, 0, 0, 0, 10.904131, 1.193197, 14.102356, -12.322069)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 102
+metadata/source_grid = Vector2i(3, 9)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(11.498574, 0, 0, 0, 28.204714, 0, 0, 0, 10.904131, -157.55649, -65.897644, -53.09279)
+
+[node name="building_103" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.787804, 0, 0, 0, 37.727272, 0, 0, 0, 10.101373, 25.192327, 18.863636, -11.427914)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 103
+metadata/source_grid = Vector2i(4, 9)
+metadata/source_sector = Vector2i(1, 2)
+metadata/source_world_transform = Transform3D(11.787804, 0, 0, 0, 37.727272, 0, 0, 0, 10.101373, -133.55736, -61.136364, -52.198635)
+
+[node name="building_109" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(17.420193, 0, 0, 0, 20.880232, 0, 0, 0, 11.028452, -24.762143, 10.44012, 13.172161)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 109
+metadata/source_grid = Vector2i(2, 10)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(17.420193, 0, 0, 0, 20.880232, 0, 0, 0, 11.028452, -183.51183, -69.55988, -27.59856)
+
+[node name="building_110" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(13.168172, 0, 0, 0, 20.271706, 0, 0, 0, 10.809259, -0.087543, 10.13585, 11.317012)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 110
+metadata/source_grid = Vector2i(3, 10)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(13.168172, 0, 0, 0, 20.271706, 0, 0, 0, 10.809259, -158.83723, -69.86415, -29.453709)
+
+[node name="building_111" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(15.307663, 0, 0, 0, 28.124687, 0, 0, 0, 17.696991, 25.341377, 14.06234, 12.311809)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 111
+metadata/source_grid = Vector2i(4, 10)
+metadata/source_sector = Vector2i(1, 2)
+metadata/source_world_transform = Transform3D(15.307663, 0, 0, 0, 28.124687, 0, 0, 0, 17.696991, -133.40831, -65.93766, -28.458912)
+
+[node name="building_117" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10.219356, 0, 0, 0, 26.344593, 0, 0, 0, 17.508434, -25.063663, 13.172295, 37.8672128)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 117
+metadata/source_grid = Vector2i(2, 11)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(10.219356, 0, 0, 0, 26.344593, 0, 0, 0, 17.508434, -183.81335, -66.827705, -2.9035082)
+
+[node name="building_118" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12.532016, 0, 0, 0, 36.52669, 0, 0, 0, 15.330009, -0.720543, 18.263348, 37.373622)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 118
+metadata/source_grid = Vector2i(3, 11)
+metadata/source_sector = Vector2i(0, 2)
+metadata/source_world_transform = Transform3D(12.532016, 0, 0, 0, 36.52669, 0, 0, 0, 15.330009, -159.47023, -61.736652, -3.397099)
+
+[node name="building_119" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.6079235, 0, 0, 0, 35.267353, 0, 0, 0, 15.635687, 26.286287, 17.633675, 36.8208332)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 119
+metadata/source_grid = Vector2i(4, 11)
+metadata/source_sector = Vector2i(1, 2)
+metadata/source_world_transform = Transform3D(14.6079235, 0, 0, 0, 35.267353, 0, 0, 0, 15.635687, -132.4634, -62.366325, -3.9498878)
+
+[node name="building_125" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10.103301, 0, 0, 0, 23.842632, 0, 0, 0, 11.359553, -23.996603, 11.92132, 63.095691)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 125
+metadata/source_grid = Vector2i(2, 12)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(10.103301, 0, 0, 0, 23.842632, 0, 0, 0, 11.359553, -182.74629, -68.07868, 22.32497)
+
+[node name="building_126" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.937981, 0, 0, 0, 26.916172, 0, 0, 0, 17.140516, -0.488793, 13.458084, 62.337799)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 126
+metadata/source_grid = Vector2i(3, 12)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(14.937981, 0, 0, 0, 26.916172, 0, 0, 0, 17.140516, -159.23848, -66.541916, 21.567078)
+
+[node name="building_127" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(16.766304, 0, 0, 0, 23.612612, 0, 0, 0, 17.03786, 23.759927, 11.806305, 63.011619)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 127
+metadata/source_grid = Vector2i(4, 12)
+metadata/source_sector = Vector2i(1, 3)
+metadata/source_world_transform = Transform3D(16.766304, 0, 0, 0, 23.612612, 0, 0, 0, 17.03786, -134.98976, -68.193695, 22.240898)
+
+[node name="building_133" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(17.197546, 0, 0, 0, 19.802692, 0, 0, 0, 17.04592, -24.014273, 9.901344, 88.188545)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 133
+metadata/source_grid = Vector2i(2, 13)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(17.197546, 0, 0, 0, 19.802692, 0, 0, 0, 17.04592, -182.76396, -70.098656, 47.417824)
+
+[node name="building_134" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12.08985, 0, 0, 0, 30.131342, 0, 0, 0, 13.262258, 0.933037, 15.065674, 88.681231)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 134
+metadata/source_grid = Vector2i(3, 13)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(12.08985, 0, 0, 0, 30.131342, 0, 0, 0, 13.262258, -157.81665, -64.934326, 47.91051)
+
+[node name="building_135" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.719873, 0, 0, 0, 38.87816, 0, 0, 0, 11.653233, 25.329987, 19.43908, 88.317455)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 135
+metadata/source_grid = Vector2i(4, 13)
+metadata/source_sector = Vector2i(1, 3)
+metadata/source_world_transform = Transform3D(14.719873, 0, 0, 0, 38.87816, 0, 0, 0, 11.653233, -133.4197, -60.56092, 47.546734)
+
+[node name="building_141" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(13.477767, 0, 0, 0, 30.563086, 0, 0, 0, 11.628225, -24.589993, 15.28154, 113.295571)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 141
+metadata/source_grid = Vector2i(2, 14)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(13.477767, 0, 0, 0, 30.563086, 0, 0, 0, 11.628225, -183.33968, -64.71846, 72.52485)
+
+[node name="building_142" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10.26209, 0, 0, 0, 23.107777, 0, 0, 0, 17.155352, 0.710947, 11.55389, 113.857361)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 142
+metadata/source_grid = Vector2i(3, 14)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(10.26209, 0, 0, 0, 23.107777, 0, 0, 0, 17.155352, -158.03874, -68.44611, 73.08664)
+
+[node name="building_143" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12.919671, 0, 0, 0, 26.735872, 0, 0, 0, 11.934059, 24.079037, 13.367935, 113.419351)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 143
+metadata/source_grid = Vector2i(4, 14)
+metadata/source_sector = Vector2i(1, 3)
+metadata/source_world_transform = Transform3D(12.919671, 0, 0, 0, 26.735872, 0, 0, 0, 11.934059, -134.67065, -66.632065, 72.64863)
+
+[node name="building_149" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10.171787, 0, 0, 0, 18.359127, 0, 0, 0, 16.19907, -26.177513, 9.179565, 138.577801)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 149
+metadata/source_grid = Vector2i(2, 15)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(10.171787, 0, 0, 0, 18.359127, 0, 0, 0, 16.19907, -184.9272, -70.820435, 97.80708)
+
+[node name="building_150" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(15.505827, 0, 0, 0, 34.004486, 0, 0, 0, 16.454056, -0.620963, 17.002243, 137.410921)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 150
+metadata/source_grid = Vector2i(3, 15)
+metadata/source_sector = Vector2i(0, 3)
+metadata/source_world_transform = Transform3D(15.505827, 0, 0, 0, 34.004486, 0, 0, 0, 16.454056, -159.37065, -62.997757, 96.6402)
+
+[node name="building_151" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.734662, 0, 0, 0, 25.688635, 0, 0, 0, 17.608942, 24.946857, 12.844315, 136.835551)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 151
+metadata/source_grid = Vector2i(4, 15)
+metadata/source_sector = Vector2i(1, 3)
+metadata/source_world_transform = Transform3D(11.734662, 0, 0, 0, 25.688635, 0, 0, 0, 17.608942, -133.80283, -67.155685, 96.06483)
+
+[node name="building_157" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.579656, 0, 0, 0, 12, 0, 0, 0, 16.534824, -26.051443, 6, 162.893981)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 157
+metadata/source_grid = Vector2i(2, 16)
+metadata/source_sector = Vector2i(0, 4)
+metadata/source_world_transform = Transform3D(14.579656, 0, 0, 0, 12, 0, 0, 0, 16.534824, -184.80113, -74, 122.12326)
+
+[node name="building_158" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(15.469986, 0, 0, 0, 17.844097, 0, 0, 0, 12.72154, -0.963053, 8.92205, 162.833881)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 158
+metadata/source_grid = Vector2i(3, 16)
+metadata/source_sector = Vector2i(0, 4)
+metadata/source_world_transform = Transform3D(15.469986, 0, 0, 0, 17.844097, 0, 0, 0, 12.72154, -159.71274, -71.07795, 122.06316)
+
+[node name="building_159" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.445445, 0, 0, 0, 38.50168, 0, 0, 0, 10.027542, 25.541207, 19.25084, 163.954246)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 159
+metadata/source_grid = Vector2i(4, 16)
+metadata/source_sector = Vector2i(1, 4)
+metadata/source_world_transform = Transform3D(11.445445, 0, 0, 0, 38.50168, 0, 0, 0, 10.027542, -133.20848, -60.74916, 123.183525)
+
+[node name="building_165" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.173958, 0, 0, 0, 17.52081, 0, 0, 0, 11.235244, -25.538783, 8.76041, 188.359161)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 165
+metadata/source_grid = Vector2i(2, 17)
+metadata/source_sector = Vector2i(0, 4)
+metadata/source_world_transform = Transform3D(14.173958, 0, 0, 0, 17.52081, 0, 0, 0, 11.235244, -184.28847, -71.23959, 147.58844)
+
+[node name="building_166" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(13.774686, 0, 0, 0, 12, 0, 0, 0, 17.356098, -0.354413, 6, 186.570131)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 166
+metadata/source_grid = Vector2i(3, 17)
+metadata/source_sector = Vector2i(0, 4)
+metadata/source_world_transform = Transform3D(13.774686, 0, 0, 0, 12, 0, 0, 0, 17.356098, -159.1041, -74, 145.79941)
+
+[node name="building_167" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(17.726494, 0, 0, 0, 26.691757, 0, 0, 0, 11.001338, 25.709097, 13.34588, 188.776241)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 167
+metadata/source_grid = Vector2i(4, 17)
+metadata/source_sector = Vector2i(1, 4)
+metadata/source_world_transform = Transform3D(17.726494, 0, 0, 0, 26.691757, 0, 0, 0, 11.001338, -133.04059, -66.65412, 148.00552)
+
+[node name="building_183" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(14.613173, 0, 0, 0, 12, 0, 0, 0, 11.115931, -23.622093, 6, 213.011691)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 183
+metadata/source_grid = Vector2i(2, 18)
+metadata/source_sector = Vector2i(0, 4)
+metadata/source_world_transform = Transform3D(14.613173, 0, 0, 0, 12, 0, 0, 0, 11.115931, -182.37178, -74, 172.24097)
+
+[node name="building_184" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11.248957, 0, 0, 0, 12, 0, 0, 0, 15.783543, -0.558513, 6, 211.388121)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 184
+metadata/source_grid = Vector2i(3, 18)
+metadata/source_sector = Vector2i(0, 4)
+metadata/source_world_transform = Transform3D(11.248957, 0, 0, 0, 12, 0, 0, 0, 15.783543, -159.3082, -74, 170.6174)
+
+[node name="building_185" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(15.692011, 0, 0, 0, 14.499299, 0, 0, 0, 12.349332, 24.140067, 7.24965, 213.762661)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+visibility_range_end = 0.0
+metadata/source_visibility_range_end_m = 520.0
+metadata/_edit_lock_ = true
+metadata/source_building_index = 185
+metadata/source_grid = Vector2i(4, 18)
+metadata/source_sector = Vector2i(1, 4)
+metadata/source_world_transform = Transform3D(15.692011, 0, 0, 0, 14.499299, 0, 0, 0, 12.349332, -134.60962, -72.75035, 172.99194)
+
+[node name="bounds_markers" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+metadata/purpose = "楼群包络XZ四角定位，不添加材质或运行轮廓"
+
+[node name="corner_0" type="Marker3D" parent="bounds_markers"]
+position = Vector3(-34.2265525, 0, -221.4622355)
+gizmo_extents = 4.0
+metadata/_edit_lock_ = true
+
+[node name="corner_1" type="Marker3D" parent="bounds_markers"]
+position = Vector3(34.572344, 0, -221.4622355)
+gizmo_extents = 4.0
+metadata/_edit_lock_ = true
+
+[node name="corner_2" type="Marker3D" parent="bounds_markers"]
+position = Vector3(-34.2265525, 0, 219.937327)
+gizmo_extents = 4.0
+metadata/_edit_lock_ = true
+
+[node name="corner_3" type="Marker3D" parent="bounds_markers"]
+position = Vector3(34.572344, 0, 219.937327)
+gizmo_extents = 4.0
+metadata/_edit_lock_ = true

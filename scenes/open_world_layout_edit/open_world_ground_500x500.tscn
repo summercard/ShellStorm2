@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Material" path="res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres" id="ground_material"]
+
+[sub_resource type="BoxMesh" id="ground_mesh"]
+size = Vector3(500, 0.2, 500)
+material = ExtResource("ground_material")
+
+[node name="open_world_ground_500x500" type="Node3D"]
+visible = true
+metadata/ground_id = "open_world_ground_500x500"
+metadata/purpose = "独立500x500地表摆位预览；不是正式替换；只拖动地表根"
+metadata/_edit_lock_ = false
+metadata/auto_sync = false
+metadata/writeback_allowed = false
+metadata/snapshot_only = true
+metadata/visual_only = true
+metadata/collision_status = "none_visual_only"
+metadata/local_bounds = AABB(-250, -0.2, -250, 500, 0.2, 500)
+metadata/visibility_bounds = AABB(-250, -0.2, -250, 500, 0.2, 500)
+metadata/world_bounds = AABB(-246.249687, -80.2, -290.770721, 500, 0.2, 500)
+metadata/world_bounds_space = "初始总场景世界坐标快照；手调后用根global_transform乘local_bounds重算"
+metadata/visibility_bounds_space = "地表根局部坐标，仅含地表；后续按实际global_transform转世界AABB"
+metadata/baseline_world_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.750313, -80, -40.770721)
+metadata/ground_dimensions_m = Vector3(500, 0.2, 500)
+metadata/source_seed = 500990095
+metadata/source_snapshot = "outputs/landscape_500_city_20261003/runtime_final.json；原500x500地表范围基线"
+metadata/material_policy = "只引用既有地表材质，不新建材质球"
+metadata/visibility_control = "根Node3D.visible启用/隐藏独立地表，不影响楼房区块；没有新增运行时剔除逻辑"
+metadata/cloud_handoff = "用户确认最终摆位后只读采集地表世界AABB；本轮不写正式云"
+
+[node name="ground" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.1, 0)
+mesh = SubResource("ground_mesh")
+metadata/_edit_lock_ = true
+metadata/top_y = -80.0
+metadata/purpose = "初始总场景顶面Y=-80、厚0.2；随独立地表根移动"

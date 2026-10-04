@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_layout_edit.tscn" id="reference"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_01.tscn" id="chunk_01"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_02.tscn" id="chunk_02"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_03.tscn" id="chunk_03"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_04.tscn" id="chunk_04"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_05.tscn" id="chunk_05"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_ground_500x500.tscn" id="ground"]
+
+[node name="open_world_chunk_layout_edit" instance=ExtResource("reference")]
+metadata/purpose = "5个楼房区块（200栋）+1个独立500x500地表摆位；固定原参考场景；未替换正式景观"
+metadata/auto_sync = false
+metadata/snapshot_only = true
+metadata/writeback_allowed = false
+metadata/chunk_count = 5
+metadata/ground_count = 1
+metadata/layout_component_count = 6
+metadata/building_count = 200
+metadata/ground_world_bounds = AABB(-246.249687, -80.2, -290.770721, 500, 0.2, 500)
+metadata/cloud_handoff = "手调后只读采集实际世界AABB交主代理；本轮不改云"
+metadata/formal_landscape_source = "res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn"
+
+[node name="Tower2" parent="."]
+metadata/_edit_lock_ = true
+metadata/writeback_allowed = false
+metadata/purpose = "固定参照，本轮只手调五区块"
+
+[node name="Tower3" parent="."]
+metadata/_edit_lock_ = true
+metadata/writeback_allowed = false
+metadata/purpose = "固定参照，本轮只手调五区块"
+
+[node name="Skyline08" parent="."]
+metadata/_edit_lock_ = true
+metadata/writeback_allowed = false
+metadata/purpose = "固定参照，本轮只手调五区块"
+
+[node name="open_world_ground_500x500" parent="." instance=ExtResource("ground")]
+position = Vector3(3.750313, -80, -40.770721)
+visible = true
+metadata/_edit_lock_ = false
+
+[node name="open_world_chunk_01" parent="." instance=ExtResource("chunk_01")]
+position = Vector3(-221.249687, -80, -40.770721)
+visible = true
+metadata/_edit_lock_ = false
+
+[node name="open_world_chunk_02" parent="." instance=ExtResource("chunk_02")]
+position = Vector3(-158.749687, -80, -40.770721)
+visible = true
+metadata/_edit_lock_ = false
+
+[node name="open_world_chunk_03" parent="." instance=ExtResource("chunk_03")]
+position = Vector3(-71.249687, -80, -40.770721)
+visible = true
+metadata/_edit_lock_ = false
+
+[node name="open_world_chunk_04" parent="." instance=ExtResource("chunk_04")]
+position = Vector3(41.250313, -80, -40.770721)
+visible = true
+metadata/_edit_lock_ = false
+
+[node name="open_world_chunk_05" parent="." instance=ExtResource("chunk_05")]
+position = Vector3(178.750313, -80, -40.770721)
+visible = true
+metadata/_edit_lock_ = false
