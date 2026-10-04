@@ -1,5 +1,11 @@
 # 游戏设计文档 v0.1 变更记录
 
+VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_deep_diagnosis.md)。同场景云海当前→历史→当前复验：旧版P95约16.8ms，当前54.7～64.3ms；历史排云覆盖改变是关键差异，不能无损回滚。正式逻辑计时支持周期保存短顿，生产修复未实施。
+
+## 2026-10-04｜楼顶与吊桥卡顿复查
+
+- TIME-DAYNIGHT / SAVE-PROFILE / WORLD-BLOCKS / VFX-POOL：当前存档副本14阶段真实渲染及40次保存微测量；确认同步保存约12ms与1440p云海慢区为两类负担，旧百毫秒保存峰值及最近两天回归起点未复现/锁定。见[复查记录](2026-10-04_stutter_recheck.md)。正式代码未改，性能未修复。
+
 ## 2026-10-04｜Boss002移动动画v011
 
 - BOSS-STAGES / ASSET-PIPELINE：新增大幅底座左右压重挪动move，保留idle。见[制作记录](2026-10-03_boss002_monitor_source.md)。

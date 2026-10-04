@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://_scratch/probe_save_recheck_parts.gd" id="1"]
+[node name="SaveParts" type="Node"]
+script = ExtResource("1")

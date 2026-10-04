@@ -1,5 +1,9 @@
 # v0.1 模块、功能与工程契约索引
 
+VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](development/2026-10-04_stutter_deep_diagnosis.md)。同场景云海当前→历史→当前复验：旧版P95约16.8ms，当前54.7～64.3ms；历史排云覆盖改变是关键差异，不能无损回滚。正式逻辑计时支持周期保存短顿，生产修复未实施。
+
+TIME-DAYNIGHT / SAVE-PROFILE / WORLD-BLOCKS：[楼顶与吊桥卡顿复查](development/2026-10-04_stutter_recheck.md)。当前存档同步保存约12ms；1440p云海慢区独立于保存，720p未重现百毫秒停顿；回归提交未锁定、性能未修复。
+
 VFX-POOL / WORLD-BLOCKS：[100F吊桥云海卡顿诊断](development/2026-10-04_bridge_cloud_stutter_diagnosis.md)。当前RTX4060Ti真实1440p重复路线帧中位51.221ms、P95 67.325ms；隐藏云海7.120/8.629ms。720p隐藏地表城市改善很小，冻结逻辑仍保留云海负担；13组完成，性能未修复，不改变美术品质与避让合同。
 
 BOSS-STAGES / ASSET-PIPELINE：[Boss002动画设计](design/Boss002显示器动画设计.md)，10类/15剪辑候选已设计，v011已制作夸张弹性idle与底座左右挪动move、五官浮动及代码UV上升，其余待制作；五官恢复下移前位置，源级绑定状态不等于运行接入。
