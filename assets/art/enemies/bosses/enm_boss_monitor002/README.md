@@ -1,6 +1,22 @@
 # Boss 002 · MONITOR.EXE
 
-## 当前交付 v009（握持与自然垂线待机）
+## 当前交付 v011（左右挪动移动动画）
+
+动画 `source/enm_boss_monitor002_animation_v011.blend` 包含idle与move，默认move。静态T Pose模型 `source/enm_boss_monitor002_model_v011.blend`。新增pedestal_motion视觉骨，64骨、SKEL-MONITOR002-005，双母版同签名；18,684三角面、3材质保持。
+
+move：30fps，1—48帧播放，49闭环，1.6秒。左右各23°底座压重与抬边，总横移0.46米，局部挪转±11°；屏幕和弹簧臂形成大幅高低差与延迟晃动。底座下缘逐帧贴地，手腕反向补偿保持键盘中段握持及垂线。逻辑root无累积位移，正式游戏前进由控制器负责。
+
+idle原动作保留，切换后需将播放范围改为1—96；idle新增底座中立轨道，避免残留移动姿态。代码UV在两动作中连续向上。证据 `previews/move_v011/audit.json`，视频 `move.mp4`。未接入Godot，剩余攻击等动作未制作。
+
+## 历史交付 v010（夸张弹性待机）
+
+打开 `source/enm_boss_monitor002_animation_v010.blend`，默认动作idle，30fps、1—96帧循环（97闭环）。静态母版为 `source/enm_boss_monitor002_model_v010.blend`。63骨、18,684三角面、3材质。
+
+双臂改为更强的连续弧线和上下摆动，左手握键盘长边中段；右手握线，线环下垂、插头朝下。三段支撑伸缩驱动屏幕明显上下呼吸，底座不动；眼睛和嘴通过各自锚点错拍浮动。code_scroll每周期增加1，UV负向采样令文字向上刷，曲线使用线性+REPEAT_OFFSET，跨周期不断流。
+
+逐帧与握持/UV专项见 `previews/idle_v010/audit.json`，动态预览 `idle.mp4`。显示器与五官的旋转约束仍保留。Blender材质UV动画需后续Godot适配，尚未导出或接入。
+
+## 历史交付 v009（握持与自然垂线待机）
 
 动画文件 `source/enm_boss_monitor002_animation_v009.blend` 默认播放 `idle`；静态T Pose母版 `source/enm_boss_monitor002_model_v009.blend`。v008张掌挂道具和上翘线圈的待机方案由此版替代。
 

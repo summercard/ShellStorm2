@@ -1,0 +1,120 @@
+{
+  "vertical_ranges": {
+    "hand.L": 0.5498677492141724,
+    "hand.R": 0.5594508647918701,
+    "monitor_spin": 0.282787561416626,
+    "face_anchor_large_eye": 0.6437180042266846,
+    "face_anchor_round_eye": 0.6733098030090332,
+    "face_anchor_mouth": 0.6824393272399902
+  },
+  "uv_scroll_range": [
+    0.0,
+    -1.0
+  ],
+  "cable_contact_distance": {
+    "1": [
+      0.00033286481630057096,
+      0.00010469488915987313,
+      0.0001061633593053557,
+      0.0003450873482506722,
+      0.00033286481630057096
+    ],
+    "2": [
+      0.0012894384562969208,
+      0.00010264027514494956,
+      0.0012023774906992912,
+      0.0003450873482506722,
+      0.0012894384562969208
+    ],
+    "3": [
+      0.0012894384562969208,
+      0.000953768496401608,
+      0.0012023774906992912,
+      0.0015268493443727493,
+      0.0012894384562969208
+    ],
+    "4": [
+      9.570200927555561e-05,
+      0.00010898119944613427,
+      0.0007309811771847308,
+      0.0009151019621640444,
+      9.570200927555561e-05
+    ]
+  },
+  "connector_direction_z": [
+    -0.9962129592895508,
+    -0.995744526386261,
+    -0.998207688331604,
+    -0.9929317831993103,
+    -0.9962129592895508
+  ],
+  "triangles": 18684,
+  "keyboard_contact_distance": {
+    "1": [
+      0.0006090598180890083,
+      0.0006089778034947813,
+      0.000609048584010452,
+      0.0006090801325626671,
+      0.0006090598180890083
+    ],
+    "2": [
+      0.002238391200080514,
+      0.0022386766504496336,
+      0.002238722052425146,
+      0.002238966291770339,
+      0.002238391200080514
+    ],
+    "3": [
+      0.00019503080693539232,
+      0.00019500742200762033,
+      0.0001948897261172533,
+      0.00019503077783156186,
+      0.00019503080693539232
+    ],
+    "4": [
+      0.0003057870490010828,
+      0.00030571443494409323,
+      0.0003056258719880134,
+      0.00030579822487197816,
+      0.0003057870490010828
+    ]
+  },
+  "passed": true,
+  "checks": {
+    "static_model_no_action": true,
+    "face_restored": true,
+    "dual_master_signature": true,
+    "formal_idle_active": true,
+    "3_materials": true,
+    "weights_normalized": true,
+    "under_20k": true,
+    "cable_16_bones": true,
+    "grip_fingers_animated": true,
+    "root_fixed": true,
+    "clear_ground": true,
+    "loop_closes": true,
+    "idle_has_motion": true,
+    "keyboard_contact_all_four_fingers": true,
+    "cable_grip_contact": true,
+    "connector_points_down": true,
+    "display_breathing_visible": true,
+    "hands_bob_visible": true,
+    "face_independent_float": true,
+    "uv_rises_continuously": true,
+    "uv_loop_seamless": true
+  },
+  "minimum_z": {
+    "Keyboard outer shell": 0.9893999099731445,
+    "Long data cable whip": 0.48171764612197876,
+    "Data connector body": 0.7454316020011902,
+    "Crescent pedestal": 0.03500000014901161,
+    "Sculpted glove L": 1.4621832370758057,
+    "Sculpted glove R": 1.4542005062103271
+  },
+  "maximum_hand_motion": 0.47250211090008687,
+  "skeleton_signature": "7136db0751fed8348c6284749d0af93302a0a67376b78d39a668338245b39848",
+  "not_executed": [
+    "Godot integration",
+    "other formal animation clips"
+  ]
+}
