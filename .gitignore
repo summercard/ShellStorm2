@@ -28,6 +28,9 @@
 # Build outputs
 bin/
 build/
+# 依赖目录。node_modules 常是指向全局缓存的**符号链接**，而本机 core.symlinks=false，
+# git 会把它当真实目录，一次 add 就把数万个包文件吞进提交（实测 _scratch/*_ledger）。
+node_modules/
 outputs/*
 !outputs/.gdignore
 .codex-tmp/
