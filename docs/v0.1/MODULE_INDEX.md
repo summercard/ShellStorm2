@@ -1,5 +1,7 @@
 # v0.1 模块、功能与工程契约索引
 
+BOSS-STAGES / ASSET-PIPELINE：[Boss002动画设计](design/Boss002显示器动画设计.md)，10类/15剪辑候选已设计，v009已重做握持和垂线idle，其余待制作；五官恢复下移前位置，源级绑定状态不等于运行接入。
+
 ASSET-PIPELINE / WORLD-BLOCKS [500米地表与程序城市v004](development/2026-10-03_cross_tower_landscape_foundation.md#500米地表与全域城市v004后续交付)：200新楼/23非空批次，25分区包含旧城总覆盖；96原实例与塔桥完整矩阵保持。真实Forward+665项与登记/门禁/快照7项合计672项、云海30,209项通过；主表825/Prefab专表717受控登记及无损基线通过。中央两区新增0，玩家和诊断四图分开；工程既有红项与移动端/LOD未验单列，不提升总体完成状态。
 
 ASSET-PIPELINE [跨塔路线景观补全代理v003](development/2026-10-03_cross_tower_landscape_foundation.md)：正式接入4基础、1地表、4新远景、2原城市下延段，共11独立PackedScene；当前100F/99F/98F完整运行时主塔实测最低-24.30；地表顶-80、厚0.2、余量20.25m。96原城市顶面/实例不变，仅2栋补长；Tower2原底低于地表，独立box向更深底面延续，不抬楼。264项几何/保护/材质/截图专项通过，真实六机位图和报告见outputs/landscape_completion_20261003。新增地上包络冲突0，34对既有关系及8对地下交叠单列；未进行三角检测、XLSX转正或全工程验收，不提升整个ASSET-PIPELINE完成状态。
