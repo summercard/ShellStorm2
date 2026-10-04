@@ -60,10 +60,9 @@ run/main_scene="res://scenes/StartupLoadingScreen.tscn"
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.6", "Forward Plus")
 run/max_fps=60
-config/icon="res://icon.svg"
-boot_splash/image="res://scenes/StartupLoadingSplash.png"
-boot_splash/show_image=true
 boot_splash/bg_color=Color(0.008, 0.014, 0.022, 1)
+boot_splash/image="res://scenes/StartupLoadingSplash.png"
+config/icon="res://icon.svg"
 
 [autoload]
 
