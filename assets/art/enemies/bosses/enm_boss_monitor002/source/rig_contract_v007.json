@@ -1,0 +1,37 @@
+{
+  "asset_id": "ENM-BOSS-MONITOR002-3D",
+  "version": "v007",
+  "skeleton_id": "SKEL-MONITOR002-003",
+  "skeleton_signature": "90e8ccdbd3b1e44c1da47204f7c437a3f66cfb1f1146cac834c6b07603072e8a",
+  "bone_count": 52,
+  "triangles": 18320,
+  "materials": [
+    "BOSS002_01_BodyPalette",
+    "BOSS002_02_ExpressionAtlas",
+    "BOSS002_03_ScrollingCode"
+  ],
+  "pivot": [
+    0,
+    -0.52,
+    2.02
+  ],
+  "arm_segments_per_side": 6,
+  "runtime_integration": false,
+  "expression_states": {
+    "default": 0,
+    "suspicious": 1,
+    "angry": 2,
+    "sleepy": 3,
+    "taunting": 4,
+    "glitched": 5
+  },
+  "controls": "rear_axle: shared rear pivot; monitor_spin local Y: independent screen roll; arm_01..06.L/R: FK bend; stretch_L/R: spring length; support_01..03: stand bend; code_scroll: upward UV motion",
+  "export_note": "Bake bone drivers/constraints for GLB. Shared expression attribute and scrolling UV require runtime shader adapter; not yet integrated.",
+  "face_anchor_z": {
+    "large_eye": 2.2,
+    "round_eye": 2.1,
+    "mouth": 1.2
+  },
+  "animation_design": "docs/v0.1/design/Boss002显示器动画设计.md",
+  "formal_animations_authored": false
+}

@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "checks": {
+    "static_model_no_action": true,
+    "face_restored": true,
+    "dual_master_signature": true,
+    "formal_idle_active": true,
+    "3_materials": true,
+    "root_fixed": true,
+    "clear_ground": true,
+    "loop_closes": true,
+    "idle_has_motion": true
+  },
+  "minimum_z": {
+    "Keyboard outer shell": 0.0931306928396225,
+    "Long data cable whip": 0.20079049468040466,
+    "Data connector body": 1.7576301097869873,
+    "Crescent pedestal": 0.03500000014901161,
+    "Sculpted glove L": 1.3383722305297852,
+    "Sculpted glove R": 1.3391183614730835
+  },
+  "maximum_hand_motion": 0.13478866303350776,
+  "skeleton_signature": "d7f4fc4e603490038fe14dbddeb707f94e636bc724cd5dffa7eb7623d62b8709",
+  "not_executed": [
+    "Godot integration",
+    "other formal animation clips"
+  ]
+}

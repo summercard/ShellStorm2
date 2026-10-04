@@ -1,6 +1,40 @@
 # Boss 002 · MONITOR.EXE
 
-## 当前交付 v005（骨架蒙皮与表情状态）
+## 当前交付 v009（握持与自然垂线待机）
+
+动画文件 `source/enm_boss_monitor002_animation_v009.blend` 默认播放 `idle`；静态T Pose母版 `source/enm_boss_monitor002_model_v009.blend`。v008张掌挂道具和上翘线圈的待机方案由此版替代。
+
+左手三根手指越过键盘上边缘，拇指从背侧对握，键盘与握点重新对齐。右手闭合握住长线，线环受重力下垂，线尾和插头朝下。修正四指根部蒙皮过渡；数据线从5节细化到16节，轻微摆动延迟于手腕。idle为3.2秒/30fps，1—96播放、97闭环；保持五官原位，底座固定。
+
+63骨、18,684三角面、3材质，骨架SKEL-MONITOR002-004，双母版签名一致。逐帧循环与接触等16项检查通过；键盘最低约10.5cm、线环最低约3.6cm。近景含双手正背面，证据 `previews/idle_v009/`，视频 `idle.mp4`。表面距离测试只验证贴合，穿插另经多角度渲染检查；未进行完整三角形碰撞求解。尚未导出/接入Godot，其他正式动作未制作。
+
+## 历史交付 v008（五官恢复与正式待机）
+
+模型 `source/enm_boss_monitor002_model_v008.blend` 保持无动作T Pose；动画 `source/enm_boss_monitor002_animation_v008.blend` 默认播放正式 `idle`。五官恢复v006位置，骨架回到相同签名的SKEL-MONITOR002-002。52骨、18,320三角面、3材质。
+
+idle为30fps、3.2秒循环，播放1—96帧，97为闭环关键帧。双臂六段形成向下弧线，左右错拍，支撑轻微呼吸、腕部和数据线滞后；底座固定，键盘/数据线离地。曲线含Cycles循环修改器。预览 `previews/idle_v008/idle.mp4`，逐帧检查见同目录audit.json。其余正式动作未制作，未接入Godot。下文为历史记录。
+
+## 历史交付 v007（五官下移与动画设计）
+
+模型 `source/enm_boss_monitor002_model_v007.blend`，动作工作文件 `source/enm_boss_monitor002_animation_v007.blend`；骨架 `SKEL-MONITOR002-003`，52骨、18,320三角面、3材质。大眼/小眼/嘴中心Z分别为2.20/2.10/1.20，六态与旋转跟随保留。33项源级检查通过。
+
+动画设计主文档：[Boss002显示器动画设计](../../../../../docs/v0.1/design/Boss002显示器动画设计.md)。10类动作拆为15个正式剪辑候选，含动作阶段、表情、建议节奏、接触点、状态衔接和制作验收；正式动画尚未制作，动作母版仍只有既有QA动作。底座局部移动控制、插头锁地与砸地/坐地接触需在正式动画阶段实现。下文为历史版本说明。
+
+## 历史交付 v006（中心后轴、分段双臂、三材质）
+
+打开 `source/enm_boss_monitor002_model_v006.blend`。动作工作文件 `source/enm_boss_monitor002_animation_v006.blend`。52骨、18,320三角面、全文件仅3个材质，双母版签名一致；旧源保留，未导出或接入Godot。
+
+- 后轴位于显示器中心背面 `(0,-0.52,2.02)`，三段柔性支撑延长到轴座。`rear_axle` 带动双臂根部，`monitor_spin` 本地Y独立旋转屏幕，双臂不随屏幕自转。
+- 双臂各 `arm_01..06.L/R` 六段FK骨，直接旋转这些骨骼弯曲。选择 `Boss002_Rig` 对象自定义属性 `stretch_L/R` 控制弹簧轴向长度（1为静止长度），半径保持；`hand_ctrl.L/R` 用于手部姿势，不再通过移动它控制整臂伸缩。
+- `support_01..03` 弯曲后支撑，`monitor_tilt` 控制屏幕前倾；四指骨、五节数据线骨、`prop_socket.L` 键盘道具挂点保留。
+- 表情保持 `ExpressionController.expression_index` 六种持久状态。脸部锚点跟屏幕位置，五官朝向跟角色root，屏幕自转时五官平面不旋转。
+- 身体：`BOSS002_01_BodyPalette`，色块图 `source/textures_v006/body_palette.png`，每个面的UV落入对应色块；色盘采用Non-Color线性值，详见同目录JSON。
+- 表情：`BOSS002_02_ExpressionAtlas`，六表情共用v004一张RGBA图。三个五官网格的 `expression_slot_id` 属性区分裁切位置，材质只有一个。
+- 屏幕：`BOSS002_03_ScrollingCode`，一张代码贴图、Repeat采样。`Boss002_Rig.code_scroll` 增大时文字从下往上移动，增加1滚动一张纹理高度；静态模型默认0，可插线性关键帧。
+
+动作文件包含5个独立QA动作：双臂弯曲、单臂拉伸、屏幕旋转、前砸、代码滚动。源级32项检查通过，见 `previews/rig_v006/audit.json`；后轴/弯臂/独立旋转及六表情均有Cycles渲染。QA动作不是正式战斗动作。导出时需要烘焙骨骼驱动与约束；表情属性和UV滚动需游戏材质适配，Blender节点不会自动变成Godot动画。下文是历史版本记录。
+
+## 历史交付 v005（骨架蒙皮与表情状态）
 
 模型：`source/enm_boss_monitor002_model_v005.blend`。动作工作文件：`source/enm_boss_monitor002_animation_v005.blend`。共41骨，骨架ID `SKEL-MONITOR002-001`，双文件骨架签名一致。整套18,308三角面（柔性支撑增加轴向环线），低于20,000。旧文件保留。未导出GLB或导入Godot。
 

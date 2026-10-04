@@ -1,0 +1,16 @@
+{
+  "structure": "passed",
+  "ledger_split": "passed",
+  "enemy_full": {
+    "passed": false,
+    "existing_sha_mismatch_rows": [
+      6,
+      7,
+      13,
+      17
+    ],
+    "boss002_issues": []
+  },
+  "other_asset_rows_unchanged": true,
+  "other_asset_files_git_clean": true
+}

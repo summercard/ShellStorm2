@@ -1,0 +1,124 @@
+{
+  "checks": {
+    "model_no_actions": true,
+    "expression_not_auto_animated": true,
+    "all_character_meshes_skinned": true,
+    "weights_normalized": true,
+    "rest_matches_v004": true,
+    "keyboard_bone_parent": true,
+    "spring_extends": true,
+    "spring_radius_preserved": true,
+    "opposite_arm_independent": true,
+    "keyboard_follows_hand": true,
+    "spring_compresses": true,
+    "face_upright": true,
+    "face_follows_anchor": true,
+    "face_moves": true,
+    "support_deforms": true,
+    "screen_can_move_down": true,
+    "finger_weights_deform": true,
+    "reset_exact": true,
+    "expression_state_persists": true,
+    "three_materials": true,
+    "one_expression_material": true,
+    "six_arm_segments_each": true,
+    "pivot_at_monitor_center": true,
+    "screen_rotates_arms_stay": true,
+    "segmented_arm_bends": true,
+    "bent_arm_moves_wrist": true,
+    "arm_roots_follow_axle": true,
+    "uv_scroll_up": true,
+    "screen_repeats": true,
+    "under_20k_triangles": true,
+    "dual_master_signature_matches": true,
+    "qa_actions_exist": true
+  },
+  "passed": true,
+  "results": {
+    "rest_max_displacement": 5.440231357547242e-07,
+    "worst_rest_objects": [
+      [
+        "Long data cable whip",
+        5.440231357547242e-07
+      ],
+      [
+        "Keyboard outer shell",
+        4.894895366623444e-07
+      ],
+      [
+        "Relief rib.001",
+        4.308471767545033e-07
+      ],
+      [
+        "Relief rib.002",
+        4.308471767545033e-07
+      ],
+      [
+        "Data connector body",
+        4.308471767545033e-07
+      ]
+    ],
+    "unbound": [],
+    "spring": {
+      "length_ratio": 1.7000000765641987,
+      "radius_ratio": 1.0,
+      "keyboard_displacement": 0.9240000203966576
+    },
+    "face": [
+      {
+        "pose": "spin",
+        "slot": "large_eye",
+        "normal_dot": 0.999999940395357,
+        "anchor_error": 2.682209014892578e-07,
+        "motion": 1.1815776587489781
+      },
+      {
+        "pose": "spin",
+        "slot": "round_eye",
+        "normal_dot": 1.000000000000003,
+        "anchor_error": 2.4755668231600746e-07,
+        "motion": 1.1447708494259448
+      },
+      {
+        "pose": "spin",
+        "slot": "mouth",
+        "normal_dot": 1.0,
+        "anchor_error": 2.2351741790771484e-08,
+        "motion": 0.13009611250971276
+      },
+      {
+        "pose": "forward",
+        "slot": "large_eye",
+        "normal_dot": 1.0,
+        "anchor_error": 2.384185791015625e-07,
+        "motion": 2.191664954161851
+      },
+      {
+        "pose": "forward",
+        "slot": "round_eye",
+        "normal_dot": 1.0,
+        "anchor_error": 2.384185791015625e-07,
+        "motion": 2.0592136209842153
+      },
+      {
+        "pose": "forward",
+        "slot": "mouth",
+        "normal_dot": 1.0,
+        "anchor_error": 1.1920928955078125e-07,
+        "motion": 1.2780144123651216
+      }
+    ],
+    "support_forward_displacement": 1.1641732185628704,
+    "screen_drop": 0.18903173418606034,
+    "evaluated_triangles": 18320
+  },
+  "skeleton_signature": "d7f4fc4e603490038fe14dbddeb707f94e636bc724cd5dffa7eb7623d62b8709",
+  "exit_code": 0,
+  "expected_faults": [],
+  "not_executed": [
+    "Godot import",
+    "runtime state mapping",
+    "GLB constraint baking",
+    "final gameplay animations"
+  ]
+}
