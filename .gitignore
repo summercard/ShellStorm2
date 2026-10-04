@@ -77,6 +77,18 @@ _scratch/*_before_*/
 _scratch/*_before_*.blend
 _scratch/*_backup/
 
+# 动画/退役对照用的「整项目快照」。baseline_project.py / retirement_baseline.py 里的
+# assets / scenes / data / tests 是 **junction 挂到真实目录**，不是拷贝 —— 入库会让 git
+# 顺着 junction 把真实资产按影子路径再存一份重复 blob（含 8 MB 级 .blend），既是垃圾又浪费体积。
+# 真副本由快照目录里的 project.godot + src/ 自己提供。
+_scratch/**/*baseline*/
+
+# 隔离运行工作区：探针为跑验收另起的 APPDATA / userdata 副本与渲染日志
+# （Godot/app_userdata/<项目>/ 下的 logs、shader_cache、pipelines.*.cache、base_save.json）。
+# 与 isolated_userdata/ 同类，机器本地产物，不是资产。
+_scratch/**/isolated_*/
+_scratch/**/app_userdata/
+
 # Blender 自动保存的备份副本（与 .blend 同名只多一个 1，体积同款几十 MB，无版本价值）
 *.blend1
 
@@ -96,6 +108,9 @@ _scratch/*_appdata/
 # 同上，但探针把 appdata 落在了 _scratch/<子目录>/ 里（如 _scratch/fat_zombie03/isolated_appdata/）。
 # 这类目录里是 editor_settings 之类的机器本地配置，含绝对路径，不是资产。
 _scratch/**/*_appdata/
+# 同上，但目录名把 appdata 夹在中间（如 _scratch/cloud_static_appdata_20261003/）。
+# 里面是 Godot 的 shader_cache / pipelines.*.cache（单文件十余 MB），且含本机 GPU 型号串，不是资产。
+_scratch/**/*appdata*/
 isolated_userdata/
 
 # 重新导出前的旧组件副本（内容与 HEAD 里那份逐字节相同，纯对照用，重导出完即弃）
