@@ -117,4 +117,6 @@ ASSET-PIPELINE 新增独立 [SKYLINE 8层大楼及景观接入](development/2026
 
 Owner：`CharacterExpressionSystem`；[设计与接口](design/character_expression_system.md)。选择/随机/保持在独立模块，Player状态事件只经过适配器发命令；网格显示不反向写玩法、衣柜或角色动作。入口`verify_character_expression_flow`，当前制作与验收见[自发光减弱](development/2026-10-01_character_expression_soft_emission.md)；[无嘴部深化](development/2026-10-01_character_expression_mouth_free.md)保留历史，[初版8种表达记录](development/2026-10-01_character_expression_system.md)保留历史。
 
-ASSET-PIPELINE / ENEMY-AI [胖子僵尸03](design/胖子僵尸03动作设计.md)：v002修正36核心骨+附加骨、Root与蒙皮比例；512贴图、游戏高2.2m，源重开及Godot静态加载通过。13段动作设计已录入[怪物设计](design/怪物设计.md)，Action与状态绑定待制作，未投放；见[交付记录](development/2026-10-03_fat_zombie03_rig_and_action_design.md)。
+ASSET-PIPELINE / ENEMY-AI [胖子僵尸03](design/胖子僵尸03动作设计.md)：v011，2.2m/512贴图、13动画/12态绑定；独立kind `fat_zombie03`可在实体场景、固定波次和触发盒调用，已接替壳甲卫兵的现行盒/怪池，厚血慢速/拍合/局部轻击/死亡已验收。见[运行配置](design/胖子僵尸03运行配置.md)及[运行交付](development/2026-10-03_fat_zombie03_runtime_binding.md)。
+
+ENEMY-AI / ASSET-PIPELINE [壳甲卫兵退役](development/2026-10-03_shielded_retirement.md)：现行刷怪由03胖子接替，旧存档及历史设计保留；独立验收verify_shielded_retirement。
