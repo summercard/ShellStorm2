@@ -300,6 +300,8 @@ core_scenes=(
   verify_main_entry_cinematic_flow
   verify_main_entry_realtime_sun_flow
   verify_melee_zombie_presentation
+  verify_fat_zombie03
+  verify_shielded_retirement
   verify_music_system
   verify_player3d_diy_flow
   verify_player3d_head_accessory_flow

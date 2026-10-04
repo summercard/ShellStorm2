@@ -64,6 +64,7 @@ const ILLUMINATION_UI_COLORS := {
 	"sunlight": Color(1.0, 0.70, 0.10, 1.0),
 }
 const BODY_SCALE_BY_KIND := {
+	"fat_zombie03": 1.0,
 	"exploder": 0.78,
 	"ranged_caster": 1.0,
 	"melee_chaser": 1.0,
@@ -73,6 +74,7 @@ const BODY_SCALE_BY_KIND := {
 	"boss": BOSS_SIZE_MULTIPLIER,
 }
 const HEALTH_BAR_SIZE_BY_KIND := {
+	"fat_zombie03": Vector2(1.8, 0.18),
 	"exploder": Vector2(1.15, 0.14),
 	"ranged_caster": Vector2(1.38, 0.15),
 	"melee_chaser": Vector2(1.38, 0.15),
@@ -89,7 +91,9 @@ const HEALTH_BAR_TEXTURE_SIZE := Vector2i(200, 24)
 const HEALTH_BAR_BORDER_PX := 2
 const HEALTH_BAR_PIXEL_SIZE := 0.005
 
+# shielded仅为旧存档/历史行为测试保留，现行MonsterInjector与编辑器不再投放。
 const PROFILES := {
+	"fat_zombie03": {"hp": 232, "speed": 0.857142857, "damage": 19, "range": 1.55, "cooldown": 1.3, "patrol_multiplier": 0.5, "telegraph": 1.2, "recovery": 1.3, "alert": 0.6, "stagger": 0.8},
 	"melee_chaser": {"hp": 58, "speed": 3.7, "damage": 12, "range": 1.90, "cooldown": 1.05},
 	"ranged_caster": {"hp": 46, "speed": 2.25, "damage": 10, "range": 8.8, "cooldown": 1.8},
 	"summoner": {"hp": 72, "speed": 1.65, "damage": 8, "range": 7.2, "cooldown": 4.8},
@@ -102,15 +106,17 @@ const PROFILES := {
 # MonsterInjector 的旧 2D 基线只用于还原楼层、主题、精英与小怪倍率；
 # 实际 3D TTK 必须建立在上面的 PROFILES 上，避免 10–40 HP 覆盖 3D 战斗基线。
 const SOURCE_HP_BASE := {
+	"fat_zombie03": 100.0,
 	"melee_chaser": 25.0, "ranged_caster": 15.0, "summoner": 30.0,
 	"shielded": 40.0, "exploder": 10.0, "ambusher": 18.0, "boss": 200.0,
 }
 const SOURCE_DAMAGE_BASE := {
+	"fat_zombie03": 8.0,
 	"melee_chaser": 5.0, "ranged_caster": 8.0, "summoner": 0.0,
 	"shielded": 3.0, "exploder": 15.0, "ambusher": 7.0, "boss": 20.0,
 }
 
-@export_enum("melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher", "boss") var enemy_kind := "melee_chaser"
+@export_enum("fat_zombie03", "melee_chaser", "ranged_caster", "summoner", "exploder", "ambusher", "boss") var enemy_kind := "melee_chaser"
 @export var room_id := ""
 
 var max_hp := 58
@@ -264,6 +270,9 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 			enemy_data["emoji"] = "尸"
 		elif configured_kind == "ranged_caster" and not enemy_data.has("name"):
 			enemy_data["name"] = "保安僵尸"
+			enemy_data["emoji"] = "尸"
+		elif configured_kind == "fat_zombie03" and not enemy_data.has("name"):
+			enemy_data["name"] = "胖子僵尸"
 			enemy_data["emoji"] = "尸"
 	elite_modifier_id = ""
 	elite_id = str(data.get("elite_id", ""))
@@ -721,6 +730,16 @@ func _physics_process(delta: float) -> void:
 			_commit_motion(delta)
 			return
 	if _target == null:
+		if enemy_kind == "fat_zombie03" and ai_state == "stagger":
+			_steer_planar(_last_hit_direction * _hit_knockback, 1.0)
+			_commit_motion(delta)
+			if _state_time >= float(PROFILES[enemy_kind]["stagger"]):
+				transition_to("idle", "stagger_no_target_finished")
+			return
+		if enemy_kind == "fat_zombie03" and ai_state in ["telegraph", "attack", "recovery"]:
+			if MonsterAIManager != null:
+				MonsterAIManager.release_attack_token(self)
+			transition_to("search", "clap_target_lost")
 		var awareness := str(_ai_decision.get("awareness", "unaware"))
 		if awareness in ["room_light_search", "seek_darkness", "lost_contact", "proximity_contact", "sound_contact"]:
 			_last_known_target_position = _ai_decision.get("stimulus_position", global_position) as Vector3
@@ -767,7 +786,7 @@ func _physics_process(delta: float) -> void:
 			transition_to("patrol")
 	if (distance < 13.5 or stimulus_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or stimulus_tracking):
 		transition_to("alert")
-	if ai_state == "alert" and _state_time > 0.28:
+	if ai_state == "alert" and _state_time > float(PROFILES[enemy_kind].get("alert", 0.28)):
 		transition_to("chase")
 	match ai_state:
 		"chase":
@@ -799,9 +818,10 @@ func _physics_process(delta: float) -> void:
 		"stagger":
 			_steer_planar(_last_hit_direction * _hit_knockback, 1.0)
 			_commit_motion(delta)
-			if _state_time > 0.16:
+			if _state_time > float(PROFILES[enemy_kind].get("stagger", 0.16)):
 				transition_to("chase")
-	if to_target.length_squared() > 0.01:
+	var clap_locked := enemy_kind == "fat_zombie03" and (ai_state in ["attack", "recovery"] or (ai_state == "telegraph" and _state_time >= 1.0))
+	if to_target.length_squared() > 0.01 and not clap_locked:
 		rotation.y = lerp_angle(rotation.y, atan2(-to_target.x, -to_target.z), minf(1.0, delta * 8.0))
 
 
@@ -877,7 +897,7 @@ func _tick_patrol(delta: float) -> void:
 		_patrol_target = _home_position + Vector3(cos(angle), 0, sin(angle)) * 1.7
 	var offset := _patrol_target - global_position
 	offset.y = 0.0
-	_steer_planar(offset.normalized() * get_effective_move_speed() * 0.32, minf(1.0, delta * 3.2))
+	_steer_planar(offset.normalized() * get_effective_move_speed() * float(PROFILES[enemy_kind].get("patrol_multiplier", 0.32)), minf(1.0, delta * 3.2))
 	_commit_motion(delta)
 
 
@@ -916,6 +936,13 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 	_attack_timer = attack_cooldown
 	_last_attack_result = "committed"
 	match enemy_kind:
+		"fat_zombie03":
+			_last_attack_result = "miss"
+			if distance <= attack_range and (-global_basis.z).dot(to_target.normalized()) >= 0.5 and is_instance_valid(_target) and _has_line_of_sight(_target) and _target.has_method("take_damage"):
+				if _target.has_method("notify_attacked_by"):
+					_target.call("notify_attacked_by", self)
+				_target.call("take_damage", contact_damage, false, to_target.normalized())
+				_last_attack_result = "hit"
 		"ranged_caster":
 			_fire_projectile_volley(to_target, contact_damage, Color(0.20, 0.82, 0.92), 3, 0.18)
 		"summoner":
@@ -1062,7 +1089,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 				AudioManager.play_enemy_hit_sfx()
 		if _should_begin_elite_escape():
 			_begin_elite_escape()
-		elif interrupt_movement:
+		elif interrupt_movement and (enemy_kind != "fat_zombie03" or critical or hit_knockback >= 0.8 or applied >= max_hp * 0.08):
 			transition_to("stagger")
 
 
@@ -1552,6 +1579,8 @@ func _track_stuck_recovery(delta: float, intended_velocity: Vector3) -> void:
 
 
 func _recovery_duration() -> float:
+	if PROFILES[enemy_kind].has("recovery"):
+		return float(PROFILES[enemy_kind]["recovery"])
 	return 0.62 if enemy_kind == "boss" else 0.48 if enemy_kind in ["shielded", "exploder"] else 0.34
 
 
@@ -1685,6 +1714,8 @@ func _behavior_role() -> String:
 
 
 func _telegraph_duration() -> float:
+	if PROFILES[enemy_kind].has("telegraph"):
+		return float(PROFILES[enemy_kind]["telegraph"])
 	if enemy_kind == "exploder":
 		return 0.9
 	if enemy_kind == "ambusher":
@@ -1722,7 +1753,7 @@ func _die() -> void:
 		remove_from_group("enemy_3d")
 		remove_from_group("damageable_3d")
 		var death_tween := create_tween()
-		death_tween.tween_interval(2.4)
+		death_tween.tween_interval(avatar.get_formal_death_duration())
 		death_tween.tween_callback(queue_free)
 	else:
 		var tween := create_tween()

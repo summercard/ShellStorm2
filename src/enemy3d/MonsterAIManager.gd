@@ -18,7 +18,7 @@ const MAX_MELEE_TOKENS_PER_TARGET := 2
 const MAX_RANGED_TOKENS_PER_TARGET := 2
 const SOUND_DEDUPE_MSEC := 500
 const MAX_EVALUATIONS_PER_TICK := 8
-const LIGHT_HUNTER_KINDS := ["melee_chaser", "shielded", "exploder", "boss"]
+const LIGHT_HUNTER_KINDS := ["melee_chaser", "fat_zombie03", "shielded", "exploder", "boss"]
 const DARKNESS_SEEKER_KINDS := ["ranged_caster", "summoner", "ambusher"]
 const RANGED_KINDS := ["ranged_caster", "summoner", "boss"]
 

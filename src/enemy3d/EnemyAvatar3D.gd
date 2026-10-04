@@ -4,6 +4,7 @@ extends Node3D
 ## 运行时只改变组合与材质，避免为每个关卡复制模型。
 
 const COLORS := {
+	"fat_zombie03": Color(0.38, 0.43, 0.26),
 	"melee_chaser": Color(0.58, 0.19, 0.12),
 	"ranged_caster": Color(0.18, 0.44, 0.50),
 	"summoner": Color(0.42, 0.22, 0.52),
@@ -15,6 +16,7 @@ const COLORS := {
 
 # 与实际模块化模型的最大横向轮廓同源；Enemy3D 直接读取该表生成受击/物理体积。
 const FOOTPRINT_PROFILES := {
+	"fat_zombie03": {"radius": 1.10, "height": 3.142857},
 	"melee_chaser": {"radius": 1.02, "height": 1.30},
 	"ranged_caster": {"radius": 1.10, "height": 1.62},
 	"summoner": {"radius": 1.22, "height": 1.82},
@@ -27,10 +29,11 @@ const FOOTPRINT_PROFILES := {
 # 正式普通怪表现按逻辑 ID 路由；这里只替换视觉，不改变 Enemy3D 的 AI、碰撞、伤害与掉落。
 # 碰撞 FOOTPRINT 仍由各 kind 的既有玩法口径提供，不随美术替换自动收紧。
 const FORMAL_NORMAL_SCENES := {
+	"fat_zombie03": "res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
 	"melee_chaser": "res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
 	"ranged_caster": "res://assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
 }
-const FORMAL_NORMAL_HEIGHTS := {"melee_chaser": 1.857143, "ranged_caster": 1.857143}
+const FORMAL_NORMAL_HEIGHTS := {"fat_zombie03": 3.142857, "melee_chaser": 1.857143, "ranged_caster": 1.857143}
 const FORMAL_MELEE_KIND := "melee_chaser"
 const FORMAL_MELEE_SCENE_PATH := FORMAL_NORMAL_SCENES[FORMAL_MELEE_KIND]
 const FORMAL_MELEE_VISUAL_HEIGHT := FORMAL_NORMAL_HEIGHTS[FORMAL_MELEE_KIND]
@@ -119,6 +122,12 @@ func flash_hit() -> void:
 		_formal_normal_root.flash_hit()
 	if _shell_material != null:
 		_shell_material.albedo_color = Color(1.0, 0.78, 0.60)
+
+
+func get_formal_death_duration() -> float:
+	if has_formal_normal():
+		return float(_formal_normal_root.get_presentation_snapshot().get("death_duration", 2.4))
+	return 0.34
 
 
 func get_component_snapshot() -> Dictionary:

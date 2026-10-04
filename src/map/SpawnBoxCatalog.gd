@@ -28,8 +28,9 @@ const DEFAULT_WALL_RECESS_TILES := 1
 ## 盒子出怪清单允许的 type：普通怪 6 种（MonsterInjector.BASE_ENEMY_TYPES 去 boss）
 ## 外加 `elite` / `boss` —— 后两者是**身份指派**（内容），编成（数量/时机）仍由盒子给。
 const ALLOWED_BOX_TYPES: Array[String] = [
+	"fat_zombie03",
 	"melee_chaser", "ranged_caster", "summoner",
-	"shielded", "exploder", "ambusher",
+	"exploder", "ambusher",
 	"elite", "boss",
 ]
 
@@ -42,7 +43,7 @@ const ALLOWED_BOX_TYPES: Array[String] = [
 ## ⚠ **大盒例外目前有两个**（业主逐次点名，均须在 `触发器刷怪设计.md` §3.1.1 留档）：
 ##   · `box_boss_arena`（8×8 m，出 4 只）—— Boss 需要更大活动面；
 ##   · `box_bridge_center`（10×14 m，出 16 只，2026-09-29）—— 桥房「桥心压制」专用，
-##     业主要求单盒一次压制 16 只（壳甲×4 + 小僵尸×8 + 警察×4）。
+##     业主要求单盒一次压制 16 只（胖子僵尸×4 + 小僵尸×8 + 警察×4）。
 ##     尺寸 10 m 是**桥宽下限**：桥心可走面只有 2 格（10 m）宽，再宽就压进柱子；
 ##     桥心砖心恒在 `x=±2.5`，故盒心必离桥轴对称 2.5 m（判据 G 的必然结果，无解）。
 const ENTRIES := {
@@ -50,7 +51,7 @@ const ENTRIES := {
 	"box_corner_ambush": ROOT + "box_corner_ambush.json",
 	# 精英点：4×4 m，精英×1 → 0.5s 近战×1。
 	"box_center_elite": ROOT + "box_center_elite.json",
-	# 窄长纵列：2×4 m，近战×2 → 1.5s 壳甲×1。
+	# 窄长纵列：2×4 m，近战×2 → 1.5s 胖子僵尸×1。
 	"box_corridor_column": ROOT + "box_corridor_column.json",
 	# 贴墙远程小队：4×2 m，远程×1~2。
 	"box_wall_arc": ROOT + "box_wall_arc.json",
@@ -58,7 +59,7 @@ const ENTRIES := {
 	"box_room_spread": ROOT + "box_room_spread.json",
 	# Boss 台：8×8 m（大盒①），Boss×1 → 1.5s 精英×2 → 3s 召唤者×1。
 	"box_boss_arena": ROOT + "box_boss_arena.json",
-	# 桥心压制：10×14 m（大盒②，桥房专属），小僵尸×8 → 1s 壳甲×4 → 2s 警察×4（共 16 只）。
+	# 桥心压制：10×14 m（大盒②，桥房专属），小僵尸×8 → 1s 胖子僵尸×4 → 2s 警察×4（共 16 只）。
 	"box_bridge_center": ROOT + "box_bridge_center.json",
 }
 

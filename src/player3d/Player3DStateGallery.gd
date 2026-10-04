@@ -9,7 +9,7 @@ const ENEMY_ANCHOR := Vector3(5.2, 0.0, -1.0)
 const NPC_ANCHOR := Vector3(-4.2, 0.0, 1.6)
 
 const ENEMY_OPTIONS := [
-	"melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher",
+	"melee_chaser", "ranged_caster", "summoner", "fat_zombie03", "exploder", "ambusher",
 ]
 const NPC_CONFIGS := [
 	{
@@ -632,5 +632,5 @@ func _refresh_readout() -> void:
 func _enemy_display_name(kind: String) -> String:
 	return str({
 		"melee_chaser": "近战追击者", "ranged_caster": "远程施法体", "summoner": "召唤支援体",
-		"shielded": "护盾重装体", "exploder": "爆破体", "ambusher": "伏击体",
+		"fat_zombie03": "胖子僵尸", "exploder": "爆破体", "ambusher": "伏击体",
 	}.get(kind, kind))

@@ -4,20 +4,20 @@ extends RefCounted
 
 ## 怪物基础类型配置
 const BASE_ENEMY_TYPES := {
+	"fat_zombie03": {"name": "胖子僵尸", "hp_base": 100, "damage_base": 8, "speed": 20.5714286},
 	"melee_chaser": { "name": "小僵尸", "hp_base": 25, "damage_base": 5, "speed": 80 },
 	"ranged_caster": { "name": "孢子射手", "hp_base": 15, "damage_base": 8, "speed": 50 },
 	"summoner": { "name": "蜂巢怪", "hp_base": 30, "damage_base": 0, "speed": 40 },
-	"shielded": { "name": "壳甲卫兵", "hp_base": 40, "damage_base": 3, "speed": 30 },
 	"exploder": { "name": "炸弹果", "hp_base": 10, "damage_base": 15, "speed": 70 },
 	"ambusher": { "name": "地刺虫", "hp_base": 18, "damage_base": 7, "speed": 90 },
 	"boss": { "name": "准首领", "hp_base": 100, "damage_base": 12, "speed": 42 },
 }
 
 const ENEMY_PRESENTATION := {
+	"fat_zombie03": {"emoji": "尸", "color": Color(0.38, 0.43, 0.26), "ai_type": "chase"},
 	"melee_chaser": { "emoji": "尸", "color": Color(0.95, 0.28, 0.24, 1.0), "ai_type": "chase" },
 	"ranged_caster": { "emoji": "🍄", "color": Color(0.62, 0.35, 1.0, 1.0), "ai_type": "ranged" },
 	"summoner": { "emoji": "🐝", "color": Color(0.95, 0.70, 0.16, 1.0), "ai_type": "summoner" },
-	"shielded": { "emoji": "🛡", "color": Color(0.35, 0.62, 0.95, 1.0), "ai_type": "chase" },
 	"exploder": { "emoji": "💣", "color": Color(1.0, 0.58, 0.14, 1.0), "ai_type": "bomber" },
 	"ambusher": { "emoji": "🦂", "color": Color(0.78, 0.28, 0.88, 1.0), "ai_type": "trapper" },
 	"boss": { "emoji": "👹", "color": Color(1.0, 0.12, 0.08, 1.0), "ai_type": "chase" },
@@ -68,6 +68,9 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 	var floor: int = config.get("floor", 1)
 	
 	match enemy_type:
+		"fat_zombie03":
+			for _index in range(maxi(1, int(config.get("count", 1)))):
+				enemies.append(_generate_basic_enemy(enemy_type, floor, floor_level))
 		"random":
 			enemies = _generate_random_enemies(floor, floor_level)
 		"elite":
@@ -256,16 +259,16 @@ func _get_available_types_for_level(floor_level: int, floor: int = 1) -> Array[S
 				return ["melee_chaser", "ranged_caster", "exploder"]
 			# 第二层及以上：SHALLOW也开放6种怪物池，丰富度提升
 			else:
-				return ["melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher"]
+				return ["melee_chaser", "ranged_caster", "summoner", "fat_zombie03", "exploder", "ambusher"]
 		RoomData.FloorLevel.MEDIUM:
 			# 全部6种
-			return ["melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher"]
+			return ["melee_chaser", "ranged_caster", "summoner", "fat_zombie03", "exploder", "ambusher"]
 		RoomData.FloorLevel.DEEP:
 			# 全部6种，且怪物密度更高（波次更多）
-			return ["melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher"]
+			return ["melee_chaser", "ranged_caster", "summoner", "fat_zombie03", "exploder", "ambusher"]
 		RoomData.FloorLevel.ABYSS:
 			# 仅精英类型
-			return ["summoner", "shielded", "ambusher"]
+			return ["summoner", "fat_zombie03", "ambusher"]
 	return ["melee_chaser"]
 
 ## 生成基础敌人
@@ -318,7 +321,7 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 	if elite_snapshot.is_empty() or bool(elite_snapshot.get("success", true)) == false:
 		return {}
 	var base_type := str(elite_snapshot.get(
-		"base_enemy_id", _get_theme_fallback_enemy("shielded")
+		"base_enemy_id", _get_theme_fallback_enemy("fat_zombie03")
 	))
 	# 无名王冠复用Boss轻量外观，但仍走精英结算而不是Boss路线解锁。
 	var base: Dictionary = _generate_basic_enemy(base_type, floor, floor_level)
@@ -432,7 +435,7 @@ func _generate_minion_pack(floor: int, floor_level: int) -> Array[Dictionary]:
 
 ## 生成守卫
 func _generate_guard(floor: int, floor_level: int) -> Dictionary:
-	var guard := _generate_basic_enemy(_get_theme_fallback_enemy("shielded"), floor, floor_level)
+	var guard := _generate_basic_enemy(_get_theme_fallback_enemy("fat_zombie03"), floor, floor_level)
 	guard["name"] = "商人护卫"
 	guard["is_guard"] = true
 	guard["xp_value"] = 15 + floor * 5

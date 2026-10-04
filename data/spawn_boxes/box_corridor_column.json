@@ -2,7 +2,7 @@
   "schema": "shellstorm2.battle.spawn_box",
   "schema_version": 1,
   "box_id": "box_corridor_column",
-  "note": "窄长纵列（小盒 2×4 m）：沿长轴一列近战×2 推进，1.5 秒后壳甲×1 压尾。盒很窄，靠墙／贴家具缝摆，读作一条过道。",
+  "note": "窄长纵列（小盒 2×4 m）：沿长轴一列近战×2 推进，1.5 秒后胖子僵尸×1 压尾。盒很窄，靠墙／贴家具缝摆，读作一条过道。",
   "shape": "box",
   "size_m": [
     2.0,
@@ -16,7 +16,7 @@
       "delay_sec": 0.0
     },
     {
-      "type": "shielded",
+      "type": "fat_zombie03",
       "count": 1,
       "delay_sec": 1.5
     }

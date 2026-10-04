@@ -2,7 +2,7 @@
   "schema": "shellstorm2.battle.spawn_box",
   "schema_version": 1,
   "box_id": "box_bridge_center",
-  "note": "桥心压制（大盒 10×14 m，桥房专属）：小僵尸×8 起手封路，1s 壳甲×4 顶线，2s 警察僵尸×4 远程压阵，共 16 只。⚠ 桥心可走面只有 2 格宽（10 m），而默认 wall_recess_tiles=1 要求盒心周围 10.02 m 见方全铺砖 —— 桥里任何砖心都不达标，原地容量恒为 0（实测），故本盒必须 wall_recess_tiles=0。",
+  "note": "桥心压制（大盒 10×14 m，桥房专属）：小僵尸×8 起手封路，1s 胖子僵尸×4 顶线，2s 警察僵尸×4 远程压阵，共 16 只。⚠ 桥心可走面只有 2 格宽（10 m），而默认 wall_recess_tiles=1 要求盒心周围 10.02 m 见方全铺砖 —— 桥里任何砖心都不达标，原地容量恒为 0（实测），故本盒必须 wall_recess_tiles=0。",
   "shape": "box",
   "size_m": [
     10.0,
@@ -16,7 +16,7 @@
       "delay_sec": 0.0
     },
     {
-      "type": "shielded",
+      "type": "fat_zombie03",
       "count": 4,
       "delay_sec": 1.0
     },
