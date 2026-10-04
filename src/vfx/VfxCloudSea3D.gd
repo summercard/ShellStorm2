@@ -24,6 +24,12 @@ var _fallback_bounds: Array[AABB] = []
 var _procedural_city_bounds: Array[AABB] = []
 var _procedural_city_texture: ImageTexture
 var _procedural_city_grid := Vector4.ZERO
+var _procedural_static_enabled := true
+var _procedural_candidates: ImageTexture3D
+var _candidate_origin := Vector3.ZERO
+var _candidate_step := Vector3.ONE
+var _candidate_stats: Dictionary = {}
+static var _candidate_cache: Dictionary = {}
 
 
 func _ready() -> void:
@@ -40,6 +46,7 @@ func _ready() -> void:
 		if mesh_node.material_override is ShaderMaterial:
 			mesh_node.material_override = mesh_node.material_override.duplicate()
 	configure(effect_color, effect_size, {})
+	set_procedural_static_clearance_enabled(_procedural_static_enabled)
 	if not Engine.is_editor_hint() and RuntimePerformanceManager != null:
 		apply_performance_quality(RuntimePerformanceManager.quality_profile)
 		RuntimePerformanceManager.quality_changed.connect(apply_performance_quality)
@@ -99,7 +106,113 @@ func set_procedural_city_layout(layout: Array[Dictionary], config: Dictionary) -
 	var center: Array = config["center_xz"]
 	var half := float(config["extent_m"]) * 0.5
 	_procedural_city_grid = Vector4(center[0] - half, center[1] - half, float(config["spacing_m"]), grid)
+	_procedural_candidates = null
+	if _procedural_static_enabled:
+		_build_candidate_cache(layout, config, image)
 	_sync_materials()
+
+
+func set_procedural_static_clearance_enabled(enabled: bool) -> void:
+	var shader := load("res://src/vfx/CloudStaticClearance.gdshader") as Shader if enabled else null
+	_procedural_static_enabled = enabled and shader != null
+	for volume in _volumes:
+		var material := (volume["node"] as MeshInstance3D).material_override as ShaderMaterial
+		if material == null:
+			continue
+		if _procedural_static_enabled and not material.has_meta("legacy_clearance_shader"):
+			material.set_meta("legacy_clearance_shader", material.shader)
+			material.shader = shader
+		elif not _procedural_static_enabled and material.has_meta("legacy_clearance_shader"):
+			material.shader = material.get_meta("legacy_clearance_shader") as Shader
+			material.remove_meta("legacy_clearance_shader")
+	if not _procedural_static_enabled:
+		_procedural_candidates = null
+		_candidate_stats = {"valid": false, "reason": "未启用或静态Shader加载失败，保留旧查询"}
+	elif _procedural_candidates == null:
+		_candidate_stats = {"valid": false, "reason": "启用后需重新set_procedural_city_layout以校验完整变换哈希"}
+	_sync_materials()
+
+
+func _build_candidate_cache(layout: Array[Dictionary], config: Dictionary, boxes: Image) -> void:
+	var started := Time.get_ticks_usec()
+	# 哈希含完整配置、世界变换和实际扩张包络；仅设置布局时计算，不扫描每帧。
+	var hashing := HashingContext.new()
+	hashing.start(HashingContext.HASH_SHA256)
+	hashing.update(var_to_bytes(["exact_candidates_v1", config, layout, _procedural_city_bounds]))
+	var key := hashing.finish().hex_encode()
+	if _candidate_cache.has(key):
+		var cached: Dictionary = _candidate_cache[key]
+		_procedural_candidates = cached["texture"]
+		_candidate_origin = cached["origin"]
+		_candidate_step = cached["step"]
+		_candidate_stats = cached["stats"].duplicate()
+		_candidate_stats["cache_hit"] = true
+		_candidate_stats["setup_ms"] = (Time.get_ticks_usec() - started) / 1000.0
+		return
+	_procedural_candidates = null
+	var grid := int(_procedural_city_grid.w)
+	var spacing := _procedural_city_grid.z
+	_candidate_step = Vector3(spacing / 4.0, 8.0, spacing / 4.0)
+	_candidate_origin = Vector3(_procedural_city_grid.x - spacing, -112.0, _procedural_city_grid.y - spacing)
+	var width := (grid + 2) * 4
+	var depth := width
+	var height := 22
+	var slices: Array[Image] = []
+	var histogram := [0, 0, 0, 0, 0, 0]
+	# 单元与旧格点边界对齐，因此整单元共用同一个旧九格候选集合。
+	for z in range(depth):
+		var slice := Image.create(width, height, false, Image.FORMAT_RGBAF)
+		for x in range(width):
+			var slots: Array[int] = []
+			var near_boxes: Array[AABB] = []
+			var cell := Vector2i((x >> 2) - 1, (z >> 2) - 1)
+			for dz in range(-1, 2):
+				for dx in range(-1, 2):
+					var slot := cell + Vector2i(dx, dz)
+					if slot.x < 0 or slot.y < 0 or slot.x >= grid or slot.y >= grid:
+						continue
+					var h := boxes.get_pixel(slot.x, slot.y + grid)
+					if h.b < 0.5:
+						continue
+					var f := boxes.get_pixel(slot.x, slot.y)
+					slots.append(slot.y * grid + slot.x + 1)
+					near_boxes.append(AABB(Vector3(f.r, h.r, f.g), Vector3(f.b - f.r, h.g - h.r, f.a - f.g)))
+			for y in range(height):
+				var lo := _candidate_origin + Vector3(x, y, z) * _candidate_step
+				var hi := lo + _candidate_step
+				var upper := 16.0
+				for box in near_boxes:
+					var farthest := (box.position - lo).max(hi - box.end).max(Vector3.ZERO)
+					upper = minf(upper, farthest.length())
+				var candidates: Array[int] = []
+				for index in range(near_boxes.size()):
+					var box := near_boxes[index]
+					var nearest := (box.position - hi).max(lo - box.end).max(Vector3.ZERO)
+					# 严格不等式加浮点保护带：平局与最近楼切换两边均保留。
+					if nearest.length() <= upper + 0.001:
+						candidates.append(slots[index])
+				var encoded := Color(0, 0, 0, 0)
+				if candidates.size() > 4:
+					encoded.r = -1.0
+					histogram[5] += 1
+				else:
+					for index in range(candidates.size()):
+						encoded[index] = float(candidates[index])
+					histogram[candidates.size()] += 1
+				slice.set_pixel(x, y, encoded)
+		slices.append(slice)
+	var texture := ImageTexture3D.new()
+	var error := texture.create(Image.FORMAT_RGBAF, width, height, depth, false, slices)
+	_candidate_stats = {"key": key, "cache_hit": false, "setup_ms": (Time.get_ticks_usec() - started) / 1000.0, "bytes": width * height * depth * 16, "dimensions": [width, height, depth], "histogram_0_1_2_3_4_fallback": histogram, "valid": error == OK}
+	if error == OK:
+		_procedural_candidates = texture
+		_candidate_cache.clear()
+		_candidate_cache[key] = {"texture": texture, "origin": _candidate_origin, "step": _candidate_step, "stats": _candidate_stats.duplicate()}
+
+
+func get_procedural_city_cache_snapshot() -> Dictionary:
+	return _candidate_stats.duplicate(true)
+
 
 func get_procedural_city_exclusion_bounds() -> Array[AABB]:
 	return _procedural_city_bounds.duplicate()
@@ -178,7 +291,18 @@ func _process(delta: float) -> void:
 	if not _enabled:
 		return
 	_flow_time += maxf(delta, 0.0)
-	_sync_materials()
+	_sync_dynamic_materials()
+
+
+func _sync_dynamic_materials() -> void:
+	var daylight := clampf(_sun.light_energy / 3.0, 0.0, 1.0) if is_instance_valid(_sun) else 1.0
+	var direction := _sun.global_basis.z.normalized() if is_instance_valid(_sun) else Vector3(-0.4, 0.8, 0.3).normalized()
+	for volume in _volumes:
+		var material := (volume["node"] as MeshInstance3D).material_override as ShaderMaterial
+		if material != null:
+			material.set_shader_parameter("flow_time", _flow_time)
+			material.set_shader_parameter("daylight", daylight)
+			material.set_shader_parameter("light_direction", direction)
 
 
 func _sync_materials() -> void:
@@ -204,6 +328,11 @@ func _sync_materials() -> void:
 			if _procedural_city_texture != null:
 				material.set_shader_parameter("procedural_city_boxes", _procedural_city_texture)
 				material.set_shader_parameter("procedural_city_grid", _procedural_city_grid)
+			material.set_shader_parameter("procedural_static_enabled", _procedural_static_enabled and _procedural_candidates != null)
+			if _procedural_candidates != null:
+				material.set_shader_parameter("procedural_candidates", _procedural_candidates)
+				material.set_shader_parameter("candidate_origin", _candidate_origin)
+				material.set_shader_parameter("candidate_step", _candidate_step)
 
 
 func apply_performance_quality(profile: String) -> void:

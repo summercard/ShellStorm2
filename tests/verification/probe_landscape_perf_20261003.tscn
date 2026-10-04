@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/verification/probe_landscape_perf_20261003.gd" id="1"]
+
+[node name="LandscapePerformanceProbe" type="Node"]
+script = ExtResource("1")
