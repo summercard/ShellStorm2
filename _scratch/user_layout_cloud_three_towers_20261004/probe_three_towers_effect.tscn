@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/user_layout_cloud_three_towers_20261004/probe_three_towers_effect.gd" id="probe"]
+
+[node name="ThreeTowersEffectProbe" type="Node"]
+script = ExtResource("probe")

@@ -8,9 +8,6 @@ const BUILDING_CLEARANCE_M := 1.5
 const HEIGHT_CLEARANCE_M := 1.5
 const PREVIEW_BOUNDARIES_PATH := "res://assets/art/vfx/environment_3d/cloud_sea/cloud_layout.json"
 
-# 正式塔楼场景显式启用；独立旧预览保留历史路径。
-@export var main_towers_only := false
-
 var _flow_time := 0.0
 var _enabled := true
 var _floor_99_y := -12.0
@@ -69,29 +66,18 @@ func _on_configure(context: Dictionary) -> void:
 	if world_root != null:
 		var route := world_root.get_node_or_null("Blocks/Rooftop/CrossTowerRoute")
 		if route != null:
-			if main_towers_only:
-				# 每塔一个静态世界包络；包含该塔基础，不包含桥、SKYLINE和楼群。
-				for target: String in ["Tower2", "Tower3"]:
-					var tower_node := route.get_node_or_null(NodePath(target))
-					if tower_node != null:
-						_collect_model_bounds(tower_node, "route/" + target)
-					var foundation_node := route.get_node_or_null(NodePath("LandscapeFoundation/" + target + "FoundationBox"))
-					if foundation_node != null:
-						_collect_model_bounds(foundation_node, "route/" + target)
-			else:
-				for building in route.get_children():
-					_collect_model_bounds(building, "route/" + str(building.name))
-		if not main_towers_only:
-			var city_layout: Array = context.get("city_layout", [])
-			for placement: Dictionary in city_layout:
-				var placement_transform: Transform3D = placement["transform"]
-				_record_keepout(_transformed_box(AABB(Vector3.ONE * -0.5, Vector3.ONE), placement_transform).grow(BUILDING_CLEARANCE_M), "city/" + str(placement.get("ring", 0)))
+			for building in route.get_children():
+				_collect_model_bounds(building, "route/" + str(building.name))
+		var city_layout: Array = context.get("city_layout", [])
+		for placement: Dictionary in city_layout:
+			var placement_transform: Transform3D = placement["transform"]
+			_record_keepout(_transformed_box(AABB(Vector3.ONE * -0.5, Vector3.ONE), placement_transform).grow(BUILDING_CLEARANCE_M), "city/" + str(placement.get("ring", 0)))
 		_sun = world_root.get_node_or_null("DirectionalLight3D") as DirectionalLight3D
 	else:
 		_sun = null
 		# Frozen authoring bounds are only used for the independent editor/preview prefab.
 		var frozen: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PREVIEW_BOUNDARIES_PATH))
-		for item: Dictionary in frozen.get("keepouts", []) if not main_towers_only else []:
+		for item: Dictionary in frozen.get("keepouts", []):
 			var lo: Array = item["min"]
 			var hi: Array = item["max"]
 			var origin := Vector3(float(lo[0]), float(lo[1]), float(lo[2]))
@@ -104,14 +90,6 @@ func _on_configure(context: Dictionary) -> void:
 
 # 全域城市每格最多一栋：上传格点足迹/高度，避免合并成整片城市超级禁云盒。
 func set_procedural_city_layout(layout: Array[Dictionary], config: Dictionary) -> void:
-	if main_towers_only:
-		# 三主塔模式拒绝任何程序楼群上传，避免未来调用点把小楼重新接回云查询。
-		_procedural_city_bounds.clear()
-		_procedural_city_texture = null
-		_procedural_candidates = null
-		_candidate_stats = {"valid": false, "reason": "main_towers_only: 拒绝程序楼群云避让"}
-		_sync_materials()
-		return
 	var grid := int(float(config["extent_m"]) / float(config["spacing_m"]))
 	var image := Image.create(grid, grid * 2, false, Image.FORMAT_RGBAF)
 	image.fill(Color(0, 0, 0, 0))
@@ -135,8 +113,6 @@ func set_procedural_city_layout(layout: Array[Dictionary], config: Dictionary) -
 
 
 func set_procedural_static_clearance_enabled(enabled: bool) -> void:
-	# 三塔模式必须保留支持禁用旧距离场的Shader；关闭候选缓存不能复活旧楼群避让。
-	enabled = enabled or main_towers_only
 	var shader := load("res://src/vfx/CloudStaticClearance.gdshader") as Shader if enabled else null
 	_procedural_static_enabled = enabled and shader != null
 	for volume in _volumes:
@@ -251,7 +227,7 @@ func _collect_model_bounds(node: Node, region: String) -> void:
 	# 地表不是整座城市禁云区；景观部件分开记录，禁止按父级合并巨大包络。
 	if node.name == "OpenWorldGroundPlane":
 		return
-	if not main_towers_only and node.get_parent() != null and node.get_parent().name == "LandscapeFoundation":
+	if node.get_parent() != null and node.get_parent().name == "LandscapeFoundation":
 		region += "/" + str(node.name)
 	# Hidden rails are still excluded: a model visibility change must never permit clouds inside.
 	if node is MeshInstance3D:
@@ -276,7 +252,7 @@ func _validate_volumes() -> void:
 			if baked.grow(0.02).encloses(keepout):
 				covered = true
 				break
-		if main_towers_only or not covered:
+		if not covered:
 			_mask_valid = false
 			changed_regions[_keepout_regions[index]] = true
 	for region in changed_regions:
@@ -348,8 +324,7 @@ func _sync_materials() -> void:
 			material.set_shader_parameter("light_direction", _sun.global_basis.z.normalized() if is_instance_valid(_sun) else Vector3(-0.4, 0.8, 0.3).normalized())
 			material.set_shader_parameter("fallback_regions", regions)
 			material.set_shader_parameter("fallback_count", _fallback_bounds.size())
-			material.set_shader_parameter("legacy_building_distance_enabled", not main_towers_only)
-			material.set_shader_parameter("procedural_city_enabled", _procedural_city_texture != null and not main_towers_only)
+			material.set_shader_parameter("procedural_city_enabled", _procedural_city_texture != null)
 			if _procedural_city_texture != null:
 				material.set_shader_parameter("procedural_city_boxes", _procedural_city_texture)
 				material.set_shader_parameter("procedural_city_grid", _procedural_city_grid)
@@ -398,5 +373,4 @@ func get_presentation_snapshot() -> Dictionary:
 	return {"enabled": _enabled, "sea_count": sea_count, "wisp_count": wisp_count,
 		"flow_time": _flow_time, "rejected_count": _rejected_count,
 		"keepout_count": _keepouts.size(), "floor_99_y": _floor_99_y,
-		"mask_valid": _mask_valid, "fallback_count": _fallback_bounds.size(), "quality_profile": _quality_profile,
-		"clearance_scope": "three_main_towers" if main_towers_only else "legacy_route_and_city"}
+		"mask_valid": _mask_valid, "fallback_count": _fallback_bounds.size(), "quality_profile": _quality_profile}

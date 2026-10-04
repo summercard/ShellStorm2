@@ -1,12 +1,10 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_ring0_index2_extension.tscn" id="city2"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_ring0_index8_extension.tscn" id="city8"]
 
 [ext_resource type="Script" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/landscape_visual_material_binding.gd" id="binding"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_30x30.tscn" id="square_30"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_60x60.tscn" id="square_60"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_100x100.tscn" id="square_100"]
+[ext_resource type="Script" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/procedural_city.gd" id="city_generator"]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower1_box.tscn" id="1_tower1"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower2_box.tscn" id="2_tower2"]
@@ -63,34 +61,8 @@ position = Vector3(-25, -76.7334747314453, -58.7502899169922)
 [node name="CityRing0Index8Extension" parent="." instance=ExtResource("city8")]
 position = Vector3(73.3030242919922, -78.626953125, -20)
 
-[node name="AuthoredCityChunks" type="Node3D" parent="."]
+[node name="ProceduralCity500" type="Node3D" parent="."]
+script = ExtResource("city_generator")
 metadata/visual_only = true
-metadata/chunk_count = 8
-metadata/building_count = 157
-metadata/layout_source = "res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
-metadata/cloud_keepout = false
-metadata/automatic_sync = false
-
-[node name="open_world_chunk_square_30x30" parent="AuthoredCityChunks" instance=ExtResource("square_30")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -80, -150)
-
-[node name="open_world_chunk_square_100x103" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, -80, 110)
-
-[node name="open_world_chunk_square_100x102" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -80, 110)
-
-[node name="open_world_chunk_square_60x60" parent="AuthoredCityChunks" instance=ExtResource("square_60")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, -80, -70)
-
-[node name="open_world_chunk_square_100x101" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -80, 0)
-
-[node name="open_world_chunk_square_100x105" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -80, -260)
-
-[node name="open_world_chunk_square_100x100" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, -80, 0)
-
-[node name="open_world_chunk_square_100x104" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -80, -150)
+metadata/future_optimization_space = true
+metadata/parameters_source = "res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_generation_parameters.json"

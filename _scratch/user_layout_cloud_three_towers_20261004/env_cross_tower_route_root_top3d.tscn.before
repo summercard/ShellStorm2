@@ -1,0 +1,454 @@
+[gd_scene load_steps=54 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn" id="foundation"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn" id="tower2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/env_skyline_08_root_top3d.tscn" id="skyline08"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn" id="tower3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/crane_00_jib/env_tower_02_crane_00_jib_root_top3d.tscn" id="jib"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_03/lower_front_box/env_tower_03_lower_front_box_root_top3d.tscn" id="cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_03/plant_front_01/env_tower_03_plant_front_01_root_top3d.tscn" id="wide_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/expedition/runtime/room_type_components/bridge_room/bridge_guardrail/bridge_guardrail_root_top3d.tscn" id="rail"]
+
+[sub_resource type="BoxShape3D" id="Shape_1"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_2"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_3"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_4"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_5"]
+size = Vector3(1.650000, 0.300000, 64.000000)
+
+[sub_resource type="BoxShape3D" id="Shape_6"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_7"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_8"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_9"]
+size = Vector3(0.200000, 2.747500, 32.310000)
+
+[sub_resource type="BoxShape3D" id="Shape_10"]
+size = Vector3(1.650000, 0.300000, 64.000000)
+
+[sub_resource type="BoxShape3D" id="Shape_11"]
+size = Vector3(1.500000, 1.680000, 1.535000)
+
+[sub_resource type="BoxShape3D" id="Shape_12"]
+size = Vector3(1.500000, 1.680000, 1.535000)
+
+[sub_resource type="BoxShape3D" id="Shape_13"]
+size = Vector3(3.000000, 2.280000, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_14"]
+size = Vector3(1.500000, 1.680000, 1.535000)
+
+[sub_resource type="BoxShape3D" id="Shape_15"]
+size = Vector3(1.500000, 1.680000, 1.535000)
+
+[sub_resource type="BoxShape3D" id="Shape_16"]
+size = Vector3(3.000000, 2.280000, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_17"]
+size = Vector3(70.000000, 0.600000, 44.000000)
+
+[sub_resource type="BoxShape3D" id="Shape_18"]
+size = Vector3(40.599998, 8.000000, 24.885001)
+
+[sub_resource type="BoxShape3D" id="Shape_19"]
+size = Vector3(0.320000, 1.220001, 44.320000)
+
+[sub_resource type="BoxShape3D" id="Shape_20"]
+size = Vector3(70.320000, 1.220001, 0.320000)
+
+[sub_resource type="BoxShape3D" id="Shape_21"]
+size = Vector3(0.320000, 1.220001, 44.320000)
+
+[sub_resource type="BoxShape3D" id="Shape_22"]
+size = Vector3(13.700001, 5.522518, 8.100000)
+
+[sub_resource type="BoxShape3D" id="Shape_23"]
+size = Vector3(14.700000, 5.022518, 7.299999)
+
+[sub_resource type="BoxShape3D" id="Shape_24"]
+size = Vector3(10.700001, 4.022518, 6.000000)
+
+[sub_resource type="BoxShape3D" id="Shape_25"]
+size = Vector3(1.812376, 2.880001, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_26"]
+size = Vector3(3.000000, 2.279999, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_27"]
+size = Vector3(2.000000, 2.680000, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_28"]
+size = Vector3(2.000000, 2.180000, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_29"]
+size = Vector3(2.400001, 2.880001, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_30"]
+size = Vector3(2.000000, 2.180000, 2.035000)
+
+[sub_resource type="BoxShape3D" id="Shape_31"]
+size = Vector3(2.522078, 3.480000, 2.434999)
+
+[sub_resource type="BoxShape3D" id="Shape_32"]
+size = Vector3(2.195365, 2.779999, 2.235000)
+
+[sub_resource type="BoxShape3D" id="Shape_33"]
+size = Vector3(2.312281, 2.580002, 2.434999)
+
+[sub_resource type="BoxShape3D" id="Shape_34"]
+size = Vector3(1.500000, 1.680000, 1.535000)
+
+[sub_resource type="BoxShape3D" id="Shape_35"]
+size = Vector3(2.300000, 2.360001, 2.299999)
+
+[sub_resource type="BoxShape3D" id="Shape_36"]
+size = Vector3(2.300000, 2.260002, 2.299999)
+
+[sub_resource type="BoxShape3D" id="Shape_37"]
+size = Vector3(1.099998, 3.450001, 1.099998)
+
+[sub_resource type="BoxShape3D" id="Shape_38"]
+size = Vector3(1.100000, 2.850002, 1.099998)
+
+[sub_resource type="BoxShape3D" id="Shape_39"]
+size = Vector3(1.099998, 2.650002, 1.099998)
+
+[sub_resource type="BoxShape3D" id="Shape_40"]
+size = Vector3(5.400002, 2.235851, 4.475954)
+
+[sub_resource type="BoxShape3D" id="Shape_41"]
+size = Vector3(13.000000, 2.100000, 4.000000)
+
+[sub_resource type="BoxShape3D" id="Shape_42"]
+size = Vector3(2.000000, 3.000000, 4.000000)
+
+[sub_resource type="BoxShape3D" id="Shape_43"]
+size = Vector3(10.500000, 2.700000, 3.200000)
+
+[sub_resource type="BoxShape3D" id="Shape_44"]
+size = Vector3(3.600000, 3.000000, 10.000000)
+
+[sub_resource type="BoxShape3D" id="Shape_45"]
+size = Vector3(3.600000, 4.800000, 2.000000)
+
+[node name="CrossTowerRoute" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-CROSS-TOWER-ROUTE"
+metadata/asset_version = "v002"
+metadata/landscape_foundation_prefab = "res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn"
+metadata/landscape_foundation_ground_y = -80.0
+metadata/landscape_foundation_collision = "visual_only"
+metadata/north_bridge_opening_x = 20.0
+metadata/collision_owner = "CrossTowerRoute"
+metadata/tower2_accessible = false
+metadata/route_width_m = 1.65
+metadata/bridge_model_asset_id = "ENV-OPENWORLD-TOWER02-CRANE-00-JIB"
+metadata/bridge_section_pitch_m = 32.0
+
+[node name="LandscapeFoundation" parent="." instance=ExtResource("foundation")]
+
+[node name="Tower2" parent="." instance=ExtResource("tower2")]
+position = Vector3(40, -100.5, -90)
+
+[node name="Skyline08" parent="." instance=ExtResource("skyline08")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -17.305016, -59.654587, -121.18834)
+
+[node name="Tower3" parent="." instance=ExtResource("tower3")]
+position = Vector3(-12, -40.15, -173.925626)
+
+[node name="lower_rail_0" parent="Tower3/support"]
+visible = false
+
+[node name="Bridge" type="Node3D" parent="."]
+
+[node name="Collision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CraneJib_0_0" parent="Bridge" instance=ExtResource("jib")]
+position = Vector3(20.050206, -0.642502, -48.491148)
+rotation = Vector3(0, 1.3962634015954636, 0)
+
+[node name="JibGuard_0_0_L" type="CollisionShape3D" parent="Collision"]
+position = Vector3(18.825000, 1.373750, -48.500000)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_1")
+
+[node name="JibGuard_0_0_R" type="CollisionShape3D" parent="Collision"]
+position = Vector3(21.175000, 1.373750, -48.500000)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_2")
+
+[node name="CraneJib_0_1" parent="Bridge" instance=ExtResource("jib")]
+position = Vector3(20.050206, -0.642502, -80.491148)
+rotation = Vector3(0, 1.3962634015954636, 0)
+
+[node name="JibGuard_0_1_L" type="CollisionShape3D" parent="Collision"]
+position = Vector3(18.825000, 1.373750, -80.500000)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_3")
+
+[node name="JibGuard_0_1_R" type="CollisionShape3D" parent="Collision"]
+position = Vector3(21.175000, 1.373750, -80.500000)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_4")
+
+[node name="BridgeSupport_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(20.000000, -0.150000, -64.500000)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_5")
+
+[node name="CraneJib_1_0" parent="Bridge" instance=ExtResource("jib")]
+position = Vector3(12.047906, -0.642502, -110.373843)
+rotation = Vector3(0, 1.9198621771937625, 0)
+
+[node name="JibGuard_1_0_L" type="CollisionShape3D" parent="Collision"]
+position = Vector3(10.982420, 1.373750, -109.768906)
+rotation = Vector3(0, 0.5235987755982988, 0)
+shape = SubResource("Shape_6")
+
+[node name="JibGuard_1_0_R" type="CollisionShape3D" parent="Collision"]
+position = Vector3(13.017580, 1.373750, -110.943906)
+rotation = Vector3(0, 0.5235987755982988, 0)
+shape = SubResource("Shape_7")
+
+[node name="CraneJib_1_1" parent="Bridge" instance=ExtResource("jib")]
+position = Vector3(-3.952094, -0.642502, -138.086656)
+rotation = Vector3(0, 1.9198621771937625, 0)
+
+[node name="JibGuard_1_1_L" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-5.017580, 1.373750, -137.481719)
+rotation = Vector3(0, 0.5235987755982988, 0)
+shape = SubResource("Shape_8")
+
+[node name="JibGuard_1_1_R" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-2.982420, 1.373750, -138.656719)
+rotation = Vector3(0, 0.5235987755982988, 0)
+shape = SubResource("Shape_9")
+
+[node name="BridgeSupport_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(4.000000, -0.150000, -124.212813)
+rotation = Vector3(0, 0.5235987755982988, 0)
+shape = SubResource("Shape_10")
+
+[node name="MainMouthControl_L" parent="." instance=ExtResource("cabinet")]
+position = Vector3(17.750000, 0.000000, -34.750000)
+rotation = Vector3(0, 0, 0)
+
+[node name="MainMouthControl_L" type="CollisionShape3D" parent="Collision"]
+position = Vector3(17.750000, 0.840000, -34.750000)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_11")
+
+[node name="Tower3EntryRail_W" parent="." instance=ExtResource("rail")]
+position = Vector3(-32.000000, 0.000000, -151.925626)
+rotation = Vector3(0, 1.5707963267948966, 0)
+
+[node name="Tower3MouthControl_W" parent="." instance=ExtResource("cabinet")]
+position = Vector3(-13.850000, 0.000000, -152.125626)
+rotation = Vector3(0, 0, 0)
+
+[node name="Tower3MouthControl_W" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-13.850000, 0.840000, -152.125626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_12")
+
+[node name="Tower3MouthPower_W" parent="." instance=ExtResource("wide_cabinet")]
+position = Vector3(-15.500000, 0.000000, -152.125626)
+rotation = Vector3(0, 0, 0)
+
+[node name="Tower3MouthPower_W" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-15.500000, 1.140000, -152.125626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_13")
+
+[node name="MainMouthControl_R" parent="." instance=ExtResource("cabinet")]
+position = Vector3(22.250000, 0.000000, -34.750000)
+rotation = Vector3(0, 0, 0)
+
+[node name="MainMouthControl_R" type="CollisionShape3D" parent="Collision"]
+position = Vector3(22.250000, 0.840000, -34.750000)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_14")
+
+[node name="Tower3EntryRail_E" parent="." instance=ExtResource("rail")]
+position = Vector3(8.000000, 0.000000, -151.925626)
+rotation = Vector3(0, 1.5707963267948966, 0)
+
+[node name="Tower3MouthControl_E" parent="." instance=ExtResource("cabinet")]
+position = Vector3(-10.150000, 0.000000, -152.125626)
+rotation = Vector3(0, 0, 0)
+
+[node name="Tower3MouthControl_E" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-10.150000, 0.840000, -152.125626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_15")
+
+[node name="Tower3MouthPower_E" parent="." instance=ExtResource("wide_cabinet")]
+position = Vector3(-8.500000, 0.000000, -152.125626)
+rotation = Vector3(0, 0, 0)
+
+[node name="Tower3MouthPower_E" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-8.500000, 1.140000, -152.125626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_16")
+
+[node name="Tower3Roof" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-12.000000, -0.300000, -173.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_17")
+
+[node name="Tower3_plant_room" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-5.000000, 3.850000, -181.898126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_18")
+
+[node name="Tower3_lower_rail_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(23.000000, 0.559999, -173.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_19")
+
+[node name="Tower3_lower_rail_2" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-12.000000, 0.559999, -195.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_20")
+
+[node name="Tower3_lower_rail_3" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-47.000000, 0.559999, -173.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_21")
+
+[node name="Tower3_ac_lower_left" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-36.000000, 2.711258, -179.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_22")
+
+[node name="Tower3_ac_upper_left" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-16.000000, 10.461258, -185.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_23")
+
+[node name="Tower3_ac_lower_right" type="CollisionShape3D" parent="Collision"]
+position = Vector3(14.000000, 1.961258, -158.425626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_24")
+
+[node name="Tower3_plant_front_00" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-19.506188, 1.389999, -168.058126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_25")
+
+[node name="Tower3_plant_front_01" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-16.000000, 1.089998, -167.858126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_26")
+
+[node name="Tower3_plant_front_02" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-9.000000, 1.289999, -167.858126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_27")
+
+[node name="Tower3_plant_front_03" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-2.000000, 1.039999, -167.858126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_28")
+
+[node name="Tower3_plant_front_04" type="CollisionShape3D" parent="Collision"]
+position = Vector3(5.000000, 1.389999, -167.858126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_29")
+
+[node name="Tower3_plant_front_05" type="CollisionShape3D" parent="Collision"]
+position = Vector3(11.000000, 1.039999, -167.858126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_30")
+
+[node name="Tower3_upper_electrical" type="CollisionShape3D" parent="Collision"]
+position = Vector3(5.011039, 9.689998, -186.858126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_31")
+
+[node name="Tower3_upper_duct_control" type="CollisionShape3D" parent="Collision"]
+position = Vector3(0.999650, 9.339998, -175.658126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_32")
+
+[node name="Tower3_lower_right_control" type="CollisionShape3D" parent="Collision"]
+position = Vector3(20.006141, 1.239999, -183.858126)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_33")
+
+[node name="Tower3_lower_front_box" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-14.000000, 0.789999, -155.858127)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_34")
+
+[node name="Tower3_turbine_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-19.000000, 1.129999, -155.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_35")
+
+[node name="Tower3_turbine_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-7.000000, 1.080000, -155.825626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_36")
+
+[node name="Tower3_exhaust_0" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-30.000000, 1.674999, -155.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_37")
+
+[node name="Tower3_exhaust_1" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-26.000000, 1.375000, -155.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_38")
+
+[node name="Tower3_exhaust_2" type="CollisionShape3D" parent="Collision"]
+position = Vector3(19.000000, 1.274999, -190.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_39")
+
+[node name="Tower3_covered_equipment" type="CollisionShape3D" parent="Collision"]
+position = Vector3(12.000000, 1.067924, -164.925521)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_40")
+
+[node name="DuctLeftTrunk" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-30.500000, 1.550000, -186.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_41")
+
+[node name="DuctLeftRiser" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-24.800000, 1.500000, -186.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_42")
+
+[node name="DuctFrontTrunk" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-35.000000, 1.350000, -158.125626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_43")
+
+[node name="DuctRightTrunk" type="CollisionShape3D" parent="Collision"]
+position = Vector3(17.000000, 3.100000, -180.325626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_44")
+
+[node name="DuctRightRiser" type="CollisionShape3D" parent="Collision"]
+position = Vector3(17.000000, 2.400000, -173.925626)
+rotation = Vector3(0, 0, 0)
+shape = SubResource("Shape_45")
+
+
+[editable path="Tower3"]

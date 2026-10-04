@@ -41,8 +41,6 @@ environment = SubResource("Environment_editor_runtime_match")
 transform = Transform3D(-0.70710677, -0.61237246, 0.35355335, 0, 0.49999997, 0.86602545, -0.70710677, 0.61237246, -0.35355335, 0, 0, 0)
 
 [node name="OutdoorClouds" parent="." instance=ExtResource("7_clouds")]
-main_towers_only = true
-metadata/clearance_scope = "Tower1/Tower2/Tower3 only; peripheral chunks, SKYLINE08, bridge and legacy city excluded"
 
 [node name="DungeonMinimap3D" parent="HUD" index="0"]
 layout_mode = 3
