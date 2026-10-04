@@ -14,8 +14,13 @@ const DOT_ANCHOR_FALLBACK_HEIGHT_M := 1.7
 ##
 ## 用脚本路径、而不是 `provider is BaseFacility3D`：控制器在 player3d/ 下，
 ## 不该为了一条表现策略反向依赖 base3d/。
-## 代价是改了文件名会**静默**失效，所以由 verify_interaction_dot_presentation 的
-## 「基地设施不挂圆点」断言盯着 —— 谁动了这条路径，测试当场变红。
+##
+## 🔴 清单写的是**家族**，不是单个文件：匹配时沿 `get_base_script()` 一路向上走。
+## 只比 `resource_path` 相等会让子类静默漏网 —— 99F 远征情报室的**中央全息平台**
+## （`HologramExpeditionFacility3D extends BaseFacility3D`）就是这么长出一个圆点的
+## （2026-10-04 主人指出：「那个圆点没去掉」）；同族的 `WardrobeFacility3D` 一样。
+## 代价仍是改了文件名会失效，所以由 verify_interaction_dot_presentation 的
+## 「基地设施家族不挂圆点」断言盯着（父类与子类各钉一条）—— 谁动了这条路径，测试当场变红。
 const DOT_EXCLUDED_PROVIDER_SCRIPTS := [
 	"res://src/base3d/BaseFacility3D.gd",
 ]
@@ -120,11 +125,16 @@ func _provider_is_eligible(provider: Node) -> bool:
 
 
 ## 这个 provider 该不该拿圆点。见 DOT_EXCLUDED_PROVIDER_SCRIPTS 的说明。
+##
+## 沿基类链匹配：豁免一个家族，子类自动继承（全息远征设施 / 衣柜设施都是
+## `extends BaseFacility3D`，它们和黄字提示牌的关系与父类完全相同）。
 func _provider_uses_dot(provider: Node) -> bool:
-	var script := provider.get_script() as Script
-	if script == null:
-		return true
-	return not DOT_EXCLUDED_PROVIDER_SCRIPTS.has(script.resource_path)
+	var cursor := provider.get_script() as Script
+	while cursor != null:
+		if DOT_EXCLUDED_PROVIDER_SCRIPTS.has(cursor.resource_path):
+			return false
+		cursor = cursor.get_base_script()
+	return true
 
 
 func _candidate_is_better(

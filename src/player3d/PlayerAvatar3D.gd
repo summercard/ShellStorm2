@@ -115,6 +115,12 @@ var _reload_animation_active := false
 var _reload_progress := 0.0
 var _reload_offset := Vector3.ZERO
 var _reload_rotation := Vector3.ZERO
+## 换弹环当前已经**画出来**的进度（不是驱动值）。用它做重建去抖：
+## 进度没跨过 RELOAD_RING_REBUILD_EPSILON 就不重建网格。
+var _reload_ring_built_progress := -1.0
+## mesh 局部半径（= 世界半径 / 锚点缩放）。_setup_reload_ring() 算一次，之后只读。
+var _reload_ring_inner_m := 0.0
+var _reload_ring_outer_m := 0.0
 var _firing_animation_active := false
 var _fire_progress := 0.0
 var _fire_intensity := 0.0
@@ -153,7 +159,45 @@ var _customization: Dictionary = DEFAULT_CUSTOMIZATION.duplicate()
 var _wearable_root: Node3D = null
 var _wearable_nodes: Dictionary = {}
 
-const RELOAD_FILL_WIDTH := 1.06
+## —— 换弹进度环（2026-10-04 主人要求）——
+## 原样是「头顶一条 1.20 × 0.18 的横向 QuadMesh 进度条」（`RELOAD_FILL_WIDTH`，
+## 用 `fill.scale.x` + 平移锁左边缘表达进度）。主人要求换成**搜索读条那套圆环动画**，
+## 并把位置从头顶挪到**角色下方**。
+##
+## 几何与绕序来自 `src/ui/RingProgressGeometry.gd` —— 与交互圆点（`InteractionDot3D`
+## 的读条环）共用同一份绘圆口径。`docs/v0.2/PLAN.md` 的 0.2-PLAYER-001 与
+## 0.2-PRESENTATION-001 是同一套视觉语言，两边各画一份圆必然漂移。
+const RING_GEOMETRY := preload("res://src/ui/RingProgressGeometry.gd")
+## 环的外半径，单位是**角色母版尺寸下的米**（1.5 m 高的角色所看到的那个大小）。
+## 真正落到世界里的半径 = 本值 × 角色运行时体型倍率（`Player3D` 会按
+## `DEFAULT_BASE_SIZE_MULTIPLIER` 给 avatar 再乘一档）—— 环跟着角色一起缩放，
+## 不会在角色被调大调小时脱钩。
+##
+## `reload_progress_root` 另外还带着 BUNNY_LINEAR_SCALE，所以建 mesh 时按
+## `本值 / 该倍率` 反算；要改大小只改这一个数。
+const RELOAD_RING_OUTER_RADIUS_M := 0.42
+## 线宽比照交互读条环：0.059 / 0.265 ≈ 0.2226（同一套视觉语言，不许各画各的）。
+const RELOAD_RING_THICKNESS_RATIO := 0.2226
+## 比交互环的 48 段密一档：这个环在屏幕上的直径更大，48 段能看出多边形边。
+const RELOAD_RING_SEGMENTS := 64
+## 🔴 环必须**平铺**在地面上（绕 X 转 -90°），**不许挂 billboard**：
+## 本作相机几乎俯视（塔内高 10.719 m / 后拉 4.038 m ⇒ 视轴离竖直仅 20.6°），
+## ① `BILLBOARD_ENABLED` 只绕 Y 轴转 ⇒ 环被压成 0.36 高的椭圆；
+## ② 若改成绕相机基向量自摆（交互圆点那招），环面会斜插进地板 ——
+##    r = 0.42 时最低点落到 -0.03 m，下半圈直接被地板吃掉，只剩半个环。
+## 平铺则只被透视压扁到 sin(69.4°) = 0.936，仍是完整一圈。
+const RELOAD_RING_EULER := Vector3(-PI * 0.5, 0.0, 0.0)
+## 环心（角色本地坐标 = 相对脚底的高度）。取 0.08 m：落在角色脚下、
+## 低于脚踝，且离地板留 8 cm 余量（共面会 z-fighting）。
+const RELOAD_RING_ANCHOR_LOCAL := Vector3(0.0, 0.08, 0.0)
+## 「环在角色下方」的结构判据上限。角色高 1.5 m、旧横条锚点在 1.67 m
+## （头顶），两条互不误判；下限 > 0 表示不许埋到地板以下。
+const RELOAD_RING_BELOW_CHARACTER_MAX_HEIGHT_M := 0.5
+## 填充沿网格法线方向相对底轨的前压量（锚点局部单位）。**不能省**：两个半透明面
+## 完全共面时深度相等、排序不稳定，画面上会闪。原横条也是靠 Fill 前压 0.012 解决的。
+const RELOAD_RING_FILL_DEPTH_OFFSET := 0.012
+## 进度变化小于这个量就不重建 mesh（与圆点读条环同口径）。
+const RELOAD_RING_REBUILD_EPSILON := 0.004
 const IDLE_LOOP_HZ := 0.42
 const IDLE_LOOP_DURATION := 1.0 / IDLE_LOOP_HZ
 const BUNNY_LINEAR_SCALE := 1.5 / 2.475
@@ -332,6 +376,7 @@ func _ready() -> void:
 		if state_vfx != null:
 			state_vfx.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
 		_apply_bunny_attachment_scale()
+	_setup_reload_ring()
 	_apply_customization()
 	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]:
 		_authored_motion.bind(self)
@@ -495,12 +540,13 @@ func get_component_snapshot() -> Dictionary:
 		"action_offset": _action_offset,
 		"action_rotation": _action_rotation,
 		"reload_bar_visible": reload_progress_root.visible,
-		"reload_fill_scale_x": reload_progress_fill.scale.x,
+		"reload_ring_progress": maxf(0.0, _reload_ring_built_progress),
+		"reload_ring_segments": RELOAD_RING_SEGMENTS,
+		"reload_ring_outer_radius_m": RELOAD_RING_OUTER_RADIUS_M,
+		"reload_ring_anchor_local": reload_progress_root.position,
 		"reload_bar_outside_visual_root": reload_progress_root.get_parent() == self,
-		"reload_bar_billboarded": (
-			(reload_progress_track.get_active_material(0) as StandardMaterial3D).billboard_mode
-			== BaseMaterial3D.BILLBOARD_ENABLED
-		),
+		"reload_bar_below_character": _reload_ring_is_below_character(),
+		"reload_ring_ground_flat": _reload_ring_is_ground_flat(),
 		"weapon_grip_pose_active": _weapon_grip_pose_active,
 		"weapon_pose_state": _weapon_pose_state,
 		"weapon_pose_previous_state": _weapon_pose_previous_state,
@@ -1336,16 +1382,104 @@ func _animate_bunny_accessories(
 	bunny_hand_r.rotation = bunny_hand_r.rotation.lerp(right_hand_rot, minf(1.0, delta * 21.0))
 
 
-func _update_reload_progress_bar() -> void:
-	var visible := _reload_animation_active and _state != "dead"
-	reload_progress_root.visible = visible
-	if not visible:
-		reload_progress_fill.scale.x = 0.0
-		reload_progress_fill.position.x = -RELOAD_FILL_WIDTH * 0.5
+## 换弹环一次性装配：定位（角色下方、平铺地面）、还原被 prefab 写死的 Fill 偏移、
+## 建底轨整圈、把两个材质的 billboard 关掉。
+##
+## 必须在 `_ready()` 里 `reload_progress_root.scale = BUNNY_LINEAR_SCALE` **之后**调用 ——
+## mesh 半径是按锚点缩放反算的，早调会算错一档（0.606 倍）。
+func _setup_reload_ring() -> void:
+	if reload_progress_root == null:
 		return
-	reload_progress_fill.scale.x = _reload_progress
-	# 缩放围绕中心进行，因此同步平移可让左边缘固定。
-	reload_progress_fill.position.x = -RELOAD_FILL_WIDTH * 0.5 * (1.0 - _reload_progress)
+	reload_progress_root.position = RELOAD_RING_ANCHOR_LOCAL
+	reload_progress_root.rotation = RELOAD_RING_EULER
+	var anchor_scale := reload_progress_root.scale.x
+	if is_zero_approx(anchor_scale):
+		anchor_scale = 1.0
+	_reload_ring_outer_m = RELOAD_RING_OUTER_RADIUS_M / anchor_scale
+	_reload_ring_inner_m = _reload_ring_outer_m * (1.0 - RELOAD_RING_THICKNESS_RATIO)
+	if reload_progress_track != null:
+		# prefab 里的 Track 是 1.20×0.18 的 QuadMesh，几何被整块换掉；材质留着
+		# （青绿/暗底那套色值不变），但要挂成 material_override —— 换 mesh 之后
+		# get_active_material(0) 就取不到原 surface 材质了。
+		var track_material := reload_progress_track.get_active_material(0) as StandardMaterial3D
+		_reset_ring_instance(reload_progress_track, track_material, 0.0)
+		reload_progress_track.mesh = RING_GEOMETRY.build_annulus(
+			_reload_ring_inner_m, _reload_ring_outer_m, RELOAD_RING_SEGMENTS
+		)
+	if reload_progress_fill != null:
+		var fill_material := reload_progress_fill.get_active_material(0) as StandardMaterial3D
+		_reset_ring_instance(reload_progress_fill, fill_material, RELOAD_RING_FILL_DEPTH_OFFSET)
+		reload_progress_fill.mesh = RING_GEOMETRY.build_arc(
+			_reload_ring_inner_m, _reload_ring_outer_m, 0.0, RELOAD_RING_SEGMENTS, 0.0
+		)
+	_reload_ring_built_progress = -1.0
+	reload_progress_root.visible = false
+
+
+## prefab 把 Fill 摆在 (-0.53, 0, 0.012)、`scale = (0,1,1)`（横条的左边缘锁定写法）。
+## 圆环不需要那个横向偏移，归零；但**必须保留沿 +Z 的那一点前压**（见
+## RELOAD_RING_FILL_DEPTH_OFFSET）—— 底轨与填充共面时，两个半透明面的排序不稳定，
+## 画面会闪。`depth_offset` 就是沿网格法线方向的前压量。
+func _reset_ring_instance(
+	node: MeshInstance3D, material: StandardMaterial3D, depth_offset: float
+) -> void:
+	node.position = Vector3(0.0, 0.0, depth_offset)
+	node.rotation = Vector3.ZERO
+	node.scale = Vector3.ONE
+	if material != null:
+		# 横条时代靠 billboard 让它永远面对相机；平铺的环反过来**必须**关掉，
+		# 否则着色器会按相机基向量重新摆朝向，把环立起来。
+		material.billboard_mode = BaseMaterial3D.BILLBOARD_DISABLED
+		material.billboard_keep_scale = false
+		node.material_override = material
+
+
+## 结构断言用：环心必须水平居中在角色上、且落在脚下高度带（0 < y ≤ 0.5 m）。
+func _reload_ring_is_below_character() -> bool:
+	if reload_progress_root == null:
+		return false
+	var anchor := reload_progress_root.position
+	return (
+		anchor.y > 0.0
+		and anchor.y <= RELOAD_RING_BELOW_CHARACTER_MAX_HEIGHT_M
+		and absf(anchor.x) < 0.05
+		and absf(anchor.z) < 0.05
+	)
+
+
+## 结构断言用：环必须平铺地面 —— 锚点绕 X 转 -90°，且两个材质都没开 billboard。
+func _reload_ring_is_ground_flat() -> bool:
+	if reload_progress_root == null:
+		return false
+	if not is_equal_approx(reload_progress_root.rotation.x, RELOAD_RING_EULER.x):
+		return false
+	for value in [reload_progress_track, reload_progress_fill]:
+		var node := value as MeshInstance3D
+		if node == null:
+			continue
+		var material := node.get_active_material(0) as StandardMaterial3D
+		if material == null or material.billboard_mode != BaseMaterial3D.BILLBOARD_DISABLED:
+			return false
+	return true
+
+
+func _update_reload_progress_bar() -> void:
+	var visible_state := _reload_animation_active and _state != "dead"
+	reload_progress_root.visible = visible_state
+	if not visible_state:
+		# 归一化"未画"状态：下一次换弹从 0 重画，不会残留上一轮的满圈。
+		_reload_ring_built_progress = -1.0
+		return
+	if reload_progress_fill == null:
+		return
+	var clamped := clampf(_reload_progress, 0.0, 1.0)
+	if absf(_reload_ring_built_progress - clamped) < RELOAD_RING_REBUILD_EPSILON:
+		return
+	_reload_ring_built_progress = clamped
+	# 弧角表达进度（不是 scale.x）—— 环形填充只能按角度裁切。
+	reload_progress_fill.mesh = RING_GEOMETRY.build_arc(
+		_reload_ring_inner_m, _reload_ring_outer_m, clamped, RELOAD_RING_SEGMENTS, 0.0
+	)
 
 
 func _ensure_wearable_nodes() -> void:

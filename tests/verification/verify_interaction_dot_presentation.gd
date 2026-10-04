@@ -16,8 +16,11 @@ extends Node
 ## 7. **全场统一白点**：所有圆点色值必须一致且为白，不许按对象类型分色。
 ## 8. 按键牌是「(e) + 功能词」，功能词从 provider 的 prompt 抽；没有 `[E]` 标记的
 ##    状态文案不显示按键牌 —— 不能空口承诺「按 e 能做某事」。
-## 9. **基地设施（BaseFacility3D）没有圆点**，且它自己的黄色文字提示牌必须还能随聚焦
-##    显隐。这是那次改动被整体回退的两半，任一半失效都要红。
+## 9. **基地设施家族（BaseFacility3D 及其子类）没有圆点**，且它自己的黄色文字提示牌必须
+##    还能随聚焦显隐。这是那次改动被整体回退的两半，任一半失效都要红。
+##    ⚠️ 2026-10-04 补的子类一半：豁免清单只按「父类脚本路径相等」匹配时，
+##    `HologramExpeditionFacility3D`（99F 远征情报室中央全息平台）/ `WardrobeFacility3D`
+##    会静默漏网、重新长出圆点。控制器已改为**沿基类链**匹配，这里父类、子类各钉一条。
 ## 10. **尺寸档贴着可操作半径**（APPROACH_* 2.6 → 5.2m），与清晰度档（3.2 → 16m）
 ##     分开：站到能按 e 的距离 = 满尺寸，走出 5.2m = FAR_SCALE 常驻尺寸。两档一旦
 ##     重新合回一条，房间里就永远走不到常驻尺寸 —— 那正是「远处还是很大」的成因。
@@ -483,8 +486,11 @@ func _validate_dots(tower: TowerDescent3D, failures: Array[String]) -> void:
 	await _validate_base_facility_reverted(tower, controller, failures)
 
 
-## ⑨ 基地设施（BaseFacility3D）被整体退回原版。两半都要验 ——
+## ⑨ 基地设施（BaseFacility3D 家族）被整体退回原版。两半都要验 ——
 ## 只验一半的话，「又给它挂回圆点」或「把它的提示牌永久藏起来」都会溜过去。
+##
+## 家族要验**两层**：父类 + 至少一个真实子类。豁免早年只按 resource_path 相等匹配，
+## 子类当场漏网 —— 远征情报室的全息平台就是这么多出一个圆点的（主人 2026-10-04 指出）。
 func _validate_base_facility_reverted(
 	tower: TowerDescent3D, controller: PlayerInteractionController3D, failures: Array[String]
 ) -> void:
@@ -498,8 +504,32 @@ func _validate_base_facility_reverted(
 		"控制器的圆点豁免清单里没有 %s" % EXCLUDED_PROVIDER_SCRIPT,
 		failures
 	)
+	# 家族匹配是**沿基类链**走的，只按路径相等就够不上子类。这里静态确认那段逻辑还在
+	# （匹配带变量的写法，避免被注释里那串同名文字蒙混过去）。
+	_expect(
+		controller_source.contains("cursor.get_base_script()"),
+		"圆点豁免没有沿基类链匹配（缺 cursor.get_base_script()）—— 基地设施子类会漏网长出圆点",
+		failures
+	)
 
-	var facility := BaseFacility3D.new()
+	await _validate_facility_family_has_no_dot(
+		tower, controller, BaseFacility3D.new(), "基地设施父类", failures
+	)
+	# 真实子类：99F 远征情报室中央全息平台。它的 _ready 会 super()，所以子节点
+	# （$NameLabel / $PromptLabel）必须入树前挂好，与父类同口径。
+	await _validate_facility_family_has_no_dot(
+		tower, controller, HologramExpeditionFacility3D.new(), "远征情报室全息平台（子类）", failures
+	)
+
+
+## 一个基地设施实例入树后必须**拿不到圆点**，且自己的黄色提示牌还能随聚焦显隐。
+func _validate_facility_family_has_no_dot(
+	tower: TowerDescent3D,
+	controller: PlayerInteractionController3D,
+	facility: BaseFacility3D,
+	label: String,
+	failures: Array[String]
+) -> void:
 	facility.display_name = "单元测试设施"
 	# BaseFacility3D 用 @onready $NameLabel / $PromptLabel，所以子节点必须在入树前挂好。
 	var name_label := Label3D.new()
@@ -515,16 +545,16 @@ func _validate_base_facility_reverted(
 
 	_expect(
 		controller.get_interaction_dot_snapshot(facility).is_empty(),
-		"基地设施被挂上了圆点 —— 会与它自己的黄色文字提示牌叠成双份提示",
+		"%s被挂上了圆点 —— 会与它自己的黄色文字提示牌叠成双份提示" % label,
 		failures
 	)
 
 	# 原版行为：聚焦且玩家在范围内 → 提示牌显示；退出聚焦 → 隐藏。
 	facility.set("_player_in_range", true)
 	facility.call("set_interaction_focus", {}, true)
-	_expect(prompt_label.visible, "基地设施的文字提示牌没有随聚焦显示 —— 回退不完整", failures)
+	_expect(prompt_label.visible, "%s的文字提示牌没有随聚焦显示 —— 回退不完整" % label, failures)
 	facility.call("set_interaction_focus", {}, false)
-	_expect(not prompt_label.visible, "基地设施的文字提示牌退出聚焦后没有隐藏", failures)
+	_expect(not prompt_label.visible, "%s的文字提示牌退出聚焦后没有隐藏" % label, failures)
 
 	facility.queue_free()
 	await get_tree().process_frame

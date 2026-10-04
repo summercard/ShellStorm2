@@ -22,6 +22,10 @@ extends MeshInstance3D
 ## 例外：基地设施（BaseFacility3D）**不用这套圆点**，它保留自己的黄色文字提示牌，
 ## 由 PlayerInteractionController3D 的 DOT_EXCLUDED_PROVIDER_SCRIPTS 挡掉。
 
+## 圆环几何的唯一真源（与角色换弹环共用）。绕序、起点、淡出口径全在那里，
+## 这里只负责把半径/进度喂进去 —— 两处各画一份圆迟早漂移，且漂移是静默的。
+const RING_GEOMETRY := preload("res://src/ui/RingProgressGeometry.gd")
+
 const DOT_SEGMENTS := 40
 const RING_SEGMENTS := 48
 
@@ -44,8 +48,8 @@ const RING_INNER_RADIUS_M := 0.206
 const DISC_CORE_ALPHA := 1.0
 const DISC_RING_RATIOS := [0.62, 0.88, 1.0]
 const DISC_RING_ALPHAS := [1.0, 0.72, 0.0]
-## 圆环起点：从 12 点方向开始，顺时针推进。
-const RING_START_ANGLE := PI * 0.5
+## 圆环起点（12 点方向、顺时针推进）现由 RingProgressGeometry.START_ANGLE 拥有 ——
+## 这里不再留一份副本，免得两处角度漂移。
 
 ## 距离 → **清晰度**映射：<= NEAR 全清晰，>= FAR 只剩 FAR_ALPHA 的透明度。
 ## 这一档只管「亮不亮」和呼吸，**不再管大小** —— 大小看下面的 APPROACH_*。
@@ -491,40 +495,11 @@ func _build_disc_mesh() -> ArrayMesh:
 
 
 ## 环形进度：从 12 点起顺时针扫过 progress 比例的圆弧，末端封口。
-## 绕序同上（+Z 看顺时针）。
+## 绕序与淡出全在 RingProgressGeometry 里（+Z 看顺时针），本处不再自己画。
 func _build_ring_mesh(progress: float) -> ArrayMesh:
-	var vertices := PackedVector3Array()
-	var colors := PackedColorArray()
-	var indices := PackedInt32Array()
-	var swept := clampf(progress, 0.0, 1.0)
-	if swept <= 0.0:
-		return _make_mesh(vertices, colors, indices)
-	var drawn := maxf(1.0, ceil(float(RING_SEGMENTS) * swept))
-	for index in range(int(drawn) + 1):
-		var ratio := float(index) / drawn
-		var angle := RING_START_ANGLE - TAU * swept * ratio
-		# 起点与终点收一下 alpha，让圆环首尾自然淡出。
-		var alpha := 1.0
-		if ratio < 0.06:
-			alpha = ratio / 0.06
-		elif ratio > 0.94:
-			alpha = (1.0 - ratio) / 0.06
-		var outer := Vector3(cos(angle), sin(angle), 0.0) * RING_OUTER_RADIUS_M
-		var inner := Vector3(cos(angle), sin(angle), 0.0) * RING_INNER_RADIUS_M
-		vertices.append(outer)
-		colors.append(Color(1.0, 1.0, 1.0, alpha))
-		vertices.append(inner)
-		colors.append(Color(1.0, 1.0, 1.0, alpha))
-	var segments := int(drawn)
-	for index in range(segments):
-		var base := index * 2
-		indices.append(base)
-		indices.append(base + 3)
-		indices.append(base + 1)
-		indices.append(base)
-		indices.append(base + 2)
-		indices.append(base + 3)
-	return _make_mesh(vertices, colors, indices)
+	return RING_GEOMETRY.build_arc(
+		RING_INNER_RADIUS_M, RING_OUTER_RADIUS_M, progress, RING_SEGMENTS
+	)
 
 
 func _make_mesh(
