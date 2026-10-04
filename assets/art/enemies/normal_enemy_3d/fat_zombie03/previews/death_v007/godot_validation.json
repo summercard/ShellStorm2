@@ -1,0 +1,118 @@
+{
+	"attack_end_hold_error": 0.0,
+	"attack_idle_transition_error": 0.0000489578087581322,
+	"attack_impact_hold_error": 0.000000261514315980094,
+	"autoplay": "idle",
+	"bone_count": 66,
+	"clips": {
+		"alert": {
+			"length": 0.600000023841858,
+			"loop_error": 0.300435364246368,
+			"loop_mode": 0,
+			"motion_amplitude": 0.209306955337524,
+			"passed": true,
+			"tracks": 25
+		},
+		"attack": {
+			"length": 2.5,
+			"loop_error": 0.0000000149011611938477,
+			"loop_mode": 0,
+			"motion_amplitude": 1.80798029899597,
+			"passed": true,
+			"tracks": 25
+		},
+		"awaken": {
+			"length": 1.20000004768372,
+			"loop_error": 0.000000000000035527136788005,
+			"loop_mode": 0,
+			"motion_amplitude": 0.311414241790771,
+			"passed": true,
+			"tracks": 25
+		},
+		"dead": {
+			"length": 2.59999990463257,
+			"loop_error": 1.74414777755737,
+			"loop_mode": 0,
+			"motion_amplitude": 1.78722608089447,
+			"passed": true,
+			"tracks": 25
+		},
+		"hit_light": {
+			"length": 0.300000011920929,
+			"loop_error": 0.0,
+			"loop_mode": 0,
+			"motion_amplitude": 0.0238603428006172,
+			"passed": true,
+			"tracks": 5
+		},
+		"hurt": {
+			"length": 0.800000011920929,
+			"loop_error": 0.000000273142802598159,
+			"loop_mode": 0,
+			"motion_amplitude": 0.29801669716835,
+			"passed": true,
+			"tracks": 25
+		},
+		"idle": {
+			"length": 3.20000004768372,
+			"loop_error": 0.0000000842936955791629,
+			"loop_mode": 1,
+			"motion_amplitude": 0.0652316063642502,
+			"passed": true,
+			"tracks": 25
+		},
+		"move_start": {
+			"length": 0.400000005960464,
+			"loop_error": 0.632936954498291,
+			"loop_mode": 0,
+			"motion_amplitude": 0.591913223266602,
+			"passed": true,
+			"tracks": 25
+		},
+		"move_stop": {
+			"length": 0.600000023841858,
+			"loop_error": 0.632936954498291,
+			"loop_mode": 0,
+			"motion_amplitude": 0.3447285592556,
+			"passed": true,
+			"tracks": 25
+		},
+		"running": {
+			"length": 1.20000004768372,
+			"loop_error": 0.0000000730004856563937,
+			"loop_mode": 1,
+			"motion_amplitude": 1.2545074224472,
+			"passed": true,
+			"tracks": 25
+		},
+		"turn_l": {
+			"length": 0.800000011920929,
+			"loop_error": 0.0,
+			"loop_mode": 0,
+			"motion_amplitude": 0.269004613161087,
+			"passed": true,
+			"tracks": 25
+		},
+		"turn_r": {
+			"length": 0.800000011920929,
+			"loop_error": 0.0,
+			"loop_mode": 0,
+			"motion_amplitude": 0.274262875318527,
+			"passed": true,
+			"tracks": 25
+		},
+		"walking": {
+			"length": 2.0,
+			"loop_error": 0.0,
+			"loop_mode": 1,
+			"motion_amplitude": 0.917272746562958,
+			"passed": true,
+			"tracks": 25
+		}
+	},
+	"dead_hold_error": 0.000000273142802598159,
+	"hit_light_upper_only": true,
+	"move_start_walking_error": 0.000000639362269794219,
+	"move_stop_idle_error": 0.00000122153176107531,
+	"passed": true
+}

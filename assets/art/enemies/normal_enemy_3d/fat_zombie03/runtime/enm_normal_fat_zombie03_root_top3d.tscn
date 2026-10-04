@@ -1,18 +1,26 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb" id="1"]
 
+[ext_resource type="Script" path="res://assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/fat_zombie03_formal_visual.gd" id="2"]
+
 [node name="FatZombie03" type="Node3D"]
+script = ExtResource("2")
 metadata/asset_id = "ENM-NORMAL-FAT-ZOMBIE03"
 metadata/content_id = "fat_zombie03"
 metadata/source_number = "03"
-metadata/asset_version = "v002"
+metadata/asset_version = "v011"
 metadata/presentation_only = true
 metadata/collision_owner = "Enemy3D"
 metadata/godot_forward = "-Z"
-metadata/validation_status = "model_rig_verified_animation_design_only"
+metadata/validation_status = "runtime_verified"
 metadata/game_height_m = 2.2
 metadata/base_display_multiplier = 0.7
 metadata/skeleton_id = "SKEL-FAT-ZOMBIE03-002"
 
 [node name="Visual" parent="." instance=ExtResource("1")]
+
+[node name="AnimationPlayer" parent="Visual"]
+autoplay = ""
+
+[editable path="Visual"]

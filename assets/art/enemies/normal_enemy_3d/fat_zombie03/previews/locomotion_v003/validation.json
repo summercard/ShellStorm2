@@ -1,0 +1,65 @@
+{
+  "clips": {
+    "idle": {
+      "duration_s": 3.2,
+      "fps": 30,
+      "frame_range": [
+        0,
+        96
+      ],
+      "loop": true,
+      "two_cycle_samples": 385,
+      "min_sole_z_m": -3.0640512704849243e-06,
+      "max_both_feet_clearance_m": 7.757917046546936e-08,
+      "max_foot_lift_m": 2.1190994630160274e-07,
+      "support_trajectory_error_m": 0,
+      "root_error": 1.4210854715202004e-14,
+      "loop_error": 0,
+      "finger_local_rotation_error": 0
+    },
+    "walking": {
+      "duration_s": 2.0,
+      "fps": 30,
+      "frame_range": [
+        0,
+        60
+      ],
+      "loop": true,
+      "two_cycle_samples": 241,
+      "min_sole_z_m": -8.028311422094702e-05,
+      "max_both_feet_clearance_m": 2.1061767370156302e-07,
+      "max_foot_lift_m": 0.060000147670507424,
+      "support_trajectory_error_m": 8.093267679221139e-05,
+      "root_error": 1.4210854715202004e-14,
+      "loop_error": 0,
+      "finger_local_rotation_error": 0
+    },
+    "running": {
+      "duration_s": 1.2,
+      "fps": 30,
+      "frame_range": [
+        0,
+        36
+      ],
+      "loop": true,
+      "two_cycle_samples": 145,
+      "min_sole_z_m": -0.00040905532659962773,
+      "max_both_feet_clearance_m": 2.0586447249115734e-07,
+      "max_foot_lift_m": 0.08982887715101241,
+      "support_trajectory_error_m": 0.004204237401485511,
+      "root_error": 1.4210854715202004e-14,
+      "loop_error": 0,
+      "finger_local_rotation_error": 0
+    }
+  },
+  "skeleton_signature": "e5d43d75f0b15522430838db1242c3fc2bd586c8b6dae11367ca0d60146bb1db",
+  "geometry_weights_identical": true,
+  "model_skeleton_identical": true,
+  "walking_reference_speed_m_s": 0.3,
+  "running_reference_speed_m_s": 0.6,
+  "authored_actions": [
+    "idle",
+    "walking",
+    "running"
+  ]
+}

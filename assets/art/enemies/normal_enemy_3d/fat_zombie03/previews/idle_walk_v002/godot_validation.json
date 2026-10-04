@@ -1,0 +1,17 @@
+{
+	"animation_list": [
+		"idle",
+		"walking"
+	],
+	"animation_player_path": "/root/FatZombie03/Visual/AnimationPlayer",
+	"autoplay": "idle",
+	"bone_count": 66,
+	"clip": "walking",
+	"length": 2.0,
+	"loop_error": 0.0,
+	"loop_mode": 1,
+	"motion_amplitude": 0.917272746562958,
+	"passed": true,
+	"root_pose": "[X: (-1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (-0.0, 0.0, -1.0), O: (0.0, 0.0, 0.0)]",
+	"tracks": 23
+}

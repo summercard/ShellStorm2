@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "asset_id": "ENM-NORMAL-FAT-ZOMBIE03",
+  "content_id": "fat_zombie03",
+  "source_number": "03",
+  "version": "v009",
+  "status": "validated",
+  "validation_scope": "all_13_clips_source_and_godot_verified; gameplay_binding_pending",
+  "model_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v002.blend",
+  "animation_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+  "skeleton_signature": "e5d43d75f0b15522430838db1242c3fc2bd586c8b6dae11367ca0d60146bb1db",
+  "clips": [
+    {
+      "name": "idle",
+      "duration_s": 3.2,
+      "fps": 30,
+      "frame_range": [
+        0,
+        96
+      ],
+      "loop": true,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "walking",
+      "duration_s": 2.0,
+      "fps": 30,
+      "frame_range": [
+        0,
+        60
+      ],
+      "loop": true,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "running",
+      "duration_s": 1.2,
+      "fps": 30,
+      "frame_range": [
+        0,
+        36
+      ],
+      "loop": true,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "attack",
+      "duration_s": 2.5,
+      "fps": 30,
+      "frame_range": [
+        0,
+        75
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "hurt",
+      "duration_s": 0.8,
+      "fps": 30,
+      "frame_range": [
+        0,
+        24
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "dead",
+      "duration_s": 2.6,
+      "fps": 30,
+      "frame_range": [
+        0,
+        78
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "awaken",
+      "duration_s": 1.2,
+      "fps": 30,
+      "frame_range": [
+        0,
+        36
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "alert",
+      "duration_s": 0.6,
+      "fps": 30,
+      "frame_range": [
+        0,
+        18
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "turn_l",
+      "duration_s": 0.8,
+      "fps": 30,
+      "frame_range": [
+        0,
+        24
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "turn_r",
+      "duration_s": 0.8,
+      "fps": 30,
+      "frame_range": [
+        0,
+        24
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "move_start",
+      "duration_s": 0.4,
+      "fps": 30,
+      "frame_range": [
+        0,
+        12
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "move_stop",
+      "duration_s": 0.6,
+      "fps": 30,
+      "frame_range": [
+        0,
+        18
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    },
+    {
+      "name": "hit_light",
+      "duration_s": 0.3,
+      "fps": 30,
+      "frame_range": [
+        0,
+        9
+      ],
+      "loop": false,
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/validation.json",
+      "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/death_v007/godot_validation.json"
+    }
+  ],
+  "missing_clips": [],
+  "files": [
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v002.blend",
+      "sha256": "4771ee4f04b17d272af8c77b256eb451051ffc05b46b770ec9b6750b540e8186"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/textures/enm_normal_fat_zombie03_basecolor_v002.png",
+      "sha256": "019f80e6a4e38253c730c1385734030b9a1ca172d6ed86abc102473e42d5913c"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb",
+      "sha256": "d2431a02091f9400ba774ceb8f100879825e27b3493836ee4bab321b3b636018"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
+      "sha256": "fab547fa759ffcfb27e654a3bb1e0cc6dcf2c477b71a08d3bb237e3a776879d1"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb.import",
+      "sha256": "819fb8e9ea0e47edbf9df6d4391e0a0a48d602cbf9dc2709dc9210e032a7f6dc"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_post_import.gd",
+      "sha256": "697beabdd342f1c791c73ce7eaa53a1baa9b59ca474be143add4fabd8faa511c"
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v007.blend",
+      "sha256": "f662fdfe011ab4878c37ab9bc4fd586a68723a33c1b1085234d5078e36c592ab"
+    }
+  ],
+  "source_zip": "I:/工作项目/桌面文件备份/僵尸_项目素材_20260922/胖子僵尸.zip",
+  "source_zip_sha256": "89a36a545512fc0de9ef63d4fd034fcdb40177b86da1c6b54792995f10ee5db5",
+  "consumer": "independent PackedScene only; Enemy3D not bound",
+  "rollback": "source model v002 retained; _scratch/fat_zombie03/death_v007_backup contains pre-attack GLB/import/ledger/baseline/transfer",
+  "notes": "编号03；v009重做dead：解除脚底锁定、整条腿随身体前倒，F34落地、F40约10cm主回弹、F52约2cm余震，F60—78停稳。其余12段曲线原样保留。13段导入专项验证，玩法适配待接入。模型v002/动作v007。",
+  "skeleton_id": "SKEL-FAT-ZOMBIE03-002",
+  "planned_clips": [
+    {
+      "name": "idle",
+      "fps": 30,
+      "last_frame": 96,
+      "duration_s": 3.2,
+      "loop": true,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "walking",
+      "fps": 30,
+      "last_frame": 60,
+      "duration_s": 2.0,
+      "loop": true,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "running",
+      "fps": 30,
+      "last_frame": 36,
+      "duration_s": 1.2,
+      "loop": true,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "attack",
+      "fps": 30,
+      "last_frame": 75,
+      "duration_s": 2.5,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "hurt",
+      "fps": 30,
+      "last_frame": 24,
+      "duration_s": 0.8,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "dead",
+      "fps": 30,
+      "last_frame": 78,
+      "duration_s": 2.6,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "awaken",
+      "fps": 30,
+      "last_frame": 36,
+      "duration_s": 1.2,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "alert",
+      "fps": 30,
+      "last_frame": 18,
+      "duration_s": 0.6,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "turn_l",
+      "fps": 30,
+      "last_frame": 24,
+      "duration_s": 0.8,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "turn_r",
+      "fps": 30,
+      "last_frame": 24,
+      "duration_s": 0.8,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "move_start",
+      "fps": 30,
+      "last_frame": 12,
+      "duration_s": 0.4,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "move_stop",
+      "fps": 30,
+      "last_frame": 18,
+      "duration_s": 0.6,
+      "loop": false,
+      "status": "authored_exported_verified"
+    },
+    {
+      "name": "hit_light",
+      "fps": 30,
+      "last_frame": 9,
+      "duration_s": 0.3,
+      "loop": false,
+      "status": "authored_exported_verified"
+    }
+  ],
+  "action_design": {
+    "path": "docs/v0.1/design/胖子僵尸03动作设计.md",
+    "revision": "r7",
+    "sha256": "28c7bb637bfc6298605df02f9d49a846a8cf80ea554f118ce16da57db11ffe93",
+    "character_count": 4596
+  },
+  "duplicate_gate": {
+    "classification": "version_increment",
+    "passed": true,
+    "report": "outputs\\asset_guard\\ENM-NORMAL-FAT-ZOMBIE03_fat_zombie03.json",
+    "same_asset_id_count": 0,
+    "identical_registered_file_count": 0
+  }
+}

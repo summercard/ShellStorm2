@@ -1,0 +1,16 @@
+{
+  "skeleton_signature": "e5d43d75f0b15522430838db1242c3fc2bd586c8b6dae11367ca0d60146bb1db",
+  "clips": {
+    "dead": {
+      "duration_s": 2.6,
+      "loop": false,
+      "samples": 157,
+      "min_mesh_z_m": 0.001399877667427063,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.11765313148498535
+    }
+  },
+  "other_twelve_actions_unchanged": true,
+  "bone_scale_one": true,
+  "hit_light_upper_body_only": true
+}

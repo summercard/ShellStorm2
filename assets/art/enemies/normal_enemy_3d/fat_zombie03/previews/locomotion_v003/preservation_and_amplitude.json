@@ -1,0 +1,17 @@
+{
+  "idle_preservation_error": 0.0,
+  "walking_preservation_error": 0.0,
+  "running_hip_range_m": [
+    0.07999999821186066,
+    0.0,
+    0.06000000238418579
+  ],
+  "running_head_range_m": [
+    0.158979132771492,
+    0.046990081667900085,
+    0.06644713878631592
+  ],
+  "running_min_hand_span_m": 1.9781842947006223,
+  "running_min_elbow_span_m": 1.703514790534973,
+  "bone_scale_error": 0
+}

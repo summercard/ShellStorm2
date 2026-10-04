@@ -1,0 +1,42 @@
+{
+	"attack_end_hold_error": 0.724137127399445,
+	"attack_idle_transition_error": 0.0000489578087581322,
+	"attack_impact_hold_error": 0.000000261514315980094,
+	"autoplay": "idle",
+	"bone_count": 66,
+	"clips": {
+		"attack": {
+			"length": 2.5,
+			"loop_error": 0.0,
+			"loop_mode": 1,
+			"motion_amplitude": 1.50061964988709,
+			"passed": false,
+			"tracks": 23
+		},
+		"idle": {
+			"length": 3.20000004768372,
+			"loop_error": 0.0000000842936955791629,
+			"loop_mode": 1,
+			"motion_amplitude": 0.0652316063642502,
+			"passed": true,
+			"tracks": 23
+		},
+		"running": {
+			"length": 1.20000004768372,
+			"loop_error": 0.0000000730004856563937,
+			"loop_mode": 1,
+			"motion_amplitude": 1.2545074224472,
+			"passed": true,
+			"tracks": 23
+		},
+		"walking": {
+			"length": 2.0,
+			"loop_error": 0.0,
+			"loop_mode": 1,
+			"motion_amplitude": 0.917272746562958,
+			"passed": true,
+			"tracks": 23
+		}
+	},
+	"passed": false
+}

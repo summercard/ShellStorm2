@@ -1,0 +1,128 @@
+import bpy, math, json, hashlib, shutil
+from pathlib import Path
+from mathutils import Vector, Quaternion, Matrix
+pkg=Path(__file__).resolve().parents[2]; project=pkg.parents[4]
+qa=pkg/'previews/death_v007';qa.mkdir(parents=True,exist_ok=True)
+model=pkg/'source/animation/enm_normal_fat_zombie03_animation_v006.blend'
+output=Path(__file__).parent/'enm_normal_fat_zombie03_animation_v007.blend'
+glb=pkg/'components/enm_normal_fat_zombie03_visual_top3d.glb'
+backup=project/'_scratch/fat_zombie03/death_v007_backup';backup.mkdir(parents=True,exist_ok=True)
+if not (backup/glb.name).exists():shutil.copy2(glb,backup/glb.name)
+bpy.ops.wm.open_mainfile(filepath=str(model))
+a=next(o for o in bpy.context.scene.objects if o.type=='ARMATURE');m=next(o for o in bpy.context.scene.objects if o.type=='MESH');s=bpy.context.scene
+rest={b.name:b.matrix_local.copy() for b in a.data.bones};heads={b.name:b.head_local.copy() for b in a.data.bones};tails={b.name:b.tail_local.copy() for b in a.data.bones}
+def sig():return hashlib.sha256(json.dumps([(b.name,b.parent.name if b.parent else None,[round(x,6) for row in b.matrix_local for x in row]) for b in a.data.bones]).encode()).hexdigest()
+original_sig=sig(); original_geo=hashlib.sha256(json.dumps([[list(v.co),[(g.group,g.weight) for g in v.groups]] for v in m.data.vertices]).encode()).hexdigest()
+assert len(bpy.data.actions)==13
+for pb in a.pose.bones:pb.matrix_basis=Matrix.Identity(4)
+def rx(deg):return Quaternion((1,0,0),math.radians(deg))
+def ry(deg):return Quaternion((0,1,0),math.radians(deg))
+def aim(n,d):return (tails[n]-heads[n]).normalized().rotation_difference(Vector(d).normalized())
+def curve(f,keys):
+ f=f%96
+ for (fa,va),(fb,vb) in zip(keys,keys[1:]):
+  if f<=fb:
+   t=(f-fa)/(fb-fa);u=t*t*t*(t*(t*6-15)+10);return va+(vb-va)*u
+ return keys[-1][1]
+foot_ids={}
+for side in ['L','R']:
+ ids={g.index for g in m.vertex_groups if g.name in [side+'_Foot',side+'_ToeBase',side+'_Toe_End']}
+ foot_ids[side]=[v.index for v in m.data.vertices if v.co.z<.25 and sum(g.weight for g in v.groups if g.group in ids)>.45]
+ assert len(foot_ids[side])>10
+def eval_points():
+ a.update_tag();bpy.context.view_layer.update();ev=m.evaluated_get(bpy.context.evaluated_depsgraph_get());em=ev.to_mesh();pts=[v.co.copy() for v in em.vertices];ev.to_mesh_clear();return pts
+def apply(Q,hip):
+ for pb in a.pose.bones:
+  n=pb.name;par=pb.parent.name if pb.parent else None;pb.rotation_mode='QUATERNION'
+  pb.rotation_quaternion=rest[n].to_quaternion().inverted()@(Q[par].inverted() if par else Quaternion())@Q[n]@rest[n].to_quaternion()
+  pb.location=(0,0,0);pb.scale=(1,1,1)
+ a.pose.bones['Hip'].location=rest['Hip'].to_3x3().inverted()@(hip-heads['Hip']);a.update_tag();bpy.context.view_layer.update()
+
+def rz(d):return Quaternion((0,0,1),math.radians(d))
+def val(f,keys):
+ for (fa,va),(fb,vb) in zip(keys,keys[1:]):
+  if f<=fb:
+   t=max(0,min(1,(f-fa)/(fb-fa)));t=t*t*(3-2*t);return va+(vb-va)*t
+ return keys[-1][1]
+def snapshot(clip,f):
+ a.animation_data.action=bpy.data.actions[clip];s.frame_set(int(f),subframe=f%1);bpy.context.view_layer.update()
+ return ({b.name:(b.matrix@rest[b.name].inverted()).to_quaternion() for b in a.pose.bones},a.pose.bones['Hip'].head.copy())
+base,basehip=snapshot('idle',0);walk,walkhip=snapshot('walking',0)
+ends={'dead':78}
+preserved={n:[[(fc.data_path,fc.array_index),[(tuple(k.co),k.interpolation) for k in fc.keyframe_points]] for fc in bpy.data.actions[n].fcurves] for n in bpy.data.actions.keys() if n!='dead'}
+a.animation_data.action=None;bpy.data.actions.remove(bpy.data.actions['dead'])
+def makepose(name,f):
+ # No foot pinning: the complete leg chain participates in the fall from F8.
+ fall=val(f,[(0,0),(8,.06),(18,.28),(28,.72),(34,1),(78,1)])
+ rebound=val(f,[(0,0),(34,0),(40,1),(47,0),(52,.20),(60,0),(78,0)])
+ lag=val(f,[(0,0),(22,0),(34,1),(42,.65),(49,.25),(60,0),(78,0)])
+ Q={n:(rx(-88*fall+7*rebound)@q if n!='Root' else q.copy()) for n,q in base.items()}
+ hip=basehip+Vector((0,.70*fall,-.65*fall))
+ Q['Spine02']=rx(-88*fall+4*rebound)@base['Spine02']
+ Q['Neck']=rx(-88*fall+11*rebound)@base['Neck'];Q['Head']=rx(-88*fall+14*rebound)@base['Head'];Q['HeadTop_End']=Q['Head']
+ for side,sign in [('L',-1),('R',1)]:
+  Q[side+'_Thigh']=ry(sign*10*fall)@rx(-90*fall-12*lag)@base[side+'_Thigh']
+  Q[side+'_Calf']=ry(sign*13*fall)@rx(-90*fall-42*lag)@base[side+'_Calf']
+  for n in [side+'_Foot',side+'_ToeBase',side+'_Toe_End']:Q[n]=ry(sign*13*fall)@rx(-90*fall-42*lag)@base[n]
+  reach=val(f,[(0,0),(12,.2),(28,1),(34,1),(60,.85),(78,.85)])
+  Q[side+'_Upperarm']=base[side+'_Upperarm'].slerp(aim(side+'_Upperarm',(sign*.5,.85,-.15)),reach)
+  Q[side+'_Forearm']=base[side+'_Forearm'].slerp(aim(side+'_Forearm',(sign*.35,.9,-.12)),reach)
+  Q[side+'_Hand']=Q[side+'_Forearm'].copy()
+  for b in a.data.bones:
+   if b.name.startswith(side+'_') and any(z in b.name for z in ['Thumb','Index','Middle','Pinky','Ring']):Q[b.name]=Q[b.parent.name].copy()
+ apply(Q,hip);pts=eval_points()
+ # Ground contact follows the body, never an ankle target; impact lifts whole mass.
+ hip.z+=.002-min(v.z for v in pts)+.10/.7*rebound
+ apply(Q,hip)
+ return Q,hip
+reports={};s.render.fps=30
+for name,end in ends.items():
+ a.animation_data.action=None;act=bpy.data.actions.new(name);act.use_fake_user=True;a.animation_data.action=act;act['loop']=False;act['duration_seconds']=end/30
+ for step in range(end*4+1):
+  f=step/4;s.frame_set(int(f),subframe=f%1);makepose(name,f)
+  for pb in a.pose.bones:
+   if name=='hit_light' and pb.name not in ['Waist','Spine01','Spine02','Neck','Head','HeadTop_End']:continue
+   pb.keyframe_insert('rotation_quaternion',frame=f,group=pb.name)
+   if pb.name=='Hip':pb.keyframe_insert('location',frame=f,group=pb.name)
+ for fc in act.fcurves:
+  fc.extrapolation='CONSTANT'
+  for k in fc.keyframe_points:k.interpolation='LINEAR'
+ minimum=10;rooterr=0;last=None;motion=0
+ for k in range(end*2+1):
+  s.frame_set(k//2,subframe=k%2/2);pts=eval_points();minimum=min(minimum,min(v.z*.7 for v in pts));rooterr=max(rooterr,max(abs(a.pose.bones['Root'].matrix_basis[i][j]-(1 if i==j else 0)) for i in range(4) for j in range(4)))
+  pose=[x for b in a.pose.bones for row in b.matrix for x in row]
+  if last:motion=max(motion,max(abs(x-y) for x,y in zip(pose,last)))
+  last=pose
+ assert rooterr<1e-6 and minimum>-.005,(name,minimum,rooterr)
+ reports[name]={'duration_s':end/30,'loop':False,'samples':end*2+1,'min_mesh_z_m':minimum,'root_error':rooterr,'max_half_frame_change':motion}
+for n,before in preserved.items():assert before==[[(fc.data_path,fc.array_index),[(tuple(k.co),k.interpolation) for k in fc.keyframe_points]] for fc in bpy.data.actions[n].fcurves]
+assert sig()==original_sig
+report={'skeleton_signature':sig(),'clips':reports,'other_twelve_actions_unchanged':True,'bone_scale_one':all(abs(v-1)<1e-6 for b in a.pose.bones for v in b.scale),'hit_light_upper_body_only':True}
+a.animation_data.action=bpy.data.actions['dead'];s.frame_start=0;s.frame_end=78;s.frame_set(60);bpy.context.preferences.filepaths.save_version=0
+bpy.ops.wm.save_as_mainfile(filepath=str(output))
+bpy.ops.object.select_all(action='DESELECT');a.select_set(True);m.select_set(True)
+bpy.ops.export_scene.gltf(filepath=str(glb),export_format='GLB',use_selection=True,export_animations=True,export_animation_mode='ACTIONS',export_frame_range=False,export_force_sampling=True,export_yup=True)
+# Keep the exported light-hit clip upper-body-only, including on importers
+# which unify sampled armature tracks across actions.
+import struct
+raw=glb.read_bytes();jn=struct.unpack_from('<I',raw,12)[0];doc=json.loads(raw[20:20+jn]);body=raw[20+jn:]
+light=next(c for c in doc['animations'] if c['name']=='hit_light');allowed={'Waist','Spine01','Spine02','Neck','Head','HeadTop_End'}
+light['channels']=[c for c in light['channels'] if doc['nodes'][c['target']['node']].get('name') in allowed]
+blob=json.dumps(doc,separators=(',',':')).encode();blob+=b' '*((-len(blob))%4)
+glb.write_bytes(struct.pack('<III',0x46546c67,2,20+len(blob)+len(body))+struct.pack('<I4s',len(blob),b'JSON')+blob+body)
+(qa/'validation.json').write_text(json.dumps(report,indent=2),encoding='utf-8');print('COMPLETE_SOURCE_OK',json.dumps(report),flush=True)
+s.render.engine='BLENDER_EEVEE_NEXT';s.render.resolution_x=480;s.render.resolution_y=480;s.render.resolution_percentage=100
+if not s.world:s.world=bpy.data.worlds.new('PreviewWorld')
+bpy.ops.mesh.primitive_plane_add(size=200,location=(0,0,-.008))
+ground=bpy.context.object;mat=bpy.data.materials.new('PreviewGround');mat.diffuse_color=(.09,.10,.11,1);ground.data.materials.append(mat)
+s.world.color=(.16,)*3
+for loc in [(3,4,5),(-3,-1,4)]:
+ bpy.ops.object.light_add(type='AREA',location=loc);bpy.context.object.data.energy=500;bpy.context.object.data.size=4
+bpy.ops.object.camera_add();cam=bpy.context.object;s.camera=cam;cam.data.type='ORTHO';cam.data.ortho_scale=6.4
+for name,end in ends.items():
+ a.animation_data.action=bpy.data.actions[name]
+ for view,pos in [('three_quarter',(4,7,4)),('side',(7,0,2))]:
+  cam.location=pos;cam.rotation_euler=(Vector((0,.7,1))-cam.location).to_track_quat('-Z','Y').to_euler()
+  for f in sorted(set(range(0,end+1,2))|{end}):
+   s.frame_set(f);s.render.filepath=str(qa/f'{name}_{view}_{f:03d}.png');bpy.ops.render.render(write_still=True)
+print('COMPLETE_PREVIEWS_OK',flush=True)

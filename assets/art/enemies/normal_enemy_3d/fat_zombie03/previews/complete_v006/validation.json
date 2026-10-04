@@ -1,0 +1,80 @@
+{
+  "skeleton_signature": "e5d43d75f0b15522430838db1242c3fc2bd586c8b6dae11367ca0d60146bb1db",
+  "clips": {
+    "hurt": {
+      "duration_s": 0.8,
+      "loop": false,
+      "samples": 49,
+      "min_mesh_z_m": -2.0689392954409414e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.09337465465068817
+    },
+    "dead": {
+      "duration_s": 2.6,
+      "loop": false,
+      "samples": 157,
+      "min_mesh_z_m": 0.001399943185970187,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.9940486252307892
+    },
+    "awaken": {
+      "duration_s": 1.2,
+      "loop": false,
+      "samples": 73,
+      "min_mesh_z_m": -2.480143564298487e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.03512578457593918
+    },
+    "alert": {
+      "duration_s": 0.6,
+      "loop": false,
+      "samples": 37,
+      "min_mesh_z_m": -2.881195314330398e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.06000863015651703
+    },
+    "turn_l": {
+      "duration_s": 0.8,
+      "loop": false,
+      "samples": 49,
+      "min_mesh_z_m": -2.1551493603055858e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.0885571539402008
+    },
+    "turn_r": {
+      "duration_s": 0.8,
+      "loop": false,
+      "samples": 49,
+      "min_mesh_z_m": -1.6852281987667083e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.08804267644882202
+    },
+    "move_start": {
+      "duration_s": 0.4,
+      "loop": false,
+      "samples": 25,
+      "min_mesh_z_m": -1.9972559073266893e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.06014934182167053
+    },
+    "move_stop": {
+      "duration_s": 0.6,
+      "loop": false,
+      "samples": 37,
+      "min_mesh_z_m": -2.054836386378156e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.053369879722595215
+    },
+    "hit_light": {
+      "duration_s": 0.3,
+      "loop": false,
+      "samples": 19,
+      "min_mesh_z_m": -1.1180817978129197e-07,
+      "root_error": 2.842170943040401e-14,
+      "max_half_frame_change": 0.02538585662841797
+    }
+  },
+  "original_four_actions_unchanged": true,
+  "bone_scale_one": true,
+  "hit_light_upper_body_only": true
+}

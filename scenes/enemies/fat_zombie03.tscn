@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn" id="1"]
+
+[node name="FatZombie03" instance=ExtResource("1")]
+enemy_kind = "fat_zombie03"

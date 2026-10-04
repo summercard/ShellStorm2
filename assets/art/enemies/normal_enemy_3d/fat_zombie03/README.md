@@ -1,13 +1,15 @@
 # 胖子僵尸03
 
-AssetID：ENM-NORMAL-FAT-ZOMBIE03。源编号：03。内容标识：fat_zombie03。
+AssetID `ENM-NORMAL-FAT-ZOMBIE03`，源编号03，调用ID `fat_zombie03`。当前v011，模型/骨架/512贴图、13动画与Enemy3D共用12态正式接入。
 
-当前版本v002：从原始FBX重建并修正连接骨重复变换；36根项目核心骨+30根保留附加骨，共66骨。新增无父级Root、Hip挂Root；全部蒙皮权重保留。模型源高3.142857m，按0.70且kind/variant=1展示为2.2m；脚底0，Blender+Y朝前，根Scale=1。颜色贴图512×512。v001仅作历史保留，存在骨架尺寸缺陷，不作为可用回退。
+模型母版 `source/model/enm_normal_fat_zombie03_model_v003.blend`；动作母版 `source/animation/enm_normal_fat_zombie03_animation_v008.blend`。2867顶点、5690三角、1材质、66骨（36核心+30附加）；Root无父级、Hip挂Root，对象Scale=1。源高3.142857米×0.7=游戏高2.2米。独立骨架签名，不直接共享其他怪物Action。v001骨架有尺寸缺陷，只保留历史。
 
-骨名及Root契约已修正，骨架签名独立，不能直接声称可共享其他怪物Action。头、左前臂、右小腿15°旋转对照原始绑定，误差小于0.000003m，局部探针无无关顶点移动；源重开与GLB内嵌512贴图复核通过。**动画尚未制作**：六段必需和七段补充动作已写成设计，尚缺独立动作母版、剪辑与状态绑定，未投放游戏怪物池。
+纯视觉包 `runtime/enm_normal_fat_zombie03_root_top3d.tscn`无碰撞/AI/伤害；`fat_zombie03_formal_visual.gd`仅采样导入动作。实体 `res://scenes/enemies/fat_zombie03.tscn`继承共用Enemy3D。MonsterInjector固定波次/触发盒按ID调用，掉落与倍率沿用共用路径。
 
-Godot4.6.3实际工程复核66骨、36核心骨齐全、Root与Hip父子关系、512贴图、游戏高度2.2m、0动作及0碰撞。AI/碰撞/HP/伤害/掉落继续归Enemy3D；本包未修改玩法。设计提出的厚血和慢速参数尚未接入配置。
+基准生命696、伤害19，巡逻0.30/追击0.60米每秒。前摇1.2秒、拍合一次结算、收势1.3秒；F30锁朝向，F36命中须1.55米内、前向半角60度且无墙阻挡。轻击上半身混合，重击硬直0.8秒。死亡立即清碰撞/AI组，原缩放播放2.6秒后回收。
 
-当前模型：source/model/enm_normal_fat_zombie03_model_v002.blend；512贴图：同目录textures/enm_normal_fat_zombie03_basecolor_v002.png。v002预览在previews/；审计在source/model/model_audit_v002.json；中转记录在runtime/character_transfer_ledger.json。
+idle/walking/running循环；其他10段单次。巡逻走路，追击/搜索/归位跑步；苏醒、起停、原地转身按状态和朝向触发。状态切换0.1秒导入姿势混合，攻击连续采样。玩法根位移/yaw归Enemy3D。腹部BellyGroundCompression死亡接地时压扁/展开，回弹时部分恢复，非死亡复位零；是离线表现，不是软体物理。hit_light经post_import去除默认下半身轨道，局部替换，不是加法差量。
 
-设计唯一主源：docs/v0.1/design/胖子僵尸03动作设计.md；登记到docs/v0.1/design/怪物设计.md。记录见docs/v0.1/development/2026-10-03_fat_zombie03_rig_and_action_design.md。
+设计主源 `docs/v0.1/design/胖子僵尸03动作设计.md`及`胖子僵尸03运行配置.md`；源审计、专项152项、负向对照、真实Forward+四图在`outputs/fat_zombie03_integration/`。验收 `tests/verification/verify_fat_zombie03.tscn`；可玩预览 `tests/verification/preview_fat_zombie03.tscn`（R重生/K死亡）。
+
+历史预览 `previews/locomotion_v003/`、`attack_v005/`、`complete_v006/`、`death_v007/`、`belly_v008/`只代表当时版本。此怪已按用户指令接替壳甲卫兵的远征盒、随机池及主题池；专属脚步/拍合新音效未制作。
