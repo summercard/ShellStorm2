@@ -1,67 +1,63 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://cch5281r1e5y"]
 
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_layout_edit.tscn" id="reference"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_01.tscn" id="chunk_01"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_02.tscn" id="chunk_02"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_03.tscn" id="chunk_03"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_04.tscn" id="chunk_04"]
-[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_05.tscn" id="chunk_05"]
 [ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_ground_500x500.tscn" id="ground"]
+[ext_resource type="PackedScene" uid="uid://b8bhdm38xw6cm" path="res://scenes/open_world_layout_edit/open_world_layout_edit.tscn" id="reference"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_30x30.tscn" id="square_30"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_60x60.tscn" id="square_60"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_100x100.tscn" id="square_100"]
 
-[node name="open_world_chunk_layout_edit" instance=ExtResource("reference")]
-metadata/purpose = "5个楼房区块（200栋）+1个独立500x500地表摆位；固定原参考场景；未替换正式景观"
-metadata/auto_sync = false
+[node name="open_world_chunk_layout_edit" unique_id=1390806617 instance=ExtResource("reference")]
+metadata/purpose = "3种正方形楼房模板（30x30、60x60、100x100）+1个独立500x500地表摆位；固定原参考场景；未替换正式景观"
 metadata/snapshot_only = true
 metadata/writeback_allowed = false
-metadata/chunk_count = 5
+metadata/chunk_count = 3
 metadata/ground_count = 1
-metadata/layout_component_count = 6
-metadata/building_count = 200
-metadata/ground_world_bounds = AABB(-246.249687, -80.2, -290.770721, 500, 0.2, 500)
+metadata/layout_component_count = 4
+metadata/building_count = 37
+metadata/ground_world_bounds = AABB(-246.24968, -80.2, -290.77072, 500, 0.2, 500)
 metadata/cloud_handoff = "手调后只读采集实际世界AABB交主代理；本轮不改云"
 metadata/formal_landscape_source = "res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn"
 
-[node name="Tower2" parent="."]
-metadata/_edit_lock_ = true
+[node name="Tower2" parent="." index="1" unique_id=43542813]
 metadata/writeback_allowed = false
+metadata/_edit_lock_ = true
 metadata/purpose = "固定参照，本轮只手调五区块"
 
-[node name="Tower3" parent="."]
-metadata/_edit_lock_ = true
+[node name="Tower3" parent="." index="2" unique_id=361880605]
 metadata/writeback_allowed = false
+metadata/_edit_lock_ = true
 metadata/purpose = "固定参照，本轮只手调五区块"
 
-[node name="Skyline08" parent="."]
-metadata/_edit_lock_ = true
+[node name="Skyline08" parent="." index="3" unique_id=1752112527]
 metadata/writeback_allowed = false
+metadata/_edit_lock_ = true
 metadata/purpose = "固定参照，本轮只手调五区块"
 
-[node name="open_world_ground_500x500" parent="." instance=ExtResource("ground")]
-position = Vector3(3.750313, -80, -40.770721)
-visible = true
-metadata/_edit_lock_ = false
+[node name="open_world_ground_500x500" parent="." index="6" unique_id=1465738191 instance=ExtResource("ground")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.750313, -80, -40.77072)
 
-[node name="open_world_chunk_01" parent="." instance=ExtResource("chunk_01")]
-position = Vector3(-221.249687, -80, -40.770721)
-visible = true
-metadata/_edit_lock_ = false
+[node name="open_world_chunk_square_30x30" parent="." index="7" unique_id=1041928072 instance=ExtResource("square_30")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -80, -150)
 
-[node name="open_world_chunk_02" parent="." instance=ExtResource("chunk_02")]
-position = Vector3(-158.749687, -80, -40.770721)
-visible = true
-metadata/_edit_lock_ = false
+[node name="open_world_chunk_square_100x103" parent="." index="8" unique_id=1083187411 instance=ExtResource("square_100")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, -80, 110)
 
-[node name="open_world_chunk_03" parent="." instance=ExtResource("chunk_03")]
-position = Vector3(-71.249687, -80, -40.770721)
-visible = true
-metadata/_edit_lock_ = false
+[node name="open_world_chunk_square_100x102" parent="." index="9" unique_id=181927332 instance=ExtResource("square_100")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -80, 110)
 
-[node name="open_world_chunk_04" parent="." instance=ExtResource("chunk_04")]
-position = Vector3(41.250313, -80, -40.770721)
-visible = true
-metadata/_edit_lock_ = false
+[node name="open_world_chunk_square_60x60" parent="." index="10" unique_id=834318772 instance=ExtResource("square_60")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, -80, -70)
 
-[node name="open_world_chunk_05" parent="." instance=ExtResource("chunk_05")]
-position = Vector3(178.750313, -80, -40.770721)
-visible = true
-metadata/_edit_lock_ = false
+[node name="open_world_chunk_square_100x101" parent="." index="11" unique_id=1026979812 instance=ExtResource("square_100")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -80, 0)
+
+[node name="open_world_chunk_square_100x105" parent="." index="12" unique_id=822358991 instance=ExtResource("square_100")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -80, -260)
+
+[node name="open_world_chunk_square_100x100" parent="." index="13" unique_id=1502717083 instance=ExtResource("square_100")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, -80, 0)
+
+[node name="open_world_chunk_square_100x104" parent="." index="14" unique_id=1364766163 instance=ExtResource("square_100")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -80, -150)
+
+[editable path="Tower3"]
