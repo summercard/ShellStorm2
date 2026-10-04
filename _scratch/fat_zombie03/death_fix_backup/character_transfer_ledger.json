@@ -369,9 +369,7 @@
     "ordinary_hit": "hit_light upper bone replacement",
     "death_duration_s": 2.6,
     "collision_owner": "Enemy3D",
-    "spawn_catalog": "src/map/SpawnBoxCatalog.gd",
-    "death_visibility_group": "enemy_death_visual_3d",
-    "death_clock_owner": "Enemy3D._process"
+    "spawn_catalog": "src/map/SpawnBoxCatalog.gd"
   },
   "validation": [
     {
@@ -398,14 +396,6 @@
         "outputs/fat_zombie03_integration/clap.png",
         "outputs/fat_zombie03_integration/dead_contact.png"
       ]
-    },
-    {
-      "test": "verify_fat_zombie03_death_visibility",
-      "date": "2026-10-04",
-      "passed": true,
-      "logic": "outputs\\fat_zombie03_death_fix\\logic.json",
-      "render": "outputs\\fat_zombie03_death_fix\\render.json",
-      "negative_expected_exit": 1
     }
   ],
   "remaining_work": [

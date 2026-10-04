@@ -1,0 +1,5 @@
+ERROR: death disappeared after AI unregister
+ERROR: corpse visibility group missing
+ERROR: corpse failed to reappear when wall removed
+ERROR: corpse did not reappear inside vision range
+ERROR: death recycled before settling

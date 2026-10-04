@@ -20,6 +20,8 @@ const ILLUMINATION_SCRIPT := preload("res://src/enemy3d/EnemyIllumination3D.gd")
 ## 名字写死在多处时改一处会静默漏掉另一处，所以从这里取。
 const GROUP_ENEMY_3D := "enemy_3d"
 const GROUP_DAMAGEABLE_3D := "damageable_3d"
+## 仅供视野管理死亡表现，不能作为战斗/寻路目标。
+const GROUP_DEATH_VISUAL_3D := "enemy_death_visual_3d"
 const VALID_STATES := [
 	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
 	"telegraph", "attack", "recovery", "stagger", "dead",
@@ -599,6 +601,13 @@ func import_runtime_state(state: Dictionary) -> bool:
 
 
 func set_runtime_active(active: bool, presentation_ready_when_inactive := false) -> void:
+	if ai_state == "dead":
+		# 房间AI休眠不得暂停倒地或回收；尸体显隐仍由PlayerVision3D管理。
+		_runtime_ai_active = false
+		process_mode = Node.PROCESS_MODE_INHERIT
+		set_physics_process(false)
+		set_process(true)
+		return
 	# 已开启门后的邻房会预先显示敌人，但在玩家正式进入前暂停 AI。
 	# process_mode 不能在可见邻房设为 DISABLED：PlayerVision3D 会把它解释为
 	# 未加载目标并强制隐藏。改为单独暂停物理 AI，让视野系统仍可正常判定显隐。
@@ -629,6 +638,9 @@ func is_concealed_in_world() -> bool:
 
 
 func _process(delta: float) -> void:
+	if ai_state == "dead":
+		# 死亡进度不依赖已经退出战斗的物理AI。
+		_state_time += delta
 	if avatar != null:
 		avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration())
 	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
@@ -1740,6 +1752,13 @@ func _die() -> void:
 			_spawn_death_fragments()
 	collision_layer = 0
 	collision_mask = 0
+	add_to_group(GROUP_DEATH_VISUAL_3D)
+	_runtime_ai_active = false
+	process_mode = Node.PROCESS_MODE_INHERIT
+	set_physics_process(false)
+	set_process(true)
+	if _overhead_health_root != null:
+		_overhead_health_root.visible = false
 	_spawn_effect("VFX-EXPLOSION-3D" if enemy_kind == "boss" else "VFX-IMPACT-3D", 1.4 if enemy_kind == "boss" else 0.8)
 	killed.emit(self, get_enemy_data())
 	if not elite_id.is_empty() and EliteRosterService != null:

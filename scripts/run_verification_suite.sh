@@ -301,6 +301,7 @@ core_scenes=(
   verify_main_entry_realtime_sun_flow
   verify_melee_zombie_presentation
   verify_fat_zombie03
+  verify_fat_zombie03_death_visibility
   verify_shielded_retirement
   verify_music_system
   verify_player3d_diy_flow

@@ -12,6 +12,7 @@ extends Node3D
 @export_flags_3d_physics var occlusion_mask := 1
 
 const VISION_TARGET_GROUPS := [
+	&"enemy_death_visual_3d",
 	&"enemy_3d", &"ground_loot_3d", &"room_key_pickup_3d",
 	&"hazard_3d", &"service_station_3d", &"extraction_beacon_3d",
 ]
@@ -477,7 +478,7 @@ func _refresh_target_visibility() -> void:
 		if next_tracked_enemy_ids.has(previous_id):
 			continue
 		var previous_enemy := instance_from_id(previous_id) as Enemy3D
-		if previous_enemy != null and is_instance_valid(previous_enemy):
+		if previous_enemy != null and is_instance_valid(previous_enemy) and not previous_enemy.is_in_group(Enemy3D.GROUP_DEATH_VISUAL_3D):
 			previous_enemy.visible = false
 	_tracked_enemy_ids = next_tracked_enemy_ids
 	for group_name in VISION_TARGET_GROUPS:
@@ -494,7 +495,7 @@ func _refresh_one_target_visibility(target: Node3D, visited: Dictionary) -> void
 	visited[target.get_instance_id()] = true
 	if target is Enemy3D:
 		var enemy := target as Enemy3D
-		if enemy.ai_state == "dead":
+		if enemy.ai_state == "dead" and not enemy.is_in_group(Enemy3D.GROUP_DEATH_VISUAL_3D):
 			return
 		if enemy.process_mode == Node.PROCESS_MODE_DISABLED:
 			enemy.visible = false
