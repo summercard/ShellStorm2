@@ -1,5 +1,17 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-10-04｜Boss002移动动画v011
+
+- BOSS-STAGES / ASSET-PIPELINE：新增大幅底座左右压重挪动move，保留idle。见[制作记录](2026-10-03_boss002_monitor_source.md)。
+
+## 2026-10-04｜Boss002弹性待机v010
+
+- BOSS-STAGES / ASSET-PIPELINE：强弧臂大幅摆动、键盘中段握持、屏幕呼吸、五官浮动及代码UV上升，见[记录](2026-10-03_boss002_monitor_source.md)。
+
+## 2026-10-04｜100F吊桥云海卡顿诊断
+
+- VFX-POOL / WORLD-BLOCKS：真实720p/1440p共13组移动对照，定位主要负担为云海GPU计算与解析建筑避让；地表城市绘制及场景逻辑并非本轮主要瓶颈。新增独立探针和[诊断记录](2026-10-04_bridge_cloud_stutter_diagnosis.md)，正式画面未改，性能仍待修复。
+
 ## 2026-10-04｜Boss002握持待机v009
 
 - BOSS-STAGES / ASSET-PIPELINE：修正键盘握点、四指闭合蒙皮和右手持线；自然下垂线环与朝下插头，16节线骨。18,684三角面、3材质，16项源级检查通过，未接入Godot。见[记录](2026-10-03_boss002_monitor_source.md)。
