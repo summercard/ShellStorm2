@@ -5327,6 +5327,8 @@ func _install_atmosphere() -> void:
 		return
 	_atmosphere = ATMOSPHERE_SCRIPT.new()
 	_atmosphere.name = "TowerAtmosphere3D"
+	# 远景楼只使用用户手工布局，禁止旧环带叠加或在布局为空时自动兜底。
+	_atmosphere.set("legacy_city_silhouette_enabled", false)
 	_atmosphere.call("configure", world_environment.environment, key_light)
 	add_child(_atmosphere)
 	_atmosphere.call("set_floor_number", _current_floor_number())

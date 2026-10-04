@@ -30,7 +30,11 @@ const SKY_BOUNCE_RANGE_BY_QUALITY := {
 	"high": 52.0,
 }
 
-## 远景城市（塔楼脚下那圈楼体剪影）。
+## 2026-10-04：远景楼以用户手工TSCN布局为唯一摆位依据。
+## 历史环带生成器只留作显式开发对照，默认禁用；缺少手工楼也不自动补楼。
+@export var legacy_city_silhouette_enabled := false
+
+## 历史远景城市（塔楼脚下那圈楼体剪影；以下参数不再约束手工布局）。
 ##
 ## 2026-09-22：壳体从 250×250 收缩成 100×80（见 `TowerFloorStage3D.TOWER_SHELL_*`）后，
 ## 原来按「半径 145 / 203」摆的两圈一下子被甩到墙外 95~105m，从天台看已经远到融进雾里。
@@ -363,6 +367,8 @@ func _unregister_sun() -> void:
 
 
 func _build_city_silhouette() -> void:
+	if not legacy_city_silhouette_enabled:
+		return
 	_city_root = Node3D.new()
 	_city_root.name = "RooftopCityBelow"
 	add_child(_city_root)
