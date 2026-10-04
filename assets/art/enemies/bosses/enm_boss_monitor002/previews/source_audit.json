@@ -1,0 +1,41 @@
+{
+  "asset_id": "ENM-BOSS-MONITOR002-3D",
+  "checks": {
+    "no_armatures": true,
+    "no_armature_modifiers": true,
+    "no_actions": true,
+    "no_vertex_weights": true,
+    "source_only_asset": true,
+    "face_is_flat": true,
+    "two_spring_arms": true,
+    "tpose_level_palms": true,
+    "unit_scale": true,
+    "standing_on_ground": true,
+    "portrait_screen": true,
+    "code_editable": true,
+    "face_floats_in_front": true,
+    "source_reference_present": true
+  },
+  "passed": true,
+  "object_count": 324,
+  "evaluated_triangles": 170766,
+  "bounds_min": [
+    -3.609999895095825,
+    -0.5000000596046448,
+    0.004999998956918716
+  ],
+  "bounds_max": [
+    2.944999933242798,
+    0.5070001482963562,
+    3.432142734527588
+  ],
+  "dimensions_m": [
+    6.554999828338623,
+    1.007000207901001,
+    3.427142735570669
+  ],
+  "planar_face_max_deviation_m": 2.086162567138672e-07,
+  "armatures": 0,
+  "actions": 0,
+  "runtime_validation": "not executed; source-only user scope"
+}

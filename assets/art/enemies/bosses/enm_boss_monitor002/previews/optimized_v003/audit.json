@@ -1,0 +1,23 @@
+{
+  "triangles": 18144,
+  "group_triangles": {
+    "01": 3534,
+    "03": 4292,
+    "04": 4596,
+    "05": 2184,
+    "06": 1540,
+    "07": 1990
+  },
+  "limit": 20000,
+  "under_limit": true,
+  "armatures": 0,
+  "actions": 0,
+  "text_objects": 0,
+  "unapplied_modifiers": 0,
+  "texture_model": "gpt-image-2",
+  "face_triangles": 6,
+  "gloves": {
+    "Sculpted glove R": 2222,
+    "Sculpted glove L": 2222
+  }
+}

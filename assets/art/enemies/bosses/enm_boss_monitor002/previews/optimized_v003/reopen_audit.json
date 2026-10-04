@@ -1,0 +1,14 @@
+{
+  "triangles_reopened": 18144,
+  "checks": {
+    "under_20000": true,
+    "no_text_geometry": true,
+    "no_rig": true,
+    "no_actions": true,
+    "applied_modifiers": true,
+    "textures_packed": true,
+    "four_fingers": true,
+    "three_face_planes": true
+  },
+  "passed": true
+}

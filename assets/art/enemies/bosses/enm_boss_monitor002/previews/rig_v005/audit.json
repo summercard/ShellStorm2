@@ -1,0 +1,112 @@
+{
+  "checks": {
+    "model_no_actions": true,
+    "expression_not_auto_animated": true,
+    "all_character_meshes_skinned": true,
+    "weights_normalized": true,
+    "rest_matches_v004": true,
+    "keyboard_bone_parent": true,
+    "spring_extends": true,
+    "spring_radius_preserved": true,
+    "opposite_arm_independent": true,
+    "keyboard_follows_hand": true,
+    "spring_compresses": true,
+    "face_upright": true,
+    "face_follows_anchor": true,
+    "face_moves": true,
+    "support_deforms": true,
+    "screen_can_move_down": true,
+    "finger_weights_deform": true,
+    "reset_exact": true,
+    "expression_state_persists": true,
+    "dual_master_signature_matches": true,
+    "qa_actions_exist": true
+  },
+  "passed": true,
+  "results": {
+    "rest_max_displacement": 5.445681294982172e-07,
+    "worst_rest_objects": [
+      [
+        "Long data cable whip",
+        5.445681294982172e-07
+      ],
+      [
+        "Keyboard outer shell",
+        4.88126765166966e-07
+      ],
+      [
+        "Texture round_eye",
+        4.814712530792806e-07
+      ],
+      [
+        "Texture large_eye",
+        4.777675730550706e-07
+      ],
+      [
+        "Relief rib.001",
+        4.308471767545033e-07
+      ]
+    ],
+    "unbound": [],
+    "spring": {
+      "length_ratio": 1.6818183640164415,
+      "radius_ratio": 1.0,
+      "keyboard_displacement": 0.9000001006656166
+    },
+    "face": [
+      {
+        "pose": "spin",
+        "slot": "large_eye",
+        "normal_dot": 1.0000000000000018,
+        "anchor_error": 2.682209014892578e-07,
+        "motion": 1.1815771921329477
+      },
+      {
+        "pose": "spin",
+        "slot": "round_eye",
+        "normal_dot": 1.000000000000003,
+        "anchor_error": 2.682209014892578e-07,
+        "motion": 1.1447709226449905
+      },
+      {
+        "pose": "spin",
+        "slot": "mouth",
+        "normal_dot": 1.0,
+        "anchor_error": 0.0,
+        "motion": 0.13009630669004218
+      },
+      {
+        "pose": "forward",
+        "slot": "large_eye",
+        "normal_dot": 0.9999999403953552,
+        "anchor_error": 3.5762786865234375e-07,
+        "motion": 2.5390140470136466
+      },
+      {
+        "pose": "forward",
+        "slot": "round_eye",
+        "normal_dot": 1.0,
+        "anchor_error": 3.5762786865234375e-07,
+        "motion": 2.4034741231161387
+      },
+      {
+        "pose": "forward",
+        "slot": "mouth",
+        "normal_dot": 1.0,
+        "anchor_error": 5.960464477539063e-08,
+        "motion": 1.5837227902863786
+      }
+    ],
+    "support_forward_displacement": 0.4696293988624856,
+    "screen_drop": 0.09231584913590352
+  },
+  "skeleton_signature": "4fb366b92b2650d331cef33af3f6292ad256272e4170c605e374194feecd212c",
+  "exit_code": 0,
+  "expected_faults": [],
+  "not_executed": [
+    "Godot import",
+    "runtime state mapping",
+    "GLB constraint baking",
+    "final gameplay animations"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "before": {
+    "evaluated_triangles": 170766,
+    "base_mesh_polygons": 13218,
+    "glove_triangles": {
+      "Sculpted glove L": 36480,
+      "Sculpted glove R": 36480
+    }
+  },
+  "after": {
+    "evaluated_triangles": 230190,
+    "base_mesh_polygons": 21294,
+    "glove_triangles": {
+      "Sculpted glove R": 68784,
+      "Sculpted glove L": 68784
+    }
+  },
+  "unrelated_objects_unchanged": true,
+  "rigs": 0,
+  "actions": 0,
+  "pose": "open flat, palm down, 1 thumb + 3 fingers",
+  "props": "retained in original positions; open hands do not grip props"
+}

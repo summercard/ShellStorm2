@@ -1,0 +1,383 @@
+{
+  "asset_id": "ENM-BOSS-MONITOR002-3D",
+  "version": "v004",
+  "atlas": "source/textures_v004/expressions_atlas.png",
+  "atlas_size": [
+    1536,
+    1024
+  ],
+  "grid": [
+    3,
+    2
+  ],
+  "expression_property": "ExpressionController[expression_index]",
+  "expressions": [
+    {
+      "index": 0,
+      "id": "default",
+      "preview_frame": 1,
+      "atlas_cell": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "id": "suspicious",
+      "preview_frame": 25,
+      "atlas_cell": [
+        1,
+        0
+      ]
+    },
+    {
+      "index": 2,
+      "id": "angry",
+      "preview_frame": 49,
+      "atlas_cell": [
+        2,
+        0
+      ]
+    },
+    {
+      "index": 3,
+      "id": "sleepy",
+      "preview_frame": 73,
+      "atlas_cell": [
+        0,
+        1
+      ]
+    },
+    {
+      "index": 4,
+      "id": "taunting",
+      "preview_frame": 97,
+      "atlas_cell": [
+        1,
+        1
+      ]
+    },
+    {
+      "index": 5,
+      "id": "glitched",
+      "preview_frame": 121,
+      "atlas_cell": [
+        2,
+        1
+      ]
+    }
+  ],
+  "regions_pixels_within_cell": {
+    "large_eye": [
+      10,
+      40,
+      270,
+      285
+    ],
+    "round_eye": [
+      275,
+      40,
+      510,
+      285
+    ],
+    "mouth": [
+      70,
+      288,
+      452,
+      485
+    ]
+  },
+  "sampling": "constant / discrete, no crossfade",
+  "preview_action": "BOSS002_expression_switch_preview",
+  "runtime_binding": "not integrated; JSON gives row/column and UV contract for future material animation",
+  "triangles": 18144,
+  "rigged": false,
+  "body_mesh_digests": {
+    "Rear shell": "b41be105c7ebf583e9725659822f6fb5e60cd4bbf8e6a3004eaa325bb597b3c1",
+    "Metal chassis": "3b2266b69b7e80038620d405408fbe553556d9229f4de675e26fae57b69eb591",
+    "Black screen gasket": "92cbd23ef9f0e4205d3cabd5239e4a883bd4ff8011b869ed642252c9921d62d2",
+    "Portrait display": "47a2674b7e079b42839015f62be91e84c1180c5fea14946c121a38f4fe6d3d51",
+    "Vertical silver bezel": "c0f7ec855d0e087b832b4d4def862bb4e48698b03ac5a04b5c3286204cc1cb56",
+    "Vertical silver bezel.001": "bb753632224deb52aa258e3df467a81b9b266e2f236dfd70251a94b75d56daf0",
+    "Horizontal silver bezel": "c8c8696c997fbd4e05fdd294bcedd10c75fd03d2935fbb7180fec708c8763e21",
+    "Horizontal silver bezel.001": "34e9b76ef23d7eb63139ba62b857c78dce06eeac8dfe487b283d36544fbabbdb",
+    "Power switch": "4f56394b0c838b82f8833946cadc2eaf47a7e101c0c914e494dafde577a48a07",
+    "Status LED": "5d3302949f3b73239dc8c1e055ccee4324ef031bdc2a40101d926e80f9aaf735",
+    "Bezel screw": "ffee625e2222c9c31c49473b4d5eaac960452a8a4e8062c5c8eed7cb7150508e",
+    "Screw slot": "160787caaafaec748e18bbc7debb366f332e70391c0c89fef09670fd5a08f7cf",
+    "Bezel screw.001": "c2758af758684136a6fe4a2e780342ad46b2b74a18444f54ba1674265c564f08",
+    "Screw slot.001": "61516ed302280ddb9c6eddff28205e8d04cc14c9239d5176fa6a5f650dbe63a9",
+    "Bezel screw.002": "b626d75559123c2f5aaa066df83da8acc9f4139f3c092b6d2e10b31c6183463e",
+    "Screw slot.002": "c582ccb00c289d99846edaa7a3d0ffc55126cd61690b59e6aae083bdb5dc9a27",
+    "Bezel screw.003": "4d7680ec7312760235f66781dfdae938a29b073d1dd9a9f36833050f1c56e00d",
+    "Screw slot.003": "e9932a3a978b288fa2d3ecbce234759bb6ed553d0327c990a021813528551eaa",
+    "Rear inset cover": "56ff052e26055dde5d69841d5fded1c1811819262da6cfd0f590508ded26c861",
+    "Service hatch": "3291d15c049389c62e2b6c35fdededbf3ff8fce2600bc035d98fcc9958c87efe",
+    "Service hatch insert": "19aaa2501f1e86f89ce3d9a2a4e4947c6960c16d67cc27eff9e23174ff83c25a",
+    "VESA screw": "5c068ed6842ac7f84d6f02ab9396db6aea8ebb5ecaeb0c57c794f52bfe9e5202",
+    "VESA screw.001": "d8928f678e8fb1b47d87fb91541d923ea84bb357f842a77c71c1a1ef574ae1bd",
+    "VESA screw.002": "44ab96a619e8cff2c24bc60ecd30cec2920dcfc573885db00fdcb8d1bebfa710",
+    "VESA screw.003": "987ea4f737acbf8fa1febd4bba57ea78439dd335bad04de8afa39e7dcd7a6ace",
+    "Rear cooling slot": "c45e7912011631dd1e653b9f5e1c9b110f9a58dd2799d38bd15878b6ada095d0",
+    "Rear cooling slot.001": "7092d8477b9636d58b958761ef041784a8e057aa1355990a14af959f685ca0ce",
+    "Rear cooling slot.002": "f5e7ec5a8242030881f548dc64b5bb8f06e00851f5fc540f109d7b286e5b1708",
+    "Rear cooling slot.003": "678061e58cf156c26f2e5578ed32e3b8535d01d47609bdfae86aef79dcbeb65f",
+    "Rear cooling slot.004": "497c4783e6bb416704e5df480ad2666b245d2213676b357108a6588803cf8416",
+    "Rear cooling slot.005": "f27f0d3b552bf68bfe4285b918bda8434386c64080c20a4e08360aece4a210a0",
+    "Rear cooling slot.006": "e24429924366666f1a80ac206c1808252b6f9f2e95c408159503455d259bd318",
+    "Rear cooling slot.007": "f71f074fc555cb00f60726fe9571c1067e09eb6b6941dca7c48dc52413413638",
+    "Rear cooling slot.008": "6345bb51d8f22980c546b8c8a7313c3d9cbfed7381b7432fa1ed31cfef86b5d1",
+    "Rear cooling slot.009": "136d8e98522ea3d5f18758f3a5c414fe90523c5112670ff76200a4c30ad1648e",
+    "Rear cooling slot.010": "c74e56b107ac1b2a557b2045ce5f0a8411ec4cc1202b596abe20cfd54292ab7f",
+    "Rear cooling slot.011": "22fc702b16c08937bf68991ee7daaf43c7e061203fc111cb6e2554c98bf3f5e6",
+    "Rear cooling slot.012": "431d596b676f453a9ce93dd81edccbd12a8d3270bdf1308c48409e580b276ca2",
+    "Rear cooling slot.013": "cbd8aaf5f248ed6fd6bc580a2654be53e399f668f9775f614e64686f35961c9e",
+    "Rear cooling slot.014": "cc6b6fe0c32960b2e27ef1e09ab71fc601a09544bf648e0e42eec7b31d0c6167",
+    "Rear cooling slot.015": "3fc992499ef37dc7dbabf1bc19befa2d036db53d08b82112dcbee2f61857d212",
+    "Rear cooling slot.016": "c3593dc64d51f217f2a3597ab2ff2a8cf43418065a6d145f928fa5fa444c5aac",
+    "Rear cooling slot.017": "a0a85c754fd4c8eecfe79e073e6228e40bdc1169b992b1bfe7581d0075844047",
+    "Rear cooling slot.018": "ebf3dc9fbb5c81f0455829078dc678527c85f7a80b511de65545fe3046ae6401",
+    "Rear cooling slot.019": "0802e8ffa759516736ef3b43c59b9acb3dd961c6de9a89f64f62a9eb7162aebf",
+    "Rear cooling slot.020": "24e71b6f05f9ff6c06f6bda9bd8bf082344a6f9824eabff42862932a2d5446d1",
+    "Rear cooling slot.021": "c62623ee65d8101c8c371c7a8e7c11e27fabed1f880a10c4d30334c7d15ca905",
+    "Rear cooling slot.022": "4812e3d4edffe4b3553b1d4440521fae4ea214cbd68da3fa3baa29768fe6a0ab",
+    "Rear cooling slot.023": "e99a648480f2dea5f35f1207244e2159484ade02718be710e1cdc2195cbc10f9",
+    "Rear cooling slot.024": "0eb67cf26e2ad19814c4d22f9bc66e2663fa230bda6628a2f48eb430a364a875",
+    "Rear cooling slot.025": "369ff25ff9f82110881cdc28e6256697a41a5caf36fc232a99b51df851250fe1",
+    "Rear cooling slot.026": "a3e592a9a2ff645c8308e692b8cd29bb410f54208b9784ec082aa1592a45fcbe",
+    "Rear cooling slot.027": "abc2c6d340f8a216df4ff43c7421cfd9498b62960002d5501cdc802907bf1e94",
+    "Rear cooling slot.028": "1c1a0086dbc715dcab4adc329f6c94687771b8e997194cd0535ca8974e9bf665",
+    "Rear cooling slot.029": "4398a99b5ece127fc5c1bff760210d7251292bdad5435ef6003dd6bcf3ce585d",
+    "Top cooling vent": "18e2e698a2ed98e942660a3c737809e36c181401ba6253212a96249f8daf7b45",
+    "Top cooling vent.001": "8a7a418cbdbff07df8194bf4849764c8e838b25152507653b71a6a20390eedc0",
+    "Top cooling vent.002": "9bb823693bef9343078af84d30d12c670edaba74c0c6d0bf7a31dc91796a8a76",
+    "Top cooling vent.003": "d69cb9c78479f02129fd4761d1b81968d78b69d845e797751b2c55c1558970a5",
+    "Top cooling vent.004": "c245c801ecb8f620a33395eb1a4ba6568fc1ebce17f42d0ca04c56baa4c33fb2",
+    "IO socket bezel": "3a1cc88cc1f69f07032c75382f7a8cda2dd43417b59063d0f95865edc6327ced",
+    "IO socket hollow": "ebeda6e4836774e847d8fb5140b84d2a6861b053fa0001a8f8032181eca264cc",
+    "IO contact": "1938b8d9854a3968ab0fb16332c7574d9b40dd978655bc4739cd529d21f0592f",
+    "IO socket bezel.001": "64517e2e76bcab32cf5775621f866a375d398c8cfa586b3236ed78888bf58e17",
+    "IO socket hollow.001": "5449a91d582525acf0dd87efff1d799c0ef093e049d553d52877a51b017f7de0",
+    "IO contact.001": "5255f5fe7c2cec974c966dd2f24fd3405be94269033ea9e0d3266cc7bd728b11",
+    "IO socket bezel.002": "6bf381b5baf4da0c79bafe1b539359c2999ce28cd0f19238a19a1df991ede2ae",
+    "IO socket hollow.002": "d96025bccdbf5077ddff0646e09fb4d1eaa1b5f90f1927aa1225378b911fece8",
+    "IO contact.002": "94e3f3cc8b754deed1b2eaf3ea1da15f054072a7b79af03c8119f42a29b86421",
+    "Screen code texture": "9960ebf24a3ab83214432b4811f584cfb165b0dd1535f8d1828ff0f6d2de0e72",
+    "Rear arm grommet L": "9c0b16c3cc1c1f52bec95155ff5bcfba8ae817c2f2d33d1d7cbca8b3d1487cb8",
+    "Behind monitor cable L": "b1c478a0c728c639c61b0509b71818e7caa3a4af7ecfff6d47176ef5f8b72ffc",
+    "Continuous spring cable L": "2d6018ce94d3bc974d8cdeacc7ddd23e84455a253399ad219da66a440ac600fc",
+    "Metal wrist ferrule L": "65719757bcf5222169ab40268891961d0f17258ae387affe95f46edba9d98b5e",
+    "Wrist sleeve L": "8a0619043f6bc9b8047a8a6a27726e4f1f2f480277493fe044e926fae6a7d5de",
+    "Rear arm grommet R": "755a94193eb60ea56868b5f7cb430f44211606c7056d2338e113d8280d59b1ed",
+    "Behind monitor cable R": "7e2d0d1ef32b40d4f173c392ff8911df3b0750c50d017c993a0e074141ab8e80",
+    "Continuous spring cable R": "33c6e1a67e3c9a065fd6f81e94d2fe6736c020a7a6fa7d4faca506ac582208c4",
+    "Metal wrist ferrule R": "27e6cce56a21c157dd7aa6f9e8902ff33ed1d324e15a34000f48db3f266f2c38",
+    "Wrist sleeve R": "5469abc9c83cd56aaaafdaa5103c115a700503a2a57c24fee928a99a13804096",
+    "White cuff L": "35fd135b46439a6c6174365074ccdc9224d0cab1d2bc2e88019848153bb64af8",
+    "White cuff R": "d1c737c6c58a6c46bceef242da2e0c48d5796d0fe0ebebddbcf5237a9d8033fc",
+    "Sculpted glove R": "e9aee95ed404dd6dd86272e5d8148901d03a105e41d0812710963c8d66613e77",
+    "Sculpted glove L": "a66ac15a02cbf55bbae8fa309c9a2a4dbd6774de83eb055741ba4a12e8d4a2a7",
+    "Keyboard outer shell": "cc2a5a46280d00815fb481676e5057b899c7df8d868dc0de7668a6fd9faf87bf",
+    "Keyboard deck": "c4d4afe0828d5cff6f10c052fe26dac439e29357f4f38e077986eb0618601e68",
+    "KEY_00_00": "10bb838f0d5e9fbbc428112c51e02b65211704b9d5a605bdb98ef3623856c730",
+    "KEY_00_01": "abb16903a972b6df5444f85447fdd3bc057831e4527869e132af5fa5f79e4ba2",
+    "KEY_00_02": "b3d4f6111e213cccca0c419bbdca5f9dbe47e5f9f4905d7f4b2b13731810185f",
+    "KEY_00_03": "a720e1518f5e6603e7152a296dbbabb9ff0f128da22dda4a09c22c1767c0546c",
+    "KEY_00_04": "28111bbcf223a969d927d56638618491d812077040d29f5aedfb3698bfa5b998",
+    "KEY_01_00": "4220313afbd67a72f8732930b1bf729578e335d6d32ba63f75b601aa301f7b5c",
+    "KEY_01_01": "c9b48300d453d8daf2697ab2286d8c3fe28aacd5c40d023a0f6f61a0d9ceb926",
+    "KEY_01_02": "f4b3aad73b6466a3178c5671005ad4a1398473946853c10de0fce29fd9952872",
+    "KEY_01_03": "ffd567b372dbc6d70cb221dbb8161e0521a7e5a93ec1d3fd9bb478af5385d98b",
+    "KEY_01_04": "3b66cff8757899612c1af14e077f21bc39344234c4ea82e3bc1c19268376b853",
+    "KEY_02_00": "5bb6322ad7f627565ad9a893102741dd816c92dba79d7443cb0965dfff653e3c",
+    "KEY_02_01": "3c83b38d3f88728cc90ef51fe220c463b41d6c5b92645dccdaa4b46556e436bb",
+    "KEY_02_02": "ab4fe6d457c38b11e8dcfcd03a56e763afbe5454d3b66c7a26fa4876ef689611",
+    "KEY_02_03": "f848de893a4d7b4aa3f6c17499cb746b10272b76f22be3df6066dda5dcb3b887",
+    "KEY_02_04": "c90fa61e148814ee262a4fe7ab4eddaa3ce77cf6d837ff9d17072f578bcd0c88",
+    "KEY_03_00": "b1914c2376866085d78d963e5007456941a372ebc6d8b027c863413ef8967bbf",
+    "KEY_03_01": "4158a5bf824ed3fa78eb657e204589ca627369b6d495c68187f53e1f453095a4",
+    "KEY_03_02": "404f58f297c9cebcaba94211289a3efa6c18618298ede1c917d649070de642ba",
+    "KEY_03_03": "547007ffbcf00ce731ccf3036d14c55063ae4745f72e5e2f39e8b5ace9cc11bc",
+    "KEY_03_04": "d74b08f374b49efd37428cc3b333ff34d36e9666355dceb21ca5f5f6db3882d5",
+    "KEY_04_00": "796be8aed1d19e3a4c461a67f2656b693a2d056fa8f16745b0bc51747839a142",
+    "KEY_04_01": "04d9dab86ac06dec63627fa0cc512b2455de1cffa8d402cda9b248d93f0603e9",
+    "KEY_04_02": "5dae46b91039bd2f0672f4284d372cd2f9fe8b2f200ee596b5771b200c82a10e",
+    "KEY_04_03": "db01495ed88da1400a3becc05883e68cf2bd81464bd76ef1fdd2619d45050c79",
+    "KEY_04_04": "668bd6381d67846e50da4e6ce2d4cd119a5e0382ed6354d71c5626bf814d87ce",
+    "KEY_05_00": "a1c33149cbb9fa773b6f997db29515cdb204b6378039c0014611fc4004d26030",
+    "KEY_05_01": "0b0c58ec5f6a310f623e8a243ec617282da2ca675769d2c594451f358eb78ca3",
+    "KEY_05_02": "5adece0eaa91e3b281e87ad4c496acf444b4652b490cfac5b2d6dcafba98b68b",
+    "KEY_05_03": "e87106340002a5de8f4cc3591f19d140bc97b29ab1a171d3da30b565b6de8276",
+    "KEY_05_04": "a0b83c7c02aebd9a2bf1d0ab30884b45b29efe0b0a84d25403f3f57876d98d86",
+    "KEY_06_00": "a00dc2f13da10964ce79ffde723449e45e192ee31045fc3a6fa068274d253927",
+    "KEY_06_01": "8cc6454a33172d42fb99eb7a0857b86aedd2c360c68c0f38590152a28c3e0192",
+    "KEY_06_02": "4f77840a21a37fee5d94ccb481cd33758b020f0bd0774ebe1caeb678f2a0969b",
+    "KEY_06_03": "5016f40bb24af11b7562a3657d8dfb9a81877dd7b798b4c4151f61578288ad01",
+    "KEY_06_04": "15bc74ec4c788c99c35a4dab19f75b7f58c286092f33d10f3db61b22fc1b32f4",
+    "KEY_07_00": "f804f2fc60bf5a2be3686f320bd5e5d18c1e1e0e876e5b227dec26f136cd816e",
+    "KEY_07_01": "cef1899778367e96689baac48602de7a6ce53306279a548559f5d77148235869",
+    "KEY_07_02": "21d521a50683cd5d6a37cfe31ddea75c4462270fc0b348981f6338159cdebbcb",
+    "KEY_07_03": "ee89a8c9c2842278cce4fb1d8e8a632efff0ef9f7fa9dd6cc8dcac90203de3f9",
+    "KEY_07_04": "11444b0334eccb3c6a2d663b2842a42c44ab877cb6cc5282babaf6181d2158e8",
+    "KEY_08_00": "6108dc7bce2b1a0bbc1b87b972c91f3e9ce16de254d8727794c833eb4f14c2eb",
+    "KEY_08_01": "af36cdb6dd664db8c952d3cb7b94f64e27c2dcbfedeb5dc105f03eeda387a396",
+    "KEY_08_02": "d8fb4a31e73156232d47b3cd67ecb1c96f5347e97306ef9bbe5ab2626b7b3941",
+    "KEY_08_03": "4cfdfece17c731e511c435ee8d2534d8c2aad33e5111866a467e42f2e5496cc8",
+    "KEY_08_04": "57c5f1e02181a041fb0a5e4e8e69551faf50c0eacaa86967928ba025618379e9",
+    "KEY_09_00": "15739286026249c4c16a48c71479944dc60b695c7d0c3dbc4bc4544f4dd7bdd9",
+    "KEY_09_01": "43ff83a760127011ae9ae565e460dcc076e3aa707941ff6e7a888e8ac049323e",
+    "KEY_09_02": "a33f1c50a74d14ac95083b1ed973c9146eeb4de59d38e9ef321fb80863c8adfd",
+    "KEY_09_03": "b20274e385c06c0481a068817765d16d5890bcdab68d81b68e0c217495a12ad3",
+    "KEY_09_04": "e4f580012dc4064605501d97071c38ed34cc345cf9436f225ae40069f856837e",
+    "KEY_10_00": "0f6877bd54125cea20f57c4a59aefdfb95c402765a22f4f2aa0b1f612a0f367d",
+    "KEY_10_01": "e6813400e5cf87c3a6926b21349a1131cd76fa53b1c1854f985411ee5d78734b",
+    "KEY_10_02": "56f15505eca761d1fe79e7f7eb090391a5acd117ed789aa2e6e6f14a5cd13a5c",
+    "KEY_10_03": "45ad1579849314dbb3c89bf759890267309c420cf0758b3449e9636871ee6828",
+    "KEY_10_04": "18711f3173ee723bd7c761971e1c6f3e91fa30c800798039b8857217c5970517",
+    "KEY_11_00": "08d2125a1b9da9f3582f0d5e5fb6c8c21380d6cda03f82cdf6b37fafa45fb573",
+    "KEY_11_01": "1a604f151064f8c441fff9b080e4083afae5d8bade74ffc01a6b58ae0579fcc6",
+    "KEY_11_02": "7628c0cad33f706765ff7a409de12d4f0cc5ebbcd4ee99c557cd83529da5daa6",
+    "KEY_11_03": "f6c5f26e7fe45ca0275f18899bc6a7cb31e531732f9ee8351266dca17fa18c00",
+    "KEY_11_04": "246fa2c9f917ea459baa916def3bfebe444479d667d09b6d629bb08833690bf7",
+    "Space bar": "bfef5b4a1bc6489b07a115c9f1e2524c7ac92f64f052cf58c9ec750f20035bcd",
+    "Keyboard LED": "63d41a48226949d18be2c2b17a6b8c5a3dac51bc840d597125b73e47d95db2c0",
+    "Keyboard LED.001": "aa7d90d359d8c3bf97129b40c813c15270f730260b60b8d9ac27918b8e1941b7",
+    "Keyboard LED.002": "c932f02d6bcdf65c04bbf9f7158029e4a17bc95f5e05a01167d0f3ad075273d6",
+    "Long data cable whip": "b0250c52b90b48df5988436a1bdd03dd3e366af87eb36b439a0818ec53c6fc47",
+    "Cable strain relief": "24685236bc15468b03a3a96587914e74859baa1815ca7e6c4b4c20c00871968c",
+    "Relief rib": "a7a62bf94df0d7a25c80c78e91f41594dfdcf2718d10999bbed766449a1e9fab",
+    "Relief rib.001": "cf06364d84cc52b17f6d05b7b662e4b5a16779e7580794d2a8c96ee7cf92d7c1",
+    "Relief rib.002": "fac29bcc3971aab5bda866b2cb0123a9970c22a679867100a03df503353ad9fa",
+    "Data connector body": "c18d48dd81324dc5a8cf70ffc10782b7d8bd3ff33e381244eb4d5f76f6d2d14e",
+    "Connector alloy collar": "ad47deff12b8c61552d267014e8f50f18b2823f890ddbcc63e28d203fd84ce29",
+    "Luminous data plug": "04df20c384316f96a00afa4982287a880dc94c0be1bc1a6b2d457562887dead0",
+    "Connector front inset": "7e0da791b821778f21019b0481dfe156e6a29556f52976683643781fa95494ec",
+    "Plug contact": "7d27c61d8ac8dd5a0a8e91ceeab6fe59f78bcad239f6a8ef8239cb4cf3ca094a",
+    "Plug contact.001": "eec6e37394ec4ee2ab9d9db2a1d905908d101f7edfce9f7f01fc0d7d3b82c2ee",
+    "Plug contact.002": "9f8c25be0cf1a9c5fd29013ab4c476371c3218a3e3124efa6f3d5d261bbd73dc",
+    "Portrait rotation hinge": "e80a014804da9dd35cc4e540fd30cd793c4570bfbd9863b22b8290c18413bc11",
+    "Hinge cap": "25f9c4a1662649b31a109ea8ed9ad794b279b416630418d1f8c4d9e838d7e284",
+    "Stand column": "1a4615cb386fa44e19cc6fc41d82146f61ac79bc53055797a1eeec6a650d20ed",
+    "Stand boot": "14e690f06a6b97352fbaf1978a39340a41617766e6cd8506d76e224e50eec798",
+    "Stand boot trim": "29890a7090e5175aecd74c39a3212eb3e7e85f8f9ecd70001b1a05e21c0f8ee4",
+    "Crescent pedestal": "439e313447d0e8d164da215ee6487ef4eb89c5a572d76741fc7513151670f3d8",
+    "Rubber foot": "37145e8f5c18c8cd629decc770e5ef0ba3924b1841ffd2137e4892021fb15998",
+    "Rubber foot.001": "4529634093086351b2cc99f941f09c9b968eb3471ed330d68a2afb9a633cc949"
+  },
+  "per_expression_slot_boxes_pixels": {
+    "large_eye": [
+      [
+        32,
+        90,
+        261,
+        275
+      ],
+      [
+        559,
+        113,
+        737,
+        248
+      ],
+      [
+        1042,
+        64,
+        1291,
+        279
+      ],
+      [
+        39,
+        596,
+        223,
+        753
+      ],
+      [
+        551,
+        576,
+        740,
+        794
+      ],
+      [
+        1076,
+        587,
+        1260,
+        768
+      ]
+    ],
+    "round_eye": [
+      [
+        312,
+        94,
+        495,
+        264
+      ],
+      [
+        819,
+        131,
+        981,
+        248
+      ],
+      [
+        1320,
+        75,
+        1509,
+        261
+      ],
+      [
+        317,
+        624,
+        480,
+        732
+      ],
+      [
+        816,
+        570,
+        993,
+        750
+      ],
+      [
+        1324,
+        574,
+        1499,
+        756
+      ]
+    ],
+    "mouth": [
+      [
+        111,
+        304,
+        408,
+        441
+      ],
+      [
+        640,
+        303,
+        903,
+        446
+      ],
+      [
+        1156,
+        287,
+        1409,
+        473
+      ],
+      [
+        105,
+        804,
+        413,
+        934
+      ],
+      [
+        622,
+        775,
+        899,
+        942
+      ],
+      [
+        1157,
+        782,
+        1401,
+        953
+      ]
+    ]
+  }
+}
