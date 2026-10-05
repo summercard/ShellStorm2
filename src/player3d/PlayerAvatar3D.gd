@@ -121,6 +121,9 @@ var _reload_ring_built_progress := -1.0
 ## mesh 局部半径（= 世界半径 / 锚点缩放）。_setup_reload_ring() 算一次，之后只读。
 var _reload_ring_inner_m := 0.0
 var _reload_ring_outer_m := 0.0
+## 锚点自身的缩放（母版线性缩放）。_setup_reload_ring() 记一次，之后只读 ——
+## 每帧摆朝向都会重写 basis，写的时候若把缩放读串了，环的世界尺寸就跟着漂。
+var _reload_ring_anchor_scale := 1.0
 var _firing_animation_active := false
 var _fire_progress := 0.0
 var _fire_intensity := 0.0
@@ -159,10 +162,20 @@ var _customization: Dictionary = DEFAULT_CUSTOMIZATION.duplicate()
 var _wearable_root: Node3D = null
 var _wearable_nodes: Dictionary = {}
 
-## —— 换弹进度环（2026-10-04 主人要求）——
+## —— 换弹进度环（2026-10-04 主人要求，2026-10-05 改口径）——
 ## 原样是「头顶一条 1.20 × 0.18 的横向 QuadMesh 进度条」（`RELOAD_FILL_WIDTH`，
 ## 用 `fill.scale.x` + 平移锁左边缘表达进度）。主人要求换成**搜索读条那套圆环动画**，
 ## 并把位置从头顶挪到**角色下方**。
+##
+## 2026-10-05 追补（原话：「这个变成脚底了，不是这个意思，是要在角色的下方的、
+## 面对镜头的，层级还是在角色上方」）—— 第一版做成了绕 X 转 -90° **平铺在地面上**，
+## 主人否掉了。三条口径从此定死在本段：
+## 1. **位置**：环心在角色下方（`RELOAD_RING_ANCHOR_LOCAL`，小腿高度）——
+##    不是头顶，也不是压在脚底板上（压在地板上会被读成「地上画的圈」）；
+## 2. **朝向**：环面**正对镜头**（`_face_reload_ring_to_camera()` 每帧手写基向量），
+##    不是平铺地面；
+## 3. **层级**：环**画在角色之上**（关深度测试）—— 环心在角色下半身，正对镜头时
+##    上半圈必然压在腿上，不画在上面就会被腿切掉半圈。
 ##
 ## 几何与绕序来自 `src/ui/RingProgressGeometry.gd` —— 与交互圆点（`InteractionDot3D`
 ## 的读条环）共用同一份绘圆口径。`docs/v0.2/PLAN.md` 的 0.2-PLAYER-001 与
@@ -180,16 +193,29 @@ const RELOAD_RING_OUTER_RADIUS_M := 0.42
 const RELOAD_RING_THICKNESS_RATIO := 0.2226
 ## 比交互环的 48 段密一档：这个环在屏幕上的直径更大，48 段能看出多边形边。
 const RELOAD_RING_SEGMENTS := 64
-## 🔴 环必须**平铺**在地面上（绕 X 转 -90°），**不许挂 billboard**：
-## 本作相机几乎俯视（塔内高 10.719 m / 后拉 4.038 m ⇒ 视轴离竖直仅 20.6°），
-## ① `BILLBOARD_ENABLED` 只绕 Y 轴转 ⇒ 环被压成 0.36 高的椭圆；
-## ② 若改成绕相机基向量自摆（交互圆点那招），环面会斜插进地板 ——
-##    r = 0.42 时最低点落到 -0.03 m，下半圈直接被地板吃掉，只剩半个环。
-## 平铺则只被透视压扁到 sin(69.4°) = 0.936，仍是完整一圈。
-const RELOAD_RING_EULER := Vector3(-PI * 0.5, 0.0, 0.0)
-## 环心（角色本地坐标 = 相对脚底的高度）。取 0.08 m：落在角色脚下、
-## 低于脚踝，且离地板留 8 cm 余量（共面会 z-fighting）。
-const RELOAD_RING_ANCHOR_LOCAL := Vector3(0.0, 0.08, 0.0)
+## 🔴 朝向**不许**交给 `BaseMaterial3D.billboard_mode`（prefab 里那两个材质原本就是
+## `billboard_mode = 1`），两条理由：
+## ① 着色器里的 billboard 会把模型基向量**归一化** ⇒ `reload_progress_root.scale`
+##    （母版线性缩放）被整个吃掉，而环的半径正是按「设计值 / 锚点缩放」反算的 ——
+##    缩放一丢，环的世界尺寸就错，且 visible / 快照 / AABB 全都正常。
+##    交互圆点正是踩过这个坑（见 `InteractionDot3D._apply_placement` 的注释），那里也是自己转节点。
+## ② `BILLBOARD_ENABLED` 只绕 Y 轴转，本作相机几乎俯视（塔内高 10.719 m / 后拉 4.038 m
+##    ⇒ 视轴离竖直仅 20.6°），竖直的环面会被压成 sin(20.6°) ≈ 0.35 的扁椭圆。
+## 所以朝向由 `_face_reload_ring_to_camera()` 手写基向量（局部基 = 相机基）。
+## 🔴「层级还是在角色上方」：环**必须画在角色之上**，照 HUD 口径关掉深度测试。
+## 代价：环也会盖住它后方的一切（含墙）。换弹提示是短时 HUD 信息，这个取舍是对的；
+## 要退回「被墙挡住」就改成 false —— 但角色腿会重新切掉半个环。
+const RELOAD_RING_DRAW_OVER_CHARACTER := true
+## 环心（角色本地坐标 = 相对脚底的高度）。
+##
+## 0.25 不是手感值，是**离地判据**反算出来的：相机向下倾 25.0°
+## （塔内高 10.719 / 后拉 4.038，注视点再抬 0.45、前送 0.75 ⇒ atan(4.788 / 10.269)，
+## 见 TowerDescent3D 的 CAMERA_* 常量），所以正对镜头的环面离水平也是 25°，
+## 竖直方向铺开 ±r·sin(25°) = ±0.42 × 0.4226 = **±0.1775**。
+## 环心低于 0.18 时下半圈就插进地板 —— 一眼看过去又变回「地上画的圈」，
+## 正是 2026-10-05 主人否掉的那一版。取 0.25 ⇒ 最低点落在 0.073（约 6 cm 实机），
+## 整个环悬在角色小腿高度，离地、离头顶都远。
+const RELOAD_RING_ANCHOR_LOCAL := Vector3(0.0, 0.25, 0.0)
 ## 「环在角色下方」的结构判据上限。角色高 1.5 m、旧横条锚点在 1.67 m
 ## （头顶），两条互不误判；下限 > 0 表示不许埋到地板以下。
 const RELOAD_RING_BELOW_CHARACTER_MAX_HEIGHT_M := 0.5
@@ -546,7 +572,8 @@ func get_component_snapshot() -> Dictionary:
 		"reload_ring_anchor_local": reload_progress_root.position,
 		"reload_bar_outside_visual_root": reload_progress_root.get_parent() == self,
 		"reload_bar_below_character": _reload_ring_is_below_character(),
-		"reload_ring_ground_flat": _reload_ring_is_ground_flat(),
+		"reload_ring_camera_alignment": _reload_ring_camera_alignment(),
+		"reload_ring_draws_over_character": _reload_ring_draws_over_character(),
 		"weapon_grip_pose_active": _weapon_grip_pose_active,
 		"weapon_pose_state": _weapon_pose_state,
 		"weapon_pose_previous_state": _weapon_pose_previous_state,
@@ -1382,8 +1409,8 @@ func _animate_bunny_accessories(
 	bunny_hand_r.rotation = bunny_hand_r.rotation.lerp(right_hand_rot, minf(1.0, delta * 21.0))
 
 
-## 换弹环一次性装配：定位（角色下方、平铺地面）、还原被 prefab 写死的 Fill 偏移、
-## 建底轨整圈、把两个材质的 billboard 关掉。
+## 换弹环一次性装配：定位（角色下方）、还原被 prefab 写死的 Fill 偏移、建底轨整圈、
+## 记下锚点缩放并把材质换成「正对镜头 + 画在角色之上」那套。
 ##
 ## 必须在 `_ready()` 里 `reload_progress_root.scale = BUNNY_LINEAR_SCALE` **之后**调用 ——
 ## mesh 半径是按锚点缩放反算的，早调会算错一档（0.606 倍）。
@@ -1391,11 +1418,13 @@ func _setup_reload_ring() -> void:
 	if reload_progress_root == null:
 		return
 	reload_progress_root.position = RELOAD_RING_ANCHOR_LOCAL
-	reload_progress_root.rotation = RELOAD_RING_EULER
-	var anchor_scale := reload_progress_root.scale.x
-	if is_zero_approx(anchor_scale):
-		anchor_scale = 1.0
-	_reload_ring_outer_m = RELOAD_RING_OUTER_RADIUS_M / anchor_scale
+	_reload_ring_anchor_scale = reload_progress_root.scale.x
+	if is_zero_approx(_reload_ring_anchor_scale):
+		_reload_ring_anchor_scale = 1.0
+	# 朝向随后由 _face_reload_ring_to_camera() 每帧重写；这里先摆一次，
+	# 免得第一帧露出 prefab 写的朝向。
+	_face_reload_ring_to_camera()
+	_reload_ring_outer_m = RELOAD_RING_OUTER_RADIUS_M / _reload_ring_anchor_scale
 	_reload_ring_inner_m = _reload_ring_outer_m * (1.0 - RELOAD_RING_THICKNESS_RATIO)
 	if reload_progress_track != null:
 		# prefab 里的 Track 是 1.20×0.18 的 QuadMesh，几何被整块换掉；材质留着
@@ -1420,18 +1449,66 @@ func _setup_reload_ring() -> void:
 ## 圆环不需要那个横向偏移，归零；但**必须保留沿 +Z 的那一点前压**（见
 ## RELOAD_RING_FILL_DEPTH_OFFSET）—— 底轨与填充共面时，两个半透明面的排序不稳定，
 ## 画面会闪。`depth_offset` 就是沿网格法线方向的前压量。
+##
+## 材质**先 duplicate() 再改**：prefab 里的 `MatReloadTrack` / `MatReloadFill` 是场景内
+## **共享**的 sub_resource，不复制就改属性会漏到同一场景的其它实例（验收场景里另起
+## 一份 player 的用例就会跟着变）。
 func _reset_ring_instance(
 	node: MeshInstance3D, material: StandardMaterial3D, depth_offset: float
 ) -> void:
 	node.position = Vector3(0.0, 0.0, depth_offset)
 	node.rotation = Vector3.ZERO
 	node.scale = Vector3.ONE
-	if material != null:
-		# 横条时代靠 billboard 让它永远面对相机；平铺的环反过来**必须**关掉，
-		# 否则着色器会按相机基向量重新摆朝向，把环立起来。
-		material.billboard_mode = BaseMaterial3D.BILLBOARD_DISABLED
-		material.billboard_keep_scale = false
-		node.material_override = material
+	if material == null:
+		return
+	var unique := material.duplicate() as StandardMaterial3D
+	# 朝向由 _face_reload_ring_to_camera() 手写 —— 材质 billboard 会把模型基向量归一化，
+	# 连 node.scale（母版线性缩放）一起吃掉，环的世界尺寸就错了。见常量区注释。
+	unique.billboard_mode = BaseMaterial3D.BILLBOARD_DISABLED
+	unique.billboard_keep_scale = false
+	# 「层级还是在角色上方」：关深度测试，环才压得住躯干，不被切掉半圈。
+	unique.no_depth_test = RELOAD_RING_DRAW_OVER_CHARACTER
+	node.material_override = unique
+
+
+## 把环面摆成**正对镜头**（2026-10-05 主人指定）。
+##
+## 相机基的 +Z 指向观察者，而环网格的正面法线也是 +Z（见 RingProgressGeometry 的绕序
+## 约定：从 +Z 看顺时针），所以「局部基 = 相机基」就等于环面正对镜头，不需要额外 look_at。
+##
+## 用**父节点正交化旋转的逆**反解局部 basis，而不是直接写 `global_basis`：父节点（角色）
+## 带着缩放（运行时体型倍率 × 母版线性缩放），每帧写 global_basis 都要做一次带缩放的
+## 矩阵分解，浮点误差会一帧帧累积；反解出来的旋转是幂等的。
+##
+## 相机沿轨道移动时朝向会变，所以调用点在**每帧**的 _update_reload_progress_bar() 里。
+func _face_reload_ring_to_camera() -> void:
+	if reload_progress_root == null:
+		return
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		# headless / 无相机：保留 prefab 朝向，不报错（验收场景走这条时另有断言兜底）。
+		return
+	var parent_node := reload_progress_root.get_parent_node_3d()
+	var parent_rotation := Basis.IDENTITY
+	if parent_node != null:
+		parent_rotation = parent_node.global_transform.basis.orthonormalized()
+	var camera_rotation := camera.global_transform.basis.orthonormalized()
+	var local_rotation := parent_rotation.inverse() * camera_rotation
+	reload_progress_root.basis = local_rotation.scaled(Vector3.ONE * _reload_ring_anchor_scale)
+
+
+## 结构断言用：环面法线（网格正面 = 局部 +Z）与相机视轴的对齐度。
+## 相机基的 +Z 指向观察者 ⇒ 正对镜头时点积 = 1；平铺在地面上时法线朝上 ≈ 0。
+## 没有相机（headless）返回 -1。
+func _reload_ring_camera_alignment() -> float:
+	if reload_progress_root == null:
+		return -1.0
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return -1.0
+	var ring_normal := reload_progress_root.global_transform.basis.z.normalized()
+	var camera_normal := camera.global_transform.basis.z.normalized()
+	return ring_normal.dot(camera_normal)
 
 
 ## 结构断言用：环心必须水平居中在角色上、且落在脚下高度带（0 < y ≤ 0.5 m）。
@@ -1447,18 +1524,14 @@ func _reload_ring_is_below_character() -> bool:
 	)
 
 
-## 结构断言用：环必须平铺地面 —— 锚点绕 X 转 -90°，且两个材质都没开 billboard。
-func _reload_ring_is_ground_flat() -> bool:
-	if reload_progress_root == null:
-		return false
-	if not is_equal_approx(reload_progress_root.rotation.x, RELOAD_RING_EULER.x):
-		return false
+## 结构断言用：「层级还是在角色上方」—— 两个材质都关了深度测试，环才压得住躯干。
+func _reload_ring_draws_over_character() -> bool:
 	for value in [reload_progress_track, reload_progress_fill]:
 		var node := value as MeshInstance3D
 		if node == null:
 			continue
 		var material := node.get_active_material(0) as StandardMaterial3D
-		if material == null or material.billboard_mode != BaseMaterial3D.BILLBOARD_DISABLED:
+		if material == null or not material.no_depth_test:
 			return false
 	return true
 
@@ -1470,6 +1543,8 @@ func _update_reload_progress_bar() -> void:
 		# 归一化"未画"状态：下一次换弹从 0 重画，不会残留上一轮的满圈。
 		_reload_ring_built_progress = -1.0
 		return
+	# 相机沿轨道移动会改变朝向，所以**每帧**重写，而不是换弹开始时写一次。
+	_face_reload_ring_to_camera()
 	if reload_progress_fill == null:
 		return
 	var clamped := clampf(_reload_progress, 0.0, 1.0)

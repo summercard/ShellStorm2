@@ -20,6 +20,16 @@ func _ready() -> void:
 	await get_tree().process_frame
 	player.weapon.set_process(false)
 
+	# 本场景默认没有相机，环的朝向分支会走「无相机 ⇒ 保留 prefab 朝向」那条，
+	# 于是「正对镜头」这条判据在验收里压根走不到。这里按 TowerDescent3D 的
+	# CAMERA_*（位置 = 玩家 + (0, 10.719009, 4.037671)，注视点 = 玩家 + (0, 0.45, -0.75)）
+	# 摆一台真相机 —— 整条相机链的倾角、以及「环离地」都按这套数算。
+	var camera := Camera3D.new()
+	add_child(camera)
+	camera.position = Vector3(0.0, 10.719009, 4.037671)
+	camera.look_at(Vector3(0.0, 0.45, -0.75), Vector3.UP)
+	camera.make_current()
+
 	var progress_samples: Array[float] = []
 	var ended_results: Array[bool] = []
 	player.reload_progress_changed.connect(func(progress: float, _remaining: float): progress_samples.append(progress))
@@ -53,16 +63,35 @@ func _ready() -> void:
 				_registered_top_level_state_count(),
 			]
 		)
-	# 2026-10-04：换弹表现由「头顶横向条」改为「角色脚下平铺圆环」（0.2-PLAYER-001）。
+	# 2026-10-04：换弹表现由「头顶横向条」改为「角色下方圆环」（0.2-PLAYER-001）。
 	# 进度不再走 fill.scale.x，而是按角度裁切圆弧 —— 判据换成 reload_ring_progress。
 	if not bool(avatar_snapshot.get("reload_bar_visible", false)) or float(avatar_snapshot.get("reload_ring_progress", -1.0)) != 0.0:
 		failures.append("角色脚下换弹环在进度 0 时没有显示成空环")
+	# 2026-10-05：口径由「平铺地面」改成「正对镜头 + 画在角色之上」。
+	# 锚点仍在角色下方、仍在 VisualRoot 之外（不随瞄准朝向立起来）。
 	if (
 		not bool(avatar_snapshot.get("reload_bar_outside_visual_root", false))
-		or not bool(avatar_snapshot.get("reload_ring_ground_flat", false))
 		or not bool(avatar_snapshot.get("reload_bar_below_character", false))
 	):
-		failures.append("换弹环没有平铺在角色脚下的独立锚点上（会随瞄准朝向立起来 / 挂回头顶）")
+		failures.append("换弹环没有挂在角色下方的独立锚点上（会随瞄准朝向立起来 / 挂回头顶）")
+	# 环面必须正对镜头：相机基的 +Z 指向观察者，环网格正面法线也是 +Z ⇒ 点积 = 1。
+	# ⚠️ 判据的量级要说清楚：本作相机离竖直只有 25°，所以「平铺地面」（法线朝上）
+	# 也有 cos(25°) ≈ 0.906 —— 这条断言区分的是 1.000 / 0.906，不是 1 / 0。
+	# 阈值取 0.999：容得下浮点误差，容不下那 25° 的倾角。
+	var ring_alignment := _ring_camera_alignment(player.avatar, camera)
+	if ring_alignment < 0.999:
+		failures.append(
+			"换弹环没有正对镜头（环面法线与相机视轴点积 %.4f；平铺地面时约 0.906）" % ring_alignment
+		)
+	# 快照里那份对齐度必须与实测对得上，否则它就是个没人维护的摆设。
+	var reported_alignment := float(avatar_snapshot.get("reload_ring_camera_alignment", -1.0))
+	if absf(reported_alignment - ring_alignment) > 0.001:
+		failures.append(
+			"快照里的换弹环朝向与实测不一致（快照 %.4f / 实测 %.4f）" % [reported_alignment, ring_alignment]
+		)
+	# 「层级还是在角色上方」：环心在角色下半身，不关深度测试就会被腿切掉半圈。
+	if not bool(avatar_snapshot.get("reload_ring_draws_over_character", false)):
+		failures.append("换弹环没有画在角色之上（深度测试没关）—— 上半圈会被腿切掉")
 	# 进度 0 时圆弧必须是**空网格**：不是「缩小到看不见」，是压根没有三角面。
 	if _arc_triangle_count(player.avatar) != 0:
 		failures.append("进度 0 时换弹环还画着圆弧（%d 个三角面）" % _arc_triangle_count(player.avatar))
@@ -117,6 +146,17 @@ func _ready() -> void:
 				"换弹环没有随角色缩放（世界外半径实测 %.4f m，期望 %.4f m = 设计值 × 体型倍率）"
 				% [mid_outer_world, expected_outer]
 			)
+		# 环还必须整个**离地**：正对镜头时环面离水平就是相机倾角，竖直方向铺开
+		# r × |sin(倾角)| = r × 法线水平分量长度。最低点 ≤ 0 就是插进地板 ——
+		# 画面上会重新读成「地上画的圈」，那正是 2026-10-05 被否掉的一版。
+		var ring_node := player.avatar.get_node_or_null("ReloadProgress3D") as Node3D
+		var ring_normal := ring_node.global_transform.basis.z.normalized()
+		var ring_lowest_m := (
+			ring_node.global_position.y
+			- mid_outer_world * Vector2(ring_normal.x, ring_normal.z).length()
+		)
+		if ring_lowest_m <= 0.0:
+			failures.append("换弹环下半圈插进了地板（最低点 %.4f m）" % ring_lowest_m)
 	if (
 		(avatar_snapshot.get("reload_offset", Vector3.ZERO) as Vector3).length() > 0.001
 		or (avatar_snapshot.get("reload_rotation", Vector3.ZERO) as Vector3).length() > 0.001
@@ -211,7 +251,7 @@ func _ready() -> void:
 	player.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("3D_RELOAD_STATE_FLOW_OK: reload overlay, real timer, weapon-class grip animation, under-character ring progress, completion and cancellation pass")
+		print("3D_RELOAD_STATE_FLOW_OK: reload overlay, real timer, weapon-class grip animation, camera-facing under-character ring progress, completion and cancellation pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -261,6 +301,18 @@ func _arc_radii_mesh(avatar: PlayerAvatar3D) -> Vector2:
 
 func _reload_ring_fill(avatar: PlayerAvatar3D) -> MeshInstance3D:
 	return avatar.get_node_or_null("ReloadProgress3D/Fill") as MeshInstance3D
+
+
+## 环面法线（网格正面 = 局部 +Z）与相机视轴的对齐度。
+## 1 = 正对镜头；0 = 平铺在地面上（法线朝上）。这里自己算，不读快照 ——
+## 读快照就成了「用被测对象证明被测对象」。
+func _ring_camera_alignment(avatar: PlayerAvatar3D, camera: Camera3D) -> float:
+	var ring := avatar.get_node_or_null("ReloadProgress3D") as Node3D
+	if ring == null or camera == null:
+		return -1.0
+	var ring_normal := ring.global_transform.basis.z.normalized()
+	var camera_normal := camera.global_transform.basis.z.normalized()
+	return ring_normal.dot(camera_normal)
 
 
 ## 锚点（ReloadProgress3D）当前的总缩放：mesh 半径 × 它 = 世界半径。
