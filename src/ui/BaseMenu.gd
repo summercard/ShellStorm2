@@ -323,7 +323,12 @@ func _on_start_pressed() -> void:
 	if overlay_mode:
 		queue_free()
 		return
-	get_tree().change_scene_to_file(GameDesignConfig.BASE_SCENE_3D)
+	var error: Error = SceneTransitionFlow.request_scene_change(
+		GameDesignConfig.BASE_SCENE_3D,
+		"返回基地"
+	)
+	if error != OK:
+		push_error("[BaseMenu] 返回基地失败：%s" % error_string(error))
 
 
 func _on_close_overlay_pressed() -> void:

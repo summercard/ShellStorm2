@@ -270,6 +270,12 @@ var _runtime_carry_restore_snapshot: Dictionary = {}
 ## `MISSION_OPERATIONS_DEPARTURE_CARRY_KEY`）。
 var _runtime_departure_carry_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
+## SceneTransitionFlow 的真实目标就绪契约：必须晚于地图结构、出生点和持久化恢复。
+var _transition_bootstrap_complete := false
+var _transition_bootstrap_running := false
+var _transition_process_modes: Dictionary = {}
+var _transition_process_nodes: Array[Node] = []
+var _last_transition_progress := 0.0
 var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
@@ -277,7 +283,64 @@ var _narrative_spawned_keys: Dictionary = {}
 var _room_graph_runtime: RoomGraphRuntime = ROOM_GRAPH_RUNTIME_SCRIPT.new()
 
 
+func is_transition_runtime_ready() -> bool:
+	return _transition_bootstrap_complete and (test_mode or _runtime_persistence_active)
+
+
+func _report_transition_progress(ratio: float, status: String) -> void:
+	var monotonic_ratio := maxf(_last_transition_progress, clampf(ratio, 0.0, 1.0))
+	_last_transition_progress = monotonic_ratio
+	if not test_mode and SceneTransitionFlow != null:
+		SceneTransitionFlow.report_target_progress(self, monotonic_ratio, status)
+
+
 func _ready() -> void:
+	_transition_bootstrap_complete = false
+	_last_transition_progress = 0.0
+	if _should_split_transition_bootstrap():
+		_start_transition_bootstrap()
+		return
+	_initialize_runtime()
+	_complete_runtime_bootstrap()
+
+
+func _should_split_transition_bootstrap() -> bool:
+	return (
+		not test_mode
+		and SceneTransitionFlow != null
+		and SceneTransitionFlow.is_transition_active()
+		and SceneTransitionFlow.get_transition_state() in ["switching", "bootstrapping"]
+	)
+
+
+func _start_transition_bootstrap() -> void:
+	_transition_bootstrap_running = true
+	_freeze_transition_runtime()
+	call_deferred("_initialize_runtime_split")
+
+
+func _initialize_runtime() -> void:
+	_initialize_runtime_context()
+	if not _initialize_runtime_layout():
+		return
+	_initialize_runtime_player()
+
+
+func _initialize_runtime_split() -> void:
+	_initialize_runtime_context()
+	if not await _initialize_runtime_layout_split():
+		_restore_transition_runtime_process_modes()
+		_transition_bootstrap_running = false
+		return
+	_initialize_runtime_player()
+	await _yield_transition_bootstrap()
+	_complete_runtime_bootstrap()
+	_restore_transition_runtime_process_modes()
+	_transition_bootstrap_running = false
+
+
+func _initialize_runtime_context() -> void:
+	_report_transition_progress(0.08, "正在初始化行动模块…")
 	if not _hud_presenter.weapon_hud_command_ready.is_connected(_apply_weapon_hud_command):
 		_hud_presenter.weapon_hud_command_ready.connect(_apply_weapon_hud_command)
 	add_to_group("room_game_mode")
@@ -296,9 +359,6 @@ func _ready() -> void:
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 				_run_id = str(candidate.get("run_id", ""))
 			elif _is_successful_extraction_carry_snapshot(candidate):
-				# 独立副本的成功撤离已经完成结算，这里只是把同一批物品实例
-				# 从关卡场景交接给返航落点（99F）。它绝不是一次可续局行动，
-				# 所以不走上面的 combat 分支，也不改 run_seed / run_id。
 				_runtime_carry_restore_snapshot = candidate
 			elif (
 				RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(candidate)
@@ -311,10 +371,6 @@ func _ready() -> void:
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 				_run_id = str(candidate.get("run_id", ""))
 			elif _is_mission_operations_departure_carry_snapshot(candidate):
-				# 基地 → 新行动地图的出发交接（见 MISSION_OPERATIONS_DEPARTURE_CARRY_KEY）。
-				# ⚠️ 顺序是契约：必须排在 base 分支之后 —— 塔楼自己的场景要靠 base 分支
-				# 恢复世界与坐标，而出发交接刻意不恢复它们。这里也刻意不继承 run_seed /
-				# run_id：远征是新行动，身份由目的地场景自己派生。
 				_runtime_departure_carry_snapshot = candidate
 	if gameplay_theme == null:
 		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
@@ -327,8 +383,6 @@ func _ready() -> void:
 		_run_id = RUN_PERSISTENCE_SERVICE.generate_run_id(run_seed)
 	_rng.seed = run_seed
 	_setup_run_modules()
-	# 热返城不会重新创建主入口界面，因此玩法场景自身必须恢复已保存外观。
-	# test_mode 禁止读取开发者真实档案，专项测试可显式调用持久化服务。
 	if not test_mode:
 		AVATAR_CUSTOMIZATION_PERSISTENCE.apply_saved_to_player(player)
 	_map_fate_triggers = MapFateTriggers.new()
@@ -338,9 +392,21 @@ func _ready() -> void:
 	_configure_environment()
 	if RuntimePerformanceManager != null:
 		RuntimePerformanceManager.register_atmosphere(self)
+
+
+func _initialize_runtime_layout() -> bool:
+	_report_transition_progress(0.32, "正在生成地图结构（静态房间壳体可能产生同步尖峰）…")
 	_generate_layout()
-	if not _can_finish_layout_bootstrap():
-		return
+	return _can_finish_layout_bootstrap()
+
+
+func _initialize_runtime_layout_split() -> bool:
+	_report_transition_progress(0.32, "正在生成地图结构（静态房间壳体可能产生同步尖峰）…")
+	await _generate_layout_split()
+	return _can_finish_layout_bootstrap()
+
+
+func _initialize_runtime_player() -> void:
 	player.set_combat_enabled(true)
 	FateCardGameBridge.reset_run_state()
 	FateCardGameBridge.set_player(player)
@@ -361,6 +427,7 @@ func _ready() -> void:
 		if not flashlight.state_changed.is_connected(_on_flashlight_state_changed):
 			flashlight.state_changed.connect(_on_flashlight_state_changed)
 		_update_battery_hud()
+	_report_transition_progress(0.78, "正在放置行动者并恢复入口…")
 	player.global_position = Vector3(0, 0.05, 0)
 	_on_room_entered(_room_by_id.get("start") as DungeonRoom3D)
 	_on_player_hp_changed(player.current_hp, player.max_hp)
@@ -370,8 +437,40 @@ func _ready() -> void:
 	seed_label.text = "SEED %d" % run_seed
 	status_label.text = "%s · 初始钥匙 1，把战利品安全带到撤离点" % gameplay_theme.fantasy
 	_refresh_loot_label()
+	_report_transition_progress(0.88, "正在恢复装备与运行时存档…")
 	generation_completed.emit(get_generation_snapshot())
-	call_deferred("_activate_runtime_persistence")
+
+
+func _complete_runtime_bootstrap() -> void:
+	if not _can_finish_layout_bootstrap():
+		return
+	_activate_runtime_persistence()
+
+
+func _yield_transition_bootstrap() -> void:
+	await get_tree().process_frame
+
+
+func _freeze_transition_runtime() -> void:
+	_transition_process_modes.clear()
+	_transition_process_nodes.clear()
+	var pending: Array[Node] = [self]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		_transition_process_nodes.append(node)
+		for child: Node in node.get_children():
+			pending.append(child)
+	for node: Node in _transition_process_nodes:
+		_transition_process_modes[node.get_instance_id()] = node.process_mode
+		node.process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func _restore_transition_runtime_process_modes() -> void:
+	for node: Node in _transition_process_nodes:
+		if is_instance_valid(node) and _transition_process_modes.has(node.get_instance_id()):
+			node.process_mode = int(_transition_process_modes[node.get_instance_id()])
+	_transition_process_modes.clear()
+	_transition_process_nodes.clear()
 
 
 ## 子类可在规划失败时阻止出生、生成完成信号与持久化激活。
@@ -388,7 +487,10 @@ func _exit_tree() -> void:
 
 
 func _activate_runtime_persistence() -> void:
-	if test_mode or BaseManager == null or not is_inside_tree():
+	if test_mode:
+		_transition_bootstrap_complete = true
+		return
+	if BaseManager == null or not is_inside_tree():
 		return
 	if not _runtime_restore_snapshot.is_empty():
 		_restore_runtime_save_snapshot(_runtime_restore_snapshot)
@@ -428,6 +530,7 @@ func _activate_runtime_persistence() -> void:
 		if not player.backpack_equipment_changed.is_connected(_on_runtime_backpack_changed):
 			player.backpack_equipment_changed.connect(_on_runtime_backpack_changed)
 	BaseManager.queue_runtime_checkpoint("runtime_ready", 0.1)
+	_transition_bootstrap_complete = true
 
 
 func _on_runtime_inventory_changed() -> void:
@@ -1831,10 +1934,27 @@ func apply_performance_quality(profile: String) -> void:
 
 
 func _generate_layout() -> void:
+	_prepare_layout_data()
+	_instantiate_layout_rooms()
+	_finish_layout_structure()
+
+
+func _generate_layout_split() -> void:
+	_prepare_layout_data()
+	await _yield_transition_bootstrap()
+	_instantiate_layout_rooms()
+	await _yield_transition_bootstrap()
+	await _finish_layout_structure_split()
+
+
+func _prepare_layout_data() -> void:
 	_build_records()
 	_build_topology()
 	minimap.configure(_records, _open_edges)
 	minimap.reveal_room("start")
+
+
+func _instantiate_layout_rooms() -> void:
 	for record in _records:
 		var room := ROOM_SCENE.instantiate() as DungeonRoom3D
 		room.configure({
@@ -1851,9 +1971,6 @@ func _generate_layout() -> void:
 			"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
 			"reward_plan": record.get("reward_plan", {}),
 			"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
-			# 授权布局壳体（区块00 98F 入口房）：入口房由本路径在开局就实例化，
-			# 而其余房间在 FloorBundle 里走 TowerDescent3D._instantiate_dynamic_room。
-			# 两处 configure 必须同样透传，否则入口房会退回通用 5m 程序化壳体。
 			"authored_layout_shell": bool(record.get("authored_layout_shell", false)),
 			"authored_layout_asset_id": str(record.get("authored_layout_asset_id", "")),
 			"authored_layout_version": str(record.get("authored_layout_version", "")),
@@ -1873,6 +1990,9 @@ func _generate_layout() -> void:
 		room.prop_searched.connect(_on_prop_searched)
 		room.service_activated.connect(_on_service_activated)
 		room.light_toggled.connect(_on_room_light_toggled)
+
+
+func _finish_layout_structure() -> void:
 	_plan_room_layout()
 	_ensure_structural_shells_resident()
 	_bind_shared_edge_doors()
@@ -1886,12 +2006,43 @@ func _generate_layout() -> void:
 	_create_extraction()
 
 
+func _finish_layout_structure_split() -> void:
+	_plan_room_layout()
+	await _ensure_structural_shells_resident_split()
+	_bind_shared_edge_doors()
+	for record in _records:
+		if str(record.get("parent", "")).is_empty():
+			continue
+		var parent: DungeonRoom3D = _room_by_id.get(str(record["parent"])) as DungeonRoom3D
+		var child: DungeonRoom3D = _room_by_id.get(str(record["id"])) as DungeonRoom3D
+		if parent != null and child != null:
+			_build_corridor(parent, child, int(record["index"]))
+		await _yield_transition_bootstrap()
+	_create_extraction()
+
+
 func _ensure_structural_shells_resident() -> void:
 	# 必须在门轴/最终房间坐标提交后构建，避免用未冻结拓扑生成错误门洞。
 	for room in _rooms:
 		if room != null and is_instance_valid(room):
 			room.ensure_shell_built()
 			room.visible = true
+
+
+func _ensure_structural_shells_resident_split() -> void:
+	# 房间壳体是目标场景最大同步成本。按房间让出绘制帧，loading
+	# 画面可以持续刷新；这不是伪进度，目标 ready gate 仍等全部房间完成。
+	for index in range(_rooms.size()):
+		var room := _rooms[index] as DungeonRoom3D
+		if room != null and is_instance_valid(room):
+			room.ensure_shell_built()
+			room.visible = true
+		_report_transition_progress(
+			0.32 + 0.12 * float(index + 1) / float(maxi(_rooms.size(), 1)),
+			"正在构建首屏房间结构：%d / %d" % [index + 1, _rooms.size()]
+		)
+		if index < _rooms.size() - 1:
+			await _yield_transition_bootstrap()
 
 
 ## 子类可在全部结构壳体完成后，把一条边唯一的门实体绑定给另一端房间。
@@ -6595,9 +6746,11 @@ func _finish_run(success: bool) -> void:
 	status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()] if success else "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
 	if not test_mode:
-		await get_tree().create_timer(0.18 if not success else 1.6).timeout
 		var entry_request_id := _request_return_entry_context(success)
-		var change_error := get_tree().change_scene_to_file(return_scene_path)
+		var change_error: Error = SceneTransitionFlow.request_scene_change(
+			return_scene_path,
+			"返回主塔基地"
+		)
 		if change_error != OK:
 			if entry_request_id > 0:
 				GameEntryFlow.cancel_request(entry_request_id)

@@ -1,12 +1,12 @@
 extends CanvasLayer
 class_name StartupLoadingScreen
-## 启动外壳：先给玩家一个明确的启动画面，再进入原有 TowerDescent3D。
+## 启动外壳：先给玩家一个明确的启动画面，再交给统一场景加载流程进入主塔。
 ##
-## 这里只负责视觉反馈与一次性切场景，不读取、不消费、不写入任何存档，
+## 这里只负责兼容启动页的视觉骨架与一次性请求，不读取、不消费、不写入任何存档，
 ## 不参与 GameEntryFlow，也不改变目的场景的出生、恢复和开始菜单逻辑。
 
 const TARGET_SCENE := "res://scenes/TowerDescent3D.tscn"
-const MIN_DISPLAY_SECONDS := 1.10
+const MIN_DISPLAY_SECONDS := 0.0
 const STEP_DURATION_SECONDS := 0.55
 const STEP_TEXTS: Array[String] = [
 	"正在启动行动系统…",
@@ -28,8 +28,7 @@ func _ready() -> void:
 	layer = 128
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
-	if _should_skip_delay():
-		_enter_game()
+	call_deferred("_enter_game")
 
 
 func _process(delta: float) -> void:
@@ -37,8 +36,6 @@ func _process(delta: float) -> void:
 		return
 	_elapsed += delta
 	_update_ui()
-	if _elapsed >= MIN_DISPLAY_SECONDS:
-		_enter_game()
 
 
 func _should_skip_delay() -> bool:
@@ -57,7 +54,13 @@ func _change_to_target_scene() -> void:
 	if not _transition_requested or _failed:
 		return
 	_transition_requested = false
-	var error: Error = get_tree().change_scene_to_file(TARGET_SCENE)
+	var transition := get_node_or_null("/root/SceneTransitionFlow")
+	if transition == null:
+		_failed = true
+		_status_label.text = "启动失败：统一加载服务不可用"
+		push_error("[StartupLoadingScreen] SceneTransitionFlow 不可用")
+		return
+	var error := int(transition.call("request_scene_change", TARGET_SCENE, "主塔基地"))
 	if error != OK:
 		_failed = true
 		if _status_label != null:
@@ -66,7 +69,7 @@ func _change_to_target_scene() -> void:
 
 
 func _update_ui() -> void:
-	var ratio := clampf(_elapsed / MIN_DISPLAY_SECONDS, 0.0, 1.0)
+	var ratio := 1.0 if MIN_DISPLAY_SECONDS <= 0.0 else clampf(_elapsed / MIN_DISPLAY_SECONDS, 0.0, 1.0)
 	if _progress != null:
 		_progress.value = ratio * 100.0
 	if _step_label != null and not STEP_TEXTS.is_empty():

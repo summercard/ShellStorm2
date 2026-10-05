@@ -3,10 +3,11 @@ class_name ExpeditionLoadingScreen
 ## 远征情报室 →「远征关卡01」之间的读取界面。
 ##
 ## 职责刻意保持单一：不提交运行态检查点、不消费入口意图、不改动任何存档。
-## 基地落盘与入口登记由 RogueMapSelectMenu 在切场景前完成；本界面只负责
-## 把"正在读取关卡"这件事显式地画给玩家看，进度走满后切到正式关卡场景。
+## 基地落盘与入口登记由 RogueMapSelectMenu 在切场景前完成；真正的资源读取和
+## 场景切换统一交给 SceneTransitionFlow。本兼容界面仍可被旧入口使用，但不再用
+## 固定时长假装地图读取进度。
 ##
-## 无头/编辑器环境直接跳过等待，保证验收脚本不会被过场拖住。
+## 无头/编辑器环境也交给统一加载服务处理，避免每个入口各自实现一套过场。
 
 ## 到达关卡路径**不在此处硬编码**：终点真源统一为 GameDesignConfig 的远征关卡清单。
 ## 本常量只是**默认终点**（远征关卡01）；实际去向由选关菜单写入的待进入关卡 id 决定，
@@ -37,8 +38,7 @@ func _ready() -> void:
 	# 「默认关卡01」这条既有断言不受影响。
 	_level_id = GameDesignConfig.peek_pending_expedition_level_id()
 	_build_ui()
-	if _should_skip_delay():
-		_enter_level()
+	call_deferred("_enter_level")
 
 
 func _process(delta: float) -> void:
@@ -53,8 +53,6 @@ func _process(delta: float) -> void:
 			int(ratio * float(STEP_TEXTS.size())), 0, STEP_TEXTS.size() - 1
 		)
 		_step_label.text = STEP_TEXTS[step_index]
-	if ratio >= 1.0:
-		_enter_level()
 
 
 ## 无头验收与编辑器内不播放过场：直接进入关卡，避免慢测试与编辑器卡帧。
@@ -69,7 +67,15 @@ func _enter_level() -> void:
 	if _advanced:
 		return
 	_advanced = true
-	var error := get_tree().change_scene_to_file(_destination_scene())
+	var transition := get_node_or_null("/root/SceneTransitionFlow")
+	if transition == null:
+		push_error("[ExpeditionLoadingScreen] SceneTransitionFlow 不可用")
+		return
+	var error := int(transition.call(
+		"request_scene_change",
+		_destination_scene(),
+		_destination_display_name()
+	))
 	if error != OK:
 		push_error(
 			"[ExpeditionLoadingScreen] 进入远征关卡失败: %s" % error_string(error)

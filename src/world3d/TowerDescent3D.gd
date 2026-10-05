@@ -451,19 +451,15 @@ func get_runtime_resume_scene_path(snapshot: Dictionary) -> String:
 
 func _ready() -> void:
 	process_physics_priority = 100
-	if is_expedition():
-		# 远征的退出/结算落点 = 玩家出发点 = 塔楼 99F 基地主场景。
-		# 刻意在代码里钉死、不靠各关卡场景文件自己写：BaseWorld3D 是历史「兼容基地」，
-		# 不是玩家出发的地方；新增关卡漏写一处就会把玩家退回那个旧场景。
-		return_scene_path = GameDesignConfig.MAIN_SCENE
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
+	if is_expedition():
+		return_scene_path = GameDesignConfig.MAIN_SCENE
 	if not test_mode and not is_expedition() and BaseManager != null:
 		var checkpoint := BaseManager.get_active_run_checkpoint()
 		var explicit_base_return := (
 			str(_entry_context.get("reason", "")) == GameEntryFlow.REASON_ABORT_RETURN_99F
 			and str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_BASE_99F
 		)
-		# 失败场景返回不结算旧行动；只交接检查点的玩家所有权，不能再次跳回坏关卡。
 		if (
 			explicit_base_return
 			and BaseManager.get_pending_insurance_slots().is_empty()
@@ -473,12 +469,12 @@ func _ready() -> void:
 			_runtime_departure_carry_snapshot = checkpoint
 		var resume_scene_path := "" if explicit_base_return else get_runtime_resume_scene_path(checkpoint)
 		if not resume_scene_path.is_empty():
-			# 主场景本身不是该行动的运行时提供者；此处必须在 super() 前转场，
-			# 防止它初始化后覆盖独立副本的检查点。
-			# 续档目的地继承本次上线的开始页意图，不改变存档恢复与出生规则。
 			var request_id := GameEntryFlow.request_runtime_restore_entry(_entry_context)
 			call_deferred("_resume_expedition_runtime_scene", resume_scene_path, request_id)
 			return
+	if _should_split_transition_bootstrap():
+		_start_transition_bootstrap()
+		return
 	var base_art := get_node_or_null("Blocks/Base/Art") as Node3D
 	if base_art != null:
 		if is_expedition():
@@ -486,6 +482,36 @@ func _ready() -> void:
 		else:
 			base_art.visible = false
 	super()
+
+
+func _initialize_runtime() -> void:
+	_report_transition_progress(0.36, "正在准备目标战区结构…")
+	super._initialize_runtime()
+	_initialize_tower_runtime()
+
+
+func _initialize_runtime_split() -> void:
+	_report_transition_progress(0.36, "正在准备目标战区结构…")
+	super._initialize_runtime_context()
+	if not await super._initialize_runtime_layout_split():
+		_restore_transition_runtime_process_modes()
+		_transition_bootstrap_running = false
+		return
+	if is_expedition() and _expedition_bootstrap_failed:
+		_fail_expedition_bootstrap("远征规划无效，拒绝启动")
+		_restore_transition_runtime_process_modes()
+		_transition_bootstrap_running = false
+		return
+	super._initialize_runtime_player()
+	await _yield_transition_bootstrap()
+	_initialize_tower_runtime()
+	await _yield_transition_bootstrap()
+	_complete_runtime_bootstrap()
+	_restore_transition_runtime_process_modes()
+	_transition_bootstrap_running = false
+
+
+func _initialize_tower_runtime() -> void:
 	if is_expedition() and _expedition_bootstrap_failed:
 		_fail_expedition_bootstrap("远征规划无效，拒绝启动")
 		return
@@ -496,6 +522,7 @@ func _ready() -> void:
 	# 否则玩家虽然出生在安全房门口，前门后方却只有尚未实例化的目标房。
 	if is_expedition():
 		_ensure_expedition_block()
+		_report_transition_progress(0.48, "正在提交远征楼层…")
 		if not _commit_floor_bundle(EXPEDITION_LAYER_INDEX, "expedition_bootstrap"):
 			_fail_expedition_bootstrap("远征楼层提交失败，拒绝启动")
 			return
@@ -510,6 +537,7 @@ func _ready() -> void:
 		"expedition_bootstrap" if is_expedition() else "rooftop_bootstrap"
 	)
 	_build_floor_stages()
+	_report_transition_progress(0.64, "正在安装楼层、设施与碰撞…")
 	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
 	_apply_indoor_camera_pose()
 	player.camera.fov = CAMERA_FOV_DEG
@@ -591,6 +619,8 @@ func _mark_expedition_bootstrap_failed(reason: String) -> void:
 
 func _fail_expedition_bootstrap(reason: String) -> void:
 	_expedition_bootstrap_failed = true
+	if not test_mode and SceneTransitionFlow != null:
+		SceneTransitionFlow.report_target_failure(self, reason)
 	if player != null and is_instance_valid(player):
 		player.velocity = Vector3.ZERO
 		player.set_input_locked(true)
@@ -633,7 +663,13 @@ func _sync_player_input_lock() -> void:
 
 
 func _resume_expedition_runtime_scene(scene_path: String, request_id: int) -> void:
-	var error := get_tree().change_scene_to_file(scene_path)
+	await get_tree().process_frame
+	var transition_state := SceneTransitionFlow.get_transition_state()
+	var error: Error = (
+		SceneTransitionFlow.redirect_scene_change(scene_path, "恢复远征行动")
+		if transition_state == "bootstrapping"
+		else SceneTransitionFlow.request_scene_change(scene_path, "恢复远征行动")
+	)
 	if error == OK:
 		return
 	if request_id > 0:
@@ -962,10 +998,8 @@ func _finish_run(success: bool) -> void:
 			push_error("[TowerDescent3D] Successful extraction settlement failed: %s" % commit)
 			return
 	_hold_player_after_settlement()
-	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
+	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返回99F基地" % _run_loot.size()
 	run_completed.emit(true, summary)
-	if not test_mode:
-		await get_tree().create_timer(0.8).timeout
 	_return_successful_extraction_to_facility()
 
 
@@ -1027,9 +1061,11 @@ func _finish_expedition_successful_extraction() -> void:
 	run_completed.emit(true, summary)
 	if test_mode:
 		return
-	await get_tree().create_timer(0.8).timeout
 	var entry_request_id := _request_return_entry_context(true)
-	var change_error := get_tree().change_scene_to_file(return_scene_path)
+	var change_error: Error = SceneTransitionFlow.request_scene_change(
+		return_scene_path,
+		"返回主塔基地"
+	)
 	if change_error != OK:
 		if entry_request_id > 0:
 			GameEntryFlow.cancel_request(entry_request_id)
@@ -3856,8 +3892,10 @@ func _confirm_expedition_exit() -> void:
 	)
 	if test_mode:
 		return
-	await get_tree().create_timer(0.8).timeout
-	var change_error := get_tree().change_scene_to_file(return_scene_path)
+	var change_error: Error = SceneTransitionFlow.request_scene_change(
+		return_scene_path,
+		"返回主塔基地"
+	)
 	if change_error != OK:
 		if entry_request_id > 0:
 			GameEntryFlow.cancel_request(entry_request_id)
@@ -4158,6 +4196,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 				_room_display_name(room.room_type),
 			]
 	_update_facility_combat_lock()
+	_set_base99_radio_floor_active(depth)
 	if _atmosphere != null:
 		_atmosphere.call("set_floor_number", _floor_number_from_index(depth))
 	if player.camera != null:
@@ -4558,6 +4597,18 @@ func _update_facility_combat_lock() -> void:
 	var should_enable_combat := not is_player_inside_facility()
 	if player.combat_enabled != should_enable_combat:
 		player.set_combat_enabled(should_enable_combat)
+
+
+func _set_base99_radio_floor_active(floor_index: int) -> void:
+	# 只接管本 TowerDescent3D 世界中的基地收音机；其他场景/世界的同组节点不受影响。
+	var active := not is_expedition() and _floor_number_from_index(floor_index) == 99
+	for node in get_tree().get_nodes_in_group("base99_radio_3d"):
+		var radio := node as Base99Radio3D
+		if radio == null or not is_ancestor_of(radio):
+			continue
+		if radio.get_world_3d() != get_world_3d():
+			continue
+		radio.set_floor_active(active)
 
 
 func _is_facility_transit_edge(edge: String) -> bool:
@@ -5753,6 +5804,9 @@ func _refresh_physical_location_authority(force := false) -> void:
 	if player == null:
 		return
 	var floor_index := _physical_floor_index()
+	# 收音机楼层权限直接跟随物理位置权威，不能依赖房间 Area 是否已经切换；
+	# 也不能放在下面的早退之后，否则同层强制刷新不会修正初始状态。
+	_set_base99_radio_floor_active(floor_index)
 	# 雷达楼层直接跟随物理位置权威，不能依赖房间Area是否已经切换。
 	# set_current_floor_height内部会忽略未变化值，不会增加重复重绘。
 	if minimap != null:
@@ -5886,7 +5940,10 @@ func return_player_to_base_center_from_pause() -> Dictionary:
 		)
 		if test_mode:
 			return {"success": true, "reason": "测试模式已允许离开失败场景"}
-		var change_error := get_tree().change_scene_to_file(return_scene_path)
+		var change_error: Error = SceneTransitionFlow.request_scene_change(
+			return_scene_path,
+			"返回主塔基地"
+		)
 		if change_error != OK:
 			if request_id > 0:
 				GameEntryFlow.cancel_request(request_id)

@@ -68,6 +68,7 @@ config/icon="res://icon.svg"
 
 VfxPool="*res://src/vfx/VfxPool3D.gd"
 Global="*res://src/core/Global.gd"
+SceneTransitionFlow="*res://src/core/SceneTransitionFlow.gd"
 GameEntryFlow="*res://src/core/GameEntryFlow.gd"
 GameManager="*res://src/core/GameManager.gd"
 AudioManager="*res://src/core/AudioManager.gd"
