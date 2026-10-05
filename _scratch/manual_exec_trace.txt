@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+    try: exec(Path('I:/工作项目/shellstrom2/ShellStorm2/_scratch/finalize_radio_evidence_body.py').read_text(encoding='utf-8'),{})
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in <module>
+  File "C:\Users\zhuangmenghong\.workbuddy\binaries\python\envs\default\Lib\site-packages\openpyxl\__init__.py", line 5, in <module>
+    from openpyxl.compat.numbers import NUMPY
+  File "C:\Users\zhuangmenghong\.workbuddy\binaries\python\envs\default\Lib\site-packages\openpyxl\compat\__init__.py", line 8, in <module>
+    import inspect
+  File "I:\工作项目\shellstrom2\inspect.py", line 1, in <module>
+    import bpy
+ModuleNotFoundError: No module named 'bpy'

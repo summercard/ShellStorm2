@@ -1,0 +1,4 @@
+found=[27]
+max=27
+dv=[('list', ['C6:C27']), ('list', ['K6:K27']), ('list', ['L6:L27'])]
+formulas=[(6, '=LOWER(TRIM(C6)&"|"&TRIM(D6)&"|"&TRIM(E6)&"|"&TRIM(F6)&"|"&TRIM(H6)&"|"&TRIM(I6))', '=IF(COUNTIF($R$6:$R$27,R6)>1,"重复","唯一")'), (26, '=LOWER(TRIM(C26)&"|"&TRIM(D26)&"|"&TRIM(E26)&"|"&TRIM(F26)&"|"&TRIM(H26)&"|"&TRIM(I26))', '=IF(COUNTIF($R$6:$R$27,R26)>1,"重复","唯一")'), (27, '=LOWER(TRIM(C27)&"|"&TRIM(D27)&"|"&TRIM(E27)&"|"&TRIM(F27)&"|"&TRIM(H27)&"|"&TRIM(I27))', '=IF(COUNTIF($R$6:$R$27,R27)>1,"重复","唯一")')]
