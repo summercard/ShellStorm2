@@ -134,7 +134,9 @@ func _update_music_for_floor(floor_number: int, rooftop: bool) -> void:
 		mgr.play("rooftop_relax")
 		return
 	if floor_number == 99:
-		mgr.play("base_passion")
+		# 99F 的 base_passion 由阁楼收音机自己的 AudioStreamPlayer3D 持有。
+		# 不让 MusicManager 播放全局版本，避免与收音机重叠；其他楼层逻辑保持不变。
+		mgr.stop()
 		return
 	# Boss 房判定：95/90/85 层或任意 floor % 5 == 0（与 plan.boss_floor 一致）
 	if floor_number > 0 and floor_number % 5 == 0:

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/preview_base99_radio.gd" id="1_preview"]
+
+[node name="PreviewBase99Radio" type="Node3D"]
+script = ExtResource("1_preview")

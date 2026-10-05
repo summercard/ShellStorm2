@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "I:\工作项目\shellstrom2\ShellStorm2\_scratch\run_apply_with_traceback.py", line 5, in <module>
+    runpy.run_path('I:/工作项目/shellstrom2/ShellStorm2/_scratch/apply_base99_radio_ledger.py', run_name='__main__')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 294, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "I:/工作项目/shellstrom2/ShellStorm2/_scratch/apply_base99_radio_ledger.py", line 228, in <module>
+    main()
+    ~~~~^^
+  File "I:/工作项目/shellstrom2/ShellStorm2/_scratch/apply_base99_radio_ledger.py", line 114, in main
+    assert not any(main.cell(r, 1).value == ASSET_ID for r in range(6, main.max_row + 1))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

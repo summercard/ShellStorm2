@@ -1,0 +1,479 @@
+{
+  "分类与编码": {
+    "max_row": 16,
+    "max_column": 10,
+    "rows": [
+      {
+        "row": 4,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "3D Prefab分类与分页",
+          null,
+          null
+        ]
+      },
+      {
+        "row": 5,
+        "values": [
+          "前缀",
+          "大类",
+          "推荐子类",
+          "标准目录",
+          "文件名模式",
+          "AssetID 示例",
+          null,
+          "Prefab分类",
+          "归类标准",
+          "分页"
+        ]
+      },
+      {
+        "row": 8,
+        "values": [
+          "WPN",
+          "武器",
+          "gunbody / melee / bullet / attachment",
+          "assets/art/weapons/",
+          "wpn_{family}_{logic_id}_{view}_v{nnn}.{png|glb|tscn}",
+          "WPN-MELEE-BP-GREATBLADE",
+          null,
+          "道具",
+          "桌椅、家具、容器和摆放装饰物",
+          "3D-道具"
+        ]
+      },
+      {
+        "row": 9,
+        "values": [
+          "ITM",
+          "道具",
+          "pickup / consumable / key / loot",
+          "assets/art/items/",
+          "itm_{type}_{logic_id}_{state}_v{nnn}.png",
+          "ITM-KEY-ROOM-DEFAULT",
+          null,
+          "角色",
+          "玩家、NPC与角色表现/玩法根",
+          "3D-角色"
+        ]
+      },
+      {
+        "row": 11,
+        "values": [
+          "PRP",
+          "场景道具",
+          "facility / container / door / debris / light / switch",
+          "assets/art/props/",
+          "prp_{set}_{logic_id}_{state}_v{nnn}.{png|glb|tscn}",
+          "PRP-BASE-WORKBENCH-IDLE",
+          null,
+          "武器",
+          "枪械、近战武器与武器装配根",
+          "3D-武器"
+        ]
+      },
+      {
+        "row": 14,
+        "values": [
+          "AUD",
+          "音效",
+          "sfx / ambience / ui",
+          "src/assets/audio/sfx/",
+          "{event}_v{nnn}.{ogg|wav}",
+          "AUD-SFX-PLAYER-DASH",
+          null,
+          "其他",
+          "无法归入以上分类的独立3D Prefab",
+          "3D-其他"
+        ]
+      }
+    ]
+  },
+  "命名与查重": {
+    "max_row": 17,
+    "max_column": 8,
+    "rows": []
+  },
+  "3D Prefab总控": {
+    "max_row": 14,
+    "max_column": 17,
+    "rows": [
+      {
+        "row": 1,
+        "values": [
+          "ShellStorm2 · 3D Prefab 分类索引",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 2,
+        "values": [
+          "详细Prefab按分类进入独立分页；场景与固定设施统一使用项目公共色盘，不在模型目录复制贴图。",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 3,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 4,
+        "values": [
+          "分类",
+          "分页",
+          "Prefab数量",
+          "直接引用GLB",
+          "有功能脚本",
+          "碰撞开启",
+          "说明",
+          "归属账本",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 5,
+        "values": [
+          "场景通用组件",
+          "3D-场景通用",
+          712,
+          641,
+          108,
+          64,
+          "关卡结构、地板、墙体、走廊、楼梯、楼板与环境套件",
+          "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 6,
+        "values": [
+          "设施组件",
+          "3D-设施",
+          23,
+          13,
+          22,
+          21,
+          "门扇、灯具、开关、终端、工作台、储物与服务设施",
+          "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 7,
+        "values": [
+          "道具",
+          "3D-道具",
+          3,
+          2,
+          1,
+          1,
+          "桌椅、家具、容器和摆放装饰物",
+          "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 8,
+        "values": [
+          "角色",
+          "3D-角色",
+          4,
+          1,
+          4,
+          1,
+          "玩家、NPC与角色表现/玩法根",
+          "assets/registry/ledgers/ShellStorm2_角色账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 9,
+        "values": [
+          "敌人",
+          "3D-敌人",
+          2,
+          1,
+          2,
+          1,
+          "普通敌人、精英、Boss与敌人共用根",
+          "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 10,
+        "values": [
+          "武器",
+          "3D-武器",
+          22,
+          18,
+          22,
+          0,
+          "枪械、近战武器与武器装配根",
+          "assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 11,
+        "values": [
+          "物品",
+          "3D-物品",
+          0,
+          0,
+          0,
+          0,
+          "拥有独立PackedScene的拾取物、消耗品、钥匙和掉落物",
+          "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 12,
+        "values": [
+          "特效",
+          "3D-特效",
+          15,
+          10,
+          10,
+          0,
+          "可独立实例化的3D战斗、环境和可见性特效",
+          "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 13,
+        "values": [
+          "其他",
+          "3D-其他",
+          0,
+          0,
+          0,
+          0,
+          "无法归入以上分类的独立3D Prefab",
+          "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 14,
+        "values": [
+          "合计",
+          "9个分类分页",
+          119,
+          47,
+          107,
+          64,
+          "更新日期：2026-09-12；新增6个99F设施玩法包装（自动贩卖机、保险柜、怪物档案室、命运卡收藏室、状态恢复舱、角色衣柜）；合计 119",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    ]
+  },
+  "ledger_index": {
+    "scenes": {
+      "key": "scenes",
+      "name": "关卡场景",
+      "file": "ShellStorm2_场景账本_v001.xlsx",
+      "categories": [
+        "场景",
+        "场景道具",
+        "基地资产包"
+      ],
+      "id_prefixes": [
+        "ART",
+        "ENV",
+        "BPK",
+        "PRP"
+      ],
+      "sheet_scope": [
+        "3D-场景通用",
+        "3D-设施",
+        "3D-其他"
+      ],
+      "prefab_pages": [
+        "3D-场景通用",
+        "3D-设施",
+        "3D-其他"
+      ],
+      "animation_sheets": [],
+      "primary_skill": "scene-full-pipeline",
+      "supporting_skills": [
+        "02b-godot-model-asset-import-standard",
+        "blender-game-prop-standard",
+        "scene-art-merge-into-shared-component"
+      ],
+      "owner": "待分配",
+      "scope_note": "关卡结构、地板、墙体、楼梯、楼板、环境套件、固定设施与基地99/100F美术资产包。场景道具按固定设施口径登记（碰撞交回引擎）；PRP 前缀同时服务本域与道具域，归属以「大类」列为准。"
+    },
+    "props": {
+      "key": "props",
+      "name": "道具",
+      "file": "ShellStorm2_道具账本_v001.xlsx",
+      "categories": [
+        "道具"
+      ],
+      "id_prefixes": [
+        "ITM",
+        "PRP"
+      ],
+      "sheet_scope": [
+        "3D-道具",
+        "3D-物品"
+      ],
+      "prefab_pages": [
+        "3D-道具",
+        "3D-物品"
+      ],
+      "animation_sheets": [],
+      "primary_skill": "game-prop-model-pipeline",
+      "supporting_skills": [],
+      "owner": "待分配",
+      "scope_note": "可拾取、可消耗、可摆放、可交互的独立道具与拥有独立PackedScene的物品。固定设施不在此域（见场景账本），PRP 归属以「大类」列为准。"
+    }
+  }
+}

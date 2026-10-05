@@ -1,0 +1,53 @@
+{
+  "asset_rows": [
+    [
+      27,
+      [
+        "PRP-BASE99-RADIO-3D",
+        "99F阁楼收音机",
+        "道具",
+        "decor_prop",
+        "base99_radio",
+        "root",
+        null,
+        "Top3D / local -Z 正面",
+        "off / music_a / music_b",
+        "基地99层美术布置层 / env_base_facility_art_layout_top3d",
+        "正式美术已接入",
+        "P1",
+        "v001",
+        "0.414m × 0.228m × 0.411m；独立视觉GLB/PackedScene；WorldCollision与点击区域分离；AudioStreamPlayer3D走Music总线；左键/E循环关→基地音乐A→基地音乐B→关",
+        "assets/art/props/base_world_3d/runtime/base99_radio/prp_base99_radio_root_top3d.tscn",
+        "assets/art/props/base_world_3d/source/base99_radio/prp_base99_radio_source_v001.blend; assets/art/props/base_world_3d/components/base99_radio/prp_base99_radio_visual_top3d.glb; src/base3d/Base99Radio3D.gd; assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d.tscn",
+        "base99_radio; 99F阁楼收音机; 收音机; 可交互道具; 基地音乐A; 基地音乐B; Music",
+        "=LOWER(TRIM(C27)&\"|\"&TRIM(D27)&\"|\"&TRIM(E27)&\"|\"&TRIM(F27)&\"|\"&TRIM(H27)&\"|\"&TRIM(I27))",
+        "=IF(COUNTIF($R$6:$R$27,R27)>1,\"重复\",\"唯一\")",
+        "41077e0b19efe0b0ae80d17e6226213808efb12eb9d9450c263d4117d18e7ee4",
+        "Codex",
+        "2026-10-05 00:00:00",
+        "用户指定Blender资产",
+        "BASE99-RADIO-INTERACTIVE",
+        "2026-10-05：按椅子/梯子既有“道具 / decor_prop / 3D-道具”口径登记；正式Prefab自持碰撞、点击区域、Music总线与左键/E交互；状态循环为关→基地音乐A→基地音乐B→关。模型验收保留 StatusLight 节点命名误报，未宣称模型门禁全过。"
+      ]
+    ]
+  ],
+  "asset_max_row": 27,
+  "prefab_max_row": 8,
+  "log_max_row": 11,
+  "master_overview": {
+    "D17": 21,
+    "D18": 20
+  },
+  "prefab_control": {
+    "C7": 4,
+    "E7": 2,
+    "F7": 2,
+    "G7": "桌椅、家具、收音机、容器和摆放装饰物"
+  },
+  "baseline": {
+    "asset_count": 1007,
+    "captured_at": "2026-10-01",
+    "asset": null
+  },
+  "evidence_exists": false
+}

@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/base99_radio/prp_base99_radio_visual_top3d.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/base3d/Base99Radio3D.gd" id="2_radio"]
+
+[sub_resource type="BoxShape3D" id="ShapeRadioWorld"]
+size = Vector3(0.414, 0.411, 0.228)
+
+[sub_resource type="BoxShape3D" id="ShapeRadioHit"]
+size = Vector3(0.454, 0.451, 0.268)
+
+[node name="ItemRoot" type="Node3D" groups=["interaction_provider_3d", "base99_radio_3d"]]
+script = ExtResource("2_radio")
+metadata/asset_id = "PRP-BASE99-RADIO-3D"
+metadata/asset_version = "v002"
+metadata/asset_name_cn = "99F阁楼床边桌独立收音机"
+metadata/asset_category = "decor_prop"
+metadata/category_display = "场景可交互道具"
+metadata/forward_axis = "-Z"
+metadata/base_plane = "Y=0"
+metadata/bounds_size_m = Vector3(0.414, 0.228, 0.411)
+metadata/model_sha256 = "565a505c9eacc53ef5a8b9b14c5577b64e4226c423ebfffce39d4965a7839f7d"
+metadata/model_faces = 598
+metadata/model_triangles = 1116
+metadata/collision_policy = "独立道具碰撞盒与点击区域；由道具Prefab自持"
+metadata/runtime_remap = "shared_facility_palette_by_material_role"
+metadata/music_policy = "local AudioStreamPlayer3D on Music bus; fixed per-state looping stream"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="WorldCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Shape" type="CollisionShape3D" parent="WorldCollision"]
+position = Vector3(0, 0.2055, 0)
+shape = SubResource("ShapeRadioWorld")
+
+[node name="InteractionHitArea" type="Area3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+monitoring = true
+monitorable = true
+
+[node name="Shape" type="CollisionShape3D" parent="InteractionHitArea"]
+position = Vector3(0, 0.2055, 0)
+shape = SubResource("ShapeRadioHit")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+bus = &"Music"
+autoplay = false
+max_distance = 12.0
+attenuation_model = 1
+
+[node name="Tooltip" type="Label3D" parent="."]
+position = Vector3(0, 0.55, 0)
+text = "左键 / E · 播放收音机 A"
+font_size = 32
+outline_size = 8
+pixel_size = 0.0018
+modulate = Color(0.72, 0.95, 1, 1)
+visible = false
+metadata/tooltip_contract = "显示下一步操作；不改变全局输入映射"

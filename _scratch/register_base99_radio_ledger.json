@@ -1,0 +1,906 @@
+{
+  "ShellStorm2_道具账本_v001.xlsx": {
+    "sheets": [
+      "总览",
+      "账本说明",
+      "资产主表",
+      "3D-道具",
+      "3D-物品",
+      "域变更日志"
+    ],
+    "asset_rows": [
+      {
+        "sheet": "资产主表",
+        "row": 18,
+        "values": [
+          "PRP-BASE-WORKSHOP-STOOL-3D",
+          "赛博维修圆凳",
+          "道具",
+          "decor_prop",
+          "workshop_stool",
+          "root",
+          null,
+          "Top3D / local -Z 正面",
+          "default / pushable / seated / swivel / driveable",
+          "基地99层美术布置层",
+          "已完成",
+          "P2",
+          "v004",
+          "分体座面旋转与轮脚底座滑行；乘坐限速=角色步速1.3倍；松手惯性衰减；离座防弹射；实体场景碰撞；45°倾倒自动离座，E扶正后可再次乘坐；角色专用碰撞体随刚体同步移动",
+          "assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d.tscn",
+          "assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v004.blend; assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_base_visual_v004.glb; assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_swivel_visual_v004.glb",
+          "workshop_stool; 赛博维修圆凳; 独立座椅; 可移动装饰",
+          "=LOWER(TRIM(C18)&\"|\"&TRIM(D18)&\"|\"&TRIM(E18)&\"|\"&TRIM(F18)&\"|\"&TRIM(H18)&\"|\"&TRIM(I18))",
+          "=IF(COUNTIF($R$6:$R$26,R18)>1,\"重复\",\"唯一\")",
+          "d55127e32bc890f4ecf4073f052dc8744e237cd4b62e77f672770ae114d4b6f2",
+          "Codex",
+          "2026-09-29 00:00:00",
+          "用户自制Blender资产",
+          "—",
+          "已从对应设施主体拆出；在场景装饰集合中独立摆放，不绑定facility_id。\n2026-08-30 AST-01规范化（原制作状态：正式美术已接入；原大类：3D道具）\n2026-08-30 AST-02：合法内容更新；文件为Git已跟踪且修改时间不早于原台账日期；验收：verify_base_facility_framework；verify_base_facility_interaction_zones；SHA a09164b2f643→24c43b83564e。\n2026-09-29：99F 基地座椅接入 PushableSeat3D，角色碰撞可推动；E 上下座，方向输入通过刚体受力滑行；场景墙/地面碰撞保留，安全下座查询；verify_pushable_base_chairs 通过。\n2026-09-29：维修圆凳 v004 从 v003 Blender 源分离旋转上部与滑行底座，GLB 双件；角色碰撞改走独立 PlayerBlocker 代理以消除离座刚体弹射。乘坐速度=玩家步速×1.3，松手后短距滑行并衰减；Godot 物理回归通过。\n2026-09-29：v004 分体 GLB 导入设置补回设施共享色盘后处理；99F 实例验证底座和旋转上部均绑定色盘；离座碰撞与镜头回归通过。\n2026-09-29：修复PlayerBlocker旧位置残留；双椅倾角超过45°自动让角色离座，再次E交互扶正；Godot物理回归验证。"
+        ]
+      },
+      {
+        "sheet": "资产主表",
+        "row": 19,
+        "values": [
+          "PRP-BASE-MISSION-COMMAND-CHAIR-3D",
+          "战术指挥椅",
+          "道具",
+          "decor_prop",
+          "mission_command_chair",
+          "root",
+          null,
+          "Top3D / local -Z 正面",
+          "default / pushable / seated / swivel / driveable",
+          "基地99层美术布置层",
+          "已完成",
+          "P2",
+          "v004",
+          "分体座面旋转与轮脚底座滑行；乘坐限速=角色步速1.3倍；松手惯性衰减；离座防弹射；实体场景碰撞；45°倾倒自动离座，E扶正后可再次乘坐；角色专用碰撞体随刚体同步移动",
+          "assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d.tscn",
+          "assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v004.blend; assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_base_visual_v004.glb; assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_swivel_visual_v004.glb",
+          "mission_command_chair; 战术指挥椅; 独立座椅; 可移动装饰",
+          "=LOWER(TRIM(C19)&\"|\"&TRIM(D19)&\"|\"&TRIM(E19)&\"|\"&TRIM(F19)&\"|\"&TRIM(H19)&\"|\"&TRIM(I19))",
+          "=IF(COUNTIF($R$6:$R$26,R19)>1,\"重复\",\"唯一\")",
+          "5dfc2145158d6e06ab80d592d868e4d0e9b5020fbecd16413473cf5109d7aa67",
+          "Codex",
+          "2026-09-29 00:00:00",
+          "用户自制Blender资产",
+          "—",
+          "已从对应设施主体拆出；在场景装饰集合中独立摆放，不绑定facility_id。\n2026-08-30 AST-01规范化（原制作状态：正式美术已接入；原大类：3D道具）\n2026-08-30 AST-02：合法内容更新；文件为Git已跟踪且修改时间不早于原台账日期；验收：verify_base_facility_framework；verify_base_facility_interaction_zones；SHA f16271a4dc23→a8c70158f3af。\n2026-09-29：99F 基地座椅接入 PushableSeat3D，角色碰撞可推动；E 上下座，方向输入通过刚体受力滑行；场景墙/地面碰撞保留，安全下座查询；verify_pushable_base_chairs 通过。\n2026-09-29：战术指挥椅 v004 从 v003 Blender 源分离旋转上部与滑行底座，GLB 双件；角色碰撞改走独立 PlayerBlocker 代理以消除离座刚体弹射。乘坐速度=玩家步速×1.3，松手后短距滑行并衰减；Godot 物理回归通过。\n2026-09-29：v004 分体 GLB 导入设置补回设施共享色盘后处理；99F 实例验证底座和旋转上部均绑定色盘；离座碰撞与镜头回归通过。\n2026-09-29：修复PlayerBlocker旧位置残留；双椅倾角超过45°自动让角色离座，再次E交互扶正；Godot物理回归验证。"
+        ]
+      },
+      {
+        "sheet": "资产主表",
+        "row": 26,
+        "values": [
+          "PRP-BASE99-TELESCOPIC-LADDER-3D",
+          "99F东阁楼双段伸缩直梯",
+          "道具",
+          "decor_prop",
+          "base99_rooftop_telescopic_ladder",
+          "root",
+          null,
+          "Top3D / 固定位置",
+          "retracted / deploying / deployed / climbing",
+          "TowerDescent99F / base100_rooftop",
+          "正式美术已接入",
+          "P1",
+          "v002",
+          "双段6m直梯；上端E放下；展开后两端E自动攀爬、反向输入折返；顶部穿东门至100F平台、底部落99F阁楼；场景实体碰撞；展开状态存档",
+          "assets/art/props/base_world_3d/runtime/base99_telescopic_ladder/prp_base99_telescopic_ladder_root_top3d.tscn",
+          "assets/art/props/base_world_3d/source/base99_telescopic_ladder/prp_base99_telescopic_ladder_source_v002.blend; assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_upper_visual_top3d.glb; assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_lower_visual_top3d.glb; src/base3d/Base99TelescopicLadder3D.gd; src/player3d/states/Player3DClimbingState.gd",
+          "99F;100F;伸缩直梯;可使用道具;攀爬;双段梯",
+          "=LOWER(TRIM(C26)&\"|\"&TRIM(D26)&\"|\"&TRIM(E26)&\"|\"&TRIM(F26)&\"|\"&TRIM(H26)&\"|\"&TRIM(I26))",
+          "=IF(COUNTIF($R$6:$R$26,R26)>1,\"重复\",\"唯一\")",
+          "26a53eee81db5dd6f5ce6a0dc7fe80b8de20044d64a7948b643adf503af98e83",
+          "Codex",
+          "2026-09-29 00:00:00",
+          "用户指定Blender资产",
+          "99F-100F-EAST-LADDER",
+          "2026-09-29：梯子贴合99F东墙并朝向阁楼；上端跨东门落100F平台。Blender v002 直接复用基地母版的四种既有材质，不新增或调整材质参数。展开一次后永久保持并写入基地存档。"
+        ]
+      }
+    ],
+    "prefab_sheets": {
+      "3D-道具": {
+        "max_row": 7,
+        "max_column": 16,
+        "matches": [
+          {
+            "row": 2,
+            "values": [
+              "桌椅、家具、容器和摆放装饰物；本次扫描 3 个独立Prefab。",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "row": 5,
+            "values": [
+              "PRP-BASE-MISSION-COMMAND-CHAIR-3D",
+              "战术指挥椅",
+              "assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn",
+              "assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_visual_top3d_v003.glb",
+              "assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v001.blend",
+              "可复用摆放道具Prefab",
+              null,
+              "无",
+              "无",
+              "无",
+              "最多4材质；独立GLB/PackedScene；无交互碰撞",
+              "-Z",
+              "基地99层美术布置层",
+              "正式美术已接入",
+              "v001",
+              "根节点=战术指挥椅(Node3D)"
+            ]
+          },
+          {
+            "row": 6,
+            "values": [
+              "PRP-BASE-WORKSHOP-STOOL-3D",
+              "赛博维修圆凳",
+              "assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn",
+              "assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_visual_top3d_v003.glb",
+              "assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v001.blend",
+              "可复用摆放道具Prefab",
+              null,
+              "无",
+              "无",
+              "无",
+              "最多4材质；独立GLB/PackedScene；无交互碰撞",
+              "-Z",
+              "基地99层美术布置层",
+              "正式美术已接入",
+              "v001",
+              "根节点=赛博维修圆凳(Node3D)"
+            ]
+          }
+        ]
+      },
+      "3D-物品": {
+        "max_row": 4,
+        "max_column": 16,
+        "matches": []
+      }
+    }
+  },
+  "ShellStorm2_场景账本_v001.xlsx": {
+    "sheets": [
+      "总览",
+      "账本说明",
+      "资产主表",
+      "3D-场景通用",
+      "3D-设施",
+      "3D-其他",
+      "域变更日志"
+    ],
+    "asset_rows": [],
+    "prefab_sheets": {
+      "3D-场景通用": {
+        "max_row": 717,
+        "max_column": 16,
+        "matches": [
+          {
+            "row": 2,
+            "values": [
+              "关卡结构、地板、墙体、走廊、楼梯与楼板；场景模型统一引用 assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png。",
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "row": 16,
+            "values": [
+              "ENV-DUNGEON-CORRIDOR-STAIR-TREAD",
+              "地牢走廊楼梯踏步",
+              "assets/art/props/dungeon_3d/prp_corridor_stair_tread.tscn",
+              null,
+              null,
+              "Godot原生场景结构Prefab；由关卡脚本按模块实例化",
+              "src/world3d/DungeonRoom3D.gd",
+              "无",
+              "无",
+              "无",
+              "未声明",
+              "未声明",
+              "场景通用组件",
+              "程序占位",
+              "v001",
+              "根节点=PrpCorridorStairTread(Node3D)；2026-08-18扫描补登记资产主表"
+            ]
+          },
+          {
+            "row": 35,
+            "values": [
+              "ENV-TOWER-ROOFTOP-STAIR-FRAME-LINTEL",
+              "楼顶楼梯框架门楣",
+              "assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_lintel.tscn",
+              null,
+              null,
+              "Godot原生场景结构Prefab；由关卡脚本按模块实例化",
+              "src/world3d/TowerFloorStage3D.gd",
+              "开",
+              "Prefab自身",
+              "BoxShape3D",
+              "未声明",
+              "未声明",
+              "场景通用组件",
+              "程序占位",
+              "v001",
+              "根节点=PrpRoomRooftopStairFrameLintel(Node3D)；2026-08-18扫描补登记资产主表"
+            ]
+          },
+          {
+            "row": 36,
+            "values": [
+              "ENV-TOWER-ROOFTOP-STAIR-FRAME-POST",
+              "楼顶楼梯框架立柱",
+              "assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_post.tscn",
+              null,
+              null,
+              "Godot原生场景结构Prefab；由关卡脚本按模块实例化",
+              "src/world3d/TowerFloorStage3D.gd",
+              "开",
+              "Prefab自身",
+              "BoxShape3D",
+              "未声明",
+              "未声明",
+              "场景通用组件",
+              "程序占位",
+              "v001",
+              "根节点=PrpRoomRooftopStairFramePost(Node3D)；2026-08-18扫描补登记资产主表"
+            ]
+          },
+          {
+            "row": 37,
+            "values": [
+              "ENV-DUNGEON-STAIR-LOBBY-ROUTE-GUIDE",
+              "楼梯厅路线引导",
+              "assets/art/props/dungeon_3d/prp_room_stair_lobby_route_guide.tscn",
+              null,
+              null,
+              "Godot原生场景结构Prefab；由关卡脚本按模块实例化",
+              "src/world3d/DungeonRoom3D.gd",
+              "无",
+              "无",
+              "无",
+              "未声明",
+              "未声明",
+              "场景通用组件",
+              "程序占位",
+              "v001",
+              "根节点=PrpRoomStairLobbyRouteGuide(Node3D)；2026-08-18扫描补登记资产主表"
+            ]
+          },
+          {
+            "row": 38,
+            "values": [
+              "ENV-DUNGEON-STAIR-LOBBY-THRESHOLD-GUIDE",
+              "楼梯厅门槛引导",
+              "assets/art/props/dungeon_3d/prp_room_stair_lobby_threshold_guide.tscn",
+              null,
+              null,
+              "Godot原生场景结构Prefab；由关卡脚本按模块实例化",
+              "src/world3d/DungeonRoom3D.gd",
+              "无",
+              "无",
+              "无",
+              "未声明",
+              "未声明",
+              "场景通用组件",
+              "程序占位",
+              "v001",
+              "根节点=PrpRoomStairLobbyThresholdGuide(Node3D)；2026-08-18扫描补登记资产主表"
+            ]
+          },
+          {
+            "row": 43,
+            "values": [
+              "ENV-TOWER-STAIRWELL-GENERIC-12M",
+              "楼梯B（99→98通用）",
+              "assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_generic_12m/env_tower_stairwell_generic_12m_root_top3d.tscn",
+              "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d.glb",
+              "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+              "Blocks/Stairs/Stair_B；PackedScene v002实例化3个优化网格，保持v021完整视觉与楼层接口",
+              "src/world3d/TowerDescent3D.gd",
+              "开",
+              "TowerDescent3D运行时包装",
+              "ConcavePolygonShape3D（1个Walkable + 1个EnclosureWall）",
+              "15×30m占地 / 12m层差 / v021完整墙地楼梯与装饰",
+              "v002；Z-up；米制；楼层合同原点",
+              "塔楼跨层楼梯间",
+              "正式美术已接入",
+              "v002",
+              "2026-09-15：v021正式美术已导出、共享色盘导入并替换临时资产；3网格运行优化，结构/流程/真实渲染验收通过；v001保留回滚。"
+            ]
+          },
+          {
+            "row": 44,
+            "values": [
+              "ENV-TOWER-STAIRWELL-ROOFTOP-12M",
+              "楼梯A（100→99天台）",
+              "assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d.tscn",
+              "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d.glb",
+              "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+              "Blocks/Stairs/Stair_A；PackedScene v002实例化3个优化网格，保持v021完整视觉与楼层接口",
+              "src/world3d/TowerDescent3D.gd",
+              "开",
+              "TowerDescent3D运行时包装",
+              "ConcavePolygonShape3D（1个Walkable + 1个EnclosureWall）",
+              "15×30m占地 / 12m层差 / v021完整墙地楼梯与装饰",
+              "v002；Z-up；米制；楼层合同原点",
+              "塔楼跨层楼梯间",
+              "正式美术已接入",
+              "v002",
+              "2026-09-15：v021正式美术已导出、共享色盘导入并替换临时资产；3网格运行优化，结构/流程/真实渲染验收通过；v001保留回滚。"
+            ]
+          },
+          {
+            "row": 54,
+            "values": [
+              "ENV-BASE99-STAIR-L-Z7",
+              "基地99层7米L型楼梯",
+              "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z7/env_base99_stair_l_z7_root_top3d.tscn",
+              "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z7/env_base99_stair_l_z7_visual_top3d.glb",
+              "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend",
+              "可编辑可行走结构；含底部摄像机净空语义",
+              "src/world3d/Base99WalkableModule3D.gd",
+              "开",
+              "Prefab脚本",
+              "两段Box斜坡+转角平台 + camera_stair_slab",
+              "约9.22×10.54×7.94m外廓；一楼至7m楼板",
+              "bottom_center；-Z",
+              "99层基地",
+              "正式美术已接入",
+              "v001",
+              "不使用踏步Trimesh；坡面低于角色44度上限；位置由布局tscn管理。"
+            ]
+          },
+          {
+            "row": 55,
+            "values": [
+              "ENV-BASE99-STAIR-EXTERIOR-H2",
+              "基地99层二楼外门2米小楼梯",
+              "assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h2/env_base99_stair_exterior_h2_root_top3d.tscn",
+              "assets/art/environments/base_facility_3d/components/env_base99_stair_exterior_h2/env_base99_stair_exterior_h2_visual_top3d.glb",
+              "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend",
+              "可编辑可行走结构；含底部摄像机净空语义",
+              "src/world3d/Base99WalkableModule3D.gd",
+              "开",
+              "Prefab脚本",
+              "简化Box斜坡 + camera_stair_slab",
+              "4.515×2.80×2.00m；7m楼板至9m外门门槛",
+              "bottom_center；-Z",
+              "99层基地",
+              "正式美术已接入",
+              "v001",
+              "不使用踏步Trimesh；位置和旋转由布局tscn管理。"
+            ]
+          },
+          {
+            "row": 57,
+            "values": [
+              "ENV-BASE99-MEZZANINE-20X10-Z5",
+              "基地99层5米楼中楼结构与护栏（复用V020二层地板）",
+              "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d.tscn",
+              "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d.glb",
+              "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend（v006；资产v004）",
+              "5米承重平台与连续栏杆；移除9个旧地砖/甲板网格，二层表现复用V020地板；真实投影",
+              "src/world3d/Base99WalkableModule3D.gd",
+              "开",
+              "Prefab自身",
+              "连续Box楼板+独立栏杆Box；西侧入口为L梯留空",
+              "20.2475×10.2475×5.93m；台面5m；552三角面",
+              "底面中心；Blender -Y / Godot -Z",
+              "99层基地楼中楼",
+              "正式美术已接入；优化完成",
+              "已完成，未接入",
+              "Blender母版v005；660/660面PaletteUV有效；边缘共面数0；视觉/碰撞/功能分离。2026-09-04：旧阁楼架实例从基地布局撤下，资产文件保留回滚。"
+            ]
+          },
+          {
+            "row": 58,
+            "values": [
+              "ENV-BASE99-STAIR-L-Z5",
+              "基地99层5米L型楼梯",
+              "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d.tscn",
+              "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d.glb",
+              "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend",
+              "0→2.5→5米完整双跑L梯；转角扶手收口；真实投影与阻挡",
+              "src/world3d/Base99WalkableModule3D.gd",
+              "开",
+              "Prefab自身",
+              "单一StaticBody：斜坡+平台+斜坡；独立连续扶手Box",
+              "9.2176×10.538×5.91015m；终点5m",
+              "底面中心；Blender -Y / Godot -Z",
+              "99层基地一楼至楼中楼",
+              "正式美术已接入；沿用已验收V004",
+              "已完成，未接入",
+              "由91个可编辑源组件重建；踏步/斜梁/平台/导光条齐全；转角扶手不穿插；三段行走形状接缝齐平并重叠0.04m。2026-09-04：旧L型楼梯实例从基地布局撤下，资产文件保留回滚。"
+            ]
+          },
+          {
+            "row": 59,
+            "values": [
+              "ENV-BASE99-STAIR-EXTERIOR-H4",
+              "基地99至100层4米外门楼梯",
+              "assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_root_top3d.tscn",
+              "assets/art/environments/base_facility_3d/components/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_visual_top3d.glb",
+              "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend",
+              "平台5米至100层9米；两段原生楼梯组合；真实投影",
+              "src/world3d/Base99WalkableModule3D.gd",
+              "开",
+              "Prefab自身",
+              "覆盖8.515米包络的连续斜坡+双侧护栏",
+              "8.515×2.8×4m；高差4m",
+              "底面中心；Blender -Y / Godot -Z",
+              "基地楼中楼至100层出口",
+              "正式美术已接入",
+              "v002",
+              "不做纵向拉伸；替代H2版本"
+            ]
+          },
+          {
+            "row": 63,
+            "values": [
+              "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+              "基地99层完整地板表现装配 V021",
+              "assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals/env_base99_floor_visuals_root_top3d.tscn",
+              null,
+              "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend（v020）",
+              "完整一层新地板、V020二层面层、V004阁楼/楼梯与V021非门墙面内容的运行时装配；由基地美术布局直接实例化。",
+              "src/world3d/DungeonRoom3D.gd",
+              "无",
+              "既有TowerFloorStage3D与楼中楼Prefab",
+              "无；仅视觉布局装配",
+              "一层30×30m；二层20×10m；无内置碰撞",
+              "layout_origin；二层面层Y=-1m；V021墙面内容保持Blender烘焙坐标",
+              "99层基地美术布局",
+              "正式美术已接入",
+              "v003",
+              "Blender源文件=base_facility_runtime_layout_hq_v020.blend；Blender版本=v020；一层替换旧MultiMesh，二层保留V020面层；FloorSupport碰撞保持不变。2026-09-04：旧5米阁楼架、L型楼梯和下方工业铁门已从基地布局撤下；tests/verification/verify_base99_mezzanine_placement_removal.tscn通过。"
+            ]
+          },
+          {
+            "row": 65,
+            "values": [
+              "ENV-BASE99-REMAINING-FACILITIES-V021",
+              "基地99层剩余非门非墙独立设施资产包",
+              "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/env_base99_remaining_facilities_root_top3d.tscn",
+              "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities（45个GLB）",
+              "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend（v021；derived from base_facility_runtime_layout_hq_v017.blend v017）",
+              "仓储、阁楼家具、独立设备与环境支持；排除门、门禁随属件、结构墙、墙面内容、地板、阁楼和楼梯。Blender烘焙摆放保持不变。",
+              "无",
+              "开",
+              "每包独立Prefab",
+              "34包逐源物件BoxShape3D；11包仅视觉",
+              "45运行时网格；84,274三角面；向下表面删除21,604；45/45公共色盘导入契约",
+              "layout_origin；Blender +Y北 / Godot -Z北",
+              "99层基地剩余设施",
+              "正式美术已接入；优化完成",
+              null,
+              null
+            ]
+          },
+          {
+            "row": 66,
+            "values": [
+              "ENV-TOWER-STAIR-FLOOR-LOWER",
+              "楼梯间下层楼板",
+              null,
+              null,
+              "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+              "3Dgame-design白盒可拖放组件",
+              null,
+              "无",
+              "3Dgame-design",
+              "无；白盒编辑",
+              "每间下层18块5×5×0.3m固定地砖，完成面+0.1m",
+              "组件中心；Blender Z-up",
+              "楼梯区专用",
+              "白盒组件",
+              "v001",
+              "v015原位拼装，详细尺寸和实例位置见组件JSON；禁止缩放。"
+            ]
+          },
+          {
+            "row": 67,
+            "values": [
+              "ENV-TOWER-STAIR-FLOOR-MID",
+              "楼梯间中层楼板",
+              null,
+              null,
+              "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+              "3Dgame-design白盒可拖放组件",
+              null,
+              "无",
+              "3Dgame-design",
+              "无；白盒编辑",
+              "每间中层6块固定拼接件，沿原平台边界收边",
+              "组件中心；Blender Z-up",
+              "楼梯区专用",
+              "白盒组件",
+              "v001",
+              "v015原位拼装，详细尺寸和实例位置见组件JSON；禁止缩放。"
+            ]
+          },
+          {
+            "row": 68,
+            "values": [
+              "ENV-TOWER-STAIR-FLOOR-UPPER",
+              "楼梯间上层楼板",
+              null,
+              null,
+              "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+              "3Dgame-design白盒可拖放组件",
+              null,
+              "无",
+              "3Dgame-design",
+              "无；白盒编辑",
+              "每间上层6块固定拼接件，另有2块门口连接板",
+              "组件中心；Blender Z-up",
+              "楼梯区专用",
+              "白盒组件",
+              "v001",
+              "v015原位拼装，详细尺寸和实例位置见组件JSON；禁止缩放。"
+            ]
+          },
+          {
+            "row": 69,
+            "values": [
+              "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+              "楼梯间可调直梯母组件",
+              null,
+              null,
+              "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+              "3Dgame-design白盒可拖放组件",
+              null,
+              "无",
+              "3Dgame-design",
+              "无；白盒编辑",
+              "单母组件；每跑6m高/15m水平长度/21.8014°；20级；另一跑180°；高度/角度可调",
+              "组件中心；Blender Z-up",
+              "楼梯区专用",
+              "白盒组件",
+              "v002",
+              "v015原位拼装，详细尺寸和实例位置见组件JSON；禁止缩放。"
+            ]
+          },
+          {
+            "row": 85,
+            "values": [
+              "ENV-BATTLE-L01-SAFE-ENTRY",
+              "局内关卡01 入口安全房 15×15m 正式美术（单一方位；运行时按门向整房旋转）",
+              "assets/art/environments/tower_zones/battle/runtime/entry_safe_room/*/*_root_top3d.tscn（17 包）；墙/地/门引用 assets/art/environments/tower_zones/battle/runtime/common_components/*_root_top3d.tscn",
+              "assets/art/environments/tower_zones/battle/components/entry_safe_room/*/*_visual_top3d.glb（17 包）",
+              "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/env_battle_l01_safe_entry_layout_source_v007.blend",
+              "战局01入口安全房 15×15m 正式美术；单一方位布局——南/东墙中段各开 2.2×2.5 门洞，其余 10 段为 5m 实墙，地面 3×3 棋盘地砖；运行时按本层实际门向把整房旋转 0/90/180/270°，任意楼层共用同一套资产，无需按方位分版本。墙/地/门引用战局区块通用组件库 v004，房间设施（14 设施 + 3 支持件，含承重底板）由 17 个房间包按各自 metadata 的 room_placement_position 摆位。",
+              "src/world3d/DungeonRoom3D.gd（_build_safe_room_shell / _build_safe_room_packages）",
+              "开",
+              "通用组件 v004（PackedScene 自带，collision_owner=self） + TowerFloorStage3D（楼板承重）",
+              "实墙/门墙自带 0.30m 结构碰撞即玩法阻挡（10 实墙 + 2 门墙；门洞 2.2×2.5 不产生碰撞）；地砖与门扇自带碰撞在接入时按层关闭去重（collision_layer=0），楼板承重归 TowerFloorStage3D._build_support()、门扇通行归 RoomDoor3D 升降碰撞；南/北向门另留唯一 camera-only 门墙代理承接镜头探针（与旧塔楼路径同契约）。",
+              "15×15×11.9m（可行走面 z=0.30；墙中线 ±7.35，墙内脸 7.2 / 外脸 7.5，墙厚 0.30；网格 5.0m，地砖模块 4.94m 见方 + 0.06m 勾缝）",
+              "房间局部坐标：X/Y 居中、底面 Z=0；Godot -Z；整房按本层门向旋转 0/90/180/270°",
+              "局内关卡01 / Battle（已接入）",
+              "正式美术已接入；源文件已规范迁移",
+              "v007",
+              "2026-09-17：由白模 v003 升为正式美术 v007 并接入运行时。v007 为单一方位布局（南/东墙中段各开 2.2×2.5 门洞，其余 10 段 5m 实墙，地面 3×3 棋盘地砖），运行时按本层实际门向整房旋转，故任意楼层共用同一套资产。2026-09-17：v007 正式美术完整接入运行时。房间只保留槽位与引用，墙/地/门（含其装饰）全部由战局区块通用组件库 v004 提供——实墙 10 + 门墙 2（南/东）+ 门扇 2 + 地砖 9（r01_c01 ×5 / r01_c02 ×4）；共 23 槽位、311 槽位对象（结构 36 + 装饰 275）。房间自有的 15 个墙/地模块、16 个旧资产包与 7 个已被 v004 吸收的装饰包（249 件）已显式移除，仅承重底板 FLOOR_BASE（15×15×0.26）由房间自持。运行时由 DungeonRoom3D._build_safe_room_shell() 按本层门向整房旋转，单一方位服务全部楼层；墙/门墙自带 0.30m 碰撞即玩法阻挡，地砖/门扇自带碰撞接入时按层关闭去重，楼板承重归 TowerFloorStage3D、门扇通行归 RoomDoor3D。楼板侧配合变更：TowerFloorStage3D 为每个 STAIR_LOBBY 房间在通用可视地砖上挖出 15×15m 可视洞（每房间 9 格，承重碰撞不变），新增 additional_visual_holes 与 _additional_visual_hole_tile_count（与楼梯洞按点去重后记账），已并入塔楼楼板 tile 契约，verify_tower_grid_component_alignment 通过。美术验收：构建自检 32/32、独立重开复测 34/34、包导出 EXPORT_OK count=17、Prefab PREFAB_OK total=17 written=17、GLB 独立复验 20/20；运行时探针 probe_safe_room_v007_integration 通过（SAFE_ROOM_V007_INTEGRATION_OK：10 实墙 / 2 门墙 / 9 地砖 / 17 包，门扇落 ±7.5 边界网格线，旧塔楼拼装无残留）。未做游戏内灯光验收与性能验收。2026-09-18：Blender过程源规范迁移至 assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/env_battle_l01_safe_entry_layout_source_v007.blend；仅调整源引用与状态说明，AssetID、Prefab/GLB运行时稳定路径、房间旋转及碰撞玩法规则未变，未重新导出运行时产物。"
+            ]
+          },
+          {
+            "row": 86,
+            "values": [
+              "ENV-BATTLE-L01-SAFE-EXIT",
+              "局内关卡01 出口安全房 15×15m 正式美术（与入口安全房同源 v007，共用同一套资产）",
+              "assets/art/environments/tower_zones/battle/runtime/entry_safe_room/*/*_root_top3d.tscn（17 包）；墙/地/门引用 assets/art/environments/tower_zones/battle/runtime/common_components/*_root_top3d.tscn",
+              "assets/art/environments/tower_zones/battle/components/entry_safe_room/*/*_visual_top3d.glb（17 包）",
+              "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/env_battle_l01_safe_entry_layout_source_v007.blend",
+              "战局01出口安全房 15×15m 正式美术；与入口安全房同类型同布局——南/东墙中段各开 2.2×2.5 门洞，其余 10 段为 5m 实墙，地面 3×3 棋盘地砖；共用 ENV-BATTLE-L01-SAFE-ENTRY 的 v007 单一方位资产，运行时按本层门向整房旋转。墙/地/门引用战局区块通用组件库 v004，房间设施由 17 个房间包按 room_placement_position 摆位。",
+              "src/world3d/DungeonRoom3D.gd（_build_safe_room_shell / _build_safe_room_packages）",
+              "开",
+              "通用组件 v004（PackedScene 自带，collision_owner=self） + TowerFloorStage3D（楼板承重）",
+              "实墙/门墙自带 0.30m 结构碰撞即玩法阻挡（10 实墙 + 2 门墙；门洞 2.2×2.5 不产生碰撞）；地砖与门扇自带碰撞在接入时按层关闭去重（collision_layer=0），楼板承重归 TowerFloorStage3D._build_support()、门扇通行归 RoomDoor3D 升降碰撞；南/北向门另留唯一 camera-only 门墙代理承接镜头探针（与旧塔楼路径同契约）。",
+              "15×15×11.9m（可行走面 z=0.30；墙中线 ±7.35，墙内脸 7.2 / 外脸 7.5，墙厚 0.30；网格 5.0m，地砖模块 4.94m 见方 + 0.06m 勾缝）",
+              "房间局部坐标：X/Y 居中、底面 Z=0；Godot -Z；整房按本层门向旋转 0/90/180/270°",
+              "局内关卡01 / Battle（已接入）",
+              "正式美术已接入；源文件已规范迁移",
+              "v007",
+              "2026-09-17：由白模 v003 升为正式美术 v007 并接入运行时。出口安全房与入口安全房是同一 STAIR_LOBBY 房间类型、同一 15×15m 布局，v007 单一方位资产按本层门向旋转后同时服务入口与出口，故共用 ENV-BATTLE-L01-SAFE-ENTRY 的 v007 资产，不再单独产出白模→正式美术的出口版本。2026-09-17：v007 正式美术完整接入运行时。房间只保留槽位与引用，墙/地/门（含其装饰）全部由战局区块通用组件库 v004 提供——实墙 10 + 门墙 2（南/东）+ 门扇 2 + 地砖 9（r01_c01 ×5 / r01_c02 ×4）；共 23 槽位、311 槽位对象（结构 36 + 装饰 275）。房间自有的 15 个墙/地模块、16 个旧资产包与 7 个已被 v004 吸收的装饰包（249 件）已显式移除，仅承重底板 FLOOR_BASE（15×15×0.26）由房间自持。运行时由 DungeonRoom3D._build_safe_room_shell() 按本层门向整房旋转，单一方位服务全部楼层；墙/门墙自带 0.30m 碰撞即玩法阻挡，地砖/门扇自带碰撞接入时按层关闭去重，楼板承重归 TowerFloorStage3D、门扇通行归 RoomDoor3D。楼板侧配合变更：TowerFloorStage3D 为每个 STAIR_LOBBY 房间在通用可视地砖上挖出 15×15m 可视洞（每房间 9 格，承重碰撞不变），新增 additional_visual_holes 与 _additional_visual_hole_tile_count（与楼梯洞按点去重后记账），已并入塔楼楼板 tile 契约，verify_tower_grid_component_alignment 通过。美术验收：构建自检 32/32、独立重开复测 34/34、包导出 EXPORT_OK count=17、Prefab PREFAB_OK total=17 written=17、GLB 独立复验 20/20；运行时探针 probe_safe_room_v007_integration 通过（SAFE_ROOM_V007_INTEGRATION_OK：10 实墙 / 2 门墙 / 9 地砖 / 17 包，门扇落 ±7.5 边界网格线，旧塔楼拼装无残留）。未做游戏内灯光验收与性能验收。2026-09-18：与入口安全房共用的Blender过程源规范迁移至 assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/env_battle_l01_safe_entry_layout_source_v007.blend；仅调整源引用与状态说明，AssetID、Prefab/GLB运行时稳定路径、房间旋转及碰撞玩法规则未变，未重新导出运行时产物。"
+            ]
+          },
+          {
+            "row": 102,
+            "values": [
+              "ENV-ROOFTOP-REF-PARAPET",
+              "女儿墙直段",
+              "assets/art/props/dungeon_3d/prp_rooftop_parapet_5m.tscn",
+              "assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_top3d.glb",
+              "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend#女儿墙直段_资产包；导出脚本 assets/art/environments/tower_zones/rooftop/source/export_env_rooftop_parapet_v001.py\n2026-09-20：改由 source/author_env_rooftop_parapet_v003.py 在 source/parapet_v003_work.blend 上重建 0.80m 方案A 平整墙板，再由 source/export_env_rooftop_parapet_v001.py 导出 GLB（source/reference_components/v002 保持只读，不改动）。",
+              "Godot原生场景结构Prefab；100F天台四周边界直段，由 TowerFloorStage3D 按 MultiMesh 摆 64 槽位",
+              "src/world3d/TowerFloorStage3D.gd",
+              "开",
+              "TowerFloorStage3D",
+              "BoxShape3D 5×0.80×0.50，由 OuterBoundaryCollision 按槽位生成（Prefab 不再自带碰撞）",
+              "GLB / 5×0.50×0.80m / 共享Mesh",
+              "bottom_center（几何 Y=0..0.80）；朝 +Z",
+              "100F天台四周边界/64段MultiMesh",
+              "正式美术已接入",
+              "v003",
+              "父库=ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY；manifest=assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/02/parapet/asset_manifest.json；外墙植物包络不进入阻挡；未导入Godot。\n2026-09-19：由「仅 Blender 源」升为运行时正式资产，本行不新增 AssetID。用户要求「把天台那两组围栏组件导入 Godot、做成 prefab、坐标对齐、让天台生成围栏的代码指向它们」。导出：assets/art/environments/tower_zones/rooftop/source/export_env_rooftop_parapet_v001.py（headless Blender，把网格 rebase 到包内 根_ 空物体后丢弃变换，得到 XY 居中 / 底面 Z=0 的原点契约，再 export_scene.gltf 导 GLB）。实测 GLB 72,632 B / sha256 30d77d64…，AABB=(-2.5,-0.25,0)~(2.5,0.25,1.8)（Blender Z-up，即 5×0.50×1.80）。.import 已绑 tools/asset_pipeline/scene_facility_shared_palette_post_import.gd，Godot 探针实测 palette_texture_bound=true（材质角色 02_细腻哑光_青绿大面）。\n接线：TowerFloorStage3D.PARAPET_SCENE 由 prp_tower_wall_parapet_5m.tscn（塔楼 A 套 5×0.30×1.50m）改指本 prefab；ROOFTOP_PARAPET_HEIGHT 0.75 → 1.80、新增 ROOFTOP_PARAPET_THICKNESS=0.50 与按层取值的 _outer_wall_thickness()/_outer_wall_inset()（普通层仍 0.30m），并删掉历史上「1.50m 几何 × 0.5 纵向缩放凑 0.75m」的补偿——现在视觉包络 = 碰撞高度 = 1.80m（远征层被误缩半高的问题一并消掉）。每边 90−5=85m / 80−5=75m 正好整格，故直段 2×(17+15)=64 段、四角让位给 2.5m 转角件。注意旧 prefab prp_tower_wall_parapet_5m.tscn 仍被 DungeonRoom3D 引用且在 6 件 PREFAB_CONTRACT清单内，故本行是并行新身份、旧行(ENV-TOWER-WALL-PARAPET-5M)不动。\n实测（probe_rooftop_parapet_alignment，须带窗口跑：MultiMesh 实例变换存在 RenderingServer 侧，dummy 渲染器一律回读成单位阵）：直段 61 + 门洞补位墙 3 + 转角件 4 = 68 件；四条边 coverage=全长 / gap=0.000 / overlap=0.000；四个转角件各 2.500×2.500 精确落座。门禁：ROOFTOP_WEST_EXPANSION_CONTRACT_PASS（verify_rooftop_32x32_contract，outer_segment_count=64 / outer_corner_count=4 / outer_wall_thickness=0.5 / outer_wall_height=1.8）；ROOFTOP_RAILING_OK / TOWER_LEVEL_BLOCKS_OK / TOWER_GRID_COMPONENT_ALIGNMENT_OK / EXPEDITION_LEVEL01_FLOW_OK / TEST_LEVEL_99_FLOW_OK 全绿。\n2026-09-20：用户「改成 0.8 米的，变体也要一起改，然后中间的竖杠太密了 不好看，横杆在两边即可」。原 v002 配方是 22 块（基座 + 0.036m 分隔带 + 10 块墙身 + 10 块压顶），运行时表现为密集竖杠；本次重建为方案A 平整墙板，块数 22→3：基座带 5.0×0.50×0.10（z0..0.10）+ 墙板 5.0×0.43×0.64（z0.08..0.72）+ 压顶带 5.0×0.50×0.10（z0.70..0.80），合计**含压顶总高 0.80m**（用户选定口径）。厚度仍 0.50m ⇒ 边界内缩 _outer_wall_inset() 不变，四边/西侧碰撞位置与槽位相位不动。asset_version v002→v003；GLB 同路径覆盖重导（11,752 B）。TowerFloorStage3D.ROOFTOP_PARAPET_HEIGHT 1.80→0.80；_outer_wall_height()、OuterBoundaryCollision_* 高度、楼梯口矮墙缩放（ROOFTOP_PARAPET_HEIGHT / ROOFTOP_PARAPET_DOOR_BASE_HEIGHT = 0.80/1.50）自动跟随。⚠️ Player3D 无跳跃、无台阶攀爬，0.80m 与 1.80m 碰撞对玩法等价（都只是「走不出去」），差异仅在视觉高度、越过墙顶的相机视线与 0.80m 以上的弹道。实测 probe_rooftop_parapet_components：AABB=(5.0,0.80,0.50)、底面 Y=0、色盘已绑；门禁 ROOFTOP_WEST_EXPANSION_CONTRACT_PASS（外墙上限高度改断言为常量口径，不再硬编码 1.8）。"
+            ]
+          },
+          {
+            "row": 108,
+            "values": [
+              "ENV-ROOFTOP-REF-ROOM-DOORWALL",
+              "房间门洞墙",
+              "assets/art/props/dungeon_3d/prp_rooftop_room_doorwall_5x12.tscn",
+              "assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_doorwall_top3d.glb",
+              "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend#房间门洞墙_资产包",
+              "独立资产包；03_房间墙体",
+              null,
+              "未创建",
+              "Base100UpperShell3D",
+              "Prefab 已声明 collision_owner；尚未在 100F 上层围护场景实例化",
+              "5.000×11.900×0.300 m；门洞净空 3.80×6.80 m（两侧垛各 0.60 m）",
+              "bottom_center（几何 Y=0 起）；+Z 朝外。⚠️ 与 99F 系（ENV-BASE99-*，-Z 朝外）差 180°：同一条边 base99 用 -90°、本套件用 +90°。",
+              "已制作并登记；100F 上层围护**未使用**（东面门洞槽仍用 base99 门墙）",
+              "正式美术已接入",
+              "v002",
+              "父库=ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY；manifest=assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/03/room_doorwall/asset_manifest.json；外墙植物包络不进入阻挡；未导入Godot。\n2026-09-20：随房间墙体套件一并导出 GLB 并建立 prefab；本批场景未摆放。原因：东面 z=-7.5 门洞槽是 100F 唯一的外梯过场门位，由 TowerDescent3D._install_base_rooftop_transit_door() 挂 RoomDoor3D，其净尺寸写死 TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M/HEIGHT_M = 2.2×2.5；换成本件的 3.80×6.80 洞等于改全游戏所有门的尺寸与碰撞。用户决策「东门不动，新门只入库」。"
+            ]
+          },
+          {
+            "row": 146,
+            "values": [
+              "ENV-ROOFTOP-DECOR-LAYOUT-100F",
+              "100F天台装饰布局",
+              null,
+              null,
+              "assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.blend",
+              "Blender组件实例布局源；只摆放共享组件实例、不拥有几何；运行时重放 120 个装饰实例（空调6+绿化20+藤蔓16+女儿墙挂藤8+水管54+立管16）；房屋围护改列 shell_reference 参照层（24墙+36封顶），由 Base100UpperShell 独占，不重放；2026-09-21 四次修正：绿化 20 件（8 花箱+6 大盆栽+6 小盆栽）改 blocking —— 运行时按实测可视包络生成 StaticBody3D 碰撞代理（layer=1，尺寸随美术自动跟随）挡玩家，其余 462 件仍 visual_only；2026-09-21 五次修正：绿化 20 件由「离墙中心线 2.15m 的单一环线」改为**逐件按自身半进深背贴建筑外皮**（件心离墙中心线 = SHELL_WALL_T/2 − 埋入 0.05 + 半进深；花箱 0.5925 / 大盆栽 0.8727377 / 小盆栽 0.5473868），南/北/东/西四边各成对、背面齐平、正面自然错落；同时补齐朝向（front_direction=−Y ⇒ yaw 0/π/+π/2/−π/2 分别朝南/北/东/西，西侧花圃原 +π/2 正面朝墙里已修）",
+              "src/world3d/TowerFloorStage3D.gd",
+              "开",
+              "引擎（per_instance：默认 visual_only，绿化 blocking）",
+              "BoxShape3D 代理（按 TowerGeometry3D.resolve_visual_bounds 实测可视包络；仅绿化 20 件，layer=1）",
+              "100×80m天台；外围72件（68直段+4外角）；266块5m地砖（开口=中庭6×6+西侧楼梯口3×6）",
+              "世界原点对齐 ROOFTOP_WORLD_RECT；Blender Z-up / -Y；Godot=(Blender X, Blender Z, -Blender Y)",
+              "100F天台 / TowerFloorStage3D 运行时按布局清单重放",
+              "正式美术已接入",
+              "v001",
+              "清单=assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json；运行时登记=assets/art/environments/tower_zones/rooftop/runtime/rooftop_100f_decorated_runtime_manifest.json；验收=verify_rooftop_32x32_contract + probe_rooftop_decorated_layout + probe_rooftop_decorated_stage_only；全部实例缩放=1、启用碰撞=0；结构壳体（地砖/女儿墙）仍由 TowerFloorStage3D 负责，布局不重复生成；2026-09-21 坐标契约修正（补 by=−gz，此前整体偏北 10m）＋房屋 20×20→30×30 对齐 Base100UpperShell；2026-09-21 三次修正：立管落地 0~9.89m（h=件高4.945、倒装件原点在顶面）、墙挂空调绕 X 轴 90° 倾倒让风扇朝外（Godot 侧读 basis.y）、布局源只写 rotation_x_deg + rotation_y_deg（rz=0，规避 Blender XYZ 序 / Godot YXZ 序的次序差）；2026-09-21 四次修正：绿化 20 件改 blocking（运行时按 TowerGeometry3D.resolve_visual_bounds 实测可视包络生成 layer=1 BoxShape3D 代理挡玩家），其余 visual_only；collision_policy 词表=visual_only/blocking，清单设计意图记 blocking_collision_count=20 / visual_only_collision_count=462；2026-09-22 六次修正：壳体几何由 TowerFloorStage3D 的 TOWER_SHELL_*（20×16 格 = 100×80m）统管 98F/99F/100F 三层；本行「外形尺寸」的 90×80m天台 / 外围68件（64直段+4外角）/ 234块5m地砖同步为 100×80m / 72件（68直段+4外角）/ 266块；重放 120 件与碰撞 20 件不变。"
+            ]
+          },
+          {
+            "row": 171,
+            "values": [
+              "ENV-OPENWORLD-TOWER02-CORE-0",
+              "塔2 核心筒_0_楼梯及开口",
+              "assets/art/environments/open_world/runtime/tower_02/core_0/env_tower_02_core_0_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_02/core_0/env_tower_02_core_0_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "8.000×9.000×84.090m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v003",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 172,
+            "values": [
+              "ENV-OPENWORLD-TOWER02-CORE-1",
+              "塔2 核心筒_1_楼梯及开口",
+              "assets/art/environments/open_world/runtime/tower_02/core_1/env_tower_02_core_1_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_02/core_1/env_tower_02_core_1_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "8.000×9.000×84.090m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v003",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 189,
+            "values": [
+              "ENV-OPENWORLD-TOWER02-CONSTRUCTION-ELEVATOR",
+              "塔2 双笼施工电梯_导轨附墙架",
+              "assets/art/environments/open_world/runtime/tower_02/construction_elevator/env_tower_02_construction_elevator_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_02/construction_elevator/env_tower_02_construction_elevator_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "10.900×5.655×88.522m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v003",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 220,
+            "values": [
+              "ENV-OPENWORLD-TOWER02-CRANE-00-MAST",
+              "塔2 塔吊1_标准节塔身_螺栓梯笼",
+              "assets/art/environments/open_world/runtime/tower_02/crane_00_mast/env_tower_02_crane_00_mast_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_02/crane_00_mast/env_tower_02_crane_00_mast_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "9.151×6.256×109.500m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v003",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 227,
+            "values": [
+              "ENV-OPENWORLD-TOWER02-CRANE-01-MAST",
+              "塔2 塔吊2_标准节塔身_螺栓梯笼",
+              "assets/art/environments/open_world/runtime/tower_02/crane_01_mast/env_tower_02_crane_01_mast_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_02/crane_01_mast/env_tower_02_crane_01_mast_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "6.614×6.614×38.000m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v003",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 234,
+            "values": [
+              "ENV-OPENWORLD-TOWER02-CRANE-02-MAST",
+              "塔2 塔吊3_标准节塔身_螺栓梯笼",
+              "assets/art/environments/open_world/runtime/tower_02/crane_02_mast/env_tower_02_crane_02_mast_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_02/crane_02_mast/env_tower_02_crane_02_mast_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "8.786×7.521×105.500m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v003",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 425,
+            "values": [
+              "ENV-OPENWORLD-TOWER03-LEFT-SERVICE-STAIRS",
+              "塔楼03 左机组检修台与双短梯",
+              "assets/art/environments/open_world/runtime/tower_03/left_service_stairs/env_tower_03_left_service_stairs_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_03/left_service_stairs/env_tower_03_left_service_stairs_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "13.660×4.594×2.680m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v001",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 444,
+            "values": [
+              "ENV-OPENWORLD-TOWER03-VERTICAL-ACCESS",
+              "塔楼03 机房及外墙爬梯_防护扶手",
+              "assets/art/environments/open_world/runtime/tower_03/vertical_access/env_tower_03_vertical_access_root_top3d.tscn",
+              "assets/art/environments/open_world/components/tower_03/vertical_access/env_tower_03_vertical_access_visual_top3d.glb",
+              "assets/art/environments/open_world/source/tower_03/v001/塔楼03_设备天台办公楼_v001.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "9.260×17.943×49.099m (Blender XYZ)",
+              "底部中心；Blender -Y→Godot +Z",
+              "开放世界场景",
+              "已导入；优化完成",
+              "v001",
+              "组合场景引用稳定组件Prefab；无功能碰撞。"
+            ]
+          },
+          {
+            "row": 686,
+            "values": [
+              "ENV-OPENWORLD-SKYLINE08-HUT-LADDER",
+              "天台机房_橙色爬梯与屋顶弯钩",
+              "assets/art/environments/open_world/runtime/skyline_08/hut_ladder/env_skyline_08_hut_ladder_root_top3d.tscn",
+              "assets/art/environments/open_world/components/skyline_08/hut_ladder/env_skyline_08_hut_ladder_visual_top3d.glb",
+              "assets/art/environments/open_world/source/skyline_08/v004/SKYLINE大楼_8层_精细天台_v004.blend",
+              "仅表现",
+              null,
+              "无",
+              "无",
+              "无",
+              "完整模型原尺寸；米制",
+              "底部中心；Blender -Y→Godot +Z",
+              "大地图场景景观",
+              "已导入；优化完成",
+              "v004",
+              "所有表面复用塔2旧材质；不含玩法碰撞；正式布局归Godot TSCN。"
+            ]
+          }
+        ]
+      },
+      "3D-设施": {
+        "max_row": 27,
+        "max_column": 16,
+        "matches": []
+      },
+      "3D-其他": {
+        "max_row": 4,
+        "max_column": 16,
+        "matches": []
+      }
+    }
+  }
+}

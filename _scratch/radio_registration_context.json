@@ -1,0 +1,855 @@
+{
+  "总览": {
+    "max_row": 20,
+    "max_column": 10,
+    "cells": {}
+  },
+  "资产主表": {
+    "max_row": 26,
+    "max_column": 25,
+    "rows": [
+      {
+        "row": 1,
+        "values": [
+          "资产主表 · 唯一登记源",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 2,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 3,
+        "values": [
+          "查重键由公式生成；S 列出现“重复”时禁止制作，先合并或建立变体父子关系",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 4,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 5,
+        "values": [
+          "AssetID",
+          "中文名",
+          "大类",
+          "子类",
+          "逻辑ID/源键",
+          "组件槽",
+          "变体父ID",
+          "视角",
+          "状态/动画",
+          "复用范围",
+          "制作状态",
+          "优先级",
+          "版本",
+          "规格(px)",
+          "文件路径",
+          "源码/策划依据",
+          "关键词/别名",
+          "查重键",
+          "查重结果",
+          "SHA-256",
+          "负责人",
+          "更新时间",
+          "来源/许可",
+          "源编号（Blender collection）",
+          "备注"
+        ]
+      },
+      {
+        "row": 6,
+        "values": [
+          "ITM-CONSUMABLE-ITEM-BEACON",
+          "撤离信标",
+          "道具",
+          "consumable",
+          "item_beacon",
+          "root",
+          null,
+          "顶视/图标",
+          "default",
+          "世界拾取/UI 图标",
+          "程序占位",
+          "P0",
+          "v001",
+          "世界 24–40 px；UI 32 px",
+          null,
+          "src/base/ItemRegistry.gd",
+          null,
+          "=LOWER(TRIM(C6)&\"|\"&TRIM(D6)&\"|\"&TRIM(E6)&\"|\"&TRIM(F6)&\"|\"&TRIM(H6)&\"|\"&TRIM(I6))",
+          "=IF(COUNTIF($R$6:$R$26,R6)>1,\"重复\",\"唯一\")",
+          null,
+          "待分配",
+          "2026-07-21 00:00:00",
+          "原创/待确认",
+          "—",
+          null
+        ]
+      },
+      {
+        "row": 7,
+        "values": [
+          "ITM-KEY-ITEM-ROOM-KEY",
+          "房间钥匙",
+          "道具",
+          "key",
+          "item_room_key",
+          "root",
+          null,
+          "顶视/图标",
+          "default",
+          "世界拾取/UI 图标",
+          "程序占位",
+          "P0",
+          "v001",
+          "世界 24–40 px；UI 32 px",
+          null,
+          "src/base/ItemRegistry.gd",
+          null,
+          "=LOWER(TRIM(C7)&\"|\"&TRIM(D7)&\"|\"&TRIM(E7)&\"|\"&TRIM(F7)&\"|\"&TRIM(H7)&\"|\"&TRIM(I7))",
+          "=IF(COUNTIF($R$6:$R$26,R7)>1,\"重复\",\"唯一\")",
+          null,
+          "待分配",
+          "2026-07-21 00:00:00",
+          "原创/待确认",
+          "—",
+          null
+        ]
+      },
+      {
+        "row": 17,
+        "values": [
+          "PRP-BASE-RETRO-TV-STATION-3D",
+          "复古游戏电视站",
+          "道具",
+          "base_facility",
+          "fate_collection",
+          "root",
+          "PRP-BASE-FACILITY-3D",
+          "Top3D / local -Z 正面",
+          "default / 正式交互设施",
+          "基地99层/命运卡收藏室",
+          "已完成",
+          "P2",
+          "v004",
+          "4材质；主体/自发光分离；独立GLB/PackedScene",
+          "assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d.tscn",
+          "assets/art/props/base_world_3d/source/retro_tv_station/prp_base_retro_tv_station_source_v004.blend",
+          "fate_collection; 命运卡收藏室; 复古游戏电视站; 收藏设施",
+          "=LOWER(TRIM(C17)&\"|\"&TRIM(D17)&\"|\"&TRIM(E17)&\"|\"&TRIM(F17)&\"|\"&TRIM(H17)&\"|\"&TRIM(I17))",
+          "=IF(COUNTIF($R$6:$R$26,R17)>1,\"重复\",\"唯一\")",
+          "10c47d81afa2a642754e2f633ee77bbcae8a96b92b2aa7e29da430bd8be97d73",
+          "Codex",
+          "2026-08-30 00:00:00",
+          "用户自制Blender资产",
+          "—",
+          "2026-08-11接入基地99层正式设施；BaseFacility3D绑定fate_collection并打开FateCardCollectionMenu；保留交互碰撞与Visual；模型正面为local -Z。\n2026-08-30 AST-01规范化（原制作状态：正式美术已接入；原大类：3D道具）\n2026-08-30 AST-02：合法内容更新；文件为Git已跟踪且修改时间不早于原台账日期；验收：verify_base_facility_framework；verify_base_facility_interaction_zones；SHA fed2c5ff578e→5664a0d62034。\n2026-09-12：TowerDescent99F的fate_collection已迁移到PRP-BASE99-LOFT-COMPUTER-WORKSTATION-FACILITY-3D；本行复古电视站继续用于BaseWorld3D。"
+        ]
+      },
+      {
+        "row": 18,
+        "values": [
+          "PRP-BASE-WORKSHOP-STOOL-3D",
+          "赛博维修圆凳",
+          "道具",
+          "decor_prop",
+          "workshop_stool",
+          "root",
+          null,
+          "Top3D / local -Z 正面",
+          "default / pushable / seated / swivel / driveable",
+          "基地99层美术布置层",
+          "已完成",
+          "P2",
+          "v004",
+          "分体座面旋转与轮脚底座滑行；乘坐限速=角色步速1.3倍；松手惯性衰减；离座防弹射；实体场景碰撞；45°倾倒自动离座，E扶正后可再次乘坐；角色专用碰撞体随刚体同步移动",
+          "assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d.tscn",
+          "assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v004.blend; assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_base_visual_v004.glb; assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_swivel_visual_v004.glb",
+          "workshop_stool; 赛博维修圆凳; 独立座椅; 可移动装饰",
+          "=LOWER(TRIM(C18)&\"|\"&TRIM(D18)&\"|\"&TRIM(E18)&\"|\"&TRIM(F18)&\"|\"&TRIM(H18)&\"|\"&TRIM(I18))",
+          "=IF(COUNTIF($R$6:$R$26,R18)>1,\"重复\",\"唯一\")",
+          "d55127e32bc890f4ecf4073f052dc8744e237cd4b62e77f672770ae114d4b6f2",
+          "Codex",
+          "2026-09-29 00:00:00",
+          "用户自制Blender资产",
+          "—",
+          "已从对应设施主体拆出；在场景装饰集合中独立摆放，不绑定facility_id。\n2026-08-30 AST-01规范化（原制作状态：正式美术已接入；原大类：3D道具）\n2026-08-30 AST-02：合法内容更新；文件为Git已跟踪且修改时间不早于原台账日期；验收：verify_base_facility_framework；verify_base_facility_interaction_zones；SHA a09164b2f643→24c43b83564e。\n2026-09-29：99F 基地座椅接入 PushableSeat3D，角色碰撞可推动；E 上下座，方向输入通过刚体受力滑行；场景墙/地面碰撞保留，安全下座查询；verify_pushable_base_chairs 通过。\n2026-09-29：维修圆凳 v004 从 v003 Blender 源分离旋转上部与滑行底座，GLB 双件；角色碰撞改走独立 PlayerBlocker 代理以消除离座刚体弹射。乘坐速度=玩家步速×1.3，松手后短距滑行并衰减；Godot 物理回归通过。\n2026-09-29：v004 分体 GLB 导入设置补回设施共享色盘后处理；99F 实例验证底座和旋转上部均绑定色盘；离座碰撞与镜头回归通过。\n2026-09-29：修复PlayerBlocker旧位置残留；双椅倾角超过45°自动让角色离座，再次E交互扶正；Godot物理回归验证。"
+        ]
+      },
+      {
+        "row": 19,
+        "values": [
+          "PRP-BASE-MISSION-COMMAND-CHAIR-3D",
+          "战术指挥椅",
+          "道具",
+          "decor_prop",
+          "mission_command_chair",
+          "root",
+          null,
+          "Top3D / local -Z 正面",
+          "default / pushable / seated / swivel / driveable",
+          "基地99层美术布置层",
+          "已完成",
+          "P2",
+          "v004",
+          "分体座面旋转与轮脚底座滑行；乘坐限速=角色步速1.3倍；松手惯性衰减；离座防弹射；实体场景碰撞；45°倾倒自动离座，E扶正后可再次乘坐；角色专用碰撞体随刚体同步移动",
+          "assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d.tscn",
+          "assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v004.blend; assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_base_visual_v004.glb; assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_swivel_visual_v004.glb",
+          "mission_command_chair; 战术指挥椅; 独立座椅; 可移动装饰",
+          "=LOWER(TRIM(C19)&\"|\"&TRIM(D19)&\"|\"&TRIM(E19)&\"|\"&TRIM(F19)&\"|\"&TRIM(H19)&\"|\"&TRIM(I19))",
+          "=IF(COUNTIF($R$6:$R$26,R19)>1,\"重复\",\"唯一\")",
+          "5dfc2145158d6e06ab80d592d868e4d0e9b5020fbecd16413473cf5109d7aa67",
+          "Codex",
+          "2026-09-29 00:00:00",
+          "用户自制Blender资产",
+          "—",
+          "已从对应设施主体拆出；在场景装饰集合中独立摆放，不绑定facility_id。\n2026-08-30 AST-01规范化（原制作状态：正式美术已接入；原大类：3D道具）\n2026-08-30 AST-02：合法内容更新；文件为Git已跟踪且修改时间不早于原台账日期；验收：verify_base_facility_framework；verify_base_facility_interaction_zones；SHA f16271a4dc23→a8c70158f3af。\n2026-09-29：99F 基地座椅接入 PushableSeat3D，角色碰撞可推动；E 上下座，方向输入通过刚体受力滑行；场景墙/地面碰撞保留，安全下座查询；verify_pushable_base_chairs 通过。\n2026-09-29：战术指挥椅 v004 从 v003 Blender 源分离旋转上部与滑行底座，GLB 双件；角色碰撞改走独立 PlayerBlocker 代理以消除离座刚体弹射。乘坐速度=玩家步速×1.3，松手后短距滑行并衰减；Godot 物理回归通过。\n2026-09-29：v004 分体 GLB 导入设置补回设施共享色盘后处理；99F 实例验证底座和旋转上部均绑定色盘；离座碰撞与镜头回归通过。\n2026-09-29：修复PlayerBlocker旧位置残留；双椅倾角超过45°自动让角色离座，再次E交互扶正；Godot物理回归验证。"
+        ]
+      },
+      {
+        "row": 22,
+        "values": [
+          "PRP-BASE99-WEAPON-WORKSHOP-STATION-FACILITY-3D",
+          "99F 武器工作台（怪物档案室）",
+          "道具",
+          "base_facility",
+          "monster_archive",
+          "root",
+          "PRP-BASE-FACILITY-3D",
+          "Top3D / 模型包围盒外扩0.8m",
+          "default / 99F正式交互设施",
+          "TowerDescent99F / monster_archive",
+          "正式美术已接入",
+          "P1",
+          "v001",
+          "交互盒 3.523101×5.31×7.35m；模型包围盒+0.8m",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_facility_top3d.tscn",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v003.tscn; src/base3d/BaseFacility3D.gd; src/world3d/TowerDescent3D.gd",
+          "monster_archive; 怪物档案室; 49_02_游戏输出; BaseFacility3D; 0.8m",
+          "=LOWER(TRIM(C22)&\"|\"&TRIM(D22)&\"|\"&TRIM(E22)&\"|\"&TRIM(F22)&\"|\"&TRIM(H22)&\"|\"&TRIM(I22))",
+          "=IF(COUNTIF($R$6:$R$26,R22)>1,\"重复\",\"唯一\")",
+          "54d8b92ae5e448613fd9f9971cd56a1fe26deb76fdfae70a9e2adcdfbefc2f02",
+          "Codex",
+          46276,
+          "用户自制Blender资产",
+          "49",
+          "2026-09-12：TowerDescent99F新增monster_archive实体入口，绑定49_02_游戏输出_整合模型_v020；包装场景保持源包世界坐标与碰撞，打开MonsterArchiveMenu，交互区锁定为源包碰撞包围盒+0.8m。"
+        ]
+      },
+      {
+        "row": 23,
+        "values": [
+          "PRP-BASE99-LOFT-COMPUTER-WORKSTATION-FACILITY-3D",
+          "99F 双屏电脑工位（命运卡收藏室）",
+          "道具",
+          "base_facility",
+          "fate_collection",
+          "root",
+          "PRP-BASE-FACILITY-3D",
+          "Top3D / 模型包围盒外扩0.8m",
+          "default / 99F正式交互设施",
+          "TowerDescent99F / fate_collection",
+          "正式美术已接入",
+          "P1",
+          "v001",
+          "交互盒 9.134999×4.64×3.005m；模型包围盒+0.8m",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_computer_workstation/loft_computer_workstation_facility_top3d.tscn",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v002.tscn; src/base3d/BaseFacility3D.gd; src/world3d/TowerDescent3D.gd",
+          "fate_collection; 命运卡收藏室; 42__02_游戏输出; BaseFacility3D; 0.8m",
+          "=LOWER(TRIM(C23)&\"|\"&TRIM(D23)&\"|\"&TRIM(E23)&\"|\"&TRIM(F23)&\"|\"&TRIM(H23)&\"|\"&TRIM(I23))",
+          "=IF(COUNTIF($R$6:$R$26,R23)>1,\"重复\",\"唯一\")",
+          "3ae4028754d49b8790f7852121f7f12fcbafaa84e3eee4a9a35994cf6ace2d07",
+          "Codex",
+          46276,
+          "用户自制Blender资产",
+          "42",
+          "2026-09-12：TowerDescent99F的fate_collection迁移到42__02_游戏输出_整合模型；包装场景保持源包世界坐标与碰撞，打开FateCardCollectionMenu，交互区锁定为源包碰撞包围盒+0.8m。BaseWorld3D的复古电视站映射保留。"
+        ]
+      },
+      {
+        "row": 24,
+        "values": [
+          "PRP-BASE99-MEDICAL-CABINET-FACILITY-3D",
+          "99F MEDICAL医疗柜（状态恢复舱）",
+          "道具",
+          "base_facility",
+          "base_recovery",
+          "root",
+          "PRP-BASE-FACILITY-3D",
+          "Top3D / 模型包围盒外扩0.8m",
+          "default / 99F正式交互设施",
+          "TowerDescent99F / base_recovery",
+          "正式美术已接入",
+          "P1",
+          "v001",
+          "交互盒 3.18×4.93×2.39m；模型包围盒+0.8m",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/medical_cabinet/medical_cabinet_facility_top3d.tscn",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/medical_cabinet/medical_cabinet_root_top3d_v001.tscn; src/base3d/BaseFacility3D.gd; src/world3d/TowerDescent3D.gd",
+          "base_recovery; 状态恢复舱; MEDICAL医疗柜; BaseFacility3D; 0.8m",
+          "=LOWER(TRIM(C24)&\"|\"&TRIM(D24)&\"|\"&TRIM(E24)&\"|\"&TRIM(F24)&\"|\"&TRIM(H24)&\"|\"&TRIM(I24))",
+          "=IF(COUNTIF($R$6:$R$26,R24)>1,\"重复\",\"唯一\")",
+          "e30407ccfc3b4e5d48a1236d388ca91ba1862458b43c206a84d3c861e8e6b6c8",
+          "Codex",
+          46276,
+          "用户自制Blender资产",
+          "45",
+          "2026-09-12：TowerDescent99F的base_recovery迁移到45_MEDICAL医疗柜_资产包；包装场景保持源包世界坐标与碰撞，打开BaseRecoveryMenu，交互区锁定为源包碰撞包围盒+0.8m。"
+        ]
+      },
+      {
+        "row": 25,
+        "values": [
+          "PRP-BASE99-LOFT-LOUNGE-SOFA-FACILITY-3D",
+          "99F 墨绿三人沙发（角色衣柜）",
+          "道具",
+          "base_facility",
+          "avatar_wardrobe",
+          "root",
+          "PRP-BASE-FACILITY-3D",
+          "Top3D / 模型包围盒外扩0.8m",
+          "default / 99F正式交互设施",
+          "TowerDescent99F / avatar_wardrobe",
+          "正式美术已接入",
+          "P1",
+          "v001",
+          "交互盒 6.42×3.431646×3.481379m；模型包围盒+0.8m",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_lounge_sofa/loft_lounge_sofa_facility_top3d.tscn",
+          "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn; src/base3d/BaseFacility3D.gd; src/world3d/TowerDescent3D.gd",
+          "avatar_wardrobe; 角色衣柜; 墨绿三人休闲沙发; BaseFacility3D; 0.8m",
+          "=LOWER(TRIM(C25)&\"|\"&TRIM(D25)&\"|\"&TRIM(E25)&\"|\"&TRIM(F25)&\"|\"&TRIM(H25)&\"|\"&TRIM(I25))",
+          "=IF(COUNTIF($R$6:$R$26,R25)>1,\"重复\",\"唯一\")",
+          "6ccb6a810717b40f8f1de56e3de87fdcebebc66ae4c187d4ff30e909eed5afd7",
+          "Codex",
+          46276,
+          "用户自制Blender资产",
+          "36",
+          "2026-09-12：TowerDescent99F的avatar_wardrobe迁移到36_墨绿三人休闲沙发_资产包；包装场景保持源包世界坐标与碰撞，打开WardrobeMenu3D，交互区锁定为源包碰撞包围盒+0.8m。"
+        ]
+      },
+      {
+        "row": 26,
+        "values": [
+          "PRP-BASE99-TELESCOPIC-LADDER-3D",
+          "99F东阁楼双段伸缩直梯",
+          "道具",
+          "decor_prop",
+          "base99_rooftop_telescopic_ladder",
+          "root",
+          null,
+          "Top3D / 固定位置",
+          "retracted / deploying / deployed / climbing",
+          "TowerDescent99F / base100_rooftop",
+          "正式美术已接入",
+          "P1",
+          "v002",
+          "双段6m直梯；上端E放下；展开后两端E自动攀爬、反向输入折返；顶部穿东门至100F平台、底部落99F阁楼；场景实体碰撞；展开状态存档",
+          "assets/art/props/base_world_3d/runtime/base99_telescopic_ladder/prp_base99_telescopic_ladder_root_top3d.tscn",
+          "assets/art/props/base_world_3d/source/base99_telescopic_ladder/prp_base99_telescopic_ladder_source_v002.blend; assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_upper_visual_top3d.glb; assets/art/props/base_world_3d/components/base99_telescopic_ladder/prp_base99_telescopic_ladder_lower_visual_top3d.glb; src/base3d/Base99TelescopicLadder3D.gd; src/player3d/states/Player3DClimbingState.gd",
+          "99F;100F;伸缩直梯;可使用道具;攀爬;双段梯",
+          "=LOWER(TRIM(C26)&\"|\"&TRIM(D26)&\"|\"&TRIM(E26)&\"|\"&TRIM(F26)&\"|\"&TRIM(H26)&\"|\"&TRIM(I26))",
+          "=IF(COUNTIF($R$6:$R$26,R26)>1,\"重复\",\"唯一\")",
+          "26a53eee81db5dd6f5ce6a0dc7fe80b8de20044d64a7948b643adf503af98e83",
+          "Codex",
+          "2026-09-29 00:00:00",
+          "用户指定Blender资产",
+          "99F-100F-EAST-LADDER",
+          "2026-09-29：梯子贴合99F东墙并朝向阁楼；上端跨东门落100F平台。Blender v002 直接复用基地母版的四种既有材质，不新增或调整材质参数。展开一次后永久保持并写入基地存档。"
+        ]
+      }
+    ],
+    "validations": [
+      {
+        "type": "list",
+        "formula1": "\"角色,敌人,武器,道具,场景,场景道具,基地资产包,UI,特效,音频\"",
+        "sqref": [
+          "C6:C26"
+        ]
+      },
+      {
+        "type": "list",
+        "formula1": "\"待制作,程序占位,已完成,原型已接入,弃用,旧资产已从正式基地移除,正式美术已接入,已优化并正式接入,Blender源已完成,已导入；优化完成,已从运行场景移除,白盒组件\"",
+        "sqref": [
+          "K6:K26"
+        ]
+      },
+      {
+        "type": "list",
+        "formula1": "\"P0,P1,P2,P3\"",
+        "sqref": [
+          "L6:L26"
+        ]
+      }
+    ]
+  },
+  "3D-道具": {
+    "max_row": 7,
+    "max_column": 16,
+    "rows": [
+      {
+        "row": 1,
+        "values": [
+          "ShellStorm2 · 道具 3D Prefab",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 2,
+        "values": [
+          "桌椅、家具、容器和摆放装饰物；本次扫描 3 个独立Prefab。",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 3,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 4,
+        "values": [
+          "AssetID",
+          "中文名",
+          "Prefab路径",
+          "GLB模型路径",
+          "Blender源文件",
+          "功能说明",
+          "功能脚本路径",
+          "碰撞开关",
+          "碰撞归属",
+          "碰撞方式",
+          "标准尺寸",
+          "原点与朝向",
+          "使用位置",
+          "制作状态",
+          "版本",
+          "备注"
+        ]
+      },
+      {
+        "row": 5,
+        "values": [
+          "PRP-BASE-MISSION-COMMAND-CHAIR-3D",
+          "战术指挥椅",
+          "assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn",
+          "assets/art/props/base_world_3d/components/mission_command_chair/prp_base_mission_command_chair_visual_top3d_v003.glb",
+          "assets/art/props/base_world_3d/source/mission_command_chair/prp_base_mission_command_chair_source_v001.blend",
+          "可复用摆放道具Prefab",
+          null,
+          "无",
+          "无",
+          "无",
+          "最多4材质；独立GLB/PackedScene；无交互碰撞",
+          "-Z",
+          "基地99层美术布置层",
+          "正式美术已接入",
+          "v001",
+          "根节点=战术指挥椅(Node3D)"
+        ]
+      },
+      {
+        "row": 6,
+        "values": [
+          "PRP-BASE-WORKSHOP-STOOL-3D",
+          "赛博维修圆凳",
+          "assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn",
+          "assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_visual_top3d_v003.glb",
+          "assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v001.blend",
+          "可复用摆放道具Prefab",
+          null,
+          "无",
+          "无",
+          "无",
+          "最多4材质；独立GLB/PackedScene；无交互碰撞",
+          "-Z",
+          "基地99层美术布置层",
+          "正式美术已接入",
+          "v001",
+          "根节点=赛博维修圆凳(Node3D)"
+        ]
+      },
+      {
+        "row": 7,
+        "values": [
+          "PRP-ROOM-FURNITURE-3D",
+          "房间家具3D通用模块",
+          "assets/art/props/dungeon_3d/prp_room_furniture_root_top3d_v001.tscn",
+          null,
+          null,
+          "可复用摆放道具Prefab",
+          "src/world3d/RoomFurniture3D.gd",
+          "开",
+          "Prefab自身",
+          "脚本生成",
+          "PackedScene/类型与尺寸配置",
+          "未声明",
+          "全部3D房间",
+          "原型已接入",
+          "v001",
+          "根节点=RoomFurniture3D(Area3D)"
+        ]
+      }
+    ]
+  },
+  "3D-物品": {
+    "max_row": 4,
+    "max_column": 16,
+    "rows": [
+      {
+        "row": 1,
+        "values": [
+          "ShellStorm2 · 物品 3D Prefab",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 2,
+        "values": [
+          "拥有独立PackedScene的拾取物、消耗品、钥匙和掉落物；本次扫描 0 个独立Prefab。",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 3,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 4,
+        "values": [
+          "AssetID",
+          "中文名",
+          "Prefab路径",
+          "GLB模型路径",
+          "Blender源文件",
+          "功能说明",
+          "功能脚本路径",
+          "碰撞开关",
+          "碰撞归属",
+          "碰撞方式",
+          "标准尺寸",
+          "原点与朝向",
+          "使用位置",
+          "制作状态",
+          "版本",
+          "备注"
+        ]
+      }
+    ]
+  },
+  "域变更日志": {
+    "max_row": 10,
+    "max_column": 7,
+    "rows": [
+      {
+        "row": 1,
+        "values": [
+          "道具账本变更日志",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 2,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 3,
+        "values": [
+          "只记录本账本的域内变更；跨域与全局变更记录在主账本《版本记录》",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 4,
+        "values": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "row": 5,
+        "values": [
+          "台账版本",
+          "日期",
+          "变更类型",
+          "范围",
+          "说明",
+          "兼容性",
+          "负责人"
+        ]
+      },
+      {
+        "row": 6,
+        "values": [
+          "v0.1.0",
+          "2026-09-18",
+          "分账本建立",
+          "道具",
+          "由单体账本《ShellStorm2_美术资产台账_v001.xlsx》按大类拆分而来；本账本接管大类=道具，条目内容逐格不变，仅登记位置变化。",
+          "资产条目、AssetID、路径与哈希全部不变；只换文件。旧引用可用 scripts/ledger_registry.py 解析。",
+          "摩斯拉"
+        ]
+      },
+      {
+        "row": 7,
+        "values": [
+          "v0.1.1",
+          "2026-09-29",
+          "99F座椅乘坐与驾驶",
+          "道具 / 基地座椅",
+          "维修圆凳与战术指挥椅改为可推刚体、可乘坐驾驶；与场景碰撞交互。",
+          "更新两条既有资产的状态、规格、v003 源、SHA、备注和日期；AssetID 与运行时路径不变。",
+          "Codex"
+        ]
+      },
+      {
+        "row": 8,
+        "values": [
+          "v0.1.2",
+          "2026-09-29",
+          "99F旋转椅分体与离座防弹射",
+          "道具 / 基地座椅",
+          "两把椅子从 v003 源派生 v004；轮脚底座物理滑行、座面/靠背独立转向；乘坐1.3倍步速与松手惯性。",
+          "更新两条既有资产的版本、双GLB来源、物理规格、SHA与备注；AssetID和运行时PackedScene路径不变。",
+          "Codex"
+        ]
+      },
+      {
+        "row": 9,
+        "values": [
+          "v0.1.3",
+          "2026-09-29",
+          "99F座椅材质与上下座回归",
+          "道具 / 基地座椅",
+          "两把椅子的分体视觉恢复共享材质；验证上下座碰撞、镜头高度及座中射击。",
+          "更新既有资产记录与验收契约；保留 AssetID 和稳定 PackedScene 路径。",
+          "Codex"
+        ]
+      },
+      {
+        "row": 10,
+        "values": [
+          "v0.1.4",
+          "2026-09-29",
+          "99F双段伸缩直梯正式接入",
+          "道具 / 基地交互道具",
+          "新增伸缩直梯 AssetID；双段GLB、固定碰撞、展开动画、攀爬状态与存档接入。",
+          "更新资产主表与运行时事实源；既有历史资源保留。",
+          "Codex"
+        ]
+      }
+    ]
+  }
+}
