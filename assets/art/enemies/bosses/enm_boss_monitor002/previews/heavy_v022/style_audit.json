@@ -1,0 +1,9 @@
+{
+  "highlight_frames": [
+    65
+  ],
+  "highlight_duration_seconds": 0.03333333333333333,
+  "unoutlined_yellow_jagged_ground_burst": true,
+  "base_animation": "v020 unchanged",
+  "first_last_light_zero": true
+}

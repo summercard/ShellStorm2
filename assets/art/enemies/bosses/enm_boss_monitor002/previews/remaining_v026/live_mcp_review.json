@@ -1,0 +1,19 @@
+{
+  "connection": "BlenderMCP TCP 9876",
+  "file": "I:\\\u5de5\u4f5c\u9879\u76ee\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\source\\enm_boss_monitor002_animation_v026.blend",
+  "live_scene": "BOSS002_STUDIO",
+  "switched_and_evaluated": [
+    "special_prepare",
+    "special_insert",
+    "special_channel",
+    "special_recover",
+    "hurt",
+    "stun_enter",
+    "stun_loop",
+    "stun_exit",
+    "turn_left",
+    "turn_right"
+  ],
+  "selected_action": "special_channel",
+  "frame": 7
+}

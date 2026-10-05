@@ -1,0 +1,115 @@
+{
+  "checks": {
+    "stun_enter_1": true,
+    "stun_enter_4": true,
+    "stun_enter_5": true,
+    "stun_loop_20": true,
+    "stun_exit_20": true,
+    "special_insert_14": true,
+    "special_insert_15": true,
+    "special_channel_12": true,
+    "special_recover_9": true,
+    "single_bounce_height": true,
+    "rig_bones_64": true,
+    "electric_bone_parenting": true,
+    "no_invalid_fx_drivers": true
+  },
+  "states": [
+    [
+      "stun_enter",
+      1,
+      [
+        2,
+        0,
+        0,
+        0
+      ]
+    ],
+    [
+      "stun_enter",
+      4,
+      [
+        2,
+        0,
+        0,
+        1
+      ]
+    ],
+    [
+      "stun_enter",
+      5,
+      [
+        5,
+        0,
+        1,
+        0
+      ]
+    ],
+    [
+      "stun_loop",
+      20,
+      [
+        5,
+        0,
+        1,
+        0
+      ]
+    ],
+    [
+      "stun_exit",
+      20,
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    [
+      "special_insert",
+      14,
+      [
+        2,
+        0,
+        0,
+        0
+      ]
+    ],
+    [
+      "special_insert",
+      15,
+      [
+        2,
+        1,
+        0,
+        0
+      ]
+    ],
+    [
+      "special_channel",
+      12,
+      [
+        2,
+        1,
+        0,
+        0
+      ]
+    ],
+    [
+      "special_recover",
+      9,
+      [
+        2,
+        0,
+        0,
+        0
+      ]
+    ]
+  ],
+  "bounce_axle_z": [
+    0.8246788382530212,
+    1.3046789169311523,
+    0.8246788382530212
+  ],
+  "passed": true
+}

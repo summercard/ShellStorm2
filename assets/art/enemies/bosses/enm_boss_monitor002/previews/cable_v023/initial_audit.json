@@ -1,0 +1,16 @@
+{
+  "old_actions_unchanged": true,
+  "action": "melee_cable",
+  "duration_seconds": 2,
+  "held_cable_hand": "hand.R (existing cable hand)",
+  "total_cable_length": 4.094171240925789,
+  "palette": "keyboard cyan / magenta / white",
+  "hold_frames": [
+    17,
+    21
+  ],
+  "active_frames": [
+    25,
+    34
+  ]
+}

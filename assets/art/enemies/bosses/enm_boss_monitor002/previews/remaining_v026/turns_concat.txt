@@ -1,0 +1,2 @@
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/remaining_v026/turn_left.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/remaining_v026/turn_right.mp4'

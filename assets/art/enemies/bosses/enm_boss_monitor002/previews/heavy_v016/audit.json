@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "checks": {
+    "previous_three_actions_unchanged": true,
+    "dual_master_signature": true,
+    "four_actions": true,
+    "single_no_cycles": true,
+    "three_screen_turns": true,
+    "rear_axle_not_spinning": true,
+    "face_stays_forward": true,
+    "root_fixed": true,
+    "base_planted": true,
+    "no_ground_penetration": true,
+    "front_ground_contact": true,
+    "six_frame_pose_hold": true,
+    "screen_nearly_flat": true,
+    "large_slam_drop": true,
+    "return_to_start": true,
+    "fx_spin_and_hit": true,
+    "fx_hold_and_end_clear": true,
+    "fx_separate_from_character": true
+  },
+  "spin_degrees": 1080.0,
+  "minimum_z": {
+    "Portrait display": 0.034999847412109375,
+    "Stand column": 0.11507470160722733,
+    "Keyboard outer shell": 0.9261943697929382,
+    "Long data cable whip": 0.00888592004776001,
+    "Data connector body": 0.37754568457603455,
+    "Sculpted glove L": 1.3921706676483154,
+    "Sculpted glove R": 1.0885388851165771,
+    "Crescent pedestal": 0.03500000014901161
+  },
+  "screen_centers": {
+    "1": [
+      0.03970588371157646,
+      0.1705605536699295,
+      2.0622072219848633
+    ],
+    "19": [
+      0.03970588371157646,
+      -0.032000020146369934,
+      2.214411735534668
+    ],
+    "49": [
+      0.03970588371157646,
+      -0.032000020146369934,
+      2.214411735534668
+    ],
+    "55": [
+      0.03970588371157646,
+      -0.032000020146369934,
+      2.214411735534668
+    ],
+    "65": [
+      0.03970588371157646,
+      1.7676669359207153,
+      0.08824881166219711
+    ],
+    "69": [
+      0.03970588371157646,
+      1.9176671504974365,
+      0.08824878185987473
+    ],
+    "81": [
+      0.03970588371157646,
+      1.9176671504974365,
+      0.08824878185987473
+    ],
+    "97": [
+      0.03970588371157646,
+      0.1705605536699295,
+      2.0622072219848633
+    ]
+  },
+  "contact_range": [
+    0.034999847412109375,
+    0.03505539894104004
+  ],
+  "face_rotation_error": 0,
+  "rear_axle_spin_error": 0,
+  "fx_counts": {
+    "1": 0,
+    "29": 3,
+    "55": 0,
+    "64": 0,
+    "65": 6,
+    "69": 14,
+    "83": 0,
+    "97": 0
+  },
+  "not_executed": [
+    "Godot import",
+    "gameplay damage",
+    "full mesh-to-mesh collision"
+  ]
+}

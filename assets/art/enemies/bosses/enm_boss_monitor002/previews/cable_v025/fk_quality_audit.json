@@ -1,0 +1,16 @@
+{
+  "terminal_hand_local_translation_drift": {
+    "L": 9.660358367108215e-07,
+    "R": 1.1693251626074973e-06
+  },
+  "arm_joint_gap": 0,
+  "hand_travel_span": {
+    "L": 0.878642703915495,
+    "R": 1.988813386438731
+  },
+  "body_translation_span": 0.2054264218534849,
+  "method": "shoulder rotation drives fixed-length segments; wrist inherits last segment; no world hand targets",
+  "expected_faults": [],
+  "runtime_tests": "not executed; Blender source only",
+  "passed": true
+}

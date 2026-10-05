@@ -1,0 +1,9 @@
+{
+  "stun_enter_frames": 43,
+  "first_contact": 19,
+  "bounce_peak": 25,
+  "second_contact": 31,
+  "dizzy_expression": 5,
+  "electric_contact_on": 15,
+  "electric_release_off": 9
+}

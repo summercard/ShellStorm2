@@ -1,0 +1,22 @@
+{
+  "samples": 241,
+  "worst_frames": {
+    "Long data cable whip": 57.0,
+    "Data connector body": 58.0,
+    "Keyboard outer shell": 47.0,
+    "Portrait display": 31.0
+  },
+  "minimum_z": {
+    "Long data cable whip": 0.6575745344161987,
+    "Data connector body": 1.033677577972412,
+    "Keyboard outer shell": 1.1922045946121216,
+    "Portrait display": 0.7007635831832886
+  },
+  "max_cable_segment_relative_length_error": 1.6088650691692408e-06,
+  "max_cable_joint_gap": 0,
+  "neutral_return_error": 0.0,
+  "front_arc_tip_y_min": 0.3716396987438202,
+  "front_arc_tip_x_span": 8.615564346313477,
+  "previous_actions_preserved": true,
+  "passed": true
+}

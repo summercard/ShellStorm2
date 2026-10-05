@@ -1,0 +1,18 @@
+{
+  "old_actions_unchanged": true,
+  "action": "melee_cable",
+  "duration_seconds": 2,
+  "held_cable_hand": "hand.R (existing cable hand)",
+  "total_cable_length": 4.094171240925789,
+  "palette": "keyboard cyan / magenta / white",
+  "hold_frames": [
+    21,
+    24
+  ],
+  "active_frames": [
+    25,
+    32
+  ],
+  "spiral_turns": 1.5,
+  "hand_space": "shoulder FK chain; hand inherits terminal bone transform"
+}

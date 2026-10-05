@@ -1,0 +1,127 @@
+{
+  "stun_enter": {
+    "min_z": {
+      "Portrait display": 0.04000043869018555,
+      "Keyboard outer shell": 0.06314750015735626,
+      "Long data cable whip": 0.2867854833602905,
+      "Luminous data plug": 0.10999114066362381
+    },
+    "worst_frames": {
+      "Portrait display": 17.0,
+      "Keyboard outer shell": 16.5,
+      "Long data cable whip": 19.0,
+      "Luminous data plug": 17.0
+    },
+    "max_cable_gap": 0,
+    "passed": true
+  },
+  "stun_loop": {
+    "min_z": {
+      "Portrait display": 0.03999972343444824,
+      "Keyboard outer shell": 0.060540568083524704,
+      "Long data cable whip": 0.2770843505859375,
+      "Luminous data plug": 0.11006397753953934
+    },
+    "worst_frames": {
+      "Portrait display": 36.0,
+      "Keyboard outer shell": 13.0,
+      "Long data cable whip": 13.0,
+      "Luminous data plug": 32.0
+    },
+    "max_cable_gap": 0,
+    "passed": true
+  },
+  "stun_exit": {
+    "min_z": {
+      "Portrait display": 0.04000043869018555,
+      "Keyboard outer shell": 0.054365772753953934,
+      "Long data cable whip": 0.2751131057739258,
+      "Luminous data plug": 0.11006409674882889
+    },
+    "worst_frames": {
+      "Portrait display": 1.0,
+      "Keyboard outer shell": 9.5,
+      "Long data cable whip": 9.0,
+      "Luminous data plug": 5.0
+    },
+    "max_cable_gap": 0,
+    "passed": true
+  },
+  "special_prepare": {
+    "min_z": {
+      "Portrait display": 0.6462609767913818,
+      "Keyboard outer shell": 1.357535719871521,
+      "Long data cable whip": 0.7182856202125549,
+      "Luminous data plug": 0.9027523994445801
+    },
+    "worst_frames": {
+      "Portrait display": 29.5,
+      "Keyboard outer shell": 1.0,
+      "Long data cable whip": 1.0,
+      "Luminous data plug": 1.0
+    },
+    "max_cable_gap": 0,
+    "passed": true
+  },
+  "special_insert": {
+    "min_z": {
+      "Portrait display": 0.5113025903701782,
+      "Keyboard outer shell": 1.4079985618591309,
+      "Long data cable whip": 0.5374451279640198,
+      "Luminous data plug": 0.040064986795186996
+    },
+    "worst_frames": {
+      "Portrait display": 15.0,
+      "Keyboard outer shell": 14.0,
+      "Long data cable whip": 16.5,
+      "Luminous data plug": 16.5
+    },
+    "max_cable_gap": 0,
+    "passed": true
+  },
+  "special_channel": {
+    "min_z": {
+      "Portrait display": 0.5071860551834106,
+      "Keyboard outer shell": 1.4108136892318726,
+      "Long data cable whip": 0.5374436974525452,
+      "Luminous data plug": 0.040063437074422836
+    },
+    "worst_frames": {
+      "Portrait display": 19.0,
+      "Keyboard outer shell": 19.0,
+      "Long data cable whip": 3.5,
+      "Luminous data plug": 3.5
+    },
+    "max_cable_gap": 0,
+    "passed": true,
+    "tip_lock_drift": 9.4949282416057e-06
+  },
+  "special_recover": {
+    "min_z": {
+      "Portrait display": 0.5113025903701782,
+      "Keyboard outer shell": 1.357535719871521,
+      "Long data cable whip": 0.5374487638473511,
+      "Luminous data plug": 0.040068503469228745
+    },
+    "worst_frames": {
+      "Portrait display": 1.0,
+      "Keyboard outer shell": 28.0,
+      "Long data cable whip": 9.0,
+      "Luminous data plug": 9.0
+    },
+    "max_cable_gap": 0,
+    "passed": true
+  },
+  "joins": {
+    "special_prepare to special_insert": 0.0,
+    "special_insert to special_channel": 0.0,
+    "special_channel to special_recover": 0.0,
+    "stun_enter to stun_loop": 0.0,
+    "stun_loop to stun_exit": 0.0
+  },
+  "loops": {
+    "special_channel": 0.0,
+    "stun_loop": 0.0
+  },
+  "passed": true
+}

@@ -1,6 +1,82 @@
 # Boss 002 · MONITOR.EXE
 
-## 当前交付 v015（夸张特效与持线手后摆）
+## 当前交付 v027（受击坐地反弹、眩晕与线缆电流）
+
+模型/动画双母版 `source/enm_boss_monitor002_model_v027.blend`、`source/enm_boss_monitor002_animation_v027.blend`；打开动画默认播放 `stun_enter`，1—43帧，30fps。保留v026及更早版本。
+
+`stun_enter`：受击后仰、单帧黄色闪形（F4）、F5切换螺旋眼与环绕星星，F19首次坐地，F25反弹最高点（0.48米），F31第二次坐地后稳定；双臂和手腕在反弹时错拍摆动。`stun_loop`保持眩晕；`stun_exit`在F20恢复表情并关闭星星。特效采用纯色块，无勾线。
+
+特殊攻击电流继承数据线骨骼，蓝色细电弧配流动亮芯；`special_insert` F15通电、`special_channel`持续、`special_recover` F9断电。所有正式动作显式重置特效开关，避免切换残留。`BOSS002_DIZZY_ELECTRIC_PREVIEW`为独立预览集合，不属于角色导出几何。
+
+七段动作以半帧采样检查地面、线缆骨链、锁点、分段衔接与循环，通过；真实Cycles预览和报告见 `previews/impact_electric_v027/`。仍为Blender源级交付，未导出GLB或接入Godot。
+
+## 历史交付 v026（剩余五类十剪辑）
+
+模型/动画双母版 `source/enm_boss_monitor002_model_v026.blend`、`source/enm_boss_monitor002_animation_v026.blend`。默认BOSS002_STUDIO、special_prepare；在Action列表切换以下剪辑，结束帧见 `previews/remaining_v026/clips.json`。旧五动作曲线保持，总计15正式剪辑。
+
+新增：special_prepare / special_insert / special_channel / special_recover；hurt；stun_enter / stun_loop / stun_exit；turn_left / turn_right。双臂肩部先动、前后错拍、末端腕部回弹；转向分别制作左右90度视觉示范，root不写运动，正式方向消费尚待运行时适配。特殊持续段插头锁地，坐地屏幕下框接地；循环及分段接续检查通过。动作按1/4帧制作采样，1/2帧验收。原始失败（插头微漂、坐起线身穿地）修正后重测通过。
+
+预览、关键帧及验收报告：`previews/remaining_v026/`。仅Blender源制作，未导出GLB、未接入Godot或伤害/状态机。
+
+## 历史交付 v025（肩部驱动双臂）
+
+打开 `source/enm_boss_monitor002_animation_v025.blend`，BOSS002_STUDIO播放1—61帧。取消世界坐标手部目标，双臂由肩侧关节领动，固定长度的六段弹簧臂逐段滞后，手腕继承末段姿态；身体仅保留小幅预备压重和跟随。支撑骨使用原姿态的朝向基准，修复进出动作时的混合翻滚。螺旋蓄力与快速弧甩保留。
+
+验收：241次连续采样、末端继承与连接专项、正/侧视图关键帧。身体位移跨度0.205米，双手末端局部偏移误差低于0.000002米，链连接误差为0。报告 `previews/cable_v025/fk_quality_audit.json` 与 `audit.json`；同目录含正常及半速预览。旧版本保留；仅Blender源级，未接入Godot。
+
+## 历史交付 v024（后轴跟随、螺旋蓄力与快速甩击）
+
+打开 `source/enm_boss_monitor002_animation_v024.blend`，BOSS002_STUDIO播放1—61帧。双手目标使用后轴局部坐标，随身体转动和位移；局部惯性摆动叠加。前摇螺旋甩线1.5圈，21—24帧停顿后快速横甩。弧带65点曲线重采样，使用切线法向构建顺滑带面。配色沿用普通键盘攻击。预览 `previews/cable_v024/`，模型母版同版本；旧版本保留，未接入Godot。
+
+## 历史交付 v023（数据线近战甩击）
+
+打开 `source/enm_boss_monitor002_animation_v023.blend` 的 BOSS002_STUDIO，选择 `melee_cable`，播放1—61帧（2秒）。沿用原持线手，内部骨名hand.R；不交换道具。后撤蓄势、17—21帧短停，手腕先甩、16段线骨延迟跟随，鞭梢扫过身前弧线，键盘手反摆，随后回弹收回。普通键盘攻击同系蓝/玫红/亮色弧带跟随实际鞭梢轨迹，无勾线。
+
+241次四分之一帧采样通过：线身、插头、键盘、屏幕离地；线骨长度误差低于0.001%，骨链无断口，首尾回同一姿态。旧四个动作曲线保持。预览 `previews/cable_v023/`，模型母版同版本。重击完整预览保留在v022；当前文件另留BOSS002_HEAVY_PREVIEW场景，需切换heavy_spin_slam动作。未接入Godot。
+
+## 历史交付 v022（黄色命中高亮）
+
+第65帧爆裂色块及瞬时补光改为黄色，仅持续1帧。源文件 `source/enm_boss_monitor002_animation_v022.blend`，模型同版本；预览 `previews/heavy_v022/`。形状及动作保持，未接入Godot。
+
+## 历史交付 v021（砸地单帧高亮）
+
+打开 `source/enm_boss_monitor002_animation_v021.blend`，播放1—97帧。第65帧为冰白高亮锯齿爆裂地面色块，附瞬时冷色补光；仅1帧（1/30秒），第66帧接回v020赛博脉冲。无勾线。整段预览及高亮帧在 `previews/heavy_v021/`；模型母版同版本，未接入Godot。
+
+## 历史交付 v020（无勾线赛博脉冲）
+
+打开 `source/enm_boss_monitor002_animation_v020.blend` 的 BOSS002_STUDIO，播放1—97帧。移除勾线、星形爆点和高饱和红蓝搭配，重新设计为冷蓝/青蓝色块、少量玫红数据碎片及冰蓝亮片。旋转使用三层断续弧带与扫描刻块；砸地使用三层错峰向外扩张的分段脉冲环、定向能量片和闪断矩形数据碎片，末段衰减消失。无手绘纹理。
+
+角色四个动作曲线与v019相同；模型母版 `source/enm_boss_monitor002_model_v020.blend`。关键帧及整段预览在 `previews/heavy_v020/`。仅源级制作，未接入Godot，旧版本保留。
+
+## 历史交付 v019（纯色色块与勾线特效）
+
+打开 `source/enm_boss_monitor002_animation_v019.blend` 的 BOSS002_STUDIO，播放1—97帧。旋转拖尾、冲击环和爆裂片全部使用高饱和红蓝纯色网格及清晰深色勾线，移除涂鸦纹理、排线和碎笔触。保留v018角色动作、惯性跟随、后仰停顿与砸地节奏。旧版本保留。模型母版 `source/enm_boss_monitor002_model_v019.blend`。
+
+四个角色动作曲线哈希与v018相同。真实渲染预览在 `previews/heavy_v019/`，仅源级制作，未导出或接入Godot。
+
+## 历史交付 v018（重击高饱和红蓝配色）
+
+动作 `source/enm_boss_monitor002_animation_v018.blend`，模型 `source/enm_boss_monitor002_model_v018.blend`。旋转弧带及地面冲击彩色笔触改成高饱和正红、亮蓝，发光强度0.8，减少高亮发白。动作、几何与时间轴保持v017；四个角色Action曲线摘要相同，见 `previews/heavy_v018/palette_audit.json`。受影响特效帧重新Cycles渲染，其余帧复用v017；完整预览 `previews/heavy_v018/heavy_spin_slam.mp4`。源级交付，未接入Godot，v017保留回退。
+
+## 历史交付 v017（惯性跟随与重砸节奏深化）
+
+动作 `source/enm_boss_monitor002_animation_v017.blend`，模型 `source/enm_boss_monitor002_model_v017.blend`。默认heavy_spin_slam，1—97帧/30fps。原idle/move/melee_keyboard保持，v016留作回退。
+
+双手不再固定在世界坐标：跟随后轴的位移与速度，左手滞后3帧、右手5帧，触地后继续向前甩出，再衰减回摆；手腕、键盘和线尾有后续摆动。旋转专门使用6条渐细环形弧带，绕屏幕前后轴连续旋转，旋转期间不出现打击爆点图集。
+
+49—55帧轻微后仰19°、抬高蓄势，55—59帧保持，59—65帧加速前扑砸地；触地后小幅回弹、再次压稳，随后重心回升与手部滞后收回。旋转弧带在停顿前消失，地面爆点仅命中时触发。
+
+22项源级专项通过，385个细分帧检查；保留连续1080°、正向五官、固定底座、双母版同签名及关键几何不穿地。证据与整段预览 `previews/heavy_v017/`。测试检查运动契约，视觉品质仍以实际预览评审；未执行Godot接入、玩法伤害或完整网格间碰撞求解。
+
+## 历史交付 v016（屏幕三圈旋转后前扑砸地）
+
+打开 `source/enm_boss_monitor002_animation_v016.blend`，默认 heavy_spin_slam，BOSS002_STUDIO，1—97帧/30fps/3.2秒单次。模型母版 `source/enm_boss_monitor002_model_v016.blend`。旧idle、move、melee_keyboard曲线完全保留；键盘攻击特效预览继续使用v015文件，v016的STUDIO专用于重击。
+
+屏幕绕后轴的前后方向独立旋转三圈（19—49帧），后轴/底座不转，双臂张开拖曳；五官抵消屏幕滚转并保持正向。49—55帧停顿，55—65帧前扑到屏幕正面近乎平贴地面，65—81帧低位暴露，81—97帧支架弹性回升。root固定，动作不产生玩法移动。
+
+复用image-2手绘图集，旋转笔触20—49帧、大范围双层地面环和放射爆点65—82帧，83帧后清除。18项源级验收通过，385个四分之一帧核验1080°连续旋转、后轴不转、五官正向、底座固定、八类关键几何无穿地。完整证据与视频 `previews/heavy_v016/`。未执行完整网格互穿求解、Godot导出/接入与伤害事件；v015留作回退。
+
+## 历史交付 v015（夸张特效与持线手后摆）
 
 动作 `source/enm_boss_monitor002_animation_v015.blend`，模型 `source/enm_boss_monitor002_model_v015.blend`。默认BOSS002_STUDIO场景，1—55帧播放。手绘爆点、冲击环及蓝/玫红干扰统一放大至v014的1.65倍。持线右手蓄力向后上方拉开，下砸后继续后摆、稍滞后达到极值，再收回；前后行程约1.95m、上下约0.94m。数据线增加逐节延迟摆动。
 
@@ -94,7 +170,7 @@ idle为30fps、3.2秒循环，播放1—96帧，97为闭环关键帧。双臂六
 
 动作文件有5个 `QA_*` Action：伸缩、屏幕旋转、前砸、下压、手指弯曲。第1帧中立，第36帧测试极值，第72帧恢复。它们只证明绑定可动，不是最终战斗动作；旋转/前砸极值可能使道具或身体触地，正式动作还需制作接触与避穿插。
 
-源级21项验收通过，见 `previews/rig_v005/audit.json`：权重覆盖与归一、静止形态、左右臂独立伸缩且半径保持、屏幕转动与前倾时五官朝向稳定、支撑变形、下压、指骨、键盘跟随、恢复无漂移、表情跨帧保持与双文件签名。导出前需烘焙变形骨约束；表情UV驱动需运行时适配，不能直接当作GLB骨动作。下列旧版说明仅供追溯。
+源级22项验收通过，见 `previews/rig_v005/audit.json`：权重覆盖与归一、静止形态、左右臂独立伸缩且半径保持、屏幕转动与前倾时五官朝向稳定、支撑变形、下压、指骨、键盘跟随、恢复无漂移、表情跨帧保持与双文件签名。导出前需烘焙变形骨约束；表情UV驱动需运行时适配，不能直接当作GLB骨动作。下列旧版说明仅供追溯。
 
 ## 当前交付 v004（六表情库）
 
