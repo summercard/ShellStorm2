@@ -1,6 +1,20 @@
 # Boss 002 · MONITOR.EXE
 
-## 当前交付 v027（受击坐地反弹、眩晕与线缆电流）
+## 当前交付 v029（击晕坐地双手摊地）
+
+双母版 `source/enm_boss_monitor002_model_v029.blend`、`source/enm_boss_monitor002_animation_v029.blend`。仅修改stun_enter / stun_loop / stun_exit，其他12段曲线保持。
+
+第二次坐地后F25—35逐渐卸力，F35后双手张开摊地、弹簧臂弯垂，眩晕循环保持低位；键盘平放在左手旁，数据线在右侧松弛落下。起身前保持手掌接触，再收回道具和双臂。眩晕表情、星星和身体反弹保留。
+
+预览及检查报告位于 `previews/seated_hands_v029/`。仅源级交付，未导出或接入Godot。
+
+## 历史交付 v028（五类动作根部甩臂）
+
+仅调整特殊四段、hurt、stun三段、turn_left/right共十段，既有idle、move、键盘/数据线/旋转砸地五段曲线保持。双母版为 `source/enm_boss_monitor002_model_v028.blend` 和 `source/enm_boss_monitor002_animation_v028.blend`。
+
+双臂由靠显示器的根部领动，弯曲波逐段向外传播，约1.05帧/段滞后，配合弹簧臂蓄力缩短、甩出拉长；手继承末段并增加腕部拖后。避免以世界坐标手部目标反解手臂。原身体、表情、接触时序和电流/眩晕特效保留；数据线接触点单独约束。预览和专项报告位于 `previews/arms_v028/`。仅Blender源交付，尚未导出或接入Godot。
+
+## 历史交付 v027（受击坐地反弹、眩晕与线缆电流）
 
 模型/动画双母版 `source/enm_boss_monitor002_model_v027.blend`、`source/enm_boss_monitor002_animation_v027.blend`；打开动画默认播放 `stun_enter`，1—43帧，30fps。保留v026及更早版本。
 

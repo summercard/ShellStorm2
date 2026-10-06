@@ -6,7 +6,7 @@ TIME-DAYNIGHT / SAVE-PROFILE / WORLD-BLOCKS：[楼顶与吊桥卡顿复查](deve
 
 VFX-POOL / WORLD-BLOCKS：[100F吊桥云海卡顿诊断](development/2026-10-04_bridge_cloud_stutter_diagnosis.md)。当前RTX4060Ti真实1440p重复路线帧中位51.221ms、P95 67.325ms；隐藏云海7.120/8.629ms。720p隐藏地表城市改善很小，冻结逻辑仍保留云海负担；13组完成，性能未修复，不改变美术品质与避让合同。
 
-BOSS-STAGES / ASSET-PIPELINE：[Boss002动画设计](design/Boss002显示器动画设计.md)，15个正式剪辑已完成Blender源制作；v027增加受击坐地单次反弹、螺旋眼/星星眩晕、单帧黄色闪形和特殊攻击接地线缆电流。肩部带动双手、纯色块赛博特效；未导出或接入Godot。
+BOSS-STAGES / ASSET-PIPELINE：[Boss002动画设计](design/Boss002显示器动画设计.md)，15个正式剪辑已完成Blender源制作；v029击晕坐地双手摊地、松弛弯臂与道具低放；其他五类动作保留v028根部甩臂与伸缩，保留受击坐地单次反弹、螺旋眼/星星眩晕、单帧黄色闪形和特殊攻击接地线缆电流。肩部带动双手、纯色块赛博特效；未导出或接入Godot。
 
 ASSET-PIPELINE / WORLD-BLOCKS [500米地表与程序城市v004](development/2026-10-03_cross_tower_landscape_foundation.md#500米地表与全域城市v004后续交付)：200新楼/23非空批次，25分区包含旧城总覆盖；96原实例与塔桥完整矩阵保持。真实Forward+665项与登记/门禁/快照7项合计672项、云海30,209项通过；主表825/Prefab专表717受控登记及无损基线通过。中央两区新增0，玩家和诊断四图分开；工程既有红项与移动端/LOD未验单列，不提升总体完成状态。
 
