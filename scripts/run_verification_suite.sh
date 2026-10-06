@@ -331,6 +331,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_base99_radio
   verify_expedition_hologram_city
   verify_base99_modular_room_visual
   verify_base99_floor_visuals_v021

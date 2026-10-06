@@ -4,7 +4,7 @@ extends Node
 const RADIO_SCENE_PATH := "res://assets/art/props/base_world_3d/runtime/base99_radio/prp_base99_radio_root_top3d.tscn"
 const LAYOUT_PATH := "res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn"
 const REQUESTED_LAYOUT_PATH := "res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d.tscn"
-const NIGHTSTAND_PATH := "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_nightstand/loft_nightstand_root_top3d.tscn"
+const BATTERY_CABINET_PATH := "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_battery_cabinet/loft_battery_cabinet_root_top3d.tscn"
 const MUSIC_A := "res://assets/audio/music/base_passion/base_passion_a_v001.ogg"
 const MUSIC_B := "res://assets/audio/music/base_passion/base_passion_b_v001.ogg"
 const TOWER_SCENE_PATH := "res://scenes/TowerDescent3D.tscn"
@@ -27,7 +27,7 @@ func _ready() -> void:
 	_assert(failures, radio.get_meta("asset_id", "") == "PRP-BASE99-RADIO-3D", "asset_id 不正确")
 	_assert(failures, radio.get_meta("asset_category", "") == "decor_prop", "category 必须是场景可交互道具")
 	var radio_bounds := _world_bounds(radio)
-	_assert(failures, radio_bounds.size.is_equal_approx(Vector3(0.414, 0.411, 0.228)), "radio运行时视觉bounds不符合0.414×0.228×0.411m契约")
+	_assert(failures, radio_bounds.size.is_equal_approx(Vector3(0.828, 0.822, 0.456)), "radio运行时视觉bounds不符合v003本地契约")
 	_assert(failures, "environment_component" not in str(radio.get_meta("collision_policy", "")), "radio 不得标记 environment_component")
 	_assert(failures, radio.scale.is_equal_approx(Vector3.ONE), "radio 根节点不得缩放")
 	_assert(failures, radio.get_node_or_null("AudioStreamPlayer3D") != null, "缺少 AudioStreamPlayer3D")
@@ -47,8 +47,8 @@ func _ready() -> void:
 		var placed := root.find_child("99F床边桌独立收音机", true, false) as Base99Radio3D
 		_assert(failures, placed != null, "正式99F布局未接入独立收音机")
 		if placed != null:
-			_assert(failures, placed.position.is_equal_approx(Vector3(-3.20, 7.25, -10.88)), "radio桌面摆位不正确")
-			_assert(failures, _scene_declares_radio_yaw_15_to_25(LAYOUT_PATH), "radio斜摆角度必须在15~25度")
+			_assert(failures, placed.position.is_equal_approx(Vector3(-1.95, 6.97, -13.87143)), "radio正式布局局部摆位不正确")
+			_assert(failures, rad_to_deg(placed.rotation.y) >= 9.99 and rad_to_deg(placed.rotation.y) <= 20.01, "radio斜摆角度必须在10~20度")
 			_assert(failures, placed.get_parent().name == "场景装饰_可自由增删", "radio不得挂在基地结构组件下")
 		root.free()
 
@@ -59,13 +59,13 @@ func _ready() -> void:
 		_assert(failures, requested_root.find_child("99F床边桌独立收音机", true, false) != null, "用户指定布局未接入radio")
 		requested_root.free()
 
-	var nightstand := load(NIGHTSTAND_PATH) as PackedScene
-	_assert(failures, nightstand != null, "原床头柜Prefab无法加载")
-	if nightstand != null:
-		var nightstand_root := nightstand.instantiate()
-		_assert(failures, nightstand_root.get_meta("asset_id", "") == "ENV-BASE99-OPTIMIZED-V021::loft_nightstand", "原床头柜资产基线改变")
-		_assert(failures, nightstand_root.get_meta("collision_policy", "") == "optimized_output_bounds_box", "原床头柜碰撞契约改变")
-		nightstand_root.free()
+	var battery_cabinet := load(BATTERY_CABINET_PATH) as PackedScene
+	_assert(failures, battery_cabinet != null, "46号BATTERY模块收纳箱Prefab无法加载")
+	if battery_cabinet != null:
+		var battery_root := battery_cabinet.instantiate()
+		_assert(failures, battery_root.get_meta("asset_id", "") == "ENV-BASE99-REMAINING-FACILITIES-V021::loft_battery_cabinet", "46号BATTERY资产基线改变")
+		_assert(failures, battery_root.get_meta("collision_policy", "") == "per_source_object_box_collision", "46号BATTERY碰撞契约改变")
+		battery_root.free()
 
 	var atmosphere_script := FileAccess.get_file_as_string("res://src/world3d/TowerAtmosphere3D.gd")
 	_assert(failures, "if floor_number == 99:" in atmosphere_script and "mgr.stop()" in atmosphere_script, "99F音乐互斥逻辑未落盘")
@@ -105,12 +105,13 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 		return
 
 	_assert(failures, radio.get_state_snapshot().get("floor_active", true) == false, "天台初始 radio 必须关闭")
-	player.global_position = radio.global_position + Vector3(0.0, 0.0, 1.1)
+	player.global_position = radio.global_position + Vector3(0.0, -0.90, 1.1)
 	player.velocity = Vector3.ZERO
 	player.set_input_locked(false)
 	player.set_combat_enabled(false)
 	tower.call("_refresh_physical_location_authority", true)
-	await get_tree().process_frame
+	await get_tree().create_timer(0.65).timeout
+	_assert(failures, player.is_on_floor() and player.get_state_machine_state() in ["idle", "moving"], "radio输入测试玩家未在阁楼地面稳定着地")
 	_assert(failures, radio.get_state_snapshot().get("floor_active", false), "进入99F后 radio 未激活")
 	if isolated_radio != null:
 		_assert(failures, isolated_radio.get_radio_state() == "a", "Tower 不得改变其他场景 radio 状态")
@@ -130,6 +131,19 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 	_assert(failures, radio.get_radio_state() == "b", "鼠标左键点击后未进入 B")
 	_assert(failures, await _click_radio(radio, screen_position, "off"), "鼠标左键点击 radio off 未执行")
 	_assert(failures, radio.get_radio_state() == "off", "鼠标左键点击后未关闭 radio")
+	for state in ["a", "b", "off"]:
+		await get_tree().process_frame
+		var key := InputEventKey.new()
+		key.keycode = KEY_E
+		key.physical_keycode = KEY_E
+		key.pressed = true
+		Input.parse_input_event(key)
+		await get_tree().process_frame
+		key = key.duplicate() as InputEventKey
+		key.pressed = false
+		Input.parse_input_event(key)
+		await get_tree().process_frame
+		_assert(failures, radio.get_radio_state() == state, "真实E派发未切换到%s" % state)
 
 	radio.set_radio_state("a")
 	var ray_origin := camera.project_ray_origin(screen_position)
@@ -154,7 +168,7 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 	player.global_position = radio.global_position + Vector3(10.0, 0.0, 0.0)
 	tower.call("_refresh_physical_location_authority", true)
 	_assert(failures, not radio.call("_mouse_hits_radio", screen_position, player) or radio.get_interaction_candidate(player).is_empty(), "超出距离仍可交互 radio")
-	player.global_position = radio.global_position + Vector3(0.0, 0.0, 1.1)
+	player.global_position = radio.global_position + Vector3(0.0, -0.90, 1.1)
 	player.set_combat_enabled(true)
 	_assert(failures, radio.get_interaction_candidate(player).is_empty(), "战斗中仍可交互 radio")
 	player.set_combat_enabled(false)
@@ -166,7 +180,7 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 	_assert(failures, radio.get_radio_state() == "off", "离开99F后 radio 未关闭")
 	_assert(failures, MusicManager == null or MusicManager.get_current_music_id() == "rooftop_relax", "离开99F后天台音乐未恢复")
 
-	player.global_position = radio.global_position + Vector3(0.0, 0.0, 1.1)
+	player.global_position = radio.global_position + Vector3(0.0, -0.90, 1.1)
 	tower.call("_refresh_physical_location_authority", true)
 	await get_tree().process_frame
 	_assert(failures, radio.get_radio_state() == "off", "返回99F后 radio 不应自动恢复播放")
@@ -182,12 +196,19 @@ func _click_radio(radio: Base99Radio3D, screen_position: Vector2, expected_state
 	event.button_index = MOUSE_BUTTON_LEFT
 	event.pressed = true
 	event.position = screen_position
-	radio.call("_unhandled_input", event)
-	var clicked := radio.get_radio_state() == expected_state
-	# Radio 对同一帧的左键与统一交互请求做去重；让下一次合成点击明确落在下一帧。
+	var camera := get_viewport().get_camera_3d()
+	if camera != null:
+		event.position = camera.unproject_position(radio.to_global(Vector3(0.0, 0.411, 0.0)))
+	var player := radio.call("_get_player") as Player3D
+	print("RADIO_DISPATCH_BEFORE expected=%s state=%s can=%s hit=%s player=%s screen=%s" % [expected_state, radio.get_radio_state(), radio.call("_can_interact", player), radio.call("_mouse_hits_radio", event.position, player), player.global_position, event.position])
+	Input.parse_input_event(event)
 	await get_tree().process_frame
+	print("RADIO_DISPATCH_AFTER state=%s" % radio.get_radio_state())
+	event = event.duplicate() as InputEventMouseButton
+	event.pressed = false
+	Input.parse_input_event(event)
 	await get_tree().process_frame
-	return clicked
+	return radio.get_radio_state() == expected_state
 
 
 func _world_bounds(root: Node3D) -> AABB:
@@ -206,11 +227,6 @@ func _world_bounds(root: Node3D) -> AABB:
 	return result
 
 
-func _scene_declares_radio_yaw_15_to_25(scene_path: String) -> bool:
-	var source := FileAccess.get_file_as_string(scene_path)
-	return "rotation = Vector3(0, 0.261799, 0)" in source
-
-
 func _assert(failures: Array[String], condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
@@ -218,7 +234,7 @@ func _assert(failures: Array[String], condition: bool, message: String) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("BASE99_RADIO_OK: prefab, bounds contract, placement, off-A-B-off, Music bus, fixed looping tracks, floor music exclusion, nightstand baseline")
+		print("BASE99_RADIO_OK: prefab, bounds contract, battery cabinet placement, dispatched mouse input, off-A-B-off, Music bus, fixed looping tracks, floor music exclusion")
 		get_tree().quit(0)
 		return
 	for failure in failures:
