@@ -1,0 +1,12 @@
+{
+  "special_prepare": 36,
+  "special_insert": 18,
+  "special_channel": 24,
+  "special_recover": 27,
+  "hurt": 15,
+  "stun_enter": 42,
+  "stun_loop": 48,
+  "stun_exit": 30,
+  "turn_left": 24,
+  "turn_right": 24
+}

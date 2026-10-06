@@ -1,0 +1,5 @@
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/arms_v028/special_prepare.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/arms_v028/special_insert.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/arms_v028/special_channel.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/arms_v028/special_channel.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/arms_v028/special_recover.mp4'

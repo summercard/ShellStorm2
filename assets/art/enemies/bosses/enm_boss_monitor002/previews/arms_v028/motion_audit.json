@@ -1,0 +1,115 @@
+{
+  "special_prepare": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.06686648692814504,
+      "R": 0.04570207360591189
+    },
+    "hand_scale_range": [
+      0.999999463558197,
+      1.0000004768371582
+    ]
+  },
+  "special_insert": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.11335376833857748,
+      "R": 0.08135982938752896
+    },
+    "hand_scale_range": [
+      0.999999463558197,
+      1.0000004768371582
+    ]
+  },
+  "special_channel": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.07645859347177329,
+      "R": 0.05119828399706192
+    },
+    "hand_scale_range": [
+      0.9999994039535522,
+      1.0000003576278687
+    ]
+  },
+  "special_recover": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.08592775679756129,
+      "R": 0.051391879480792935
+    },
+    "hand_scale_range": [
+      0.9999994039535522,
+      1.0000005960464478
+    ]
+  },
+  "hurt": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.11713607374953734,
+      "R": 0.07404609332841273
+    },
+    "hand_scale_range": [
+      0.999999463558197,
+      1.0000004768371582
+    ]
+  },
+  "stun_enter": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.17168513765135834,
+      "R": 0.23199088036949359
+    },
+    "hand_scale_range": [
+      0.9999995231628418,
+      1.0000004768371582
+    ]
+  },
+  "stun_loop": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.039903723665275906,
+      "R": 0.04582410865962649
+    },
+    "hand_scale_range": [
+      0.999999463558197,
+      1.0000004768371582
+    ]
+  },
+  "stun_exit": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.1310502588800135,
+      "R": 0.2234456058977402
+    },
+    "hand_scale_range": [
+      0.999999463558197,
+      1.0000004768371582
+    ]
+  },
+  "turn_left": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.14971077578624392,
+      "R": 0.12781288925049333
+    },
+    "hand_scale_range": [
+      0.9999994039535522,
+      1.0000005960464478
+    ]
+  },
+  "turn_right": {
+    "max_quarter_frame_hand_step": {
+      "L": 0.12920619398110697,
+      "R": 0.14430721097752008
+    },
+    "hand_scale_range": [
+      0.9999995231628418,
+      1.0000004768371582
+    ]
+  },
+  "body_face_fx_tracks_unchanged": {
+    "special_prepare": true,
+    "special_insert": true,
+    "special_channel": true,
+    "special_recover": true,
+    "hurt": true,
+    "stun_enter": true,
+    "stun_loop": true,
+    "stun_exit": true,
+    "turn_left": true,
+    "turn_right": true
+  },
+  "passed": true
+}

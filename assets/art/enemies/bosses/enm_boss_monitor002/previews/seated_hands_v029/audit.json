@@ -1,0 +1,115 @@
+{
+  "stun_enter": {
+    "min_z": {
+      "Portrait display": 0.04000043869018555,
+      "Keyboard outer shell": 0.024999970570206642,
+      "Long data cable whip": 0.0648038387298584,
+      "Luminous data plug": 0.02087240479886532,
+      "Sculpted glove L": 0.014000177383422852,
+      "Sculpted glove R": 0.01399993896484375
+    },
+    "worst_frames": {
+      "Portrait display": 17.0,
+      "Keyboard outer shell": 36.0,
+      "Long data cable whip": 35.5,
+      "Luminous data plug": 28.5,
+      "Sculpted glove L": 35.0,
+      "Sculpted glove R": 35.5
+    },
+    "max_cable_gap": 0,
+    "max_arm_gap": 0,
+    "arm_length_range": {
+      "L": [
+        1.1276066154241562,
+        1.920229822397232
+      ],
+      "R": [
+        1.1139082163572311,
+        1.8716714680194855
+      ]
+    },
+    "local_hand_travel": {
+      "L": 2.268767249835219,
+      "R": 1.6593215280024511
+    },
+    "passed": true
+  },
+  "stun_loop": {
+    "min_z": {
+      "Portrait display": 0.03999972343444824,
+      "Keyboard outer shell": 0.024999922141432762,
+      "Long data cable whip": 0.06456959247589111,
+      "Luminous data plug": 0.7507831454277039,
+      "Sculpted glove L": 0.01399993896484375,
+      "Sculpted glove R": 0.01399993896484375
+    },
+    "worst_frames": {
+      "Portrait display": 36.0,
+      "Keyboard outer shell": 45.5,
+      "Long data cable whip": 28.5,
+      "Luminous data plug": 12.0,
+      "Sculpted glove L": 1.5,
+      "Sculpted glove R": 1.0
+    },
+    "max_cable_gap": 0,
+    "max_arm_gap": 0,
+    "arm_length_range": {
+      "L": [
+        1.3849644362926483,
+        1.462967336177826
+      ],
+      "R": [
+        1.384022369980812,
+        1.4620253890752792
+      ]
+    },
+    "local_hand_travel": {
+      "L": 0.09227722313000265,
+      "R": 0.09225358498665927
+    },
+    "passed": true
+  },
+  "stun_exit": {
+    "min_z": {
+      "Portrait display": 0.04000043869018555,
+      "Keyboard outer shell": 0.023791128769516945,
+      "Long data cable whip": 0.06600689888000488,
+      "Luminous data plug": -0.002296124817803502,
+      "Sculpted glove L": 0.014000177383422852,
+      "Sculpted glove R": 0.013938665390014648
+    },
+    "worst_frames": {
+      "Portrait display": 1.0,
+      "Keyboard outer shell": 9.0,
+      "Long data cable whip": 9.0,
+      "Luminous data plug": 20.0,
+      "Sculpted glove L": 1.0,
+      "Sculpted glove R": 10.5
+    },
+    "max_cable_gap": 0,
+    "max_arm_gap": 0,
+    "arm_length_range": {
+      "L": [
+        1.2154444307088852,
+        2.181655675172806
+      ],
+      "R": [
+        1.2450884133577347,
+        2.0943931937217712
+      ]
+    },
+    "local_hand_travel": {
+      "L": 1.7090214142191558,
+      "R": 1.9334778327104603
+    },
+    "passed": true
+  },
+  "joins": {
+    "stun_enter to stun_loop": 5.662441253662109e-07,
+    "stun_loop to stun_exit": 5.960464477539063e-08
+  },
+  "loops": {
+    "stun_loop": 5.960464477539063e-08
+  },
+  "passed": true
+}
