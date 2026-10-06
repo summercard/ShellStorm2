@@ -159,7 +159,7 @@ func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
 
 
 func get_interaction_dot_anchor() -> Vector3:
-	return to_global(Vector3(0.0, 0.48, 0.0))
+	return to_global(Vector3(0.0, 1.05, 0.0))
 
 
 func is_interaction_dot_visible() -> bool:
@@ -178,9 +178,10 @@ func _update_feedback() -> void:
 	# 保留共享色盘纹理与 UV；状态只改变实例材质的色调和自发光。
 	var tint := Color(0.15, 1.0, 0.75) if radio_state == "a" else Color(1.0, 0.28, 0.85)
 	for material in _status_materials:
+		material.emission_enabled = radio_state != "off"
 		material.albedo_color = tint if radio_state != "off" else Color(0.12, 0.12, 0.12)
 		material.emission = tint
-		material.emission_energy_multiplier = 3.0 if radio_state != "off" else 0.0
+		material.emission_energy_multiplier = 1.2 if radio_state != "off" else 0.0
 	tooltip.text = get_next_prompt()
 
 

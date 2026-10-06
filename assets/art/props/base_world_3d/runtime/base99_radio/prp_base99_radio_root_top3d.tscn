@@ -4,22 +4,22 @@
 [ext_resource type="Script" path="res://src/base3d/Base99Radio3D.gd" id="2_radio"]
 
 [sub_resource type="BoxShape3D" id="ShapeRadioWorld"]
-size = Vector3(0.414, 0.411, 0.228)
+size = Vector3(0.828, 0.822, 0.456)
 
 [sub_resource type="BoxShape3D" id="ShapeRadioHit"]
-size = Vector3(0.454, 0.451, 0.268)
+size = Vector3(0.868, 0.862, 0.496)
 
 [node name="ItemRoot" type="Node3D" groups=["interaction_provider_3d", "base99_radio_3d"]]
 script = ExtResource("2_radio")
 metadata/asset_id = "PRP-BASE99-RADIO-3D"
-metadata/asset_version = "v002"
+metadata/asset_version = "v003"
 metadata/asset_name_cn = "99F阁楼床边桌独立收音机"
 metadata/asset_category = "decor_prop"
 metadata/category_display = "场景可交互道具"
 metadata/forward_axis = "-Z"
 metadata/base_plane = "Y=0"
-metadata/bounds_size_m = Vector3(0.414, 0.228, 0.411)
-metadata/model_sha256 = "565a505c9eacc53ef5a8b9b14c5577b64e4226c423ebfffce39d4965a7839f7d"
+metadata/bounds_size_m = Vector3(0.828, 0.456, 0.822)
+metadata/model_sha256 = "53773f46f22e6fbbfe607839adda38d5c02171510f2478d4d61b8b0fef4d0040"
 metadata/model_faces = 598
 metadata/model_triangles = 1116
 metadata/collision_policy = "独立道具碰撞盒与点击区域；由道具Prefab自持"
@@ -33,7 +33,7 @@ collision_layer = 1
 collision_mask = 1
 
 [node name="Shape" type="CollisionShape3D" parent="WorldCollision"]
-position = Vector3(0, 0.2055, 0)
+position = Vector3(0, 0.411, 0)
 shape = SubResource("ShapeRadioWorld")
 
 [node name="InteractionHitArea" type="Area3D" parent="."]
@@ -43,17 +43,18 @@ monitoring = true
 monitorable = true
 
 [node name="Shape" type="CollisionShape3D" parent="InteractionHitArea"]
-position = Vector3(0, 0.2055, 0)
+position = Vector3(0, 0.411, 0)
 shape = SubResource("ShapeRadioHit")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 0.411, 0)
 bus = &"Music"
 autoplay = false
 max_distance = 12.0
 attenuation_model = 1
 
 [node name="Tooltip" type="Label3D" parent="."]
-position = Vector3(0, 0.55, 0)
+position = Vector3(0, 1.05, 0)
 text = "左键 / E · 播放收音机 A"
 font_size = 32
 outline_size = 8

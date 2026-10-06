@@ -125,11 +125,11 @@ base_size_multiplier = 1.0
 metadata/usage = "这里可以继续添加无玩法碰撞的装饰模型"
 
 [node name="99F床边桌独立收音机" parent="场景装饰_可自由增删" instance=ExtResource("15_radio")]
-position = Vector3(-3.20, 7.25, -10.88)
-rotation = Vector3(0, 0.261799, 0)
-metadata/placement_role = "32号床头柜西南桌面空位"
-metadata/placement_surface_y = 7.25
-metadata/placement_clearance_contract = "避开书、杯子、植物及床头柜主体；局部占位盒，不使用生活物件整体AABB"
+position = Vector3(-1.95, 6.97, -13.87143)
+rotation = Vector3(0, 0.174533, 0)
+metadata/placement_role = "46号BATTERY模块收纳箱顶部中央可用桌面"
+metadata/placement_surface_y = 6.97
+metadata/placement_clearance_contract = "2倍v003收音机；置于46号BATTERY模块收纳箱顶部；避开相邻45号医疗模块收纳箱与47号FOOD模块收纳箱；不移动承载家具"
 metadata/interactive = true
 
 [node name="BlenderV021非门墙面内容_仅视觉" parent="场景装饰_可自由增删" instance=ExtResource("17_wall_contents")]
