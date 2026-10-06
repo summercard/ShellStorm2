@@ -1,8 +1,6 @@
 extends CanvasLayer
 class_name RogueMapSelectMenu
 ## Lifecycle adapter only; the city and input targets live in the gameplay world.
-## 历史读取界面路径保留给旧验收与兼容入口；正式入口直接交给统一 SceneTransitionFlow，
-## 避免「先进入一个假 loading 场景，再二次切地图」造成两套加载流程。
 const LOADING_SCENE := "res://scenes/ExpeditionLoadingScreen.tscn"
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
 const CITY_SCENE = preload("res://assets/art/ui/expedition_city/hologram_city.tscn")
@@ -30,9 +28,6 @@ var _city_environment: Environment
 var _source_dof_blur_amount := 0.0
 var _dof_attributes: CameraAttributesPractical
 var _departure_provider: Node
-var _departure_snapshot: Dictionary = {}
-var _departure_entry_request_id := 0
-var _departure_target_scene_path := ""
 
 func set_player(value) -> void:
 	_player = value
@@ -251,14 +246,6 @@ func _enter_level(level_id: String) -> void:
 		return
 	_departing = true
 	_state = "entering"
-	var target_scene := GameDesignConfig.expedition_level_scene(level_id)
-	var target_title := GameDesignConfig.expedition_level_display_name(level_id)
-	# 先让统一遮罩真正完成一帧绘制，再做 checkpoint flush 和交接。
-	# 否则保存/序列化的同步尖峰会发生在旧菜单仍可见时，用户看到的是“点击后卡死”。
-	var presentation_error: Error = await SceneTransitionFlow.present_loading_frame(target_title)
-	if presentation_error != OK:
-		_departure_failed("无法显示加载画面，请重试")
-		return
 	var departure: Dictionary = {}
 	if BaseManager != null:
 		_departure_provider = BaseManager.call("_get_runtime_checkpoint_provider")
@@ -275,46 +262,18 @@ func _enter_level(level_id: String) -> void:
 				BaseManager.register_runtime_checkpoint_provider(_departure_provider)
 			_departure_failed("出发交接失败，请重试")
 			return
-	_departure_snapshot = departure.duplicate(true)
-	_departure_entry_request_id = GameEntryFlow.request_gameplay_entry(
-		GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT,
-		GameEntryFlow.SPAWN_SAVED_PROGRESS
-	)
-	_departure_target_scene_path = target_scene
-	var error: Error = SceneTransitionFlow.request_scene_change(
-		target_scene,
-		GameDesignConfig.expedition_level_display_name(level_id)
-	)
+	var request_id := GameEntryFlow.request_gameplay_entry(GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT, GameEntryFlow.SPAWN_SAVED_PROGRESS)
+	var error := get_tree().change_scene_to_file(LOADING_SCENE)
 	if error != OK:
-		_rollback_departure("读取界面加载失败，请重试")
-		return
-	if not SceneTransitionFlow.transition_failed.is_connected(_on_transition_failed):
-		SceneTransitionFlow.transition_failed.connect(_on_transition_failed)
-
-
-func _on_transition_failed(scene_path: String, _reason: String) -> void:
-	if not _departing or scene_path != _departure_target_scene_path:
-		return
-	_rollback_departure("目标战区加载失败，请重试")
-
-
-func _rollback_departure(message: String) -> void:
-	if _departure_entry_request_id > 0:
-		GameEntryFlow.cancel_request(_departure_entry_request_id)
-		_departure_entry_request_id = 0
-	if BaseManager != null:
-		BaseManager.set_active_run_checkpoint(_departure_snapshot, "mission_operations_departure_rollback")
-		if is_instance_valid(_departure_provider):
-			BaseManager.register_runtime_checkpoint_provider(_departure_provider)
-	_departure_snapshot = {}
-	_departure_provider = null
-	_departure_target_scene_path = ""
-	SceneTransitionFlow.dismiss_failure()
-	_departure_failed(message)
+		if request_id > 0:
+			GameEntryFlow.cancel_request(request_id)
+		if BaseManager != null:
+			BaseManager.set_active_run_checkpoint(departure, "mission_operations_departure_rollback")
+			if is_instance_valid(_departure_provider):
+				BaseManager.register_runtime_checkpoint_provider(_departure_provider)
+		_departure_failed("读取界面加载失败，请重试")
 
 func _departure_failed(message: String) -> void:
-	if SceneTransitionFlow.get_transition_state() == "preparing":
-		SceneTransitionFlow.dismiss_preparation()
 	_departing = false
 	_state = "active"
 	GameDesignConfig.pending_expedition_level_id = ""

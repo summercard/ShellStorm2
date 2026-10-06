@@ -173,12 +173,7 @@ func _on_exit_requested() -> void:
 	if test_mode:
 		status_label.text = "测试模式：已验证返回入口"
 		return
-	var error: Error = SceneTransitionFlow.request_scene_change(
-		GameDesignConfig.BASE_SCENE_3D,
-		"返回基地"
-	)
-	if error != OK:
-		push_error("[TrainingRange3D] 返回基地失败：%s" % error_string(error))
+	get_tree().change_scene_to_file(GameDesignConfig.BASE_SCENE_3D)
 
 
 func get_training_snapshot() -> Dictionary:

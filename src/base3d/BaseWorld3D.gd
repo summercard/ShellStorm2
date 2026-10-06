@@ -103,7 +103,7 @@ func _load_scene(scene_path: String, floor: int = 0) -> void:
 	if floor > 0:
 		LevelSelect.selected_floor = floor
 		LevelSelect.selection_made = true
-	var change_error: Error = SceneTransitionFlow.request_scene_change(scene_path, "进入行动地图")
+	var change_error := get_tree().change_scene_to_file(scene_path)
 	if change_error != OK:
 		push_error("[BaseWorld3D] Scene transition failed: %s" % error_string(change_error))
 
@@ -114,10 +114,7 @@ func _on_dungeon_entrance_activated(entrance: DungeonEntrance3D) -> void:
 		return
 	LevelSelect.prepare_dungeon_entry(entrance.target_floor, entrance.entrance_id)
 	status_label.text = "进入 %s……" % entrance.display_name
-	var change_error: Error = SceneTransitionFlow.request_scene_change(
-		entrance.target_scene_path,
-		entrance.display_name
-	)
+	var change_error := get_tree().change_scene_to_file(entrance.target_scene_path)
 	if change_error != OK:
 		push_error("[BaseWorld3D] Dungeon transition failed: %s" % error_string(change_error))
 

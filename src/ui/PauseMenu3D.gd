@@ -450,9 +450,9 @@ func _reset_runtime_singletons_for_new_profile() -> void:
 func _restart_from_main_scene() -> void:
 	var main_scene_path := str(ProjectSettings.get_setting("application/run/main_scene", ""))
 	var error: Error = (
-		SceneTransitionFlow.request_scene_change(main_scene_path, "重新进入主塔")
+		get_tree().change_scene_to_file(main_scene_path)
 		if not main_scene_path.is_empty()
-		else SceneTransitionFlow.request_scene_change(get_tree().current_scene.scene_file_path, "重新载入当前地图")
+		else get_tree().reload_current_scene()
 	)
 	if error == OK:
 		return
