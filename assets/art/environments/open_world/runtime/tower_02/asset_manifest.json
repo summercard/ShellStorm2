@@ -11,5 +11,2929 @@
   ],
   "collision": "none_visual_only",
   "layout_owner": "Godot TSCN; rerun preserves layout by default",
-  "crane_count": 3
+  "crane_count": 3,
+  "source_original": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "source_original_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
+  "runtime_integrated": false,
+  "restore_history": [
+    {
+      "event": "before_full_detail_restore_20261007",
+      "manifest_before": {
+        "asset_id": "ENV-OPENWORLD-TOWER02",
+        "version": "v004",
+        "source": "assets/art/environments/open_world/source/tower_02/export/v004/tower02_game_output_optimized_v004.blend",
+        "source_sha256": "44a77c4988c666d4356d5f6ef30f0be4b8f8537c1c1e6d54e04d0d640842969b",
+        "prefab": "assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn",
+        "component_count": 92,
+        "footprint_m": [
+          70,
+          50
+        ],
+        "collision": "none_visual_only",
+        "layout_owner": "Godot TSCN; rerun preserves layout by default",
+        "crane_count": 3,
+        "source_original": "assets/art/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
+        "source_original_sha256": "3ff5ab637a9868a03b7bd1579a6ce5ce132eeeb82328307c7fb08751b8c31bc6",
+        "optimization": {
+          "method": "per-component COLLAPSE decimate",
+          "ratio": 0.22,
+          "triangles_before": 406088,
+          "triangles_after_blend": 89264,
+          "triangles_after_export": 80952,
+          "target_max_triangles": 100000,
+          "reduction_formula": "R=(T_before-T_after)/T_before",
+          "reduction_ratio_blend": 0.780185575540277,
+          "reduction_ratio_export": 0.8006540454285771,
+          "modular_boundaries_preserved": true
+        },
+        "runtime_integrated": true,
+        "runtime_integration": {
+          "stable_component_paths_preserved": true,
+          "stable_packedscene_paths_preserved": true,
+          "formal_layout_rewritten": false,
+          "collision_or_gameplay_changed": false,
+          "godot_reimport_pending": false,
+          "godot_reimport_completed": "2026-10-06T18:46:10+08:00"
+        },
+        "backup_before_promotion": "_scratch/tower02_v003_stable_backup_before_v004_20261006_184418",
+        "promoted_components": [
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-00",
+            "slug": "floor_00",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_00.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_00/env_tower_02_floor_00_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "fb4d28bd36a018a3691bed872826dffcaa203f7c0e24d8f296719de66427b07a",
+            "after_sha256": "1a83f81df3e02dc8903209222b9ba61eb25c2a4135f1858807646fe0807c17b2"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-01",
+            "slug": "floor_01",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_01.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_01/env_tower_02_floor_01_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_01/env_tower_02_floor_01_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "7dec9c4bd5eb237db4d10c5345a0a7fc659114f07f8b5ec38dce72c51a6fe195",
+            "after_sha256": "562f934cc688b318a24e348ff588a2bcf2c66e20a916f019cc42f7a1cb5df01c"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-02",
+            "slug": "floor_02",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_02.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_02/env_tower_02_floor_02_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_02/env_tower_02_floor_02_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "f3ecca404809d21ba5839b72a209e1a70caa5e3cfc42a25a837722d45e4b6719",
+            "after_sha256": "277421e3f9a0f223d64dfb5c3aa0ac127681724e46ee89ca1ffe1b2c78222423"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-03",
+            "slug": "floor_03",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_03.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_03/env_tower_02_floor_03_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_03/env_tower_02_floor_03_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "eebb11c5e49ad9a12bb05323ef683acd943d5a54f766bca32c9bfab17cd21eb7",
+            "after_sha256": "7752ae2e0a3ea763df0ec9e92fa0064f11d1cb727fc58aac5af77c5f0011131b"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-04",
+            "slug": "floor_04",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_04.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_04/env_tower_02_floor_04_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_04/env_tower_02_floor_04_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "b83257bb92060a5264d071adb278ab8f39dc5023325d320ce149bf1dd1f0061c",
+            "after_sha256": "4e04e5aea2ce4e138ed19f20f8dd734bcfe234a4adbe4de70e0170091ef59495"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-05",
+            "slug": "floor_05",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_05.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_05/env_tower_02_floor_05_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_05/env_tower_02_floor_05_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "03606142f067014e2bb00a88e2483c70b84086ed1c7dff2761f31d7e563a2525",
+            "after_sha256": "55870b2aebd9e3b7279cb233dc194e1cacad828d28074deac7423f9b0a2071fa"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-06",
+            "slug": "floor_06",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_06.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_06/env_tower_02_floor_06_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_06/env_tower_02_floor_06_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "2c3dec0baee1cd089d05f38af3a5435dd2c49b83fb70b76d77e4a29188b20f53",
+            "after_sha256": "6191bf688e44a376aa94746bae746724b599ca467361d89d87a1da763b65176f"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-07",
+            "slug": "floor_07",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_07.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_07/env_tower_02_floor_07_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_07/env_tower_02_floor_07_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "7cc2a03483ff521228cf20bfa256d5be0a3c4c8b630f283768c40b159dc93554",
+            "after_sha256": "3e75ea5f9f1eba3a2078746af32f1766cbe35d74fec888b55e13519e53ce8c7c"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-08",
+            "slug": "floor_08",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_08.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_08/env_tower_02_floor_08_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_08/env_tower_02_floor_08_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "b2d5fabec21f0a1aed6e19ffd9832aa9b1607245f7be90da04c23e20719440b3",
+            "after_sha256": "35e025555c43668818a0c22dd0b953320bbc48f08fc7994e282aff30db840853"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-09",
+            "slug": "floor_09",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_09.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_09/env_tower_02_floor_09_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_09/env_tower_02_floor_09_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "c52426d5bc5ef0fed4d6ec373dcf0129263c2d5c0711bd4f70d826ddcfa9fb88",
+            "after_sha256": "ed71544ada02aac1acfd6aebb8116adc81e9d8a877e329d0f674b9cb36669a9a"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-10",
+            "slug": "floor_10",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_10.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_10/env_tower_02_floor_10_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_10/env_tower_02_floor_10_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "2e62104aa6ce75e61ea5e1a10da0f82c60ba3913a3cf0b9527dc5b9ff1dbe669",
+            "after_sha256": "256bcd65ba275ea1e004bcb96813ae1eb2b9f4e0bd2f93b9c67894e1e3b38b7a"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-11",
+            "slug": "floor_11",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_11.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_11/env_tower_02_floor_11_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_11/env_tower_02_floor_11_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "68b4293b36f54949bda4af9eff0e4715094e620854af908ced425927f5c8548e",
+            "after_sha256": "bba007a0af4478ab2d1affd9599f2c58fe63da68be40d4a3d73a11c421bb85f6"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-12",
+            "slug": "floor_12",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_12.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_12/env_tower_02_floor_12_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_12/env_tower_02_floor_12_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "da2a2ff731e3c7bf0edd6a8dfaace96b338dbfcac6fa7e296141c261109ad2f8",
+            "after_sha256": "b64c9525b1299c59dc02771f81f65d77ec4d3a18c654cfb7a87d407063a1e250"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-13",
+            "slug": "floor_13",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_13.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_13/env_tower_02_floor_13_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_13/env_tower_02_floor_13_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "a49c88690953a75a8ce8539976eca188c29f974ff7742da09ddebd3ea2154ff4",
+            "after_sha256": "082c6465a8c55dca60ce4397f4587fbf79ae830012dffeece29768d97b8db459"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-14",
+            "slug": "floor_14",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_14.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_14/env_tower_02_floor_14_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_14/env_tower_02_floor_14_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "d8071e0b4cd833c623b26d7db7e3559982dfce6e8546ee78cb2a5e761d50c05c",
+            "after_sha256": "bba204354005208847abaabc79bf5f753e2bf5cda63aef7d9ce32d1dfffa8b58"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-15",
+            "slug": "floor_15",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_15.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_15/env_tower_02_floor_15_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_15/env_tower_02_floor_15_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "02e3488ff21eb410784bf1be7f749886d251086ebef3c7e969cb33d02ddd8324",
+            "after_sha256": "aa1d40b83cff6f7f757f9a6c6427420976435bea41e35a3ef78471ce341433a4"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-16",
+            "slug": "floor_16",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_16.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_16/env_tower_02_floor_16_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_16/env_tower_02_floor_16_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "f82d93645e69d7af927afd510159ba318416065b46862440a54a94f0a0af2916",
+            "after_sha256": "0c35991e9785947e4d3bc497d8495acf10cc4b131dda161a7f1d868d2c4202a8"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-17",
+            "slug": "floor_17",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_17.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_17/env_tower_02_floor_17_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_17/env_tower_02_floor_17_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "43e9852e4def1c7144d52f1c7f9e2645ec76e72f563be8848c2b935c16c04ec1",
+            "after_sha256": "890503ab0aa4fd13e36e6fce8674d33022bce0cb2b4a14f6fc429b8cf7efa4be"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-18",
+            "slug": "floor_18",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_18.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_18/env_tower_02_floor_18_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_18/env_tower_02_floor_18_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "a0a5f26cd91215a36b956e7f14a7e3d6782b7dc80f5e45df478d89b4e01a8d1c",
+            "after_sha256": "881aadee4086d09dbf3055e5e7d04587928730f673992578f95ccfa18215f3b8"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-19",
+            "slug": "floor_19",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_19.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_19/env_tower_02_floor_19_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_19/env_tower_02_floor_19_root_top3d.tscn",
+            "triangles": 544,
+            "before_sha256": "0873a25095732646be2ce45efe3448c0a37dc1043897e9247962cb7533f0b883",
+            "after_sha256": "29b078395803e0657371f1e214ff0c02f1750c28ccac2c03d32e4f3e3df8329e"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-20",
+            "slug": "floor_20",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/floor_20.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/floor_20/env_tower_02_floor_20_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_20/env_tower_02_floor_20_root_top3d.tscn",
+            "triangles": 3,
+            "before_sha256": "411eb8c148c7de09b5912bfe8008a22f3930adb6ada7277711db4c426cc543c6",
+            "after_sha256": "a4a5276ea42fe9e1f53ddea9ed5afea08703bccde990b9debdfd37f0f8563e79"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CORE-0",
+            "slug": "core_0",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/core_0.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/core_0/env_tower_02_core_0_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/core_0/env_tower_02_core_0_root_top3d.tscn",
+            "triangles": 1194,
+            "before_sha256": "6a304a673c0942213c36048c5b1010233b10b2015af6633920b44b196b7ecedb",
+            "after_sha256": "8af85e0d4084d5b207cb3bf3168cc72e8ea6976612fd5128b8a94ac6eaa95d3e"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CORE-1",
+            "slug": "core_1",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/architecture/core_1.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/core_1/env_tower_02_core_1_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/core_1/env_tower_02_core_1_root_top3d.tscn",
+            "triangles": 1194,
+            "before_sha256": "66b6f89949546d669d85be456b1414cde854baa5f80f96e01a981e530cb9257b",
+            "after_sha256": "c693f02bd213dba3e9a1da77fcfa7b47ef7af3b40f3410c29e1f7ba19b9aeeb0"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-00",
+            "slug": "scaffold_00",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_00.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_00/env_tower_02_scaffold_00_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_00/env_tower_02_scaffold_00_root_top3d.tscn",
+            "triangles": 1191,
+            "before_sha256": "043917863d16109805d21285cd9419af0875b4009014b266e870044da4d2452d",
+            "after_sha256": "3f7370becb453ccf6ccbb5603cd417e7e9357f5fadebe29d4dd44aca32aa3692"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-01",
+            "slug": "scaffold_01",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_01.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_01/env_tower_02_scaffold_01_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_01/env_tower_02_scaffold_01_root_top3d.tscn",
+            "triangles": 460,
+            "before_sha256": "398b76c7caeabcf23ca7de067f2b7cd74ca7069c9e32a92f82aec897c5e6ba07",
+            "after_sha256": "69bdf499ac9ce7b7013ed00a7c5fd57985a652a073217ccfd8c67fea3294529f"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-02",
+            "slug": "scaffold_02",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_02.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_02/env_tower_02_scaffold_02_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_02/env_tower_02_scaffold_02_root_top3d.tscn",
+            "triangles": 688,
+            "before_sha256": "7146b2b6e1a83b1ce63261be22b0708975fbcccbcdfcb45cdfc1efb6fc751ef5",
+            "after_sha256": "f4d452e119dea02ac00772dcaa8d68fd51cc73c4630aacf6e5d0e5e2b1ebe42f"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-03",
+            "slug": "scaffold_03",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_03.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_03/env_tower_02_scaffold_03_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_03/env_tower_02_scaffold_03_root_top3d.tscn",
+            "triangles": 460,
+            "before_sha256": "bee2e8b1367e5da64a7904fad8ec9a4548a495b604c80d6cd243db21ba007c8c",
+            "after_sha256": "55e62642f14214219f7c7ddc5828868302825998ec1fc1de656e0f1785b11b6b"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-04",
+            "slug": "scaffold_04",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_04.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_04/env_tower_02_scaffold_04_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_04/env_tower_02_scaffold_04_root_top3d.tscn",
+            "triangles": 1612,
+            "before_sha256": "dd771a5e055afd6556d3b112ab70186c22b7f06608b8bc207d0bf803ed28d569",
+            "after_sha256": "e672fc190ce94361489a3e9449ac5871e12badd8b58fde0940e6e34917a0a3c7"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-05",
+            "slug": "scaffold_05",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_05.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_05/env_tower_02_scaffold_05_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_05/env_tower_02_scaffold_05_root_top3d.tscn",
+            "triangles": 2143,
+            "before_sha256": "673e7709914039a87376abdd4fedff1325351a97358af4d81a20a6ced459b089",
+            "after_sha256": "dd09618a95b3327e76e1640104439a8697080bcbc5181731ce41648b511025da"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-06",
+            "slug": "scaffold_06",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_06.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_06/env_tower_02_scaffold_06_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_06/env_tower_02_scaffold_06_root_top3d.tscn",
+            "triangles": 2867,
+            "before_sha256": "aa5ad11067c11a27eedf20f79a5717c2820afa7f3274495d01814df4762f01ad",
+            "after_sha256": "ae1a123f6ac3d8cfa6ce14c7a96ab69a89015729ca5acc56886fac6691deda36"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-07",
+            "slug": "scaffold_07",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/scaffold_07.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/scaffold_07/env_tower_02_scaffold_07_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_07/env_tower_02_scaffold_07_root_top3d.tscn",
+            "triangles": 2143,
+            "before_sha256": "759f5d36728dfe167ce62e41993e46646bbc544f20a8bd89964a3c1c8973b720",
+            "after_sha256": "df80f56e224de985a48ab389e8a4c752e151448858a327678831d3dae1ca9e76"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-00",
+            "slug": "climbing_screen_00",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_00.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_00/env_tower_02_climbing_screen_00_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_00/env_tower_02_climbing_screen_00_root_top3d.tscn",
+            "triangles": 414,
+            "before_sha256": "042bd0cf0bcb75bbc1b2adef03e45bace2ad8a27c0a1d60cc22651aa6bf3dd7e",
+            "after_sha256": "eea9e927cef34f798e2695f65f9dcc2ab6d8f232a81f36f4b9654cca539e88f9"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-01",
+            "slug": "climbing_screen_01",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_01.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_root_top3d.tscn",
+            "triangles": 102,
+            "before_sha256": "bc423711b4ef09ef36f1bc8c34079b659754056f7c0f94338f136c946e0559ae",
+            "after_sha256": "9f2003e66f525ed1c948ff7f0f81e1d6ecab77e9ec0d97e4c967ea090a300ee4"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-02",
+            "slug": "climbing_screen_02",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_02.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_02/env_tower_02_climbing_screen_02_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_02/env_tower_02_climbing_screen_02_root_top3d.tscn",
+            "triangles": 204,
+            "before_sha256": "39f337e64daff446f7ab76e82d9c495b54f05f0d827d132b28b0d537563f99c5",
+            "after_sha256": "0c824f44eccf3e9f8d1bd8862014015483a52ccb73da533b1300db09dcca255d"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-03",
+            "slug": "climbing_screen_03",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_03.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_03/env_tower_02_climbing_screen_03_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_03/env_tower_02_climbing_screen_03_root_top3d.tscn",
+            "triangles": 102,
+            "before_sha256": "27d87fe142ff9373f2c5233c2c5609edb7d1aca237478839bef7b61937c7180b",
+            "after_sha256": "940f1f0a07fce0a9667808d5da7c386953a41d4dc34731fa090962cf6fa233db"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-04",
+            "slug": "climbing_screen_04",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_04.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_04/env_tower_02_climbing_screen_04_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_04/env_tower_02_climbing_screen_04_root_top3d.tscn",
+            "triangles": 622,
+            "before_sha256": "923f32b919f619e614fffe935ef8dd0afc6120eca54bd6303ee1234a37f8ba2a",
+            "after_sha256": "d18f61a87a8d10cc58831218489d7584c3de74016add5ce91a1eefcaaf95818d"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-05",
+            "slug": "climbing_screen_05",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_05.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_05/env_tower_02_climbing_screen_05_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_05/env_tower_02_climbing_screen_05_root_top3d.tscn",
+            "triangles": 794,
+            "before_sha256": "130a7f87a1fbd752e0359b9cb357d8516adbd69ad993a62b4626abcbba5c87ce",
+            "after_sha256": "36df2f68173ffce07d9f21c526a4f54d99a267ec4bba4523e645c4130a6de3da"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-06",
+            "slug": "climbing_screen_06",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_06.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_06/env_tower_02_climbing_screen_06_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_06/env_tower_02_climbing_screen_06_root_top3d.tscn",
+            "triangles": 1213,
+            "before_sha256": "9a6c0e6b7c2eec4ff93e65e2571c0e6bd7e600870a5f09648a92797ab83315dc",
+            "after_sha256": "c82acb72f936c5706182c72d25ad1541decf426b588d55ceb13154019c6d82a5"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-07",
+            "slug": "climbing_screen_07",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/scaffold/climbing_screen_07.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_07/env_tower_02_climbing_screen_07_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_07/env_tower_02_climbing_screen_07_root_top3d.tscn",
+            "triangles": 794,
+            "before_sha256": "bfe012be8dda404d51ca12b782f4c2d8ccaf1fa9675d3fe383069a8c4b249e64",
+            "after_sha256": "df0e8cd22a2ebd1f25cdbb0cbb809e653e2c01006f3c908d017634be4dad652f"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CONSTRUCTION-ELEVATOR",
+            "slug": "construction_elevator",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/construction_elevator.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/construction_elevator/env_tower_02_construction_elevator_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/construction_elevator/env_tower_02_construction_elevator_root_top3d.tscn",
+            "triangles": 1892,
+            "before_sha256": "93b1a5a4cc606090a70d063b49697c79e1f7119a87070113f8b6962878b3d9fb",
+            "after_sha256": "cae1a4cc8e2b8163f996f00913bcec45d0361b511592dbe33e755f43e1239d1e"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-00",
+            "slug": "roof_column_00",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_00.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_00/env_tower_02_roof_column_00_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_00/env_tower_02_roof_column_00_root_top3d.tscn",
+            "triangles": 256,
+            "before_sha256": "0ccd6223ff7b3e9d280da419056b1bf535449d79ffa42bccfd9a16fb8a3cc3ee",
+            "after_sha256": "f8a35d4d13d56d090382e119333e823029ae0fda662dab1294388f30220fba4a"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-01",
+            "slug": "roof_column_01",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_01.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_01/env_tower_02_roof_column_01_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_01/env_tower_02_roof_column_01_root_top3d.tscn",
+            "triangles": 649,
+            "before_sha256": "5d294fc1f463a3e31c9ae8474204e827b1b259647eb57d3739cec72eaa1d118c",
+            "after_sha256": "c685996af95165b30f41e00eb40643aeca55d242426e5841d01b7ba010b07fbd"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-02",
+            "slug": "roof_column_02",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_02.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_02/env_tower_02_roof_column_02_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_02/env_tower_02_roof_column_02_root_top3d.tscn",
+            "triangles": 873,
+            "before_sha256": "8611787a3345807e893e6f93bd1aabba462f1dc84d2674df8e26aeb5252b2e0e",
+            "after_sha256": "18b020f0e2939744614c7bb69778114165bad7c56cf86dbbac82a5af0d18a87b"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-03",
+            "slug": "roof_column_03",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_03.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_03/env_tower_02_roof_column_03_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_03/env_tower_02_roof_column_03_root_top3d.tscn",
+            "triangles": 372,
+            "before_sha256": "525e4fcfc1815e40192a782f963a6a4338a0f3a2c7cfdbc116af2bd195378118",
+            "after_sha256": "ece27c0a9ebc58d3ec77f2e3087c58834c353503cd5c5748294e92838f9ca0bc"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-04",
+            "slug": "roof_column_04",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_04.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_04/env_tower_02_roof_column_04_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_04/env_tower_02_roof_column_04_root_top3d.tscn",
+            "triangles": 709,
+            "before_sha256": "6ddb1e1672559cd10393bf401bc7edc467198728f6533628a2a8770304c4f4e3",
+            "after_sha256": "20b2d01214b61f3a65a49b7b3a9f4c9b348418d21b73ae9e7db691481a2486a7"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-05",
+            "slug": "roof_column_05",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_05.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_05/env_tower_02_roof_column_05_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_05/env_tower_02_roof_column_05_root_top3d.tscn",
+            "triangles": 818,
+            "before_sha256": "00d7a46607450c6e36017cd20416c116a3f64c9272b6e9421e09885a8d5eab35",
+            "after_sha256": "ae271acb6798b403eb2d88d3e496173f1e7f5bda7bc42a48ac8c78d916933c37"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-06",
+            "slug": "roof_column_06",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_06.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_06/env_tower_02_roof_column_06_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_06/env_tower_02_roof_column_06_root_top3d.tscn",
+            "triangles": 504,
+            "before_sha256": "33ea70bdbca2b17f97127504431dd73b4954eae6fbaf18074587bf74d5442b0b",
+            "after_sha256": "0f0efd5b20dd70e9fe907a3079f83f9aecf58aa3505fcdf370c6cfd9bc64e6ee"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-07",
+            "slug": "roof_column_07",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_07.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_07/env_tower_02_roof_column_07_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_07/env_tower_02_roof_column_07_root_top3d.tscn",
+            "triangles": 451,
+            "before_sha256": "f056cef7c20d83f0f6c59e76c676c433806dceb4059ad9b0c9338e8254c39c38",
+            "after_sha256": "070985aa32055c7c54229d92dc1e2675b88fed4a203a4d4d431b3f5732d23024"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-08",
+            "slug": "roof_column_08",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_08.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_08/env_tower_02_roof_column_08_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_08/env_tower_02_roof_column_08_root_top3d.tscn",
+            "triangles": 909,
+            "before_sha256": "00752384bba3a703284f433cdb1614c0da6d0ed66dbb3fc0faa1ac4015ea70fb",
+            "after_sha256": "fea4c6a97261f5c6ff2408db2ac0626d96f51c5c552b18834ad7bdb0d0d0c0e0"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-09",
+            "slug": "roof_column_09",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_09.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_09/env_tower_02_roof_column_09_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_09/env_tower_02_roof_column_09_root_top3d.tscn",
+            "triangles": 314,
+            "before_sha256": "3232e855fdb56d00865606986bd6587252a33952747272a8e8c44202f60b771e",
+            "after_sha256": "7714140102fa656d984fa4d90a83f0b6ad5f545bc40baa16ea629618cf4f5c6e"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-10",
+            "slug": "roof_column_10",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_10.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_10/env_tower_02_roof_column_10_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_10/env_tower_02_roof_column_10_root_top3d.tscn",
+            "triangles": 770,
+            "before_sha256": "0ba3d0ab90cc0b58f9c671d9abfd632d7c29678240e6bfdc8f3356db3b6c3072",
+            "after_sha256": "881b650a7ab33f90bb7f17f714a78a3fabf28d60a3e1558594db9f2d70f315a8"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-11",
+            "slug": "roof_column_11",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_11.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_11/env_tower_02_roof_column_11_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_11/env_tower_02_roof_column_11_root_top3d.tscn",
+            "triangles": 628,
+            "before_sha256": "04cdef84f471bdba2520dabd4dea8d01f2f7ebbc9907164077526ce13aa9b529",
+            "after_sha256": "8826bb487d2e10519903df5f8915427f048190951b70e2abd6760b1f42081b6e"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-12",
+            "slug": "roof_column_12",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_12.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_12/env_tower_02_roof_column_12_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_12/env_tower_02_roof_column_12_root_top3d.tscn",
+            "triangles": 428,
+            "before_sha256": "17742cb5e4d3657214fabf6c05de3e6ae11f39b94fa041f7782c376a58e8859f",
+            "after_sha256": "fa03c4de07677439711dd662c006aeb9aec673aa2a30f632fb4257dd1ff74a0d"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-13",
+            "slug": "roof_column_13",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_13.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_13/env_tower_02_roof_column_13_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_13/env_tower_02_roof_column_13_root_top3d.tscn",
+            "triangles": 492,
+            "before_sha256": "e4d117d293d7e4c63ad4b5abe63abf1c6a16379ca998204a176c199438dacebf",
+            "after_sha256": "90c22b3d41ebf658ae618f4b52e15c428ff3adf002a9195fa847a93920009f99"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-14",
+            "slug": "roof_column_14",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_column_14.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_column_14/env_tower_02_roof_column_14_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_14/env_tower_02_roof_column_14_root_top3d.tscn",
+            "triangles": 834,
+            "before_sha256": "301c5ac4256a53219d770d7038ff60a700d84e0bb8da7df7cb854d894eb31f41",
+            "after_sha256": "ed85d2f29ac59c13f05dab2bb22c06de9178596ce8f219855f1ef214c60a640e"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-0",
+            "slug": "roof_formwork_0",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_formwork_0.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_0/env_tower_02_roof_formwork_0_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_0/env_tower_02_roof_formwork_0_root_top3d.tscn",
+            "triangles": 1063,
+            "before_sha256": "6269b0209395cdf78eca79ac1e8aae725d154a46f742248570931facb6bd9cd5",
+            "after_sha256": "f90890cb291865a5c078efeb77644dfabb4a598788273d65692878bc93da4315"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-1",
+            "slug": "roof_formwork_1",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_formwork_1.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_1/env_tower_02_roof_formwork_1_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_1/env_tower_02_roof_formwork_1_root_top3d.tscn",
+            "triangles": 1064,
+            "before_sha256": "b0bcff4d298c933771a12a4fb476299ab6faab8dad0dd0ab6d571995c9618207",
+            "after_sha256": "1b073d734445f504ec267c44a20c6860af372c668d869e2206aba71c84ace14e"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-2",
+            "slug": "roof_formwork_2",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_formwork_2.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_2/env_tower_02_roof_formwork_2_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_2/env_tower_02_roof_formwork_2_root_top3d.tscn",
+            "triangles": 977,
+            "before_sha256": "5ae151e190df5432dde04b4e27c23910052ad778c53a463669cde1ce35896a97",
+            "after_sha256": "4d8f12ea3f5f9264c1acc6248609950f0c7f3ee52b4f27104055de9718d395c1"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-00",
+            "slug": "roof_shoring_00",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_shoring_00.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_root_top3d.tscn",
+            "triangles": 947,
+            "before_sha256": "12677630202836926fde4ff14c072c2f9602c3af47e28ed49fa278cd6feb65f6",
+            "after_sha256": "c239a6a32691d57f8615a5b18e380715be2e4d3ed3def6a9c07491408f74ba3b"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-01",
+            "slug": "roof_shoring_01",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_shoring_01.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_01/env_tower_02_roof_shoring_01_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_01/env_tower_02_roof_shoring_01_root_top3d.tscn",
+            "triangles": 904,
+            "before_sha256": "cddc533db6ddc0e4c4eb1deaa1e651f0f83bc9f35ffc3a93d6fba6df791c1d70",
+            "after_sha256": "368d1ba52516ae8213c2b3058520dd98739326728f896b0552a5d2ec231772de"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-02",
+            "slug": "roof_shoring_02",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_shoring_02.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_02/env_tower_02_roof_shoring_02_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_02/env_tower_02_roof_shoring_02_root_top3d.tscn",
+            "triangles": 421,
+            "before_sha256": "fc398a30f010d0603e3e44935cf52ab2a419434c06a845d14126c046da38a2c8",
+            "after_sha256": "da764b418119d78d87cfc72b6cb28c56217b2d4718b938b33d8fa6f0645cb6fb"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-03",
+            "slug": "roof_shoring_03",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_shoring_03.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_03/env_tower_02_roof_shoring_03_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_03/env_tower_02_roof_shoring_03_root_top3d.tscn",
+            "triangles": 494,
+            "before_sha256": "16aaf67e4590fdb95f7af06a8a8c668aa77185d92aab8f3af163d1bf0b19526a",
+            "after_sha256": "e23ca0cfb8ace41f7e61a57735dde5ef18514e3ab6f4e0668b4f5e85c06bd865"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-00",
+            "slug": "roof_supply_00",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_00.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_00/env_tower_02_roof_supply_00_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_00/env_tower_02_roof_supply_00_root_top3d.tscn",
+            "triangles": 366,
+            "before_sha256": "e62290806cded017426b13b17b8a6da38a65deb34c1d821026b52722f6720d22",
+            "after_sha256": "f41ec79c533f35fb94bd09f96d1fe3369d1def696290955580220cd7b0994468"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-01",
+            "slug": "roof_supply_01",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_01.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_01/env_tower_02_roof_supply_01_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_01/env_tower_02_roof_supply_01_root_top3d.tscn",
+            "triangles": 32,
+            "before_sha256": "a1cb4462b3fa38cd1afb6f15831c457ffa178e579d4927ea9a0e745c267128bf",
+            "after_sha256": "592e94df4e4b687e7139a1ed91e36a4d75116c2673b18b914fc8ed5948e0596c"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-02",
+            "slug": "roof_supply_02",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_02.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_02/env_tower_02_roof_supply_02_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_02/env_tower_02_roof_supply_02_root_top3d.tscn",
+            "triangles": 87,
+            "before_sha256": "e95fd749f124bcd5006bc9b591823c3044eafcf4444dc8e9baa6f210afb6caed",
+            "after_sha256": "23771383cf7fee061786abe1111097701843275ded6eecea17ed57fc0b244f6a"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-03",
+            "slug": "roof_supply_03",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_03.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_03/env_tower_02_roof_supply_03_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_03/env_tower_02_roof_supply_03_root_top3d.tscn",
+            "triangles": 366,
+            "before_sha256": "bd1f9393b553c250f889718c04dc2ab0def4d0d46b3e2cbc6d2fe9747e3186da",
+            "after_sha256": "353aa60c7fbd94b0d3d7b544d08c02e7f71856a64f99757ba5d0932e25c3dbe9"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-04",
+            "slug": "roof_supply_04",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_04.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_04/env_tower_02_roof_supply_04_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_04/env_tower_02_roof_supply_04_root_top3d.tscn",
+            "triangles": 32,
+            "before_sha256": "b426b70a313c72ff003e941bd3ab7a7e9199fa2771472c2d47b21b9a43d6a08c",
+            "after_sha256": "3b659814a39904690710c1082110da121d1a5935f55d955b7d76d49c9e45300b"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-05",
+            "slug": "roof_supply_05",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_05.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_05/env_tower_02_roof_supply_05_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_05/env_tower_02_roof_supply_05_root_top3d.tscn",
+            "triangles": 264,
+            "before_sha256": "05f9f24ff1f1c87527a07dfda48b5c81b83080c64818798d132ecf37ea79a2ca",
+            "after_sha256": "f3a8a1f9cb9cf781a9dcb76c9bc8d0ca10ffe16e423282500e8965ab6386d763"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-06",
+            "slug": "roof_supply_06",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_06.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_06/env_tower_02_roof_supply_06_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_06/env_tower_02_roof_supply_06_root_top3d.tscn",
+            "triangles": 264,
+            "before_sha256": "d48bf0423c5efd0d6110734805976330fd900bff50d0dd716a0fe5f0c31cb654",
+            "after_sha256": "7f0b084a0a83a6c37f7ce6a96009b5ab6ef8a409831050095ee98fcab6356ac1"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-07",
+            "slug": "roof_supply_07",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_supply_07.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_supply_07/env_tower_02_roof_supply_07_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_07/env_tower_02_roof_supply_07_root_top3d.tscn",
+            "triangles": 87,
+            "before_sha256": "a926d543c883d7f31f77a3fa271ef73d687bd111a814e63d16ce281a6740383b",
+            "after_sha256": "bf6381209d0f26025976176495fa54ca3e78b36397b9d0decc14e7af6708509b"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-MAST",
+            "slug": "crane_00_mast",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_00_mast.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_00_mast/env_tower_02_crane_00_mast_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_mast/env_tower_02_crane_00_mast_root_top3d.tscn",
+            "triangles": 5917,
+            "before_sha256": "a90f93d62149e5d159f0bd1a10d04e0a37a39e78899d5ae0bee408ab8651e5a7",
+            "after_sha256": "d07bb6e2d220a5de4bdbb46fd9b00354d0e909c3dbaddeeafa1365c60c1df14c"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-SLEW-CAB",
+            "slug": "crane_00_slew_cab",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_00_slew_cab.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_root_top3d.tscn",
+            "triangles": 1306,
+            "before_sha256": "9a2599202c271344ef3b647800b95d289fbf602cdf4fb79063dec589abede2f9",
+            "after_sha256": "f2a8213d0dd65d78d6a3c9ab8aa545e2d47e8467850fc63fa0ef25028f5f77af"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-JIB",
+            "slug": "crane_00_jib",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_00_jib.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_00_jib/env_tower_02_crane_00_jib_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_jib/env_tower_02_crane_00_jib_root_top3d.tscn",
+            "triangles": 1351,
+            "before_sha256": "ebda7e2d957b10a84c2d8840b198ff6934730f8aec53f53f8f7d4a4b37aecdc3",
+            "after_sha256": "75163b6520cb8d9a4862514083ec4d03178123bccee056521a77dc8b659a3ac5"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-COUNTER-JIB",
+            "slug": "crane_00_counter_jib",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_00_counter_jib.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_00_counter_jib/env_tower_02_crane_00_counter_jib_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_counter_jib/env_tower_02_crane_00_counter_jib_root_top3d.tscn",
+            "triangles": 1998,
+            "before_sha256": "2f9be76cd77067be290edbbcdeac27f99388b9c5fda86f1a41d4eaa89054c478",
+            "after_sha256": "05f2aa9eac2f6a245976e5ffc7cc8e4fa6c7fcf75b0f50c75d33ba9851ab19e2"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-APEX",
+            "slug": "crane_00_apex",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_00_apex.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_00_apex/env_tower_02_crane_00_apex_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_apex/env_tower_02_crane_00_apex_root_top3d.tscn",
+            "triangles": 822,
+            "before_sha256": "f230f736495a423d06e60a2a40410fc813cef9ca3cff3b6eeb5229ecb8db5074",
+            "after_sha256": "ab95a4452315086584b7abc5979310b92069447babc6769af202c4c4610a5df6"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-TROLLEY",
+            "slug": "crane_00_trolley",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_00_trolley.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_00_trolley/env_tower_02_crane_00_trolley_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_trolley/env_tower_02_crane_00_trolley_root_top3d.tscn",
+            "triangles": 558,
+            "before_sha256": "c76ab3fa3c0eb5a3134889e6a44952eb2e37d569bf85fb5b0ccd864acd67cf81",
+            "after_sha256": "5d6795c37a5367c824890981d3e60e039fbf9797376c0b1ff79a6492eb6029b7"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-HOOK",
+            "slug": "crane_00_hook",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_00_hook.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_00_hook/env_tower_02_crane_00_hook_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_hook/env_tower_02_crane_00_hook_root_top3d.tscn",
+            "triangles": 603,
+            "before_sha256": "62966c3de0f362d0167163d792e9b7da3d68f34cd8edba0627c5447cb64dfda1",
+            "after_sha256": "30bba56de8449883b2ceac0778c7424c0d2957da8acfabdcd5028dd0156521d2"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-MAST",
+            "slug": "crane_01_mast",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_01_mast.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_01_mast/env_tower_02_crane_01_mast_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_mast/env_tower_02_crane_01_mast_root_top3d.tscn",
+            "triangles": 1999,
+            "before_sha256": "35eee9ccfcc5f363ecec870e9763530efa407750a3f4d05aeb47dadad8c9fe58",
+            "after_sha256": "3659cd3536b7537ff5e10832c99db9ee20e361f803654260925eefcf2da00a32"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-SLEW-CAB",
+            "slug": "crane_01_slew_cab",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_01_slew_cab.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_root_top3d.tscn",
+            "triangles": 1306,
+            "before_sha256": "57a614404af30180c364557b6483c9c62754d872a94c5ab613fed222f25c1ed8",
+            "after_sha256": "2d0fc24be7d8e9204bd2c2dec5d394ccc9fca10f1961b1fbe811a674e192de9d"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-JIB",
+            "slug": "crane_01_jib",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_01_jib.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_01_jib/env_tower_02_crane_01_jib_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_jib/env_tower_02_crane_01_jib_root_top3d.tscn",
+            "triangles": 1350,
+            "before_sha256": "c9dc348ee653364b65d7e1d804025edf96842b340d71c0b3f1f272fa1c949bea",
+            "after_sha256": "5f1b8a3bd3b6520335068bb5855dbd4f1f4fe6bbe67b5de42926b32b7d42f72f"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-COUNTER-JIB",
+            "slug": "crane_01_counter_jib",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_01_counter_jib.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_01_counter_jib/env_tower_02_crane_01_counter_jib_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_counter_jib/env_tower_02_crane_01_counter_jib_root_top3d.tscn",
+            "triangles": 1998,
+            "before_sha256": "310104fb9e3415a0f984da35261e72639464ed8ae12bda7bdbb18c48e243525f",
+            "after_sha256": "29dd138471b035836b24e8d5602dd850417678b6e6883b286fcf928200e6e73a"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-APEX",
+            "slug": "crane_01_apex",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_01_apex.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_01_apex/env_tower_02_crane_01_apex_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_apex/env_tower_02_crane_01_apex_root_top3d.tscn",
+            "triangles": 822,
+            "before_sha256": "c983e124086c3045191beb9cb8967eb8ebbc6fd84c5340945b9db546808c03f6",
+            "after_sha256": "2ae32bf942cf06b09fcb0fa6279c73322fe485d9958782d789cb54c3f2d69c90"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-TROLLEY",
+            "slug": "crane_01_trolley",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_01_trolley.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_01_trolley/env_tower_02_crane_01_trolley_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_trolley/env_tower_02_crane_01_trolley_root_top3d.tscn",
+            "triangles": 558,
+            "before_sha256": "ae3b0b4b23229e88d86b59de2ad7c35795448f344e866083b49643772bb0ab96",
+            "after_sha256": "97c22ad45f1d545e93e3e70af7912069f5f61504d737d3cfcda7c9ce0fbe4147"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-HOOK",
+            "slug": "crane_01_hook",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_01_hook.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_01_hook/env_tower_02_crane_01_hook_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_hook/env_tower_02_crane_01_hook_root_top3d.tscn",
+            "triangles": 603,
+            "before_sha256": "5a97eadfa14900dc372eb2a2780243fd251e8ba656325a208299e1870845e284",
+            "after_sha256": "5ee08b0f68737fe1486280246f8b2b1387251188ff058b8adf4084f3f258f9ae"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-MAST",
+            "slug": "crane_02_mast",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_02_mast.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_02_mast/env_tower_02_crane_02_mast_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_mast/env_tower_02_crane_02_mast_root_top3d.tscn",
+            "triangles": 5772,
+            "before_sha256": "a26cefe28b9a2d7be652ab654a79143a9915de99e6de278806176cb5febae5fe",
+            "after_sha256": "6f08216cdf3c556a0dc2f0056f921b41ec6bb245fc62c40960c69a8ede797dcc"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-SLEW-CAB",
+            "slug": "crane_02_slew_cab",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_02_slew_cab.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_02_slew_cab/env_tower_02_crane_02_slew_cab_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_slew_cab/env_tower_02_crane_02_slew_cab_root_top3d.tscn",
+            "triangles": 1306,
+            "before_sha256": "9d2948f9c374565d52ec44594c82fa3b8b89b585e55fa27ca296375e2ee53e74",
+            "after_sha256": "fe43d072bb6a43dce42bc1d22cf0e12ad3d8a4748bea8b58d56b83d3eb157661"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-JIB",
+            "slug": "crane_02_jib",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_02_jib.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_02_jib/env_tower_02_crane_02_jib_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_jib/env_tower_02_crane_02_jib_root_top3d.tscn",
+            "triangles": 1354,
+            "before_sha256": "0ced701f3c174e438f8746651b8d6f1a77c489570e87ea6a48c96d3ec8082aca",
+            "after_sha256": "c612f8e41ae90d327b4eceb4be1f601df50ffeb73af056a6c03f4ccec30de029"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-COUNTER-JIB",
+            "slug": "crane_02_counter_jib",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_02_counter_jib.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_02_counter_jib/env_tower_02_crane_02_counter_jib_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_counter_jib/env_tower_02_crane_02_counter_jib_root_top3d.tscn",
+            "triangles": 1998,
+            "before_sha256": "d605b04979edf5e7de15e19abd56c5de87c8d5ec6b3c2061c74c1efb114e1b5f",
+            "after_sha256": "363811937e49ad3ce55003f2b0398a2b0f55dfa62aecf24fb4655f45eab0b9aa"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-APEX",
+            "slug": "crane_02_apex",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_02_apex.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_02_apex/env_tower_02_crane_02_apex_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_apex/env_tower_02_crane_02_apex_root_top3d.tscn",
+            "triangles": 822,
+            "before_sha256": "35064b21fd9f621e8d6e99b154ce8ad18eb706c6bb9746b931aae2b350b60538",
+            "after_sha256": "7bd5213c13fe959fefff2dee8d04e4754e7e0557428535192031f0b30a68cc4d"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-TROLLEY",
+            "slug": "crane_02_trolley",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_02_trolley.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_02_trolley/env_tower_02_crane_02_trolley_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_trolley/env_tower_02_crane_02_trolley_root_top3d.tscn",
+            "triangles": 558,
+            "before_sha256": "90d0b61c1d89ca1db8c02c14e47232c158551c584eccf687c98719daa74df67c",
+            "after_sha256": "27e8de6db4648cf35508915545023e6842c3e28dfb675ff61991a9de80846620"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-HOOK",
+            "slug": "crane_02_hook",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/facilities/crane_02_hook.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/crane_02_hook/env_tower_02_crane_02_hook_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_hook/env_tower_02_crane_02_hook_root_top3d.tscn",
+            "triangles": 603,
+            "before_sha256": "0276052dc4cbed233d245647480eb28aea0ea439ffb47cd51fed742cc7863275",
+            "after_sha256": "40e7a14ed09d1dd920f92b7a5dba8b22d3dd675e08e02bbcb93b2717d0fb19d9"
+          },
+          {
+            "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-WARNING",
+            "slug": "roof_warning",
+            "staged_glb": "assets/art/environments/open_world/components/tower_02_v004/roof/roof_warning.glb",
+            "stable_glb": "assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb",
+            "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_warning/env_tower_02_roof_warning_root_top3d.tscn",
+            "triangles": 1,
+            "before_sha256": "38be288904ccafa9602797bad983dec2756c41ccd1244467c97318cc9df95f99",
+            "after_sha256": "e47baf617c70b8a7f6b410f85aa47a1ad6e3ac616db5fecf16ae3c663002a2f9"
+          }
+        ]
+      }
+    }
+  ],
+  "source_blend": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "export_source": "assets/art/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
+  "export_source_sha256": "3ff5ab637a9868a03b7bd1579a6ce5ce132eeeb82328307c7fb08751b8c31bc6",
+  "export_manifest": "assets/art/environments/open_world/source/tower_02/export/v003/export_manifest.json",
+  "active_geometry": "full_detail_unreduced",
+  "runtime_verified": true,
+  "godot_reimport_pending": false,
+  "ledger_status": "pending",
+  "ledger_sync_pending": true,
+  "restore_backup": "_scratch/towers_restore_full_20261007/tower02_before",
+  "runtime_integration": {
+    "stable_component_paths_preserved": true,
+    "stable_packedscene_paths_preserved": true,
+    "formal_layout_rewritten": false,
+    "collision_or_gameplay_changed": false,
+    "runtime_verified": true,
+    "godot_reimport_pending": false
+  },
+  "triangle_count": 406088,
+  "actual_glb_triangles": 406088,
+  "source_blend_triangles": 406088,
+  "components": [
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-00",
+      "slug": "floor_00",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_00/env_tower_02_floor_00_visual_top3d.glb",
+      "glb_sha256": "fb4d28bd36a018a3691bed872826dffcaa203f7c0e24d8f296719de66427b07a",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_00/env_tower_02_floor_00_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599999904632568,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-01",
+      "slug": "floor_01",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_01/env_tower_02_floor_01_visual_top3d.glb",
+      "glb_sha256": "7dec9c4bd5eb237db4d10c5345a0a7fc659114f07f8b5ec38dce72c51a6fe195",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_01/env_tower_02_floor_01_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600000381469727,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-02",
+      "slug": "floor_02",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_02/env_tower_02_floor_02_visual_top3d.glb",
+      "glb_sha256": "f3ecca404809d21ba5839b72a209e1a70caa5e3cfc42a25a837722d45e4b6719",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_02/env_tower_02_floor_02_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600000381469727,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-03",
+      "slug": "floor_03",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_03/env_tower_02_floor_03_visual_top3d.glb",
+      "glb_sha256": "eebb11c5e49ad9a12bb05323ef683acd943d5a54f766bca32c9bfab17cd21eb7",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_03/env_tower_02_floor_03_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600000381469727,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-04",
+      "slug": "floor_04",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_04/env_tower_02_floor_04_visual_top3d.glb",
+      "glb_sha256": "b83257bb92060a5264d071adb278ab8f39dc5023325d320ce149bf1dd1f0061c",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_04/env_tower_02_floor_04_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600000381469727,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-05",
+      "slug": "floor_05",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_05/env_tower_02_floor_05_visual_top3d.glb",
+      "glb_sha256": "03606142f067014e2bb00a88e2483c70b84086ed1c7dff2761f31d7e563a2525",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_05/env_tower_02_floor_05_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600000381469727,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-06",
+      "slug": "floor_06",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_06/env_tower_02_floor_06_visual_top3d.glb",
+      "glb_sha256": "2c3dec0baee1cd089d05f38af3a5435dd2c49b83fb70b76d77e4a29188b20f53",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_06/env_tower_02_floor_06_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-07",
+      "slug": "floor_07",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_07/env_tower_02_floor_07_visual_top3d.glb",
+      "glb_sha256": "7cc2a03483ff521228cf20bfa256d5be0a3c4c8b630f283768c40b159dc93554",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_07/env_tower_02_floor_07_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600000381469727,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-08",
+      "slug": "floor_08",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_08/env_tower_02_floor_08_visual_top3d.glb",
+      "glb_sha256": "b2d5fabec21f0a1aed6e19ffd9832aa9b1607245f7be90da04c23e20719440b3",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_08/env_tower_02_floor_08_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600002288818359,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-09",
+      "slug": "floor_09",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_09/env_tower_02_floor_09_visual_top3d.glb",
+      "glb_sha256": "c52426d5bc5ef0fed4d6ec373dcf0129263c2d5c0711bd4f70d826ddcfa9fb88",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_09/env_tower_02_floor_09_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600002288818359,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-10",
+      "slug": "floor_10",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_10/env_tower_02_floor_10_visual_top3d.glb",
+      "glb_sha256": "2e62104aa6ce75e61ea5e1a10da0f82c60ba3913a3cf0b9527dc5b9ff1dbe669",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_10/env_tower_02_floor_10_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-11",
+      "slug": "floor_11",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_11/env_tower_02_floor_11_visual_top3d.glb",
+      "glb_sha256": "68b4293b36f54949bda4af9eff0e4715094e620854af908ced425927f5c8548e",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_11/env_tower_02_floor_11_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-12",
+      "slug": "floor_12",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_12/env_tower_02_floor_12_visual_top3d.glb",
+      "glb_sha256": "da2a2ff731e3c7bf0edd6a8dfaace96b338dbfcac6fa7e296141c261109ad2f8",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_12/env_tower_02_floor_12_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-13",
+      "slug": "floor_13",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_13/env_tower_02_floor_13_visual_top3d.glb",
+      "glb_sha256": "a49c88690953a75a8ce8539976eca188c29f974ff7742da09ddebd3ea2154ff4",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_13/env_tower_02_floor_13_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600002288818359,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-14",
+      "slug": "floor_14",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_14/env_tower_02_floor_14_visual_top3d.glb",
+      "glb_sha256": "d8071e0b4cd833c623b26d7db7e3559982dfce6e8546ee78cb2a5e761d50c05c",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_14/env_tower_02_floor_14_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600002288818359,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-15",
+      "slug": "floor_15",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_15/env_tower_02_floor_15_visual_top3d.glb",
+      "glb_sha256": "02e3488ff21eb410784bf1be7f749886d251086ebef3c7e969cb33d02ddd8324",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_15/env_tower_02_floor_15_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-16",
+      "slug": "floor_16",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_16/env_tower_02_floor_16_visual_top3d.glb",
+      "glb_sha256": "f82d93645e69d7af927afd510159ba318416065b46862440a54a94f0a0af2916",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_16/env_tower_02_floor_16_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.600006103515625,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-17",
+      "slug": "floor_17",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_17/env_tower_02_floor_17_visual_top3d.glb",
+      "glb_sha256": "43e9852e4def1c7144d52f1c7f9e2645ec76e72f563be8848c2b935c16c04ec1",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_17/env_tower_02_floor_17_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-18",
+      "slug": "floor_18",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_18/env_tower_02_floor_18_visual_top3d.glb",
+      "glb_sha256": "a0a5f26cd91215a36b956e7f14a7e3d6782b7dc80f5e45df478d89b4e01a8d1c",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_18/env_tower_02_floor_18_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-19",
+      "slug": "floor_19",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_19/env_tower_02_floor_19_visual_top3d.glb",
+      "glb_sha256": "0873a25095732646be2ce45efe3448c0a37dc1043897e9247962cb7533f0b883",
+      "triangle_count": 3048,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_19/env_tower_02_floor_19_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.064998626708984,
+          0.0,
+          -25.056291580200195
+        ],
+        [
+          35.064998626708984,
+          4.599998474121094,
+          25.056291580200195
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-20",
+      "slug": "floor_20",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/floor_20/env_tower_02_floor_20_visual_top3d.glb",
+      "glb_sha256": "411eb8c148c7de09b5912bfe8008a22f3930adb6ada7277711db4c426cc543c6",
+      "triangle_count": 36,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_20/env_tower_02_floor_20_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.0,
+          0.0,
+          -25.0
+        ],
+        [
+          35.0,
+          0.5,
+          25.0
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CORE-0",
+      "slug": "core_0",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/core_0/env_tower_02_core_0_visual_top3d.glb",
+      "glb_sha256": "6a304a673c0942213c36048c5b1010233b10b2015af6633920b44b196b7ecedb",
+      "triangle_count": 7440,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/core_0/env_tower_02_core_0_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.0,
+          0.0,
+          -4.5
+        ],
+        [
+          4.0,
+          84.08999633789062,
+          4.5
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CORE-1",
+      "slug": "core_1",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/core_1/env_tower_02_core_1_visual_top3d.glb",
+      "glb_sha256": "66b6f89949546d669d85be456b1414cde854baa5f80f96e01a981e530cb9257b",
+      "triangle_count": 7440,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/core_1/env_tower_02_core_1_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.0,
+          0.0,
+          -4.5
+        ],
+        [
+          4.0,
+          84.08999633789062,
+          4.5
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-00",
+      "slug": "scaffold_00",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_00/env_tower_02_scaffold_00_visual_top3d.glb",
+      "glb_sha256": "043917863d16109805d21285cd9419af0875b4009014b266e870044da4d2452d",
+      "triangle_count": 5672,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_00/env_tower_02_scaffold_00_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -12.575000762939453,
+          0.0,
+          -1.2250003814697266
+        ],
+        [
+          12.574999809265137,
+          88.2874526977539,
+          1.2250003814697266
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-01",
+      "slug": "scaffold_01",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_01/env_tower_02_scaffold_01_visual_top3d.glb",
+      "glb_sha256": "398b76c7caeabcf23ca7de067f2b7cd74ca7069c9e32a92f82aec897c5e6ba07",
+      "triangle_count": 2148,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_01/env_tower_02_scaffold_01_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.2249994277954102,
+          0.0,
+          -3.0699996948242188
+        ],
+        [
+          1.2250003814697266,
+          88.28865814208984,
+          3.0699996948242188
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-02",
+      "slug": "scaffold_02",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_02/env_tower_02_scaffold_02_visual_top3d.glb",
+      "glb_sha256": "7146b2b6e1a83b1ce63261be22b0708975fbcccbcdfcb45cdfc1efb6fc751ef5",
+      "triangle_count": 3228,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_02/env_tower_02_scaffold_02_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -5.074999809265137,
+          0.0,
+          -1.2250003814697266
+        ],
+        [
+          5.074999809265137,
+          88.28582000732422,
+          1.2250003814697266
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-03",
+      "slug": "scaffold_03",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_03/env_tower_02_scaffold_03_visual_top3d.glb",
+      "glb_sha256": "bee2e8b1367e5da64a7904fad8ec9a4548a495b604c80d6cd243db21ba007c8c",
+      "triangle_count": 2148,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_03/env_tower_02_scaffold_03_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.225000023841858,
+          0.0,
+          -3.0699996948242188
+        ],
+        [
+          1.225000023841858,
+          88.28865814208984,
+          3.0699996948242188
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-04",
+      "slug": "scaffold_04",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_04/env_tower_02_scaffold_04_visual_top3d.glb",
+      "glb_sha256": "dd771a5e055afd6556d3b112ab70186c22b7f06608b8bc207d0bf803ed28d569",
+      "triangle_count": 7716,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_04/env_tower_02_scaffold_04_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -17.575000762939453,
+          0.0,
+          -1.2250003814697266
+        ],
+        [
+          17.575000762939453,
+          88.28821563720703,
+          1.2250003814697266
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-05",
+      "slug": "scaffold_05",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_05/env_tower_02_scaffold_05_visual_top3d.glb",
+      "glb_sha256": "673e7709914039a87376abdd4fedff1325351a97358af4d81a20a6ced459b089",
+      "triangle_count": 10220,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_05/env_tower_02_scaffold_05_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.2250022888183594,
+          0.0,
+          -25.06999969482422
+        ],
+        [
+          1.2249984741210938,
+          88.28834533691406,
+          25.06999969482422
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-06",
+      "slug": "scaffold_06",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_06/env_tower_02_scaffold_06_visual_top3d.glb",
+      "glb_sha256": "aa5ad11067c11a27eedf20f79a5717c2820afa7f3274495d01814df4762f01ad",
+      "triangle_count": 13844,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_06/env_tower_02_scaffold_06_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -35.07500076293945,
+          0.0,
+          -1.2250003814697266
+        ],
+        [
+          35.07500076293945,
+          88.28821563720703,
+          1.2250003814697266
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-07",
+      "slug": "scaffold_07",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/scaffold_07/env_tower_02_scaffold_07_visual_top3d.glb",
+      "glb_sha256": "759f5d36728dfe167ce62e41993e46646bbc544f20a8bd89964a3c1c8973b720",
+      "triangle_count": 10220,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/scaffold_07/env_tower_02_scaffold_07_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.2249984741210938,
+          0.0,
+          -25.06999969482422
+        ],
+        [
+          1.2250022888183594,
+          88.28834533691406,
+          25.06999969482422
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-00",
+      "slug": "climbing_screen_00",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_00/env_tower_02_climbing_screen_00_visual_top3d.glb",
+      "glb_sha256": "042bd0cf0bcb75bbc1b2adef03e45bace2ad8a27c0a1d60cc22651aa6bf3dd7e",
+      "triangle_count": 1888,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_00/env_tower_02_climbing_screen_00_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -9.903999328613281,
+          0.0,
+          -0.20999908447265625
+        ],
+        [
+          9.904000282287598,
+          13.812583923339844,
+          0.20999908447265625
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-01",
+      "slug": "climbing_screen_01",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_visual_top3d.glb",
+      "glb_sha256": "bc423711b4ef09ef36f1bc8c34079b659754056f7c0f94338f136c946e0559ae",
+      "triangle_count": 472,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_01/env_tower_02_climbing_screen_01_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -0.21000003814697266,
+          0.0,
+          -2.8999996185302734
+        ],
+        [
+          0.21000003814697266,
+          13.11258316040039,
+          2.8999996185302734
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-02",
+      "slug": "climbing_screen_02",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_02/env_tower_02_climbing_screen_02_visual_top3d.glb",
+      "glb_sha256": "39f337e64daff446f7ab76e82d9c495b54f05f0d827d132b28b0d537563f99c5",
+      "triangle_count": 944,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_02/env_tower_02_climbing_screen_02_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.904000282287598,
+          0.0,
+          -0.20999908447265625
+        ],
+        [
+          4.904000282287598,
+          13.462583541870117,
+          0.20999908447265625
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-03",
+      "slug": "climbing_screen_03",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_03/env_tower_02_climbing_screen_03_visual_top3d.glb",
+      "glb_sha256": "27d87fe142ff9373f2c5233c2c5609edb7d1aca237478839bef7b61937c7180b",
+      "triangle_count": 472,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_03/env_tower_02_climbing_screen_03_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -0.21000003814697266,
+          0.0,
+          -2.8999996185302734
+        ],
+        [
+          0.20999997854232788,
+          13.11258316040039,
+          2.8999996185302734
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-04",
+      "slug": "climbing_screen_04",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_04/env_tower_02_climbing_screen_04_visual_top3d.glb",
+      "glb_sha256": "923f32b919f619e614fffe935ef8dd0afc6120eca54bd6303ee1234a37f8ba2a",
+      "triangle_count": 2832,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_04/env_tower_02_climbing_screen_04_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -17.40399932861328,
+          0.0,
+          -0.20999908447265625
+        ],
+        [
+          17.40399932861328,
+          13.812583923339844,
+          0.20999908447265625
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-05",
+      "slug": "climbing_screen_05",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_05/env_tower_02_climbing_screen_05_visual_top3d.glb",
+      "glb_sha256": "130a7f87a1fbd752e0359b9cb357d8516adbd69ad993a62b4626abcbba5c87ce",
+      "triangle_count": 3776,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_05/env_tower_02_climbing_screen_05_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -0.21000289916992188,
+          0.0,
+          -22.404001235961914
+        ],
+        [
+          0.21000289916992188,
+          13.812583923339844,
+          22.404001235961914
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-06",
+      "slug": "climbing_screen_06",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_06/env_tower_02_climbing_screen_06_visual_top3d.glb",
+      "glb_sha256": "9a6c0e6b7c2eec4ff93e65e2571c0e6bd7e600870a5f09648a92797ab83315dc",
+      "triangle_count": 5664,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_06/env_tower_02_climbing_screen_06_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -34.90399932861328,
+          0.0,
+          -0.20999908447265625
+        ],
+        [
+          34.90399932861328,
+          13.812583923339844,
+          0.20999908447265625
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-07",
+      "slug": "climbing_screen_07",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/climbing_screen_07/env_tower_02_climbing_screen_07_visual_top3d.glb",
+      "glb_sha256": "bfe012be8dda404d51ca12b782f4c2d8ccaf1fa9675d3fe383069a8c4b249e64",
+      "triangle_count": 3776,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/climbing_screen_07/env_tower_02_climbing_screen_07_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -0.21000289916992188,
+          0.0,
+          -22.404001235961914
+        ],
+        [
+          0.21000289916992188,
+          13.812583923339844,
+          22.404001235961914
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CONSTRUCTION-ELEVATOR",
+      "slug": "construction_elevator",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/construction_elevator/env_tower_02_construction_elevator_visual_top3d.glb",
+      "glb_sha256": "93b1a5a4cc606090a70d063b49697c79e1f7119a87070113f8b6962878b3d9fb",
+      "triangle_count": 8712,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/construction_elevator/env_tower_02_construction_elevator_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -5.450000762939453,
+          0.0,
+          -2.827320098876953
+        ],
+        [
+          5.44999885559082,
+          88.5224838256836,
+          2.827322006225586
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-00",
+      "slug": "roof_column_00",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_00/env_tower_02_roof_column_00_visual_top3d.glb",
+      "glb_sha256": "0ccd6223ff7b3e9d280da419056b1bf535449d79ffa42bccfd9a16fb8a3cc3ee",
+      "triangle_count": 1172,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_00/env_tower_02_roof_column_00_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.7000007629394531,
+          0.0,
+          -1.6999998092651367
+        ],
+        [
+          1.7000007629394531,
+          3.8000030517578125,
+          1.7000007629394531
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-01",
+      "slug": "roof_column_01",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_01/env_tower_02_roof_column_01_visual_top3d.glb",
+      "glb_sha256": "5d294fc1f463a3e31c9ae8474204e827b1b259647eb57d3739cec72eaa1d118c",
+      "triangle_count": 3100,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_01/env_tower_02_roof_column_01_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.3990039825439453,
+          0.0,
+          -1.6649999618530273
+        ],
+        [
+          3.3990039825439453,
+          7.8000030517578125,
+          1.6649999618530273
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-02",
+      "slug": "roof_column_02",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_02/env_tower_02_roof_column_02_visual_top3d.glb",
+      "glb_sha256": "8611787a3345807e893e6f93bd1aabba462f1dc84d2674df8e26aeb5252b2e0e",
+      "triangle_count": 4060,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_02/env_tower_02_roof_column_02_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.4020729064941406,
+          0.0,
+          -1.664999008178711
+        ],
+        [
+          3.4020748138427734,
+          11.800003051757812,
+          1.6650009155273438
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-03",
+      "slug": "roof_column_03",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_03/env_tower_02_roof_column_03_visual_top3d.glb",
+      "glb_sha256": "525e4fcfc1815e40192a782f963a6a4338a0f3a2c7cfdbc116af2bd195378118",
+      "triangle_count": 1692,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_03/env_tower_02_roof_column_03_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.7000007629394531,
+          0.0,
+          -1.6999998092651367
+        ],
+        [
+          1.6999998092651367,
+          5.8000030517578125,
+          1.7000007629394531
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-04",
+      "slug": "roof_column_04",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_04/env_tower_02_roof_column_04_visual_top3d.glb",
+      "glb_sha256": "6ddb1e1672559cd10393bf401bc7edc467198728f6533628a2a8770304c4f4e3",
+      "triangle_count": 3360,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_04/env_tower_02_roof_column_04_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.399942398071289,
+          0.0,
+          -1.6649999618530273
+        ],
+        [
+          3.3999433517456055,
+          9.0,
+          1.6649999618530273
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-05",
+      "slug": "roof_column_05",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_05/env_tower_02_roof_column_05_visual_top3d.glb",
+      "glb_sha256": "00d7a46607450c6e36017cd20416c116a3f64c9272b6e9421e09885a8d5eab35",
+      "triangle_count": 3800,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_05/env_tower_02_roof_column_05_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.4017410278320312,
+          0.0,
+          -1.664999008178711
+        ],
+        [
+          3.4017410278320312,
+          10.5,
+          1.6650009155273438
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-06",
+      "slug": "roof_column_06",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_06/env_tower_02_roof_column_06_visual_top3d.glb",
+      "glb_sha256": "33ea70bdbca2b17f97127504431dd73b4954eae6fbaf18074587bf74d5442b0b",
+      "triangle_count": 2292,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_06/env_tower_02_roof_column_06_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.6999998092651367,
+          0.0,
+          -1.6999998092651367
+        ],
+        [
+          1.7000000476837158,
+          8.300003051757812,
+          1.7000007629394531
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-07",
+      "slug": "roof_column_07",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_07/env_tower_02_roof_column_07_visual_top3d.glb",
+      "glb_sha256": "f056cef7c20d83f0f6c59e76c676c433806dceb4059ad9b0c9338e8254c39c38",
+      "triangle_count": 2240,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_07/env_tower_02_roof_column_07_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.383589267730713,
+          0.0,
+          -1.6649999618530273
+        ],
+        [
+          3.383589267730713,
+          4.5,
+          1.6649999618530273
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-08",
+      "slug": "roof_column_08",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_08/env_tower_02_roof_column_08_visual_top3d.glb",
+      "glb_sha256": "00752384bba3a703284f433cdb1614c0da6d0ed66dbb3fc0faa1ac4015ea70fb",
+      "triangle_count": 4220,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_08/env_tower_02_roof_column_08_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.4028878211975098,
+          0.0,
+          -1.664999008178711
+        ],
+        [
+          3.402888059616089,
+          12.5,
+          1.6650009155273438
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-09",
+      "slug": "roof_column_09",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_09/env_tower_02_roof_column_09_visual_top3d.glb",
+      "glb_sha256": "3232e855fdb56d00865606986bd6587252a33952747272a8e8c44202f60b771e",
+      "triangle_count": 1432,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_09/env_tower_02_roof_column_09_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.6999998092651367,
+          0.0,
+          -1.6999998092651367
+        ],
+        [
+          1.6999998092651367,
+          4.8000030517578125,
+          1.7000007629394531
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-10",
+      "slug": "roof_column_10",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_10/env_tower_02_roof_column_10_visual_top3d.glb",
+      "glb_sha256": "0ba3d0ab90cc0b58f9c671d9abfd632d7c29678240e6bfdc8f3356db3b6c3072",
+      "triangle_count": 3620,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_10/env_tower_02_roof_column_10_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.401163101196289,
+          0.0,
+          -1.6649999618530273
+        ],
+        [
+          3.4011640548706055,
+          10.099998474121094,
+          1.6649999618530273
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-11",
+      "slug": "roof_column_11",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_11/env_tower_02_roof_column_11_visual_top3d.glb",
+      "glb_sha256": "04cdef84f471bdba2520dabd4dea8d01f2f7ebbc9907164077526ce13aa9b529",
+      "triangle_count": 2920,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_11/env_tower_02_roof_column_11_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.395918846130371,
+          0.0,
+          -1.664999008178711
+        ],
+        [
+          3.3959197998046875,
+          7.3000030517578125,
+          1.6650009155273438
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-12",
+      "slug": "roof_column_12",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_12/env_tower_02_roof_column_12_visual_top3d.glb",
+      "glb_sha256": "17742cb5e4d3657214fabf6c05de3e6ae11f39b94fa041f7782c376a58e8859f",
+      "triangle_count": 1952,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_12/env_tower_02_roof_column_12_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.7000007629394531,
+          0.0,
+          -1.6999998092651367
+        ],
+        [
+          1.7000007629394531,
+          6.8000030517578125,
+          1.7000007629394531
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-13",
+      "slug": "roof_column_13",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_13/env_tower_02_roof_column_13_visual_top3d.glb",
+      "glb_sha256": "e4d117d293d7e4c63ad4b5abe63abf1c6a16379ca998204a176c199438dacebf",
+      "triangle_count": 2400,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_13/env_tower_02_roof_column_13_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.3898048400878906,
+          0.0,
+          -1.6649999618530273
+        ],
+        [
+          3.3898048400878906,
+          5.3000030517578125,
+          1.6649999618530273
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-14",
+      "slug": "roof_column_14",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_column_14/env_tower_02_roof_column_14_visual_top3d.glb",
+      "glb_sha256": "301c5ac4256a53219d770d7038ff60a700d84e0bb8da7df7cb854d894eb31f41",
+      "triangle_count": 3880,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_column_14/env_tower_02_roof_column_14_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.402374267578125,
+          0.0,
+          -1.664999008178711
+        ],
+        [
+          3.402374267578125,
+          11.099998474121094,
+          1.6650009155273438
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-0",
+      "slug": "roof_formwork_0",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_0/env_tower_02_roof_formwork_0_visual_top3d.glb",
+      "glb_sha256": "6269b0209395cdf78eca79ac1e8aae725d154a46f742248570931facb6bd9cd5",
+      "triangle_count": 5312,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_0/env_tower_02_roof_formwork_0_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -5.479999542236328,
+          0.0,
+          -6.600000381469727
+        ],
+        [
+          5.479999542236328,
+          7.924247741699219,
+          6.599999904632568
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-1",
+      "slug": "roof_formwork_1",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_1/env_tower_02_roof_formwork_1_visual_top3d.glb",
+      "glb_sha256": "b0bcff4d298c933771a12a4fb476299ab6faab8dad0dd0ab6d571995c9618207",
+      "triangle_count": 5312,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_1/env_tower_02_roof_formwork_1_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -5.730000019073486,
+          0.0,
+          -6.099999904632568
+        ],
+        [
+          5.730000019073486,
+          4.924247741699219,
+          6.100000381469727
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-2",
+      "slug": "roof_formwork_2",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_formwork_2/env_tower_02_roof_formwork_2_visual_top3d.glb",
+      "glb_sha256": "5ae151e190df5432dde04b4e27c23910052ad778c53a463669cde1ce35896a97",
+      "triangle_count": 4892,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_formwork_2/env_tower_02_roof_formwork_2_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.979999542236328,
+          0.0,
+          -7.100000381469727
+        ],
+        [
+          4.979999542236328,
+          6.5242462158203125,
+          7.099999904632568
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-00",
+      "slug": "roof_shoring_00",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_visual_top3d.glb",
+      "glb_sha256": "12677630202836926fde4ff14c072c2f9602c3af47e28ed49fa278cd6feb65f6",
+      "triangle_count": 4436,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_00/env_tower_02_roof_shoring_00_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -7.844999313354492,
+          0.0,
+          -2.0799999237060547
+        ],
+        [
+          7.845000267028809,
+          6.7742462158203125,
+          2.0799999237060547
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-01",
+      "slug": "roof_shoring_01",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_01/env_tower_02_roof_shoring_01_visual_top3d.glb",
+      "glb_sha256": "cddc533db6ddc0e4c4eb1deaa1e651f0f83bc9f35ffc3a93d6fba6df791c1d70",
+      "triangle_count": 4256,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_01/env_tower_02_roof_shoring_01_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -7.844999313354492,
+          0.0,
+          -2.0799999237060547
+        ],
+        [
+          7.845001220703125,
+          4.2742462158203125,
+          2.0799999237060547
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-02",
+      "slug": "roof_shoring_02",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_02/env_tower_02_roof_shoring_02_visual_top3d.glb",
+      "glb_sha256": "fc398a30f010d0603e3e44935cf52ab2a419434c06a845d14126c046da38a2c8",
+      "triangle_count": 2176,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_02/env_tower_02_roof_shoring_02_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.844999313354492,
+          0.0,
+          -5.579999923706055
+        ],
+        [
+          2.845001220703125,
+          5.374244689941406,
+          5.579999923706055
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-03",
+      "slug": "roof_shoring_03",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_shoring_03/env_tower_02_roof_shoring_03_visual_top3d.glb",
+      "glb_sha256": "16aaf67e4590fdb95f7af06a8a8c668aa77185d92aab8f3af163d1bf0b19526a",
+      "triangle_count": 2476,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_shoring_03/env_tower_02_roof_shoring_03_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.8450002670288086,
+          0.0,
+          -2.0799999237060547
+        ],
+        [
+          3.8449997901916504,
+          3.3742446899414062,
+          2.0799999237060547
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-00",
+      "slug": "roof_supply_00",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_00/env_tower_02_roof_supply_00_visual_top3d.glb",
+      "glb_sha256": "e62290806cded017426b13b17b8a6da38a65deb34c1d821026b52722f6720d22",
+      "triangle_count": 1664,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_00/env_tower_02_roof_supply_00_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.0,
+          0.0,
+          -1.3600001335144043
+        ],
+        [
+          3.0,
+          2.268646240234375,
+          1.359999656677246
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-01",
+      "slug": "roof_supply_01",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_01/env_tower_02_roof_supply_01_visual_top3d.glb",
+      "glb_sha256": "a1cb4462b3fa38cd1afb6f15831c457ffa178e579d4927ea9a0e745c267128bf",
+      "triangle_count": 204,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_01/env_tower_02_roof_supply_01_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.3500003814697266,
+          0.0,
+          -1.3600001335144043
+        ],
+        [
+          2.3500003814697266,
+          1.6650009155273438,
+          1.359999656677246
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-02",
+      "slug": "roof_supply_02",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_02/env_tower_02_roof_supply_02_visual_top3d.glb",
+      "glb_sha256": "e95fd749f124bcd5006bc9b591823c3044eafcf4444dc8e9baa6f210afb6caed",
+      "triangle_count": 588,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_02/env_tower_02_roof_supply_02_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.3500003814697266,
+          0.0,
+          -1.359999656677246
+        ],
+        [
+          2.3500003814697266,
+          1.7099990844726562,
+          1.359999656677246
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-03",
+      "slug": "roof_supply_03",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_03/env_tower_02_roof_supply_03_visual_top3d.glb",
+      "glb_sha256": "bd1f9393b553c250f889718c04dc2ab0def4d0d46b3e2cbc6d2fe9747e3186da",
+      "triangle_count": 1664,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_03/env_tower_02_roof_supply_03_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.0,
+          0.0,
+          -1.3600006103515625
+        ],
+        [
+          3.0,
+          2.268646240234375,
+          1.3600006103515625
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-04",
+      "slug": "roof_supply_04",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_04/env_tower_02_roof_supply_04_visual_top3d.glb",
+      "glb_sha256": "b426b70a313c72ff003e941bd3ab7a7e9199fa2771472c2d47b21b9a43d6a08c",
+      "triangle_count": 204,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_04/env_tower_02_roof_supply_04_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.3500003814697266,
+          0.0,
+          -1.3600001335144043
+        ],
+        [
+          2.3500003814697266,
+          1.6650009155273438,
+          1.3600001335144043
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-05",
+      "slug": "roof_supply_05",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_05/env_tower_02_roof_supply_05_visual_top3d.glb",
+      "glb_sha256": "05f9f24ff1f1c87527a07dfda48b5c81b83080c64818798d132ecf37ea79a2ca",
+      "triangle_count": 1244,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_05/env_tower_02_roof_supply_05_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.427366256713867,
+          0.0,
+          -1.3600001335144043
+        ],
+        [
+          2.427366256713867,
+          2.0500030517578125,
+          1.359999656677246
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-06",
+      "slug": "roof_supply_06",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_06/env_tower_02_roof_supply_06_visual_top3d.glb",
+      "glb_sha256": "d48bf0423c5efd0d6110734805976330fd900bff50d0dd716a0fe5f0c31cb654",
+      "triangle_count": 1244,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_06/env_tower_02_roof_supply_06_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.427367687225342,
+          0.0,
+          -1.3600001335144043
+        ],
+        [
+          2.427367687225342,
+          2.0500030517578125,
+          1.3600000143051147
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-07",
+      "slug": "roof_supply_07",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_07/env_tower_02_roof_supply_07_visual_top3d.glb",
+      "glb_sha256": "a926d543c883d7f31f77a3fa271ef73d687bd111a814e63d16ce281a6740383b",
+      "triangle_count": 588,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_07/env_tower_02_roof_supply_07_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.3499999046325684,
+          0.0,
+          -1.3600006103515625
+        ],
+        [
+          2.3499999046325684,
+          1.7099990844726562,
+          1.3600006103515625
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-MAST",
+      "slug": "crane_00_mast",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_00_mast/env_tower_02_crane_00_mast_visual_top3d.glb",
+      "glb_sha256": "a90f93d62149e5d159f0bd1a10d04e0a37a39e78899d5ae0bee408ab8651e5a7",
+      "triangle_count": 30932,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_mast/env_tower_02_crane_00_mast_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.575408935546875,
+          0.0,
+          -3.12783145904541
+        ],
+        [
+          4.575412750244141,
+          109.5,
+          3.1278305053710938
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-SLEW-CAB",
+      "slug": "crane_00_slew_cab",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_visual_top3d.glb",
+      "glb_sha256": "9a2599202c271344ef3b647800b95d289fbf602cdf4fb79063dec589abede2f9",
+      "triangle_count": 6354,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_slew_cab/env_tower_02_crane_00_slew_cab_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.9133453369140625,
+          0.0,
+          -3.426650047302246
+        ],
+        [
+          3.9133453369140625,
+          4.7100067138671875,
+          3.4266510009765625
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-JIB",
+      "slug": "crane_00_jib",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_00_jib/env_tower_02_crane_00_jib_visual_top3d.glb",
+      "glb_sha256": "ebda7e2d957b10a84c2d8840b198ff6934730f8aec53f53f8f7d4a4b37aecdc3",
+      "triangle_count": 7484,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_jib/env_tower_02_crane_00_jib_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -16.143993377685547,
+          0.0,
+          -4.187518119812012
+        ],
+        [
+          16.143993377685547,
+          3.3899993896484375,
+          4.187517166137695
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-COUNTER-JIB",
+      "slug": "crane_00_counter_jib",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_00_counter_jib/env_tower_02_crane_00_counter_jib_visual_top3d.glb",
+      "glb_sha256": "2f9be76cd77067be290edbbcdeac27f99388b9c5fda86f1a41d4eaa89054c478",
+      "triangle_count": 9212,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_counter_jib/env_tower_02_crane_00_counter_jib_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -7.757987976074219,
+          0.0,
+          -2.922107696533203
+        ],
+        [
+          7.757987976074219,
+          5.0200042724609375,
+          2.922109603881836
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-APEX",
+      "slug": "crane_00_apex",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_00_apex/env_tower_02_crane_00_apex_visual_top3d.glb",
+      "glb_sha256": "f230f736495a423d06e60a2a40410fc813cef9ca3cff3b6eeb5229ecb8db5074",
+      "triangle_count": 3740,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_apex/env_tower_02_crane_00_apex_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -20.59840202331543,
+          0.0,
+          -4.595548629760742
+        ],
+        [
+          20.598400115966797,
+          9.098655700683594,
+          4.595548629760742
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-TROLLEY",
+      "slug": "crane_00_trolley",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_00_trolley/env_tower_02_crane_00_trolley_visual_top3d.glb",
+      "glb_sha256": "c76ab3fa3c0eb5a3134889e6a44952eb2e37d569bf85fb5b0ccd864acd67cf81",
+      "triangle_count": 2580,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_trolley/env_tower_02_crane_00_trolley_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.0568408966064453,
+          0.0,
+          -2.097400665283203
+        ],
+        [
+          2.056842803955078,
+          1.8600006103515625,
+          2.097400665283203
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-HOOK",
+      "slug": "crane_00_hook",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_00_hook/env_tower_02_crane_00_hook_visual_top3d.glb",
+      "glb_sha256": "62966c3de0f362d0167163d792e9b7da3d68f34cd8edba0627c5447cb64dfda1",
+      "triangle_count": 2784,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_00_hook/env_tower_02_crane_00_hook_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.0529842376708984,
+          0.0,
+          -0.6575555801391602
+        ],
+        [
+          1.0529861450195312,
+          19.787765502929688,
+          0.6575565338134766
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-MAST",
+      "slug": "crane_01_mast",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_01_mast/env_tower_02_crane_01_mast_visual_top3d.glb",
+      "glb_sha256": "35eee9ccfcc5f363ecec870e9763530efa407750a3f4d05aeb47dadad8c9fe58",
+      "triangle_count": 10504,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_mast/env_tower_02_crane_01_mast_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -3.3068113327026367,
+          0.0,
+          -3.3068113327026367
+        ],
+        [
+          3.3068113327026367,
+          38.0,
+          3.3068113327026367
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-SLEW-CAB",
+      "slug": "crane_01_slew_cab",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_visual_top3d.glb",
+      "glb_sha256": "57a614404af30180c364557b6483c9c62754d872a94c5ab613fed222f25c1ed8",
+      "triangle_count": 6354,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_slew_cab/env_tower_02_crane_01_slew_cab_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.08611536026001,
+          0.0,
+          -3.661850929260254
+        ],
+        [
+          4.086114883422852,
+          4.7100067138671875,
+          3.661850929260254
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-JIB",
+      "slug": "crane_01_jib",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_01_jib/env_tower_02_crane_01_jib_visual_top3d.glb",
+      "glb_sha256": "c9dc348ee653364b65d7e1d804025edf96842b340d71c0b3f1f272fa1c949bea",
+      "triangle_count": 7484,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_jib/env_tower_02_crane_01_jib_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -15.953937530517578,
+          0.0,
+          -5.485221862792969
+        ],
+        [
+          15.953937530517578,
+          3.3899917602539062,
+          5.485221862792969
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-COUNTER-JIB",
+      "slug": "crane_01_counter_jib",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_01_counter_jib/env_tower_02_crane_01_counter_jib_visual_top3d.glb",
+      "glb_sha256": "310104fb9e3415a0f984da35261e72639464ed8ae12bda7bdbb18c48e243525f",
+      "triangle_count": 9212,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_counter_jib/env_tower_02_crane_01_counter_jib_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -7.745974540710449,
+          0.0,
+          -3.512134552001953
+        ],
+        [
+          7.745975494384766,
+          5.0200042724609375,
+          3.512134075164795
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-APEX",
+      "slug": "crane_01_apex",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_01_apex/env_tower_02_crane_01_apex_visual_top3d.glb",
+      "glb_sha256": "c983e124086c3045191beb9cb8967eb8ebbc6fd84c5340945b9db546808c03f6",
+      "triangle_count": 3740,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_apex/env_tower_02_crane_01_apex_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -20.287540435791016,
+          0.0,
+          -6.33762264251709
+        ],
+        [
+          20.287540435791016,
+          9.098663330078125,
+          6.337622165679932
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-TROLLEY",
+      "slug": "crane_01_trolley",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_01_trolley/env_tower_02_crane_01_trolley_visual_top3d.glb",
+      "glb_sha256": "ae3b0b4b23229e88d86b59de2ad7c35795448f344e866083b49643772bb0ab96",
+      "triangle_count": 2580,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_trolley/env_tower_02_crane_01_trolley_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.172281265258789,
+          0.0,
+          -2.2076358795166016
+        ],
+        [
+          2.172281265258789,
+          1.8600006103515625,
+          2.2076377868652344
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-HOOK",
+      "slug": "crane_01_hook",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_01_hook/env_tower_02_crane_01_hook_visual_top3d.glb",
+      "glb_sha256": "5a97eadfa14900dc372eb2a2780243fd251e8ba656325a208299e1870845e284",
+      "triangle_count": 2784,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_01_hook/env_tower_02_crane_01_hook_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -1.0327959060668945,
+          0.0,
+          -0.7114048004150391
+        ],
+        [
+          1.0327959060668945,
+          19.787765502929688,
+          0.7114048004150391
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-MAST",
+      "slug": "crane_02_mast",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_02_mast/env_tower_02_crane_02_mast_visual_top3d.glb",
+      "glb_sha256": "a26cefe28b9a2d7be652ab654a79143a9915de99e6de278806176cb5febae5fe",
+      "triangle_count": 30168,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_mast/env_tower_02_crane_02_mast_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.392963409423828,
+          0.0,
+          -3.760366439819336
+        ],
+        [
+          4.392967224121094,
+          105.5,
+          3.760366439819336
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-SLEW-CAB",
+      "slug": "crane_02_slew_cab",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_02_slew_cab/env_tower_02_crane_02_slew_cab_visual_top3d.glb",
+      "glb_sha256": "9d2948f9c374565d52ec44594c82fa3b8b89b585e55fa27ca296375e2ee53e74",
+      "triangle_count": 6354,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_slew_cab/env_tower_02_crane_02_slew_cab_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -4.4566650390625,
+          0.0,
+          -4.309318542480469
+        ],
+        [
+          4.4566650390625,
+          4.7100067138671875,
+          4.309317588806152
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-JIB",
+      "slug": "crane_02_jib",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_02_jib/env_tower_02_crane_02_jib_visual_top3d.glb",
+      "glb_sha256": "0ced701f3c174e438f8746651b8d6f1a77c489570e87ea6a48c96d3ec8082aca",
+      "triangle_count": 7484,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_jib/env_tower_02_crane_02_jib_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -14.009170532226562,
+          0.0,
+          -10.37198257446289
+        ],
+        [
+          14.009170532226562,
+          3.3899993896484375,
+          10.371983528137207
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-COUNTER-JIB",
+      "slug": "crane_02_counter_jib",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_02_counter_jib/env_tower_02_crane_02_counter_jib_visual_top3d.glb",
+      "glb_sha256": "d605b04979edf5e7de15e19abd56c5de87c8d5ec6b3c2061c74c1efb114e1b5f",
+      "triangle_count": 9212,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_counter_jib/env_tower_02_crane_02_counter_jib_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -7.116024017333984,
+          0.0,
+          -5.637601852416992
+        ],
+        [
+          7.11602783203125,
+          5.0200042724609375,
+          5.637599945068359
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-APEX",
+      "slug": "crane_02_apex",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_02_apex/env_tower_02_crane_02_apex_visual_top3d.glb",
+      "glb_sha256": "35064b21fd9f621e8d6e99b154ce8ad18eb706c6bb9746b931aae2b350b60538",
+      "triangle_count": 3740,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_apex/env_tower_02_crane_02_apex_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -17.553119659423828,
+          0.0,
+          -12.708146095275879
+        ],
+        [
+          17.553119659423828,
+          9.098655700683594,
+          12.708146095275879
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-TROLLEY",
+      "slug": "crane_02_trolley",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_02_trolley/env_tower_02_crane_02_trolley_visual_top3d.glb",
+      "glb_sha256": "90d0b61c1d89ca1db8c02c14e47232c158551c584eccf687c98719daa74df67c",
+      "triangle_count": 2580,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_trolley/env_tower_02_crane_02_trolley_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -2.4618492126464844,
+          0.0,
+          -2.474128246307373
+        ],
+        [
+          2.4618492126464844,
+          1.8600006103515625,
+          2.474128246307373
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-HOOK",
+      "slug": "crane_02_hook",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/crane_02_hook/env_tower_02_crane_02_hook_visual_top3d.glb",
+      "glb_sha256": "0276052dc4cbed233d245647480eb28aea0ea439ffb47cd51fed742cc7863275",
+      "triangle_count": 2784,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/crane_02_hook/env_tower_02_crane_02_hook_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -0.9715957641601562,
+          0.0,
+          -0.8807330131530762
+        ],
+        [
+          0.9715957641601562,
+          19.787765502929688,
+          0.8807330131530762
+        ]
+      ]
+    },
+    {
+      "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-WARNING",
+      "slug": "roof_warning",
+      "version": "v003",
+      "glb": "assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb",
+      "glb_sha256": "38be288904ccafa9602797bad983dec2756c41ccd1244467c97318cc9df95f99",
+      "triangle_count": 14,
+      "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_warning/env_tower_02_roof_warning_root_top3d.tscn",
+      "bbox_godot_local": [
+        [
+          -0.2999999523162842,
+          0.0,
+          -0.2999992370605469
+        ],
+        [
+          0.2999999523162842,
+          0.15000152587890625,
+          0.2999992370605469
+        ]
+      ]
+    }
+  ]
 }

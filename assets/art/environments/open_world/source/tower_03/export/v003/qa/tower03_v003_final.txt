@@ -1,0 +1,22 @@
+塔3 v003 最终 Blender 优化/导出验收
+
+总状态: PASS
+重开 Blend tri: 96988
+GLB 实际 tri: 96702
+内存态脚本 tri: 96648；重开差异: 340
+
+分区（组件数 / Blender重开tri / GLB tri）：
+- architecture: 24 / 31794 / 31794
+- floor: 144 / 8976 / 8976
+- hvac: 23 / 23731 / 23731
+- support: 21 / 27410 / 27410
+- telecom: 5 / 4791 / 4791
+
+严格 PaletteUV: PASS
+GLB无内嵌纹理/索引一致: PASS
+保留率与地板/主体入口锁定: PASS
+包络核对: PASS
+源哈希: PASS
+
+视觉证据: outputs/tower03_v003/v001 与 v003；固定机位全景正/背/侧、天台、天台近景、HVAC近景。
+运行时接入: false；Godot/账本: 未修改。

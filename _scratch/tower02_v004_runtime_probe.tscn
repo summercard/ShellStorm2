@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/tower02_v004_runtime_probe.gd" id="1_probe"]
+
+[node name="Tower02V004RuntimeProbe" type="Node"]
+script = ExtResource("1_probe")

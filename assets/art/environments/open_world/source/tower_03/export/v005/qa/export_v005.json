@@ -1,0 +1,1134 @@
+{
+  "schema": "shellstorm2.openworld.tower03.export_qa.v005",
+  "version": "v005",
+  "passed": true,
+  "records": 217,
+  "mesh_objects": 228,
+  "triangles_blend": 99169,
+  "triangles_glb": 99169,
+  "partitions": {
+    "architecture": {
+      "components": 24,
+      "triangles_blender": 31794,
+      "triangles_glb": 31794
+    },
+    "floor": {
+      "components": 144,
+      "triangles_blender": 8976,
+      "triangles_glb": 8976
+    },
+    "support": {
+      "components": 21,
+      "triangles_blender": 29042,
+      "triangles_glb": 29042
+    },
+    "hvac": {
+      "components": 23,
+      "triangles_blender": 23731,
+      "triangles_glb": 23731
+    },
+    "telecom": {
+      "components": 5,
+      "triangles_blender": 5626,
+      "triangles_glb": 5626
+    }
+  },
+  "derived_sha256": "77e5cc22a1b3b1776bb2c34af918349d6efd98752c90d123c56ca4eb04616470",
+  "staged_component_root": "assets/art/environments/open_world/source/tower_03/export/v005/staged_components",
+  "embedded_images_or_textures": false,
+  "non_visual_payload": false,
+  "material_budget_passed": true,
+  "texcoord_0_passed": true,
+  "export_memory_invariance_passed": true,
+  "runtime_integrated": false,
+  "stable_paths_touched": false,
+  "godot_modified": false,
+  "ledger_modified": false,
+  "records_detail": [
+    {
+      "slug": "main_structure",
+      "triangle_count": 1276,
+      "glb_sha256": "032960f27d580ae12a75835bb78dff6d76084b8e7724985ef3ab91a60fd03081"
+    },
+    {
+      "slug": "facade_00",
+      "triangle_count": 1236,
+      "glb_sha256": "14385d3261736c91541abfecd59220d6c9a0270b0f9c0a581dd626beba5777c8"
+    },
+    {
+      "slug": "facade_01",
+      "triangle_count": 1078,
+      "glb_sha256": "94b8027a01b761c99a78883934105ce6e569dcc7d4f9360bf72a4c2d4193f7a1"
+    },
+    {
+      "slug": "facade_02",
+      "triangle_count": 1158,
+      "glb_sha256": "2503b7bc72e3bb50b083b1f1ecf2a9246b2d2b9397afb99e98257b7cd4d5e750"
+    },
+    {
+      "slug": "facade_03",
+      "triangle_count": 1158,
+      "glb_sha256": "09577da30e6fd4196b68f222385bb04283776af65ddbc85305db830f8adbbf7e"
+    },
+    {
+      "slug": "facade_04",
+      "triangle_count": 1078,
+      "glb_sha256": "1c28bbddc6efd14a3e68ba0f997e8f6fefde44fc91cb12fa4af5a9e095d58c26"
+    },
+    {
+      "slug": "facade_05",
+      "triangle_count": 1158,
+      "glb_sha256": "79efb1f88353e9615cb3cc8f06c8057956fda6c1d339c2e8e9a47413988b71d1"
+    },
+    {
+      "slug": "facade_06",
+      "triangle_count": 1133,
+      "glb_sha256": "6fd5e519bacd7fe6eec6979054470bad4dd4edbb2c885adc5d7ec6a27e9a88dd"
+    },
+    {
+      "slug": "facade_07",
+      "triangle_count": 1078,
+      "glb_sha256": "a3128391e8d880f7dc25d84a51fed44731265476ad57f83fd4410f983a7bcb92"
+    },
+    {
+      "slug": "facade_08",
+      "triangle_count": 1156,
+      "glb_sha256": "6a6077a5147f531757011cb1b62994e39bbdfc9352c741e8a450656451c5cc87"
+    },
+    {
+      "slug": "facade_09",
+      "triangle_count": 1158,
+      "glb_sha256": "394ff970c8b9673228c4faf741648d42aad0e47ddd1e6ecb262afd831d910c14"
+    },
+    {
+      "slug": "facade_10",
+      "triangle_count": 1078,
+      "glb_sha256": "37dad2a24d978ec4e91426786053b271f2d9335e0d99773c42ca280ae12db820"
+    },
+    {
+      "slug": "facade_11",
+      "triangle_count": 1204,
+      "glb_sha256": "0200612e3f77c767f3a960ca042dc5d7e44e3e806542061da8843e3be372cdbe"
+    },
+    {
+      "slug": "facade_12",
+      "triangle_count": 1203,
+      "glb_sha256": "38571a7981b1e4a9592fb88f3df87506b704b1aa4dc1e3b791bbd64c7b1ecf5d"
+    },
+    {
+      "slug": "facade_13",
+      "triangle_count": 1078,
+      "glb_sha256": "d9dfb55d193db5e2c948d42f427ed2f0e492ec92155ce169b53e4f2d68b41dd5"
+    },
+    {
+      "slug": "facade_14",
+      "triangle_count": 1158,
+      "glb_sha256": "63664871d2211c4cf429cd3e718df9f7b90773b666fae0bcb2a03425881e12d6"
+    },
+    {
+      "slug": "facade_15",
+      "triangle_count": 1158,
+      "glb_sha256": "bfb446514df8937e2804bdef41c82376a92d264eba6b93560c75a52b4cf7b796"
+    },
+    {
+      "slug": "facade_16",
+      "triangle_count": 1078,
+      "glb_sha256": "14c7c6393efffd326d5380754534f978f5c61dc2ef3c2277cf0656a6966f9e6d"
+    },
+    {
+      "slug": "facade_17",
+      "triangle_count": 1156,
+      "glb_sha256": "b19571851c13445198c65bf7396329198a6084dce083104408f6a5c63c6adf73"
+    },
+    {
+      "slug": "facade_18",
+      "triangle_count": 1134,
+      "glb_sha256": "8489d5276d4369a18f03ebded87eaa9832573405697046919abea9cbec32591f"
+    },
+    {
+      "slug": "facade_19",
+      "triangle_count": 1157,
+      "glb_sha256": "b56e6d06b23eee67125bfcb181454d13a1db6ecdd93a27c84924d024a95976fb"
+    },
+    {
+      "slug": "entrance",
+      "triangle_count": 496,
+      "glb_sha256": "5dde7bb1c1c0eac546505d8353a4ba62a0cbd71654778f04c4d7a3b6d57ecac6"
+    },
+    {
+      "slug": "lower_tile_00_00",
+      "triangle_count": 200,
+      "glb_sha256": "3633a86d2dbb64a083714b50927e750057c0666899dd9e91f947e906895dd5d1"
+    },
+    {
+      "slug": "lower_tile_00_01",
+      "triangle_count": 44,
+      "glb_sha256": "bf535c0bb7141ffe35c4b93e36249cc47e31462acef11a3d2776d1a95c99f8c1"
+    },
+    {
+      "slug": "lower_tile_00_02",
+      "triangle_count": 44,
+      "glb_sha256": "423cbe9ce735c76b99d62c2926bbed59980e96b1fa4b9b34d593d32272ad8fbb"
+    },
+    {
+      "slug": "lower_tile_00_03",
+      "triangle_count": 44,
+      "glb_sha256": "0108894df571b1b767d70a1d76e786e463a1743481c4b47e068d3ac0270db74c"
+    },
+    {
+      "slug": "lower_tile_00_04",
+      "triangle_count": 140,
+      "glb_sha256": "4fa7b8e56c8a1f5ebe6221317c3996665ada9ee30f429d81d4c0cdbf7a3220e1"
+    },
+    {
+      "slug": "lower_tile_00_05",
+      "triangle_count": 44,
+      "glb_sha256": "e04fdf2bda9ad8da03d80a686ffeeb9f7dd0d4b75ec5adfabc9770efc81b375a"
+    },
+    {
+      "slug": "lower_tile_00_06",
+      "triangle_count": 60,
+      "glb_sha256": "dbdf183b64b8ccf0496abaa38d090f3a3f75b96faf26595b4c07f713651f78a0"
+    },
+    {
+      "slug": "lower_tile_00_07",
+      "triangle_count": 88,
+      "glb_sha256": "f50c57bdf7f06bd998d7f6912fc66a19acefa10b0fde590e7b3b591e23b4fac5"
+    },
+    {
+      "slug": "lower_tile_01_00",
+      "triangle_count": 44,
+      "glb_sha256": "7cbad03c4e0bbac18ba917b4f0016ec8ae816de8bffeb5bc59a2622b422b1dfd"
+    },
+    {
+      "slug": "lower_tile_01_01",
+      "triangle_count": 44,
+      "glb_sha256": "caecd7eecba62e39f654108cd62c66b78e9f6fad01f47b05503a1d05f8ebc0b5"
+    },
+    {
+      "slug": "lower_tile_01_02",
+      "triangle_count": 44,
+      "glb_sha256": "343d8a9b3e0ae64e414937635dc8be3418394c403de95322a977ec63b54e1258"
+    },
+    {
+      "slug": "lower_tile_01_03",
+      "triangle_count": 140,
+      "glb_sha256": "1075d5755f68e3f6669cbfb03050d5804fc194522dde39446c6f8692dde0ba6b"
+    },
+    {
+      "slug": "lower_tile_01_04",
+      "triangle_count": 44,
+      "glb_sha256": "074f39776dc504925877e6cd6634b1471808b46c914bdfde3befcf9ac97b7605"
+    },
+    {
+      "slug": "lower_tile_01_05",
+      "triangle_count": 60,
+      "glb_sha256": "44aaf9af3985db1c682c57acfd3f424e71430241f452bd7f6879f697da3eff55"
+    },
+    {
+      "slug": "lower_tile_01_06",
+      "triangle_count": 88,
+      "glb_sha256": "0db237f6ebf2ee3ca7d18f8707d550677456dcd4b185dd688adbb212921b0f75"
+    },
+    {
+      "slug": "lower_tile_01_07",
+      "triangle_count": 140,
+      "glb_sha256": "f65e5b6b748aaf529b69e7d88285f980ba98cfd02973334f7ba2dc7459d2825f"
+    },
+    {
+      "slug": "lower_tile_02_00",
+      "triangle_count": 44,
+      "glb_sha256": "ac9aa718ac6202f9cf07a01b15b3696ecf399e2bfaca13808a4b724c008e7f07"
+    },
+    {
+      "slug": "lower_tile_02_01",
+      "triangle_count": 44,
+      "glb_sha256": "25a2853ad811940d60cb8dfd9847c6177ede0dabb78a08ba89ba9fd0ff8dabb1"
+    },
+    {
+      "slug": "lower_tile_02_02",
+      "triangle_count": 140,
+      "glb_sha256": "fecdb9465f05452fb7733e386eaafca17ca8b5ffe89f5ad439b3d79f20dc46fb"
+    },
+    {
+      "slug": "lower_tile_02_03",
+      "triangle_count": 44,
+      "glb_sha256": "204a919d614f27ba09e232125ae619e94cfca945be5fc17c814ec6ee2186a7b5"
+    },
+    {
+      "slug": "lower_tile_02_04",
+      "triangle_count": 60,
+      "glb_sha256": "ed3b64417e80010120afc1b9606134549a0545583e2aca9fd66d0dbe0a2e61f7"
+    },
+    {
+      "slug": "lower_tile_02_05",
+      "triangle_count": 88,
+      "glb_sha256": "673eff9a3278474f7e01097e41936face642b9c0bba429c6f07daad824841640"
+    },
+    {
+      "slug": "lower_tile_02_06",
+      "triangle_count": 140,
+      "glb_sha256": "4e809e46787f7e9b586a1d76b8e4abc6807bdb14205b0c932d5f3671f0370ed4"
+    },
+    {
+      "slug": "lower_tile_02_07",
+      "triangle_count": 44,
+      "glb_sha256": "edd7aea89428ca4f6064826e5c5d58d2cae6fd00a8c5f7dbf4762ed8e8a1be28"
+    },
+    {
+      "slug": "lower_tile_03_00",
+      "triangle_count": 44,
+      "glb_sha256": "5491aeec34c602f4f0708e4d6158c8015037b3f5a76c0ac32d5c0c312b5b2fb1"
+    },
+    {
+      "slug": "lower_tile_03_01",
+      "triangle_count": 140,
+      "glb_sha256": "8dacca7f39a7628bc3544859c113e805eea024419104aabc1841a7ac4ad751a5"
+    },
+    {
+      "slug": "lower_tile_03_02",
+      "triangle_count": 44,
+      "glb_sha256": "02a2a5f0f3425192fec0a38e75b69fd3027f66ce7a13d22b8f3ce560462ec7c6"
+    },
+    {
+      "slug": "lower_tile_03_03",
+      "triangle_count": 60,
+      "glb_sha256": "7b1a172071d1ef42d81aa6942010f5ba3e2f7599a837573fc672559e3bcf02f6"
+    },
+    {
+      "slug": "lower_tile_03_04",
+      "triangle_count": 88,
+      "glb_sha256": "5dab87a56d866356fa979ad23f5c76d23d5b87e00a6fb1117bd35c6cff1516d1"
+    },
+    {
+      "slug": "lower_tile_03_05",
+      "triangle_count": 140,
+      "glb_sha256": "f225aeabe71f8ef34715c4164cde4a24878e56ac2226f2cce7f2a6e363d7f4d7"
+    },
+    {
+      "slug": "lower_tile_03_06",
+      "triangle_count": 44,
+      "glb_sha256": "0b7d12a84d54a57174b4720364882c3fa805e4b666a46559f202421d66d3e720"
+    },
+    {
+      "slug": "lower_tile_03_07",
+      "triangle_count": 44,
+      "glb_sha256": "f5843c3553d7d684795a258614cd5cd5972c2fdb0d8760e2d88e404fe1b0ee97"
+    },
+    {
+      "slug": "lower_tile_04_00",
+      "triangle_count": 140,
+      "glb_sha256": "4c1d8722fe75cb3c4619afebdd8dd020fb6ae9b1d703885b645274ec9dcfbf11"
+    },
+    {
+      "slug": "lower_tile_04_01",
+      "triangle_count": 44,
+      "glb_sha256": "fef9919da864a06745d0bfa9d0fbbcb91f8119db2dafcd5c51090b6aad814db7"
+    },
+    {
+      "slug": "lower_tile_04_02",
+      "triangle_count": 60,
+      "glb_sha256": "a7b10bce4a2caf8bbcd9c6dd8fc8f7efe972cd014804e10396bd7993c6da9fcd"
+    },
+    {
+      "slug": "lower_tile_04_03",
+      "triangle_count": 88,
+      "glb_sha256": "2e502324f9b4d57333652fe87e85c094fadc2a84ef30a48d6fd02062ab098e49"
+    },
+    {
+      "slug": "lower_tile_04_04",
+      "triangle_count": 44,
+      "glb_sha256": "27b60862e06924a6e5949f62662feac6403221e5edf64604a8b5ef4bc7ff5fc2"
+    },
+    {
+      "slug": "lower_tile_04_05",
+      "triangle_count": 44,
+      "glb_sha256": "590f1cf97c24af6b1b164dc3473210830b23fbb43c8f37955e4fca72f4ad1f2a"
+    },
+    {
+      "slug": "lower_tile_04_06",
+      "triangle_count": 44,
+      "glb_sha256": "e943d94d0c0e1ad1c11ba1ab9e728b4fdafd7a871f97360ed04c1af3e988eaf0"
+    },
+    {
+      "slug": "lower_tile_04_07",
+      "triangle_count": 44,
+      "glb_sha256": "5160531f12282911007a4bb2d02a4b06deb7d1eaafcca7f4c519e0823fe3a6eb"
+    },
+    {
+      "slug": "lower_tile_05_00",
+      "triangle_count": 44,
+      "glb_sha256": "4e850e2b35ed0b8a868e4bf76f77264f0c177b417c68ffa4c0156a25036eda35"
+    },
+    {
+      "slug": "lower_tile_05_01",
+      "triangle_count": 60,
+      "glb_sha256": "4ad670fd30d2ff19b231057a5a869c64328c9b62e64030428b8a85866df8f5fa"
+    },
+    {
+      "slug": "lower_tile_05_02",
+      "triangle_count": 88,
+      "glb_sha256": "ac9b2f7d1235bb5768d617bc6e7a5c28bdca7d478934179a3c49b62202918991"
+    },
+    {
+      "slug": "lower_tile_05_03",
+      "triangle_count": 44,
+      "glb_sha256": "f83366408aacc7e2fb0d3dbe15959e52a3c26fc1a71e3c2c3926843ee9156a1b"
+    },
+    {
+      "slug": "lower_tile_05_04",
+      "triangle_count": 44,
+      "glb_sha256": "8d1dfaead0fbaacd3a2a88527a8d803ca9aaeb0e501f477df03a6aef6d6d5dbe"
+    },
+    {
+      "slug": "lower_tile_05_05",
+      "triangle_count": 44,
+      "glb_sha256": "39ccc95facb2a70c129dbe85ecfae34f841104982e5f52c4444366c3e00f71fa"
+    },
+    {
+      "slug": "lower_tile_05_06",
+      "triangle_count": 44,
+      "glb_sha256": "5fec3ae36b50bae3efc1f303342e831c8e931ab671ba7343bcc7685fa8e251b8"
+    },
+    {
+      "slug": "lower_tile_05_07",
+      "triangle_count": 44,
+      "glb_sha256": "6c69f02c9b1f89b57c3705b1f28b4aee71e66291b62c4782e9c44c53a1b8deb1"
+    },
+    {
+      "slug": "lower_tile_06_00",
+      "triangle_count": 60,
+      "glb_sha256": "522c681322b349a474d1420af3eba9f0ab76a3fc535573fcd75355675f876de0"
+    },
+    {
+      "slug": "lower_tile_06_01",
+      "triangle_count": 88,
+      "glb_sha256": "a1df049248d0338887893c571d6bfc8823165f92b86af833a439352fe78818ff"
+    },
+    {
+      "slug": "lower_tile_06_02",
+      "triangle_count": 140,
+      "glb_sha256": "6f7ad68d5e4966aae8b5e50cecb58f8a2b840e939b70f340018465b90ff4d3aa"
+    },
+    {
+      "slug": "lower_tile_06_03",
+      "triangle_count": 44,
+      "glb_sha256": "9e3fe4ec41b2d4f286eded0604b5b177f8d8d50318097b7099fdaf92b7526d56"
+    },
+    {
+      "slug": "lower_tile_06_04",
+      "triangle_count": 44,
+      "glb_sha256": "7dcccf794818e6713e7dc4e3fe689f879185ae426f51e435f54e449b279f7385"
+    },
+    {
+      "slug": "lower_tile_06_05",
+      "triangle_count": 44,
+      "glb_sha256": "21a043f8f1c9e0e881cc9baaace2c9651d8d1e1d7ea399b9a69e41cbebb6c06f"
+    },
+    {
+      "slug": "lower_tile_06_06",
+      "triangle_count": 44,
+      "glb_sha256": "ff75694d0cd8ffb6e2a6e1d047fde20f8b21fdb4311031f8082cc2dd4056cf0c"
+    },
+    {
+      "slug": "lower_tile_06_07",
+      "triangle_count": 44,
+      "glb_sha256": "918f4266c1b1708f9e2449b44e4fd35fa8e16d6ca2a065d2980fe0f86580b7ca"
+    },
+    {
+      "slug": "lower_tile_07_00",
+      "triangle_count": 88,
+      "glb_sha256": "d793ce131a6dd4ae5208781bebc09bb08e7219e91f3898ae22ed4d129e2e6b6c"
+    },
+    {
+      "slug": "lower_tile_07_01",
+      "triangle_count": 140,
+      "glb_sha256": "ae1d093711dd7e20d2d9a5a72f7c02dbaae370bde6e75a8ecc54634ed3eb1f87"
+    },
+    {
+      "slug": "lower_tile_07_02",
+      "triangle_count": 44,
+      "glb_sha256": "8e941410fe97c803f3aaabf2ec61fc099f724ca3a33e5c5ad8c136b2476a7f20"
+    },
+    {
+      "slug": "lower_tile_07_03",
+      "triangle_count": 44,
+      "glb_sha256": "c6186c9b8e6b5e61e03dfb65c4e3cc778a17eb3ddde0dea755e28cbd89d650d1"
+    },
+    {
+      "slug": "lower_tile_07_04",
+      "triangle_count": 44,
+      "glb_sha256": "b6b81b260e11244a531a0e9a8d9ab184939394f5045bdcdef9f568c09ce508ab"
+    },
+    {
+      "slug": "lower_tile_07_05",
+      "triangle_count": 44,
+      "glb_sha256": "fe113eb6e38791076698eef1475582a6355be76211046eadb2e38586c5901f6c"
+    },
+    {
+      "slug": "lower_tile_07_06",
+      "triangle_count": 44,
+      "glb_sha256": "9d9a1e0388ba037f423f47218a8b73885d22f3e42a759fb284ca49ba6e99c60b"
+    },
+    {
+      "slug": "lower_tile_07_07",
+      "triangle_count": 88,
+      "glb_sha256": "c4b6ecefbf6f25aadc5fadac110100e1be7fd7ddf3d0f88a603dadc7ad6c95eb"
+    },
+    {
+      "slug": "lower_tile_08_00",
+      "triangle_count": 140,
+      "glb_sha256": "6d5d2c02248ac947024f037a6d7a71f384ee82b8c30a37cb5e6412bf20c3cc43"
+    },
+    {
+      "slug": "lower_tile_08_01",
+      "triangle_count": 44,
+      "glb_sha256": "d79e83d935e922fca6da229e07a20da9ebae2635adedb6b6d4c5cd85eed05cd6"
+    },
+    {
+      "slug": "lower_tile_08_02",
+      "triangle_count": 44,
+      "glb_sha256": "1145fa2ba67b9a9241409c0df3b873fa66298aa3fa8549e617e3243cf0ceb895"
+    },
+    {
+      "slug": "lower_tile_08_03",
+      "triangle_count": 44,
+      "glb_sha256": "190444a81e1d334cfd99fb1c719a6b61b3ee439a1a58bb15de89e5ea60841fc9"
+    },
+    {
+      "slug": "lower_tile_08_04",
+      "triangle_count": 44,
+      "glb_sha256": "88c862df7ee47bd8de57949d8e6d53b487aa0b0d89887b58c62e22d93b0b5db2"
+    },
+    {
+      "slug": "lower_tile_08_05",
+      "triangle_count": 44,
+      "glb_sha256": "51d93fca9330c05d6dfa7dce3e379f92ffbd9da71040492c26950ec11e0462eb"
+    },
+    {
+      "slug": "lower_tile_08_06",
+      "triangle_count": 88,
+      "glb_sha256": "65c86325aa1cd9804b2fdd831fb85881aa7b271ca249eaabbe3fadd058a94a71"
+    },
+    {
+      "slug": "lower_tile_08_07",
+      "triangle_count": 44,
+      "glb_sha256": "3d54b94e227e10d8e2be6888e428fc50b1e5860e9b5a9ea928226f29b147bd6e"
+    },
+    {
+      "slug": "lower_tile_09_00",
+      "triangle_count": 44,
+      "glb_sha256": "1546ff9d51b383c0a6e8f0f5d6eec25b93fdfdb58ccb221618e9f26ba0c47257"
+    },
+    {
+      "slug": "lower_tile_09_01",
+      "triangle_count": 44,
+      "glb_sha256": "50767e0d1f85836019883f0da5233a6897fe5c09ee432c942f0913995bdb8fe6"
+    },
+    {
+      "slug": "lower_tile_09_02",
+      "triangle_count": 44,
+      "glb_sha256": "95937367974cd9be8f3e268bc8416e702345a93cc4f60add63d8d568a0b0b014"
+    },
+    {
+      "slug": "lower_tile_09_03",
+      "triangle_count": 44,
+      "glb_sha256": "36bf49a39ba0c04171374366af49dd853a975ec5b031dd3255bf1fe5e600b9ab"
+    },
+    {
+      "slug": "lower_tile_09_04",
+      "triangle_count": 44,
+      "glb_sha256": "25e542958864a63397104d765e28bfbe737215af588735d1c7eea84e1b6a83b4"
+    },
+    {
+      "slug": "lower_tile_09_05",
+      "triangle_count": 88,
+      "glb_sha256": "e35f3609ab7160f561eca140dcbd2270bf8a294c17e9e29dd8bf693813e42926"
+    },
+    {
+      "slug": "lower_tile_09_06",
+      "triangle_count": 44,
+      "glb_sha256": "95efc0a6be96eb398013e6045bc4375afc30b05f705fe2c0119c8253993cd8c5"
+    },
+    {
+      "slug": "lower_tile_09_07",
+      "triangle_count": 44,
+      "glb_sha256": "a4f34625d38889ef1b952f1bcf68daac3886647ba9b85323da63b9ed520fa7f8"
+    },
+    {
+      "slug": "lower_tile_10_00",
+      "triangle_count": 44,
+      "glb_sha256": "23c6a7923aef332b20248439dc480de1bb76ea2cebcd99f25abdc76e0582bacb"
+    },
+    {
+      "slug": "lower_tile_10_01",
+      "triangle_count": 44,
+      "glb_sha256": "ba4a1b56c4f829095d8b3d6f59db80e25cba6ba7f326bf9323fe17ba8f580d24"
+    },
+    {
+      "slug": "lower_tile_10_02",
+      "triangle_count": 156,
+      "glb_sha256": "de0377524e6d67438ac568ab572fada58fdccee9a28e03b092c2cc3631d3a373"
+    },
+    {
+      "slug": "lower_tile_10_03",
+      "triangle_count": 44,
+      "glb_sha256": "a739c1a05c9bdaf2830d44b7133020663122d146c4820c9f2250ef5b717a83c8"
+    },
+    {
+      "slug": "lower_tile_10_04",
+      "triangle_count": 88,
+      "glb_sha256": "c452b60998182350ef7e81a8179eaee7416b7115b17f42af9e33d1d8041c8da3"
+    },
+    {
+      "slug": "lower_tile_10_05",
+      "triangle_count": 44,
+      "glb_sha256": "d2ea53f480706ad2d23e92374421dd0b548fe917b0a13752bcb67511a1979fc7"
+    },
+    {
+      "slug": "lower_tile_10_06",
+      "triangle_count": 44,
+      "glb_sha256": "9cc2eb49ce9cac59334c1e48eeaf4f4e764f1e0bd37063595d0aacbcb152dc69"
+    },
+    {
+      "slug": "lower_tile_10_07",
+      "triangle_count": 44,
+      "glb_sha256": "4dd5f68b07ab6bd99d1da2a11f905dc1c4313644d309d8fedc9ac3565af3ef6e"
+    },
+    {
+      "slug": "lower_tile_11_00",
+      "triangle_count": 44,
+      "glb_sha256": "59c4817c586e740bbe0fa41e51146f7790d8b1a5f02d8100658dfd3e7d451776"
+    },
+    {
+      "slug": "lower_tile_11_01",
+      "triangle_count": 156,
+      "glb_sha256": "2f8cf11e274bd19655cafdf4c46b45a58717c92a809d139b118520174c9ef019"
+    },
+    {
+      "slug": "lower_tile_11_02",
+      "triangle_count": 44,
+      "glb_sha256": "aaa6f2f9a7c58a7b7c2dbcafd8c706dbcf00db2a887b5cfafa26a9cbed71e8dd"
+    },
+    {
+      "slug": "lower_tile_11_03",
+      "triangle_count": 88,
+      "glb_sha256": "07ab5ab85da4b545a447a857335c4158f138be08aea1d39297fbb34b4fad1113"
+    },
+    {
+      "slug": "lower_tile_11_04",
+      "triangle_count": 44,
+      "glb_sha256": "8a40a64d1047d56a6790e02db9a5d371ca9e1d2f6c8292c3ccf77d4bd0dad53f"
+    },
+    {
+      "slug": "lower_tile_11_05",
+      "triangle_count": 44,
+      "glb_sha256": "f60d242f9a1cff9b8c50e63b275ee18b9a40dc931b0950036ad8adc2445a7948"
+    },
+    {
+      "slug": "lower_tile_11_06",
+      "triangle_count": 44,
+      "glb_sha256": "29ad931e476cdef5a8b117c03a2d04a1da5fb418282c55911a2068dac7e3081f"
+    },
+    {
+      "slug": "lower_tile_11_07",
+      "triangle_count": 44,
+      "glb_sha256": "6e441eb66e39b4051ebdac52e9405f64fc115f8eb514c7c898a64de12386973a"
+    },
+    {
+      "slug": "lower_tile_12_00",
+      "triangle_count": 156,
+      "glb_sha256": "41d72eb6a30f0bcdaa1ef215c06da68ac51ec9da8b3da3a4e66e2e8668e82f05"
+    },
+    {
+      "slug": "lower_tile_12_01",
+      "triangle_count": 44,
+      "glb_sha256": "4158da9a993b8b6b49d0c5a8ff47a690e893cf02632ee93d1bfb0e01b82dc28e"
+    },
+    {
+      "slug": "lower_tile_12_02",
+      "triangle_count": 88,
+      "glb_sha256": "871c82f737027e295b5cd9df83728d58ee3c346bb86f0e3b8140a25f8dc67584"
+    },
+    {
+      "slug": "lower_tile_12_03",
+      "triangle_count": 44,
+      "glb_sha256": "0e7dfc24d72372fe89f39e0c0043b5478ceef6c505cd40dddabafbda8ee179eb"
+    },
+    {
+      "slug": "lower_tile_12_04",
+      "triangle_count": 140,
+      "glb_sha256": "d3f25037eb0a227a4e630a4e90e7633f79a6c8018b65636c37bf575d24b078af"
+    },
+    {
+      "slug": "lower_tile_12_05",
+      "triangle_count": 44,
+      "glb_sha256": "6b90446bd70c573622756abbcac8648ced60069b75befdcf9b789119e425c6fe"
+    },
+    {
+      "slug": "lower_tile_12_06",
+      "triangle_count": 60,
+      "glb_sha256": "5623d44cdfe3796574af8ccdd7ec543b26764eefa83187614a2a2a6321c62f14"
+    },
+    {
+      "slug": "lower_tile_12_07",
+      "triangle_count": 44,
+      "glb_sha256": "24c0be77743a716e3e3d26298dc5c9c380c90a70a158e1dcd0823f8c920fec4e"
+    },
+    {
+      "slug": "lower_tile_13_00",
+      "triangle_count": 44,
+      "glb_sha256": "e04d7929e4431a198bd49f7574bdf8dffc71a0a86b045ff8dad22429943e3fdc"
+    },
+    {
+      "slug": "lower_tile_13_01",
+      "triangle_count": 88,
+      "glb_sha256": "b949288980d727533decfc681c59ef44d97252939e311ef3b2ebae87b7ede89f"
+    },
+    {
+      "slug": "lower_tile_13_02",
+      "triangle_count": 44,
+      "glb_sha256": "e2198f3349ec264c00583a2b83bfb0d5da7798ad666cd4b25ef0ea174db7a642"
+    },
+    {
+      "slug": "lower_tile_13_03",
+      "triangle_count": 140,
+      "glb_sha256": "152aeb5353a9987ac91b520efb08428f260ccd994e6e31107e5506b9e2376c41"
+    },
+    {
+      "slug": "lower_tile_13_04",
+      "triangle_count": 44,
+      "glb_sha256": "a28adce784a73b7533866fe87507bdfb25f9125688dccc23a267a245f1641457"
+    },
+    {
+      "slug": "lower_tile_13_05",
+      "triangle_count": 60,
+      "glb_sha256": "7f7d14309ae4098b00eb3a7d5b9f189f79342be60aa9df04ca7760b97540f230"
+    },
+    {
+      "slug": "lower_tile_13_06",
+      "triangle_count": 44,
+      "glb_sha256": "2cb92894d55054497d6d5be757fcc02f68d0b1321fc7731d9d5f47695b9905d5"
+    },
+    {
+      "slug": "lower_tile_13_07",
+      "triangle_count": 140,
+      "glb_sha256": "c7f436c26762e3486821c236c3bc30b7981a3fcc636c58e686410f1938162189"
+    },
+    {
+      "slug": "plant_east_louvers",
+      "triangle_count": 940,
+      "glb_sha256": "e6404447bbf50cdb1553ac73520b140c758d526d88759887601f4d5477963589"
+    },
+    {
+      "slug": "plant_room",
+      "triangle_count": 6287,
+      "glb_sha256": "f153362484c39ce03ec63eb019ae2f7e74fba60a82f40081c53a9a03ebb14039"
+    },
+    {
+      "slug": "upper_tile_00_00",
+      "triangle_count": 44,
+      "glb_sha256": "456bbe236a1ba5354d8358bfe0a86b4b770c8ef6b7cd14dd2a38ff80d7cda56d"
+    },
+    {
+      "slug": "upper_tile_00_01",
+      "triangle_count": 44,
+      "glb_sha256": "1871b83ac7059d1f34fd207fd0346ed9c7f0aca790689e7867c4984954659753"
+    },
+    {
+      "slug": "upper_tile_00_02",
+      "triangle_count": 44,
+      "glb_sha256": "95d221eba4e98e9e766038b14dcdb8961f945a1f274320cba8fef4e97abfdf2d"
+    },
+    {
+      "slug": "upper_tile_00_03",
+      "triangle_count": 44,
+      "glb_sha256": "abcea8cea6ed9a3e68d27f770995c532b1f937664bcfd3ac8e0de173cc24a19e"
+    },
+    {
+      "slug": "upper_tile_01_00",
+      "triangle_count": 44,
+      "glb_sha256": "5b1375366df49d50fc7b27471393212131012702c9f29234f201fca4d6a76580"
+    },
+    {
+      "slug": "upper_tile_01_01",
+      "triangle_count": 44,
+      "glb_sha256": "64e649afe7c7cbd7290748ae858cbd37a6c9a16c57aa69db19009e5f5feaa870"
+    },
+    {
+      "slug": "upper_tile_01_02",
+      "triangle_count": 44,
+      "glb_sha256": "71ac73f06ec1692b33f2965f7c209f45f4b730196f45f573d1f2502e9bab0c8e"
+    },
+    {
+      "slug": "upper_tile_01_03",
+      "triangle_count": 44,
+      "glb_sha256": "16a200c8665cb3453d51668eb17f6203219817f2bdfb637dd7722190ae174292"
+    },
+    {
+      "slug": "upper_tile_02_00",
+      "triangle_count": 44,
+      "glb_sha256": "75d6a067ba37411a0cc5e5ccce2a0d5e929d236f832a52f4dad6940d1f8ca47d"
+    },
+    {
+      "slug": "upper_tile_02_01",
+      "triangle_count": 44,
+      "glb_sha256": "62796fbd062ba601f49656f9336c045be47e8f110183adffabc8eddb259b7a90"
+    },
+    {
+      "slug": "upper_tile_02_02",
+      "triangle_count": 44,
+      "glb_sha256": "449ec78e4e1e612a8a582f143aa377b2957f8136354d2ee6ae83213d0e024184"
+    },
+    {
+      "slug": "upper_tile_02_03",
+      "triangle_count": 44,
+      "glb_sha256": "0e791aaf1cf24b6f22cf237d86ac20e77a05f0a96f353bc8bc9f6a60c2fc2faa"
+    },
+    {
+      "slug": "upper_tile_03_00",
+      "triangle_count": 44,
+      "glb_sha256": "d750d1aa36e11e8a296945175229cdb9b79f5750b0791d741fda779702b48a6f"
+    },
+    {
+      "slug": "upper_tile_03_01",
+      "triangle_count": 44,
+      "glb_sha256": "746debd8ad4f20f65038521ca8f0ae6e6942f7b9fc71a8416fcfff4065e2742a"
+    },
+    {
+      "slug": "upper_tile_03_02",
+      "triangle_count": 44,
+      "glb_sha256": "d356329524504d0084529de2b31c079e0d1412583b0c70cefedc4d1358f9ed8a"
+    },
+    {
+      "slug": "upper_tile_03_03",
+      "triangle_count": 44,
+      "glb_sha256": "eb35b124e41e1314348bb861805d75731db505586dea73dc2fb4a008a10dddca"
+    },
+    {
+      "slug": "upper_tile_04_00",
+      "triangle_count": 44,
+      "glb_sha256": "989ae515cff37dcfe11ec6429644cce845353adfc25ca2d5dccf62b4d5271c63"
+    },
+    {
+      "slug": "upper_tile_04_01",
+      "triangle_count": 44,
+      "glb_sha256": "3fce52597cdcd9b50b63963c99b3442c21eaf173c3153cd84993e48607780224"
+    },
+    {
+      "slug": "upper_tile_04_02",
+      "triangle_count": 44,
+      "glb_sha256": "1653446d97b9f6f573353b8e4aef8c40b66e1aa5a037abd7b6b0742f15e61cf0"
+    },
+    {
+      "slug": "upper_tile_04_03",
+      "triangle_count": 44,
+      "glb_sha256": "3a9ef0075242fe18a7f92d2088c259b42fad206d73d26748e5e5be7459c67003"
+    },
+    {
+      "slug": "upper_tile_05_00",
+      "triangle_count": 44,
+      "glb_sha256": "fc093f546e03aea14bb6dd0db8a029b8f7a47e5b30e823efa64ea6d7e5204a1c"
+    },
+    {
+      "slug": "upper_tile_05_01",
+      "triangle_count": 44,
+      "glb_sha256": "6a2717afce302c8291d312562bc0045a161baae53ab041eeb8b83084d399bf97"
+    },
+    {
+      "slug": "upper_tile_05_02",
+      "triangle_count": 44,
+      "glb_sha256": "2e786153df2847d38b72c9ff9a29df37a2f6700da4143d11cd80cf8b1a727045"
+    },
+    {
+      "slug": "upper_tile_05_03",
+      "triangle_count": 44,
+      "glb_sha256": "839bb322ddcc01288184cb8e212b0a8df1b8f8a54c7bb18c0e391e9f1c14e60b"
+    },
+    {
+      "slug": "upper_tile_06_00",
+      "triangle_count": 44,
+      "glb_sha256": "f12b2c653761497db7032c1dc1ea86b2139138fa5f371d3b54fc1b0f3a726b63"
+    },
+    {
+      "slug": "upper_tile_06_01",
+      "triangle_count": 44,
+      "glb_sha256": "451fe8d70215696eee4e9b925965897a9af3ccf08ab8cc069f767623c7c3e23d"
+    },
+    {
+      "slug": "upper_tile_06_02",
+      "triangle_count": 44,
+      "glb_sha256": "d9e24a76b9928f9cb7b1392ada847d52fd9dc773a2bd7beb37acf24a81174857"
+    },
+    {
+      "slug": "upper_tile_06_03",
+      "triangle_count": 44,
+      "glb_sha256": "e011f5e2dcf2993b9e3d3510f2ebb43e75a92497febf8aea2a003bf682c9046b"
+    },
+    {
+      "slug": "upper_tile_07_00",
+      "triangle_count": 44,
+      "glb_sha256": "debefeb6f7e2a65ea9fde69b37d8a1b0f5f8402a5befcfbb78c4818388206d75"
+    },
+    {
+      "slug": "upper_tile_07_01",
+      "triangle_count": 44,
+      "glb_sha256": "3f78ced12b19ef7ec60c11b7744952d17b6bca0db5e363c97856cb72df72064d"
+    },
+    {
+      "slug": "upper_tile_07_02",
+      "triangle_count": 44,
+      "glb_sha256": "52f690c16f0bf22dfb2abe27df6f78a4ef451e0ed6fdd12513cb55fe5aa3fc20"
+    },
+    {
+      "slug": "upper_tile_07_03",
+      "triangle_count": 44,
+      "glb_sha256": "cb3120ae47cfff552473420e6a187972df964f63170594ee2bb29d99a753c39e"
+    },
+    {
+      "slug": "lower_rail_0",
+      "triangle_count": 2312,
+      "glb_sha256": "d9eebb3d1d0fa8666e4ed8ae20120a0add5f14af9e563e3d85121c6bc7479f70"
+    },
+    {
+      "slug": "lower_rail_1",
+      "triangle_count": 1512,
+      "glb_sha256": "154c2c15679c5c83c94db1d298f36e6b281deb9be34c22ff8269dc1af02fd4ea"
+    },
+    {
+      "slug": "lower_rail_2",
+      "triangle_count": 2312,
+      "glb_sha256": "a6f309e129acfc71658996950fd48fdde6edc2d9802dd550e8dd976b3d75cdcf"
+    },
+    {
+      "slug": "lower_rail_3",
+      "triangle_count": 1512,
+      "glb_sha256": "6b662ad835d56a8cd9e5b0a13e87ca02a06d5232799b315a8b0f3883e88d602f"
+    },
+    {
+      "slug": "upper_rail_0",
+      "triangle_count": 1432,
+      "glb_sha256": "57d2210f9692c6f4c062ec4c427c09e482a3a9f6fa97dca00f563e16469f8183"
+    },
+    {
+      "slug": "upper_rail_1",
+      "triangle_count": 952,
+      "glb_sha256": "fcebbf5e2b8dfa4c7cc2d3a62477e6a67473c4e025afa80cbbf4dd95c1866f93"
+    },
+    {
+      "slug": "upper_rail_2",
+      "triangle_count": 1432,
+      "glb_sha256": "79a14ef55e7d3fc91e7ce688c5bb62b7ab8e5c1e43dea86487b77e6b4a2df730"
+    },
+    {
+      "slug": "upper_rail_3",
+      "triangle_count": 952,
+      "glb_sha256": "f9f826a33cd1bbe1328be7677b7a8a4882d2a982a43502d41476ad18f96bbcae"
+    },
+    {
+      "slug": "ac_lower_left",
+      "triangle_count": 4958,
+      "glb_sha256": "09e9e2a04cf4da652a9cd610c9ca861fa51c8c71ba70c3095b42efebf031d493"
+    },
+    {
+      "slug": "ac_upper_left",
+      "triangle_count": 4852,
+      "glb_sha256": "c2c890319cca60a12ad7fc686f1e641f3ee270cc5baaea1c538ec2b381a7451a"
+    },
+    {
+      "slug": "ac_lower_right",
+      "triangle_count": 4320,
+      "glb_sha256": "ed649c3cec11647865ddf91cd4ebc82c622418257daf7594da9889b36781a59e"
+    },
+    {
+      "slug": "left_service_stairs",
+      "triangle_count": 1490,
+      "glb_sha256": "8a9f44a1215cd8115e3f1377e538f0790cf971465f0ddd950167053b41208a0c"
+    },
+    {
+      "slug": "duct_upper_front",
+      "triangle_count": 1047,
+      "glb_sha256": "c41974a48c4b73bb1662bb6457aa275e64b59f2042ecd671bed37a676db0f92c"
+    },
+    {
+      "slug": "duct_lower_left",
+      "triangle_count": 955,
+      "glb_sha256": "50f144bbb8269441d6b1d1b9bd20a5831e52eda63d098997da430cdad258c799"
+    },
+    {
+      "slug": "duct_lower_front",
+      "triangle_count": 512,
+      "glb_sha256": "77ab84473a69aea7d7c190b884011b45db49ce32f022c65012352bd65d3716eb"
+    },
+    {
+      "slug": "duct_lower_right",
+      "triangle_count": 955,
+      "glb_sha256": "4aa023bab638622efa96747d398098d8d32bda5397ec509ce4db0e66f1948eef"
+    },
+    {
+      "slug": "plant_front_00",
+      "triangle_count": 443,
+      "glb_sha256": "56cc739e02b521b2417c3db0988e543dc4faf2d343ca9c39bcf0997456ffce23"
+    },
+    {
+      "slug": "plant_front_01",
+      "triangle_count": 407,
+      "glb_sha256": "1bd89cc37d9d18c4948da57e7c4c738476a600eb9f81feeadfd12e110afb7258"
+    },
+    {
+      "slug": "plant_front_02",
+      "triangle_count": 407,
+      "glb_sha256": "f2193d32a2725d3d81652df66d25c249cae2346fc72a70dd1f8dca19bfc8055f"
+    },
+    {
+      "slug": "plant_front_03",
+      "triangle_count": 407,
+      "glb_sha256": "6b39daf035195cbe6dd589c7490bf458a694459c74c40867ae1ff53e6ba03346"
+    },
+    {
+      "slug": "plant_front_04",
+      "triangle_count": 443,
+      "glb_sha256": "2bf1d62234c0160371995635778cf8ded461dd3fd53cca7cc4dc4d40b293a429"
+    },
+    {
+      "slug": "plant_front_05",
+      "triangle_count": 407,
+      "glb_sha256": "8556a2ba7a0f44d6475f717f1f4b6d6e4eb34b321fa7d00376fc841bf37b471d"
+    },
+    {
+      "slug": "upper_electrical",
+      "triangle_count": 479,
+      "glb_sha256": "344efac5bc2ef90e5853fbe418fa41fa42871a2a9e49b2f0a33637320ae60ee8"
+    },
+    {
+      "slug": "upper_duct_control",
+      "triangle_count": 443,
+      "glb_sha256": "6883dd647fd0db56c6a6f590a9a174b761dda4609852d6fde64de7b6d3e49d14"
+    },
+    {
+      "slug": "lower_right_control",
+      "triangle_count": 407,
+      "glb_sha256": "79a06b320e971a455c16dcf9d8f2a2761b6a9427ad42d29603683062d31aeb9b"
+    },
+    {
+      "slug": "lower_front_box",
+      "triangle_count": 407,
+      "glb_sha256": "7aca1acf043b6b6d05925f74e3b8080410b46d7957bf8c4a79b718a7fbf1a503"
+    },
+    {
+      "slug": "conduit_banks",
+      "triangle_count": 7080,
+      "glb_sha256": "11ba1ada0732cc6c01eb0013ef8a246a6fae0b4120734646d370238c9d9e1300"
+    },
+    {
+      "slug": "tray_0",
+      "triangle_count": 628,
+      "glb_sha256": "cfd7c7d747355c53c1305e71232c8185d8ce5f538db77435dda67c60e266118a"
+    },
+    {
+      "slug": "tray_1",
+      "triangle_count": 736,
+      "glb_sha256": "7aaa67ca80de16cb7040fd34dcbde0a690dc7e279bcbe64fe2f5f02f230949b2"
+    },
+    {
+      "slug": "tray_2",
+      "triangle_count": 844,
+      "glb_sha256": "6ac65d4be3d531dab2a011a99b32f56c2666b3727a29b864ce0645d928cbf3b1"
+    },
+    {
+      "slug": "vertical_access",
+      "triangle_count": 5344,
+      "glb_sha256": "8287911136072b4f0668d4add8cdcee6c99f8125e1b038fc50989de715ea26c6"
+    },
+    {
+      "slug": "turbine_0",
+      "triangle_count": 192,
+      "glb_sha256": "ee0befac0ce38a7f2a60c100338c9cff40d77bfaae2272c4035d25786ecdeb1d"
+    },
+    {
+      "slug": "turbine_1",
+      "triangle_count": 192,
+      "glb_sha256": "d0e785e6f5e7834cce6f083e753774efdab8ad072438e35e7923ebd69f79201d"
+    },
+    {
+      "slug": "exhaust_0",
+      "triangle_count": 110,
+      "glb_sha256": "96e553e93f1ea3e68be3ee04abf37508ea522e7ea8cb0674f0b47956f338bbe2"
+    },
+    {
+      "slug": "exhaust_1",
+      "triangle_count": 110,
+      "glb_sha256": "3379edfb38f11d5d7b03b86d44b142a0fa48c4a3af614a7b9027013a64d2dce4"
+    },
+    {
+      "slug": "exhaust_2",
+      "triangle_count": 110,
+      "glb_sha256": "34dece5239b5fdb176e1df6971e0770812271371e0204331c01ef2737bc2a24d"
+    },
+    {
+      "slug": "covered_equipment",
+      "triangle_count": 1168,
+      "glb_sha256": "993d95d44ec88eba3511bfd5bc0a98d024609214b89568da0a9d055bd8fa86b4"
+    },
+    {
+      "slug": "telecom_main",
+      "triangle_count": 3512,
+      "glb_sha256": "67aa0e4b6905d8898c1cf64388efb2deacd9972520de4b5421d6ba03685c262b"
+    },
+    {
+      "slug": "satellite_dish",
+      "triangle_count": 794,
+      "glb_sha256": "061d9c5fa75e601fb991a4ad4d00526970689ce2a7f5a0fadd2b6eabbdd5a49b"
+    },
+    {
+      "slug": "mast_0",
+      "triangle_count": 440,
+      "glb_sha256": "baaf9eea45cb3059110d3fb1c4f8ac2dbde548e99ad509704778815f85c07558"
+    },
+    {
+      "slug": "mast_1",
+      "triangle_count": 440,
+      "glb_sha256": "5a227ab1326f5cf1f36433aa37804761b5a88cb0f53c78e1e4f4a828c8f338d0"
+    },
+    {
+      "slug": "mast_2",
+      "triangle_count": 440,
+      "glb_sha256": "fda1342f1bd208ee9b08e880fd5f48adbf674fabff69b3c66e74a1b3f5710094"
+    },
+    {
+      "slug": "beacon_0",
+      "triangle_count": 72,
+      "glb_sha256": "12adfd27d409c2dae11f596deb22d07341305f2c8559b4004f9dff260b9020ac"
+    },
+    {
+      "slug": "beacon_1",
+      "triangle_count": 72,
+      "glb_sha256": "2fb221b54b1f7f9cf029c145b8ecae49afb2fd2e48ed6569ff0d57c2b6c803df"
+    },
+    {
+      "slug": "beacon_2",
+      "triangle_count": 72,
+      "glb_sha256": "f335b02e00532c74e835ffc14f776aa3d492bbe0c93b3e40b16623f0b7c469a8"
+    },
+    {
+      "slug": "beacon_3",
+      "triangle_count": 72,
+      "glb_sha256": "def55a289360d7fa7be3f5c46a9b5b04e082ecca045d79ffaec2931f553e471e"
+    },
+    {
+      "slug": "beacon_4",
+      "triangle_count": 72,
+      "glb_sha256": "daff87588233826c7b2022bd8ccfd8190e12cbb7deefe4876a7896284db3c059"
+    },
+    {
+      "slug": "beacon_5",
+      "triangle_count": 72,
+      "glb_sha256": "2fd8181d8cdc09d9f7a9e8f1abcdb08467f983e7769f006125edc3e657a9b34b"
+    },
+    {
+      "slug": "beacon_6",
+      "triangle_count": 72,
+      "glb_sha256": "1fd7f8e9f51dfc050e9db5a56c6f3e7dcf93f67ffb241976765c20ddcf1ce70e"
+    }
+  ]
+}

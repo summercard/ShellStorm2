@@ -4,7 +4,7 @@
   "slug": "roof_supply_03",
   "category": "roof",
   "version": "v003",
-  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "source_blend": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
   "collection": "屋顶材料_03_rebar_资产包",
   "objects": [
     "屋顶材料_03_rebar"
@@ -45,7 +45,7 @@
   "emissive": false,
   "dependencies": [],
   "collision_status": "not_authored",
-  "exported": false,
+  "exported": true,
   "expected_export": "roof_supply_03.glb",
   "fixed_display_attachment": true,
   "manifest_path": "component_packages/roof/roof_supply_03/asset_manifest.json",
@@ -77,5 +77,125 @@
   "glb_sha256": "bd1f9393b553c250f889718c04dc2ab0def4d0d46b3e2cbc6d2fe9747e3186da",
   "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_03/env_tower_02_roof_supply_03_root_top3d.tscn",
   "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
-  "collision": "none_visual_only"
+  "collision": "none_visual_only",
+  "restore_history": [
+    {
+      "event": "before_full_detail_restore_20261007",
+      "manifest_before": {
+        "package_id": "tower_02/roof_supply_03",
+        "display_name": "屋顶材料_03_rebar",
+        "slug": "roof_supply_03",
+        "category": "roof",
+        "version": "v003",
+        "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+        "collection": "屋顶材料_03_rebar_资产包",
+        "objects": [
+          "屋顶材料_03_rebar"
+        ],
+        "root_object": "屋顶材料_03_rebar",
+        "world_position": [
+          0,
+          0,
+          0
+        ],
+        "local_origin": [
+          0,
+          0,
+          0
+        ],
+        "front_direction": "-Y",
+        "bounds_min": [
+          0.0,
+          18.639999389648438,
+          84.01567840576172
+        ],
+        "bounds_max": [
+          6.0,
+          21.360000610351562,
+          86.2843246459961
+        ],
+        "dimensions": [
+          6.0,
+          2.720001220703125,
+          2.268646240234375
+        ],
+        "material_roles": [
+          "01_精工金属_紫色骨架",
+          "02_细腻哑光_青绿大面",
+          "03_清漆反光_紫粉点缀"
+        ],
+        "animation": false,
+        "emissive": false,
+        "dependencies": [],
+        "collision_status": "not_authored",
+        "exported": false,
+        "expected_export": "roof_supply_03.glb",
+        "fixed_display_attachment": true,
+        "manifest_path": "component_packages/roof/roof_supply_03/asset_manifest.json",
+        "anchor_blender": [
+          3.0,
+          20.0,
+          84.01567840576172
+        ],
+        "position_godot": [
+          3.0,
+          84.01567840576172,
+          -20.0
+        ],
+        "bounds_blender": [
+          [
+            0.0,
+            18.639999389648438,
+            84.01567840576172
+          ],
+          [
+            6.0,
+            21.360000610351562,
+            86.2843246459961
+          ]
+        ],
+        "triangle_count": 1664,
+        "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-03",
+        "glb": "assets/art/environments/open_world/components/tower_02/roof_supply_03/env_tower_02_roof_supply_03_visual_top3d.glb",
+        "glb_sha256": "bd1f9393b553c250f889718c04dc2ab0def4d0d46b3e2cbc6d2fe9747e3186da",
+        "prefab": "assets/art/environments/open_world/runtime/tower_02/roof_supply_03/env_tower_02_roof_supply_03_root_top3d.tscn",
+        "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+        "collision": "none_visual_only"
+      }
+    }
+  ],
+  "source_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
+  "source_original": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "source_original_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
+  "export_source": "assets/art/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
+  "export_source_sha256": "3ff5ab637a9868a03b7bd1579a6ce5ce132eeeb82328307c7fb08751b8c31bc6",
+  "export_manifest": "assets/art/environments/open_world/source/tower_02/export/v003/export_manifest.json",
+  "active_geometry": "full_detail_unreduced",
+  "runtime_integrated": false,
+  "runtime_verified": true,
+  "godot_reimport_pending": false,
+  "ledger_status": "pending",
+  "ledger_sync_pending": true,
+  "restore_backup": "_scratch/towers_restore_full_20261007/tower02_before",
+  "runtime_integration": {
+    "stable_component_paths_preserved": true,
+    "stable_packedscene_paths_preserved": true,
+    "formal_layout_rewritten": false,
+    "collision_or_gameplay_changed": false,
+    "runtime_verified": true,
+    "godot_reimport_pending": false
+  },
+  "actual_glb_triangles": 1664,
+  "bbox_godot_local": [
+    [
+      -3.0,
+      0.0,
+      -1.3600006103515625
+    ],
+    [
+      3.0,
+      2.268646240234375,
+      1.3600006103515625
+    ]
+  ]
 }

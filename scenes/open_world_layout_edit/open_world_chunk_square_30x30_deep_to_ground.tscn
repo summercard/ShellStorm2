@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Mesh" path="res://scenes/open_world_layout_edit/open_world_chunk_shared_unit_box.tres" id="city_mesh"]
+
+[node name="open_world_chunk_square_30x30" type="Node3D"]
+visible = true
+metadata/chunk_id = "open_world_chunk_square_30x30"
+metadata/template_id = "open_world_square"
+metadata/template_size_m = 30.0
+metadata/chunk_index = 30
+metadata/building_count = 4
+metadata/purpose = "30x30米正方形楼群模板；不含地表；复制此根节点摆放"
+metadata/_edit_lock_ = false
+metadata/auto_sync = false
+metadata/writeback_allowed = false
+metadata/snapshot_only = true
+metadata/deep_to_ground_extension_m = 51.0
+metadata/extension_contract = "楼顶保持原位置；底部从原Y=0延伸至Y=-51；区块根Y=-49时，最低点接触地表Y=-100"
+metadata/visual_only = true
+metadata/collision_status = "none_visual_only"
+metadata/local_bounds = AABB(-14, -51, -13.5, 27.5, 75, 27.5)
+metadata/visibility_bounds = AABB(-14, -51, -13.5, 27.5, 75, 27.5)
+metadata/footprint_bounds = AABB(-15, -51, -15, 30, 75, 30)
+metadata/visibility_bounds_space = "根局部坐标；模板楼群足迹必须落在30x30米方形内"
+metadata/visibility_control = "根Node3D.visible启用/隐藏整块；没有新增运行时剔除逻辑"
+metadata/cloud_handoff = "用户确认最终摆位后按每栋世界Transform重新采集；本模板不直接写正式云"
+metadata/source_seed = 500990095
+metadata/material_policy = "所有楼引用同一单位BoxMesh和同一原生产材质字段快照；不含地表材质"
+metadata/building_scale_policy = "逐栋缩放复刻原程序BoxMesh尺寸；模板根保持单位缩放"
+
+[node name="buildings" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="building_000" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10, 0, 0, 0, 69, 0, 0, 0, 10, -8, -16.5, -8)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+metadata/source_building_index = 10000
+metadata/source_grid = Vector2i(0, 0)
+metadata/_edit_lock_ = true
+
+[node name="building_001" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(11, 0, 0, 0, 75, 0, 0, 0, 11, 8, -13.5, -8)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+metadata/source_building_index = 10001
+metadata/source_grid = Vector2i(1, 0)
+metadata/_edit_lock_ = true
+
+[node name="building_002" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(12, 0, 0, 0, 65, 0, 0, 0, 10, -8, -18.5, 8)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+metadata/source_building_index = 10002
+metadata/source_grid = Vector2i(0, 1)
+metadata/_edit_lock_ = true
+
+[node name="building_003" type="MeshInstance3D" parent="buildings"]
+transform = Transform3D(10, 0, 0, 0, 72, 0, 0, 0, 12, 8, -15, 8)
+mesh = ExtResource("city_mesh")
+cast_shadow = 0
+metadata/source_building_index = 10003
+metadata/source_grid = Vector2i(1, 1)
+metadata/_edit_lock_ = true

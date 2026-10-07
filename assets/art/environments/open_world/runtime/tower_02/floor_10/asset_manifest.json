@@ -4,7 +4,7 @@
   "slug": "floor_10",
   "category": "architecture",
   "version": "v003",
-  "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+  "source_blend": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
   "collection": "楼层_10_楼板柱梁_资产包",
   "objects": [
     "楼层_10_楼板柱梁"
@@ -45,7 +45,7 @@
   "emissive": false,
   "dependencies": [],
   "collision_status": "not_authored",
-  "exported": false,
+  "exported": true,
   "expected_export": "floor_10.glb",
   "fixed_display_attachment": true,
   "manifest_path": "component_packages/architecture/floor_10/asset_manifest.json",
@@ -77,5 +77,125 @@
   "glb_sha256": "2e62104aa6ce75e61ea5e1a10da0f82c60ba3913a3cf0b9527dc5b9ff1dbe669",
   "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_10/env_tower_02_floor_10_root_top3d.tscn",
   "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
-  "collision": "none_visual_only"
+  "collision": "none_visual_only",
+  "restore_history": [
+    {
+      "event": "before_full_detail_restore_20261007",
+      "manifest_before": {
+        "package_id": "tower_02/floor_10",
+        "display_name": "楼层_10_楼板柱梁",
+        "slug": "floor_10",
+        "category": "architecture",
+        "version": "v003",
+        "source_blend": "塔2_施工高楼_70x50m_v003.blend",
+        "collection": "楼层_10_楼板柱梁_资产包",
+        "objects": [
+          "楼层_10_楼板柱梁"
+        ],
+        "root_object": "楼层_10_楼板柱梁",
+        "world_position": [
+          0,
+          0,
+          0
+        ],
+        "local_origin": [
+          0,
+          0,
+          0
+        ],
+        "front_direction": "-Y",
+        "bounds_min": [
+          -35.064998626708984,
+          -25.056291580200195,
+          42.0
+        ],
+        "bounds_max": [
+          35.064998626708984,
+          25.056291580200195,
+          46.599998474121094
+        ],
+        "dimensions": [
+          70.12999725341797,
+          50.11258316040039,
+          4.599998474121094
+        ],
+        "material_roles": [
+          "01_精工金属_紫色骨架",
+          "02_细腻哑光_青绿大面",
+          "03_清漆反光_紫粉点缀"
+        ],
+        "animation": false,
+        "emissive": false,
+        "dependencies": [],
+        "collision_status": "not_authored",
+        "exported": false,
+        "expected_export": "floor_10.glb",
+        "fixed_display_attachment": true,
+        "manifest_path": "component_packages/architecture/floor_10/asset_manifest.json",
+        "anchor_blender": [
+          0.0,
+          0.0,
+          42.0
+        ],
+        "position_godot": [
+          0.0,
+          42.0,
+          -0.0
+        ],
+        "bounds_blender": [
+          [
+            -35.064998626708984,
+            -25.056291580200195,
+            42.0
+          ],
+          [
+            35.064998626708984,
+            25.056291580200195,
+            46.599998474121094
+          ]
+        ],
+        "triangle_count": 3048,
+        "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-10",
+        "glb": "assets/art/environments/open_world/components/tower_02/floor_10/env_tower_02_floor_10_visual_top3d.glb",
+        "glb_sha256": "2e62104aa6ce75e61ea5e1a10da0f82c60ba3913a3cf0b9527dc5b9ff1dbe669",
+        "prefab": "assets/art/environments/open_world/runtime/tower_02/floor_10/env_tower_02_floor_10_root_top3d.tscn",
+        "source": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+        "collision": "none_visual_only"
+      }
+    }
+  ],
+  "source_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
+  "source_original": "assets/art/environments/open_world/source/tower_02/v003/塔2_施工高楼_70x50m_v003.blend",
+  "source_original_sha256": "9c56a7e489416230c460063c3b5a84b2cfed8d9c43cec05a20638e5e3d84b4c8",
+  "export_source": "assets/art/environments/open_world/source/tower_02/export/v003/env_tower_02-v003-runtime.blend",
+  "export_source_sha256": "3ff5ab637a9868a03b7bd1579a6ce5ce132eeeb82328307c7fb08751b8c31bc6",
+  "export_manifest": "assets/art/environments/open_world/source/tower_02/export/v003/export_manifest.json",
+  "active_geometry": "full_detail_unreduced",
+  "runtime_integrated": false,
+  "runtime_verified": true,
+  "godot_reimport_pending": false,
+  "ledger_status": "pending",
+  "ledger_sync_pending": true,
+  "restore_backup": "_scratch/towers_restore_full_20261007/tower02_before",
+  "runtime_integration": {
+    "stable_component_paths_preserved": true,
+    "stable_packedscene_paths_preserved": true,
+    "formal_layout_rewritten": false,
+    "collision_or_gameplay_changed": false,
+    "runtime_verified": true,
+    "godot_reimport_pending": false
+  },
+  "actual_glb_triangles": 3048,
+  "bbox_godot_local": [
+    [
+      -35.064998626708984,
+      0.0,
+      -25.056291580200195
+    ],
+    [
+      35.064998626708984,
+      4.599998474121094,
+      25.056291580200195
+    ]
+  ]
 }

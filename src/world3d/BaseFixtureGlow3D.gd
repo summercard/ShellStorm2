@@ -272,6 +272,9 @@ func _enhance_mesh(
 		var original := visual.get_active_material(surface) as BaseMaterial3D
 		if original == null or not original.emission_enabled:
 			continue
+		# 收音机常驻红绿灯由自身实例反馈拥有，不参与基地HDR增强和开关闪烁。
+		if original.get_meta("radio_status_feedback_owned", false):
+			continue
 		var arrays := visual.mesh.surface_get_arrays(surface)
 		var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
 		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]

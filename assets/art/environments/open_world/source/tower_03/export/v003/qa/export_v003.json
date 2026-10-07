@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "asset_id": "ENV-OPENWORLD-TOWER03",
+  "version": "v003",
+  "records": 217,
+  "triangles_blend": 96702,
+  "triangles_glb": 96702,
+  "staged_component_root": "assets/art/environments/open_world/source/tower_03/export/v003/staged_components",
+  "optimized_blend_sha256": "a5430d072b009ef3af2105c724d95357ec8a0bba54e25495d7637ab24950b670",
+  "glb_sha256s_verified": true,
+  "stable_glb_paths_version_free": true,
+  "runtime_glb_paths_version_free": true,
+  "runtime_prefab_paths_version_free": true,
+  "runtime_integrated": false,
+  "godot_modified": false,
+  "ledger_modified": false
+}

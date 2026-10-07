@@ -4912,8 +4912,11 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 	var was_cleared := room != null and room.cleared
 	super(room, spawn_key)
 	if room != null and room.room_type == "BOSS" and not was_cleared:
-		_boss_descent_key_count += 1
-		status_label.text = "Boss已击败 · 获得本段下行权限"
+		if is_expedition():
+			status_label.text = "Boss房已肃清 · 前往终点撤离点"
+		else:
+			_boss_descent_key_count += 1
+			status_label.text = "Boss已击败 · 获得本段下行权限"
 
 
 func _persist_runtime_boundary(reason: String) -> bool:

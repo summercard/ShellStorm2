@@ -12787,8 +12787,12 @@
       "runtime_asset_id": "ENV-OPENWORLD-TOWER03-BEACON-6"
     }
   ],
-  "ledger_status": "已导入；优化完成",
-  "runtime_integrated": true,
+  "ledger_status": "用户明确恢复未减面完整模型；运行验收通过，账本待同步",
+  "runtime_integrated": false,
   "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
-  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn"
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn",
+  "runtime_verified": true,
+  "godot_reimport_pending": false,
+  "ledger_sync_pending": true,
+  "ledger_pending": true
 }

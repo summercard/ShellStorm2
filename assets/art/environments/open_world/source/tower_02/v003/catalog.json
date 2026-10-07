@@ -7,8 +7,8 @@
   ],
   "floor_count": 20,
   "floor_height_m": 4.2,
-  "source_status": "authored_not_runtime",
-  "ledger_status": "已导入；优化完成",
+  "source_status": "runtime_verified_ledger_pending",
+  "ledger_status": "用户明确恢复未减面完整模型；运行验收通过，账本待同步",
   "packages": [
     {
       "package_id": "tower_02/floor_00",
@@ -5292,6 +5292,9 @@
       "exported": true
     }
   ],
-  "runtime_integrated": true,
-  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn"
+  "runtime_integrated": false,
+  "runtime_prefab": "assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn",
+  "runtime_verified": true,
+  "godot_reimport_pending": false,
+  "ledger_sync_pending": true
 }

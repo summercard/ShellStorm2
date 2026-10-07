@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://_scratch/user_layout_cloud_three_towers_20261004/probe_manual_layout_deep_ground.gd" id="1_probe"]
+
+[node name="ProbeManualLayoutDeepGround" type="Node"]
+script = ExtResource("1_probe")

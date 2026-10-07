@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "asset_id": "ENV-OPENWORLD-TOWER03",
+  "version": "v002",
+  "records": 217,
+  "triangles_after_blend": 80763,
+  "source_sha256": "91b2f8f7d7ccfd483e76799e4b0a7573492b1741021eb3f7b34e5bfc24ec631e",
+  "optimized_blend_sha256": "5a764f9654a53e579953002b8a5b7a63eea913dd1a7ab31bbc949ca9d68dd139",
+  "staged_component_root": "assets/art/environments/open_world/components/tower_03_v002",
+  "stable_paths_untouched": true
+}

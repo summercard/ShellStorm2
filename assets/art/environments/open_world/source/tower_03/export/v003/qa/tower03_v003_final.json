@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "version": "v003",
+  "reopened_blend": "assets/art/environments/open_world/source/tower_03/export/v003/env_tower_03-v003-runtime_optimized.blend",
+  "reopened_blend_sha256": "a5430d072b009ef3af2105c724d95357ec8a0bba54e25495d7637ab24950b670",
+  "protected_hashes": {
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_03\\export\\v001\\env_tower_03-v001-runtime.blend": {
+      "expected": "a5eb1a4429fdb9ccbbf1de3a6ae11a4f2b1edcac3deb02878f455ecf99b3f744",
+      "actual": "a5eb1a4429fdb9ccbbf1de3a6ae11a4f2b1edcac3deb02878f455ecf99b3f744",
+      "match": true
+    },
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_03\\v001\\塔楼03_设备天台办公楼_v001.blend": {
+      "expected": "91b2f8f7d7ccfd483e76799e4b0a7573492b1741021eb3f7b34e5bfc24ec631e",
+      "actual": "91b2f8f7d7ccfd483e76799e4b0a7573492b1741021eb3f7b34e5bfc24ec631e",
+      "match": true
+    }
+  },
+  "palette_sha256": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+  "records": 217,
+  "triangles_blend_reopened": 96988,
+  "triangles_manifest_glb": 96702,
+  "triangles_glb_actual": 96702,
+  "script_memory_stat_triangles": 96648,
+  "reopen_delta_vs_script": 340,
+  "categories": {
+    "architecture": [
+      24,
+      31794,
+      31794
+    ],
+    "floor": [
+      144,
+      8976,
+      8976
+    ],
+    "support": [
+      21,
+      27410,
+      27410
+    ],
+    "hvac": [
+      23,
+      23731,
+      23731
+    ],
+    "telecom": [
+      5,
+      4791,
+      4791
+    ]
+  },
+  "strict_palette_uv": {
+    "counts": {
+      "ok": 96988
+    },
+    "failures": [],
+    "passed": true
+  },
+  "bounds_errors": [],
+  "material_errors": [],
+  "glb_errors": [],
+  "retention_errors": [],
+  "stable_path_errors": [],
+  "staged_root": "assets/art/environments/open_world/source/tower_03/export/v003/staged_components",
+  "runtime_integrated": false,
+  "godot_modified": false,
+  "ledger_modified": false,
+  "visual_acceptance": {
+    "v001": "outputs/tower03_v003/v001",
+    "v003": "outputs/tower03_v003/v003",
+    "views": [
+      "全景_front",
+      "全景_back",
+      "全景_side",
+      "全景_rooftop",
+      "近景_天台",
+      "近景_HVAC"
+    ],
+    "read_by_agent": true
+  }
+}

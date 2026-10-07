@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\tower_02\\export\\v004\\env_tower_02-v004-runtime.blend",
+  "scope": "02_游戏输出_独立资产包_v003",
+  "objects": 93,
+  "triangles_before": 406088,
+  "triangles_after": 89264,
+  "reduction_ratio": 0.780185575540277,
+  "target_triangles": 100000,
+  "target_ratio_per_mesh": 0.22,
+  "bounds_before_min": [
+    -35.07500076293945,
+    -25.06999969482422,
+    0.0
+  ],
+  "bounds_before_max": [
+    35.07500076293945,
+    25.06999969482422,
+    109.5
+  ],
+  "bounds_after_min": [
+    -35.06204605102539,
+    -25.072168350219727,
+    -0.011601279489696026
+  ],
+  "bounds_after_max": [
+    35.064998626708984,
+    25.072168350219727,
+    109.5
+  ],
+  "material_names": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "notes": [
+    "v003 remains untouched; v004 is an independent derivative.",
+    "Only the game-output collection is decimated.",
+    "Per-package object and collection boundaries are preserved.",
+    "No runtime Godot prefab or gameplay code was modified in this stage."
+  ]
+}
