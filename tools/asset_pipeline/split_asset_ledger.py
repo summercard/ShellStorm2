@@ -63,6 +63,7 @@ STATUS_VALUES = [
     "待制作", "程序占位", "已完成", "原型已接入", "弃用",
     "旧资产已从正式基地移除", "正式美术已接入", "已优化并正式接入",
     "Blender源已完成", "已导入；优化完成",
+    "design_only", "authored", "exported_pending_godot_validation", "validated", "active",
     # 历史上出现过但未被门禁枚举接纳的值: 保留在 DV 里, 以免打开文件时被标红
     "已从运行场景移除", "白盒组件",
 ]

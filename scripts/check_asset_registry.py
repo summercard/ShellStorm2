@@ -59,8 +59,9 @@ ACCEPTED_STATUSES = {
     "待制作", "程序占位", "已完成", "原型已接入", "弃用",
     "旧资产已从正式基地移除", "正式美术已接入", "已优化并正式接入",
     "Blender源已完成", "已导入；优化完成",
+    "design_only", "authored", "exported_pending_godot_validation", "validated", "active",
 }
-ARTIFACT_STATUSES = ACCEPTED_STATUSES - {"待制作", "程序占位", "弃用"}
+ARTIFACT_STATUSES = ACCEPTED_STATUSES - {"待制作", "程序占位", "弃用", "design_only"}
 ACCEPTED_PRIORITIES = {"P0", "P1", "P2"}
 ASSET_ID_PATTERN = re.compile(r"^[A-Z0-9]+(?:-[A-Z0-9]+)+$")
 # `_vNNN` 可选。运行资产已被去版本化门禁（scripts/check_asset_runtime_naming.py）

@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-05",
+ "captured_at": "2026-10-06",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -913,7 +913,7 @@
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01": {
-   "v": "08bd483ec84a271f2044123092ce7db9284d957f24ab787e454a52c7225f1bdc",
+   "v": "31a8bd5c3d87579c5fc550858b6e15430737345a63c8e0ef0d0acf7fad0a5cca",
    "c": "角色",
    "d": "characters"
   },
@@ -2623,482 +2623,482 @@
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02": {
-   "v": "8af1b1ead1ae37bce981c4620f78aa9c3e8a19a8bb695cbc8d5fc3c439e0d338",
+   "v": "3a80d019326479d739f49ab0ede84f3eed70ce390fff968d6fa67d5e88a22e6c",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-00": {
-   "v": "eaefbd872ee192a903ff7e466b69acd00284a2c34c1ca53962acaf1999bf2c90",
+   "v": "2458483a11935640bb66847efe91eec12b303402465b721568731fa69aee1f55",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-01": {
-   "v": "5a002599b217ed1cc21767437455b99806922b235d63308c1e9b9825ecfa74fb",
+   "v": "a13cfea15b938c9e5c321c7e9d153518fb27bc4b545cc4cd299adb512030f5d5",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-02": {
-   "v": "3d30ad3fb004770fa3a04f062cba6368aa293193b3dc02af0b555da568f96e71",
+   "v": "b89bfe727ada0aa78a962f5cbdb5514e41da813960f900f83fd08199efec2813",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-03": {
-   "v": "e299f11461f031a47dac957d86283f1ed72b81ce78ccbd0cea2647646e43316a",
+   "v": "c81cc24682ed8d51aa7a58e3e9b6be7950fba43654222f7872496d574a8f7e9a",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-04": {
-   "v": "b4ea757dfb89a28c9cf4e7df402a7ee9b3c7728c61e58789e9ee3279153b1d57",
+   "v": "b93290c2aee7c868d2fb995af08b4cc42685417607912987a8475f1ca76a2792",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-05": {
-   "v": "a1cb76479f1a43043e8bbc6ffdeeb7cb77519ad406414b3c3b0ce770d73dde92",
+   "v": "efe1b553a10c83806736028135da758779289253e5269a24b679fdc6857103bf",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-06": {
-   "v": "10fa007cda4cc9c08a97cfa5aa0202789c9df16c52829f7c56da8675e69c5940",
+   "v": "820e7b007bf79cfb237fc7230ba4b4a857b317dc00cf0e163993ffe5f79807dc",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-07": {
-   "v": "f4058a395d3d91cb96df61f241cbf1d252d72bd5690b677f9f0af6f2271ab527",
+   "v": "fdd0d3c7d3380b690993e55264e1535c55a959d173010cdd9ab6a1efdfc12d67",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CONSTRUCTION-ELEVATOR": {
-   "v": "0262c008bfeced80ddb7318a5328d001c795adb1f227a1ecfaa701772325b5c6",
+   "v": "8511b722a3b5648f9bb5218344fc6e456d8b2aea62506b61df6261546354f300",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CORE-0": {
-   "v": "b440c0a4754aadc750e39a156554f0e712281219fd0825e2a84257447922c34e",
+   "v": "187e6b61193faf27f22e31407f9853a85e7e0c6871b6f66496afc0d4b5e8c4e9",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CORE-1": {
-   "v": "023af8a314244dcfe5376f6ff854b6f81abb1d24e15900938dd34f88f4c02afa",
+   "v": "4651cd983b4cafef4ef9592cb11af6d85ac9815b72ea26c83990189ec737630d",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00": {
-   "v": "7d8f6b32cc30000ab325d09649a4620908f43e8353e1ac027dd9ef95043ffcbd",
+   "v": "61d79a8f89a8c85dbe8df8909d5914400894c738f1f627e4b8df4ba78b5f9a28",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00-APEX": {
-   "v": "f434eb0805ccfa8d2a391ec2860739fa52dfb77c45fa3152c6d85f2de0911679",
+   "v": "742f349a128cf23b1dcd091110cc50c35e38d0e441eee2977de04d3cc451f504",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00-COUNTER-JIB": {
-   "v": "eb23fabb06300144ee0d6539a146ee1cf1e5d03ae22d7f57470e89f9f224022f",
+   "v": "8b14d9e8d27c8aa28123e1c1d48a97fd9c91a137e9899f0721743ea2c1dcdfb8",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00-HOOK": {
-   "v": "db90a6d0f4a86c7f85d9217d233f7f88bb9c170be29bd9a6d4b3e1f4990a9856",
+   "v": "d62f6c6e07eb54af621b41b70b7e257d1a85f20f6a5d76445087bc6104fdd1ad",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00-JIB": {
-   "v": "86b2ecf299b6e39551825f29218e08a7a1b795b6990a1fc1a36c0fc3ad8abc56",
+   "v": "0558a82da2502ffae21db163753a030ec0897630e074b09dffe2656defd6b6bb",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00-MAST": {
-   "v": "dfe4f91015e500551432d2b7ae8137d65f21079429e0c011c3dbdf850bad91db",
+   "v": "3a76f5ca3a22ee0b59b000465365c10737344a7fe06e0b444275c1cb4d2a90c6",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00-SLEW-CAB": {
-   "v": "422d68126dde05df80cdbb1b6dc3d0ab563e9912fabe3ab18ac58f812886754a",
+   "v": "8fffd43717f40d5b0b2be2b5ee64daf24e0844a6b015fd51931d8db4c81921d0",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-00-TROLLEY": {
-   "v": "c006718c07652493437ecbdd4d7968481c1f8684ef9f6d9b4bbe197461599f24",
+   "v": "e5dd6bce50a1a74e833e96a66799cbb6b236e4348c0d147ba0600b31076e754f",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01": {
-   "v": "8f2f75b41c8857faadae0e013a9b3aaca9ef6804d9dad5e8f340b45b963f0733",
+   "v": "93bd221f3089dfd1ade36954d7decdbf4bff33fc019874cbae3ac77c8ca8e508",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01-APEX": {
-   "v": "f4ade2e49d2d670847b1e1cb80fe15b16a125439e7f205a02ea95e249644cac1",
+   "v": "a362b2a83bdd7a6b9217fc796e2564ce8e52b7ec5bfefece931175ca1c08fdee",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01-COUNTER-JIB": {
-   "v": "97efdf8cc34e3ccef18dbca8565218ce8d09f3e89aa4646e841a0f91493b7609",
+   "v": "1eb44d41f5e1373648cc0e89ba00f6e9103f772f2bb2dbd0cb1ae18209632711",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01-HOOK": {
-   "v": "4ffb7d969621410bd6e954e58ae32b124a83e3cd52e0a6390d7ef107aeab01d8",
+   "v": "77e0f76fead4ea199aeaa366ba3c5d07b2bd6859cc2e09f8b1649a7f2bd88c08",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01-JIB": {
-   "v": "87ab84868b564ff4b38e65dc60f196e3cbd7c063aecaa47d93e3ce65984c553d",
+   "v": "2d96ac42657e09a74bfb48c17e100c5018c35a6e733cfc15b6618cc72dd1153a",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01-MAST": {
-   "v": "a54fcb2a0e570aedd2caef861682244e36abecb22f10e672c929389b2a97008e",
+   "v": "4da50cabca0a8eaa1e36753512667eb689296263a2bb8bd1249662df0dc51b62",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01-SLEW-CAB": {
-   "v": "56c5253fb8242ccce44c88b5b52d5cc940167d1e28247d70f04040cc21bfa5c8",
+   "v": "6f27f8e99c7e8cffd501205cafc653643c02d8e61c20a69fe512b3044f9f7c49",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-01-TROLLEY": {
-   "v": "3a04e64d391408b74797517358266c089f6afe22b72f7b35d23c0943ca25a283",
+   "v": "83837f33f25470455c31e3e39109a70eb5e3753bb9c99aff27541bb60416e662",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02": {
-   "v": "02dcfe344cb78d5f2957e9b972819c381461fc9c9735e561ac4f1a4e7da0ea69",
+   "v": "979eacfbbe20e264a52c640ac8942f193094a1579c95fb93e0ff5612e307dda1",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02-APEX": {
-   "v": "f69302924bf6ff2ae8b0e683686a77b8683930b17ff62325503b12c9750ae53e",
+   "v": "8538c9de4166993b6974fc4dc4efae26ff441995ab38516983eb881f7189cee6",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02-COUNTER-JIB": {
-   "v": "0a90dbc4a74c53aeedd89aeda91b823cc4cd3487026d43f84ab5d362f9286ca5",
+   "v": "0697d1dd16ac87a9850a5c6a94086b8b037c2e5a485cc6ee983ba18e95f05e0c",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02-HOOK": {
-   "v": "5f90e648def61b983b9ed1e8e73e50222804d78050bd01b03fed2872f45272bc",
+   "v": "863e05c431ce991f94a7e41a01c89593716daa714226ea24877ae420ef9ed94b",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02-JIB": {
-   "v": "b524dd281ec63b0cba69a4cea7974eb5d22b4c66589b9637d9dba9ca35f18219",
+   "v": "86a3a51f27654f33bec3316d62de708c295a81bc866da0bd318403341e700fa0",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02-MAST": {
-   "v": "eff3c9dc9dfe7b7fb19b7c1286f37197a5f406dfc9fcf0db4267fe2a92d1d417",
+   "v": "9284513708873ddb41d5d1df142a62b2d3d203a6d7bea6040b962b54e912d5cd",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02-SLEW-CAB": {
-   "v": "f1eea3235d2cc3195272677474d833ddeeef5347e9aefcfbb0ad3d9ef1013e95",
+   "v": "2d148a3d2b4b6ad047547f4b4059ce8b813da7696b403f5391b730f737d8c3ec",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-CRANE-02-TROLLEY": {
-   "v": "f32b4a1738ccef6dec7840d4cd2ecbaf483a0da0b525bb678a898796dfe1c62b",
+   "v": "fd1b7bd886b64ab84c2147bf6389234b3b52446fddd1f4b7f3aef0c9e8578c9f",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-00": {
-   "v": "2fdaedd289ef692f063189afc4449ed8fb489f5eb768f371c45e494a335ff36a",
+   "v": "c2b9e45852b060cbd5a5e24bc33847fdab7cddf622220783dfd2ade4b0f5136c",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-01": {
-   "v": "7ee1485f99125ef38efc729f5cd24fde058a171bbc4821a347740900a1f29900",
+   "v": "ab773d89bbefd9d0d35e9997cc31ad2fddb744f3fc81e9d6e5458cdeacecf598",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-02": {
-   "v": "1574a60fbf50b036fa28d4a9d683bf2ac95fcb2daa079650fc513fc1f9a49171",
+   "v": "de4c6b313876ec948338ba78d923eee9e3106909200f8db72812294aff01bd13",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-03": {
-   "v": "cb4d3026deb3f2f2c0a98d983c93980a758cab34a20c284084b12a76c6e02490",
+   "v": "319c01662f8165a9504800d37b8b0c806776ba5b4770959e23e01548bb3538dc",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-04": {
-   "v": "39de3fa026ca29cb763fe10b17fa571119dfa7530fde969d8e4ad10e436d22e4",
+   "v": "0dd10ea0f43ce328c3642abf1f2ecf0074914ecc895bb4dd8d170d3c3cd0be30",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-05": {
-   "v": "8d63d28ff04479076bbcbfa9b0407b4f49f03d557359a0a02568e8955a5d8b1c",
+   "v": "f38a0b714dd0f2784f6563783e23d138ad3cdb8f3a54a4c0d79687f8b7ce1170",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-06": {
-   "v": "057c21967dfa2c9153b1f0acc6b7c0205d1c8822abc4f02fdecfab9bbb4fcfb0",
+   "v": "102c35043a0fb2e70225574168e47f5d2fd1bd5ac96b00d69c3af20b265c6489",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-07": {
-   "v": "63d488499f52cba98464bafc0055d7ec18a860caf0dd21dd11cdf1c7e4e4c2c1",
+   "v": "3cfff2543c5eb52d1536aaa9e660a8995d9351791d114cc526ae32d72d00c1d5",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-08": {
-   "v": "ba020b3a6c22d7d6f11ff22a321d2f58273593b3191a61f13173e9558b3e9fd1",
+   "v": "1baf3713dbe1dab4c9a47c5abb2f463696b5deddde9d9109c05d47e58d0680c9",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-09": {
-   "v": "c3ccf78c1a8c86528f85690081c4c2a6ce6dfc4f2aa51df6e8242134836fbb12",
+   "v": "0c8685db25cd7b33084b4d3fbbb82b88660d75166ab2b95b2eca42c28d136a74",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-10": {
-   "v": "cc4eb2d04590f8af452fd6806392f1f2c2284b3ab2781c4a8345753a04303119",
+   "v": "03e14741c56f49e6df28dc5b74822026929731e760f190b49ce6c28e730572b6",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-11": {
-   "v": "2f6bd5b3e972a378881444542dd7d6081417e75e097b1eb6ff13fdff81a48edc",
+   "v": "d0e2363d6da08b3f3cb62cf0dcb34ff4ea846496b512f1d88f65d73aa3be9145",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-12": {
-   "v": "4506d96fbf8e49b201441079e53c07db9176bee40859b2470e3c0585ffa181c2",
+   "v": "90ab26c4e1d6fafc22d42b0dd08665cc36adbbf4cba92a125a39f91b468462b0",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-13": {
-   "v": "53cb02b39c456bd5d83869fcf0a5ebcf3bdfa9d02fb519715cea3f5b14634886",
+   "v": "981e7c499892824d6996df1ae24020045cffe4f9cb09fd87fe1c3e1dc043ccab",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-14": {
-   "v": "9502933edca031d80190c708c1d21dbd7af4e6e2be52d5aaf4bc92163b43d61f",
+   "v": "bd81790e75bcbcf15d4b8b69996e59ffbe068368884ad63804267facef18ba6e",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-15": {
-   "v": "3471ef5d1b6c58f22b9798e0f0da92ab2b2a44ffe02eec45ae7e6685af57d8ff",
+   "v": "fa85cbb6ac00ea0ddfcab0594df1362f33d4504a723ac80ca899c8a893400ea4",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-16": {
-   "v": "ba200c5baa5d0f09a0cdff4fd6be98efb0e414516f9f4473e331e5cd7b15c7f2",
+   "v": "3068367e102298c892939542db54471d4469df10e9e060374f8375044c8112de",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-17": {
-   "v": "5079ff3ac1530a422a3bd6eb31b38bf98fad8479e44b6861d9af0f3a82a1f753",
+   "v": "67a6aa25c8824f3871540598151c1423f2d14a6455f07d67497b5810b42b87bf",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-18": {
-   "v": "4b1420f24384ef57f1c6208aa46312c506155b3d6ee919da64a1a45a3e63dca3",
+   "v": "a91ae40d7e9331ec48434746ec4a808fccea6edf59a9c614d99bf7b6fc78be8a",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-19": {
-   "v": "b4618a3e03cdf87d1372fd88beac423689cb26f85f4507d5a14ca8ce6f8d61ab",
+   "v": "64023c7afea41bfe157852341d4f8018cc75ce73d5619f73bd3e9eb876756e2d",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-FLOOR-20": {
-   "v": "7a0c7052f557fefdd5af5c3909a4b7cb759058bada832ce0ef5493e7a423336e",
+   "v": "d3d28efbadade2745f7c150359716f599c3f45775aa518872f39606ffea749d9",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-00": {
-   "v": "2a604cd236f685ef0020b1989f4034d1d5c29ff6d506c93cff12cb99f2898bbf",
+   "v": "c1e26beb2852e1252ac0306373b9758d25617f8a8715fdaf9913f02c8d0ab8d2",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-01": {
-   "v": "97cfbf998a9dc3af72ef9ec74ef8d8b50358c32418ed4ab7ca79046ac5d4408a",
+   "v": "bae2dce4e6ffecc3d8f3a5883d0c650f6683d09593faf7ddaa1503fcf42874f9",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-02": {
-   "v": "b115be470d4c3069c047dbb9a8c7bc175621b1e4c1b4b4d4cef5ce4e69d92c61",
+   "v": "083d9ebae5d5cd832678dfd6149d0569ba1599636d3af59345c759b5cced34b7",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-03": {
-   "v": "938d0845d3777af6493e0649f13fe92cb5b42f57529bddda51238a1480b1f46c",
+   "v": "bdf330eed306904082e15fc22aa905120849b51c096cde020be92882f3b0796e",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-04": {
-   "v": "6298b2f63ca3be464cde59a41cbc2003c696548b6c0efa3421322902d165ff60",
+   "v": "9e62dbcd6b95246ec1896a16a3566db2fa21fd209d3a7968ebcff5e6cb566ddc",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-05": {
-   "v": "14aebc98917426ecd91bd14fdab8ee4602d6e1df862585c5fac87d747f818caa",
+   "v": "b5d4a242aad70804a5e72290de554efc1d70ac3ca3a57ecec36c1f6a12efff03",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-06": {
-   "v": "dde227396328115b412cac2e47e10b6fe7b9372fda24a16e4bf58dbdad5d2866",
+   "v": "9e5a652af21308d7606e5d187f20b7961d1962eeff5f1bdb41b0f05b0a6bc26d",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-07": {
-   "v": "eccf2f8fb5ef1e910cd4d0ff1abfc578eed469858aed6de7d9d409e4deb4e77d",
+   "v": "bcee6c5444bb3b7d844d70b67e913f1db27087111e4c1e55cd164b07029de2bd",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-08": {
-   "v": "3e75f562787533f1cbe4e3057514a8dcc7582486a5e2c7c7c3f67dede9ef863a",
+   "v": "02d882521916485857848d87ff35166f37f4ff62763dc23a43caa2895f328f88",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-09": {
-   "v": "bd2014dd0ac46dc9d1380a6ed047cb8c3c8851029456a703b332534ead5b25c6",
+   "v": "5af1f0c5621439abc38c965cb105ad71f47826e963fc53d5cf2d7cf85c9bf644",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-10": {
-   "v": "683e6fe69888cfa8705227ecb0501a007f2dc09f91a43cd11f6f8b1c71fe8050",
+   "v": "afedbf1ceff28168b74ecc40388b2c9f0b41b777e20a09c508726571bda96b4e",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-11": {
-   "v": "769de2038e2ca1703e476cdaafb960eb24418ae43d051e024b5ecbc56c779b11",
+   "v": "4c8b5785aab34f01bbe04c9b4e1a70cbf2b372a735f21200ec38bf7e46f9eadf",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-12": {
-   "v": "d9b32bdfc5885a71f0b13f8298652c018fd3f0fb70e009c5126b99f924237e4d",
+   "v": "a19e12323476e2e4ee8ce197d979f72c95373ad2af1cde1a359ba0dead0be010",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-13": {
-   "v": "697b68c6cf948eea90843d83a147a54381ec94e694a969a610ce0871b1c35bb7",
+   "v": "609c17313660363d4132a3d4144e9fc257c19b6c6d9e4dce394685d075f795e3",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-14": {
-   "v": "644501b3b25f29ce876384e5cabdfb3e5c58218be43b9a4629b19d8dca3be452",
+   "v": "5b21c50fa3d61465a62ce28f5a8f1a1a182e6c705587d3c65fe8274cb6c2a34d",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-0": {
-   "v": "874622245b8cd91ea76a79e570432c51ff4cb8707eb5e58188d019e9d862ea67",
+   "v": "522d2863b761039c53419af99031168e94c8a558508b2b74c40192ac20f799cc",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-1": {
-   "v": "3e651ebddf0aa5cdd6416bab0fc76afaf925e2e283db4b6585649548591e74e2",
+   "v": "8df77c8de394cb777c665b0d28b8c3510525576e7133bb0d00ce1dab5d6689fa",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-2": {
-   "v": "e5ae87e53c35ab415d0d660df1e9c63f6abd4033ea843b7644135bc1c3a08cd9",
+   "v": "7c7fead28be0e2c71ba2ee2a1ee5cd03232fa66c2b974438d1426ca908591ca4",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SHORING-00": {
-   "v": "f1c8437e3f8be5807da7f5bbd81d7b821eb00858f8e5d3fb58c0cd65942376db",
+   "v": "db72e61a0a3d48a01a96bb7c75f1eaa0e07d9594641166d0bdf0d64327b7848c",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SHORING-01": {
-   "v": "ab651bf891573364179e213ca8aee3789420e119f70a62e9b25ba7feb2cb5a66",
+   "v": "5cb502a2708c9c6602ac54624c7f5da9285c6d75bc60b635b6ac6087d12aa79d",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SHORING-02": {
-   "v": "db1f6291503766c1437ab3f7ab4481b2b1fa5062a6be549517a692ea993287e4",
+   "v": "07ad08911be3dda63d4f403e28243f263f7b57068c363cfe0e036ea968aa2c92",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SHORING-03": {
-   "v": "9424423671bc81f1ef224c08d73d1639e01373dfb5465af9e42efe6fa265789b",
+   "v": "962eb06c52cb2429cf1d5a2d65147450d58fd1721553e911e71ee372223f4a38",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-00": {
-   "v": "dfb034b54236ff757c1e7477c79b48b678227fda762ba121700ef7c77e4f61c1",
+   "v": "5200db437f95c1f4cfb1239be42819e7b920fe5a53bdd5d9a8e0e4c477085c38",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-01": {
-   "v": "69b02851ed73cb049d8254107e8a0c14d7e277032d97898333d35358c709c5e6",
+   "v": "90d8a8a66659231199c8f9fa6d482f0064baeddf403835ff81143aca28e40d32",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-02": {
-   "v": "0bdd6441564159c41e58d5710ebcc100d5b77dcb6a783f85ec696cf4e2586f0b",
+   "v": "a82d06201ebb54f92dffe330974786eea03cefe00c93ab7ec8b1a8f578985046",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-03": {
-   "v": "ae3940cc5666f8a0f9ec76051eaa63dae00112d3dad011a03c072781a7b0d2cb",
+   "v": "3b982ad8873d4be59305f6c8382e3320d74e823c48204344798f378e47962bc7",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-04": {
-   "v": "3b4f2a821da84d4121b262d074bb46fc760ab5e213f2c3b25b8c60d3213d2c18",
+   "v": "9a19c7228e753ff7b079c1ebab3975d4ba4628188fd3b149b69dfbd10ea8b7ba",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-05": {
-   "v": "24a9a128fa1dfeac19833df445fb47cd3715436eab4f168f8d889c6a76560df6",
+   "v": "be150d1b9b8297875b74758a0fba62bfa87461053cdfe304d1ed8fab9de9e000",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-06": {
-   "v": "c39e69a7bf902cc9086de9845c719aa5e52ba30c5eb27e9468e6896db5b4ad17",
+   "v": "60bb91a4ea870754106508ceed984d3c9b3f9243bb9462b113561b901d551b0c",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-07": {
-   "v": "9df3837219477bc74d38c99ead78b9c1c1abe954d5d21897fbff8446bb0992ff",
+   "v": "97e7f46204bf334cf6d1c0fefd501db16a2f4c5c2e3e13e8fc3819daa4c74420",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-ROOF-WARNING": {
-   "v": "70f990209473a1ad69086ea3cae4f2df3c90519416d2808215c4b4401a5e54f1",
+   "v": "458c22b515ea9604ae72a6f49979e43cc2c6f34e0f42fb8b40f91e77ab7e7f2a",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-00": {
-   "v": "18536affca5a01433e6e1f91d0ce0e66bb3ade8439b6624e8ea4f8f2a16dca15",
+   "v": "67055583e94f737d15c34271ae341e393538b4fc35a248721feedf78a3d7c417",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-01": {
-   "v": "5c3e62200c250e8c58f75598202220d9c3ebfe1968efade8e822d38e1c783fc9",
+   "v": "9e6caa224b6dfb329e96c6e3b9c82a4d1fcd9cd2ea3aee1f0de3acf17b7ff422",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-02": {
-   "v": "c1ef3d32685e07289750b4b3e9d461e6a6bc1afba6ea9b4192d953db15a20b3c",
+   "v": "4997ef7c0afed0cfb727900803db91982b1959131abb846302a042b447c14ef9",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-03": {
-   "v": "da6c46fd141dff1f71553e30b5eccf7595901f34b59c06e2b367f2d97c09c062",
+   "v": "5e841e64319ab4754a8b1246db08fae724f40aaf303a9a40aee723205e01ac22",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-04": {
-   "v": "4d9eb3d4b6e262bbc9b9a92f96baa501f3c7b00576a5391e696963a2ac648c04",
+   "v": "34288bff17a533c21f431e46a2517c888a1da513e2ee3b62680364af05cfb348",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-05": {
-   "v": "47a23a121fb79cd0470bbeba552d71cec353fc7ec040326cf8f237880fb02efa",
+   "v": "f6dddf2260beccec0cde8b74830313140b91ae78f91231cf5dc867f8e66e022f",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-06": {
-   "v": "f55470542f7e4eec9edf62e09c2a8d1075e56fa6dacb60bb183077be78b8c864",
+   "v": "2c00d69fd0e218dd2ed508d3d076867fac419d9189da153a44f74a4aacac25e8",
    "c": "场景",
    "d": "scenes"
   },
   "ENV-OPENWORLD-TOWER02-SCAFFOLD-07": {
-   "v": "e2c796edfd5a309febaa22b6ad76a5c64be25bdb5dff2e92509ef1f728aed2fe",
+   "v": "75e2a5d1e3c7d641433f5010fea352ede0ada299060d56e3df844fb117a7242b",
    "c": "场景",
    "d": "scenes"
   },
@@ -5068,12 +5068,12 @@
    "d": "scenes"
   },
   "ENM-BOSS-MONITOR002-3D": {
-   "v": "4895bef51ead38d3f45b1d4fa8e4c37ddc6e49760975b1f8b0e6508a7332553d",
+   "v": "ca467b95557041044125c164adc442186b692700de604c80ea9e84fe6bfb9d9c",
    "c": "敌人",
    "d": "enemies"
   },
   "PRP-BASE99-RADIO-3D": {
-   "v": "35e2e5e33a95b63f4e04aba48951d602902876c500fe2a2b5d0d07a5929e66d6",
+   "v": "3126ada83057d884aed1bd2540d01c671202b5d724d317151fc7abdc558e1bcc",
    "c": "道具",
    "d": "props"
   }
@@ -5087,34 +5087,34 @@
   "6": "fdb7ed5e1d278a1299c302f7e2fb4488696bc4dc8ab3d24fc31c7d73400996f3",
   "7": "61006a8281d794bf95eb4a0f089047befd3e1375a2737aabc5cdef66a5fb5ceb",
   "8": "e33b86cf262396d49efbae3922341dfa2ab78515bbae7dcc90b66c06654a2b60",
-  "9": "f06bc266037870e311dd9638c09cc4abc2005c51926c17d91f2415a9034b52e2",
-  "10": "f3520885a364be9289a7ae500224508f53261dd99b822dd0e98157f6254428f6",
-  "11": "c732ab52c2f799b12352d4a92438c83e169ca709be48729e4f66a795dab5b950",
+  "9": "e8985e368845ff5c3f72cd25127aea0dd10238a37ecd9dacbad5765065ae01ee",
+  "10": "4523a525fc49ca7f05cb2d907c096814a9f626c2ebd1885a401fd74ccd2105af",
+  "11": "89b3adeccdaf817146232a2204c04a240fecd97f51c4610094ced2204e6e4d97",
   "12": "1669419d2ba33ab2d6f4fb50bcf1584989bd5db4abe32aeab79b0d7238b8ce8e",
-  "13": "f0d7ad189b405538b4af8bc35962e77c749b639fef9f09ed46f80767da4a1d15",
-  "14": "624064cf15e242ea63b9d42c42337e6a7da2485d61d3c357d69d75a9f042a869",
-  "15": "779066f2a59271337d747b8feb6051353d12a2fb773d0200a4db475fa2c3746a",
-  "16": "504df5b49a44ee9b6846fc694d947b7dcac6ee9a4d33acb7d3014e355865b1e9",
-  "17": "59675d21c8298216daa30492bc16a5e3efa7d7ae39c1f0b4eff26dc346cdd2a7",
-  "20": "1c0c7f2ed61e660bd14e9030cdfa2836f0efb5044742bd22f12cf6305efde983",
+  "13": "72d42b5dfe79be696c29bbd86954c9cf091205183b1ff52f5ec6188320745c03",
+  "14": "40ef6d19c12af5d29dbfa75a3a932461778160b03888b674def2914b7dc70bf5",
+  "15": "169fb3d3f3cadc6477c26f8198b3918691a6d8309f2a6403d2294325ff8d521c",
+  "16": "69c063bf75c718fb0638a43696dabc981a5e748196d8c0223867117d743747bf",
+  "17": "965b2799306e9053267bc958fba15e9b555be7af2843d82bd3956d073370a7fa",
+  "20": "ed7356471cf487dcde55532c643365e6946a764155264cf7e227483f025087d1",
   "21": "dd0b64f9f32ebac2fc191bd1e591538f17e61712741b8dc003b48645b5275857",
-  "22": "b05f215dbf6652e65c0481c539449a5f12bf5c22dd8131099f5144e44315336e",
+  "22": "fb45f95df2a000a2a8efd814dff790a796a88735a970744eac7cf91de89c2470",
   "23": "94a35bc20696a90af865d86c9ff7dc6370cc16ce5ab643edf2b8c0b5cd260418",
   "24": "3947abd2e6d8a274ac228d80a714a2f36a16287cc2a7c400a54da6ceea090663",
-  "25": "08732cf065d2442cedc4e954e5fcd64b5ff77fce85859f93add4bb2d66851f08"
+  "25": "a0d6bbbf8749bf3b97fec563a61bb14e808fbf1447d4d8d884766dd29415d79a"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
-  "动画与状态": "4b8b607a5afd340a4f63a5a4f0a6f206ff1a3775af7837c4bcd41c0c6a4dce27",
+  "动画与状态": "a5893a2498040576c57340d76117ea436a04151ec0c7aa80c35ba26046b03ad7",
   "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
-  "角色中转记录": "52b0b3dd0ec0faa78fec84b810c0edf1ba3d3958c1ebfd8c865508db1c23628b",
+  "角色中转记录": "1c6f1557b0e53f9109d8260f043e3de462ee77305577fe50ca0b92bcf10b88d9",
   "3D-角色": "89e541b24810a37268f7bd911f67de71d36326d41c0bd97fbad2b9b20ecddb01",
-  "敌人动画与状态": "22c16478e0f1e24a17d4539a0a05682c786792c4be673c0636d19e993a4afae1",
-  "3D-敌人": "3ce55823d425557ce4916599bcfe8d1980249da991181e4bd1eaf64d86cafa8f",
-  "3D-场景通用": "f458cea5c03110275c00f1acea685f5d592e22fbed525d9ad04b1bee6dec990e",
+  "敌人动画与状态": "e55bc952e092ac66f9fc9d0de8dc3d36247984060e990d61af1d31e8b52dd595",
+  "3D-敌人": "2e6b4526ba9b97d06086ac95fd02644fbd3e1c09fc7143100054d4bad7ddf9f3",
+  "3D-场景通用": "41b2d2e3364cfb488ec25e8f7513757d993936de9d90f096d4c5dadb7bbf81c2",
   "3D-设施": "1dfd2cd7f359a0ebeadaf04c00af843003cf221b9806daf832c6673f9fc25546",
   "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
-  "3D-道具": "f7a1a6182277ba50637ecfad7f00daa694679fdf9dcdf1058ea56b14f6ef8e1f",
+  "3D-道具": "0df2406c4bc342b8e03efc9b48403236989566786e9210152b126d413e16596f",
   "3D-物品": "212b1502b45f70f56e7a2bf0c9e68a2e2b8114d8e87a2322953745c048e1d9bc",
   "3D-武器": "0ed7c67c14253417622d401d958ac8a4ed51e9aba0db25935010ac3811fec21d",
   "3D-特效": "8d9522a6b48e2aa3ed77c026817b641d97f3f3db577dc9eb53f5acc1a9855550"
@@ -5131,5 +5131,20 @@
   "道具": 22,
   "音乐": 9,
   "音效": 48
- }
+ },
+ "targeted_updates": [
+  {
+   "date": "2026-10-06",
+   "asset_id": "ENM-BOSS-MONITOR002-3D",
+   "version": "v031",
+   "status": "active",
+   "scope": "One asset row plus 3D-敌人 / 敌人动画与状态 sparse edits; union column digests refreshed only after every unrelated row fingerprint matched the prior baseline."
+  },
+  {
+   "date": "2026-10-07",
+   "asset_id": "ENM-BOSS-MONITOR002-3D",
+   "version": "v031",
+   "scope": "Expedition01 spawn acceptance: existing master row20, prefab row10 and domain log52; no model or gameplay value changes."
+  }
+ ]
 }
