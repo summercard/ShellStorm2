@@ -1,0 +1,99 @@
+{
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v025",
+  "status": "authored_pending_export",
+  "runtime_changed": false,
+  "model_source": "production/v021/source/model/chr_bunny01_model_v021.blend",
+  "skeleton_id": "SKEL-BUNNY01-004",
+  "validation": {
+    "status": "authored_pending_export",
+    "original_actions_preserved": 14,
+    "clips": {
+      "sidearm_idle": {
+        "duration": 3.2,
+        "frames": [
+          1,
+          193
+        ],
+        "errors": {
+          "scale": 4.76837158203125e-07,
+          "arm_gap": 1.0771179418862582e-07,
+          "right_grip": 2.6832436182154874e-07,
+          "left_support": 0.0,
+          "planted_feet": 9.033828973770142e-08,
+          "root_motion": 0.0,
+          "loop": 4.898331976967515e-19
+        },
+        "ground_min_z": {
+          "character": -8.859005617978255e-08,
+          "weapon": 0.3025563061237335
+        },
+        "two_cycle_error": 4.898331976967515e-19,
+        "muzzle_direction": [
+          0.10320984572172165,
+          0.22133398056030273,
+          0.9697210788726807
+        ],
+        "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8"
+      },
+      "longgun_idle": {
+        "duration": 3.6,
+        "frames": [
+          1,
+          217
+        ],
+        "errors": {
+          "scale": 5.960464477539062e-07,
+          "arm_gap": 1.210576058124894e-07,
+          "right_grip": 1.914088812271525e-07,
+          "left_support": 2.58954572632652e-07,
+          "planted_feet": 8.940696716308594e-08,
+          "root_motion": 0.0,
+          "loop": 4.897530128761221e-19
+        },
+        "ground_min_z": {
+          "character": -8.873951884424969e-08,
+          "weapon": 0.16025635600090027
+        },
+        "two_cycle_error": 4.897530128761221e-19,
+        "muzzle_direction": [
+          -0.9452901482582092,
+          0.25328993797302246,
+          0.2055986225605011
+        ],
+        "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8"
+      },
+      "machinegun_idle": {
+        "duration": 4.0,
+        "frames": [
+          1,
+          241
+        ],
+        "errors": {
+          "scale": 4.76837158203125e-07,
+          "arm_gap": 9.431681708374741e-08,
+          "right_grip": 1.9556887072930765e-07,
+          "left_support": 2.803636747930464e-07,
+          "planted_feet": 1.043081283569336e-07,
+          "root_motion": 0.0,
+          "loop": 2.2620544252018124e-18
+        },
+        "ground_min_z": {
+          "character": -9.544115187054558e-08,
+          "weapon": 0.0058152200654149055
+        },
+        "two_cycle_error": 2.2620544252018124e-18,
+        "muzzle_direction": [
+          -0.9808551073074341,
+          0.08581364154815674,
+          -0.17481213808059692
+        ],
+        "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8"
+      }
+    }
+  },
+  "source": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v025.blend",
+  "sha256": "53a7951a00c6fed8f22ceef335a5817b4a55580ef38b315b2b56f9464065a8ad",
+  "integration_warning": "Runtime v021 wrapper currently uses v024 motion library. New idles require weapon-family selection and gun orientation binding, not just hand-tip translation. Preview guns and their actions must not export.",
+  "preserved_source_scene_note": "v024 moving preview scene already plays climbing; unchanged. Original moving action retained."
+}
