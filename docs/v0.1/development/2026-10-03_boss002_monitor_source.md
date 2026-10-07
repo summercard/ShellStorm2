@@ -1,5 +1,9 @@
 # 2026-10-03 Boss002 显示器美术源
 
+## 2026-10-06｜Boss002 v030 表情分配与双螺旋眼
+
+BOSS-STAGES / ASSET-PIPELINE，设计r24。按用户图1分配叉眼吐舌至受击，图2小眼改螺旋并用于坐地；内置imagegen编辑透明图集、内嵌双母版。五个实际渲染表情时点检查通过；见资产previews/expressions_v030/audit.json。未导出或接入Godot。
+
 ## 2026-10-06｜Boss002 v029 击晕双手摊地
 
 BOSS-STAGES / ASSET-PIPELINE，设计r23。仅改击晕三段，第二次坐地后手掌张开摊地，键盘平放及线环低放，循环保持、起身收回。其他12段曲线哈希保留；专项报告及真实预览见资产previews/seated_hands_v029。未导出或接入Godot。

@@ -1,12 +1,14 @@
 # v0.1 模块、功能与工程契约索引
 
+PLAYER-STATE / ENTRY-AVATAR / ASSET-PIPELINE：[三类持枪站立待机源v025](development/2026-10-07_player_weapon_idle_v025.md)。短枪单手朝上、长枪胸前斜持、机枪低位承重，三个独立循环；旧14动作与静止骨架保留。源级验收完成，未接入Godot；四方向移动仍待制作，不提升玩家动画总体完成状态。
+
 VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](development/2026-10-04_stutter_deep_diagnosis.md)。同场景云海当前→历史→当前复验：旧版P95约16.8ms，当前54.7～64.3ms；历史排云覆盖改变是关键差异，不能无损回滚。正式逻辑计时支持周期保存短顿，生产修复未实施。
 
 TIME-DAYNIGHT / SAVE-PROFILE / WORLD-BLOCKS：[楼顶与吊桥卡顿复查](development/2026-10-04_stutter_recheck.md)。当前存档同步保存约12ms；1440p云海慢区独立于保存，720p未重现百毫秒停顿；回归提交未锁定、性能未修复。
 
 VFX-POOL / WORLD-BLOCKS：[100F吊桥云海卡顿诊断](development/2026-10-04_bridge_cloud_stutter_diagnosis.md)。当前RTX4060Ti真实1440p重复路线帧中位51.221ms、P95 67.325ms；隐藏云海7.120/8.629ms。720p隐藏地表城市改善很小，冻结逻辑仍保留云海负担；13组完成，性能未修复，不改变美术品质与避让合同。
 
-BOSS-STAGES / ASSET-PIPELINE：[Boss002动画设计](design/Boss002显示器动画设计.md)，15个正式剪辑已完成Blender源制作；v029击晕坐地双手摊地、松弛弯臂与道具低放；其他五类动作保留v028根部甩臂与伸缩，保留受击坐地单次反弹、螺旋眼/星星眩晕、单帧黄色闪形和特殊攻击接地线缆电流。肩部带动双手、纯色块赛博特效；未导出或接入Godot。
+BOSS-STAGES / ASSET-PIPELINE：[Boss002技能设计](design/Boss002显示器技能设计.md)、[动画设计](design/Boss002显示器动画设计.md)。v031正式Prefab、16剪辑/64骨、十二态、四技能与三阶段已接入远征01 f00_boss；同AssetID台账active。远征01正式进房/三波清房/撤离门专项见[投放记录](development/2026-10-07_expedition01_monitor_boss_spawn.md)。专项与真实渲染证据见[正式导入记录](development/2026-10-06_boss002_runtime_import.md)。
 
 ASSET-PIPELINE / WORLD-BLOCKS [500米地表与程序城市v004](development/2026-10-03_cross_tower_landscape_foundation.md#500米地表与全域城市v004后续交付)：200新楼/23非空批次，25分区包含旧城总覆盖；96原实例与塔桥完整矩阵保持。真实Forward+665项与登记/门禁/快照7项合计672项、云海30,209项通过；主表825/Prefab专表717受控登记及无损基线通过。中央两区新增0，玩家和诊断四图分开；工程既有红项与移动端/LOD未验单列，不提升总体完成状态。
 
@@ -69,7 +71,7 @@ ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_t
 | REWARD-SERVICE | 统一奖励与掉落：一份 Spec → 唯一解析器 → 三个发放口（物品/任务/搜索/怪物/清房钥匙/保底备弹/剧情） | [玩法设计](design/战斗奖励与物品流转设计.md)；[04](04_技术施工_战斗与局内成长.md)（§22）、[05](05_技术施工_关卡生成与爬楼.md)（§11 `reward_slots[]`）、[01](01_内容数据库说明.md)（§5.5/§5.7） | `src/rewards/`：`RuntimeRewardCoordinator`（运行时调度/确定性事件ID）+`RewardPoolRegistry/RewardSpec/RewardService/RewardSink` | `verify_reward_service_flow`、`verify_reward_ground_handoff`、`verify_requested_experience_upgrade_flow`、`verify_finite_ammo_flow`、`verify_narrative_timeline` | 报告只保留`grants[]`；四条地面主链通过Sink确认实际生成；专用发放出口与废弃池/真渲染另行管理 |
 | ENEMY-AI | 感知、导航、攻击、光照 | [06A](06A_怪物AI系统完整设计_评审稿.md)、[06](06_技术施工_怪物精英与Boss.md) | `Enemy3D/MonsterAIManager/MonsterVisionSystem3D` | `verify_monster_ai_system_complete`、`verify_enemy_illumination_states` | 有较完整规范；真实错误日志仍需严查 |
 | ELITE-ROSTER | 唯一名册、预约、跨局成长 | [06](06_技术施工_怪物精英与Boss.md) | `EliteContentCatalog/EliteRosterService`→`BaseManager`档案命令/查询→BaseData | `verify_unique_elite_roster_flow`、`verify_first_elite_growth_flow` | 12名册/1投放；私有档案直写已移除，事务失败回滚；其余11为design_only |
-| BOSS-STAGES | 95/90/85 Boss及下行权限 | [06](06_技术施工_怪物精英与Boss.md) | `BossContentCatalog`→Enemy3D→Tower | `verify_unique_boss_content_flow` | 有规范；钥匙实体契约未完全对齐 |
+| BOSS-STAGES | 显示器Boss002、95/90/85 Boss及下行权限 | [Boss002技能设计](design/Boss002显示器技能设计.md)、[06](06_技术施工_怪物精英与Boss.md) | `BossContentCatalog`→Enemy3D→Tower | `verify_expedition_monitor_boss_flow`、`verify_monitor_boss_flow`、`verify_monitor_boss_visual`、`verify_unique_boss_content_flow` | Boss002正式链已验收；既有钥匙实体契约仍未完全对齐 |
 | BASE-FACILITY | 设施入口、禁射、常驻和恢复 | [07](07_技术施工_基地设施.md) | `BaseFacilityCatalog/Service`→BaseFacility3D | `verify_base_facility_framework`、`verify_tower_base_facility_persistent_flow` | 全息终端作者锁定交互盒及语义命名StaticBody碰撞已接入，交互区专项通过；其余旧基地资产专项仍待裁决 |
 | BASE-SHOP | 基地购买、出售、保险柜转移 | [玩法设计](design/基地经济与存档结算设计.md)；[07](07_技术施工_基地设施.md)、[09](09_技术施工_存档结算与复活.md) | BaseManager事务→BaseShopService→ItemRegistry | `verify_base_shop_save_flow`、`verify_tower_facility_inventory_binding`、`verify_extraction_points_spend_transaction` | 商店已有幂等/回滚；普通资源扣款已在写盘失败和revision冲突时回滚/拒绝，工坊事务也已收口到BASE-WORKSHOP |
 | BASE-WORKSHOP | 蓝图升级与手电模块 | [07.1](07.1_玩法系统_枪械工坊.md)、[07](07_技术施工_基地设施.md) | `WorkshopMenu`→`BaseManager.upgrade_blueprint`→`BlueprintUpgradeService`→BaseData | `verify_workshop_transaction_flow`（`core`） | **核心事务已完成**：扣魂+Tier+幂等ID一次写盘；成功/余额不足/旧Tier/写盘失败回滚/重试/重载幂等独立验收通过。成本数据外置和工坊详情表现仍待做 |

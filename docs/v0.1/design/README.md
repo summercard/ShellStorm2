@@ -1,6 +1,6 @@
 # v0.1 设计与工程契约
 
-- [Boss002显示器动画设计](Boss002显示器动画设计.md)：BOSS-STAGES / ASSET-PIPELINE，10类动作、15剪辑候选，idle/move/melee_keyboard/heavy_spin_slam已制作，其余待制作。
+- [Boss002显示器技能设计](Boss002显示器技能设计.md)、[动画设计](Boss002显示器动画设计.md)：BOSS-STAGES / ENEMY-AI / ASSET-PIPELINE；四技能、三阶段、十二态与16剪辑，正式调用ID boss_monitor002；独立怪物表和敌人账本同步。
 
 独立怪物：[怪物设计登记](怪物设计.md)、[03胖子僵尸动作设计](胖子僵尸03动作设计.md)。13段动作和12态绑定已完成，参见[运行配置](胖子僵尸03运行配置.md)；资产事实同步敌人账本。
 

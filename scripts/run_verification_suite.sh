@@ -184,6 +184,7 @@ smoke_scenes=(
 )
 
 core_scenes=(
+  verify_monitor_boss_flow
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
   verify_level_plan_design_source
@@ -279,6 +280,7 @@ core_scenes=(
   verify_3d_combat_progression_flow
   verify_dungeon_wave_intermission
   verify_expedition_wave_chain
+  verify_expedition_monitor_boss_flow
   verify_3d_parity_core
   verify_3d_reload_state_flow
   verify_3d_vision_input_flow
@@ -331,6 +333,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_monitor_boss_visual
   verify_base99_radio
   verify_expedition_hologram_city
   verify_base99_modular_room_visual

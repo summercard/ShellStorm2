@@ -79,6 +79,33 @@ _scratch/.verify_ws/
 _scratch/*_before_*/
 _scratch/*_before_*.blend
 _scratch/*_backup/
+# 注意：上面的 `*_before_*` 要求 _before_ 前后都非空 —— git 的段内 `*` **不匹配空串**
+# （实测 git 2.55：`x_before_y.blend` 命中，`boss029_before.blend` 不命中）。所以
+# 「下划线在前、点号在后」的命名要单独兜住，否则 144 MB 级 .blend 会直接撞 GitHub 100 MB 上限。
+_scratch/*_before.blend
+# 账本/资产补丁前的对照副本（以 _before 结尾的目录，或带 _sync_<日期> 的中间副本）
+_scratch/*_before/
+_scratch/*_sync_*/
+# 「稳定版封存」与状态快照：整树镜像 assets 的 manifest/tscn，纯对照用，用完即弃。
+# 命名把日期时间戳接在 _backup 后面，不满足「恰好以 _backup 结尾」，故单列。
+_scratch/*_stable_backup_*/
+_scratch/*_bounds_manifest_backup_*/
+_scratch/**/status_before/
+_scratch/**/status_after/
+# 回滚/恢复前的整树备份（含 GLB 二进制副本）与其中任意层级的 *_before 目录
+_scratch/*_restore_full_*/
+_scratch/**/*_before/
+# 探针另起的独立 Godot 校验工程（自带 .codex/skills 拷贝与 outputs 工作区，单次 3.5 万文件）。
+# 临时脚手架，不是项目资产。
+_scratch/*_qa_project/
+
+# QA/验证工程里再落一层 outputs/（探针 mktemp 出来的校验工作区，单轮 6.5 万个文件，
+# 且路径长度逼近 Windows 上限、git 直接读不了）。仓库根的 outputs/ 已有规则，这条兜住 _scratch 深层。
+_scratch/**/outputs/
+
+# 探针另起的 userdata 副本（base_save.json + shader_cache，机器本地，不是资产）。
+# 既有规则只认 "appdata" 命名，这条兜住 "userdata" 写法。
+_scratch/**/*userdata*/
 
 # 动画/退役对照用的「整项目快照」。baseline_project.py / retirement_baseline.py 里的
 # assets / scenes / data / tests 是 **junction 挂到真实目录**，不是拷贝 —— 入库会让 git
@@ -100,6 +127,14 @@ _scratch/**/app_userdata/
 # 仓库只留 catalog.json / qa 验收 / 预览图 / 构建脚本 / 账本，靠账本与脚本追溯。
 # 注意：v001–v005 的 .blend 此前已入库（历史不动），本规则只挡新增。
 assets/art/environments/open_world/source/**/*.blend
+
+# Boss002 显示器 Boss 的 animation 母版：v028 起单文件已达 137~175 MB（v031 = 166.57 MB），
+# 超 GitHub 100 MB 硬限，一次 push 会让整批提交被拒。与 open_world/source 同理 —— 源不入库：
+# 几何 model 母版（6.6 MB）仍入库，运行时消费导出的 GLB/prefab，靠 asset_manifest、
+# 生产账本与 scripts/blender/export_monitor_boss.py 追溯。注意 source/ 下的 .gdignore 只管
+# Godot 导入器，**对 git 无效** —— 这就是这 4 个文件此前一直出现在 git status 里的原因。
+# v001~v027 历史已入库（历史不动），本规则只挡新增。裁决（Git LFS / 异地归档）待业主定。
+assets/art/enemies/bosses/enm_boss_monitor002/source/*_animation_v*.blend
 
 # WorkBuddy 会话的临时探查脚本与运行日志（scratch，不入库；记忆与工具仍正常入库）
 .workbuddy/tmp/
