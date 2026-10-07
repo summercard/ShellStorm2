@@ -12,16 +12,16 @@ size = Vector3(0.868, 0.862, 0.496)
 [node name="ItemRoot" type="Node3D" groups=["interaction_provider_3d", "base99_radio_3d"]]
 script = ExtResource("2_radio")
 metadata/asset_id = "PRP-BASE99-RADIO-3D"
-metadata/asset_version = "v003"
+metadata/asset_version = "v004"
 metadata/asset_name_cn = "99F阁楼床边桌独立收音机"
 metadata/asset_category = "decor_prop"
 metadata/category_display = "场景可交互道具"
 metadata/forward_axis = "-Z"
 metadata/base_plane = "Y=0"
 metadata/bounds_size_m = Vector3(0.828, 0.456, 0.822)
-metadata/model_sha256 = "53773f46f22e6fbbfe607839adda38d5c02171510f2478d4d61b8b0fef4d0040"
-metadata/model_faces = 598
-metadata/model_triangles = 1116
+metadata/model_sha256 = "3538fa3c51cd0a50d47fa05165c431c9e9a16dd356d9c799cf9bb9d1f2ce33b5"
+metadata/model_faces = 646
+metadata/model_triangles = 1264
 metadata/collision_policy = "独立道具碰撞盒与点击区域；由道具Prefab自持"
 metadata/runtime_remap = "shared_facility_palette_by_material_role"
 metadata/music_policy = "local AudioStreamPlayer3D on Music bus; fixed per-state looping stream"

@@ -36,6 +36,7 @@ func _collect_status_materials(mesh_node: MeshInstance3D) -> void:
 		if original == null:
 			continue
 		var material := original.duplicate() as BaseMaterial3D
+		material.set_meta("radio_status_feedback_owned", true)
 		mesh_node.set_surface_override_material(index, material)
 		_status_materials.append(material)
 
@@ -175,13 +176,14 @@ func get_next_prompt() -> String:
 
 
 func _update_feedback() -> void:
-	# 保留共享色盘纹理与 UV；状态只改变实例材质的色调和自发光。
-	var tint := Color(0.15, 1.0, 0.75) if radio_state == "a" else Color(1.0, 0.28, 0.85)
+	# 小灯源UV为红格(4,8)；glTF翻转V后，偏移到绿格(5,5)。白乘色保留色盘原色。
 	for material in _status_materials:
-		material.emission_enabled = radio_state != "off"
-		material.albedo_color = tint if radio_state != "off" else Color(0.12, 0.12, 0.12)
-		material.emission = tint
-		material.emission_energy_multiplier = 1.2 if radio_state != "off" else 0.0
+		material.uv1_offset = Vector3.ZERO if radio_state == "off" else Vector3(0.1, 0.3, 0.0)
+		material.albedo_color = Color.WHITE
+		material.emission_enabled = true
+		material.emission = Color.WHITE
+		material.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
+		material.emission_energy_multiplier = 1.5
 	tooltip.text = get_next_prompt()
 
 

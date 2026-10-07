@@ -34,10 +34,20 @@ func _ready() -> void:
 	_assert(failures, radio.get_node("AudioStreamPlayer3D").bus == &"Music", "AudioStreamPlayer3D 未使用 Music bus")
 	_assert(failures, ResourceLoader.exists(MUSIC_A) and ResourceLoader.exists(MUSIC_B), "base_passion A/B 音频缺失")
 
+	_assert(failures, radio.get_meta("asset_version", "") == "v004", "收音机资产必须v004")
+	_assert(failures, int(radio.get_meta("model_faces", 800)) < 800, "收音机面数必须小于800")
+	_verify_visual_contract(failures, radio)
 	_assert(failures, radio.radio_state == "off", "初始状态必须 off")
+	_verify_status(failures, radio, false)
 	_assert(failures, radio.cycle_state() == "a", "off → A 状态切换失败")
+	_verify_status(failures, radio, true)
+	_assert(failures, radio.audio_player.playing and radio.audio_player.stream.resource_path.is_empty(), "A应使用独立循环音频实例")
 	_assert(failures, radio.cycle_state() == "b", "A → B 状态切换失败")
+	_verify_status(failures, radio, true)
+	_assert(failures, radio.audio_player.playing, "B应播放")
 	_assert(failures, radio.cycle_state() == "off", "B → off 状态切换失败")
+	_verify_status(failures, radio, false)
+	_assert(failures, not radio.audio_player.playing and radio.audio_player.stream == null, "off停止音频不关闭红灯")
 	_assert(failures, radio.set_radio_state("bad") == false, "非法状态必须失败")
 
 	var layout := load(LAYOUT_PATH) as PackedScene
@@ -113,6 +123,18 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 	await get_tree().create_timer(0.65).timeout
 	_assert(failures, player.is_on_floor() and player.get_state_machine_state() in ["idle", "moving"], "radio输入测试玩家未在阁楼地面稳定着地")
 	_assert(failures, radio.get_state_snapshot().get("floor_active", false), "进入99F后 radio 未激活")
+	_verify_status(failures, radio, false)
+	var art := radio.get_parent().get_parent()
+	art.call("set_presentation_lighting_enabled", false)
+	_verify_status(failures, radio, false)
+	art.call("set_presentation_lighting_enabled", true)
+	radio.set_radio_state("a")
+	await get_tree().create_timer(0.15).timeout
+	_verify_status(failures, radio, true)
+	radio.set_radio_state("b")
+	await get_tree().create_timer(0.15).timeout
+	_verify_status(failures, radio, true)
+	radio.set_radio_state("off")
 	if isolated_radio != null:
 		_assert(failures, isolated_radio.get_radio_state() == "a", "Tower 不得改变其他场景 radio 状态")
 
@@ -144,6 +166,7 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 		Input.parse_input_event(key)
 		await get_tree().process_frame
 		_assert(failures, radio.get_radio_state() == state, "真实E派发未切换到%s" % state)
+		_verify_status(failures, radio, state != "off")
 
 	radio.set_radio_state("a")
 	var ray_origin := camera.project_ray_origin(screen_position)
@@ -178,6 +201,8 @@ func _verify_tower_radio_mouse_path(failures: Array[String]) -> void:
 	tower.call("_refresh_physical_location_authority", true)
 	await get_tree().process_frame
 	_assert(failures, radio.get_radio_state() == "off", "离开99F后 radio 未关闭")
+	_verify_status(failures, radio, false)
+	_assert(failures, not radio.audio_player.playing and radio.audio_player.stream == null, "离楼音频停止但红灯应待机")
 	_assert(failures, MusicManager == null or MusicManager.get_current_music_id() == "rooftop_relax", "离开99F后天台音乐未恢复")
 
 	player.global_position = radio.global_position + Vector3(0.0, -0.90, 1.1)
@@ -209,6 +234,47 @@ func _click_radio(radio: Base99Radio3D, screen_position: Vector2, expected_state
 	Input.parse_input_event(event)
 	await get_tree().process_frame
 	return radio.get_radio_state() == expected_state
+
+
+func _verify_status(failures: Array[String], radio: Base99Radio3D, green: bool) -> void:
+	var lamps := radio.status_light as MeshInstance3D
+	_assert(failures, lamps != null, "StatusLight必须为独立小圆灯")
+	if lamps == null:
+		return
+	for surface in lamps.mesh.get_surface_count():
+		var material := lamps.get_active_material(surface) as BaseMaterial3D
+		_assert(failures, material.emission_enabled and is_equal_approx(material.emission_energy_multiplier, 1.5), "所有状态小灯必须常驻适度发光")
+		_assert(failures, material.albedo_color == Color.WHITE and material.emission == Color.WHITE, "灯实例乘色必须白色，不得叠乘发黑")
+		_assert(failures, material.emission_operator == BaseMaterial3D.EMISSION_OP_MULTIPLY, "灯必须乘公共色盘而非加白")
+		_assert(failures, material.uv1_offset.is_equal_approx(Vector3(0.1, 0.3, 0.0) if green else Vector3.ZERO), "红绿UV格切换错误")
+		var arrays := lamps.mesh.surface_get_arrays(surface)
+		var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
+		var palette := material.albedo_texture.get_image()
+		for uv in uvs:
+			uv += Vector2(material.uv1_offset.x, material.uv1_offset.y)
+			var color := palette.get_pixel(int(uv.x * palette.get_width()), int(uv.y * palette.get_height()))
+			_assert(failures, color.g > color.r * 2.0 and color.g > color.b if green else color.r > color.g * 2.0 and color.r > color.b * 2.0, "实际灯UV未采到红/绿色格")
+	_assert(failures, lamps.get_aabb().size.x < 0.06 and lamps.get_aabb().size.y < 0.04, "只允许独立小灯，不允许整块窗发光")
+
+
+func _verify_visual_contract(failures: Array[String], radio: Base99Radio3D) -> void:
+	var antenna_count := 0
+	var triangles := 0
+	for value in radio.get_node("Visual").find_children("*", "MeshInstance3D", true, false):
+		var mesh := value as MeshInstance3D
+		if mesh.name == "Antenna":
+			antenna_count += 1
+			var bounds := mesh.get_aabb()
+			_assert(failures, bounds.size.x / bounds.size.y > 0.4 and bounds.size.y > 0.3, "独立天线必须可见斜率，不得竖直或叠加")
+		for surface in mesh.mesh.get_surface_count():
+			var material := mesh.get_active_material(surface) as BaseMaterial3D
+			triangles += mesh.mesh.surface_get_array_index_len(surface) / 3
+			if mesh != radio.status_light:
+				_assert(failures, not material.emission_enabled or is_zero_approx(material.emission_energy_multiplier), "机身/调频窗/天线不得自发光")
+			if mesh.name == "Antenna" or str(material.resource_name).begins_with("01_"):
+				_assert(failures, is_equal_approx(material.metallic, 0.88) and is_equal_approx(material.roughness, 0.32), "天线/护框/旋钮必须真实金属参数")
+	_assert(failures, antenna_count == 1, "必须只有一根独立天线")
+	_assert(failures, triangles == int(radio.get_meta("model_triangles", 0)), "实际导入三角形须与登记一致")
 
 
 func _world_bounds(root: Node3D) -> AABB:

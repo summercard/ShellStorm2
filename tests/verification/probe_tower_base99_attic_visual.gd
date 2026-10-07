@@ -1,6 +1,6 @@
 extends Node
 
-const OUTPUT_DIR := "I:/工作项目/shellstrom2/ShellStorm2/outputs/base99_radio_v003"
+const OUTPUT_DIR := "I:/工作项目/shellstrom2/ShellStorm2/outputs/base99_radio_v004"
 
 func _ready() -> void:
 	print("VISUAL_PROBE_START")
@@ -29,17 +29,45 @@ func _ready() -> void:
 	if radio == null:
 		get_tree().quit(1)
 		return
-	await _capture(camera, Vector3(0.0, -4.9, -5.0), Vector3(0.0, 5.5, 5.5), "attic_full.png")
 	var target := radio.global_position + Vector3(0.0, 0.32, 0.0)
-	await _capture(camera, target, Vector3(1.8, 1.8, 3.0), "radio_off_closeup.png")
-	for state in ["a", "b", "off"]:
+	var native_offset := tower.player.camera.global_basis.z.normalized()
+	print("MAIN_CAMERA_BASIS=%s offset=%s" % [tower.player.camera.global_basis, native_offset])
+	# 同一真实场景/相机/光照的旧资产对照，不回写正式场景。
+	var document := GLTFDocument.new()
+	var gltf_state := GLTFState.new()
+	var old_path := OUTPUT_DIR + "/backup_before/assets/art/props/base_world_3d/components/base99_radio/prp_base99_radio_visual_top3d.glb"
+	if document.append_from_file(old_path, gltf_state) == OK:
+		var old_visual := document.generate_scene(gltf_state)
+		_bind_old_palette(old_visual)
+		radio.add_child(old_visual)
+		radio.get_node("Visual").hide()
+		await _capture(camera, target, native_offset * 3.0, "before_v003_closeup.png")
+		await _capture(camera, target + Vector3(1.2, -0.35, 2.0), native_offset * 10.0, "before_v003_attic.png")
+		old_visual.free()
+		radio.get_node("Visual").show()
+	for state in ["off", "a", "b"]:
 		radio.set_radio_state(state)
-		await _capture(camera, target, Vector3(1.8, 1.8, 3.0), "radio_%s_closeup.png" % state)
+		await _capture(camera, target, native_offset * 3.0, "radio_%s_closeup.png" % state)
+		await _capture(camera, target + Vector3(1.2, -0.35, 2.0), native_offset * 10.0, "attic_%s.png" % state)
 		print("RADIO_VISUAL_STATE=%s snapshot=%s" % [state, radio.get_state_snapshot()])
 	_dump_materials(radio)
 	tower.free()
 	await get_tree().process_frame
 	get_tree().quit(0)
+
+func _bind_old_palette(root: Node) -> void:
+	if root is MeshInstance3D:
+		var mesh := root as MeshInstance3D
+		for surface in mesh.mesh.get_surface_count():
+			var material := mesh.mesh.surface_get_material(surface) as BaseMaterial3D
+			material.albedo_texture = load("res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png")
+			material.emission_texture = material.albedo_texture
+			material.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
+			material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+			material.texture_repeat = false
+	for child in root.get_children():
+		_bind_old_palette(child)
+
 
 func _dump_materials(radio: Node3D) -> void:
 	for value in radio.get_node("Visual").find_children("*", "MeshInstance3D", true, false):
