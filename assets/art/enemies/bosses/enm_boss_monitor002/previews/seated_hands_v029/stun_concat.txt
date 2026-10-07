@@ -1,0 +1,4 @@
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/seated_hands_v029/stun_enter.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/seated_hands_v029/stun_loop.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/seated_hands_v029/stun_loop.mp4'
+file 'I:/工作项目/shellstrom2/ShellStorm2/assets/art/enemies/bosses/enm_boss_monitor002/previews/seated_hands_v029/stun_exit.mp4'

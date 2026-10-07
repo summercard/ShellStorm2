@@ -11,7 +11,10 @@ const CONTENT: Dictionary = {
 static func get_for_floor(floor_number: int) -> Dictionary:
 	return (CONTENT.get(floor_number, {}) as Dictionary).duplicate(true)
 
+const MONITOR_PROFILE := {"boss_content_id":"boss_monitor002", "display_name":"MONITOR.EXE 显示器", "presentation_asset_id":"ENM-BOSS-MONITOR002-3D", "presentation_scene":"res://assets/art/enemies/bosses/enm_boss_monitor002/runtime/enm_boss_monitor002/enm_boss_monitor002_root_top3d.tscn", "arena_asset_id":"", "arena_scene":"", "accent":Color(0.10,0.48,0.66), "phase_skill_bags":{1:["monitor_keyboard","monitor_cable","monitor_keyboard","monitor_spin_slam"],2:["monitor_cable","monitor_ground_current","monitor_keyboard","monitor_spin_slam"],3:["monitor_spin_slam","monitor_ground_current","monitor_cable","monitor_spin_slam","monitor_ground_current"]}}
+
 static func get_by_content_id(content_id: String) -> Dictionary:
+	if content_id == "boss_monitor002":return MONITOR_PROFILE.duplicate(true)
 	for profile in CONTENT.values():
 		if str((profile as Dictionary).get("boss_content_id", "")) == content_id:
 			return (profile as Dictionary).duplicate(true)
@@ -55,7 +58,7 @@ static func resolve_profile(authored_content_id: String, floor_number: int) -> D
 	return by_floor
 
 static func all_profiles() -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
+	var result: Array[Dictionary] = [MONITOR_PROFILE.duplicate(true)]
 	for floor_number in [95, 90, 85]:
 		var profile := get_for_floor(floor_number)
 		profile["floor_number"] = floor_number

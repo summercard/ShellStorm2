@@ -1,0 +1,11 @@
+{
+  "tool": "built-in image_gen",
+  "prompt": "精确修改3x2六表情图集：仅底右表情的小眼睛改为黑色螺旋，保留小眼尺寸、白底黑边、三根睫毛和原嘴型，透明背景；其他五表情布局保持。",
+  "source": "source/textures_v004/expressions_atlas.png",
+  "generated_image": "source/textures_v030/expressions_atlas.png",
+  "resolution": [
+    1536,
+    1024
+  ],
+  "alpha": true
+}

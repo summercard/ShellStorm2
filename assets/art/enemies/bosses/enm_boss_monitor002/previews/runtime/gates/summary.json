@@ -1,0 +1,83 @@
+{
+  "asset_registry_structure": {
+    "exit_code": 0,
+    "command": [
+      "python",
+      "scripts/check_asset_registry.py",
+      "--ledger",
+      "enemies",
+      "--scope",
+      "structure"
+    ]
+  },
+  "asset_registry_full": {
+    "exit_code": 1,
+    "command": [
+      "python",
+      "scripts/check_asset_registry.py",
+      "--ledger",
+      "enemies",
+      "--scope",
+      "full",
+      "--json-output",
+      "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\previews\\runtime\\gates\\asset_registry_full.json"
+    ]
+  },
+  "ledger_split": {
+    "exit_code": 0,
+    "command": [
+      "python",
+      "tools/asset_pipeline/verify_ledger_split.py",
+      "--json-output",
+      "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\previews\\runtime\\gates\\ledger_split.json"
+    ],
+    "column_digest_drift": []
+  },
+  "runtime_naming": {
+    "exit_code": 1,
+    "command": [
+      "python",
+      "scripts/check_asset_runtime_naming.py",
+      "--json"
+    ]
+  },
+  "ledger_refs": {
+    "exit_code": 1,
+    "command": [
+      "python",
+      "scripts/check_ledger_refs.py",
+      "--json-output",
+      "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\previews\\runtime\\gates\\ledger_refs.json"
+    ]
+  },
+  "verification_registry": {
+    "exit_code": 1,
+    "command": [
+      "python",
+      "scripts/check_verification_registry.py"
+    ]
+  },
+  "documentation_contracts": {
+    "exit_code": 1,
+    "command": [
+      "python",
+      "scripts/check_documentation_contracts.py"
+    ],
+    "issues": "Only four pre-existing unregistered scenes after UTF-8 and installed openpyxl dependency override."
+  },
+  "feature_traceability": {
+    "exit_code": 0,
+    "features": 37
+  },
+  "asset_guard": {
+    "exit_code": 0,
+    "classification": "version_increment"
+  },
+  "boss_specific": {
+    "flow_exit_code": 0,
+    "checks": 507,
+    "visual_exit_code": 0,
+    "screenshots": 10,
+    "transfer_sha_files": 19
+  }
+}

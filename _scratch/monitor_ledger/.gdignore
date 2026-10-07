@@ -1,0 +1,1 @@
+# Development ledger workspace; exclude shared node_modules from Godot resource imports.

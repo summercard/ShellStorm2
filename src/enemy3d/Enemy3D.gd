@@ -191,6 +191,7 @@ var _last_motion_position := Vector3.ZERO
 var _patrol_step := 0
 var _boss_skill_bag: Array[String] = []
 var _boss_skill_index := 0
+var monitor_combat: MonitorBossCombat
 var _last_attack_result := "none"
 var _last_state_reason := "spawned"
 var _ambush_reburrow_cooldown := 0.0
@@ -260,6 +261,8 @@ func apply_profile(kind: String) -> void:
 
 
 func configure_from_enemy_data(data: Dictionary) -> void:
+	if monitor_combat != null:monitor_combat.cancel()
+	monitor_combat = null
 	enemy_data = data.duplicate(true)
 	if not bool(data.get("is_elite", false)):
 		var configured_kind := str(data.get("enemy_type", enemy_kind))
@@ -340,6 +343,9 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 		_variant_scale_multiplier *= float(data.get("boss_scale", 1.0))
 		if avatar != null:
 			avatar.configure_boss_content(str(data.get("boss_content_id", "")))
+		if str(data.get("boss_content_id", "")) == MonitorBossCombat.ID:
+			monitor_combat = MonitorBossCombat.new(self)
+			attack_range = 6.0
 	_apply_presentation_scale()
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
@@ -450,6 +456,7 @@ func _position_overhead_health_bar() -> void:
 	)
 	if avatar != null and avatar.has_formal_normal():
 		local_height = maxf(local_height, float(EnemyAvatar3D.FORMAL_NORMAL_HEIGHTS.get(enemy_kind, 0.0)))
+	if monitor_combat != null:local_height = maxf(local_height,4.2)
 	var world_height := local_height * maxf(scale.y, 0.01)
 	_overhead_health_root.global_position = global_position + Vector3.UP * (world_height + 0.58)
 	# top_level 已阻断父节点旋转；显式归零可清除热重载或旧实例留下的朝向。
@@ -540,6 +547,8 @@ func export_runtime_state() -> Dictionary:
 		"slow_timer": _slow_timer,
 		"boss_skill_bag": _boss_skill_bag.duplicate(),
 		"boss_skill_index": _boss_skill_index,
+		"monitor_poise_damage": monitor_combat.poise_damage if monitor_combat != null else 0.0,
+		"monitor_electric_cooldown": monitor_combat.electric_cooldown if monitor_combat != null else 0.0,
 	}
 
 
@@ -586,6 +595,10 @@ func import_runtime_state(state: Dictionary) -> bool:
 		for value in saved_bag as Array:
 			_boss_skill_bag.append(str(value))
 	_boss_skill_index = clampi(int(state.get("boss_skill_index", 0)), 0, _boss_skill_bag.size())
+	if monitor_combat != null:
+		monitor_combat.cancel()
+		monitor_combat.poise_damage = maxf(0.0,float(state.get("monitor_poise_damage",0.0)))
+		monitor_combat.electric_cooldown = maxf(0.0,float(state.get("monitor_electric_cooldown",0.0)))
 	var saved_ai_state := str(state.get("ai_state", "idle"))
 	# 生效帧不能跨卸载边界继续伤害；重新进房时退回可读的警戒状态。
 	if saved_ai_state in ["telegraph", "attack", "recovery", "stagger"]:
@@ -642,7 +655,10 @@ func _process(delta: float) -> void:
 		# 死亡进度不依赖已经退出战斗的物理AI。
 		_state_time += delta
 	if avatar != null:
-		avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration())
+		if monitor_combat != null:
+			avatar.sync_boss_presentation(monitor_combat.presentation_context())
+		else:
+			avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration())
 	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
 	# 否则其 physics_process 被暂停后，探照灯永远不可能将它唤醒。
 	if _runtime_ai_active or ai_state == "dead" or illumination_sensor == null:
@@ -706,6 +722,7 @@ func _physics_process(delta: float) -> void:
 		MonsterAIManager.update_enemy_spatial(self)
 	_ai_decision = MonsterAIManager.evaluate_enemy(self) if MonsterAIManager != null else {}
 	_apply_ai_decision(_ai_decision)
+	if monitor_combat != null and monitor_combat.tick(delta):return
 	if enemy_kind == "ambusher" and _ambush_triggered:
 		var target_distance := global_position.distance_to(_target.global_position) if _target != null and is_instance_valid(_target) else INF
 		if not bool(_ai_decision.get("target_visible", false)) and target_distance > 5.0:
@@ -833,12 +850,15 @@ func _physics_process(delta: float) -> void:
 			if _state_time > float(PROFILES[enemy_kind].get("stagger", 0.16)):
 				transition_to("chase")
 	var clap_locked := enemy_kind == "fat_zombie03" and (ai_state in ["attack", "recovery"] or (ai_state == "telegraph" and _state_time >= 1.0))
-	if to_target.length_squared() > 0.01 and not clap_locked:
+	if monitor_combat != null:
+		monitor_combat.face_target(to_target,delta)
+	elif to_target.length_squared() > 0.01 and not clap_locked:
 		rotation.y = lerp_angle(rotation.y, atan2(-to_target.x, -to_target.z), minf(1.0, delta * 8.0))
 
 
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
-	if distance <= attack_range and _attack_timer <= 0.0:
+	var monitor_facing_ready := monitor_combat == null or (not monitor_combat.turning and (-global_basis.z).normalized().dot(to_target.normalized()) >= 0.97)
+	if distance <= attack_range and _attack_timer <= 0.0 and monitor_facing_ready:
 		var channel := "ranged" if enemy_kind in ["ranged_caster", "summoner", "boss"] else "melee"
 		if MonsterAIManager == null or MonsterAIManager.request_attack_token(self, _target, channel):
 			_last_attack_result = "token_granted"
@@ -848,7 +868,7 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	var effective_move_speed := get_effective_move_speed()
 	var desired_direction := _navigation_direction(_target.global_position, to_target)
 	var desired := desired_direction * effective_move_speed * _slow_factor
-	if enemy_kind in ["ranged_caster", "summoner", "boss"]:
+	if enemy_kind in ["ranged_caster", "summoner", "boss"] and monitor_combat == null:
 		var radial := to_target.normalized()
 		var tangent := Vector3(-radial.z, 0, radial.x) * _strafe_sign
 		var ideal_distance := attack_range * (0.78 if enemy_kind != "summoner" else 0.86)
@@ -1101,6 +1121,8 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 				AudioManager.play_enemy_hit_sfx()
 		if _should_begin_elite_escape():
 			_begin_elite_escape()
+		elif monitor_combat != null:
+			monitor_combat.on_damage(applied,critical,hit_knockback,interrupt_movement)
 		elif interrupt_movement and (enemy_kind != "fat_zombie03" or critical or hit_knockback >= 0.8 or applied >= max_hp * 0.08):
 			transition_to("stagger")
 
@@ -1200,6 +1222,9 @@ func transition_to(state_id: String, reason := "") -> bool:
 		if MonsterAIManager != null:
 			MonsterAIManager.release_attack_token(self)
 	ai_state = state_id
+	if monitor_combat != null:
+		if state_id == "telegraph":monitor_combat.begin()
+		elif state_id in ["dead","dormant"]:monitor_combat.cancel()
 	_last_state_reason = reason if not reason.is_empty() else "%s_to_%s" % [previous, state_id]
 	_state_time = 0.0
 	if avatar != null:
@@ -1766,7 +1791,7 @@ func _die() -> void:
 			"floor_number": int(enemy_data.get("floor_number", enemy_data.get("floor", 0))),
 			"room_id": room_id,
 		})
-	if avatar != null and avatar.has_formal_normal():
+	if avatar != null and (avatar.has_formal_normal() or monitor_combat != null):
 		if MonsterAIManager != null:
 			MonsterAIManager.unregister_enemy(self)
 		remove_from_group("enemy_3d")
@@ -1923,11 +1948,15 @@ func _update_boss_phase() -> void:
 		return
 	var ratio := float(current_hp) / float(max_hp)
 	var next_phase := 3 if ratio <= 0.30 else 2 if ratio <= 0.65 else 1
+	if monitor_combat != null:next_phase = 3 if ratio <= 0.33 else 2 if ratio <= 0.66 else 1
 	if next_phase <= boss_phase:
 		return
 	boss_phase = next_phase
 	_boss_skill_bag.clear()
 	_boss_skill_index = 0
+	if monitor_combat != null:
+		boss_phase_changed.emit(self,boss_phase)
+		return
 	attack_cooldown *= 0.82
 	move_speed *= 1.10
 	if boss_phase == 3:

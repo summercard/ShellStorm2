@@ -418,6 +418,9 @@ func _generate_boss(floor: int, floor_level: int, request: Dictionary = {}) -> D
 	result["arena_scene"] = str(boss_profile["arena_scene"])
 	result["boss_accent"] = boss_profile.get("accent", Color(1.0, 0.2, 0.035))
 	result["boss_phase_skill_bags"] = (boss_profile["phase_skill_bags"] as Dictionary).duplicate(true)
+	if str(boss_profile["boss_content_id"]) == "boss_monitor002":
+		# Fixed monitor encounter baseline, independent of obsolete tower depth multipliers.
+		result.merge({"hp":200,"max_hp":200,"damage":20,"speed":41.28,"boss_scale":1.0},true)
 	return result
 
 ## 生成小怪群

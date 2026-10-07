@@ -73,6 +73,7 @@ func configure_boss_content(content_id: String) -> bool:
 	if scene == null:
 		return false
 	if _formal_boss_root != null and is_instance_valid(_formal_boss_root):
+		_root.remove_child(_formal_boss_root)
 		_formal_boss_root.queue_free()
 	_formal_boss_root = scene.instantiate() as Node3D
 	_formal_boss_root.name = "FormalBoss_%s" % content_id
@@ -118,6 +119,7 @@ static func get_footprint_profile(kind: String) -> Dictionary:
 
 
 func flash_hit() -> void:
+	if has_animated_boss():_formal_boss_root.flash_hit()
 	if has_formal_normal():
 		_formal_normal_root.flash_hit()
 	if _shell_material != null:
@@ -125,6 +127,7 @@ func flash_hit() -> void:
 
 
 func get_formal_death_duration() -> float:
+	if has_animated_boss():return 2.0
 	if has_formal_normal():
 		return float(_formal_normal_root.get_presentation_snapshot().get("death_duration", 2.4))
 	return 0.34
@@ -138,7 +141,8 @@ func get_component_snapshot() -> Dictionary:
 		"component_count": 2 if has_formal_normal() else 4,
 		"formal_normal_asset": has_formal_normal(),
 		"presentation": _formal_normal_root.get_presentation_snapshot() if has_formal_normal() else {},
-		"procedural_pose": not has_formal_normal(),
+		"procedural_pose": not has_formal_normal() and not has_animated_boss(),
+		"boss_presentation": _formal_boss_root.get_presentation_snapshot() if has_animated_boss() else {},
 		"footprint": get_footprint_profile(enemy_kind),
 		"ambush_revealed": _ambush_revealed,
 		"boss_content_id": _boss_content_id,
@@ -154,10 +158,10 @@ func _process(delta: float) -> void:
 	_elapsed += delta
 	if _root == null:
 		return
-	if has_formal_normal():
+	if has_formal_normal() or has_animated_boss():
 		_root.position = Vector3.ZERO
 		_root.scale = Vector3.ONE
-		_tell_ring.visible = ai_state == "telegraph"
+		_tell_ring.visible = ai_state == "telegraph" and not has_animated_boss()
 		return
 	var bob := sin(_elapsed * 3.3 + float(get_instance_id() % 11)) * 0.07
 	var hidden_offset := -0.58 if enemy_kind == "ambusher" and not _ambush_revealed else 0.0
@@ -275,6 +279,12 @@ func disable_formal_normal() -> void:
 func has_formal_normal() -> bool:
 	return is_instance_valid(_formal_normal_root)
 
+
+func has_animated_boss() -> bool:
+	return is_instance_valid(_formal_boss_root) and _formal_boss_root.has_method("sync_context")
+
+func sync_boss_presentation(context: Dictionary) -> void:
+	if has_animated_boss():_formal_boss_root.sync_context(context)
 
 func sync_presentation(state: String, state_time: float, speed: float, telegraph_duration: float, recovery_duration: float) -> void:
 	if has_formal_normal() and _formal_normal_root.has_method("sync_state"):

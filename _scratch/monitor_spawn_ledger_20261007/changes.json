@@ -1,0 +1,30 @@
+[
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\registry\\ledgers\\ShellStorm2_敌人账本_v001.xlsx",
+    "sheets": {
+      "资产主表": {
+        "J20": "expedition_01 / floor_00 / boss（源房ID f00_boss）",
+        "V20": "2026-10-07",
+        "Y20": "v031正式接入：16源剪辑/64骨/十二态/四技能/三阶段；根驱动弹簧甩臂、双螺旋坐地、黄色单帧闪形及接地电流；507项专项及真实渲染10关键帧通过；Enemy3D拥有碰撞/AI/伤害；远征01 Boss房调用boss_monitor002。；asset_guard分类：version_increment。\n投放验收：2026-10-07，box_boss_arena首波1只、3波清房、正式钥匙开门、STANDARD撤离、重进不重刷；25项通过。"
+      },
+      "域变更日志": {
+        "A52": "v031",
+        "B52": "2026-10-07",
+        "C52": "Codex",
+        "D52": "ENM-BOSS-MONITOR002-3D",
+        "E52": "补录v031正式接入及远征01房间投放验收。远征01正式Boss房投放：box_boss_arena首波生成1只，房间共3波。5200HP、4技能、3阶段。全清后按原钥匙/门策略前往STANDARD撤离；重进不重刷，不发塔楼下行权限。2026-10-07房间流程25项通过；技能专项507项通过。见2026-10-07_expedition01_monitor_boss_spawn.md。",
+        "F52": "docs/v0.1/development/2026-10-07_expedition01_monitor_boss_spawn.md",
+        "G52": "原资产ID、v031、active保持；未重导模型。"
+      }
+    }
+  },
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\registry\\ledgers\\ShellStorm2_敌人账本_v001.xlsx",
+    "sheets": {
+      "3D-敌人": {
+        "M10": "expedition_01 / floor_00 / boss（源房ID f00_boss）；box_boss_arena首波1只",
+        "P10": "远征01正式Boss房投放：box_boss_arena首波生成1只，房间共3波。5200HP、4技能、3阶段。全清后按原钥匙/门策略前往STANDARD撤离；重进不重刷，不发塔楼下行权限。2026-10-07房间流程25项通过；技能专项507项通过。见2026-10-07_expedition01_monitor_boss_spawn.md。\n原v031：16剪辑/64骨/12态；真实渲染10帧通过。"
+      }
+    }
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "hurt_5": {
+    "expression": 4,
+    "passed": true
+  },
+  "stun_enter_4": {
+    "expression": 4,
+    "passed": true
+  },
+  "stun_enter_35": {
+    "expression": 5,
+    "passed": true
+  },
+  "stun_loop_25": {
+    "expression": 5,
+    "passed": true
+  },
+  "stun_exit_25": {
+    "expression": 0,
+    "passed": true
+  },
+  "passed": true
+}

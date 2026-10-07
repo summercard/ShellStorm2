@@ -1,6 +1,20 @@
 # Boss 002 · MONITOR.EXE
 
-## 当前交付 v029（击晕坐地双手摊地）
+## 当前交付 v031（正式导入与技能状态绑定）
+
+正式调用ID `boss_monitor002`，远征01 f00_boss房间使用此Boss。视觉入口 `runtime/enm_boss_monitor002/enm_boss_monitor002_root_top3d.tscn`；组件在 `components/enm_boss_monitor002/`，包含纯视觉GLB、30Hz骨姿态采样、表情图集和屏幕代码纹理。Prefab根倍率1；碰撞、生命、十二态、四技能及三阶段由Enemy3D拥有。
+
+双母版 `source/enm_boss_monitor002_model_v031.blend` 和 `source/enm_boss_monitor002_animation_v031.blend` 同64骨架，16段剪辑包含新增2秒死亡。AnimationPlayer按真实状态进度索引Blender求值矩阵，保留弹簧伸缩、约束及剪切；键盘BoneAttachment在骨姿态写入后同步，避免挂点滞后。代码UV向上滚动，叉眼受击、双螺旋坐地、黄闪1帧与接地电流均已绑定。
+
+规范中转和SHA见 `enm_boss_monitor002_transfer_ledger.json`，专项报告、10张真实Godot渲染关键帧及完整攻击/击晕序列在 `previews/runtime/`。设计见 [技能契约](../../../../../docs/v0.1/design/Boss002显示器技能设计.md)，开发及门禁结果见 [正式接入记录](../../../../../docs/v0.1/development/2026-10-06_boss002_runtime_import.md)。
+
+## 历史交付 v030（受击叉眼吐舌、坐地双螺旋眼）
+
+图1叉眼吐舌使用已有状态4：hurt F1—10，stun_enter F1—4；图2的坐地眩晕改为双螺旋眼状态5，stun_enter F5起及stun_loop持续，stun_exit F20恢复默认。
+
+透明1536×1024图集 `source/textures_v030/expressions_atlas.png` 由内置imagegen编辑，已内嵌模型/动画双母版v030。原嘴型、睫毛和六格布局保留。实际渲染及切换检查见 `previews/expressions_v030/`。仅Blender源交付，未导出或接入Godot。
+
+## 历史交付 v029（击晕坐地双手摊地）
 
 双母版 `source/enm_boss_monitor002_model_v029.blend`、`source/enm_boss_monitor002_animation_v029.blend`。仅修改stun_enter / stun_loop / stun_exit，其他12段曲线保持。
 

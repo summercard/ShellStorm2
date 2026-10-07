@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/enemy3d/MonitorBossPresentation.gd" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d.glb" id="2"]
+
+[node name="MonitorBossPresentation" type="Node3D"]
+script = ExtResource("1")
+metadata/asset_id = "ENM-BOSS-MONITOR002-3D"
+metadata/asset_version = "v031"
+
+[node name="Model" parent="." instance=ExtResource("2")]

@@ -402,6 +402,7 @@
     },
     {
       "key": "boss",
+      "boss_content_id": "boss_monitor002",
       "room_id": "f00_boss",
       "legacy_room_id": "boss",
       "room_type": "BOSS_ROOM",

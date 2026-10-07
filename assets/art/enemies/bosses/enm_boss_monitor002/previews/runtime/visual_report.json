@@ -1,0 +1,9 @@
+{
+	"display_server": "Windows",
+	"exit_code": 0,
+	"expected_errors": [],
+	"not_executed": [],
+	"renderer": "NVIDIA GeForce RTX 4060 Ti",
+	"screenshots": 10,
+	"unexpected_script_errors": []
+}

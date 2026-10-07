@@ -1,0 +1,21 @@
+{
+  "version": "v030",
+  "atlas": "source/textures_v030/expressions_atlas.png",
+  "hurt": {
+    "expression": 4,
+    "active_frames": [
+      1,
+      10
+    ]
+  },
+  "stun_enter": {
+    "hit_expression": 4,
+    "dizzy_expression": 5,
+    "switch_frame": 5
+  },
+  "stun_loop": 5,
+  "stun_exit": {
+    "dizzy_expression": 5,
+    "restore_frame": 20
+  }
+}
