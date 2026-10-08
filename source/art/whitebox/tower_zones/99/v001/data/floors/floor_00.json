@@ -67,8 +67,8 @@
         },
         {
           "port_id": "P2",
-          "target": "room_02",
-          "side": "east",
+          "target": "boss",
+          "side": "north",
           "lane_m": 0.0,
           "wall_length_m": 25.0
         }
@@ -76,56 +76,41 @@
       "content_type": "COMBAT"
     },
     {
-      "key": "room_02",
-      "room_id": "room_02",
+      "key": "boss",
+      "room_id": "boss",
       "legacy_room_id": "",
-      "room_type": "COMMON_ROOM",
-      "role": "main",
+      "room_type": "BOSS_ROOM",
+      "role": "boss",
       "parent_key": "room_01",
-      "template_id": "std_25x25",
+      "template_id": "boss_45x45",
       "template_variant": "",
       "center_m": [
-        37.5,
-        -32.5
+        2.5,
+        -87.5
       ],
       "size_m": [
-        25.0,
-        25.0
+        45.0,
+        45.0
       ],
       "template_rotation_deg": 0,
+      "boss_content_id": "boss_monitor002",
       "ports": [
         {
           "port_id": "P1",
-          "target": "extraction",
-          "side": "north",
+          "target": "room_01",
+          "side": "south",
           "lane_m": 0.0,
-          "wall_length_m": 25.0
+          "wall_length_m": 45.0
         },
         {
           "port_id": "P2",
-          "target": "room_01",
-          "side": "west",
+          "target": "extraction",
+          "side": "north",
           "lane_m": 0.0,
-          "wall_length_m": 25.0
+          "wall_length_m": 45.0
         }
       ],
-      "content_type": "COMBAT",
-      "enemy_spawn_plan": {
-        "waves": [
-          {
-            "monsters": [
-              { "type": "melee_chaser", "count": 2 },
-              { "type": "ranged_caster", "count": 1 }
-            ]
-          },
-          {
-            "monsters": [
-              { "type": "shielded", "count": 1 },
-              { "type": "exploder", "count": 2 }
-            ]
-          }
-        ]
-      }
+      "content_type": "BOSS"
     },
     {
       "key": "extraction",
@@ -133,12 +118,12 @@
       "legacy_room_id": "",
       "room_type": "EXTRACTION_ROOM",
       "role": "extraction",
-      "parent_key": "room_02",
+      "parent_key": "boss",
       "template_id": "extraction_25x25",
       "template_variant": "",
       "center_m": [
-        37.5,
-        -67.5
+        2.5,
+        -132.5
       ],
       "size_m": [
         25.0,
@@ -148,7 +133,7 @@
       "ports": [
         {
           "port_id": "P1",
-          "target": "room_02",
+          "target": "boss",
           "side": "south",
           "lane_m": 0.0,
           "wall_length_m": 25.0
@@ -158,8 +143,7 @@
     }
   ],
   "main_path": [
-    "room_01",
-    "room_02"
+    "room_01"
   ],
   "edge_policy": []
 }

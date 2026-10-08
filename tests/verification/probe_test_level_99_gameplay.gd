@@ -17,9 +17,9 @@ extends Node
 ##      所以探针**不能**先全开边再测门策略，否则测出假阳性。
 
 const SCENE_PATH := "res://scenes/ExpeditionLevel99_3D.tscn"
-const ALL_ROOM_IDS: Array[String] = ["start", "room_01", "room_02", "extraction"]
+const ALL_ROOM_IDS: Array[String] = ["start", "room_01", "boss", "extraction"]
 ## 主路（设计源 floor_00.json 的 main_path）。
-const MAIN_PATH: Array[String] = ["room_01", "room_02"]
+const MAIN_PATH: Array[String] = ["room_01"]
 ## 门策略的三个开关，与 verify_expedition_level01_flow 同一套口径。
 const DOOR_POLICY_KEYS: Array[String] = ["requires_clear", "requires_key", "triggers_fate"]
 
@@ -174,10 +174,8 @@ func _probe_searchable(tower: TowerDescent3D) -> void:
 
 
 func _probe_door_policies(tower: TowerDescent3D) -> void:
-	var edges: Array = [["start", "room_01"]]
-	for index in range(MAIN_PATH.size() - 1):
-		edges.append([MAIN_PATH[index], MAIN_PATH[index + 1]])
-	edges.append([MAIN_PATH[MAIN_PATH.size() - 1], "extraction"])
+	# 本关是固定动线：入口 → 内容房 → Boss 房 → 撤离房。
+	var edges: Array = [["start", "room_01"], ["room_01", "boss"], ["boss", "extraction"]]
 	for edge_pair in edges:
 		var policy: Dictionary = tower._door_policy_for_edge(edge_pair[0], edge_pair[1])
 		var flags: Array[String] = []

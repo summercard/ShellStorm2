@@ -29,10 +29,11 @@
   "room_templates": [
     "safe_15x15",
     "std_25x25",
+    "boss_45x45",
     "extraction_25x25"
   ],
   "generation_policy": {
-    "min_main_content_rooms": 2,
+    "min_main_content_rooms": 1,
     "branch_count_range": [0, 0],
     "max_attempts": 1,
     "target_occupancy_ratio": 0.42,
@@ -44,6 +45,6 @@
   "provenance": {
     "mode": "authored",
     "extracted_from": "docs/v0.1/design/新关卡设计表.md",
-    "note": "测试关卡99：1 入口安全房 + 2 战斗房 + 1 撤离房。单层、无支线、无 Boss。两间内容房的内容类型由设计钉死为 COMBAT，故 content_type_pool 当前不被消费（留作后续解钉时的缺省）。runtime_enabled=true：本关卡的设计源已是运行时真源，FloorPlanGenerator.generate_from_level_plan 会替代内置远征房表（内置房表硬编码 5 间内容房，装不下 2 间的关卡）。"
+    "note": "测试关卡99：1 入口安全房 + 1 普通战斗房 + 1 Boss 房（boss_monitor002）+ 1 撤离房，一条直线北向南排布。单层、无支线。主路只有 room_01 一间内容房，Boss 与撤离房由生成器自动追加到主链。runtime_enabled=true：本关卡的设计源已是运行时真源，FloorPlanGenerator.generate_from_level_plan 会替代内置远征房表。"
   }
 }

@@ -7,7 +7,7 @@ extends Node
 ## 故用本探针把「层站结构 + 每间房的外壳 + 垂直射线打到谁」全部打出来。
 
 const SCENE_PATH := "res://scenes/ExpeditionLevel99_3D.tscn"
-const ALL_ROOM_IDS: Array[String] = ["start", "room_01", "room_02", "extraction"]
+const ALL_ROOM_IDS: Array[String] = ["start", "room_01", "boss", "extraction"]
 ## 俯瞰机位高度（与视觉探针一致），射线从这里往下打。
 const RAY_START_Y := 90.0
 ## 网格采样：在内容包围盒上按这个间距铺点向下打射线。

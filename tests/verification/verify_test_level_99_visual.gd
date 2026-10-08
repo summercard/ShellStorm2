@@ -8,7 +8,7 @@ extends Node
 ## 采样点（6 张）：
 ##   1) 整层俯瞰 —— 4 间房 + 3 条走廊是否都在楼面内、外墙是否成圈；
 ##   2) 入口安全房；3) 01 号战斗房；4) 02 号战斗房；5) 撤离房与信标；
-##   6) 01↔02 水平走廊。
+##   6) 01↔Boss 水平走廊。
 ##
 ## 两条采样口径（刻意不同，各有用途）：
 ##   · 俯瞰图：临时接管相机做斜俯视。必须接管，因为游戏相机永远贴着玩家，
@@ -29,12 +29,12 @@ const SCENE_PATH := "res://scenes/ExpeditionLevel99_3D.tscn"
 const OVERVIEW_PATH := OUTPUT_DIR + "/test_level_99_overview.png"
 const ENTRY_PATH := OUTPUT_DIR + "/test_level_99_entry_safe_room.png"
 const ROOM_01_PATH := OUTPUT_DIR + "/test_level_99_room_01.png"
-const ROOM_02_PATH := OUTPUT_DIR + "/test_level_99_room_02.png"
+const BOSS_PATH := OUTPUT_DIR + "/test_level_99_boss.png"
 const EXTRACTION_PATH := OUTPUT_DIR + "/test_level_99_extraction_beacon.png"
-const CORRIDOR_PATH := OUTPUT_DIR + "/test_level_99_corridor_01_02.png"
+const CORRIDOR_PATH := OUTPUT_DIR + "/test_level_99_corridor_01_boss.png"
 
-## 关卡 99 的四间房。顺序即主路：入口 → 01 → 02 → 撤离。
-const ALL_ROOM_IDS: Array[String] = ["start", "room_01", "room_02", "extraction"]
+## 关卡 99 的四间房。顺序即主路：入口 → 01 → Boss → 撤离。
+const ALL_ROOM_IDS: Array[String] = ["start", "room_01", "boss", "extraction"]
 
 ## 是否进房开灯后再采样。不开灯的话整套图几乎全黑 —— 房间默认关灯，
 ## 而这是本关的室内默认状态，黑图读不出装配关系，等于没验收。
@@ -62,10 +62,10 @@ const ROOM_SHOTS: Array = [
 		"failure": "01 号战斗房采样失败",
 	},
 	{
-		"room_id": "room_02",
+		"room_id": "boss",
 		"yaw": PI / 4.0,
-		"path": ROOM_02_PATH,
-		"failure": "02 号战斗房采样失败",
+		"path": BOSS_PATH,
+		"failure": "Boss 房采样失败",
 	},
 	{
 		"room_id": "extraction",
@@ -79,14 +79,14 @@ const ROOM_SHOTS: Array = [
 const PLAYER_STAND_Y := 0.05
 
 ## 走廊采样：玩家站 01 号房中央面向 +X（rotation.y = -PI/2），另用**独立近距机位**
-## 从 01↔02 通道正上方偏西做正交式俯视。
+## 从 01↔Boss 通道正上方偏西做正交式俯视。
 ##
 ## 为什么这一张不走游戏相机：游戏相机在玩家局部系里偏出约 (6.2, 10.3, 6.2)m，
 ## 俯角 ≈ 55°；而水平走廊只有 5m 宽、门洞在 1.6m 高处，这个俯角下**看不到正前方的
 ## 门洞**，拍出来只是一片带缝的地面（已实测）。判读「走廊有没有真接上门」需要
 ## 沿着通道方向正面看，故这里与俯瞰图同类，属于「为判读刻意偏离游戏相机」。
 const CORRIDOR_FROM_ROOM := "room_01"
-const CORRIDOR_TO_ROOM := "room_02"
+const CORRIDOR_TO_ROOM := "boss"
 const CORRIDOR_YAW := -PI * 0.5
 ## 走廊机位：沿用俯瞰图那条 45° 斜视线（已被俯瞰图证明看得见墙与走廊），
 ## 只是把距离从 134m 拉到 26m，使 10m 长的通道占到画面约 1/3。
@@ -198,10 +198,10 @@ func _ready() -> void:
 		await _settle()
 		_capture(str(shot["path"]), str(shot["failure"]), failures)
 
-	# —— 采样 6：01↔02 走廊（独立近距机位，理由见 CORRIDOR_* 常量注释）——
+	# —— 采样 6：01↔Boss 走廊（独立近距机位，理由见 CORRIDOR_* 常量注释）——
 	# 必须先把玩家真的放进 01 号房：走廊可见性由「当前房 ∈ 该边两端」决定，
 	# 只调 force_enter_room_for_test 而不挪玩家，当前房仍是上一间房，
-	# room_01↔room_02 会按契约保持隐藏（实测过，别把它当关卡缺陷）。
+	# room_01↔boss 会按契约保持隐藏（实测过，别把它当关卡缺陷）。
 	if not _place_player_in_room(tower, CORRIDOR_FROM_ROOM, CORRIDOR_YAW):
 		failures.append("无法把玩家放进 %s，跳过走廊采样" % CORRIDOR_FROM_ROOM)
 	else:
@@ -319,7 +319,7 @@ func _restore_overview_overrides(
 		_set_environment_fog(tower, true)
 
 
-## 01↔02 走廊的近距俯视。视觉相机已被接管（调用方已停塔楼 _physics_process）。
+## 01↔Boss 走廊的近距俯视。视觉相机已被接管（调用方已停塔楼 _physics_process）。
 ##
 ## 机位对齐通道走向：在两端门中心的中点正上方 7m，再沿**垂直于通道**的水平方向
 ## 偏出 10m（通道是东西向时即偏南北），这样 5m 宽的通道横向装满画面，
@@ -363,7 +363,7 @@ func _capture_corridor(
 		% [edge, str(start), str(end), str(eye)]
 	)
 	await _settle()
-	_capture(CORRIDOR_PATH, "01↔02 走廊采样失败", failures)
+	_capture(CORRIDOR_PATH, "01↔Boss 走廊采样失败", failures)
 
 
 ## 让全部走廊节点可见，返回被显示的走廊数。仅俯瞰图使用。
@@ -383,7 +383,7 @@ func _report(failures: Array[String], original_clock: Dictionary) -> void:
 	GameTimeManager.restore_from_persistence(original_clock, false)
 	if failures.is_empty():
 		print(
-			"TEST_LEVEL_99_VISUAL_OK: overview/entry/room_01/room_02/extraction/corridor "
+			"TEST_LEVEL_99_VISUAL_OK: overview/entry/room_01/boss/extraction/corridor "
 			+ "previews saved under res://outputs/verification/, each with render guard "
 			+ "(captured=%d skipped_headless=%d)" % [_captured, _skipped_headless]
 		)

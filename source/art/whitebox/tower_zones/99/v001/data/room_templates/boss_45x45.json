@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "boss_45x45",
+  "room_type": "BOSS_ROOM",
+  "size_m": [45.0, 45.0],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": ["north", "south", "east", "west"],
+  "wall_lane_table": {
+    "north": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0],
+    "south": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0],
+    "east": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0],
+    "west": [-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0]
+  },
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "ENV-EXPEDITION-L99-BOSS-45X45",
+    "components": []
+  },
+  "note": "测试关卡99 Boss 房（45×45，9 段×9 段，含中心门槽）。与 std_25x25 同为奇数段墙，门槽相位一致，可在直线布局下与相邻房对齐成 5m 整数倍净距。运行时白盒程序化生成，无静态 TSCN。"
+}

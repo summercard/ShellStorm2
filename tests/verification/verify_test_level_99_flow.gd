@@ -12,7 +12,7 @@ extends Node
 ##   * 房间运行时编号没跟运行时契约（`start` / `room_01..N` / `extraction`）对齐时，
 ##     几何校验与静态设计源校验全部通过，只是玩家出生点取不到房、撤离信标落在
 ##     一个不存在的房 id 上（`_commit_floor_bundle` 按 key 找房所以照样绿）；
-##   * 内置远征房表硬编码 5 间内容房，2 间内容房的关卡一旦回退到它就会**多出 3 间房**，
+##   * 内置远征房表硬编码 5 间内容房，1 间内容房的关卡一旦回退到它就会**多出 4 间房**，
 ##     而回退只在 `runtime_enabled` 缺失时才发生，没有任何报错；
 ##   * 菜单按钮绑错关卡 id 时按钮照样能点、读取界面照样能进，只是去了别的关卡。
 ## 这三类都只有「真装配一次 + 真读一次产出」才看得见，所以本脚本两件事都做。
@@ -26,19 +26,20 @@ const TOWER_SCENE := "res://scenes/TowerDescent3D.tscn"
 const DEFAULT_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
 const DEFAULT_DISPLAY_NAME := "远征关卡01"
 const LEVEL_DISPLAY_NAME := "测试关卡99"
-## 内置房表里远征恒为 5 间内容房。99 只有 2 间，因此「没有回退到内置房表」
-## 本身就是一个可断言的事实 —— 见 _verify_design_source 与 _verify_level_scene。
+## 内置房表里远征恒为 5 间内容房。99 只有 1 间内容房 + 1 间 Boss 房，因此
+## 「没有回退到内置房表」本身就是一个可断言的事实 —— 见 _verify_design_source。
 const BUILTIN_EXPEDITION_CONTENT_ROOMS := 5
 
 const SAFE_ROOM_SIZE := Vector2(15.0, 15.0)
 const CONTENT_ROOM_SIZE := Vector2(25.0, 25.0)
-const EXPECTED_ROOM_IDS: Array[String] = ["start", "room_01", "room_02", "extraction"]
-const EXPECTED_MAIN_KEYS: Array[String] = ["room_01", "room_02"]
+const BOSS_ROOM_SIZE := Vector2(45.0, 45.0)
+const EXPECTED_ROOM_IDS: Array[String] = ["start", "room_01", "boss", "extraction"]
+const EXPECTED_MAIN_KEYS: Array[String] = ["room_01"]
 ## 设计源里按房间钉死的内容类型（不是随机洗牌的），运行时必须逐值复现。
 const EXPECTED_ROOM_TYPES := {
 	"start": "STAIR_LOBBY",
 	"room_01": "COMBAT",
-	"room_02": "COMBAT",
+	"boss": "BOSS",
 	"extraction": "EXTRACTION",
 }
 const GENERATOR_SEED := 20260919
@@ -148,8 +149,8 @@ func _verify_design_source(failures: Array[String]) -> void:
 		failures.append("测试关卡99 的房间数等于内置远征房表（7 房），疑似回退到了内置房表")
 	var main_keys: Array = plan.get("main_path_keys", []) as Array
 	if main_keys != EXPECTED_MAIN_KEYS.duplicate():
-		failures.append("测试关卡99 的主通道不是 01—02 号房：%s" % [main_keys])
-	# 设计源把两间内容房钉死成 COMBAT，运行时不得被洗成别的类型。
+		failures.append("测试关卡99 的主通道不是 01 号房：%s" % [main_keys])
+	# 设计源把唯一一间内容房钉死成 COMBAT、Boss 房钉死成 BOSS，运行时不得被洗成别的类型。
 	_verify_level_plan_rooms(failures)
 
 
@@ -168,9 +169,17 @@ func _verify_level_plan_rooms(failures: Array[String]) -> void:
 		failures.append("测试关卡99 的 L2 缺少入口房 key=entry（运行时按该 key 找入口）")
 	if not by_key.has("extraction"):
 		failures.append("测试关卡99 的 L2 缺少撤离房 key=extraction（运行时按该 key 挂撤离信标）")
+	if not by_key.has("boss"):
+		failures.append("测试关卡99 的 L2 缺少 Boss 房 key=boss（运行时按该 key 指派首领）")
+	else:
+		var boss_room := by_key.get("boss") as Dictionary
+		if str(boss_room.get("room_type", "")) != "BOSS_ROOM":
+			failures.append("测试关卡99 的 boss 房 room_type 不是 BOSS_ROOM：%s" % str(boss_room.get("room_type", "")))
+		if str(boss_room.get("boss_content_id", "")) != "boss_monitor002":
+			failures.append("测试关卡99 的 boss 房首领指派不是 boss_monitor002：%s" % str(boss_room.get("boss_content_id", "")))
 	var main_path: Array = normalized.get("main_path", []) as Array
 	if main_path != EXPECTED_MAIN_KEYS.duplicate():
-		failures.append("测试关卡99 的 L2 主路不是 01—02：%s" % [main_path])
+		failures.append("测试关卡99 的 L2 主路不是 01 号房：%s" % [main_path])
 	# 入口房的门槽必须指向 01 号房，否则开局动线断在安全屋里。
 	var entry_ports: Array = (by_key.get("entry", {}) as Dictionary).get("ports", []) as Array
 	if entry_ports.size() != 1:
@@ -337,7 +346,7 @@ func _verify_level_scene(failures: Array[String]) -> void:
 	await get_tree().process_frame
 
 
-## 规划快照必须来自数据驱动，且**内容房只有 2 间** —— 这是「没有静默回退内置房表」的运行时证据。
+## 规划快照必须来自数据驱动，且**内容房只有 1 间（另加 Boss 房）** —— 这是「没有静默回退内置房表」的运行时证据。
 func _verify_plan_snapshot(tower: TowerDescent3D, failures: Array[String]) -> void:
 	var plan := tower._floor_plan_snapshots.get(0, {}) as Dictionary
 	if plan.is_empty():
@@ -349,7 +358,7 @@ func _verify_plan_snapshot(tower: TowerDescent3D, failures: Array[String]) -> vo
 			% str(plan.get("trigger", ""))
 		)
 	if int(plan.get("content_room_count", -1)) != EXPECTED_MAIN_KEYS.size():
-		failures.append("测试关卡99 运行时内容房计数不是 2：%s" % str(plan.get("content_room_count", -1)))
+		failures.append("测试关卡99 运行时内容房计数不是 1：%s" % str(plan.get("content_room_count", -1)))
 	if not bool(plan.get("valid", false)):
 		failures.append("测试关卡99 的规划校验未通过：%s" % str(plan.get("validation_errors", [])))
 	if str(plan.get("terminal_mode", "")) != "extraction_room":
@@ -513,7 +522,7 @@ func _verify_rooms(tower: TowerDescent3D, failures: Array[String]) -> void:
 			failures.append("%s 不在 Blocks/Expedition 内：%s" % [room_id, str(room.get_path())])
 		if str(room.get_meta("block_id", "")) != "expedition":
 			failures.append("%s 的 block_id 元数据不是 expedition" % room_id)
-		var expected_size := SAFE_ROOM_SIZE if room_id == "start" else CONTENT_ROOM_SIZE
+		var expected_size := SAFE_ROOM_SIZE if room_id == "start" else BOSS_ROOM_SIZE if room_id == "boss" else CONTENT_ROOM_SIZE
 		if not room.get_dimensions().is_equal_approx(expected_size):
 			failures.append("%s 尺寸不是 %s：%s" % [room_id, expected_size, room.get_dimensions()])
 	if not tower.get_first_safe_room_dimensions().is_equal_approx(SAFE_ROOM_SIZE):
@@ -533,18 +542,18 @@ func _verify_rooms(tower: TowerDescent3D, failures: Array[String]) -> void:
 
 
 ## 入口门是固定交通接口：免费通行（不清房、不耗钥匙、不弹命运卡）。
-## 这条在一次只有 2 间内容房的关卡里更重要 —— 少了内容房分摊，命运卡一旦卡在入口
-## 就会让整局只剩一间房可打。
+## 这条在一次只有 1 间内容房的关卡里更重要 —— 少了内容房分摊，命运卡一旦卡在入口
+## 就会让整局只剩 Boss 房可打。
 func _verify_entry_gate(tower: TowerDescent3D, failures: Array[String]) -> void:
 	var policy := tower._door_policy_for_edge("start", "room_01")
 	for key in ["requires_clear", "requires_key", "triggers_fate"]:
 		if bool(policy.get(key, true)):
 			failures.append("测试关卡99 的入口门应为免费通行：%s" % policy)
-	# 01 → 02 是唯一一间内容房之间的门，必须保留默认门策略（清房/钥匙/命运卡）。
-	var inner := tower._door_policy_for_edge("room_01", "room_02")
+	# 01 → Boss 是内容房到 Boss 房的门，必须保留默认门策略（清房/钥匙/命运卡）。
+	var inner := tower._door_policy_for_edge("room_01", "boss")
 	for key in ["requires_clear", "requires_key", "triggers_fate"]:
 		if not bool(inner.get(key, false)):
-			failures.append("测试关卡99 的 01→02 门策略应保留默认：%s" % inner)
+			failures.append("测试关卡99 的 01→Boss 门策略应保留默认：%s" % inner)
 
 
 func _verify_extraction(tower: TowerDescent3D, failures: Array[String]) -> void:
@@ -569,69 +578,21 @@ func _verify_extraction(tower: TowerDescent3D, failures: Array[String]) -> void:
 
 ## 房间级刷怪计划（enemy_spawn_plan）的运行时落地断言。
 ##
-## 只验「设计源透传到 plan」是不够的：plan 里的字段要真的驱动刷怪才有意义。
-## 这里真装配 99、真调唯一刷怪入口 `_spawn_room_enemies`，逐值读产出：
-##   * room_02 填了计划 → 波次数 / 每波数量 / 组成必须与设计源逐值一致（2 波 × 3 只）；
-##   * room_01 没填     → 必须仍走全局公式（覆盖是「按房间可选」，不是「一填全改」）。
-## 另钉一条状态不泄漏：命运卡注入的「下一间房」倍率与补兵计数，在被设计源接管的
-## 房里也必须落账并清零 —— 漏清零会安静地污染后面几间房，没有任何几何/静态校验看得见。
+## 本关只有一间内容房 room_01，且它**不填** enemy_spawn_plan（走全局公式）。
+## 因此这里钉的是「没填计划 → 照常走全局公式」以及「BOSS 房不归设计源管」两条口径：
+##   * room_01 没填     → 必须仍走全局公式刷出敌人（不填不等于不刷）；
+##   * BOSS 房不写计划 → 静态校验与运行时兜底两道都要拦住（Boss 有独立出场逻辑）。
 func _verify_enemy_spawn_plan(tower: TowerDescent3D, failures: Array[String]) -> void:
 	var room_01 := tower._room_by_id.get("room_01") as DungeonRoom3D
-	var room_02 := tower._room_by_id.get("room_02") as DungeonRoom3D
-	if room_01 == null or room_02 == null:
-		failures.append("刷怪计划断言取不到 room_01 / room_02")
+	var boss := tower._room_by_id.get("boss") as DungeonRoom3D
+	if room_01 == null:
+		failures.append("刷怪计划断言取不到 room_01")
 		return
-	# A/B 前提：同一张关卡、同一种房型（都是 COMBAT），只有 room_02 填了计划。
+	# room_01 是唯一内容房、未填计划 → 必须仍走全局公式（覆盖是「按房间可选」）。
 	if not room_01.enemy_spawn_plan.is_empty():
 		failures.append(
 			"room_01 本应保持全局公式（未填 enemy_spawn_plan），实为 %s" % [room_01.enemy_spawn_plan]
 		)
-	if room_02.enemy_spawn_plan.is_empty():
-		failures.append("room_02 的 enemy_spawn_plan 没有落到房间实例上（设计源字段被吞了）")
-		return
-	var authored_waves: Array = room_02.enemy_spawn_plan.get("waves", []) as Array
-	if authored_waves.size() != 2:
-		failures.append("room_02 设计源应为 2 波，实为 %d" % authored_waves.size())
-
-	# 命运卡注入：临时设「下一间房」倍率 + 补兵计数，验证被接管的房照常落账/清零。
-	tower._next_room_enemy_hp_multiplier = 2.5
-	tower._next_room_enemy_count = 4
-	if not bool(tower.call("_spawn_room_enemies", room_02)):
-		failures.append("room_02 刷怪失败（入口会解锁房间防软锁）")
-		return
-	var live := tower._enemy_nodes_by_room.get("room_02", []) as Array
-	var queue := tower._room_wave_queues.get("room_02", []) as Array
-	var queued := int((queue[0] as Array).size()) if queue.size() == 1 else -1
-	if live.size() != 3:
-		failures.append("room_02 第一波应为 3 只（2 近战 + 1 远程），实为 %d" % live.size())
-	if queue.size() != 1:
-		failures.append("room_02 剩余波数应为 1，实为 %d" % queue.size())
-	elif queued != 3:
-		failures.append("room_02 第二波应为 3 只（1 护盾 + 2 自爆），实为 %d" % queued)
-	if int(tower._room_wave_totals.get("room_02", 0)) != 2:
-		failures.append(
-			"room_02 波次总数应为 2，实为 %s" % str(tower._room_wave_totals.get("room_02", 0))
-		)
-	if live.size() + maxi(queued, 0) != 6:
-		failures.append(
-			"room_02 总敌数应为 6（数量以设计源为准，补兵计数不得追加到本房），实为 %d"
-			% [live.size() + maxi(queued, 0)]
-		)
-	if not is_equal_approx(float(tower._room_enemy_hp_multipliers.get("room_02", 1.0)), 2.5):
-		failures.append(
-			"room_02 未落账命运卡倍率：%s" % str(tower._room_enemy_hp_multipliers.get("room_02", 1.0))
-		)
-	if not is_equal_approx(float(tower._next_room_enemy_hp_multiplier), 1.0):
-		failures.append(
-			"被设计源接管的房没有清零「下一间房」倍率，会泄漏给后面的房间：%s"
-			% str(tower._next_room_enemy_hp_multiplier)
-		)
-	if int(tower._next_room_enemy_count) != 0:
-		failures.append(
-			"被设计源接管的房没有清零补兵计数：%d" % int(tower._next_room_enemy_count)
-		)
-
-	# room_01 未填计划 → 必须仍走全局公式（证明覆盖是按房间可选的）。
 	if not bool(tower.call("_spawn_room_enemies", room_01)):
 		failures.append("room_01 走全局公式时刷怪失败")
 		return
@@ -639,33 +600,15 @@ func _verify_enemy_spawn_plan(tower: TowerDescent3D, failures: Array[String]) ->
 	if formula_live.is_empty():
 		failures.append("room_01 未按全局公式刷出任何敌人")
 
-	# 上面把 _next_room_enemy_count 设成 4 才刷的 room_02：设计源赢下「数量」这一维度，
-	# 但不允许静默吞掉 —— 必须留痕，否则表现为「卡抽了没反应」且无处可查。
-	if int(tower._room_spawn_plan_suppressed_reinforcements.get("room_02", 0)) != 4:
-		failures.append(
-			"被接管房没有留下「命运卡补兵被抑制」的记录（静默吞掉不可接受）：%s"
-			% str(tower._room_spawn_plan_suppressed_reinforcements)
-		)
-
-	# 落点必须逐只不同：布局房只有 4 个环形点，而设计源允许一波 24 只。
-	# 若仍按 index % size 取点，超出的敌人会叠在同一坐标 —— 数量上限就成了空话。
-	var seen_positions: Array[Vector3] = []
-	for spawn_index in range(12):
-		var spawn_point: Vector3 = room_02.spawn_point_for_index(spawn_index)
-		for existing_point in seen_positions:
-			if existing_point.distance_to(spawn_point) < 0.05:
-				failures.append(
-					"刷怪落点重合：index %d 与已有点相距仅 %.3f m（数量上限无法兑现）"
-					% [spawn_index, existing_point.distance_to(spawn_point)]
-				)
-				break
-		seen_positions.append(spawn_point)
-
 	# BOSS 房不归设计源管：Boss 的出场与结算由生成工具（BossContentCatalog）决定。
 	# 在 BOSS 房写计划会让刷怪入口先于 match room.room_type 返回，boss + elite 整段被跳过。
 	# 静态校验与运行时兜底两道都要在，这里逐条钉住。
 	if GameDesignConfig.is_spawn_plan_authorable_room("BOSS"):
 		failures.append("唯一口径 is_spawn_plan_authorable_room 把 BOSS 判成可写，口径反了")
+	if boss == null:
+		failures.append("刷怪计划断言取不到 boss 房")
+	elif not boss.enemy_spawn_plan.is_empty():
+		failures.append("boss 房不应带 enemy_spawn_plan（Boss 有独立出场逻辑）：%s" % [boss.enemy_spawn_plan])
 	var boss_probe := LevelPlanValidator._validate_enemy_spawn_plan({
 		"key": "boss_probe",
 		"content_type": "BOSS",
@@ -1035,26 +978,24 @@ func _report(failures: Array[String]) -> void:
 			+ "registry(99 -> ExpeditionLevel99_3D, run_id 99, resume route), "
 			+ "design source loaded with runtime_enabled pinned per level (99 + expedition_01 on, "
 			+ "battle_level01 off), "
-			+ "generator trigger=level_plan_data with 4 rooms start/room_01/room_02/extraction "
+			+ "generator trigger=level_plan_data with 4 rooms start/room_01/boss/extraction "
 			+ "(no fallback to the 5-content-room builtin table), "
 			+ "standalone single-layer scene on Dungeon3D base with Blocks/Expedition only, "
 			+ "content bounds shrunk to the 4-room footprint with real raycast floor/walls, "
 			+ "free entry gate, STANDARD extraction beacon in the extraction room, "
 			+ "99F mission-operations menu exposes the test-level-99 entry button, "
-			+ "per-room enemy_spawn_plan drives room_02 (2 waves x 3) while room_01 stays "
-			+ "on the global formula, fate-card next-room multipliers recorded then reset, "
+			+ "room_01 stays on the global formula while the boss room is authored "
+			+ "boss_content_id=boss_monitor002, "
 			+ "boss rooms excluded from spawn-plan authoring at both validator and runtime, "
 			+ "boss identity authorable per room via boss_content_id through one resolver "
 			+ "(authored id wins over the floor roster, an unknown id is never silently swapped, "
 			+ "and an unspecified single-layer boss room spawns no boss at all), "
 			+ "boss_content_id survives both the loader whitelist and the generator passthrough "
-			+ "(hand-written patch probe, since no shipped level authors the field yet), "
+			+ "(level 99 authors boss_monitor002 for its boss room), "
 			+ "reward_plan survives both the loader whitelist and the generator passthrough, "
 			+ "projects to reward_slots with ref intact for pool/inline forms, stays out of "
 			+ "layout_id, and is gated on unknown pools plus kill slots on non-hostile rooms "
 			+ "(hand-written patch probe, same reason), "
-			+ "suppressed fate-card reinforcements recorded instead of silently dropped, "
-			+ "spawn points stay pairwise distinct beyond the ring (cap is honorable), "
 			+ "loading screen follows the pending level and falls back to expedition_01 unchanged"
 		)
 		get_tree().quit(0)
