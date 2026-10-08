@@ -1,0 +1,1056 @@
+00:00.453  blend            | Read blend: "I:\工作项目\shellstrom2\ShellStorm2\assets\art\props\base_world_3d\source\base99_radio\prp_base99_radio_source_v004.blend"
+{
+  "01_制作组件_已统一材质": [
+    {
+      "name": "主体外壳_青绿哑光",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.7604081630706787,
+        0.3840000033378601,
+        0.43786925077438354
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "02_细腻哑光_青绿大面",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "底座_深紫金属",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.718163251876831,
+        0.36479997634887695,
+        0.051748182624578476
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "正面护框_上",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.7392857074737549,
+        0.030719995498657227,
+        0.0398063063621521
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "正面护框_下",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.7392857074737549,
+        0.030719995498657227,
+        0.039806291460990906
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "正面护框_左",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.042244940996170044,
+        0.030719995498657227,
+        0.3662179112434387
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "正面护框_右",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.042244940996170044,
+        0.030719995498657227,
+        0.3662179112434387
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "侧面装甲_左",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.03379592299461365,
+        0.3263999819755554,
+        0.3383535146713257
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "02_细腻哑光_青绿大面",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "侧面装甲_右",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.03379592299461365,
+        0.3263999819755554,
+        0.3383535146713257
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "02_细腻哑光_青绿大面",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "调频玻璃窗_紫粉反光",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.2745918035507202,
+        0.01920001208782196,
+        0.08359318971633911
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "03_清漆反光_紫粉点缀",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "调频窗刻度_金属",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.21122446656227112,
+        0.009599998593330383,
+        0.0059709250926971436
+      ],
+      "verts": 8,
+      "faces": 6,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "扬声器栅格_竖_01",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.016897961497306824,
+        0.015360012650489807,
+        0.22291524708271027
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "扬声器栅格_竖_02",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.016897961497306824,
+        0.015360012650489807,
+        0.22291524708271027
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "扬声器栅格_竖_03",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.016897961497306824,
+        0.015360012650489807,
+        0.22291524708271027
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "扬声器栅格_竖_04",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.016897961497306824,
+        0.015360012650489807,
+        0.22291524708271027
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "扬声器栅格_竖_05",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.016897961497306824,
+        0.015360012650489807,
+        0.22291524708271027
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "扬声器栅格_横_01",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.2640305757522583,
+        0.01151999831199646,
+        0.013932198286056519
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "扬声器栅格_横_02",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.2640305757522583,
+        0.01151999831199646,
+        0.013932198286056519
+      ],
+      "verts": 24,
+      "faces": 26,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "旋钮_调频",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.10138778388500214,
+        0.03839999437332153,
+        0.09553509950637817
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "旋钮_音量",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.08448976278305054,
+        0.034560009837150574,
+        0.0796126127243042
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "旋钮指示线_调频",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.006336718797683716,
+        0.005760014057159424,
+        0.031845033168792725
+      ],
+      "verts": 8,
+      "faces": 6,
+      "props": {
+        "material_role": "02_细腻哑光_青绿大面",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "旋钮指示线_音量",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.006336718797683716,
+        0.005760014057159424,
+        0.025874078273773193
+      ],
+      "verts": 8,
+      "faces": 6,
+      "props": {
+        "material_role": "02_细腻哑光_青绿大面",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "护框螺栓",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.02112242579460144,
+        0.015359997749328613,
+        0.019903145730495453
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "护框螺栓.001",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.02112242579460144,
+        0.015359997749328613,
+        0.01990315318107605
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "护框螺栓.002",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.02112242579460144,
+        0.015359997749328613,
+        0.019903145730495453
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "护框螺栓.003",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.02112242579460144,
+        0.015359997749328613,
+        0.01990315318107605
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "提手_左",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.06290453672409058,
+        0.03840000182390213,
+        0.13922718167304993
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "提手_顶",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.44357138872146606,
+        0.03840000182390213,
+        0.039806246757507324
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "提手_右",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.06290455162525177,
+        0.03839999809861183,
+        0.1392272412776947
+      ],
+      "verts": 16,
+      "faces": 10,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "斜金属伸缩天线_单根",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.20504958927631378,
+        0.03735262528061867,
+        0.3430095613002777
+      ],
+      "verts": 60,
+      "faces": 36,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>",
+        "antenna_base": "<bpy id property array [3]>",
+        "antenna_tip": "<bpy id property array [3]>",
+        "tilt_degrees": "29.34988279857398"
+      }
+    },
+    {
+      "name": "状态灯金属座",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.062000006437301636,
+        0.062000006437301636,
+        0.024000048637390137
+      ],
+      "verts": 24,
+      "faces": 14,
+      "props": {
+        "material_role": "01_精工金属_紫色骨架",
+        "palette_cell": "<bpy id property array [2]>"
+      }
+    },
+    {
+      "name": "状态灯_Source",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.046000003814697266,
+        0.046000003814697266,
+        0.029999971389770508
+      ],
+      "verts": 62,
+      "faces": 72,
+      "props": {
+        "material_role": "04_柔和自发光_UI灯光",
+        "palette_cell": "<bpy id property array [2]>",
+        "runtime_interface_name": "StatusLight"
+      }
+    }
+  ],
+  "02_游戏输出_独立资产包_v004": [
+    {
+      "name": "ItemRoot",
+      "type": "EMPTY",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "verts": null,
+      "faces": null,
+      "props": {
+        "asset_id": "PRP-BASE99-RADIO-3D",
+        "asset_version": "v004",
+        "front_direction_godot": "-Z",
+        "base_plane": "Z=0",
+        "runtime_prefab": "assets/art/props/base_world_3d/runtime/base99_radio/prp_base99_radio_root_top3d.tscn",
+        "status_light_node_path": "ItemRoot/StatusLight",
+        "preview_camera": "收音机近景相机",
+        "dimensions_contract_m": "0.828W x 0.456D x 0.822H Blender; Godot 0.828W x 0.822H x 0.456D",
+        "scale_baked": "True",
+        "material_finish": "deep ink green / dark brown copper retro matte; StatusLight only emissive at runtime",
+        "status_palette_contract": "off=(4,8), a/b=(5,5), 0-based bottom-left; white factors; UV1 offset=(0.1,0.3) Godot; energy=1.5"
+      }
+    }
+  ],
+  "02_状态灯_自发光": [
+    {
+      "name": "StatusLight_UI灯光_柔和自发光",
+      "type": "MESH",
+      "parent": "ItemRoot",
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.046000003814697266,
+        0.046000003814697266,
+        0.029999971389770508
+      ],
+      "verts": 62,
+      "faces": 72,
+      "props": {
+        "runtime_interface_name": "StatusLight"
+      }
+    }
+  ],
+  "root": {
+    "name": "ItemRoot",
+    "type": "EMPTY",
+    "parent": null,
+    "loc": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dims": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "verts": null,
+    "faces": null,
+    "props": {
+      "asset_id": "PRP-BASE99-RADIO-3D",
+      "asset_version": "v004",
+      "front_direction_godot": "-Z",
+      "base_plane": "Z=0",
+      "runtime_prefab": "assets/art/props/base_world_3d/runtime/base99_radio/prp_base99_radio_root_top3d.tscn",
+      "status_light_node_path": "ItemRoot/StatusLight",
+      "preview_camera": "收音机近景相机",
+      "dimensions_contract_m": "0.828W x 0.456D x 0.822H Blender; Godot 0.828W x 0.822H x 0.456D",
+      "scale_baked": "True",
+      "material_finish": "deep ink green / dark brown copper retro matte; StatusLight only emissive at runtime",
+      "status_palette_contract": "off=(4,8), a/b=(5,5), 0-based bottom-left; white factors; UV1 offset=(0.1,0.3) Godot; energy=1.5"
+    }
+  },
+  "all_objects": [
+    {
+      "name": "Antenna",
+      "type": "MESH",
+      "parent": "ItemRoot",
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.20504958927631378,
+        0.03735262528061867,
+        0.3430095613002777
+      ],
+      "verts": 60,
+      "faces": 36,
+      "props": {
+        "antenna_base": "<bpy id property array [3]>",
+        "antenna_tip": "<bpy id property array [3]>",
+        "tilt_degrees": "29.34988279857398"
+      }
+    },
+    {
+      "name": "ItemRoot",
+      "type": "EMPTY",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "verts": null,
+      "faces": null,
+      "props": {
+        "asset_id": "PRP-BASE99-RADIO-3D",
+        "asset_version": "v004",
+        "front_direction_godot": "-Z",
+        "base_plane": "Z=0",
+        "runtime_prefab": "assets/art/props/base_world_3d/runtime/base99_radio/prp_base99_radio_root_top3d.tscn",
+        "status_light_node_path": "ItemRoot/StatusLight",
+        "preview_camera": "收音机近景相机",
+        "dimensions_contract_m": "0.828W x 0.456D x 0.822H Blender; Godot 0.828W x 0.822H x 0.456D",
+        "scale_baked": "True",
+        "material_finish": "deep ink green / dark brown copper retro matte; StatusLight only emissive at runtime",
+        "status_palette_contract": "off=(4,8), a/b=(5,5), 0-based bottom-left; white factors; UV1 offset=(0.1,0.3) Godot; energy=1.5"
+      }
+    },
+    {
+      "name": "StatusLight_UI灯光_柔和自发光",
+      "type": "MESH",
+      "parent": "ItemRoot",
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.046000003814697266,
+        0.046000003814697266,
+        0.029999971389770508
+      ],
+      "verts": 62,
+      "faces": 72,
+      "props": {
+        "runtime_interface_name": "StatusLight"
+      }
+    },
+    {
+      "name": "Visual",
+      "type": "MESH",
+      "parent": "ItemRoot",
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.8279999494552612,
+        0.45600003004074097,
+        0.6269491314888
+      ],
+      "verts": 576,
+      "faces": 538,
+      "props": {}
+    },
+    {
+      "name": "状态灯_Source",
+      "type": "MESH",
+      "parent": null,
+      "loc": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "dims": [
+        0.046000003814697266,
+        0.046000003814697266,
+        0.029999971389770508
+      ],
+      "verts": 62,
+      "faces": 72,
+      "props": {
+        "material_role": "04_柔和自发光_UI灯光",
+        "palette_cell": "<bpy id property array [2]>",
+        "runtime_interface_name": "StatusLight"
+      }
+    }
+  ]
+}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+
+Blender quit

@@ -53,14 +53,22 @@ func _process(_delta: float) -> void:
 	tooltip.text = get_next_prompt()
 
 
+func _input(event: InputEvent) -> void:
+	_consume_mouse_input(event)
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	_consume_mouse_input(event)
+
+
+func _consume_mouse_input(event: InputEvent) -> void:
 	var mouse := event as InputEventMouseButton
 	if mouse == null or mouse.button_index != MOUSE_BUTTON_LEFT or not mouse.pressed:
 		return
 	var player := _get_player()
 	if _can_interact(player) and _mouse_hits_radio(mouse.position, player):
-		perform_interaction(player, get_interaction_candidate(player))
-		get_viewport().set_input_as_handled()
+		if perform_interaction(player, get_interaction_candidate(player)):
+			get_viewport().set_input_as_handled()
 
 
 func _get_player() -> Player3D:

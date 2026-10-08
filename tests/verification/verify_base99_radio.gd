@@ -27,15 +27,15 @@ func _ready() -> void:
 	_assert(failures, radio.get_meta("asset_id", "") == "PRP-BASE99-RADIO-3D", "asset_id 不正确")
 	_assert(failures, radio.get_meta("asset_category", "") == "decor_prop", "category 必须是场景可交互道具")
 	var radio_bounds := _world_bounds(radio)
-	_assert(failures, radio_bounds.size.is_equal_approx(Vector3(0.828, 0.822, 0.456)), "radio运行时视觉bounds不符合v003本地契约")
+	_assert(failures, radio_bounds.size.is_equal_approx(Vector3(0.828, 0.822, 0.456)), "radio运行时视觉bounds不符合v005本地契约")
 	_assert(failures, "environment_component" not in str(radio.get_meta("collision_policy", "")), "radio 不得标记 environment_component")
 	_assert(failures, radio.scale.is_equal_approx(Vector3.ONE), "radio 根节点不得缩放")
 	_assert(failures, radio.get_node_or_null("AudioStreamPlayer3D") != null, "缺少 AudioStreamPlayer3D")
 	_assert(failures, radio.get_node("AudioStreamPlayer3D").bus == &"Music", "AudioStreamPlayer3D 未使用 Music bus")
 	_assert(failures, ResourceLoader.exists(MUSIC_A) and ResourceLoader.exists(MUSIC_B), "base_passion A/B 音频缺失")
 
-	_assert(failures, radio.get_meta("asset_version", "") == "v004", "收音机资产必须v004")
-	_assert(failures, int(radio.get_meta("model_faces", 800)) < 800, "收音机面数必须小于800")
+	_assert(failures, radio.get_meta("asset_version", "") == "v005", "收音机资产必须v005")
+	_assert(failures, int(radio.get_meta("model_faces", 800)) == 599 and int(radio.get_meta("model_triangles", 0)) == 1190 and int(radio.get_meta("model_faces", 800)) < 800, "收音机面数/三角形必须符合v005登记")
 	_verify_visual_contract(failures, radio)
 	_assert(failures, radio.radio_state == "off", "初始状态必须 off")
 	_verify_status(failures, radio, false)
@@ -221,9 +221,6 @@ func _click_radio(radio: Base99Radio3D, screen_position: Vector2, expected_state
 	event.button_index = MOUSE_BUTTON_LEFT
 	event.pressed = true
 	event.position = screen_position
-	var camera := get_viewport().get_camera_3d()
-	if camera != null:
-		event.position = camera.unproject_position(radio.to_global(Vector3(0.0, 0.411, 0.0)))
 	var player := radio.call("_get_player") as Player3D
 	print("RADIO_DISPATCH_BEFORE expected=%s state=%s can=%s hit=%s player=%s screen=%s" % [expected_state, radio.get_radio_state(), radio.call("_can_interact", player), radio.call("_mouse_hits_radio", event.position, player), player.global_position, event.position])
 	Input.parse_input_event(event)
@@ -249,12 +246,16 @@ func _verify_status(failures: Array[String], radio: Base99Radio3D, green: bool) 
 		_assert(failures, material.uv1_offset.is_equal_approx(Vector3(0.1, 0.3, 0.0) if green else Vector3.ZERO), "红绿UV格切换错误")
 		var arrays := lamps.mesh.surface_get_arrays(surface)
 		var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
-		var palette := material.albedo_texture.get_image()
+		var palette_texture := material.albedo_texture
+		_assert(failures, palette_texture != null and palette_texture.resource_path == "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png", "StatusLight实际材质必须绑定公共色盘，不允许测试回退掩盖丢贴图")
+		if palette_texture == null:
+			continue
+		var palette := palette_texture.get_image()
 		for uv in uvs:
 			uv += Vector2(material.uv1_offset.x, material.uv1_offset.y)
 			var color := palette.get_pixel(int(uv.x * palette.get_width()), int(uv.y * palette.get_height()))
 			_assert(failures, color.g > color.r * 2.0 and color.g > color.b if green else color.r > color.g * 2.0 and color.r > color.b * 2.0, "实际灯UV未采到红/绿色格")
-	_assert(failures, lamps.get_aabb().size.x < 0.06 and lamps.get_aabb().size.y < 0.04, "只允许独立小灯，不允许整块窗发光")
+	_assert(failures, lamps.get_aabb().size.x > 0.195 and lamps.get_aabb().size.x < 0.205 and lamps.get_aabb().size.z > 0.195 and lamps.get_aabb().size.z < 0.205 and lamps.get_aabb().size.y > 0.05 and lamps.get_aabb().size.y < 0.065, "StatusLight必须为顶面0.20m直径、0.058m高凸帽")
 
 
 func _verify_visual_contract(failures: Array[String], radio: Base99Radio3D) -> void:
@@ -273,6 +274,24 @@ func _verify_visual_contract(failures: Array[String], radio: Base99Radio3D) -> v
 				_assert(failures, not material.emission_enabled or is_zero_approx(material.emission_energy_multiplier), "机身/调频窗/天线不得自发光")
 			if mesh.name == "Antenna" or str(material.resource_name).begins_with("01_"):
 				_assert(failures, is_equal_approx(material.metallic, 0.88) and is_equal_approx(material.roughness, 0.32), "天线/护框/旋钮必须真实金属参数")
+	var lamp := radio.status_light as MeshInstance3D
+	if lamp != null:
+		var bounds := lamp.get_aabb()
+		_assert(failures, bounds.position.y > 0.49 and bounds.position.z > 0.0, "灯必须位于机身顶面偏前，不得退回正面小灯")
+		var crown_triangles := 0
+		for surface in lamp.mesh.get_surface_count():
+			var arrays := lamp.mesh.surface_get_arrays(surface)
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
+			for index in range(0, indices.size(), 3):
+				var a := vertices[indices[index]]
+				var b := vertices[indices[index + 1]]
+				var c := vertices[indices[index + 2]]
+				if minf(a.y, minf(b.y, c.y)) > 0.54:
+					var normal := (c - a).cross(b - a).normalized()
+					_assert(failures, normal.y > 0.95, "灯帽顶面法线必须朝上，禁止反面或竖直假顶面")
+					crown_triangles += 1
+		_assert(failures, crown_triangles == 12, "12边灯帽必须保留12个朝上冠面")
 	_assert(failures, antenna_count == 1, "必须只有一根独立天线")
 	_assert(failures, triangles == int(radio.get_meta("model_triangles", 0)), "实际导入三角形须与登记一致")
 

@@ -12,16 +12,22 @@ size = Vector3(0.868, 0.862, 0.496)
 [node name="ItemRoot" type="Node3D" groups=["interaction_provider_3d", "base99_radio_3d"]]
 script = ExtResource("2_radio")
 metadata/asset_id = "PRP-BASE99-RADIO-3D"
-metadata/asset_version = "v004"
+metadata/asset_version = "v005"
 metadata/asset_name_cn = "99F阁楼床边桌独立收音机"
 metadata/asset_category = "decor_prop"
 metadata/category_display = "场景可交互道具"
 metadata/forward_axis = "-Z"
 metadata/base_plane = "Y=0"
 metadata/bounds_size_m = Vector3(0.828, 0.456, 0.822)
-metadata/model_sha256 = "3538fa3c51cd0a50d47fa05165c431c9e9a16dd356d9c799cf9bb9d1f2ce33b5"
-metadata/model_faces = 646
-metadata/model_triangles = 1264
+metadata/model_sha256 = "0b2cf2fcba9832ce8b37b62185e016f294ee834555439b71b11c543e0244851d"
+metadata/model_faces = 599
+metadata/model_triangles = 1190
+metadata/prefab_version = "v005"
+metadata/source_blend = "assets/art/props/base_world_3d/source/base99_radio/prp_base99_radio_source_v005.blend"
+metadata/optimized_blend = "assets/art/props/base_world_3d/source/base99_radio/export/v005/prp_base99_radio_optimized_v005.blend"
+metadata/source_sha256 = "d707298407d52dd5ce36c7f6de3fdef71dcfbfdac986cadf6d250318a3628a12"
+metadata/optimized_sha256 = "448f30da74d0e118a032842e9eed2d49e8befcfcce24cb6f386547011b492ec1"
+metadata/status_light_contract = "ItemRoot/Visual/StatusLight；顶面偏前侧12边低模凸帽；直径0.20m；off红常亮，A/B绿常亮；无billboard/UI/bloom"
 metadata/collision_policy = "独立道具碰撞盒与点击区域；由道具Prefab自持"
 metadata/runtime_remap = "shared_facility_palette_by_material_role"
 metadata/music_policy = "local AudioStreamPlayer3D on Music bus; fixed per-state looping stream"
