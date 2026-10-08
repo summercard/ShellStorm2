@@ -1,0 +1,40 @@
+{
+  "package_id": "shelter_frame",
+  "name_zh": "07_风化木梁角钢棚架",
+  "collection": "07_风化木梁角钢棚架_资产包",
+  "root_object": "prp_shelter_frame_root",
+  "objects": [
+    "07_风化木梁角钢棚架_主体"
+  ],
+  "origin_blender": [
+    -3.5999999046325684,
+    2.049999952316284,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    3.7699999809265137,
+    3.3950001001358032,
+    3.1550000607967377
+  ],
+  "bbox_world": [
+    [
+      -5.460000038146973,
+      0.5049999952316284,
+      0.41999998688697815
+    ],
+    [
+      -1.690000057220459,
+      3.9000000953674316,
+      3.575000047683716
+    ]
+  ],
+  "triangles": 872,
+  "kind": "architecture",
+  "fixed_display_attachment": false,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\shelter_frame\\prp_shelter_frame_visual_top3d.glb",
+  "exported": false
+}

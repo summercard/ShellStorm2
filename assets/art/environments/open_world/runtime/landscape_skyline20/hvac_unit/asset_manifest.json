@@ -1,0 +1,19 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-HVAC-UNIT",
+  "parent_asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "version": "v005",
+  "slug": "hvac_unit",
+  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v005/env_landscape_skyline20_source_v005.blend",
+  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v005/export/v005/env_landscape_skyline20_optimized_v005.blend",
+  "glb": "assets/art/environments/open_world/components/landscape_skyline20/hvac_unit/env_landscape_skyline20_hvac_unit_visual_top3d.glb",
+  "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/hvac_unit/env_landscape_skyline20_hvac_unit_root_top3d.tscn",
+  "glb_sha256": "1cc67703d3475526230208f585f22d8a1bc2e253516a5595ab47ac95430f8adc",
+  "triangles_before": 176,
+  "triangles_after": 176,
+  "reduction_ratio": 0.0,
+  "optimization": "独立另存；零面积/重复面检查；原点与PaletteUV保持；无安全减面操作",
+  "collision": "none_visual_only",
+  "block_id": "open_world",
+  "floor_range": "1F-20F + rooftop",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-LANDSCAPE-SKYLINE20"
+}

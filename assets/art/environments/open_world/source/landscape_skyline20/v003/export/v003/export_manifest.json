@@ -1,0 +1,94 @@
+{
+  "schema": "shellstorm2.openworld.export.v001",
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "version": "v003",
+  "source": "assets/art/environments/open_world/source/landscape_skyline20/v003/env_landscape_skyline20_source_v003.blend",
+  "source_sha256": "5221692df0b6e2eeb72535eab9531784976ccd7525e45221a08c1dbd40986bd3",
+  "optimized": "assets/art/environments/open_world/source/landscape_skyline20/v003/export/v003/env_landscape_skyline20_optimized_v003.blend",
+  "optimized_sha256": "499a60ee5327a05887476d3135f6a17d2a56cb29cae9cccf99c7271e0413fb23",
+  "optimization": "独立优化文件另存；源保持不变；仅执行几何完整性检查与导出变换；未做破坏性减面，因为源已在1万三角预算内",
+  "triangle_budget": 10000,
+  "full_preview_triangle_estimate": 5632,
+  "coordinate_map": "Blender (x,y,z) -> Godot (x,z,-y)",
+  "collision": "none_visual_only",
+  "records": [
+    {
+      "slug": "floor_module",
+      "object": "重复楼层_外立面窗墙模块_输出",
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/floor_module/env_landscape_skyline20_floor_module_visual_top3d.glb",
+      "glb_sha256": "ec4ca5811935d09e22cebb23bdad6ff90d9ba89a9ef92873a348728c74ffd2dd",
+      "triangles": 164,
+      "material_count": 4,
+      "bounds_m": [
+        50.29999923706055,
+        50.29999923706055,
+        3.759999990463257
+      ]
+    },
+    {
+      "slug": "hvac_a",
+      "object": "外机_A_双格栅_输出",
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/hvac_a/env_landscape_skyline20_hvac_a_visual_top3d.glb",
+      "glb_sha256": "fb566b1877679bf8f3e6c770f7c5b2b635724a233c4a9470ba979d89ae845eef",
+      "triangles": 176,
+      "material_count": 4,
+      "bounds_m": [
+        2.5999999046325684,
+        1.5899999141693115,
+        1.9249999523162842
+      ]
+    },
+    {
+      "slug": "hvac_b",
+      "object": "外机_B_红色警示_输出",
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/hvac_b/env_landscape_skyline20_hvac_b_visual_top3d.glb",
+      "glb_sha256": "2c7eec35213ccbfd844ab1ede9fd52007cfdfbec9b2e957fcb3f98982a74d19d",
+      "triangles": 176,
+      "material_count": 4,
+      "bounds_m": [
+        2.5999999046325684,
+        1.5899999141693115,
+        1.9249999523162842
+      ]
+    },
+    {
+      "slug": "hvac_c",
+      "object": "外机_C_冷光面板_输出",
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/hvac_c/env_landscape_skyline20_hvac_c_visual_top3d.glb",
+      "glb_sha256": "0abed93a4569f620a2fca95734ffdfb89ca313a4cacf357d82fea3468b19c3a8",
+      "triangles": 176,
+      "material_count": 4,
+      "bounds_m": [
+        2.5999999046325684,
+        1.5899999141693115,
+        1.9249999523162842
+      ]
+    },
+    {
+      "slug": "roof_kit",
+      "object": "屋顶重点_设备与通信设施_输出",
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_kit/env_landscape_skyline20_roof_kit_visual_top3d.glb",
+      "glb_sha256": "701a21d7edb7b7e64cd4d8079500b81a80a304d099fc65713691da7b67ef2976",
+      "triangles": 4112,
+      "material_count": 4,
+      "bounds_m": [
+        50.0,
+        50.0,
+        8.300000190734863
+      ]
+    },
+    {
+      "slug": "billboard",
+      "object": "大型广告牌_日落城市剪影_输出",
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/billboard/env_landscape_skyline20_billboard_visual_top3d.glb",
+      "glb_sha256": "e0d062bc0f45608ba98ff8e7055d1cd76f1b5653258d41f7b1f4bdc045189f39",
+      "triangles": 828,
+      "material_count": 4,
+      "bounds_m": [
+        36.0,
+        0.6650000214576721,
+        16.33660316467285
+      ]
+    }
+  ]
+}

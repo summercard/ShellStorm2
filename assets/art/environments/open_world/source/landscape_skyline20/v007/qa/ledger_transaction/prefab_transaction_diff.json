@@ -1,0 +1,872 @@
+[
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A718",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A719",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A720",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A721",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-GUARDRAIL-KIT"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A722",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A723",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A724",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SATELLITE-DISH"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A725",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "A726",
+    "before": null,
+    "after": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B718",
+    "before": null,
+    "after": "SKYLINE20二十层景观建筑"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B719",
+    "before": null,
+    "after": "SKYLINE20重复楼层外立面模块"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B720",
+    "before": null,
+    "after": "SKYLINE20外立面空调单元"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B721",
+    "before": null,
+    "after": "SKYLINE20屋顶护栏与结构套件"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B722",
+    "before": null,
+    "after": "SKYLINE20屋顶服务小屋"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B723",
+    "before": null,
+    "after": "SKYLINE20屋顶空调单元"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B724",
+    "before": null,
+    "after": "SKYLINE20屋顶卫星天线"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B725",
+    "before": null,
+    "after": "SKYLINE20屋顶桁架通信塔"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "B726",
+    "before": null,
+    "after": "SKYLINE20外立面广告牌"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C718",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C719",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C720",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C721",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C722",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C723",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_hvac_unit/env_landscape_skyline20_roof_hvac_unit_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C724",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_satellite_dish/env_landscape_skyline20_roof_satellite_dish_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C725",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_truss_tower/env_landscape_skyline20_roof_truss_tower_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "C726",
+    "before": null,
+    "after": "assets/art/environments/open_world/runtime/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_root_top3d.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D719",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D720",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D721",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D722",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D723",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/roof_hvac_unit/env_landscape_skyline20_roof_hvac_unit_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D724",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/roof_satellite_dish/env_landscape_skyline20_roof_satellite_dish_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D725",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/roof_truss_tower/env_landscape_skyline20_roof_truss_tower_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "D726",
+    "before": null,
+    "after": "assets/art/environments/open_world/components/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_visual_top3d.glb"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E718",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E719",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E720",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E721",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E722",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E723",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E724",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E725",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "E726",
+    "before": null,
+    "after": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F718",
+    "before": null,
+    "after": "主体50×50m；20层×3.8m；包络53.23×50.93×86.16m；8组件/37实例；7720三角；屋顶4572三角(59.22%)"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F719",
+    "before": null,
+    "after": "包络50×50×3.8m（Blender XYZ）；单组件88三角；20实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F720",
+    "before": null,
+    "after": "包络2.6×1.59×1.925m（Blender XYZ）；单组件176三角；6实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F721",
+    "before": null,
+    "after": "包络50×50×2.2106m（Blender XYZ）；单组件1436三角；1实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F722",
+    "before": null,
+    "after": "包络14.6×12.7×6.51m（Blender XYZ）；单组件308三角；1实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F723",
+    "before": null,
+    "after": "包络6×5×3.6m（Blender XYZ）；单组件248三角；4实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F724",
+    "before": null,
+    "after": "包络9.189×5.505×9.8021m（Blender XYZ）；单组件628三角；1实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F725",
+    "before": null,
+    "after": "包络3.2×3.2×8.5m（Blender XYZ）；单组件604三角；2实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "F726",
+    "before": null,
+    "after": "包络16×0.56×30m（Blender XYZ）；单组件166三角；2实例；bottom_center；公共色盘"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H718",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H719",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H720",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H721",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H722",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H723",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H724",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H725",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "H726",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I718",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I719",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I720",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I721",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I722",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I723",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I724",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I725",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "I726",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J718",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J719",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J720",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J721",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J722",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J723",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J724",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J725",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "J726",
+    "before": null,
+    "after": "无"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K718",
+    "before": null,
+    "after": "主体50×50m；20层；层距3.8m；包络53.23×50.93×86.16m"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K719",
+    "before": null,
+    "after": "50×50×3.8m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K720",
+    "before": null,
+    "after": "2.6×1.59×1.925m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K721",
+    "before": null,
+    "after": "50×50×2.2106m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K722",
+    "before": null,
+    "after": "14.6×12.7×6.51m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K723",
+    "before": null,
+    "after": "6×5×3.6m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K724",
+    "before": null,
+    "after": "9.189×5.505×9.8021m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K725",
+    "before": null,
+    "after": "3.2×3.2×8.5m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "K726",
+    "before": null,
+    "after": "16×0.56×30m（Blender XYZ）"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L718",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L719",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L720",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L721",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L722",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L723",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L724",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L725",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "L726",
+    "before": null,
+    "after": "bottom_center；Godot Y-up/-Z；Blender Z-up/-Y"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M718",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M719",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M720",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M721",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M722",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M723",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M724",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M725",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M726",
+    "before": null,
+    "after": "开放世界景观候选；未接入正式房间"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N718",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N719",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N720",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N721",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N722",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N723",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N724",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N725",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "N726",
+    "before": null,
+    "after": "validated"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O718",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O719",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O720",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O721",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O722",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O723",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O724",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O725",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "O726",
+    "before": null,
+    "after": "v007"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P718",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=d1921a414d40eff34d089138dbf2a8bcf8e80338706d55ded45cf1b18f27b631"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P719",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=f04bef4ab749ea3bd4077231ab5b9a640188adfe27db88733143a66d8f4d5c3d"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P720",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=90df5df90de6d10b4da97bfbc9136167c2b2e8737c21bae0feb7b94d1d2e5958"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P721",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=7bc511a9e0b65eeebaa41dfb74529e1f20148c561c30b98ade63d32b3ec4159f"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P722",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=bed5affd9ea20f9efe54b4e71bb9bd74d611fd1c8f6129076dff053a9e115d4c"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P723",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=a89e04ac686c0d4c16026fcc421a7e78a7754a240e5a865cb5b479ad61383217"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P724",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=d7948846a255276e969a6ba5ef86f16f007e7040ea2421a53298878a910ecf3e"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P725",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=6338570dd92658e0eee62a0596376255dc9b8af135eebc403cdc15b2ec06005b"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P726",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=f740f6aebe524b494eb7105c29c69cdbf9f698fd2dc959eefa781bbdbd58470a"
+  },
+  {
+    "sheet": "域变更日志",
+    "cell": "A54",
+    "before": null,
+    "after": "v0.1.48"
+  },
+  {
+    "sheet": "域变更日志",
+    "cell": "B54",
+    "before": null,
+    "after": "2026-10-07"
+  },
+  {
+    "sheet": "域变更日志",
+    "cell": "C54",
+    "before": null,
+    "after": "独立登记PackedScene专表"
+  },
+  {
+    "sheet": "域变更日志",
+    "cell": "D54",
+    "before": null,
+    "after": "Skyline20 v007"
+  },
+  {
+    "sheet": "域变更日志",
+    "cell": "E54",
+    "before": null,
+    "after": "9个实际存在Prefab（root+8组件）；专表独立事务；validated；无碰撞/功能脚本；美术待审、未正式接入。"
+  },
+  {
+    "sheet": "域变更日志",
+    "cell": "F54",
+    "before": null,
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。"
+  },
+  {
+    "sheet": "域变更日志",
+    "cell": "G54",
+    "before": null,
+    "after": "WorkBuddy"
+  },
+  {
+    "sheet": "总览",
+    "cell": "B17",
+    "before": "==COUNTA('3D-场景通用'!$A$5:$A$204)",
+    "after": "=COUNTA('3D-场景通用'!$A$5:$A$726)"
+  },
+  {
+    "sheet": "总览",
+    "cell": "C17",
+    "before": "==COUNTIF('3D-场景通用'!$D$5:$D$204,\"<>\")",
+    "after": "=COUNTIF('3D-场景通用'!$D$5:$D$726,\"<>\")"
+  },
+  {
+    "sheet": "总览",
+    "cell": "D17",
+    "before": "==COUNTIF('3D-场景通用'!$G$5:$G$204,\"<>\")",
+    "after": "=COUNTIF('3D-场景通用'!$G$5:$G$726,\"<>\")"
+  },
+  {
+    "sheet": "总览",
+    "cell": "E17",
+    "before": "==COUNTIF('3D-场景通用'!$H$5:$H$204,\"开\")",
+    "after": "=COUNTIF('3D-场景通用'!$H$5:$H$726,\"开\")"
+  }
+]

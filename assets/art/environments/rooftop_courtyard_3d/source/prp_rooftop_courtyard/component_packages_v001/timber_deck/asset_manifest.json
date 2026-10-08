@@ -1,0 +1,40 @@
+{
+  "package_id": "timber_deck",
+  "name_zh": "05_十厘米风化木平台",
+  "collection": "05_十厘米风化木平台_资产包",
+  "root_object": "prp_timber_deck_root",
+  "objects": [
+    "05_十厘米风化木平台_主体"
+  ],
+  "origin_blender": [
+    -0.8999999761581421,
+    0.5,
+    0.3199999928474426
+  ],
+  "dimensions": [
+    9.025712966918945,
+    6.572499990463257,
+    0.10600000619888306
+  ],
+  "bbox_world": [
+    [
+      -5.019999980926514,
+      -2.8949999809265137,
+      0.3199999928474426
+    ],
+    [
+      4.005712985992432,
+      3.677500009536743,
+      0.4259999990463257
+    ]
+  ],
+  "triangles": 17832,
+  "kind": "floor",
+  "fixed_display_attachment": false,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\timber_deck\\prp_timber_deck_visual_top3d.glb",
+  "exported": false
+}

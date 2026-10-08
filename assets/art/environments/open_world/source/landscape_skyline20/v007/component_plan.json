@@ -1,0 +1,200 @@
+{
+  "schema": "shellstorm2.openworld.component_plan",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "source_version": "v007",
+  "block_id": "open_world",
+  "component_budget": {
+    "limit": 50,
+    "planned": 8,
+    "remaining": 42,
+    "status": "frozen_before_formal_geometry"
+  },
+  "freeze_stage": "before_builder_and_mesh_creation",
+  "floor_count": 20,
+  "floor_height_m": 3.8,
+  "roof_z_m": 76.0,
+  "design_scope": "50x50m主体；20层；无底层、室内、玩法、碰撞；屋顶优先",
+  "reference_image": "references/用户参考_景观建筑.jpg",
+  "planned_dimensions_m": {
+    "floor_facade_module": [
+      50,
+      50,
+      3.8
+    ],
+    "roof_service_hut": [
+      14.6,
+      12.6,
+      6.6
+    ],
+    "roof_hvac_unit": [
+      6,
+      5,
+      3.6
+    ],
+    "roof_satellite_dish": [
+      9.2,
+      8,
+      10
+    ],
+    "roof_truss_tower": [
+      3.2,
+      3.2,
+      8.5
+    ],
+    "facade_billboard": [
+      16,
+      0.6,
+      30
+    ]
+  },
+  "roof_layout_reference": [
+    {
+      "slug": "roof_service_hut",
+      "instance_id": "roof_service_hut",
+      "position_m": [
+        0,
+        0,
+        76.36
+      ],
+      "rotation_y_deg": 0
+    },
+    {
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_01",
+      "position_m": [
+        -16,
+        -15,
+        76.36
+      ],
+      "rotation_y_deg": 0
+    },
+    {
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_02",
+      "position_m": [
+        15,
+        -16,
+        76.36
+      ],
+      "rotation_y_deg": 90
+    },
+    {
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_03",
+      "position_m": [
+        -16,
+        4,
+        76.36
+      ],
+      "rotation_y_deg": 270
+    },
+    {
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_04",
+      "position_m": [
+        8,
+        17,
+        76.36
+      ],
+      "rotation_y_deg": 180
+    },
+    {
+      "slug": "roof_satellite_dish",
+      "instance_id": "roof_dish",
+      "position_m": [
+        15,
+        4,
+        76.36
+      ],
+      "rotation_y_deg": 0
+    },
+    {
+      "slug": "roof_truss_tower",
+      "instance_id": "roof_tower_01",
+      "position_m": [
+        -17,
+        17,
+        76.36
+      ],
+      "rotation_y_deg": 0
+    },
+    {
+      "slug": "roof_truss_tower",
+      "instance_id": "roof_tower_02",
+      "position_m": [
+        -7,
+        17,
+        76.36
+      ],
+      "rotation_y_deg": 0
+    }
+  ],
+  "inactive_preserved_components": [
+    "roof_hvac_bank",
+    "roof_communications"
+  ],
+  "triangle_budget": {
+    "limit": 10000,
+    "metric": "runtime_instance_triangles",
+    "roof_share_target": 0.45
+  },
+  "definitions": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "component_family": "repeat_floor_facade",
+      "instance_count": 20,
+      "variant_reason": "灰墙与暖色窄窗；无每层灯带"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "component_family": "external_ac_unit",
+      "instance_count": 6,
+      "variant_reason": "单一母版；实例旋转朝外"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-GUARDRAIL-KIT",
+      "slug": "roof_guardrail_kit",
+      "component_family": "roof_structure",
+      "instance_count": 1,
+      "variant_reason": "灰色屋面与黄色护栏"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT",
+      "slug": "roof_service_hut",
+      "component_family": "roof_service_hut",
+      "instance_count": 1,
+      "variant_reason": "14x12m大型机房及直接附属通风罩"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "component_family": "roof_hvac_unit",
+      "instance_count": 4,
+      "variant_reason": "6x5x3.6m单台母版；四区分散；真实八边风扇"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SATELLITE-DISH",
+      "slug": "roof_satellite_dish",
+      "component_family": "roof_satellite_dish",
+      "instance_count": 1,
+      "variant_reason": "9m实心抛物面与独立深灰支架"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER",
+      "slug": "roof_truss_tower",
+      "component_family": "roof_truss_tower",
+      "instance_count": 2,
+      "variant_reason": "8.5m通信塔母版；接收板与暖灯"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+      "slug": "facade_billboard",
+      "component_family": "billboard_cityscape",
+      "instance_count": 2,
+      "variant_reason": "16x30m竖幅；太阳城市剪影和SKYLINE七字"
+    }
+  ]
+}

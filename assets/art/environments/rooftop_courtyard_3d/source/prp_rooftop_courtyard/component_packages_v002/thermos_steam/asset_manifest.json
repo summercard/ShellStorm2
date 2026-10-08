@@ -1,0 +1,47 @@
+{
+  "package_id": "thermos_steam",
+  "name_zh": "29_暖水瓶细白热气",
+  "collection": "29_暖水瓶细白热气_资产包",
+  "root_object": "prp_thermos_steam_root",
+  "objects": [
+    "29_暖水瓶细白热气_柔和自发光"
+  ],
+  "origin_blender": [
+    -0.800000011920929,
+    0.25,
+    1.2000000476837158
+  ],
+  "dimensions": [
+    0.05175679922103882,
+    0.05116070806980133,
+    0.5808944702148438
+  ],
+  "bbox_world": [
+    [
+      -0.8258131742477417,
+      0.22446851432323456,
+      1.1986678838729858
+    ],
+    [
+      -0.7740563750267029,
+      0.2756292223930359,
+      1.7795623540878296
+    ]
+  ],
+  "triangles": 816,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "sway",
+      "axis": 0,
+      "amplitude_rad": 0.09,
+      "period_frames": 144
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\thermos_steam\\prp_thermos_steam_visual_top3d.glb",
+  "exported": false
+}

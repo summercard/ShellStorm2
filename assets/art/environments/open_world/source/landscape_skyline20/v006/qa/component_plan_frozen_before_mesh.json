@@ -1,0 +1,65 @@
+{
+  "schema": "shellstorm2.openworld.component_plan",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "source_version": "v006",
+  "block_id": "open_world",
+  "component_budget": {
+    "limit": 50,
+    "planned": 7,
+    "remaining": 43,
+    "status": "frozen_before_formal_geometry"
+  },
+  "freeze_stage": "before_builder_and_mesh_creation",
+  "definitions": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "component_family": "repeat_floor_facade",
+      "instance_count": 20,
+      "variant_reason": "结构模块；20层复用"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "component_family": "external_ac_unit",
+      "instance_count": 6,
+      "variant_reason": "同族单一几何；旋转负责朝外"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-GUARDRAIL-KIT",
+      "slug": "roof_guardrail_kit",
+      "component_family": "roof_structure",
+      "instance_count": 1,
+      "variant_reason": "屋顶平台、女儿墙、黄色护栏"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT",
+      "slug": "roof_service_hut",
+      "component_family": "roof_service_hut",
+      "instance_count": 1,
+      "variant_reason": "屋顶服务舱"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-BANK",
+      "slug": "roof_hvac_bank",
+      "component_family": "roof_hvac_bank",
+      "instance_count": 1,
+      "variant_reason": "语义独立屋顶空调"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-COMMUNICATIONS",
+      "slug": "roof_communications",
+      "component_family": "roof_communications",
+      "instance_count": 1,
+      "variant_reason": "桁架通信塔与实心抛物面天线"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+      "slug": "facade_billboard",
+      "component_family": "billboard_cityscape",
+      "instance_count": 2,
+      "variant_reason": "广告牌降几何预算并置于立面"
+    }
+  ]
+}

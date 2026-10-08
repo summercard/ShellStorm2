@@ -1,0 +1,17 @@
+landscape_skyline20_景观建筑_中文资产管理
+├─ 01_制作组件_按组件拆分_v006
+│  └─ 制作源_floor_facade_module
+│  └─ 制作源_facade_hvac_unit
+│  └─ 制作源_roof_guardrail_kit
+│  └─ 制作源_roof_service_hut
+│  └─ 制作源_roof_hvac_bank
+│  └─ 制作源_roof_communications
+│  └─ 制作源_facade_billboard
+└─ 02_游戏输出_独立资产包_v006
+   └─ 02_游戏输出_floor_facade_module_资产包 (主体 + 自发光)
+   └─ 02_游戏输出_facade_hvac_unit_资产包 (主体 + 自发光)
+   └─ 02_游戏输出_roof_guardrail_kit_资产包 (主体 + 自发光)
+   └─ 02_游戏输出_roof_service_hut_资产包 (主体 + 自发光)
+   └─ 02_游戏输出_roof_hvac_bank_资产包 (主体 + 自发光)
+   └─ 02_游戏输出_roof_communications_资产包 (主体 + 自发光)
+   └─ 02_游戏输出_facade_billboard_资产包 (主体 + 自发光)

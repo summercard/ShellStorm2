@@ -1,0 +1,335 @@
+{
+  "schema": "shellstorm2.openworld.component_asset_manifest",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+  "parent_asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+  "slug": "roof_hvac_unit",
+  "component_family": "roof_hvac_unit",
+  "instance_transforms": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_01",
+      "position_m": [
+        -16.0,
+        -15.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -16,
+        -15,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_01",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_02",
+      "position_m": [
+        15.0,
+        -16.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        15,
+        -16,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_02",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_03",
+      "position_m": [
+        -16.0,
+        4.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -16,
+        4,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_03",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_04",
+      "position_m": [
+        8.0,
+        17.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 180,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        8,
+        17,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_04",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    }
+  ],
+  "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "bbox_godot_m": [
+    6.0,
+    3.6,
+    5.0
+  ],
+  "geometry_offset_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "scope": "asset_local",
+  "serves_room_types": [
+    "open_world_landscape"
+  ],
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend",
+  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/export/v007/env_landscape_skyline20_optimized_v007.blend",
+  "source_sha256_before": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "source_sha256_after": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "optimized_sha256": "047822810b1abac363102f3d9577a617a9b32ada0107de2c9ffc56a9e5845c63",
+  "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_hvac_unit/env_landscape_skyline20_roof_hvac_unit_visual_top3d.glb",
+  "glb_sha256": "a3c15520b63d9041e66005c3b800de71539a0911ca616efb58ca810d9e7726ad",
+  "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_hvac_unit/env_landscape_skyline20_roof_hvac_unit_root_top3d.tscn",
+  "collection": "02_游戏输出_roof_hvac_unit_资产包",
+  "root_object": "Root_roof_hvac_unit",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "none_visual_only",
+  "palette_uv_layer": "PaletteUV",
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "triangles_before": 248,
+  "triangles_after": 248,
+  "reduction_ratio": 0.0,
+  "optimization_records": [
+    {
+      "object": "屋顶HVAC_单台双风扇_主体",
+      "role": "body",
+      "before": {
+        "triangles": 236,
+        "vertices": 224,
+        "edges": 276,
+        "polygons": 98,
+        "bbox": [
+          -3.0,
+          -2.5,
+          0.0,
+          3.0,
+          2.5,
+          3.6
+        ],
+        "uv_fingerprint": "f3e32ca852480934a97437b44eeb1c57d0d8eedb518be4806700fff2cd3f0e21",
+        "geometry_sha256": "ebac77934a85cb32459121f3d60b3b7c69ba8d0a023b9dcac7846299b97f8712",
+        "corner_uv_material_sha256": "fc4e059a21dc1b508dc823393cb32b2b053efe9dd3b9641a8cad24a87284d0dc",
+        "uv_area_by_material_cell": {
+          "(0, 9, 8)": 0.04457108546997901,
+          "(1, 9, 3)": 0.013535538562663874,
+          "(0, 9, 3)": 0.03457108070160686,
+          "(0, 9, 4)": 0.03499999582767188
+        }
+      },
+      "after": {
+        "triangles": 236,
+        "vertices": 224,
+        "edges": 414,
+        "polygons": 236,
+        "bbox": [
+          -3.0,
+          -2.5,
+          0.0,
+          3.0,
+          2.5,
+          3.6
+        ],
+        "uv_fingerprint": "9b49ebf68b179226191c4f4ec7768bb7619a5d55042747d24bcb3c2ac3cbf84a",
+        "geometry_sha256": "9ceb7a3ade49320bbd9a830497ebc186a3307c54f3b672ab4435160a770ddf13",
+        "corner_uv_material_sha256": "fc4e059a21dc1b508dc823393cb32b2b053efe9dd3b9641a8cad24a87284d0dc",
+        "uv_area_by_material_cell": {
+          "(0, 9, 8)": 0.04457108546997901,
+          "(1, 9, 3)": 0.013535538562663874,
+          "(0, 9, 3)": 0.03457108070160686,
+          "(0, 9, 4)": 0.03499999582767188
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    },
+    {
+      "object": "屋顶HVAC_暖色状态灯_自发光",
+      "role": "emissive",
+      "before": {
+        "triangles": 12,
+        "vertices": 8,
+        "edges": 12,
+        "polygons": 6,
+        "bbox": [
+          2.15,
+          -2.5,
+          2.51,
+          2.45,
+          -2.44,
+          2.69
+        ],
+        "uv_fingerprint": "d4cb7f03882bb2c22b50a64766f2cbb20ec1e6ddc0e1e9afd5867b0499166699",
+        "geometry_sha256": "763274075b56c2a0d980b3f3aa0361f7f716594943d28acc07da271e25a93dd9",
+        "corner_uv_material_sha256": "52cd9f26f4185a1d8462bf2b534b843344fd4917293ef9fd303997170dcf810e",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.007500003576279113
+        }
+      },
+      "after": {
+        "triangles": 12,
+        "vertices": 8,
+        "edges": 18,
+        "polygons": 12,
+        "bbox": [
+          2.15,
+          -2.5,
+          2.51,
+          2.45,
+          -2.44,
+          2.69
+        ],
+        "uv_fingerprint": "5a447d5817557b06e6693153e9f8db85950836721cc094c97043fe45846fe23d",
+        "geometry_sha256": "9dac6db837b4af453af372fd3237704ba7a06e104b27ccab401d20e565f3dcef",
+        "corner_uv_material_sha256": "52cd9f26f4185a1d8462bf2b534b843344fd4917293ef9fd303997170dcf810e",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.007500003576279113
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    }
+  ],
+  "bbox_m": [
+    6.0,
+    5.0,
+    3.6
+  ],
+  "uv_fingerprints": {
+    "屋顶HVAC_单台双风扇_主体": "9b49ebf68b179226191c4f4ec7768bb7619a5d55042747d24bcb3c2ac3cbf84a",
+    "屋顶HVAC_暖色状态灯_自发光": "5a447d5817557b06e6693153e9f8db85950836721cc094c97043fe45846fe23d"
+  },
+  "embedded_images": false,
+  "import_contract": {
+    "gltf_embedded_image_handling": 0,
+    "post_import": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+  },
+  "collision": "none_visual_only"
+}

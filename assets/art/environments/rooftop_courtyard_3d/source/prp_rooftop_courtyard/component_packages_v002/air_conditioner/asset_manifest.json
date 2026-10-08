@@ -1,0 +1,40 @@
+{
+  "package_id": "air_conditioner",
+  "name_zh": "36_旧空调外机",
+  "collection": "36_旧空调外机_资产包",
+  "root_object": "prp_air_conditioner_root",
+  "objects": [
+    "36_旧空调外机_主体"
+  ],
+  "origin_blender": [
+    -6.619999885559082,
+    2.740000009536743,
+    2.200000047683716
+  ],
+  "dimensions": [
+    0.9848542213439941,
+    1.4200000762939453,
+    0.8400001525878906
+  ],
+  "bbox_world": [
+    [
+      -6.980000019073486,
+      2.0299999713897705,
+      2.109999895095825
+    ],
+    [
+      -5.995145797729492,
+      3.450000047683716,
+      2.950000047683716
+    ]
+  ],
+  "triangles": 1240,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\air_conditioner\\prp_air_conditioner_visual_top3d.glb",
+  "exported": false
+}

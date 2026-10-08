@@ -1,0 +1,45 @@
+{
+  "package_id": "roof_canvas",
+  "name_zh": "09_半旧灰帆布",
+  "collection": "09_半旧灰帆布_资产包",
+  "root_object": "prp_roof_canvas_root",
+  "objects": [
+    "09_半旧灰帆布_主体"
+  ],
+  "origin_blender": [
+    -3.200000047683716,
+    2.299999952316284,
+    3.5799999237060547
+  ],
+  "dimensions": [
+    2.8500001430511475,
+    3.3510656356811523,
+    0.26363110542297363
+  ],
+  "bbox_world": [
+    [
+      -4.800000190734863,
+      0.4455418586730957,
+      3.5629565715789795
+    ],
+    [
+      -1.9500000476837158,
+      3.796607494354248,
+      3.826587677001953
+    ]
+  ],
+  "triangles": 384,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "cloth_shape",
+      "max_displacement_m": 0.028
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\roof_canvas\\prp_roof_canvas_visual_top3d.glb",
+  "exported": false
+}

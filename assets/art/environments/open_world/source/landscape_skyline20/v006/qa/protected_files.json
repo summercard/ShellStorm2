@@ -1,0 +1,15 @@
+{
+  "before": {
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import": "b04a929a5a2f50578f8f19222aa8742f9362a2b419d74c781cb25bf948bc64ff",
+    "assets/art/environments/open_world/source/landscape_skyline20/v005/env_landscape_skyline20_source_v005.blend": "0a1eb427e186291f1315616c651a411866175e852acdb9a86b4dc5d5f3d4f40e",
+    "assets/art/environments/open_world/source/landscape_skyline20/v005/export/v005/env_landscape_skyline20_optimized_v005.blend": "da2a83ecd1aade2c2028c3a331074520a2113ee3a76e573795d032311d8a96f3"
+  },
+  "after": {
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import": "b04a929a5a2f50578f8f19222aa8742f9362a2b419d74c781cb25bf948bc64ff",
+    "assets/art/environments/open_world/source/landscape_skyline20/v005/env_landscape_skyline20_source_v005.blend": "0a1eb427e186291f1315616c651a411866175e852acdb9a86b4dc5d5f3d4f40e",
+    "assets/art/environments/open_world/source/landscape_skyline20/v005/export/v005/env_landscape_skyline20_optimized_v005.blend": "da2a83ecd1aade2c2028c3a331074520a2113ee3a76e573795d032311d8a96f3"
+  },
+  "unchanged": true
+}

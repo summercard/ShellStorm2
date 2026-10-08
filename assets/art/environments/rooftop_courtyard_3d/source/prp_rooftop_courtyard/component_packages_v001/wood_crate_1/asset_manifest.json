@@ -1,0 +1,40 @@
+{
+  "package_id": "wood_crate_1",
+  "name_zh": "22_1_旧木箱",
+  "collection": "22_1_旧木箱_资产包",
+  "root_object": "prp_wood_crate_1_root",
+  "objects": [
+    "22_1_旧木箱_主体"
+  ],
+  "origin_blender": [
+    -4.199999809265137,
+    -1.25,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    1.2643885612487793,
+    0.9134706854820251,
+    0.6759999692440033
+  ],
+  "bbox_world": [
+    [
+      -4.8321943283081055,
+      -1.706735372543335,
+      0.41999998688697815
+    ],
+    [
+      -3.567805767059326,
+      -0.7932646870613098,
+      1.0959999561309814
+    ]
+  ],
+  "triangles": 412,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\wood_crate_1\\prp_wood_crate_1_visual_top3d.glb",
+  "exported": false
+}

@@ -1,0 +1,44 @@
+{
+  "package_id": "newspaper_corner",
+  "name_zh": "51_报纸微翘边角",
+  "collection": "51_报纸微翘边角_资产包",
+  "root_object": "prp_newspaper_corner_root",
+  "objects": [
+    "51_报纸微翘边角_主体"
+  ],
+  "origin_blender": [
+    -0.56,
+    2.27,
+    1.41
+  ],
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "paper_shape",
+      "max_displacement_m": 0.025
+    }
+  ],
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\newspaper_corner\\prp_newspaper_corner_visual_top3d.glb",
+  "exported": false,
+  "version": "v002",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "bbox_world": [
+    [
+      -0.6200000047683716,
+      2.0799999237060547,
+      1.4149999618530273
+    ],
+    [
+      -0.5,
+      2.4600000381469727,
+      1.4394999742507935
+    ]
+  ],
+  "dimensions": [
+    0.12000000476837158,
+    0.38000011444091797,
+    0.024500012397766113
+  ],
+  "triangles": 48
+}

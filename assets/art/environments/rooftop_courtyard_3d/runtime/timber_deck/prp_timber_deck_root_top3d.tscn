@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/components/timber_deck/prp_timber_deck_visual_top3d.glb" id="1"]
+
+[sub_resource type="BoxShape3D" id="box"]
+size = Vector3(9.025713, 0.1, 6.5725)
+
+[node name="prp_timber_deck" type="Node3D"]
+metadata/package_id = "timber_deck"
+metadata/asset_version = "v002"
+metadata/block_id = "rooftop"
+metadata/fixed_display_attachment = true
+
+[node name="Visual" parent="." instance=ExtResource("1")]
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+position = Vector3(0, 0.05, 0)
+shape = SubResource("box")

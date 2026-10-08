@@ -1,0 +1,235 @@
+ERROR (imbuf.color_management): C:\Users\blender\git\blender-v450\blender.git\source\blender\imbuf\opencolorio\intern\libocio\error_handling.cc:19 report_exception: OpenColorIO Error: Error: Loading the OCIO profile 'D:\blender-5.2\5.2\datafiles\colormanagement\config.ocio' failed. This .ocio config  'D:\blender-5.2\5.2\datafiles\colormanagement\config.ocio' is version 2.5. This version of the OpenColorIO library (2.4.1) is not able to load that config version.
+The minor version 5 is not supported for major version 2. Maximum minor version is 4.
+Blender 4.5.0 (hash 8cb6b388974a built 2025-07-15 01:36:24)
+Read blend: "I:\工作项目\shellstrom2\ShellStorm2\assets\art\environments\open_world\source\landscape_skyline20\v007\env_landscape_skyline20_source_v007.blend"
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+regiondata free error
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+regiondata free error
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 11 missing in space type "Action" (id: 12) - removing region
+Warning: region type 14 missing in space type "Node" (id: 16) - removing region
+Warning: region type 15 missing in space type "Node" (id: 16) - removing region
+警告: 文件由较新版本的 Blender 二进制程序 (502.45) 生成, 可能会造成数据丢失!
+错误: 引擎 'BLENDER_EEVEE' 对场景 'Scene' 不可用(可能需要安装或启用插件)
+LOADED UPDATER!
+Error: LZ4 module didn't load. Unsupported OS or Python version!
+Traceback (most recent call last):
+  File "C:\Users\zhuangmenghong\AppData\Roaming\Blender Foundation\Blender\4.5\scripts\addons\rokoko-studio-live-blender-1-4-2\core\login_manager.py", line 27, in <module>
+    import boto3
+ModuleNotFoundError: No module named 'boto3'
+
+
+### Loading Rokoko Studio Live for Blender...
+Custom bone list not found.
+Custom name list file is not a valid name list file
+### Loaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon registered
+[Tripo3D] Log file: C:\Users\ZHUANG~1\AppData\Local\Temp\tripo3d_blender_bridge.log
+Reloading external rigs...
+Reloading external metarigs...
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\source\\landscape_skyline20\\v007\\env_landscape_skyline20_source_v007.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 14,
+  "polygon_count": 1601,
+  "valid_island_polygon_count": 1601,
+  "uv_reports": [
+    {
+      "object": "外立面空调_中性状态灯_自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "外立面空调外机_主体",
+      "polygon_count": 68,
+      "valid_island_polygon_count": 68,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶HVAC_单台双风扇_主体",
+      "polygon_count": 98,
+      "valid_island_polygon_count": 98,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶HVAC_暖色状态灯_自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶卫星天线_实心碟与深灰支架_主体",
+      "polygon_count": 320,
+      "valid_island_polygon_count": 320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶护栏_中性灯带_自发光",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶机房_暖色门灯_自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶机房_服务舱_主体",
+      "polygon_count": 132,
+      "valid_island_polygon_count": 132,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶结构_女儿墙与黄色护栏_主体",
+      "polygon_count": 530,
+      "valid_island_polygon_count": 530,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶通信塔_暖色警示灯_自发光",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "屋顶通信塔_桁架与接收板_主体",
+      "polygon_count": 286,
+      "valid_island_polygon_count": 286,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面广告牌_SKYLINE城市剪影_主体",
+      "polygon_count": 63,
+      "valid_island_polygon_count": 63,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立面广告牌_暖光边线_自发光",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "重复楼层_外立面窗墙模块_主体",
+      "polygon_count": 44,
+      "valid_island_polygon_count": 44,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}
+### Unloading Rokoko Studio Live for Blender...
+### Unloaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon unregistered
+
+21:39:05 - tripo_addon - [task.py:21] - INFO - WebSocket server started on port 60600
+21:39:05 - tripo_addon - [ws_server.py:66] - ERROR - Error in event loop: [Errno 10048] error while attempting to bind on address ('127.0.0.1', 60600): 通常每个套接字地址(协议/网络地址/端口)只允许使用一次。
+21:39:05 - tripo_addon - [ws_server.py:77] - INFO - Event loop closed
+21:39:05 - tripo_addon - [task.py:27] - INFO - WebSocket server stop requested

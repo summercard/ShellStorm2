@@ -1,0 +1,47 @@
+{
+  "structure": {
+    "before_exit": 0,
+    "after_exit": 0,
+    "before_errors": 0,
+    "after_errors": 0,
+    "new": [],
+    "resolved": [],
+    "unchanged": 0
+  },
+  "full_scenes": {
+    "before_exit": 1,
+    "after_exit": 1,
+    "before_errors": 465,
+    "after_errors": 465,
+    "new": [],
+    "resolved": [],
+    "unchanged": 465
+  },
+  "baseline": {
+    "before_exit": 0,
+    "after_exit": 0,
+    "before_errors": 0,
+    "after_errors": 0,
+    "new": [],
+    "resolved": [],
+    "unchanged": 0
+  },
+  "naming": {
+    "before_exit": 1,
+    "after_exit": 1,
+    "before_errors": 1,
+    "after_errors": 1,
+    "new": [],
+    "resolved": [],
+    "unchanged": 1
+  },
+  "refs": {
+    "before_exit": 1,
+    "after_exit": 1,
+    "before_errors": 22,
+    "after_errors": 22,
+    "new": [],
+    "resolved": [],
+    "unchanged": 22
+  }
+}

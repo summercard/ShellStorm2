@@ -1,0 +1,110 @@
+[
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M718",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M719",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M720",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M721",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M722",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M723",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M724",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M725",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "M726",
+    "before": "开放世界景观候选；未接入正式房间",
+    "after": "开放世界塔3东侧；正式route=res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn；共享摆位=res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn；编辑场景=res://scenes/open_world_layout_edit/open_world_layout_edit.tscn / res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P718",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=d1921a414d40eff34d089138dbf2a8bcf8e80338706d55ded45cf1b18f27b631",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=d1921a414d40eff34d089138dbf2a8bcf8e80338706d55ded45cf1b18f27b631 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P719",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=f04bef4ab749ea3bd4077231ab5b9a640188adfe27db88733143a66d8f4d5c3d",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=f04bef4ab749ea3bd4077231ab5b9a640188adfe27db88733143a66d8f4d5c3d 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P720",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=90df5df90de6d10b4da97bfbc9136167c2b2e8737c21bae0feb7b94d1d2e5958",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=90df5df90de6d10b4da97bfbc9136167c2b2e8737c21bae0feb7b94d1d2e5958 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P721",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=7bc511a9e0b65eeebaa41dfb74529e1f20148c561c30b98ade63d32b3ec4159f",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=7bc511a9e0b65eeebaa41dfb74529e1f20148c561c30b98ade63d32b3ec4159f 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P722",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=bed5affd9ea20f9efe54b4e71bb9bd74d611fd1c8f6129076dff053a9e115d4c",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=bed5affd9ea20f9efe54b4e71bb9bd74d611fd1c8f6129076dff053a9e115d4c 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P723",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=a89e04ac686c0d4c16026fcc421a7e78a7754a240e5a865cb5b479ad61383217",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=a89e04ac686c0d4c16026fcc421a7e78a7754a240e5a865cb5b479ad61383217 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P724",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=d7948846a255276e969a6ba5ef86f16f007e7040ea2421a53298878a910ecf3e",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=d7948846a255276e969a6ba5ef86f16f007e7040ea2421a53298878a910ecf3e 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P725",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=6338570dd92658e0eee62a0596376255dc9b8af135eebc403cdc15b2ec06005b",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=6338570dd92658e0eee62a0596376255dc9b8af135eebc403cdc15b2ec06005b 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  },
+  {
+    "sheet": "3D-场景通用",
+    "cell": "P726",
+    "before": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=false；未正式入库/未正式接入；无碰撞，不制作底层室内。 prefab_sha256=f740f6aebe524b494eb7105c29c69cdbf9f698fd2dc959eefa781bbdbd58470a",
+    "after": "技术通过、美术待审；reference_art_approved=false；runtime_integrated=true；用户授权v007正式导入并投放塔3东侧，授权不等同逐项参考图美术验收；已正式接入route/共享摆位/编辑场景；无碰撞，不制作底层室内。 prefab_sha256=f740f6aebe524b494eb7105c29c69cdbf9f698fd2dc959eefa781bbdbd58470a 本阶段证据=outputs/skyline20_placement/placement_runtime.json；live_instance_count=1；roof_delta_m=10；原阶段QA/登记报告保留为历史证据。"
+  }
+]

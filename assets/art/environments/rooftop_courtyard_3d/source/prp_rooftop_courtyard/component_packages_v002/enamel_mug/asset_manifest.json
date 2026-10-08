@@ -1,0 +1,40 @@
+{
+  "package_id": "enamel_mug",
+  "name_zh": "16_白瓷红边茶缸",
+  "collection": "16_白瓷红边茶缸_资产包",
+  "root_object": "prp_enamel_mug_root",
+  "objects": [
+    "16_白瓷红边茶缸_主体"
+  ],
+  "origin_blender": [
+    -1.2799999713897705,
+    2.259999990463257,
+    1.2899999618530273
+  ],
+  "dimensions": [
+    0.29222583770751953,
+    0.21392297744750977,
+    0.1969282627105713
+  ],
+  "bbox_world": [
+    [
+      -1.3869614601135254,
+      2.153038501739502,
+      1.2899999618530273
+    ],
+    [
+      -1.0947356224060059,
+      2.3669614791870117,
+      1.4869282245635986
+    ]
+  ],
+  "triangles": 1328,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\enamel_mug\\prp_enamel_mug_visual_top3d.glb",
+  "exported": false
+}

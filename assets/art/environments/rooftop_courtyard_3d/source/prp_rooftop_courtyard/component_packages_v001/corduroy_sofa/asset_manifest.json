@@ -1,0 +1,40 @@
+{
+  "package_id": "corduroy_sofa",
+  "name_zh": "11_灯芯绒单人沙发",
+  "collection": "11_灯芯绒单人沙发_资产包",
+  "root_object": "prp_corduroy_sofa_root",
+  "objects": [
+    "11_灯芯绒单人沙发_主体"
+  ],
+  "origin_blender": [
+    -3.6500000953674316,
+    2.5999999046325684,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    2.260000228881836,
+    1.5999999046325684,
+    1.749999612569809
+  ],
+  "bbox_world": [
+    [
+      -4.78000020980835,
+      1.7599999904632568,
+      0.41999998688697815
+    ],
+    [
+      -2.5199999809265137,
+      3.359999895095825,
+      2.169999599456787
+    ]
+  ],
+  "triangles": 3856,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\corduroy_sofa\\prp_corduroy_sofa_visual_top3d.glb",
+  "exported": false
+}

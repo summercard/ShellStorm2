@@ -1,0 +1,40 @@
+{
+  "package_id": "rotary_phone",
+  "name_zh": "26_拨盘老电话",
+  "collection": "26_拨盘老电话_资产包",
+  "root_object": "prp_rotary_phone_root",
+  "objects": [
+    "26_拨盘老电话_主体"
+  ],
+  "origin_blender": [
+    1.5700000524520874,
+    -2.0,
+    0.8999999761581421
+  ],
+  "dimensions": [
+    0.5839921236038208,
+    0.39368295669555664,
+    0.39499998092651367
+  ],
+  "bbox_world": [
+    [
+      1.3050000667572021,
+      -2.2186830043792725,
+      0.8999999761581421
+    ],
+    [
+      1.888992190361023,
+      -1.8250000476837158,
+      1.2949999570846558
+    ]
+  ],
+  "triangles": 1124,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\rotary_phone\\prp_rotary_phone_visual_top3d.glb",
+  "exported": false
+}

@@ -1,0 +1,45 @@
+{
+  "package_id": "tv_static",
+  "name_zh": "19_细碎雪花光点",
+  "collection": "19_细碎雪花光点_资产包",
+  "root_object": "prp_tv_static_root",
+  "objects": [
+    "19_细碎雪花光点_柔和自发光"
+  ],
+  "origin_blender": [
+    0.6299999952316284,
+    -1.3799999952316284,
+    1.059999942779541
+  ],
+  "dimensions": [
+    0.8905124068260193,
+    0.006000041961669922,
+    0.5451712608337402
+  ],
+  "bbox_world": [
+    [
+      0.19468361139297485,
+      -1.3730000257492065,
+      0.7828172445297241
+    ],
+    [
+      1.0851960182189941,
+      -1.3669999837875366,
+      1.3279885053634644
+    ]
+  ],
+  "triangles": 2040,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "tv_static",
+      "update_hz": 6
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\tv_static\\prp_tv_static_visual_top3d.glb",
+  "exported": false
+}

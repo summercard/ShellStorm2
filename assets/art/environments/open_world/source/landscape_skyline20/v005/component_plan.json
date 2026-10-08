@@ -1,0 +1,93 @@
+{
+  "schema": "shellstorm2.openworld.component_plan",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "source_version": "v005",
+  "block_id": "open_world",
+  "floor_range": "1F-20F + rooftop",
+  "design_scope": "50m x 50m景观建筑；20层重复外立面；重点深化屋顶；无底层结构与室内玩法",
+  "reference_image": "references/用户参考_景观建筑.png",
+  "component_budget": {
+    "limit": 50,
+    "planned": 7,
+    "remaining": 43
+  },
+  "dimensions_m": [
+    50.0,
+    50.0,
+    84.2
+  ],
+  "floor_count": 20,
+  "floor_height_m": 3.8,
+  "roof_z_m": 76.0,
+  "triangle_budget": {
+    "limit": 10000,
+    "metric": "runtime_instance_triangles",
+    "scope": "godot_root_tscn_instance_list"
+  },
+  "definitions": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-MODULE",
+      "slug": "floor_module",
+      "component_family": "repeat_floor_facade",
+      "instance_count": 20,
+      "scope": "asset_local"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-HVAC-UNIT",
+      "slug": "hvac_unit",
+      "component_family": "external_ac_unit",
+      "instance_count": 6,
+      "scope": "asset_local"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-STRUCTURE",
+      "slug": "roof_structure",
+      "component_family": "roof_structure",
+      "instance_count": 1,
+      "scope": "asset_local"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT",
+      "slug": "roof_service_hut",
+      "component_family": "roof_service_hut",
+      "instance_count": 1,
+      "scope": "asset_local"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-BANK",
+      "slug": "roof_hvac_bank",
+      "component_family": "roof_hvac_bank",
+      "instance_count": 1,
+      "scope": "asset_local"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-COMMUNICATIONS",
+      "slug": "roof_communications",
+      "component_family": "roof_communications",
+      "instance_count": 1,
+      "scope": "asset_local"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-BILLBOARD",
+      "slug": "billboard",
+      "component_family": "billboard_cityscape",
+      "instance_count": 2,
+      "scope": "asset_local"
+    }
+  ],
+  "style": "景观建筑；参考图同类的夸张工业酒店/商业楼；大面简化、屋顶高密度设备、暖色灯点",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "coordinates": "Blender Z-up; local front -Y; Godot mapping (x,y,z)->(x,z,-y)",
+  "collision": "none_visual_only",
+  "scene_design_docs": [
+    "docs/v0.1/10.1_3D场景美术生产流程.md",
+    "用户参考图及建筑需求"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-LANDSCAPE-SKYLINE20"
+}

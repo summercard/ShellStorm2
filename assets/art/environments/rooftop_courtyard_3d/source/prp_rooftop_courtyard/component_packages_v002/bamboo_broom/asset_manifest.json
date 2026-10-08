@@ -1,0 +1,40 @@
+{
+  "package_id": "bamboo_broom",
+  "name_zh": "43_竹扫帚铁皮簸箕",
+  "collection": "43_竹扫帚铁皮簸箕_资产包",
+  "root_object": "prp_bamboo_broom_root",
+  "objects": [
+    "43_竹扫帚铁皮簸箕_主体"
+  ],
+  "origin_blender": [
+    -6.25,
+    0.25999999046325684,
+    0.3199999928474426
+  ],
+  "dimensions": [
+    0.7397613525390625,
+    0.38500000536441803,
+    1.8178949654102325
+  ],
+  "bbox_world": [
+    [
+      -6.5497612953186035,
+      0.07500000298023224,
+      0.33500000834465027
+    ],
+    [
+      -5.809999942779541,
+      0.46000000834465027,
+      2.152894973754883
+    ]
+  ],
+  "triangles": 576,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\bamboo_broom\\prp_bamboo_broom_visual_top3d.glb",
+  "exported": false
+}

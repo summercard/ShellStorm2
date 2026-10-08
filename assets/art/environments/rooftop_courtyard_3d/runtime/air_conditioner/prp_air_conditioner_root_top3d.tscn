@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/components/air_conditioner/prp_air_conditioner_visual_top3d.glb" id="1"]
+
+[node name="prp_air_conditioner" type="Node3D"]
+metadata/package_id = "air_conditioner"
+metadata/asset_version = "v002"
+metadata/block_id = "rooftop"
+metadata/fixed_display_attachment = true
+
+[node name="Visual" parent="." instance=ExtResource("1")]

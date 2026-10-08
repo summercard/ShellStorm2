@@ -1,0 +1,41 @@
+{
+  "package_id": "oil_lantern",
+  "name_zh": "35_玻璃煤油灯",
+  "collection": "35_玻璃煤油灯_资产包",
+  "root_object": "prp_oil_lantern_root",
+  "objects": [
+    "35_玻璃煤油灯_主体",
+    "35_玻璃煤油灯_柔和自发光"
+  ],
+  "origin_blender": [
+    -3.0399999618530273,
+    -1.3300000429153442,
+    1.7899999618530273
+  ],
+  "dimensions": [
+    0.2799999713897705,
+    0.2799999713897705,
+    0.527698278427124
+  ],
+  "bbox_world": [
+    [
+      -3.180000066757202,
+      -1.4700000286102295,
+      1.7899999618530273
+    ],
+    [
+      -2.9000000953674316,
+      -1.190000057220459,
+      2.3176982402801514
+    ]
+  ],
+  "triangles": 1080,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\oil_lantern\\prp_oil_lantern_visual_top3d.glb",
+  "exported": false
+}

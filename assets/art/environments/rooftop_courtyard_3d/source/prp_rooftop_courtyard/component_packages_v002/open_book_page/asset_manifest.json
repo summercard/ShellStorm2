@@ -1,0 +1,44 @@
+{
+  "package_id": "open_book_page",
+  "name_zh": "50_微风旧书书页",
+  "collection": "50_微风旧书书页_资产包",
+  "root_object": "prp_open_book_page_root",
+  "objects": [
+    "50_微风旧书书页_主体"
+  ],
+  "origin_blender": [
+    -2.54,
+    -0.2,
+    1.18
+  ],
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "paper_shape",
+      "max_displacement_m": 0.025
+    }
+  ],
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\open_book_page\\prp_open_book_page_visual_top3d.glb",
+  "exported": false,
+  "version": "v002",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "bbox_world": [
+    [
+      -2.8450000286102295,
+      -0.4099999964237213,
+      1.184999942779541
+    ],
+    [
+      -2.234999895095825,
+      0.009999990463256836,
+      1.2094999551773071
+    ]
+  ],
+  "dimensions": [
+    0.6100001335144043,
+    0.41999998688697815,
+    0.024500012397766113
+  ],
+  "triangles": 48
+}

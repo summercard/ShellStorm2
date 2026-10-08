@@ -1,0 +1,90 @@
+{
+  "floor_facade_module": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "facade_hvac_unit": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      -0.02000001072883606,
+      0.0
+    ]
+  },
+  "roof_guardrail_kit": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "roof_service_hut": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      -0.04999995231628418,
+      0.0
+    ]
+  },
+  "roof_hvac_unit": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "roof_satellite_dish": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      -0.352512001991272,
+      0.0
+    ]
+  },
+  "roof_truss_tower": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "facade_billboard": {
+    "bottom_center": true,
+    "root_identity": true,
+    "mesh_local_identity_parented": true,
+    "collection_offset_zero": true,
+    "geometry_offset_m": [
+      0.0,
+      -0.09999999403953552,
+      0.0
+    ]
+  }
+}

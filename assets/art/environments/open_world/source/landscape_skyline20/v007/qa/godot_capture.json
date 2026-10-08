@@ -1,0 +1,9 @@
+{
+  "native_viewport": true,
+  "paths": [
+    "res://assets/art/environments/open_world/source/landscape_skyline20/v007/qa/godot_runtime_full.png",
+    "res://assets/art/environments/open_world/source/landscape_skyline20/v007/qa/godot_runtime_roof.png"
+  ],
+  "renderer": "NVIDIA GeForce RTX 4060 Ti",
+  "status": "passed"
+}

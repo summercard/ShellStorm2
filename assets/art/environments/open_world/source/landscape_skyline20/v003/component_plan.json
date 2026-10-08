@@ -1,0 +1,92 @@
+{
+  "schema": "shellstorm2.openworld.component_plan",
+  "schema_version": 1,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "source_version": "v003",
+  "block_id": "open_world",
+  "floor_range": "1F-20F + rooftop",
+  "design_scope": "50m x 50m景观建筑；20层重复外立面；重点深化屋顶；无底层结构与室内玩法",
+  "reference_image": "references/用户参考_景观建筑.png",
+  "component_budget": {
+    "limit": 50,
+    "planned": 7,
+    "remaining": 43
+  },
+  "dimensions_m": [
+    50.0,
+    50.0,
+    76.0
+  ],
+  "floor_count": 20,
+  "floor_height_m": 3.8,
+  "roof_z_m": 76.0,
+  "triangle_budget": {
+    "limit": 10000,
+    "metric": "exported_triangle_count",
+    "scope": "full_preview_assembly"
+  },
+  "definitions": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-MODULE",
+      "slug": "floor_module",
+      "component_family": "repeat_floor_facade",
+      "instance_count": 20
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-HVAC-A",
+      "slug": "hvac_a",
+      "component_family": "external_ac_unit",
+      "variant_axis": "layout_variant",
+      "variant_value": "A",
+      "variant_reason": "外立面空调差异"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-HVAC-B",
+      "slug": "hvac_b",
+      "component_family": "external_ac_unit",
+      "variant_axis": "layout_variant",
+      "variant_value": "B",
+      "variant_reason": "外立面空调差异"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-HVAC-C",
+      "slug": "hvac_c",
+      "component_family": "external_ac_unit",
+      "variant_axis": "layout_variant",
+      "variant_value": "C",
+      "variant_reason": "外立面空调差异"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-KIT",
+      "slug": "roof_kit",
+      "component_family": "roof_equipment_dense",
+      "instance_count": 1
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-BILLBOARD",
+      "slug": "billboard",
+      "component_family": "billboard_cityscape",
+      "instance_count": 2
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SUPPORT",
+      "slug": "roof_support",
+      "component_family": "roof_support",
+      "instance_count": 1
+    }
+  ],
+  "style": "景观建筑；参考图同类的夸张工业酒店/商业楼；大面简化、屋顶高密度设备、暖色灯点",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "coordinates": "Blender Z-up; local front -Y; Godot mapping (x,y,z)->(x,z,-y)",
+  "collision": "none_visual_only",
+  "scene_design_docs": [
+    "docs/v0.1/10.1_3D场景美术生产流程.md",
+    "用户参考图及建筑需求"
+  ],
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-LANDSCAPE-SKYLINE20"
+}

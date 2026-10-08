@@ -1,0 +1,40 @@
+{
+  "package_id": "low_fence",
+  "name_zh": "06_矮木围栏",
+  "collection": "06_矮木围栏_资产包",
+  "root_object": "prp_low_fence_root",
+  "objects": [
+    "06_矮木围栏_主体"
+  ],
+  "origin_blender": [
+    4.03000020980835,
+    1.399999976158142,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    0.16100001335144043,
+    5.385000109672546,
+    1.1199999749660492
+  ],
+  "bbox_world": [
+    [
+      3.9700000286102295,
+      -1.8600000143051147,
+      0.41999998688697815
+    ],
+    [
+      4.13100004196167,
+      3.5250000953674316,
+      1.5399999618530273
+    ]
+  ],
+  "triangles": 312,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\low_fence\\prp_low_fence_visual_top3d.glb",
+  "exported": false
+}

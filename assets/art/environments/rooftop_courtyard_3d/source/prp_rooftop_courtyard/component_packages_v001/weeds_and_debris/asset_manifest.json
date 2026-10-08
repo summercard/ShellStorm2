@@ -1,0 +1,40 @@
+{
+  "package_id": "weeds_and_debris",
+  "name_zh": "46_细草落叶碎石烟蒂",
+  "collection": "46_细草落叶碎石烟蒂_资产包",
+  "root_object": "prp_weeds_and_debris_root",
+  "objects": [
+    "46_细草落叶碎石烟蒂_主体"
+  ],
+  "origin_blender": [
+    0.0,
+    0.0,
+    0.3199999928474426
+  ],
+  "dimensions": [
+    13.44251012802124,
+    8.579601764678955,
+    0.1889999806880951
+  ],
+  "bbox_world": [
+    [
+      -6.82072114944458,
+      -4.536672592163086,
+      0.30799999833106995
+    ],
+    [
+      6.62178897857666,
+      4.042929172515869,
+      0.49699997901916504
+    ]
+  ],
+  "triangles": 884,
+  "kind": "support",
+  "fixed_display_attachment": false,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\weeds_and_debris\\prp_weeds_and_debris_visual_top3d.glb",
+  "exported": false
+}

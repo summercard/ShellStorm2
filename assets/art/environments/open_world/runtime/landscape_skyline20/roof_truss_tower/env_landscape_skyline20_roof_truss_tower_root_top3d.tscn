@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/components/landscape_skyline20/roof_truss_tower/env_landscape_skyline20_roof_truss_tower_visual_top3d.glb" id="1"]
+
+[node name="LandscapeSkyline20_roof_truss_tower" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER"
+metadata/asset_version = "v007"
+metadata/component_id = "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER"
+metadata/component_slug = "roof_truss_tower"
+metadata/collision_status = "none_visual_only"
+metadata/layout_owner = "private_component_root"
+metadata/bounds_m = Vector3(3.200000, 8.500000, 3.200000)
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("1")]

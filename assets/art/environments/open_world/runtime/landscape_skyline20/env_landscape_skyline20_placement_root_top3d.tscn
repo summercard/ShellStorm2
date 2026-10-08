@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_root_top3d.tscn" id="skyline20"]
+
+[node name="Skyline20Placement" type="Node3D"]
+metadata/layout_owner = "Godot shared placement TSCN; edit child Skyline20 to synchronize formal and editor scenes"
+metadata/formal_route_scene = "res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn"
+metadata/editor_scene = "res://scenes/open_world_layout_edit/open_world_chunk_layout_edit.tscn"
+metadata/roof_reference = "Tower3 main rooftop world Y=0; Skyline20 roof surface world Y=-10"
+metadata/visual_only = true
+
+[node name="Skyline20" parent="." instance=ExtResource("skyline20")]
+position = Vector3(75, -86.36, -195)
+metadata/display_name = "塔3东侧20层景观建筑"
+metadata/placement_authorization = "用户授权塔3东侧红框附近，屋面低10m；水平摆位允许后续手调"

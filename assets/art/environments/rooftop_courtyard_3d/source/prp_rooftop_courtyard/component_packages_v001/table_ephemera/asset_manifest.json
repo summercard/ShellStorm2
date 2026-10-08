@@ -1,0 +1,40 @@
+{
+  "package_id": "table_ephemera",
+  "name_zh": "17_烟灰缸与卷报",
+  "collection": "17_烟灰缸与卷报_资产包",
+  "root_object": "prp_table_ephemera_root",
+  "objects": [
+    "17_烟灰缸与卷报_主体"
+  ],
+  "origin_blender": [
+    -0.75,
+    2.25,
+    1.2899999618530273
+  ],
+  "dimensions": [
+    0.4190000295639038,
+    0.4200000762939453,
+    0.12800002098083496
+  ],
+  "bbox_world": [
+    [
+      -0.9150000214576721,
+      2.059999942779541,
+      1.2860000133514404
+    ],
+    [
+      -0.4959999918937683,
+      2.4800000190734863,
+      1.4140000343322754
+    ]
+  ],
+  "triangles": 532,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\table_ephemera\\prp_table_ephemera_visual_top3d.glb",
+  "exported": false
+}

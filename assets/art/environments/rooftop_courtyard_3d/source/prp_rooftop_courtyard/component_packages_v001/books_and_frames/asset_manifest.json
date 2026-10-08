@@ -1,0 +1,40 @@
+{
+  "package_id": "books_and_frames",
+  "name_zh": "27_旧书相框铁皮饼干盒",
+  "collection": "27_旧书相框铁皮饼干盒_资产包",
+  "root_object": "prp_books_and_frames_root",
+  "objects": [
+    "27_旧书相框铁皮饼干盒_主体"
+  ],
+  "origin_blender": [
+    -2.5399999618530273,
+    -0.20000000298023224,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    1.1898777484893799,
+    0.767946720123291,
+    1.1763923466205597
+  ],
+  "bbox_world": [
+    [
+      -3.3519630432128906,
+      -0.4829466938972473,
+      0.40400001406669617
+    ],
+    [
+      -2.1620852947235107,
+      0.2850000262260437,
+      1.5803923606872559
+    ]
+  ],
+  "triangles": 1816,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\books_and_frames\\prp_books_and_frames_visual_top3d.glb",
+  "exported": false
+}

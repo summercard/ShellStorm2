@@ -1,0 +1,1066 @@
+{
+  "schema": "shellstorm2.openworld.component_instances",
+  "schema_version": 1,
+  "library": "v007",
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "source_room_type_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend",
+  "coordinate_contract": {
+    "source_space": "blender_room_local",
+    "origin_mode": "component_bounds_xy_center_at_walk_plane",
+    "blender_plane": "XY",
+    "blender_up": "+Z",
+    "rotation_y_deg_semantics": "rotation_about_blender_Z",
+    "godot_mapping": "(bx, by, bz) -> (bx, bz, -by)",
+    "godot_rotation_mapping": "Blender +Z rotation -> Godot +Y rotation",
+    "room_frame_world_translation_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "instances": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_01",
+      "position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_01",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_02",
+      "position_m": [
+        0.0,
+        0.0,
+        3.8
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        3.8
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_02",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_03",
+      "position_m": [
+        0.0,
+        0.0,
+        7.5999999
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        7.6
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_03",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_04",
+      "position_m": [
+        0.0,
+        0.0,
+        11.3999996
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        11.399999999999999
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_04",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_05",
+      "position_m": [
+        0.0,
+        0.0,
+        15.1999998
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        15.2
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_05",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_06",
+      "position_m": [
+        0.0,
+        0.0,
+        19.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        19.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_06",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_07",
+      "position_m": [
+        0.0,
+        0.0,
+        22.7999992
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        22.799999999999997
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_07",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_08",
+      "position_m": [
+        0.0,
+        0.0,
+        26.6000004
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        26.599999999999998
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_08",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_09",
+      "position_m": [
+        0.0,
+        0.0,
+        30.3999996
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        30.4
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_09",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_10",
+      "position_m": [
+        0.0,
+        0.0,
+        34.2000008
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        34.199999999999996
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_10",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_11",
+      "position_m": [
+        0.0,
+        0.0,
+        38.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        38.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_11",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_12",
+      "position_m": [
+        0.0,
+        0.0,
+        41.7999992
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        41.8
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_12",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_13",
+      "position_m": [
+        0.0,
+        0.0,
+        45.5999985
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        45.599999999999994
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_13",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_14",
+      "position_m": [
+        0.0,
+        0.0,
+        49.4000015
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        49.4
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_14",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_15",
+      "position_m": [
+        0.0,
+        0.0,
+        53.2000008
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        53.199999999999996
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_15",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_16",
+      "position_m": [
+        0.0,
+        0.0,
+        57.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        57.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_16",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_17",
+      "position_m": [
+        0.0,
+        0.0,
+        60.7999992
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        60.8
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_17",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_18",
+      "position_m": [
+        0.0,
+        0.0,
+        64.5999985
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        64.6
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_18",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_19",
+      "position_m": [
+        0.0,
+        0.0,
+        68.4000015
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        68.39999999999999
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_19",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE",
+      "slug": "floor_facade_module",
+      "instance_id": "floor_20",
+      "position_m": [
+        0.0,
+        0.0,
+        72.1999969
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        72.2
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_floor_20",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "instance_id": "facade_hvac_01",
+      "position_m": [
+        -25.8199997,
+        -10.0,
+        1.0
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -25.8,
+        -10.0,
+        1.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.02000001072883606,
+        0.0
+      ],
+      "source_object": "实例_facade_hvac_01",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "instance_id": "facade_hvac_02",
+      "position_m": [
+        25.8199997,
+        -6.0,
+        11.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        25.8,
+        -6.0,
+        11.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.02000001072883606,
+        0.0
+      ],
+      "source_object": "实例_facade_hvac_02",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "instance_id": "facade_hvac_03",
+      "position_m": [
+        -25.8199997,
+        5.0,
+        25.0
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -25.8,
+        5.0,
+        25.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.02000001072883606,
+        0.0
+      ],
+      "source_object": "实例_facade_hvac_03",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "instance_id": "facade_hvac_04",
+      "position_m": [
+        25.8199997,
+        10.0,
+        39.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        25.8,
+        10.0,
+        39.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.02000001072883606,
+        0.0
+      ],
+      "source_object": "实例_facade_hvac_04",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "instance_id": "facade_hvac_05",
+      "position_m": [
+        -25.8199997,
+        -7.0,
+        53.0
+      ],
+      "rotation_y_deg": 270.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -25.8,
+        -7.0,
+        53.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.02000001072883606,
+        0.0
+      ],
+      "source_object": "实例_facade_hvac_05",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT",
+      "slug": "facade_hvac_unit",
+      "instance_id": "facade_hvac_06",
+      "position_m": [
+        25.8199997,
+        5.0,
+        67.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        25.8,
+        5.0,
+        67.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.02000001072883606,
+        0.0
+      ],
+      "source_object": "实例_facade_hvac_06",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-GUARDRAIL-KIT",
+      "slug": "roof_guardrail_kit",
+      "instance_id": "roof_guardrail",
+      "position_m": [
+        0.0,
+        0.0,
+        76.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        0.0,
+        76.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_guardrail",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT",
+      "slug": "roof_service_hut",
+      "instance_id": "roof_service_hut",
+      "position_m": [
+        0.0,
+        -0.05,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0,
+        0,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.04999995231628418,
+        0.0
+      ],
+      "source_object": "实例_roof_service_hut",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_01",
+      "position_m": [
+        -16.0,
+        -15.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -16,
+        -15,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_01",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_02",
+      "position_m": [
+        15.0,
+        -16.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 90,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        15,
+        -16,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_02",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_03",
+      "position_m": [
+        -16.0,
+        4.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 270,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -16,
+        4,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_03",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT",
+      "slug": "roof_hvac_unit",
+      "instance_id": "roof_hvac_04",
+      "position_m": [
+        8.0,
+        17.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 180,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        8,
+        17,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_hvac_04",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SATELLITE-DISH",
+      "slug": "roof_satellite_dish",
+      "instance_id": "roof_dish",
+      "position_m": [
+        15.0,
+        3.6474881,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        15,
+        4,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.352512001991272,
+        0.0
+      ],
+      "source_object": "实例_roof_dish",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER",
+      "slug": "roof_truss_tower",
+      "instance_id": "roof_tower_01",
+      "position_m": [
+        -17.0,
+        17.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -17,
+        17,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_tower_01",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER",
+      "slug": "roof_truss_tower",
+      "instance_id": "roof_tower_02",
+      "position_m": [
+        -7.0,
+        17.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -7,
+        17,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_tower_02",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+      "slug": "facade_billboard",
+      "instance_id": "billboard_south",
+      "position_m": [
+        0.0,
+        -25.6499996,
+        32.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        -25.55,
+        32.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.09999999403953552,
+        0.0
+      ],
+      "source_object": "实例_billboard_south",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+      "slug": "facade_billboard",
+      "instance_id": "billboard_east",
+      "position_m": [
+        25.6499996,
+        -0.0,
+        38.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        25.55,
+        0.0,
+        38.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.09999999403953552,
+        0.0
+      ],
+      "source_object": "实例_billboard_east",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    }
+  ],
+  "validation": {
+    "instance_count": 37,
+    "unique_component_count": 8,
+    "coverage_ok": true,
+    "layout_owner": "Godot TSCN after initialization"
+  },
+  "source_room_type_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+}

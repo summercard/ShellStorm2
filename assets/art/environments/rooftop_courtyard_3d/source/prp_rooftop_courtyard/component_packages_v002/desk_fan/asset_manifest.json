@@ -1,0 +1,40 @@
+{
+  "package_id": "desk_fan",
+  "name_zh": "20_铁壳台式电风扇",
+  "collection": "20_铁壳台式电风扇_资产包",
+  "root_object": "prp_desk_fan_root",
+  "objects": [
+    "20_铁壳台式电风扇_主体"
+  ],
+  "origin_blender": [
+    2.700000047683716,
+    1.850000023841858,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    0.9616928100585938,
+    0.5600000619888306,
+    1.5708899796009064
+  ],
+  "bbox_world": [
+    [
+      2.219243049621582,
+      1.5700000524520874,
+      0.4200000464916229
+    ],
+    [
+      3.180935859680176,
+      2.130000114440918,
+      1.9908900260925293
+    ]
+  ],
+  "triangles": 4044,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\desk_fan\\prp_desk_fan_visual_top3d.glb",
+  "exported": false
+}

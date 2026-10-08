@@ -1,0 +1,279 @@
+{
+  "schema": "shellstorm2.openworld.component_asset_manifest",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER",
+  "parent_asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER",
+  "slug": "roof_truss_tower",
+  "component_family": "roof_truss_tower",
+  "instance_transforms": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER",
+      "slug": "roof_truss_tower",
+      "instance_id": "roof_tower_01",
+      "position_m": [
+        -17.0,
+        17.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -17,
+        17,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_tower_01",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER",
+      "slug": "roof_truss_tower",
+      "instance_id": "roof_tower_02",
+      "position_m": [
+        -7.0,
+        17.0,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -7,
+        17,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source_object": "实例_roof_tower_02",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    }
+  ],
+  "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "bbox_godot_m": [
+    3.2,
+    8.5,
+    3.2
+  ],
+  "geometry_offset_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "scope": "asset_local",
+  "serves_room_types": [
+    "open_world_landscape"
+  ],
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend",
+  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/export/v007/env_landscape_skyline20_optimized_v007.blend",
+  "source_sha256_before": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "source_sha256_after": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "optimized_sha256": "047822810b1abac363102f3d9577a617a9b32ada0107de2c9ffc56a9e5845c63",
+  "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_truss_tower/env_landscape_skyline20_roof_truss_tower_visual_top3d.glb",
+  "glb_sha256": "d145b53af85da932dc417ddc87cb9df17f8e57f31a643cfe5d1a5d29e8804812",
+  "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_truss_tower/env_landscape_skyline20_roof_truss_tower_root_top3d.tscn",
+  "collection": "02_游戏输出_roof_truss_tower_资产包",
+  "root_object": "Root_roof_truss_tower",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "none_visual_only",
+  "palette_uv_layer": "PaletteUV",
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "triangles_before": 604,
+  "triangles_after": 604,
+  "reduction_ratio": 0.0,
+  "optimization_records": [
+    {
+      "object": "屋顶通信塔_桁架与接收板_主体",
+      "role": "body",
+      "before": {
+        "triangles": 592,
+        "vertices": 388,
+        "edges": 582,
+        "polygons": 286,
+        "bbox": [
+          -1.6,
+          -1.6,
+          0.0,
+          1.6,
+          1.6,
+          8.3
+        ],
+        "uv_fingerprint": "fa8a50283906a21de32162fe04993df44d76b8f69934ad1712c8fa4bd3da4182",
+        "geometry_sha256": "a9e5d2c1ead44cd05b2ebaa7c1b00e4f01fad81a0990b29280e364b1ab3e2612",
+        "corner_uv_material_sha256": "f8de06e9acd2b7f0ce4230ff2ec6ebade30dbf2bcba462805c40098eab46ae1d",
+        "uv_area_by_material_cell": {
+          "(0, 9, 8)": 0.10824764587520619,
+          "(0, 9, 3)": 0.21000010013581516,
+          "(1, 9, 1)": 0.027071071601307395,
+          "(1, 9, 4)": 0.014999998211859378
+        }
+      },
+      "after": {
+        "triangles": 592,
+        "vertices": 388,
+        "edges": 888,
+        "polygons": 592,
+        "bbox": [
+          -1.6,
+          -1.6,
+          0.0,
+          1.6,
+          1.6,
+          8.3
+        ],
+        "uv_fingerprint": "26e9aa5cc834cd1ed6d3686a48687c4126f2fb77ac4ced37f5a77a5b88c86f4b",
+        "geometry_sha256": "d209b5493baaea3031705c282d69b9b56e1e8cdc99afaa167e44cf9deda42169",
+        "corner_uv_material_sha256": "f8de06e9acd2b7f0ce4230ff2ec6ebade30dbf2bcba462805c40098eab46ae1d",
+        "uv_area_by_material_cell": {
+          "(0, 9, 8)": 0.10824764587520619,
+          "(0, 9, 3)": 0.21000010013581516,
+          "(1, 9, 1)": 0.027071071601307395,
+          "(1, 9, 4)": 0.014999998211859378
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    },
+    {
+      "object": "屋顶通信塔_暖色警示灯_自发光",
+      "role": "emissive",
+      "before": {
+        "triangles": 12,
+        "vertices": 8,
+        "edges": 12,
+        "polygons": 6,
+        "bbox": [
+          -0.15,
+          -0.15,
+          8.2,
+          0.15,
+          0.15,
+          8.5
+        ],
+        "uv_fingerprint": "d4cb7f03882bb2c22b50a64766f2cbb20ec1e6ddc0e1e9afd5867b0499166699",
+        "geometry_sha256": "d8c37dc6f28608ec8e1793e81735cdc20c5780c1e7c15a061a604d203559d2f7",
+        "corner_uv_material_sha256": "5687a4c39ba722693bf0a6ae51a9675c6ba7c4daa9ed6b13dd2a27414ba9c079",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.007500003576279113
+        }
+      },
+      "after": {
+        "triangles": 12,
+        "vertices": 8,
+        "edges": 18,
+        "polygons": 12,
+        "bbox": [
+          -0.15,
+          -0.15,
+          8.2,
+          0.15,
+          0.15,
+          8.5
+        ],
+        "uv_fingerprint": "5a447d5817557b06e6693153e9f8db85950836721cc094c97043fe45846fe23d",
+        "geometry_sha256": "c53306e01c5a28a9bdfcb2350e0aab1cdd8285ed6b22d5e0c33b907c34183bc7",
+        "corner_uv_material_sha256": "5687a4c39ba722693bf0a6ae51a9675c6ba7c4daa9ed6b13dd2a27414ba9c079",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.007500003576279113
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    }
+  ],
+  "bbox_m": [
+    3.2,
+    3.2,
+    8.5
+  ],
+  "uv_fingerprints": {
+    "屋顶通信塔_桁架与接收板_主体": "26e9aa5cc834cd1ed6d3686a48687c4126f2fb77ac4ced37f5a77a5b88c86f4b",
+    "屋顶通信塔_暖色警示灯_自发光": "5a447d5817557b06e6693153e9f8db85950836721cc094c97043fe45846fe23d"
+  },
+  "embedded_images": false,
+  "import_contract": {
+    "gltf_embedded_image_handling": 0,
+    "post_import": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+  },
+  "collision": "none_visual_only"
+}

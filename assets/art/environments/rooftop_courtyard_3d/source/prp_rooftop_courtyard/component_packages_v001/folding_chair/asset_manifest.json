@@ -1,0 +1,40 @@
+{
+  "package_id": "folding_chair",
+  "name_zh": "24_半旧折叠帆布椅",
+  "collection": "24_半旧折叠帆布椅_资产包",
+  "root_object": "prp_folding_chair_root",
+  "objects": [
+    "24_半旧折叠帆布椅_主体"
+  ],
+  "origin_blender": [
+    0.25,
+    0.6499999761581421,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    1.0200000405311584,
+    1.048378050327301,
+    1.472677767276764
+  ],
+  "bbox_world": [
+    [
+      -0.25999999046325684,
+      0.2650222182273865,
+      0.41153424978256226
+    ],
+    [
+      0.7600000500679016,
+      1.3134002685546875,
+      1.8842120170593262
+    ]
+  ],
+  "triangles": 304,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\folding_chair\\prp_folding_chair_visual_top3d.glb",
+  "exported": false
+}

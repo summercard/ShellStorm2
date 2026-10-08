@@ -1,0 +1,279 @@
+{
+  "schema": "shellstorm2.openworld.component_asset_manifest",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+  "parent_asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+  "slug": "facade_billboard",
+  "component_family": "billboard_cityscape",
+  "instance_transforms": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+      "slug": "facade_billboard",
+      "instance_id": "billboard_south",
+      "position_m": [
+        0.0,
+        -25.6499996,
+        32.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0.0,
+        -25.55,
+        32.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.09999999403953552,
+        0.0
+      ],
+      "source_object": "实例_billboard_south",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    },
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD",
+      "slug": "facade_billboard",
+      "instance_id": "billboard_east",
+      "position_m": [
+        25.6499996,
+        -0.0,
+        38.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        25.55,
+        0.0,
+        38.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.09999999403953552,
+        0.0
+      ],
+      "source_object": "实例_billboard_east",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    }
+  ],
+  "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "bbox_godot_m": [
+    16.0,
+    30.0,
+    0.56
+  ],
+  "geometry_offset_m": [
+    0.0,
+    -0.09999999403953552,
+    0.0
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "scope": "asset_local",
+  "serves_room_types": [
+    "open_world_landscape"
+  ],
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend",
+  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/export/v007/env_landscape_skyline20_optimized_v007.blend",
+  "source_sha256_before": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "source_sha256_after": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "optimized_sha256": "047822810b1abac363102f3d9577a617a9b32ada0107de2c9ffc56a9e5845c63",
+  "glb": "assets/art/environments/open_world/components/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_visual_top3d.glb",
+  "glb_sha256": "65407375166d78445dc5848b988939fed5f82edfbe6c4bee93c5168adf0cf67a",
+  "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_root_top3d.tscn",
+  "collection": "02_游戏输出_facade_billboard_资产包",
+  "root_object": "Root_facade_billboard",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "none_visual_only",
+  "palette_uv_layer": "PaletteUV",
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "triangles_before": 166,
+  "triangles_after": 166,
+  "reduction_ratio": 0.0,
+  "optimization_records": [
+    {
+      "object": "立面广告牌_SKYLINE城市剪影_主体",
+      "role": "body",
+      "before": {
+        "triangles": 142,
+        "vertices": 188,
+        "edges": 208,
+        "polygons": 63,
+        "bbox": [
+          -8.0,
+          -0.28,
+          0.0,
+          8.0,
+          0.28,
+          30.0
+        ],
+        "uv_fingerprint": "9db464e247fce0773f3db980ce806d040cec4c80964d6a6f4c8e2bd6169d193c",
+        "geometry_sha256": "15889f3888fae1db2746f2cad1debbb567211c30ff9436263992309466f11b13",
+        "corner_uv_material_sha256": "a023d8f5367753398d2d005a86dceb532e1e7f90ba1e2d42616b2bf2f13bac4b",
+        "uv_area_by_material_cell": {
+          "(1, 8, 9)": 0.007500003576279113,
+          "(0, 9, 3)": 0.03000001430511645,
+          "(1, 6, 6)": 0.030681371010423675,
+          "(1, 9, 9)": 0.01125000536441867
+        }
+      },
+      "after": {
+        "triangles": 142,
+        "vertices": 180,
+        "edges": 283,
+        "polygons": 142,
+        "bbox": [
+          -8.0,
+          -0.28,
+          0.0,
+          8.0,
+          0.28,
+          30.0
+        ],
+        "uv_fingerprint": "ce2a31121b77e45d4b2a02706d5fc6a309bcddc1dfd9828a5de21ef34e693151",
+        "geometry_sha256": "a2cc14c8aa97d90a5b67c877f3b91fcbea5760de05cd438cad53cf0c1eb2b466",
+        "corner_uv_material_sha256": "a023d8f5367753398d2d005a86dceb532e1e7f90ba1e2d42616b2bf2f13bac4b",
+        "uv_area_by_material_cell": {
+          "(1, 8, 9)": 0.007500003576279113,
+          "(0, 9, 3)": 0.03000001430511645,
+          "(1, 6, 6)": 0.030681371010423675,
+          "(1, 9, 9)": 0.01125000536441867
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 8,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    },
+    {
+      "object": "立面广告牌_暖光边线_自发光",
+      "role": "emissive",
+      "before": {
+        "triangles": 24,
+        "vertices": 16,
+        "edges": 24,
+        "polygons": 12,
+        "bbox": [
+          -7.15,
+          -0.27,
+          0.64,
+          7.15,
+          -0.21,
+          29.360001
+        ],
+        "uv_fingerprint": "2d6297453d618750c646eade0218cbb8954fc8941e46f032b4924450be57f900",
+        "geometry_sha256": "f3d35d182a6ceb5e0733a34fe2dfa020718eaffc5ce6a00a92111aa89be4c230",
+        "corner_uv_material_sha256": "d8aa99698df8d7190edaab3695d6c5b942fd9c032dec6c638bef33bebe9acedc",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.015000007152558226
+        }
+      },
+      "after": {
+        "triangles": 24,
+        "vertices": 16,
+        "edges": 36,
+        "polygons": 24,
+        "bbox": [
+          -7.15,
+          -0.27,
+          0.64,
+          7.15,
+          -0.21,
+          29.360001
+        ],
+        "uv_fingerprint": "ea68ef4a1db89fbb61b8d8f2e1b4c938a561f23612786101ab3adac6e361af99",
+        "geometry_sha256": "3f62ac2534c82392f051ddd7a380ea6f7b772e3e31ac4b52279ed71254a7871b",
+        "corner_uv_material_sha256": "d8aa99698df8d7190edaab3695d6c5b942fd9c032dec6c638bef33bebe9acedc",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.015000007152558226
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    }
+  ],
+  "bbox_m": [
+    16.0,
+    0.56,
+    30.0
+  ],
+  "uv_fingerprints": {
+    "立面广告牌_SKYLINE城市剪影_主体": "ce2a31121b77e45d4b2a02706d5fc6a309bcddc1dfd9828a5de21ef34e693151",
+    "立面广告牌_暖光边线_自发光": "ea68ef4a1db89fbb61b8d8f2e1b4c938a561f23612786101ab3adac6e361af99"
+  },
+  "embedded_images": false,
+  "import_contract": {
+    "gltf_embedded_image_handling": 0,
+    "post_import": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+  },
+  "collision": "none_visual_only"
+}

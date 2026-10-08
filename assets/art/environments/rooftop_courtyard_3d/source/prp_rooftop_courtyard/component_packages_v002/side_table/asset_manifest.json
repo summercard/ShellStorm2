@@ -1,0 +1,40 @@
+{
+  "package_id": "side_table",
+  "name_zh": "12_旧实木边几",
+  "collection": "12_旧实木边几_资产包",
+  "root_object": "prp_side_table_root",
+  "objects": [
+    "12_旧实木边几_主体"
+  ],
+  "origin_blender": [
+    -1.0299999713897705,
+    2.549999952316284,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    1.2099999785423279,
+    0.9748811721801758,
+    0.8649999797344208
+  ],
+  "bbox_world": [
+    [
+      -1.6349999904632568,
+      2.025118827819824,
+      0.41999998688697815
+    ],
+    [
+      -0.42500001192092896,
+      3.0,
+      1.284999966621399
+    ]
+  ],
+  "triangles": 1032,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\side_table\\prp_side_table_visual_top3d.glb",
+  "exported": false
+}

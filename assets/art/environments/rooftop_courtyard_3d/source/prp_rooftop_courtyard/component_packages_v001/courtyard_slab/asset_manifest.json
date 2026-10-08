@@ -1,0 +1,40 @@
+{
+  "package_id": "courtyard_slab",
+  "name_zh": "01_完整旧水泥天台底座",
+  "collection": "01_完整旧水泥天台底座_资产包",
+  "root_object": "prp_courtyard_slab_root",
+  "objects": [
+    "01_完整旧水泥天台底座_主体"
+  ],
+  "origin_blender": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "dimensions": [
+    15.0,
+    10.0,
+    0.33460843563079834
+  ],
+  "bbox_world": [
+    [
+      -7.5,
+      -5.0,
+      0.0
+    ],
+    [
+      7.5,
+      5.0,
+      0.33460843563079834
+    ]
+  ],
+  "triangles": 1596,
+  "kind": "architecture",
+  "fixed_display_attachment": false,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\courtyard_slab\\prp_courtyard_slab_visual_top3d.glb",
+  "exported": false
+}

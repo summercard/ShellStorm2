@@ -1,0 +1,40 @@
+{
+  "package_id": "bicycle_rim",
+  "name_zh": "32_旧自行车轮圈",
+  "collection": "32_旧自行车轮圈_资产包",
+  "root_object": "prp_bicycle_rim_root",
+  "objects": [
+    "32_旧自行车轮圈_主体"
+  ],
+  "origin_blender": [
+    -5.849999904632568,
+    1.0,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    0.09999990463256836,
+    1.267653465270996,
+    1.2676534056663513
+  ],
+  "bbox_world": [
+    [
+      -5.900000095367432,
+      0.36617326736450195,
+      0.4161732792854309
+    ],
+    [
+      -5.800000190734863,
+      1.633826732635498,
+      1.6838266849517822
+    ]
+  ],
+  "triangles": 2244,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\bicycle_rim\\prp_bicycle_rim_visual_top3d.glb",
+  "exported": false
+}

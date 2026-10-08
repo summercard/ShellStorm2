@@ -1,0 +1,41 @@
+{
+  "package_id": "valve_radio",
+  "name_zh": "13_木壳灯丝收音机",
+  "collection": "13_木壳灯丝收音机_资产包",
+  "root_object": "prp_valve_radio_root",
+  "objects": [
+    "13_木壳灯丝收音机_主体",
+    "13_木壳灯丝收音机_柔和自发光"
+  ],
+  "origin_blender": [
+    -1.0399999618530273,
+    2.700000047683716,
+    1.2899999618530273
+  ],
+  "dimensions": [
+    0.8799999952316284,
+    0.45247840881347656,
+    0.948691725730896
+  ],
+  "bbox_world": [
+    [
+      -1.4800000190734863,
+      2.4275217056274414,
+      1.2949999570846558
+    ],
+    [
+      -0.6000000238418579,
+      2.880000114440918,
+      2.2436916828155518
+    ]
+  ],
+  "triangles": 8036,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\valve_radio\\prp_valve_radio_visual_top3d.glb",
+  "exported": false
+}

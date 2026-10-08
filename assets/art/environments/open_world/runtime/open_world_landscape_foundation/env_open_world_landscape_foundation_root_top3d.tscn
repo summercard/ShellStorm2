@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_ring0_index2_extension.tscn" id="city2"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/city_ring0_index8_extension.tscn" id="city8"]
@@ -17,6 +17,9 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_tower2_b.tscn" id="7_remote_tower2_b"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_tower3_a.tscn" id="8_remote_tower3_a"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/remote_skyline08_a.tscn" id="9_remote_skyline08_a"]
+
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_30x30_deep_to_ground.tscn" id="square_30_authored"]
+[ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_100x100_deep_to_ground.tscn" id="square_100_authored"]
 
 [node name="OpenWorldLandscapeFoundation" type="Node3D"]
 script = ExtResource("binding")
@@ -37,7 +40,7 @@ position = Vector3(0.0, -52.15, 5.0)
 position = Vector3(40.0, -110.5, -90.0)
 
 [node name="Tower3FoundationBox" parent="." instance=ExtResource("3_tower3")]
-position = Vector3(-12.01462, -60.075001, -173.036148)
+transform = Transform3D(0.945, 0, 0, 0, 1.417, 0, 0, 0, 0.845, -12.015, -70.075, -173.036)
 
 [node name="Skyline08FoundationBox" parent="." instance=ExtResource("4_skyline08")]
 position = Vector3(-17.305016, -69.827294, -122.641167)
@@ -71,8 +74,8 @@ metadata/layout_source = "res://scenes/open_world_layout_edit/open_world_chunk_l
 metadata/cloud_keepout = false
 metadata/automatic_sync = false
 
-[node name="open_world_chunk_square_30x30" parent="AuthoredCityChunks" instance=ExtResource("square_30")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -80, -150)
+[node name="open_world_chunk_square_30x30" parent="AuthoredCityChunks" instance=ExtResource("square_30_authored")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.645, -65.685, -134.415)
 
 [node name="open_world_chunk_square_100x103" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, -80, 110)
@@ -83,14 +86,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -80, 110)
 [node name="open_world_chunk_square_60x60" parent="AuthoredCityChunks" instance=ExtResource("square_60")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, -80, -70)
 
-[node name="open_world_chunk_square_100x101" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -80, 0)
+[node name="open_world_chunk_square_100x101" parent="AuthoredCityChunks" instance=ExtResource("square_100_authored")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -40, 0)
 
-[node name="open_world_chunk_square_100x105" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -80, -260)
+[node name="open_world_chunk_square_100x105" parent="AuthoredCityChunks" instance=ExtResource("square_100_authored")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -40, -260)
 
-[node name="open_world_chunk_square_100x100" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, -80, 0)
+[node name="open_world_chunk_square_100x100" parent="AuthoredCityChunks" instance=ExtResource("square_100_authored")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, -41, 0)
 
-[node name="open_world_chunk_square_100x104" parent="AuthoredCityChunks" instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -80, -150)
+[node name="open_world_chunk_square_100x104" parent="AuthoredCityChunks" instance=ExtResource("square_100_authored")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -39, -150)

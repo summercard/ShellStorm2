@@ -1,0 +1,249 @@
+{
+  "schema": "shellstorm2.openworld.component_asset_manifest",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-BANK",
+  "parent_asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-BANK",
+  "slug": "roof_hvac_bank",
+  "component_family": "roof_hvac_bank",
+  "instance_transforms": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-BANK",
+      "slug": "roof_hvac_bank",
+      "instance_id": "roof_hvac_bank",
+      "position_m": [
+        -8.8249998,
+        -6.9499998,
+        76.4000015
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -8.0,
+        -7.0,
+        76.0
+      ],
+      "geometry_offset_m": [
+        -0.8250000476837158,
+        0.04999995231628418,
+        0.4000000059604645
+      ],
+      "source_object": "实例_roof_hvac_bank",
+      "source_sha256": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92"
+    }
+  ],
+  "source_sha256": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
+  "bbox_godot_m": [
+    13.55,
+    3.12,
+    10.1
+  ],
+  "geometry_offset_m": [
+    -0.8250000476837158,
+    0.04999995231628418,
+    0.4000000059604645
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "scope": "asset_local",
+  "serves_room_types": [
+    "open_world_landscape"
+  ],
+  "version": "v006",
+  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v006/env_landscape_skyline20_source_v006.blend",
+  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v006/export/v006/env_landscape_skyline20_optimized_v006.blend",
+  "source_sha256_before": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
+  "source_sha256_after": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
+  "optimized_sha256": "67f09f7517c93e353df22b97c7d6e5d7f02da3ea1a137d00740c4389158c10f8",
+  "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_hvac_bank/env_landscape_skyline20_roof_hvac_bank_visual_top3d.glb",
+  "glb_sha256": "f4eeee6d771965e2858bca155fa006f848382916e95f9ac089dbd2b0f733e967",
+  "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_hvac_bank/env_landscape_skyline20_roof_hvac_bank_root_top3d.tscn",
+  "collection": "02_游戏输出_roof_hvac_bank_资产包",
+  "root_object": "Root_roof_hvac_bank",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "none_visual_only",
+  "palette_uv_layer": "PaletteUV",
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "triangles_before": 832,
+  "triangles_after": 832,
+  "reduction_ratio": 0.0,
+  "optimization_records": [
+    {
+      "object": "屋顶空调机组_主体",
+      "role": "body",
+      "before": {
+        "triangles": 736,
+        "vertices": 416,
+        "edges": 624,
+        "polygons": 256,
+        "bbox": [
+          -6.775,
+          -5.05,
+          0.0,
+          6.775,
+          5.05,
+          3.12
+        ],
+        "uv_fingerprint": "a2dbc861f21b92298775b5ddd44221592de8fda763696e9404c554d6b19a63f9",
+        "geometry_sha256": "9b6e364c7473bb760142498326d922d6ffdfcf4b37d2b4920c9502daa045c281",
+        "corner_uv_material_sha256": "db077f4c4dfc0035063c0e1ef9fceefd1e1e7094e4a1d447c53cf1e3cfe521d6",
+        "uv_area_by_material_cell": {
+          "(1, 9, 0)": 0.054142146973100935,
+          "(0, 9, 3)": 0.1835314724212651,
+          "(0, 9, 8)": 0.10828430850131099
+        }
+      },
+      "after": {
+        "triangles": 736,
+        "vertices": 416,
+        "edges": 1104,
+        "polygons": 736,
+        "bbox": [
+          -6.775,
+          -5.05,
+          0.0,
+          6.775,
+          5.05,
+          3.12
+        ],
+        "uv_fingerprint": "6899453404a43eb08d2950b9d47e8d9ded32d46a1880323c46e7f580f3cef28f",
+        "geometry_sha256": "9a35ad3cb5e44cc3702bda6dc788774c231802fb272857b242021211cff73fe2",
+        "corner_uv_material_sha256": "db077f4c4dfc0035063c0e1ef9fceefd1e1e7094e4a1d447c53cf1e3cfe521d6",
+        "uv_area_by_material_cell": {
+          "(1, 9, 0)": 0.054142146973100935,
+          "(0, 9, 3)": 0.1835314724212651,
+          "(0, 9, 8)": 0.10828430850131099
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    },
+    {
+      "object": "屋顶空调_中性指示灯_自发光",
+      "role": "emissive",
+      "before": {
+        "triangles": 96,
+        "vertices": 64,
+        "edges": 96,
+        "polygons": 48,
+        "bbox": [
+          -5.585,
+          -3.555,
+          1.44,
+          5.705,
+          2.695,
+          1.56
+        ],
+        "uv_fingerprint": "81bf790dc34c55ee1ae55542da26d978564413141b93fb878c0a632cb535be66",
+        "geometry_sha256": "530c1b311e95b78db82ba7b06e082b746fd1e1e3068b192a139c157fac080a2d",
+        "corner_uv_material_sha256": "91d86a4e5c438c21ac712b48bd1fb9f0d0bfa83df69a6e7ceb59d67e9ddecbca",
+        "uv_area_by_material_cell": {
+          "(0, 9, 0)": 0.06000001743435934
+        }
+      },
+      "after": {
+        "triangles": 96,
+        "vertices": 64,
+        "edges": 144,
+        "polygons": 96,
+        "bbox": [
+          -5.585,
+          -3.555,
+          1.44,
+          5.705,
+          2.695,
+          1.56
+        ],
+        "uv_fingerprint": "29ec36850d47510aa9f7ee2339f173969ccce3045896b07a790d91ef730bb49a",
+        "geometry_sha256": "696a4bf7b5638377bddc94920ceeccf8bbb2dfd469101f9df2ff6ec9d6a04773",
+        "corner_uv_material_sha256": "91d86a4e5c438c21ac712b48bd1fb9f0d0bfa83df69a6e7ceb59d67e9ddecbca",
+        "uv_area_by_material_cell": {
+          "(0, 9, 0)": 0.06000001743435934
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    }
+  ],
+  "bbox_m": [
+    13.55,
+    10.1,
+    3.12
+  ],
+  "uv_fingerprints": {
+    "屋顶空调机组_主体": "6899453404a43eb08d2950b9d47e8d9ded32d46a1880323c46e7f580f3cef28f",
+    "屋顶空调_中性指示灯_自发光": "29ec36850d47510aa9f7ee2339f173969ccce3045896b07a790d91ef730bb49a"
+  },
+  "embedded_images": false,
+  "import_contract": {
+    "gltf_embedded_image_handling": 0,
+    "post_import": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+  },
+  "collision": "none_visual_only"
+}

@@ -1,0 +1,27 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "version": "v004",
+  "source_hash": "b71ae3271d11209b6a1f1f91e156fb744fc168e3927819b60c9d549522018447",
+  "optimized_hash": "c95bb8155d084ac032afa3c9864f96884b336aa6864a3500cd646eb0e70f7c5d",
+  "component_count": 6,
+  "floor_count": 20,
+  "footprint_m": [
+    50,
+    50
+  ],
+  "triangle_budget": 10000,
+  "component_triangles": {
+    "floor_module": 164,
+    "hvac_a": 176,
+    "hvac_b": 176,
+    "hvac_c": 176,
+    "roof_kit": 3872,
+    "billboard": 828
+  },
+  "exported_triangle_sum": 5392,
+  "source_unchanged": true,
+  "collision": "none_visual_only",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "status": "BLENDER_SOURCE_AND_STABLE_EXPORT_COMPLETE",
+  "godot_import": "PENDING"
+}

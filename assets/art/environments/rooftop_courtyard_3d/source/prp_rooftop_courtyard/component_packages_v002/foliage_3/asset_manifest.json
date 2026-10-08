@@ -1,0 +1,47 @@
+{
+  "package_id": "foliage_3",
+  "name_zh": "31_3_微风绿叶",
+  "collection": "31_3_微风绿叶_资产包",
+  "root_object": "prp_foliage_3_root",
+  "objects": [
+    "31_3_微风绿叶_主体"
+  ],
+  "origin_blender": [
+    -3.0,
+    4.650000095367432,
+    1.690000057220459
+  ],
+  "dimensions": [
+    0.6783547401428223,
+    0.6337690353393555,
+    0.730846643447876
+  ],
+  "bbox_world": [
+    [
+      -3.3344454765319824,
+      4.356655120849609,
+      1.685847520828247
+    ],
+    [
+      -2.65609073638916,
+      4.990424156188965,
+      2.416694164276123
+    ]
+  ],
+  "triangles": 266,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "sway",
+      "axis": 1,
+      "amplitude_rad": 0.018,
+      "period_frames": 192
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\foliage_3\\prp_foliage_3_visual_top3d.glb",
+  "exported": false
+}

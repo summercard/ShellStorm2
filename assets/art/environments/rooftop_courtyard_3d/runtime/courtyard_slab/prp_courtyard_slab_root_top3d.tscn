@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/components/courtyard_slab/prp_courtyard_slab_visual_top3d.glb" id="1"]
+
+[sub_resource type="BoxShape3D" id="box"]
+size = Vector3(15, 0.32, 10)
+
+[node name="prp_courtyard_slab" type="Node3D"]
+metadata/package_id = "courtyard_slab"
+metadata/asset_version = "v002"
+metadata/block_id = "rooftop"
+metadata/fixed_display_attachment = true
+
+[node name="Visual" parent="." instance=ExtResource("1")]
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+position = Vector3(0, 0.16, 0)
+shape = SubResource("box")

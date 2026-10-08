@@ -1,0 +1,46 @@
+{
+  "package_id": "puddle_ripples",
+  "name_zh": "48_灯影微波纹",
+  "collection": "48_灯影微波纹_资产包",
+  "root_object": "prp_puddle_ripples_root",
+  "objects": [
+    "48_灯影微波纹_主体",
+    "48_灯影微波纹_柔和自发光"
+  ],
+  "origin_blender": [
+    5.699999809265137,
+    -3.5999999046325684,
+    0.3370000123977661
+  ],
+  "dimensions": [
+    1.0239872932434082,
+    1.0239877700805664,
+    0.013314783573150635
+  ],
+  "bbox_world": [
+    [
+      5.188006401062012,
+      -4.111993789672852,
+      0.3303426206111908
+    ],
+    [
+      6.21199369430542,
+      -3.088006019592285,
+      0.34365740418434143
+    ]
+  ],
+  "triangles": 2496,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "water_ripple",
+      "amplitude": 0.025
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\puddle_ripples\\prp_puddle_ripples_visual_top3d.glb",
+  "exported": false
+}

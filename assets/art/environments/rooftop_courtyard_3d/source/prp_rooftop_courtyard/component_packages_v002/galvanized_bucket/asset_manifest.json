@@ -1,0 +1,40 @@
+{
+  "package_id": "galvanized_bucket",
+  "name_zh": "34_镀锌桶卷轴油纸伞",
+  "collection": "34_镀锌桶卷轴油纸伞_资产包",
+  "root_object": "prp_galvanized_bucket_root",
+  "objects": [
+    "34_镀锌桶卷轴油纸伞_主体"
+  ],
+  "origin_blender": [
+    4.849999904632568,
+    2.299999952316284,
+    0.3199999928474426
+  ],
+  "dimensions": [
+    0.8206844329833984,
+    0.7398890256881714,
+    1.8130623698234558
+  ],
+  "bbox_world": [
+    [
+      4.439657688140869,
+      1.9300554990768433,
+      0.3199999928474426
+    ],
+    [
+      5.260342121124268,
+      2.6699445247650146,
+      2.1330623626708984
+    ]
+  ],
+  "triangles": 1996,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\galvanized_bucket\\prp_galvanized_bucket_visual_top3d.glb",
+  "exported": false
+}

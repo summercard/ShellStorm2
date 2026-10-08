@@ -1,0 +1,84 @@
+{
+  "schema": "shellstorm2.openworld.whitebox",
+  "schema_version": 1,
+  "scene_id": "landscape_skyline20",
+  "display_name": "景观建筑 Skyline 同类 20层楼",
+  "version": 1,
+  "block": {
+    "block_id": "open_world",
+    "floor_range": "1F-20F + rooftop",
+    "design_scope": "50m x 50m景观建筑；20层重复外立面；重点深化屋顶；无底层结构与室内玩法",
+    "scene_design_docs": [
+      "docs/v0.1/10.1_3D场景美术生产流程.md",
+      "用户参考图及建筑需求"
+    ],
+    "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx#资产主表::ENV-OPENWORLD-LANDSCAPE-SKYLINE20"
+  },
+  "source": {
+    "document": "用户参考图及建筑需求",
+    "read_date": "2026-10-07"
+  },
+  "unit": "meter",
+  "coordinate_system": "blender_z_up",
+  "scene_size_m": [
+    50.0,
+    50.0,
+    76.0
+  ],
+  "floor_height_m": 3.8,
+  "modules": [
+    {
+      "module_id": "repeat_floor_facade",
+      "dimensions_m": [
+        50.0,
+        50.0,
+        3.8
+      ],
+      "instances": 20
+    },
+    {
+      "module_id": "roof_structure",
+      "dimensions_m": [
+        50.0,
+        50.0,
+        2.6
+      ],
+      "z_m": 76.0
+    },
+    {
+      "module_id": "roof_service_hut",
+      "dimensions_m": [
+        11.6,
+        9.6,
+        5.9
+      ],
+      "z_m": 76.0
+    },
+    {
+      "module_id": "roof_hvac_bank",
+      "dimensions_m": [
+        22.0,
+        19.0,
+        4.2
+      ],
+      "z_m": 76.0
+    },
+    {
+      "module_id": "roof_communications",
+      "dimensions_m": [
+        25.0,
+        25.0,
+        8.0
+      ],
+      "z_m": 76.0
+    }
+  ],
+  "clearance_zones": [],
+  "collision": "none_visual_only",
+  "notes": [
+    "不制作底层结构",
+    "20层重复",
+    "屋顶预算优先",
+    "总输出三角面不得超过10000"
+  ]
+}

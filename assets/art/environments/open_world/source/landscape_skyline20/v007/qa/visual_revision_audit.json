@@ -1,0 +1,44 @@
+{
+  "schema": "shellstorm2.openworld.visual_revision_audit.v001",
+  "previous_version": "v006",
+  "current_version": "v007",
+  "review_status": "SELF_REVIEW_COMPLETE_MAIN_AGENT_ART_APPROVAL_PENDING",
+  "pixel_metric_method": "Blender读取保存PNG的RGBA像素；MAE按0-1四通道平均；变化像素按RGB任一通道差>1/255统计。指标仅证明图像变化，不等同美术批准。",
+  "optimization_same_camera_pixel_mae": {
+    "front": 0.0000021984552287242627,
+    "back": 0.0000013250148582338083,
+    "side": 0.0000012101406309132776,
+    "game": 0.000001651812384417751,
+    "roof": 0.0000041760747222173395
+  },
+  "v006_to_v007": {
+    "front": {"pixel_mae": 0.12070196394379994, "changed_pixel_fraction": 0.672949494949495},
+    "roof": {"pixel_mae": 0.1050358775630371, "changed_pixel_fraction": 0.5664777777777777},
+    "roof_equipment_horizontal_bbox_area_sum_m2": {"v006": 300.29213519999996, "v007": 376.48544533503997},
+    "area_metric_note": "各设备水平联合AABB面积乘实例数求和；非真实表面面积，也不是屋顶三角占比。v007设备包络无重叠；v006历史区域包含设备间空隙，因此面积不能代替目视密度判定。",
+    "visual_observations": [
+      "中央空区改为14x12m机房，机房顶部保留独立于展示环境的附属通风罩。",
+      "四台6x5mHVAC不再焊成bank，分散各边区；顶盖双八边风扇有实体轮廓、叶片和中心轴，正反百叶为有面积面片。",
+      "9m实心dish与两座8.5m桁架塔成为独立组件；深灰支架、碟沿、桁架骨架对白灰碟面和接收板形成对比。",
+      "广告从横幅改为16x30m竖幅，深蓝背板、暖色太阳、深色城市剪影及七字几何SKYLINE，顶部不触及屋面。",
+      "移除每层灯带及大面积蓝窗，改灰墙、暗琥珀窄窗；保留50m主体20层及3.8m层距。",
+      "优化前后front/back/side/game/roof均已读取核对，轮廓与布局保持，像素差仅为极小重渲染差异。"
+    ],
+    "remaining_art_limitations": [
+      "建筑下部按用户简化要求保留重复灰墙暖窗，不宣称还原参考的完整酒店层次、装饰、植被或底层入口。",
+      "受固定50m屋顶与尺寸契约限制，屋顶仍保留明显净空；已提升中央占用与设备分区，但最终视觉密度由主代理审阅。",
+      "暖窗采用公共palette反光面片而非逐层自发光；塔灯和门灯为独立低强度自发光网格。"
+    ]
+  },
+  "optimization": {
+    "actual_processed_counts": {"zero_area_faces": 0, "duplicate_faces": 0, "merged_vertices": 8, "loose_edges": 0, "loose_vertices": 0},
+    "triangle_reduction_ratio": 0,
+    "bbox_corner_uv_material_uv_area_all_passed": true,
+    "note": "真实安全清理合并8个重复顶点，没有删三角；不把三角化称作减面。"
+  },
+  "godot_native_self_review": {"roof_and_full_read": true, "observations": "实际Godot灰墙和屋面灰阶可读；深灰塔架、dish支架和HVAC百叶清晰；白灰碟面仍最亮，接受为焦点但不宣称美术通过；两幅竖广告低于屋面、SKYLINE可读；屋顶净空仍明显，交主代理审阅。", "renderer": "NVIDIA GeForce RTX 4060 Ti / OpenGL Compatibility"},
+  "runtime_integrated": false,
+  "formal_room_modified": false,
+  "ledger_modified": false,
+  "tests_modified": false
+}

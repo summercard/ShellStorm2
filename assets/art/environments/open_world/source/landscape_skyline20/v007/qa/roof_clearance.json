@@ -1,0 +1,212 @@
+{
+  "equipment_bounds": {
+    "roof_service_hut": [
+      -7.3,
+      -6.4,
+      76.360001,
+      7.3,
+      6.3,
+      82.870001
+    ],
+    "roof_hvac_01": [
+      -19.0,
+      -17.5,
+      76.360001,
+      -13.0,
+      -12.5,
+      79.960001
+    ],
+    "roof_hvac_02": [
+      12.5,
+      -19.0,
+      76.360001,
+      17.5,
+      -13.0,
+      79.960001
+    ],
+    "roof_hvac_03": [
+      -18.5,
+      1.0,
+      76.360001,
+      -13.5,
+      7.0,
+      79.960001
+    ],
+    "roof_hvac_04": [
+      5.0,
+      14.5,
+      76.360001,
+      11.0,
+      19.5,
+      79.960001
+    ],
+    "roof_dish": [
+      10.40552,
+      0.894976,
+      76.360001,
+      19.59448,
+      6.4,
+      86.162108
+    ],
+    "roof_tower_01": [
+      -18.6,
+      15.4,
+      76.360001,
+      -15.4,
+      18.6,
+      84.860001
+    ],
+    "roof_tower_02": [
+      -8.6,
+      15.4,
+      76.360001,
+      -5.4,
+      18.6,
+      84.860001
+    ]
+  },
+  "pair_checks": [
+    {
+      "a": "roof_service_hut",
+      "b": "roof_hvac_01",
+      "horizontal_aabb_gap_m": 8.34865258589672
+    },
+    {
+      "a": "roof_service_hut",
+      "b": "roof_hvac_02",
+      "horizontal_aabb_gap_m": 8.402380615040002
+    },
+    {
+      "a": "roof_service_hut",
+      "b": "roof_hvac_03",
+      "horizontal_aabb_gap_m": 6.2
+    },
+    {
+      "a": "roof_service_hut",
+      "b": "roof_hvac_04",
+      "horizontal_aabb_gap_m": 8.2
+    },
+    {
+      "a": "roof_service_hut",
+      "b": "roof_dish",
+      "horizontal_aabb_gap_m": 3.1055199999999994
+    },
+    {
+      "a": "roof_service_hut",
+      "b": "roof_tower_01",
+      "horizontal_aabb_gap_m": 12.182774724995946
+    },
+    {
+      "a": "roof_service_hut",
+      "b": "roof_tower_02",
+      "horizontal_aabb_gap_m": 9.100000000000001
+    },
+    {
+      "a": "roof_hvac_01",
+      "b": "roof_hvac_02",
+      "horizontal_aabb_gap_m": 25.5
+    },
+    {
+      "a": "roof_hvac_01",
+      "b": "roof_hvac_03",
+      "horizontal_aabb_gap_m": 13.5
+    },
+    {
+      "a": "roof_hvac_01",
+      "b": "roof_hvac_04",
+      "horizontal_aabb_gap_m": 32.449961479175904
+    },
+    {
+      "a": "roof_hvac_01",
+      "b": "roof_dish",
+      "horizontal_aabb_gap_m": 26.967457212554837
+    },
+    {
+      "a": "roof_hvac_01",
+      "b": "roof_tower_01",
+      "horizontal_aabb_gap_m": 27.9
+    },
+    {
+      "a": "roof_hvac_01",
+      "b": "roof_tower_02",
+      "horizontal_aabb_gap_m": 28.244822534404424
+    },
+    {
+      "a": "roof_hvac_02",
+      "b": "roof_hvac_03",
+      "horizontal_aabb_gap_m": 29.5296461204668
+    },
+    {
+      "a": "roof_hvac_02",
+      "b": "roof_hvac_04",
+      "horizontal_aabb_gap_m": 27.54087870784082
+    },
+    {
+      "a": "roof_hvac_02",
+      "b": "roof_dish",
+      "horizontal_aabb_gap_m": 13.894976
+    },
+    {
+      "a": "roof_hvac_02",
+      "b": "roof_tower_01",
+      "horizontal_aabb_gap_m": 39.81168170273644
+    },
+    {
+      "a": "roof_hvac_02",
+      "b": "roof_tower_02",
+      "horizontal_aabb_gap_m": 33.57037384361395
+    },
+    {
+      "a": "roof_hvac_03",
+      "b": "roof_hvac_04",
+      "horizontal_aabb_gap_m": 19.96246477767713
+    },
+    {
+      "a": "roof_hvac_03",
+      "b": "roof_dish",
+      "horizontal_aabb_gap_m": 23.90552
+    },
+    {
+      "a": "roof_hvac_03",
+      "b": "roof_tower_01",
+      "horizontal_aabb_gap_m": 8.4
+    },
+    {
+      "a": "roof_hvac_03",
+      "b": "roof_tower_02",
+      "horizontal_aabb_gap_m": 9.724710792614864
+    },
+    {
+      "a": "roof_hvac_04",
+      "b": "roof_dish",
+      "horizontal_aabb_gap_m": 8.1
+    },
+    {
+      "a": "roof_hvac_04",
+      "b": "roof_tower_01",
+      "horizontal_aabb_gap_m": 20.4
+    },
+    {
+      "a": "roof_hvac_04",
+      "b": "roof_tower_02",
+      "horizontal_aabb_gap_m": 10.4
+    },
+    {
+      "a": "roof_dish",
+      "b": "roof_tower_01",
+      "horizontal_aabb_gap_m": 27.32992613364332
+    },
+    {
+      "a": "roof_dish",
+      "b": "roof_tower_02",
+      "horizontal_aabb_gap_m": 18.188305651445383
+    },
+    {
+      "a": "roof_tower_01",
+      "b": "roof_tower_02",
+      "horizontal_aabb_gap_m": 6.800000000000001
+    }
+  ],
+  "minimum_gap_m": 3.1055199999999994,
+  "passed": true
+}

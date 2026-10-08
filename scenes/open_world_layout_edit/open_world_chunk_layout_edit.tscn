@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://cch5281r1e5y"]
 
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_skyline08_box.tscn" id="foundation_skyline08"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower1_box.tscn" id="foundation_tower1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower2_box.tscn" id="foundation_tower2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower3_box.tscn" id="foundation_tower3"]
 [ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_ground_500x500.tscn" id="ground"]
 [ext_resource type="PackedScene" uid="uid://b8bhdm38xw6cm" path="res://scenes/open_world_layout_edit/open_world_layout_edit.tscn" id="reference"]
 [ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_30x30_deep_to_ground.tscn" id="square_30"]
 [ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_60x60_deep_to_ground.tscn" id="square_60"]
 [ext_resource type="PackedScene" path="res://scenes/open_world_layout_edit/open_world_chunk_square_100x100_deep_to_ground.tscn" id="square_100"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower1_box.tscn" id="foundation_tower1"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower2_box.tscn" id="foundation_tower2"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_tower3_box.tscn" id="foundation_tower3"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/foundation_skyline08_box.tscn" id="foundation_skyline08"]
 
 [node name="open_world_chunk_layout_edit" unique_id=1390806617 instance=ExtResource("reference")]
 metadata/purpose = "3种正方形楼房模板（30x30、60x60、100x100）+1个独立500x500地表摆位；固定原参考场景；未替换正式景观"
@@ -28,17 +28,20 @@ metadata/manual_edit_pending = true
 metadata/formal_sync_required_after_manual_confirm = true
 metadata/deep_ground_contract = "编辑地表Y=-100；楼群底部延伸到Y=-100；楼顶世界高度保持原摆位"
 
-[node name="Tower2" parent="." index="1" unique_id=43542813]
+[node name="Skyline20Placement" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.860847, 0, 17.398159)
+
+[node name="Tower2" parent="." index="2" unique_id=43542813]
 metadata/writeback_allowed = false
 metadata/_edit_lock_ = true
 metadata/purpose = "固定参照，本轮只手调五区块"
 
-[node name="Tower3" parent="." index="2" unique_id=361880605]
+[node name="Tower3" parent="." index="3" unique_id=361880605]
 metadata/writeback_allowed = false
 metadata/_edit_lock_ = true
 metadata/purpose = "固定参照，本轮只手调五区块"
 
-[node name="Skyline08" parent="." index="3" unique_id=1752112527]
+[node name="Skyline08" parent="." index="4" unique_id=1752112527]
 metadata/writeback_allowed = false
 metadata/_edit_lock_ = true
 metadata/purpose = "固定参照，本轮只手调五区块"
@@ -46,48 +49,8 @@ metadata/purpose = "固定参照，本轮只手调五区块"
 [node name="open_world_ground_500x500" parent="." index="6" unique_id=1465738191 instance=ExtResource("ground")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75, -100, -40.771)
 
-[node name="Tower1FoundationBox" parent="." instance=ExtResource("foundation_tower1")]
-position = Vector3(0, -62.15, 5)
-scale = Vector3(1, 1.359066, 1)
-metadata/edit_role = "manual_foundation_box"
-metadata/target = "Tower1"
-metadata/ground_y = -100.0
-metadata/top_y = -24.3
-metadata/bottom_y = -100.0
-metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
-
-[node name="Tower2FoundationBox" parent="." instance=ExtResource("foundation_tower2")]
-position = Vector3(40, -110.25, -90)
-scale = Vector3(1, 1.025, 1)
-metadata/edit_role = "manual_foundation_box"
-metadata/target = "Tower2"
-metadata/ground_y = -100.0
-metadata/top_y = -100.0
-metadata/bottom_y = -120.5
-metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
-
-[node name="Tower3FoundationBox" parent="." instance=ExtResource("foundation_tower3")]
-position = Vector3(-12.015, -70.075, -173.036)
-scale = Vector3(1, 1.501882, 1)
-metadata/edit_role = "manual_foundation_box"
-metadata/target = "Tower3"
-metadata/ground_y = -100.0
-metadata/top_y = -40.15
-metadata/bottom_y = -100.0
-metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
-
-[node name="Skyline08FoundationBox" parent="." instance=ExtResource("foundation_skyline08")]
-position = Vector3(-17.305, -79.827, -122.641)
-scale = Vector3(1, 1.98304, 1)
-metadata/edit_role = "manual_foundation_box"
-metadata/target = "Skyline08"
-metadata/ground_y = -100.0
-metadata/top_y = -59.655
-metadata/bottom_y = -100.0
-metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
-
 [node name="open_world_chunk_square_30x30" parent="." index="7" unique_id=1041928072 instance=ExtResource("square_30")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -49, -150)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.645, -65.685, -134.415)
 
 [node name="open_world_chunk_square_100x103" parent="." index="8" unique_id=1083187411 instance=ExtResource("square_100")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, -49, 110)
@@ -99,15 +62,43 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, -49, 110)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, -49, -70)
 
 [node name="open_world_chunk_square_100x101" parent="." index="11" unique_id=1026979812 instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -49, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -40, 0)
 
 [node name="open_world_chunk_square_100x105" parent="." index="12" unique_id=822358991 instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -49, -260)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -40, -260)
 
 [node name="open_world_chunk_square_100x100" parent="." index="13" unique_id=1502717083 instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, -49, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, -41, 0)
 
 [node name="open_world_chunk_square_100x104" parent="." index="14" unique_id=1364766163 instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -49, -150)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -39, -150)
+
+[node name="Tower1FoundationBox" parent="." index="16" unique_id=1791593966 instance=ExtResource("foundation_tower1")]
+transform = Transform3D(1, 0, 0, 0, 1.359066, 0, 0, 0, 1, 0, -62.15, 5)
+metadata/ground_y = -100.0
+metadata/bottom_y = -100.0
+metadata/edit_role = "manual_foundation_box"
+metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
+
+[node name="Tower2FoundationBox" parent="." index="17" unique_id=283572296 instance=ExtResource("foundation_tower2")]
+transform = Transform3D(1, 0, 0, 0, 1.025, 0, 0, 0, 1, 40, -110.25, -90)
+metadata/top_y = -100.0
+metadata/ground_y = -100.0
+metadata/edit_role = "manual_foundation_box"
+metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
+
+[node name="Tower3FoundationBox" parent="." index="18" unique_id=340931880 instance=ExtResource("foundation_tower3")]
+transform = Transform3D(0.945, 0, 0, 0, 1.417, 0, 0, 0, 0.845, -12.015, -70.075, -173.036)
+metadata/ground_y = -100.0
+metadata/bottom_y = -100.0
+metadata/edit_role = "manual_foundation_box"
+metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
+
+[node name="Skyline08FoundationBox" parent="." index="19" unique_id=2028117031 instance=ExtResource("foundation_skyline08")]
+transform = Transform3D(1, 0, 0, 0, 1.98304, 0, 0, 0, 1, -17.305, -79.827, -122.641)
+metadata/ground_y = -100.0
+metadata/bottom_y = -100.0
+metadata/edit_role = "manual_foundation_box"
+metadata/extension_policy = "Y向拉伸到地表；可在Godot继续手调"
 
 [editable path="Tower3"]

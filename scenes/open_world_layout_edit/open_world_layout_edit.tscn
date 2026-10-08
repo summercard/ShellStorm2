@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn" id="tower2"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_03/env_tower_03_root_top3d.tscn" id="tower3"]
 
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_placement_root_top3d.tscn" id="skyline20_placement"]
+
 [node name="OpenWorldLayoutEdit" type="Node3D" unique_id=1560104757]
 metadata/purpose = "独立编辑摆位；只读提取变换，确认后才能回填正式场景。"
 metadata/formal_route_scene = "res://assets/art/environments/open_world/runtime/cross_tower_route/env_cross_tower_route_root_top3d.tscn"
@@ -14,6 +16,10 @@ metadata/auto_sync = false
 metadata/coordinate_space = "正式世界空间；根和正式路线父级均为 identity"
 metadata/baseline_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 metadata/_edit_lock_ = true
+
+[node name="Skyline20Placement" parent="." instance=ExtResource("skyline20_placement")]
+metadata/display_name = "塔3东侧景观建筑（打开共享摆位场景调整）"
+metadata/writeback_mode = "shared_placement_tscn; outer overrides do not auto-sync"
 
 [node name="RooftopReference" parent="." unique_id=2077180569 instance=ExtResource("rooftop")]
 metadata/display_name = "主塔100F天台（默认固定参照）"

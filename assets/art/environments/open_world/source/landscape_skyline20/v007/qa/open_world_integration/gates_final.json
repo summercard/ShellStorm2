@@ -1,0 +1,22 @@
+{
+  "documentation": {
+    "exit_code": 1,
+    "log": "final_documentation.log"
+  },
+  "naming": {
+    "exit_code": 1,
+    "log": "final_naming.log"
+  },
+  "structure": {
+    "exit_code": 0,
+    "log": "final_structure.log"
+  },
+  "full_scenes": {
+    "exit_code": 1,
+    "log": "final_full_scenes.log"
+  },
+  "baseline": {
+    "exit_code": 0,
+    "log": "final_baseline.log"
+  }
+}

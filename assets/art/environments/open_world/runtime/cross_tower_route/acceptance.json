@@ -1,8 +1,8 @@
 {
   "checks": 319,
   "failures": [],
-  "renderer": "Windows",
-  "scene_sha256": "4ddbdbb3bc7914f2a8122cb2c50111bb7cf7f34522c2bb34041f0f1da8cfac29",
+  "renderer": "headless",
+  "scene_sha256": "21adb359384dc12c358de4641b49bb456f77efc7c18e736ad96c3ed5a44e0d66",
   "tower3": {
     "derived": "assets/art/environments/open_world/source/tower_03/export/v001/env_tower_03-v001-runtime.blend",
     "derived_sha256": "a5eb1a4429fdb9ccbbf1de3a6ae11a4f2b1edcac3deb02878f455ecf99b3f744",

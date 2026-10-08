@@ -1,0 +1,253 @@
+{
+  "schema": "shellstorm2.openworld.component_asset_manifest",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT",
+  "parent_asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT",
+  "slug": "roof_service_hut",
+  "component_family": "roof_service_hut",
+  "instance_transforms": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT",
+      "slug": "roof_service_hut",
+      "instance_id": "roof_service_hut",
+      "position_m": [
+        0.0,
+        -0.05,
+        76.3600006
+      ],
+      "rotation_y_deg": 0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        0,
+        0,
+        76.36
+      ],
+      "geometry_offset_m": [
+        0.0,
+        -0.04999995231628418,
+        0.0
+      ],
+      "source_object": "实例_roof_service_hut",
+      "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b"
+    }
+  ],
+  "source_sha256": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "bbox_godot_m": [
+    14.6,
+    6.51,
+    12.7
+  ],
+  "geometry_offset_m": [
+    0.0,
+    -0.04999995231628418,
+    0.0
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "scope": "asset_local",
+  "serves_room_types": [
+    "open_world_landscape"
+  ],
+  "version": "v007",
+  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/env_landscape_skyline20_source_v007.blend",
+  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v007/export/v007/env_landscape_skyline20_optimized_v007.blend",
+  "source_sha256_before": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "source_sha256_after": "17bbdd849430c7b0d4752e25e91326102fb40239d8c674880004bb149ff4174b",
+  "optimized_sha256": "047822810b1abac363102f3d9577a617a9b32ada0107de2c9ffc56a9e5845c63",
+  "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb",
+  "glb_sha256": "83cf94ed4102c22235298816d1ecc82828e6fb96d36c663f159c9755b2291406",
+  "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_root_top3d.tscn",
+  "collection": "02_游戏输出_roof_service_hut_资产包",
+  "root_object": "Root_roof_service_hut",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "none_visual_only",
+  "palette_uv_layer": "PaletteUV",
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "triangles_before": 308,
+  "triangles_after": 308,
+  "reduction_ratio": 0.0,
+  "optimization_records": [
+    {
+      "object": "屋顶机房_服务舱_主体",
+      "role": "body",
+      "before": {
+        "triangles": 296,
+        "vertices": 208,
+        "edges": 296,
+        "polygons": 132,
+        "bbox": [
+          -7.3,
+          -6.35,
+          0.0,
+          7.3,
+          6.35,
+          6.51
+        ],
+        "uv_fingerprint": "4e619de4111d04f39faaa7e283f15659ae21fa501b01f5b78cc39ab84d4ffa66",
+        "geometry_sha256": "a07207eeb76b417e45ba434836add27daa5b40cd869c70d98e981fcbe217b487",
+        "corner_uv_material_sha256": "578dfe5c712d2b034bc2b01b0048bb91e508f9ae529b6fa15fa86b1032c087c3",
+        "uv_area_by_material_cell": {
+          "(1, 9, 3)": 0.013535538562663874,
+          "(0, 9, 8)": 0.09250004410744239,
+          "(1, 6, 7)": 0.007499994635580265,
+          "(0, 9, 3)": 0.013535538562663874,
+          "(1, 9, 4)": 0.04207106428914642
+        }
+      },
+      "after": {
+        "triangles": 296,
+        "vertices": 208,
+        "edges": 460,
+        "polygons": 296,
+        "bbox": [
+          -7.3,
+          -6.35,
+          0.0,
+          7.3,
+          6.35,
+          6.51
+        ],
+        "uv_fingerprint": "f7053c3121f1aa225e4f4297d024da6e250646f7faa4cf7f49074967b1e1dfc7",
+        "geometry_sha256": "c1183e4ef66a9b0d68b2d4e02204d3f896cae598a39ddffdf1a142d5ab5b21c1",
+        "corner_uv_material_sha256": "578dfe5c712d2b034bc2b01b0048bb91e508f9ae529b6fa15fa86b1032c087c3",
+        "uv_area_by_material_cell": {
+          "(1, 9, 3)": 0.013535538562663874,
+          "(0, 9, 8)": 0.09250004410744239,
+          "(1, 6, 7)": 0.007499994635580265,
+          "(0, 9, 3)": 0.013535538562663874,
+          "(1, 9, 4)": 0.04207106428914642
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    },
+    {
+      "object": "屋顶机房_暖色门灯_自发光",
+      "role": "emissive",
+      "before": {
+        "triangles": 12,
+        "vertices": 8,
+        "edges": 12,
+        "polygons": 6,
+        "bbox": [
+          -1.4,
+          -6.225,
+          4.21,
+          1.4,
+          -6.175,
+          4.39
+        ],
+        "uv_fingerprint": "d4cb7f03882bb2c22b50a64766f2cbb20ec1e6ddc0e1e9afd5867b0499166699",
+        "geometry_sha256": "bc732adc80cf3cf1815d058e2fb2a85ad101834fa59f83b9b6e72373562e471d",
+        "corner_uv_material_sha256": "b542262dedad426ca0dcc780ca256102090f26e29e42bb0f14c481557fbbd4b7",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.007500003576279113
+        }
+      },
+      "after": {
+        "triangles": 12,
+        "vertices": 8,
+        "edges": 18,
+        "polygons": 12,
+        "bbox": [
+          -1.4,
+          -6.225,
+          4.21,
+          1.4,
+          -6.175,
+          4.39
+        ],
+        "uv_fingerprint": "5a447d5817557b06e6693153e9f8db85950836721cc094c97043fe45846fe23d",
+        "geometry_sha256": "0e77510f447c1f2be464018f7f120286bda27c15d6b8a0417aa3b09f7aaeab0c",
+        "corner_uv_material_sha256": "b542262dedad426ca0dcc780ca256102090f26e29e42bb0f14c481557fbbd4b7",
+        "uv_area_by_material_cell": {
+          "(0, 6, 6)": 0.007500003576279113
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    }
+  ],
+  "bbox_m": [
+    14.6,
+    12.7,
+    6.51
+  ],
+  "uv_fingerprints": {
+    "屋顶机房_服务舱_主体": "f7053c3121f1aa225e4f4297d024da6e250646f7faa4cf7f49074967b1e1dfc7",
+    "屋顶机房_暖色门灯_自发光": "5a447d5817557b06e6693153e9f8db85950836721cc094c97043fe45846fe23d"
+  },
+  "embedded_images": false,
+  "import_contract": {
+    "gltf_embedded_image_handling": 0,
+    "post_import": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+  },
+  "collision": "none_visual_only"
+}

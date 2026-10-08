@@ -1,0 +1,40 @@
+{
+  "package_id": "puddle_drain",
+  "name_zh": "47_排水口积水冷暖倒影",
+  "collection": "47_排水口积水冷暖倒影_资产包",
+  "root_object": "prp_puddle_drain_root",
+  "objects": [
+    "47_排水口积水冷暖倒影_主体"
+  ],
+  "origin_blender": [
+    5.699999809265137,
+    -3.5999999046325684,
+    0.3199999928474426
+  ],
+  "dimensions": [
+    2.2692437171936035,
+    1.2471857070922852,
+    0.025000005960464478
+  ],
+  "bbox_world": [
+    [
+      4.615756511688232,
+      -4.210218906402588,
+      0.3190000057220459
+    ],
+    [
+      6.885000228881836,
+      -2.9630331993103027,
+      0.3440000116825104
+    ]
+  ],
+  "triangles": 156,
+  "kind": "support",
+  "fixed_display_attachment": false,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\puddle_drain\\prp_puddle_drain_visual_top3d.glb",
+  "exported": false
+}

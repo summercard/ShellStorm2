@@ -1,0 +1,40 @@
+{
+  "package_id": "pot_1",
+  "name_zh": "30_1_陶土花盆",
+  "collection": "30_1_陶土花盆_资产包",
+  "root_object": "prp_pot_1_root",
+  "objects": [
+    "30_1_陶土花盆_主体"
+  ],
+  "origin_blender": [
+    -5.900000095367432,
+    -1.899999976158142,
+    0.3199999928474426
+  ],
+  "dimensions": [
+    0.7560000419616699,
+    0.7560001611709595,
+    0.5845000147819519
+  ],
+  "bbox_world": [
+    [
+      -6.2779998779296875,
+      -2.2780001163482666,
+      0.3199999928474426
+    ],
+    [
+      -5.521999835968018,
+      -1.5219999551773071,
+      0.9045000076293945
+    ]
+  ],
+  "triangles": 384,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\pot_1\\prp_pot_1_visual_top3d.glb",
+  "exported": false
+}

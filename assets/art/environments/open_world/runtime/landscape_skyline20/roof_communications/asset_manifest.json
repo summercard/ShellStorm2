@@ -1,0 +1,249 @@
+{
+  "schema": "shellstorm2.openworld.component_asset_manifest",
+  "schema_version": 2,
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-COMMUNICATIONS",
+  "parent_asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-COMMUNICATIONS",
+  "slug": "roof_communications",
+  "component_family": "roof_communications",
+  "instance_transforms": [
+    {
+      "component_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-COMMUNICATIONS",
+      "slug": "roof_communications",
+      "instance_id": "roof_communications",
+      "position_m": [
+        -8.0,
+        10.407547,
+        76.1893768
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "reference_position_m": [
+        -8.0,
+        10.0,
+        76.0
+      ],
+      "geometry_offset_m": [
+        0.0,
+        0.4075474739074707,
+        0.18937823176383972
+      ],
+      "source_object": "实例_roof_communications",
+      "source_sha256": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92"
+    }
+  ],
+  "source_sha256": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
+  "bbox_godot_m": [
+    9.2,
+    7.420622,
+    6.164906
+  ],
+  "geometry_offset_m": [
+    0.0,
+    0.4075474739074707,
+    0.18937823176383972
+  ],
+  "variant_axis": null,
+  "variant_value": null,
+  "variant_reason": null,
+  "scope": "asset_local",
+  "serves_room_types": [
+    "open_world_landscape"
+  ],
+  "version": "v006",
+  "source_blend": "assets/art/environments/open_world/source/landscape_skyline20/v006/env_landscape_skyline20_source_v006.blend",
+  "optimized_blend": "assets/art/environments/open_world/source/landscape_skyline20/v006/export/v006/env_landscape_skyline20_optimized_v006.blend",
+  "source_sha256_before": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
+  "source_sha256_after": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
+  "optimized_sha256": "67f09f7517c93e353df22b97c7d6e5d7f02da3ea1a137d00740c4389158c10f8",
+  "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_communications/env_landscape_skyline20_roof_communications_visual_top3d.glb",
+  "glb_sha256": "0a34b3f226ce481915706e1c99332d0930a4147a03aa1c25614fee7d4c1e48c3",
+  "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_communications/env_landscape_skyline20_roof_communications_root_top3d.tscn",
+  "collection": "02_游戏输出_roof_communications_资产包",
+  "root_object": "Root_roof_communications",
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "none_visual_only",
+  "palette_uv_layer": "PaletteUV",
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "triangles_before": 1396,
+  "triangles_after": 1396,
+  "reduction_ratio": 0.0,
+  "optimization_records": [
+    {
+      "object": "屋顶通信_实心卫星天线与桁架塔_主体",
+      "role": "body",
+      "before": {
+        "triangles": 1344,
+        "vertices": 838,
+        "edges": 1310,
+        "polygons": 638,
+        "bbox": [
+          -4.6,
+          -3.082453,
+          0.0,
+          4.6,
+          3.082453,
+          7.210622
+        ],
+        "uv_fingerprint": "cec842570662a781f4a7829ac28e922be84079ebe9b6fc758925723a0ea70a7e",
+        "geometry_sha256": "63557cb17f3ad22df21dcc601144f9799d65e679bb083848b5e4657ee389353b",
+        "corner_uv_material_sha256": "319020b956264597f9be1ecb94606784a3e26336d0ddf5847e9af17ae46fcb5d",
+        "uv_area_by_material_cell": {
+          "(0, 9, 3)": 0.5487448961686034,
+          "(1, 9, 0)": 0.14023321405907707,
+          "(0, 6, 6)": 0.11373803843290986
+        }
+      },
+      "after": {
+        "triangles": 1344,
+        "vertices": 838,
+        "edges": 2016,
+        "polygons": 1344,
+        "bbox": [
+          -4.6,
+          -3.082453,
+          0.0,
+          4.6,
+          3.082453,
+          7.210622
+        ],
+        "uv_fingerprint": "17887e5b4b651c1eea0d6a710e901e9df21d0174370acc8f224bc1bafb5f6c72",
+        "geometry_sha256": "43051028903dc8db52d01bb0b7f5edd8aaa4e376ceb66ffd51e44796eb961332",
+        "corner_uv_material_sha256": "319020b956264597f9be1ecb94606784a3e26336d0ddf5847e9af17ae46fcb5d",
+        "uv_area_by_material_cell": {
+          "(0, 9, 3)": 0.5487448961686034,
+          "(1, 9, 0)": 0.14023321405907707,
+          "(0, 6, 6)": 0.11373803843290986
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    },
+    {
+      "object": "屋顶通信_中性信标_自发光",
+      "role": "emissive",
+      "before": {
+        "triangles": 52,
+        "vertices": 32,
+        "edges": 48,
+        "polygons": 22,
+        "bbox": [
+          -3.71,
+          -0.517547,
+          6.120622,
+          3.71,
+          2.502453,
+          7.420622
+        ],
+        "uv_fingerprint": "fa012c60f6ecaf8b1390c11b1fddf6bd275150020ffea7ef521f84cbe07f8a38",
+        "geometry_sha256": "a0b3d4879785d4b08bb6297343198aca063dcc510efeec5be3f973a16b49a922",
+        "corner_uv_material_sha256": "583cb16d677eeb756944528e36ab5f3ca422e09fea602fb5bbc9833cb95938fb",
+        "uv_area_by_material_cell": {
+          "(0, 9, 0)": 0.02853554110186507
+        }
+      },
+      "after": {
+        "triangles": 52,
+        "vertices": 32,
+        "edges": 78,
+        "polygons": 52,
+        "bbox": [
+          -3.71,
+          -0.517547,
+          6.120622,
+          3.71,
+          2.502453,
+          7.420622
+        ],
+        "uv_fingerprint": "a221333df1635dc4a7199b2262b1d8898c82b814c2409abe785b61cc9c6452f1",
+        "geometry_sha256": "8b212fa1f3264889901cef33edc9649551929ca1807743b3269e2a5ac9b749cb",
+        "corner_uv_material_sha256": "583cb16d677eeb756944528e36ab5f3ca422e09fea602fb5bbc9833cb95938fb",
+        "uv_area_by_material_cell": {
+          "(0, 9, 0)": 0.02853554110186507
+        }
+      },
+      "processed_counts": {
+        "zero_area_faces": 0,
+        "duplicate_faces": 0,
+        "merged_vertices": 0,
+        "loose_edges": 0,
+        "loose_vertices": 0
+      },
+      "operations": [
+        "delete_zero_area_faces(area<=1e-12)",
+        "delete_duplicate_faces(material_uv_preserving)",
+        "remove_doubles(dist=1e-6,matching_uv_material_hard_edge)",
+        "delete_loose_edges_vertices",
+        "recalc_face_normals",
+        "triangulate(BEAUTY)"
+      ],
+      "fidelity": {
+        "bbox_equal": true,
+        "corner_uv_material_equal": true,
+        "uv_cell_area_equal": true
+      },
+      "reduction_ratio": 0.0,
+      "budget": null,
+      "budget_source": "用户整栋实例成本<=10000；未提供逐组件预算",
+      "retained_faces_reason": "底面、背面与封闭面用于独立组件复用及投影，缺少不可见证据故保留；源已使用低分段，无安全额外减面。",
+      "zero_change_reason": "完整清理真实执行；无命中记录零处理量；三角化不宣称减面。"
+    }
+  ],
+  "bbox_m": [
+    9.2,
+    6.164906,
+    7.420622
+  ],
+  "uv_fingerprints": {
+    "屋顶通信_实心卫星天线与桁架塔_主体": "17887e5b4b651c1eea0d6a710e901e9df21d0174370acc8f224bc1bafb5f6c72",
+    "屋顶通信_中性信标_自发光": "a221333df1635dc4a7199b2262b1d8898c82b814c2409abe785b61cc9c6452f1"
+  },
+  "embedded_images": false,
+  "import_contract": {
+    "gltf_embedded_image_handling": 0,
+    "post_import": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+  },
+  "collision": "none_visual_only"
+}

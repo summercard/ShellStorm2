@@ -1,0 +1,204 @@
+{
+  "authorized_assets": {
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20": {
+      "before": null,
+      "after": {
+        "v": "74469ed22ff8b9d6a359b68f3b1d9a5495a3f7fe2636a72728fb4cc631166b77",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD": {
+      "before": null,
+      "after": {
+        "v": "db5e04260f57c206308e94b7cb6092bcb0d185095f9e4c14edc04ffe705c9cf8",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT": {
+      "before": null,
+      "after": {
+        "v": "c315d2275d9335e8184f0bbfd1535f33095826513325d0893a51616e1ee7dbde",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE": {
+      "before": null,
+      "after": {
+        "v": "c0a0a1ebd1b9d3ffe5777488b3bff007a7e871634319c5b69a9a99903cc79d5f",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-GUARDRAIL-KIT": {
+      "before": null,
+      "after": {
+        "v": "1340ae159d04f91d3e81d98f9f9db0b5da509a94830ab9154a7f969aafe59184",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT": {
+      "before": null,
+      "after": {
+        "v": "582ea38b43572c0f1c826344db13decffa0c4428ca43aa263f223727268c484b",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SATELLITE-DISH": {
+      "before": null,
+      "after": {
+        "v": "e79d8d98a694da789596cf55b4ed1e43caa53de4a37efc1d23a4ad478efe0bb4",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT": {
+      "before": null,
+      "after": {
+        "v": "2b9ed1e5725e43073e7aee8cb88708302dffffe492f1b0a888066ee9e2e3bc99",
+        "c": "场景",
+        "d": "scenes"
+      }
+    },
+    "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER": {
+      "before": null,
+      "after": {
+        "v": "7c70dd5487161b2814aba3ff7de52817ad79bc83922e61caf710af83bc7afb76",
+        "c": "场景",
+        "d": "scenes"
+      }
+    }
+  },
+  "asset_count": [
+    1008,
+    1017
+  ],
+  "column_digests": {
+    "1": [
+      "b5f7fa980624f35497cfdfef0878fbdd2f97d87f7e2b992361e3e317611c883d",
+      "b949143c19661a52212dbfee5561c20ac1f14769ad7e8e46b63fb333939d1940"
+    ],
+    "2": [
+      "4088358677d6e9f4b933acf6e025180e31cf34f432f34d5b8c26972263b07b05",
+      "85acf4ab84b6aacaa407772dfbefd090cc27280296f38a0044778e34cdcf1ef8"
+    ],
+    "3": [
+      "e8e29821af4f7eb60abe528d6e09cd92253b4d1df209a2ee93399bdc1c8b0e88",
+      "f17acab2dc751f09fac0d40ea4bd14b2ab7af1282d39dfa611cbca8b29fdae4c"
+    ],
+    "4": [
+      "de3e67ecceec8cd681212626aba8edb4525b59dbc6eaa416d88f3637975dcb35",
+      "40d15b596f23f10a7ade9ccb0e604cbebcc989217063aa1e7e64317664a6c5dd"
+    ],
+    "5": [
+      "21e467910c09f854cc55bd6807d655aac3145c99a5b80b6f5db703883ba06b37",
+      "a6f47a4517f634ceeab6cfdad3e2dd6fe2aef91abe7efeda44a46de65c74cc9d"
+    ],
+    "6": [
+      "fdb7ed5e1d278a1299c302f7e2fb4488696bc4dc8ab3d24fc31c7d73400996f3",
+      "31d574bac224176617e0b45c044d565e36c5771ed58e4cbe786a84a5965564ba"
+    ],
+    "7": [
+      "61006a8281d794bf95eb4a0f089047befd3e1375a2737aabc5cdef66a5fb5ceb",
+      "2d49c24699a285590ee9cef8769bbfa034c1a62acd1dc2098d5a7dabb25c12e4"
+    ],
+    "8": [
+      "e33b86cf262396d49efbae3922341dfa2ab78515bbae7dcc90b66c06654a2b60",
+      "93fecf2db138d0c9021d45ad912c2b6fe0957152fdef4c9f1efab5944a87a94b"
+    ],
+    "9": [
+      "14bd3cc58c64e3ffe13a55d3d1d81de171d2c06bdc0b3f5caa31a12108fdcfde",
+      "99c8d2dbcfc5d9702b973f822d0eac001cba1a91f8beeec7c175f7b50e8972b1"
+    ],
+    "10": [
+      "4523a525fc49ca7f05cb2d907c096814a9f626c2ebd1885a401fd74ccd2105af",
+      "20602e84720d1498a2fdf7a499de4d3312bfdfdc1b0709a37a460bde613d2731"
+    ],
+    "11": [
+      "a88da0b985214ef5ba1b2b28aa0c260b0a7355e60e5194f05e01767801752ade",
+      "c8873af73af2a794ecd111e3448d49fead5d856f2e776c788771706004e11900"
+    ],
+    "12": [
+      "1669419d2ba33ab2d6f4fb50bcf1584989bd5db4abe32aeab79b0d7238b8ce8e",
+      "8a0e4fdb825cae68fa38d8e63a95512de61c4c1eab0ecb5fd6ab84bd94c63782"
+    ],
+    "13": [
+      "1fcceae8ed596c0e4515187b8ee0680e91b768aea8787bd86f1498892257005c",
+      "d54f8ded2f024a70293f93d59c4be3ee9919396438c77be555de2275d4044406"
+    ],
+    "14": [
+      "f98391ea2f133882f9683d8bd17323814f3290c1dc432070140282b348581128",
+      "c2d652031e897333f270521130c58f1f4f361aca08f5683f808141983383f724"
+    ],
+    "15": [
+      "169fb3d3f3cadc6477c26f8198b3918691a6d8309f2a6403d2294325ff8d521c",
+      "1d8ef5b9b7b94657b6a3504ea797bc1f62e31759d26bc1fc95c796af78cfeecb"
+    ],
+    "16": [
+      "97fbf12493bf020e54ae3b0f00579db04739f66720aee3de2c96f01c4a463c98",
+      "83ffcbfe151511c0565fb48834b729a62f1f74186753a2bb457d5f07bcb97504"
+    ],
+    "17": [
+      "965b2799306e9053267bc958fba15e9b555be7af2843d82bd3956d073370a7fa",
+      "af702415f90cc6b6ec8dded78d1c395dc34157789a7f1ed11dba0a46b74678f7"
+    ],
+    "20": [
+      "1f47b3e36e7d559142864891878caa3f222753d5c3542896611c01a512c0d9a1",
+      "2d9225a73e6e003eb89d53d52d1f87f389091d857d4b240bb871da254fbc264d"
+    ],
+    "21": [
+      "dd0b64f9f32ebac2fc191bd1e591538f17e61712741b8dc003b48645b5275857",
+      "8e29b9f73d9b4ba1c839f3eb17e25cd26707d2af0a9e8f9f848f34770fd935cd"
+    ],
+    "22": [
+      "fb45f95df2a000a2a8efd814dff790a796a88735a970744eac7cf91de89c2470",
+      "4aa81e715750a36a2b8b540e99bae6147dd4e7ef4a262febcd42387d9626bd3c"
+    ],
+    "23": [
+      "94a35bc20696a90af865d86c9ff7dc6370cc16ce5ab643edf2b8c0b5cd260418",
+      "33a6f5e086b3edd6fdd299f73653f88f34e81572a4ddf52cd509c0ce9653a69e"
+    ],
+    "24": [
+      "3947abd2e6d8a274ac228d80a714a2f36a16287cc2a7c400a54da6ceea090663",
+      "a656e9fcc0dc034be9dd41c63541cf43e790b448aa106c047255d4075b76b8a9"
+    ],
+    "25": [
+      "33c1dd1f45dda4a050c5c605c93aa2d23c6d1e443385f0e35640ef38678187b2",
+      "09cc2526e8209e29bc2d63e8a56af6ffcf67dc897cf4d7afdf5c7d375f5d227c"
+    ]
+  },
+  "category_counts": [
+    {
+      "UI": 16,
+      "场景": 686,
+      "场景道具": 20,
+      "基地资产包": 114,
+      "敌人": 15,
+      "武器": 36,
+      "特效": 17,
+      "角色": 25,
+      "道具": 22,
+      "音乐": 9,
+      "音效": 48
+    },
+    {
+      "UI": 16,
+      "场景": 695,
+      "场景道具": 20,
+      "基地资产包": 114,
+      "敌人": 15,
+      "武器": 36,
+      "特效": 17,
+      "角色": 25,
+      "道具": 22,
+      "音乐": 9,
+      "音效": 48
+    }
+  ],
+  "unrelated_asset_fingerprints_unchanged": true,
+  "all_sheet_fingerprints_unchanged": true
+}

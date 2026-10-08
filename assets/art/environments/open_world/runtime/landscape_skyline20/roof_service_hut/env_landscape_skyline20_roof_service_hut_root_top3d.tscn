@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb" id="1"]
+
+[node name="LandscapeSkyline20_roof_service_hut" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT"
+metadata/asset_version = "v007"
+metadata/component_id = "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT"
+metadata/component_slug = "roof_service_hut"
+metadata/collision_status = "none_visual_only"
+metadata/layout_owner = "private_component_root"
+metadata/bounds_m = Vector3(14.600000, 6.510000, 12.700000)
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("1")]

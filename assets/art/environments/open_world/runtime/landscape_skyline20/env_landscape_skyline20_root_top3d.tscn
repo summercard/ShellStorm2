@@ -1,0 +1,169 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_root_top3d.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_root_top3d.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_root_top3d.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_root_top3d.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/roof_hvac_unit/env_landscape_skyline20_roof_hvac_unit_root_top3d.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/roof_satellite_dish/env_landscape_skyline20_roof_satellite_dish_root_top3d.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/roof_truss_tower/env_landscape_skyline20_roof_truss_tower_root_top3d.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_root_top3d.tscn" id="8"]
+
+[node name="LandscapeSkyline20" type="Node3D"]
+metadata/asset_id = "ENV-OPENWORLD-LANDSCAPE-SKYLINE20"
+metadata/asset_version = "v007"
+metadata/block_id = "open_world"
+metadata/floor_range = "1F-20F + rooftop"
+metadata/design_scope = "50m x 50m; 20层；3.8m美术层高；无底层；屋顶重点"
+metadata/collision_status = "none_visual_only"
+metadata/layout_owner = "Godot TSCN initialization; not formal room"
+metadata/component_count = 8
+metadata/instance_count = 37
+
+[node name="floor_01" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 0.000000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_02" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 3.800000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_03" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 7.600000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_04" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 11.400000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_05" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 15.200000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_06" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 19.000000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_07" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 22.799999, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_08" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 26.600000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_09" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 30.400000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_10" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 34.200001, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_11" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 38.000000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_12" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 41.799999, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_13" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 45.599998, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_14" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 49.400002, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_15" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 53.200001, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_16" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 57.000000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_17" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 60.799999, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_18" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 64.599998, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_19" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 68.400002, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="floor_20" parent="." instance=ExtResource("1")]
+position = Vector3(0.000000, 72.199997, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="facade_hvac_01" parent="." instance=ExtResource("2")]
+position = Vector3(-25.820000, 1.000000, 10.000000)
+rotation = Vector3(0, 4.712388980, 0)
+
+[node name="facade_hvac_02" parent="." instance=ExtResource("2")]
+position = Vector3(25.820000, 11.000000, 6.000000)
+rotation = Vector3(0, 1.570796327, 0)
+
+[node name="facade_hvac_03" parent="." instance=ExtResource("2")]
+position = Vector3(-25.820000, 25.000000, -5.000000)
+rotation = Vector3(0, 4.712388980, 0)
+
+[node name="facade_hvac_04" parent="." instance=ExtResource("2")]
+position = Vector3(25.820000, 39.000000, -10.000000)
+rotation = Vector3(0, 1.570796327, 0)
+
+[node name="facade_hvac_05" parent="." instance=ExtResource("2")]
+position = Vector3(-25.820000, 53.000000, 7.000000)
+rotation = Vector3(0, 4.712388980, 0)
+
+[node name="facade_hvac_06" parent="." instance=ExtResource("2")]
+position = Vector3(25.820000, 67.000000, -5.000000)
+rotation = Vector3(0, 1.570796327, 0)
+
+[node name="roof_guardrail" parent="." instance=ExtResource("3")]
+position = Vector3(0.000000, 76.000000, -0.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="roof_service_hut" parent="." instance=ExtResource("4")]
+position = Vector3(0.000000, 76.360001, 0.050000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="roof_hvac_01" parent="." instance=ExtResource("5")]
+position = Vector3(-16.000000, 76.360001, 15.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="roof_hvac_02" parent="." instance=ExtResource("5")]
+position = Vector3(15.000000, 76.360001, 16.000000)
+rotation = Vector3(0, 1.570796327, 0)
+
+[node name="roof_hvac_03" parent="." instance=ExtResource("5")]
+position = Vector3(-16.000000, 76.360001, -4.000000)
+rotation = Vector3(0, 4.712388980, 0)
+
+[node name="roof_hvac_04" parent="." instance=ExtResource("5")]
+position = Vector3(8.000000, 76.360001, -17.000000)
+rotation = Vector3(0, 3.141592654, 0)
+
+[node name="roof_dish" parent="." instance=ExtResource("6")]
+position = Vector3(15.000000, 76.360001, -3.647488)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="roof_tower_01" parent="." instance=ExtResource("7")]
+position = Vector3(-17.000000, 76.360001, -17.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="roof_tower_02" parent="." instance=ExtResource("7")]
+position = Vector3(-7.000000, 76.360001, -17.000000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="billboard_south" parent="." instance=ExtResource("8")]
+position = Vector3(0.000000, 32.000000, 25.650000)
+rotation = Vector3(0, 0.000000000, 0)
+
+[node name="billboard_east" parent="." instance=ExtResource("8")]
+position = Vector3(25.650000, 38.000000, 0.000000)
+rotation = Vector3(0, 1.570796327, 0)

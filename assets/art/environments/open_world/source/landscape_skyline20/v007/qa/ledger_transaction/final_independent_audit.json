@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "historical_rows": 820,
+  "historical_content_cells": 18860,
+  "historical_prefab_rows_untouched": 713,
+  "historical_baseline_assets_preserved": 1008,
+  "authorized_new_assets": 9,
+  "authorized_sheet_digest_changes": [
+    "3D-场景通用"
+  ],
+  "historical_artifact_hashes_unchanged": 465,
+  "historical_refs_scripts_unchanged": 22,
+  "new_gate_errors": 0,
+  "resolved_historical_gate_errors": 0,
+  "asset_geometry_files_unchanged": true
+}

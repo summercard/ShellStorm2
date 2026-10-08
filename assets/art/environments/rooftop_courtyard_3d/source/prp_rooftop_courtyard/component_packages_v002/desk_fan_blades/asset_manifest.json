@@ -1,0 +1,46 @@
+{
+  "package_id": "desk_fan_blades",
+  "name_zh": "21_风扇匀速扇叶",
+  "collection": "21_风扇匀速扇叶_资产包",
+  "root_object": "prp_desk_fan_blades_root",
+  "objects": [
+    "21_风扇匀速扇叶_主体"
+  ],
+  "origin_blender": [
+    2.700000047683716,
+    1.840000033378601,
+    1.5099999904632568
+  ],
+  "dimensions": [
+    0.8144257068634033,
+    0.12999999523162842,
+    0.7675180435180664
+  ],
+  "bbox_world": [
+    [
+      2.303476095199585,
+      1.7549999952316284,
+      1.083430528640747
+    ],
+    [
+      3.1179018020629883,
+      1.8849999904632568,
+      1.8509485721588135
+    ]
+  ],
+  "triangles": 296,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "rotation",
+      "axis": 1,
+      "turns_per_10s": 4
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\desk_fan_blades\\prp_desk_fan_blades_visual_top3d.glb",
+  "exported": false
+}

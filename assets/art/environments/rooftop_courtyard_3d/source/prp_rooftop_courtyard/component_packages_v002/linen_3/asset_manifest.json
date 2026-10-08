@@ -1,0 +1,51 @@
+{
+  "package_id": "linen_3",
+  "name_zh": "41_3_旧布巾亚麻手帕",
+  "collection": "41_3_旧布巾亚麻手帕_资产包",
+  "root_object": "prp_linen_3_root",
+  "objects": [
+    "41_3_旧布巾亚麻手帕_主体"
+  ],
+  "origin_blender": [
+    1.600000023841858,
+    4.380000114440918,
+    2.3148365020751953
+  ],
+  "dimensions": [
+    0.5499999523162842,
+    0.09669780731201172,
+    0.7985446453094482
+  ],
+  "bbox_world": [
+    [
+      1.3250000476837158,
+      4.335172653198242,
+      1.586470603942871
+    ],
+    [
+      1.875,
+      4.431870460510254,
+      2.3850152492523193
+    ]
+  ],
+  "triangles": 120,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "sway",
+      "axis": 0,
+      "amplitude_rad": 0.023,
+      "period_frames": 192
+    },
+    {
+      "type": "cloth_shape",
+      "max_displacement_m": 0.028
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\linen_3\\prp_linen_3_visual_top3d.glb",
+  "exported": false
+}

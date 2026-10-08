@@ -1,0 +1,827 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "components": [
+    {
+      "aabb": {
+        "end": [
+          25.0,
+          3.75999999046326,
+          25.0
+        ],
+        "position": [
+          -25.0,
+          0.0,
+          -25.0
+        ],
+        "size": [
+          50.0,
+          3.75999999046326,
+          50.0
+        ]
+      },
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_visual_top3d.glb",
+      "loaded": true,
+      "materials": [
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": true,
+          "emission_energy": 1.14999997615814,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_visual_top3d.glb::StandardMaterial3D_4m3a5",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_visual_top3d.glb::StandardMaterial3D_u2svf",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_visual_top3d.glb::StandardMaterial3D_4fsv6",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_visual_top3d.glb::StandardMaterial3D_vnd16",
+          "texture_filter": 0,
+          "texture_repeat": false
+        }
+      ],
+      "mesh_count": 2,
+      "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/floor_facade_module/env_landscape_skyline20_floor_facade_module_root_top3d.tscn",
+      "root_transform_identity": true,
+      "slug": "floor_facade_module",
+      "triangles": 188
+    },
+    {
+      "aabb": {
+        "end": [
+          1.29999995231628,
+          1.92499995231628,
+          0.794999957084656
+        ],
+        "position": [
+          -1.29999995231628,
+          0.0,
+          -0.794999957084656
+        ],
+        "size": [
+          2.59999990463257,
+          1.92499995231628,
+          1.58999991416931
+        ]
+      },
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_visual_top3d.glb",
+      "loaded": true,
+      "materials": [
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": true,
+          "emission_energy": 1.14999997615814,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_visual_top3d.glb::StandardMaterial3D_yrpsy",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_visual_top3d.glb::StandardMaterial3D_xkinn",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_visual_top3d.glb::StandardMaterial3D_t0fs3",
+          "texture_filter": 0,
+          "texture_repeat": false
+        }
+      ],
+      "mesh_count": 2,
+      "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/facade_hvac_unit/env_landscape_skyline20_facade_hvac_unit_root_top3d.tscn",
+      "root_transform_identity": true,
+      "slug": "facade_hvac_unit",
+      "triangles": 176
+    },
+    {
+      "aabb": {
+        "end": [
+          25.0,
+          2.21062183380127,
+          25.0
+        ],
+        "position": [
+          -25.0,
+          0.0,
+          -25.0
+        ],
+        "size": [
+          50.0,
+          2.21062183380127,
+          50.0
+        ]
+      },
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_visual_top3d.glb",
+      "loaded": true,
+      "materials": [
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": true,
+          "emission_energy": 1.14999997615814,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_visual_top3d.glb::StandardMaterial3D_s7jo2",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_visual_top3d.glb::StandardMaterial3D_447is",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_visual_top3d.glb::StandardMaterial3D_hrbnr",
+          "texture_filter": 0,
+          "texture_repeat": false
+        }
+      ],
+      "mesh_count": 2,
+      "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_guardrail_kit/env_landscape_skyline20_roof_guardrail_kit_root_top3d.tscn",
+      "root_transform_identity": true,
+      "slug": "roof_guardrail_kit",
+      "triangles": 1436
+    },
+    {
+      "aabb": {
+        "end": [
+          5.80000019073486,
+          5.40000009536743,
+          4.59999990463257
+        ],
+        "position": [
+          -5.80000019073486,
+          0.0,
+          -4.59999990463257
+        ],
+        "size": [
+          11.6000003814697,
+          5.40000009536743,
+          9.19999980926514
+        ]
+      },
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb",
+      "loaded": true,
+      "materials": [
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": true,
+          "emission_energy": 1.14999997615814,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb::StandardMaterial3D_0dafj",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb::StandardMaterial3D_l2hln",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb::StandardMaterial3D_dth64",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_visual_top3d.glb::StandardMaterial3D_diup5",
+          "texture_filter": 0,
+          "texture_repeat": false
+        }
+      ],
+      "mesh_count": 2,
+      "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_service_hut/env_landscape_skyline20_roof_service_hut_root_top3d.tscn",
+      "root_transform_identity": true,
+      "slug": "roof_service_hut",
+      "triangles": 180
+    },
+    {
+      "aabb": {
+        "end": [
+          6.77499961853027,
+          3.11999988555908,
+          5.05000019073486
+        ],
+        "position": [
+          -6.77499961853027,
+          0.0,
+          -5.05000019073486
+        ],
+        "size": [
+          13.5499992370605,
+          3.11999988555908,
+          10.1000003814697
+        ]
+      },
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_hvac_bank/env_landscape_skyline20_roof_hvac_bank_visual_top3d.glb",
+      "loaded": true,
+      "materials": [
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": true,
+          "emission_energy": 1.14999997615814,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_hvac_bank/env_landscape_skyline20_roof_hvac_bank_visual_top3d.glb::StandardMaterial3D_6nlo8",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_hvac_bank/env_landscape_skyline20_roof_hvac_bank_visual_top3d.glb::StandardMaterial3D_pvkj6",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_hvac_bank/env_landscape_skyline20_roof_hvac_bank_visual_top3d.glb::StandardMaterial3D_7e837",
+          "texture_filter": 0,
+          "texture_repeat": false
+        }
+      ],
+      "mesh_count": 2,
+      "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_hvac_bank/env_landscape_skyline20_roof_hvac_bank_root_top3d.tscn",
+      "root_transform_identity": true,
+      "slug": "roof_hvac_bank",
+      "triangles": 832
+    },
+    {
+      "aabb": {
+        "end": [
+          4.59999990463257,
+          7.42062187194824,
+          3.08245253562927
+        ],
+        "position": [
+          -4.59999990463257,
+          0.0,
+          -3.08245253562927
+        ],
+        "size": [
+          9.19999980926514,
+          7.42062187194824,
+          6.16490507125854
+        ]
+      },
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/roof_communications/env_landscape_skyline20_roof_communications_visual_top3d.glb",
+      "loaded": true,
+      "materials": [
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": true,
+          "emission_energy": 1.14999997615814,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_communications/env_landscape_skyline20_roof_communications_visual_top3d.glb::StandardMaterial3D_2ydj8",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_communications/env_landscape_skyline20_roof_communications_visual_top3d.glb::StandardMaterial3D_hk0ef",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/roof_communications/env_landscape_skyline20_roof_communications_visual_top3d.glb::StandardMaterial3D_vvwl2",
+          "texture_filter": 0,
+          "texture_repeat": false
+        }
+      ],
+      "mesh_count": 2,
+      "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/roof_communications/env_landscape_skyline20_roof_communications_root_top3d.tscn",
+      "root_transform_identity": true,
+      "slug": "roof_communications",
+      "triangles": 1396
+    },
+    {
+      "aabb": {
+        "end": [
+          15.0,
+          13.0,
+          0.340000003576279
+        ],
+        "position": [
+          -15.0,
+          0.0,
+          -0.340000003576279
+        ],
+        "size": [
+          30.0,
+          13.0,
+          0.680000007152557
+        ]
+      },
+      "glb": "assets/art/environments/open_world/components/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_visual_top3d.glb",
+      "loaded": true,
+      "materials": [
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_visual_top3d.glb::StandardMaterial3D_iaggd",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_visual_top3d.glb::StandardMaterial3D_xh30u",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": false,
+          "emission_energy": 1.0,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_visual_top3d.glb::StandardMaterial3D_pt38t",
+          "texture_filter": 0,
+          "texture_repeat": false
+        },
+        {
+          "albedo_texture": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+          "class": "StandardMaterial3D",
+          "emission": true,
+          "emission_energy": 1.14999997615814,
+          "palette": true,
+          "resource_path": "res://assets/art/environments/open_world/components/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_visual_top3d.glb::StandardMaterial3D_v1alb",
+          "texture_filter": 0,
+          "texture_repeat": false
+        }
+      ],
+      "mesh_count": 2,
+      "prefab": "assets/art/environments/open_world/runtime/landscape_skyline20/facade_billboard/env_landscape_skyline20_facade_billboard_root_top3d.tscn",
+      "root_transform_identity": true,
+      "slug": "facade_billboard",
+      "triangles": 460
+    }
+  ],
+  "fail": 0,
+  "messages": [],
+  "palette": "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "pass": 469,
+  "root": {
+    "aabb": {
+      "end": [
+        26.6149997711182,
+        83.6100006103516,
+        26.0499992370605
+      ],
+      "position": [
+        -26.6149997711182,
+        0.0,
+        -25.0
+      ],
+      "size": [
+        53.2299995422363,
+        83.6100006103516,
+        51.0499992370605
+      ]
+    },
+    "child_count": 32,
+    "collision_nodes": 0,
+    "instances": [
+      {
+        "instance_id": "floor_01",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_02",
+        "position": [
+          0.0,
+          3.79999995231628,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_03",
+        "position": [
+          0.0,
+          7.59999990463257,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_04",
+        "position": [
+          0.0,
+          11.3999996185303,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_05",
+        "position": [
+          0.0,
+          15.1999998092651,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_06",
+        "position": [
+          0.0,
+          19.0,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_07",
+        "position": [
+          0.0,
+          22.7999992370605,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_08",
+        "position": [
+          0.0,
+          26.6000003814697,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_09",
+        "position": [
+          0.0,
+          30.3999996185303,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_10",
+        "position": [
+          0.0,
+          34.2000007629395,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_11",
+        "position": [
+          0.0,
+          38.0,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_12",
+        "position": [
+          0.0,
+          41.7999992370605,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_13",
+        "position": [
+          0.0,
+          45.5999984741211,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_14",
+        "position": [
+          0.0,
+          49.4000015258789,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_15",
+        "position": [
+          0.0,
+          53.2000007629395,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_16",
+        "position": [
+          0.0,
+          57.0,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_17",
+        "position": [
+          0.0,
+          60.7999992370605,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_18",
+        "position": [
+          0.0,
+          64.5999984741211,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_19",
+        "position": [
+          0.0,
+          68.4000015258789,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "floor_20",
+        "position": [
+          0.0,
+          72.1999969482422,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "floor_facade_module",
+        "triangles": 188
+      },
+      {
+        "instance_id": "facade_hvac_01",
+        "position": [
+          -25.8199996948242,
+          1.0,
+          10.0
+        ],
+        "rotation_y": 4.71238899230957,
+        "slug": "facade_hvac_unit",
+        "triangles": 176
+      },
+      {
+        "instance_id": "facade_hvac_02",
+        "position": [
+          25.8199996948242,
+          11.0,
+          6.0
+        ],
+        "rotation_y": 1.57079637050629,
+        "slug": "facade_hvac_unit",
+        "triangles": 176
+      },
+      {
+        "instance_id": "facade_hvac_03",
+        "position": [
+          -25.8199996948242,
+          25.0,
+          -5.0
+        ],
+        "rotation_y": 4.71238899230957,
+        "slug": "facade_hvac_unit",
+        "triangles": 176
+      },
+      {
+        "instance_id": "facade_hvac_04",
+        "position": [
+          25.8199996948242,
+          39.0,
+          -10.0
+        ],
+        "rotation_y": 1.57079637050629,
+        "slug": "facade_hvac_unit",
+        "triangles": 176
+      },
+      {
+        "instance_id": "facade_hvac_05",
+        "position": [
+          -25.8199996948242,
+          53.0,
+          7.0
+        ],
+        "rotation_y": 4.71238899230957,
+        "slug": "facade_hvac_unit",
+        "triangles": 176
+      },
+      {
+        "instance_id": "facade_hvac_06",
+        "position": [
+          25.8199996948242,
+          67.0,
+          -5.0
+        ],
+        "rotation_y": 1.57079637050629,
+        "slug": "facade_hvac_unit",
+        "triangles": 176
+      },
+      {
+        "instance_id": "roof_guardrail",
+        "position": [
+          0.0,
+          76.0,
+          0.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "roof_guardrail_kit",
+        "triangles": 1436
+      },
+      {
+        "instance_id": "roof_service_hut",
+        "position": [
+          10.0,
+          76.0,
+          -7.0
+        ],
+        "rotation_y": 0.0,
+        "slug": "roof_service_hut",
+        "triangles": 180
+      },
+      {
+        "instance_id": "roof_hvac_bank",
+        "position": [
+          -8.82499980926514,
+          76.4000015258789,
+          6.94999980926514
+        ],
+        "rotation_y": 0.0,
+        "slug": "roof_hvac_bank",
+        "triangles": 832
+      },
+      {
+        "instance_id": "roof_communications",
+        "position": [
+          -8.0,
+          76.1893768310547,
+          -10.4075469970703
+        ],
+        "rotation_y": 0.0,
+        "slug": "roof_communications",
+        "triangles": 1396
+      },
+      {
+        "instance_id": "billboard_south",
+        "position": [
+          0.0,
+          32.0,
+          25.7099990844727
+        ],
+        "rotation_y": 0.0,
+        "slug": "facade_billboard",
+        "triangles": 460
+      },
+      {
+        "instance_id": "billboard_east",
+        "position": [
+          25.7099990844727,
+          52.0,
+          0.0
+        ],
+        "rotation_y": 1.57079637050629,
+        "slug": "facade_billboard",
+        "triangles": 460
+      }
+    ],
+    "loaded": true,
+    "mesh_count": 64,
+    "triangles": 9580
+  },
+  "root_scene": "res://assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_root_top3d.tscn",
+  "schema": "shellstorm2.openworld.godot_probe.v001",
+  "status": "passed",
+  "version": "v006"
+}

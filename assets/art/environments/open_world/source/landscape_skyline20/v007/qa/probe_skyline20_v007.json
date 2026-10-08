@@ -1,0 +1,166 @@
+{
+  "components": [
+    {
+      "aabb": {
+        "position": [
+          -25.0,
+          0.0,
+          -25.0
+        ],
+        "size": [
+          50.0,
+          3.79999995231628,
+          50.0
+        ]
+      },
+      "mesh_count": 1,
+      "slug": "floor_facade_module",
+      "triangles": 88
+    },
+    {
+      "aabb": {
+        "position": [
+          -1.29999995231628,
+          0.0,
+          -0.794999957084656
+        ],
+        "size": [
+          2.59999990463257,
+          1.92499995231628,
+          1.58999991416931
+        ]
+      },
+      "mesh_count": 2,
+      "slug": "facade_hvac_unit",
+      "triangles": 176
+    },
+    {
+      "aabb": {
+        "position": [
+          -25.0,
+          0.0,
+          -25.0
+        ],
+        "size": [
+          50.0,
+          2.21062183380127,
+          50.0
+        ]
+      },
+      "mesh_count": 2,
+      "slug": "roof_guardrail_kit",
+      "triangles": 1436
+    },
+    {
+      "aabb": {
+        "position": [
+          -7.30000019073486,
+          0.0,
+          -6.35000038146973
+        ],
+        "size": [
+          14.6000003814697,
+          6.51000022888184,
+          12.7000007629395
+        ]
+      },
+      "mesh_count": 2,
+      "slug": "roof_service_hut",
+      "triangles": 308
+    },
+    {
+      "aabb": {
+        "position": [
+          -3.0,
+          0.0,
+          -2.5
+        ],
+        "size": [
+          6.0,
+          3.59999990463257,
+          5.0
+        ]
+      },
+      "mesh_count": 2,
+      "slug": "roof_hvac_unit",
+      "triangles": 248
+    },
+    {
+      "aabb": {
+        "position": [
+          -4.59448003768921,
+          0.0,
+          -2.75251197814941
+        ],
+        "size": [
+          9.18896007537842,
+          9.8021068572998,
+          5.50502395629883
+        ]
+      },
+      "mesh_count": 1,
+      "slug": "roof_satellite_dish",
+      "triangles": 628
+    },
+    {
+      "aabb": {
+        "position": [
+          -1.60000002384186,
+          0.0,
+          -1.60000002384186
+        ],
+        "size": [
+          3.20000004768372,
+          8.5,
+          3.20000004768372
+        ]
+      },
+      "mesh_count": 2,
+      "slug": "roof_truss_tower",
+      "triangles": 604
+    },
+    {
+      "aabb": {
+        "position": [
+          -8.0,
+          0.0,
+          -0.280000001192093
+        ],
+        "size": [
+          16.0,
+          30.0,
+          0.560000002384186
+        ]
+      },
+      "mesh_count": 2,
+      "slug": "facade_billboard",
+      "triangles": 166
+    },
+    {
+      "aabb": {
+        "position": [
+          -26.6149997711182,
+          0.0,
+          -25.0
+        ],
+        "size": [
+          53.2299995422363,
+          86.162109375,
+          50.9300003051758
+        ]
+      },
+      "child_count": 37,
+      "mesh_count": 53,
+      "roof_share": 0.592227979274611,
+      "roof_triangles": 4572,
+      "slug": "private_root",
+      "triangles": 7720
+    }
+  ],
+  "fail": 0,
+  "messages": [],
+  "pass": 1430,
+  "schema": "shellstorm2.openworld.godot_probe.v002",
+  "status": "passed",
+  "version": "v007"
+}

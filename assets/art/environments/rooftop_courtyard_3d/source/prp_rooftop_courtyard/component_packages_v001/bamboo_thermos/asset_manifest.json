@@ -1,0 +1,40 @@
+{
+  "package_id": "bamboo_thermos",
+  "name_zh": "28_竹壳暖水瓶",
+  "collection": "28_竹壳暖水瓶_资产包",
+  "root_object": "prp_bamboo_thermos_root",
+  "objects": [
+    "28_竹壳暖水瓶_主体"
+  ],
+  "origin_blender": [
+    -0.800000011920929,
+    0.25,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    0.5846822559833527,
+    0.46791984140872955,
+    0.7700000703334808
+  ],
+  "bbox_world": [
+    [
+      -1.033959984779358,
+      0.016040071845054626,
+      0.41999998688697815
+    ],
+    [
+      -0.44927772879600525,
+      0.4839599132537842,
+      1.190000057220459
+    ]
+  ],
+  "triangles": 3304,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\bamboo_thermos\\prp_bamboo_thermos_visual_top3d.glb",
+  "exported": false
+}

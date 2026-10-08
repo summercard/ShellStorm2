@@ -1,0 +1,48 @@
+{
+  "package_id": "pendant_bulb",
+  "name_zh": "49_悬吊裸灯泡",
+  "collection": "49_悬吊裸灯泡_资产包",
+  "root_object": "prp_pendant_bulb_root",
+  "objects": [
+    "49_悬吊裸灯泡_主体",
+    "49_悬吊裸灯泡_柔和自发光"
+  ],
+  "origin_blender": [
+    -2.2200000286102295,
+    0.7300000190734863,
+    3.4000000953674316
+  ],
+  "dimensions": [
+    0.1659998893737793,
+    0.16600000858306885,
+    0.8056483268737793
+  ],
+  "bbox_world": [
+    [
+      -2.312999963760376,
+      0.6470000147819519,
+      2.5950000286102295
+    ],
+    [
+      -2.1470000743865967,
+      0.8130000233650208,
+      3.400648355484009
+    ]
+  ],
+  "triangles": 520,
+  "kind": "support",
+  "fixed_display_attachment": false,
+  "animations": [
+    {
+      "type": "sway",
+      "axis": 1,
+      "amplitude_rad": 0.014,
+      "period_frames": 144
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\pendant_bulb\\prp_pendant_bulb_visual_top3d.glb",
+  "exported": false
+}

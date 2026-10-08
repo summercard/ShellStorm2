@@ -1,0 +1,39 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "version": "v005",
+  "source_hash": "0a1eb427e186291f1315616c651a411866175e852acdb9a86b4dc5d5f3d4f40e",
+  "optimized_hash": "da2a83ecd1aade2c2028c3a331074520a2113ee3a76e573795d032311d8a96f3",
+  "component_count": 7,
+  "floor_count": 20,
+  "footprint_m": [
+    50,
+    50
+  ],
+  "triangle_budget": 10000,
+  "component_triangles": {
+    "floor_module": 164,
+    "hvac_unit": 176,
+    "roof_structure": 1388,
+    "roof_service_hut": 96,
+    "roof_hvac_bank": 1000,
+    "roof_communications": 1388,
+    "billboard": 828
+  },
+  "component_triangle_sum": 5040,
+  "instance_counts": {
+    "floor_module": 20,
+    "hvac_unit": 6,
+    "roof_structure": 1,
+    "roof_service_hut": 1,
+    "roof_hvac_bank": 1,
+    "roof_communications": 1,
+    "billboard": 2
+  },
+  "runtime_instance_triangles": 9864,
+  "budget_pass": true,
+  "source_unchanged": true,
+  "collision": "none_visual_only",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "status": "BLENDER_SOURCE_AND_STABLE_EXPORT_COMPLETE",
+  "godot_import": "PENDING"
+}

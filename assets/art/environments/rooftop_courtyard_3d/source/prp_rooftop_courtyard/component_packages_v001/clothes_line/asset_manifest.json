@@ -1,0 +1,47 @@
+{
+  "package_id": "clothes_line",
+  "name_zh": "40_晾衣绳旧电线",
+  "collection": "40_晾衣绳旧电线_资产包",
+  "root_object": "prp_clothes_line_root",
+  "objects": [
+    "40_晾衣绳旧电线_主体"
+  ],
+  "origin_blender": [
+    0.0,
+    4.349999904632568,
+    2.5
+  ],
+  "dimensions": [
+    12.000000476837158,
+    0.11105775833129883,
+    1.4800000190734863
+  ],
+  "bbox_world": [
+    [
+      -6.075000286102295,
+      4.3462233543396,
+      1.2999999523162842
+    ],
+    [
+      5.925000190734863,
+      4.457281112670898,
+      2.7799999713897705
+    ]
+  ],
+  "triangles": 1352,
+  "kind": "support",
+  "fixed_display_attachment": false,
+  "animations": [
+    {
+      "type": "sway",
+      "axis": 0,
+      "amplitude_rad": 0.004,
+      "period_frames": 192
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\clothes_line\\prp_clothes_line_visual_top3d.glb",
+  "exported": false
+}

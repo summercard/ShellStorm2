@@ -1,0 +1,51 @@
+{
+  "package_id": "cinema_poster_2",
+  "name_zh": "42_2_褪色旧电影海报",
+  "collection": "42_2_褪色旧电影海报_资产包",
+  "root_object": "prp_cinema_poster_2_root",
+  "objects": [
+    "42_2_褪色旧电影海报_主体"
+  ],
+  "origin_blender": [
+    -6.690000057220459,
+    3.9000000953674316,
+    1.8300000429153442
+  ],
+  "dimensions": [
+    0.03800010681152344,
+    0.679999828338623,
+    0.9500000476837158
+  ],
+  "bbox_world": [
+    [
+      -6.696000099182129,
+      3.559999942779541,
+      1.3550000190734863
+    ],
+    [
+      -6.6579999923706055,
+      4.239999771118164,
+      2.305000066757202
+    ]
+  ],
+  "triangles": 260,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "sway",
+      "axis": 1,
+      "amplitude_rad": 0.007,
+      "period_frames": 144
+    },
+    {
+      "type": "poster_corner_shape",
+      "max_displacement_m": 0.025
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\cinema_poster_2\\prp_cinema_poster_2_visual_top3d.glb",
+  "exported": false
+}

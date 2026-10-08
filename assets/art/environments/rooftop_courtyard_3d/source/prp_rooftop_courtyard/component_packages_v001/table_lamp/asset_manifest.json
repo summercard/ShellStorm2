@@ -1,0 +1,41 @@
+{
+  "package_id": "table_lamp",
+  "name_zh": "39_旧台灯",
+  "collection": "39_旧台灯_资产包",
+  "root_object": "prp_table_lamp_root",
+  "objects": [
+    "39_旧台灯_主体",
+    "39_旧台灯_柔和自发光"
+  ],
+  "origin_blender": [
+    2.700000047683716,
+    0.14000000059604645,
+    0.41999998688697815
+  ],
+  "dimensions": [
+    0.6800000667572021,
+    0.4400000125169754,
+    1.0800000131130219
+  ],
+  "bbox_world": [
+    [
+      2.2100000381469727,
+      -0.07999999821186066,
+      0.41999998688697815
+    ],
+    [
+      2.890000104904175,
+      0.36000001430511475,
+      1.5
+    ]
+  ],
+  "triangles": 572,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\table_lamp\\prp_table_lamp_visual_top3d.glb",
+  "exported": false
+}

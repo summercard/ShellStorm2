@@ -1,0 +1,352 @@
+[gd_scene load_steps=75 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/courtyard_slab/prp_courtyard_slab_root_top3d.tscn" id="c0"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/parapet_back/prp_parapet_back_root_top3d.tscn" id="c1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/parapet_left/prp_parapet_left_root_top3d.tscn" id="c2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/weathered_wall/prp_weathered_wall_root_top3d.tscn" id="c3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/timber_deck/prp_timber_deck_root_top3d.tscn" id="c4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/low_fence/prp_low_fence_root_top3d.tscn" id="c5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/shelter_frame/prp_shelter_frame_root_top3d.tscn" id="c6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/corrugated_roof/prp_corrugated_roof_root_top3d.tscn" id="c7"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/roof_canvas/prp_roof_canvas_root_top3d.tscn" id="c8"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/rope_net/prp_rope_net_root_top3d.tscn" id="c9"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/corduroy_sofa/prp_corduroy_sofa_root_top3d.tscn" id="c10"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/side_table/prp_side_table_root_top3d.tscn" id="c11"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/valve_radio/prp_valve_radio_root_top3d.tscn" id="c12"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/radio_pointer/prp_radio_pointer_root_top3d.tscn" id="c13"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/radio_pilot/prp_radio_pilot_root_top3d.tscn" id="c14"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/enamel_mug/prp_enamel_mug_root_top3d.tscn" id="c15"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/table_ephemera/prp_table_ephemera_root_top3d.tscn" id="c16"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/crt_television/prp_crt_television_root_top3d.tscn" id="c17"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/tv_static/prp_tv_static_root_top3d.tscn" id="c18"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/desk_fan/prp_desk_fan_root_top3d.tscn" id="c19"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/desk_fan_blades/prp_desk_fan_blades_root_top3d.tscn" id="c20"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/wood_crate_1/prp_wood_crate_1_root_top3d.tscn" id="c21"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/wood_crate_2/prp_wood_crate_2_root_top3d.tscn" id="c22"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/wood_crate_3/prp_wood_crate_3_root_top3d.tscn" id="c23"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/wood_crate_4/prp_wood_crate_4_root_top3d.tscn" id="c24"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/leather_case_1/prp_leather_case_1_root_top3d.tscn" id="c25"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/leather_case_2/prp_leather_case_2_root_top3d.tscn" id="c26"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/leather_case_3/prp_leather_case_3_root_top3d.tscn" id="c27"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/folding_chair/prp_folding_chair_root_top3d.tscn" id="c28"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/tire_table/prp_tire_table_root_top3d.tscn" id="c29"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/rotary_phone/prp_rotary_phone_root_top3d.tscn" id="c30"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/books_and_frames/prp_books_and_frames_root_top3d.tscn" id="c31"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/bamboo_thermos/prp_bamboo_thermos_root_top3d.tscn" id="c32"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/thermos_steam/prp_thermos_steam_root_top3d.tscn" id="c33"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_1/prp_pot_1_root_top3d.tscn" id="c34"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_1/prp_foliage_1_root_top3d.tscn" id="c35"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_2/prp_pot_2_root_top3d.tscn" id="c36"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_2/prp_foliage_2_root_top3d.tscn" id="c37"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_3/prp_pot_3_root_top3d.tscn" id="c38"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_3/prp_foliage_3_root_top3d.tscn" id="c39"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_4/prp_pot_4_root_top3d.tscn" id="c40"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_4/prp_foliage_4_root_top3d.tscn" id="c41"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_5/prp_pot_5_root_top3d.tscn" id="c42"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_5/prp_foliage_5_root_top3d.tscn" id="c43"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_6/prp_pot_6_root_top3d.tscn" id="c44"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_6/prp_foliage_6_root_top3d.tscn" id="c45"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_7/prp_pot_7_root_top3d.tscn" id="c46"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_7/prp_foliage_7_root_top3d.tscn" id="c47"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pot_8/prp_pot_8_root_top3d.tscn" id="c48"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/foliage_8/prp_foliage_8_root_top3d.tscn" id="c49"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/bicycle_rim/prp_bicycle_rim_root_top3d.tscn" id="c50"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/enamel_basin/prp_enamel_basin_root_top3d.tscn" id="c51"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/galvanized_bucket/prp_galvanized_bucket_root_top3d.tscn" id="c52"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/oil_lantern/prp_oil_lantern_root_top3d.tscn" id="c53"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/air_conditioner/prp_air_conditioner_root_top3d.tscn" id="c54"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/ac_fan_blades/prp_ac_fan_blades_root_top3d.tscn" id="c55"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/wall_services/prp_wall_services_root_top3d.tscn" id="c56"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/table_lamp/prp_table_lamp_root_top3d.tscn" id="c57"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/clothes_line/prp_clothes_line_root_top3d.tscn" id="c58"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/linen_1/prp_linen_1_root_top3d.tscn" id="c59"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/linen_2/prp_linen_2_root_top3d.tscn" id="c60"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/linen_3/prp_linen_3_root_top3d.tscn" id="c61"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/cinema_poster_1/prp_cinema_poster_1_root_top3d.tscn" id="c62"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/cinema_poster_2/prp_cinema_poster_2_root_top3d.tscn" id="c63"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/bamboo_broom/prp_bamboo_broom_root_top3d.tscn" id="c64"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/road_sign/prp_road_sign_root_top3d.tscn" id="c65"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/dried_flowers/prp_dried_flowers_root_top3d.tscn" id="c66"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/weeds_and_debris/prp_weeds_and_debris_root_top3d.tscn" id="c67"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/puddle_drain/prp_puddle_drain_root_top3d.tscn" id="c68"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/puddle_ripples/prp_puddle_ripples_root_top3d.tscn" id="c69"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/pendant_bulb/prp_pendant_bulb_root_top3d.tscn" id="c70"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/open_book_page/prp_open_book_page_root_top3d.tscn" id="c71"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/newspaper_corner/prp_newspaper_corner_root_top3d.tscn" id="c72"]
+[ext_resource type="Script" path="res://assets/art/environments/rooftop_courtyard_3d/runtime/prp_rooftop_courtyard/prp_rooftop_courtyard_motion.gd" id="motion"]
+
+[node name="RooftopCourtyard" type="Node3D"]
+script = ExtResource("motion")
+metadata/asset_id = "PRP-ROOFTOP-COURTYARD-3D"
+metadata/asset_version = "v002"
+metadata/block_id = "rooftop"
+metadata/floor_range = "100F"
+metadata/facility_kind = "fixed_decorative_facility"
+metadata/gameplay_service = false
+metadata/design_footprint = Vector2(15,10)
+
+[node name="courtyard_slab" parent="." instance=ExtResource("c0")]
+position = Vector3(0.0, 0.0, -0.0)
+
+[node name="parapet_back" parent="." instance=ExtResource("c1")]
+position = Vector3(0.0, 0.32, -4.6900001)
+
+[node name="parapet_left" parent="." instance=ExtResource("c2")]
+position = Vector3(-7.23, 0.32, -0.0)
+
+[node name="weathered_wall" parent="." instance=ExtResource("c3")]
+position = Vector3(-6.8527498, 0.32, -2.2439053)
+
+[node name="timber_deck" parent="." instance=ExtResource("c4")]
+position = Vector3(-0.5071435, 0.32, -0.39125)
+
+[node name="low_fence" parent="." instance=ExtResource("c5")]
+position = Vector3(4.0504999, 0.42, -0.8325)
+
+[node name="shelter_frame" parent="." instance=ExtResource("c6")]
+position = Vector3(-3.575, 0.42, -2.2025001)
+
+[node name="corrugated_roof" parent="." instance=ExtResource("c7")]
+position = Vector3(-3.6200001, 3.4749999, -2.1424999)
+
+[node name="roof_canvas" parent="." instance=ExtResource("c8")]
+position = Vector3(-3.375, 3.5629566, -2.1210747)
+metadata/motion_spec = "[{\"type\": \"cloth_shape\", \"max_displacement_m\": 0.028}]"
+
+[node name="rope_net" parent="." instance=ExtResource("c9")]
+position = Vector3(-3.7612786, 2.1724064, -2.0452442)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 0, \"amplitude_rad\": 0.009, \"period_frames\": 192}]"
+
+[node name="corduroy_sofa" parent="." instance=ExtResource("c10")]
+position = Vector3(-3.6500001, 0.42, -2.5599999)
+
+[node name="side_table" parent="." instance=ExtResource("c11")]
+position = Vector3(-1.03, 0.42, -2.5125594)
+
+[node name="valve_radio" parent="." instance=ExtResource("c12")]
+position = Vector3(-1.04, 1.295, -2.6537609)
+
+[node name="radio_pointer" parent="." instance=ExtResource("c13")]
+position = Vector3(-0.85, 1.6775, -2.4579999)
+metadata/motion_spec = "[{\"type\": \"tuning\", \"amplitude_m\": 0.027}]"
+
+[node name="radio_pilot" parent="." instance=ExtResource("c14")]
+position = Vector3(-0.67, 1.7920001, -2.46)
+metadata/motion_spec = "[{\"type\": \"breathing_indicator\", \"amplitude\": 0.08}]"
+
+[node name="enamel_mug" parent="." instance=ExtResource("c15")]
+position = Vector3(-1.2408485, 1.29, -2.26)
+
+[node name="table_ephemera" parent="." instance=ExtResource("c16")]
+position = Vector3(-0.7055, 1.286, -2.27)
+
+[node name="crt_television" parent="." instance=ExtResource("c17")]
+position = Vector3(0.8, 0.425, 0.9525)
+
+[node name="tv_static" parent="." instance=ExtResource("c18")]
+position = Vector3(0.6399398, 0.7828172, 1.37)
+metadata/motion_spec = "[{\"type\": \"tv_static\", \"update_hz\": 6}]"
+
+[node name="desk_fan" parent="." instance=ExtResource("c19")]
+position = Vector3(2.7000895, 0.42, -1.8500001)
+
+[node name="desk_fan_blades" parent="." instance=ExtResource("c20")]
+position = Vector3(2.7106891, 1.0834305, -1.8199999)
+metadata/motion_spec = "[{\"type\": \"rotation\", \"axis\": 1, \"turns_per_10s\": 4}]"
+
+[node name="wood_crate_1" parent="." instance=ExtResource("c21")]
+position = Vector3(-4.1999998, 0.42, 1.25)
+
+[node name="wood_crate_2" parent="." instance=ExtResource("c22")]
+position = Vector3(-4.1399999, 1.12, 1.23)
+
+[node name="wood_crate_3" parent="." instance=ExtResource("c23")]
+position = Vector3(-2.8, 0.42, 1.37)
+
+[node name="wood_crate_4" parent="." instance=ExtResource("c24")]
+position = Vector3(-5.3000002, 0.42, 0.05)
+
+[node name="leather_case_1" parent="." instance=ExtResource("c25")]
+position = Vector3(-4.1199999, 1.83, 1.2514799)
+
+[node name="leather_case_2" parent="." instance=ExtResource("c26")]
+position = Vector3(-2.78, 1.1, 1.37148)
+
+[node name="leather_case_3" parent="." instance=ExtResource("c27")]
+position = Vector3(-2.55, 1.4299999, 1.35148)
+
+[node name="folding_chair" parent="." instance=ExtResource("c28")]
+position = Vector3(0.25, 0.4115342, -0.7892113)
+
+[node name="tire_table" parent="." instance=ExtResource("c29")]
+position = Vector3(1.6, 0.42, 2.0)
+
+[node name="rotary_phone" parent="." instance=ExtResource("c30")]
+position = Vector3(1.5969961, 0.9, 2.0218415)
+
+[node name="books_and_frames" parent="." instance=ExtResource("c31")]
+position = Vector3(-2.7570243, 0.404, 0.0989733)
+
+[node name="bamboo_thermos" parent="." instance=ExtResource("c32")]
+position = Vector3(-0.7416189, 0.42, -0.25)
+
+[node name="thermos_steam" parent="." instance=ExtResource("c33")]
+position = Vector3(-0.7999347, 1.1986679, -0.2500489)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 0, \"amplitude_rad\": 0.09, \"period_frames\": 144}]"
+
+[node name="pot_1" parent="." instance=ExtResource("c34")]
+position = Vector3(-5.8999996, 0.32, 1.9000001)
+
+[node name="foliage_1" parent="." instance=ExtResource("c35")]
+position = Vector3(-5.8972092, 0.8414967, 1.8679203)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="pot_2" parent="." instance=ExtResource("c36")]
+position = Vector3(-6.5, 1.3, -3.8000002)
+
+[node name="foliage_2" parent="." instance=ExtResource("c37")]
+position = Vector3(-6.4952679, 1.6859119, -3.82354)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="pot_3" parent="." instance=ExtResource("c38")]
+position = Vector3(-3.0, 1.3, -4.6500001)
+
+[node name="foliage_3" parent="." instance=ExtResource("c39")]
+position = Vector3(-2.9952681, 1.6858475, -4.6735396)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="pot_4" parent="." instance=ExtResource("c40")]
+position = Vector3(2.9000001, 1.3, -4.6500001)
+
+[node name="foliage_4" parent="." instance=ExtResource("c41")]
+position = Vector3(2.9040849, 1.7315687, -4.6785917)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="pot_5" parent="." instance=ExtResource("c42")]
+position = Vector3(5.6999998, 0.32, -4.5)
+
+[node name="foliage_5" parent="." instance=ExtResource("c43")]
+position = Vector3(5.6999865, 1.0374147, -4.5292397)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="pot_6" parent="." instance=ExtResource("c44")]
+position = Vector3(5.8000002, 0.32, 1.1)
+
+[node name="foliage_6" parent="." instance=ExtResource("c45")]
+position = Vector3(5.8021441, 0.8871403, 1.0685756)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="pot_7" parent="." instance=ExtResource("c46")]
+position = Vector3(3.1500001, 0.42, -3.1999998)
+
+[node name="foliage_7" parent="." instance=ExtResource("c47")]
+position = Vector3(3.1543005, 0.8365352, -3.2269082)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="pot_8" parent="." instance=ExtResource("c48")]
+position = Vector3(-1.8, 0.42, -3.8000002)
+
+[node name="foliage_8" parent="." instance=ExtResource("c49")]
+position = Vector3(-1.7950525, 0.790882, -3.8218555)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.018, \"period_frames\": 192}]"
+
+[node name="bicycle_rim" parent="." instance=ExtResource("c50")]
+position = Vector3(-5.8500004, 0.4161733, -1.0)
+
+[node name="enamel_basin" parent="." instance=ExtResource("c51")]
+position = Vector3(4.8000002, 0.32, 2.3)
+
+[node name="galvanized_bucket" parent="." instance=ExtResource("c52")]
+position = Vector3(4.8499999, 0.32, -2.3)
+
+[node name="oil_lantern" parent="." instance=ExtResource("c53")]
+position = Vector3(-3.04, 1.79, 1.33)
+
+[node name="air_conditioner" parent="." instance=ExtResource("c54")]
+position = Vector3(-6.4875727, 2.1099999, -2.74)
+
+[node name="ac_fan_blades" parent="." instance=ExtResource("c55")]
+position = Vector3(-6.0549998, 2.3099999, -2.51)
+metadata/motion_spec = "[{\"type\": \"rotation\", \"axis\": 0, \"turns_per_10s\": 3}]"
+
+[node name="wall_services" parent="." instance=ExtResource("c56")]
+position = Vector3(-1.9602115, 0.4196077, -2.1300001)
+
+[node name="table_lamp" parent="." instance=ExtResource("c57")]
+position = Vector3(2.5500002, 0.42, -0.14)
+
+[node name="clothes_line" parent="." instance=ExtResource("c58")]
+position = Vector3(-0.075, 1.3, -4.4017525)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 0, \"amplitude_rad\": 0.004, \"period_frames\": 192}]"
+
+[node name="linen_1" parent="." instance=ExtResource("c59")]
+position = Vector3(-0.8, 1.3691175, -4.3846483)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 0, \"amplitude_rad\": 0.023, \"period_frames\": 192}, {\"type\": \"cloth_shape\", \"max_displacement_m\": 0.028}]"
+
+[node name="linen_2" parent="." instance=ExtResource("c60")]
+position = Vector3(0.6, 1.6502391, -4.3826923)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 0, \"amplitude_rad\": 0.023, \"period_frames\": 192}, {\"type\": \"cloth_shape\", \"max_displacement_m\": 0.028}]"
+
+[node name="linen_3" parent="." instance=ExtResource("c61")]
+position = Vector3(1.6, 1.5864706, -4.3835216)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 0, \"amplitude_rad\": 0.023, \"period_frames\": 192}, {\"type\": \"cloth_shape\", \"max_displacement_m\": 0.028}]"
+
+[node name="cinema_poster_1" parent="." instance=ExtResource("c62")]
+position = Vector3(-6.677, 1.285, -1.1)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.007, \"period_frames\": 144}, {\"type\": \"poster_corner_shape\", \"max_displacement_m\": 0.025}]"
+
+[node name="cinema_poster_2" parent="." instance=ExtResource("c63")]
+position = Vector3(-6.677, 1.355, -3.8999999)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.007, \"period_frames\": 144}, {\"type\": \"poster_corner_shape\", \"max_displacement_m\": 0.025}]"
+
+[node name="bamboo_broom" parent="." instance=ExtResource("c64")]
+position = Vector3(-6.1798806, 0.335, -0.2675)
+
+[node name="road_sign" parent="." instance=ExtResource("c65")]
+position = Vector3(3.3, 0.775, -3.55825)
+
+[node name="dried_flowers" parent="." instance=ExtResource("c66")]
+position = Vector3(4.21, 0.7589985, -1.897712)
+
+[node name="weeds_and_debris" parent="." instance=ExtResource("c67")]
+position = Vector3(-0.0994661, 0.308, 0.2468717)
+
+[node name="puddle_drain" parent="." instance=ExtResource("c68")]
+position = Vector3(5.7503786, 0.319, 3.5866261)
+
+[node name="puddle_ripples" parent="." instance=ExtResource("c69")]
+position = Vector3(5.6999998, 0.3303426, 3.5999999)
+metadata/motion_spec = "[{\"type\": \"water_ripple\", \"amplitude\": 0.025}]"
+
+[node name="pendant_bulb" parent="." instance=ExtResource("c70")]
+position = Vector3(-2.23, 2.595, -0.73)
+metadata/motion_spec = "[{\"type\": \"sway\", \"axis\": 1, \"amplitude_rad\": 0.014, \"period_frames\": 144}]"
+
+[node name="open_book_page" parent="." instance=ExtResource("c71")]
+position = Vector3(-2.54, 1.1849999, 0.2)
+metadata/motion_spec = "[{\"type\": \"paper_shape\", \"max_displacement_m\": 0.025}]"
+
+[node name="newspaper_corner" parent="." instance=ExtResource("c72")]
+position = Vector3(-0.56, 1.415, -2.27)
+metadata/motion_spec = "[{\"type\": \"paper_shape\", \"max_displacement_m\": 0.025}]"
+
+[node name="WarmBulb" type="OmniLight3D" parent="."]
+position = Vector3(-2.23, 2.64, -0.65)
+light_color = Color(1,0.58,0.2,1)
+light_energy = 1.1
+omni_range = 3.0
+metadata/base_energy = 1.1
+
+[node name="WarmTableLamp" type="OmniLight3D" parent="."]
+position = Vector3(2.43, 1.21, -0.14)
+light_color = Color(1,0.58,0.2,1)
+light_energy = 0.6
+omni_range = 3.0
+metadata/base_energy = 0.6
+
+[node name="WarmRadio" type="OmniLight3D" parent="."]
+position = Vector3(-0.86, 1.7, -2.39)
+light_color = Color(1,0.58,0.2,1)
+light_energy = 0.18
+omni_range = 3.0
+metadata/base_energy = 0.18

@@ -1,0 +1,40 @@
+{
+  "package_id": "leather_case_3",
+  "name_zh": "23_3_牛皮旅行箱",
+  "collection": "23_3_牛皮旅行箱_资产包",
+  "root_object": "prp_leather_case_3_root",
+  "objects": [
+    "23_3_牛皮旅行箱_主体"
+  ],
+  "origin_blender": [
+    -2.549999952316284,
+    -1.2999999523162842,
+    1.4299999475479126
+  ],
+  "dimensions": [
+    1.119999885559082,
+    0.7429598569869995,
+    0.3380000591278076
+  ],
+  "bbox_world": [
+    [
+      -3.109999895095825,
+      -1.7229598760604858,
+      1.4299999475479126
+    ],
+    [
+      -1.9900000095367432,
+      -0.9800000190734863,
+      1.7680000066757202
+    ]
+  ],
+  "triangles": 1116,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\leather_case_3\\prp_leather_case_3_visual_top3d.glb",
+  "exported": false
+}

@@ -1,0 +1,46 @@
+{
+  "package_id": "ac_fan_blades",
+  "name_zh": "37_空调风扇",
+  "collection": "37_空调风扇_资产包",
+  "root_object": "prp_ac_fan_blades_root",
+  "objects": [
+    "37_空调风扇_主体"
+  ],
+  "origin_blender": [
+    -6.054999828338623,
+    2.509999990463257,
+    2.559999942779541
+  ],
+  "dimensions": [
+    0.0,
+    0.5,
+    0.5
+  ],
+  "bbox_world": [
+    [
+      -6.054999828338623,
+      2.259999990463257,
+      2.309999942779541
+    ],
+    [
+      -6.054999828338623,
+      2.759999990463257,
+      2.809999942779541
+    ]
+  ],
+  "triangles": 8,
+  "kind": "fixed_display_attachment",
+  "fixed_display_attachment": true,
+  "animations": [
+    {
+      "type": "rotation",
+      "axis": 0,
+      "turns_per_10s": 3
+    }
+  ],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\ac_fan_blades\\prp_ac_fan_blades_visual_top3d.glb",
+  "exported": false
+}

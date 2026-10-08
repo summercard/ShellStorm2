@@ -1,0 +1,2792 @@
+[
+  {
+    "asset_id": "ENV-BASE99-FLOOR-DETAILS-V017",
+    "row": 32,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_full_replacement\\env_base99_floor_full_replacement_root_top3d.tscn",
+    "sha256": "7369d29754bc4f844a281e8d62908e04d3112282fe4925b9c51d434ae45152ff"
+  },
+  {
+    "asset_id": "ENV-BASE99-LOFT-FLOOR-FINISH-V017",
+    "row": 33,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_loft_floor_finish\\env_base99_loft_floor_finish_root_top3d.tscn",
+    "sha256": "4c1c5520e5aabde635073c93d2aafbf4975211c5bbfcb2d330c65ebdf9690527"
+  },
+  {
+    "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+    "row": 34,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_visuals\\env_base99_floor_visuals_root_top3d.tscn",
+    "sha256": "6986011c1aaa90ed30d409a8ff7e4d07db3ca2a75e11fd06ba2b53f121672b16"
+  },
+  {
+    "asset_id": "ENV-BASE-WORLD-KIT-3D",
+    "row": 35,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_world_3d\\env_base_world_kit_top3d.tscn",
+    "sha256": "b9040926e7d2e7d09a25d072d30a815f7bb5e35a4aa1c824c0c27a73de1b6e71"
+  },
+  {
+    "asset_id": "PRP-BASE-FACILITY-3D",
+    "row": 36,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\base_world_3d\\prp_base_facility_root_top3d.tscn",
+    "sha256": "0c12134edcce24dab43e3364e1f09a75d4c41d0721edfb40fc4720a8aad6c3a1"
+  },
+  {
+    "asset_id": "PRP-DUNGEON-GATE-3D",
+    "row": 37,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\base_world_3d\\prp_dungeon_gate_root_top3d.tscn",
+    "sha256": "67f42bca67d541f83b244a4ed6a8ae23495b22d7cbf3aa9b32656339e59cfa0d"
+  },
+  {
+    "asset_id": "ENV-DUNGEON-RUNTIME-3D",
+    "row": 39,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_dungeon_runtime_kit_top3d.tscn",
+    "sha256": "e4e7472285a1f2d89f18c5d8a11e414c475adabeed98584cd9d10d4e5d793b76"
+  },
+  {
+    "asset_id": "ENV-DUNGEON-IRON-FRONTIER-3D",
+    "row": 40,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_iron_frontier_kit_top3d_v001.tres",
+    "sha256": "f8b3ab02d3613a2e6c739e9d3013adce091dff82c76e6198eb13a816e144b00c"
+  },
+  {
+    "asset_id": "ENV-DUNGEON-RUST-FOUNDRY-3D",
+    "row": 41,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_rust_foundry_kit_top3d_v001.tres",
+    "sha256": "acc115574ec882b7bc3f74acb8da788151a6ce810b4b99ee4bedc96357d3d5b8"
+  },
+  {
+    "asset_id": "ENV-DUNGEON-SPORE-DEPTHS-3D",
+    "row": 42,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_spore_depths_kit_top3d_v001.tres",
+    "sha256": "50b5a344a474a866d2065a8979bac564170ba8422bb610418ac8082d24db91dc"
+  },
+  {
+    "asset_id": "ENV-DUNGEON-ABYSS-ARCHIVE-3D",
+    "row": 43,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\dungeon_3d\\env_abyss_archive_kit_top3d_v001.tres",
+    "sha256": "93b2f606618b202fd51513e3eb2b039c0db2d26f328d1f71dd0ef4df196939e5"
+  },
+  {
+    "asset_id": "PRP-WASTELAND-LIGHT-3D",
+    "row": 44,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_wasteland_light_root_top3d.tscn",
+    "sha256": "0b6eee3dde59911854d2a062aaab55672c6d1fa4c705155f7a217faf46394e00"
+  },
+  {
+    "asset_id": "PRP-ROOM-FURNITURE-3D",
+    "row": 45,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_room_furniture_root_top3d.tscn",
+    "sha256": "b98c316a9634111506783e11ada7d6558cebd85f136ec1d2fb6bfb325b0f46c3"
+  },
+  {
+    "asset_id": "PRP-SEARCH-CONTAINER-3D",
+    "row": 46,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_search_container_root_top3d.tscn",
+    "sha256": "c9a836df320181589c748ffc3aa57dc45a403bc148dec9972013b105795c40f5"
+  },
+  {
+    "asset_id": "PRP-SERVICE-STATION-3D",
+    "row": 47,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_service_station_root_top3d.tscn",
+    "sha256": "8d2ccf3e8714a237d0096d7e44beaa824ca2acd13e5c5a20b8cb22ba5ef38e78"
+  },
+  {
+    "asset_id": "PRP-EXTRACTION-BEACON-3D",
+    "row": 48,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_extraction_beacon_root_top3d.tscn",
+    "sha256": "26922cc2f1d9640f0b237f0876d6d549f1f323d20ac4f916ca789b3893bc6aa3"
+  },
+  {
+    "asset_id": "ENV-TRAINING-RANGE-KIT-3D",
+    "row": 49,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\training_range_3d\\env_training_range_kit_top3d.tscn",
+    "sha256": "e3a0ef2fb72576117c4f6faa6528c46f11bec8470b2ddec0eac2d1beb0bdc356"
+  },
+  {
+    "asset_id": "PRP-ROOM-LIGHT-SWITCH-3D",
+    "row": 52,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_room_light_switch_root_top3d.tscn",
+    "sha256": "56accc731cf04c9d11aaa105e3012f5e4aeecc34f96616dd8a20de5929929555"
+  },
+  {
+    "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+    "row": 54,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_descent_3d\\runtime\\floor_tile_5m\\env_tower_floor_tile_5m_root_top3d.tscn",
+    "sha256": "3eb08fd277af14d56a25f55f3bb7e714c9855e21cd549596969686591b389cf6"
+  },
+  {
+    "asset_id": "ENV-BASE99-WALL-PLAIN-5X12",
+    "row": 64,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_wall_plain_5x12\\env_base99_wall_plain_5x12_root_top3d.tscn",
+    "sha256": "f5b57f98b47024ccd8bddb583e6d3bd6096c621606be0d591e0db257ba4b5b73"
+  },
+  {
+    "asset_id": "ENV-BASE99-WALL-DOOR-5X12",
+    "row": 65,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_wall_door_5x12\\env_base99_wall_door_5x12_root_top3d.tscn",
+    "sha256": "d26ccbd73a9aea16e6b705b77e4821168a546994fa3c02aa0f481bbbe0f998ac"
+  },
+  {
+    "asset_id": "ENV-BASE99-FLOOR-PLAIN-5M",
+    "row": 66,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_plain_5m\\env_base99_floor_plain_5m_root_top3d.tscn",
+    "sha256": "92c91fb4bc1348bb4d754e1be99459267b4c3ae79af84622d0be0e5ab5d7db15"
+  },
+  {
+    "asset_id": "ENV-BASE99-FLOOR-RIVET-5M",
+    "row": 67,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_floor_rivet_5m\\env_base99_floor_rivet_5m_root_top3d.tscn",
+    "sha256": "cea934e69812d75f995b8ec0cc5b2c963a900e74f637a6e28ae3af4bdf25adc6"
+  },
+  {
+    "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+    "row": 68,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\base\\runtime\\zone_base.tscn",
+    "sha256": "0c35b1c7422afcf7a99891f205968ba4aff682f621bc4bf939ad1d0a54723df7"
+  },
+  {
+    "asset_id": "ENV-BASE99-WALL-WINDOW-5X12",
+    "row": 103,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_wall_window_5x12\\env_base99_wall_window_5x12_root_top3d.tscn",
+    "sha256": "5a6a113915c283eda1488810f6fb03422fbecc27bf175918784a0a54880b8b23"
+  },
+  {
+    "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z7",
+    "row": 104,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_mezzanine_20x10_z7\\env_base99_mezzanine_20x10_z7_root_top3d.tscn",
+    "sha256": "1933a3ec61ce9acb510716b3b897d236ce615f80ec745f335f7e94432c848539"
+  },
+  {
+    "asset_id": "ENV-BASE99-STAIR-L-Z7",
+    "row": 105,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_l_z7\\env_base99_stair_l_z7_root_top3d.tscn",
+    "sha256": "91bf771aef3dc8df55ffe7b97f2d0813e4d3b763469b167e7595e9d8a76e1c95"
+  },
+  {
+    "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H2",
+    "row": 106,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_exterior_h2\\env_base99_stair_exterior_h2_root_top3d.tscn",
+    "sha256": "2c3c3fc5d543abe8f985edde34fd7387502c77bb962e52d029896f9d97b6e994"
+  },
+  {
+    "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+    "row": 107,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_door_lift_2p2x2p5\\env_base99_door_lift_2p2x2p5_root_top3d.tscn",
+    "sha256": "49b17fbc77236afc3a9cdd295ba03c94d6ba7361959158213657497d89231013"
+  },
+  {
+    "asset_id": "ENV-BASE100-UPPER-SHELL-30X30-H12",
+    "row": 108,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base100_upper_shell_30x30_h12\\env_base100_upper_shell_30x30_h12_root_top3d.tscn",
+    "sha256": "97144dc883c564235abeb60b19585bbfded8041523e2ffa8c99be6d01b39154e"
+  },
+  {
+    "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+    "row": 109,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_mezzanine_20x10_z5\\env_base99_mezzanine_20x10_z5_root_top3d.tscn",
+    "sha256": "21f11d2ff3aa61e615180ca25c85ff195d5018cdca64b2a3c201c5b4d0657d7c"
+  },
+  {
+    "asset_id": "ENV-BASE99-STAIR-L-Z5",
+    "row": 110,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_l_z5\\env_base99_stair_l_z5_root_top3d.tscn",
+    "sha256": "60412ac98b264d931c8eaf37696b35e68899f5f909d713db6ffbe1aa78b37b5d"
+  },
+  {
+    "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H4",
+    "row": 111,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_stair_exterior_h4\\env_base99_stair_exterior_h4_root_top3d.tscn",
+    "sha256": "f5bd7711f3ff73b28e430aefabc9c8d6f2724c5d528810d64d2ec5a2dce90432"
+  },
+  {
+    "asset_id": "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER",
+    "row": 112,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_mezzanine_underdeck_blocker\\env_base99_mezzanine_underdeck_blocker_root_top3d.tscn",
+    "sha256": "ce39ce1609900e9e009fc5d1f6bf979a7ef9545083e1d22bb0e0d9e51e052a7a"
+  },
+  {
+    "asset_id": "PRP-BASE-AVATAR-WARDROBE-001",
+    "row": 113,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\base_world_3d\\runtime\\avatar_wardrobe\\prp_base_avatar_wardrobe_root_top3d.tscn",
+    "sha256": "146c0eb55313d6766b6f6c7ef9297ff777b44ce5f5197ffdcc4cbccb43bdf1b4"
+  },
+  {
+    "asset_id": "PRP-BASE-RECOVERY-STATION-3D",
+    "row": 115,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\base_world_3d\\runtime\\recovery_station\\prp_base_recovery_station_root_top3d.tscn",
+    "sha256": "8d65f37832a55a991ba30a3db2bd174bbc2dee630e9384c00fc542e034b83cb3"
+  },
+  {
+    "asset_id": "PRP-TOWER-ROOM-DOOR-3D",
+    "row": 116,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\props\\dungeon_3d\\prp_room_door_3d.tscn",
+    "sha256": "6ab7516a40ca661264ceebe59973b3790640e3495230c25e70a38eb0b267d22f"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-MEZZANINE-STRUCTURE",
+    "row": 117,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\architecture\\east_mezzanine_structure\\asset_manifest.json",
+    "sha256": "b6757e1229b9394b9d29a5f3cef24473c04580c1cb864e13cfb76d04e6a7ae4f"
+  },
+  {
+    "asset_id": "BPK-BASE99-NORTHWEST-L-STAIR",
+    "row": 119,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\architecture\\northwest_l_stair\\asset_manifest.json",
+    "sha256": "98fd8945f83998ec265da4e447c0600b470a7c6bf283331477c112f533f53992"
+  },
+  {
+    "asset_id": "BPK-BASE99-RETAINED-WALL-SYSTEM",
+    "row": 120,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\architecture\\retained_wall_system\\asset_manifest.json",
+    "sha256": "1757151e65d8c0d147dacfa2e0efac8fe420eef2130340a4371d2a9a452edcf6"
+  },
+  {
+    "asset_id": "BPK-BASE99-UNDERDECK-SHEET-BLOCKER",
+    "row": 121,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\architecture\\underdeck_sheet_blocker\\asset_manifest.json",
+    "sha256": "df9b6eff39e247df5282cea02660cf273b246090473f6269e5a0b2334943ac85"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-FLAMMABLE-BIN",
+    "row": 122,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_flammable_bin\\asset_manifest.json",
+    "sha256": "d67856f7054de69177c719bb95fb60f3840f92a162bfcdfbda06263ea1a12480"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-INDUSTRIAL-PIPELINE-SYSTEM",
+    "row": 123,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_industrial_pipeline_system\\asset_manifest.json",
+    "sha256": "17131b6c007c19a68cbfa9840985791cde68ac938e59b14d960c27d164a391f3"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-LOW-STORAGE-BENCH",
+    "row": 124,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_low_storage_bench\\asset_manifest.json",
+    "sha256": "425f3923fe553cac17dbb350477207a41015df2ae7aac88fe578e3737db1f438"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-MAINTENANCE-WORKSTATION",
+    "row": 125,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_maintenance_workstation\\asset_manifest.json",
+    "sha256": "8175ece5f3b1bea66004ebbca23a7c807b63e555eb1981feda6e1c564175ccc4"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-PERSONNEL-SECURITY-DOOR",
+    "row": 126,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_personnel_security_door\\asset_manifest.json",
+    "sha256": "c5e08f9aa4fd858444a8622de401cf99106cd0af57ef8cb25f235bc05fdf3f20"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-PLANT-GROUP",
+    "row": 127,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_plant_group\\asset_manifest.json",
+    "sha256": "e776728d1d2cef6a575f5e32916f80050c3ee88c5cf2a160d64f7389d2285564"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-POWER-DISTRIBUTION",
+    "row": 128,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_power_distribution\\asset_manifest.json",
+    "sha256": "414ce80873bfafe62cbdab687819652bf7f5a851fbdda34d059c73e9a6a0ee5c"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-RECYCLE-BIN",
+    "row": 129,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_recycle_bin\\asset_manifest.json",
+    "sha256": "cebdf92cb4adefa25ee23460d4f7c09ed6a14c2ebd54c08604f890dfb2ab8b98"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-ROUND-PENDANT-LIGHT",
+    "row": 130,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_round_pendant_light\\asset_manifest.json",
+    "sha256": "97e280af194980156a0cdd900717a63adee22d679f0c9f7193e3b900d1d7e832"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-SMALL-SAFETY-DEVICES",
+    "row": 131,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_small_safety_devices\\asset_manifest.json",
+    "sha256": "04104b58b3411162a65f90065f2c54f8cef5254413b0b4dfb4f59f12ee0ce0a5"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-SUPPLY-24H-STATION",
+    "row": 132,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_supply_24h_station\\asset_manifest.json",
+    "sha256": "8aaec3764c331a2fe56f5645483c66e60b3f9b4d2e2fa2faccc794f03034f95d"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-WASTE-BIN",
+    "row": 133,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_waste_bin\\asset_manifest.json",
+    "sha256": "7b49265dd096d1b51188f479eda5b4239755543c917f3d8e1cb757ffa633533e"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-WORK-TOGETHER-POSTER",
+    "row": 134,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_work_together_poster\\asset_manifest.json",
+    "sha256": "862f766c8d48f7ef6ea4b6c5c918cc279e4e234c5680dda9f261b9f59943a8ec"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R01-C01",
+    "row": 135,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r01_c01\\asset_manifest.json",
+    "sha256": "2d1bd5a9a5b1532ddfcd6b80d711b764255f4205abb334905a325ab2c72c1404"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R01-C02",
+    "row": 136,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r01_c02\\asset_manifest.json",
+    "sha256": "5559ec023d166cae6a8b5155b696f5bd9998693f7f4ad9fbfea00136b490bcab"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R01-C03",
+    "row": 137,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r01_c03\\asset_manifest.json",
+    "sha256": "e0e599a8f2798876cd7e29a52d4393d6b799bccf13aa46e25996cad94ee89836"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R01-C04",
+    "row": 138,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r01_c04\\asset_manifest.json",
+    "sha256": "9991ac680ebbae80ea9b8b18305d51525090dd9aa55686ab78ef00437feccdb2"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R01-C05",
+    "row": 139,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r01_c05\\asset_manifest.json",
+    "sha256": "d45ec20535d6cca0824c5c248ed49b5c3c0d381291e72aed3a0af3617e3a5a8a"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R01-C06",
+    "row": 140,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r01_c06\\asset_manifest.json",
+    "sha256": "a3a61202fa7c06c7204854319288c1f0c5e60fef93e2c1f755a4f06f379a4a90"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R02-C01",
+    "row": 141,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r02_c01\\asset_manifest.json",
+    "sha256": "05143a649b91d046c2c09dafe705d94f0346d0770c39b1ae526ee52a046582e8"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R02-C02",
+    "row": 142,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r02_c02\\asset_manifest.json",
+    "sha256": "22b9e407b68836896207ea49099214bcf7aaa7efb8736162bb2722ebf00734a4"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R02-C03",
+    "row": 143,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r02_c03\\asset_manifest.json",
+    "sha256": "2f6a8782942233e2926c6f31281f5d98fa50e858b72995eca6c74eb7198cc4db"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R02-C04",
+    "row": 144,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r02_c04\\asset_manifest.json",
+    "sha256": "d90d14028c3f434be09acf88ef6b467aefaecdf5fa76a206d370c98c0603d555"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R02-C05",
+    "row": 145,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r02_c05\\asset_manifest.json",
+    "sha256": "61200762c6e6e04e040bb6105dce32fda5f1bd9d69c357ec7cc539bce9754e3b"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R02-C06",
+    "row": 146,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r02_c06\\asset_manifest.json",
+    "sha256": "5202b82292620f369443fa36ec4ba3b8b62ad620c4d74a797bbf69fb829c7ed1"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R03-C01",
+    "row": 147,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r03_c01\\asset_manifest.json",
+    "sha256": "a71e85e45cc4d1a72e7875cc410843e8dfe193dfb676c9680d66c63a62aa0453"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R03-C02",
+    "row": 148,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r03_c02\\asset_manifest.json",
+    "sha256": "f8dd8e763276ff2635af0ff614361bddd2930ef68c160cc229aaf2e0c54c9dd3"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R03-C03",
+    "row": 149,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r03_c03\\asset_manifest.json",
+    "sha256": "2cd8e29242ecf121d91d5a44126c672b8d1d93529fef0ad1a3eab230cab3ee91"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R03-C04",
+    "row": 150,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r03_c04\\asset_manifest.json",
+    "sha256": "5859d50bb04a09c0cf7b3fe6151193c51737b2118f3f5584bbedade814d66b6c"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R03-C05",
+    "row": 151,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r03_c05\\asset_manifest.json",
+    "sha256": "e329b1e52e214692364ebf810abca7fc4fe6d0b67b0174eb2a6f418004ff6b8c"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R03-C06",
+    "row": 152,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r03_c06\\asset_manifest.json",
+    "sha256": "e8eaa3e6e43e5b1ee450aee2ea8d502b34db6c300199466b2d90e919796fe00b"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R04-C01",
+    "row": 153,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r04_c01\\asset_manifest.json",
+    "sha256": "b06fd80bf8c9725277500eaa6994ab44b64c0d0b57262ac5920e79bc56960650"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R04-C02",
+    "row": 154,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r04_c02\\asset_manifest.json",
+    "sha256": "e8b84767dce8656c366c381fbc131452d8019be4581fb4f1892625d5909d3f97"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R04-C03",
+    "row": 155,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r04_c03\\asset_manifest.json",
+    "sha256": "9a66cc637b1abd89d06434949aa19b6b38be017d2a6dad9454cf6403ba22b4ea"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R04-C04",
+    "row": 156,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r04_c04\\asset_manifest.json",
+    "sha256": "9b962f6d003e082f33dc44ba251f5d5d1be141ffb69d6b056899e8ad9ef06c4f"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R04-C05",
+    "row": 157,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r04_c05\\asset_manifest.json",
+    "sha256": "7865cb437e32dfb271918f2c09c14fd1864d17233a1f932563227af201e72374"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R04-C06",
+    "row": 158,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r04_c06\\asset_manifest.json",
+    "sha256": "a727a84f59506e36ae549fafca03cd986e900c1fb0626ff7201158f492f2730b"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R05-C01",
+    "row": 159,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r05_c01\\asset_manifest.json",
+    "sha256": "25ce320949596cebbe75797299a65b576438bc04be76cc4e7f9a8d8a8a942e2d"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R05-C02",
+    "row": 160,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r05_c02\\asset_manifest.json",
+    "sha256": "c1e0cf57455c9162fa4db66615695f1bcce722fb9a4bf371884be2c28015b44f"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R05-C03",
+    "row": 161,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r05_c03\\asset_manifest.json",
+    "sha256": "9963472468273a6ed85fd89256f4c5bfafa28b3bc881a663f698d1ede44168bf"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R05-C04",
+    "row": 162,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r05_c04\\asset_manifest.json",
+    "sha256": "40018cec7389eec3fc60e519d46d2f568d92d4d6c95e8078efefd1fc52ddc952"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R05-C05",
+    "row": 163,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r05_c05\\asset_manifest.json",
+    "sha256": "35cc3a0eaeeec55f2589501c960a46def1cfdf7a0cbc7a5514888399729cc3cf"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R05-C06",
+    "row": 164,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r05_c06\\asset_manifest.json",
+    "sha256": "1ffb43895468ba8454caf8cd96736a43b23c4bfa7f1c5a7ce90045ab79b0cda1"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R06-C01",
+    "row": 165,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r06_c01\\asset_manifest.json",
+    "sha256": "93355c7c277d68051bf8f57cbe647724040947ea3ef62fb303eb6156bcc3330a"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R06-C02",
+    "row": 166,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r06_c02\\asset_manifest.json",
+    "sha256": "8b1d9e1c00926068b1a766bf9b06cd77c8564494a9e53a737cce499e8700299c"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R06-C03",
+    "row": 167,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r06_c03\\asset_manifest.json",
+    "sha256": "587528fa866f3c611502ec6a25302b42a151003b4e9ce7f006bd333bef94df28"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R06-C04",
+    "row": 168,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r06_c04\\asset_manifest.json",
+    "sha256": "642031fcb2150bb66acdf355c66a4c306df7dd33f72608668ff15c9577a46e38"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R06-C05",
+    "row": 169,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r06_c05\\asset_manifest.json",
+    "sha256": "c0329eb9daf7da1934787930e05ca0bc66ec0f0de0e513bb38f7522c3afa085d"
+  },
+  {
+    "asset_id": "BPK-BASE99-TILE-R06-C06",
+    "row": 170,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\tile_r06_c06\\asset_manifest.json",
+    "sha256": "4410eb7cee5e0420ed07525523ffd0ab0f340cc8f801a9c98419ff3b903e6a5a"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-BACKWALL-FUNCTION-PANEL-SYSTEM",
+    "row": 171,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_backwall_function_panel_system\\asset_manifest.json",
+    "sha256": "e97ed4ea9b8bdf13e8c0accd7f2453cc0120175ee02d6f2d9051723d67239570"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-BACKWALL-SERVICES",
+    "row": 172,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_backwall_services\\asset_manifest.json",
+    "sha256": "176002fd29433831e3b0e5dc30d1ffc32abacb6a4f2c893ef9edeb4c5868fa0c"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-BATTERY-CABINET",
+    "row": 173,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_battery_cabinet\\asset_manifest.json",
+    "sha256": "35982945ea521268c8c3d232ef47bc175f652eae1ced10c42efcb806623fde73"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-BED-AND-BEDDING",
+    "row": 174,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_bed_and_bedding\\asset_manifest.json",
+    "sha256": "75bc4d4d791e935086c3e54d74e0ab2721d6350f06e7549c9caab3f40ca453f7"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-BEDSIDE-LAMP",
+    "row": 175,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_bedside_lamp\\asset_manifest.json",
+    "sha256": "dfa62a3159a7ffce0ca1d8dd098818ab648b2e5804ec339550a5dc2b69b877da"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-BEDSIDE-RUG",
+    "row": 176,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_bedside_rug\\asset_manifest.json",
+    "sha256": "c425070885081f74727ab40c783cd109cc5d52c65986d3dfe990665712bfaacd"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-COFFEE-TABLE",
+    "row": 177,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_coffee_table\\asset_manifest.json",
+    "sha256": "7391a67ddc603322b4258bcadfe8669a2ebbfff3979333f23bba00b6e3a3acc2"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-COMPUTER-WORKSTATION",
+    "row": 178,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_computer_workstation\\asset_manifest.json",
+    "sha256": "ae8512dc8d445075a9a334b6366d8595e635ce7c75a7c745497ba0bc4f6e31eb"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-EXPLORE-POSTER",
+    "row": 179,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_explore_poster\\asset_manifest.json",
+    "sha256": "3e6f3503232b8bf78b103a606d626169d02fdaf368bed59a62fedae9ae7e882b"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-FOOD-CABINET",
+    "row": 180,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_food_cabinet\\asset_manifest.json",
+    "sha256": "47f07c66ca448d78584fc1a2c255f7e68b7431c9e017bd2896084fb5c1d0ded9"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-GOOD-VIBES-NEON",
+    "row": 181,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_good_vibes_neon\\asset_manifest.json",
+    "sha256": "d80f55a362a7f865b32988bfab3466cd054ac41ea5319f07541e39dea39dda0d"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-HANGING-PLANT",
+    "row": 182,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_hanging_plant\\asset_manifest.json",
+    "sha256": "ec3b5a9fe2c042eac25147940cef9cf1f3644d3c50a2fa70e6fb740c136e056a"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-LOUNGE-RUG",
+    "row": 183,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_lounge_rug\\asset_manifest.json",
+    "sha256": "e78f61c3ad775e6d8f8c39cf945e9520953ba172268e18dc49fb4559dea30710"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-LOUNGE-SOFA",
+    "row": 184,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_lounge_sofa\\asset_manifest.json",
+    "sha256": "0ea576fd93a4e4cfaab99f5fa628b2561954259a5cf0badcadfd0ed711dc711d"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-MEDICAL-CABINET",
+    "row": 185,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_medical_cabinet\\asset_manifest.json",
+    "sha256": "90a440b55dfe8b8de10f0e4be29b60f4563b4659fea46da390a619131cc1466c"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-NIGHTSTAND",
+    "row": 186,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_nightstand\\asset_manifest.json",
+    "sha256": "a96e50bbfa9476fc4ee987bfcd46631d63cf2224d565ebfda769b5f48bc8e7dc"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-OFFICE-CHAIR",
+    "row": 187,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_office_chair\\asset_manifest.json",
+    "sha256": "cebb026db98f698673e2758ee5b887a5d2108a277298e8fdd3dde9e2fa06704e"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-POUF-01",
+    "row": 188,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_pouf_01\\asset_manifest.json",
+    "sha256": "eefc2ff2071498076d80babd04c265a339885c872298e33ac1032f7ba16affde"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-POUF-02",
+    "row": 189,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_pouf_02\\asset_manifest.json",
+    "sha256": "12605eb5bd72bfcf95a6681defcf7f3bf10c433598bdc573bf88ba7c45988f01"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-SIDE-TABLE",
+    "row": 190,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_side_table\\asset_manifest.json",
+    "sha256": "196228330020639583b065ab7356611b6ec416c887ed0cb2ea8a691979a94a43"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-STAY-CURIOUS-NEON",
+    "row": 191,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_stay_curious_neon\\asset_manifest.json",
+    "sha256": "839a14265dd791c3f75a3db2366d5f6ae3231711710ff2d37294e08852eab7d2"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-STRIPED-PRIVACY-CURTAIN",
+    "row": 192,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_striped_privacy_curtain\\asset_manifest.json",
+    "sha256": "314bae326f34e948dddfa42d0e73b70b79743095bcb218ec4ae96970f07cf656"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-TOOL-PEGBOARD",
+    "row": 193,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\loft\\loft_tool_pegboard\\asset_manifest.json",
+    "sha256": "680345a4a3adf2fc74a5395e7105033c8633e411e57dfc61f7c98474fa70d5e7"
+  },
+  {
+    "asset_id": "BPK-BASE99-CORRIDOR-EMERGENCY-LIGHT-GROUP",
+    "row": 194,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\support\\corridor_emergency_light_group\\asset_manifest.json",
+    "sha256": "91a2188f0a0819488332d5384088e7d4eba0c6043421a93b18c444260e1d9701"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-LIGHTING-SUPPORT",
+    "row": 195,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\support\\loft_lighting_support\\asset_manifest.json",
+    "sha256": "abe38c11684b2be621edcb448b12850da7d3472d215e9f18c78a0a9592948f23"
+  },
+  {
+    "asset_id": "BPK-BASE99-VOLUMETRIC-DUST-FX",
+    "row": 196,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\support\\volumetric_dust_fx\\asset_manifest.json",
+    "sha256": "70a699d6ddb5c3005b0c982960be90e7997595c76c6b22110d635452f3fde467"
+  },
+  {
+    "asset_id": "BPK-BASE99-WAREHOUSE-PENDANT-LIGHT-GROUP",
+    "row": 197,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\support\\warehouse_pendant_light_group\\asset_manifest.json",
+    "sha256": "543f336c346e31fd89c4cf60b28a843e41023b7cd8be1b1d1036b3e28b711343"
+  },
+  {
+    "asset_id": "BPK-BASE99-ACCESS-TERMINAL",
+    "row": 198,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\access_terminal\\asset_manifest.json",
+    "sha256": "36db763dbbc616a69a135d71b83b094d1773b8196858c2340505527cf8574f1f"
+  },
+  {
+    "asset_id": "BPK-BASE99-BASE-CAMP-NEON-SIGN",
+    "row": 199,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\base_camp_neon_sign\\asset_manifest.json",
+    "sha256": "ba7d0fb2dbba09a1b860340c6b59b47c6b1eb598ab8b502ee36e288272de2e45"
+  },
+  {
+    "asset_id": "BPK-BASE99-BASE-CAMP-ROLLUP-MAIN-DOOR",
+    "row": 200,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\base_camp_rollup_main_door\\asset_manifest.json",
+    "sha256": "10136ee036092b66b19780625e92a9f7bc808770838a285a8f1c52bc44e88581"
+  },
+  {
+    "asset_id": "BPK-BASE99-BASE-STATUS-TERMINAL",
+    "row": 201,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\base_status_terminal\\asset_manifest.json",
+    "sha256": "f5083ec93792056dedf834c275351c144170c170e265c45907654bab1a2e2d18"
+  },
+  {
+    "asset_id": "BPK-BASE99-HOLOGRAM-TERMINAL-PLATFORM",
+    "row": 202,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\hologram_terminal_platform\\asset_manifest.json",
+    "sha256": "761b1591ee608316a47fa06e85a5a7f2a18d87dac3cb80f5294b54c47813852d"
+  },
+  {
+    "asset_id": "BPK-BASE99-MAIN-DOOR-LOW-STORAGE-CABINET",
+    "row": 203,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\main_door_low_storage_cabinet\\asset_manifest.json",
+    "sha256": "5fa3be4b090c09f631db5d18960be6180696449b04bcba402aba6d34674fb928"
+  },
+  {
+    "asset_id": "BPK-BASE99-MEDICAL-CABINET",
+    "row": 204,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\medical_cabinet\\asset_manifest.json",
+    "sha256": "e5d0bcd80ad4c56e60e6e5ead83154e036d46f6b3e7c7fd691c8d2eb12073f79"
+  },
+  {
+    "asset_id": "BPK-BASE99-NARROW-BATTERY-CABINET",
+    "row": 205,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\narrow_battery_cabinet\\asset_manifest.json",
+    "sha256": "8d0866fc43cd1c50b0977d3b37c81ec27ad5203055dec4da99117ff788d45f2e"
+  },
+  {
+    "asset_id": "BPK-BASE99-NARROW-EMERGENCY-CABINET",
+    "row": 206,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\narrow_emergency_cabinet\\asset_manifest.json",
+    "sha256": "2d3e67ae01fb8d2722d637fd58c007ced90f44746aec4301eb762814acb1ed45"
+  },
+  {
+    "asset_id": "BPK-BASE99-SOUTH-INDUSTRIAL-WALL-DETAILS",
+    "row": 207,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\south_industrial_wall_details\\asset_manifest.json",
+    "sha256": "b5c165d27e34d5e679129345e0a8fc19d716535f818f59946544275bbe2078df"
+  },
+  {
+    "asset_id": "BPK-BASE99-SOUTH-UPPER-RAILING-DETAILS",
+    "row": 208,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\south_upper_railing_details\\asset_manifest.json",
+    "sha256": "a6ed0e3a365744c2d7ddc23b44f6db88a87e05ae3af5d8c4c049880fd02e6030"
+  },
+  {
+    "asset_id": "BPK-BASE99-SOUTH-WALL-PIPELINE-SYSTEM",
+    "row": 209,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\south_wall_pipeline_system\\asset_manifest.json",
+    "sha256": "4df099890e491380d7579c1a423144c6065aaceb8fc7aeb359b8dc12a45beb8e"
+  },
+  {
+    "asset_id": "BPK-BASE99-STORAGE-TERMINAL",
+    "row": 210,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\storage_terminal\\asset_manifest.json",
+    "sha256": "9a3bcdb47187783f355dd37fe4127d98e38672a1d597ee68e97fa7dde5bfe180"
+  },
+  {
+    "asset_id": "BPK-BASE99-TOOLS-CABINET",
+    "row": 211,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\tools_cabinet\\asset_manifest.json",
+    "sha256": "02c3f0b47847e989ae88a803b2e91cb9557fd60c776f69752d866d16c8a2a389"
+  },
+  {
+    "asset_id": "BPK-BASE99-UNDERSTAIR-BULLETIN-BOARD",
+    "row": 212,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\understair_bulletin_board\\asset_manifest.json",
+    "sha256": "09b8e426a88a07d63b81fddfe5c60678c9a36795e7724ef7596b2a861784075f"
+  },
+  {
+    "asset_id": "BPK-BASE99-UNDERSTAIR-EQUIPMENT-CABINET",
+    "row": 213,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\understair_equipment_cabinet\\asset_manifest.json",
+    "sha256": "1aa9bb72dcf2d2937ff7d26c1df1e1886258ecbcc27d1a62dc3584b2ecc2ff80"
+  },
+  {
+    "asset_id": "BPK-BASE99-UNDERSTAIR-GREEN-BENCH",
+    "row": 214,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\understair_green_bench\\asset_manifest.json",
+    "sha256": "5ac9a6343b67f5515d37eafb1feb9057d6809890c184a48acd90df6aa868964c"
+  },
+  {
+    "asset_id": "BPK-BASE99-UNDERSTAIR-LIGHTING-LIVING-SUPPORT",
+    "row": 215,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\understair_lighting_living_support\\asset_manifest.json",
+    "sha256": "45b9c9bf88b00892b8ebf61ba99fafee68c80caee3307bcd7b52ab687069394d"
+  },
+  {
+    "asset_id": "BPK-BASE99-UNDERSTAIR-STORAGE-SHELF",
+    "row": 216,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\understair_storage_shelf\\asset_manifest.json",
+    "sha256": "2e7e296aec13638562542154a7e6c0f60864c65de6baa6f6dd51a33d1146849e"
+  },
+  {
+    "asset_id": "BPK-BASE99-WEAPON-WORKSHOP-STATION",
+    "row": 217,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\underloft\\weapon_workshop_station\\asset_manifest.json",
+    "sha256": "f568e54a20f9da78496f14a7dc6b5a2480e8d06ae1444556e67eaf1714e52eed"
+  },
+  {
+    "asset_id": "BPK-BASE99-AIR-COMPRESSOR",
+    "row": 218,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\air_compressor\\asset_manifest.json",
+    "sha256": "fe223a3c61fefa41112c53d0db19456b7fe7fa7a1b96c344dd3731890f520abf"
+  },
+  {
+    "asset_id": "BPK-BASE99-BACKUP-GENERATOR",
+    "row": 219,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\backup_generator\\asset_manifest.json",
+    "sha256": "46365109119549947bf83b6ce9dc5f6f437615a351fe9170e75fa25c7c9bd99a"
+  },
+  {
+    "asset_id": "BPK-BASE99-BATTERY-BANK",
+    "row": 220,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\battery_bank\\asset_manifest.json",
+    "sha256": "6fdffb163e8c09d489b9b6e8a016ee9f5a2966d88c59210a2631904733bf0417"
+  },
+  {
+    "asset_id": "BPK-BASE99-HEAVY-SUPPLY-SHELF",
+    "row": 221,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\heavy_supply_shelf\\asset_manifest.json",
+    "sha256": "0d2048acc401d5580c86cb36de4f34b7e3787150cff3eb1ae8051c37a026e8e7"
+  },
+  {
+    "asset_id": "BPK-BASE99-HOSE-REEL",
+    "row": 222,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\hose_reel\\asset_manifest.json",
+    "sha256": "0824feeb2d04559927f281f0718fec54324bcd89a2a89a7adfbb9647a0e5778f"
+  },
+  {
+    "asset_id": "BPK-BASE99-INDUSTRIAL-WATER-TANK",
+    "row": 223,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\industrial_water_tank\\asset_manifest.json",
+    "sha256": "dc9600c8d886f01da3ae3155cc834dc3be57a2ce1694443882cde146b37eea1f"
+  },
+  {
+    "asset_id": "BPK-BASE99-SOUTH-WALL-INFORMATION-BOARDS",
+    "row": 224,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\south_wall_information_boards\\asset_manifest.json",
+    "sha256": "34a301ac94e1f61fe04e6ecbaf7cfd2ac7eba947bfffe534a361ee6f2fd70fa2"
+  },
+  {
+    "asset_id": "BPK-BASE99-WATER-PURIFIER",
+    "row": 225,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\warehouse\\water_purifier\\asset_manifest.json",
+    "sha256": "ce901e1145a3d1f7c0ee20ba57e89ee224ce84c9d3057e001903b84e4ffad0ad"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-DOOR-ACCESS-CONTROL",
+    "row": 226,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\east_facilities\\east_door_access_control\\asset_manifest.json",
+    "sha256": "a2ae13595d1301377c215e354641f74116c7e7935a2369ddf4f2fb1d2fd681c0"
+  },
+  {
+    "asset_id": "BPK-BASE99-EAST-DOOR-WALL-MODULE",
+    "row": 227,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\architecture\\east_door_wall_module\\asset_manifest.json",
+    "sha256": "87bf2ab81c6713c2fcfc96fa83303389400b30df878ac64967d95d8c80578f21"
+  },
+  {
+    "asset_id": "BPK-BASE99-WEST-DOOR-WALL-MODULE",
+    "row": 228,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\architecture\\west_door_wall_module\\asset_manifest.json",
+    "sha256": "561879c23a51a6aa3482596abb7ec85b58610759b734bf2d563aac18eee72f65"
+  },
+  {
+    "asset_id": "BPK-BASE99-WEST-DOOR-LIFT-INSTANCE",
+    "row": 229,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\west_facilities\\west_door_lift_instance\\asset_manifest.json",
+    "sha256": "8476b5676a9345cef4f7eb9ac64694a546609f71770ff84b548d897f0e53907f"
+  },
+  {
+    "asset_id": "BPK-BASE99-LOFT-FLOOR-FINISH",
+    "row": 230,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\component_packages\\floor\\loft_floor_finish\\asset_manifest.json",
+    "sha256": "cdbab0f3c5bc3a4cb41c97cc1522fa2abff0943bcb3e4495d09e323b2552c15b"
+  },
+  {
+    "asset_id": "ENV-BASE99-WALL-CONTENTS-V021",
+    "row": 231,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_wall_contents\\env_base99_wall_contents_root_top3d.tscn",
+    "sha256": "b7ef5b6f0a4f068d6b8469174bd33b7215366f2bb01ae3293911c8bb1845fde6"
+  },
+  {
+    "asset_id": "ENV-BASE99-REMAINING-FACILITIES-V021",
+    "row": 232,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\base_facility_3d\\runtime\\env_base99_remaining_facilities\\env_base99_remaining_facilities_root_top3d.tscn",
+    "sha256": "c5e4c8064198080df13219c7d6579d5bf21f5e93f7069c1af69b57dba1266314"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02",
+    "row": 248,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\env_tower_02_root_top3d.tscn",
+    "sha256": "8196bbdb95e93bf2b847ccfe47528cd26db0b22d7d9094609dbeedcd89dc1487"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03",
+    "row": 249,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\env_tower_03_root_top3d.tscn",
+    "sha256": "76f563b9f0d5e27dbb8b3e5ea882a2cfe934d249a6a69807a2c07b55ca944bf0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-00",
+    "row": 250,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_00\\env_tower_02_floor_00_root_top3d.tscn",
+    "sha256": "428c2a76f1f9fb7bb39b512f6eac1e8137824bd729525705dd6da1e19bf86bd9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-01",
+    "row": 251,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_01\\env_tower_02_floor_01_root_top3d.tscn",
+    "sha256": "d54ce42008fab8a5241173294629a1e2fb7a6ff19808d08c5ba81ef94172d780"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-02",
+    "row": 252,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_02\\env_tower_02_floor_02_root_top3d.tscn",
+    "sha256": "5b3f165053face0fa78ffd31f5fdf4cee614ee985e4f7b6c3e0133a3f6fc0ec2"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-03",
+    "row": 253,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_03\\env_tower_02_floor_03_root_top3d.tscn",
+    "sha256": "b982588409bc7a64829e55503291a9960d2a407a5a611568efdda30df6c4e2c2"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-04",
+    "row": 254,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_04\\env_tower_02_floor_04_root_top3d.tscn",
+    "sha256": "26a9bba1c0bfb6cb3de64af33a9a90e8e03f5c2420f60c488d180aa5e957a507"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-05",
+    "row": 255,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_05\\env_tower_02_floor_05_root_top3d.tscn",
+    "sha256": "8da8035c1a319dc6e44d381421001d3f69828a7c9d5cdeff907615e942feca4a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-06",
+    "row": 256,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_06\\env_tower_02_floor_06_root_top3d.tscn",
+    "sha256": "b7b59c5fcb4d93928b9134aae4f9440b6497871616fd2071d09fe7101bc25f6a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-07",
+    "row": 257,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_07\\env_tower_02_floor_07_root_top3d.tscn",
+    "sha256": "73fcd773a2f2c0aeaa88ccece62fbd302510831042242fba95ad3a65fa91fb5f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-08",
+    "row": 258,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_08\\env_tower_02_floor_08_root_top3d.tscn",
+    "sha256": "dd5a9a7a20ed5b74ec03d440203b24b762dde5a78acc28e462edffc8640a0454"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-09",
+    "row": 259,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_09\\env_tower_02_floor_09_root_top3d.tscn",
+    "sha256": "3b16278444e56343e8e2ca57338948fb802e6be47ba315c3fea02887653e5b4c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-10",
+    "row": 260,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_10\\env_tower_02_floor_10_root_top3d.tscn",
+    "sha256": "55e7e1d2eb61df1e0c34c9b6921dce964f60d04ccbd0fe23f2fadd128403d023"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-11",
+    "row": 261,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_11\\env_tower_02_floor_11_root_top3d.tscn",
+    "sha256": "1c6cf4d4253c9132b668e363759f23a39c391cf96752f995dd3890e8c54d5f75"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-12",
+    "row": 262,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_12\\env_tower_02_floor_12_root_top3d.tscn",
+    "sha256": "e126e69f8ea69a5573809f5a9d577924b65de1cc683cb837d8a25faf5c10c094"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-13",
+    "row": 263,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_13\\env_tower_02_floor_13_root_top3d.tscn",
+    "sha256": "6bf86a0f96d65519871dba6465e19b1ceb3cbf159a1c540f146f8e2ed348b677"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-14",
+    "row": 264,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_14\\env_tower_02_floor_14_root_top3d.tscn",
+    "sha256": "3a54fccd088070a6d63478fe45545a7ddf964b292d996ee36e8186bc16e50017"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-15",
+    "row": 265,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_15\\env_tower_02_floor_15_root_top3d.tscn",
+    "sha256": "f0ebef9044adf6f8dfb4b3471d5cdce4366f230b9c81e99b35cee718e2e5dcc6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-16",
+    "row": 266,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_16\\env_tower_02_floor_16_root_top3d.tscn",
+    "sha256": "70511f36ca6bdb0a88ebeef14db5228208fca2505f33e211f36bec3b2a4c72ef"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-17",
+    "row": 267,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_17\\env_tower_02_floor_17_root_top3d.tscn",
+    "sha256": "31e8513dbd4a29cd1605f6f33f4ea87d90779edc3dd4a12f14007dbee3db49cb"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-18",
+    "row": 268,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_18\\env_tower_02_floor_18_root_top3d.tscn",
+    "sha256": "8c0cd28c20401527ee8d6717c2b1b2e06897956aa71f02949a4802d354d97de4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-19",
+    "row": 269,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_19\\env_tower_02_floor_19_root_top3d.tscn",
+    "sha256": "ad202d510ea7ef7dc5a1e8278d57f344cfb251d38a72d689a73e79526faa2247"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-FLOOR-20",
+    "row": 270,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\floor_20\\env_tower_02_floor_20_root_top3d.tscn",
+    "sha256": "e28038b0b77dd0d19280a421f2bf878d0b892ba733e94cb731e4ba8326b197ac"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CORE-0",
+    "row": 271,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\core_0\\env_tower_02_core_0_root_top3d.tscn",
+    "sha256": "9a3bdaa5fd18401bfc8f94581c7c02dcdff1c1257fc9ab5118d4f39c4c26f9fb"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CORE-1",
+    "row": 272,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\core_1\\env_tower_02_core_1_root_top3d.tscn",
+    "sha256": "61f2fa0471596b006a692b96d8353f254135b15c6967125d48f638256852c540"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-00",
+    "row": 273,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_00\\env_tower_02_scaffold_00_root_top3d.tscn",
+    "sha256": "0b81bbd39fe0ad840ee191eb3dc41cc71fff1be89cba89968be0998c549548bd"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-01",
+    "row": 274,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_01\\env_tower_02_scaffold_01_root_top3d.tscn",
+    "sha256": "abab921ffd5dabe98bf7312694068001f9d79fa08d5c5299889b7445238ea178"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-02",
+    "row": 275,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_02\\env_tower_02_scaffold_02_root_top3d.tscn",
+    "sha256": "6bd457f169213cc97bf2aba72a66176e40d02a974b4dfae49f9de465dc879e18"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-03",
+    "row": 276,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_03\\env_tower_02_scaffold_03_root_top3d.tscn",
+    "sha256": "b067623a78e7ceccc6579af3e4037b4c821a70641a437749c70c9082f22f0ba4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-04",
+    "row": 277,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_04\\env_tower_02_scaffold_04_root_top3d.tscn",
+    "sha256": "bce2f5fabd346d24963a8af7d4fb477691fe70f4befe522855e2a72861d68271"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-05",
+    "row": 278,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_05\\env_tower_02_scaffold_05_root_top3d.tscn",
+    "sha256": "0d9a9e8a4c2756ecca153cd007165cdbca5f9110721a07ab17f94643ffa52f34"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-06",
+    "row": 279,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_06\\env_tower_02_scaffold_06_root_top3d.tscn",
+    "sha256": "4b6d1c47c69c2fcec61c9985d755d4374e09951e000f92d38d7b2448e2e0a071"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-SCAFFOLD-07",
+    "row": 280,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\scaffold_07\\env_tower_02_scaffold_07_root_top3d.tscn",
+    "sha256": "efc0e0fd233757719d4a48144a9c20427ef2fb19902cd407a53c8c72b28b2522"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-00",
+    "row": 281,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_00\\env_tower_02_climbing_screen_00_root_top3d.tscn",
+    "sha256": "3dabe645ecc4daa02318cd0cd87aa8b25619d437ee4df573eb6ff04b80aa652f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-01",
+    "row": 282,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_01\\env_tower_02_climbing_screen_01_root_top3d.tscn",
+    "sha256": "40497ed322e48a7f27f231027e711623af1bc7d92a74940ad262e61c1e96f8aa"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-02",
+    "row": 283,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_02\\env_tower_02_climbing_screen_02_root_top3d.tscn",
+    "sha256": "84919af0967e211c46d36a1943cfc88a112d02db28bd90f0d2916b67f68b35e4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-03",
+    "row": 284,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_03\\env_tower_02_climbing_screen_03_root_top3d.tscn",
+    "sha256": "ae6af68d14670caab519c2385ac83f945ebfa165115ae10383e41bd974d52332"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-04",
+    "row": 285,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_04\\env_tower_02_climbing_screen_04_root_top3d.tscn",
+    "sha256": "ce9879a4af9241120590970ae52d50fe3c50b7ab5acaa3521369a858f4795d25"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-05",
+    "row": 286,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_05\\env_tower_02_climbing_screen_05_root_top3d.tscn",
+    "sha256": "77cc6db1adf851b5248a2e96d49893174f977483784b50e44b031ede5f5d3b75"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-06",
+    "row": 287,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_06\\env_tower_02_climbing_screen_06_root_top3d.tscn",
+    "sha256": "5b51fc1e0eb0b4cfe471630dba59a359fbd6b47e20b4e98d363916578dda6a60"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CLIMBING-SCREEN-07",
+    "row": 288,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\climbing_screen_07\\env_tower_02_climbing_screen_07_root_top3d.tscn",
+    "sha256": "79a12b2dbc464f8e42368febc534f0c62203d6cd33bed0079d39c0571f0c69ac"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CONSTRUCTION-ELEVATOR",
+    "row": 289,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\construction_elevator\\env_tower_02_construction_elevator_root_top3d.tscn",
+    "sha256": "183e4b74dd6884eceba3b7194459e5e45cef9ddaa77a613205622c15a7b9c5a4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-00",
+    "row": 290,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_00\\env_tower_02_roof_column_00_root_top3d.tscn",
+    "sha256": "b9f791d44a93281526ddd8ea90fa0493429c2e086b9b4055c2f197a7c286b65d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-01",
+    "row": 291,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_01\\env_tower_02_roof_column_01_root_top3d.tscn",
+    "sha256": "2af66137f126c15eb24dad2094a8d96ed67ba479776e43e07d99381470efbcf0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-02",
+    "row": 292,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_02\\env_tower_02_roof_column_02_root_top3d.tscn",
+    "sha256": "4dc5066b79a7f52e4f0dc753701df41eda847d1100dcc484baad99aa039d612d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-03",
+    "row": 293,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_03\\env_tower_02_roof_column_03_root_top3d.tscn",
+    "sha256": "d6b5bc359b0105ce39c1b18e15b700f844ee76260df8fe92a9794104489e129f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-04",
+    "row": 294,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_04\\env_tower_02_roof_column_04_root_top3d.tscn",
+    "sha256": "188a94cf3a1edf931b651ef85a5ffd54e0e66057bb49dda1a92ce856af46711b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-05",
+    "row": 295,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_05\\env_tower_02_roof_column_05_root_top3d.tscn",
+    "sha256": "c04e30db98b3a182811b06a54f79a3fc4f156c43f0677333f1f954f47aed671a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-06",
+    "row": 296,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_06\\env_tower_02_roof_column_06_root_top3d.tscn",
+    "sha256": "c82996472ebce4e777fc60f61415107f761b71f6791363245a788f55fc1b665d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-07",
+    "row": 297,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_07\\env_tower_02_roof_column_07_root_top3d.tscn",
+    "sha256": "3fae04d4d23bedc4c7a183bd6f5c0a44bb2dcdab2703ae21031f4526d07a9ac0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-08",
+    "row": 298,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_08\\env_tower_02_roof_column_08_root_top3d.tscn",
+    "sha256": "886b63e21931ddbe34e1870911a9a06a3fbd5627b7ea00b3b7696a4c091e462d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-09",
+    "row": 299,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_09\\env_tower_02_roof_column_09_root_top3d.tscn",
+    "sha256": "1bfe698690bfa8cd2f5a05d820eb732a9453c01993769cc95a31789fa3e0f2ab"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-10",
+    "row": 300,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_10\\env_tower_02_roof_column_10_root_top3d.tscn",
+    "sha256": "37935bf2235fb510b61042bf527bd222753798bb50de05fe6ac3b89d49e71eaa"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-11",
+    "row": 301,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_11\\env_tower_02_roof_column_11_root_top3d.tscn",
+    "sha256": "8eebf7c4708366f6f15d3b33aad91bb8bd194b5e5c4c9d6674c64e7afe71f886"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-12",
+    "row": 302,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_12\\env_tower_02_roof_column_12_root_top3d.tscn",
+    "sha256": "c577f1fe1a02d3a28d31fb0756242e6b9071d4f746d278c41973482b6023d0bc"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-13",
+    "row": 303,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_13\\env_tower_02_roof_column_13_root_top3d.tscn",
+    "sha256": "3b24fc7cebc3a2f430f5d6dac7baaa3d1cd0f2a0d1a3406e6c6d388154c7fe00"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-COLUMN-14",
+    "row": 304,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_column_14\\env_tower_02_roof_column_14_root_top3d.tscn",
+    "sha256": "519288f7cef309b732de6df7fcbd766dc3a91609275d952bd37373cd9d07364c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-0",
+    "row": 305,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_formwork_0\\env_tower_02_roof_formwork_0_root_top3d.tscn",
+    "sha256": "9c93187b55b29351f6307d9ccae6fe15798bf7465658c8caa340daaf815cd0f6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-1",
+    "row": 306,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_formwork_1\\env_tower_02_roof_formwork_1_root_top3d.tscn",
+    "sha256": "427b06e59f7748cac21153999efa0b6de5f7340e996487ecb955d7b44a799ff1"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-FORMWORK-2",
+    "row": 307,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_formwork_2\\env_tower_02_roof_formwork_2_root_top3d.tscn",
+    "sha256": "d6eedd1ca24dd9be591f13cf22902d985fee3d9a134510459889d79c41aada72"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-00",
+    "row": 308,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_shoring_00\\env_tower_02_roof_shoring_00_root_top3d.tscn",
+    "sha256": "8d0cf751acb31c5115638e18b56f73b2af8dcd53962c815e5bdfa1315493d900"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-01",
+    "row": 309,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_shoring_01\\env_tower_02_roof_shoring_01_root_top3d.tscn",
+    "sha256": "fc83c9d2effd8a99e6d6e338eb872d307fe1224f4711297ac8d3bfe83853721a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-02",
+    "row": 310,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_shoring_02\\env_tower_02_roof_shoring_02_root_top3d.tscn",
+    "sha256": "01d290cf392ef1974c2b58d6fbbb954d5533dc5619db3980171c4b3a8993871d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SHORING-03",
+    "row": 311,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_shoring_03\\env_tower_02_roof_shoring_03_root_top3d.tscn",
+    "sha256": "6c65d1f0c396934878aecea6173477cc2d310e6194ce480abcfb69237f5c9a49"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-00",
+    "row": 312,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_00\\env_tower_02_roof_supply_00_root_top3d.tscn",
+    "sha256": "3948ec3991ad9c9cd49314dba555fd914ee2553265539ae7b8a3de360a53ed88"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-01",
+    "row": 313,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_01\\env_tower_02_roof_supply_01_root_top3d.tscn",
+    "sha256": "a2164d572c58c065edcbec2ce0a4b9296838c5ad694993d1ac2810086730d2b0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-02",
+    "row": 314,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_02\\env_tower_02_roof_supply_02_root_top3d.tscn",
+    "sha256": "9ef527faf976bcadd1e2dd2d9eeea7661526e02a2caa670b56970e0e4cbbced4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-03",
+    "row": 315,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_03\\env_tower_02_roof_supply_03_root_top3d.tscn",
+    "sha256": "ec2e828385c47b78919911336b34beeb3fa758dcd79d8a5da65805a864b1c4cc"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-04",
+    "row": 316,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_04\\env_tower_02_roof_supply_04_root_top3d.tscn",
+    "sha256": "66091ee98c19c66cd3b521feca01c0cc82a785c4a0f805d8a838b45adc12e76e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-05",
+    "row": 317,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_05\\env_tower_02_roof_supply_05_root_top3d.tscn",
+    "sha256": "8870c12284de5d98287291360295523e7862beecdb45db62ed170113ce53a680"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-06",
+    "row": 318,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_06\\env_tower_02_roof_supply_06_root_top3d.tscn",
+    "sha256": "bd343c92bbe5c1a7c42b1b3d12dd57c8877221388ac7e0f8e8a3454215be4770"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-SUPPLY-07",
+    "row": 319,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_supply_07\\env_tower_02_roof_supply_07_root_top3d.tscn",
+    "sha256": "7cfa4a9f80e6ad7df5579390b419aee92e54e7289e924a3a42be19bb2a769db4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-MAST",
+    "row": 320,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_00_mast\\env_tower_02_crane_00_mast_root_top3d.tscn",
+    "sha256": "720c6eea61873c58457fb368c96f90e1b18f037fa30cfe936c77974dfd12375f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-SLEW-CAB",
+    "row": 321,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_00_slew_cab\\env_tower_02_crane_00_slew_cab_root_top3d.tscn",
+    "sha256": "27626c90e98c8cf32ff0ddc89a3ea2ec3936c4342185e9cc26092fe22ef7cb4e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-JIB",
+    "row": 322,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_00_jib\\env_tower_02_crane_00_jib_root_top3d.tscn",
+    "sha256": "d9dec3807817e1187fcd927f2df7a3e3c59c816542fe4029211b9385ccf209be"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-COUNTER-JIB",
+    "row": 323,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_00_counter_jib\\env_tower_02_crane_00_counter_jib_root_top3d.tscn",
+    "sha256": "d784f0b2290a7a440614d17df39ebd132e3fa1ce99e9111569e7fadff39bfd90"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-APEX",
+    "row": 324,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_00_apex\\env_tower_02_crane_00_apex_root_top3d.tscn",
+    "sha256": "c290db3c6612cd9eb47711689d8aebd2869a8294642862d832dbcb1f50ed4c79"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-TROLLEY",
+    "row": 325,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_00_trolley\\env_tower_02_crane_00_trolley_root_top3d.tscn",
+    "sha256": "4a23eb80e2295b071790b7f36580f77f2a88f58bc6fec4dedbb3cb70812698d0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-00-HOOK",
+    "row": 326,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_00_hook\\env_tower_02_crane_00_hook_root_top3d.tscn",
+    "sha256": "a77ec94c4b387bb2e521eb82d7614e9cf3271122e8b677a1c02e3b0a312c988a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-MAST",
+    "row": 327,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_01_mast\\env_tower_02_crane_01_mast_root_top3d.tscn",
+    "sha256": "1c5052c62c03c3e4453372046966680174af31faf719b164a5065cbbc8ba3da5"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-SLEW-CAB",
+    "row": 328,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_01_slew_cab\\env_tower_02_crane_01_slew_cab_root_top3d.tscn",
+    "sha256": "f33312e2044f894128cbfdf80cb98ee4abb7651c3170ba7ddb38f839efb20e78"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-JIB",
+    "row": 329,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_01_jib\\env_tower_02_crane_01_jib_root_top3d.tscn",
+    "sha256": "1c277b574525a13ef46e590cff993f45d18ec4f76129c238cfd89ea63d9cf663"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-COUNTER-JIB",
+    "row": 330,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_01_counter_jib\\env_tower_02_crane_01_counter_jib_root_top3d.tscn",
+    "sha256": "0a259b97c6a9aa49b3a01593658b393f8b96c1eac21b144a6c2d8957e19e96da"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-APEX",
+    "row": 331,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_01_apex\\env_tower_02_crane_01_apex_root_top3d.tscn",
+    "sha256": "50ff92ee28eb8eb975b17854a7a191cd97d3e4b38ed9a906c31ff850050bf01b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-TROLLEY",
+    "row": 332,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_01_trolley\\env_tower_02_crane_01_trolley_root_top3d.tscn",
+    "sha256": "779e5a27c16175a9c26de02e6963a4539b92639ffb42fe28e9711d432728abfb"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-01-HOOK",
+    "row": 333,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_01_hook\\env_tower_02_crane_01_hook_root_top3d.tscn",
+    "sha256": "173857d3e4ab59b3328c4227a8c30d5d3a2bef3dc36600cd8f4e593751ce6b07"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-MAST",
+    "row": 334,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_02_mast\\env_tower_02_crane_02_mast_root_top3d.tscn",
+    "sha256": "955a35174e59efcfa01dd89dffe67a198d089b3d396a2ec6448b21ee90d61d98"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-SLEW-CAB",
+    "row": 335,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_02_slew_cab\\env_tower_02_crane_02_slew_cab_root_top3d.tscn",
+    "sha256": "ff053d1e8f9dc8c0c55e3afb7e99de7c57f7b3141e08ece1d1022b8df3f18700"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-JIB",
+    "row": 336,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_02_jib\\env_tower_02_crane_02_jib_root_top3d.tscn",
+    "sha256": "6222aaa84859c62c636c9703178ab2934fe88b2320215ff5a5d8a641ed7804f6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-COUNTER-JIB",
+    "row": 337,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_02_counter_jib\\env_tower_02_crane_02_counter_jib_root_top3d.tscn",
+    "sha256": "85a7705672e740567710cd7186cf895b1748d02b993095b1b22e8e1bf788a11c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-APEX",
+    "row": 338,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_02_apex\\env_tower_02_crane_02_apex_root_top3d.tscn",
+    "sha256": "70a5a3f265b2c9a6387ef833310ef8348593d1dd04303a17f04e53923d64f4d9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-TROLLEY",
+    "row": 339,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_02_trolley\\env_tower_02_crane_02_trolley_root_top3d.tscn",
+    "sha256": "cecee3c056d7b82c8eebb70b3bf8eac3638dd6684e6961b56cc6a33d7cd5d122"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-CRANE-02-HOOK",
+    "row": 340,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\crane_02_hook\\env_tower_02_crane_02_hook_root_top3d.tscn",
+    "sha256": "a9c5755af9d00572d9cbf69ecc764e53cfc93866e7228c0a6b3b783dbd7fc6bc"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER02-ROOF-WARNING",
+    "row": 341,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_02\\roof_warning\\env_tower_02_roof_warning_root_top3d.tscn",
+    "sha256": "7740945d4b8d0d2494302b604777e10a3cf0e91a076d53720fe055345787fb9d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-MAIN-STRUCTURE",
+    "row": 345,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\main_structure\\env_tower_03_main_structure_root_top3d.tscn",
+    "sha256": "b215729cba933355ce0bc92f5d53abfcd3fc6a238d271ad4aa8f945c44cd379e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-00",
+    "row": 346,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_00\\env_tower_03_facade_00_root_top3d.tscn",
+    "sha256": "a4d27206f3c5882405142b1ddf097848c8b477f5532bbfa79103ec59d1200908"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-01",
+    "row": 347,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_01\\env_tower_03_facade_01_root_top3d.tscn",
+    "sha256": "17217d1d855690f03dd991b377a3affd661ae02f347d0773d7ec90c361cb8725"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-02",
+    "row": 348,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_02\\env_tower_03_facade_02_root_top3d.tscn",
+    "sha256": "c9f18f1b207d5a4bd6ef9431bf0f57d799c9045d5dddf4ea8e4f0679d3817525"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-03",
+    "row": 349,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_03\\env_tower_03_facade_03_root_top3d.tscn",
+    "sha256": "06dadb8342e344c334e6dcb6af713781a7933cfb176acbae9e2f2288e42eb7d2"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-04",
+    "row": 350,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_04\\env_tower_03_facade_04_root_top3d.tscn",
+    "sha256": "99f8b9dad48c46bb3f68af281a5f832cb3f65a4721bfe4a664f1d78ba3fbfc49"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-05",
+    "row": 351,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_05\\env_tower_03_facade_05_root_top3d.tscn",
+    "sha256": "cf12e28196f436427f6dc5ebf0e8aba7d9e5b61502329d71a4cf275688fecd36"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-06",
+    "row": 352,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_06\\env_tower_03_facade_06_root_top3d.tscn",
+    "sha256": "008dc6bac64d097f6e4b409b0b38618128d513b37f9e8010b82af554117f5148"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-07",
+    "row": 353,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_07\\env_tower_03_facade_07_root_top3d.tscn",
+    "sha256": "ee85575cdbdf7368e3f2a71f06b096c09e0c813471c0a3fb0f808f885478e18f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-08",
+    "row": 354,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_08\\env_tower_03_facade_08_root_top3d.tscn",
+    "sha256": "dad3507d109cad50f103ebb36f69b989525b0fea71fff40004c05113d8fe1940"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-09",
+    "row": 355,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_09\\env_tower_03_facade_09_root_top3d.tscn",
+    "sha256": "7b3a83ae5a7aac1fb14799793fe9f1729186bd22ac45009f011cd3d8e0c34a75"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-10",
+    "row": 356,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_10\\env_tower_03_facade_10_root_top3d.tscn",
+    "sha256": "c43d7f2afe772308de5eed5cdf3bdab695add86d3eb611cc8a0e272f3eda98e3"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-11",
+    "row": 357,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_11\\env_tower_03_facade_11_root_top3d.tscn",
+    "sha256": "22c0adc8010fc04812c013699cebaa80231da387966ed763a496cb1609a8dd96"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-12",
+    "row": 358,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_12\\env_tower_03_facade_12_root_top3d.tscn",
+    "sha256": "116efbfb3de180de0ab093830968630cb651df1eeefcda0cf1b41f1a7a799962"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-13",
+    "row": 359,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_13\\env_tower_03_facade_13_root_top3d.tscn",
+    "sha256": "6a57f93d7484df5588e08fcb22dadfdb21cf24af403453015c89a10810d0d834"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-14",
+    "row": 360,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_14\\env_tower_03_facade_14_root_top3d.tscn",
+    "sha256": "a998d7567a870dbe2d0fada26d15ac7101d518067d85493676a64d8f0e192807"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-15",
+    "row": 361,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_15\\env_tower_03_facade_15_root_top3d.tscn",
+    "sha256": "6c2e655f63e46d1876fbab6012496117432dc4ca22826c6f4ff914e09a30bfb6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-16",
+    "row": 362,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_16\\env_tower_03_facade_16_root_top3d.tscn",
+    "sha256": "dcca0cce29f1998d37ea686c6c78f0fc9bd46930527af840d1cdc99f6129d2e9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-17",
+    "row": 363,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_17\\env_tower_03_facade_17_root_top3d.tscn",
+    "sha256": "37d58a9c786e0b8549792e13488eb788993d46ddf733381b834d2397eff7568a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-18",
+    "row": 364,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_18\\env_tower_03_facade_18_root_top3d.tscn",
+    "sha256": "070c059174ebf035d04a2061e1ef0a73c359ebaddecb0f543fbb5150b5e81bf9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-FACADE-19",
+    "row": 365,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\facade_19\\env_tower_03_facade_19_root_top3d.tscn",
+    "sha256": "5dc0e3c5500e0c16f6513eb4db7f71dffbc8771a060b21653b7f7cd7db687e84"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-ENTRANCE",
+    "row": 366,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\entrance\\env_tower_03_entrance_root_top3d.tscn",
+    "sha256": "652017eb4292a5625d4e2f05902d0f97cb89a4be1cb5c94c66fceedca3428045"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-00",
+    "row": 367,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_00\\env_tower_03_lower_tile_00_00_root_top3d.tscn",
+    "sha256": "4de6a6d14b720aacab4454a806c3161a335d658b3f4107f65b459ace0f06f1e2"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-01",
+    "row": 368,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_01\\env_tower_03_lower_tile_00_01_root_top3d.tscn",
+    "sha256": "4d5d9dc4b3c9ad134ece777b7d77b6c7b40a27edff9bd4306d165b588f75c8e0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-02",
+    "row": 369,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_02\\env_tower_03_lower_tile_00_02_root_top3d.tscn",
+    "sha256": "324ab21bbb386a7c6505ea856e8498e96cc120a1ebe48215e3176ef41843ad62"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-03",
+    "row": 370,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_03\\env_tower_03_lower_tile_00_03_root_top3d.tscn",
+    "sha256": "afcac09e71d0b5ce944317a18a8e2cd492259797b1b74502d0afbc641454b79f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-04",
+    "row": 371,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_04\\env_tower_03_lower_tile_00_04_root_top3d.tscn",
+    "sha256": "dc56c2ef0a832eae2b3ea00335b05831bfb3812bad439c7387508faa08f814bf"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-05",
+    "row": 372,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_05\\env_tower_03_lower_tile_00_05_root_top3d.tscn",
+    "sha256": "681abfeb6fd2375674ef3d23206d6b06f3a7e976412f0f1acaf778aac35c3bee"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-06",
+    "row": 373,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_06\\env_tower_03_lower_tile_00_06_root_top3d.tscn",
+    "sha256": "63e5d67f54925819ddb7f54be6b6426673816327b9a5926ada54b25b10343f15"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-00-07",
+    "row": 374,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_00_07\\env_tower_03_lower_tile_00_07_root_top3d.tscn",
+    "sha256": "ceee5084047654913abd6832fb815ff54e462b6e529d73e8acc66d5bb9d5787f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-00",
+    "row": 375,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_00\\env_tower_03_lower_tile_01_00_root_top3d.tscn",
+    "sha256": "82c4126e5a81697aabf8d52580a865ebfcc4938430635683fb67abc977d3efe4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-01",
+    "row": 376,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_01\\env_tower_03_lower_tile_01_01_root_top3d.tscn",
+    "sha256": "fe78b54365b0c17649b141f8bfa48756337af012efce2981fc245e30ecfe4992"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-02",
+    "row": 377,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_02\\env_tower_03_lower_tile_01_02_root_top3d.tscn",
+    "sha256": "5c443ed19bbaf14446553b995751aa3758549eacbb95eb6a232106f521e0cc41"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-03",
+    "row": 378,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_03\\env_tower_03_lower_tile_01_03_root_top3d.tscn",
+    "sha256": "90c9c010a14be15ab252bcb10128c3e492822931d7a859d0c6f1d4b61670d138"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-04",
+    "row": 379,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_04\\env_tower_03_lower_tile_01_04_root_top3d.tscn",
+    "sha256": "8e7577dad3744eb47279bba71bf86b8f1f56661759e18e7e0ca4e4d6378ae74f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-05",
+    "row": 380,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_05\\env_tower_03_lower_tile_01_05_root_top3d.tscn",
+    "sha256": "8b3036244c362023bdf69347381d87b5c85a346edfb5853ad5c9e4756091cef7"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-06",
+    "row": 381,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_06\\env_tower_03_lower_tile_01_06_root_top3d.tscn",
+    "sha256": "bfda3878b9cefbfde9dc788b1439801535d403c5fb5b4ae629fa7bdf2e86777d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-01-07",
+    "row": 382,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_01_07\\env_tower_03_lower_tile_01_07_root_top3d.tscn",
+    "sha256": "91140292769352f1ff2544d646c94c17e93f227c103681cfc8e5d7ffa17f3a85"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-00",
+    "row": 383,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_00\\env_tower_03_lower_tile_02_00_root_top3d.tscn",
+    "sha256": "ef0a213ad96eea0c9b2a0e8e1548743accf2e09ab11009c9cec00a6d29378324"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-01",
+    "row": 384,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_01\\env_tower_03_lower_tile_02_01_root_top3d.tscn",
+    "sha256": "1fe8eba58f61e445260820047dd7ed766203f9c549c938cac397a34c5e5f8d9d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-02",
+    "row": 385,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_02\\env_tower_03_lower_tile_02_02_root_top3d.tscn",
+    "sha256": "09adac2cbb372b33bd55e497a5af677ecd4cb71e83047618933ffd29c78c7afa"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-03",
+    "row": 386,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_03\\env_tower_03_lower_tile_02_03_root_top3d.tscn",
+    "sha256": "8226b83713407d3a199f4241a90f382e455371d5dffb1aa5e29e97470db0d177"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-04",
+    "row": 387,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_04\\env_tower_03_lower_tile_02_04_root_top3d.tscn",
+    "sha256": "59130359baa8dba829aa3fb5a705f8c94da4f56dd4a778b5a40c13c613d8f4ea"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-05",
+    "row": 388,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_05\\env_tower_03_lower_tile_02_05_root_top3d.tscn",
+    "sha256": "63b9bd8ea4685b3a375a9e7538e47e4cf1b8ebbf2aad1b5aa6a1288dd81700fc"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-06",
+    "row": 389,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_06\\env_tower_03_lower_tile_02_06_root_top3d.tscn",
+    "sha256": "890cd38dc2822dbd94b3cb42cb1508c9396b2822e86effc940fa7cc441bf5691"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-02-07",
+    "row": 390,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_02_07\\env_tower_03_lower_tile_02_07_root_top3d.tscn",
+    "sha256": "6a8f3999e81b698db8f1552121dcb603192f1b6a7a73ce7a3deeccf605d0867e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-00",
+    "row": 391,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_00\\env_tower_03_lower_tile_03_00_root_top3d.tscn",
+    "sha256": "2d5865848ed1fce2ea5f6250f2abe9abdb3ee595803056586d4feeb3e9c7854e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-01",
+    "row": 392,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_01\\env_tower_03_lower_tile_03_01_root_top3d.tscn",
+    "sha256": "7af673a08e19c244bf264964360d80fd72a600b3cf446f3727c8d5eda9146ce5"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-02",
+    "row": 393,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_02\\env_tower_03_lower_tile_03_02_root_top3d.tscn",
+    "sha256": "bf15882779d70024468a42f8d14acaf239c88b50942fffabfed92dc0300b2412"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-03",
+    "row": 394,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_03\\env_tower_03_lower_tile_03_03_root_top3d.tscn",
+    "sha256": "a580a4984e9113680a4849f0c57635a087e7893c37f59507c98ea3a5f5b94adb"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-04",
+    "row": 395,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_04\\env_tower_03_lower_tile_03_04_root_top3d.tscn",
+    "sha256": "52e84b9ea63e0681031aa7c123aef100779956531d4cbbf82082620303803739"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-05",
+    "row": 396,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_05\\env_tower_03_lower_tile_03_05_root_top3d.tscn",
+    "sha256": "fed070a6831110de5860a64c280be10dd8b1fe4d039a3c67ce314bc681ea8a5b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-06",
+    "row": 397,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_06\\env_tower_03_lower_tile_03_06_root_top3d.tscn",
+    "sha256": "299a42a83031754d2a124c0c17961c4d667f48b2bd6a5cb361ffc69efce1c079"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-03-07",
+    "row": 398,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_03_07\\env_tower_03_lower_tile_03_07_root_top3d.tscn",
+    "sha256": "674d124ba9c3a413f00b5c8fb3407ab07e27f83313cf53424b20d5b96aee831b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-00",
+    "row": 399,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_00\\env_tower_03_lower_tile_04_00_root_top3d.tscn",
+    "sha256": "9547229b46d941c80159d0e6c7e9afdd5bd890012386edc8b63f932b032c926e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-01",
+    "row": 400,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_01\\env_tower_03_lower_tile_04_01_root_top3d.tscn",
+    "sha256": "8fcbdcf2bf2ae661e4251f97d20d92968834505ac8f8f234f8d54015e4134f2a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-02",
+    "row": 401,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_02\\env_tower_03_lower_tile_04_02_root_top3d.tscn",
+    "sha256": "5efd92d38b9406720f3969803abdb380defba3123024496421bb4dd1662c8acf"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-03",
+    "row": 402,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_03\\env_tower_03_lower_tile_04_03_root_top3d.tscn",
+    "sha256": "92ca050a9ecda53414e1acb30bc3f1a08d0ee56eaf650f1aa4e00bec20e7db83"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-04",
+    "row": 403,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_04\\env_tower_03_lower_tile_04_04_root_top3d.tscn",
+    "sha256": "e1192141ab9f5cf29285a76cef0ddcbdae18f02710a23e095705bb83bc6350b9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-05",
+    "row": 404,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_05\\env_tower_03_lower_tile_04_05_root_top3d.tscn",
+    "sha256": "77793b613343fe8ac0f391b7f2c14a838863848be8cceaecfcda8c56f2f7a6da"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-06",
+    "row": 405,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_06\\env_tower_03_lower_tile_04_06_root_top3d.tscn",
+    "sha256": "b7dd6737338a9e04bf406966f8407234a05c62ce3ad26b83380e71b16ef6947c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-04-07",
+    "row": 406,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_04_07\\env_tower_03_lower_tile_04_07_root_top3d.tscn",
+    "sha256": "7cbc3abed27fed5ac541c09e785ed2139437223642b7d4172a6778d71792b061"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-00",
+    "row": 407,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_00\\env_tower_03_lower_tile_05_00_root_top3d.tscn",
+    "sha256": "4df9ae09f62aea26e55ce659fa07ff2e4e8141e360c950598e81b038fe6c77a7"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-01",
+    "row": 408,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_01\\env_tower_03_lower_tile_05_01_root_top3d.tscn",
+    "sha256": "aad9be08e3b80d92f0acb0459f98f68d678fff4fbd89ced85aad058e7e243687"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-02",
+    "row": 409,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_02\\env_tower_03_lower_tile_05_02_root_top3d.tscn",
+    "sha256": "14a93d9377653a4b6053c1020194d2493abd9af15714c84d36a6a45db122b8a7"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-03",
+    "row": 410,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_03\\env_tower_03_lower_tile_05_03_root_top3d.tscn",
+    "sha256": "90b114f5a98468c1229f4e80f819ef072b3ca67198c129e0b33fba2fd9df513e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-04",
+    "row": 411,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_04\\env_tower_03_lower_tile_05_04_root_top3d.tscn",
+    "sha256": "493a89ff72f6ef6cecaac7ca586cb2ec297d00e27b95d9a95bf6d76d7387cfa8"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-05",
+    "row": 412,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_05\\env_tower_03_lower_tile_05_05_root_top3d.tscn",
+    "sha256": "73042476b3c2d9fd71541948cd7b6154e588ab4207eb48e656cba64b512104ca"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-06",
+    "row": 413,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_06\\env_tower_03_lower_tile_05_06_root_top3d.tscn",
+    "sha256": "ec5b038568ec4763770e4d5baa79d7660e3bbcbbd1910afd1e814302c716c2af"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-05-07",
+    "row": 414,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_05_07\\env_tower_03_lower_tile_05_07_root_top3d.tscn",
+    "sha256": "589b7f838e17ea43dd4a8e7a6854bc8d04bfeab6b612ba02f0e34b26bdfc5630"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-00",
+    "row": 415,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_00\\env_tower_03_lower_tile_06_00_root_top3d.tscn",
+    "sha256": "fe263366bdaf7da359975bdfb5266669a429f6ff9fc5fb43ae19c24a6412bc03"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-01",
+    "row": 416,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_01\\env_tower_03_lower_tile_06_01_root_top3d.tscn",
+    "sha256": "aeec23cbce2b3a8b6719688d3484dbfe2c7b0b0853e2f1655aa417c45313bf44"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-02",
+    "row": 417,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_02\\env_tower_03_lower_tile_06_02_root_top3d.tscn",
+    "sha256": "909f2098da17b37e325d380585ff0abb7ae4dd00ae872e38e613fe2d56e75a69"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-03",
+    "row": 418,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_03\\env_tower_03_lower_tile_06_03_root_top3d.tscn",
+    "sha256": "2d817f087413698721bc567b80cd0a0448d135fd4a7041a9e46307c888bebbaa"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-04",
+    "row": 419,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_04\\env_tower_03_lower_tile_06_04_root_top3d.tscn",
+    "sha256": "6372b3aef3f3b58d5e48773a27046e122763ede179993857549ad88afa888c7d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-05",
+    "row": 420,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_05\\env_tower_03_lower_tile_06_05_root_top3d.tscn",
+    "sha256": "dd14cae77dbd797f686b7fc7604e0c257c6e7ca97f8dc5a65833b82e44399045"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-06",
+    "row": 421,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_06\\env_tower_03_lower_tile_06_06_root_top3d.tscn",
+    "sha256": "a3f1646e96e250d880d6238cae3b04e87e2319cf6bd252bb7ab39f5c10d4ea6c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-06-07",
+    "row": 422,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_06_07\\env_tower_03_lower_tile_06_07_root_top3d.tscn",
+    "sha256": "eaf22e5449513320bbd7462f6ae8a8a1e7f772cc597a7b990f38d84dc8861a75"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-00",
+    "row": 423,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_00\\env_tower_03_lower_tile_07_00_root_top3d.tscn",
+    "sha256": "cc320c8435977a795725521fe17fd174c4711c6c9931755a302feb1668b7af53"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-01",
+    "row": 424,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_01\\env_tower_03_lower_tile_07_01_root_top3d.tscn",
+    "sha256": "d2f020ac1ddb8178e7a57c355fd1892fc2f76e15b34a925926eae151e277c2bd"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-02",
+    "row": 425,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_02\\env_tower_03_lower_tile_07_02_root_top3d.tscn",
+    "sha256": "65600a075db0551df41123268eff006ad63c1d80b1d2e21369144831546744dc"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-03",
+    "row": 426,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_03\\env_tower_03_lower_tile_07_03_root_top3d.tscn",
+    "sha256": "2371f939f242d5c3154789ed64727dd8c85b20c2e43378d8c4f1e7827a0650d1"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-04",
+    "row": 427,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_04\\env_tower_03_lower_tile_07_04_root_top3d.tscn",
+    "sha256": "5de8d99aaab2305f9809b7e0901e9bb1f6261b9eb972a0560649a54dee454e4e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-05",
+    "row": 428,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_05\\env_tower_03_lower_tile_07_05_root_top3d.tscn",
+    "sha256": "c5565c8629d0763e74332611a914f85243361c6568b189fc850909689ee8d688"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-06",
+    "row": 429,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_06\\env_tower_03_lower_tile_07_06_root_top3d.tscn",
+    "sha256": "80251d887f5cdc3ecfa3f46b21537f396b4503838aa84f390ae1b5d4b37ec969"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-07-07",
+    "row": 430,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_07_07\\env_tower_03_lower_tile_07_07_root_top3d.tscn",
+    "sha256": "51430c5ebec75cb6131d5986e53cc8cd664c05bbf802a4c41b46ea82ab1aaea3"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-00",
+    "row": 431,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_00\\env_tower_03_lower_tile_08_00_root_top3d.tscn",
+    "sha256": "f4e85c58895a77a8a1d549b24684e1028232ad6f48dda3cb9a4ec223c4b63734"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-01",
+    "row": 432,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_01\\env_tower_03_lower_tile_08_01_root_top3d.tscn",
+    "sha256": "0057ab2c311f8fe50ad140e8ec82f3d6a45e7d88d90049315389c606f963b353"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-02",
+    "row": 433,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_02\\env_tower_03_lower_tile_08_02_root_top3d.tscn",
+    "sha256": "5d374e93f1d30d01f5d584e35301b73784577c9bd0a29ab0fa2a89f8d45cb2c3"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-03",
+    "row": 434,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_03\\env_tower_03_lower_tile_08_03_root_top3d.tscn",
+    "sha256": "4d184a066ffa00600db34fd345bb603ffe1ed4f58c6f9fa9b15a9908ac698101"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-04",
+    "row": 435,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_04\\env_tower_03_lower_tile_08_04_root_top3d.tscn",
+    "sha256": "8e386234214dd6c4d98fe7af807c357a028b74db04a5af3ef65914f3f218eec7"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-05",
+    "row": 436,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_05\\env_tower_03_lower_tile_08_05_root_top3d.tscn",
+    "sha256": "37ff62eb82b9c856c9d044df6fab57b5e1764300b8faf948f22ebe0d548e2000"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-06",
+    "row": 437,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_06\\env_tower_03_lower_tile_08_06_root_top3d.tscn",
+    "sha256": "42282ef137be9521299dcf1c12d7bd7e65ac1dd4ab4282ea04777d9e710f0e95"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-08-07",
+    "row": 438,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_08_07\\env_tower_03_lower_tile_08_07_root_top3d.tscn",
+    "sha256": "245d5f39ff178a8e2d2f2de382152cb1679885c294f27e8eff5ea2718b24d123"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-00",
+    "row": 439,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_00\\env_tower_03_lower_tile_09_00_root_top3d.tscn",
+    "sha256": "4f237b822c56cf4d844fe95a3e8caacaf909257e2f4f740eab517191f4352cae"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-01",
+    "row": 440,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_01\\env_tower_03_lower_tile_09_01_root_top3d.tscn",
+    "sha256": "08c78c387dfcb03c8bdc62936a0fae992de805b777c838bb09659400b44fa1e5"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-02",
+    "row": 441,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_02\\env_tower_03_lower_tile_09_02_root_top3d.tscn",
+    "sha256": "c5dca646f851ae7254a7f74c30b6d61a45a792efbedf92078f1844423831ced3"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-03",
+    "row": 442,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_03\\env_tower_03_lower_tile_09_03_root_top3d.tscn",
+    "sha256": "0cc57d31d67bc4caa07b65bfdcd927ca4954d192952632cf80d5183523bb10b6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-04",
+    "row": 443,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_04\\env_tower_03_lower_tile_09_04_root_top3d.tscn",
+    "sha256": "ead64679adba60ac26208aead6f619b736e4a3283d6eef2648a8bb12c62aea51"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-05",
+    "row": 444,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_05\\env_tower_03_lower_tile_09_05_root_top3d.tscn",
+    "sha256": "a9e73989320bf545bcc86c2f33aad679761627afe7f6b11872cfe7fcef05ba73"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-06",
+    "row": 445,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_06\\env_tower_03_lower_tile_09_06_root_top3d.tscn",
+    "sha256": "7581644b0ae473874de61d62775845b4ddcb23d45e9ed1f6af70e49177d6bb14"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-09-07",
+    "row": 446,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_09_07\\env_tower_03_lower_tile_09_07_root_top3d.tscn",
+    "sha256": "8cd398ced2058f731244fc92a7a726f448801b722fa3a7bad21bb396f7ac256b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-00",
+    "row": 447,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_00\\env_tower_03_lower_tile_10_00_root_top3d.tscn",
+    "sha256": "89c1c9815d172f09f5e35f87886fafd2dfd3109b892aa6980f3e86beea49e4d0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-01",
+    "row": 448,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_01\\env_tower_03_lower_tile_10_01_root_top3d.tscn",
+    "sha256": "76912370c3caa9adc7f85bf584b0b99ed24bf97cb3f81b121f91c15337cfc696"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-02",
+    "row": 449,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_02\\env_tower_03_lower_tile_10_02_root_top3d.tscn",
+    "sha256": "83900326fbe51fe003fbd47833996ab74bfa987cf4eb03960eb24b9fdaccdd09"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-03",
+    "row": 450,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_03\\env_tower_03_lower_tile_10_03_root_top3d.tscn",
+    "sha256": "1f028ac21e0fd9d1b0da35c6f3f9fcc80e2c8ae14dfe895d2a37b57567c64a56"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-04",
+    "row": 451,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_04\\env_tower_03_lower_tile_10_04_root_top3d.tscn",
+    "sha256": "064e09e123d6db893736a594808652a9107309cf2a5cc2e3c03f831aa597891a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-05",
+    "row": 452,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_05\\env_tower_03_lower_tile_10_05_root_top3d.tscn",
+    "sha256": "d8ff56b26cde5bfe6b3b7081bc609cbe52c2e8f88ba2859d9c683bc7f5af5591"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-06",
+    "row": 453,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_06\\env_tower_03_lower_tile_10_06_root_top3d.tscn",
+    "sha256": "14f44d79b19191875d6d1a4a3de7483ef3fdc9c0251b75a733df384ebc2827e5"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-10-07",
+    "row": 454,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_10_07\\env_tower_03_lower_tile_10_07_root_top3d.tscn",
+    "sha256": "8f91ddac79534cbf060106a5f8384013e976b32ffa4dbcd9ea46c0881d0df3b0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-00",
+    "row": 455,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_00\\env_tower_03_lower_tile_11_00_root_top3d.tscn",
+    "sha256": "7f84cd070d0797ae50359f71a9e63031072ceecce3e2766361904277fcca887b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-01",
+    "row": 456,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_01\\env_tower_03_lower_tile_11_01_root_top3d.tscn",
+    "sha256": "b4d63e487550a6ebd054c4f95657f947cb19e9faec0643b3e45a5f405e3bd608"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-02",
+    "row": 457,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_02\\env_tower_03_lower_tile_11_02_root_top3d.tscn",
+    "sha256": "7b6d8071b326ca824f6140be157f9ba3476b4937fae3f2025445bd1f047fd772"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-03",
+    "row": 458,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_03\\env_tower_03_lower_tile_11_03_root_top3d.tscn",
+    "sha256": "662be281e03de23ad74304643099aa0994aecb12918327fef32e3786b64decb3"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-04",
+    "row": 459,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_04\\env_tower_03_lower_tile_11_04_root_top3d.tscn",
+    "sha256": "541285ce37cc6ae5f002110634c4fc68e26bb77dff4fb992bd05a3b34e9ff2b6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-05",
+    "row": 460,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_05\\env_tower_03_lower_tile_11_05_root_top3d.tscn",
+    "sha256": "d393763d81311bdea232a00bd6e0f6506cceae2589d750e114345f11702f3f6c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-06",
+    "row": 461,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_06\\env_tower_03_lower_tile_11_06_root_top3d.tscn",
+    "sha256": "11f138755574312c59b85f42bd9e17a4ab8b5b942cfc768cdcec57dda9a8b9c0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-11-07",
+    "row": 462,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_11_07\\env_tower_03_lower_tile_11_07_root_top3d.tscn",
+    "sha256": "a0ac4b275028b09b8bc21c5fc58636a2280ef916cd3ad3cfa760273c996f0340"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-00",
+    "row": 463,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_00\\env_tower_03_lower_tile_12_00_root_top3d.tscn",
+    "sha256": "8efe7f5a7ccce10c05bc2d460834f0c1d674374fc50b4b7cc8bda419dc64b3b4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-01",
+    "row": 464,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_01\\env_tower_03_lower_tile_12_01_root_top3d.tscn",
+    "sha256": "1aea6980282f9c57bb4dbaa317402c59b97a9b4e8fed7229c4f827c971f5ce8f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-02",
+    "row": 465,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_02\\env_tower_03_lower_tile_12_02_root_top3d.tscn",
+    "sha256": "a6c857b6f9679a0fabde2e7f0d26b1a5610cf1a94d541db60f5fe0b1748b2e10"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-03",
+    "row": 466,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_03\\env_tower_03_lower_tile_12_03_root_top3d.tscn",
+    "sha256": "1f320853abe333b22d4cf0a99e9195c11fcf8bcddf9715c6c036b6144f8ff785"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-04",
+    "row": 467,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_04\\env_tower_03_lower_tile_12_04_root_top3d.tscn",
+    "sha256": "1e26c3039fcf4c34ded25b76bedfe8b6c4ce9ee1c1335e93447192e9d17883dd"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-05",
+    "row": 468,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_05\\env_tower_03_lower_tile_12_05_root_top3d.tscn",
+    "sha256": "378e22c95f31afc9f5654eace5ee7e3054f06a6839bd28a81ed55e92e9e76b40"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-06",
+    "row": 469,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_06\\env_tower_03_lower_tile_12_06_root_top3d.tscn",
+    "sha256": "f0aeac1fd4a4be4e2fe291c3ef7081ca0daf6adcb196ab85b16e30bd4438a5b6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-12-07",
+    "row": 470,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_12_07\\env_tower_03_lower_tile_12_07_root_top3d.tscn",
+    "sha256": "3c7e6c6548e731937808de677d90f21d5c23c689e2992466d1597d75ba758696"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-00",
+    "row": 471,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_00\\env_tower_03_lower_tile_13_00_root_top3d.tscn",
+    "sha256": "e2ae0c2da5158c713f715f66d17a16fb4322efd5167a0addbc60835a9de6bb36"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-01",
+    "row": 472,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_01\\env_tower_03_lower_tile_13_01_root_top3d.tscn",
+    "sha256": "8a741de2c1c463327c0a2c8d4153b215b3f848c99d6d163c5e99e2d97ce39db7"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-02",
+    "row": 473,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_02\\env_tower_03_lower_tile_13_02_root_top3d.tscn",
+    "sha256": "5e6f9b5fffb1e26193959084844f28d5174ba009647e58b6110917d60ad5c5d9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-03",
+    "row": 474,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_03\\env_tower_03_lower_tile_13_03_root_top3d.tscn",
+    "sha256": "9b68816b4afa6e7185cdf299870593201f3bb848b0c405c357ec43ec6f6d3ba0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-04",
+    "row": 475,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_04\\env_tower_03_lower_tile_13_04_root_top3d.tscn",
+    "sha256": "3a1ece5bfcb18cb513d20167692dce83966371b770874e502c1caf6a0e90b506"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-05",
+    "row": 476,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_05\\env_tower_03_lower_tile_13_05_root_top3d.tscn",
+    "sha256": "5209bb834dd74681549f461a6918f173621c336d6cee49b2652e0db47262d159"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-06",
+    "row": 477,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_06\\env_tower_03_lower_tile_13_06_root_top3d.tscn",
+    "sha256": "743abbab63b1d325406020d157ba7aebf74057e80da580f4284f49e8096d147a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-TILE-13-07",
+    "row": 478,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_tile_13_07\\env_tower_03_lower_tile_13_07_root_top3d.tscn",
+    "sha256": "ae42757dde7dd7471e41199f6b49a1ae4c8c0ab6f00d96b3ce239cbdfdd27f81"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-EAST-LOUVERS",
+    "row": 479,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_east_louvers\\env_tower_03_plant_east_louvers_root_top3d.tscn",
+    "sha256": "969fd1602c41dd1cc1f1ea05008910506b6dc4b933c5012dc89929c634494b4d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-ROOM",
+    "row": 480,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_room\\env_tower_03_plant_room_root_top3d.tscn",
+    "sha256": "254365e55b6d5e4db0e48329f495d7e54db2a3c9dc54fdea80c8211b25b62813"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-00",
+    "row": 481,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_00_00\\env_tower_03_upper_tile_00_00_root_top3d.tscn",
+    "sha256": "5b7a4210c34a5824e9bb672c4f2f6c3738e3549b7e5c3b1d10375aac7b8e74b4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-01",
+    "row": 482,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_00_01\\env_tower_03_upper_tile_00_01_root_top3d.tscn",
+    "sha256": "7a946f25afa1e3263df79250e89fa51e610c85064e168a11f28ec311d2cf80e1"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-02",
+    "row": 483,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_00_02\\env_tower_03_upper_tile_00_02_root_top3d.tscn",
+    "sha256": "57c577ae32d4d1e5ad970aab0e695ac7c882fe923b809cc003615d367e7cd585"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-00-03",
+    "row": 484,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_00_03\\env_tower_03_upper_tile_00_03_root_top3d.tscn",
+    "sha256": "f963dc18165ffeaf36ba2660d80bb50f617e7b53656b437a5b01b4b913d2d85c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-00",
+    "row": 485,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_01_00\\env_tower_03_upper_tile_01_00_root_top3d.tscn",
+    "sha256": "961db010d395caa26d08b6b747fae01c07ca94668dedc6127ecc603c78228da9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-01",
+    "row": 486,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_01_01\\env_tower_03_upper_tile_01_01_root_top3d.tscn",
+    "sha256": "95a18fa23c5a803177dd6df6a7aa7e83e91b356896b54350401f4cd7fecb7ba7"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-02",
+    "row": 487,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_01_02\\env_tower_03_upper_tile_01_02_root_top3d.tscn",
+    "sha256": "4daf0d27e7c7119f396e3a132bc734a3970d0d00e68d708d279c010571a840ff"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-01-03",
+    "row": 488,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_01_03\\env_tower_03_upper_tile_01_03_root_top3d.tscn",
+    "sha256": "88d11a33441525ee64307ef68ff01cdd4761973f5c0c264fadacc250d46fa435"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-00",
+    "row": 489,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_02_00\\env_tower_03_upper_tile_02_00_root_top3d.tscn",
+    "sha256": "846b6ae37ce259b672d909afcb4d1df8582377715487556695875e6e85318b1a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-01",
+    "row": 490,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_02_01\\env_tower_03_upper_tile_02_01_root_top3d.tscn",
+    "sha256": "9556a2dfcb96efb51b8e503c4d670378473f10c77e790324731e50b9818e1824"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-02",
+    "row": 491,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_02_02\\env_tower_03_upper_tile_02_02_root_top3d.tscn",
+    "sha256": "4f3f1f546781056b276f59d332d4b29d9b88fa507a989a5463124d3ab942d7ee"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-02-03",
+    "row": 492,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_02_03\\env_tower_03_upper_tile_02_03_root_top3d.tscn",
+    "sha256": "ceb997cd2b4097a9544b3b61bb2d24f367bfd3cb2bcb5471de37ef3a45c1159e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-00",
+    "row": 493,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_03_00\\env_tower_03_upper_tile_03_00_root_top3d.tscn",
+    "sha256": "c05ad8efd78d50a9cd0c101ca72446bfeaa59b762db79f946d5d360dee8ee9e6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-01",
+    "row": 494,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_03_01\\env_tower_03_upper_tile_03_01_root_top3d.tscn",
+    "sha256": "2318f2f5013b17b6e7d41b4117d236026587921ca1329bef36f0d3cf9673f903"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-02",
+    "row": 495,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_03_02\\env_tower_03_upper_tile_03_02_root_top3d.tscn",
+    "sha256": "af8289c15c5aabd048e80ea42f564f48b83eb62365d7738e9046417e4d640c7a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-03-03",
+    "row": 496,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_03_03\\env_tower_03_upper_tile_03_03_root_top3d.tscn",
+    "sha256": "b9b1607d60d5525983e5cea517e51ae0b646ea66c48b06a817f493eb558ef24c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-00",
+    "row": 497,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_04_00\\env_tower_03_upper_tile_04_00_root_top3d.tscn",
+    "sha256": "565c104eb9896b66183fe788d64095700319680a23ca13d47ea1cabf818975a9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-01",
+    "row": 498,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_04_01\\env_tower_03_upper_tile_04_01_root_top3d.tscn",
+    "sha256": "40654f85e0e555f825dbdc29bb1554a6af1f567d3fafdd4bc2095e289d88a531"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-02",
+    "row": 499,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_04_02\\env_tower_03_upper_tile_04_02_root_top3d.tscn",
+    "sha256": "4a78259a32db6a9824bc147630cd2a5d2b2124e92f686a83d7ae42cb144d90e4"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-04-03",
+    "row": 500,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_04_03\\env_tower_03_upper_tile_04_03_root_top3d.tscn",
+    "sha256": "9ebdb87485457a6ba26c1d20efc9c3de1e977c77138d0fd3bf0692c0f4624e3a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-00",
+    "row": 501,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_05_00\\env_tower_03_upper_tile_05_00_root_top3d.tscn",
+    "sha256": "60678087fae678380f0c336bdb0fd684bbbb8af0e253e50edab388a311d5ea3b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-01",
+    "row": 502,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_05_01\\env_tower_03_upper_tile_05_01_root_top3d.tscn",
+    "sha256": "19a7d62a6a246a353ca72d72ab4da4ce22046f2dc0659c2d1b6705147d56b084"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-02",
+    "row": 503,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_05_02\\env_tower_03_upper_tile_05_02_root_top3d.tscn",
+    "sha256": "88dd44e3132ad87539a3a83e04216dfd904a0ae8c34f7a6d2921bef1b8477772"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-05-03",
+    "row": 504,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_05_03\\env_tower_03_upper_tile_05_03_root_top3d.tscn",
+    "sha256": "612ca2a2a10dbf26560eab0e2c5a10bafd9b69672992bd4c68d0c7ce80333a97"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-00",
+    "row": 505,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_06_00\\env_tower_03_upper_tile_06_00_root_top3d.tscn",
+    "sha256": "7dd5da1c9adb83f3b4c16dbac4f26220e820ac96c5e2de42539acb9d2e014dbb"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-01",
+    "row": 506,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_06_01\\env_tower_03_upper_tile_06_01_root_top3d.tscn",
+    "sha256": "c91587c8bf7cf80ce3290fc5b78f292b2848e34ed7f167d0b5ea089c3fbd3c63"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-02",
+    "row": 507,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_06_02\\env_tower_03_upper_tile_06_02_root_top3d.tscn",
+    "sha256": "3cdfbd7a6f952f6ba05171a63afbb9bd6fb7aa58ba36b6d327d43d4e43bcf383"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-06-03",
+    "row": 508,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_06_03\\env_tower_03_upper_tile_06_03_root_top3d.tscn",
+    "sha256": "b9abcaa9df820ddb0fea9a1093db6be5e77a6f15a909a4d918d1215381bcc8d5"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-00",
+    "row": 509,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_07_00\\env_tower_03_upper_tile_07_00_root_top3d.tscn",
+    "sha256": "5a89c69dca17328d743e12148e5f86af69391f7f72eb5ec8d2a069765f9f42dc"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-01",
+    "row": 510,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_07_01\\env_tower_03_upper_tile_07_01_root_top3d.tscn",
+    "sha256": "f47a959d9d6590642625e9d8e9134bcadc3fdf4c44c880ee2defd8470c2f73aa"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-02",
+    "row": 511,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_07_02\\env_tower_03_upper_tile_07_02_root_top3d.tscn",
+    "sha256": "dec67e933bb71d08c80f206f7fe41318e4688d4600e34d8bf11bf08667dcab79"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-TILE-07-03",
+    "row": 512,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_tile_07_03\\env_tower_03_upper_tile_07_03_root_top3d.tscn",
+    "sha256": "65df60607e02e2c5494481faf1b38b666cea2fc93510f3fa1029a0215027d3ea"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-0",
+    "row": 513,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_rail_0\\env_tower_03_lower_rail_0_root_top3d.tscn",
+    "sha256": "66f96b7d77b0b3468f1420ac26516c7fd5f174a3aab751ce8abca80e1ef7e95d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-1",
+    "row": 514,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_rail_1\\env_tower_03_lower_rail_1_root_top3d.tscn",
+    "sha256": "3fd656ed9476b66732607fc1bd7abaedbd53fa0da15c9cfe465a9fd4d473967a"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-2",
+    "row": 515,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_rail_2\\env_tower_03_lower_rail_2_root_top3d.tscn",
+    "sha256": "857eaec7d33be23b71a6527a415d045ba9504c4a4cd2c38a074bebdbf012e536"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RAIL-3",
+    "row": 516,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_rail_3\\env_tower_03_lower_rail_3_root_top3d.tscn",
+    "sha256": "4dd29a35fd92550e52f5c0bf0f871c035f18c5c8b2471c4e8fa67a50f1f816e0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-0",
+    "row": 517,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_rail_0\\env_tower_03_upper_rail_0_root_top3d.tscn",
+    "sha256": "de1ae95a2cfb3309d61531e14d8d29707625ee6d58672f442d03456b1810793e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-1",
+    "row": 518,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_rail_1\\env_tower_03_upper_rail_1_root_top3d.tscn",
+    "sha256": "1e56dabeacaa762c014970abaf12a86c74e93c3e61b556d13f33e017e2d155a8"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-2",
+    "row": 519,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_rail_2\\env_tower_03_upper_rail_2_root_top3d.tscn",
+    "sha256": "91d13442583eeee069c39c1eff65af349edc5f20d2134f8e013e32c849882c12"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-RAIL-3",
+    "row": 520,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_rail_3\\env_tower_03_upper_rail_3_root_top3d.tscn",
+    "sha256": "c0e88753c257e56b86f92a663576cf773ee48de157ca20e86f29f33ed730f71d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-AC-LOWER-LEFT",
+    "row": 521,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\ac_lower_left\\env_tower_03_ac_lower_left_root_top3d.tscn",
+    "sha256": "c4a14d6128c970e926d0d8914b896d2e2980f45f7fd273c89d3fbf8a2482d41f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-AC-UPPER-LEFT",
+    "row": 522,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\ac_upper_left\\env_tower_03_ac_upper_left_root_top3d.tscn",
+    "sha256": "dee7f4072116793a4bf382481ef48a9d09faf4ce0b6f67b04efd7e3787ff5693"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-AC-LOWER-RIGHT",
+    "row": 523,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\ac_lower_right\\env_tower_03_ac_lower_right_root_top3d.tscn",
+    "sha256": "79c8bc9198dfe37f6f55517ddb16baa0c66b369006e0c38163fe94358bf7702b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LEFT-SERVICE-STAIRS",
+    "row": 524,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\left_service_stairs\\env_tower_03_left_service_stairs_root_top3d.tscn",
+    "sha256": "8fb971e3780b536b19a3148880362265a95946cc6392f6293c2f45df01e65f43"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-DUCT-UPPER-FRONT",
+    "row": 525,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\duct_upper_front\\env_tower_03_duct_upper_front_root_top3d.tscn",
+    "sha256": "03e148e4cb43275d05de8c7b5dae2350410225dfb31efd479545e087b225a1ac"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-LEFT",
+    "row": 526,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\duct_lower_left\\env_tower_03_duct_lower_left_root_top3d.tscn",
+    "sha256": "a5910eb98d414ccdeaa9fabaf4678553f55e3dd862b3ea63a1df976a078785ac"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-FRONT",
+    "row": 527,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\duct_lower_front\\env_tower_03_duct_lower_front_root_top3d.tscn",
+    "sha256": "f9d6510125d22016a50a0f54e062789c89989093f0646fe8e1e276be1dfae2e9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-DUCT-LOWER-RIGHT",
+    "row": 528,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\duct_lower_right\\env_tower_03_duct_lower_right_root_top3d.tscn",
+    "sha256": "e793674c90a435bae2cc45c3a728c332508634f32c27e888ca8d6d1a672a7a95"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-00",
+    "row": 529,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_front_00\\env_tower_03_plant_front_00_root_top3d.tscn",
+    "sha256": "5408fd7fb77adb6e6f49ed20daf19ca936e91db58ba2959570e6d35a72c43bb8"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-01",
+    "row": 530,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_front_01\\env_tower_03_plant_front_01_root_top3d.tscn",
+    "sha256": "158bc09ae304d420385549e036e5801c5da4580d3ebafd8020bf48c0bfef30c2"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-02",
+    "row": 531,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_front_02\\env_tower_03_plant_front_02_root_top3d.tscn",
+    "sha256": "4863020b0da8df4a9dd867d4264a912fd276da05fa5e72852667ff509a6ed00c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-03",
+    "row": 532,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_front_03\\env_tower_03_plant_front_03_root_top3d.tscn",
+    "sha256": "98b564381ec02efc6386698d295ec93e69ce7e6fe77a7716e08dc85fda8afc02"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-04",
+    "row": 533,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_front_04\\env_tower_03_plant_front_04_root_top3d.tscn",
+    "sha256": "3c51406bac2f70cda51fc67037eadbc18544d0e877408afa096589463a68ab3d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-PLANT-FRONT-05",
+    "row": 534,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\plant_front_05\\env_tower_03_plant_front_05_root_top3d.tscn",
+    "sha256": "053807d0b40a5d2c13e4cdfcaecdc52dbccbcfd74bc428a04bfb88e15a789c00"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-ELECTRICAL",
+    "row": 535,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_electrical\\env_tower_03_upper_electrical_root_top3d.tscn",
+    "sha256": "26aa29b7d09aa34ca3b8285dc714e5825505ae7ef5e0179cf67e9aaeccae7011"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-UPPER-DUCT-CONTROL",
+    "row": 536,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\upper_duct_control\\env_tower_03_upper_duct_control_root_top3d.tscn",
+    "sha256": "b1767d5ab57eb03ef0e60944f3fc970279d4a3c4fe9a794bcd708af3a81aab68"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-RIGHT-CONTROL",
+    "row": 537,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_right_control\\env_tower_03_lower_right_control_root_top3d.tscn",
+    "sha256": "b82f41455443f4999c28cac113a178691b56809e3432fa954f506c56a46199c5"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-LOWER-FRONT-BOX",
+    "row": 538,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\lower_front_box\\env_tower_03_lower_front_box_root_top3d.tscn",
+    "sha256": "d6138c1734623044257e502bd61fe9c4264ebd198142ced0da1ede7af4ec523d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-CONDUIT-BANKS",
+    "row": 539,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\conduit_banks\\env_tower_03_conduit_banks_root_top3d.tscn",
+    "sha256": "3518df6a2fd2a9724366da077788f95396503b6f7178d4c8cb891f204abd8e87"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-TRAY-0",
+    "row": 540,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\tray_0\\env_tower_03_tray_0_root_top3d.tscn",
+    "sha256": "140a186c4bd9c1804d517181434c90887f08ed598c656653fe2f9951ea9ccd1b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-TRAY-1",
+    "row": 541,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\tray_1\\env_tower_03_tray_1_root_top3d.tscn",
+    "sha256": "944977dbe6f16d2f97ce35cd244880f074500565e99c2c4a5250d7e856c683d9"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-TRAY-2",
+    "row": 542,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\tray_2\\env_tower_03_tray_2_root_top3d.tscn",
+    "sha256": "d27c0fefbd214cbbb82b16543acc1ec8c4d30fddc152d6b3c22dee238fba220d"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-VERTICAL-ACCESS",
+    "row": 543,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\vertical_access\\env_tower_03_vertical_access_root_top3d.tscn",
+    "sha256": "7eb86a36e31973d3112ff496fa5c610b891b670d487e2c6f7fc876273000dd40"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-TURBINE-0",
+    "row": 544,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\turbine_0\\env_tower_03_turbine_0_root_top3d.tscn",
+    "sha256": "e0fd5aad3eeecb7e1f54035770319b8fabda2b3f9b2c0356d93904b589270e2b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-TURBINE-1",
+    "row": 545,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\turbine_1\\env_tower_03_turbine_1_root_top3d.tscn",
+    "sha256": "7d874c571d077092899a70526751618ce2a944088d0d9465d4cb597ca4c2a5f1"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-EXHAUST-0",
+    "row": 546,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\exhaust_0\\env_tower_03_exhaust_0_root_top3d.tscn",
+    "sha256": "7729af9925f64ef5bc2ca23d7942e4671e0b3a565ab075d391d191d7f8a67d9e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-EXHAUST-1",
+    "row": 547,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\exhaust_1\\env_tower_03_exhaust_1_root_top3d.tscn",
+    "sha256": "e7b41a4b4b7ac892595c298fbf5f553fcf8ddd5ffc72a17df26fac856cf6bb92"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-EXHAUST-2",
+    "row": 548,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\exhaust_2\\env_tower_03_exhaust_2_root_top3d.tscn",
+    "sha256": "53bbc60a31c14f26d66f36c34dd462858a288f5f25f7367a20017909f55df562"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-COVERED-EQUIPMENT",
+    "row": 549,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\covered_equipment\\env_tower_03_covered_equipment_root_top3d.tscn",
+    "sha256": "e0b731bd26a343ed4c75731a988c6218cea9456de57439cb0138ff4be550682f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-TELECOM-MAIN",
+    "row": 550,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\telecom_main\\env_tower_03_telecom_main_root_top3d.tscn",
+    "sha256": "a4cf7cfcc70b4505f0074189507119860723ca4253ccbc96e1e75a07a321035f"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-SATELLITE-DISH",
+    "row": 551,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\satellite_dish\\env_tower_03_satellite_dish_root_top3d.tscn",
+    "sha256": "e4a706ee3a8d00502a49da4e43838b43dd6050a82ab7bc97c38d0886c060bbf0"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-MAST-0",
+    "row": 552,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\mast_0\\env_tower_03_mast_0_root_top3d.tscn",
+    "sha256": "98a0ced5fec92e53099a4e0377067082ad2372307ac094fb187cc573cb3b86f1"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-MAST-1",
+    "row": 553,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\mast_1\\env_tower_03_mast_1_root_top3d.tscn",
+    "sha256": "0a560ce5bd18109d1159bf75872467eb5de1a4032bba6c249d833071740d099e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-MAST-2",
+    "row": 554,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\mast_2\\env_tower_03_mast_2_root_top3d.tscn",
+    "sha256": "45f06f7add92adedbd0bbb834580e501bd1fe0a153ea6cb2e7b7c3736a26a0f6"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-0",
+    "row": 555,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\beacon_0\\env_tower_03_beacon_0_root_top3d.tscn",
+    "sha256": "c0ca80613b588ca6a5f98d9c3e6873b3f1d146a8db5812718742fbb2951e2380"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-1",
+    "row": 556,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\beacon_1\\env_tower_03_beacon_1_root_top3d.tscn",
+    "sha256": "e389e1a57cec85d8222fad71b3777bc012fc2ae0d965d7e7c4cca0fb0cd2daae"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-2",
+    "row": 557,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\beacon_2\\env_tower_03_beacon_2_root_top3d.tscn",
+    "sha256": "add132cf24858171f36eeb1f2377b10c8328d71343061906ea17eb9f4a7bf58b"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-3",
+    "row": 558,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\beacon_3\\env_tower_03_beacon_3_root_top3d.tscn",
+    "sha256": "73f180a23ea60f3db5df0ec5f1d5f2af9d3053abe385daccd4028ba1485d537e"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-4",
+    "row": 559,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\beacon_4\\env_tower_03_beacon_4_root_top3d.tscn",
+    "sha256": "bc1a90dc02429d38900d18dfa1d69bb65aed2b855607e3fd9abe56a500923a00"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-5",
+    "row": 560,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\beacon_5\\env_tower_03_beacon_5_root_top3d.tscn",
+    "sha256": "292d22e7c5c9f7767b9a66c8f5e6ba5ee88690e88336a1e8831f7bbacba9e3af"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-TOWER03-BEACON-6",
+    "row": 561,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\tower_03\\beacon_6\\env_tower_03_beacon_6_root_top3d.tscn",
+    "sha256": "ab8a2c764a78073add7c28ca440f14a82a162c7880bde2cfc661c9781551a42c"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-CROSS-TOWER-ROUTE",
+    "row": 562,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\cross_tower_route\\env_cross_tower_route_root_top3d.tscn",
+    "sha256": "4ddbdbb3bc7914f2a8122cb2c50111bb7cf7f34522c2bb34041f0f1da8cfac29"
+  },
+  {
+    "asset_id": "ENV-OPENWORLD-LANDSCAPE-FOUNDATION",
+    "row": 825,
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\open_world\\runtime\\open_world_landscape_foundation\\env_open_world_landscape_foundation_root_top3d.tscn",
+    "sha256": "73dcc18aed979a66908c3d48ef6380ceb734a45bb3e37359895ede72eafccdac"
+  }
+]

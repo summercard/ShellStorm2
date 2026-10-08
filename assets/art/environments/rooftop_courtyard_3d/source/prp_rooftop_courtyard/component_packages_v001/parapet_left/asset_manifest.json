@@ -1,0 +1,40 @@
+{
+  "package_id": "parapet_left",
+  "name_zh": "03_左侧矮水泥护栏",
+  "collection": "03_左侧矮水泥护栏_资产包",
+  "root_object": "prp_parapet_left_root",
+  "objects": [
+    "03_左侧矮水泥护栏_主体"
+  ],
+  "origin_blender": [
+    -7.199999809265137,
+    0.0,
+    0.3199999928474426
+  ],
+  "dimensions": [
+    0.5699996948242188,
+    9.449999809265137,
+    0.9749999642372131
+  ],
+  "bbox_world": [
+    [
+      -7.514999866485596,
+      -4.724999904632568,
+      0.3199999928474426
+    ],
+    [
+      -6.945000171661377,
+      4.724999904632568,
+      1.2949999570846558
+    ]
+  ],
+  "triangles": 24,
+  "kind": "architecture",
+  "fixed_display_attachment": false,
+  "animations": [],
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\source\\prp_rooftop_courtyard\\prp_rooftop_courtyard_source_v002.blend",
+  "version": "v002",
+  "front": "Blender -Y -> Godot +Z (preview frontage); explicit negative-Y front",
+  "expected_glb": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\rooftop_courtyard_3d\\components\\parapet_left\\prp_parapet_left_visual_top3d.glb",
+  "exported": false
+}

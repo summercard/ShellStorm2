@@ -1,0 +1,258 @@
+{
+  "asset_id": "ENV-OPENWORLD-LANDSCAPE-SKYLINE20",
+  "budget_pass": true,
+  "collision": "none_visual_only",
+  "component_anchors": {
+    "facade_billboard": {
+      "bottom_center": true,
+      "collection_offset_zero": true,
+      "geometry_offset_m": [
+        0.0,
+        -0.159999996423721,
+        0.0
+      ],
+      "mesh_local_identity_parented": true,
+      "root_identity": true
+    },
+    "facade_hvac_unit": {
+      "bottom_center": true,
+      "collection_offset_zero": true,
+      "geometry_offset_m": [
+        0.0,
+        -0.0200000107288361,
+        0.0
+      ],
+      "mesh_local_identity_parented": true,
+      "root_identity": true
+    },
+    "floor_facade_module": {
+      "bottom_center": true,
+      "collection_offset_zero": true,
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "mesh_local_identity_parented": true,
+      "root_identity": true
+    },
+    "roof_communications": {
+      "bottom_center": true,
+      "collection_offset_zero": true,
+      "geometry_offset_m": [
+        0.0,
+        0.407547473907471,
+        0.18937823176384
+      ],
+      "mesh_local_identity_parented": true,
+      "root_identity": true
+    },
+    "roof_guardrail_kit": {
+      "bottom_center": true,
+      "collection_offset_zero": true,
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "mesh_local_identity_parented": true,
+      "root_identity": true
+    },
+    "roof_hvac_bank": {
+      "bottom_center": true,
+      "collection_offset_zero": true,
+      "geometry_offset_m": [
+        -0.825000047683716,
+        0.0499999523162842,
+        0.400000005960464
+      ],
+      "mesh_local_identity_parented": true,
+      "root_identity": true
+    },
+    "roof_service_hut": {
+      "bottom_center": true,
+      "collection_offset_zero": true,
+      "geometry_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "mesh_local_identity_parented": true,
+      "root_identity": true
+    }
+  },
+  "component_count": 7.0,
+  "component_triangles": {
+    "facade_billboard": 460.0,
+    "facade_hvac_unit": 176.0,
+    "floor_facade_module": 188.0,
+    "roof_communications": 1396.0,
+    "roof_guardrail_kit": 1436.0,
+    "roof_hvac_bank": 832.0,
+    "roof_service_hut": 180.0
+  },
+  "floor_height_m": 3.8,
+  "footprint_m": [
+    50.0,
+    50.0
+  ],
+  "glb_inspection": {
+    "facade_billboard": {
+      "images": 0.0,
+      "json_chunk_sha256": "62bfd24ac62a1d11652f4314fee15cae858a9c2ebbd3027067ce294e6b433ed8",
+      "material_count": 4.0,
+      "mesh_count": 2.0,
+      "surfaces": 4.0,
+      "textures": 0.0,
+      "triangles": 460.0
+    },
+    "facade_hvac_unit": {
+      "images": 0.0,
+      "json_chunk_sha256": "b17f3343599d8b2a020a87ad666aac41bdfe28784baaba4f680a402f158954f7",
+      "material_count": 3.0,
+      "mesh_count": 2.0,
+      "surfaces": 3.0,
+      "textures": 0.0,
+      "triangles": 176.0
+    },
+    "floor_facade_module": {
+      "images": 0.0,
+      "json_chunk_sha256": "216ad52e5aadbe1c4eb8c242fc89515dd317f99cc2f4096331d27414e7691164",
+      "material_count": 4.0,
+      "mesh_count": 2.0,
+      "surfaces": 4.0,
+      "textures": 0.0,
+      "triangles": 188.0
+    },
+    "roof_communications": {
+      "images": 0.0,
+      "json_chunk_sha256": "2ac2444577d319641bfc91f4a0f743691df9cecbf84e5323df801f0bea3cf7c6",
+      "material_count": 3.0,
+      "mesh_count": 2.0,
+      "surfaces": 3.0,
+      "textures": 0.0,
+      "triangles": 1396.0
+    },
+    "roof_guardrail_kit": {
+      "images": 0.0,
+      "json_chunk_sha256": "18b8b3cd6d6813d6957089103c070d5c9f1716534390e24ec9fd773978001192",
+      "material_count": 3.0,
+      "mesh_count": 2.0,
+      "surfaces": 3.0,
+      "textures": 0.0,
+      "triangles": 1436.0
+    },
+    "roof_hvac_bank": {
+      "images": 0.0,
+      "json_chunk_sha256": "74f41b700c23f82e77f70987f222afd64ca18bb3f8cf1c08f709ded640a0a2e6",
+      "material_count": 3.0,
+      "mesh_count": 2.0,
+      "surfaces": 3.0,
+      "textures": 0.0,
+      "triangles": 832.0
+    },
+    "roof_service_hut": {
+      "images": 0.0,
+      "json_chunk_sha256": "8af55e5778d0f02473c60679fca781cbd3159c16bcf3d1acd01a8931b4e5d522",
+      "material_count": 4.0,
+      "mesh_count": 2.0,
+      "surfaces": 4.0,
+      "textures": 0.0,
+      "triangles": 180.0
+    }
+  },
+  "godot_import": {
+    "status": "passed",
+    "exit_code": 0,
+    "component_glbs_reimported": 7,
+    "log": "assets/art/environments/open_world/source/landscape_skyline20/v006/qa/godot_import.log",
+    "note": "实际执行正式import；其他资产历史palette UID及scratch重复UID警告保留，未修改范围外内容。"
+  },
+  "godot_capture": {
+    "status": "passed",
+    "save_png_error": 0,
+    "renderer": "OpenGL Compatibility / NVIDIA RTX 4060 Ti",
+    "image": "assets/art/environments/open_world/source/landscape_skyline20/v006/qa/godot_runtime_front.png",
+    "note": "实际渲染帧已读取检查；项目TAA只支持Forward+的警告不等同于本资产机验失败。"
+  },
+  "final_hash_verification_after_godot": {
+    "protected_v005_palette_and_import_unchanged": true,
+    "source_and_optimized_match_catalog": true,
+    "all_seven_glbs_match_catalog": true,
+    "all_seven_import_contracts_match": true
+  },
+  "visual_review": {
+    "reviewed": true,
+    "blender_front_back_side_game_roof_before_after": true,
+    "godot_actual_frame": true,
+    "whitebox_top_and_annotations": true,
+    "readable_neutral_body_no_blue_emission": true,
+    "reference_high_fidelity_approved": false,
+    "remaining": ["20层主体按用户要求简化，但立面与参考图并非高还原", "屋顶设备已具备空调、实心天线、双桁架塔与黄色护栏，细节密度仍低于参考图", "Godot屋顶浅色大面较亮，尚未获用户美术认可", "广告为简化城市条形图标，不包含真实SKYLINE文字"]
+  },
+  "runtime_integrated": false,
+  "formal_room_modified": false,
+  "ledger_or_tests_modified": false,
+  "godot_runtime_probe": {
+    "fail": 0,
+    "pass": 469,
+    "report": "res://assets/art/environments/open_world/source/landscape_skyline20/v006/qa/probe_skyline20_v006.json",
+    "status": "passed"
+  },
+  "height_m": 83.609999,
+  "instance_count": 32.0,
+  "measured_assembly_bounds": {
+    "bounds_local": [
+      -26.615,
+      -26.049999,
+      0.0,
+      26.615,
+      25.0,
+      83.609999
+    ],
+    "size_m": [
+      53.229999,
+      51.049999,
+      83.609999
+    ]
+  },
+  "optimized_hash": "67f09f7517c93e353df22b97c7d6e5d7f02da3ea1a137d00740c4389158c10f8",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "plan_frozen_sha256": "096e7130614f95ca0b11baa2cdf3fc22c5a7e27d4dbfe20d644baeff76df2a33",
+  "protected_files": {
+    "after": {
+      "assets/art/environments/open_world/source/landscape_skyline20/v005/env_landscape_skyline20_source_v005.blend": "0a1eb427e186291f1315616c651a411866175e852acdb9a86b4dc5d5f3d4f40e",
+      "assets/art/environments/open_world/source/landscape_skyline20/v005/export/v005/env_landscape_skyline20_optimized_v005.blend": "da2a83ecd1aade2c2028c3a331074520a2113ee3a76e573795d032311d8a96f3",
+      "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+      "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import": "b04a929a5a2f50578f8f19222aa8742f9362a2b419d74c781cb25bf948bc64ff"
+    },
+    "before": {
+      "assets/art/environments/open_world/source/landscape_skyline20/v005/env_landscape_skyline20_source_v005.blend": "0a1eb427e186291f1315616c651a411866175e852acdb9a86b4dc5d5f3d4f40e",
+      "assets/art/environments/open_world/source/landscape_skyline20/v005/export/v005/env_landscape_skyline20_optimized_v005.blend": "da2a83ecd1aade2c2028c3a331074520a2113ee3a76e573795d032311d8a96f3",
+      "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+      "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import": "b04a929a5a2f50578f8f19222aa8742f9362a2b419d74c781cb25bf948bc64ff"
+    },
+    "unchanged": true
+  },
+  "runtime_instance_triangles": 9580.0,
+  "source_hash": "a0c2fdcf71d3a1cfc77a63447492743bf5a7d6acb1f1a1cfe5c7ce5ebab4fe92",
+  "source_unchanged": true,
+  "status": "TECHNICAL_GATES_PASSED_REFERENCE_ART_APPROVAL_PENDING",
+  "structural_footprint_m": [
+    50.0,
+    50.0
+  ],
+  "triangle_budget": 10000.0,
+  "v005_preserved": true,
+  "validator": {
+    "command": "validate_game_prop.py --max-materials 12 --shared-palette <公共色盘>",
+    "optimized": "passed",
+    "source": "passed"
+  },
+  "version": "v006",
+  "whitebox": {
+    "blend": "source/art/whitebox/landscape_skyline20/v006/whitebox_landscape_skyline20_v006.blend",
+    "top_annotated_preview": "source/art/whitebox/landscape_skyline20/v006/previews/whitebox_top_annotated.png",
+    "top_preview": "source/art/whitebox/landscape_skyline20/v006/previews/whitebox_top.png"
+  }
+}
