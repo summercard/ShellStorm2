@@ -496,6 +496,8 @@ func _process(delta: float) -> void:
 	_authored_motion.pose_lock_phase = _narrative_pose_phase
 	if assembly_version in ["v009", "v010", "v011", "v021"]:
 		_authored_motion.apply(self, delta)
+	if _player != null and _player.has_method("_sync_backpack_body_follow"):
+		_player.call("_sync_backpack_body_follow")
 	_update_reload_progress_bar()
 	_update_state_materials()
 
@@ -513,6 +515,8 @@ func get_component_snapshot() -> Dictionary:
 		"avatar_profile": "bunny01" if is_bunny else "capsule_cat",
 		"assembly_version": str(get_meta("assembly_version", "v008" if is_bunny else "v001")),
 		"authored_motion_clip": _authored_motion.active_clip,
+		"authored_overlay_clip": _authored_motion.active_overlay,
+		"authored_overlay_progress": _authored_motion.overlay_progress,
 		"motion_library_version": _authored_motion.library_version,
 		"movement_direction": _authored_motion.movement_direction,
 		"movement_speed_role": _authored_motion.speed_role,
@@ -824,7 +828,7 @@ func _get_missing_authored_action() -> String:
 	if _weapon_class == "heavy_melee" and _melee_animation_active:
 		return "heavy_melee_%s" % _melee_phase
 	if _reload_animation_active:
-		return "%s_reload" % _weapon_class
+		return "" if _authored_motion.active_overlay == "%s_reload" % _weapon_class else "%s_reload" % _weapon_class
 	if _charging_animation_active:
 		return "%s_charge" % _weapon_class
 	if _firing_animation_active:

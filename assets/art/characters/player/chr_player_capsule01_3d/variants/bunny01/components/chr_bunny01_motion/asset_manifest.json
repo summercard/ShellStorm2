@@ -1,9 +1,9 @@
 {
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "asset_version": "v032",
+  "asset_version": "v033",
   "assembly_version": "v021",
   "status": "active",
-  "source": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v032.blend",
+  "source": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v033.blend",
   "transfer": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/character_transfer_ledger.json",
   "prefab": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
   "skeleton_id": "SKEL-BUNNY01-004",
@@ -92,6 +92,24 @@
       "loop": true,
       "frames": 61,
       "tracks": 10
+    },
+    "longgun_reload": {
+      "duration": 2.0,
+      "loop": false,
+      "frames": 241,
+      "tracks": 11
+    },
+    "machinegun_reload": {
+      "duration": 2.0,
+      "loop": false,
+      "frames": 241,
+      "tracks": 11
+    },
+    "sidearm_reload": {
+      "duration": 2.0,
+      "loop": false,
+      "frames": 241,
+      "tracks": 11
     },
     "sidearm_idle": {
       "duration": 3.2,
@@ -545,50 +563,51 @@
       "bytes": 10282728
     },
     {
-      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v032.blend",
-      "sha256": "0fa3767ec1a7c57c8c686f97eb809aa65100bb6725e664cacab624059069ea9d",
-      "bytes": 260138212
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v033.blend",
+      "sha256": "1e690ad4479915a0c173a6eeb411c3bbf6a83e97971e6eb8879c749c6096ab94",
+      "bytes": 276603632
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.json",
-      "sha256": "081525c870cfe3954d21056da6ae44542e18a1ba218ff2ff7af0be01fbcb6b0b",
-      "bytes": 12479676
+      "sha256": "d99434f852e64111a0b8da9acd316d9b33fdd7a06b0280d342b59fda2be72d93",
+      "bytes": 13799260
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_bunny01_motion/anim_bunny01_library.glb",
-      "sha256": "439081827701d079ef91d9fbcee0f86d62d8daf2f00ccd65a3c54f3f84f43d0b",
-      "bytes": 1685548
+      "sha256": "a32b3bc97825b9b0ff48bb3c67bd3affb148c123f815bf3eef0ac62c25429fb9",
+      "bytes": 1769716
     },
     {
       "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
-      "sha256": "ca9d03d23c08dcdb2313171a4ce74e51f47aa8db371103ea8c80e7920d7754ff",
+      "sha256": "c991ad2f8a65e796184684344b898672c2a67d4509d0a1cac37644ebe7987535",
       "bytes": 5846
     },
     {
       "path": "src/player3d/CharacterMotionLibrary3D.gd",
-      "sha256": "fd8d3b91e9d6995c54d365d19d45f4c6079a3761d010485cc00c1c681401f9dc",
-      "bytes": 14876
+      "sha256": "f549ebce994802c1176d9c3bb0e1469fbc666304fe53471f22e57f7e45accf12",
+      "bytes": 15740
     },
     {
       "path": "src/player3d/PlayerAvatar3D.gd",
-      "sha256": "617cf5b42628cd8ff2e8618ad48fde4199fd49e45eec4a3cfb3041dcec60e791",
-      "bytes": 99725
+      "sha256": "3a4ebf1250e6fef71b2f362b28103bc7f2063cd1b34678882f12de52e2be43c9",
+      "bytes": 101365
     },
     {
       "path": "src/player3d/Player3D.gd",
-      "sha256": "a12bee6699d09ec6458bace83aafbd3f4f6f63d56c6bdf18d926414588e1d3c7",
-      "bytes": 93956
+      "sha256": "e18032bdb4cfebf0c67c77eb5019e0cb86fe3079bffe8c7465da2de78ba02cbe",
+      "bytes": 111555
     },
     {
-      "path": "src/world3d/Dungeon3D.gd",
-      "sha256": "5f3cd7e1e237a4baf48f14985f90a22697116678a575c2b8647610ab69b5f1e1",
-      "bytes": 321760
+      "path": "src/combat3d/WeaponModel3D.gd",
+      "sha256": "23a6f9fc99ece9b77b8d1372f6da5e2a68f2b69983d09d233ac78720f800d011",
+      "bytes": 53795
     }
   ],
   "limits": [
+    "No detached magazine or gun mechanism animation authored",
     "Held/back weapon display scales retain existing distinct contracts",
     "Expedition resume scene skipped in headless; full save-resume not verified",
-    "No family reload/charge or heavy-melee action authored",
+    "No family charge or heavy-melee action authored",
     "Other longguns support offsets differ: 0.029-0.108m at default scale",
     "No exact world foot lock or 2D directional blend",
     "No full project or mobile performance suite"

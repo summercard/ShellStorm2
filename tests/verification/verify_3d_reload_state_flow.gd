@@ -196,9 +196,11 @@ func _ready() -> void:
 	if (
 		(avatar_snapshot.get("reload_offset", Vector3.ZERO) as Vector3).length() > 0.001
 		or (avatar_snapshot.get("reload_rotation", Vector3.ZERO) as Vector3).length() > 0.001
-		or str(avatar_snapshot.get("missing_authored_action", "")) != "single_hand_reload"
+		or str(avatar_snapshot.get("missing_authored_action", "")) != ""
+		or str(avatar_snapshot.get("authored_overlay_clip", "")) != "sidearm_reload"
+		or absf(float(avatar_snapshot.get("authored_overlay_progress", -1.0)) - mid_progress) > 0.001
 	):
-		failures.append("Reload did not keep the base Blender clip and expose the registered shared single_hand_reload gap")
+		failures.append("Reload did not sample the authored sidearm overlay from the gameplay progress")
 	var mid_right_grip_distance := float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0))
 	if (
 		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_reload"

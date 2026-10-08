@@ -9,7 +9,7 @@ R=Path(__file__).resolve().parents[2]
 B=R/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01'
 MODEL=B/'production/v021/source/model/chr_bunny01_model_v021.blend'
 VERSION=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--source-version=')), 'v030' if '--firing-v030' in sys.argv else 'v029')
-assert VERSION in ('v029','v030','v031','v032')
+assert VERSION in ('v029','v030','v031','v032','v033')
 SOURCE=B/f'source/animation/chr_bunny01_animation_{VERSION}.blend'
 OUT=B/'components/chr_bunny01_motion';OUT.mkdir(parents=True,exist_ok=True)
 bpy.ops.wm.open_mainfile(filepath=str(MODEL))
@@ -45,10 +45,15 @@ for s in list(bpy.data.scenes):
     new[state]=dict(duration=float(a['duration']),loop=bool(a['loop']),frames=frames,source_action=a.name)
     spec_key=state.replace('_fire_','_')
     if spec_key in specs:new[state]['reference_speed_mps']=specs[spec_key]['reference_speed_mps']
-expected_count=35 if VERSION=='v029' else 74 if VERSION=='v032' else 62
+expected_count=35 if VERSION=='v029' else 77 if VERSION=='v033' else 74 if VERSION=='v032' else 62
 assert len(new)==expected_count,len(new)
 clips.update(new)
 path=OUT/'anim_bunny01_library.json'
+if VERSION=='v033':
+    previous=json.loads(path.read_text(encoding='utf-8'))['clips']
+    retained=[n for n in previous if not n.endswith('_reload')]
+    assert len(retained)==88
+    assert all(clips[n]==previous[n] for n in retained),'Unrelated runtime clip changed'
 if VERSION=='v032':
     previous=json.loads(path.read_text(encoding='utf-8'))['clips']
     retained=[n for n in previous if not (n.startswith('unarmed_') and n.endswith(('forward','backward'))) and '_stow_' not in n and '_draw_' not in n]
@@ -94,8 +99,11 @@ for animation in gltf['animations']:
 def entry(p):return dict(path=p.relative_to(R).as_posix(),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
 ledger=dict(schema=1,asset_id='CHR-PLY-CAPSULE01-3D-BUNNY01',version='v029',status='exported_pending_godot_validation',classification='version_increment',skeleton_id='SKEL-BUNNY01-004',skeleton_sha256=expected,model_signature=expected,animation_signature=expected,files=[entry(p) for p in (MODEL,SOURCE,path,glb)],animation_adapter='anatomical_to_rigid_node_map',consumer='src/player3d/CharacterMotionLibrary3D.gd',state_owner='src/player3d/Player3D.gd',prefab='assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn',verification='verify_player3d_directional_motion',collision_owner='scenes/Player3D.tscn',authoring_height_m=1.5,blender_forward='+Y',godot_forward='-Z',preview_weapon_exported=False,clips={n:dict(duration=c['duration'],loop=c['loop'],frames=len(c['frames']),tracks=len(c['frames'][0])) for n,c in clips.items()},new_clip_count=35,retained_legacy_clip_count=14,glb_clip_count=35,missing_actions=['family_fire','family_reload','family_charge','heavy_melee'],rollback='Retained v028/v027 Blender sources and Git runtime baseline',git_baseline=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip())
 ledger.update(version=VERSION,new_clip_count=expected_count,glb_clip_count=expected_count)
-if VERSION in ('v030','v031','v032'):
+if VERSION in ('v030','v031','v032','v033'):
     ledger['missing_actions']=['family_reload','family_charge','heavy_melee']
     ledger['verification']='verify_player3d_firing_motion'
+if VERSION=='v033':
+    ledger['missing_actions']=['family_charge','heavy_melee']
+    ledger['verification']='verify_player3d_reload_motion'
 (B/'character_transfer_ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2),encoding='utf-8')
 print('RUNTIME_EXPORTED',len(clips),'GLB',len(gltf['animations']))

@@ -30,6 +30,9 @@ var _fire_hold_remaining := 0.0
 var _fire_weapon_id := ""
 var _transition_duration := 0.18
 var _switch_was_active := false
+var _reload_was_active := false
+var active_overlay := ""
+var overlay_progress := 0.0
 ## 叙事姿态锁：剧情演出期间把采样相位钉在某个值（倒地 / 起身的落脚点）。
 ## 只影响采样相位，不改剪辑数据、不写玩家状态、不参与任何玩法判定。
 var pose_lock_enabled := false
@@ -106,14 +109,16 @@ func apply(avatar: Node3D, delta: float) -> void:
 	if family == "heavy_melee":
 		fallback_reason = "single_hand_attachment_only"
 	var authored_anatomical := int(_cache.get("schema", 0)) == 2 and clips.has(clip_name)
+	var reload_now := armed and bool(avatar.get("_reload_animation_active")) and state in ["idle", "moving", "seated"]
 	var switch_now := false
 	if avatar.get("_player") != null and avatar.get("_player").has_method("get_weapon_transition_snapshot"):
 		switch_now = bool(avatar.get("_player").call("get_weapon_transition_snapshot").get("active", false))
-	if _switch_was_active and not switch_now:
+	if (_switch_was_active and not switch_now) or (_reload_was_active and not reload_now):
 		_transition_pose = _last_pose.duplicate(true)
 		_transition_time = 0.0
 		_transition_duration = 0.12
 	_switch_was_active = switch_now
+	_reload_was_active = reload_now
 	if not clips.has(clip_name):
 		clips = _fallback.get("clips", {})
 		authored_anatomical = false
@@ -156,6 +161,17 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var switch_snapshot: Dictionary = {}
 	var switch_frames: Array = []
 	var switch_cursor := 0.0
+	active_overlay = ""
+	overlay_progress = 0.0
+	if reload_now and not switch_now:
+		var reload_name := family + "_reload"
+		if clips.has(reload_name):
+			switch_frames = clips[reload_name].frames
+			overlay_progress = clampf(float(avatar.get("_reload_progress")), 0.0, 1.0)
+			switch_cursor = overlay_progress * (switch_frames.size() - 1)
+			active_overlay = reload_name
+		else:
+			fallback_reason = "missing_" + reload_name
 	if avatar.get("_player") != null and avatar.get("_player").has_method("get_weapon_transition_snapshot"):
 		switch_snapshot = avatar.get("_player").call("get_weapon_transition_snapshot")
 		if bool(switch_snapshot.get("active", false)) and state in ["idle", "moving", "seated"]:
@@ -163,6 +179,8 @@ func apply(avatar: Node3D, delta: float) -> void:
 			if clips.has(switch_name):
 				switch_frames = clips[switch_name].frames
 				switch_cursor = float(switch_snapshot.progress) * (switch_frames.size() - 1)
+				active_overlay = switch_name
+				overlay_progress = float(switch_snapshot.progress)
 	var cursor := phase * (frames.size() - 1)
 	var first := mini(int(cursor), frames.size() - 1)
 	var second := mini(first + 1, frames.size() - 1)
@@ -176,11 +194,11 @@ func apply(avatar: Node3D, delta: float) -> void:
 	for bone: String in _nodes:
 		var target: Node3D = _nodes[bone]
 		if target == null: continue
-		if not frames[first].has(bone): continue
-		var a: Dictionary = frames[first][bone]
-		var b: Dictionary = frames[second][bone]
-		var track_blend := blend
 		var switching_track := not switch_frames.is_empty() and bone in ["hand_l", "hand_r", "weapon_socket"]
+		if not frames[first].has(bone) and not switching_track: continue
+		var a: Dictionary = frames[first].get(bone, {})
+		var b: Dictionary = frames[second].get(bone, {})
+		var track_blend := blend
 		if switching_track:
 			var switch_first := mini(int(switch_cursor), switch_frames.size() - 1)
 			var switch_second := mini(switch_first + 1, switch_frames.size() - 1)
@@ -215,7 +233,7 @@ func apply(avatar: Node3D, delta: float) -> void:
 			avatar.bunny_hand_r.global_position = avatar.weapon_socket.global_position
 	elif _version == "v021":
 		# Carry socket orientation is exported from Blender; no hand overrides.
-		if frames[first].has("weapon_socket") and live_grip_active:
+		if (frames[first].has("weapon_socket") or not switch_frames.is_empty()) and live_grip_active:
 			# Keep the sampled palm fixed through quaternion transition blending.
 			avatar.weapon_socket.global_position = palm_global(avatar, "r")
 		else:
