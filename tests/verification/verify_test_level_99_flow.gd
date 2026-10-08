@@ -339,6 +339,7 @@ func _verify_level_scene(failures: Array[String]) -> void:
 	_verify_extraction(tower, failures)
 	_verify_enemy_spawn_plan(tower, failures)
 	_verify_boss_identity(failures)
+	await _verify_boss_reinforcements(tower, failures)
 	_verify_reward_plan(failures)
 
 	tower.queue_free()
@@ -758,6 +759,324 @@ func _verify_boss_identity(failures: Array[String]) -> void:
 			"没写 boss_content_id 的普通房竟被赋了值：%s"
 			% str(plain_room.get("boss_content_id", ""))
 		)
+
+
+## 测试关卡99 Boss 双排持续增援的端到端验收。
+## 覆盖设计源四段透传、运行时挂点、激活后10秒边界、3→4递增、朝中心抛射、18只上限、
+## 离房暂停、快照恢复、Boss死亡停止，以及“Boss死后仍须清完剩余增援才清房”。
+func _verify_boss_reinforcements(
+	tower: TowerDescent3D, failures: Array[String]
+) -> void:
+	var failures_before := failures.size()
+	var room := tower._room_by_id.get("boss") as DungeonRoom3D
+	if room == null:
+		failures.append("Boss增援验收取不到 boss 房")
+		return
+	var expected_plan := {
+		"enabled": true,
+		"boss_spawn_local_m": [0.0, 0.0],
+		"activation_delay_sec": 10.0,
+		"spawn_rows": [
+			{"side": "west", "x_m": -18.0, "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0], "height_m": 3.0},
+			{"side": "east", "x_m": 18.0, "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0], "height_m": 3.0},
+		],
+		"enemy_request_type": "ambush",
+		"initial_count": 3.0,
+		"count_step": 1.0,
+		"max_count_per_round": 8.0,
+		"initial_interval_sec": 6.0,
+		"interval_step_sec": -0.35,
+		"min_interval_sec": 2.5,
+		"max_reinforcement_alive": 18.0,
+		"launch_speed_mps": 8.5,
+		"launch_duration_sec": 0.38,
+	}
+
+	# —— 四段白名单：L2规范化 → 计划 → record → 房实例 ——
+	var normalized := LevelPlanLoader.normalize_floor(LEVEL_ID, 0)
+	var normalized_boss := {}
+	for value in normalized.get("rooms", []):
+		var candidate := value as Dictionary
+		if str(candidate.get("key", "")) == "boss":
+			normalized_boss = candidate
+			break
+	if normalized_boss.is_empty():
+		failures.append("规范化层取不到 boss 房，增援计划入口验收无法成立")
+	elif (normalized_boss.get("boss_reinforcement_plan", {}) as Dictionary) != expected_plan:
+		failures.append("L2规范化后的 boss_reinforcement_plan 与设计源不一致：%s" % [
+			normalized_boss.get("boss_reinforcement_plan", {}),
+		])
+	var plan_snapshot := tower._floor_plan_snapshots.get(0, {}) as Dictionary
+	var planned_boss := {}
+	for value in plan_snapshot.get("rooms", []):
+		var candidate := value as Dictionary
+		if str(candidate.get("id", "")) == "boss":
+			planned_boss = candidate
+			break
+	if (planned_boss.get("boss_reinforcement_plan", {}) as Dictionary) != expected_plan:
+		failures.append("生成器计划丢失或改写 boss_reinforcement_plan：%s" % [
+			planned_boss.get("boss_reinforcement_plan", {}),
+		])
+	var record_plan := {}
+	for record in tower._records:
+		if str(record.get("id", "")) == "boss":
+			record_plan = record.get("boss_reinforcement_plan", {}) as Dictionary
+			break
+	if record_plan != expected_plan:
+		failures.append("TowerDescent3D record 丢失或改写 boss_reinforcement_plan：%s" % [record_plan])
+	if room.boss_reinforcement_plan != expected_plan:
+		failures.append("DungeonRoom3D 实例丢失或改写 boss_reinforcement_plan：%s" % [
+			room.boss_reinforcement_plan,
+		])
+
+	# 内容参数不属于几何指纹；调整数量/间隔不能让既有房间进度失配。
+	if not normalized.is_empty():
+		var mode := str(normalized.get("mode", "authored"))
+		var baseline_id := FloorPlanGenerator._data_driven_layout_id(
+			LEVEL_ID, 0, normalized, mode, GENERATOR_SEED
+		)
+		var tainted := normalized.duplicate(true)
+		for room_value in tainted.get("rooms", []) as Array:
+			if str((room_value as Dictionary).get("key", "")) == "boss":
+				(room_value as Dictionary)["boss_reinforcement_plan"] = {
+					"enabled": true, "initial_count": 99,
+				}
+		var tainted_id := FloorPlanGenerator._data_driven_layout_id(
+			LEVEL_ID, 0, tainted, mode, GENERATOR_SEED
+		)
+		if tainted_id != baseline_id:
+			failures.append("boss_reinforcement_plan 竟参与 layout_id（调增援会使旧存档失配）")
+
+	# —— Marker几何：Boss正中心，两侧各5点，全部离地3米 ——
+	var center := room.get_node_or_null("BossSpawnCenter") as Marker3D
+	if center == null:
+		failures.append("Boss房没有运行时 BossSpawnCenter")
+	elif center.position.distance_to(Vector3.ZERO) > 0.001:
+		failures.append("BossSpawnCenter 不在房间局部正中心：%s" % center.position)
+	var markers := room.boss_reinforcement_spawn_markers()
+	if markers.size() != 10:
+		failures.append("Boss增援挂点应为两侧各5个、共10个，实为 %d" % markers.size())
+	var west := 0
+	var east := 0
+	for marker in markers:
+		var side := str(marker.get_meta("spawn_side", ""))
+		west += 1 if side == "west" else 0
+		east += 1 if side == "east" else 0
+		if not is_equal_approx(marker.position.y, 3.0):
+			failures.append("Boss增援挂点未离地3米：%s=%s" % [marker.name, marker.position])
+		if side == "west" and not is_equal_approx(marker.position.x, -18.0):
+			failures.append("西侧挂点横坐标错误：%s=%s" % [marker.name, marker.position])
+		if side == "east" and not is_equal_approx(marker.position.x, 18.0):
+			failures.append("东侧挂点横坐标错误：%s=%s" % [marker.name, marker.position])
+	if west != 5 or east != 5:
+		failures.append("Boss增援挂点分组错误：west=%d east=%d" % [west, east])
+	var marker_cycle := tower._boss_reinforcement_marker_cycle(room)
+	if marker_cycle.size() != 10:
+		failures.append("Boss增援轮询挂点数不为10：%d" % marker_cycle.size())
+	else:
+		for index in range(marker_cycle.size()):
+			var expected_side := "west" if index % 2 == 0 else "east"
+			if str(marker_cycle[index].get_meta("spawn_side", "")) != expected_side:
+				failures.append("双排轮询未按 west/east 交替：index=%d" % index)
+				break
+
+	# —— 静态语义门禁正反例 ——
+	var legal_probe := LevelPlanValidator._validate_boss_reinforcement_plan({
+		"key": "boss_probe", "role": "boss", "content_type": "BOSS",
+		"size": BOSS_ROOM_SIZE, "boss_reinforcement_plan": expected_plan,
+	})
+	if not legal_probe.is_empty():
+		failures.append("合法 boss_reinforcement_plan 被静态校验误报：%s" % [legal_probe])
+	var non_boss_probe := LevelPlanValidator._validate_boss_reinforcement_plan({
+		"key": "combat_probe", "role": "main", "content_type": "COMBAT",
+		"size": CONTENT_ROOM_SIZE, "boss_reinforcement_plan": expected_plan,
+	})
+	if not _has_error_prefix(non_boss_probe, "boss_reinforcement_plan_on_non_boss_room"):
+		failures.append("非Boss房写增援计划未被拦住：%s" % [non_boss_probe])
+	var broken_plan := expected_plan.duplicate(true)
+	broken_plan["spawn_rows"] = [
+		{"side": "west", "x_m": -40.0, "z_m": [], "height_m": 0.0},
+		{"side": "west", "x_m": 18.0, "z_m": [40.0], "height_m": 3.0},
+	]
+	broken_plan["enemy_request_type"] = "minion"
+	broken_plan["initial_count"] = 3.5
+	var broken_probe := LevelPlanValidator._validate_boss_reinforcement_plan({
+		"key": "broken_boss", "role": "boss", "content_type": "BOSS",
+		"size": BOSS_ROOM_SIZE, "boss_reinforcement_plan": broken_plan,
+	})
+	for prefix in [
+		"boss_reinforcement_row_x_outside_room",
+		"boss_reinforcement_row_z_empty",
+		"boss_reinforcement_row_height_invalid",
+		"boss_reinforcement_row_side_duplicate",
+		"boss_reinforcement_rows_require_west_east",
+		"boss_reinforcement_enemy_request_type_invalid",
+		"boss_reinforcement_initial_count_invalid",
+	]:
+		if not _has_error_prefix(broken_probe, prefix):
+			failures.append("坏增援参数未触发静态错误 %s：%s" % [prefix, broken_probe])
+
+	# —— 正式进房、Boss中心出生与激活后计时 ——
+	room.ensure_shell_built()
+	room.ensure_detail_built()
+	tower.player.global_position = room.global_position + Vector3(0.0, 0.5, 0.0)
+	tower._on_room_entered(room)
+	await get_tree().physics_frame
+	var boss: Enemy3D = null
+	for value in tower._enemy_nodes_by_room.get(room.room_id, []) as Array:
+		if value is Enemy3D and str((value as Enemy3D).get_enemy_data().get("boss_content_id", "")) == "boss_monitor002":
+			boss = value as Enemy3D
+			break
+	if boss == null:
+		failures.append("正式进入Boss房后没有生成 boss_monitor002")
+		return
+	if boss.global_position.distance_to(room.boss_spawn_position_world()) > 0.05:
+		failures.append("Boss未出生在Boss房正中心：%s vs %s" % [
+			boss.global_position, room.boss_spawn_position_world(),
+		])
+	if not boss.boss_activation_completed.is_connected(tower._on_boss_activation_completed):
+		failures.append("Boss激活完成信号未接入Dungeon3D增援控制器")
+	# 避免本测试手动推进时又被场景_process自动推进一份。
+	tower.set_process(false)
+	tower._on_boss_activation_completed(boss)
+	var state := tower._boss_reinforcement_states.get(room.room_id, {}) as Dictionary
+	if not bool(state.get("armed", false)) or not is_zero_approx(float(state.get("elapsed", -1.0))):
+		failures.append("Boss激活完成后没有从0秒武装增援状态：%s" % [state])
+	tower._tick_boss_reinforcements(9.99)
+	if tower._boss_reinforcement_alive(room.room_id) != 0:
+		failures.append("Boss激活完成未满10秒就生成了增援")
+	tower._tick_boss_reinforcements(0.01)
+	if tower._boss_reinforcement_alive(room.room_id) != 3:
+		failures.append("第10秒第一轮应预约3只增援，实为 %d" % tower._boss_reinforcement_alive(room.room_id))
+	if int((tower._boss_reinforcement_states[room.room_id] as Dictionary).get("round", -1)) != 1:
+		failures.append("第一轮后round未推进到1：%s" % [tower._boss_reinforcement_states[room.room_id]])
+	# 私有抛射参数必须随预约保留到实例化前；实到后必须从enemy_data移除，但速度朝房心。
+	var reserved := tower._reserved_room_spawns.get(room.room_id, []) as Array
+	if reserved.is_empty() or ((reserved[0] as Dictionary).get("configs", []) as Array).size() != 3:
+		failures.append("第一轮3只增援未完整进入正式预约队列：%s" % [reserved])
+	else:
+		var first_config := (((reserved[0] as Dictionary).get("configs", []) as Array)[0] as Dictionary)
+		if not first_config.get("spawn_launch_target", null) is Vector3:
+			failures.append("增援预约丢失朝中心抛射目标")
+		if not is_equal_approx(float(first_config.get("spawn_launch_speed_mps", 0.0)), 8.5):
+			failures.append("增援预约抛射速度不是8.5m/s：%s" % [first_config])
+	tower._flush_reserved_room_spawns(room.room_id)
+	var first_wave := _boss_reinforcement_enemies(tower, room.room_id)
+	if first_wave.size() != 3:
+		failures.append("第一轮预约实到后应为3只增援，实为%d" % first_wave.size())
+	for enemy in first_wave:
+		var to_center := room.boss_spawn_position_world() - enemy.global_position
+		to_center.y = 0.0
+		var velocity := enemy._external_velocity
+		velocity.y = 0.0
+		if velocity.length_squared() <= 0.01 or velocity.normalized().dot(to_center.normalized()) < 0.999:
+			failures.append("增援出生外力没有朝房间中心：%s -> %s" % [enemy.global_position, enemy._external_velocity])
+		if enemy.get_enemy_data().has("spawn_launch_target"):
+			failures.append("出生抛射私有字段污染了敌人配置/存档数据")
+
+	# 第一轮后间隔=6-0.35=5.65秒；边界前不刷，跨界刷4只。
+	tower._tick_boss_reinforcements(5.64)
+	if tower._boss_reinforcement_alive(room.room_id) != 3:
+		failures.append("第二轮间隔未满5.65秒就刷怪")
+	# 明确跨过5.65秒边界：5.64 + 0.01 在二进制浮点下可能略小于5.65，不能拿它做越界样本。
+	tower._tick_boss_reinforcements(0.02)
+	if tower._boss_reinforcement_alive(room.room_id) != 7:
+		failures.append("第二轮应递增4只、累计7只，实为%d" % tower._boss_reinforcement_alive(room.room_id))
+	if int((tower._boss_reinforcement_states[room.room_id] as Dictionary).get("round", -1)) != 2:
+		failures.append("第二轮后round未推进到2")
+	tower._flush_reserved_room_spawns(room.room_id)
+
+	# 离开当前活动房时倒计时暂停；回来后从原值继续。
+	state = tower._boss_reinforcement_states[room.room_id] as Dictionary
+	state["elapsed"] = 1.25
+	tower._boss_reinforcement_states[room.room_id] = state
+	tower._current_room_id = "room_01"
+	tower._tick_boss_reinforcements(100.0)
+	if not is_equal_approx(float((tower._boss_reinforcement_states[room.room_id] as Dictionary).get("elapsed", 0.0)), 1.25):
+		failures.append("离开Boss房后增援倒计时仍在后台推进")
+	tower._current_room_id = room.room_id
+
+	# 快照保存并恢复倒计时、轮次和挂点游标，不得重置为第一轮。
+	state = tower._boss_reinforcement_states[room.room_id] as Dictionary
+	state["elapsed"] = 2.2
+	state["round"] = 4
+	state["cursor"] = 7
+	tower._boss_reinforcement_states[room.room_id] = state
+	tower._capture_room_runtime_state(room.room_id)
+	var captured := (tower._segment_runtime_state[room.room_id] as Dictionary).get(
+		"boss_reinforcement_state", {}
+	) as Dictionary
+	if int(captured.get("round", -1)) != 4 or int(captured.get("cursor", -1)) != 7:
+		failures.append("Boss增援状态未写入房间段快照：%s" % [captured])
+	tower._boss_reinforcement_states[room.room_id] = {
+		"armed": false, "stopped": false, "elapsed": 0.0, "round": 0, "cursor": 0,
+	}
+	tower._restore_room_runtime_state(room.room_id)
+	var restored := tower._boss_reinforcement_states[room.room_id] as Dictionary
+	if (
+		int(restored.get("round", -1)) != 4
+		or int(restored.get("cursor", -1)) != 7
+		or not is_equal_approx(float(restored.get("elapsed", 0.0)), 2.2)
+	):
+		failures.append("Boss增援快照恢复后轮次/游标/倒计时被重置：%s" % [restored])
+
+	# 存活上限同时计算实体与预约：当前7只，从高轮次先约8、再约3到18，第三次必须拒绝。
+	var cap_state := {"armed": true, "stopped": false, "elapsed": 0.0, "round": 5, "cursor": 0}
+	var cap_first := int(tower._spawn_boss_reinforcement_round(room, cap_state))
+	var cap_second := int(tower._spawn_boss_reinforcement_round(room, cap_state))
+	var cap_third := int(tower._spawn_boss_reinforcement_round(room, cap_state))
+	if [cap_first, cap_second, cap_third] != [8, 3, 0]:
+		failures.append("18只上限未同时计入实体与预约：%s（期望[8,3,0]）" % [[cap_first, cap_second, cap_third]])
+	if tower._boss_reinforcement_alive(room.room_id) != 18:
+		failures.append("Boss增援存活上限应锁在18，实为%d" % tower._boss_reinforcement_alive(room.room_id))
+	tower._flush_reserved_room_spawns(room.room_id)
+	if _boss_reinforcement_enemies(tower, room.room_id).size() != 18:
+		failures.append("18只上限的预约实到后实体数不为18")
+
+	# Boss死亡后停止新轮次；但18只增援仍在时房间不能提前清除。
+	boss.take_damage(1000000)
+	tower._tick_boss_reinforcements(100.0)
+	if not bool((tower._boss_reinforcement_states[room.room_id] as Dictionary).get("stopped", false)):
+		failures.append("Boss死亡后增援控制器未停止")
+	if room.cleared:
+		failures.append("Boss死亡但剩余增援未清完时房间提前清除")
+	var alive_before_stop := tower._boss_reinforcement_alive(room.room_id)
+	tower._tick_boss_reinforcements(100.0)
+	if tower._boss_reinforcement_alive(room.room_id) != alive_before_stop:
+		failures.append("Boss死亡后仍继续生成增援")
+	for enemy in _boss_reinforcement_enemies(tower, room.room_id):
+		enemy.take_damage(1000000)
+	# Boss房还可能有正式精英随从；全部清除后才应清房。
+	for value in (tower._enemy_nodes_by_room.get(room.room_id, []) as Array).duplicate():
+		if value is Enemy3D and is_instance_valid(value) and (value as Enemy3D).ai_state != "dead":
+			(value as Enemy3D).take_damage(1000000)
+	await get_tree().process_frame
+	if not room.cleared:
+		failures.append("Boss与剩余增援全部清除后房间仍未清除")
+
+	tower.set_process(true)
+	if failures.size() == failures_before:
+		print(
+			"TEST_LEVEL_99_BOSS_REINFORCEMENT_OK 计划四段透传/layout_id隔离/中心Boss/"
+			+ "双排3米挂点/10秒延迟/3→4递增/朝中心抛射/18只上限/离房暂停/"
+			+ "快照恢复/Boss死亡停止/剩余敌人清房门禁 全绿"
+		)
+
+
+func _boss_reinforcement_enemies(
+	tower: TowerDescent3D, room_id: String
+) -> Array[Enemy3D]:
+	var result: Array[Enemy3D] = []
+	for value in tower._enemy_nodes_by_room.get(room_id, []) as Array:
+		if (
+			value is Enemy3D
+			and is_instance_valid(value)
+			and not (value as Enemy3D).is_queued_for_deletion()
+			and (value as Enemy3D).ai_state != "dead"
+			and bool((value as Enemy3D).get_enemy_data().get("boss_reinforcement_spawned", false))
+		):
+			result.append(value as Enemy3D)
+	return result
 
 
 ## 房间级掉落计划（`reward_plan`）的端到端落地断言。

@@ -94,6 +94,35 @@
       ],
       "template_rotation_deg": 0,
       "boss_content_id": "boss_monitor002",
+      "boss_reinforcement_plan": {
+        "enabled": true,
+        "boss_spawn_local_m": [0.0, 0.0],
+        "activation_delay_sec": 10.0,
+        "spawn_rows": [
+          {
+            "side": "west",
+            "x_m": -18.0,
+            "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0],
+            "height_m": 3.0
+          },
+          {
+            "side": "east",
+            "x_m": 18.0,
+            "z_m": [-14.0, -7.0, 0.0, 7.0, 14.0],
+            "height_m": 3.0
+          }
+        ],
+        "enemy_request_type": "ambush",
+        "initial_count": 3,
+        "count_step": 1,
+        "max_count_per_round": 8,
+        "initial_interval_sec": 6.0,
+        "interval_step_sec": -0.35,
+        "min_interval_sec": 2.5,
+        "max_reinforcement_alive": 18,
+        "launch_speed_mps": 8.5,
+        "launch_duration_sec": 0.38
+      },
       "ports": [
         {
           "port_id": "P1",

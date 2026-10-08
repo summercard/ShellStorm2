@@ -146,8 +146,9 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		# 本字典是**白名单重建**，不是原样透传：设计源新增字段若忘记在此登记，
 		# 会被静默丢掉（不会报错、也不会红），因此每次扩字段都要连这里一起改。
 		# 已登记的房间级可选字段：enemy_spawn_plan（刷怪计划）、boss_content_id（首领指派）、
-		# reward_plan（统一掉落计划，04 §22.7 / 05 §11 reward_slots）、
-		# spawn_placements（触发盒放置，触发器刷怪设计 §3.2）、encounter（波次调用 §3.3）。
+		# boss_reinforcement_plan（Boss 激活后并发增援）、reward_plan（统一掉落计划，
+		# 04 §22.7 / 05 §11 reward_slots）、spawn_placements（触发盒放置，触发器刷怪设计 §3.2）、
+		# encounter（波次调用 §3.3）。
 		var spawn_plan: Dictionary = {}
 		var raw_spawn_plan: Variant = raw.get("enemy_spawn_plan", {})
 		if raw_spawn_plan is Dictionary:
@@ -164,6 +165,15 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw_encounter: Variant = raw.get("encounter", {})
 		if raw_encounter is Dictionary:
 			encounter = (raw_encounter as Dictionary).duplicate(true)
+		# Boss 激活后并发增援：只透传，不在加载层解释挂点、曲线或抛射参数。
+		var boss_reinforcement_plan: Dictionary = {}
+		var raw_boss_reinforcement: Variant = raw.get("boss_reinforcement_plan", {})
+		if raw_boss_reinforcement is Dictionary:
+			boss_reinforcement_plan = (raw_boss_reinforcement as Dictionary).duplicate(true)
+		elif raw.has("boss_reinforcement_plan"):
+			errors.append(
+				"boss_reinforcement_plan_not_object:%s" % str(raw.get("key", ""))
+			)
 		# 统一掉落计划：键是 trigger（clear / search / kill），值是槽位引用。
 		# 本层只做**类型守卫 + 深拷贝**，语义（trigger 合法、spec 存在、池已登记）由
 		# LevelPlanValidator 与 RewardSpec 负责 —— 与 enemy_spawn_plan 同样「只透传不解释」。
@@ -208,6 +218,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"rotation_deg": float(raw.get("template_rotation_deg", 0.0)),
 			"content_type": str(raw.get("content_type", "")),
 			"boss_content_id": str(raw.get("boss_content_id", "")),
+			"boss_reinforcement_plan": boss_reinforcement_plan,
 			"enemy_spawn_plan": spawn_plan,
 			"spawn_placements": spawn_placements,
 			"encounter": encounter,

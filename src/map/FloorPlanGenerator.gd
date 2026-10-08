@@ -215,8 +215,8 @@ static func generate_expedition(request: Dictionary) -> Dictionary:
 ## —— 单间房的「设计源 → 运行时计划」透传（唯一登记点）——
 ##
 ## 房间级**可选**字段只在此处登记一次：`enemy_spawn_plan`（刷怪计划）、
-## `boss_content_id`（首领指派）、`reward_plan`（统一掉落计划）、
-## `spawn_placements` / `encounter`（触发盒放置与调用，触发器刷怪设计 §3.2）、
+## `boss_content_id`（首领指派）、`boss_reinforcement_plan`（激活后并发增援）、
+## `reward_plan`（统一掉落计划）、`spawn_placements` / `encounter`（触发盒放置与调用，触发器刷怪设计 §3.2）、
 ## `authored_layout_*`（授权布局壳体，区块00 / 远征01）。两处消费方
 ## （`generate_from_level_plan` 与验收脚本）都走本函数，禁止各自复刻字段表。
 ##
@@ -261,6 +261,10 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		# 塔楼按层号取名册条目，单层关卡则**不出 Boss**（口径见 BossContentCatalog.resolve_profile）。
 		# 只透传不解释；本字段**不进 layout_id**，故改它不会让既有存档失配。
 		"boss_content_id": str(src.get("boss_content_id", "")),
+		# Boss 激活后并发增援。玩法内容不进 layout_id，改数量/间隔不使旧存档布局失配。
+		"boss_reinforcement_plan": (
+			src.get("boss_reinforcement_plan", {}) as Dictionary
+		).duplicate(true),
 		# 房间级统一掉落计划（04 §22.7 覆盖链：房间 > 关卡 > 怪物表 > 全局默认）。
 		# 空字典 = 本房在该 trigger 上不覆盖，逐级回退。**不进 layout_id**：
 		# 掉落是内容不是几何，改它不得让既有存档的房间进度失配。
@@ -875,6 +879,9 @@ static func _constrained_slot(
 		# 槽位漏带 = 设计源写了也被静默丢弃（2026-09-25 人报「刷怪批次与设计不符」的根因）。
 		"content_type": str(raw.get("content_type", "")),
 		"boss_content_id": str(raw.get("boss_content_id", "")),
+		"boss_reinforcement_plan": (
+			raw.get("boss_reinforcement_plan", {}) as Dictionary
+		).duplicate(true),
 		"enemy_spawn_plan": (raw.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
 		"reward_plan": (raw.get("reward_plan", {}) as Dictionary).duplicate(true),
 		# 触发盒放置/调用：槽位必须带，否则 `_constrained_floor_from` 产出的房表
@@ -1801,6 +1808,9 @@ static func _constrained_floor_from(
 			# 这四项曾被硬写空 ⇒ 设计源即便声明了也被静默丢弃，运行时恒回退公式波次。
 			"content_type": str(slot.get("content_type", "")),
 			"boss_content_id": str(slot.get("boss_content_id", "")),
+			"boss_reinforcement_plan": (
+				slot.get("boss_reinforcement_plan", {}) as Dictionary
+			).duplicate(true),
 			"enemy_spawn_plan": (slot.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
 			"reward_plan": (slot.get("reward_plan", {}) as Dictionary).duplicate(true),
 			# 触发盒放置/调用（触发器刷怪设计 §3.2 / §3.3）：与上列字段同口径，

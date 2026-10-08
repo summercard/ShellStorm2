@@ -422,6 +422,8 @@ var open_wall_directions: Array[String] = []
 ## 设计源给出的房间级刷怪计划（波次 / 每波数量 / 怪物组成）。
 ## 空字典 = 该房走全局刷怪公式；非空时由 Dungeon3D._spawn_room_enemies 全量接管。
 var enemy_spawn_plan: Dictionary = {}
+## Boss 激活后的房间级并发增援计划。空字典 = 不启用；由 Dungeon3D 统一计时、刷怪和停止。
+var boss_reinforcement_plan: Dictionary = {}
 ## —— 触发器刷怪（`docs/v0.1/design/触发器刷怪设计.md`）——
 ## 放置层：本房摆了哪些触发盒。每项 = `{box: String, center_m: [x,z] 房间局部坐标,
 ## size_m?: [w,d] 覆盖, rotation_deg?: float, delay_sec?: float}`。数组**下标即实例 id**，
@@ -495,6 +497,10 @@ func configure(config: Dictionary) -> void:
 	tower_module_shell = bool(config.get("tower_module_shell", tower_module_shell))
 	open_wall_directions.assign(config.get("open_wall_directions", []))
 	enemy_spawn_plan = (config.get("enemy_spawn_plan", enemy_spawn_plan) as Dictionary).duplicate(true)
+	boss_reinforcement_plan = (
+		config.get("boss_reinforcement_plan", boss_reinforcement_plan) as Dictionary
+	).duplicate(true)
+	_build_boss_reinforcement_markers()
 	spawn_placements = (config.get("spawn_placements", spawn_placements) as Array).duplicate(true)
 	encounter = (config.get("encounter", encounter) as Dictionary).duplicate(true)
 	spawn_boxes_only = bool(config.get("spawn_boxes_only", spawn_boxes_only))
@@ -512,6 +518,59 @@ func configure(config: Dictionary) -> void:
 	door_endpoint_owners = (
 		config.get("door_endpoint_owners", door_endpoint_owners) as Dictionary
 	).duplicate(true)
+
+
+## 把关卡设计源里的 Boss 中心点与两侧增援点落成可见、可探测的运行时 Marker3D。
+## 本房没有计划时一个节点都不创建，其他关卡行为不变。
+func _build_boss_reinforcement_markers() -> void:
+	var old_center := get_node_or_null("BossSpawnCenter")
+	if old_center != null:
+		old_center.free()
+	var old_rows := get_node_or_null("BossReinforcementSpawns")
+	if old_rows != null:
+		old_rows.free()
+	if boss_reinforcement_plan.is_empty() or not bool(boss_reinforcement_plan.get("enabled", false)):
+		return
+	var center_raw := boss_reinforcement_plan.get("boss_spawn_local_m", []) as Array
+	var boss_marker := Marker3D.new()
+	boss_marker.name = "BossSpawnCenter"
+	if center_raw.size() >= 2:
+		boss_marker.position = Vector3(float(center_raw[0]), 0.0, float(center_raw[1]))
+	add_child(boss_marker)
+	var rows_root := Node3D.new()
+	rows_root.name = "BossReinforcementSpawns"
+	add_child(rows_root)
+	for row_value in boss_reinforcement_plan.get("spawn_rows", []) as Array:
+		if not row_value is Dictionary:
+			continue
+		var row := row_value as Dictionary
+		var side := str(row.get("side", "row")).capitalize()
+		var x := float(row.get("x_m", 0.0))
+		var height := float(row.get("height_m", 3.0))
+		var z_values := row.get("z_m", []) as Array
+		for index in range(z_values.size()):
+			var marker := Marker3D.new()
+			marker.name = "%s_%02d" % [side, index + 1]
+			marker.position = Vector3(x, height, float(z_values[index]))
+			marker.set_meta("spawn_side", side.to_lower())
+			marker.set_meta("spawn_index", index)
+			rows_root.add_child(marker)
+
+
+func boss_spawn_position_world() -> Vector3:
+	var marker := get_node_or_null("BossSpawnCenter") as Marker3D
+	return marker.global_position if marker != null else global_position
+
+
+func boss_reinforcement_spawn_markers() -> Array[Marker3D]:
+	var result: Array[Marker3D] = []
+	var root := get_node_or_null("BossReinforcementSpawns")
+	if root == null:
+		return result
+	for child in root.get_children():
+		if child is Marker3D:
+			result.append(child as Marker3D)
+	return result
 
 
 func _ready() -> void:

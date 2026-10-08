@@ -35,6 +35,10 @@ const MONSTER_DROP_TABLE := preload("res://src/rewards/MonsterDropTable.gd")
 const SPAWN_PLAN_MAX_WAVES := 6
 const SPAWN_PLAN_MAX_PER_WAVE := 24
 const SPAWN_PLAN_MAX_TOTAL := 64
+## Boss 增援挂点不能压在房间边界上；保留半米，避免 CharacterBody3D 出生即嵌墙。
+const BOSS_REINFORCEMENT_EDGE_MARGIN_M := 0.5
+## 当前增援控制器只有 ambush 路径会逐值消费显式 count；其它请求类型可能按自身公式出怪。
+const BOSS_REINFORCEMENT_REQUEST_TYPES := ["ambush"]
 
 ## 触发器刷怪：盒子资产库（id → 路径 + 解析 + 自检）。见 `docs/v0.1/design/触发器刷怪设计.md`。
 const SPAWN_BOX_CATALOG := preload("res://src/map/SpawnBoxCatalog.gd")
@@ -544,8 +548,136 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 							"port_lane_not_in_template_table:%s:%s:%s" % [key, side, str(lane)]
 						)
 	errors.append_array(_validate_enemy_spawn_plan(room))
+	errors.append_array(_validate_boss_reinforcement_plan(room))
 	errors.append_array(_validate_reward_plan(room))
+	errors.append_array(_validate_boss_content_id(room))
 	return errors
+
+
+## 校验 Boss 激活后的房间级循环增援计划。
+##
+## 这份数据会跨四道重建式白名单后驱动运行时 Marker 与循环刷怪；任何拼写或非法数值若不在
+## 静态层拦住，运行时会回退默认值或产出空挂点，表现为“配置写了但没生效”。
+static func _validate_boss_reinforcement_plan(room: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	var key := str(room.get("key", ""))
+	var raw: Variant = room.get("boss_reinforcement_plan", {})
+	if raw == null:
+		return errors
+	if not (raw is Dictionary):
+		errors.append("boss_reinforcement_plan_not_object:%s" % key)
+		return errors
+	var plan := raw as Dictionary
+	if plan.is_empty():
+		return errors
+	var content_type := str(room.get("content_type", ""))
+	if not GAME_DESIGN_CONFIG.is_boss_room(content_type, str(room.get("role", ""))):
+		errors.append("boss_reinforcement_plan_on_non_boss_room:%s:%s" % [key, content_type])
+	if not bool(plan.get("enabled", false)):
+		return errors
+
+	var size := room.get("size", Vector2.ZERO) as Vector2
+	var half_x := size.x * 0.5 - BOSS_REINFORCEMENT_EDGE_MARGIN_M
+	var half_z := size.y * 0.5 - BOSS_REINFORCEMENT_EDGE_MARGIN_M
+	var center_value: Variant = plan.get("boss_spawn_local_m", null)
+	if not (center_value is Array) or (center_value as Array).size() < 2:
+		errors.append("boss_reinforcement_center_invalid:%s" % key)
+	else:
+		var center_raw := center_value as Array
+		if not _boss_reinforcement_number(center_raw[0]) or not _boss_reinforcement_number(center_raw[1]):
+			errors.append("boss_reinforcement_center_invalid:%s" % key)
+		else:
+			var center := Vector2(float(center_raw[0]), float(center_raw[1]))
+			if absf(center.x) > half_x + EPS or absf(center.y) > half_z + EPS:
+				errors.append("boss_reinforcement_center_outside_room:%s:%s" % [key, str(center)])
+
+	var rows_value: Variant = plan.get("spawn_rows", null)
+	if not (rows_value is Array):
+		errors.append("boss_reinforcement_rows_not_array:%s" % key)
+	else:
+		var rows := rows_value as Array
+		if rows.size() != 2:
+			errors.append("boss_reinforcement_rows_count:%s:%d" % [key, rows.size()])
+		var seen_sides := {}
+		for row_index in range(rows.size()):
+			var row_value: Variant = rows[row_index]
+			if not (row_value is Dictionary):
+				errors.append("boss_reinforcement_row_not_object:%s:%d" % [key, row_index])
+				continue
+			var row := row_value as Dictionary
+			var side := str(row.get("side", ""))
+			if not side in ["west", "east"]:
+				errors.append("boss_reinforcement_row_side_invalid:%s:%d:%s" % [key, row_index, side])
+			elif seen_sides.has(side):
+				errors.append("boss_reinforcement_row_side_duplicate:%s:%s" % [key, side])
+			else:
+				seen_sides[side] = true
+			var x_value: Variant = row.get("x_m", null)
+			if not _boss_reinforcement_number(x_value):
+				errors.append("boss_reinforcement_row_x_invalid:%s:%d" % [key, row_index])
+			else:
+				var x := float(x_value)
+				if absf(x) > half_x + EPS:
+					errors.append("boss_reinforcement_row_x_outside_room:%s:%d:%.3f" % [key, row_index, x])
+				if side == "west" and x >= 0.0:
+					errors.append("boss_reinforcement_row_side_mismatch:%s:west:%.3f" % [key, x])
+				elif side == "east" and x <= 0.0:
+					errors.append("boss_reinforcement_row_side_mismatch:%s:east:%.3f" % [key, x])
+			var height_value: Variant = row.get("height_m", null)
+			if not _boss_reinforcement_number(height_value) or float(height_value) <= 0.0:
+				errors.append("boss_reinforcement_row_height_invalid:%s:%d" % [key, row_index])
+			var z_value: Variant = row.get("z_m", null)
+			if not (z_value is Array) or (z_value as Array).is_empty():
+				errors.append("boss_reinforcement_row_z_empty:%s:%d" % [key, row_index])
+				continue
+			for z_index in range((z_value as Array).size()):
+				var coordinate: Variant = (z_value as Array)[z_index]
+				if not _boss_reinforcement_number(coordinate):
+					errors.append("boss_reinforcement_row_z_invalid:%s:%d:%d" % [key, row_index, z_index])
+				elif absf(float(coordinate)) > half_z + EPS:
+					errors.append(
+					"boss_reinforcement_row_z_outside_room:%s:%d:%d:%.3f"
+					% [key, row_index, z_index, float(coordinate)]
+				)
+		if not seen_sides.has("west") or not seen_sides.has("east"):
+			errors.append("boss_reinforcement_rows_require_west_east:%s" % key)
+
+	var request_type := str(plan.get("enemy_request_type", ""))
+	if not request_type in BOSS_REINFORCEMENT_REQUEST_TYPES:
+		errors.append("boss_reinforcement_enemy_request_type_invalid:%s:%s" % [key, request_type])
+	for field in ["activation_delay_sec", "initial_interval_sec", "min_interval_sec", "launch_speed_mps", "launch_duration_sec"]:
+		var value: Variant = plan.get(field, null)
+		if not _boss_reinforcement_number(value) or float(value) <= 0.0:
+			errors.append("boss_reinforcement_%s_invalid:%s" % [field, key])
+	var interval_step: Variant = plan.get("interval_step_sec", null)
+	if not _boss_reinforcement_number(interval_step) or float(interval_step) > 0.0:
+		errors.append("boss_reinforcement_interval_step_sec_invalid:%s" % key)
+	for field in ["initial_count", "count_step", "max_count_per_round", "max_reinforcement_alive"]:
+		var value: Variant = plan.get(field, null)
+		if (
+			not _boss_reinforcement_number(value)
+			or float(value) <= 0.0
+			or not is_equal_approx(float(value), round(float(value)))
+		):
+			errors.append("boss_reinforcement_%s_invalid:%s" % [field, key])
+	var initial_count := int(plan.get("initial_count", 0))
+	var max_per_round := int(plan.get("max_count_per_round", 0))
+	var max_alive := int(plan.get("max_reinforcement_alive", 0))
+	if max_per_round > 0 and initial_count > max_per_round:
+		errors.append("boss_reinforcement_initial_count_exceeds_round_cap:%s:%d>%d" % [key, initial_count, max_per_round])
+	if max_alive > 0 and max_per_round > max_alive:
+		errors.append("boss_reinforcement_round_cap_exceeds_alive_cap:%s:%d>%d" % [key, max_per_round, max_alive])
+	if (
+		_boss_reinforcement_number(plan.get("initial_interval_sec", null))
+		and _boss_reinforcement_number(plan.get("min_interval_sec", null))
+		and float(plan.get("min_interval_sec")) > float(plan.get("initial_interval_sec"))
+	):
+		errors.append("boss_reinforcement_min_interval_exceeds_initial:%s" % key)
+	return errors
+
+
+static func _boss_reinforcement_number(value: Variant) -> bool:
+	return value is int or value is float
 
 
 ## 校验房间级刷怪计划 enemy_spawn_plan。
@@ -857,7 +989,7 @@ static func _validate_boss_content_id(room: Dictionary) -> Array[String]:
 	var content_type := str(room.get("content_type", ""))
 	if not GAME_DESIGN_CONFIG.is_boss_room(content_type, str(room.get("role", ""))):
 		errors.append("boss_content_id_on_non_boss_room:%s:%s" % [key, content_type])
-	if BOSS_CONTENT_CATALOG.floor_number_for_content_id(content_id) <= 0:
+	if BOSS_CONTENT_CATALOG.get_by_content_id(content_id).is_empty():
 		errors.append("boss_content_id_unknown:%s:%s" % [key, content_id])
 	return errors
 

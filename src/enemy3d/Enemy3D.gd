@@ -7,6 +7,8 @@ signal escaped(enemy: Enemy3D, context: Dictionary)
 signal summon_requested(enemy: Enemy3D, count: int)
 signal state_changed(previous: String, current: String)
 signal boss_phase_changed(enemy: Enemy3D, phase: int)
+## 显示器 Boss 完整播放激活流程后只发一次；房间玩法不得轮询 MonitorBossCombat 私有状态。
+signal boss_activation_completed(enemy: Enemy3D)
 signal health_changed(enemy: Enemy3D, current: int, maximum: int)
 signal illumination_state_changed(enemy: Enemy3D, previous: String, current: String, context: Dictionary)
 
@@ -167,6 +169,8 @@ var boss_phase := 1
 var _ambush_triggered := false
 var _strafe_sign := 1.0
 var _bypass_shield_once := false
+var _fate_statuses: Dictionary = {}
+var _fate_freeze_remaining := 0.0
 var _source_hp_scale := 1.0
 var _source_damage_scale := 1.0
 var _overhead_health_root: Node3D
@@ -694,6 +698,11 @@ func activate_from_stimulus(stimulus_position: Vector3, _stimulus_kind := "inter
 
 
 func _physics_process(delta: float) -> void:
+	_tick_fate_statuses(delta)
+	if _fate_freeze_remaining > 0.0 and ai_state != "dead":
+		_fate_freeze_remaining = maxf(0.0, _fate_freeze_remaining - delta)
+		velocity = Vector3.ZERO
+		return
 	if illumination_sensor != null:
 		illumination_sensor.tick(delta)
 	_tick_illumination_effects(delta)
@@ -725,7 +734,13 @@ func _physics_process(delta: float) -> void:
 	if _elite_escape_active:
 		_tick_elite_escape(delta)
 		return
-	if monitor_combat != null and monitor_combat.tick_activation(delta):return
+	if monitor_combat != null:
+		var activation_was_completed := monitor_combat.activation_completed
+		var activation_blocks_ai := monitor_combat.tick_activation(delta)
+		if not activation_was_completed and monitor_combat.activation_completed:
+			boss_activation_completed.emit(self)
+		if activation_blocks_ai:
+			return
 	if MonsterAIManager != null:
 		MonsterAIManager.update_enemy_spatial(self)
 	_ai_decision = MonsterAIManager.evaluate_enemy(self) if MonsterAIManager != null else {}
@@ -1144,15 +1159,18 @@ func take_projectile_damage(
 	attacker: Node3D = null,
 	hit_knockback := 0.0
 ) -> void:
-	if attacker != null:
+	if ai_state == "dead" or amount <= 0:
+		return
+	if is_instance_valid(attacker):
 		notify_attacked_by(attacker)
-	_bypass_shield_once = (
-		"armor" in tags
-		or "piercing" in tags
-		or bool(behavior.get("pierce_shield", false))
-	)
+	_bypass_shield_once = bool(behavior.get("pierce_shield", "armor" in tags or "piercing" in tags))
+	if enemy_kind == "shielded" and not _bypass_shield_once and hit_direction.dot(-global_basis.z) < -0.15:
+		amount = maxi(1, int(amount * float(behavior.get("shield_damage_scale", 1.0))))
 	take_damage(amount, critical, hit_direction, hit_knockback, hit_knockback > 0.0)
 	_bypass_shield_once = false
+	var source: Variant = behavior.get("source_weapon_tree")
+	if ai_state == "dead" and is_instance_valid(source):
+		source.record_projectile_kill(critical)
 
 
 func notify_attacked_by(attacker: Node3D) -> void:
@@ -1195,6 +1213,63 @@ func apply_melee_knockback(direction: Vector3, strength: float, duration := 0.20
 		return
 	_external_velocity = planar.normalized() * clampf(strength, 0.5, 10.5)
 	_external_timer = clampf(duration, 0.08, 0.42)
+
+
+func apply_fate_element(element: String, params: Dictionary, weapon_damage: int, source: WeaponAssemblyTree, attacker: Node3D) -> void:
+	if ai_state == "dead":
+		return
+	if element == "ice":
+		var duration := float(params.get("freeze_duration", 0.5))
+		if duration > 0.0:
+			if not elite_modifier_id.is_empty() or enemy_kind == "boss":
+				duration = float(params.get("freeze_duration_elite", duration * 0.5))
+			_fate_freeze_remaining = maxf(_fate_freeze_remaining, duration)
+		else:
+			apply_slow(1.0 - float(params.get("slow_ratio", 0.35)), float(params.get("slow_duration", 3.0)))
+		return
+	var key := element + ("_burst" if params.has("burst_delay") else "")
+	var state: Dictionary = _fate_statuses.get(key, {})
+	var stacks := mini(int(state.get("stacks", 0)) + 1, int(params.get("max_stacks", 5))) if element == "poison" and not params.has("burst_delay") else 1
+	var duration := float(params.get("burst_delay", params.get("dot_duration", 3.0)))
+	_fate_statuses[key] = {
+		"remaining": duration, "elapsed": float(state.get("elapsed", 0.0)),
+		"stacks": stacks, "damage": weapon_damage,
+		"ratio": float(params.get("burst_damage_scale", params.get("dot_damage_per_sec", params.get("dot_damage_per_stack", 0.05)))),
+		"burst": params.has("burst_delay"), "source": source, "attacker": attacker,
+	}
+
+
+func _tick_fate_statuses(delta: float) -> void:
+	if ai_state == "dead":
+		return
+	for key in _fate_statuses.keys():
+		var state: Dictionary = _fate_statuses[key]
+		var active_delta := minf(delta, float(state["remaining"]))
+		state["remaining"] = maxf(0.0, float(state["remaining"]) - delta)
+		state["elapsed"] = float(state["elapsed"]) + active_delta
+		var ticks := 0
+		if bool(state["burst"]):
+			ticks = 1 if float(state["remaining"]) <= 0.00001 else 0
+		else:
+			ticks = int(floor(float(state["elapsed"]) + 0.00001))
+			state["elapsed"] = float(state["elapsed"]) - ticks
+		if ticks > 0:
+			var applied := maxi(1, int(round(float(state["damage"]) * float(state["ratio"]) * int(state["stacks"]) * ticks)))
+			current_hp = maxi(0, current_hp - applied)
+			health_changed.emit(self, current_hp, max_hp)
+			_spawn_damage_number(applied, false)
+			if current_hp <= 0:
+				var source: Variant = state["source"]
+				_die()
+				if is_instance_valid(source):
+					source.record_projectile_kill(false)
+				return
+		if float(state["remaining"]) <= 0.00001:
+			_fate_statuses.erase(key)
+
+
+func get_fate_status_snapshot() -> Dictionary:
+	return {"elements": _fate_statuses.duplicate(true), "freeze_remaining": _fate_freeze_remaining, "slow_factor": _slow_factor, "slow_remaining": _slow_timer}
 
 
 func apply_damage_over_time(total_damage: int, duration: float) -> void:
