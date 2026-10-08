@@ -25,8 +25,8 @@ func _ready() -> void:
 		failures.append("Standing player is not owned by the top-level idle state")
 	if not bool(idle_b.get("idle_animation_active", false)) or not bool(idle_b.get("idle_state_machine_owned", false)):
 		failures.append("Idle state does not activate the formal standing animation")
-	if str(idle_b.get("authored_motion_clip", "")) != "armed_idle":
-		failures.append("Standing armed player is not sampling the authored armed_idle clip")
+	if str(idle_b.get("authored_motion_clip", "")) != "sidearm_idle":
+		failures.append("Standing pistol player is not sampling sidearm_idle")
 	if bool(idle_b.get("legacy_procedural_motion_enabled", true)):
 		failures.append("Standing player still enables the legacy procedural idle generator")
 	if (
@@ -60,6 +60,8 @@ func _ready() -> void:
 
 	var machine := player.get("_state_machine") as StateMachine
 	player.velocity = Vector3(4.0, 0.0, 0.0)
+	player.aim_yaw = 0.0
+	player.avatar.visual_root.rotation.y = 0.0
 	if not machine.transition_to("moving"):
 		failures.append("Idle state could not transition to moving")
 	player.avatar.call("_process", 0.10)
@@ -68,7 +70,7 @@ func _ready() -> void:
 		player.get_state_machine_state() != "moving"
 		or bool(moving.get("idle_animation_active", true))
 		or not bool(moving.get("moving_animation_active", false))
-		or str(moving.get("authored_motion_clip", "")) != "armed_moving"
+		or str(moving.get("authored_motion_clip", "")) != "sidearm_moving_strafe_right"
 	):
 		failures.append("Movement does not immediately switch from authored idle to authored jog")
 

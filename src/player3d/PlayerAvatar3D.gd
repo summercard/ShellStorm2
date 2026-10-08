@@ -177,6 +177,19 @@ var _wearable_nodes: Dictionary = {}
 ## 3. **层级**：环**画在角色之上**（关深度测试）—— 环心在角色下半身，正对镜头时
 ##    上半圈必然压在腿上，不画在上面就会被腿切掉半圈。
 ##
+## 2026-10-08 再补（原话：「现在的位置会直接挡住角色，缩小一点放在红色圈圈的位置」）——
+## 环被居中摆在角色身上，正对镜头时**把角色整个盖住了**。改两条：
+## ① **半径缩小**：0.42 → 0.30（外径 0.84 → 0.60 设计米；实机世界直径 0.672 → 0.48 m）；
+## ② **横向让位**：沿**屏幕右**平移 `RELOAD_RING_LATERAL_OFFSET_M`，让环贴着角色右侧
+##    而不压在身上。方向与位移量都是量出来的，不是手感值 —— 见该常量的推导。
+##
+## 2026-10-08 三轮（原话：「缩小一点，是现在的 70%」）—— 半径 0.30 → **0.21**
+## （0.30 × 0.70，设计外径 0.60 → 0.42；实机世界直径 0.48 → 0.336 m）。
+## ⚠️ **只缩小、不挪位**：主人这次只说"缩小"，没说改位置，所以环心仍在上一轮标定的
+## 红圈落点上（`RELOAD_RING_LATERAL_OFFSET_M` 保持 0.979 不变）。若改成"按新半径重乘
+## 2.33"把环拉回角色身上，就违反了"别挡住角色"这条。副作用是可接受且合意的：环缩小后
+## 近侧边缘离角色更远一点（约 12 px 屏幕间隙），观感更"独立"，正是主人要的。
+##
 ## 几何与绕序来自 `src/ui/RingProgressGeometry.gd` —— 与交互圆点（`InteractionDot3D`
 ## 的读条环）共用同一份绘圆口径。`docs/v0.2/PLAN.md` 的 0.2-PLAYER-001 与
 ## 0.2-PRESENTATION-001 是同一套视觉语言，两边各画一份圆必然漂移。
@@ -188,7 +201,18 @@ const RING_GEOMETRY := preload("res://src/ui/RingProgressGeometry.gd")
 ##
 ## `reload_progress_root` 另外还带着 BUNNY_LINEAR_SCALE，所以建 mesh 时按
 ## `本值 / 该倍率` 反算；要改大小只改这一个数。
-const RELOAD_RING_OUTER_RADIUS_M := 0.42
+##
+## 演进（都在 2026-10-08 这一天）：0.42 → 0.30 → **0.21**。
+## · 0.42 的问题是它**和角色等大**（实机外径 0.672 m，而角色连耳宽约 0.90 m），怎么挪都压人；
+## · 0.30（原话「缩小一点」）后外径 0.48 m，只有角色宽度的一半，才能"贴边站着"；
+## · 0.21（原话「缩小一点，是现在的 70%」＝ 0.30 × 0.70）后实机外径 **0.336 m**，
+##   屏幕直径约 **16 px**（1280×720、实机视角 px/m ≈ 48.7）。
+##   ⚠️ 这已是"小徽标"量级，再往下缩弧头会糊 —— 到那时该动的是**加粗**
+##   （RELOAD_RING_THICKNESS_RATIO），而不是继续缩半径。
+##
+## 线宽按 RELOAD_RING_THICKNESS_RATIO **等比**缩，所以改大小只需改这一个数：
+## 环不会变成粗甜甜圈，也不会细成一根头发。
+const RELOAD_RING_OUTER_RADIUS_M := 0.21
 ## 线宽比照交互读条环：0.059 / 0.265 ≈ 0.2226（同一套视觉语言，不许各画各的）。
 const RELOAD_RING_THICKNESS_RATIO := 0.2226
 ## 比交互环的 48 段密一档：这个环在屏幕上的直径更大，48 段能看出多边形边。
@@ -199,23 +223,44 @@ const RELOAD_RING_SEGMENTS := 64
 ##    （母版线性缩放）被整个吃掉，而环的半径正是按「设计值 / 锚点缩放」反算的 ——
 ##    缩放一丢，环的世界尺寸就错，且 visible / 快照 / AABB 全都正常。
 ##    交互圆点正是踩过这个坑（见 `InteractionDot3D._apply_placement` 的注释），那里也是自己转节点。
-## ② `BILLBOARD_ENABLED` 只绕 Y 轴转，本作相机几乎俯视（塔内高 10.719 m / 后拉 4.038 m
-##    ⇒ 视轴离竖直仅 20.6°），竖直的环面会被压成 sin(20.6°) ≈ 0.35 的扁椭圆。
+## ② `BILLBOARD_ENABLED` 只绕 Y 轴转，本作相机几乎俯视（塔内相机在玩家系
+##    (0, 10.269009, 4.787671)、注视点 (0, 0.45, -0.75) ⇒ 视轴离竖直 29.42°，
+##    见 TowerDescent3D 的 CAMERA_* 常量），竖直的环面会被压成 sin(29.42°) ≈ 0.49 的扁椭圆。
 ## 所以朝向由 `_face_reload_ring_to_camera()` 手写基向量（局部基 = 相机基）。
 ## 🔴「层级还是在角色上方」：环**必须画在角色之上**，照 HUD 口径关掉深度测试。
 ## 代价：环也会盖住它后方的一切（含墙）。换弹提示是短时 HUD 信息，这个取舍是对的；
 ## 要退回「被墙挡住」就改成 false —— 但角色腿会重新切掉半个环。
 const RELOAD_RING_DRAW_OVER_CHARACTER := true
-## 环心（角色本地坐标 = 相对脚底的高度）。
+## 基准锚点（角色本地坐标 = 相对脚底的高度）。**横向让位量另加**（见
+## RELOAD_RING_LATERAL_OFFSET_M）—— 这个常量只管高度，所以断言里"高度带"永远照它判。
 ##
-## 0.25 不是手感值，是**离地判据**反算出来的：相机向下倾 25.0°
-## （塔内高 10.719 / 后拉 4.038，注视点再抬 0.45、前送 0.75 ⇒ atan(4.788 / 10.269)，
-## 见 TowerDescent3D 的 CAMERA_* 常量），所以正对镜头的环面离水平也是 25°，
-## 竖直方向铺开 ±r·sin(25°) = ±0.42 × 0.4226 = **±0.1775**。
-## 环心低于 0.18 时下半圈就插进地板 —— 一眼看过去又变回「地上画的圈」，
-## 正是 2026-10-05 主人否掉的那一版。取 0.25 ⇒ 最低点落在 0.073（约 6 cm 实机），
-## 整个环悬在角色小腿高度，离地、离头顶都远。
+## 0.25 不是手感值，是**离地判据**反算出来的：相机在玩家系 (0, 10.269009, 4.787671)、
+## 注视点 (0, 0.45, -0.75) ⇒ 相机→焦点 = (0, -9.819009, -5.537671)，
+## 视轴离竖直 atan(5.537671 / 9.819009) = **29.42°**（sin = 0.4912）。
+## 正对镜头的环面离水平也是 29.42°，竖直方向铺开 ±r·sin(29.42°)：
+## · r = 0.30（上一轮）⇒ ±0.30 × 0.4912 = ±0.1474；
+## · r = 0.21（当前）⇒ ±0.21 × 0.4912 = **±0.1031** —— 环变小、下半圈上收，
+##   离地余量反而更宽松，所以缩半径**不必**动这个锚点。
+## 环心低于 r×0.4912 时下半圈就插进地板 —— 一眼看过去又变回「地上画的圈」，
+## 正是 2026-10-05 主人否掉的那一版。锚点固定取 0.25 ⇒ 最低点 = 0.25 − 0.1031
+## = **0.147**（约 12 cm 实机），整个环悬在角色小腿高度，离地、离头顶都远。
 const RELOAD_RING_ANCHOR_LOCAL := Vector3(0.0, 0.25, 0.0)
+## 横向让位：沿**屏幕右**（相机基 +X）平移多少设计米。0.979 的来历是量出来的，不是调的：
+##
+##   主人标注图（980×561）实测 —— 环心 (510.9, 298.8)、环**外半径 16.5 px**；
+##   主人手绘的红圈中心 (549.4, 299.9) ⇒ Δx = 38.5 px = **2.33 × 环外半径**，
+##   Δy = 1.1 px ≈ 0（纯横向，不抬不压）。
+##
+## 比值 2.33 与相机远近无关：环半径与横向位移**都落在像平面内**，投影是同一个尺度。
+## 用它乘**标注时那一版的半径 0.42**：0.42 × 2.33 = **0.979**。
+##
+## ⚠️ 这里踩过一个坑，记着：改半径时**不要**用新半径重乘这个比值。
+## 主人标的是**环心的落点**（红圈画在哪，环心就去哪），不是"环的左边贴着角色"。
+## 若按新半径 0.30 × 2.33 = 0.699，环心会被拉近角色 0.28 设计米 —— 环反而压回
+## 角色右肩/耳上（实机重渲一次就看到了）。半径缩小只会让**近侧边缘**离角色更远，
+## 那正是主人要的"别挡住角色"。
+## 实机世界位移 = 本值 × 角色运行时体型倍率 = 0.979 × 0.8 ≈ 0.78 m。
+const RELOAD_RING_LATERAL_OFFSET_M := 0.979
 ## 「环在角色下方」的结构判据上限。角色高 1.5 m、旧横条锚点在 1.67 m
 ## （头顶），两条互不误判；下限 > 0 表示不许埋到地板以下。
 const RELOAD_RING_BELOW_CHARACTER_MAX_HEIGHT_M := 0.5
@@ -243,11 +288,13 @@ const LEFT_HAND_RING_CENTER_LOCAL := Vector3(-0.039783746, 0.030701667, 0.017969
 const EAR_ROOT_CENTER_LOCAL := Vector3(-0.048021823, 0.046667456, -0.001094951)
 const RIGHT_HAND_PIVOT_CONTRACT := "cuff_ring_center_is_HandJointR_and_GripSocket"
 const SIDEARM_GUNS := ["bp_pistol"]
+const MACHINEGUN_GUNS := ["bp_machinegun", "bp_sprinkler"]
 const HEAVY_MELEE_WEAPONS := ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"]
 const WEAPON_POSE_STATES := [
 	"unarmed",
 	"sidearm_hold", "sidearm_run", "sidearm_fire", "sidearm_reload", "sidearm_charge",
 	"longgun_hold", "longgun_run", "longgun_fire", "longgun_reload", "longgun_charge",
+	"machinegun_hold", "machinegun_run", "machinegun_fire", "machinegun_reload", "machinegun_charge",
 	"heavy_melee_hold", "heavy_melee_run", "heavy_melee_windup", "heavy_melee_active", "heavy_melee_recovery",
 ]
 const WEAPON_ANIMATION_PROFILES := {
@@ -466,13 +513,16 @@ func get_component_snapshot() -> Dictionary:
 		"avatar_profile": "bunny01" if is_bunny else "capsule_cat",
 		"assembly_version": str(get_meta("assembly_version", "v008" if is_bunny else "v001")),
 		"authored_motion_clip": _authored_motion.active_clip,
+		"motion_library_version": _authored_motion.library_version,
+		"movement_direction": _authored_motion.movement_direction,
+		"movement_speed_role": _authored_motion.speed_role,
+		"motion_playback_rate": _authored_motion.playback_rate,
+		"motion_reference_speed_mps": _authored_motion.reference_speed_mps,
+		"weapon_support_error_m": _get_authored_support_error(),
+		"right_hand_palm_to_socket_global_distance": _authored_motion.palm_global(self, "r").distance_to(weapon_socket.global_position),
 		"animation_driver": "blender_v021_only" if str(get_meta("assembly_version", "")) == "v021" else "legacy_compatible",
 		"legacy_procedural_motion_enabled": str(get_meta("assembly_version", "")) != "v021",
-		"weapon_animation_fallback": (
-			"single_hand_armed_clip" if str(get_meta("assembly_version", "")) == "v021" and _weapon_class == "longgun"
-			else "single_hand_attachment_only" if str(get_meta("assembly_version", "")) == "v021" and _weapon_class == "heavy_melee"
-			else "none"
-		),
+		"weapon_animation_fallback": _authored_motion.fallback_reason,
 		"missing_authored_action": _get_missing_authored_action(),
 		"rig_type": "rigid_node_skeleton" if is_bunny else "legacy_component_nodes",
 		"component_space": "pivot_local" if is_bunny else "scene_local",
@@ -569,7 +619,9 @@ func get_component_snapshot() -> Dictionary:
 		"reload_ring_progress": maxf(0.0, _reload_ring_built_progress),
 		"reload_ring_segments": RELOAD_RING_SEGMENTS,
 		"reload_ring_outer_radius_m": RELOAD_RING_OUTER_RADIUS_M,
-		"reload_ring_anchor_local": reload_progress_root.position,
+		"reload_ring_anchor_local": RELOAD_RING_ANCHOR_LOCAL,
+		"reload_ring_lateral_offset_m": RELOAD_RING_LATERAL_OFFSET_M,
+		"reload_ring_lateral_offset_world": _reload_ring_lateral_offset_world(),
 		"reload_bar_outside_visual_root": reload_progress_root.get_parent() == self,
 		"reload_bar_below_character": _reload_ring_is_below_character(),
 		"reload_ring_camera_alignment": _reload_ring_camera_alignment(),
@@ -582,7 +634,7 @@ func get_component_snapshot() -> Dictionary:
 		"equipped_gun_id": _equipped_gun_id,
 		"weapon_fire_style": _weapon_fire_style,
 		"active_grip_hand_count": _active_grip_hand_count,
-		"right_hand_pivot_contract": RIGHT_HAND_PIVOT_CONTRACT,
+		"right_hand_pivot_contract": "cuff_ring_center_is_HandJointR_palm_is_GripSocket" if _authored_motion.has_palm_offsets() else RIGHT_HAND_PIVOT_CONTRACT,
 		"right_hand_ring_center_local": right_ring,
 		"left_hand_ring_center_local": left_ring,
 		"right_hand_model_pivot_offset": bunny_hand_r_model.position if bunny_hand_r_model != null else Vector3.ZERO,
@@ -715,17 +767,18 @@ func _refresh_weapon_pose_state() -> void:
 	_equipped_gun_id = str(weapon_snapshot.get("gun_id", ""))
 	var has_weapon := not _equipped_gun_id.is_empty() and weapon_socket.get_child_count() > 0 and _state != "dead"
 	_weapon_class = (
-		"heavy_melee" if _equipped_gun_id in HEAVY_MELEE_WEAPONS
+		"unarmed" if not has_weapon
+		else "heavy_melee" if _equipped_gun_id in HEAVY_MELEE_WEAPONS
 		else "sidearm" if _equipped_gun_id in SIDEARM_GUNS
+		else "machinegun" if _equipped_gun_id in MACHINEGUN_GUNS
 		else "longgun" if has_weapon
 		else "unarmed"
 	)
 	var profile := _get_weapon_animation_profile()
 	_weapon_fire_style = str(profile.get("fire_style", "none")) if has_weapon else "none"
 	_active_grip_hand_count = (
-		1 if has_weapon and str(get_meta("assembly_version", "")) == "v021"
-		else 1 if _weapon_class == "sidearm"
-		else 2 if _weapon_class in ["longgun", "heavy_melee"]
+		1 if _weapon_class in ["sidearm", "heavy_melee"]
+		else 2 if _weapon_class in ["longgun", "machinegun"]
 		else 0
 	)
 	_weapon_grip_pose_active = has_weapon
@@ -771,22 +824,19 @@ func _get_missing_authored_action() -> String:
 	if _weapon_class == "heavy_melee" and _melee_animation_active:
 		return "heavy_melee_%s" % _melee_phase
 	if _reload_animation_active:
-		return "single_hand_reload" if _weapon_class in ["sidearm", "longgun"] else "%s_reload" % _weapon_class
-	if _charging_animation_active and _weapon_class == "longgun":
-		return "single_hand_charge"
-	if _firing_animation_active and _weapon_class in ["sidearm", "longgun"]:
-		return "single_hand_fire"
-	if _weapon_class == "longgun":
-		var locomotion := "idle"
-		if _state == "moving":
-			locomotion = "moving"
-			if _player != null and _player.get("velocity") is Vector3:
-				var velocity := _player.get("velocity") as Vector3
-				var speed := Vector2(velocity.x, velocity.z).length()
-				if speed > 0.05 and speed < 3.2:
-					locomotion = "walking"
-		return "longgun_two_hand_%s" % locomotion
+		return "%s_reload" % _weapon_class
+	if _charging_animation_active:
+		return "%s_charge" % _weapon_class
+	if _firing_animation_active:
+		return "" if "_fire_" in _authored_motion.active_clip else "%s_fire" % _weapon_class
 	return ""
+
+
+func _get_authored_support_error() -> float:
+	if _weapon_class not in ["longgun", "machinegun"]:
+		return 0.0
+	var socket := weapon_socket.find_child("SupportHandSocket", true, false) as Node3D
+	return _authored_motion.palm_global(self, "l").distance_to(socket.global_position) if socket != null else -1.0
 
 
 func _update_orientation(delta: float) -> void:
@@ -1417,6 +1467,8 @@ func _animate_bunny_accessories(
 func _setup_reload_ring() -> void:
 	if reload_progress_root == null:
 		return
+	# 先落在基准锚点（只定高度）；横向让位在 _face_reload_ring_to_camera() 里加 ——
+	# 让位方向是相机相关的，_ready 这一刻相机未必就位，所以不能在这里定死。
 	reload_progress_root.position = RELOAD_RING_ANCHOR_LOCAL
 	_reload_ring_anchor_scale = reload_progress_root.scale.x
 	if is_zero_approx(_reload_ring_anchor_scale):
@@ -1486,7 +1538,7 @@ func _face_reload_ring_to_camera() -> void:
 		return
 	var camera := get_viewport().get_camera_3d()
 	if camera == null:
-		# headless / 无相机：保留 prefab 朝向，不报错（验收场景走这条时另有断言兜底）。
+		# headless / 无相机：保留 prefab 朝向与基准锚点，不报错（验收场景另有断言兜底）。
 		return
 	var parent_node := reload_progress_root.get_parent_node_3d()
 	var parent_rotation := Basis.IDENTITY
@@ -1495,6 +1547,17 @@ func _face_reload_ring_to_camera() -> void:
 	var camera_rotation := camera.global_transform.basis.orthonormalized()
 	var local_rotation := parent_rotation.inverse() * camera_rotation
 	reload_progress_root.basis = local_rotation.scaled(Vector3.ONE * _reload_ring_anchor_scale)
+	# 位置也得每帧重写：让位方向是**屏幕右**，而屏幕右 = 相机基 +X。
+	# 相机是玩家的子节点、只在 Y/Z 上偏移，所以这个方向恒等于玩家朝向下的"右手边"，
+	# 与角色当前朝哪（visual_root 的 yaw）无关 —— 环不会因为转身而绕着角色转。
+	#
+	# 用正交化基（不带缩放）反解方向，得到的是**单位**向量；乘上让位量后与
+	# RELOAD_RING_ANCHOR_LOCAL 同处父节点局部系，父节点的体型缩放会一并作用到两者，
+	# 所以"环跟着角色缩放"这条对高度和横移同时成立。
+	var lateral_local := parent_rotation.inverse() * camera_rotation.x
+	reload_progress_root.position = (
+		RELOAD_RING_ANCHOR_LOCAL + lateral_local * RELOAD_RING_LATERAL_OFFSET_M
+	)
 
 
 ## 结构断言用：环面法线（网格正面 = 局部 +Z）与相机视轴的对齐度。
@@ -1511,17 +1574,25 @@ func _reload_ring_camera_alignment() -> float:
 	return ring_normal.dot(camera_normal)
 
 
-## 结构断言用：环心必须水平居中在角色上、且落在脚下高度带（0 < y ≤ 0.5 m）。
+## 结构断言用：环心相对角色原点的**水平**位移（世界系，y 归零）。
+## 「贴在角色右侧」这条要同时验方向和大小：方向靠它点乘相机基 +X，
+## 大小靠它的长度 —— 只看其中一条都会放过「挪到了角色左边」或「挪得太远」。
+func _reload_ring_lateral_offset_world() -> Vector3:
+	if reload_progress_root == null:
+		return Vector3.ZERO
+	var delta := reload_progress_root.global_position - global_position
+	return Vector3(delta.x, 0.0, delta.z)
+
+
+## 结构断言用：环心落在脚下高度带（0 < 离地 ≤ 0.5 m）。
+## 只看**高度**：横向让位是设计的一部分（见 RELOAD_RING_LATERAL_OFFSET_M），
+## 所以不再要求环水平居中对齐角色 —— 那条断言是 2026-10-05 的旧口径，
+## 留着它会把 2026-10-08 的让位改动误判成"环跑掉了"。
 func _reload_ring_is_below_character() -> bool:
 	if reload_progress_root == null:
 		return false
-	var anchor := reload_progress_root.position
-	return (
-		anchor.y > 0.0
-		and anchor.y <= RELOAD_RING_BELOW_CHARACTER_MAX_HEIGHT_M
-		and absf(anchor.x) < 0.05
-		and absf(anchor.z) < 0.05
-	)
+	var height := reload_progress_root.position.y
+	return height > 0.0 and height <= RELOAD_RING_BELOW_CHARACTER_MAX_HEIGHT_M
 
 
 ## 结构断言用：「层级还是在角色上方」—— 两个材质都关了深度测试，环才压得住躯干。

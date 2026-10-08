@@ -1,6 +1,6 @@
 {
   "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
-  "version": "v025",
+  "version": "v026",
   "status": "authored_pending_export",
   "runtime_changed": false,
   "model_source": "production/v021/source/model/chr_bunny01_model_v021.blend",
@@ -17,8 +17,8 @@
         ],
         "errors": {
           "scale": 3.5762786865234375e-07,
-          "arm_gap": 1.221986075256521e-07,
-          "right_grip": 2.0701354726329154e-07,
+          "arm_gap": 1.3657139822709083e-07,
+          "right_grip": 3.0538293021796936e-07,
           "left_support": 0.0,
           "planted_feet": 1.043081283569336e-07,
           "root_motion": 0.0,
@@ -71,9 +71,9 @@
         ],
         "errors": {
           "scale": 3.5762786865234375e-07,
-          "arm_gap": 9.996002811937585e-08,
-          "right_grip": 2.2940046069533605e-07,
-          "left_support": 3.488272401904948e-07,
+          "arm_gap": 1.1151007970493857e-07,
+          "right_grip": 2.6066386229598374e-07,
+          "left_support": 3.6863436927953305e-07,
           "planted_feet": 1.1920928955078125e-07,
           "root_motion": 0.0,
           "loop": 2.2620573203339564e-18
@@ -93,7 +93,263 @@
     }
   },
   "source": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v026.blend",
-  "sha256": "c764377a1ead694e22c2af522d1368c24505cb8c74291977221d176b014e71ea",
+  "sha256": "0081e249b36db0ce1cbd3aff5e4111980c31c0920921c3c4123b9d13eee33edc",
   "integration_warning": "Runtime v021 wrapper currently uses v024 motion library. New idles require weapon-family selection and gun orientation binding, not just hand-tip translation. Preview guns and their actions must not export.",
-  "preserved_source_scene_note": "v024 moving preview scene already plays climbing; unchanged. Original moving action retained."
+  "preserved_source_scene_note": "v024 moving preview scene already plays climbing; unchanged. Original moving action retained.",
+  "reference": "User front and side screenshots, 2026-10-07; no access to that live player session",
+  "source_parent": "assets\\art\\characters\\player\\chr_player_capsule01_3d\\variants\\bunny01\\source\\animation\\chr_bunny01_animation_v025.blend",
+  "source_parent_sha256": "53a7951a00c6fed8f22ceef335a5817b4a55580ef38b315b2b56f9464065a8ad",
+  "reach": {
+    "l": 0.2338090921588181,
+    "r": 0.33076282025452636
+  },
+  "clearance": {
+    "sidearm": [
+      {
+        "frame": 1.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08400066941976547
+      },
+      {
+        "frame": 13.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08448166400194168
+      },
+      {
+        "frame": 25.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08496308326721191
+      },
+      {
+        "frame": 37.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08533518016338348
+      },
+      {
+        "frame": 49.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08554409444332123
+      },
+      {
+        "frame": 61.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08556079864501953
+      },
+      {
+        "frame": 73.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08538268506526947
+      },
+      {
+        "frame": 85.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.0850335955619812
+      },
+      {
+        "frame": 97.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08458735048770905
+      },
+      {
+        "frame": 109.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08412481844425201
+      },
+      {
+        "frame": 121.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.0835973247885704
+      },
+      {
+        "frame": 133.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08317907154560089
+      },
+      {
+        "frame": 145.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08293822407722473
+      },
+      {
+        "frame": 157.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08291424810886383
+      },
+      {
+        "frame": 169.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08311052620410919
+      },
+      {
+        "frame": 181.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.08349400013685226
+      }
+    ],
+    "longgun": [
+      {
+        "frame": 1.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013826210051774979
+      },
+      {
+        "frame": 14.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013646090403199196
+      },
+      {
+        "frame": 28.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013507124967873096
+      },
+      {
+        "frame": 41.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013502446934580803
+      },
+      {
+        "frame": 55.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013516326434910297
+      },
+      {
+        "frame": 68.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013557558879256248
+      },
+      {
+        "frame": 82.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013612312264740467
+      },
+      {
+        "frame": 95.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013699107803404331
+      },
+      {
+        "frame": 109.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013874989002943039
+      },
+      {
+        "frame": 122.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.014039382338523865
+      },
+      {
+        "frame": 136.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.014180807396769524
+      },
+      {
+        "frame": 149.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.01427527703344822
+      },
+      {
+        "frame": 163.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.014293612912297249
+      },
+      {
+        "frame": 176.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.014250018633902073
+      },
+      {
+        "frame": 190.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.014144434593617916
+      },
+      {
+        "frame": 203.5,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.013994274660944939
+      }
+    ],
+    "machinegun": [
+      {
+        "frame": 1.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.037643350660800934
+      },
+      {
+        "frame": 16.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03792576119303703
+      },
+      {
+        "frame": 31.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03831443935632706
+      },
+      {
+        "frame": 46.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03868004307150841
+      },
+      {
+        "frame": 61.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.038920871913433075
+      },
+      {
+        "frame": 76.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03899968042969704
+      },
+      {
+        "frame": 91.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.0389031358063221
+      },
+      {
+        "frame": 106.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.038645680993795395
+      },
+      {
+        "frame": 121.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03835011646151543
+      },
+      {
+        "frame": 136.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03806687518954277
+      },
+      {
+        "frame": 151.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03777329996228218
+      },
+      {
+        "frame": 166.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.037512555718421936
+      },
+      {
+        "frame": 181.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03732705116271973
+      },
+      {
+        "frame": 196.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03724484145641327
+      },
+      {
+        "frame": 211.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03727741166949272
+      },
+      {
+        "frame": 226.0,
+        "intersecting_face_pairs": 0,
+        "vertex_surface_gap": 0.03741796314716339
+      }
+    ]
+  },
+  "note": "Only three carry arms/gun previews adjusted. Body/head/ears/feet curves and all original actions preserved; pose-only shoulder protraction for floating hands, no rest/scale changes."
 }

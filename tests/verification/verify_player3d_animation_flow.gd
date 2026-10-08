@@ -60,23 +60,25 @@ func _ready() -> void:
 		snapshot = gallery.player.avatar.get_component_snapshot()
 		if (
 			str(snapshot.get("weapon_pose_state", "")) != "longgun_hold"
-			or int(snapshot.get("active_grip_hand_count", 0)) != 1
-			or str(snapshot.get("weapon_animation_fallback", "")) != "single_hand_armed_clip"
-			or str(snapshot.get("authored_motion_clip", "")) != "armed_idle"
-			or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.001
+			or int(snapshot.get("active_grip_hand_count", 0)) != 2
+			or str(snapshot.get("weapon_animation_fallback", "")) != "none"
+			or str(snapshot.get("authored_motion_clip", "")) != "longgun_idle"
+			or float(snapshot.get("right_hand_palm_to_socket_global_distance", 999.0)) > 0.001
 		):
-			failures.append("Rifle does not use the registered single-hand Blender fallback")
+			failures.append("Rifle does not use its authored two-hand carry idle")
 		gallery.run_player_action("moving")
+		gallery.player.aim_yaw = 0.0
+		gallery.player.avatar.visual_root.rotation.y = 0.0
 		gallery.player.velocity = Vector3(2.0, 0.0, 0.0)
 		gallery.player.avatar.call("_process", 0.20)
 		snapshot = gallery.player.avatar.get_component_snapshot()
-		if str(snapshot.get("authored_motion_clip", "")) != "armed_walking":
-			failures.append("Slow longgun locomotion does not select armed_walking")
+		if str(snapshot.get("authored_motion_clip", "")) != "longgun_walking_strafe_right":
+			failures.append("Slow longgun locomotion does not select its right strafe")
 		gallery.player.velocity = Vector3(5.0, 0.0, 0.0)
 		gallery.player.avatar.call("_process", 0.20)
 		snapshot = gallery.player.avatar.get_component_snapshot()
-		if str(snapshot.get("authored_motion_clip", "")) != "armed_moving":
-			failures.append("Normal-speed longgun locomotion does not select armed_moving")
+		if str(snapshot.get("authored_motion_clip", "")) != "longgun_moving_strafe_right":
+			failures.append("Normal-speed longgun locomotion does not select its right strafe")
 
 	gallery.run_player_action("dashing")
 	# v0.1 的翻滚周期为位移周期的 1.3 倍；90 ms 才进入约 34% 的收腹关键帧。

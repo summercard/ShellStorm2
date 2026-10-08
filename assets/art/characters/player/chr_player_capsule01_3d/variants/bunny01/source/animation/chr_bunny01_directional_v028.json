@@ -1,0 +1,720 @@
+{
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v028",
+  "status": "authored_pending_export",
+  "runtime_changed": false,
+  "source": "assets\\art\\characters\\player\\chr_player_capsule01_3d\\variants\\bunny01\\source\\animation\\chr_bunny01_animation_v028.blend",
+  "sha256": "d646646d5c5380edd9d571cb5d8c793eda78e73bb50e112e189312643af66b51",
+  "source_parent": "assets\\art\\characters\\player\\chr_player_capsule01_3d\\variants\\bunny01\\source\\animation\\chr_bunny01_animation_v027.blend",
+  "parent_sha256": "3558a0eb983bfdc965164dc7d6a9030f5ec10525199155847f7cd22e71c11490",
+  "preserved_actions": 62,
+  "clips": {
+    "sidearm_walking_strafe_left": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 1.9082797281243946e-07,
+        "support": 0.0,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.2990531157078367e-07
+      },
+      "ground_min_z": -3.63358694244198e-08,
+      "duration": 1.0
+    },
+    "sidearm_walking_strafe_right": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 1.9082797281243946e-07,
+        "support": 0.0,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.2990531157078367e-07
+      },
+      "ground_min_z": -4.447635859605725e-08,
+      "duration": 1.0
+    },
+    "sidearm_walking_backward": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 2.2500259981366246e-07,
+        "support": 0.0,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.884864366154897e-07
+      },
+      "ground_min_z": -2.8309639077406246e-08,
+      "duration": 1.0
+    },
+    "sidearm_moving_strafe_left": {
+      "errors": {
+        "scale": 2.384185791015625e-07,
+        "grip": 1.6858739404357614e-07,
+        "support": 0.0,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.1151007970493857e-07
+      },
+      "ground_min_z": -2.9035344795147466e-08,
+      "duration": 0.8
+    },
+    "sidearm_moving_strafe_right": {
+      "errors": {
+        "scale": 2.980232238769531e-07,
+        "grip": 1.6858739404357614e-07,
+        "support": 0.0,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.1151007970493857e-07
+      },
+      "ground_min_z": -3.684375471380008e-08,
+      "duration": 0.8
+    },
+    "sidearm_moving_backward": {
+      "errors": {
+        "scale": 2.384185791015625e-07,
+        "grip": 1.6049041769309353e-07,
+        "support": 0.0,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.3328003749250113e-07
+      },
+      "ground_min_z": -2.5260582958708255e-08,
+      "duration": 0.8
+    },
+    "longgun_walking_strafe_left": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 1.8431718463976653e-07,
+        "support": 2.1126042125758269e-07,
+        "loop": 6.938893903907228e-18,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.0745380149674383e-07
+      },
+      "ground_min_z": -2.6320208235119935e-08,
+      "duration": 1.0
+    },
+    "longgun_walking_strafe_right": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 1.8431718463976653e-07,
+        "support": 2.1126042125758269e-07,
+        "loop": 6.938893903907228e-18,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.0745380149674383e-07
+      },
+      "ground_min_z": -2.298547130408224e-08,
+      "duration": 1.0
+    },
+    "longgun_walking_backward": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 2.3276357876976293e-07,
+        "support": 1.884864366154897e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.0745380149674383e-07
+      },
+      "ground_min_z": -4.293758593121311e-08,
+      "duration": 1.0
+    },
+    "longgun_moving_strafe_left": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 1.959941750461743e-07,
+        "support": 1.959941750461743e-07,
+        "loop": 6.938893903907228e-18,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.0745380149674383e-07
+      },
+      "ground_min_z": -2.6388885743244828e-08,
+      "duration": 0.8
+    },
+    "longgun_moving_strafe_right": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 1.959941750461743e-07,
+        "support": 1.959941750461743e-07,
+        "loop": 6.938893903907228e-18,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.0745380149674383e-07
+      },
+      "ground_min_z": -3.03215692554204e-08,
+      "duration": 0.8
+    },
+    "longgun_moving_backward": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 1.9082797281243946e-07,
+        "support": 2.086162567138672e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.2013700229374393e-07
+      },
+      "ground_min_z": -2.1245440962047724e-08,
+      "duration": 0.8
+    },
+    "machinegun_walking_strafe_left": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 2.2500259981366246e-07,
+        "support": 1.6049041769309353e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.666000468656264e-07
+      },
+      "ground_min_z": -2.7463450180675864e-08,
+      "duration": 1.0
+    },
+    "machinegun_walking_strafe_right": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 2.2500259981366246e-07,
+        "support": 1.6049041769309353e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.666000468656264e-07
+      },
+      "ground_min_z": -2.7721533513158647e-08,
+      "duration": 1.0
+    },
+    "machinegun_walking_backward": {
+      "errors": {
+        "scale": 3.5762786865234375e-07,
+        "grip": 2.3466372114455137e-07,
+        "support": 1.4901161193847656e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.6323404237781945e-07
+      },
+      "ground_min_z": -3.543268078942674e-08,
+      "duration": 1.0
+    },
+    "machinegun_moving_strafe_left": {
+      "errors": {
+        "scale": 2.384185791015625e-07,
+        "grip": 1.7881393432617188e-07,
+        "support": 1.2644054553268208e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.6323404237781945e-07
+      },
+      "ground_min_z": -2.4220206285008317e-08,
+      "duration": 0.8
+    },
+    "machinegun_moving_strafe_right": {
+      "errors": {
+        "scale": 2.384185791015625e-07,
+        "grip": 1.7881393432617188e-07,
+        "support": 1.2644054553268208e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.6323404237781945e-07
+      },
+      "ground_min_z": -2.4351123784072115e-08,
+      "duration": 0.8
+    },
+    "machinegun_moving_backward": {
+      "errors": {
+        "scale": 2.384185791015625e-07,
+        "grip": 1.8491854736195292e-07,
+        "support": 1.519626234052415e-07,
+        "loop": 0.0,
+        "root": 0.0,
+        "face": 0.0,
+        "arm": 1.837138534477048e-07
+      },
+      "ground_min_z": -2.1469674038598896e-08,
+      "duration": 0.8
+    }
+  },
+  "specs": {
+    "sidearm_walking_strafe_left": {
+      "family": "sidearm",
+      "speed": "walking",
+      "direction": "strafe_left",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.12,
+      "reference_speed_mps": 0.21818181818181814,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "sidearm_walking_strafe_right": {
+      "family": "sidearm",
+      "speed": "walking",
+      "direction": "strafe_right",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.12,
+      "reference_speed_mps": 0.21818181818181814,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "sidearm_walking_backward": {
+      "family": "sidearm",
+      "speed": "walking",
+      "direction": "backward",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.19,
+      "reference_speed_mps": 0.3454545454545454,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "sidearm_moving_strafe_left": {
+      "family": "sidearm",
+      "speed": "moving",
+      "direction": "strafe_left",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.13440000000000002,
+      "reference_speed_mps": 0.336,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "sidearm_moving_strafe_right": {
+      "family": "sidearm",
+      "speed": "moving",
+      "direction": "strafe_right",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.13440000000000002,
+      "reference_speed_mps": 0.336,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "sidearm_moving_backward": {
+      "family": "sidearm",
+      "speed": "moving",
+      "direction": "backward",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.21280000000000002,
+      "reference_speed_mps": 0.532,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "longgun_walking_strafe_left": {
+      "family": "longgun",
+      "speed": "walking",
+      "direction": "strafe_left",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.12,
+      "reference_speed_mps": 0.21818181818181814,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "longgun_walking_strafe_right": {
+      "family": "longgun",
+      "speed": "walking",
+      "direction": "strafe_right",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.12,
+      "reference_speed_mps": 0.21818181818181814,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "longgun_walking_backward": {
+      "family": "longgun",
+      "speed": "walking",
+      "direction": "backward",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.19,
+      "reference_speed_mps": 0.3454545454545454,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "longgun_moving_strafe_left": {
+      "family": "longgun",
+      "speed": "moving",
+      "direction": "strafe_left",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.13440000000000002,
+      "reference_speed_mps": 0.336,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "longgun_moving_strafe_right": {
+      "family": "longgun",
+      "speed": "moving",
+      "direction": "strafe_right",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.13440000000000002,
+      "reference_speed_mps": 0.336,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "longgun_moving_backward": {
+      "family": "longgun",
+      "speed": "moving",
+      "direction": "backward",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.21280000000000002,
+      "reference_speed_mps": 0.532,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "machinegun_walking_strafe_left": {
+      "family": "machinegun",
+      "speed": "walking",
+      "direction": "strafe_left",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.1056,
+      "reference_speed_mps": 0.19199999999999998,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "machinegun_walking_strafe_right": {
+      "family": "machinegun",
+      "speed": "walking",
+      "direction": "strafe_right",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.1056,
+      "reference_speed_mps": 0.19199999999999998,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "machinegun_walking_backward": {
+      "family": "machinegun",
+      "speed": "walking",
+      "direction": "backward",
+      "period": 60,
+      "stance": 0.55,
+      "lift": 0.05,
+      "stride_m": 0.16720000000000002,
+      "reference_speed_mps": 0.304,
+      "ear_mean_degrees": 10,
+      "ear_pulse_degrees": 3
+    },
+    "machinegun_moving_strafe_left": {
+      "family": "machinegun",
+      "speed": "moving",
+      "direction": "strafe_left",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.11827200000000002,
+      "reference_speed_mps": 0.29568,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "machinegun_moving_strafe_right": {
+      "family": "machinegun",
+      "speed": "moving",
+      "direction": "strafe_right",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.11827200000000002,
+      "reference_speed_mps": 0.29568,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    },
+    "machinegun_moving_backward": {
+      "family": "machinegun",
+      "speed": "moving",
+      "direction": "backward",
+      "period": 48,
+      "stance": 0.5,
+      "lift": 0.075,
+      "stride_m": 0.187264,
+      "reference_speed_mps": 0.46816,
+      "ear_mean_degrees": 16,
+      "ear_pulse_degrees": 4.5
+    }
+  },
+  "note": "v027 directional clips refined only on ear rotations; opposite-travel drag and delayed cyclic rebound. All weapon, body and foot curves unchanged. Source-only, no runtime binding.",
+  "ear_validation": {
+    "sidearm_walking_strafe_left": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.0450916588306427,
+          "max": 0.10409057140350342
+        },
+        "ear_r": {
+          "min": 0.04335355758666992,
+          "max": 0.09525644779205322
+        }
+      }
+    },
+    "sidearm_walking_strafe_right": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.04361039400100708,
+          "max": 0.09643742442131042
+        },
+        "ear_r": {
+          "min": 0.044818878173828125,
+          "max": 0.10272267460823059
+        }
+      }
+    },
+    "sidearm_walking_backward": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.044123727828264236,
+          "max": 0.09908956289291382
+        },
+        "ear_r": {
+          "min": 0.043864525854587555,
+          "max": 0.0978599265217781
+        }
+      }
+    },
+    "sidearm_moving_strafe_left": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.08066707849502563,
+          "max": 0.16408124566078186
+        },
+        "ear_r": {
+          "min": 0.07580012083053589,
+          "max": 0.14425399899482727
+        }
+      }
+    },
+    "sidearm_moving_strafe_right": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.07601934671401978,
+          "max": 0.145481675863266
+        },
+        "ear_r": {
+          "min": 0.08042597770690918,
+          "max": 0.16253206133842468
+        }
+      }
+    },
+    "sidearm_moving_backward": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.0776299461722374,
+          "max": 0.1519271433353424
+        },
+        "ear_r": {
+          "min": 0.0774131566286087,
+          "max": 0.15062758326530457
+        }
+      }
+    },
+    "longgun_walking_strafe_left": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.04509162902832031,
+          "max": 0.10409057140350342
+        },
+        "ear_r": {
+          "min": 0.04335358738899231,
+          "max": 0.09525647759437561
+        }
+      }
+    },
+    "longgun_walking_strafe_right": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.043610453605651855,
+          "max": 0.09643742442131042
+        },
+        "ear_r": {
+          "min": 0.044818878173828125,
+          "max": 0.10272267460823059
+        }
+      }
+    },
+    "longgun_walking_backward": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.04412372037768364,
+          "max": 0.09908957034349442
+        },
+        "ear_r": {
+          "min": 0.04386452957987785,
+          "max": 0.09785991907119751
+        }
+      }
+    },
+    "longgun_moving_strafe_left": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.08066707849502563,
+          "max": 0.16408121585845947
+        },
+        "ear_r": {
+          "min": 0.07580012083053589,
+          "max": 0.14425402879714966
+        }
+      }
+    },
+    "longgun_moving_strafe_right": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.07601931691169739,
+          "max": 0.14548170566558838
+        },
+        "ear_r": {
+          "min": 0.08042597770690918,
+          "max": 0.16253207623958588
+        }
+      }
+    },
+    "longgun_moving_backward": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.07762997597455978,
+          "max": 0.1519271731376648
+        },
+        "ear_r": {
+          "min": 0.0774131715297699,
+          "max": 0.15062761306762695
+        }
+      }
+    },
+    "machinegun_walking_strafe_left": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.0450916588306427,
+          "max": 0.10409057140350342
+        },
+        "ear_r": {
+          "min": 0.04335355758666992,
+          "max": 0.09525644779205322
+        }
+      }
+    },
+    "machinegun_walking_strafe_right": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.04361042380332947,
+          "max": 0.09643742442131042
+        },
+        "ear_r": {
+          "min": 0.044818878173828125,
+          "max": 0.10272267460823059
+        }
+      }
+    },
+    "machinegun_walking_backward": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.04412372410297394,
+          "max": 0.09908957034349442
+        },
+        "ear_r": {
+          "min": 0.043864525854587555,
+          "max": 0.0978599265217781
+        }
+      }
+    },
+    "machinegun_moving_strafe_left": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.08066707849502563,
+          "max": 0.16408124566078186
+        },
+        "ear_r": {
+          "min": 0.07580012083053589,
+          "max": 0.14425402879714966
+        }
+      }
+    },
+    "machinegun_moving_strafe_right": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.07601931691169739,
+          "max": 0.145481675863266
+        },
+        "ear_r": {
+          "min": 0.08042597770690918,
+          "max": 0.1625320464372635
+        }
+      }
+    },
+    "machinegun_moving_backward": {
+      "ear_root_error": 0.0,
+      "loop_error": 0.0,
+      "tip_opposite_travel_m": {
+        "ear_l": {
+          "min": 0.07762996107339859,
+          "max": 0.1519271582365036
+        },
+        "ear_r": {
+          "min": 0.0774131715297699,
+          "max": 0.15062756836414337
+        }
+      }
+    }
+  }
+}

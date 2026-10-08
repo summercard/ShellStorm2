@@ -110,6 +110,12 @@ var weapon_tree: WeaponAssemblyTree = null
 var equipped_weapon_instance: WeaponInstance = null
 var equipped_weapon_slots: Array = [null, null]
 var active_weapon_slot := 0
+var weapon_holstered := false
+var _weapon_transition_phase := ""
+var _weapon_transition_elapsed := 0.0
+var _weapon_transition_target := -1
+var _holstered_active_model: WeaponModel3D = null
+const WEAPON_TRANSITION_SECONDS := 0.45
 var _loading_weapon_instance := false
 var _reload_ammo_provider: Callable
 var _stowed_weapon_model: WeaponModel3D = null
@@ -419,6 +425,7 @@ func _physics_process(delta: float) -> void:
 	_seat_exit_push_suppression = maxf(0.0, _seat_exit_push_suppression - delta)
 	_update_invincibility(delta)
 	_tick_action_overlays(delta)
+	_tick_weapon_transition(delta)
 	_silence_remaining = maxf(0.0, _silence_remaining - delta)
 	_update_aim_from_mouse()
 	_update_combat_input()
@@ -749,6 +756,12 @@ func get_presentation_state() -> String:
 	return _presentation_state
 
 
+func get_locomotion_presentation_snapshot() -> Dictionary:
+	# Read-only parameters; directional clips never become gameplay states.
+	return {"state": _presentation_state, "world_velocity": Vector3(velocity.x, 0, velocity.z),
+		"aim_yaw": aim_yaw, "speed_mps": Vector2(velocity.x, velocity.z).length()}
+
+
 ## 外观装配是纯表现数据；不改碰撞、武器树、伤害或八态逻辑。
 func set_avatar_customization(slot_id: String, variant_id: String) -> bool:
 	if not PlayerAvatar3D.has_customization_variant(slot_id, variant_id):
@@ -968,6 +981,7 @@ func get_state_machine_snapshot() -> Dictionary:
 	}
 	snapshot["reload"] = reload_snapshot
 	snapshot["actions"] = get_action_snapshot()
+	snapshot["locomotion"] = get_locomotion_presentation_snapshot()
 	snapshot["melee_action_machine"] = melee_combat.get_snapshot() if melee_combat != null else {}
 	return snapshot
 
@@ -1172,6 +1186,7 @@ func get_action_snapshot() -> Dictionary:
 
 
 func equip_weapon(gun_id: String, bullet_id: String) -> bool:
+	if not _weapon_transition_phase.is_empty(): return false
 	_ensure_weapon_tree()
 	var gun := BlueprintRegistry.create_assembly_node(gun_id)
 	var is_melee := gun != null and "melee" in gun.tags
@@ -1195,6 +1210,7 @@ func equip_weapon(gun_id: String, bullet_id: String) -> bool:
 	equipped_weapon_instance = WeaponInstance.from_runtime_tree(weapon_tree)
 	equipped_weapon_slots[active_weapon_slot] = equipped_weapon_instance
 	_sync_equipped_weapon_instance()
+	_refresh_stowed_weapon_model(true)
 	weapon_instance_changed.emit(get_weapon_presentation_snapshot())
 	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
 	return true
@@ -1315,7 +1331,9 @@ func get_weapon_loadout_snapshot() -> Dictionary:
 		)
 		presentation["slot_index"] = slot_index
 		presentation["slot_name"] = "主武器" if slot_index == 0 else "副武器"
-		presentation["active"] = slot_index == active_weapon_slot
+		presentation["active"] = slot_index == active_weapon_slot and not weapon_holstered
+		presentation["selected"] = slot_index == active_weapon_slot
+		presentation["held"] = slot_index == active_weapon_slot and not weapon_holstered
 		slots.append(presentation)
 	var stowed_visible := _stowed_weapon_model != null and is_instance_valid(_stowed_weapon_model)
 	var stowed_slot := 1 - active_weapon_slot if stowed_visible else -1
@@ -1324,6 +1342,10 @@ func get_weapon_loadout_snapshot() -> Dictionary:
 		stowed_socket = avatar.get_stowed_weapon_socket(stowed_slot)
 	return {
 		"active_slot": active_weapon_slot,
+		"held_slot": -1 if weapon_holstered else active_weapon_slot,
+		"holstered": weapon_holstered,
+		"transition": get_weapon_transition_snapshot(),
+		"stowed_count": int(stowed_visible) + int(_holstered_active_model != null and is_instance_valid(_holstered_active_model)),
 		"slots": slots,
 		"stowed_visible": stowed_visible,
 		"stowed_instance_id": _stowed_weapon_instance_id,
@@ -1613,6 +1635,8 @@ func equip_weapon_item(item: Dictionary) -> Dictionary:
 
 
 func equip_weapon_item_to_slot(item: Dictionary, slot_index: int) -> Dictionary:
+	if not _weapon_transition_phase.is_empty():
+		return {"success": false, "reason": "收取武器期间不能替换装备"}
 	if slot_index < 0 or slot_index >= equipped_weapon_slots.size():
 		return {"success": false, "reason": "武器槽无效"}
 	_ensure_weapon_tree()
@@ -1654,6 +1678,8 @@ func unequip_weapon_item() -> Dictionary:
 
 
 func unequip_weapon_item_from_slot(slot_index: int) -> Dictionary:
+	if not _weapon_transition_phase.is_empty():
+		return {"success": false, "reason": "收取武器期间不能卸下装备"}
 	var current := get_equipped_weapon_instance_for_slot(slot_index)
 	if current == null:
 		return {"success": false, "reason": "该装备槽没有枪械"}
@@ -1698,7 +1724,84 @@ func switch_weapon_slot(slot_index: int) -> Dictionary:
 	return {"success": true, "slot_index": slot_index, "snapshot": snapshot}
 
 
+func get_weapon_transition_snapshot() -> Dictionary:
+	var slot := active_weapon_slot
+	var instance := equipped_weapon_slots[slot] as WeaponInstance
+	var gun := instance.assembly_id if instance != null else ""
+	var family := "sidearm" if gun == "bp_pistol" else "machinegun" if gun in ["bp_machinegun", "bp_sprinkler"] else "longgun"
+	return {"active": not _weapon_transition_phase.is_empty(), "phase": _weapon_transition_phase,
+		"progress": clampf(_weapon_transition_elapsed / WEAPON_TRANSITION_SECONDS, 0.0, 1.0),
+		"slot": slot, "family": family, "target_slot": _weapon_transition_target}
+
+
+func request_weapon_slot(slot_index: int) -> Dictionary:
+	if slot_index < 0 or slot_index >= equipped_weapon_slots.size() or equipped_weapon_slots[slot_index] == null:
+		return {"success": false, "reason": "该武器槽未装备"}
+	if not _weapon_transition_phase.is_empty() or input_locked or current_hp <= 0 or get_state_machine_state() not in ["idle", "moving", "seated"]:
+		return {"success": false, "reason": "当前动作不能切换武器"}
+	_sync_equipped_weapon_instance()
+	_weapon_transition_target = -1 if slot_index == active_weapon_slot and not weapon_holstered else slot_index
+	if weapon != null:
+		weapon.cancel_charge()
+		weapon.cancel_reload()
+	_clear_action_overlays()
+	if weapon_holstered:
+		var result := switch_weapon_slot(slot_index)
+		if not bool(result.get("success", false)): return result
+		set_weapon_holstered(false)
+		_weapon_transition_phase = "draw"
+	else:
+		_weapon_transition_phase = "stow"
+	_weapon_transition_elapsed = 0.0
+	if weapon != null: weapon.display_only = true
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
+	return {"success": true, "pending": true, "holstering": _weapon_transition_target == -1, "slot_index": slot_index}
+
+
+func set_weapon_holstered(value: bool) -> void:
+	weapon_holstered = value
+	if weapon != null:
+		weapon.visible = not value
+		weapon.display_only = value or not _weapon_transition_phase.is_empty()
+		if value:
+			weapon.cancel_charge()
+			weapon.cancel_reload()
+	_refresh_stowed_weapon_model(true)
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
+
+
+func _tick_weapon_transition(delta: float) -> void:
+	if _weapon_transition_phase.is_empty(): return
+	if input_locked or current_hp <= 0 or get_state_machine_state() not in ["idle", "moving", "seated"]:
+		_weapon_transition_phase = ""
+		_weapon_transition_target = -1
+		set_weapon_holstered(weapon_holstered)
+		return
+	_weapon_transition_elapsed += delta
+	if _weapon_transition_elapsed < WEAPON_TRANSITION_SECONDS: return
+	if _weapon_transition_phase == "stow":
+		if _weapon_transition_target < 0:
+			_weapon_transition_phase = ""
+			set_weapon_holstered(true)
+		else:
+			var result := switch_weapon_slot(_weapon_transition_target)
+			if not bool(result.get("success", false)):
+				_weapon_transition_phase = ""
+				set_weapon_holstered(false)
+				return
+			_weapon_transition_phase = "draw"
+			_weapon_transition_elapsed = 0.0
+			set_weapon_holstered(false)
+	else:
+		_weapon_transition_phase = ""
+		_weapon_transition_target = -1
+		set_weapon_holstered(false)
+
+
 func clear_all_equipped_weapons() -> Array[Dictionary]:
+	_weapon_transition_phase = ""
+	_weapon_transition_target = -1
+	weapon_holstered = false
 	_sync_equipped_weapon_instance()
 	var removed: Array[Dictionary] = []
 	for slot_index in range(equipped_weapon_slots.size()):
@@ -1746,6 +1849,10 @@ func _load_active_weapon_instance(instance: WeaponInstance) -> bool:
 
 
 func _refresh_stowed_weapon_model(force := false) -> void:
+	if weapon != null:
+		weapon.visible = not weapon_holstered
+		weapon.display_only = weapon_holstered or not _weapon_transition_phase.is_empty()
+	_refresh_holstered_active_model()
 	var stowed_slot := 1 - active_weapon_slot
 	var stowed := equipped_weapon_slots[stowed_slot] as WeaponInstance
 	var instance_id := stowed.weapon_instance_id if stowed != null else ""
@@ -1760,7 +1867,7 @@ func _refresh_stowed_weapon_model(force := false) -> void:
 	var stowed_socket := avatar.get_stowed_weapon_socket(stowed_slot)
 	if stowed_socket == null:
 		return
-	var scene := load("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn") as PackedScene
+	var scene := _get_stowed_weapon_scene()
 	if scene == null:
 		return
 	_stowed_weapon_model = scene.instantiate() as WeaponModel3D
@@ -1773,6 +1880,28 @@ func _refresh_stowed_weapon_model(force := false) -> void:
 	_stowed_weapon_model.position = Vector3.ZERO
 	_stowed_weapon_model.rotation = Vector3.ZERO
 	_stowed_weapon_model.scale = Vector3.ONE * (0.70 if stowed.assembly_id in ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"] else 0.52)
+
+
+func _get_stowed_weapon_scene() -> PackedScene:
+	return load("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn") as PackedScene
+
+
+func _refresh_holstered_active_model() -> void:
+	if _holstered_active_model != null and is_instance_valid(_holstered_active_model):
+		_holstered_active_model.queue_free()
+	_holstered_active_model = null
+	var instance := equipped_weapon_slots[active_weapon_slot] as WeaponInstance
+	if not weapon_holstered or instance == null or avatar == null: return
+	var scene := _get_stowed_weapon_scene()
+	if scene == null: return
+	_holstered_active_model = scene.instantiate() as WeaponModel3D
+	_holstered_active_model.name = "HolsteredActiveWeaponModel3D"
+	_holstered_active_model.display_only = true
+	_holstered_active_model.render_layers = 2
+	_holstered_active_model.set_meta("weapon_item_data", instance.to_item_dictionary())
+	_holstered_active_model.set_meta("weapon_slot_index", active_weapon_slot)
+	avatar.get_stowed_weapon_socket(active_weapon_slot).add_child(_holstered_active_model)
+	_holstered_active_model.scale = Vector3.ONE * (0.70 if instance.assembly_id in ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"] else 0.52)
 
 
 func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
@@ -1807,7 +1936,7 @@ func set_reload_ammo_provider(provider: Callable) -> void:
 
 
 func request_reload() -> bool:
-	return weapon != null and is_instance_valid(weapon) and weapon.request_reload()
+	return not weapon_holstered and _weapon_transition_phase.is_empty() and weapon != null and is_instance_valid(weapon) and weapon.request_reload()
 
 
 func set_damage_multiplier(source: String, multiplier: float) -> void:
@@ -1845,6 +1974,8 @@ func clear_weapon() -> void:
 
 
 func get_weapon_snapshot() -> Dictionary:
+	if weapon_holstered:
+		return {"gun_id": "", "bullet_id": "", "has_model": false, "is_3d": true, "holstered": true}
 	return weapon.get_snapshot() if weapon != null and is_instance_valid(weapon) else {
 		"gun_id": "", "bullet_id": "", "has_model": false, "is_3d": true,
 	}
@@ -1907,10 +2038,13 @@ func _on_melee_hit_resolved(result: Dictionary) -> void:
 
 
 func request_melee_attack() -> bool:
-	return melee_combat != null and melee_combat.request_attack()
+	return not weapon_holstered and _weapon_transition_phase.is_empty() and melee_combat != null and melee_combat.request_attack()
 
 
 func _update_combat_input() -> void:
+	if weapon_holstered or not _weapon_transition_phase.is_empty():
+		if weapon != null: weapon.cancel_charge()
+		return
 	var shoot_pressed_here: bool = Input.is_action_pressed("shoot")
 	var shoot_just_pressed_here: bool = Input.is_action_just_pressed("shoot")
 	var shoot_released_here: bool = Input.is_action_just_released("shoot")

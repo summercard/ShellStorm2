@@ -16,9 +16,9 @@ SOURCE = base.TARGET
 base.TARGET = base.BASE / 'source/animation/chr_bunny01_animation_v026.blend'
 base.OUT = base.ROOT / 'outputs/character_pipeline/weapon_idle_v026'
 base.TRANSFER = base.BASE / 'source/animation/chr_bunny01_weapon_idles_v026.json'
-base.SPECS['sidearm'].update(palm=(.38, .24, .43), yaw=-12, pitch=55)
+base.SPECS['sidearm'].update(palm=(.48, .53, .43), yaw=-12, pitch=55)
 base.SPECS['longgun'].update(palm=(.17, .30, .32))
-base.SPECS['machinegun'].update(palm=(.18, .42, .245))
+base.SPECS['machinegun'].update(palm=(.18, .47, .245))
 max_reach = {'l': 0., 'r': 0.}
 
 

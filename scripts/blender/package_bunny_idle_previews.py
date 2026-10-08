@@ -1,9 +1,10 @@
 """Assemble actual Blender-rendered frames, without altering rendered poses."""
 from pathlib import Path
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'outputs/character_pipeline/weapon_idle_v025'
+OUT = ROOT / ('outputs/character_pipeline/weapon_idle_' + (sys.argv[1] if len(sys.argv) > 1 else 'v025'))
 font = ImageFont.truetype('C:/Windows/Fonts/msyh.ttc', 24)
 small = ImageFont.truetype('C:/Windows/Fonts/msyh.ttc', 18)
 specs = [('sidearm', '短枪 · 单手朝上', 3200), ('longgun', '长枪 · 胸前斜持', 3600), ('machinegun', '机枪 · 低位承重', 4000)]

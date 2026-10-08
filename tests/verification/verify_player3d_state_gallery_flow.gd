@@ -1,6 +1,7 @@
 extends Node
 
 const GALLERY_SCENE: PackedScene = preload("res://scenes/Player3DStateGallery.tscn")
+const EXPECTED_PLAYER_STATES := ["idle", "moving", "dashing", "hurt", "locked", "falling", "landing", "dead", "seated", "climbing"]
 const REQUIRED_CONTROLS := [
 	"StateIdle", "StateMoving", "StateDashing", "StateHurt", "StateLocked",
 	"StateFalling", "StateLanding", "StateDead",
@@ -27,8 +28,11 @@ func _ready() -> void:
 		if control_id not in control_ids:
 			failures.append("Missing gallery control: %s" % control_id)
 	var player_snapshot := gallery.get_preview_snapshot().get("player", {}) as Dictionary
-	if int((player_snapshot.get("states", []) as Array).size()) != 8:
-		failures.append("Gallery player does not expose exactly eight top-level states")
+	var registered_states := player_snapshot.get("states", []) as Array
+	if registered_states.size() != EXPECTED_PLAYER_STATES.size():
+		failures.append("Gallery must preserve eight base states plus seated/climbing")
+	for state_name in EXPECTED_PLAYER_STATES:
+		if state_name not in registered_states: failures.append("Missing state: " + state_name)
 	if str(player_snapshot.get("current", "")) != "idle":
 		failures.append("Gallery player does not start in idle")
 
@@ -42,7 +46,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	player_snapshot = gallery.get_preview_snapshot().get("player", {}) as Dictionary
 	var overlays := player_snapshot.get("overlays", {}) as Dictionary
-	if not bool(overlays.get("reloading", false)) or int((player_snapshot.get("states", []) as Array).size()) != 8:
+	if not bool(overlays.get("reloading", false)) or int((player_snapshot.get("states", []) as Array).size()) != EXPECTED_PLAYER_STATES.size():
 		failures.append("Reload is not a Player3D overlay in the gallery")
 	if not gallery.request_preview_fire():
 		failures.append("Fire button cannot drive the real weapon shot event")
@@ -127,7 +131,7 @@ func _ready() -> void:
 	gallery.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("PLAYER3D_STATE_GALLERY_FLOW_OK: real eight-state player, fall/landing, weapon action overlays, knockback, Enemy3D/Boss and NPC3D controls pass")
+		print("PLAYER3D_STATE_GALLERY_FLOW_OK: ten existing player states, fall/landing, weapon overlays, knockback, Enemy3D/Boss and NPC3D controls pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
