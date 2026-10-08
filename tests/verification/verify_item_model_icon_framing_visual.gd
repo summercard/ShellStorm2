@@ -47,6 +47,9 @@ const ITEMS := [
 	"item_health_potion",
 	"item_room_key",
 	"item_beacon",
+	"equipment_backpack_2",
+	"equipment_backpack_4",
+	"equipment_backpack_8",
 ]
 
 const FIT_RATIO_LIMIT := 1.0
@@ -55,7 +58,7 @@ const MIN_MARGIN_PIXELS := 1.0
 const MIN_FILL_RATIO := 0.5
 
 ## 联系表版式：每格 112px 间距、图标区 96px，左侧一列写格子名、顶部一行写物品名。
-const SHEET_WINDOW := Vector2i(1360, 604)
+const SHEET_WINDOW := Vector2i(1792, 604)
 const SHEET_CELL := 112.0
 const SHEET_COLUMN_HEADER := 26.0
 const SHEET_ROW_HEADER := 96.0
@@ -324,7 +327,7 @@ func _verify_live_call_sites(failures: Array[String]) -> void:
 	if inventory == null or inventory_ui == null:
 		failures.append("Cannot resolve the live inventory for icon framing acceptance")
 		return
-	for item_id in ["weapon_greatblade", "weapon_waraxe", "weapon_baseball_bat"]:
+	for item_id in ["weapon_greatblade", "weapon_waraxe", "weapon_baseball_bat", "equipment_backpack_2", "equipment_backpack_4", "equipment_backpack_8"]:
 		var item := ItemRegistry.get_instance().get_item(item_id)
 		if item.is_empty() or inventory.add_item(item, 1) <= 0:
 			failures.append("Cannot stage %s into the live inventory" % item_id)
@@ -332,7 +335,7 @@ func _verify_live_call_sites(failures: Array[String]) -> void:
 	inventory_ui.set_inventory_panel_open(true)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	for item_id in ["weapon_greatblade", "weapon_waraxe", "weapon_baseball_bat"]:
+	for item_id in ["weapon_greatblade", "weapon_waraxe", "weapon_baseball_bat", "equipment_backpack_2", "equipment_backpack_4", "equipment_backpack_8"]:
 		var slot_index := _find_slot(inventory, item_id)
 		if slot_index < 0:
 			failures.append("Cannot find the staged %s slot in the live inventory" % item_id)

@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/items_weapons/props/backpack_small/components/prp_backpack_small_visual_top3d.glb" id="1_visual"]
+
+[node name="ItemRoot" type="Node3D"]
+metadata/asset_id = "ITM-EQUIPMENT-BACKPACK-SMALL-3D"
+metadata/logical_id = "equipment_backpack_2"
+metadata/asset_version = "v001"
+metadata/model_kind = "backpack"
+metadata/backpack_extra_slots = 2
+metadata/triangle_count = 322
+metadata/dimensions_m = Vector3(0.56, 0.6, 0.28)
+metadata/front_axis = "+Z"
+metadata/shoulder_straps = false
+metadata/collision_intent = "none"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]

@@ -2,6 +2,7 @@ extends Node
 ## 可装备背包专项：内容、UI、动态容量、背部Mesh与缩容溢出地面事务。
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
+const BACKPACK_CONTRACT = preload("res://tests/verification/backpack_asset_contract.gd")
 
 
 func _ready() -> void:
@@ -16,6 +17,9 @@ func _ready() -> void:
 			and int(item.get("stack_max", 0)) == 1,
 			"%d格背包物品定义不完整" % slots, failures
 		)
+		var model := ItemModelFactory3D.create_model(item)
+		BACKPACK_CONTRACT.verify(model, slots, failures)
+		model.free()
 	_check(
 		_has_loot_item(registry.get_loot_table("scavenge_floor_1"), "equipment_backpack_2")
 		and _has_loot_item(registry.get_loot_table("elite_floor_1"), "equipment_backpack_4")
@@ -35,7 +39,7 @@ func _ready() -> void:
 	_check(ui.equipment_backpack_slot != null, "角色装备栏没有独立背包槽", failures)
 	_check(str(ui.equipment_backpack_slot.get_meta("slot_kind", "")) == "backpack", "背包槽类型错误", failures)
 
-	# 左键装备8格包：物品离开普通格，容量扩为20，背部挂点生成占位Mesh。
+	# 左键装备8格包：物品离开普通格，容量扩为20，背部挂点实例化正式背包。
 	var expedition := registry.get_item("equipment_backpack_8")
 	_check(inventory.add_item(expedition, 1) == 1, "无法放入8格背包", failures)
 	var expedition_slot := _find_item_slot(inventory, "equipment_backpack_8")
@@ -49,10 +53,11 @@ func _ready() -> void:
 		str(presentation.get("socket_name", "")) == "BackpackSocket"
 		and bool(presentation.get("model_visible", false))
 		and str(presentation.get("model_kind", "")) == "backpack"
-		and int(presentation.get("mesh_count", 0)) >= 7,
+		and str((dungeon.player.get("_backpack_model") as Node3D).get_meta("asset_id", "")) == "ITM-EQUIPMENT-BACKPACK-LARGE-3D",
 		"背部挂点或8格背包Mesh表现没有同步", failures
 	)
 	var backpack_model := dungeon.player.get("_backpack_model") as Node3D
+	BACKPACK_CONTRACT.verify(backpack_model, 8, failures)
 	_check(
 		backpack_model != null
 		and backpack_model.find_children("*", "CollisionShape3D", true, false).is_empty(),
@@ -118,6 +123,33 @@ func _ready() -> void:
 	)
 
 	dungeon.queue_free()
+	await get_tree().process_frame
+	var fit_player := preload("res://scenes/Player3D.tscn").instantiate() as Player3D
+	fit_player.start_with_weapon = false
+	add_child(fit_player)
+	fit_player.process_mode = Node.PROCESS_MODE_DISABLED
+	var capsule := fit_player.get_node("VirtualCollisionCapsule") as CollisionShape3D
+	var shape := capsule.shape as CapsuleShape3D
+	var collision_before := Vector3(shape.radius, shape.height, capsule.position.y)
+	var fit_results: Array = []
+	for slots in [2, 4, 8]:
+		var item := registry.get_item("equipment_backpack_%d" % slots)
+		fit_player.equip_backpack_item(item)
+		var result := BACKPACK_CONTRACT.measure_worn(fit_player, slots, failures)
+		fit_results.append(result)
+		print("BACKPACK_HEAD_FIT slots=%d gap=%.6f samples=%d" % [slots, result.minimum_socket_gap_m, result.samples])
+		_check(fit_player.get_equipped_backpack_item() == item, "背负修复不应改物品快照", failures)
+		var world_model := ItemModelFactory3D.create_model(item)
+		_check(world_model.transform.is_equal_approx(Transform3D.IDENTITY), "背负偏移泄漏到世界/UI模型", failures)
+		BACKPACK_CONTRACT.verify(world_model, slots, failures)
+		world_model.free()
+	_check(Vector3(shape.radius, shape.height, capsule.position.y) == collision_before, "背负修复改变角色碰撞", failures)
+	DirAccess.make_dir_recursive_absolute("res://outputs/backpack_head_fit_20261008")
+	var fit_file := FileAccess.open("res://outputs/backpack_head_fit_20261008/fit_test.json", FileAccess.WRITE)
+	fit_file.store_string(JSON.stringify({"results": fit_results, "failures": failures}, "\t"))
+	fit_file.close()
+	fit_player.queue_free()
+	await get_tree().process_frame
 	_finish(failures)
 
 

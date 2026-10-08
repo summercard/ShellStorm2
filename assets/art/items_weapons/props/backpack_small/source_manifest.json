@@ -1,0 +1,53 @@
+{
+  "triangles": 322,
+  "polygon_count": 133,
+  "bbox_blender_min": [
+    -0.2800000011920929,
+    -0.14000000059604645,
+    -0.30000004172325134
+  ],
+  "bbox_blender_max": [
+    0.2800000011920929,
+    0.14000000059604645,
+    0.30000004172325134
+  ],
+  "uv_faces_checked": 133,
+  "uv_nonzero_area": true,
+  "uv_single_cell_safe": true,
+  "shared_palette_external_closest": true,
+  "shoulder_straps": false,
+  "asset_id": "ITM-EQUIPMENT-BACKPACK-SMALL-3D",
+  "logical_id": "equipment_backpack_2",
+  "source_version": "v001",
+  "source_blend": "assets/art/items_weapons/props/backpack_small/source/prp_backpack_small_source_v001.blend",
+  "source_sha256_before": "dae9e45159142fca9e2df367f49fc3ff3659c1f59da0c856687de182eff9fd61",
+  "source_sha256_after": "dae9e45159142fca9e2df367f49fc3ff3659c1f59da0c856687de182eff9fd61",
+  "optimized_blend": "assets/art/items_weapons/props/backpack_small/source/export/v001/prp_backpack_small_optimized_v001.blend",
+  "optimized_sha256": "d1d98fca5d6565a08fa4572cc1a58579f086334a036d3bdbb24a8720e7e4d3e8",
+  "stable_glb": "assets/art/items_weapons/props/backpack_small/components/prp_backpack_small_visual_top3d.glb",
+  "glb_sha256": "44a3e6d05b915b31fe51e9ca4b2ba703956ed3ceb49e9626bda2ae2e5163ad92",
+  "glb_triangles": 322,
+  "glb_embedded_images": false,
+  "optimization": {
+    "degenerate_faces_removed": 0,
+    "triangles_before": 322,
+    "triangles_after": 322,
+    "reduction_ratio": 0,
+    "note": "按最终预算直接构建低模；无安全可删的外表面，保留背面、底面及提手；执行退化检查和法线一致化，不虚报三角化为减面"
+  },
+  "template_resolution": {
+    "requested_missing": "assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend",
+    "search_result": "仅找到角色模板，与静态道具契约不符，不挪用角色骨架",
+    "replacement": "assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend",
+    "action": "按06五集合、公共色盘、PaletteUV及ItemRoot补建静态分支模板；不覆盖历史文件；tier_0删除示例骨架"
+  },
+  "runtime_integrated": false,
+  "visual_acceptance": "pending",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette_sha256": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3"
+}

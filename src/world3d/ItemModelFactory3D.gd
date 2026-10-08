@@ -3,6 +3,11 @@ extends RefCounted
 ## 世界拾取与背包图标共用的 3D 道具模型工厂，避免维护两套外观。
 
 const WEAPON_SCENE: PackedScene = preload("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn")
+const BACKPACK_SCENES := {
+	2: preload("res://assets/art/items_weapons/props/backpack_small/runtime/prp_backpack_small_root_top3d.tscn"),
+	4: preload("res://assets/art/items_weapons/props/backpack_medium/runtime/prp_backpack_medium_root_top3d.tscn"),
+	8: preload("res://assets/art/items_weapons/props/backpack_large/runtime/prp_backpack_large_root_top3d.tscn"),
+}
 
 
 static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72)) -> Node3D:
@@ -112,39 +117,13 @@ static func _build_weapon(root: Node3D, item: Dictionary) -> void:
 	root.add_child(weapon)
 
 
-static func _build_backpack(root: Node3D, item: Dictionary, tint: Color) -> void:
+static func _build_backpack(root: Node3D, item: Dictionary, _tint: Color) -> void:
 	var extra_slots := clampi(int(item.get("extra_slots", 2)), 2, 8)
-	var size_by_slots := {
-		2: Vector3(0.56, 0.60, 0.28),
-		4: Vector3(0.66, 0.74, 0.33),
-		8: Vector3(0.76, 0.88, 0.38),
-	}
-	var body_size := size_by_slots.get(extra_slots, size_by_slots[2]) as Vector3
-	var shell := _material(tint.darkened(0.12), 0.18, 0.68)
-	var panel := _material(tint, 0.24, 0.62, 0.10)
-	var strap := _material(tint.darkened(0.48), 0.10, 0.82)
-	_add_box(root, "BackpackBody", Vector3.ZERO, body_size, shell)
-	_add_box(
-		root, "TopFlap",
-		Vector3(0, body_size.y * 0.34, -body_size.z * 0.54),
-		Vector3(body_size.x * 0.88, body_size.y * 0.24, body_size.z * 0.12), panel
-	)
-	for side in [-1.0, 1.0]:
-		_add_box(
-			root, "ShoulderStrapL" if side < 0.0 else "ShoulderStrapR",
-			Vector3(side * body_size.x * 0.31, 0.02, body_size.z * 0.56),
-			Vector3(body_size.x * 0.12, body_size.y * 0.92, body_size.z * 0.08), strap
-		)
-	var pocket_count := 1 if extra_slots == 2 else 2 if extra_slots == 4 else 3
-	for pocket_index in range(pocket_count):
-		var pocket_x := (float(pocket_index) - float(pocket_count - 1) * 0.5) * body_size.x * 0.31
-		_add_box(
-			root, "CapacityPocket_%d" % pocket_index,
-			Vector3(pocket_x, -body_size.y * 0.30, -body_size.z * 0.56),
-			Vector3(body_size.x * (0.48 if pocket_count == 1 else 0.27), body_size.y * 0.25, body_size.z * 0.18),
-			panel
-		)
+	var scene := BACKPACK_SCENES.get(extra_slots, BACKPACK_SCENES[2]) as PackedScene
+	var backpack := scene.instantiate() as Node3D
+	root.add_child(backpack)
 	root.set_meta("backpack_extra_slots", extra_slots)
+	root.set_meta("asset_id", backpack.get_meta("asset_id"))
 
 
 static func _build_bullet(root: Node3D, item: Dictionary, fallback: Color) -> void:

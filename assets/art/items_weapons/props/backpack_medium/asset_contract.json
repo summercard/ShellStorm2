@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "asset_id": "ITM-EQUIPMENT-BACKPACK-MEDIUM-3D",
+  "parent_asset_id": "ITM-EQUIPMENT-BACKPACK-3D",
+  "display_name_zh": "中号黄色单扣背包",
+  "category": "道具",
+  "subclass": "equipment",
+  "logical_id": "equipment_backpack_4",
+  "extra_slots": 4,
+  "domain_ledger": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+  "ledger_sheet": "3D-物品",
+  "dimensions_m": {
+    "width": 0.66,
+    "depth": 0.33,
+    "height": 0.74
+  },
+  "dimension_source": "用户批准的整包宽深高；含提手、前袋与大包卷铺盖",
+  "origin_and_facing": "整包包围盒中心原点；Godot +Z前袋朝外，+Y向上；Blender -Y前袋朝外，+Z向上",
+  "collision_intent": {
+    "enabled": false,
+    "owner": "无",
+    "method": "无"
+  },
+  "function_note": "仅表现；地面拾取/UI图标/角色BackpackSocket共用；容量和存档规则不变",
+  "animation_tier": "tier_0_static",
+  "animation_reason": "封闭静态装备；本任务无开盖动作，无骨架、形变及自身动画",
+  "source_collection": "PRP_中号黄色单扣背包_中文资产管理",
+  "anchor_contract": [
+    "ItemRoot"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "material_override_reason": "用户明确要求场景四材质标准名；不使用道具专属别名",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "source_dir": "assets/art/items_weapons/props/backpack_medium/source",
+  "source_blend": "assets/art/items_weapons/props/backpack_medium/source/prp_backpack_medium_source_v001.blend",
+  "optimized_blend": "assets/art/items_weapons/props/backpack_medium/source/export/v001/prp_backpack_medium_optimized_v001.blend",
+  "stable_glb": "assets/art/items_weapons/props/backpack_medium/components/prp_backpack_medium_visual_top3d.glb",
+  "stable_prefab": "assets/art/items_weapons/props/backpack_medium/runtime/prp_backpack_medium_root_top3d.tscn",
+  "max_triangles": 500,
+  "shoulder_straps": false,
+  "front_clasp_straps": true,
+  "top_handle": true,
+  "source_version": "v001",
+  "reference_image": "C:/Users/zhuangmenghong/.workbuddy/clipboard-images/clipboard-2026-10-08T09-16-34-177Z-40fdd968.jpg",
+  "template_resolution": {
+    "requested_missing": "assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend",
+    "search_result": "仅找到角色模板，与静态道具契约不符，不挪用角色骨架",
+    "replacement": "assets/art/items_weapons/_templates/prp/prp_template_source_v001.blend",
+    "action": "按06五集合、公共色盘、PaletteUV及ItemRoot补建静态分支模板；不覆盖历史文件；tier_0删除示例骨架"
+  }
+}
