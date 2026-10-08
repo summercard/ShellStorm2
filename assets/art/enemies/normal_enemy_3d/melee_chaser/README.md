@@ -1,5 +1,24 @@
 # 小僵尸 · 首只标准普通怪资产包
 
+## 2026-10-08：basecolor 降为 512（包体优化）
+
+源贴图 `source/model/textures/enm_melee_fungboar01_basecolor_v002.png` 由 2048² 降为 512²（Lanczos 重采样，PNG 无损编码）。同步改写了四处贴图载体：模型 blend 内嵌、动画 blend 内嵌、`components/*.glb` 内嵌、Godot 抽取到 components/ 的同目录 PNG。
+
+GLB 用**二进制原位替换**（只替换 image 的 bufferView 数据并重排 bufferView 偏移），**不做 Blender 重导** ⇒ 几何 / 骨架 / 动画字节与改动前逐位一致。blend 侧留了会失败的断言：改动前后比对 2278 顶点坐标哈希、4552 面拓扑哈希、36 根骨的名字与 `matrix_local` 哈希、顶点组权重哈希、6 段 Action 全部 F-Curve 哈希，逐项相同才算通过。
+
+| 文件 | 改前 | 改后 |
+|---|---|---|
+| `source/model/textures/…_basecolor_v002.png` | 2048² · 2,674,035 B | **512² · 295,265 B** |
+| `source/model/…_model_v002.blend` | 3,762,377 B | 1,383,607 B |
+| `source/animation/…_animation_v003.blend` | 7,099,307 B | 4,422,328 B |
+| `components/…_visual_top3d.glb` | 3,090,004 B | **710,660 B** |
+
+- 2K 原件 + 改动前的两个 blend 与 GLB，备份在 `ShellStorm2/_scratch/melee_chaser_tex2k_backup/`（**gitignore 覆盖的本地回滚副本**，不入库），覆盖回去即回滚 —— 备份内容已逐个 sha256 核对与改前 ledger 一致。
+- 工具脚本 `ShellStorm2/_scratch/xiaojunzhu_intake/tex_downscale/`：`make_tex512.py`（重采样）、`replace_glb_texture.py`（GLB 原位替换 + 字节断言）、`blend_tex_patch.py`（blend 内嵌替换 + 指纹断言）、`compare_fp.py`（指纹比对）。
+- `runtime/character_transfer_ledger.json` 的 `files` / `runtime_files` / `source_sha256` / `outputs` 哈希与字节数已同步，并留了一条 limitation 说明。
+- ⚠️ `asset_version` **仍为 v003** —— 本次是发布参数压缩，模型与动作美术没有迭代，故未升版。若按「内容变了必须升版」处理，须改为 v004 并同步全部引用。
+- ⚠️ 上一条 v002 记录里的「2K sRGB PNG」「栅格覆盖 49.32%」等数值描述的是 **2K 时代**的状态，本次未重新测量 512 口径的 UV 覆盖率。
+
 ## 2026-09-20：攻击与跑步修订 v003
 
 源：`source/animation/enm_melee_fungboar01_animation_v003.blend`。仅替换attack/running；其余四Action曲线摘要与v002一致。模型、骨架、UV不改。

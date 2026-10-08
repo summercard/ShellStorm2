@@ -56,14 +56,15 @@
     }
   ],
   "outputs": {
-    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\components\\enm_melee_fungboar01_visual_top3d.glb": "fb233a3cb57dc82e24fa8afcd262048a1ccdbe10b8a0c3c06b5535ebb37b07a6"
+    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\components\\enm_melee_fungboar01_visual_top3d.glb": "c111dcbaf7ccb3b4d7989a82017d550cc77f03541c4dd4c9776d765c283a0e5d"
   },
   "limitations": [
-    "源跑步亚帧约1.3mm穿地；未完成全程自穿插/支撑脚滑移质量审查"
+    "源跑步亚帧约1.3mm穿地；未完成全程自穿插/支撑脚滑移质量审查",
+    "basecolor 已于 2026-10-08 由 2048 降为 512（包体优化，模型/骨架/6段动作未改动）；2K 原件与改动前 blend/GLB 备份于 ShellStorm2/_scratch/melee_chaser_tex2k_backup/（gitignore 覆盖的本地回滚副本，不入库）"
   ],
   "source_sha256": {
-    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v002.blend": "bc14b22d389b79cb22a998ba7f713ada33cfccab4ab128d677dec2f3a4910d86",
-    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v003.blend": "5d16d2993a2f6d69f56bc99cfdd067d443bf15e916e819737cde1d8c30d654ee"
+    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v002.blend": "3fa2f442174069869797fd959eaa5725126093893725f5bc9eb33c644d6daecb",
+    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v003.blend": "482f68bf6ec634a2856479ce1e1f3c6043661a8bd9031eb1f651931df2051707"
   },
   "asset_version": "v003",
   "presentation_only": true,
@@ -81,23 +82,23 @@
   "files": [
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v002.blend",
-      "sha256": "bc14b22d389b79cb22a998ba7f713ada33cfccab4ab128d677dec2f3a4910d86",
-      "bytes": 3762377
+      "sha256": "3fa2f442174069869797fd959eaa5725126093893725f5bc9eb33c644d6daecb",
+      "bytes": 1383607
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/textures/enm_melee_fungboar01_basecolor_v002.png",
-      "sha256": "67988bc8be3eeab99d72748a70f1b3f04ec4029b842680063c8be6e2092a8fe8",
-      "bytes": 2674035
+      "sha256": "068b6ab85d834a203ef371976ae83197e4c352a70a5b7758245a24814305d49c",
+      "bytes": 295265
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v003.blend",
-      "sha256": "5d16d2993a2f6d69f56bc99cfdd067d443bf15e916e819737cde1d8c30d654ee",
-      "bytes": 7099307
+      "sha256": "482f68bf6ec634a2856479ce1e1f3c6043661a8bd9031eb1f651931df2051707",
+      "bytes": 4422328
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb",
-      "sha256": "fb233a3cb57dc82e24fa8afcd262048a1ccdbe10b8a0c3c06b5535ebb37b07a6",
-      "bytes": 3090004
+      "sha256": "c111dcbaf7ccb3b4d7989a82017d550cc77f03541c4dd4c9776d765c283a0e5d",
+      "bytes": 710660
     }
   ],
   "runtime_files": [
