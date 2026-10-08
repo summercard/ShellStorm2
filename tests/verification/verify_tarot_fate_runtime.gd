@@ -54,8 +54,42 @@ func _ready() -> void:
 		_check(card.orientation_name() in ["正位", "逆位"], "offer card has no readable orientation", failures)
 	_check(offer_ids.size() == 3, "draw_offer contains duplicate card ids", failures)
 
+	# —— 战斗命运单一真源（主人 2026-10-08，A 方案）——
+	# 会改战斗的命运（敌增援 / 房间诅咒 / 亡者祝福）只走抽卡（塔罗三选一 / 占卜屋 /
+	# 工作台），MapFateTriggers 环境自动层不再白送：自动表里不得再出现这三条，
+	# 否则就是「卡没抽却在生效」，并让远征 room_01 恒多刷一波（设计 1 波 + 命运 1 波）。
+	var auto_ids := {}
+	for entry in MapFateTriggers.DEFAULT_TRIGGERS:
+		auto_ids[str(entry.get("fate_card_id", ""))] = true
+	for reward_fate in ["fate_mark_enemy", "fate_lucky_chest", "fate_extra_loot"]:
+		_check(
+			auto_ids.has(reward_fate),
+			"%s 奖励类环境触发被误删" % reward_fate,
+			failures
+		)
+	for combat_fate in ["fate_reinforce", "fate_curse_map", "fate_bless_dead"]:
+		_check(
+			not auto_ids.has(combat_fate),
+			"%s 仍由 MapFateTriggers 自动层点燃（战斗命运应只走抽卡）" % combat_fate,
+			failures
+		)
+		var trigger_result: Dictionary = FateCardGameBridge.apply_fate_card_from_trigger(combat_fate)
+		_check(
+			not bool(trigger_result.get("success", true))
+			and str(trigger_result.get("message", "")).begins_with("Combat fate requires a drawn card:"),
+			"%s 仍可绕过抽卡从环境触发桥生效" % combat_fate,
+			failures
+		)
+	# 抽卡路径仍是敌增援唯一真源：预设必须保留 REINFORCE_WAVE 执行动作。
+	var reinforce := FateCardPresets.fate_reinforce()
+	_check(
+		int((reinforce.effect as Dictionary).get("action", -1)) == FateCard.EffectAction.REINFORCE_WAVE,
+		"fate_reinforce 预设缺少 REINFORCE_WAVE（抽卡落地路径被破坏）",
+		failures
+	)
+
 	if failures.is_empty():
-		print("TAROT_FATE_RUNTIME_OK: 48 tarot names, upright/reversed effects, stable IDs and 50/50 orientation passed")
+		print("TAROT_FATE_RUNTIME_OK: 48 tarot names, upright/reversed effects, stable IDs, 50/50 orientation and draw-only combat fates passed")
 		get_tree().quit(0)
 		return
 	for failure in failures:

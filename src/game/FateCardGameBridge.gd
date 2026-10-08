@@ -166,18 +166,22 @@ static func apply_card(card: FateCard) -> Dictionary:
 
 	return instance.apply_card_instance(card)
 
-## 获取单例实例（通过组查找，比节点路径更稳定）
+## 供 MapFateTriggers 环境自动层调用。
+## 战斗类命运必须由玩家抽卡后经 apply_card() 生效；即使未来误把这些 ID 重新塞回
+## MapFateTriggers 配置，本桥也必须拒绝，避免恢复「卡没抽却自动生效」的旁路。
 static func apply_fate_card_from_trigger(fate_card_id: String) -> Dictionary:
-	## 供 MapFateTriggers 调用：fate_card_id 字符串 → 找到对应 preset → 执行效果
-	## 避免 MapFateTriggers 需要直接引用 FateCardEngine
+	match fate_card_id:
+		"fate_reinforce", "fate_curse_map", "fate_bless_dead":
+			return {
+				"success": false,
+				"message": "Combat fate requires a drawn card: " + fate_card_id,
+			}
+
 	var card: FateCard = null
 	match fate_card_id:
-		"fate_reinforce": card = FateCardPresets.fate_reinforce()
 		"fate_mark_enemy": card = FateCardPresets.fate_mark_enemy()
 		"fate_lucky_chest": card = FateCardPresets.fate_lucky_chest()
 		"fate_extra_loot": card = FateCardPresets.fate_extra_loot()
-		"fate_curse_map": card = FateCardPresets.fate_curse_map()
-		"fate_bless_dead": card = FateCardPresets.fate_bless_dead()
 	if card == null:
 		return {"success": false, "message": "Unknown fate_card_id: " + fate_card_id}
 	return apply_card(card)

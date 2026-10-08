@@ -203,19 +203,16 @@ func _verify_summon_reservation() -> void:
 func _verify_fate_wave() -> void:
 	if not _prepare([2, 1]):
 		return
-	var triggers := dungeon._map_fate_triggers
-	triggers._reset_counters()
-	for config in triggers._triggers:
-		if config.fate_card_id == "fate_reinforce":
-			config.enabled = true
-	triggers._counters[int(MapFateTriggers.TriggerType.KILL_COUNT)] = 2
-	(_enemies()[0] as Enemy3D)._die()
-	_check(_alive() == 1 and _enemies().size() == 1 and _wave() == 1 and not _pending(), "首杀触发命运时并发刷怪")
+	# 「敌增援」的**追加机制**（trigger_extra_wave）由抽到的星币·王牌经
+	# FateCardEngine._apply_reinforce_wave 触发。MapFateTriggers 环境自动层已下线
+	# （2026-10-08，A 方案），不再用击杀阈值点燃本用例 —— 改为直接调用同一入口，
+	# 判据不变：追加、不改原队列顺序、每房幂等、终波清房后不再刷。
+	dungeon.trigger_extra_wave()
+	_check(_alive() == 2 and _enemies().size() == 2 and _wave() == 1 and not _pending(), "命运增援排队时并发刷怪")
 	_check(int(dungeon._room_wave_totals[room.room_id]) == 3, "命运增援没有追加到总波数")
-	for index in 4:
-		triggers._last_trigger_time.clear()
-		triggers._on_kill_recorded()
-	_check(int(dungeon._room_wave_totals[room.room_id]) == 3, "命运增援重复阈值无限追加")
+	# 幂等：同一房只接受一次追加，重复调用不得再加。
+	dungeon.trigger_extra_wave()
+	_check(int(dungeon._room_wave_totals[room.room_id]) == 3, "命运增援重复追加")
 	_kill_all()
 	await get_tree().create_timer(2.15).timeout
 	_check(_wave() == 2 and _enemies().size() == 1, "命运增援改变了原波队列顺序")
@@ -229,8 +226,6 @@ func _verify_fate_wave() -> void:
 	_kill_all()
 	dungeon.trigger_extra_wave()
 	_check(room.cleared and not _pending(), "命运终波全清后重启遭遇")
-	for config in triggers._triggers:
-		config.enabled = false
 
 
 func _verify_spawn_failure() -> void:

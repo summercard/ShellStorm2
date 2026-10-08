@@ -30,8 +30,9 @@ extends Node
 ##   · 它的用例从不声明 `spawn_delay_sec`（从不制造在途延迟怪）；
 ##   · 它跑 `Dungeon3D.tscn`（塔楼），没有 `spawn_placements` 触发盒数据。
 ##
-## 🔴 命运触发器（`fate_reinforce`）会在击杀阈值追加一波并 `_room_wave_totals += 1`，
-##    会让「自动续波」判据失效，故全程禁用（塔楼门禁亦如此）。
+## 2026-10-08 A 方案后，`fate_reinforce` 已从环境自动层下线，room_01 击杀 3 只
+## 不得再被追加第 2 波；本门禁先在环境层保持开启时实测这一条，再关闭仍保留的奖励类
+## 自动触发，隔离后续「自动续波」用例。
 
 const SCENE: PackedScene = preload("res://scenes/ExpeditionLevel01_3D.tscn")
 const SEED_VALUE := 77001199
@@ -60,8 +61,6 @@ func _ready() -> void:
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame
-	for config in tower._map_fate_triggers._triggers:
-		config.enabled = false
 	# 壳体 + 细节都要建：落点取样要看得到家具碰撞，否则取的点和真机不同。
 	for value in tower._room_by_id.values():
 		(value as DungeonRoom3D).ensure_shell_built()
@@ -70,6 +69,11 @@ func _ready() -> void:
 		(value as DungeonRoom3D).ensure_detail_built()
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+
+	await _verify_room01_no_automatic_reinforce()
+	# 后续用例只测波次生命周期，关闭仍保留的奖励 / 掉落类环境触发，避免随机卡片等副作用。
+	for config in tower._map_fate_triggers._triggers:
+		config.enabled = false
 
 	test_room_id = _pick_test_room()
 	if test_room_id.is_empty():
@@ -97,6 +101,48 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+# ============================================================
+# 用例 0：room_01 正式进房 + 3 击杀不得自动追加命运增援
+# ============================================================
+
+func _verify_room01_no_automatic_reinforce() -> void:
+	var room01 := tower._room_by_id.get("room_01") as DungeonRoom3D
+	if room01 == null:
+		_check(false, "找不到 room_01，无法验证自动增援已下线")
+		return
+	room = room01
+	_reset_room()
+	_enter(room01)
+	_check(
+		int(tower._room_wave_totals.get(room01.room_id, 0)) == 1,
+		"room_01 进房初始总波数不是 1"
+	)
+	var killed := 0
+	for value in _enemies().duplicate():
+		if killed >= 3:
+			break
+		var enemy := value as Enemy3D
+		if not is_instance_valid(enemy) or enemy.is_queued_for_deletion():
+			continue
+		enemy._die()
+		killed += 1
+		await get_tree().process_frame
+	_check(killed == 3, "room_01 首波不足 3 只，无法复现原自动触发阈值")
+	_check(
+		int(tower._room_wave_totals.get(room01.room_id, 0)) == 1,
+		"room_01 击杀 3 只后被环境命运自动追加了第 2 波"
+	)
+	_check(
+		(tower._room_wave_queues.get(room01.room_id, []) as Array).is_empty(),
+		"room_01 击杀 3 只后出现额外待发波"
+	)
+	_check(
+		not tower._room_fate_wave_queued.has(room01.room_id),
+		"room_01 击杀 3 只后仍写入命运增援幂等标记"
+	)
+	_reset_room()
 
 
 # ============================================================

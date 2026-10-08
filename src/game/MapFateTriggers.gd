@@ -38,19 +38,24 @@ var _run_runtime: Node = null
 var _connected: bool = false
 
 ## 默认触发器配置
+##
+## 会改战斗的命运 **不再由本环境自动层白送**（主人 2026-10-08 裁定，A 方案）。
+## 塔罗三选一 / 占卜屋 / 工作台才是「敌增援 / 房间诅咒 / 亡者祝福」唯一真源：
+## 玩家抽到对应牌（星币·王牌 fate_reinforce 等）后由 FateCardEngine 落地，
+## 与「抽没抽到」严格一致。此前本表把这三条按环境事件自动点燃，
+## 表现为「卡没抽却每局白送」，并让远征 room_01 恒多刷一波（设计 1 波 + 命运 1 波）。
+## 已下线（保留此注释以追溯）：
+##   · fate_reinforce  —— KILL_COUNT ≥3 / 冷却 15s / 可重复（房间恒多一波的直接来源）
+##   · fate_curse_map  —— ENTER_ROOM ≥7 / 冷却 45s
+##   · fate_bless_dead —— ELITE_KILL ≥1 / 冷却 30s
+## 留下的三条只走「奖励 / 掉落」自动事件，不直接追加波次或修改房间敌人，故保留。
 const DEFAULT_TRIGGERS: Array[Dictionary] = [
-	# 击杀触发：连续击杀3个敌人 → 敌增援
-	{"trigger_type": TriggerType.KILL_COUNT, "threshold": 3, "fate_card_id": "fate_reinforce", "cooldown": 15.0, "once_per_run": false},
 	# 击杀触发：击杀第10个敌人 → 获得一张随机命运卡片
 	{"trigger_type": TriggerType.KILL_COUNT, "threshold": 10, "fate_card_id": "fate_mark_enemy", "cooldown": 60.0, "once_per_run": true},
 	# 开箱触发：开第5个箱子 → 箱子物品品质提升
 	{"trigger_type": TriggerType.OPEN_CHEST, "threshold": 5, "fate_card_id": "fate_lucky_chest", "cooldown": 30.0, "once_per_run": false},
 	# 开箱触发：开第10个箱子 → 额外掉落
 	{"trigger_type": TriggerType.OPEN_CHEST, "threshold": 10, "fate_card_id": "fate_extra_loot", "cooldown": 30.0, "once_per_run": true},
-	# 进入房间触发：进入第7个房间 → 诅咒降临（怪物伤害+15%）
-	{"trigger_type": TriggerType.ENTER_ROOM, "threshold": 7, "fate_card_id": "fate_curse_map", "cooldown": 45.0, "once_per_run": true},
-	# 精英击杀：击杀精英后 → 亡者祝福
-	{"trigger_type": TriggerType.ELITE_KILL, "threshold": 1, "fate_card_id": "fate_bless_dead", "cooldown": 30.0, "once_per_run": false},
 ]
 
 func _ready() -> void:
