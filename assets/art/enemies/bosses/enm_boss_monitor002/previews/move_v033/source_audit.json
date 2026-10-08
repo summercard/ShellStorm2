@@ -1,0 +1,38 @@
+{
+  "version": "v033",
+  "samples": 97,
+  "pedestal_bottom_z": [
+    0.004961054772138596,
+    0.0050000399351119995
+  ],
+  "pedestal_top_z": [
+    0.12999999523162842,
+    0.42305654287338257
+  ],
+  "lateral_range": 0.46000000834465027,
+  "body_yaw_range_degrees": 22.580600273420277,
+  "closure_error": 0.0,
+  "other_actions_unchanged": true,
+  "other_move_tracks_unchanged": true,
+  "pedestal_roll_degrees": 10,
+  "baseline_version": "v031",
+  "hand_ranges": {
+    "hand.L": [
+      0.9724733829498291,
+      0.45495636761188507,
+      0.7165886163711548
+    ],
+    "hand.R": [
+      0.6534328460693359,
+      1.1724750399589539,
+      0.6213512420654297
+    ]
+  },
+  "old_sources": {
+    "model": "08226029d873745814209830092d2278105cd7c33c519335095787c8925f8277",
+    "animation": "9aa6628d03a6d54264d4bb29cac165cf60480a1de966d968db36e853d6533ff4"
+  },
+  "skeleton_signature": "e97e2d7536565a6eb61e35997595969bab57359dbef1921b8e62d4d959a7834f",
+  "dual_signature_equal": true,
+  "static_glb_reused": "64cdcc1410624c14714b6c730037ebea1da68025c4d338ba68ee48cc638664ba"
+}

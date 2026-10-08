@@ -1,0 +1,72 @@
+[
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\registry\\ledgers\\ShellStorm2_敌人账本_v001.xlsx",
+    "sheets": {
+      "资产主表": {
+        "M20": "v033",
+        "P20": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend；SKEL-MONITOR002-005",
+        "T20": "eac956c0fb298d1c1d0f1c29ab299085611b015146e44ef50e8608537b497d62",
+        "V20": "2026-10-08",
+        "Y20": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。"
+      },
+      "域变更日志": {
+        "A54": "v033",
+        "B54": "2026-10-08",
+        "C54": "Codex",
+        "D54": "ENM-BOSS-MONITOR002-3D",
+        "E54": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "F54": "docs/v0.1/development/2026-10-08_boss002_reduced_lift.md",
+        "G54": "不改模型几何、玩法或其余动作"
+      }
+    }
+  },
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\registry\\ledgers\\ShellStorm2_敌人账本_v001.xlsx",
+    "sheets": {
+      "3D-敌人": {
+        "E10": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "O10": "v033",
+        "P10": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。"
+      },
+      "敌人动画与状态": {
+        "E47": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I47": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E48": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I48": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E49": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I49": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E50": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I50": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E51": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I51": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E52": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I52": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E53": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I53": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E54": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I54": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E55": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I55": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E56": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I56": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E57": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I57": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。",
+        "E58": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "I58": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。"
+      }
+    }
+  },
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\source\\boss002_production_ledger.xlsx",
+    "sheets": {
+      "Boss002制作明细": {
+        "B4": "v033 老版move仅减小底座侧翘；正式16剪辑/十二态/四技能/三阶段",
+        "B20": "v033",
+        "C20": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend",
+        "C21": "source/rig_contract_v033.json",
+        "B26": "previews/move_v033/source_audit.json; previews/runtime/flow_report.json",
+        "C26": "v033：回到v031原版move，仅底座最大侧翘23°减为10°并重算接地高度。原横移、机身、双臂、腕部节奏保留，1.6s/48帧。其余15剪辑完全不变。源97采样及Godot专项、真实渲染证据见previews/move_v033。远征01投放、四技能、三阶段规则保留。"
+      }
+    }
+  }
+]

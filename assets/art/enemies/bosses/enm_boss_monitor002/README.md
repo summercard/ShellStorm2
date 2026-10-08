@@ -1,5 +1,11 @@
 # Boss 002 · MONITOR.EXE
 
+## 历史试改 v032 / v033
+
+仅修改move：底座水平左右挪动0.46m，底面固定在0.005m；机身经后支撑左右扭转约41°，手臂柔性跟随。保留1.6秒循环、逻辑root原地、其他15个动作与全部技能时序。双母版为source/enm_boss_monitor002_model_v032.blend与source/enm_boss_monitor002_animation_v032.blend，同64骨架。静态GLB保持原几何，正式monitor_motion.json更新move采样。
+
+该两版未作为当前运行版本；当前恢复为下方的v031正式导入版本。
+
 ## 当前交付 v031（正式导入与技能状态绑定）
 
 正式调用ID `boss_monitor002`，远征01 f00_boss房间使用此Boss。视觉入口 `runtime/enm_boss_monitor002/enm_boss_monitor002_root_top3d.tscn`；组件在 `components/enm_boss_monitor002/`，包含纯视觉GLB、30Hz骨姿态采样、表情图集和屏幕代码纹理。Prefab根倍率1；碰撞、生命、十二态、四技能及三阶段由Enemy3D拥有。

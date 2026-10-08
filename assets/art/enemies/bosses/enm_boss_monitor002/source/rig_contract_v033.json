@@ -1,0 +1,251 @@
+{
+  "asset_id": "ENM-BOSS-MONITOR002-3D",
+  "version": "v033",
+  "skeleton_id": "SKEL-MONITOR002-005",
+  "skeleton_signature": "696f6dc701f5ddccd3eb7324f534ba5fa96580daead8e4873fdf923d078b3539",
+  "bone_count": 64,
+  "triangles": 18684,
+  "materials": [
+    "BOSS002_01_BodyPalette",
+    "BOSS002_02_ExpressionAtlas",
+    "BOSS002_03_ScrollingCode"
+  ],
+  "pivot": [
+    0,
+    -0.52,
+    2.02
+  ],
+  "arm_segments_per_side": 6,
+  "runtime_integration": true,
+  "expression_states": {
+    "default": 0,
+    "suspicious": 1,
+    "angry": 2,
+    "sleepy": 3,
+    "taunting": 4,
+    "glitched": 5,
+    "hurt_x_eye": 4,
+    "seated_double_spiral": 5
+  },
+  "controls": "rear_axle: shared rear pivot; monitor_spin local Y: independent screen roll; arm_01..06.L/R: FK bend; stretch_L/R: spring length; support_01..03: stand bend; code_scroll: upward UV motion",
+  "export_note": "Pure visual GLB plus evaluated 30Hz motion JSON; AnimationPlayer indexes 16 clips, preserving constraint stretch and shear. Enemy3D owns collision, state, damage and death.",
+  "formal_animations_authored": [
+    "idle",
+    "move",
+    "melee_keyboard",
+    "melee_cable",
+    "heavy_spin_slam",
+    "special_prepare",
+    "special_insert",
+    "special_channel",
+    "special_recover",
+    "hurt",
+    "stun_enter",
+    "stun_loop",
+    "stun_exit",
+    "turn_left",
+    "turn_right",
+    "dead"
+  ],
+  "idle": {
+    "fps": 30,
+    "start": 1,
+    "end": 96,
+    "closure": 97,
+    "duration_seconds": 3.2
+  },
+  "face_layout": "restored exactly to v006",
+  "grip": "keyboard center grip; doubled hanging cable with downward plug",
+  "cable_bones": 16,
+  "move": {
+    "fps": 30,
+    "start": 1,
+    "end": 48,
+    "closure": 49,
+    "duration_seconds": 1.6,
+    "root_motion": false,
+    "pedestal_roll_degrees": 10,
+    "pedestal_lateral_range": 0.46,
+    "pedestal_bottom_z": 0.005,
+    "revision": "r27 v031 reduced pedestal roll only"
+  },
+  "melee_keyboard": {
+    "fps": 30,
+    "start": 1,
+    "end": 55,
+    "duration_seconds": 1.8,
+    "impact_frame": 33,
+    "state_property": "Boss002_Rig.expression_state",
+    "gameplay_damage": false,
+    "flat_ground_contact": true,
+    "expression_scale": 1.22,
+    "contact_forward_m": 3.0,
+    "vfx_style": "image-2 hand drawn atlas; cyan magenta cyber accents",
+    "right_hand_counter_swing": "backward -Y, delayed overshoot at frame37",
+    "vfx_scale_vs_v014": 1.65,
+    "impact_vfx": "BOSS002_IMPACT_PREVIEW collection; source preview only"
+  },
+  "heavy_spin_slam": {
+    "fps": 30,
+    "start": 1,
+    "end": 97,
+    "duration_seconds": 3.2,
+    "spin_turns": 3,
+    "spin_frames": [
+      19,
+      49
+    ],
+    "hold_frames": [
+      55,
+      59
+    ],
+    "impact_frame": 65,
+    "low_frames": [
+      65,
+      81
+    ],
+    "expression_flow": "taunting / angry / default",
+    "vfx_texture_reuse": "textures/impact_v014/impact_atlas.png",
+    "runtime_integrated": false,
+    "backlean_degrees": 19,
+    "downstroke_frames": [
+      59,
+      65
+    ],
+    "hand_inertia_delay_frames": {
+      "L": 3,
+      "R": 5
+    },
+    "wrist_overlap": true,
+    "rotor_vfx": "Dedicated rotor ribbon meshes; no impact atlas while spinning",
+    "ground_rebound_clearance_m": 0.16,
+    "vfx_palette": "high saturation red and blue, emission 0.8"
+  },
+  "preview_vfx_style": "cyber pulse; no outlines; cool blue color blocks, muted magenta data fragments, expanding segmented rings",
+  "impact_highlight": {
+    "frame": 65,
+    "duration_frames": 1,
+    "shape": "yellow jagged ground burst, no outline"
+  },
+  "melee_cable": {
+    "frames": [
+      1,
+      61
+    ],
+    "duration_seconds": 2,
+    "hold_frames": [
+      21,
+      24
+    ],
+    "sweep_frames": [
+      25,
+      34
+    ],
+    "hand": "existing cable hand: hand.R",
+    "cable_bones": 16,
+    "neutral_recovery": true,
+    "palette": "keyboard cyan/magenta/white",
+    "verification": "previews/cable_v025/audit.json",
+    "hand_space": "shoulder-led FK fixed length chain; hands inherit arm06",
+    "spiral_turns": 1.5,
+    "quality_audit": "previews/cable_v025/fk_quality_audit.json"
+  },
+  "new_clips": {
+    "special_prepare": {
+      "frames": [
+        1,
+        37
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "special_insert": {
+      "frames": [
+        1,
+        19
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "special_channel": {
+      "frames": [
+        1,
+        25
+      ],
+      "fps": 30,
+      "loop": true
+    },
+    "special_recover": {
+      "frames": [
+        1,
+        28
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "hurt": {
+      "frames": [
+        1,
+        16
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "stun_enter": {
+      "frames": [
+        1,
+        43
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "stun_loop": {
+      "frames": [
+        1,
+        49
+      ],
+      "fps": 30,
+      "loop": true
+    },
+    "stun_exit": {
+      "frames": [
+        1,
+        31
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "turn_left": {
+      "frames": [
+        1,
+        25
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "turn_right": {
+      "frames": [
+        1,
+        25
+      ],
+      "fps": 30,
+      "loop": false
+    },
+    "dead": {
+      "frames": [
+        1,
+        61
+      ],
+      "fps": 30,
+      "loop": false
+    }
+  },
+  "verification": "previews/runtime/flow_report.json",
+  "preview_vfx_note": "Blender preview collections excluded from GLB; runtime filled cyber VFX owned by MonitorBossVfx.",
+  "arm_motion": "root-driven C/S traveling curvature and stretch; hand inherits distal chain",
+  "stun_contact": "Flat relaxed palms after frame35, sustained through stun_loop; prop_socket.L lays keyboard beside hand and returns during exit",
+  "expression_atlas": "source/textures_v030/expressions_atlas.png",
+  "export_signature": "e97e2d7536565a6eb61e35997595969bab57359dbef1921b8e62d4d959a7834f",
+  "export_signature_schema": "ordered bone names, parents and 8-decimal rest matrices",
+  "runtime_prefab": "assets/art/enemies/bosses/enm_boss_monitor002/runtime/enm_boss_monitor002/enm_boss_monitor002_root_top3d.tscn"
+}

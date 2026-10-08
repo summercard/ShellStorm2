@@ -2818,7 +2818,13 @@
     "runtime/enm_boss_monitor002/enm_boss_monitor002_root_top3d.tscn": "8c06769d50dc70b5cd97a062102d2cba6298812282aeb3417f2c6a7051a2c6d7",
     "source/rig_contract_v031.json": "be229d7dbf2907789588d2363002a8f68af96757623df2befd690af0e4fdf07d",
     "source/enm_boss_monitor002_model_v031.blend": "08226029d873745814209830092d2278105cd7c33c519335095787c8925f8277",
-    "source/enm_boss_monitor002_animation_v031.blend": "9aa6628d03a6d54264d4bb29cac165cf60480a1de966d968db36e853d6533ff4"
+    "source/enm_boss_monitor002_animation_v031.blend": "9aa6628d03a6d54264d4bb29cac165cf60480a1de966d968db36e853d6533ff4",
+    "source/rig_contract_v032.json": "00de60aff428370f5f4f674859d5af8ee56b5006b26963aec699ca48e584cd9a",
+    "source/enm_boss_monitor002_model_v032.blend": "01d57543c294413553b9d5d7838cb41d7b8fadcf2958aedfb33a295aa55f5403",
+    "source/enm_boss_monitor002_animation_v032.blend": "d05210904fc179388c28c9da2519c5e57105854303a76aa8c9a71eb9102af28b",
+    "source/rig_contract_v033.json": "028ac4580282f3c35176cd19566aecb09ea95af1e2040047074a5ef4d6acc69b",
+    "source/enm_boss_monitor002_model_v033.blend": "49b5892bd6725dadbe2e0263f3748e3de3f8d8b02e1ae4b54049bed9bb7608fc",
+    "source/enm_boss_monitor002_animation_v033.blend": "e6d50fff30d235fe0cca45946477ed2f9451f309fb3cbf023bd7c6642b04cc8b"
   },
   "triangles": 18684,
   "texture_model": "gpt-image-2",
@@ -2917,7 +2923,13 @@
     "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v031.blend": "08226029d873745814209830092d2278105cd7c33c519335095787c8925f8277",
     "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v031.blend": "9aa6628d03a6d54264d4bb29cac165cf60480a1de966d968db36e853d6533ff4",
     "assets/art/enemies/bosses/enm_boss_monitor002/README.md": "33d0947797869e841847e5566281a44a1144d68c16608d535c1856a78c0e21d7",
-    "assets/art/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx": "d59705e703fbacd84655cbaed4dd780fa88a900f4d5bc9edfecd8926d3dc841f"
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx": "d59705e703fbacd84655cbaed4dd780fa88a900f4d5bc9edfecd8926d3dc841f",
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/rig_contract_v032.json": "00de60aff428370f5f4f674859d5af8ee56b5006b26963aec699ca48e584cd9a",
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v032.blend": "01d57543c294413553b9d5d7838cb41d7b8fadcf2958aedfb33a295aa55f5403",
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v032.blend": "d05210904fc179388c28c9da2519c5e57105854303a76aa8c9a71eb9102af28b",
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/rig_contract_v033.json": "028ac4580282f3c35176cd19566aecb09ea95af1e2040047074a5ef4d6acc69b",
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v033.blend": "49b5892bd6725dadbe2e0263f3748e3de3f8d8b02e1ae4b54049bed9bb7608fc",
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v033.blend": "e6d50fff30d235fe0cca45946477ed2f9451f309fb3cbf023bd7c6642b04cc8b"
   },
   "clip_specs": {
     "idle": {

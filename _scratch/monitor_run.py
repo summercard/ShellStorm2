@@ -8,6 +8,7 @@ args=[G,'--path',str(D),'--audio-driver','Dummy']
 args += ['--rendering-method','gl_compatibility','--resolution','960x720','--position','80,80'] if visual else ['--headless']
 args += ['--editor','--import','--quit'] if name=='import' else ['res://tests/verification/'+name+'.tscn']
 if '--sequence' in sys.argv:args += ['--','--sequence']
+if '--walk' in sys.argv:args += ['--','--walk']
 p=Q/(name+'.log');start=time.time()
 with p.open('wb') as f:
  try:r=subprocess.run(args,cwd=R,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=120,creationflags=subprocess.CREATE_NO_WINDOW);code=r.returncode
