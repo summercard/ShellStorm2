@@ -31,7 +31,19 @@ v034新增activate6.4秒，17剪辑；原动作曲线保留，首次进房激活
 
 v033基于v031仅侧翘23°→10°、保持其余动作；[交付与验收](2026-10-08_boss002_reduced_lift.md)。
 
+## 2026-10-08 命运卡运行效果补全
+
+- FeatureID：`FATE-RULES`。按用户要求修复48张运行卡中功能不满足、逆位参数未消费、末端消费者错误和正式进房/世界事务接线问题；新增武器、角色、世界、正式Bridge和跨进程命运快照专项。
+- 武器22张补齐真实投射物/敌人末端、附枪来源隔离、元素状态、返航/回填、击杀归属和正逆位倍率；角色12张补齐生命、伤害/暴击、进房/清房/精英生命周期、祝福血线和愚者正式事务；世界14张补齐单件候选掉落、倍率、钥匙、赏金、撤离区域与未来波次规则。
+- `FateCardGameBridge` 统一 WORLD 唯一应用命令和来源选择；失败不登记、不消费；愚者待领固定身份/方位；`runtime_player_state_v2.fate_run_state.version=1` 保存角色、世界、Bridge、运行枪树和真实 `weapon_instance_id`，恢复不重放即时效果。
+- 专项证据：`verify_fate_weapon_completion`、`verify_fate_character_completion`（127项）、`verify_fate_world_completion`（113项）、`verify_fate_integration_completion`（728项）、`verify_fate_resume_completion`，以及既有塔罗/作用域/武器归属回归均退出0、成功标记存在且无脚本错误。详情见[运行效果补全记录](2026-10-08_fate_runtime_completion.md)。
+- 边界：精英名册不可用时按契约拒绝；静态配件行为和背包散装来源事务仍待设计；真实窗口输入/来源面板视觉QA未执行。全局文档/资产门禁既有债务仍保留。
+
 # 游戏设计文档 v0.1 变更记录
+
+## 2026-10-08 三类换弹与时长同步
+
+PLAYER-STATE / ASSET-PIPELINE：[v033记录](2026-10-08_player_motion_reload_v033.md)。短枪、长枪、机枪各新增独立换弹，按实际换弹进度缩放整条动作，移动时脚步与耳朵保持。三类多时长、移动、取消、打断专项174检查通过；原88剪辑保留，不新增弹匣物件。
 
 ## 2026-10-08｜Boss002 v032 贴地挪动与机身扭转
 

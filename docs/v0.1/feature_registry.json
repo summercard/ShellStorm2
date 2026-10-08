@@ -139,7 +139,9 @@
         "docs/v0.1/04_技术施工_战斗与局内成长.md"
       ],
       "development_records": [
-        "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md"
+        "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md",
+        "docs/v0.1/development/2026-10-08_fate_runtime_completion.md",
+        "docs/v0.1/development/2026-10-08_fate_persistence_completion.md"
       ],
       "verification": [
         {
@@ -149,6 +151,26 @@
         {
           "kind": "scene",
           "id": "verify_celestial_fate_scope_flow"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_weapon_completion"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_character_completion"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_world_completion"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_integration_completion"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_resume_completion"
         }
       ],
       "status": "partial"
@@ -561,7 +583,8 @@
       "development_records": [
         "docs/v0.1/development/2026-09-12_save_reentry_spawn_policy.md",
         "docs/v0.1/development/2026-09-23_p1_architecture_and_transaction_repair.md",
-        "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md"
+        "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md",
+        "docs/v0.1/development/2026-10-08_fate_persistence_completion.md"
       ],
       "verification": [
         {
@@ -575,6 +598,10 @@
         {
           "kind": "scene",
           "id": "verify_new_save_handoff"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_fate_resume_completion"
         }
       ],
       "status": "partial"

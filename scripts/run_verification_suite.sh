@@ -187,6 +187,7 @@ core_scenes=(
   verify_player3d_directional_motion
   verify_player3d_firing_motion
   verify_player3d_weapon_switch
+  verify_player3d_reload_motion
   verify_monitor_boss_flow
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
@@ -205,6 +206,7 @@ core_scenes=(
   verify_narrative_timeline
   verify_opening_script_runtime
   verify_new_save_handoff
+  verify_fate_resume_completion
   verify_tower_journey_polish
   verify_arrival_gate_floor_bundle_flow
   verify_common_floor_tile_components_v004
@@ -237,6 +239,10 @@ core_scenes=(
   verify_3d_melee_feedback_flow
   verify_training_range_3d_flow
   verify_3d_fate_weapon_flow
+  verify_fate_weapon_completion
+  verify_fate_character_completion
+  verify_fate_world_completion
+  verify_fate_integration_completion
   verify_3d_inventory_weapon_flow
   verify_weapon_instance_contract_matrix
   verify_starting_weapon_contract
