@@ -27,11 +27,13 @@ CLASSIFICATIONS = {'reuse', 'replacement', 'version_increment', 'child_variant'}
 
 # 两种登记文件命名并存：角色域带版本号，敌人等域走恒定名。
 LEDGER_GLOBS = (
+    'assets/art/**/*_transfer_ledger*.json',
     'assets/art/**/character_transfer_ledger_v*.json',
     'assets/art/**/character_transfer_ledger.json',
 )
 # 本包登记账本的候选位置，按优先级排列。
 CURRENT_LEDGER_CANDIDATES = (
+    '{name}_transfer_ledger.json',
     'character_transfer_ledger_{name}.json',
     'character_transfer_ledger.json',
     'runtime/character_transfer_ledger.json',

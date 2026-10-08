@@ -184,6 +184,9 @@ smoke_scenes=(
 )
 
 core_scenes=(
+  verify_player3d_directional_motion
+  verify_player3d_firing_motion
+  verify_player3d_weapon_switch
   verify_monitor_boss_flow
   "${smoke_scenes[@]}"
   verify_floor_plan_generator

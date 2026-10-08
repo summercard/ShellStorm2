@@ -1,5 +1,17 @@
 # v0.1 模块、功能与工程契约索引
 
+PLAYER-STATE / ASSET-PIPELINE / SAVE-PROFILE：[无枪摆臂与双槽收取枪v032](development/2026-10-08_player_motion_switch_v032.md)。无枪前后交替摆臂、侧移保持；1/2重复当前槽收枪并双背负，换槽先收后取；动画88条，专项96检查通过，完整续档及全局套件未验。
+
+ASSET-PIPELINE / WORLD-BLOCKS [SKYLINE20塔3东侧正式投放](development/CHANGELOG.md#skyline20-v007-塔3东侧正式投放)：v007主体50×50m/20层，8组件/37实例、7720三角，屋顶占59.22%。用户授权接入正式游戏与open_world编辑场景，初始共享摆位(75,-86.36,-195)，[用户手调增量同步](development/CHANGELOG.md#2026-10-08-open_world建筑手调增量同步)后实际世界根(54.139153,-86.36,-177.601841)，屋面比塔3主天台低10m，游戏1栋、无碰撞，路线回归319/0；主表826–834及Prefab718–726使用位置已同步validated。逐项美术确认及全局历史红项保留，不提升总体完成状态。
+
+PLAYER-STATE / ASSET-PIPELINE：[长枪机枪斜持微调v031](development/2026-10-07_player_motion_carry_v031.md)；[举枪及四方向射击v030](development/2026-10-07_player_motion_firing_v030.md)。非开火长枪/机枪略斜、机枪收近；射击/停火切换与四方向双速度保持。换弹蓄力近战、逐枪型支撑贴合和脚底锁地仍待完善。
+
+PLAYER-STATE / ASSET-PIPELINE：[持枪移动耳朵跟随v028](development/2026-10-07_player_ear_sway_v028.md)。18循环增加反移动方向飘动与错相回弹，保持v027持枪/脚步；源级待导入。
+
+PLAYER-STATE / ASSET-PIPELINE：[持枪三方向移动v027](development/2026-10-07_player_directional_v027.md)。以v026持枪状态制作三枪型×慢走/正常移动×左移/右移/后退18循环；源级待导入，前进与运行速度同步待完成。
+
+PLAYER-STATE / ASSET-PIPELINE：[持枪待机位置修订v026](development/2026-10-07_player_weapon_idle_v026.md)。按正侧参考调整短枪，长枪机枪整体前移、双手同步跟随；源级待导入，v025保留。
+
 PLAYER-STATE / ENTRY-AVATAR / ASSET-PIPELINE：[三类持枪站立待机源v025](development/2026-10-07_player_weapon_idle_v025.md)。短枪单手朝上、长枪胸前斜持、机枪低位承重，三个独立循环；旧14动作与静止骨架保留。源级验收完成，未接入Godot；四方向移动仍待制作，不提升玩家动画总体完成状态。
 
 VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](development/2026-10-04_stutter_deep_diagnosis.md)。同场景云海当前→历史→当前复验：旧版P95约16.8ms，当前54.7～64.3ms；历史排云覆盖改变是关键差异，不能无损回滚。正式逻辑计时支持周期保存短顿，生产修复未实施。
@@ -8,7 +20,7 @@ TIME-DAYNIGHT / SAVE-PROFILE / WORLD-BLOCKS：[楼顶与吊桥卡顿复查](deve
 
 VFX-POOL / WORLD-BLOCKS：[100F吊桥云海卡顿诊断](development/2026-10-04_bridge_cloud_stutter_diagnosis.md)。当前RTX4060Ti真实1440p重复路线帧中位51.221ms、P95 67.325ms；隐藏云海7.120/8.629ms。720p隐藏地表城市改善很小，冻结逻辑仍保留云海负担；13组完成，性能未修复，不改变美术品质与避让合同。
 
-BOSS-STAGES / ASSET-PIPELINE：[Boss002技能设计](design/Boss002显示器技能设计.md)、[动画设计](design/Boss002显示器动画设计.md)。v031正式Prefab、16剪辑/64骨、十二态、四技能与三阶段已接入远征01 f00_boss；同AssetID台账active。远征01正式进房/三波清房/撤离门专项见[投放记录](development/2026-10-07_expedition01_monitor_boss_spawn.md)。专项与真实渲染证据见[正式导入记录](development/2026-10-06_boss002_runtime_import.md)。
+BOSS-STAGES / ASSET-PIPELINE：[Boss002技能设计](design/Boss002显示器技能设计.md)、[动画设计](design/Boss002显示器动画设计.md)。v031正式Prefab（原版侧翘横移move）、16剪辑/64骨、十二态、四技能与三阶段已接入远征01 f00_boss；同AssetID台账active。远征01正式进房/三波清房/撤离门专项见[投放记录](development/2026-10-07_expedition01_monitor_boss_spawn.md)。专项与真实渲染证据见[正式导入记录](development/2026-10-06_boss002_runtime_import.md)。
 
 ASSET-PIPELINE / WORLD-BLOCKS [500米地表与程序城市v004](development/2026-10-03_cross_tower_landscape_foundation.md#500米地表与全域城市v004后续交付)：200新楼/23非空批次，25分区包含旧城总覆盖；96原实例与塔桥完整矩阵保持。真实Forward+665项与登记/门禁/快照7项合计672项、云海30,209项通过；主表825/Prefab专表717受控登记及无损基线通过。中央两区新增0，玩家和诊断四图分开；工程既有红项与移动端/LOD未验单列，不提升总体完成状态。
 

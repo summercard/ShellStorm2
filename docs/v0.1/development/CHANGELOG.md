@@ -1,4 +1,76 @@
+## 2026-10-08｜Boss002 恢复 v031
+
+用户要求停止走路迭代，正式运行版本恢复为 v031 原版侧翘横移。仅恢复 move 的运行采样、源引用、Prefab 版本、清单与账本；其它 15 个剪辑、四技能、三阶段与远征01投放保持不变。详见[恢复记录](2026-10-08_boss002_restore_v031.md)。
+
+## 2026-10-08 Boss002 老版走路小改
+
+v033基于v031仅侧翘23°→10°、保持其余动作；[交付与验收](2026-10-08_boss002_reduced_lift.md)。
+
 # 游戏设计文档 v0.1 变更记录
+
+## 2026-10-08｜Boss002 v032 贴地挪动与机身扭转
+
+BOSS-STAGES / ASSET-PIPELINE，动画r26：move底座取消翘起/抬升，保持贴地横移0.46m，机身左右扭动、双臂柔性跟随。其他15剪辑及玩法保留。Blender97采样、Godot509项及48帧真实渲染通过；双母版、中转、运行采样与账本同步。见[走路修订记录](2026-10-08_boss002_grounded_move.md)。
+
+## 2026-10-08 无枪摆臂与双槽收取枪
+
+PLAYER-STATE / ASSET-PIPELINE / SAVE-PROFILE：[v032记录](2026-10-08_player_motion_switch_v032.md)。修订4条无枪前后摆臂，新增三枪型双背槽12条收取枪过渡；1/2重复当前槽收起，双枪背负，换槽先收后取。专项96检查及相关回归通过；完整续档、全项目和移动端未验。
+
+## 2026-10-08 open_world建筑手调增量同步
+
+- FeatureID：WORLD-BLOCKS / ASSET-PIPELINE；工程0.1.0。用户要求仅同步已调整建筑的位置与大小，其它不动。以已保存`open_world_chunk_layout_edit.tscn`相对上一交付快照的变化为白名单，不全量回填编辑场景。
+- 本次仅改两份正式TSCN：route的`Skyline20Placement`父实例矩阵；foundation中的5个变更楼群根/对应深延长模板引用及`Tower3FoundationBox`矩阵。作者源、共享SKYLINE20源、未改3区块、其它基础、地表、塔2/塔3/SKYLINE08本体、桥、碰撞、云雾、材质保持。
+- SKYLINE20正式世界根为(54.139153,-86.36,-177.601841)，缩放1，屋面Y=-10不变；正式route同步作者wrapper偏移(-20.860847,0,17.398159)，不改共享子楼，不清除作者覆写，避免二次叠加。编辑基础参考仍是历史摆位，最新完整编辑总场景为本次同步依据。
+- 5区块当前位置：30x30=(-51.645,-65.685,-134.415)；100x101=(-110,-40,0)；100x105=(-45,-40,-260)；100x100=(110,-41,0)；100x104=(-110,-39,-150)。仅这些实例引用编辑源已有深延长模板，以同步用户所见尺寸，未修改模板文件。塔3基础按作者完整矩阵，position=(-12.015,-70.075,-173.036)，scale=(0.945,1.417,0.845)。不依据旧metadata重新拉伸或恢复高度。
+- 正式游戏加载专项1546项/0失败，退出0，无ERROR/泄漏；逐节点核对5组区块、楼栋/mesh尺寸、可见性和世界矩阵，SKYLINE20唯一实例及塔3基础一致。709文件冻结，仅两份正式TSCN变化，707保护文件未变；作者源字节未改。完整全项目套件、视觉截图与全区块一致探针未执行，历史未同步3组区块保留，不放宽旧门禁。
+- 文档/命名门禁前后退出1的范围外问题另记，未修债务。未改资产源、GLB、独立Prefab、账本状态/哈希，旧交付坐标及截图仍为历史快照。备份、保护结果、运行验证和本轮报告见`outputs/open_world_manual_sync_20261008/`。回退仅按本轮两文件节点差异撤销，不覆盖其它作者改动。
+
+## 2026-10-07 长枪机枪斜持微调
+
+PLAYER-STATE / ASSET-PIPELINE：[v031记录](2026-10-07_player_motion_carry_v031.md)。按游戏截图调整18条非开火持枪循环：长枪/机枪略斜，机枪收近身体；双手同步，短枪及射击瞄准线保持。
+
+## 2026-10-07 三类枪举枪与四方向移动射击
+
+PLAYER-STATE / ASSET-PIPELINE：[v030交付记录](2026-10-07_player_motion_firing_v030.md)。修复开火仍播放持枪，补27条站立/双速度四方向举枪循环；真实开火、枪口朝向、握点和停火恢复专项通过，碰撞及武器玩法不变。
+
+## SKYLINE20 v007 塔3东侧正式投放
+
+- FeatureID：ASSET-PIPELINE / WORLD-BLOCKS；工程0.1.0；用户明确授权按红框放塔3东侧、屋面低10m、open_world编辑场景保留可调实例。契约见[跨塔景观设计](../design/rooftop_cross_tower_route.md#塔3东侧skyline20景观摆放2026-10-07用户授权)。以下为接入阶段事实，上一技术交付章节保留原时点状态。
+- 复用已验收v007源/独立优化/8组件GLB/9Prefab，源与优化哈希匹配catalog，几何、材质及稳定Prefab内容不变，不重复优化或重导出；整栋7720三角。新建稳定共享摆位TSCN`env_landscape_skyline20_placement_root_top3d.tscn`，正式route与编辑参考各新增一个引用，区块总场景继承一份且文件未改。保留所有原节点、作者覆写、桥、碰撞和城市手摆。
+- 初始世界根(75,-86.36,-195)，单位缩放、零旋转。Godot实测塔3主天台Y=0，SKYLINE20实际屋面Y=-10，高差10.00m；最高通信附件约Y=-0.198，不将附件顶当屋面。新楼位于东侧+X且略偏北，与塔3/现有城市区块包络不相交，未擅自移动小楼。
+- 正式`--import`退出0且无ERROR；真实渲染加载正式游戏，实例唯一、正式/编辑/游戏Transform一致、零碰撞，高差等专项无失败。跨塔路线回归319项/0失败、退出0，无脚本错误或泄漏；未执行全项目完整套件。用户存档隔离APPDATA。原始云雾截图及临时关雾/环境光0.6诊断视图分别记录，云仍保留，未保存任何光照修改。首轮截图误含独立比较场景，最终关闭比较树后重拍，只保留正式游戏树作为交付图。
+- 账本两次独立白名单事务：主表826–834 J/Y共18格，Prefab718–726 M/P共18格；仅刷新对应资产行及专表基线指纹，其他行/表/公式/样式/DV及总目录保留。validated状态不变，runtime_integrated=true，用户授权投放=true，reference_art_approved=false（不将投放授权伪造成逐项美术验收）。历史登记报告保留，不改写原阶段证据。
+- 门禁：structure/baseline退出0；full scenes/naming/refs历史红项保留且账本事务新增错误0。文档/命名收尾与正确基线对照见`outputs/skyline20_placement/gates_final.json`，不更新债务白名单、不批量洗白历史SHA。初版通用runner误用full_scenes的--json导致退出2，已改为--json-output重新运行；错误日志保留，不作有效基线。
+- 同步调整：在共享摆位场景修改`Skyline20`子节点即可影响正式与编辑引用；外层编辑场景覆写不自动回填正式。未来保存后本次坐标证据成为历史快照，需复验。回退仅撤两处引用并按新账本事务差异撤销接入备注，不覆盖其他并发改动。
+- 证据：`assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration.json`及同目录`open_world_integration/`；交付截图/报告在`outputs/skyline20_placement/`。逐项美术最终确认、移动端/LOD与全项目验收仍未执行。
+
+## SKYLINE20 v007 景观建筑技术交付
+
+- FeatureID：ASSET-PIPELINE；工程版本0.1.0；核对基线`4e964e41cc5e0530a56ed6af389e4770a4eccb8f`+当前工作区。AssetID：`ENV-OPENWORLD-LANDSCAPE-SKYLINE20`，block_id=open_world，与SKYLINE景观同类；不覆盖SKYLINE08。依据用户参考及[场景生产流程](../10.1_3D场景美术生产流程.md)、[资产规范](../10_资产与内容规范.md)。本节为该资产独立交付记录，不新增玩法设计，不提升整个ASSET-PIPELINE完成状态。
+- 用户范围：主体约50×50m、20层、屋顶重点、简化重复楼身；不制作底层结构、室内、碰撞、导航或交互。3.8m层距为本次美术取值，不借用战斗楼层12m契约。实测主体50×50m，附属装饰完整包络53.23×50.93×86.16m。
+- 实际产物：v007可编辑源及独立优化Blend；8个活跃组件母版、37个实例；整栋累计7720三角，预算10000，屋顶结构/设备4572三角占59.22%。中央机房、四台屋顶空调、独立实心碟、两座桁架塔、黄色护栏及两幅竖广告；旧v005/v006保留。公共色盘PaletteUV、共享角色材质，8个GLB均无内嵌图片/纹理。独立优化合并8个重复顶点，三角减面率0，不将三角化称为减面。
+- 所有权：Blender拥有几何/材质，组件PackedScene拥有包装，Godot TSCN拥有实例布局。稳定入口为`assets/art/environments/open_world/runtime/landscape_skyline20/env_landscape_skyline20_root_top3d.tscn`；未重生成正式房间，未修改玩法/tests。正式关卡摆放未指定，runtime_integrated=false。
+- 证据：[组件catalog](../../../assets/art/environments/open_world/source/landscape_skyline20/v007/component_catalog.json)、[专项QA](../../../assets/art/environments/open_world/source/landscape_skyline20/v007/qa/qa_report.json)、[账本事务](../../../assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_registration.json)。制作源与优化源严格检查通过；Godot专项1430通过/0失败；53个保护文件未变；屋顶水平AABB净空28对通过，最小3.10552m（不等于逐三角碰撞检测）。原生整栋/屋顶截图位于QA的`godot_runtime_full.png`/`godot_runtime_roof.png`；源/优化/活跃GLB哈希匹配catalog。
+- 首轮Godot导入曾出现get_multiple_md5的f.is_null错误，原日志保留；正式复查导入无ERROR。技术专项通过不代表用户美术批准：reference_art_approved=false；账本父资产主表826、组件827–834，Prefab718–726已登记validated（技术通过、美术待审），未转为正式可用。
+- 登记事务门禁：structure/baseline退出0；full scenes/naming/refs分别退出1；465条历史SHA、1项历史命名及22项历史引用问题保留，登记新增错误0。收尾文档基线退出1：4个范围外验收脚本未注册；命名基线退出1：其他角色/椅子等14个带版本文件、3个带版本目录及tscn引用93→98。未更新债务白名单、未批量回填历史SHA；最终复测见`outputs/skyline20_v007_delivery/gates_final.json`。
+- 收尾修复：同步QA与runtime manifest的ledger_modified=true及登记报告链接，保留美术待审/未接入。验收运行使用托管Python隔离环境；初轮依赖/参数探测失败保留日志，正式基线使用-I隔离上级inspect.py同名模块，并将子进程python3映射为同一解释器，未修改项目门禁脚本。
+- 未执行项：用户最终视觉批准、正式场景投放、移动端/LOD/全项目完整游戏验收；不得把本资产专项结果签署为全局全绿。源几何回退使用保留版本，但活跃组件集合有变化，运行回退须按对应catalog审查，不直接覆盖正式房间。供用户审核的文件与截图见`outputs/skyline20_v007_delivery/`。
+
+## 2026-10-07｜玩家四方向持枪动作接入 v029
+
+PLAYER-STATE / ASSET-PIPELINE：新增完整枪型/速度/方向选择、采样枪朝向和掌心挂点，35条新动作并保留原14条。参见[接入与验收记录](2026-10-07_player_motion_runtime_v029.md)，不提升专用战斗动作完成状态。
+
+## 2026-10-07｜玩家持枪移动耳朵跟随 v028
+
+PLAYER-STATE / ASSET-PIPELINE：18条移动循环补耳朵反向拖曳和轻微回弹，持枪、头部与脚步曲线不变；源级待导入。见[独立记录](2026-10-07_player_ear_sway_v028.md)。
+
+## 2026-10-07｜持枪左移、右移、后退源v027
+
+PLAYER-STATE / ASSET-PIPELINE：按用户指定保留v026三种持枪姿态，新增慢走与正常移动三方向18循环，独立落脚与撤步轨迹；旧源/动作保留，未导入Godot。见[交付记录](2026-10-07_player_directional_v027.md)。
+
+## 2026-10-07｜持枪待机位置修订v026
+
+PLAYER-STATE / ASSET-PIPELINE：短枪按用户正侧参考前上倾，长枪与机枪前移并同步双握点；增加循环中枪体与躯干/头部三角面相交检查。仅修改源动作，保留v025及运行版本，见[修订记录](2026-10-07_player_weapon_idle_v026.md)。
 
 ## 2026-10-07｜玩家三类持枪站立待机源v025
 
@@ -2084,3 +2156,7 @@ VFX-POOL / WORLD-BLOCKS / SAVE-PROFILE：[流畅度深查](2026-10-04_stutter_de
 - 2026-10-05：修掉景观地基「认领城市材质」在**引导场景被顶掉**时的报错 —— `ERROR: Parameter "data.tree" is null.` 与紧随其后的 `SCRIPT ERROR: Invalid access to property or key 'root' on a base object of type 'null instance'`。根因：`_ready` 排的 `call_deferred` 至少隔一帧才跑，而带**未完成续局**的存档启动时，引导用的 `TowerDescent3D` 会在第 1 帧被 `_resume_expedition_runtime_scene()` 的 `change_scene_to_file` 顶掉；地基已出树，120 帧轮询却还在跑。修法：每轮先 `is_inside_tree()` 再取 `get_tree()` —— 只判 `get_tree()` 的返回值不够，它自身带 `ERR_FAIL_NULL_V`，出树时照样打日志。改动文件 `assets/art/environments/open_world/runtime/open_world_landscape_foundation/landscape_visual_material_binding.gd`。A/B/C 三组对照（同一份真实存档、各自全新副本）：原版 2 条报错 / 只判返回值版 1 条 / 最终版 0 条，三组都正常进局。
 
 - 2026-10-05：换弹环口径返工 —— 上一版「平铺地面」被主人否掉，改为**正对镜头 + 画在角色之上 + 离地 0.25**。朝向由 `_face_reload_ring_to_camera()` 每帧手写基向量（不走 `billboard_mode`：着色器 billboard 会归一化模型基向量、吃掉锚点缩放，环的世界尺寸就错，而 visible/快照/AABB 全绿）；两材质 `no_depth_test = true`，否则环的上半圈会被腿切掉；锚点由 0.08 抬到 0.25 —— 相机实算倾角 **25.0°**（上一版记的 20.6° 漏了注视点偏移：位置 = 玩家 +(0, 10.719, 4.038)、注视点 = 玩家 +(0, 0.45, −0.75)），正对镜头的环竖直铺开 ±r·sin(25°) = ±0.1775，环心低于 0.18 就插进地板（0.08 时最低点 −0.078 m）。`verify_3d_reload_state_flow` 自摆一台同姿态相机，新增朝向 / 层级 / 离地三条断言，反证三次全红。见 [v0.2/PLAN](../../v0.2/PLAN.md) 的 0.2-PLAYER-001。
+
+- 2026-10-08：换弹环第三次改口径（主人原话「现在的位置会直接挡住角色，缩小一点放在红色圈圈的位置」）。① **半径** `RELOAD_RING_OUTER_RADIUS_M` 0.42 → **0.30**（实机世界直径 0.672 → 0.48 m）；② **横向让位** 新增 `RELOAD_RING_LATERAL_OFFSET_M := 0.979`，沿**屏幕右**（相机基 +X）平移 —— 相机是玩家的子节点且只在 Y/Z 上偏移，所以这个方向恒等于「玩家的右手边」，与角色朝向无关，转身时环不会绕着角色转。位移量按主人标注图实测比值算：红圈中心 − 环心 = 38.5 px = **2.33 × 环外半径**（比值与相机远近无关 —— 环半径与横向位移都落在像平面内），再乘**标注时那一版的半径 0.42**；⚠️ **不要**用新半径重乘（0.30 × 2.33 = 0.699 会把环拉回角色右肩上，实机重渲一次就看得见）。顺带**第二次修正相机倾角**：10-04 记 20.6°、10-05 改 25.0° 都错，真值 **29.42°**（相机→注视点 = (0, −9.819009, −5.537671)，atan(5.537671 / 9.819009)，sin = 0.4912），判决不变。新增**渲染预览探针** `tests/verification/preview_reload_ring.{gd,tscn}`（不注册进套件）—— 前两轮返工都因为「看不见画面只能盲改」，这台探针按 `TowerDescent3D` 的真实相机姿态出图，用来终结那条回路。见 [v0.2/PLAN](../../v0.2/PLAN.md) 的 0.2-PLAYER-001。
+
+- 2026-10-08：换弹环第四次改口径（主人原话「缩小一点，是现在的 70%」）。半径 `RELOAD_RING_OUTER_RADIUS_M` 0.30 → **0.21**（设计外径 0.60 → 0.42 米；实机世界直径 0.48 → **0.336 m**）。**只缩小、不挪位** —— `RELOAD_RING_LATERAL_OFFSET_M` 保持 0.979，环心仍在上一轮标定的红圈落点上。线宽是**比例**（`RELOAD_RING_THICKNESS_RATIO` = 0.2226）故等比变细，改大小只需改半径这一个数，环不会变成粗甜甜圈；离地判据随之变宽松（正对镜头竖直铺开 ±r·sin(29.42°) 由 ±0.1474 降到 ±0.1031，最低点 +0.103 → **+0.147 设计米 ≈ +12 cm 实机**），锚点 0.25 无需调整。用渲染预览探针三档同机位重渲、逐图连通域量外径复核：细看图 110.5 / 78.5 / **54.5** px、实机视角 33.0 / 23.5 / **16.5** px，**54.5 ÷ 78.5 = 0.694 ≈ 0.70** 与「70%」逐像素吻合；且 0.30 与 0.21 两档**环心完全重合**（细看 x = 767.5、实机 x = 678.5；y 一律 405.0 / 403.0），是"只缩小不挪位"的机器证据。副作用（预期、已告知）：环心不动而半径变小 ⇒ 近侧边缘间隙由 11 px 涨到 23 px（细看档；实机 3 → 7 px），嫌飘可把让位量减到约 0.886 压回上一轮水平。验收 `verify_3d_reload_state_flow` 全绿（半径断言全部从快照读数，无硬编码，缩半径不必改脚本），只剩并行会话的 `single_hand_reload` 契约红项（非本轮改动）。见 [v0.2/PLAN](../../v0.2/PLAN.md) 的 0.2-PLAYER-001。

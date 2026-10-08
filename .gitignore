@@ -157,3 +157,34 @@ _scratch/*_old_import/
 # 云海烘焙的中间体：由 source/v00X/build_*.py 按固定种子确定性生成（rng seed 写在脚本里），
 # 运行时真正吃的是烘焙产物 cloud_keepout.res / cloud_noise.res。布局变化本来就要重烘焙。
 assets/art/vfx/environment_3d/cloud_sea/source/**/*.raw
+
+# 验证套件的隔离工作区「带业务后缀」变体（探针实际生成 .verify_ws_radio_v005 之类）。
+# 上面 `_scratch/.verify_ws/` 是精确名，只命中不带后缀的，故补通配。
+# 实测单轮 5.5 万文件 / 10.7 GB，且含符号链接自引用（git 报 Too many levels of symbolic links）。
+_scratch/.verify_ws_*/
+
+# 「收尾工程」副本：把整棵工程树复制出来做某版收口验证（如 radio_v005_finish_project），
+# source/ 走 symlink 指回真实目录、_scratch 再落一层。单轮 3.4 万文件 / 6.8 GB。
+# 与 *_qa_project 同类，是临时脚手架不是资产。
+_scratch/*_finish_project/
+
+# Blender 会话快照：改前把当前会话整档另存（session_before / session_before_open），
+# 单文件 166 MB，直接撞 GitHub 100 MB 硬限。它位于 _scratch/<工作区>/ 的下一层，
+# 既有 `_scratch/*_before.blend` 只覆盖 _scratch 直属层，故用 **/ 兜住深层。
+_scratch/**/session_before*.blend
+
+# 探针把 Godot 编辑器本地数据（editor_doc_cache-*.res）落在 *_localdata/ 目录。
+# 既有规则只认 appdata / userdata 命名，这条补 localdata。
+_scratch/**/*localdata*/
+
+# bunny 玩家 animation 母版：v028 起单文件 117~248 MB（v028=117 / v029=136 / v030=183 /
+# v031=214 / v032=248），超 GitHub 100 MB 硬限，一次 push 会让整批提交被拒。
+# v027=94 MB 未超限，仍入库。与 Boss002 animation / open_world 源同理 —— 源不入库：
+# 运行时消费的是导出的 GLB 与剪辑清单（*_directional_v0XX.json / *_weapon_idles_v0XX.json），
+# 靠角色账本、character_transfer_ledger.json 与 scripts/blender/author_bunny_*.py 追溯。
+# 本规则只挡 v028+，历史不动。
+assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v028.blend
+assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v029.blend
+assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v030.blend
+assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v031.blend
+assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v032.blend
