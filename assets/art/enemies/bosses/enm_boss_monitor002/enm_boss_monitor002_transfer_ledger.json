@@ -1,6 +1,6 @@
 {
   "asset_id": "ENM-BOSS-MONITOR002-3D",
-  "version": "v031",
+  "version": "v035",
   "status": "active",
   "classification": "version_increment",
   "skeleton_id": "SKEL-MONITOR002-005",
@@ -8,8 +8,8 @@
   "animation_signature": "e97e2d7536565a6eb61e35997595969bab57359dbef1921b8e62d4d959a7834f",
   "legacy_signature": "696f6dc701f5ddccd3eb7324f534ba5fa96580daead8e4873fdf923d078b3539",
   "source_sha256": {
-    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v031.blend": "08226029d873745814209830092d2278105cd7c33c519335095787c8925f8277",
-    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v031.blend": "9aa6628d03a6d54264d4bb29cac165cf60480a1de966d968db36e853d6533ff4"
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend": "50079ee6b49331bc9e1cba2a444f01171d9803115f40a4a53de2182681b56de8",
+    "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend": "dfc5d231e87c5f906cfdad6d8243c8401c6b70a60a3bef48095d330a9ed02f1f"
   },
   "files": [
     {
@@ -19,8 +19,8 @@
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d.glb",
-      "sha256": "64cdcc1410624c14714b6c730037ebea1da68025c4d338ba68ee48cc638664ba",
-      "bytes": 5178996
+      "sha256": "1f81643355fc2669e082f94075294a579edcfcf1ccc1d19b3866d1c049e11a74",
+      "bytes": 5183224
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/enm_boss_monitor002_visual_top3d_body_palette.png",
@@ -54,8 +54,8 @@
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/monitor_motion.json",
-      "sha256": "cfb879814d5cfa91a1ad2802dad59780ee9cdf09077aa049b9297cf7a2711a59",
-      "bytes": 6168915
+      "sha256": "d1f21b991a8a8512f96eb5cf208eefc65bd3815794c62bd0534780e381433e49",
+      "bytes": 7849862
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/screen_code.png",
@@ -64,28 +64,28 @@
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/README.md",
-      "sha256": "33d0947797869e841847e5566281a44a1144d68c16608d535c1856a78c0e21d7",
-      "bytes": 30178
+      "sha256": "e2169c80e1ed9aa4501fed502e1aba853f3964e6728c1870db527a2aaee4a240",
+      "bytes": 31402
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/runtime/enm_boss_monitor002/enm_boss_monitor002_root_top3d.tscn",
-      "sha256": "8c06769d50dc70b5cd97a062102d2cba6298812282aeb3417f2c6a7051a2c6d7",
+      "sha256": "712ca8f0cd8ef64989e377cebc6b5468ad1f6404161033c2943a64aa14801b42",
       "bytes": 515
     },
     {
       "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/boss002_production_ledger.xlsx",
-      "sha256": "d59705e703fbacd84655cbaed4dd780fa88a900f4d5bc9edfecd8926d3dc841f",
-      "bytes": 7925
+      "sha256": "9103a65145376e4dd92195e55e09564219917d185604d08259bee1416fc68c03",
+      "bytes": 7942
     },
     {
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/rig_contract_v031.json",
-      "sha256": "be229d7dbf2907789588d2363002a8f68af96757623df2befd690af0e4fdf07d",
-      "bytes": 6319
+      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/rig_contract_v035.json",
+      "sha256": "744f201f79831760ab65d1a29165c1e8de6c39d23d1ea824e418471d3822a364",
+      "bytes": 6612
     },
     {
       "path": "src/enemy3d/monitor_code.gdshader",
-      "sha256": "6a9a37112430b909aa854a153ba32d40ed672ada4332be2a5d082de343f53475",
-      "bytes": 283
+      "sha256": "ac6c3bab69f38e9fcbb5936559fcce84a8760ad4a4aeb412069d33597cfa68a9",
+      "bytes": 395
     },
     {
       "path": "src/enemy3d/monitor_expression.gdshader",
@@ -94,18 +94,33 @@
     },
     {
       "path": "src/enemy3d/MonitorBossCombat.gd",
-      "sha256": "abb3202856862054ecb94be88356adbf4c7dacf0e673299827b55dbf7bca9825",
-      "bytes": 8595
+      "sha256": "7cf47177760d5a93d69adf290f74f72ae1188a78df8a8b88bee6cd26a75db74e",
+      "bytes": 10287
     },
     {
       "path": "src/enemy3d/MonitorBossPresentation.gd",
-      "sha256": "78b94586d0dd52f192b509040da83b4cb5b9aae2e1b93b97a22f9b20362c0991",
-      "bytes": 8621
+      "sha256": "4d7476c268d89345eb9eedeec8ee4ead7bdc80eb513279cad02929dc437f1f25",
+      "bytes": 10339
     },
     {
       "path": "src/enemy3d/MonitorBossVfx.gd",
       "sha256": "4e10490f03c234dd12e424fa93de7accddd4008ff0455ea54954f40cea116f9c",
       "bytes": 6515
+    },
+    {
+      "path": "src/enemy3d/MonitorBossActivationVfx.gd",
+      "sha256": "9f8994b66f4d26a439a8ac4124101b8ca1fd6abf14588f11aab68ecd0cd3501c",
+      "bytes": 3950
+    },
+    {
+      "path": "scripts/blender/animate_monitor_activation_v034.py",
+      "sha256": "ed2461c2fc5c71880ec6351acd491cca3d4476a0107f3e4674840cdadec573cd",
+      "bytes": 13744
+    },
+    {
+      "path": "scripts/blender/offset_monitor_screen_v035.py",
+      "sha256": "48bde188f9a87f6516199ae9cb06df1b498194a5cc09eb2d4eaaf69096e1f12c",
+      "bytes": 4744
     }
   ],
   "clips": {
@@ -204,6 +219,13 @@
       "loop": false,
       "tracks": 64,
       "root_motion": false
+    },
+    "activate": {
+      "duration": 6.4,
+      "loop": false,
+      "frames": 193,
+      "tracks": 64,
+      "root_motion": false
     }
   },
   "pose_sampling": "Evaluated C @ global matrices at 30Hz; preserve nonuniform stretch/shear and all constraints via Skeleton3D overrides, indexed by AnimationPlayer. No extra local-axis conversion.",
@@ -214,8 +236,8 @@
   },
   "consumer": "src/enemy3d/MonitorBossPresentation.gd",
   "collision_owner": "Enemy3D",
-  "rollback": "Retained v030 dual masters; runtime restore from Git baseline",
-  "git_baseline": "dd7d40a83313c87dc18b592c92577bd3da6d69a4",
+  "rollback": "Retained v031 dual masters; pre-grip static GLB at _scratch/monitor_activate_v034/visual_before_grip.glb. Runtime paths unchanged.",
+  "git_baseline": "7c271b93d2bb0ce94afc01d9789a02481c0e06d0",
   "stage_history": [
     {
       "stage": "authored",
@@ -232,17 +254,77 @@
     {
       "stage": "active",
       "date": "2026-10-06"
+    },
+    {
+      "stage": "authored",
+      "version": "v034",
+      "date": "2026-10-08"
+    },
+    {
+      "stage": "exported_pending_godot_validation",
+      "version": "v034",
+      "date": "2026-10-08"
+    },
+    {
+      "stage": "validated",
+      "version": "v034",
+      "date": "2026-10-08"
+    },
+    {
+      "stage": "active",
+      "version": "v034",
+      "date": "2026-10-08"
+    },
+    {
+      "stage": "authored",
+      "version": "v035",
+      "date": "2026-10-08"
+    },
+    {
+      "stage": "exported_pending_godot_validation",
+      "version": "v035",
+      "date": "2026-10-08"
+    },
+    {
+      "stage": "validated",
+      "version": "v035",
+      "date": "2026-10-08"
+    },
+    {
+      "stage": "active",
+      "version": "v035",
+      "date": "2026-10-08"
     }
   ],
   "verification": {
     "flow": "previews/runtime/flow_report.json",
-    "checks": 507,
+    "checks": 562,
     "real_renderer": "previews/runtime/visual_report.json",
     "rendered_frames": 567,
     "preview": "previews/runtime/monitor_runtime_preview.mp4",
     "runtime_ai_all_four_skills": true,
     "source_mesh_bounds_tolerance_m": 0.008,
-    "source_bone_head_tolerance_m": 0.002
+    "source_bone_head_tolerance_m": 0.002,
+    "activation": {
+      "source": "previews/activate_v034/source_audit.json",
+      "preview": "previews/activate_v034/monitor_activation.mp4",
+      "rendered_frames": 214,
+      "source_frames": 193,
+      "baseline_version": "v031",
+      "old_16_pose_clips_unchanged": true,
+      "static_keyboard_grip_corrected": true,
+      "room_flow_checks": 29,
+      "activation_distance_m": 10
+    },
+    "screen_clearance": {
+      "version": "v035",
+      "screen_actor_forward_m": 0.5,
+      "non_screen_bone_error": 0,
+      "rotation_scale_error": 0,
+      "clip_count": 17,
+      "static_glb_unchanged": true,
+      "preview": "previews/screen_v035/monitor_activation.mp4"
+    }
   },
   "design": "docs/v0.1/design/Boss002显示器技能设计.md",
   "runtime_binding": {
@@ -262,25 +344,25 @@
     "classification": "version_increment",
     "passed": true,
     "report": "outputs\\asset_guard\\ENM-BOSS-MONITOR002-3D_enm_boss_monitor002.json",
-    "same_asset_id_count": 3,
-    "identical_registered_file_count": 46
+    "same_asset_id_count": 5,
+    "identical_registered_file_count": 64
   },
-  "generated_at": "2026-10-06T19:55:58+08:00",
-  "generated_by": "Codex",
+  "generated_at": "2026-10-08",
+  "generated_by": "Codex / Blender MCP screen clearance only",
   "sources": [
     {
       "kind": "model",
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v031.blend",
-      "sha256": "08226029d873745814209830092d2278105cd7c33c519335095787c8925f8277",
+      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend",
+      "sha256": "50079ee6b49331bc9e1cba2a444f01171d9803115f40a4a53de2182681b56de8",
       "bytes": 6657756,
       "skeleton_id": "SKEL-MONITOR002-005",
       "skeleton_signature": "e97e2d7536565a6eb61e35997595969bab57359dbef1921b8e62d4d959a7834f"
     },
     {
       "kind": "animation",
-      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v031.blend",
-      "sha256": "9aa6628d03a6d54264d4bb29cac165cf60480a1de966d968db36e853d6533ff4",
-      "bytes": 174663765,
+      "path": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+      "sha256": "dfc5d231e87c5f906cfdad6d8243c8401c6b70a60a3bef48095d330a9ed02f1f",
+      "bytes": 183641556,
       "skeleton_id": "SKEL-MONITOR002-005",
       "skeleton_signature": "e97e2d7536565a6eb61e35997595969bab57359dbef1921b8e62d4d959a7834f"
     }

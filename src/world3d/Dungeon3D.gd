@@ -2684,6 +2684,9 @@ func _collect_box_stage_entries(
 			# `spawn_position` 是落点直通键，`_spawn_enemy_batch` 会取用并在实例化前摘掉；
 			# `spawn_delay_sec` 是延迟键，非 0 的条目会被摘进 `_pending_delayed_spawns`。
 			config["spawn_position"] = point
+			# Monitor encounter: center the boss only; retain the authored escort placements.
+			if str(config.get("boss_content_id", "")) == "boss_monitor002":
+				config["spawn_position"] = Vector3(room.global_position.x, point.y, room.global_position.z)
 			config["spawn_delay_sec"] = float(item["delay_sec"])
 			entries.append(config)
 
@@ -3017,6 +3020,9 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		if not is_equal_approx(damage_multiplier, 1.0):
 			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))
 		enemy.global_position = spawn_positions[index]
+		if str(spawn_data.get("boss_content_id", "")) == "boss_monitor002":
+			# Characters face local -Z; PI points toward world south (+Z).
+			enemy.global_rotation.y = PI
 		enemy.killed.connect(_on_enemy_killed)
 		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)
@@ -4777,11 +4783,7 @@ func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: in
 	var tween := button.create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	if reduce_motion:
-		button.rotation = PI if card.is_reversed() else 0.0
-		if back != null:
-			back.visible = false
-		if face != null:
-			face.visible = true
+		_reveal_reference_tarot_face(button, face, back, card.is_reversed())
 		button.modulate.a = 0.0
 		tween.tween_property(button, "modulate:a", 1.0, 0.15)
 	else:
@@ -4793,10 +4795,10 @@ func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: in
 
 
 func _reveal_reference_tarot_face(button: Control, face: Control, back: Control, is_reversed: bool) -> void:
-	# 逆位是整张实体卡面旋转180°：边框、名称、天体、数值和说明共同倒置。
-	# 描述内容已由 FateCard 的逆位效果快照替换，不再保留独立正向文字层。
-	if button != null and is_instance_valid(button):
-		button.rotation = PI if is_reversed else 0.0
+	# 逆位保留边框/图案倒置，文字层反向补偿为正向；效果仍读取逆位快照。
+	if button != null and is_instance_valid(button) and face != null:
+		var ornament := face.find_child("TarotOrientationOrnament", true, false) as Control
+		UIStyleFactory.apply_tarot_orientation(button as Button, face, is_reversed, ornament)
 	if back != null and is_instance_valid(back):
 		back.visible = false
 	if face != null and is_instance_valid(face):

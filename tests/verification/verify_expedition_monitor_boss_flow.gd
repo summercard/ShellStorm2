@@ -55,10 +55,27 @@ func _ready() -> void:
 	if not bosses.is_empty():
 		var boss := bosses[0]
 		check(boss.max_hp == 5200, "正式刷怪生命为5200")
+		check(Vector2(boss.global_position.x, boss.global_position.z).distance_to(Vector2(room.global_position.x, room.global_position.z)) < 0.01, "Boss出生在房间中心")
+		check((-boss.global_basis.z).dot(Vector3.BACK) > 0.999, "Boss初始面向南边+Z")
+		check(is_equal_approx(boss.move_speed, 3.612), "Boss移速为原1.204的三倍")
 		check(boss.monitor_combat != null, "正式技能策略已绑定")
 		check(boss.avatar._formal_boss_root is MonitorBossPresentation, "正式显示器资产已绑定")
 		check(boss.killed.is_connected(tower._on_enemy_killed), "Boss 死亡接入房间结算")
 		check(boss.boss_phase_changed.is_connected(tower._on_boss_phase_changed), "Boss 阶段接入正式 HUD/音效")
+		# Exercise distance gating on the formally spawned boss before normal battle.
+		boss.set_physics_process(false);boss.monitor_combat.activation_started = false;boss.monitor_combat.activation_elapsed = 0.0
+		boss.monitor_combat.activation_completed = false
+		tower.player.global_position = boss.global_position + Vector3(10.1,0,0)
+		boss._physics_process(0.25)
+		check(not boss.monitor_combat.activation_started and boss.monitor_combat.activation_elapsed == 0.0,"正式房间10米外不播放出场")
+		tower.player.global_position = boss.global_position + Vector3(9.9,0,0)
+		boss._physics_process(0.25)
+		check(boss.monitor_combat.activation_started and boss.monitor_combat.presentation_context().action_id == "activate","正式房间接近10米触发出场")
+		tower.player.global_position = boss.global_position + Vector3(15,0,0)
+		boss.monitor_combat.tick_activation(6.14)
+		check(not boss.monitor_combat.activation_completed and boss.monitor_combat.skill_id.is_empty(),"出场未完成禁止战斗，退出范围仍续播")
+		boss.monitor_combat.tick_activation(0.02)
+		check(boss.monitor_combat.activation_completed and boss.ai_state == "idle","完整出场结束才开放正常战斗")
 		boss.take_damage(1800)
 		check(boss.boss_phase == 2, "实伤进入第二阶段")
 		boss.take_damage(1800)

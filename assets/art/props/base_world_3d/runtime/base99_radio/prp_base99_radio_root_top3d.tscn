@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/base99_radio/prp_base99_radio_visual_top3d.glb" id="1_visual"]
 [ext_resource type="Script" path="res://src/base3d/Base99Radio3D.gd" id="2_radio"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/radio_music_notes/vfx_radio_music_notes_root_top3d.tscn" id="3_notes"]
 
 [sub_resource type="BoxShape3D" id="ShapeRadioWorld"]
 size = Vector3(0.828, 0.822, 0.456)
@@ -12,7 +13,8 @@ size = Vector3(0.868, 0.862, 0.496)
 [node name="ItemRoot" type="Node3D" groups=["interaction_provider_3d", "base99_radio_3d"]]
 script = ExtResource("2_radio")
 metadata/asset_id = "PRP-BASE99-RADIO-3D"
-metadata/asset_version = "v005"
+metadata/asset_version = "v005.1"
+metadata/model_version = "v005"
 metadata/asset_name_cn = "99F阁楼床边桌独立收音机"
 metadata/asset_category = "decor_prop"
 metadata/category_display = "场景可交互道具"
@@ -22,7 +24,9 @@ metadata/bounds_size_m = Vector3(0.828, 0.456, 0.822)
 metadata/model_sha256 = "0b2cf2fcba9832ce8b37b62185e016f294ee834555439b71b11c543e0244851d"
 metadata/model_faces = 599
 metadata/model_triangles = 1190
-metadata/prefab_version = "v005"
+metadata/prefab_version = "v005.1"
+metadata/music_notes_asset_id = "VFX-RADIO-MUSIC-NOTES-3D"
+metadata/music_notes_policy = "radio child; real audio playing; A/B continuous; off/floor off/exit immediate clear; visual only"
 metadata/source_blend = "assets/art/props/base_world_3d/source/base99_radio/prp_base99_radio_source_v005.blend"
 metadata/optimized_blend = "assets/art/props/base_world_3d/source/base99_radio/export/v005/prp_base99_radio_optimized_v005.blend"
 metadata/source_sha256 = "d707298407d52dd5ce36c7f6de3fdef71dcfbfdac986cadf6d250318a3628a12"
@@ -33,6 +37,9 @@ metadata/runtime_remap = "shared_facility_palette_by_material_role"
 metadata/music_policy = "local AudioStreamPlayer3D on Music bus; fixed per-state looping stream"
 
 [node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="MusicNotes" parent="." instance=ExtResource("3_notes")]
+position = Vector3(0, 1.42, 0)
 
 [node name="WorldCollision" type="StaticBody3D" parent="."]
 collision_layer = 1

@@ -4,6 +4,7 @@ extends Node3D
 const BASE := "res://assets/art/enemies/bosses/enm_boss_monitor002/components/enm_boss_monitor002/"
 const FACE_SHADER := preload("res://src/enemy3d/monitor_expression.gdshader")
 const CODE_SHADER := preload("res://src/enemy3d/monitor_code.gdshader")
+const ACTIVATION_FX := preload("res://src/enemy3d/MonitorBossActivationVfx.gd")
 const FX_SCRIPT := preload("res://src/enemy3d/MonitorBossVfx.gd")
 static var motion: Dictionary = {}
 static var face_boxes: Dictionary = {}
@@ -24,6 +25,8 @@ var _context: Dictionary = {}
 var _blended: Array[Transform3D] = []
 var _blend_from: Array[Transform3D] = []
 var _blend_time := 1.0
+var _emerging_meshes: Array[MeshInstance3D] = []
+var activation_fx: Node3D
 
 func _ready() -> void:
 	if motion.is_empty():motion = JSON.parse_string(FileAccess.get_file_as_string(BASE+"monitor_motion.json")) as Dictionary
@@ -49,6 +52,9 @@ func _ready() -> void:
 	for node in find_children("*","MeshInstance3D",true,false):
 		var mesh := node as MeshInstance3D
 		mesh.extra_cull_margin = 12.0
+		var label := str(mesh.name)
+		if label.begins_with("Continuous spring") or label.begins_with("Sculpted glove") or label.begins_with("White cuff") or label.begins_with("Behind monitor cable") or label.begins_with("Plug contact") or label in ["Long data cable whip","Cable strain relief","Connector alloy collar","Connector front inset","Data connector body","Luminous data plug"]:
+			_emerging_meshes.append(mesh)
 		if mesh.name.begins_with("Texture"):
 			var slot := "large_eye" if "large_eye" in str(mesh.name) else "round_eye" if "round_eye" in str(mesh.name) else "mouth"
 			var mat := ShaderMaterial.new();mat.shader = FACE_SHADER
@@ -64,13 +70,14 @@ func _ready() -> void:
 		var attachment := BoneAttachment3D.new();attachment.bone_name = skeleton.get_bone_name(_bone_map[(motion.bones as Array).find(pair[1])]);skeleton.add_child(attachment)
 		var marker := Marker3D.new();marker.name = pair[0];attachment.add_child(marker)
 	fx = FX_SCRIPT.new();fx.name = "CyberEffects";add_child(fx)
+	activation_fx = ACTIVATION_FX.new();activation_fx.name = "ActivationTethers";add_child(activation_fx)
 	sync_context({"action_id":"idle","time":0.0})
 
 func _process(delta: float) -> void:
 	code_phase += delta/3.2
 	hit_timer = maxf(0.0,hit_timer-delta)
 	_blend_time = minf(1.0,_blend_time+delta/0.18)
-	if _code:_code.set_shader_parameter("scroll_phase",code_phase)
+	if _code and action_id != "activate":_code.set_shader_parameter("scroll_phase",code_phase)
 
 func flash_hit() -> void:
 	hit_timer = 10.0/30.0
@@ -94,7 +101,7 @@ func sync_context(context: Dictionary, blend := true) -> void:
 	var next := mini(frame+1,clip.frames.size()-1)
 	var mix := pos-floorf(pos)
 	expression = int(clip.frames[frame].expression)
-	if hit_timer > 0.0 and not action_id.begins_with("stun") and action_id != "dead":expression = 4
+	if hit_timer > 0.0 and not action_id.begins_with("stun") and action_id not in ["dead","activate"]:expression = 4
 	# Turning clips contain a 90-degree authored visual turn; remove only that yaw.
 	rotation.y = 0.0
 	if action_id in ["turn_left","turn_right"]:
@@ -117,12 +124,23 @@ func sync_context(context: Dictionary, blend := true) -> void:
 			var index := (attachment as BoneAttachment3D).bone_idx
 			if index >= 0:attachment.transform = skeleton.get_bone_global_pose(index)
 	for slot in _faces:
+		var face_start := 5.7 if slot == "large_eye" else 5.83 if slot == "round_eye" else 6.0
+		_faces[slot].mesh.visible = action_id != "activate" or sample_time >= face_start
 		var box: Array = face_boxes[slot][expression]
 		var uv_rect := Vector4(float(box[0])/1536.0,float(box[1])/1024.0,float(box[2]-box[0])/1536.0,float(box[3]-box[1])/1024.0)
 		_faces[slot].material.set_shader_parameter("region",uv_rect)
 		var sizes: Array = clip.frames[frame].face_scale[slot]
 		var next_sizes: Array = clip.frames[next].face_scale[slot]
 		_faces[slot].material.set_shader_parameter("face_scale",Vector2(lerpf(float(sizes[0]),float(next_sizes[0]),mix)/float(face_rest[slot][0]),lerpf(float(sizes[1]),float(next_sizes[1]),mix)/float(face_rest[slot][1])))
+		if action_id == "activate":
+			var pop := clampf((sample_time-face_start)/0.20,0.0,1.0)
+			var size := lerpf(0.20,1.0,pop) + sin(pop*PI)*0.35
+			_faces[slot].material.set_shader_parameter("face_scale",Vector2(size,size))
+	for mesh in _emerging_meshes:mesh.visible = action_id != "activate" or sample_time >= (3.73 if str(mesh.name).ends_with("L") else 3.9)
+	if _code:
+		_code.set_shader_parameter("boot_reveal",clampf(floorf((sample_time-0.60)*30.0)/27.0,0.0,1.0) if action_id == "activate" else 1.0)
+		if action_id == "activate":_code.set_shader_parameter("scroll_phase",maxf(0.0,sample_time-0.6)*0.32)
+	activation_fx.sync_activation(action_id,sample_time,self)
 	fx.sync_effects(context,self)
 
 static func matrix(values: Array) -> Transform3D:
@@ -142,4 +160,4 @@ func bone_point(name: String) -> Vector3:
 	return skeleton.get_bone_global_pose(_bone_map[(motion.bones as Array).find(name)]).origin
 
 func get_presentation_snapshot() -> Dictionary:
-	return {"asset_id":"ENM-BOSS-MONITOR002-3D","version":"v031","action_id":action_id,"time":sample_time,"expression":expression,"bone_count":skeleton.get_bone_count() if skeleton else 0,"clip_count":motion.get("clips",{}).size(),"procedural_pose":false,"electric_active":_context.get("electric_active",false),"death_duration":2.0}
+	return {"asset_id":"ENM-BOSS-MONITOR002-3D","version":"v035","action_id":action_id,"time":sample_time,"expression":expression,"bone_count":skeleton.get_bone_count() if skeleton else 0,"clip_count":motion.get("clips",{}).size(),"procedural_pose":false,"electric_active":_context.get("electric_active",false),"death_duration":2.0}

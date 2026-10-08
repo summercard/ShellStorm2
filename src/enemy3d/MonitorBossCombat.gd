@@ -3,6 +3,8 @@ extends RefCounted
 ## Enemy3D-owned skill timeline. Presentation never executes damage or state transitions.
 
 const ID := "boss_monitor002"
+const ACTIVATION_DURATION := 6.4
+const ACTIVATION_DISTANCE := 10.0
 const SKILLS := {
 	"monitor_keyboard": {"clip":"melee_keyboard", "windup":32.0/30.0, "end":1.8, "radius":1.65, "offset":3.2, "damage":1.0},
 	"monitor_cable": {"clip":"melee_cable", "windup":0.8, "end":2.0, "radius":6.0, "offset":0.0, "damage":0.833333},
@@ -28,6 +30,34 @@ var turn_delta := 0.0
 var turn_clip := "turn_left"
 var damage_events := 0
 var _phase_at_cast := 1
+var activation_completed := false
+var activation_started := false
+var activation_elapsed := 0.0
+
+func tick_activation(delta: float) -> bool:
+	if activation_completed or owner_enemy.ai_state == "dead":return false
+	if not owner_enemy._runtime_ai_active or owner_enemy.ai_state == "dormant":return true
+	if not activation_started:
+		for candidate in owner_enemy.get_tree().get_nodes_in_group("player_3d"):
+			var player := candidate as Node3D
+			if not is_instance_valid(player) or player.is_queued_for_deletion():continue
+			if "current_hp" in player and int(player.get("current_hp")) <= 0:continue
+			if owner_enemy.global_position.distance_squared_to(player.global_position) <= ACTIVATION_DISTANCE*ACTIVATION_DISTANCE:
+				activation_started = true
+				break
+		if not activation_started:
+			owner_enemy.velocity = Vector3.ZERO
+			return true
+	owner_enemy.transition_to("alert", "monitor_activation")
+	owner_enemy.velocity.x = 0.0;owner_enemy.velocity.z = 0.0
+	owner_enemy._commit_motion(delta)
+	activation_elapsed = minf(ACTIVATION_DURATION, activation_elapsed + delta)
+	if activation_elapsed >= ACTIVATION_DURATION:
+		activation_completed = true
+		owner_enemy._attack_timer = 0.65
+		owner_enemy.transition_to("idle", "monitor_activation_finished")
+	return true
+
 
 func _init(enemy: Enemy3D) -> void:
 	owner_enemy = enemy
@@ -44,6 +74,7 @@ func choose_skill() -> String:
 	return chosen
 
 func begin() -> void:
+	if not activation_completed:return
 	skill_id = choose_skill()
 	if skill_id.is_empty():return
 	elapsed = 0.0
@@ -71,6 +102,7 @@ func on_damage(amount: int, critical: bool, knockback: float, interrupt: bool) -
 	if owner_enemy.ai_state == "dead" or owner_enemy.current_hp <= 0:
 		cancel()
 		return
+	if not activation_completed:return
 	if owner_enemy.ai_state == "stagger" and seated:
 		return # Continue taking damage without restarting seated animation.
 	poise_damage += amount
@@ -173,6 +205,7 @@ func presentation_context() -> Dictionary:
 	var time := owner_enemy._state_time
 	var state := owner_enemy.ai_state
 	if state == "dead":clip = "dead"
+	elif not activation_completed:clip = "activate";time = activation_elapsed
 	elif state == "stagger":
 		clip = "hurt"
 		if seated:

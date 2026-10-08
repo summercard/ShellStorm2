@@ -2833,7 +2833,8 @@ func _build_tower_horizontal_corridor(
 	# 走廊端点必须取真实门组件坐标；房间中心不能代替门位。
 	var start := _room_door_world_position(from_room, from_side)
 	var end := _room_door_world_position(to_room, to_side)
-	var tangent_error := start.distance_to(end)
+	# 只检查垂直于走廊轴线的偏差，门间距离是走廊长度，不是错位量。
+	var tangent_error := absf(start.z - end.z) if horizontal_x else absf(start.x - end.x)
 	if tangent_error > 0.01:
 		push_error(
 			"Tower corridor %s door modules are off the 5m lane by %.3fm" % [

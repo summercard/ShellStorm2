@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/vfx/VfxRadioMusicNotes3D.gd" id="1_nx2ka"]
+[ext_resource type="Texture2D" path="res://assets/art/vfx/environment_3d/radio_music_notes/radio_note_quarter.tres" id="2_3ovvc"]
+[ext_resource type="Texture2D" path="res://assets/art/vfx/environment_3d/radio_music_notes/radio_note_eighth.tres" id="3_h8do2"]
+[ext_resource type="Texture2D" path="res://assets/art/vfx/environment_3d/radio_music_notes/radio_note_double_eighth.tres" id="4_scjid"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jcnl1"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.38, 0.76, 0.64, 0)
+albedo_texture = ExtResource("2_3ovvc")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_4a404"]
+size = Vector2(0.46, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ppstj"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.86, 0.63, 0.29, 0)
+albedo_texture = ExtResource("3_h8do2")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_iqbu8"]
+size = Vector2(0.46, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7pavs"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.38, 0.76, 0.64, 0)
+albedo_texture = ExtResource("4_scjid")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_dsf0m"]
+size = Vector2(0.46, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qc2gf"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.86, 0.63, 0.29, 0)
+albedo_texture = ExtResource("2_3ovvc")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_snifw"]
+size = Vector2(0.46, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rtaei"]
+resource_local_to_scene = true
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.38, 0.76, 0.64, 0)
+albedo_texture = ExtResource("3_h8do2")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_3dkoi"]
+size = Vector2(0.46, 0.52)
+
+[node name="VfxRadioMusicNotes3D" type="Node3D" unique_id=1641274709]
+visible = false
+script = ExtResource("1_nx2ka")
+lifetime = 0.0
+metadata/asset_id = "VFX-RADIO-MUSIC-NOTES-3D"
+metadata/asset_version = "v001"
+metadata/lifecycle = "radio_owned_continuous_attachment_no_pool"
+metadata/visual_budget = "5 frozen QuadMesh slots / 10 triangles; 2.5 births/s; 1.8s; rise 1.1m"
+
+[node name="Note0" type="MeshInstance3D" parent="." unique_id=708274007]
+visible = false
+material_override = SubResource("StandardMaterial3D_jcnl1")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_4a404")
+
+[node name="Note1" type="MeshInstance3D" parent="." unique_id=1213111439]
+visible = false
+material_override = SubResource("StandardMaterial3D_ppstj")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_iqbu8")
+
+[node name="Note2" type="MeshInstance3D" parent="." unique_id=988586016]
+visible = false
+material_override = SubResource("StandardMaterial3D_7pavs")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_dsf0m")
+
+[node name="Note3" type="MeshInstance3D" parent="." unique_id=905686679]
+visible = false
+material_override = SubResource("StandardMaterial3D_qc2gf")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_snifw")
+
+[node name="Note4" type="MeshInstance3D" parent="." unique_id=325892967]
+visible = false
+material_override = SubResource("StandardMaterial3D_rtaei")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_3dkoi")

@@ -338,6 +338,7 @@ core_scenes=(
 visual_scenes=(
   verify_monitor_boss_visual
   verify_base99_radio
+  verify_base99_radio_music_notes
   verify_expedition_hologram_city
   verify_base99_modular_room_visual
   verify_base99_floor_visuals_v021

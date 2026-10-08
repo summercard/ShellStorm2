@@ -8,7 +8,11 @@ const OLD_VISUALS := [
 	"res://assets/art/environments/open_world/components/tower_02/roof_warning/env_tower_02_roof_warning_visual_top3d.glb",
 ]
 
-func _enter_tree() -> void:
+# 运行时跨实例保留材质引用，避免旧视觉包失去强引用后被反复加载、实例化。
+# 编辑器仍实时收集，确保重导入后不沿用旧材质。
+static var _runtime_material_catalog: Dictionary = {}
+
+func _collect_material_catalog() -> Dictionary:
 	var roles: Dictionary = {}
 	var legacy_materials: Array[Material] = []
 	var materials_by_path: Dictionary = {}
@@ -16,7 +20,7 @@ func _enter_tree() -> void:
 		var packed := load(path) as PackedScene
 		assert(packed != null, "缺少旧视觉包: " + path)
 		if packed == null:
-			continue
+			return {}
 		var instance := packed.instantiate()
 		for value in instance.find_children("*", "MeshInstance3D", true, false):
 			var mi := value as MeshInstance3D
@@ -37,6 +41,21 @@ func _enter_tree() -> void:
 	var fallback_material: Material = null
 	if materials_by_path.size() == 1:
 		fallback_material = materials_by_path.values()[0] as Material
+	return {"roles": roles, "legacy_materials": legacy_materials, "fallback_material": fallback_material}
+
+func _enter_tree() -> void:
+	var catalog: Dictionary
+	if Engine.is_editor_hint():
+		catalog = _collect_material_catalog()
+	else:
+		if _runtime_material_catalog.is_empty():
+			_runtime_material_catalog = _collect_material_catalog()
+		catalog = _runtime_material_catalog
+	if catalog.is_empty():
+		return
+	var roles: Dictionary = catalog["roles"]
+	var legacy_materials: Array[Material] = catalog["legacy_materials"]
+	var fallback_material: Material = catalog["fallback_material"]
 	for value in find_children("*", "MeshInstance3D", true, false):
 		var mi := value as MeshInstance3D
 		var names: Array = mi.get_meta("existing_material_roles", [])

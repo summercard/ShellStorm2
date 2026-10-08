@@ -1,0 +1,54 @@
+[
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\registry\\ledgers\\ShellStorm2_敌人账本_v001.xlsx",
+    "sheets": {
+      "资产主表": {
+        "M20": "v035",
+        "P20": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend；SKEL-MONITOR002-005",
+        "T20": "712ca8f0cd8ef64989e377cebc6b5468ad1f6404161033c2943a64aa14801b42",
+        "Y20": "v035仅屏幕总成沿角色前向平移0.5米，排除下沿支杆穿插。外壳、代码与五官同步；其它骨骼矩阵、旋转/缩放、17剪辑时长、双手、特效及10米激活规则均不变。562项专项通过；真实出场214帧验证。"
+      },
+      "3D-敌人": {
+        "E10": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "O10": "v035",
+        "P10": "v035仅屏幕总成沿角色前向平移0.5米，排除下沿支杆穿插。外壳、代码与五官同步；其它骨骼矩阵、旋转/缩放、17剪辑时长、双手、特效及10米激活规则均不变。562项专项通过；真实出场214帧验证。"
+      },
+      "敌人动画与状态": {
+        "E47": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E48": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E49": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E50": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E51": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E52": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E53": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E54": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E55": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E56": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E57": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "E58": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend"
+      },
+      "域变更日志": {
+        "A58": "v035",
+        "B58": "2026-10-08",
+        "C58": "Codex",
+        "D58": "ENM-BOSS-MONITOR002-3D",
+        "E58": "v035仅屏幕总成沿角色前向平移0.5米，排除下沿支杆穿插。外壳、代码与五官同步；其它骨骼矩阵、旋转/缩放、17剪辑时长、双手、特效及10米激活规则均不变。562项专项通过；真实出场214帧验证。",
+        "F58": "docs/v0.1/development/2026-10-08_boss002_screen_clearance.md",
+        "G58": "仅屏幕前移"
+      }
+    }
+  },
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\source\\boss002_production_ledger.xlsx",
+    "sheets": {
+      "Boss002制作明细": {
+        "B4": "v035 仅屏幕前移避开支杆；17剪辑/十二态/四技能/三阶段",
+        "B20": "v035",
+        "C20": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v035.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v035.blend",
+        "C21": "source/rig_contract_v035.json",
+        "B26": "previews/screen_v035/source_audit.json",
+        "C26": "v035仅屏幕总成沿角色前向平移0.5米，排除下沿支杆穿插。外壳、代码与五官同步；其它骨骼矩阵、旋转/缩放、17剪辑时长、双手、特效及10米激活规则均不变。562项专项通过；真实出场214帧验证。"
+      }
+    }
+  }
+]

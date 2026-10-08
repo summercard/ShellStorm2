@@ -6,6 +6,6 @@
 [node name="MonitorBossPresentation" type="Node3D"]
 script = ExtResource("1")
 metadata/asset_id = "ENM-BOSS-MONITOR002-3D"
-metadata/asset_version = "v031"
+metadata/asset_version = "v035"
 
 [node name="Model" parent="." instance=ExtResource("2")]

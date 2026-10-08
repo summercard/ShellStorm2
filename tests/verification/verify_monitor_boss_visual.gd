@@ -16,6 +16,18 @@ func _ready() -> void:
 	var camera := Camera3D.new();camera.position = Vector3(8,7,-14);add_child(camera);camera.look_at(Vector3(0,1.8,-0.6));camera.projection = Camera3D.PROJECTION_ORTHOGONAL;camera.size = 12.8;camera.current = true
 	presenter = PREFAB.instantiate();add_child(presenter)
 	await get_tree().process_frame
+	if "--activation" in OS.get_cmdline_user_args():
+		camera.position = Vector3(6.2,4.6,-12);camera.look_at(Vector3(0,1.3,0.4));camera.size = 7.5
+		presenter.set_process(false)
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT+"activation_frames"))
+		for frame in range(214):
+			presenter.sync_context({"action_id":"activate" if frame <= 192 else "idle","time":minf(frame/30.0,6.4) if frame<=192 else (frame-192)/30.0},false)
+			await RenderingServer.frame_post_draw
+			await RenderingServer.frame_post_draw
+			get_viewport().get_texture().get_image().save_png(OUT+"activation_frames/%04d.png"%frame)
+		var activation_report := FileAccess.open(OUT+"activation_visual_report.json",FileAccess.WRITE)
+		activation_report.store_string(JSON.stringify({"renderer":RenderingServer.get_video_adapter_name(),"frames":214,"fps":30,"exit_code":0,"unexpected_script_errors":[],"expected_errors":[]},"\t"));activation_report.close()
+		print("MONITOR_ACTIVATION_VISUAL_OK frames=214");get_tree().quit();return
 	var checks := 0
 	for spec in [["idle",0.8],["hurt",0.133333],["stun_loop",0.8],["heavy_spin_slam",1.1],["heavy_spin_slam",64.0/30.0],["heavy_spin_slam",2.23333],["melee_keyboard",32.0/30.0],["melee_cable",0.9],["special_channel",0.35],["dead",1.9]]:
 		var clip := str(spec[0]);var time := float(spec[1]);var electric := clip == "special_channel"

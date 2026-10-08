@@ -98,7 +98,7 @@ func _create_card_button(card: FateCard) -> Button:
 
 
 func _play_card_flip(button: Button, card: FateCard, choice_index: int) -> void:
-	var face_text := button.text
+	var face := UIStyleFactory.make_tarot_button_text(button)
 	button.disabled = true
 	button.text = "✦\n命运塔罗\nFATE"
 	button.pivot_offset = button.size * 0.5
@@ -106,15 +106,17 @@ func _play_card_flip(button: Button, card: FateCard, choice_index: int) -> void:
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
 		button.modulate.a = 0.0
-		button.text = face_text
-		button.rotation = PI if card.is_reversed() else 0.0
+		button.text = ""
+		face.visible = true
+		UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
 		tween.tween_property(button, "modulate:a", 1.0, 0.15)
 	else:
 		tween.tween_interval(0.10 + float(choice_index) * 0.08)
 		tween.tween_property(button, "scale:x", 0.04, 0.14)
 		tween.tween_callback(func() -> void:
-			button.text = face_text
-			button.rotation = PI if card.is_reversed() else 0.0
+			button.text = ""
+			face.visible = true
+			UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
 		)
 		tween.tween_property(button, "scale:x", 1.0, 0.18)
 	tween.tween_callback(func() -> void:

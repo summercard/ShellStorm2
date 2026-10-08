@@ -41,6 +41,9 @@ func _ready() -> void:
 			_validate_room_door(room, side, failures)
 
 	var horizontal_count := 0
+	var nonzero_x_count := 0
+	var nonzero_z_count := 0
+	var corridor_failure_start := failures.size()
 	var vertical_count := 0
 	var entry_hub_dynamic_corridor_verified := false
 	for connector_value in (tower.get("_corridor_by_edge") as Dictionary).values():
@@ -59,6 +62,22 @@ func _ready() -> void:
 		if tangent_error > 0.01:
 			failures.append("%s horizontal door lanes differ by %.3fm" % [connector.name, tangent_error])
 		var length := start.distance_to(end)
+		var along_x := absf(end.x - start.x) >= absf(end.z - start.z)
+		var tangent_axis := Vector3.BACK if along_x else Vector3.RIGHT
+		var expected_tangent_error := absf((end - start).dot(tangent_axis))
+		if not is_finite(tangent_error) or not is_equal_approx(tangent_error, expected_tangent_error):
+			failures.append("%s 门槽误差元数据不等于垂轴投影" % connector.name)
+		if length > 0.05:
+			if along_x:
+				nonzero_x_count += 1
+			else:
+				nonzero_z_count += 1
+			if is_equal_approx(tangent_error, length):
+				failures.append("%s 非零走廊长度被错误用作门槽误差" % connector.name)
+			print("CORRIDOR_TANGENT_SAMPLE edge=%s axis=%s length=%.3f tangent=%.3f coverage=%.3f" % [
+				str(connector.get_meta("edge_key", "")), "X" if along_x else "Z",
+				length, tangent_error, float(connector.get_meta("module_coverage_length_m", -1.0)),
+			])
 		if not is_equal_approx(length, snappedf(length, TowerGeometry3D.GRID_UNIT_M)):
 			failures.append("%s corridor length %.3fm is not a 5m component multiple" % [connector.name, length])
 		_validate_horizontal_corridor_modules(connector, start, end, failures)
@@ -78,6 +97,11 @@ func _ready() -> void:
 		failures.append("98F safe-room north corridor is not a complete 25m/5-module passage")
 	if vertical_count <= 0:
 		failures.append("tower generated no vertical connector for stair approach wall validation")
+	if nonzero_x_count <= 0 or nonzero_z_count <= 0:
+		failures.append("非零长度走廊必须实际覆盖 X/Z 两轴，禁止零长度样本制造假绿")
+	print("CORRIDOR_TANGENT_REGRESSION_DONE horizontal=%d nonzero_x=%d nonzero_z=%d failures=%d" % [
+		horizontal_count, nonzero_x_count, nonzero_z_count, failures.size() - corridor_failure_start,
+	])
 
 	_validate_key_door(room_by_id, "facility", "west", Vector3(-15.0, -12.0, 2.5), failures)
 	_validate_key_door(room_by_id, "facility", "east", Vector3(15.0, -12.0, 2.5), failures)

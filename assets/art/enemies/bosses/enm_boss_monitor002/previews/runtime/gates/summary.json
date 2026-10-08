@@ -30,8 +30,7 @@
       "tools/asset_pipeline/verify_ledger_split.py",
       "--json-output",
       "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\previews\\runtime\\gates\\ledger_split.json"
-    ],
-    "column_digest_drift": []
+    ]
   },
   "runtime_naming": {
     "exit_code": 1,
@@ -62,22 +61,6 @@
     "command": [
       "python",
       "scripts/check_documentation_contracts.py"
-    ],
-    "issues": "Only four pre-existing unregistered scenes after UTF-8 and installed openpyxl dependency override."
-  },
-  "feature_traceability": {
-    "exit_code": 0,
-    "features": 37
-  },
-  "asset_guard": {
-    "exit_code": 0,
-    "classification": "version_increment"
-  },
-  "boss_specific": {
-    "flow_exit_code": 0,
-    "checks": 507,
-    "visual_exit_code": 0,
-    "screenshots": 10,
-    "transfer_sha_files": 19
+    ]
   }
 }

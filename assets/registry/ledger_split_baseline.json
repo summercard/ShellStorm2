@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
-  "captured_at": "2026-10-07",
+  "captured_at": "2026-10-08",
   "sheet": "资产主表",
   "columns": [
     "AssetID",
@@ -35,7 +35,7 @@
     19
   ],
   "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
-  "asset_count": 1018,
+  "asset_count": 1019,
   "assets": {
     "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
       "v": "1d441c35ed1b2bc15d15a858b776c192f312dc0039ec1fb90d1a40c7462d88b9",
@@ -5068,12 +5068,12 @@
       "d": "scenes"
     },
     "ENM-BOSS-MONITOR002-3D": {
-      "v": "c33cd4598ac5b9c73d6fd5fef7f6dd1053713a6b35c7109889e75f5eac87a7ed",
+      "v": "dd8f96466c0ab0892c3c3947c905f952b1bd64a41dcb88fd25c6dbdaad4377d3",
       "c": "敌人",
       "d": "enemies"
     },
     "PRP-BASE99-RADIO-3D": {
-      "v": "05df2661bb529b6326583e0c7791f506a9eb9e1618cab398c56ffae5d6e33cad",
+      "v": "9ea9c8b18895b4c9f3bbb814af4ed80c280add4b8c7307d8eb5f4bb7daf1715c",
       "c": "道具",
       "d": "props"
     },
@@ -5126,32 +5126,37 @@
       "v": "34c61b55822d14e36134a2212bbc7d8f12f2fbfbd87d07f945f73343b9a07994",
       "c": "场景道具",
       "d": "scenes"
+    },
+    "VFX-RADIO-MUSIC-NOTES-3D": {
+      "v": "b0173a74c78587df41937e04204a67b022683cf7ed2e3bb2de426e961cbb6c5a",
+      "c": "特效",
+      "d": "vfx"
     }
   },
   "column_digests": {
-    "1": "a1b0cb4fafc67088d64ff71a250b12b3905ffe8cdfc684d72128ab3a52d334aa",
-    "2": "0e64fa6f7727a74135f05ef42cdd891050aabfb3e17fd541a6bfc2d38aed9623",
-    "3": "31987e74512cd5676fe16218a803060c2f9c2c88727703a89f20064f819c1745",
-    "4": "f4706b04d711d8d0bd460a4d40291951a2207b5c2c06d0c724b64c6181bcb563",
-    "5": "995f455b74f4f2e6ce48ff7789677df163bb680fa6c08df6158f8eea3484b5aa",
-    "6": "ebc33511e3e31ce2bb1faf07797fd3a46ffd9a41f3bad8fdebe0057ad13e94af",
-    "7": "1a86d683d60a82cfde5d536933d476caa051e95adbf629c90fbd801d545a991a",
-    "8": "523a0f6ce08bd3a004693bb029f793a74d5937b2f18f37d113f850467b9ce63f",
-    "9": "f743273d6f1a8501ad8095a817ea78f352850ba72378ca4e4f243fbefe4e59b0",
-    "10": "59fba89c0c5abfe1d4e0b38c421fad2b15d0f6bb91527b9e2b045e67b510fcbb",
-    "11": "74d40ebe30cde94fbaa11b812bda121bac11ee2d56ce317a6630e0763f5f8c0b",
-    "12": "c8c798dcc05aa8c36648a6f65815e743b2e43c1d0a089049e0e912c6f17491d7",
-    "13": "5a91699ae96bada2570dbea62c43b9ad480e10909802f553023ab74ba9f3e2bc",
-    "14": "17180856fcae68eb60cd952a2a8106d80bb2d316709a33564401b20a57cfd527",
-    "15": "8de9a197fad630898b5d6166333f511a93232e040ef05afc4a8573491110ba86",
-    "16": "8cf8600b4ec7aa81bfcac802efdf1d0bce744ff5dea25d9f821a1c9b6dfd058f",
-    "17": "e8b036b187bcfe47e9a52ed8d9a678f43699a9770afbc28e7724010e9cfcca36",
-    "20": "2e28b6a4931d1369bf3a641222a1910dea643e2e5f5834aa495606f529c9467a",
-    "21": "49df735a5ef57856be4a6f7b5d9289c3fd3b019ec7e6d1e50d647ff83cba1410",
-    "22": "a08ee323db20f2295583d5f9579835093623ab5de52462021a5a1d84d884b091",
-    "23": "d4954645ab5eecac630e6d96be25fd728f5f1ab6137d37a98c0beab57075f999",
-    "24": "681e1182bc8050b857aad27bc578aedd2f43220e4ed140d64170c657a9f34d67",
-    "25": "6f203e725190b382137c9990378ce245c78c05d6fceaab6f35fed922e5eff1c0"
+    "1": "c415e9be9d2acce2e9a1ed0018074a61745320d2239d227b69548132995c6763",
+    "2": "7c23b942e1d011381995bdd40b1c49e0f06cfb87559a51009db4d8acdf045e4a",
+    "3": "52b61424fb1b13721ba3bd9bd2d7d9f4f1e1bc2e385cdad4d905bdc766d139a7",
+    "4": "97b2d30c91ca4cd8861a936b05c4452540d3fa5988b1644f29076281fabc0236",
+    "5": "4290a9d137a4ceb8babee874ee0f666ecf7b4b196f2c12d78b7393d84ea78454",
+    "6": "c15d181dd16a2888df8d0bb112019d87ec161422c6861dd1255aa11fa4e1722b",
+    "7": "8539bb1d558e77ccbc16880db22edd51419e7618cc46cb32e546d3b41320f67f",
+    "8": "245e303cfa5946115d9a9cd6ff1fe3d386ba0fc1f7fb2dc11a849af40f6101de",
+    "9": "8285e69871939df4fb482b93de99b0b8c96d548ecb3ccb57f06b7c30153f212b",
+    "10": "a71ea2612dc48e74fdffa6af526699629093a5cedd33af8ec04fc7d608cfbdc1",
+    "11": "dd72d1f1bd7f698809305a98b86ef3673f4880e47ea68a3b817a8d94ec917ed8",
+    "12": "63d6086dc470e485a13b319804744ba682683638da1f78ba414308db63090614",
+    "13": "8448dd30440a27603dc1ed1367cb32967e7215c1634290d14a7f5d988332fd64",
+    "14": "f95995a80a2f01f28f9ad79241b3094906146c4afa1f0c749a81a79bed2f1a5a",
+    "15": "583414ce134c5e3fd5bd995db2fd1c15090d7cdad57f4106ff08c7d8483d893a",
+    "16": "5a7e3eebc165390867316e83a7f14290fa4efcaa5663d2741733c6a77d26ece8",
+    "17": "188412f28731746fae6bf46d98973c43a30d7da9a421851baab0edf1643b9571",
+    "20": "6fbaa8529df290835fde632db635672a2908f8e841f07e8c8c50be173b66b3d2",
+    "21": "2993985ff9061162e294d44550c5ebe974d796f001de83a071d5f0aab9608b69",
+    "22": "914472ac1a12bdfaba91631a0aa0ecc2c4850bce90c6396b09e7d35c1a8e084d",
+    "23": "fa113860129923537ed2f23580e2439eee2f968f8397bb28596ea50599087229",
+    "24": "12c42f6ecc6bd80bf85171e8468716c961f359643031d99c044095927b032b0a",
+    "25": "e47b23f272de45785292e72194437c6ae4599532e072d3b7742cce2b82c3cd27"
   },
   "sheet_digests": {
     "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
@@ -5159,15 +5164,15 @@
     "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
     "角色中转记录": "a791386f6cd465227a1663a330d66fb087e99fee05615ddc330a2c61a646ca9a",
     "3D-角色": "04b2e42513eba3d9b7f8d69eaa68b314d6b92c08b2ab48919e0a231d05eb7dcd",
-    "敌人动画与状态": "cf2d6152503a0c02d94d691d48e50f534ebb07c118fab1f0cb590a9aa63ca542",
-    "3D-敌人": "b1d86b0f87f4f958f4546d56931a89642acef2232255ff7129e61e70115c3be7",
+    "敌人动画与状态": "7d5bdcf171acebd12e65b5f1586ad2bfa3fa5d753a49a3ebe22710c86216618e",
+    "3D-敌人": "85ab914e08cc9de2a1f54f243ddcd2c3c25c9599629faf0f536399f03e73fb10",
     "3D-场景通用": "422b04f0e0110236ac33b930b8c582199435548ac1080fc5b1cc6fe9b9ead99f",
     "3D-设施": "1dfd2cd7f359a0ebeadaf04c00af843003cf221b9806daf832c6673f9fc25546",
     "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
-    "3D-道具": "f6edb2d6ec0e0cb0c602b58de40dd3c72231b838c9c50bed0b71511df50f9bb6",
+    "3D-道具": "e8f6334abf31209c707fbbdcdf852ebf44cc706a07fb0e1c0139e7f2ed6d5278",
     "3D-物品": "212b1502b45f70f56e7a2bf0c9e68a2e2b8114d8e87a2322953745c048e1d9bc",
     "3D-武器": "0ed7c67c14253417622d401d958ac8a4ed51e9aba0db25935010ac3811fec21d",
-    "3D-特效": "8d9522a6b48e2aa3ed77c026817b641d97f3f3db577dc9eb53f5acc1a9855550"
+    "3D-特效": "ffd3a855a5507fd131af823980e5b31163122b50b4fe1ce67c750694719060c0"
   },
   "category_counts": {
     "UI": 16,
@@ -5176,7 +5181,7 @@
     "基地资产包": 114,
     "敌人": 15,
     "武器": 36,
-    "特效": 17,
+    "特效": 18,
     "角色": 25,
     "道具": 22,
     "音乐": 9,
@@ -5213,6 +5218,30 @@
       "asset_id": "ENM-BOSS-MONITOR002-3D",
       "version": "v031",
       "scope": "User-requested restore of the verified v031 Boss002 release."
+    },
+    {
+      "date": "2026-10-08",
+      "asset_id": "ENM-BOSS-MONITOR002-3D",
+      "version": "v034",
+      "scope": "Add activation clip/ownership, preserve old motion, correct static keyboard grip."
+    },
+    {
+      "date": "2026-10-08",
+      "asset_id": "ENM-BOSS-MONITOR002-3D",
+      "version": "v034",
+      "scope": "Add activation clip/ownership, preserve old motion, correct static keyboard grip."
+    },
+    {
+      "date": "2026-10-08",
+      "asset_id": "ENM-BOSS-MONITOR002-3D",
+      "version": "v034",
+      "scope": "10 world meter activation gate; full intro before battle."
+    },
+    {
+      "date": "2026-10-08",
+      "asset_id": "ENM-BOSS-MONITOR002-3D",
+      "version": "v035",
+      "scope": "Screen assembly forward clearance only"
     }
   ]
 }

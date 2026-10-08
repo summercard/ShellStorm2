@@ -1,18 +1,18 @@
 {
-  "baseline_assets": 1008,
-  "baseline_captured_at": "2026-10-06",
+  "baseline_assets": 1019,
+  "baseline_captured_at": "2026-10-08",
   "ledger_totals": {
     "characters": 25,
     "enemies": 15,
-    "scenes": 820,
+    "scenes": 830,
     "props": 22,
     "weapons": 36,
-    "vfx": 17,
+    "vfx": 18,
     "ui": 16,
     "audio": 48,
     "music": 9
   },
-  "union_assets": 1008,
+  "union_assets": 1019,
   "missing_assets": [],
   "extra_assets": [],
   "column_digest_drift": [],

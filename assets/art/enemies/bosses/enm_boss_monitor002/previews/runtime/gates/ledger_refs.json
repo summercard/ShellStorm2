@@ -4,8 +4,8 @@
   "counts": {
     "pending": 22,
     "allowed": 2,
-    "dangling": 49,
-    "records": 176,
+    "dangling": 60,
+    "records": 194,
     "prose": 14
   },
   "pending": [
@@ -37,6 +37,17 @@
     "tools/asset_pipeline/update_v01_completion_registry.mjs"
   ],
   "dangling": [
+    "assets/art/enemies/bosses/enm_boss_monitor002/previews/runtime/gates/ledger_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/after_asset_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/after_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/before_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/candidate_asset_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/candidate_prefab_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_after_asset_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_after_prefab_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_before_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_candidate_asset_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_candidate_prefab_refs.json  -> ['ShellStorm2_美术资产台账_v001.xlsx', 'ShellStorm2_美术资产台账_v002.xlsx']",
     "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_corner/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']",
     "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_edge/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']",
     "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/component_packages_v002/01/floor_full/asset_manifest.json  -> ['ShellStorm2_美术资产台账_v002.xlsx']",
@@ -88,6 +99,24 @@
     "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/qa/build_rooftop.py  -> ['ShellStorm2_美术资产台账_v002.xlsx']"
   ],
   "records": [
+    "assets/art/enemies/bosses/enm_boss_monitor002/previews/runtime/gates/ledger_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_registration.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/after_asset_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/after_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/asset_commit.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/before_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/candidate_asset_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/candidate_prefab_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/prefab_commit.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/ledger_transaction/prepared.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_after_asset_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_after_prefab_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_asset_commit.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_before_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_candidate_asset_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_candidate_prefab_refs.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/integration_prefab_commit.json",
+    "assets/art/environments/open_world/source/landscape_skyline20/v007/qa/open_world_integration/ledger_integration.json",
     "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v020/asset_manifest.json",
     "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v020/qa/registry_result.json",
     "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/asset_manifest.json",

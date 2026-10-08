@@ -17,6 +17,7 @@ var _status_materials: Array[BaseMaterial3D] = []
 @onready var audio_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
 @onready var status_light: Node3D = find_child("StatusLight", true, false) as Node3D
 @onready var tooltip: Label3D = $Tooltip
+@onready var music_notes: VfxRadioMusicNotes3D = $MusicNotes
 
 
 func _ready() -> void:
@@ -42,11 +43,13 @@ func _collect_status_materials(mesh_node: MeshInstance3D) -> void:
 
 
 func _exit_tree() -> void:
+	music_notes.set_emitting(false)
 	audio_player.stop()
 	audio_player.stream = null
 
 
 func _process(_delta: float) -> void:
+	_sync_music_notes()
 	var player := _get_player()
 	var hovered := _can_interact(player) and _mouse_hits_radio(get_viewport().get_mouse_position(), player)
 	tooltip.visible = hovered or (_focused and _can_interact(player))
@@ -152,7 +155,12 @@ func _set_state(state: String) -> void:
 		stream.loop_offset = 0.0
 		audio_player.stream = stream
 		audio_player.play()
+	_sync_music_notes()
 	_update_feedback()
+
+
+func _sync_music_notes() -> void:
+	music_notes.set_emitting(_floor_active and radio_state != "off" and audio_player.playing)
 
 
 func set_floor_active(active: bool) -> void:

@@ -1,0 +1,8 @@
+{
+  "version": "v035",
+  "screen_actor_forward_m": 0.5,
+  "non_screen_bone_error": 0,
+  "rotation_scale_error": 0,
+  "clip_count": 17,
+  "static_glb_unchanged": true
+}

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/build_radio_music_notes.gd" id="1"]
+
+[node name="BuildRadioMusicNotes" type="Node"]
+script = ExtResource("1")

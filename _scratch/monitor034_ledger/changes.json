@@ -1,0 +1,85 @@
+[
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\registry\\ledgers\\ShellStorm2_敌人账本_v001.xlsx",
+    "sheets": {
+      "资产主表": {
+        "M20": "v034",
+        "P20": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend；SKEL-MONITOR002-005",
+        "T20": "35d6a1da81b20c7ea3d640f5bef9cc626beeefdaa36fd5a7dcf4bc2260f6c8b6",
+        "V20": "2026-10-08",
+        "Y20": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。"
+      },
+      "3D-敌人": {
+        "E10": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "F10": "17剪辑；activate6.4s；四技能；三阶段；双母版同64骨架",
+        "O10": "v034",
+        "P10": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。"
+      },
+      "敌人动画与状态": {
+        "E47": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I47": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "D47": "首次activate第0帧；已完成则idle",
+        "E48": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I48": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E49": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I49": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E50": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I50": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "D50": "首次activate 6.4s；完成后idle",
+        "E51": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I51": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E52": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I52": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E53": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I53": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E54": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I54": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E55": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I55": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E56": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I56": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E57": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I57": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "E58": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "I58": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。"
+      },
+      "域变更日志": {
+        "A56": "v034",
+        "B56": "2026-10-08",
+        "C56": "Codex",
+        "D56": "ENM-BOSS-MONITOR002-3D",
+        "E56": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。",
+        "F56": "docs/v0.1/development/2026-10-08_boss002_activation.md",
+        "G56": "新增出场；保留v031动作，修正键盘静态挂点"
+      }
+    }
+  },
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\bosses\\enm_boss_monitor002\\source\\boss002_production_ledger.xlsx",
+    "sheets": {
+      "Boss002制作明细": {
+        "B4": "v034 激活出场；17剪辑/十二态/四技能/三阶段",
+        "B20": "v034",
+        "C20": "assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_model_v034.blend; assets/art/enemies/bosses/enm_boss_monitor002/source/enm_boss_monitor002_animation_v034.blend",
+        "C21": "source/rig_contract_v034.json",
+        "B26": "previews/activate_v034/source_audit.json; previews/runtime/flow_report.json",
+        "C26": "v034新增activate出场6.4s/192帧：黑屏、代码上刷、断线火花、两次挣扎、弹簧双臂伸出、抓键盘、五官弹出。原16动作曲线和采样数据保留；静态键盘握持挂点校正。首次激活alert承载，休眠续播、保存进度、死亡优先；四技能与三阶段数值不变。"
+      }
+    }
+  },
+  {
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\docs\\v0.1\\data\\ShellStorm2_游戏内容数据库_v010.xlsx",
+    "sheets": {
+      "怪物与Boss": {
+        "L17": "用户激活出场要求；技能设计r3",
+        "O17": "17 Blender剪辑；首次activate6.4s（非伤害技能），四技能/十二态；伤害8%韧性击晕4.8s；通电暴击可打断；独立资产ENM-BOSS-MONITOR002-3D"
+      },
+      "Boss002技能设计": {
+        "B21": "未激活：activate第0帧；已出场：idle",
+        "B24": "首次activate6.4s；之后idle",
+        "B34": "首轮出场进度/完成标记随实例保存；休眠暂停，重进续播；旧档默认已出场。危险技能仍取消。",
+        "B36": "docs/v0.1/design/Boss002显示器技能设计.md（r3）；动画设计r28"
+      }
+    }
+  }
+]

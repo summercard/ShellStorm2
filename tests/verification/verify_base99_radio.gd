@@ -26,7 +26,7 @@ func _ready() -> void:
 
 	_assert(failures, radio.get_meta("asset_id", "") == "PRP-BASE99-RADIO-3D", "asset_id 不正确")
 	_assert(failures, radio.get_meta("asset_category", "") == "decor_prop", "category 必须是场景可交互道具")
-	var radio_bounds := _world_bounds(radio)
+	var radio_bounds := _world_bounds(radio.get_node("Visual") as Node3D)
 	_assert(failures, radio_bounds.size.is_equal_approx(Vector3(0.828, 0.822, 0.456)), "radio运行时视觉bounds不符合v005本地契约")
 	_assert(failures, "environment_component" not in str(radio.get_meta("collision_policy", "")), "radio 不得标记 environment_component")
 	_assert(failures, radio.scale.is_equal_approx(Vector3.ONE), "radio 根节点不得缩放")
@@ -34,7 +34,7 @@ func _ready() -> void:
 	_assert(failures, radio.get_node("AudioStreamPlayer3D").bus == &"Music", "AudioStreamPlayer3D 未使用 Music bus")
 	_assert(failures, ResourceLoader.exists(MUSIC_A) and ResourceLoader.exists(MUSIC_B), "base_passion A/B 音频缺失")
 
-	_assert(failures, radio.get_meta("asset_version", "") == "v005", "收音机资产必须v005")
+	_assert(failures, radio.get_meta("asset_version", "") == "v005.1" and radio.get_meta("model_version", "") == "v005", "收音机runtime必须v005.1且模型保持v005")
 	_assert(failures, int(radio.get_meta("model_faces", 800)) == 599 and int(radio.get_meta("model_triangles", 0)) == 1190 and int(radio.get_meta("model_faces", 800)) < 800, "收音机面数/三角形必须符合v005登记")
 	_verify_visual_contract(failures, radio)
 	_assert(failures, radio.radio_state == "off", "初始状态必须 off")
@@ -251,6 +251,8 @@ func _verify_status(failures: Array[String], radio: Base99Radio3D, green: bool) 
 		if palette_texture == null:
 			continue
 		var palette := palette_texture.get_image()
+		if palette.is_compressed():
+			palette.decompress()
 		for uv in uvs:
 			uv += Vector2(material.uv1_offset.x, material.uv1_offset.y)
 			var color := palette.get_pixel(int(uv.x * palette.get_width()), int(uv.y * palette.get_height()))

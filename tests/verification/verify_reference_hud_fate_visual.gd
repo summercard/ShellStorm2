@@ -85,9 +85,29 @@ func _ready() -> void:
 		if reversed_cards.size() == 1:
 			var reversed_card := reversed_cards[0] as Control
 			var ornament := reversed_card.find_child("TarotOrientationOrnament", true, false) as Control
-			_check(absf(absf(reversed_card.rotation) - PI) < 0.01, "Reversed card face is not wholly upside down", failures)
-			_check(ornament != null and absf(ornament.rotation) < 0.01, "Reversed card still rotates only the ornament layer", failures)
+			_check(absf(absf(reversed_card.rotation) - PI) < 0.01, "Reversed card frame lost its inverted orientation", failures)
+			_check(ornament != null and absf(absf(ornament.get_global_transform().get_rotation()) - PI) < 0.01, "Reversed ornament is no longer inverted", failures)
+		for card in cards:
+			_check_tarot_text_upright(card as Button, failures)
+		var reversed_description := FateCardPresets.fate_reinforce()
+		reversed_description.set_orientation(FateCard.Orientation.REVERSED, 0.8)
+		_check(reversed_description.short_description in all_text, "Reversed effect text was replaced by upright text", failures)
 	_check(_capture("reference_fate_three_choice.png"), "Could not capture reference tarot overlay", failures)
+
+	# 减少动效同样保留逆位框/图案与正向文字。
+	var old_reduce_motion: Variant = ProjectSettings.get_setting("accessibility/reduce_motion", false)
+	ProjectSettings.set_setting("accessibility/reduce_motion", true)
+	dungeon.call("_close_door_fate_overlay")
+	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen reduced-motion offer", failures)
+	await get_tree().create_timer(0.3).timeout
+	var reduced_overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
+	if reduced_overlay != null:
+		for card in reduced_overlay.find_children("FateChoiceCard_*", "Button", true, false):
+			_check_tarot_text_upright(card as Button, failures)
+	else:
+		_check(false, "Reduced-motion overlay is missing", failures)
+	await _check_simple_tarot_entries(failures)
+	ProjectSettings.set_setting("accessibility/reduce_motion", old_reduce_motion)
 
 	dungeon.queue_free()
 	await get_tree().process_frame
@@ -106,12 +126,57 @@ func _ready() -> void:
 	_check(_capture("reference_tower_hud_compact.png"), "Could not capture compact tower HUD", failures)
 
 	if failures.is_empty():
-		print("REFERENCE_HUD_FATE_VISUAL_OK: three celestial cards flip from code backs and reversed cards rotate the complete face with reversed effect text")
+		print("REFERENCE_HUD_FATE_VISUAL_OK: reversed frames/ornaments stay inverted, all face text stays upright; normal/reduced motion and three entry points verified")
 		get_tree().quit(0)
 		return
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _check_tarot_text_upright(button: Button, failures: Array[String]) -> void:
+	var face := button.get_meta("tarot_face_node", null) as Control
+	_check(face != null and face.visible, "Tarot readable text layer is missing", failures)
+	if face == null:
+		return
+	_check(absf(face.get_global_transform().get_rotation()) < 0.01, "Tarot face text layer is upside down", failures)
+	_check(face.pivot_offset.is_equal_approx(face.size * 0.5), "Tarot text pivot does not follow layout size", failures)
+	var labels := face.find_children("*", "Label", true, false)
+	if face is Label:
+		labels.append(face)
+	for node in labels:
+		var label := node as Label
+		# 中央天体与朝向三角是图案，不是需要旋回的说明文字。
+		var ornament := face.find_child("TarotOrientationOrnament", true, false)
+		if ornament != null and ornament.is_ancestor_of(label):
+			continue
+		_check(absf(label.get_global_transform().get_rotation()) < 0.01, "Tarot label is upside down: %s" % label.text, failures)
+	_check(not button.disabled, "Tarot card stayed disabled", failures)
+
+
+func _check_simple_tarot_entries(failures: Array[String]) -> void:
+	var workbench := WorkbenchPanel.new()
+	var divination := DivinationMenu.new()
+	var reversed_card := FateCardPresets.fate_reinforce()
+	reversed_card.set_orientation(FateCard.Orientation.REVERSED, 0.8)
+	for reduce_motion in [false, true]:
+		ProjectSettings.set_setting("accessibility/reduce_motion", reduce_motion)
+		for entry in [workbench, divination]:
+			var button := Button.new()
+			button.text = "星币·王牌\n逆位\n" + reversed_card.short_description
+			button.size = Vector2(240, 120)
+			add_child(button)
+			entry.call("_play_workbench_tarot_flip" if entry == workbench else "_play_card_flip", button, reversed_card, 0)
+			_check(button.disabled, "Simple tarot entry allows clicks before reveal", failures)
+			await get_tree().create_timer(0.55).timeout
+			_check_tarot_text_upright(button, failures)
+			_check(absf(absf(button.rotation) - PI) < 0.01, "Simple tarot entry lost reversed frame", failures)
+			button.size = Vector2(300, 140)
+			await get_tree().process_frame
+			_check_tarot_text_upright(button, failures)
+			button.free()
+	workbench.free()
+	divination.free()
 
 
 func _capture(file_name: String) -> bool:

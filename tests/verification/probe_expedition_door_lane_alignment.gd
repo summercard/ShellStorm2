@@ -90,6 +90,27 @@ func _probe_seed(seed_value: int, use_static: bool, label: String) -> void:
 		await get_tree().process_frame
 		await get_tree().physics_frame
 	var rooms := _collect_rooms(tower)
+	# 共墙远征仍必须实际构建连接器；不能因没有非零走廊而跳过被测函数。
+	var connectors := tower.get("_corridor_by_edge") as Dictionary
+	var corridor_failure_start := failures.size()
+	if connectors.size() != 12:
+		failures.append("%s seed=%d 必须实际构建12条共墙连接器，实际%d" % [label, seed_value, connectors.size()])
+	for value in connectors.values():
+		var connector := value as Node3D
+		if connector == null or bool(connector.get_meta("is_vertical_connector", true)):
+			failures.append("%s seed=%d 共墙连接器缺失或类型错误" % [label, seed_value])
+			continue
+		var start := connector.get_meta("start_door_position", Vector3.INF) as Vector3
+		var end := connector.get_meta("end_door_position", Vector3.INF) as Vector3
+		var tangent := float(connector.get_meta("door_tangent_error_m", INF))
+		if not start.is_finite() or not end.is_finite() or start.distance_to(end) > 0.01:
+			failures.append("%s seed=%d %s 共墙端点未重合" % [label, seed_value, connector.name])
+		if not is_finite(tangent) or not is_zero_approx(tangent):
+			failures.append("%s seed=%d %s 共墙门槽误差不为零" % [label, seed_value, connector.name])
+		for key in ["module_count", "floor_module_count", "wall_module_count", "module_coverage_length_m"]:
+			if float(connector.get_meta(key, -1.0)) != 0.0:
+				failures.append("%s seed=%d %s 零长度连接器生成了%s" % [label, seed_value, connector.name, key])
+	print("EXPEDITION_CORRIDOR_REGRESSION seed=%d mode=%s connectors=%d failures=%d" % [seed_value, label, connectors.size(), failures.size() - corridor_failure_start])
 	for room in rooms:
 		room.ensure_shell_built()
 	await get_tree().process_frame

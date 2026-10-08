@@ -6,6 +6,60 @@ class_name UIStyleFactory
 extends RefCounted
 
 
+## 塔罗卡框保留逆位，文字层反向补偿；装饰层再跟随卡框倒置。
+## 居中枢轴随布局尺寸刷新，避免翻牌后或窗口缩放时文字偏出卡框。
+static func apply_tarot_orientation(
+	button: Button, face: Control, is_reversed: bool, ornament: Control = null,
+) -> void:
+	button.pivot_offset = button.size * 0.5
+	button.rotation = PI if is_reversed else 0.0
+	face.pivot_offset = face.size * 0.5
+	face.rotation = -button.rotation
+	if not face.has_meta("tarot_pivot_bound"):
+		face.set_meta("tarot_pivot_bound", true)
+		face.resized.connect(func() -> void:
+			face.pivot_offset = face.size * 0.5
+			face.rotation = -button.rotation
+		)
+	# 减少动效在首帧即揭面，初次容器排序会重置变换；排版后再同步一次。
+	(func() -> void:
+		if not is_instance_valid(button) or not is_instance_valid(face):
+			return
+		button.pivot_offset = button.size * 0.5
+		face.pivot_offset = face.size * 0.5
+		face.rotation = -button.rotation
+		if is_instance_valid(ornament):
+			ornament.pivot_offset = ornament.size * 0.5
+			ornament.rotation = button.rotation
+	).call_deferred()
+	if not button.has_meta("tarot_pivot_bound"):
+		button.set_meta("tarot_pivot_bound", true)
+		button.resized.connect(func() -> void: button.pivot_offset = button.size * 0.5)
+	if ornament != null:
+		ornament.pivot_offset = ornament.size * 0.5
+		ornament.rotation = button.rotation
+		if not ornament.has_meta("tarot_pivot_bound"):
+			ornament.set_meta("tarot_pivot_bound", true)
+			ornament.resized.connect(func() -> void: ornament.pivot_offset = ornament.size * 0.5)
+
+
+## 简式选卡按钮把内置文字移到独立层，避免文字随 Button 倒置。
+static func make_tarot_button_text(button: Button) -> Label:
+	var label := Label.new()
+	label.name = "TarotFaceText"
+	label.text = button.text
+	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_color_override("font_color", button.get_theme_color("font_color"))
+	label.add_theme_font_size_override("font_size", button.get_theme_font_size("font_size"))
+	label.visible = false
+	button.add_child(label)
+	button.set_meta("tarot_face_node", label)
+	return label
+
+
 # ========== 面板背景 ==========
 
 ## 创建面板背景

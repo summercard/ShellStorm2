@@ -346,6 +346,7 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 		if str(data.get("boss_content_id", "")) == MonitorBossCombat.ID:
 			monitor_combat = MonitorBossCombat.new(self)
 			attack_range = 6.0
+			if avatar != null:avatar.sync_boss_presentation(monitor_combat.presentation_context())
 	_apply_presentation_scale()
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
@@ -549,6 +550,9 @@ func export_runtime_state() -> Dictionary:
 		"boss_skill_index": _boss_skill_index,
 		"monitor_poise_damage": monitor_combat.poise_damage if monitor_combat != null else 0.0,
 		"monitor_electric_cooldown": monitor_combat.electric_cooldown if monitor_combat != null else 0.0,
+		"monitor_activation_completed": monitor_combat.activation_completed if monitor_combat != null else true,
+		"monitor_activation_started": monitor_combat.activation_started if monitor_combat != null else true,
+		"monitor_activation_elapsed": monitor_combat.activation_elapsed if monitor_combat != null else 0.0,
 	}
 
 
@@ -599,6 +603,9 @@ func import_runtime_state(state: Dictionary) -> bool:
 		monitor_combat.cancel()
 		monitor_combat.poise_damage = maxf(0.0,float(state.get("monitor_poise_damage",0.0)))
 		monitor_combat.electric_cooldown = maxf(0.0,float(state.get("monitor_electric_cooldown",0.0)))
+		monitor_combat.activation_completed = bool(state.get("monitor_activation_completed",true))
+		monitor_combat.activation_elapsed = clampf(float(state.get("monitor_activation_elapsed",0.0)),0.0,MonitorBossCombat.ACTIVATION_DURATION)
+		monitor_combat.activation_started = bool(state.get("monitor_activation_started",monitor_combat.activation_completed or monitor_combat.activation_elapsed > 0.0))
 	var saved_ai_state := str(state.get("ai_state", "idle"))
 	# 生效帧不能跨卸载边界继续伤害；重新进房时退回可读的警戒状态。
 	if saved_ai_state in ["telegraph", "attack", "recovery", "stagger"]:
@@ -718,6 +725,7 @@ func _physics_process(delta: float) -> void:
 	if _elite_escape_active:
 		_tick_elite_escape(delta)
 		return
+	if monitor_combat != null and monitor_combat.tick_activation(delta):return
 	if MonsterAIManager != null:
 		MonsterAIManager.update_enemy_spatial(self)
 	_ai_decision = MonsterAIManager.evaluate_enemy(self) if MonsterAIManager != null else {}
@@ -1214,6 +1222,8 @@ func _tick_damage_over_time(delta: float) -> void:
 
 func transition_to(state_id: String, reason := "") -> bool:
 	if not VALID_STATES.has(state_id) or ai_state == "dead" and state_id != "dead":
+		return false
+	if monitor_combat != null and not monitor_combat.activation_completed and state_id not in ["dead","dormant","idle","alert"]:
 		return false
 	if ai_state == state_id:
 		return true
