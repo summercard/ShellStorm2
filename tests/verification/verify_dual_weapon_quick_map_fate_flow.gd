@@ -51,6 +51,7 @@ func _ready() -> void:
 	_expect((loadout.get("stowed_socket_position", Vector3.ZERO) as Vector3).x > 0.0, "Secondary weapon back socket is not on the avatar right", failures)
 	_expect((loadout.get("stowed_muzzle_direction", Vector3.ZERO) as Vector3).dot(Vector3.DOWN) > 0.99, "Secondary weapon muzzle does not point down", failures)
 	_expect(bool(dungeon.call("_select_weapon_slot", 1)), "Key-2 weapon switch contract failed", failures)
+	await _wait_weapon_transition(player, failures)
 	_expect(player.get_active_weapon_slot() == 1 and str(player.get_weapon_snapshot().get("gun_id", "")) == "bp_shotgun", "Secondary weapon did not become the active runtime tree", failures)
 	loadout = player.get_weapon_loadout_snapshot()
 	_expect(int(loadout.get("stowed_slot", -1)) == 0, "Primary weapon is not assigned to the left back socket", failures)
@@ -58,6 +59,8 @@ func _ready() -> void:
 	_expect((loadout.get("stowed_socket_position", Vector3.ZERO) as Vector3).x < 0.0, "Primary weapon back socket is not on the avatar left", failures)
 	_expect((loadout.get("stowed_muzzle_direction", Vector3.ZERO) as Vector3).dot(Vector3.DOWN) > 0.99, "Primary weapon muzzle does not point down", failures)
 	_expect(bool(dungeon.call("_select_weapon_slot", 0)), "Key-1 weapon switch contract failed", failures)
+	await _wait_weapon_transition(player, failures)
+	_expect(player.get_active_weapon_slot() == 0 and player.get_equipped_weapon_instance_id() == primary_id, "收取动画完成后必须恢复原主枪实例", failures)
 	_expect(player.get_equipped_weapon_instance_id_for_slot(1) == secondary_id, "Weapon switch rebuilt or lost secondary instance", failures)
 
 	# Quick slots own the moved item stack and consume only after a successful effect.
@@ -186,6 +189,13 @@ func _ready() -> void:
 
 	dungeon.queue_free()
 	_finish(failures)
+
+
+func _wait_weapon_transition(player: Player3D, failures: Array[String]) -> void:
+	var deadline := Time.get_ticks_msec() + 6000
+	while bool(player.get_weapon_transition_snapshot().get("active", false)) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	_expect(not bool(player.get_weapon_transition_snapshot().get("active", true)), "双槽收取枪动画未完成", failures)
 
 
 func _find_slot(inventory: InventoryModule, item_id: String) -> int:

@@ -65,8 +65,9 @@ func _ready() -> void:
 		failures.append("sun trial damage risk was not stored")
 	if not is_equal_approx(float(world.get("next_room_currency_multiplier", 1.0)), 2.0):
 		failures.append("sun trial reward was not stored")
-	if int(world.get("bounty_rooms", 0)) != 3 or int(world.get("bounty_amount", 0)) != 35:
-		failures.append("sun bounty was not stored")
+	var bounty_queues: Array = world.get("bounty_queues", [])
+	if bounty_queues.size() != 1 or int(bounty_queues[0].get("rooms", 0)) != 3 or int(bounty_queues[0].get("amount", 0)) != 35:
+		failures.append("sun bounty was not stored as its independent queue")
 	if not is_equal_approx(float(world.get("extraction_time_multiplier", 1.0)), 0.8):
 		failures.append("sun extraction shortcut was not stored")
 

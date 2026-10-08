@@ -1,0 +1,73 @@
+{
+  "feature_ids": ["FATE-RULES", "SAVE-RUN"],
+  "status": "implemented_and_verified_specialized_persistence; overall_features_remain_partial",
+  "scope": {
+    "allowed_runtime_files": [
+      "src/player3d/Player3D.gd",
+      "src/world3d/Dungeon3D.gd",
+      "src/world3d/TowerDescent3D.gd",
+      "src/core/GameManager.gd",
+      "src/game/FateCardGameBridge.gd"
+    ],
+    "actual_runtime_changes": [
+      "src/player3d/Player3D.gd",
+      "src/world3d/Dungeon3D.gd",
+      "src/world3d/TowerDescent3D.gd",
+      "src/game/FateCardGameBridge.gd"
+    ],
+    "game_manager": "No GameManager persistence code was needed: it remains the runtime owner of currency, which is already collected/restored by Dungeon3D's existing run snapshot path.",
+    "not_modified": ["UI", "Engine", "Enemy", "weapon logic"],
+    "bridge_rule": "Only export_fate_snapshot/import_fate_snapshot were added to FateCardGameBridge; existing Bridge functions were preserved."
+  },
+  "snapshot_contract": {
+    "container": "runtime_player_state_v2.fate_run_state",
+    "version": 1,
+    "sections": ["player", "world", "bridge"],
+    "backward_compatibility": "Missing fate_run_state or unsupported version safely clears/ignores fate state; existing inventory/equipment/world restore remains available. Invalid numeric, type, orientation, unknown-card, malformed-rule and malformed-trigger data is rejected without applying it.",
+    "no_replay": ["no apply_card", "no orientation roll", "no immediate room heal/damage/ammo", "no key grant or soul transaction", "no duplicate card registration"],
+    "ownership": "Weapon fate runtime state is keyed by the existing permanent weapon_instance_id and is restored only into currently equipped real instances; no ghost source or new ownership is created.",
+    "new_run": "TowerDescent3D successful extraction carry removes fate_run_state; existing FateCardGameBridge.reset_run_state/reset_world_fate_state lifecycle clears temporary fate."
+  },
+  "interfaces": [
+    {"file":"src/player3d/Player3D.gd","line":1308,"signature":"static func is_fate_snapshot_number(value: Variant, minimum: float, maximum: float, integer := false) -> bool","purpose":"JSON numeric boundary validation"},
+    {"file":"src/player3d/Player3D.gd","line":1313,"signature":"static func read_fate_snapshot_fields(value: Variant, defaults: Dictionary, signed_fields: Array = []) -> Dictionary","purpose":"Typed/defaulted snapshot field import"},
+    {"file":"src/player3d/Player3D.gd","line":1333,"signature":"func clear_fate_weapon_cache_for_restore() -> void","purpose":"Clear stale fate runtime trees before real equipment hydration"},
+    {"file":"src/player3d/Player3D.gd","line":1342,"signature":"func export_fate_snapshot() -> Dictionary","purpose":"Export character modifiers, counters, used flags, blessing timers and per-instance weapon runtime state"},
+    {"file":"src/player3d/Player3D.gd","line":1361,"signature":"func import_fate_snapshot(value: Variant) -> bool","purpose":"Validate and restore character/per-instance runtime state without replaying effects"},
+    {"file":"src/world3d/Dungeon3D.gd","line":519,"signature":"snapshot[\"fate_run_state\"] = { version: 1, player, world, bridge }","purpose":"Embed fate state into the existing runtime_player_state_v2 snapshot"},
+    {"file":"src/world3d/Dungeon3D.gd","line":4677,"signature":"func export_world_fate_snapshot() -> Dictionary","purpose":"Export future world rules, temporary keys, room idempotency/queues, exploration and trigger counters"},
+    {"file":"src/world3d/Dungeon3D.gd","line":4696,"signature":"func import_world_fate_snapshot(value: Variant) -> bool","purpose":"Validate and restore world fate state without re-rolling or re-registering"},
+    {"file":"src/game/FateCardGameBridge.gd","line":527,"signature":"func export_fate_snapshot() -> Dictionary","purpose":"Export applied stable cards, orientations, effect snapshots and fixed pending rewards"},
+    {"file":"src/game/FateCardGameBridge.gd","line":543,"signature":"func import_fate_snapshot(value: Variant) -> bool","purpose":"Rehydrate cards from stable IDs/presets without applying or charging"},
+    {"file":"src/world3d/TowerDescent3D.gd","line":1059,"signature":"snapshot.erase(\"fate_run_state\")","purpose":"Do not carry temporary fate state into a new run after successful extraction"}
+  ],
+  "verification": {
+    "scene": "res://tests/verification/verify_fate_resume_completion.tscn",
+    "script": "res://tests/verification/verify_fate_resume_completion.gd",
+    "roundtrip": {"checks":76,"failures":0,"exit_code":0,"log":"outputs/fate_completion_20261008/persistence/roundtrip_third.log"},
+    "two_process": {
+      "writer": {"checks":26,"failures":0,"exit_code":0,"log":"outputs/fate_completion_20261008/persistence/process_writer.log"},
+      "resumer": {"checks":34,"failures":0,"exit_code":0,"log":"outputs/fate_completion_20261008/persistence/process_resumer.log"}
+    },
+    "assertions": [
+      "HP and soul do not duplicate",
+      "future world effects survive",
+      "character modifiers, blessing elapsed/stacks and kill counters survive",
+      "used flags and environment trigger counters survive",
+      "Fool fixed pending reward preserves stable ID/orientation/currency cost",
+      "weapon growth/overheat/Queen temporary state and model shot state survive",
+      "permanent weapon_instance_id ownership survives",
+      "re-import is idempotent",
+      "new-run reset clears cards, pending rewards, world rules and weapon temporary state",
+      "legacy snapshot without fate version safely defaults",
+      "invalid snapshot state is rejected"
+    ],
+    "isolation": "APPDATA and LOCALAPPDATA were isolated under outputs/fate_completion_20261008/persistence; no real save was touched."
+  },
+  "documentation": {
+    "registry": "docs/v0.1/feature_registry.json adds verify_fate_resume_completion under FATE-RULES and SAVE-RUN; scripts/run_verification_suite.sh assigns it to core_scenes.",
+    "development_record": "docs/v0.1/development/2026-10-08_fate_persistence_completion.md",
+    "doc_gate_note": "Existing project documentation/asset gate debt remains; this handoff does not claim the whole project gate is green."
+  },
+  "commit": "not committed"
+}

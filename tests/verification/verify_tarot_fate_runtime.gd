@@ -1,8 +1,21 @@
-extends Node
+extends "res://tests/verification/verify_fate_world_completion.gd"
 
 
 func _ready() -> void:
-	var failures: Array[String] = []
+	call_deferred("_run")
+
+
+func _run() -> void:
+	dungeon = DUNGEON.instantiate() as Dungeon3D
+	dungeon.test_mode = true
+	dungeon.run_seed_override = 20261008
+	add_child(dungeon)
+	dungeon.process_mode = Node.PROCESS_MODE_DISABLED
+	await get_tree().process_frame
+	for candidate in dungeon._rooms:
+		if candidate.room_type == "COMBAT":
+			room = candidate
+			break
 	var cards := FateCardPresets.playable_presets()
 	_check(cards.size() == 48, "expected 48 executable tarot cards, got %d" % cards.size(), failures)
 	var stable_ids := {}
@@ -19,8 +32,9 @@ func _ready() -> void:
 		card.set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
 		var upright_description := card.description
 		var upright_effect := card.effect.duplicate(true)
+		_prepare_owner()
 		var upright_tree := BlueprintRegistry.build_weapon_tree("bp_rifle")
-		var upright_result := FateCardEngine.apply_card(card, upright_tree)
+		var upright_result := FateCardEngine.apply_card(card, upright_tree, _source_targets(card, upright_tree))
 		_check(upright_result.success, "%s upright failed: %s" % [tarot_name, upright_result.message], failures)
 		upright_tree.clear_assembly(false)
 		upright_tree.free()
@@ -29,8 +43,9 @@ func _ready() -> void:
 		_check(card.description != upright_description, "%s reversed description is unchanged" % tarot_name, failures)
 		_check(card.effect != upright_effect, "%s reversed effect snapshot is unchanged" % tarot_name, failures)
 		_check(str(card.effect.get("orientation", "")) == "REVERSED", "%s reversed effect lacks orientation" % tarot_name, failures)
+		_prepare_owner()
 		var reversed_tree := BlueprintRegistry.build_weapon_tree("bp_rifle")
-		var reversed_result := FateCardEngine.apply_card(card, reversed_tree)
+		var reversed_result := FateCardEngine.apply_card(card, reversed_tree, _source_targets(card, reversed_tree))
 		_check(reversed_result.success, "%s reversed failed: %s" % [tarot_name, reversed_result.message], failures)
 		reversed_tree.clear_assembly(false)
 		reversed_tree.free()
@@ -61,13 +76,13 @@ func _ready() -> void:
 	var auto_ids := {}
 	for entry in MapFateTriggers.DEFAULT_TRIGGERS:
 		auto_ids[str(entry.get("fate_card_id", ""))] = true
-	for reward_fate in ["fate_mark_enemy", "fate_lucky_chest", "fate_extra_loot"]:
+	for reward_fate in ["fate_lucky_chest", "fate_extra_loot"]:
 		_check(
 			auto_ids.has(reward_fate),
 			"%s 奖励类环境触发被误删" % reward_fate,
 			failures
 		)
-	for combat_fate in ["fate_reinforce", "fate_curse_map", "fate_bless_dead"]:
+	for combat_fate in ["fate_mark_enemy", "fate_reinforce", "fate_curse_map", "fate_bless_dead"]:
 		_check(
 			not auto_ids.has(combat_fate),
 			"%s 仍由 MapFateTriggers 自动层点燃（战斗命运应只走抽卡）" % combat_fate,
@@ -88,6 +103,8 @@ func _ready() -> void:
 		failures
 	)
 
+	dungeon.queue_free()
+	await get_tree().process_frame
 	if failures.is_empty():
 		print("TAROT_FATE_RUNTIME_OK: 48 tarot names, upright/reversed effects, stable IDs, 50/50 orientation and draw-only combat fates passed")
 		get_tree().quit(0)
@@ -95,6 +112,28 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _prepare_owner() -> void:
+	prepare()
+	EliteRosterService.reset_roster_for_test()
+	room.set_meta("floor_number", EliteContentCatalog.get_selected_floor_for_seed("elite_rift_boar_armed", dungeon.run_seed))
+	commit()
+	dungeon.player.reset_character_fate_state()
+
+
+func _source_targets(current: FateCard, tree: WeaponAssemblyTree) -> Array[AssemblyNode]:
+	var bullet := tree.root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
+	match current.get_stable_card_id():
+		"fate_attachment_parasite":
+			var source := BlueprintRegistry.create_assembly_node("attach_triple_muzzle")
+			_check(tree.mount(tree.root, source.get_attachment_slot_type(), source), "安装真实配件前置", failures)
+			return [bullet, source]
+		"fate_gun_on_gun":
+			return [tree.root, tree.root]
+		"fate_bullet_carry_gun":
+			return [bullet, tree.root]
+	return []
 
 
 func _check(condition: bool, message: String, failures: Array[String]) -> void:

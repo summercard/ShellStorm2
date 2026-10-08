@@ -1,0 +1,65 @@
+{
+  "owner": "integration",
+  "status": "integration_and_five_regressions_passed_pending_main_documentation_and_save_owner",
+  "modified_files": [
+    "src/game/FateCardGameBridge.gd",
+    "src/weapons/FateCardEngine.gd",
+    "src/ui/FateSourceSelectionPanel.gd",
+    "src/ui/WorkbenchPanel.gd",
+    "src/ui/DivinationMenu.gd",
+    "src/world3d/Dungeon3D.gd（仅_on_door_fate_selected局部）",
+    "tests/verification/verify_fate_integration_completion.gd",
+    "tests/verification/verify_fate_integration_completion.tscn",
+    "tests/verification/verify_tarot_fate_runtime.gd",
+    "tests/verification/verify_celestial_fate_scope_flow.gd",
+    "tests/verification/verify_3d_fate_weapon_flow.gd",
+    "tests/verification/verify_weapon_instance_fate_ownership_flow.gd",
+    "tests/verification/verify_dual_weapon_quick_map_fate_flow.gd"
+  ],
+  "world_contract": {
+    "route": "Bridge WORLD -> FateCardEngine.apply_world_card(card) -> Dungeon.apply_world_fate_card(card)，唯一调用一次；完整card及已合并方位effect透传。Bridge只在真实success后登记world_card_ids/applied_cards及emit scope/list；失败保留选择。",
+    "direct_engine": "FateCardEngine.apply_card(card, null)与apply_card_to_player对WORLD无需武器树，调用相同完整卡命令；ApplyResult.success/error/message体现失败，effect_value保留原始Dictionary含业务error。CHARACTER直接Engine也转Player真实消费者，不再假成功/愚者立即随机旁路。",
+    "signals": "scope_state_changed仅成功后的观察事件，Dungeon旧消费保持停用，没有第二次计算。"
+  },
+  "source_contract": {
+    "entry": "await FateCardGameBridge.apply_card_with_source_selection(card: FateCard, host: Node) -> Dictionary",
+    "query": "requires_source_selection(card)、get_source_candidates(card)->Array[Dictionary]、await select_card_source(card,host)",
+    "ownership": "当前枪实际root/已装配件；非激活副槽从真实WeaponInstance.build_runtime_tree水合来源节点，提交时重验原slot的同一实例及assembly_snapshot不变。没有伪造属性、没有暗选副槽。来源标签带节点尾号；副槽不需先切出即可选。",
+    "semantics": "沿用现有Engine完整computed_stats/标签快照；来源不转移、不消耗、不变更库存。14/04未冻结命运来源耗材规则，不擅自追加转移经济。散装背包来源仍需先通过既有装备事务装上；不生成无owned前置的配件。",
+    "ui": "新增Window来源面板，按钮metadata绑定实际AssemblyNode；模态期间暂停并恢复先前暂停状态，取消/host退出不吞卡。工作台与Dungeon门后三选一均await同入口，静态配件显示明确提示且Engine拒绝后保留卡。",
+    "divination": "DivinationMenu原设计只持久预留到下一局首次门后，未改成当场应用/未提前存Node引用；提示届时统一来源选择，实际首门应用走上述Dungeon入口。"
+  },
+  "pending_rewards": {
+    "entry": "Bridge CanvasLayer FatePendingRewards常驻按钮 -> _open_pending_rewards -> 原固定card/方位选择 -> 来源面板 -> retry_pending_character_reward",
+    "behavior": "失败退魂、不重抽、不改概率、不排除source卡；取消保留；成功一次扣魂/占槽/移除待领。专项真实按钮绑定及领取链已执行。"
+  },
+  "verification": {
+    "engine": "Godot 4.6.3 console headless",
+    "isolation": "每个进程Autoload前APPDATA与LOCALAPPDATA设为outputs/fate_completion_20261008/integration下独立路径；未触正式用户档",
+    "integration": {"entry": "res://tests/verification/verify_fate_integration_completion.tscn", "checks": 728, "failures": 0, "exit_code": 0, "script_errors": 0, "marker": "FATE_INTEGRATION_COMPLETION_OK", "log": "outputs/fate_completion_20261008/integration/verify_fate_integration_completion_final.log"},
+    "coverage": "48运行卡×正逆经正式Bridge；三scope槽和事件归属；14世界Bridge对Engine完整命令结果对拍且一次落地；真实战斗/精英前置；清房拒绝和正式选择保留；3source真实按钮；静态附件/伪造/陈旧来源拒绝；副槽未激活可选及来源快照不转移；工作台与门后实调用；愚者固定奖励UI领取和失败退魂。",
+    "regressions": [
+      {"entry":"verify_tarot_fate_runtime", "exit_code":0, "errors":0, "ok_marker":true},
+      {"entry":"verify_celestial_fate_scope_flow", "exit_code":0, "errors":0, "ok_marker":true},
+      {"entry":"verify_3d_fate_weapon_flow", "exit_code":0, "errors":0, "ok_marker":true},
+      {"entry":"verify_weapon_instance_fate_ownership_flow", "exit_code":0, "errors":0, "ok_marker":true},
+      {"entry":"verify_dual_weapon_quick_map_fate_flow", "exit_code":0, "errors":0, "ok_marker":true}
+    ],
+    "regression_logs": "outputs/fate_completion_20261008/integration/<entry>_final.log",
+    "old_test_migrations": ["tarot补真实Dungeon/战斗/精英/来源配件前置，愚者不再环境白送", "赏金改验独立队列rooms/amount", "冰霜读取fate_elements.ice真实参数", "超频验未射击为1、真实开两枪持续累积", "无Dungeon必须拒绝，并实例化正式Dungeon验成功一次", "双槽等待既有收取动画完成，原实例/挂点等断言保留并增加切回身份"],
+    "failed_attempts": "首次集成捕获来源Array泛型不匹配已修；旧回归假字段/过热/即时切枪预期已按真实语义修；一次Windows反斜线隔离哨兵误报，规范化路径后728项复验通过。初始日志不作通过证据。",
+    "not_executed": "未跑全局套件、真实渲染/物理鼠标手柄视觉QA、跨进程命运续档；其他三代理末端专项使用各自既有证据，本代理未宣称重跑。",
+    "diff_check": "授权修改git diff --check退出0"
+  },
+  "main_assistant_actions": [
+    "登记verify_fate_integration_completion.tscn及前三代理专项到verification registry/feature_registry；更新14/04、开发记录和逐卡审计实际状态。",
+    "配合存档代理统一applied_cards、character/world ids、_pending_character_rewards固定card/方位/currency_cost持久化。Bridge本轮未改存档schema、不改Player核心。",
+    "明确剩余静态配件没有事件行为设计、精英名册不可用时拒绝、背包散装来源需先装备。不得把有条件成功写成无条件48卡全部可用。",
+    "补真实渲染与物理输入QA；来源面板目前以headless实例化和真实pressed绑定验证，不冒充像素验收。"
+  ],
+  "gates": {
+    "documentation": "退出1：CHANGELOG断链2026-10-08_boss002_spawn_speed.md；8个专项未登记（含本次4个fate专项）；python缺openpyxl。登记归主助手，未越权编辑文档。",
+    "asset_naming": "退出1：既有14带版本资产、3目录及tscn引用债务；本批无美术资产改动。"
+  },
+  "commit": "未提交、未回滚代理代码；未修改Player，Dungeon仅选牌函数局部接线"
+}

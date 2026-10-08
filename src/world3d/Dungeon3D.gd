@@ -205,22 +205,22 @@ var _next_room_currency_multiplier := 1.0
 var _room_enemy_hp_multipliers: Dictionary = {}
 var _room_enemy_damage_multipliers: Dictionary = {}
 var _room_currency_multipliers: Dictionary = {}
-## 被设计源接管的房「没有吃到的」命运卡补兵数量，按 room_id 记账。
-## 为什么必须记：命运卡补兵与设计源编成是两个来源，同时作用于同一间房的数量就是两处真源打架。
-## 口径 = 设计源赢（这间房出什么由设计源定），命运卡的**倍率**照常生效（那是另一维度，不冲突），
-## 而「下一间房 +N 敌人」这类**数量**效果在本房不被采纳。但**不能静默吞掉** ——
-## 吞掉会表现为「卡抽了没反应」，且无处可查；这里留痕，供界面/门禁/排查读数。
-## 键 = room_id，值 = 被抑制的补兵数量（>0 才入账）。
 var _room_spawn_plan_suppressed_reinforcements: Dictionary = {}
 var _world_currency_multiplier := 1.0
-var _room_clear_bounty_rooms := 0
-var _room_clear_bounty_amount := 0
+var _fate_visited_rooms: Dictionary = {}
+var _next_chest_max_rarity := ""
+var _next_room_elite_configs: Array[Dictionary] = []
+var _fate_elite_reservation_serial := 0
+var _next_room_clear_currency := 0
+var _room_fate_clear_currency: Dictionary = {}
+var _fate_bounty_queues: Array[Dictionary] = []
+var _room_fate_bounties: Dictionary = {}
+var _room_zero_currency: Dictionary = {}
+var _fate_drop_quality_rules: Array[Dictionary] = []
+var _temporary_room_keys := 0
+var _temporary_key_floor := ""
 var _extraction_time_multiplier := 1.0
-var _bless_dead_active := false
-var _bless_dead_threshold := 0.30
-var _bless_dead_remaining := 0.0
-var _bless_dead_bonus := 0.10
-var _bless_dead_triggered := false
+var _extraction_enemy_speed_multiplier := 1.0
 var _starter_cache_opened := false
 var _boss_panel: PanelContainer = null
 var _boss_label: Label = null
@@ -273,6 +273,9 @@ var _runtime_persistence_active := false
 var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
+## Boss 房持续增援状态：room_id → {armed, elapsed, round, cursor, stopped}。
+## 轮次与倒计时随房间段快照保存；不使用裸 Timer，切房/续局不会重复启动或遗留回调。
+var _boss_reinforcement_states: Dictionary = {}
 var _narrative_spawned_keys: Dictionary = {}
 var _room_graph_runtime: RoomGraphRuntime = ROOM_GRAPH_RUNTIME_SCRIPT.new()
 
@@ -513,6 +516,12 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"runtime_map_id": get_runtime_map_id(),
 	}
 	snapshot["world_state"] = _build_runtime_world_save_snapshot()
+	snapshot["fate_run_state"] = {
+		"version": 1,
+		"player": player.export_fate_snapshot(),
+		"world": export_world_fate_snapshot(),
+		"bridge": FateCardGameBridge.export_fate_snapshot(),
+	}
 	return RUN_PERSISTENCE_SERVICE.finalize_runtime_snapshot(snapshot)
 
 
@@ -655,6 +664,14 @@ func _base_runtime_restore_position(room: DungeonRoom3D) -> Vector3:
 ## 会在目的地图里被 `_resolve_runtime_restore_room()` 兜底解析成"入口安全房"，
 ## 把远征刻意的出生点偏移（安全房中心朝前门偏 4m）直接抹掉。
 func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) -> void:
+	# 角色在位置恢复期间保持无命运效果，避免安全落点被算成一次进房奖励。
+	player.reset_character_fate_state()
+	var fate: Variant = snapshot.get("fate_run_state", {})
+	var resume_fate: bool = fate is Dictionary and int((fate as Dictionary).get("version", 0)) == 1 and not bool(snapshot.get(SUCCESSFUL_EXTRACTION_CARRY_KEY, false)) and not bool(snapshot.get(MISSION_OPERATIONS_DEPARTURE_CARRY_KEY, false))
+	if resume_fate and not bool(snapshot.get("world_restore_failed", false)):
+		import_world_fate_snapshot(fate.get("world"))
+	else:
+		import_world_fate_snapshot({})
 	var backpack := snapshot.get("equipped_backpack_item", {}) as Dictionary
 	if player.has_method("clear_equipped_backpack"):
 		player.clear_equipped_backpack()
@@ -669,6 +686,7 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 	if insurance_slots is Array:
 		_insurance.restore_slots_snapshot(insurance_slots as Array)
 	player.clear_all_equipped_weapons()
+	player.clear_fate_weapon_cache_for_restore()
 	var weapon_items: Variant = snapshot.get("equipped_weapon_items", [])
 	if weapon_items is Array:
 		for slot_index in mini(2, (weapon_items as Array).size()):
@@ -734,6 +752,9 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 		# 旧存档曾写入约 +/-PI 的玩家根节点旋转，恢复后会连同子相机一起掉头，
 		# 造成整幅画面与输入的屏幕相对方向同时反转。固定相机项目中根节点必须归零。
 		player.rotation.y = 0.0
+	player.import_fate_snapshot(fate.get("player", {}) if resume_fate else {})
+	FateCardGameBridge.set_player(player)
+	FateCardGameBridge.import_fate_snapshot(fate.get("bridge", {}) if resume_fate else {})
 	player.current_hp = clampi(int(snapshot.get("player_hp", player.current_hp)), 1, player.max_hp)
 	player.hp_changed.emit(player.current_hp, player.max_hp)
 	if _inventory_ui != null:
@@ -932,6 +953,7 @@ func _make_door_interaction_candidate(
 
 func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
+	_tick_boss_reinforcements(delta)
 	_tick_battery_blink(delta)
 	_tick_enemy_preactivation(delta)
 	_hud_run_elapsed += delta
@@ -2310,6 +2332,11 @@ func _create_extraction_beacon(room: DungeonRoom3D, type_id: String, countdown: 
 func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room == null:
 		return
+	var first_visit := not _fate_visited_rooms.has(room.room_id)
+	if first_visit:
+		_fate_visited_rooms[room.room_id] = true
+		player.on_fate_room_entered(room.room_id)
+	_expire_temporary_room_keys(_fate_floor_key(room))
 	var previous_runtime_room_id := _current_room_id
 	if not _current_room_id.is_empty() and _current_room_id != room.room_id:
 		var previous_room := _room_by_id.get(_current_room_id) as DungeonRoom3D
@@ -2326,9 +2353,6 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	_update_room_streaming(room.room_id)
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
 	_update_wave_hud(room.room_id)
-	var first_visit := not _spawned_rooms.has(room.room_id)
-	if first_visit and player.has_method("on_fate_room_entered"):
-		player.call("on_fate_room_entered")
 	if _spawned_rooms.has(room.room_id):
 		_ensure_room_key_reward(room)
 		_repair_room_progress(room)
@@ -2394,7 +2418,6 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 	# 房型保持敌对不变（门/小地图/HUD 语义一致），只是没有敌人，立刻清房，绝不留锁门。
 	var box_waves := _spawn_box_waves(room, floor, floor_level)
 	if not box_waves.is_empty():
-		_note_room_enemy_modifiers(room)
 		return _commit_room_waves(room, box_waves)
 	if room.spawn_boxes_only:
 		_alive_by_room[room.room_id] = 0
@@ -2408,14 +2431,6 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 	# 单只怪的数值仍由 MonsterInjector 出（主题倍率 + 楼层缩放照常生效）。
 	var authored_waves := _authored_spawn_waves(room, floor, floor_level)
 	if not authored_waves.is_empty():
-		# 设计源接管本房的数量与组成，但命运卡注入的倍率仍须照常落账并清零：
-		# 只写 _room_enemy_*_multipliers 而不清零，会让「下一间房」的临时倍率
-		# 泄漏到更后面的房间（公式路径原本就在末尾做这件事）。
-		# 命运卡的「下一间房 +N 敌人」属于**数量**效果，与设计源编成是两处真源 →
-		# 本房以设计源为准、不采纳补兵；但不静默吞掉，按 room_id 留痕备查。
-		if _next_room_enemy_count > 0:
-			_room_spawn_plan_suppressed_reinforcements[room.room_id] = _next_room_enemy_count
-		_note_room_enemy_modifiers(room)
 		return _commit_room_waves(room, authored_waves)
 	var enemy_configs: Array[Dictionary] = []
 	match room.room_type:
@@ -2427,6 +2442,10 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 				"floor_number": _elite_floor_number(room),
 				"boss_content_id": str(room.get_meta("boss_content_id", "")),
 			})
+			# 声明了 Boss 增援计划的房间同时声明唯一中心出生点；只改 Boss，不挪精英随从。
+			if not room.boss_reinforcement_plan.is_empty():
+				for boss_config in boss_configs:
+					boss_config["spawn_position"] = room.boss_spawn_position_world()
 			enemy_configs.assign(boss_configs)
 			# 没有 Boss 就不配精英随从：否则「未指派首领房」会变成精英房，与本房声明不符。
 			if not boss_configs.is_empty():
@@ -2464,14 +2483,6 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 		enemy_configs.assign(_monster_injector.generate_enemies({
 			"type": "random", "floor": floor, "floor_level": floor_level,
 		}))
-	if _next_room_enemy_count > 0:
-		var reinforcements := _monster_injector.generate_enemies({
-			"type": "ambush", "count": _next_room_enemy_count, "floor": floor,
-			"floor_level": floor_level,
-		})
-		enemy_configs.append_array(reinforcements)
-		_next_room_enemy_count = 0
-	_note_room_enemy_modifiers(room)
 	# 设计源把 BOSS 房留空（未指派首领，且本层也没有按层指派的内容）是**合法空房**：
 	# 不刷 Boss、不报错、直接放行 —— 这是「没写 boss 就是没有 boss」这一条口径的落地。
 	# 必须早于下面的通用空房分支，否则会以「敌群生成失败」误报并刷屏 push_error。
@@ -2507,18 +2518,28 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 	return _commit_room_waves(room, waves)
 
 
-## 把命运卡注入的「本房倍率」落账到本房 id，并清零待用值。
-## 公式路径与设计源路径都必须调用：只落账不清零，待用值会漏到后面几间房。
-## `_next_room_enemy_count`（补兵）由公式路径自行消费（它要按数量追加敌人）；
-## 设计源路径不做补兵 —— 数量以设计源为准 —— 但仍须在此清零。
+## 只在真实敌群首次提交时消费下一房规则，和平房与预览不吞卡。
 func _note_room_enemy_modifiers(room: DungeonRoom3D) -> void:
+	if _room_enemy_hp_multipliers.has(room.room_id):
+		return
 	_room_enemy_hp_multipliers[room.room_id] = _next_room_enemy_hp_multiplier
-	_room_enemy_damage_multipliers[room.room_id] = _next_room_enemy_damage_multiplier
-	_room_currency_multipliers[room.room_id] = _next_room_currency_multiplier
+	_room_enemy_damage_multipliers[room.room_id] = float(_room_enemy_damage_multipliers.get(room.room_id, 1.0)) * _next_room_enemy_damage_multiplier
+	_room_currency_multipliers[room.room_id] = float(_room_currency_multipliers.get(room.room_id, 1.0)) * _next_room_currency_multiplier
 	_next_room_enemy_hp_multiplier = 1.0
 	_next_room_enemy_damage_multiplier = 1.0
 	_next_room_currency_multiplier = 1.0
-	_next_room_enemy_count = 0
+	_room_fate_clear_currency[room.room_id] = _next_room_clear_currency
+	_next_room_clear_currency = 0
+	var bounty := 0
+	for rule in _fate_bounty_queues:
+		if int(rule["rooms"]) > 0:
+			bounty += int(rule["amount"])
+			rule["rooms"] = int(rule["rooms"]) - 1
+		elif int(rule["zero_rooms"]) > 0:
+			_room_zero_currency[room.room_id] = true
+			rule["zero_rooms"] = int(rule["zero_rooms"]) - 1
+	_room_fate_bounties[room.room_id] = bounty
+	_fate_bounty_queues = _fate_bounty_queues.filter(func(rule: Dictionary) -> bool: return int(rule["rooms"]) > 0 or int(rule["zero_rooms"]) > 0)
 
 
 ## 读房间设计源给出的刷怪计划并转成波次（每项一波）。
@@ -2864,6 +2885,19 @@ func _resolve_spawn_position(
 func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
 	if waves.is_empty():
 		return false
+	if not _room_enemy_hp_multipliers.has(room.room_id):
+		var extra: Array[Dictionary] = []
+		if _next_room_enemy_count > 0:
+			extra.assign(_monster_injector.generate_enemies({
+				"type": "ambush", "count": _next_room_enemy_count,
+				"floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 0,
+			}))
+		extra.append_array(_next_room_elite_configs)
+		if not extra.is_empty():
+			(waves[0] as Array).append_array(extra)
+		_next_room_enemy_count = 0
+		_next_room_elite_configs.clear()
+		_note_room_enemy_modifiers(room)
 	var wave_count := waves.size()
 	var first_wave: Array[Dictionary] = waves.pop_front() as Array[Dictionary]
 	_cancel_room_wave_intermission(room.room_id)
@@ -2997,10 +3031,16 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.room_id = room.room_id
 		$ActiveEnemies.add_child(enemy)
 		var spawn_data := enemy_configs[index].duplicate(true)
-		# 落点直通键 / 延迟键是**本系统的私有通道**，不是敌人数据的一部分：
+		var launch_target: Variant = spawn_data.get("spawn_launch_target", null)
+		var launch_speed := float(spawn_data.get("spawn_launch_speed_mps", 0.0))
+		var launch_duration := float(spawn_data.get("spawn_launch_duration_sec", 0.0))
+		# 落点 / 延迟 / 出生抛射键是**本系统的私有通道**，不是敌人数据的一部分：
 		# 摘掉再喂给 `configure_from_enemy_data`，免得它们漏进存档或敌人快照。
 		spawn_data.erase("spawn_position")
 		spawn_data.erase("spawn_delay_sec")
+		spawn_data.erase("spawn_launch_target")
+		spawn_data.erase("spawn_launch_speed_mps")
+		spawn_data.erase("spawn_launch_duration_sec")
 		if not spawn_data.has("spawn_index"):
 			spawn_data["spawn_index"] = index
 		if not spawn_data.has("persistent_id"):
@@ -3010,6 +3050,8 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 				index,
 			]
 		enemy.configure_from_enemy_data(spawn_data)
+		enemy.set_meta("fate_kill_currency", int(spawn_data.get("fate_kill_currency", 0)))
+		enemy.state_changed.connect(_on_fate_enemy_state_changed.bind(enemy))
 		# 剧情生成的怪打标记，剧情撤怪只认自己生成的那些。
 		if bool(spawn_data.get("narrative_spawned", false)):
 			enemy.set_meta("narrative_spawned", true)
@@ -3020,6 +3062,12 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		if not is_equal_approx(damage_multiplier, 1.0):
 			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))
 		enemy.global_position = spawn_positions[index]
+		if launch_target is Vector3 and launch_speed > 0.0 and launch_duration > 0.0:
+			enemy.apply_melee_knockback(
+				(launch_target as Vector3) - enemy.global_position,
+				launch_speed,
+				launch_duration
+			)
 		if str(spawn_data.get("boss_content_id", "")) == "boss_monitor002":
 			# Characters face local -Z; PI points toward world south (+Z).
 			enemy.global_rotation.y = PI
@@ -3027,6 +3075,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)
 		enemy.boss_phase_changed.connect(_on_boss_phase_changed)
+		enemy.boss_activation_completed.connect(_on_boss_activation_completed)
 		enemy.health_changed.connect(_on_enemy_health_changed)
 		(_enemy_nodes_by_room[room.room_id] as Array).append(enemy)
 		spawned_count += 1
@@ -3508,9 +3557,6 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 	if not _claim_enemy_departure(enemy):
 		return
 	_kills += 1
-	var weapon_tree := player.get_weapon_tree() if player != null else null
-	if weapon_tree != null:
-		weapon_tree.add_crit_on_kill_stack(1)
 	last_killed_enemy_data = enemy_data.duplicate(true)
 	kill_recorded.emit()
 	var loot_room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
@@ -3524,12 +3570,17 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 			enemy.get_persistent_id(), str(reward_report.get("errors", []))
 		])
 	var grants := (reward_report.get("grants", []) as Array).duplicate(true)
-	# 房间试炼先写进掉落物；全局黄金潮汐在真正拾取/结算魂时统一应用，避免重复倍率。
-	var currency_multiplier := float(_room_currency_multipliers.get(enemy.room_id, 1.0))
-	for value in grants:
-		var grant := value as Dictionary
-		if str(grant.get("kind", "")) == "currency":
-			grant["amount"] = maxi(1, int(round(float(grant.get("amount", 1)) * currency_multiplier)))
+	# 星币王牌的精英击杀赏金并入唯一魂球；房间倍率在统一地面出口应用。
+	var kill_currency := int(enemy.get_meta("fate_kill_currency", 0))
+	if kill_currency > 0:
+		var merged := false
+		for grant in grants:
+			if str(grant.get("kind", "")) == "currency":
+				grant["amount"] = int(grant.get("amount", 0)) + kill_currency
+				merged = true
+				break
+		if not merged:
+			grants.append({"kind": "currency", "amount": kill_currency})
 	if (bool(enemy_data.get("is_elite", false)) or enemy.enemy_kind == "boss") and player.has_method("on_fate_elite_killed"):
 		player.call("on_fate_elite_killed")
 	if not grants.is_empty():
@@ -3602,10 +3653,197 @@ func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data:
 
 func _on_boss_phase_changed(enemy: Enemy3D, phase: int) -> void:
 	if enemy == _active_boss and _boss_label != null:
-		_boss_label.text = "%s · 阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), phase]
+		_boss_label.text = "%s  ·  阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), phase]
 	status_label.text = "Boss 阶段 %d · 攻击节奏与增援强度提升" % phase
 	if AudioManager != null:
 		AudioManager.play_sfx("boss_phase", -2.0)
+
+
+func _on_fate_enemy_state_changed(_previous: String, current: String, enemy: Enemy3D) -> void:
+	if current not in ["chase", "telegraph", "attack", "recovery"] or not is_instance_valid(enemy):
+		return
+	if bool(enemy.get_enemy_data().get("is_elite", false)) or enemy.enemy_kind == "boss":
+		player.on_fate_elite_combat_started("%s:%s" % [enemy.room_id, enemy.get_persistent_id()])
+
+
+func _on_boss_activation_completed(enemy: Enemy3D) -> void:
+	if enemy == null or not is_instance_valid(enemy):
+		return
+	_on_fate_enemy_state_changed("dormant", "chase", enemy)
+	# Boss HUD 与战斗开放使用同一条公共激活完成信号：出场动画期间只绑定数据，
+	# 完整结束后才揭示血条，避免玩家一进房就提前看到首领信息。
+	if enemy == _active_boss and _boss_panel != null:
+		_boss_panel.visible = true
+	var room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
+	if room == null or room.boss_reinforcement_plan.is_empty() or room.cleared:
+		return
+	var state := _boss_reinforcement_states.get(room.room_id, {}) as Dictionary
+	state["armed"] = true
+	state["stopped"] = false
+	state["elapsed"] = 0.0
+	state["round"] = maxi(0, int(state.get("round", 0)))
+	state["cursor"] = maxi(0, int(state.get("cursor", 0)))
+	_boss_reinforcement_states[room.room_id] = state
+	status_label.text = "Boss 已激活 · 10 秒后两侧增援开始投放"
+
+
+func _tick_boss_reinforcements(delta: float) -> void:
+	if delta <= 0.0 or _completed or _current_room_id.is_empty():
+		return
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if (
+		room == null
+		or room.cleared
+		or room.boss_reinforcement_plan.is_empty()
+		or not bool(room.boss_reinforcement_plan.get("enabled", false))
+	):
+		return
+	var boss := _boss_reinforcement_boss(room.room_id)
+	if boss == null:
+		if _boss_reinforcement_states.has(room.room_id):
+			(_boss_reinforcement_states[room.room_id] as Dictionary)["stopped"] = true
+		return
+	var state := _boss_reinforcement_states.get(room.room_id, {}) as Dictionary
+	# 旧存档可能已保存「Boss 激活完成」却没有本控制器状态；从 Boss 的正式恢复状态补建，
+	# 但不会重置已有轮次或倒计时。
+	if not bool(state.get("armed", false)):
+		if boss.monitor_combat == null or not boss.monitor_combat.activation_completed:
+			return
+		state = {
+			"armed": true,
+			"stopped": false,
+			"elapsed": 0.0,
+			"round": 0,
+			"cursor": 0,
+		}
+	if bool(state.get("stopped", false)):
+		return
+	state["elapsed"] = float(state.get("elapsed", 0.0)) + delta
+	var round_index := maxi(0, int(state.get("round", 0)))
+	var wait_seconds := (
+		maxf(0.1, float(room.boss_reinforcement_plan.get("activation_delay_sec", 10.0)))
+		if round_index == 0
+		else _boss_reinforcement_interval(room.boss_reinforcement_plan, round_index)
+	)
+	if float(state["elapsed"]) < wait_seconds:
+		_boss_reinforcement_states[room.room_id] = state
+		return
+	var spawned := _spawn_boss_reinforcement_round(room, state)
+	if spawned > 0:
+		state["elapsed"] = 0.0
+		state["round"] = round_index + 1
+		status_label.text = "Boss 增援第 %d 轮 · 两侧投放 %d 只" % [round_index + 1, spawned]
+	else:
+		# 容量已满时保持“已到期”，一旦腾出名额就在下一帧补投，不再额外等完整轮次。
+		state["elapsed"] = wait_seconds
+	_boss_reinforcement_states[room.room_id] = state
+
+
+func _boss_reinforcement_boss(room_id: String) -> Enemy3D:
+	for value in _enemy_nodes_by_room.get(room_id, []) as Array:
+		if not is_instance_valid(value) or not value is Enemy3D:
+			continue
+		var enemy := value as Enemy3D
+		if (
+			enemy.ai_state != "dead"
+			and str(enemy.get_enemy_data().get("boss_content_id", "")) == "boss_monitor002"
+		):
+			return enemy
+	return null
+
+
+func _boss_reinforcement_alive(room_id: String) -> int:
+	var count := 0
+	for value in _enemy_nodes_by_room.get(room_id, []) as Array:
+		if not is_instance_valid(value) or not value is Enemy3D:
+			continue
+		var enemy := value as Enemy3D
+		if enemy.ai_state != "dead" and bool(enemy.get_enemy_data().get("boss_reinforcement_spawned", false)):
+			count += 1
+	# 预约在 call_deferred 实到前已经占用存活账；上限也必须把这段窗口算进去，
+	# 否则同帧重复触发或房间流送暂停时可连续预约并突破 max_reinforcement_alive。
+	for request_value in _reserved_room_spawns.get(room_id, []) as Array:
+		var request := request_value as Dictionary
+		for config_value in request.get("configs", []) as Array:
+			if bool((config_value as Dictionary).get("boss_reinforcement_spawned", false)):
+				count += 1
+	return count
+
+
+func _boss_reinforcement_interval(plan: Dictionary, completed_rounds: int) -> float:
+	var initial := maxf(0.1, float(plan.get("initial_interval_sec", 6.0)))
+	var step := float(plan.get("interval_step_sec", -0.35))
+	var minimum := maxf(0.1, float(plan.get("min_interval_sec", 2.5)))
+	return maxf(minimum, initial + step * float(completed_rounds))
+
+
+func _boss_reinforcement_marker_cycle(room: DungeonRoom3D) -> Array[Marker3D]:
+	var west: Array[Marker3D] = []
+	var east: Array[Marker3D] = []
+	var other: Array[Marker3D] = []
+	for marker in room.boss_reinforcement_spawn_markers():
+		match str(marker.get_meta("spawn_side", "")):
+			"west": west.append(marker)
+			"east": east.append(marker)
+			_: other.append(marker)
+	var result: Array[Marker3D] = []
+	var paired := maxi(west.size(), east.size())
+	for index in range(paired):
+		if index < west.size():
+			result.append(west[index])
+		if index < east.size():
+			result.append(east[index])
+	result.append_array(other)
+	return result
+
+
+func _spawn_boss_reinforcement_round(room: DungeonRoom3D, state: Dictionary) -> int:
+	var plan := room.boss_reinforcement_plan
+	var markers := _boss_reinforcement_marker_cycle(room)
+	if markers.is_empty():
+		return 0
+	var max_alive := maxi(1, int(plan.get("max_reinforcement_alive", 18)))
+	var capacity := maxi(0, max_alive - _boss_reinforcement_alive(room.room_id))
+	if capacity <= 0:
+		return 0
+	var round_index := maxi(0, int(state.get("round", 0)))
+	var desired := mini(
+		maxi(1, int(plan.get("initial_count", 3)) + round_index * int(plan.get("count_step", 1))),
+		maxi(1, int(plan.get("max_count_per_round", 8)))
+	)
+	var count := mini(desired, capacity)
+	var floor := maxi(1, visual_theme.difficulty_rank)
+	var floor_level := clampi(
+		int(float(_record_index(room.room_id)) / maxf(1.0, float(_records.size() - 1)) * 3.0),
+		0,
+		3
+	)
+	var configs := _monster_injector.generate_enemies({
+		"type": str(plan.get("enemy_request_type", "ambush")),
+		"count": count,
+		"floor": floor,
+		"floor_level": floor_level,
+	})
+	if configs.is_empty():
+		return 0
+	count = mini(count, configs.size())
+	configs.resize(count)
+	var positions: Array = []
+	var cursor := maxi(0, int(state.get("cursor", 0)))
+	var center := room.boss_spawn_position_world()
+	for index in range(count):
+		var marker := markers[(cursor + index) % markers.size()]
+		positions.append(marker.global_position)
+		configs[index]["boss_reinforcement_spawned"] = true
+		configs[index]["persistent_id"] = "%s:boss_reinforcement:%d:%d" % [
+			room.room_id, round_index + 1, index,
+		]
+		configs[index]["spawn_launch_target"] = center
+		configs[index]["spawn_launch_speed_mps"] = float(plan.get("launch_speed_mps", 8.5))
+		configs[index]["spawn_launch_duration_sec"] = float(plan.get("launch_duration_sec", 0.38))
+	state["cursor"] = (cursor + count) % markers.size()
+	_reserve_room_spawn(room.room_id, configs, positions)
+	return count
 
 
 func _on_enemy_health_changed(enemy: Enemy3D, current: int, maximum: int) -> void:
@@ -3619,37 +3857,46 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 	var is_new_boss := enemy != _active_boss
 	_active_boss = enemy
 	if _boss_panel == null:
-		_boss_panel = PanelContainer.new()
+		# 简约首领条：透明外壳只负责布局，不再使用厚重面板、霓虹边框或投影。
+		_boss_panel = _make_bare_hud_panel()
 		_boss_panel.name = "BossHUD3D"
-		_boss_panel.anchor_left = 0.5
-		_boss_panel.anchor_right = 0.5
-		_boss_panel.offset_left = -270
-		_boss_panel.offset_right = 270
-		_boss_panel.offset_top = 82
-		_boss_panel.offset_bottom = 142
-		_boss_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_anchor_control(_boss_panel, 0.5, 0.0, 0.5, 0.0, -340, 106, 340, 160)
 		$HUD.add_child(_boss_panel)
 		var margin := MarginContainer.new()
-		margin.add_theme_constant_override("margin_left", 14)
-		margin.add_theme_constant_override("margin_top", 8)
-		margin.add_theme_constant_override("margin_right", 14)
-		margin.add_theme_constant_override("margin_bottom", 8)
+		margin.add_theme_constant_override("margin_left", _hud_int(18))
+		margin.add_theme_constant_override("margin_right", _hud_int(18))
 		_boss_panel.add_child(margin)
 		var box := VBoxContainer.new()
-		box.add_theme_constant_override("separation", 5)
+		box.add_theme_constant_override("separation", _hud_int(7))
 		margin.add_child(box)
 		_boss_label = Label.new()
+		_boss_label.name = "BossName"
 		_boss_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_boss_label.add_theme_color_override("font_color", Color(1.0, 0.48, 0.28))
+		_boss_label.add_theme_font_size_override("font_size", _hud_int(21))
+		_boss_label.add_theme_color_override("font_color", Color(1.0, 0.92, 0.88))
+		_boss_label.add_theme_color_override("font_outline_color", Color(0.08, 0.01, 0.015, 0.96))
+		_boss_label.add_theme_constant_override("outline_size", _hud_int(5))
 		box.add_child(_boss_label)
 		_boss_bar = ProgressBar.new()
+		_boss_bar.name = "BossHealthBar"
 		_boss_bar.show_percentage = false
-		_boss_bar.custom_minimum_size.y = 14
+		_boss_bar.custom_minimum_size.y = _hud_int(10)
+		var bar_background := StyleBoxFlat.new()
+		bar_background.bg_color = Color(0.07, 0.025, 0.03, 0.88)
+		bar_background.border_color = Color(1.0, 0.46, 0.42, 0.38)
+		bar_background.set_border_width_all(1)
+		bar_background.set_corner_radius_all(_hud_int(2))
+		_boss_bar.add_theme_stylebox_override("background", bar_background)
+		var bar_fill := StyleBoxFlat.new()
+		bar_fill.bg_color = Color(0.96, 0.13, 0.17)
+		bar_fill.set_corner_radius_all(_hud_int(2))
+		_boss_bar.add_theme_stylebox_override("fill", bar_fill)
 		box.add_child(_boss_bar)
-	_boss_panel.visible = true
+	# 有正式出场流程的 Boss 必须等动画完成；没有该流程的旧 Boss 保持即时显示。
+	_boss_panel.visible = enemy.monitor_combat == null or enemy.monitor_combat.activation_completed
 	if is_new_boss and AudioManager != null:
 		AudioManager.play_sfx("boss_intro", -1.5)
-	_boss_label.text = "%s · 阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), enemy.boss_phase]
+	_boss_label.text = "%s  ·  阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), enemy.boss_phase]
 	_on_enemy_health_changed(enemy, enemy.current_hp, enemy.max_hp)
 
 
@@ -3698,15 +3945,6 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 		status_label.text = "搜索失败 · 奖励配置无效"
 		return
 	var candidates := _ground_reward_candidates(report.get("grants", []))
-	if _next_chest_quality_boost > 0:
-		var boosted_floor := maxi(1, reward_floor + _next_chest_quality_boost)
-		var boosted_report := _reward_coordinator.resolve_search(
-			{}, "scavenge_floor_%d" % mini(5, boosted_floor), boosted_floor, "%s:boost" % event_id
-		)
-		var boosted := _ground_reward_candidates(boosted_report.get("grants", []))
-		if not boosted.is_empty():
-			candidates = [boosted[0]]
-		_next_chest_quality_boost = 0
 	if _extra_loot_next_chest_count > 0:
 		var ranked: Array[Dictionary] = []
 		ranked.append_array(candidates)
@@ -3723,7 +3961,7 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 		if not ranked.is_empty():
 			ranked.sort_custom(
 				func(a: Dictionary, b: Dictionary) -> bool:
-					return int((a.get("item", {}) as Dictionary).get("loot_table_tier", 0)) > int((b.get("item", {}) as Dictionary).get("loot_table_tier", 0))
+					return _fate_rarity_rank(a.get("item", {}) as Dictionary) > _fate_rarity_rank(b.get("item", {}) as Dictionary)
 			)
 			candidates = [ranked[0]]
 		_extra_loot_next_chest_count = 0
@@ -3735,6 +3973,11 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 		selected["amount"] = 1
 	else:
 		selected["count"] = 1
+		var item := selected.get("item", {}) as Dictionary
+		_apply_fate_item_quality(item, _next_chest_quality_boost, _next_chest_max_rarity)
+		item["fate_rarity_cap"] = _next_chest_max_rarity
+	_next_chest_quality_boost = 0
+	_next_chest_max_rarity = ""
 	var delivery := _deliver_ground_rewards(
 		room, [selected], player.global_position + player.aim_direction * 1.2, event_id
 	)
@@ -3745,7 +3988,25 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 	)
 
 
-## 搜索只读同一 grant 的地面展示字段来排序；最终交付仍使用原 grant。
+const FATE_RARITIES := ["common", "uncommon", "rare", "epic", "legendary"]
+
+
+func _fate_rarity_rank(item: Dictionary) -> int:
+	return maxi(0, FATE_RARITIES.find(str(item.get("rarity", "common")).to_lower()))
+
+
+func _apply_fate_item_quality(item: Dictionary, tiers: int, cap: String = "") -> void:
+	if item.is_empty() or str(item.get("type", "")) == "currency":
+		return
+	var rank := clampi(_fate_rarity_rank(item) + tiers, 0, FATE_RARITIES.size() - 1)
+	if not cap.is_empty():
+		rank = mini(rank, maxi(0, FATE_RARITIES.find(cap.to_lower())))
+	item["rarity"] = FATE_RARITIES[rank]
+	if item.get("weapon_instance") is Dictionary:
+		(item["weapon_instance"] as Dictionary)["rarity"] = item["rarity"]
+
+
+## 候选按物品实际稀有度排序，池档位不等同于品质。
 func _ground_reward_candidates(grants: Array) -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = []
 	for value in grants:
@@ -3761,8 +4022,29 @@ func _ground_reward_candidates(grants: Array) -> Array[Dictionary]:
 func _deliver_ground_rewards(
 	room: DungeonRoom3D, grants: Array, origin: Vector3, context: String
 ) -> Dictionary:
+	var adjusted: Array = []
+	for value in grants:
+		var grant := (value as Dictionary).duplicate(true)
+		if str(grant.get("kind", "")) == "currency":
+			if room != null and bool(_room_zero_currency.get(room.room_id, false)):
+				continue
+			var multiplier := float(_room_currency_multipliers.get(room.room_id, 1.0)) if room != null else 1.0
+			grant["amount"] = maxi(0, int(round(float(grant.get("amount", 0)) * multiplier)))
+			if int(grant["amount"]) <= 0:
+				continue
+		adjusted.append(grant)
 	var delivery := REWARD_SINK_SCRIPT.apply_ground(
-		grants, func(items: Array) -> int: return _spawn_loot_items(room, items, origin)
+		adjusted, func(items: Array) -> int:
+			for item in items:
+				if str(item.get("type", "")) == "currency":
+					continue
+				var tiers := 0
+				for rule in _fate_drop_quality_rules:
+					rule["count"] = int(rule["count"]) + 1
+					if int(rule["count"]) % int(rule["every"]) == 0:
+						tiers += int(rule["tiers"])
+				_apply_fate_item_quality(item, tiers, str(item.get("fate_rarity_cap", "")))
+			return _spawn_loot_items(room, items, origin)
 	)
 	var rejected := delivery.get("rejected", []) as Array
 	if not rejected.is_empty():
@@ -4215,7 +4497,7 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 	_mark_room_cleared(room, true)
 
 
-func _reveal_nearby_rooms(origin_id: String, depth: int) -> void:
+func _reveal_nearby_rooms(origin_id: String, depth: int, hide_room_types: bool = false) -> void:
 	var frontier: Array[String] = [origin_id]
 	var visited := {origin_id: true}
 	for _step in range(maxi(1, depth)):
@@ -4227,82 +4509,265 @@ func _reveal_nearby_rooms(origin_id: String, depth: int) -> void:
 					continue
 				visited[neighbor_id] = true
 				next.append(neighbor_id)
-				minimap.reveal_room(neighbor_id)
+				minimap.reveal_room(neighbor_id, hide_room_types)
 		frontier = next
 
 
-func trigger_extra_wave() -> void:
+func trigger_extra_wave(effect: Dictionary = {}) -> Dictionary:
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	if (
-		_completed or room == null or room.cleared
-		or room.room_type not in HOSTILE_ROOM_TYPES
-		or not _room_wave_totals.has(room.room_id)
-		or _room_fate_wave_queued.has(room.room_id)
-	):
-		return
-	var configs: Array[Dictionary] = _monster_injector.generate_enemies({
-		"type": "ambush", "count": 3, "floor": maxi(1, visual_theme.difficulty_rank),
-		"floor_level": clampi(_record_index(room.room_id) / 3, 0, 3),
-	})
+	if _completed or room == null or room.cleared or not _room_wave_totals.has(_current_room_id):
+		return {"success": false, "error": "room_not_in_combat", "message": "当前房间不在战斗中，未消耗命运"}
+	if _room_fate_wave_queued.has(room.room_id):
+		return {"success": false, "error": "fate_wave_already_queued", "message": "本房已接受命运增援"}
+	var configs: Array[Dictionary] = []
+	if bool(effect.get("spawn_elite", false)):
+		configs = _reserve_fate_elite(room, "reinforce")
+	else:
+		configs.assign(_monster_injector.generate_enemies({
+			"type": "ambush", "count": int(effect.get("spawn_count", 3)),
+			"floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 0,
+		}))
 	if configs.is_empty():
-		return
-	# 击杀阈值会反复触发；每房只接受一次，并走同一整波队列，不能边杀边补。
+		return {"success": false, "error": "reinforcement_unavailable", "message": "没有可用增援，未消耗命运"}
+	for config in configs:
+		config["fate_kill_currency"] = int(effect.get("clear_currency", 0))
 	_room_fate_wave_queued[room.room_id] = true
 	(_room_wave_queues[room.room_id] as Array).append(configs)
 	_room_wave_totals[room.room_id] = int(_room_wave_totals[room.room_id]) + 1
 	_update_wave_hud(room.room_id)
 	_schedule_room_wave_intermission(room.room_id)
 	status_label.text = "命运增援已排队 · 本房最多追加一波"
+	return {"success": true, "message": status_label.text}
+
+
+func _reserve_fate_elite(room: DungeonRoom3D, source: String) -> Array[Dictionary]:
+	_fate_elite_reservation_serial += 1
+	return _monster_injector.generate_enemies({
+		"type": "elite", "floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 0,
+		"floor_number": _elite_floor_number(room), "seed": run_seed,
+		"encounter_id": "%s:fate:%s:%d" % [_elite_encounter_id(room), source, _fate_elite_reservation_serial],
+	})
 
 
 func set_next_chest_quality_boost(boost: int) -> void:
-	_next_chest_quality_boost = maxi(_next_chest_quality_boost, boost)
+	_next_chest_quality_boost += boost
 
 
 func set_extra_loot_next_chest(enabled: bool) -> void:
 	_extra_loot_next_chest_count = maxi(_extra_loot_next_chest_count, 1 if enabled else 0)
 
 
-func _on_fate_scope_state_changed(scope: String, stable_card_id: String) -> void:
-	if scope != FateCard.scope_name(FateCard.Scope.WORLD):
-		return
-	var card := FateCardGameBridge.get_latest_applied_card(stable_card_id)
-	if card == null:
-		card = FateCardPresets.get_by_card_id(stable_card_id)
-	if card == null:
-		return
-	var modifier := str(card.effect.get("modifier", ""))
-	match modifier:
-		"next_chest_quality":
-			_next_chest_quality_boost += maxi(0, int(card.effect.get("tiers", 1)))
-		"next_chest_extra":
-			_extra_loot_next_chest_count += maxi(0, int(card.effect.get("count", 1)))
-		"next_room_enemy_count":
-			_next_room_enemy_count += maxi(0, int(card.effect.get("count", 0)))
-		"reveal_rooms":
-			_reveal_nearby_rooms(_current_room_id, int(card.effect.get("radius", 1)))
-		"grant_room_key":
-			_room_key_count += maxi(0, int(card.effect.get("count", 1)))
+func _on_fate_scope_state_changed(_scope: String, _stable_card_id: String) -> void:
+	# 此信号只通知显示层；规则由有失败返回的命令入口一次执行。
+	pass
+
+
+func apply_world_fate_card(card: FateCard) -> Dictionary:
+	if card == null or card.scope != FateCard.Scope.WORLD or _completed:
+		return {"success": false, "error": "invalid_world_card", "message": "当前不能应用世界命运"}
+	var effect := card.effect
+	match card.stable_card_id:
+		"fate_reinforce":
+			return trigger_extra_wave(effect)
+		"fate_curse_map":
+			return apply_curse_to_current_room(float(effect.get("enemy_damage_multiplier", effect.get("damage_multiplier", 1.15))), float(effect.get("currency_multiplier", 1.0)))
+		"fate_lucky_chest", "fate_extra_loot":
+			_next_chest_quality_boost += int(effect.get("quality_boost", 0))
+			_extra_loot_next_chest_count += int(effect.get("extra_count", 1 if card.stable_card_id == "fate_extra_loot" else 0))
+		"fate_sun_quality":
+			_next_chest_quality_boost += int(effect.get("tiers", 1))
+		"fate_sun_extra_loot":
+			_extra_loot_next_chest_count += maxi(0, int(effect.get("count", 1)))
+			if effect.has("max_rarity"):
+				_next_chest_max_rarity = str(effect["max_rarity"]).to_lower()
+		"fate_sun_reinforce":
+			if int(effect.get("elite_count", 0)) > 0:
+				var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+				if room == null:
+					return {"success": false, "error": "room_missing", "message": "没有当前楼层"}
+				var elites := _reserve_fate_elite(room, "emperor")
+				if elites.is_empty():
+					return {"success": false, "error": "elite_unavailable", "message": "当前楼层无可用精英，未消耗命运"}
+				_next_room_elite_configs.append_array(elites)
+				_next_room_clear_currency += int(effect.get("clear_currency", 0))
+			else:
+				_next_room_enemy_count += maxi(0, int(effect.get("count", 0)))
+		"fate_sun_reveal":
+			_reveal_nearby_rooms(_current_room_id, int(effect.get("radius", 1)), bool(effect.get("hide_room_types", false)))
+		"fate_sun_key":
+			if bool(effect.get("temporary_floor_only", false)):
+				_temporary_key_floor = _fate_floor_key(_room_by_id.get(_current_room_id) as DungeonRoom3D)
+				_temporary_room_keys += maxi(0, int(effect.get("count", 1)))
+			else:
+				_room_key_count += maxi(0, int(effect.get("count", 1)))
 			_refresh_loot_label()
-		"currency_gain":
-			_world_currency_multiplier *= maxf(1.0, float(card.effect.get("multiplier", 1.0)))
-		"next_room_enemy_hp":
-			_next_room_enemy_hp_multiplier *= clampf(float(card.effect.get("multiplier", 1.0)), 0.1, 3.0)
-		"next_room_trial":
-			_next_room_enemy_damage_multiplier *= maxf(1.0, float(card.effect.get("damage_multiplier", 1.0)))
-			_next_room_currency_multiplier *= maxf(1.0, float(card.effect.get("currency_multiplier", 1.0)))
-		"room_clear_bounty":
-			_room_clear_bounty_rooms += maxi(0, int(card.effect.get("rooms", 0)))
-			_room_clear_bounty_amount = maxi(_room_clear_bounty_amount, int(card.effect.get("amount", 0)))
-		"extraction_time":
-			var multiplier := clampf(float(card.effect.get("multiplier", 1.0)), 0.1, 1.0)
+		"fate_sun_currency":
+			_world_currency_multiplier *= maxf(0.0, float(effect.get("multiplier", 1.0)))
+			if int(effect.get("quality_every", 0)) > 0:
+				_fate_drop_quality_rules.append({"every": int(effect["quality_every"]), "tiers": int(effect.get("quality_tiers", 1)), "count": 0})
+		"fate_sun_scorch":
+			_next_room_enemy_hp_multiplier *= maxf(0.01, float(effect.get("multiplier", 1.0)))
+			_next_room_enemy_damage_multiplier *= maxf(0.0, float(effect.get("damage_multiplier", 1.0)))
+		"fate_sun_trial":
+			_next_room_enemy_damage_multiplier *= maxf(0.0, float(effect.get("damage_multiplier", 1.0)))
+			_next_room_currency_multiplier *= maxf(0.0, float(effect.get("currency_multiplier", 1.0)))
+		"fate_sun_bounty":
+			_fate_bounty_queues.append({"rooms": int(effect.get("rooms", 0)), "amount": int(effect.get("amount", 0)), "zero_rooms": int(effect.get("zero_currency_rooms_after", 0))})
+		"fate_sun_extraction":
+			var multiplier := maxf(0.01, float(effect.get("multiplier", 1.0)))
 			_extraction_time_multiplier *= multiplier
+			_extraction_enemy_speed_multiplier *= maxf(0.01, float(effect.get("enemy_speed_multiplier", 1.0)))
 			for beacon_value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
 				var beacon := beacon_value as ExtractionBeacon3D
-				if beacon != null and is_instance_valid(beacon):
-					beacon.duration *= multiplier
+				if beacon != null and is_ancestor_of(beacon):
+					beacon.apply_fate_time_multiplier(multiplier)
 		_:
-			return
+			return {"success": false, "error": "unsupported_world_card", "message": "世界命运尚无执行器"}
+	return {"success": true, "message": "已应用世界命运：%s" % card.card_name}
+
+
+func reset_world_fate_state() -> void:
+	_next_chest_quality_boost = 0
+	_extra_loot_next_chest_count = 0
+	_next_chest_max_rarity = ""
+	_next_room_enemy_count = 0
+	for config in _next_room_elite_configs:
+		EliteRosterService.settle(str(config.get("elite_id", "")), str(config.get("encounter_instance_id", "")), "despawned")
+	_next_room_elite_configs.clear()
+	_next_room_clear_currency = 0
+	_next_room_enemy_hp_multiplier = 1.0
+	_next_room_enemy_damage_multiplier = 1.0
+	_next_room_currency_multiplier = 1.0
+	_world_currency_multiplier = 1.0
+	_temporary_room_keys = 0
+	_temporary_key_floor = ""
+	_fate_visited_rooms.clear()
+	_room_fate_wave_queued.clear()
+	_fate_elite_reservation_serial = 0
+	_fate_bounty_queues.clear()
+	_fate_drop_quality_rules.clear()
+	_room_fate_bounties.clear()
+	_room_fate_clear_currency.clear()
+	_room_zero_currency.clear()
+	_room_enemy_hp_multipliers.clear()
+	_room_enemy_damage_multipliers.clear()
+	_room_currency_multipliers.clear()
+	_extraction_enemy_speed_multiplier = 1.0
+	_update_fate_extraction_slow()
+	for beacon_value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
+		var beacon := beacon_value as ExtractionBeacon3D
+		if beacon != null and is_ancestor_of(beacon):
+			beacon.apply_fate_time_multiplier(1.0 / _extraction_time_multiplier)
+	_extraction_time_multiplier = 1.0
+
+
+const WORLD_FATE_SAVE_DEFAULTS := {
+	"_next_chest_quality_boost": 0, "_extra_loot_next_chest_count": 0, "_next_chest_max_rarity": "",
+	"_next_room_enemy_count": 0, "_next_room_elite_configs": [], "_fate_elite_reservation_serial": 0,
+	"_next_room_clear_currency": 0, "_next_room_enemy_hp_multiplier": 1.0,
+	"_next_room_enemy_damage_multiplier": 1.0, "_next_room_currency_multiplier": 1.0,
+	"_world_currency_multiplier": 1.0, "_temporary_room_keys": 0, "_temporary_key_floor": "",
+	"_fate_visited_rooms": {}, "_fate_bounty_queues": [], "_fate_drop_quality_rules": [],
+	"_room_fate_bounties": {}, "_room_fate_clear_currency": {}, "_room_zero_currency": {},
+	"_room_enemy_hp_multipliers": {}, "_room_enemy_damage_multipliers": {}, "_room_currency_multipliers": {},
+	"_room_fate_wave_queued": {}, "_extraction_time_multiplier": 1.0, "_extraction_enemy_speed_multiplier": 1.0,
+}
+
+
+func export_world_fate_snapshot() -> Dictionary:
+	var state: Dictionary = {}
+	for key in WORLD_FATE_SAVE_DEFAULTS:
+		var value: Variant = get(key)
+		state[key] = value.duplicate(true) if value is Array or value is Dictionary else value
+	var exploration: Dictionary = {}
+	for key in ["_revealed", "_hidden_room_types", "_visited_room_types"]:
+		exploration[key] = minimap.get(key).duplicate(true)
+	var triggers: Dictionary = {}
+	if _map_fate_triggers != null:
+		for type in MapFateTriggers.TriggerType.values():
+			triggers[str(type)] = {
+				"count": _map_fate_triggers._counters.get(type, 0),
+				"used": _map_fate_triggers._triggered_this_run.get(type, false),
+				"age": maxf(0.0, Time.get_ticks_msec() / 1000.0 - float(_map_fate_triggers._last_trigger_time.get(type, -999.0))),
+			}
+	return {"version": 1, "state": state, "exploration": exploration, "triggers": triggers}
+
+
+func import_world_fate_snapshot(value: Variant) -> bool:
+	var previous_time := _extraction_time_multiplier
+	# 恢复不是退役精英预约：不调用会 settle 的 reset_world_fate_state。
+	for key in WORLD_FATE_SAVE_DEFAULTS:
+		var initial: Variant = WORLD_FATE_SAVE_DEFAULTS[key]
+		if initial is Array:
+			get(key).clear()
+		elif initial is Dictionary:
+			set(key, initial.duplicate(true))
+		else:
+			set(key, initial)
+	for beacon_value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
+		if beacon_value is ExtractionBeacon3D and is_ancestor_of(beacon_value):
+			beacon_value.apply_fate_time_multiplier(1.0 / maxf(0.01, previous_time))
+	if not value is Dictionary or value.get("version", 0) != 1:
+		return false
+	var state := Player3D.read_fate_snapshot_fields(value.get("state"), WORLD_FATE_SAVE_DEFAULTS, ["_next_chest_quality_boost", "_extra_loot_next_chest_count"])
+	if state.is_empty() or state["_next_chest_max_rarity"] not in ["", "common", "uncommon", "rare", "epic", "legendary"]:
+		return false
+	for key in ["_next_room_enemy_hp_multiplier", "_extraction_time_multiplier", "_extraction_enemy_speed_multiplier"]:
+		if float(state[key]) <= 0.0:
+			return false
+	for key in WORLD_FATE_SAVE_DEFAULTS:
+		if not WORLD_FATE_SAVE_DEFAULTS[key] is Dictionary:
+			continue
+		for id in state[key]:
+			var flag: bool = key in ["_fate_visited_rooms", "_room_zero_currency", "_room_fate_wave_queued"]
+			if not id is String or id.is_empty() or (flag and state[key][id] != true) or (not flag and not Player3D.is_fate_snapshot_number(state[key][id], 0, 2147483647)):
+				return false
+	for key in ["_fate_bounty_queues", "_fate_drop_quality_rules"]:
+		var defaults: Dictionary = {"rooms": 0, "amount": 0, "zero_rooms": 0} if key == "_fate_bounty_queues" else {"every": 1, "tiers": 0, "count": 0}
+		var rules: Array[Dictionary] = []
+		for row in state[key]:
+			var rule := Player3D.read_fate_snapshot_fields(row, defaults)
+			if rule.is_empty() or (key == "_fate_drop_quality_rules" and rule["every"] < 1):
+				return false
+			rules.append(rule)
+		state[key] = rules
+	for config in state["_next_room_elite_configs"]:
+		if not config is Dictionary or not config.get("elite_id") is String or not config.get("encounter_instance_id") is String or config.get("elite_id", "").is_empty() or config.get("encounter_instance_id", "").is_empty():
+			return false
+		for key in ["hp", "max_hp", "damage", "speed", "floor"]:
+			if not Player3D.is_fate_snapshot_number(config.get(key, 0), 0, 2147483647):
+				return false
+	var exploration := Player3D.read_fate_snapshot_fields(value.get("exploration", {}), {"_revealed": {}, "_hidden_room_types": {}, "_visited_room_types": {}})
+	if exploration.is_empty():
+		return false
+	var triggers := value.get("triggers", {}) as Dictionary
+	if not triggers.is_empty() and _map_fate_triggers != null:
+		for type in MapFateTriggers.TriggerType.values():
+			var row := triggers.get(str(type), {}) as Dictionary
+			if row.is_empty() or not Player3D.is_fate_snapshot_number(row.get("count"), 0, 2147483647, true) or row.get("used") not in [true, false] or not Player3D.is_fate_snapshot_number(row.get("age"), 0.0, 315360000.0):
+				return false
+	for key in exploration:
+		for id in exploration[key]:
+			if not id is String or exploration[key][id] != true:
+				return false
+	for key in state:
+		if WORLD_FATE_SAVE_DEFAULTS[key] is Array:
+			get(key).assign(state[key])
+		else:
+			set(key, state[key])
+	for key in exploration:
+		minimap.set(key, exploration[key].duplicate(true))
+	if not triggers.is_empty() and _map_fate_triggers != null:
+		for type in MapFateTriggers.TriggerType.values():
+			var row := triggers[str(type)] as Dictionary
+			_map_fate_triggers._counters[type] = int(row["count"])
+			_map_fate_triggers._triggered_this_run[type] = bool(row["used"])
+			_map_fate_triggers._last_trigger_time[type] = Time.get_ticks_msec() / 1000.0 - float(row["age"])
+	minimap.queue_redraw()
+	for beacon_value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
+		if beacon_value is ExtractionBeacon3D and is_ancestor_of(beacon_value):
+			beacon_value.apply_fate_time_multiplier(_extraction_time_multiplier)
+	return true
 
 
 func get_world_fate_snapshot() -> Dictionary:
@@ -4314,41 +4779,66 @@ func get_world_fate_snapshot() -> Dictionary:
 		"next_room_enemy_damage_multiplier": _next_room_enemy_damage_multiplier,
 		"next_room_currency_multiplier": _next_room_currency_multiplier,
 		"currency_multiplier": _world_currency_multiplier,
-		"bounty_rooms": _room_clear_bounty_rooms,
-		"bounty_amount": _room_clear_bounty_amount,
+		"bounty_queues": _fate_bounty_queues.duplicate(true),
+		"temporary_keys": _temporary_room_keys,
+		"next_room_elite_count": _next_room_elite_configs.size(),
+		"next_chest_max_rarity": _next_chest_max_rarity,
 		"extraction_time_multiplier": _extraction_time_multiplier,
 	}
 
 
-func apply_curse_to_current_room(damage_multiplier: float) -> void:
+func apply_curse_to_current_room(damage_multiplier: float, currency_multiplier: float = 1.0) -> Dictionary:
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null or room.cleared or not _room_wave_totals.has(_current_room_id):
+		return {"success": false, "error": "room_not_in_combat", "message": "当前没有可诅咒的战斗，未消耗命运"}
+	_room_enemy_damage_multipliers[_current_room_id] = float(_room_enemy_damage_multipliers.get(_current_room_id, 1.0)) * damage_multiplier
+	_room_currency_multipliers[_current_room_id] = float(_room_currency_multipliers.get(_current_room_id, 1.0)) * currency_multiplier
 	for value in _enemy_nodes_by_room.get(_current_room_id, []):
 		if not is_instance_valid(value):
 			continue
 		var enemy := value as Enemy3D
-		if enemy != null and is_instance_valid(enemy) and enemy.ai_state != "dead":
-			enemy.contact_damage = maxi(1, int(enemy.contact_damage * damage_multiplier))
-	status_label.text = "房间诅咒：敌人伤害提高 %.0f%%" % [(damage_multiplier - 1.0) * 100.0]
+		if enemy != null and enemy.ai_state != "dead":
+			enemy.contact_damage = maxi(0, int(round(enemy.contact_damage * damage_multiplier)))
+	return {"success": true, "message": "本房所有波次诅咒已生效"}
 
 
 func apply_bless_dead(hp_threshold: float, survive_duration: float, damage_bonus: float) -> void:
-	_bless_dead_active = true
-	_bless_dead_threshold = clampf(hp_threshold, 0.05, 0.95)
-	_bless_dead_remaining = maxf(0.1, survive_duration)
-	_bless_dead_bonus = maxf(0.0, damage_bonus)
-	_bless_dead_triggered = false
+	player.apply_character_fate_modifier({"modifier": "survival_blessing", "hp_threshold": hp_threshold, "survive_duration": survive_duration, "damage_bonus": damage_bonus})
 
 
 func _tick_bless_dead(delta: float) -> void:
-	if not _bless_dead_active or _bless_dead_triggered or player == null or player.current_hp <= 0:
-		return
-	if float(player.current_hp) / float(maxi(1, player.max_hp)) > _bless_dead_threshold:
-		return
-	_bless_dead_remaining = maxf(0.0, _bless_dead_remaining - delta)
-	if _bless_dead_remaining > 0.0:
-		return
-	_bless_dead_triggered = true
-	player.apply_damage_buff("bless_dead", _bless_dead_bonus)
-	status_label.text = "亡者祝福生效：武器伤害 +%.0f%%" % [_bless_dead_bonus * 100.0]
+	if not _completed and player != null:
+		player.update_fate_survival(delta)
+	_update_fate_extraction_slow()
+
+
+func _fate_floor_key(room: DungeonRoom3D) -> String:
+	return str(room.get_meta("floor_number", room.position.y)) if room != null else ""
+
+
+func _expire_temporary_room_keys(floor_key: String) -> void:
+	if _temporary_room_keys > 0 and floor_key != _temporary_key_floor:
+		_temporary_room_keys = 0
+		_temporary_key_floor = ""
+		_refresh_loot_label()
+
+
+func _update_fate_extraction_slow() -> void:
+	for value in $ActiveEnemies.get_children():
+		var enemy := value as Enemy3D
+		if enemy == null or enemy.ai_state == "dead":
+			continue
+		var multiplier := 1.0
+		if not is_equal_approx(_extraction_enemy_speed_multiplier, 1.0):
+			for beacon_value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
+				var beacon := beacon_value as ExtractionBeacon3D
+				if beacon != null and is_ancestor_of(beacon) and beacon.is_in_active_sync_area(enemy.global_position):
+					multiplier = _extraction_enemy_speed_multiplier
+					break
+		var previous := float(enemy.get_meta("fate_extraction_speed", 1.0))
+		if not is_equal_approx(previous, multiplier):
+			enemy.move_speed = enemy.move_speed / previous * multiplier
+			enemy.set_meta("fate_extraction_speed", multiplier)
 
 
 func handle_esc() -> void:
@@ -4363,9 +4853,12 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		return
 	var was_cleared := room.cleared
 	room.cleared = true
+	if _boss_reinforcement_states.has(room.room_id):
+		(_boss_reinforcement_states[room.room_id] as Dictionary)["stopped"] = true
 	_cancel_room_wave_intermission(room.room_id)
 	_update_wave_hud(room.room_id)
 	if not was_cleared:
+		player.on_fate_room_cleared(room.room_id)
 		room_cleared.emit(room)
 		var clear_report := _reward_coordinator.resolve_clear(
 			room.reward_plan,
@@ -4376,9 +4869,9 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 			room, clear_report.get("grants", []), room.global_position,
 			"clear:%s" % room.room_id
 		)
-	if not was_cleared and room.room_type in HOSTILE_ROOM_TYPES and _room_clear_bounty_rooms > 0:
-		_grant_run_currency(_room_clear_bounty_amount)
-		_room_clear_bounty_rooms -= 1
+	if not was_cleared:
+		var bounty := int(_room_fate_bounties.get(room.room_id, 0)) + int(_room_fate_clear_currency.get(room.room_id, 0))
+		_grant_run_currency(bounty)
 		_refresh_loot_label()
 	if spawn_key and not was_cleared:
 		call_deferred("_ensure_room_key_reward", room)
@@ -4931,14 +5424,16 @@ func _on_door_fate_selected(choice_index: int) -> void:
 				_fate_feedback_label.text = "转换确认 · %s\n再次点击同一张卡：放弃刻印并获得 %d 魂" % [card.card_name, currency_value]
 				_fate_feedback_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
 			return
-		GameManager.add_currency(currency_value)
+		currency_value = _grant_run_currency(currency_value)
 		_close_door_fate_overlay()
 		status_label.text = "命运转化：%s → %d魂" % [card.card_name, currency_value]
 		return
 	_pending_fate_currency_choice = -1
-	var result := FateCardGameBridge.apply_card(card)
+	var result := await FateCardGameBridge.apply_card_with_source_selection(card, _fate_overlay)
+	if not is_inside_tree() or not _door_fate_active:
+		return
 	if not bool(result.get("success", false)):
-		var failure := str(result.get("reason", result.get("message", "当前目标无法承载该命运")))
+		var failure := str(result.get("message", result.get("reason", "当前目标无法承载该命运")))
 		status_label.text = "%s：%s" % [card.card_name, failure]
 		if _fate_feedback_label != null:
 			_fate_feedback_label.text = "应用失败 · %s\n%s · 请改选其他命运" % [card.card_name, failure]
@@ -5036,11 +5531,13 @@ func resolve_fate_choice_for_test(choice_index := 0) -> void:
 
 
 func _get_total_room_keys() -> int:
-	return _room_key_count + (_inventory.get_item_count("item_room_key") if _inventory != null else 0)
+	return _room_key_count + _temporary_room_keys + (_inventory.get_item_count("item_room_key") if _inventory != null else 0)
 
 
 func _consume_room_key() -> void:
-	if _inventory != null and _inventory.has_item("item_room_key"):
+	if _temporary_room_keys > 0:
+		_temporary_room_keys -= 1
+	elif _inventory != null and _inventory.has_item("item_room_key"):
 		_inventory.consume_item("item_room_key", 1)
 	else:
 		_room_key_count = maxi(0, _room_key_count - 1)
@@ -5176,6 +5673,9 @@ func _capture_room_runtime_state(room_id: String) -> void:
 		# 🔴 本房有没有「建立过波次账」的显式标记。见 `_restore_room_runtime_state`
 		#    顶部注释：没这个标记就无法区分「真的只有 1 波」和「抓快照时还没刷怪」。
 		"wave_established": _room_wave_totals.has(room_id),
+		"boss_reinforcement_state": (
+			_boss_reinforcement_states.get(room_id, {}) as Dictionary
+		).duplicate(true),
 		"captured_at_msec": Time.get_ticks_msec(),
 	}
 
@@ -5208,6 +5708,9 @@ func _restore_room_runtime_state(room_id: String) -> void:
 		not snapshot_established_waves and _room_wave_totals.has(room_id)
 	)
 	room.visited = bool(state.get("visited", room.visited))
+	var boss_reinforcement_state := state.get("boss_reinforcement_state", {}) as Dictionary
+	if not boss_reinforcement_state.is_empty():
+		_boss_reinforcement_states[room_id] = boss_reinforcement_state.duplicate(true)
 	if not keep_live_combat_progress:
 		_reserved_room_spawns[room_id] = (state.get("reserved_spawns", []) as Array).duplicate(true)
 		room.cleared = bool(state.get("cleared", room.cleared))
@@ -5245,10 +5748,13 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			enemy.room_id = room_id
 			$ActiveEnemies.add_child(enemy)
 			enemy.configure_from_enemy_data(enemy_data)
+			enemy.set_meta("fate_kill_currency", int(enemy_data.get("fate_kill_currency", 0)))
+			enemy.state_changed.connect(_on_fate_enemy_state_changed.bind(enemy))
 			enemy.killed.connect(_on_enemy_killed)
 			enemy.escaped.connect(_on_enemy_escaped)
 			enemy.summon_requested.connect(_on_summon_requested)
 			enemy.boss_phase_changed.connect(_on_boss_phase_changed)
+			enemy.boss_activation_completed.connect(_on_boss_activation_completed)
 			enemy.health_changed.connect(_on_enemy_health_changed)
 			enemy.import_runtime_state(enemy_state)
 			live_enemies.append(enemy)

@@ -1055,6 +1055,8 @@ func _write_successful_extraction_carry_checkpoint() -> bool:
 	snapshot["player_position"] = []
 	snapshot["world_state"] = {}
 	snapshot["edge_states"] = {}
+	# 返航只带永久装备；已结算局的角色/世界/枪树临时命运不进入下一局。
+	snapshot.erase("fate_run_state")
 	snapshot[SUCCESSFUL_EXTRACTION_CARRY_KEY] = true
 	return BaseManager.set_active_run_checkpoint(snapshot, "expedition_success_return")
 
@@ -1089,6 +1091,7 @@ func _return_successful_extraction_to_facility() -> void:
 	GameManager.currency = 0
 	GameManager.currency_changed.emit(0)
 	FateCardGameBridge.reset_run_state()
+	reset_world_fate_state()
 	_refresh_loot_label()
 	_refresh_tower_hud()
 	_sync_player_input_lock()
@@ -2045,6 +2048,10 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	var spawn_plan := spec.get("enemy_spawn_plan", {}) as Dictionary
 	if not spawn_plan.is_empty():
 		record["enemy_spawn_plan"] = spawn_plan.duplicate(true)
+	# Boss 激活后并发增援：计划随房间记录下发，未声明的关卡行为逐字不变。
+	var boss_reinforcement := spec.get("boss_reinforcement_plan", {}) as Dictionary
+	if not boss_reinforcement.is_empty():
+		record["boss_reinforcement_plan"] = boss_reinforcement.duplicate(true)
 	# 房间级统一掉落计划（04 §22.7）：同样没写就不落字段，运行时见空即回退覆盖链下一级。
 	var reward_plan := spec.get("reward_plan", {}) as Dictionary
 	if not reward_plan.is_empty():
@@ -3745,6 +3752,7 @@ func _discard_run_carry_for_retreat() -> Dictionary:
 		_inventory_ui.set_quick_item_module(_quick_inventory)
 	_refresh_quick_item_hud()
 	FateCardGameBridge.reset_run_state()
+	reset_world_fate_state()
 	return {
 		"inventory_slots": discarded_inventory,
 		"weapons": discarded_weapons.size(),
@@ -4867,6 +4875,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"tower_module_shell": bool(record.get("tower_module_shell", false)),
 		"open_wall_directions": record.get("open_wall_directions", []),
 		"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
+		"boss_reinforcement_plan": record.get("boss_reinforcement_plan", {}),
 		"spawn_placements": record.get("spawn_placements", []),
 		"encounter": record.get("encounter", {}),
 		"spawn_boxes_only": bool(record.get("spawn_boxes_only", false)),
@@ -5770,6 +5779,7 @@ func _refresh_physical_location_authority(force := false) -> void:
 	if player == null:
 		return
 	var floor_index := _physical_floor_index()
+	_expire_temporary_room_keys(str(100 - floor_index))
 	# 收音机楼层权限直接跟随物理位置权威，不能依赖房间 Area 是否已经切换；
 	# 也不能放在下面的早退之后，否则同层强制刷新不会修正初始状态。
 	_set_base99_radio_floor_active(floor_index)

@@ -1,0 +1,43 @@
+{
+  "status": "implemented_and_targeted_test_passed_with_explicit_design_and_integration_gaps",
+  "owner": "weapons",
+  "modified_files": ["src/weapons/FateCardEngine.gd", "src/weapons/WeaponAssemblyTree.gd", "src/weapons/AssemblyNode.gd", "src/combat3d/WeaponModel3D.gd", "src/combat3d/Projectile3D.gd", "src/enemy3d/Enemy3D.gd", "tests/verification/verify_fate_weapon_completion.gd", "tests/verification/verify_fate_weapon_completion.tscn"],
+  "interfaces": [
+    {"owner":"角色", "contract":"提供get_fate_critical_chance_bonus()->float。主枪/副枪/复制波发射实时读取，携枪/炮台继承发射快照。set_damage_multiplier(float)同时覆盖主枪与附枪派生发射，不能在Player重复乘。", "tested":"专项替身返回1.0，主副枪均实际critical=true；附枪damage_multiplier=0.92路径已运行。"},
+    {"owner":"世界/主助手", "contract":"移除Dungeon3D击杀回调中的weapon_tree.add_crit_on_kill_stack(1)，不得无条件force_critical。旧add_crit_on_kill_stack目前故意不执行以阻止来源泄漏。", "replacement":"Projectile3D.fate_behavior.source_weapon_tree/source_weapon传来源；Enemy3D.take_projectile_damage在实际致死后调用来源tree.record_projectile_kill(was_critical)，DOT归属也传来源且critical=false。"},
+    {"owner":"主助手/Bridge", "contract":"FateCardEngine.apply_card(card, tree, target_nodes)已有真实来源入口。魔术师[target_gun, source_gun]，战车[target_bullet, source_gun]；来源完整computed_stats和弹种标签快照独立保存在附枪节点，绝不聚合到主枪。", "gap":"当前Bridge不提供来源选择UI/事务；不传来源仍以目标枪真实属性快照生成附枪，并非独立库存枪的转移/消耗。若设计要求选择库存枪，需补Bridge/WeaponInstance原子事务，不能宣称这部分完成。"},
+    {"owner":"主助手/Bridge", "contract":"寄生[target_bullet, source_attachment]；省略source时仅从当前树选择真实已装配件。缺失真实配件或只有静态属性时返回失败。当前支持pull_strength、bullet_count、copy_chance对应现有吸引/投射物/复制行为。", "gap":"瞄具/弹匣/枪托仅静态属性，如何在命中或换弹事件触发尚无设计；当前明确拒绝，不再伪造两枚35%分裂弹。源配件为快照，不执行背包转移。"},
+    {"owner":"主助手", "contract":"登记tests/verification/verify_fate_weapon_completion.tscn，更新文档及现有verify_tarot_fate_runtime的配件前置条件。该旧用例无配件也要求所有卡success，已不符合真实来源拒绝语义。"},
+    {"owner":"武器", "contract":"WeaponModel3D.refund_projectile_ammo(count, source_tree)只给来源仍匹配的枪回填，换枪不误填新枪。Enemy3D.apply_fate_element(element, params, weapon_damage, source_tree, attacker)与get_fate_status_snapshot()为元素消费者/诊断接口。"}
+  ],
+  "implemented": [
+    "力量正逆百分比伤害、显式穿盾和盾面倍率；王牌/国王体积、伤害、bullet_speed倍率；逆超频单发倍率",
+    "真实附枪属性和标签隔离；主副交替与降速；携枪逆位仅首次命中一次射击；角色伤害和暴击覆盖派生发射",
+    "换弹首发2.5、弹匣0.8、第七发命中敌人爆炸；装配重配读取tree.current_ammo不满弹",
+    "成长归属武器树，damage_per_hit=0.15与scale_per_hit=0.12分别消费，最大5层；未命中成长，下一次实际命中消费",
+    "恶魔只改附枪，360/90度、附枪增伤、射速额外时序及后坐倍率；高塔吸引与0.2秒；最远可见射线排墙",
+    "真实配件命中/换弹完成事件、3秒冷却；移动炮台；返航倍率固定不连乘、去程0.7、返程2.2；折返再次命中、零伤回程与回填",
+    "复制波真实延迟或反向；火冰毒独立状态与伤害计时，冰冻、精英减半、35%减速、五层毒、三秒爆发",
+    "王后必须持牌且按来源枪判定；正位击杀下一次射击必暴；逆位只有暴击击杀后三次射击1.3伤，不强制暴击"
+  ],
+  "design_notes_and_limits": [
+    "过热根据Presets现有每次射击累计受击倍率文字实现pow(overheat_penalty,shots)，无自行添加冷却或上限；数值增长很快，若需要封顶须设计补参数。",
+    "正毒持续时间Presets/Catalog未定义，保留旧执行器3秒默认，不宣称3秒是新冻结设计。",
+    "恶魔逆位patch仍继承正位damage_scale=1.3；按用户指示消费现有Catalog合并值，不擅自取消。",
+    "14正文成长描述15%体积与Presets scale_per_hit=0.12不一致，按现有参数消费12%，需主助手文档说明。",
+    "真实库存来源选择/消耗未越权修改Bridge；纯静态配件触发规则待明确。因此不能标成22张所有跨owner与设计缺口完全关闭。",
+    "成长、过热、王后临时奖励目前以运行WeaponAssemblyTree持有。Player若在切枪重建树，应另行评估是否需要保留临时战斗状态；未更改存档schema或WeaponInstance。"
+  ],
+  "tests": {
+    "entry":"res://tests/verification/verify_fate_weapon_completion.tscn",
+    "log":"outputs/fate_completion_20261008/weapons/verification_final.log",
+    "success_marker":"FATE_WEAPON_COMPLETION_OK",
+    "exit_code":0,
+    "script_errors":0,
+    "isolation":"启动Godot前APPDATA/LOCALAPPDATA均指向outputs/fate_completion_20261008/weapons下独立目录",
+    "coverage":"真实Projectile发射数量/方向/伤害、真实Enemy HP/冻结/毒火tick/吸引速度、换弹完成、回填、来源击杀、射线墙遮挡；未运行整套runner，未触碰真实用户档",
+    "documentation_gate":"执行失败：已有CHANGELOG断链、既有未登记专项与新增专项待主助手登记、当前python缺openpyxl",
+    "asset_naming_gate":"执行失败：既有14个版本化资产、3个版本目录及引用债务；本批未新增或改动美术资产"
+  },
+  "commit":"未提交；保留既有逆位文字修复提交；其他owner工作区变更未修改或回退"
+}

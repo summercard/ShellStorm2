@@ -145,6 +145,8 @@ var _mobile_shoot_active := false
 var _mobile_shoot_was_active := false
 var _mobile_input_available := false
 var _backpack_model: Node3D = null
+var _backpack_follow: Node3D = null
+const BACKPACK_WORN_SCALE := 0.45
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
 var _fire_animation_remaining := 0.0
@@ -172,7 +174,11 @@ var _debug_scale_initialized := false
 ## 仅作用于镜头姿态的临时偏移量；玩家朝向/移动方向/战斗数据完全不受影响。
 var _debug_camera_trailing_offset_m := 0.0
 var _debug_camera_yaw_offset_deg := 0.0
-var _character_fate := {
+var _fate_damage_source: WeakRef
+var _fate_damage_source_frame := -1
+var _fate_weapon_trees: Dictionary = {}
+var _fate_weapon_model_states: Dictionary = {}
+const CHARACTER_FATE_DEFAULTS := {
 	"move_speed_multiplier": 1.0,
 	"dash_cooldown_multiplier": 1.0,
 	"damage_taken_multiplier": 1.0,
@@ -183,7 +189,28 @@ var _character_fate := {
 	"first_hit_ready": false,
 	"last_stand_charges": 0,
 	"room_ammo_ratio": 0.0,
+	"max_hp_delta": 0,
+	"critical_chance_bonus": 0.0,
+	"dash_distance_multiplier": 1.0,
+	"dash_invulnerability_multiplier": 1.0,
+	"dash_invulnerability_bonus": 0.0,
+	"reflect_ratio": 0.0,
+	"room_damage": 0,
+	"clear_heal": 0,
+	"elite_engage_shield": 0,
+	"shield": 0,
+	"first_reload_speed": 1.0,
+	"first_reload_ready": false,
+	"room_hit_count": 0,
+	"following_guards": [],
+	"last_stands": [],
+	"blessings": [],
+	"kill_rules": [],
+	"entered_rooms": {},
+	"cleared_rooms": {},
+	"elite_encounters": {},
 }
+var _character_fate: Dictionary = CHARACTER_FATE_DEFAULTS.duplicate(true)
 
 @onready var avatar: PlayerAvatar3D = $Avatar3D
 @onready var camera: Camera3D = $Camera3D
@@ -951,11 +978,20 @@ func _recover_from_invalid_fall_if_needed() -> void:
 
 
 func get_dash_speed() -> float:
-	return DASH_SPEED
+	return DASH_SPEED * float(_character_fate.get("dash_distance_multiplier", 1.0))
 
 
 func get_dash_duration() -> float:
 	return DASH_DURATION
+
+
+func begin_fate_dash_invulnerability() -> void:
+	is_invincible = true
+	_invincible_remaining = maxf(_invincible_remaining, DASH_DURATION * float(_character_fate["dash_invulnerability_multiplier"]) + float(_character_fate["dash_invulnerability_bonus"]))
+
+
+func get_fate_critical_chance_bonus() -> float:
+	return float(_character_fate["critical_chance_bonus"])
 
 
 func get_state_machine_state() -> String:
@@ -990,22 +1026,51 @@ func is_low_health() -> bool:
 	return current_hp > 0 and float(current_hp) / float(maxi(1, max_hp)) <= 0.30
 
 
-func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO, knockback_override := false, knockback_strength := 0.0) -> void:
-	if current_hp <= 0 or is_invincible:
+func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO, knockback_override := false, knockback_strength := 0.0, fate_health_loss := false) -> void:
+	var damage_source: Node3D = null
+	if _fate_damage_source != null and _fate_damage_source_frame == Engine.get_process_frames():
+		damage_source = _fate_damage_source.get_ref() as Node3D
+	_fate_damage_source = null
+	if current_hp <= 0 or (is_invincible and not fate_health_loss) or amount <= 0:
 		return
 	var overheat_multiplier := weapon_tree.get_overheat_penalty() if weapon_tree != null else 1.0
 	var fate_multiplier := float(_character_fate.get("damage_taken_multiplier", 1.0))
-	if bool(_character_fate.get("first_hit_ready", false)):
+	if not fate_health_loss and bool(_character_fate.get("first_hit_ready", false)):
 		fate_multiplier *= float(_character_fate.get("first_hit_multiplier", 1.0))
 		_character_fate["first_hit_ready"] = false
-	_last_damage_amount = maxi(1, int(round(float(amount) * overheat_multiplier * fate_multiplier)))
+	var hit_index := int(_character_fate["room_hit_count"])
+	for guard: Dictionary in _character_fate["following_guards"]:
+		if hit_index > 0 and hit_index <= int(guard["count"]):
+			fate_multiplier *= float(guard["multiplier"])
+	if not fate_health_loss:
+		_character_fate["room_hit_count"] = hit_index + 1
+	_last_damage_amount = amount if fate_health_loss else maxi(1, int(round(float(amount) * overheat_multiplier * fate_multiplier)))
+	var absorbed := 0 if fate_health_loss else mini(_last_damage_amount, int(_character_fate["shield"]))
+	_character_fate["shield"] = int(_character_fate["shield"]) - absorbed
+	_last_damage_amount -= absorbed
+	var actual_damage := mini(current_hp, _last_damage_amount)
 	if hit_direction.length_squared() > 0.001:
 		_last_hit_direction = Vector3(hit_direction.x, 0.0, hit_direction.z).normalized()
 	var next_hp := current_hp - _last_damage_amount
-	if next_hp <= 0 and int(_character_fate.get("last_stand_charges", 0)) > 0:
-		_character_fate["last_stand_charges"] = int(_character_fate["last_stand_charges"]) - 1
-		next_hp = 1
+	if next_hp <= 0:
+		var rescues: Array = _character_fate["last_stands"]
+		for index in range(rescues.size()):
+			var rescue: Dictionary = rescues[index]
+			var cost := int(rescue["currency_cost"])
+			if cost > 0 and not GameManager.spend_currency(cost):
+				continue
+			next_hp = maxi(1, roundi(max_hp * float(rescue["heal_ratio"])))
+			rescues.remove_at(index)
+			_character_fate["last_stand_charges"] = rescues.size()
+			break
 	current_hp = maxi(0, next_hp)
+	var reflected := 0 if fate_health_loss else roundi(actual_damage * float(_character_fate["reflect_ratio"]))
+	if reflected > 0 and is_instance_valid(damage_source) and damage_source != self:
+		if damage_source.has_method("take_projectile_damage"):
+			var reflection_tags: Array[String] = []
+			damage_source.call("take_projectile_damage", reflected, false, -hit_direction, reflection_tags, {"fate_reflection": true}, self)
+		elif damage_source.has_method("take_damage"):
+			damage_source.call("take_damage", reflected)
 	_force_leave_chair()
 	if AudioManager != null:
 		AudioManager.play_player_hit_sfx()
@@ -1032,6 +1097,8 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 
 
 func notify_attacked_by(source: Node3D) -> void:
+	_fate_damage_source = weakref(source) if is_instance_valid(source) else null
+	_fate_damage_source_frame = Engine.get_process_frames()
 	_last_damage_source_snapshot.clear()
 	_last_damage_source_at_msec = Time.get_ticks_msec()
 	if source == null or not is_instance_valid(source) or not source.has_method("get_enemy_data"):
@@ -1060,49 +1127,173 @@ func heal(amount: int) -> void:
 
 func apply_character_fate_modifier(effect: Dictionary) -> Dictionary:
 	var modifier := str(effect.get("modifier", ""))
+	if int(effect.get("action", -1)) == FateCard.EffectAction.GRANT_RANDOM_CARD:
+		modifier = "kill_card"
+	elif int(effect.get("action", -1)) == FateCard.EffectAction.BLESS_DEAD:
+		modifier = "survival_blessing"
 	match modifier:
+		"kill_card":
+			var rule := effect.duplicate(true)
+			rule["kills"] = 0
+			_character_fate["kill_rules"].append(rule)
+		"survival_blessing":
+			var rule := effect.duplicate(true)
+			rule["elapsed"] = 0.0
+			rule["stacks"] = 0
+			_character_fate["blessings"].append(rule)
 		"max_hp":
-			var amount := maxi(0, int(effect.get("amount", 0)))
-			max_hp += amount
-			current_hp = mini(max_hp, current_hp + amount)
+			var previous_max := max_hp
+			var amount := int(effect.get("amount", 0))
+			max_hp = maxi(1, max_hp + amount)
+			_character_fate["max_hp_delta"] = int(_character_fate["max_hp_delta"]) + max_hp - previous_max
+			current_hp = mini(max_hp, current_hp + maxi(0, int(effect.get("heal", amount))))
 			hp_changed.emit(current_hp, max_hp)
 		"move_speed":
 			_character_fate["move_speed_multiplier"] = float(_character_fate["move_speed_multiplier"]) * float(effect.get("multiplier", 1.0))
+			_character_fate["dash_invulnerability_bonus"] += float(effect.get("dash_invulnerability_bonus", 0.0))
 		"dash_cooldown":
 			_character_fate["dash_cooldown_multiplier"] = float(_character_fate["dash_cooldown_multiplier"]) * float(effect.get("multiplier", 1.0))
+			_character_fate["dash_distance_multiplier"] *= float(effect.get("distance_multiplier", 1.0))
+			_character_fate["dash_invulnerability_multiplier"] *= float(effect.get("invulnerability_multiplier", 1.0))
 		"damage_taken":
 			_character_fate["damage_taken_multiplier"] = float(_character_fate["damage_taken_multiplier"]) * float(effect.get("multiplier", 1.0))
+			_character_fate["reflect_ratio"] += float(effect.get("reflect_ratio", 0.0))
 		"weapon_damage":
 			_character_fate["weapon_damage_multiplier"] = float(_character_fate["weapon_damage_multiplier"]) * float(effect.get("multiplier", 1.0))
+			_character_fate["critical_chance_bonus"] += float(effect.get("crit_chance_bonus", 0.0))
 			set_damage_multiplier("fate_moon_power", float(_character_fate["weapon_damage_multiplier"]))
 		"room_heal":
-			_character_fate["room_heal"] = int(_character_fate["room_heal"]) + int(effect.get("amount", 0))
+			var amount := int(effect.get("amount", 0))
+			_character_fate["room_heal"] += maxi(0, amount)
+			_character_fate["room_damage"] += maxi(0, -amount)
+			_character_fate["clear_heal"] += int(effect.get("clear_heal", 0))
 		"elite_heal":
 			_character_fate["elite_heal"] = int(_character_fate["elite_heal"]) + int(effect.get("amount", 0))
+			_character_fate["elite_engage_shield"] += int(effect.get("elite_engage_shield", 0))
 		"first_hit_guard":
 			_character_fate["first_hit_multiplier"] = float(_character_fate["first_hit_multiplier"]) * float(effect.get("multiplier", 1.0))
 			_character_fate["first_hit_ready"] = true
+			if effect.has("following_hit_count"):
+				_character_fate["following_guards"].append({"count": int(effect["following_hit_count"]), "multiplier": float(effect["following_hit_multiplier"])})
 		"last_stand":
-			_character_fate["last_stand_charges"] = int(_character_fate["last_stand_charges"]) + int(effect.get("charges", 1))
+			for _charge in range(int(effect.get("charges", 1))):
+				_character_fate["last_stands"].append({"currency_cost": int(effect.get("currency_cost", 0)), "heal_ratio": float(effect.get("heal_ratio", 0.0))})
+			_character_fate["last_stand_charges"] = _character_fate["last_stands"].size()
 		"room_ammo":
 			_character_fate["room_ammo_ratio"] = float(_character_fate["room_ammo_ratio"]) + float(effect.get("ratio", 0.0))
+			_character_fate["first_reload_speed"] *= float(effect.get("first_reload_speed", 1.0))
 		_:
 			return {"success": false, "message": "未知月亮命运效果：" + modifier}
 	return {"success": true, "message": "月亮命运已写入角色本局状态"}
 
 
-func on_fate_room_entered() -> Dictionary:
+func on_fate_room_entered(room_id: String = "") -> Dictionary:
+	if not room_id.is_empty():
+		if _character_fate["entered_rooms"].has(room_id):
+			return {"healed": 0, "ammo_added": 0, "duplicate": true}
+		_character_fate["entered_rooms"][room_id] = true
 	_character_fate["first_hit_ready"] = float(_character_fate.get("first_hit_multiplier", 1.0)) < 1.0
-	var healed := int(_character_fate.get("room_heal", 0))
-	if healed > 0:
-		heal(healed)
+	_character_fate["room_hit_count"] = 0
+	_character_fate["first_reload_ready"] = float(_character_fate["first_reload_speed"]) > 1.0
+	var before_hp := current_hp
+	heal(int(_character_fate["room_heal"]))
+	var healed := current_hp - before_hp
+	var loss := int(_character_fate["room_damage"])
+	if loss > 0:
+		take_damage(loss, false, Vector3.ZERO, false, 0.0, true)
 	var ammo_added := 0
 	if weapon != null and is_instance_valid(weapon):
+		var before_ammo := weapon.current_ammo
 		ammo_added = int(ceil(float(weapon.magazine_size) * float(_character_fate.get("room_ammo_ratio", 0.0))))
 		if ammo_added > 0:
 			weapon.current_ammo = mini(weapon.magazine_size, weapon.current_ammo + ammo_added)
+			ammo_added = weapon.current_ammo - before_ammo
+			weapon_tree.current_ammo = weapon.current_ammo
 			weapon.ammo_changed.emit(weapon.current_ammo, weapon.magazine_size)
-	return {"healed": healed, "ammo_added": ammo_added}
+	return {"healed": healed, "damage": loss, "ammo_added": ammo_added}
+
+
+func on_fate_room_cleared(room_id: String = "") -> int:
+	if not room_id.is_empty():
+		if _character_fate["cleared_rooms"].has(room_id):
+			return 0
+		_character_fate["cleared_rooms"][room_id] = true
+	var before := current_hp
+	heal(int(_character_fate["clear_heal"]))
+	return current_hp - before
+
+
+func on_fate_elite_combat_started(encounter_id: String = "") -> int:
+	if not encounter_id.is_empty():
+		if _character_fate["elite_encounters"].has(encounter_id):
+			return 0
+		_character_fate["elite_encounters"][encounter_id] = true
+	var amount := int(_character_fate["elite_engage_shield"])
+	_character_fate["shield"] += amount
+	return amount
+
+
+func update_fate_survival(delta: float) -> void:
+	if current_hp <= 0 or delta <= 0.0:
+		return
+	var ratio := float(current_hp) / maxi(1, max_hp)
+	var rules: Array = _character_fate["blessings"]
+	for index in range(rules.size()):
+		var rule: Dictionary = rules[index]
+		var threshold := float(rule.get("hp_threshold", 0.3))
+		var eligible := ratio > threshold if str(rule.get("threshold_mode", "below")) == "above" else ratio < threshold
+		if not eligible:
+			rule["elapsed"] = 0.0
+			continue
+		var limit := maxi(1, int(rule.get("max_stacks", 3)))
+		if int(rule["stacks"]) >= limit:
+			continue
+		rule["elapsed"] = float(rule["elapsed"]) + delta
+		var duration := maxf(0.01, float(rule.get("survive_duration", 30.0)))
+		while float(rule["elapsed"]) >= duration and int(rule["stacks"]) < limit:
+			rule["elapsed"] -= duration
+			rule["stacks"] += 1
+		set_damage_multiplier("fate_bless_dead_%d" % index, 1.0 + float(rule.get("damage_bonus", 0.1)) * int(rule["stacks"]))
+
+
+func on_fate_kill_recorded() -> Array[Dictionary]:
+	var results: Array[Dictionary] = []
+	var bridge := get_tree().get_first_node_in_group("fate_cards")
+	# 固定本次规则列表，新获得的愚者从下一次击杀开始计数。
+	var rules: Array = (_character_fate["kill_rules"] as Array).duplicate()
+	for rule: Dictionary in rules:
+		rule["kills"] = int(rule["kills"]) + 1
+		var threshold := maxi(1, int(rule.get("kill_threshold", 10)))
+		if int(rule["kills"]) % threshold != 0:
+			continue
+		var probability := float(rule.get("chance", rule.get("grant_probability", 0.5)))
+		if randf() >= probability:
+			continue
+		if bridge != null:
+			results.append(bridge.call("grant_random_card_from_character", int(rule.get("currency_cost", 0))) as Dictionary)
+	return results
+
+
+func reset_character_fate_state() -> void:
+	max_hp = maxi(1, max_hp - int(_character_fate["max_hp_delta"]))
+	current_hp = mini(current_hp, max_hp)
+	_character_fate = CHARACTER_FATE_DEFAULTS.duplicate(true)
+	_fate_damage_source = null
+	for tree: WeaponAssemblyTree in _fate_weapon_trees.values():
+		if not is_instance_valid(tree):
+			continue
+		for key in ["growth_stacks", "_overheat_shots", "_crit_damage_shots", "_crit_on_kill_stack"]:
+			tree.set(key, 0)
+		tree.set("_attachment_ready_at", 0.0)
+	_fate_weapon_model_states.clear()
+	if is_instance_valid(weapon):
+		weapon.set("_reload_first_shot", false)
+		weapon.set("_fire_sequence", 0)
+	for source: String in _named_damage_multipliers.keys():
+		if source.begins_with("fate_") or source == "bless_dead":
+			_named_damage_multipliers.erase(source)
+	_apply_named_damage_multipliers()
+	hp_changed.emit(current_hp, max_hp)
 
 
 func on_fate_elite_killed() -> int:
@@ -1114,6 +1305,135 @@ func on_fate_elite_killed() -> int:
 
 func get_character_fate_snapshot() -> Dictionary:
 	return _character_fate.duplicate(true)
+
+
+static func is_fate_snapshot_number(value: Variant, minimum: float, maximum: float, integer := false) -> bool:
+	return (value is int or value is float) and is_finite(float(value)) and float(value) >= minimum and float(value) <= maximum and (not integer or float(value) == floor(float(value)))
+
+
+## JSON 边界只接受默认模板声明的类型；缺字段兼容，错误类型/负计数拒绝。
+static func read_fate_snapshot_fields(value: Variant, defaults: Dictionary, signed_fields: Array = []) -> Dictionary:
+	if not value is Dictionary:
+		return {}
+	var result := defaults.duplicate(true)
+	for key in defaults:
+		if not value.has(key):
+			continue
+		var item: Variant = value[key]
+		var sample: Variant = defaults[key]
+		if sample is int or sample is float:
+			if not is_fate_snapshot_number(item, -2147483647 if key in signed_fields else 0, 2147483647, sample is int):
+				return {}
+			result[key] = int(item) if sample is int else float(item)
+		elif typeof(item) != typeof(sample):
+			return {}
+		else:
+			result[key] = item.duplicate(true) if item is Array or item is Dictionary else item
+	return result
+
+
+func clear_fate_weapon_cache_for_restore() -> void:
+	# 仅在装备槽卸空后使用，避免同进程重载复用旧装配或泄漏未入树的副槽树。
+	for tree: WeaponAssemblyTree in _fate_weapon_trees.values():
+		if is_instance_valid(tree) and tree != weapon_tree:
+			tree.free()
+	_fate_weapon_trees.clear()
+	_fate_weapon_model_states.clear()
+
+
+func export_fate_snapshot() -> Dictionary:
+	_sync_equipped_weapon_instance()
+	var weapons: Dictionary = {}
+	for instance: WeaponInstance in equipped_weapon_slots:
+		if instance == null:
+			continue
+		var tree := _fate_weapon_trees.get(instance.weapon_instance_id) as WeaponAssemblyTree
+		if not is_instance_valid(tree):
+			continue
+		var state: Dictionary = {}
+		for key in ["growth_stacks", "_overheat_shots", "_crit_damage_shots", "_crit_on_kill_stack"]:
+			state[key] = tree.get(key)
+		state["attachment_cooldown_remaining"] = maxf(0.0, float(tree.get("_attachment_ready_at")) - Time.get_ticks_msec() / 1000.0)
+		state["model"] = _fate_weapon_model_states.get(instance.weapon_instance_id, {}).duplicate(true)
+		weapons[instance.weapon_instance_id] = state
+	return {"version": 1, "character": _character_fate.duplicate(true), "weapons": weapons}
+
+
+## 装备实例先恢复；仅按实际槽内永久 ID 恢复运行树，绝不创建幽灵装备。
+func import_fate_snapshot(value: Variant) -> bool:
+	reset_character_fate_state()
+	if not value is Dictionary or value.get("version", 0) != 1:
+		return false
+	var character := read_fate_snapshot_fields(value.get("character"), CHARACTER_FATE_DEFAULTS, ["max_hp_delta"])
+	if character.is_empty() or not value.get("weapons", {}) is Dictionary:
+		return false
+	for key in ["move_speed_multiplier", "dash_cooldown_multiplier", "dash_distance_multiplier", "dash_invulnerability_multiplier", "first_reload_speed"]:
+		if float(character[key]) <= 0.0:
+			return false
+	for key in ["entered_rooms", "cleared_rooms", "elite_encounters"]:
+		for id in character[key]:
+			if not id is String or id.is_empty() or character[key][id] != true:
+				return false
+	var rule_defaults := {
+		"following_guards": {"count": 0, "multiplier": 1.0},
+		"last_stands": {"currency_cost": 0, "heal_ratio": 0.0},
+		"blessings": {"action": 0, "hp_threshold": 0.3, "threshold_mode": "below", "survive_duration": 30.0, "damage_bonus": 0.1, "max_stacks": 3, "elapsed": 0.0, "stacks": 0, "orientation": "UPRIGHT"},
+		"kill_rules": {"action": 0, "kill_threshold": 10, "grant_probability": 0.5, "chance": 0.5, "currency_cost": 0, "kills": 0, "orientation": "UPRIGHT"},
+	}
+	for key in rule_defaults:
+		var rules: Array = []
+		for row in character[key]:
+			var rule := read_fate_snapshot_fields(row, rule_defaults[key])
+			if rule.is_empty():
+				return false
+			if key == "blessings" and (rule["threshold_mode"] not in ["above", "below"] or rule["survive_duration"] <= 0 or rule["stacks"] > rule["max_stacks"] or rule["hp_threshold"] > 1):
+				return false
+			if key == "kill_rules":
+				if rule["kill_threshold"] < 1 or rule["chance"] > 1 or rule["grant_probability"] > 1:
+					return false
+				if not row.has("chance"):
+					rule.erase("chance")
+			if key == "last_stands" and rule["heal_ratio"] > 1:
+				return false
+			rules.append(rule)
+		character[key] = rules
+	character["last_stand_charges"] = character["last_stands"].size()
+	_character_fate = character
+	max_hp = maxi(1, max_hp + int(character["max_hp_delta"]))
+	set_damage_multiplier("fate_moon_power", float(character["weapon_damage_multiplier"]))
+	for index in character["blessings"].size():
+		var rule: Dictionary = character["blessings"][index]
+		set_damage_multiplier("fate_bless_dead_%d" % index, 1.0 + float(rule["damage_bonus"]) * int(rule["stacks"]))
+	for instance: WeaponInstance in equipped_weapon_slots:
+		if instance == null:
+			continue
+		var raw: Variant = value.get("weapons", {}).get(instance.weapon_instance_id, {})
+		var state := read_fate_snapshot_fields(raw, {"growth_stacks": 0, "_overheat_shots": 0, "_crit_damage_shots": 0, "_crit_on_kill_stack": 0, "attachment_cooldown_remaining": 0.0, "model": {}})
+		if state.is_empty():
+			continue
+		var model := read_fate_snapshot_fields(state["model"], {"_reload_first_shot": false, "_fire_sequence": 0})
+		if model.is_empty():
+			continue
+		var tree := _fate_weapon_trees.get(instance.weapon_instance_id) as WeaponAssemblyTree
+		if not is_instance_valid(tree):
+			tree = instance.build_runtime_tree()
+			if tree == null:
+				continue
+			_fate_weapon_trees[instance.weapon_instance_id] = tree
+			add_child(tree)
+		var stats := tree.get_computed_stats()
+		var bullet := tree.root.slots.get(AssemblyNode.SlotType.BULLET) as AssemblyNode
+		var growth: Dictionary = bullet.get_computed_stats() if bullet != null else {}
+		tree.growth_stacks = mini(int(state["growth_stacks"]), int(growth.get("growth_max_stacks", 5))) if bool(growth.get("size_growth", false)) else 0
+		tree.set("_overheat_shots", int(state["_overheat_shots"]))
+		tree.set("_crit_damage_shots", mini(int(state["_crit_damage_shots"]), int(stats.get("crit_kill_bonus_shots", 0))))
+		tree.set("_crit_on_kill_stack", mini(int(state["_crit_on_kill_stack"]), WeaponAssemblyTree.MAX_CRIT_STACK) if bool(stats.get("crit_on_kill", false)) else 0)
+		tree.set("_attachment_ready_at", Time.get_ticks_msec() / 1000.0 + minf(float(state["attachment_cooldown_remaining"]), float(stats.get("attachment_cooldown", 0.0))))
+		_fate_weapon_model_states[instance.weapon_instance_id] = model
+		if instance == equipped_weapon_instance and is_instance_valid(weapon):
+			for key in model:
+				weapon.set(key, model[key])
+	return true
 
 
 func request_dash() -> void:
@@ -1197,7 +1517,11 @@ func equip_weapon(gun_id: String, bullet_id: String) -> bool:
 		if bullet != null:
 			bullet.free()
 		return false
-	weapon_tree.clear_assembly(false)
+	_sync_equipped_weapon_instance()
+	_detach_fate_weapon_tree()
+	_loading_weapon_instance = true
+	equipped_weapon_instance = null
+	_ensure_weapon_tree()
 	if not weapon_tree.set_root(gun):
 		gun.free()
 		bullet.free()
@@ -1209,6 +1533,7 @@ func equip_weapon(gun_id: String, bullet_id: String) -> bool:
 	_sync_weapon_from_tree()
 	equipped_weapon_instance = WeaponInstance.from_runtime_tree(weapon_tree)
 	equipped_weapon_slots[active_weapon_slot] = equipped_weapon_instance
+	_loading_weapon_instance = false
 	_sync_equipped_weapon_instance()
 	_refresh_stowed_weapon_model(true)
 	weapon_instance_changed.emit(get_weapon_presentation_snapshot())
@@ -1226,6 +1551,7 @@ func _ensure_weapon_model() -> void:
 		weapon = scene.instantiate() as WeaponModel3D
 		weapon.gun_id = ""
 		weapon.render_layers = 2
+		weapon.character_authored_reload = str(avatar.get_meta("assembly_version", "")) == "v021"
 		avatar.weapon_socket.add_child(weapon)
 		weapon.ammo_changed.connect(_on_weapon_ammo_changed)
 		weapon.loadout_changed.connect(_on_weapon_loadout_changed)
@@ -1273,6 +1599,26 @@ func _sync_weapon_from_tree() -> void:
 
 func _on_weapon_tree_stats_changed(_stats: Dictionary) -> void:
 	_sync_weapon_from_tree()
+
+
+func owns_fate_source_node(source: AssemblyNode) -> bool:
+	for instance: WeaponInstance in equipped_weapon_slots:
+		if instance == null:
+			continue
+		var tree := _fate_weapon_trees.get(instance.weapon_instance_id) as WeaponAssemblyTree
+		if is_instance_valid(tree) and tree.root != null and (source == tree.root or source in tree.root.get_all_descendants()):
+			return true
+	return false
+
+
+func _detach_fate_weapon_tree() -> void:
+	if weapon_tree != null:
+		if weapon_tree.tree_changed.is_connected(_sync_weapon_from_tree):
+			weapon_tree.tree_changed.disconnect(_sync_weapon_from_tree)
+		if weapon_tree.stats_changed.is_connected(_on_weapon_tree_stats_changed):
+			weapon_tree.stats_changed.disconnect(_on_weapon_tree_stats_changed)
+	weapon_tree = WeaponAssemblyTree.new()
+	add_child(weapon_tree)
 
 
 func get_weapon_tree() -> WeaponAssemblyTree:
@@ -1473,6 +1819,18 @@ func remove_attachment_from_weapon_slot(weapon_slot_index: int, slot_type: int) 
 
 
 func _refresh_weapon_slot_after_instance_change(slot_index: int, instance: WeaponInstance) -> bool:
+	var cached := _fate_weapon_trees.get(instance.weapon_instance_id) as WeaponAssemblyTree
+	if is_instance_valid(cached):
+		var combat_state := {}
+		for key in ["growth_stacks", "_overheat_shots", "_crit_damage_shots", "_crit_on_kill_stack", "_attachment_ready_at"]:
+			combat_state[key] = cached.get(key)
+		_loading_weapon_instance = true
+		var loaded := instance.load_into_runtime_tree(cached)
+		_loading_weapon_instance = false
+		if not loaded:
+			return false
+		for key: String in combat_state:
+			cached.set(key, combat_state[key])
 	equipped_weapon_slots[slot_index] = instance
 	if slot_index == active_weapon_slot:
 		if not _load_active_weapon_instance(instance):
@@ -1615,6 +1973,9 @@ func is_player_inside_facility() -> bool:
 
 
 func _refresh_backpack_model() -> void:
+	if is_instance_valid(_backpack_follow):
+		_backpack_follow.queue_free()
+	_backpack_follow = null
 	if _backpack_model != null and is_instance_valid(_backpack_model):
 		_backpack_model.queue_free()
 	_backpack_model = null
@@ -1628,6 +1989,23 @@ func _refresh_backpack_model() -> void:
 	_backpack_model.set_meta("equipment_item_id", str(equipped_backpack_item.get("id", "")))
 	_backpack_model.set_meta("extra_slots", int(equipped_backpack_item.get("extra_slots", 0)))
 	socket.add_child(_backpack_model)
+	# 模型仍由BackpackSocket持有；只让背负视觉继承躯干动作，不改变挂点或源资产。
+	var sizes := {2: Vector3(0.56, 0.60, 0.28), 4: Vector3(0.66, 0.74, 0.33), 8: Vector3(0.76, 0.88, 0.38)}
+	var size: Vector3 = sizes.get(int(equipped_backpack_item.get("extra_slots", 2)), sizes[2])
+	_backpack_follow = Node3D.new()
+	_backpack_follow.name = "BackpackBodyFollow"
+	avatar.body.add_child(_backpack_follow)
+	# BodyJoint 是背包真正的动作父级；模型仍由BackpackSocket持有。
+	# 该缩放只属于角色背负表现，世界掉落和UI继续使用源尺寸。
+	const WORN_SCALE := 0.68
+	_backpack_model.scale = Vector3.ONE * WORN_SCALE
+	_backpack_follow.position = Vector3(0.0, 0.04, -0.20 - size.z * WORN_SCALE * 0.5 - 0.015)
+	_sync_backpack_body_follow()
+
+func _sync_backpack_body_follow() -> void:
+	if not is_instance_valid(_backpack_model) or not is_instance_valid(_backpack_follow):
+		return
+	_backpack_model.global_transform = _backpack_follow.global_transform * Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * 0.68), Vector3.ZERO)
 
 
 func equip_weapon_item(item: Dictionary) -> Dictionary:
@@ -1688,8 +2066,7 @@ func unequip_weapon_item_from_slot(slot_index: int) -> Dictionary:
 	equipped_weapon_slots[slot_index] = null
 	if slot_index == active_weapon_slot:
 		_loading_weapon_instance = true
-		if weapon_tree != null:
-			weapon_tree.clear_assembly(false)
+		_detach_fate_weapon_tree()
 		if weapon != null and is_instance_valid(weapon):
 			weapon.clear_weapon()
 		equipped_weapon_instance = null
@@ -1810,8 +2187,7 @@ func clear_all_equipped_weapons() -> Array[Dictionary]:
 			removed.append(instance.to_item_dictionary())
 		equipped_weapon_slots[slot_index] = null
 	_loading_weapon_instance = true
-	if weapon_tree != null:
-		weapon_tree.clear_assembly(false)
+	_detach_fate_weapon_tree()
 	if weapon != null and is_instance_valid(weapon):
 		weapon.clear_weapon()
 	equipped_weapon_instance = null
@@ -1830,11 +2206,22 @@ func _load_active_weapon_instance(instance: WeaponInstance) -> bool:
 	_ensure_weapon_tree()
 	var stored_ammo := instance.current_ammo
 	_loading_weapon_instance = true
-	var loaded := instance.load_into_runtime_tree(weapon_tree)
-	if not loaded:
-		_loading_weapon_instance = false
-		return false
+	var previous_tree := weapon_tree
+	var next_tree := _fate_weapon_trees.get(instance.weapon_instance_id) as WeaponAssemblyTree
+	if next_tree == null or not is_instance_valid(next_tree):
+		next_tree = instance.build_runtime_tree()
+		if next_tree == null:
+			_loading_weapon_instance = false
+			return false
+		_fate_weapon_trees[instance.weapon_instance_id] = next_tree
+	if previous_tree != next_tree:
+		if previous_tree.tree_changed.is_connected(_sync_weapon_from_tree):
+			previous_tree.tree_changed.disconnect(_sync_weapon_from_tree)
+		if previous_tree.stats_changed.is_connected(_on_weapon_tree_stats_changed):
+			previous_tree.stats_changed.disconnect(_on_weapon_tree_stats_changed)
+	weapon_tree = next_tree
 	equipped_weapon_instance = instance
+	_ensure_weapon_tree()
 	equipped_weapon_slots[active_weapon_slot] = instance
 	# configure_from_tree 会短暂把模型设为满弹。整个投影加载必须保持原子，
 	# 不能让这个中间 ammo_changed 覆盖枪械实例保存的真实余弹。
@@ -1843,8 +2230,14 @@ func _load_active_weapon_instance(instance: WeaponInstance) -> bool:
 		weapon.current_ammo = clampi(stored_ammo, 0, weapon.magazine_size)
 		instance.current_ammo = weapon.current_ammo
 		weapon.ammo_changed.emit(weapon.current_ammo, weapon.magazine_size)
+	var model_state: Dictionary = _fate_weapon_model_states.get(instance.weapon_instance_id, {})
+	for key: String in model_state:
+		weapon.set(key, model_state[key])
 	_loading_weapon_instance = false
 	_sync_equipped_weapon_instance()
+	var bridge := get_tree().get_first_node_in_group("fate_cards")
+	if bridge != null:
+		bridge.call("set_player", self)
 	return true
 
 
@@ -1904,6 +2297,22 @@ func _refresh_holstered_active_model() -> void:
 	_holstered_active_model.scale = Vector3.ONE * (0.70 if instance.assembly_id in ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"] else 0.52)
 
 
+func commit_fate_weapon_upgrade(card: FateCard, staged_tree: WeaponAssemblyTree, transaction_id: String) -> Dictionary:
+	var instance := get_equipped_weapon_instance()
+	if instance == null or staged_tree == null or staged_tree.root == null:
+		return {"success": false, "reason": "枪械事务目标无效"}
+	var before := instance.assembly_snapshot.duplicate(true)
+	var result := instance.append_fate_upgrade(card, transaction_id)
+	if not bool(result.get("success", false)):
+		return result
+	instance.capture_runtime_tree(staged_tree)
+	if not _refresh_weapon_slot_after_instance_change(active_weapon_slot, instance):
+		instance.fate_upgrades.pop_back()
+		instance.assembly_snapshot = before
+		return {"success": false, "reason": "枪械事务投影失败"}
+	return result
+
+
 func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
 	var instance := get_equipped_weapon_instance()
 	if instance == null:
@@ -1920,6 +2329,12 @@ func _sync_equipped_weapon_instance() -> void:
 	if _loading_weapon_instance or equipped_weapon_instance == null or weapon_tree == null:
 		return
 	equipped_weapon_instance.capture_runtime_tree(weapon_tree)
+	_fate_weapon_trees[equipped_weapon_instance.weapon_instance_id] = weapon_tree
+	if weapon != null:
+		_fate_weapon_model_states[equipped_weapon_instance.weapon_instance_id] = {
+			"_reload_first_shot": weapon.get("_reload_first_shot"),
+			"_fire_sequence": weapon.get("_fire_sequence"),
+		}
 	equipped_weapon_slots[active_weapon_slot] = equipped_weapon_instance
 	if weapon != null and is_instance_valid(weapon):
 		equipped_weapon_instance.current_ammo = weapon.current_ammo
@@ -1957,7 +2372,7 @@ func remove_damage_buff(source: String) -> void:
 func _apply_named_damage_multipliers() -> void:
 	var final_multiplier := 1.0
 	for value in _named_damage_multipliers.values():
-		final_multiplier = maxf(final_multiplier, float(value))
+		final_multiplier *= float(value)
 	if weapon != null:
 		weapon.set_damage_multiplier(final_multiplier)
 
@@ -2010,6 +2425,12 @@ func _on_weapon_loadout_changed(gun_id: String, bullet_id: String) -> void:
 
 
 func _on_weapon_reload_started(duration: float) -> void:
+	# 自动空弹换弹也发此信号，统一在角色桥消费本房第一次成功开始的换弹。
+	if bool(_character_fate["first_reload_ready"]):
+		_character_fate["first_reload_ready"] = false
+		duration /= float(_character_fate["first_reload_speed"])
+		weapon.set("_active_reload_duration", duration)
+		weapon.set("_reload_remaining", duration)
 	reload_started.emit(duration)
 
 

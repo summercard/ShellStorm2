@@ -18,6 +18,7 @@ var _workbench_ref: Node = null
 var _current_selection: Dictionary = {}
 var _transform_button: Button = null
 var _transform_mode: bool = false
+var _fate_selection_busy := false
 
 
 func _ready() -> void:
@@ -386,7 +387,11 @@ func _apply_selection() -> void:
 
 ## 命运卡片被选中 → 通过 FateCardGameBridge 应用到武器树
 func _on_fate_card_selected(card: FateCard) -> void:
-	var result: Dictionary = FateCardGameBridge.apply_card(card)
+	if _fate_selection_busy:
+		return
+	_fate_selection_busy = true
+	var result: Dictionary = await FateCardGameBridge.apply_card_with_source_selection(card, self)
+	_fate_selection_busy = false
 	if result.get("success", false):
 		_update_status("✓ %s 已应用！" % card.card_name)
 		_update_weapon_tree_display()

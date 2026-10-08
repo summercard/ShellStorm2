@@ -157,7 +157,7 @@ func get_computed_stats() -> Dictionary:
 	# 向下递归聚合子节点属性
 	for slot_type in slots:
 		var child: AssemblyNode = slots[slot_type]
-		if child != null:
+		if child != null and child.node_type != NodeType.GUN_BODY and not bool(child.base_stats.get("fate_trigger_attachment", false)):
 			var child_stats = child.get_computed_stats()
 			_combine_stats(computed, child_stats)
 
@@ -166,7 +166,13 @@ func get_computed_stats() -> Dictionary:
 func _combine_stats(target: Dictionary, source: Dictionary) -> void:
 	"""将 source 的属性合并到 target（不同标签叠加，相同标签取最大值/加成）"""
 	for key in source:
-		if key == "damage":
+		if key in ["fate_damage_multiplier", "fate_speed_multiplier", "fate_magazine_multiplier", "fate_scale"]:
+			target[key] = float(target.get(key, 1.0)) * float(source[key])
+		elif key == "fate_elements":
+			var elements: Dictionary = target.get(key, {}).duplicate(true)
+			elements.merge(source[key], true)
+			target[key] = elements
+		elif key == "damage":
 			# 伤害叠加
 			target[key] = target.get(key, 0) + source[key]
 		elif key == "fire_rate":

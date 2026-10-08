@@ -1,0 +1,51 @@
+{
+  "owner": "characters",
+  "status": "角色及Bridge专项127项通过；Dungeon正式回调接线与保存/UI遗留见下方，不宣称跨owner全闭环",
+  "real_paths": ["src/player3d/Player3D.gd", "src/game/FateCardGameBridge.gd", "src/game/MapFateTriggers.gd"],
+  "dungeon_calls": [
+    {"signature":"Player3D.on_fate_room_entered(room_id: String = \"\") -> Dictionary", "when":"所有房型第一次进入时调用，不限安全房或已清房。传全局唯一房键（含楼层/关卡），角色端按非空键幂等；进房回血/扣血/补弹/首次快换弹/月亮受伤序列重置。"},
+    {"signature":"Player3D.on_fate_room_cleared(room_id: String = \"\") -> int", "when":"正式清房结算成功时调用一次，传与进房相同房键；返回实际治疗值。"},
+    {"signature":"Player3D.on_fate_elite_combat_started(encounter_id: String = \"\") -> int", "when":"精英或Boss真实进入战斗时调用，不是生成时；传唯一遭遇键；返回新增护盾。"},
+    {"signature":"Player3D.on_fate_elite_killed() -> int", "when":"保留已有精英/Boss击杀回血调用。"},
+    {"signature":"Player3D.update_fate_survival(delta: float) -> void", "when":"Dungeon有效行动计时每帧调用；替代旧_low_hp_bless_timer与apply_damage_buff亡者祝福路径，角色端保存逐张规则、正位below/逆位above、连续30秒及已触发状态。不要双重计时。"},
+    {"signature":"Player3D.apply_character_fate_modifier(effect: Dictionary) -> Dictionary", "when":"Bridge将包括GRANT_RANDOM_CARD/BLESS_DEAD的角色卡直接转交Player；Dungeon旧apply_bless_dead如果保留兼容入口应只转交该方法（补modifier=survival_blessing），不能另行计时。"},
+    {"signature":"Player3D.reset_character_fate_state() -> void", "when":"新局/结算重置调用；Bridge.reset_run_state也会调用，不在切枪时清除。"}
+  ],
+  "kill_routing":"MapFateTriggers._on_kill_recorded负责转发Player3D.on_fate_kill_recorded()，Dungeon只发已有kill_recorded信号，勿重复直接调用角色；取消DEFAULT_TRIGGERS中fate_mark_enemy环境白送。",
+  "weapons_contract":"get_fate_critical_chance_bonus()->float；角色具名伤害按乘法组合。切枪运行树按实例保留，避免飞行弹来源指向重建后的另一枪。",
+  "verification":"tests/verification/verify_fate_character_completion.tscn，请主助手登记；本代理不改文档、registry、Dungeon、Engine或其他owner文件。",
+  "implemented": [
+    "女祭司负上限与独立heal50、恋人乘法及真实投射物暴击消费、冲刺距离/无敌与隐者额外0.12秒",
+    "倒吊人反射通过当前攻击一次性WeakRef来源进入真实Enemy.take_projectile_damage，带attacker=self且不绑定武器树，不给当前枪错误击杀奖励",
+    "月亮每房首击/后三击、逐张救助付魂回血且不足魂不消费救助、进房固定失血不吃盾/减伤/无敌但可触发致命救助",
+    "清房回血、精英进战护盾、自动/手动首次换弹速度、正逆位祝福连续血线计时及max_stacks=3叠层",
+    "愚者每张从抽卡后按10杀持久重复，Bridge正式身份/槽/记录，失败退魂并保留固定已抽牌；不再环境白送",
+    "按实例保留WeaponAssemblyTree，保留飞行弹来源、成长、热、王后奖励、模型第N发与换弹首发；新局重置临时状态",
+    "Bridge武器卡先用副本Engine试算，成功后一次提交实例槽/装配；失败不改正式树；角色卡绕过旧Engine命令直接路由Player"
+  ],
+  "source_contract": {
+    "entry":"FateCardGameBridge.apply_card_instance(card: FateCard, source: AssemblyNode = null) -> Dictionary；静态apply_card同参数",
+    "resolution":"检查过Dungeon/Workbench/背包/树面板：现有选卡契约只有目标枪，没有来源枪/背包来源选择。没有来源时魔术师与战车明确source_selection_required；寄生只有恰好一个真实已装配件时可选，否则明确拒绝。显式source须属于玩家现有运行装备树。Engine收到[target, source]真实节点，不暗取副槽、不伪造属性、不消耗库存来源。",
+    "pending":"get_pending_character_rewards()->Array[Dictionary]；retry_pending_character_reward(index:int=0, source:AssemblyNode=null)->Dictionary，固定身份/方位、不重抽、失败退魂。当前无UI入口，不冒称已完成UI交互。"
+  },
+  "limits": [
+    "Dungeon调用方由其他owner接入；本专项直接运行真实消费者，未将尚未接线的正式Dungeon链判绿。需优先补清房、进战、update_fate_survival并去旧祝福计时。",
+    "角色命运/愚者进度及待领取队列目前仅本局运行内保留，切枪不丢；现有存档链没有该领域快照序列化，本代理未改存档owner，跨进程续档未闭环。",
+    "逆愚者不足30魂时保留已抽定奖励，不白送、不产生负魂；不足魂具体负债/扣到零规则未冻结。满槽或缺来源同样保留固定奖励，需主助手交接UI领取入口。",
+    "来源枪/背包配件UI选择与库存转移/消耗没有既有契约，不杜撰；静态属性配件命中触发仍由Engine明确拒绝。",
+    "低/高血祝福使用Presets max_stacks=3；每连续30秒叠一层，每层正10%/逆8%，不同卡相乘，离开血线清本次计时、不清已获得层。"
+  ],
+  "tests": {
+    "entry":"res://tests/verification/verify_fate_character_completion.tscn",
+    "checks":127,
+    "exit_code":0,
+    "script_errors":0,
+    "log":"outputs/fate_completion_20261008/characters/verification_final.log",
+    "weapon_regression":"verify_fate_weapon_completion.tscn再次运行退出0，FATE_WEAPON_COMPLETION_OK，日志characters/weapons_regression.log",
+    "isolation":"Autoload前APPDATA/LOCALAPPDATA设为outputs/fate_completion_20261008/characters下独立目录；Godot 4.6.3 console --headless",
+    "documentation_gate":"退出1：既有CHANGELOG断链、多个未登记专项（包括本次角色/武器专项）、python缺openpyxl。主助手负责登记和文档。",
+    "asset_naming_gate":"退出1：既有14资产/3目录版本化及tscn引用债务；本次未增改资产。"
+  },
+  "modified_files":["src/player3d/Player3D.gd","src/player3d/states/Player3DDashingState.gd","src/game/FateCardGameBridge.gd","src/game/MapFateTriggers.gd","tests/verification/verify_fate_character_completion.gd","tests/verification/verify_fate_character_completion.tscn","_scratch/fate_character_handoff.json"],
+  "commit":"未提交，未回退或改动其他owner文件"
+}

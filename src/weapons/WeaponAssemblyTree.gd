@@ -37,6 +37,11 @@ var _node_registry: Dictionary = {}
 
 ## 超频受击惩罚倍率（由超频命卡写入，overheat_penalty>1 时每次射击叠加受击伤害倍率）
 var _overheat_penalty: float = 1.0
+var _overheat_shots := 0
+var growth_stacks := 0
+var _crit_damage_shots := 0
+var _attachment_ready_at := 0.0
+signal attachment_triggered(event: String, attachment: Dictionary, target: Node)
 
 
 ## 构造函数：从一个根节点装配树创建
@@ -167,6 +172,11 @@ func clear_assembly(notify: bool = true) -> void:
 	bullet_speed = 1.0
 	bullet_damage = 0
 	_overheat_penalty = 1.0
+	_overheat_shots = 0
+	growth_stacks = 0
+	_crit_on_kill_stack = 0
+	_crit_damage_shots = 0
+	_attachment_ready_at = 0.0
 	if old_root != null and is_instance_valid(old_root):
 		_free_assembly_subtree(old_root)
 	if notify:
@@ -226,7 +236,7 @@ func get_assembly_tree_string() -> String:
 ## 公开接口：消耗一次击杀必暴击堆栈（返回 true 表示本次射击强制暴击）
 ## 由 3D 武器命中敌人并击杀后调用。
 func consume_crit_on_kill_stack() -> bool:
-	if _crit_on_kill_stack > 0:
+	if bool(get_computed_stats().get("crit_on_kill", false)) and _crit_on_kill_stack > 0:
 		_crit_on_kill_stack -= 1
 		crit_stacks_changed.emit(_crit_on_kill_stack)
 		return true
@@ -240,13 +250,53 @@ func get_crit_on_kill_stack() -> int:
 
 ## 公开接口：获取超频受击惩罚倍率（由超频命卡写入，取值>1时玩家受击伤害增加）
 func get_overheat_penalty() -> float:
-	return _overheat_penalty
+	return pow(_overheat_penalty, _overheat_shots)
 
 
 ## 公开接口：增加击杀必暴击堆栈（由 3D 局内运行时在 kill_recorded 后调用）。
-func add_crit_on_kill_stack(count: int = 1) -> void:
-	_crit_on_kill_stack = mini(_crit_on_kill_stack + count, MAX_CRIT_STACK)
-	crit_stacks_changed.emit(_crit_on_kill_stack)
+func add_crit_on_kill_stack(_count: int = 1) -> void:
+	# 无来源的旧房间广播不能给当前枪增加王后奖励。
+	pass
+
+
+func record_projectile_kill(was_critical: bool) -> void:
+	var stats := get_computed_stats()
+	if bool(stats.get("crit_on_kill", false)):
+		_crit_on_kill_stack = mini(_crit_on_kill_stack + 1, MAX_CRIT_STACK)
+		crit_stacks_changed.emit(_crit_on_kill_stack)
+	if was_critical and int(stats.get("crit_kill_bonus_shots", 0)) > 0:
+		_crit_damage_shots = int(stats["crit_kill_bonus_shots"])
+
+
+func consume_shot_damage_bonus() -> float:
+	_overheat_shots += 1
+	if _crit_damage_shots <= 0:
+		return 1.0
+	_crit_damage_shots -= 1
+	return float(get_computed_stats().get("crit_kill_damage_multiplier", 1.0))
+
+
+func record_growth_result(hit: bool, behavior: Dictionary) -> void:
+	if not bool(behavior.get("size_growth", false)):
+		return
+	if hit and bool(behavior.get("consume_growth_on_hit", false)):
+		growth_stacks = 0
+	elif hit != bool(behavior.get("grow_on_miss", false)):
+		growth_stacks = mini(growth_stacks + 1, int(behavior.get("growth_max_stacks", 5)))
+
+
+func claim_attachment_trigger(event: String, target: Node = null) -> Dictionary:
+	var stats := get_computed_stats()
+	var enabled := bool(stats.get("fate_attachment_hit_trigger" if event == "hit" else "fate_attachment_reload_trigger", false))
+	var now := Time.get_ticks_msec() / 1000.0
+	if not enabled or now < _attachment_ready_at:
+		return {}
+	var attachment: Dictionary = stats.get("fate_attachment", {}).duplicate(true)
+	if attachment.is_empty():
+		return {}
+	_attachment_ready_at = now + float(stats.get("attachment_cooldown", 0.0))
+	attachment_triggered.emit(event, attachment, target)
+	return attachment
 
 const MAX_CRIT_STACK: int = 10
 
@@ -287,7 +337,7 @@ func _apply_stats(stats: Dictionary) -> void:
 		return
 	fire_rate = stats.get("fire_rate", 4.0)
 	reload_time = stats.get("reload_time", 2.0)
-	magazine_size = stats.get("magazine_size", 30)
+	magazine_size = maxi(1, int(float(stats.get("magazine_size", 30)) * float(stats.get("fate_magazine_multiplier", 1.0))))
 	projectile_count = stats.get("bullet_count", 1)
 	spread = stats.get("spread", 0.0)
 	# 子弹自有属性（从 BULLET 节点透传上来）

@@ -151,7 +151,9 @@ func _on_card_button_pressed(card: FateCard) -> void:
 
 	# 视觉反馈：卡片确认提示
 	if instruction_label:
-		instruction_label.text = "已保留 [%s]，它会出现在首次开门的选择中".format([card.card_name])
+		instruction_label.text = "已保留 [%s]，它会出现在首次开门的选择中" % card.card_name
+		if FateCardGameBridge.requires_source_selection(card):
+			instruction_label.text += "；届时通过统一来源面板选择真实已装备来源快照，不消耗来源物品"
 
 
 ## 更新已选择标签

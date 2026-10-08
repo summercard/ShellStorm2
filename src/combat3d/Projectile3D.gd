@@ -34,7 +34,13 @@ var _turret_active := false
 var _turret_remaining := 0.0
 var _turret_shot_timer := 0.0
 var _attached_shot_timer := 0.0
-var _growth_stacks := 0
+var source_weapon_tree: WeaponAssemblyTree
+var source_weapon: WeaponModel3D
+var _flight_base_damage := 0
+var _ungrown_damage := 0
+var _hit_any := false
+var _attached_hit_fired := false
+var _return_hit_ids: Dictionary = {}
 var _tracked_collision_exceptions: Array[PhysicsBody3D] = []
 
 
@@ -48,6 +54,21 @@ func configure(config: Dictionary) -> void:
 	bullet_color = config.get("color", bullet_color) as Color
 	shooter = config.get("shooter", shooter) as Node3D
 	fate_behavior = (config.get("behavior", {}) as Dictionary).duplicate(true)
+	var source_tree_value: Variant = fate_behavior.get("source_weapon_tree")
+	var source_weapon_value: Variant = fate_behavior.get("source_weapon")
+	source_weapon_tree = source_tree_value as WeaponAssemblyTree if is_instance_valid(source_tree_value) else null
+	source_weapon = source_weapon_value as WeaponModel3D if is_instance_valid(source_weapon_value) else null
+	_hit_any = false
+	_ungrown_damage = damage
+	_attached_hit_fired = false
+	_return_hit_ids.clear()
+	if bool(fate_behavior.get("size_growth", false)) and is_instance_valid(source_weapon_tree):
+		var growth := minf(float(fate_behavior.get("max_fate_scale", 3.0)), 1.0 + source_weapon_tree.growth_stacks * float(fate_behavior.get("growth_per_hit", 0.2)))
+		damage = maxi(1, int(damage * growth))
+		var growth_size := minf(float(fate_behavior.get("max_fate_scale", 3.0)), 1.0 + source_weapon_tree.growth_stacks * float(fate_behavior.get("growth_scale_per_hit", 0.12)))
+		fate_behavior["fate_scale"] = float(fate_behavior.get("fate_scale", 1.0)) * growth_size
+	_flight_base_damage = damage
+	damage = maxi(1, int(damage * float(fate_behavior.get("outbound_damage_multiplier", 1.0))))
 	# 默认 0 = 不让怪物位移；霰弹枪在 WeaponModel3D 注入 0.8（轻微击退）。
 	hit_knockback = float(config.get("hit_knockback", hit_knockback))
 	_bounces_left = int(fate_behavior.get("bounce_count", 2 if bullet_tags.has("bounce") else 0))
@@ -58,7 +79,6 @@ func configure(config: Dictionary) -> void:
 	_turret_remaining = 0.0
 	_turret_shot_timer = 0.0
 	_attached_shot_timer = 0.12
-	_growth_stacks = 0
 	if _built:
 		_apply_visual_configuration()
 		_sync_visual_orientation()
@@ -109,15 +129,26 @@ func _physics_process(delta: float) -> void:
 	# 命运卡行为可注入更长的 home_lifetime（如 fate_card 追踪弹 5 秒），只增不减于下限。
 	var max_lifetime := maxf(1.0, float(fate_behavior.get("home_lifetime", 1.0)))
 	if _lifetime >= max_lifetime:
-		expired.emit()
-		_retire()
+		if not _returning and bool(fate_behavior.get("spawn_turret_on_land", false)):
+			_become_turret()
+		elif not _returning and bool(fate_behavior.get("home_on_land", false)):
+			_begin_return()
+		else:
+			expired.emit()
+			_retire()
 		return
 	_tick_attached_gun(delta)
 	if _returning:
-		if shooter == null or not is_instance_valid(shooter) or global_position.distance_to(shooter.global_position) <= 0.72:
+		if not is_instance_valid(shooter):
 			_retire()
 			return
-		direction = (shooter.global_position + Vector3(0, 0.72, 0) - global_position).normalized()
+		var destination := _return_destination()
+		if global_position.distance_to(destination) <= maxf(0.72, speed * delta):
+			if is_instance_valid(source_weapon):
+				source_weapon.refund_projectile_ammo(int(fate_behavior.get("refund_ammo", 0)), source_weapon_tree)
+			_retire()
+			return
+		direction = (destination - global_position).normalized()
 	elif (bullet_tags.has("homing") or bool(fate_behavior.get("homing", false))) and not hostile:
 		var target := _nearest_target()
 		if target != null:
@@ -135,12 +166,30 @@ func _physics_process(delta: float) -> void:
 	if collider == shooter:
 		return
 	if collider != null and collider.has_method("take_damage"):
+		_hit_target(collider, hit_context)
+		return
+	_hit_surface(collision.get_normal(), hit_context)
+
+
+func _hit_target(collider: Node, hit_context: Dictionary = {}) -> void:
+	if not _active:
+		return
+	if _returning and (damage <= 0 or _return_hit_ids.has(collider.get_instance_id())):
+		return
+	if collider != null:
 		if collider.has_method("can_absorb_projectile") and bool(collider.call("can_absorb_projectile", bullet_tags)):
 			if collider.has_method("on_projectile_absorbed"):
 				collider.call("on_projectile_absorbed", damage)
 			_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 1.25, hit_context)
 			_retire()
 			return
+		if bool(fate_behavior.get("size_growth", false)) and is_instance_valid(source_weapon_tree):
+			var growth := minf(float(fate_behavior.get("max_fate_scale", 3.0)), 1.0 + source_weapon_tree.growth_stacks * float(fate_behavior.get("growth_per_hit", 0.2)))
+			_flight_base_damage = maxi(1, int(_ungrown_damage * growth))
+			damage = maxi(0, int(_flight_base_damage * float(fate_behavior.get("return_damage_multiplier", 0.6)))) if _returning else maxi(1, int(_flight_base_damage * float(fate_behavior.get("outbound_damage_multiplier", 1.0))))
+		_hit_any = true
+		if _returning:
+			_return_hit_ids[collider.get_instance_id()] = true
 		if collider.has_method("take_projectile_damage"):
 			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, shooter, hit_knockback)
 		else:
@@ -154,10 +203,15 @@ func _physics_process(delta: float) -> void:
 		if bool(fate_behavior.get("spawn_turret_on_land", false)):
 			_become_turret()
 			return
-		if bool(fate_behavior.get("return_to_player", false)) or bool(fate_behavior.get("home_on_land", false)):
-			_begin_return()
+		if _returning:
 			if collider is PhysicsBody3D:
 				_add_tracked_collision_exception(collider as PhysicsBody3D)
+			return
+		if bool(fate_behavior.get("return_on_hit", false)) or bool(fate_behavior.get("return_to_player", false)) or bool(fate_behavior.get("home_on_land", false)):
+			_begin_return()
+			if bool(fate_behavior.get("return_on_hit", false)) and damage > 0:
+				_hit_target(collider, hit_context)
+			global_position += direction * 0.28
 			return
 		if _pierces_left > 0:
 			_pierces_left -= 1
@@ -165,12 +219,17 @@ func _physics_process(delta: float) -> void:
 				_add_tracked_collision_exception(collider as PhysicsBody3D)
 			global_position += direction * 0.28
 			return
-		if bullet_tags.has("explosive") or bullet_tags.has("blackhole") or bullet_tags.has("balloon"):
+		if bullet_tags.has("explosive") or bullet_tags.has("blackhole") or bullet_tags.has("balloon") or bool(fate_behavior.get("nth_explosion", false)):
 			_explode()
 		_retire()
 		return
+
+
+func _hit_surface(normal: Vector3, hit_context: Dictionary = {}) -> void:
+	if _returning:
+		return
 	if _bounces_left > 0:
-		direction = direction.bounce(collision.get_normal()).normalized()
+		direction = direction.bounce(normal).normalized()
 		damage = maxi(1, int(damage * float(fate_behavior.get("bounce_damage_scale", 0.85))))
 		_sync_visual_orientation()
 		_bounces_left -= 1
@@ -206,29 +265,27 @@ func _apply_secondary_effect(target: Node) -> void:
 
 
 func _apply_fate_on_hit(target: Node) -> void:
-	if bool(fate_behavior.get("fuse_damage", false)) and target.has_method("apply_damage_over_time"):
-		var duration := maxf(1.0, float(fate_behavior.get("dot_duration", 3.0)))
-		var ratio := float(fate_behavior.get(
-			"dot_damage_per_stack",
-			fate_behavior.get("dot_damage_per_sec", 0.08),
-		))
-		target.call("apply_damage_over_time", maxi(1, int(damage * ratio * duration)), duration)
-	var freeze_duration := float(fate_behavior.get("freeze_duration", 0.0))
-	if freeze_duration > 0.0 and target.has_method("apply_slow"):
-		if target is Enemy3D and not (target as Enemy3D).elite_modifier_id.is_empty():
-			freeze_duration = float(fate_behavior.get("freeze_duration_elite", freeze_duration * 0.5))
-		target.call("apply_slow", 0.25, freeze_duration)
+	if target.has_method("apply_fate_element"):
+		var elements: Dictionary = fate_behavior.get("fate_elements", {})
+		for element in elements:
+			target.call("apply_fate_element", element, elements[element], _flight_base_damage, source_weapon_tree, shooter)
+	var attached: Dictionary = fate_behavior.get("attached_gun", {})
+	if bool(attached.get("fire_on_hit", false)) and not _attached_hit_fired:
+		_attached_hit_fired = true
+		_fire_attached_gun(attached, direction)
 	if bool(fate_behavior.get("chain_lightning", false)):
 		_apply_chain_lightning(target)
-	if bool(fate_behavior.get("size_growth", false)):
-		_apply_growth()
-	if bool(fate_behavior.get("fate_attachment_hit_trigger", false)):
-		for angle in [-0.24, 0.24]:
-			_spawn_child_projectile(
-				direction.rotated(Vector3.UP, angle),
-				maxi(1, int(damage * 0.35)),
-				bullet_color.lightened(0.08),
-			)
+	if is_instance_valid(source_weapon_tree):
+		source_weapon_tree.record_growth_result(true, fate_behavior)
+		var attachment := source_weapon_tree.claim_attachment_trigger("hit", target) if bool(fate_behavior.get("fate_attachment_hit_trigger", false)) else {}
+		if attachment.has("pull_strength") and target.has_method("apply_pull") and is_instance_valid(shooter):
+			target.call("apply_pull", shooter.global_position, float(attachment["pull_strength"]))
+		var count := int(attachment.get("bullet_count", 0))
+		if randf() < float(attachment.get("copy_chance", 0.0)):
+			count += 1
+		for index in range(count):
+			var angle := (float(index) - float(count - 1) * 0.5) * float(attachment.get("spread", 0.0))
+			_spawn_child_projectile(direction.rotated(Vector3.UP, angle), damage, bullet_color)
 
 
 func _apply_chain_lightning(first_target: Node) -> void:
@@ -258,20 +315,6 @@ func _apply_chain_lightning(first_target: Node) -> void:
 		current = nearest
 
 
-func _apply_growth() -> void:
-	var max_stacks := maxi(1, int(fate_behavior.get("max_stacks", 5)))
-	if _growth_stacks >= max_stacks:
-		return
-	_growth_stacks += 1
-	var growth := maxf(0.02, float(fate_behavior.get("growth_per_hit", 0.12)))
-	damage = maxi(1, int(damage * (1.0 + growth)))
-	var growth_scale := 1.0 + growth
-	if _collision_shape != null and _collision_shape.shape is SphereShape3D:
-		(_collision_shape.shape as SphereShape3D).radius *= growth_scale
-	if _visual != null and _visual.has_method("apply_growth"):
-		_visual.call("apply_growth", growth_scale)
-
-
 func _explode() -> void:
 	var radius := maxf(0.5, float(fate_behavior.get("explosion_radius", 90.0)) / 30.0) if fate_behavior.has("explosion_radius") else 3.0
 	if bullet_tags.has("blackhole"):
@@ -296,7 +339,10 @@ func _explode() -> void:
 		var explosion_scale := float(fate_behavior.get("explosion_damage_scale", 0.72))
 		if shooter != null and target.has_method("notify_attacked_by"):
 			target.call("notify_attacked_by", shooter)
-		target.call("take_damage", maxi(1, int(damage * falloff * explosion_scale)), false, hit_direction)
+		if target.has_method("take_projectile_damage"):
+			target.call("take_projectile_damage", maxi(1, int(damage * falloff * explosion_scale)), false, hit_direction, bullet_tags, fate_behavior, shooter)
+		else:
+			target.call("take_damage", maxi(1, int(damage * falloff * explosion_scale)), false, hit_direction)
 		if bullet_tags.has("blackhole") and target.has_method("apply_pull"):
 			target.call("apply_pull", global_position, 3.0 + falloff * 5.0)
 		if bullet_tags.has("balloon") and target.has_method("apply_slow"):
@@ -305,7 +351,8 @@ func _explode() -> void:
 
 func _nearest_target() -> Node3D:
 	var best: Node3D = null
-	var best_distance := 12.0
+	var farthest := str(fate_behavior.get("target_mode", "nearest")) == "farthest"
+	var best_distance := -1.0 if farthest else 12.0
 	for candidate in get_tree().get_nodes_in_group("enemy_3d"):
 		if not candidate is Node3D:
 			continue
@@ -313,10 +360,23 @@ func _nearest_target() -> Node3D:
 		if candidate is Enemy3D and (candidate as Enemy3D).ai_state == "dead":
 			continue
 		var distance := global_position.distance_to(candidate_3d.global_position)
-		if distance < best_distance:
+		if distance > 12.0:
+			continue
+		if farthest and not _target_visible(candidate_3d):
+			continue
+		if (distance > best_distance if farthest else distance < best_distance):
 			best = candidate_3d
 			best_distance = distance
 	return best
+
+
+func _target_visible(target: Node3D) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(global_position, target.global_position + Vector3(0, 0.68, 0), 1)
+	query.exclude = [get_rid()]
+	if shooter is CollisionObject3D:
+		query.exclude.append(shooter.get_rid())
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.is_empty() or hit.get("collider") == target
 
 
 func _build_visual() -> void:
@@ -344,13 +404,30 @@ func _apply_visual_configuration() -> void:
 		(_collision_shape.shape as SphereShape3D).radius = 0.12 * scale_factor
 
 
+func _return_destination() -> Vector3:
+	if int(fate_behavior.get("refund_ammo", 0)) > 0 and is_instance_valid(source_weapon):
+		return source_weapon.global_position
+	return shooter.global_position + Vector3(0, 0.72, 0)
+
+
 func _begin_return() -> void:
-	if shooter == null or not is_instance_valid(shooter):
+	if _returning:
+		return
+	if not is_instance_valid(shooter):
 		_retire()
 		return
 	_returning = true
-	damage = maxi(1, int(damage * float(fate_behavior.get("return_damage_multiplier", 0.6))))
-	direction = (shooter.global_position + Vector3(0, 0.72, 0) - global_position).normalized()
+	_lifetime = 0.0
+	damage = maxi(0, int(_flight_base_damage * float(fate_behavior.get("return_damage_multiplier", 0.6))))
+	# 返航不再被去程穿透例外或墙体阻断；回程每个目标只结算一次。
+	for exception in _tracked_collision_exceptions:
+		if is_instance_valid(exception) and exception != shooter:
+			remove_collision_exception_with(exception)
+	_tracked_collision_exceptions.clear()
+	if shooter is PhysicsBody3D:
+		_add_tracked_collision_exception(shooter)
+	collision_mask = 4 if damage > 0 else 0
+	direction = (_return_destination() - global_position).normalized()
 	_sync_visual_orientation()
 
 
@@ -370,6 +447,8 @@ func _become_turret() -> void:
 
 
 func _tick_turret(delta: float) -> void:
+	if bool(fate_behavior.get("mobile_turret", false)) and is_instance_valid(shooter):
+		global_position = global_position.move_toward(shooter.global_position + Vector3(0, 0.72, 0), speed * delta)
 	_turret_remaining -= delta
 	if _turret_remaining <= 0.0:
 		_retire()
@@ -395,34 +474,48 @@ func _tick_attached_gun(delta: float) -> void:
 	if _attached_shot_timer > 0.0:
 		return
 	var attached := fate_behavior.get("attached_gun", {}) as Dictionary
+	if bool(attached.get("fire_on_hit", false)):
+		return
 	var target := _nearest_target()
 	if target == null:
 		return
-	_attached_shot_timer = 1.0 / maxf(0.2, float(attached.get("fire_rate", 2.0)))
+	_attached_shot_timer = 1.0 / maxf(0.2, float(attached.get("fire_rate", 2.0)) * float(fate_behavior.get("uncontrolled_fire_rate_scale", 1.0)))
+	_fire_attached_gun(attached, (target.global_position + Vector3(0, 0.65, 0) - global_position).normalized())
+
+
+func _fire_attached_gun(attached: Dictionary, base_direction: Vector3) -> void:
 	var count := maxi(1, int(attached.get("bullet_count", 1)))
-	var base_direction := (target.global_position + Vector3(0, 0.65, 0) - global_position).normalized()
+	var child_damage := (float(attached.get("damage", 0)) + float(attached.get("bullet_damage", 5))) * float(attached.get("fate_damage_multiplier", 1.0)) * float(fate_behavior.get("owner_damage_multiplier", 1.0))
 	if bool(fate_behavior.get("uncontrolled_gun", false)):
-		base_direction = base_direction.rotated(Vector3.UP, randf_range(-PI, PI))
+		base_direction = base_direction.rotated(Vector3.UP, randf_range(-PI, PI) * float(fate_behavior.get("aim_randomness", 1.0)))
+		child_damage *= float(fate_behavior.get("uncontrolled_damage_scale", 1.0))
+	var child_behavior := attached.duplicate(true)
+	if bool(fate_behavior.get("uncontrolled_gun", false)) and is_instance_valid(source_weapon):
+		source_weapon._recoil = maxf(source_weapon._recoil, 0.09 * float(fate_behavior.get("uncontrolled_recoil_scale", 1.0)))
+		source_weapon.set_process(true)
+	child_behavior.erase("attached_gun")
+	child_behavior.erase("size_growth")
 	for index in range(count):
-		var angle := (float(index) - float(count - 1) * 0.5) * 0.10
-		_spawn_child_projectile(
-			base_direction.rotated(Vector3.UP, angle),
-			maxi(1, int(attached.get("damage", 5))),
-			bullet_color.lightened(0.10),
-		)
+		var angle := (float(index) - float(count - 1) * 0.5) * float(attached.get("spread", 0.10))
+		_spawn_child_projectile(base_direction.rotated(Vector3.UP, angle), maxi(1, int(child_damage)), bullet_color.lightened(0.10), child_behavior)
 
 
-func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: Color) -> void:
+func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: Color, child_behavior: Dictionary = {}) -> void:
+	child_behavior = child_behavior.duplicate(true)
+	child_behavior["source_weapon_tree"] = source_weapon_tree
+	child_behavior["source_weapon"] = source_weapon
+	var is_critical := randf() < float(fate_behavior.get("owner_critical_chance", 0.0))
+	var critical_multiplier := float(fate_behavior.get("owner_critical_multiplier", 1.5))
 	var config := {
 		"direction": shot_direction,
-		"speed": maxf(14.0, speed * 0.9),
-		"damage": shot_damage,
-		"critical": false,
+		"speed": 23.0 * float(child_behavior.get("bullet_speed", speed / 23.0)) * float(child_behavior.get("fate_speed_multiplier", 1.0)),
+		"damage": maxi(1, int(shot_damage * (critical_multiplier / 1.5 if is_critical else 1.0))),
+		"critical": is_critical,
 		"hostile": hostile,
-		"tags": [],
+		"tags": child_behavior.get("tags", []),
 		"color": color,
 		"shooter": shooter,
-		"behavior": {},
+		"behavior": child_behavior,
 	}
 	var pools := get_tree().get_nodes_in_group("projectile_pool_3d")
 	if not pools.is_empty() and pools[0] is ProjectilePool3D:
@@ -462,6 +555,8 @@ func _retire() -> void:
 	if not _active:
 		return
 	_active = false
+	if not _hit_any and is_instance_valid(source_weapon_tree):
+		source_weapon_tree.record_growth_result(false, fate_behavior)
 	velocity = Vector3.ZERO
 	visible = false
 	if _visual != null and _visual.has_method("deactivate"):

@@ -40,7 +40,15 @@ func _ready() -> void:
 	var world_before := int(player.get_weapon_presentation_snapshot().get("fate_slot_used", -1))
 	var world_result := FateCardGameBridge.apply_card(FateCardPresets.fate_extra_loot())
 	var character_result := FateCardGameBridge.apply_card(FateCardPresets.fate_bless_dead())
-	_check(bool(world_result.get("success", false)) and world_result.get("scope", "") == "WORLD", "World-scope card did not route to world state", failures)
+	_check(not bool(world_result.get("success", true)) and world_result.get("error", "") == "world_owner_unavailable", "缺少世界所有者时不得假成功", failures)
+	_check(FateCardGameBridge.world_card_ids.is_empty(), "世界命令失败仍登记持卡", failures)
+	var world_owner := preload("res://scenes/Dungeon3D.tscn").instantiate() as Dungeon3D
+	world_owner.test_mode = true
+	add_child(world_owner)
+	FateCardGameBridge.set_player(player)
+	world_result = FateCardGameBridge.apply_card(FateCardPresets.fate_extra_loot())
+	_check(bool(world_result.get("success", false)) and int(world_owner.get_world_fate_snapshot().get("next_chest_extra", 0)) == 1, "世界效果没有恰好执行一次", failures)
+	world_owner.queue_free()
 	_check(bool(character_result.get("success", false)) and character_result.get("scope", "") == "CHARACTER", "Character-scope card did not route to character state", failures)
 	_check(int(player.get_weapon_presentation_snapshot().get("fate_slot_used", -1)) == world_before, "Character/world card occupied a weapon fate slot", failures)
 

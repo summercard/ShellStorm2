@@ -125,6 +125,19 @@ func abort_extraction() -> void:
 		_cancel()
 
 
+func apply_fate_time_multiplier(multiplier: float) -> void:
+	duration *= multiplier
+	if _active:
+		_remaining *= multiplier
+
+
+func is_in_active_sync_area(world_position: Vector3) -> bool:
+	if not _active:
+		return false
+	var local := to_local(world_position)
+	return Vector2(local.x, local.z).length() <= 2.0 and local.y >= -0.25 and local.y <= 2.25
+
+
 func get_snapshot() -> Dictionary:
 	return {
 		"type": beacon_type, "locked": locked, "active": _active,

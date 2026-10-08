@@ -33,6 +33,8 @@ class ApplyResult:
 ## 应用一张命运卡片到玩家武器装配树（静态方法，供外部 UI 调用）
 ## 自动从场景树查找玩家的 WeaponAssemblyTree 并应用卡片
 static func apply_card_to_player(card: FateCard) -> ApplyResult:
+	if card != null and card.scope != FateCard.Scope.WEAPON:
+		return apply_card(card, null)
 	var player: Node = _find_player()
 	if player == null or not player.has_method("get_weapon_tree"):
 		var result: ApplyResult = ApplyResult.new()
@@ -59,9 +61,20 @@ static func apply_card(
 ) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 
-	if card == null or tree == null:
+	if card == null:
 		result.error = ApplyError.TARGET_INVALID
-		result.message = "card or tree is null"
+		result.message = "命运卡为空"
+		return result
+	if card.scope == FateCard.Scope.WORLD:
+		return _owner_result(apply_world_card(card))
+	if card.scope == FateCard.Scope.CHARACTER:
+		var player := _find_player()
+		if player == null or not player.has_method("apply_character_fate_modifier"):
+			return _owner_result({"success": false, "error": "character_owner_unavailable", "message": "角色命运所有者不可用"})
+		return _owner_result(player.call("apply_character_fate_modifier", card.effect))
+	if tree == null:
+		result.error = ApplyError.TARGET_INVALID
+		result.message = "武器树为空"
 		return result
 
 	var action: int = int(card.effect.get("action", -1))
@@ -148,7 +161,26 @@ static func apply_card(
 	return result
 
 
-## 月亮/太阳命运的实际所有者在 Player3D 与 Dungeon3D；引擎只完成作用域事务验收。
+## Bridge 与直接 Engine 调用共用唯一世界命令，不再通过事件执行效果。
+static func apply_world_card(card: FateCard) -> Dictionary:
+	var owner := _find_room_game_mode()
+	if owner == null or not owner.has_method("apply_world_fate_card"):
+		return {"success": false, "error": "world_owner_unavailable", "message": "世界命运所有者不可用；卡片未消耗"}
+	return owner.call("apply_world_fate_card", card) as Dictionary
+
+
+static func _owner_result(outcome: Dictionary) -> ApplyResult:
+	var result := ApplyResult.new()
+	result.success = bool(outcome.get("success", false))
+	result.error = ApplyError.OK if result.success else ApplyError.APPLY_FAILED
+	result.message = str(outcome.get("message", "命运执行失败"))
+	result.effect_value = outcome.duplicate(true)
+	if result.success:
+		_fate_audio_card_applied()
+	return result
+
+
+## 非武器命运由上方所有者路由执行。
 static func _apply_scoped_modifier(card: FateCard) -> ApplyResult:
 	var result := ApplyResult.new()
 	if card.scope == FateCard.Scope.WEAPON:
@@ -249,26 +281,16 @@ static func _apply_attach_gun_to_bullet(
 		result.message = "No bullet node found to attach gun"
 		return result
 
-	# 创建新枪身节点
-	var attached_gun: AssemblyNode = AssemblyNode.new(
-		AssemblyNode.NodeType.GUN_BODY, "AttachedGun_" + card.card_id
-	)
-	var damage_scale: float = card.effect.get("damage_scale", 0.5)
-	var fire_rate_scale: float = card.effect.get("fire_rate_scale", 0.6)
-	(
-		attached_gun
-		. set_base_stats(
-			{
-				"damage": int(10 * damage_scale),
-				"fire_rate": 4.0 * fire_rate_scale,
-				"bullet_count": 1,
-			}
-		)
-	)
-	attached_gun.tags = ["Fate.AttachedGun", card.card_id]
+	var source := root
+	for candidate in targets:
+		if candidate.node_type == AssemblyNode.NodeType.GUN_BODY:
+			source = candidate
+	var attached_gun := _make_attached_gun(source, card)
+	attached_gun.tags.append("Fate.AttachedGun")
 
 	# 挂载到子弹的 MOUNT 槽
 	if bullet_node.slots[AssemblyNode.SlotType.MOUNT] != null:
+		attached_gun.free()
 		result.error = ApplyError.SLOT_OCCUPIED
 		result.message = "Bullet mount slot already occupied"
 		return result
@@ -292,6 +314,7 @@ static func _apply_attach_gun_to_bullet(
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount gun to bullet"
+		attached_gun.free()
 		return result
 
 	modified.append(bullet_node)
@@ -321,37 +344,31 @@ static func _apply_attach_to_mount(
 		var slot_name: String = card.effect.get("target_slot", "MOUNT")
 		slot_type = AssemblyNode.SlotType.get(slot_name)
 
-	# 如果是挂载类组合卡，自动创建一个配件节点。
-	var action: int = int(card.effect.get("action", -1))
-	var child_node: AssemblyNode = null
-
-	if card.card_type == FateCard.CardType.COMBINE:
-		# 组合类：创建一个匹配的子节点
-		if action == FateCard.EffectAction.ATTACH_TO_MOUNT:
-			# 默认创建附件节点
-			child_node = AssemblyNode.new(
-				AssemblyNode.NodeType.ATTACHMENT, "FateAttachment_" + card.card_id
-			)
-		child_node.tags = card.tags.duplicate()
-		# 配件寄生默认效果：命中触发。命中时 Bullet 会派发 attachment_hit_triggered 信号，
-		# 其效果（分裂/强化等）由 Bullet 根据挂载的配件节点 stats 具体决定
-		var default_stats := {"damage": 0, "fire_rate": 0, "fate_attachment_hit_trigger": true, "trigger_on_hit": true}
-		child_node.set_base_stats(default_stats)
-
-	if child_node == null:
-		result.error = ApplyError.APPLY_FAILED
-		result.message = "Could not create child node for combine card"
+	var source: AssemblyNode = null
+	for candidate in targets:
+		if candidate.node_type == AssemblyNode.NodeType.ATTACHMENT:
+			source = candidate
+	if source == null:
+		for candidate in tree.root.get_all_descendants():
+			if candidate.node_type == AssemblyNode.NodeType.ATTACHMENT and not bool(candidate.base_stats.get("fate_trigger_attachment", false)):
+				source = candidate
+				break
+	if source == null:
+		result.error = ApplyError.NO_TARGET
+		result.message = "配件寄生需要选择真实配件"
 		return result
-
-	# 配件寄生：标记命中触发效果，供 Bullet 运行时检测
-	if card.get_stable_card_id() == "fate_attachment_parasite" or card.effect.get("trigger_on_hit", false):
-		var attach_stats: Dictionary = child_node.get_base_stats()
-		attach_stats["fate_attachment_hit_trigger"] = true
-		attach_stats["trigger_on_hit"] = true
-		child_node.set_base_stats(attach_stats)
-		child_node.tags.append("Fate.AttachmentHitTrigger")
+	var source_stats := source.get_computed_stats()
+	if not source_stats.has("pull_strength") and not source_stats.has("bullet_count") and not source_stats.has("copy_chance"):
+		result.error = ApplyError.TARGET_INVALID
+		result.message = "该配件只有静态属性，尚无已定义的事件触发效果"
+		return result
+	var child_node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "FateAttachment_" + source.node_name)
+	child_node.tags = source.tags.duplicate()
+	source_stats["fate_trigger_attachment"] = true
+	child_node.set_base_stats(source_stats)
 
 	if target.slots[slot_type] != null:
+		child_node.free()
 		result.error = ApplyError.SLOT_OCCUPIED
 		result.message = "Target slot %s already occupied" % AssemblyNode.SlotType.keys()[slot_type]
 		return result
@@ -360,10 +377,18 @@ static func _apply_attach_to_mount(
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount node"
+		child_node.free()
 		return result
 
 	result.success = true
 	_fate_audio_card_applied()
+	var trigger_stats := target.get_base_stats()
+	trigger_stats["fate_attachment"] = source_stats.duplicate(true)
+	trigger_stats["fate_attachment_hit_trigger"] = card.effect.get("trigger_on_hit", true)
+	trigger_stats["fate_attachment_reload_trigger"] = card.effect.get("trigger_on_reload", false)
+	trigger_stats["attachment_cooldown"] = card.effect.get("cooldown", 0.0)
+	target.set_base_stats(trigger_stats)
+	tree.refresh_stats()
 	result.modified_nodes = [target, child_node]
 	result.effect_value = child_node
 	result.message = (
@@ -417,28 +442,23 @@ static func _apply_attach_gun_to_gun(
 	var fire_rate_scale: float = card.effect.get("fire_rate_scale", 0.6)
 	var follow_probability: float = card.effect.get("follow_probability", 1.0)  # 跟随射击概率
 
-	# 创建副枪身节点
-	var secondary_gun: AssemblyNode = AssemblyNode.new(
-		AssemblyNode.NodeType.GUN_BODY, "SecondaryGun_" + card.card_id
-	)
-	(
-		secondary_gun
-		. set_base_stats(
-			{
-				"damage": int(10 * damage_scale),
-				"fire_rate": 4.0 * fire_rate_scale,
-				"bullet_count": 1,
-			}
-		)
-	)
-	secondary_gun.tags = ["Fate.SecondaryGun", card.card_id, "Fate.GunOnGun"]
-
+	var source := targets[1] if targets.size() > 1 and targets[1].node_type == AssemblyNode.NodeType.GUN_BODY else main_gun
+	var secondary_gun := _make_attached_gun(source, card)
+	secondary_gun.tags.append("Fate.SecondaryGun")
 	# 将副枪挂载到主枪的 MOUNT 槽
 	var ok: bool = tree.mount(main_gun, AssemblyNode.SlotType.MOUNT, secondary_gun)
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount secondary gun"
+		secondary_gun.free()
 		return result
+	if bool(card.effect.get("alternate_fire", false)):
+		var main_stats := main_gun.get_base_stats()
+		main_stats["alternate_fire"] = true
+		main_stats["fire_rate"] = float(main_stats.get("fire_rate", 4.0)) * fire_rate_scale
+		main_stats["fate_damage_multiplier"] = float(main_stats.get("fate_damage_multiplier", 1.0)) * damage_scale
+		main_gun.set_base_stats(main_stats)
+		tree.refresh_stats()
 
 	result.success = true
 	_fate_audio_card_applied()
@@ -463,17 +483,10 @@ static func _apply_scale_node(
 
 	var target: AssemblyNode = targets[0]
 	var scale: float = card.effect.get("scale", 1.5)
-	var damage_bonus: int = card.effect.get("damage_bonus", 3)
-	var speed_multiplier: float = card.effect.get("speed_multiplier", 1.0)
-
-	# 在 base_stats 中记录缩放因子
 	var stats: Dictionary = target.get_base_stats()
-	stats["fate_scale"] = scale
-	if target.node_type == AssemblyNode.NodeType.BULLET:
-		stats["bullet_damage"] = stats.get("bullet_damage", 5) + damage_bonus
-	else:
-		stats["damage"] = stats.get("damage", 10) + damage_bonus
-	stats["speed"] = stats.get("speed", 1.0) * speed_multiplier
+	stats["fate_scale"] = float(stats.get("fate_scale", 1.0)) * scale
+	stats["fate_damage_multiplier"] = float(stats.get("fate_damage_multiplier", 1.0)) * float(card.effect.get("damage_scale", 1.0))
+	stats["fate_speed_multiplier"] = float(stats.get("fate_speed_multiplier", 1.0)) * float(card.effect.get("speed_scale", 1.0))
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Scaled")
 	tree.refresh_stats()
@@ -502,6 +515,7 @@ static func _apply_multiply_fire_rate(
 	var stats: Dictionary = target.get_base_stats()
 	stats["fire_rate"] = stats.get("fire_rate", 4.0) * fire_rate_scale
 	stats["overheat_penalty"] = overheat_penalty
+	stats["fate_damage_multiplier"] = float(stats.get("fate_damage_multiplier", 1.0)) * float(card.effect.get("damage_scale", 1.0))
 	target.tags.append("Fate.Overclocked")
 	target.set_base_stats(stats)
 	tree.refresh_stats()
@@ -525,15 +539,11 @@ static func _apply_add_damage(
 		return result
 
 	var target: AssemblyNode = targets[0]
-	var damage_bonus: int = card.effect.get("damage_bonus", 5)
-	var pierce_level: int = card.effect.get("pierce_level", 0)
+	var damage_bonus: float = card.effect.get("damage_scale", 1.0)
 	var stats: Dictionary = target.get_base_stats()
-	if target.node_type == AssemblyNode.NodeType.BULLET:
-		stats["bullet_damage"] = stats.get("bullet_damage", 5) + damage_bonus
-	else:
-		stats["damage"] = stats.get("damage", 10) + damage_bonus
-	if pierce_level > 0:
-		stats["pierce_level"] = pierce_level
+	stats["fate_damage_multiplier"] = float(stats.get("fate_damage_multiplier", 1.0)) * damage_bonus
+	stats["pierce_shield"] = bool(stats.get("pierce_shield", false)) or bool(card.effect.get("pierce_shield", false))
+	stats["shield_damage_scale"] = maxf(float(stats.get("shield_damage_scale", 1.0)), float(card.effect.get("shield_damage_scale", 1.0)))
 	target.set_base_stats(stats)
 	target.tags.append("Fate.ArmorPierced")
 	tree.refresh_stats()
@@ -564,7 +574,9 @@ static func _apply_mutate_to_homing(
 	var stats: Dictionary = target.get_base_stats()
 	stats["homing"] = true
 	stats["homing_strength"] = homing_strength
-	stats["speed"] = stats.get("speed", 1.0) * (1.0 - speed_penalty)
+	stats["target_mode"] = card.effect.get("target_mode", "nearest")
+	stats["fate_damage_multiplier"] = float(stats.get("fate_damage_multiplier", 1.0)) * float(card.effect.get("damage_scale", 1.0))
+	stats["fate_speed_multiplier"] = float(stats.get("fate_speed_multiplier", 1.0)) * (1.0 - speed_penalty)
 	stats["return_to_player"] = return_to_player
 	if return_to_player:
 		stats["return_damage_multiplier"] = card.effect.get("return_damage_multiplier", 0.6)
@@ -667,10 +679,15 @@ static func _apply_mutate_to_bounce(
 	var damage_scale: float = card.effect.get("damage_scale", 0.85)
 
 	var stats: Dictionary = target.get_base_stats()
-	stats["bounce"] = true
-	stats["bounce_count"] = bounce_count
-	stats["bounce_walls"] = bounce_walls
-	stats["bounce_damage_scale"] = damage_scale
+	if card.get_stable_card_id() == "fate_bullet_return":
+		stats["return_on_hit"] = true
+		stats["return_damage_multiplier"] = card.effect.get("damage_scale_on_bounce", 0.7)
+		stats["refund_ammo"] = card.effect.get("refund_ammo", 0)
+	else:
+		stats["bounce"] = true
+		stats["bounce_count"] = bounce_count
+		stats["bounce_walls"] = bounce_walls
+		stats["bounce_damage_scale"] = damage_scale
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Bounce")
 	tree.refresh_stats()
@@ -733,6 +750,7 @@ static func _apply_mutate_to_turret(
 	stats["spawn_turret_on_land"] = true
 	stats["turret_duration"] = turret_duration
 	stats["turret_fire_rate"] = turret_fire_rate
+	stats["mobile_turret"] = card.effect.get("mobile_turret", false)
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Turret")
 	tree.refresh_stats()
@@ -763,6 +781,7 @@ static func _apply_mutate_to_home_on_land(
 	stats["home_on_land"] = true
 	stats["home_lifetime"] = home_lifetime
 	stats["return_damage_multiplier"] = return_damage_mult
+	stats["outbound_damage_multiplier"] = card.effect.get("outbound_damage_multiplier", 1.0)
 	target.set_base_stats(stats)
 	target.tags.append("Fate.HomeOnLand")
 	tree.refresh_stats()
@@ -803,6 +822,7 @@ static func _apply_copy_node(
 
 	var stats: Dictionary = target.get_base_stats()
 	stats["copy_fire"] = true
+	stats["backward_wave"] = card.effect.get("backward_wave", false)
 	stats["copy_fire_delay"] = copy_fire_delay
 	stats["second_wave_damage_scale"] = second_wave_damage_scale
 	target.set_base_stats(stats)
@@ -830,26 +850,12 @@ static func _apply_fuse_damage(
 
 	var target: AssemblyNode = targets[0]
 	var damage_type: String = card.effect.get("damage_type", "fire")
-	var dot_damage_per_sec: float = card.effect.get("dot_damage_per_sec", 0.08)
-	var dot_duration: float = card.effect.get("dot_duration", 3.0)
-	var freeze_duration: float = card.effect.get("freeze_duration", 0.5)
-	var freeze_duration_elite: float = card.effect.get("freeze_duration_elite", 0.25)
-	var dot_damage_per_stack: float = card.effect.get("dot_damage_per_stack", 0.05)
-	var max_stacks: int = card.effect.get("max_stacks", 5)
-	var dot_tick_rate: float = card.effect.get("dot_tick_rate", 1.0)
-
 	var stats: Dictionary = target.get_base_stats()
 	stats["fuse_damage"] = true
 	stats["fuse_damage_type"] = damage_type
-	# 通用 DOT 参数
-	stats["dot_damage_per_sec"] = dot_damage_per_sec
-	stats["dot_duration"] = dot_duration
-	stats["dot_damage_per_stack"] = dot_damage_per_stack
-	stats["max_stacks"] = max_stacks
-	stats["dot_tick_rate"] = dot_tick_rate
-	# 冰冻参数
-	stats["freeze_duration"] = freeze_duration
-	stats["freeze_duration_elite"] = freeze_duration_elite
+	var elements: Dictionary = stats.get("fate_elements", {}).duplicate(true)
+	elements[damage_type] = card.effect.duplicate(true)
+	stats["fate_elements"] = elements
 	target.set_base_stats(stats)
 
 	# 视觉标签 + 视觉特效写入
@@ -895,7 +901,8 @@ static func _apply_explode_on_reload(
 	stats["explode_on_reload"] = true
 	stats["explosion_radius"] = explosion_radius
 	stats["explosion_damage_scale"] = explosion_damage_scale
-	stats["reload_penalty"] = reload_penalty
+	stats["reload_penalty"] = card.effect.get("reload_time_add", reload_penalty)
+	stats["attract_enemies"] = card.effect.get("attract_enemies", false)
 	target.set_base_stats(stats)
 	target.tags.append("Fate.CurseReload")
 	tree.refresh_stats()
@@ -924,7 +931,10 @@ static func _apply_every_nth_fire(
 
 	var stats: Dictionary = target.get_base_stats()
 	stats["every_nth_fire"] = nth
-	stats["every_nth_attach_gun"] = attach_gun
+	stats["nth_damage_multiplier"] = card.effect.get("damage_multiplier", 2.0)
+	stats["nth_after_reload"] = card.effect.get("after_reload", false)
+	stats["nth_explosion_enabled"] = not bool(card.effect.get("after_reload", false)) and str(card.effect.get("bonus_effect", "")) == "small_explosion"
+	stats["fate_magazine_multiplier"] = float(stats.get("fate_magazine_multiplier", 1.0)) * float(card.effect.get("magazine_multiplier", 1.0))
 	target.set_base_stats(stats)
 	target.tags.append("Fate.EveryNthFire")
 	tree.refresh_stats()
@@ -950,8 +960,13 @@ static func _apply_crit_on_kill(
 	var target: AssemblyNode = targets[0]
 	var crit_mult: float = card.effect.get("crit_damage_multiplier", 2.5)
 	var stats: Dictionary = target.get_base_stats()
-	stats["crit_on_kill"] = true
-	stats["crit_damage_multiplier"] = crit_mult
+	var guaranteed := bool(card.effect.get("guaranteed_crit", true))
+	if guaranteed:
+		stats["crit_on_kill"] = true
+		stats["crit_damage_multiplier"] = crit_mult
+	else:
+		stats["crit_kill_bonus_shots"] = int(card.effect.get("stacks", 3))
+		stats["crit_kill_damage_multiplier"] = float(card.effect.get("damage_multiplier", 1.3))
 	target.set_base_stats(stats)
 	target.tags.append("Fate.CritOnKill")
 	tree.refresh_stats()
@@ -1187,8 +1202,10 @@ static func _apply_out_of_control(
 	# 将乱射标记写入子弹节点 stats
 	var stats: Dictionary = bullet_node.get_base_stats()
 	stats["uncontrolled_gun"] = true
-	stats["aim_randomness"] = aim_randomness
+	stats["aim_randomness"] = card.effect.get("aim_randomness", float(card.effect.get("spread_angle", 360.0)) / 360.0)
 	stats["uncontrolled_damage_scale"] = damage_scale
+	stats["uncontrolled_fire_rate_scale"] = card.effect.get("fire_rate_scale", 1.0)
+	stats["uncontrolled_recoil_scale"] = card.effect.get("recoil_scale", 1.0)
 	bullet_node.set_base_stats(stats)
 	bullet_node.tags.append("Fate.Uncontrolled")
 	tree.refresh_stats()
@@ -1227,13 +1244,17 @@ static func _apply_size_growth(
 		result.message = "No bullet node found for SIZE_GROWTH"
 		return result
 
-	var growth_per_hit: float = card.effect.get("growth_per_hit", 0.2)
+	var growth_per_hit: float = card.effect.get("damage_per_hit", card.effect.get("growth_per_hit", 0.15))
 	var max_scale: float = card.effect.get("max_scale", 3.0)
 
 	var stats: Dictionary = bullet_node.get_base_stats()
 	stats["size_growth"] = true
 	stats["growth_per_hit"] = growth_per_hit
+	stats["growth_scale_per_hit"] = card.effect.get("scale_per_hit", 0.12)
 	stats["max_fate_scale"] = max_scale
+	stats["growth_max_stacks"] = card.effect.get("max_stacks", 5)
+	stats["grow_on_miss"] = card.effect.get("grow_on_miss", false)
+	stats["consume_growth_on_hit"] = card.effect.get("consume_growth_on_hit", false)
 	bullet_node.set_base_stats(stats)
 	bullet_node.tags.append("Fate.SizeGrowth")
 	tree.refresh_stats()
@@ -1246,6 +1267,25 @@ static func _apply_size_growth(
 		growth_per_hit * 100.0, max_scale, bullet_node.node_name
 	]
 	return result
+
+
+static func _make_attached_gun(source: AssemblyNode, card: FateCard) -> AssemblyNode:
+	var gun := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, source.node_name)
+	var stats := source.get_computed_stats().duplicate(true)
+	stats["fate_damage_multiplier"] = float(stats.get("fate_damage_multiplier", 1.0)) * float(card.effect.get("damage_scale", 1.0))
+	stats["fire_rate"] = float(stats.get("fire_rate", 4.0)) * float(card.effect.get("fire_rate_scale", 1.0))
+	stats["fire_on_hit"] = card.effect.get("fire_on_hit", false)
+	stats["follow_probability"] = card.effect.get("follow_probability", 1.0)
+	stats.erase("attached_gun")
+	stats.erase("alternate_fire")
+	gun.set_base_stats(stats)
+	gun.tags = source.tags.duplicate()
+	var bullet: AssemblyNode = source.slots.get(AssemblyNode.SlotType.BULLET)
+	if bullet != null:
+		for tag in bullet.tags:
+			if tag not in gun.tags:
+				gun.tags.append(tag)
+	return gun
 
 
 ## ========== 辅助方法 ==========

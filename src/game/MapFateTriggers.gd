@@ -48,10 +48,8 @@ var _connected: bool = false
 ##   · fate_reinforce  —— KILL_COUNT ≥3 / 冷却 15s / 可重复（房间恒多一波的直接来源）
 ##   · fate_curse_map  —— ENTER_ROOM ≥7 / 冷却 45s
 ##   · fate_bless_dead —— ELITE_KILL ≥1 / 冷却 30s
-## 留下的三条只走「奖励 / 掉落」自动事件，不直接追加波次或修改房间敌人，故保留。
+## 愚者也必须先抽到角色牌，击杀信号只转发角色规则；这里只保留两条容器事件。
 const DEFAULT_TRIGGERS: Array[Dictionary] = [
-	# 击杀触发：击杀第10个敌人 → 获得一张随机命运卡片
-	{"trigger_type": TriggerType.KILL_COUNT, "threshold": 10, "fate_card_id": "fate_mark_enemy", "cooldown": 60.0, "once_per_run": true},
 	# 开箱触发：开第5个箱子 → 箱子物品品质提升
 	{"trigger_type": TriggerType.OPEN_CHEST, "threshold": 5, "fate_card_id": "fate_lucky_chest", "cooldown": 30.0, "once_per_run": false},
 	# 开箱触发：开第10个箱子 → 额外掉落
@@ -107,6 +105,9 @@ func _reset_counters() -> void:
 ## ========== 事件处理 ==========
 
 func _on_kill_recorded() -> void:
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null and player.has_method("on_fate_kill_recorded"):
+		player.call("on_fate_kill_recorded")
 	_increment_counter(TriggerType.KILL_COUNT)
 	var enemy_data = null
 	if _run_runtime != null and _run_runtime.has_method("get_last_killed_enemy"):

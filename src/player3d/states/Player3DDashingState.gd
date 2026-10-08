@@ -8,7 +8,7 @@ func enter() -> void:
 	super.enter()
 	_announce("dashing", {"direction": player.get("dash_direction")})
 	player.set("is_dashing", true)
-	player.set("is_invincible", true)
+	player.call("begin_fate_dash_invulnerability")
 	_remaining = float(player.call("get_dash_duration"))
 	if AudioManager != null:
 		AudioManager.play_dash_sfx()

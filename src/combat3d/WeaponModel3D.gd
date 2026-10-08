@@ -110,6 +110,8 @@ var fire_rate := 3.5
 var projectile_count := 1
 var spread := 0.03
 var reload_time := 1.5
+## Character-authored reload owns the held weapon pose; retain recoil independently.
+var character_authored_reload := false
 var magazine_size := 12
 var current_ammo := 12
 var bullet_speed := 24.0
@@ -127,6 +129,10 @@ var _projectile_behavior: Dictionary = {}
 var _secondary_guns: Array[Dictionary] = []
 var _source_tree: WeaponAssemblyTree
 var _fire_sequence := 0
+var _reload_first_shot := false
+var _pending_copy_waves: Array[Dictionary] = []
+var _pending_secondary_shots: Array[Dictionary] = []
+var _secondary_rate_remainder := 0.0
 
 var _cooldown := 0.0
 var _reload_remaining := 0.0
@@ -175,6 +181,22 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	for index in range(_pending_secondary_shots.size() - 1, -1, -1):
+		var shot := _pending_secondary_shots[index]
+		shot["remaining"] = float(shot["remaining"]) - delta
+		if float(shot["remaining"]) <= 0.0:
+			_pending_secondary_shots.remove_at(index)
+			if is_instance_valid(shot["shooter"]) and is_instance_valid(shot["world"]) and shot["source"] == _source_tree:
+				_fire_secondary_gun(shot["world"], shot["shooter"], shot["direction"], shot["secondary"])
+	for index in range(_pending_copy_waves.size() - 1, -1, -1):
+		var wave := _pending_copy_waves[index]
+		wave["remaining"] = float(wave["remaining"]) - delta
+		if float(wave["remaining"]) <= 0.0:
+			_pending_copy_waves.remove_at(index)
+			if is_instance_valid(wave["world"]) and is_instance_valid(wave["shooter"]):
+				for config in wave["configs"]:
+					var projectile := _acquire_projectile(wave["world"], config, wave["position"])
+					projectile_spawned.emit(projectile)
 	_cooldown = maxf(0.0, _cooldown - delta)
 	if _reload_remaining > 0.0:
 		_reload_remaining = maxf(0.0, _reload_remaining - delta)
@@ -187,7 +209,7 @@ func _process(delta: float) -> void:
 	_recoil = lerpf(_recoil, 0.0, minf(1.0, delta * 15.0))
 	if _visual_root != null:
 		var reload_progress := get_reload_progress()
-		var reload_arch := sin(reload_progress * PI) if is_reloading() else 0.0
+		var reload_arch := sin(reload_progress * PI) if is_reloading() and not character_authored_reload else 0.0
 		var service_tick := sin(reload_progress * TAU * 2.0) * reload_arch
 		_visual_root.position = Vector3(0.0, -0.025 * reload_arch, _recoil + 0.04 * reload_arch)
 		_visual_root.rotation = Vector3(
@@ -201,11 +223,17 @@ func _process(delta: float) -> void:
 		and _reload_remaining <= 0.0
 		and not _charge_active
 		and absf(_recoil) < 0.001
+		and _pending_copy_waves.is_empty()
+		and _pending_secondary_shots.is_empty()
 	):
 		set_process(false)
 
 
 func configure(p_gun_id: String, p_bullet_id: String) -> bool:
+	_pending_copy_waves.clear()
+	_pending_secondary_shots.clear()
+	_fire_sequence = 0
+	_reload_first_shot = false
 	cancel_reload()
 	cancel_charge()
 	_cooldown = 0.0
@@ -254,6 +282,12 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 		clear_weapon()
 		return false
 	var root := tree.get_root()
+	if _source_tree != tree:
+		_pending_copy_waves.clear()
+		_pending_secondary_shots.clear()
+		_fire_sequence = 0
+		_reload_first_shot = false
+		_secondary_rate_remainder = 0.0
 	_source_tree = tree
 	var bullet: AssemblyNode = null
 	for node in root.get_all_descendants():
@@ -265,6 +299,7 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 	bullet_id = "" if root_is_melee else str(BULLET_NAME_TO_ID.get(bullet.node_name if bullet != null else "", "mod_bullet_standard"))
 	var stats := tree.get_computed_stats()
 	_configure_common_stats(stats, root_is_melee)
+	current_ammo = clampi(tree.current_ammo, 0, magazine_size)
 	_copy_chance = clampf(float(stats.get("copy_chance", 0.0)), 0.0, 1.0)
 	_critical_chance = 0.12 if root_is_melee else (0.28 if gun_id == "bp_sniper" else 0.10)
 	_critical_damage_multiplier = maxf(1.0, float(stats.get("crit_damage_multiplier", 1.5)))
@@ -276,24 +311,20 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 	var behavior_nodes := root.get_all_descendants()
 	behavior_nodes.append(root)
 	for node in behavior_nodes:
-		for tag in node.tags:
-			if tag not in bullet_tags:
-				bullet_tags.append(tag)
+		var owner_gun := node.parent_node
+		while owner_gun != null and owner_gun.node_type != AssemblyNode.NodeType.GUN_BODY:
+			owner_gun = owner_gun.parent_node
 		if node != root and node.node_type == AssemblyNode.NodeType.GUN_BODY:
-			var child_stats := node.get_base_stats()
+			var child_stats := node.get_computed_stats().duplicate(true)
+			child_stats["tags"] = node.tags.duplicate()
 			if node.parent_node != null and node.parent_node.node_type == AssemblyNode.NodeType.BULLET:
-				_projectile_behavior["attached_gun"] = {
-					"damage": maxi(1, int(child_stats.get("damage", 5))),
-					"fire_rate": maxf(0.2, float(child_stats.get("fire_rate", 2.0))),
-					"bullet_count": maxi(1, int(child_stats.get("bullet_count", 1))),
-				}
+				_projectile_behavior["attached_gun"] = child_stats
 			elif "Fate.SecondaryGun" in node.tags:
-				_secondary_guns.append({
-					"damage": maxi(1, int(child_stats.get("damage", 5))),
-					"bullet_count": maxi(1, int(child_stats.get("bullet_count", 1))),
-				})
-	if "Fate.ArmorPierced" in bullet_tags:
-		_projectile_behavior["pierce_shield"] = true
+				_secondary_guns.append(child_stats)
+		elif (node == root or owner_gun == root) and not bool(node.base_stats.get("fate_trigger_attachment", false)):
+			for tag in node.tags:
+				if tag not in bullet_tags:
+					bullet_tags.append(tag)
 	_apply_gun_behavior_tags()
 	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.20, 0.84, 0.92) if root_is_melee else Color(0.76, 0.86, 0.92))
 	_rebuild_visual()
@@ -318,15 +349,15 @@ func _configure_common_stats(stats: Dictionary, melee: bool) -> void:
 		_melee_profile = _build_melee_profile(stats)
 		return
 	_melee_profile.clear()
-	_base_damage = maxi(1, int(stats.get("damage", 0)) + int(stats.get("bullet_damage", 5)))
+	_base_damage = maxi(1, int((float(stats.get("damage", 0)) + float(stats.get("bullet_damage", 5))) * float(stats.get("fate_damage_multiplier", 1.0))))
 	damage = maxi(1, int(_base_damage * damage_multiplier))
 	fire_rate = maxf(0.2, float(stats.get("fire_rate", 3.0)))
 	projectile_count = maxi(1, int(stats.get("bullet_count", 1)))
 	spread = maxf(0.0, float(stats.get("spread", 0.0)))
 	reload_time = maxf(0.25, float(stats.get("reload_time", 1.5)) + float(stats.get("reload_penalty", 0.0)))
-	magazine_size = maxi(1, int(stats.get("magazine_size", 12)))
+	magazine_size = maxi(1, int(float(stats.get("magazine_size", 12)) * float(stats.get("fate_magazine_multiplier", 1.0))))
 	current_ammo = magazine_size
-	bullet_speed = 23.0 * float(stats.get("bullet_speed", 1.0))
+	bullet_speed = 23.0 * float(stats.get("bullet_speed", 1.0)) * float(stats.get("fate_speed_multiplier", 1.0))
 	charge_time = maxf(0.0, float(stats.get("charge_time", 0.0)))
 
 
@@ -425,23 +456,30 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 	set_process(true)
 	var behavior := _projectile_behavior.duplicate(true)
 	var base_direction := aim_direction.normalized()
-	if bool(behavior.get("uncontrolled_gun", false)):
-		var randomness := clampf(float(behavior.get("aim_randomness", 0.5)), 0.0, 1.0)
-		base_direction = base_direction.rotated(Vector3.UP, randf_range(-PI, PI) * randomness)
-		shot_damage_multiplier *= float(behavior.get("uncontrolled_damage_scale", 1.0))
+	behavior["source_weapon_tree"] = _source_tree
+	behavior["source_weapon"] = self
+	behavior["owner_damage_multiplier"] = damage_multiplier
+	behavior["owner_critical_chance"] = _critical_chance + _character_critical_bonus(shooter)
+	behavior["owner_critical_multiplier"] = _critical_damage_multiplier
+	if is_instance_valid(_source_tree):
+		shot_damage_multiplier *= _source_tree.consume_shot_damage_bonus()
 	var nth := int(behavior.get("every_nth_fire", 0))
-	if nth > 0 and _fire_sequence % nth == 0:
+	var after_reload := bool(behavior.get("nth_after_reload", false))
+	if nth > 0 and ((_reload_first_shot if after_reload else _fire_sequence % nth == 0)):
 		shot_damage_multiplier *= float(behavior.get("nth_damage_multiplier", 2.0))
-		behavior["nth_explosion"] = true
+		behavior["nth_explosion"] = bool(behavior.get("nth_explosion_enabled", false))
+	_reload_first_shot = false
+	var alternate_secondary := bool(behavior.get("alternate_fire", false)) and _fire_sequence % 2 == 0 and not _secondary_guns.is_empty()
 	var emitted_count := 0
-	for index in range(projectile_count):
+	var forced_critical := _consume_forced_critical()
+	for index in range(0 if alternate_secondary else projectile_count):
 		var angle := 0.0
 		if projectile_count > 1:
 			angle = lerpf(-spread * 0.5, spread * 0.5, float(index) / float(projectile_count - 1))
 		elif spread > 0.0:
 			angle = randf_range(-spread * 0.5, spread * 0.5)
 		var shot_direction := base_direction.rotated(Vector3.UP, angle).normalized()
-		var is_critical := _consume_forced_critical() or randf() < _critical_chance
+		var is_critical := forced_critical or randf() < _critical_chance + _character_critical_bonus(shooter)
 		var projectile_damage := maxi(1, int(damage * shot_damage_multiplier))
 		if is_critical:
 			# Enemy3D 的通用暴击入口会乘 1.5；在这里补齐命运卡的实际倍率差额。
@@ -477,9 +515,16 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			)
 			projectile_spawned.emit(copied)
 			emitted_count += 1
-	for secondary in _secondary_guns:
-		emitted_count += _fire_secondary_gun(world, shooter, base_direction, secondary)
-	if bool(behavior.get("copy_fire", false)):
+	if not bool(behavior.get("alternate_fire", false)) or alternate_secondary:
+		for secondary in _secondary_guns:
+			emitted_count += _fire_secondary_gun(world, shooter, base_direction, secondary, forced_critical)
+			var rate_scale := float(behavior.get("uncontrolled_fire_rate_scale", 1.0))
+			_secondary_rate_remainder += maxf(0.0, rate_scale - 1.0)
+			var extras := int(_secondary_rate_remainder)
+			_secondary_rate_remainder -= extras
+			for extra in range(extras):
+				_pending_secondary_shots.append({"remaining": float(extra + 1) / (fire_rate * rate_scale), "world": world, "shooter": shooter, "direction": base_direction, "secondary": secondary.duplicate(true), "source": _source_tree})
+	if bool(behavior.get("copy_fire", false)) and not alternate_secondary:
 		emitted_count += _fire_copy_wave(
 			world,
 			shooter,
@@ -499,6 +544,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			shooter
 		)
 	shot_fired.emit(emitted_count)
+	if is_instance_valid(_source_tree):
+		_source_tree.current_ammo = current_ammo
 	ammo_changed.emit(current_ammo, magazine_size)
 	if current_ammo <= 0:
 		request_reload()
@@ -534,39 +581,69 @@ func _extract_projectile_behavior(stats: Dictionary) -> Dictionary:
 		"explosion_damage_scale", "every_nth_fire", "every_nth_attach_gun",
 		"visual_has_eyes", "visual_has_legs",
 		"fate_attachment_hit_trigger",
-		"crit_on_kill", "crit_damage_multiplier",
+		"crit_on_kill", "crit_damage_multiplier", "pierce_shield", "shield_damage_scale",
+		"target_mode", "return_on_hit", "refund_ammo", "outbound_damage_multiplier",
+		"mobile_turret", "backward_wave", "nth_damage_multiplier", "nth_after_reload", "nth_explosion_enabled",
+		"fate_elements", "growth_max_stacks", "growth_scale_per_hit", "grow_on_miss", "consume_growth_on_hit",
+		"uncontrolled_fire_rate_scale", "uncontrolled_recoil_scale", "alternate_fire",
+		"attract_enemies", "fate_attachment", "fate_attachment_reload_trigger", "attachment_cooldown",
 	]:
 		if stats.has(key):
 			behavior[key] = stats[key]
-	if "Fate.ArmorPierced" in bullet_tags or int(stats.get("pierce_level", 0)) > 0:
+	if not behavior.has("pierce_shield") and int(stats.get("pierce_level", 0)) > 0:
 		behavior["pierce_shield"] = true
 	return behavior
 
 
 func _consume_forced_critical() -> bool:
-	return _source_tree != null and _source_tree.consume_crit_on_kill_stack()
+	return is_instance_valid(_source_tree) and _source_tree.consume_crit_on_kill_stack()
+
+
+func _character_critical_bonus(shooter: Node3D) -> float:
+	return float(shooter.call("get_fate_critical_chance_bonus")) if is_instance_valid(shooter) and shooter.has_method("get_fate_critical_chance_bonus") else 0.0
+
+
+func refund_projectile_ammo(count: int, source: WeaponAssemblyTree) -> void:
+	if not is_instance_valid(source) or source != _source_tree:
+		return
+	current_ammo = mini(magazine_size, current_ammo + maxi(0, count))
+	source.current_ammo = current_ammo
+	ammo_changed.emit(current_ammo, magazine_size)
 
 
 func _fire_secondary_gun(
 	world: Node,
 	shooter: Node3D,
 	aim_direction: Vector3,
-	secondary: Dictionary
+	secondary: Dictionary,
+	forced_critical := false
 ) -> int:
+	if randf() > float(secondary.get("follow_probability", 1.0)):
+		return 0
 	var count := maxi(1, int(secondary.get("bullet_count", 1)))
+	var attached_behavior := _extract_projectile_behavior(secondary)
+	attached_behavior["source_weapon_tree"] = _source_tree
+	attached_behavior["source_weapon"] = self
+	var child_damage := (float(secondary.get("damage", 0)) + float(secondary.get("bullet_damage", 5))) * float(secondary.get("fate_damage_multiplier", 1.0)) * damage_multiplier
+	if bool(_projectile_behavior.get("uncontrolled_gun", false)):
+		aim_direction = aim_direction.rotated(Vector3.UP, randf_range(-PI, PI) * float(_projectile_behavior.get("aim_randomness", 1.0)))
+		child_damage *= float(_projectile_behavior.get("uncontrolled_damage_scale", 1.0))
+		_recoil *= float(_projectile_behavior.get("uncontrolled_recoil_scale", 1.0))
 	for index in range(count):
-		var angle := (float(index) - float(count - 1) * 0.5) * 0.08
-		_acquire_projectile(world, {
+		var angle := (float(index) - float(count - 1) * 0.5) * float(secondary.get("spread", 0.08))
+		var is_critical := forced_critical or randf() < _critical_chance + _character_critical_bonus(shooter)
+		var projectile := _acquire_projectile(world, {
 			"direction": aim_direction.rotated(Vector3.UP, angle),
-			"speed": bullet_speed,
-			"damage": maxi(1, int(secondary.get("damage", 5))),
-			"critical": false,
+			"speed": 23.0 * float(secondary.get("bullet_speed", 1.0)) * float(secondary.get("fate_speed_multiplier", 1.0)),
+			"damage": maxi(1, int(child_damage * (_critical_damage_multiplier / 1.5 if is_critical else 1.0))),
+			"critical": is_critical,
 			"hostile": false,
-			"tags": bullet_tags,
+			"tags": secondary.get("tags", []),
 			"color": bullet_color.lightened(0.12),
 			"shooter": shooter,
-			"behavior": {},
+			"behavior": attached_behavior,
 		}, _muzzle.global_position if _muzzle != null else global_position)
+		projectile_spawned.emit(projectile)
 	return count
 
 
@@ -577,22 +654,28 @@ func _fire_copy_wave(
 	damage_scale: float,
 	behavior: Dictionary
 ) -> int:
+	var configs: Array[Dictionary] = []
+	var backward := bool(behavior.get("backward_wave", false))
 	for index in range(projectile_count):
-		var angle := 0.0 if projectile_count <= 1 else lerpf(
-			-spread * 0.5, spread * 0.5, float(index) / float(projectile_count - 1)
-		)
-		_acquire_projectile(world, {
-			"direction": aim_direction.rotated(Vector3.UP, angle + 0.025),
+		var angle := 0.0 if projectile_count <= 1 else lerpf(-spread * 0.5, spread * 0.5, float(index) / float(projectile_count - 1))
+		var is_critical := randf() < _critical_chance + _character_critical_bonus(shooter)
+		configs.append({
+			"direction": (-aim_direction if backward else aim_direction).rotated(Vector3.UP, angle),
 			"speed": bullet_speed,
-			"damage": maxi(1, int(damage * damage_scale)),
-			"critical": false,
-			"hostile": false,
-			"tags": bullet_tags,
-			"color": bullet_color.darkened(0.10),
-			"shooter": shooter,
-			"behavior": behavior,
-		}, _muzzle.global_position if _muzzle != null else global_position)
-	return projectile_count
+			"damage": maxi(1, int(damage * damage_scale * (_critical_damage_multiplier / 1.5 if is_critical else 1.0))),
+			"critical": is_critical,
+			"hostile": false, "tags": bullet_tags.duplicate(),
+			"color": bullet_color, "shooter": shooter, "behavior": behavior.duplicate(true),
+		})
+	var origin := _muzzle.global_position if _muzzle != null else global_position
+	var delay := float(behavior.get("copy_fire_delay", 0.1))
+	if delay > 0.0:
+		_pending_copy_waves.append({"remaining": delay, "configs": configs, "world": world, "shooter": shooter, "position": origin})
+		return 0
+	for config in configs:
+		var projectile := _acquire_projectile(world, config, origin)
+		projectile_spawned.emit(projectile)
+	return configs.size()
 
 
 func _acquire_projectile(world: Node, config: Dictionary, world_position: Vector3) -> Projectile3D:
@@ -741,7 +824,30 @@ func _finish_reload() -> void:
 	reload_progress_changed.emit(1.0, 0.0)
 	_active_reload_duration = 0.0
 	ammo_changed.emit(current_ammo, magazine_size)
+	if loaded > 0:
+		_reload_first_shot = true
+		if is_instance_valid(_source_tree):
+			_source_tree.current_ammo = current_ammo
+			var attachment := _source_tree.claim_attachment_trigger("reload")
+			if not attachment.is_empty():
+				_trigger_reload_attachment(attachment)
 	reload_ended.emit(loaded > 0)
+
+
+func _trigger_reload_attachment(attachment: Dictionary) -> void:
+	var player := _find_owner_player()
+	if player == null:
+		return
+	if attachment.has("pull_strength"):
+		for target in get_tree().get_nodes_in_group("enemy_3d"):
+			if target is Enemy3D and player.global_position.distance_to(target.global_position) <= 12.0:
+				target.apply_pull(player.global_position, float(attachment["pull_strength"]))
+	var count := int(attachment.get("bullet_count", 0))
+	if randf() < float(attachment.get("copy_chance", 0.0)):
+		count += 1
+	if count > 0:
+		var stats := {"damage": _base_damage, "bullet_damage": 0, "bullet_count": count, "spread": attachment.get("spread", spread)}
+		_fire_secondary_gun(get_tree().current_scene, player, -global_basis.z, stats)
 
 
 func _perform_reload_explosion() -> void:
@@ -757,7 +863,9 @@ func _perform_reload_explosion() -> void:
 		if enemy == null or enemy.ai_state == "dead" or player.global_position.distance_to(enemy.global_position) > radius:
 			continue
 		enemy.notify_attacked_by(player)
-		enemy.take_damage(maxi(1, int(damage * damage_scale)), false, (enemy.global_position - player.global_position).normalized())
+		enemy.take_projectile_damage(maxi(1, int(damage * damage_scale)), false, (enemy.global_position - player.global_position).normalized(), [], {"source_weapon_tree": _source_tree}, player)
+		if bool(_projectile_behavior.get("attract_enemies", false)):
+			enemy.apply_pull(player.global_position, radius)
 	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
 	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
 		(pools[0] as CombatEffectPool3D).acquire("explosion", bullet_color, radius * 0.35, player.global_position)

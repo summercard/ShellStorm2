@@ -43,6 +43,9 @@ func _verify_behavior_card(
 		failures.append("3D fate card cannot apply: %s (%s)" % [label, result.get("message", "")])
 	else:
 		var behavior := player.get_weapon_snapshot().get("fate_behavior", {}) as Dictionary
+		if key == "freeze_duration":
+			var elements: Dictionary = behavior.get("fate_elements", {})
+			behavior = elements.get("ice", {})
 		if not behavior.has(key):
 			failures.append("3D adapter lost %s behavior key: %s" % [label, key])
 		elif expected is float and not is_equal_approx(float(behavior[key]), float(expected)):
@@ -54,7 +57,7 @@ func _verify_behavior_card(
 
 func _verify_secondary_gun(failures: Array[String]) -> void:
 	var player := await _make_player()
-	var result := FateCardGameBridge.apply_card(FateCardPresets.gun_on_gun())
+	var result := FateCardGameBridge.apply_card(FateCardPresets.gun_on_gun(), player.get_weapon_tree().root)
 	await get_tree().process_frame
 	if not bool(result.get("success", false)) or int(player.get_weapon_snapshot().get("secondary_gun_count", 0)) < 1:
 		failures.append("Gun-on-gun fate is not routed into 3D secondary fire")
@@ -63,7 +66,7 @@ func _verify_secondary_gun(failures: Array[String]) -> void:
 
 func _verify_attached_gun_and_uncontrolled(failures: Array[String]) -> void:
 	var player := await _make_player()
-	var attached := FateCardGameBridge.apply_card(FateCardPresets.bullet_carry_gun())
+	var attached := FateCardGameBridge.apply_card(FateCardPresets.bullet_carry_gun(), player.get_weapon_tree().root)
 	var unstable := FateCardGameBridge.apply_card(FateCardPresets.out_of_control())
 	await get_tree().process_frame
 	var behavior := player.get_weapon_snapshot().get("fate_behavior", {}) as Dictionary
@@ -81,8 +84,16 @@ func _verify_numeric_cards(failures: Array[String]) -> void:
 	await get_tree().process_frame
 	if not bool(overclock.get("success", false)) or float(player.get_weapon_snapshot().get("fire_rate", 0.0)) <= base_fire_rate:
 		failures.append("Overclock fate does not increase the 3D gun fire rate")
-	if player.get_weapon_tree().get_overheat_penalty() <= 1.0:
-		failures.append("Overclock fate does not preserve its 3D incoming-damage penalty")
+	if not is_equal_approx(player.get_weapon_tree().get_overheat_penalty(), 1.0):
+		failures.append("未开火不能凭空积累过热")
+	if not player.weapon.try_fire(Vector3.FORWARD, player):
+		failures.append("超频实际射击前置失败")
+	var heat := player.get_weapon_tree().get_overheat_penalty()
+	if heat <= 1.0:
+		failures.append("实际开火后没有累积超频受击惩罚")
+	player.weapon._cooldown = 0.0
+	if not player.weapon.try_fire(Vector3.FORWARD, player) or player.get_weapon_tree().get_overheat_penalty() <= heat:
+		failures.append("第二次实际开火没有继续累积过热")
 	await _discard_player(player)
 
 

@@ -41,6 +41,8 @@ const RADAR_BG := Color(0.006, 0.020, 0.034, 0.78)
 var _records: Array[Dictionary] = []
 var _edges: Dictionary = {}
 var _revealed: Dictionary = {}
+var _hidden_room_types: Dictionary = {}
+var _visited_room_types: Dictionary = {}
 var _current_room_id := ""
 var _position_by_id: Dictionary = {}
 var _record_by_id: Dictionary = {}
@@ -98,6 +100,8 @@ func reset_exploration_for_new_run() -> void:
 	# configure() 也用于同一战局内追加新楼层，不能在那里清 revealed。
 	# 只有明确的新战局边界才清掉上一局的探索路径和实时敌人投影。
 	_revealed.clear()
+	_hidden_room_types.clear()
+	_visited_room_types.clear()
 	_current_room_id = ""
 	_enemy_world_positions.clear()
 	_has_realtime_player_state = false
@@ -117,6 +121,8 @@ func copy_state_from(source: DungeonMinimap3D) -> void:
 	_records = source._records.duplicate(true)
 	_edges = source._edges.duplicate(true)
 	_revealed = source._revealed.duplicate(true)
+	_hidden_room_types = source._hidden_room_types.duplicate(true)
+	_visited_room_types = source._visited_room_types.duplicate(true)
 	_current_room_id = source._current_room_id
 	_position_by_id = source._position_by_id.duplicate(true)
 	_record_by_id = source._record_by_id.duplicate(true)
@@ -131,13 +137,23 @@ func copy_state_from(source: DungeonMinimap3D) -> void:
 	queue_redraw()
 
 
-func reveal_room(room_id: String) -> void:
+func reveal_room(room_id: String, hide_type: bool = false) -> void:
 	_revealed[room_id] = true
+	if hide_type and not _visited_room_types.has(room_id):
+		_hidden_room_types[room_id] = true
 	queue_redraw()
+
+
+func get_visible_room_type(room_id: String) -> String:
+	if not _revealed.has(room_id) or _hidden_room_types.has(room_id):
+		return ""
+	return str((_record_by_id.get(room_id, {}) as Dictionary).get("type", ""))
 
 
 func set_current_room(room_id: String) -> void:
 	_current_room_id = room_id
+	_visited_room_types[room_id] = true
+	_hidden_room_types.erase(room_id)
 	var position := _position_by_id.get(room_id, Vector3.ZERO) as Vector3
 	_current_floor_y = position.y
 	reveal_room(room_id)
@@ -177,6 +193,7 @@ func set_edge_open(a: String, b: String, opened: bool) -> void:
 func get_snapshot() -> Dictionary:
 	return {
 		"revealed_count": _revealed.size(),
+		"hidden_room_types": _hidden_room_types.keys(),
 		"current_room_id": _current_room_id,
 		"open_edge_count": _edges.values().count(true),
 		"room_count": _records.size(),
@@ -250,6 +267,10 @@ func _draw_walls_and_doors(bounds: Rect2, map_rect: Rect2) -> void:
 		var dimensions := _dimensions_by_id.get(room_id, Vector2(20.0, 18.0)) as Vector2
 		var rect_world := _room_world_rect(world_position, dimensions)
 		_draw_room_walls(room_id, rect_world, bounds, map_rect)
+		var visible_type := get_visible_room_type(room_id)
+		if _full_map_mode and not visible_type.is_empty():
+			var center := _map_position(world_position, bounds, map_rect)
+			draw_string(ThemeDB.fallback_font, center, visible_type, HORIZONTAL_ALIGNMENT_CENTER, -1, 12, WALL_COLOR)
 
 	# 再画走廊：把"两端房间在门洞位置的边缘点"用蓝色线段连起来。
 	_drawn_corridors(bounds, map_rect)

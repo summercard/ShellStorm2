@@ -1,0 +1,55 @@
+{
+  "owner": "world",
+  "status": "world_consumers_and_character_wiring_verified_pending_engine_bridge_integration",
+  "modified_files": ["src/world3d/Dungeon3D.gd", "src/world3d/TowerDescent3D.gd", "src/ui/DungeonMinimap3D.gd", "src/world3d/ExtractionBeacon3D.gd", "tests/verification/verify_fate_world_completion.gd", "tests/verification/verify_fate_world_completion.tscn", "_scratch/fate_world_handoff.json"],
+  "required_main_assistant_interfaces": [
+    {
+      "owner": "Engine/Bridge",
+      "signature": "Dungeon3D.apply_world_fate_card(card: FateCard) -> Dictionary",
+      "location": "src/world3d/Dungeon3D.gd:4547",
+      "contract": "全部14张WORLD交完整已定方位card（effect为合并快照）到唯一执行入口；返回success/message/error。失败不登记持卡、不发scope_state_changed、不消费选择。世界scope_state_changed已不再执行业务以避免双算。Bridge WORLD分支先调用此入口成功才登记，或Engine统一调用后Bridge只登记，二选一不能双调用。当前旧WORLD_MODIFIER桥在主助手改完前不会执行，不能直接发布当前中间状态。",
+      "old_interfaces_to_replace": ["REINFORCE: trigger_extra_wave(effect: Dictionary={}) -> Dictionary，必须传spawn_count/spawn_elite/clear_currency并消费失败", "LUCKY_CHEST: 不再只传quality_boost，完整card带extra_count", "EXTRA_LOOT: 不再只传true，完整card带quality_boost/extra_count", "CURSE_ROOM_ENEMIES: apply_curse_to_current_room(damage_multiplier: float, currency_multiplier: float=1.0) -> Dictionary；逆位优先enemy_damage_multiplier", "WORLD_MODIFIER: 不再先success再靠scope信号落地，统一完整卡命令"],
+      "rejection": "星币王牌按14§5.4清房拒绝，不延后、不恢复五杀。room_not_in_combat/fate_wave_already_queued/reinforcement_unavailable；诅咒无战斗同样拒绝。"
+    },
+    {"owner":"主助手", "contract":"登记res://tests/verification/verify_fate_world_completion.tscn并补Engine/Bridge正式应用/失败留卡端到端断言；同步文档、状态、开发记录，本代理不改文档/registry。"}
+  ],
+  "implemented": [
+    "皇后追加候选按真实rarity排序；逆位最终品质上限RARE，实际武器实例rarity同步；单件不恢复多件",
+    "皇帝普通补兵/真实精英在共同波次提交入口生效，覆盖公式/设计源/触发盒；逆位清房50魂。和平房/无盒空房不消费下一敌房规则",
+    "教皇临时钥匙独立计数、优先消耗；进房与Tower物理楼层权威离层过期；不混永久钥匙",
+    "正义逆位伤害0.8/魂0.5，节制逆位HP1.2/伤害0.8；同房未来波保持",
+    "太阳魂倍率允许0.85；满槽兑魂改走统一_grant_run_currency。奖励地面出口非货币每3件升品，恢复旧地面物/主动丢弃不重计数",
+    "世界撤离正逆倍率均消费，已启动剩余同步缩放；真实同步圆柱区域内敌移速减半，离区/取消后恢复",
+    "赏金每卡独立队列，进入真实战斗时绑定房间；各清房金额累加不串max，逆位后两敌房在统一地面出口禁魂",
+    "下一箱真实rarity升降而非仅重抽池档；逆幸运箱追加2候选，逆额外掉落追加1候选并升1；数量扣减不消灭单件",
+    "地图独立隐藏类型状态、完整地图显示走get_visible_room_type，逆测绘仅拓扑，真正进房恢复类型",
+    "星币王牌抽后立即排波，每房一次、全清等2秒；逆位真实精英+50击杀魂并入一个魂球；清房拒绝",
+    "诅咒保存房间伤害/魂倍率，当前与未来波均消费；逆位优先enemy_damage_multiplier=0.9、魂0.7",
+    "角色首次进房独立visited判定，streaming前on_fate_room_entered(room_id)，避免预生成吞回调；清房回调与实际精英state_changed/首领激活完成回调；角色按唯一房/敌键幂等",
+    "update_fate_survival替代旧祝福计时；移除Dungeon无条件crit，击杀角色事件仍仅MapFateTriggers转发；Tower结算/撤退reset_world_fate_state"
+  ],
+  "verification": {
+    "status":"passed",
+    "entry":"res://tests/verification/verify_fate_world_completion.tscn",
+    "checks":113,
+    "failures":0,
+    "exit_code":0,
+    "errors":0,
+    "success_marker":"FATE_WORLD_COMPLETION_OK",
+    "log":"outputs/fate_completion_20261008/world/verification_final.log",
+    "isolation":"Autoload启动前APPDATA/LOCALAPPDATA均隔离到outputs/fate_completion_20261008/world；Godot 4.6.3 console headless，不跑全套，不触真实档",
+    "coverage":"正式Dungeon场景/进房；真实玩家HP弹药、清房治疗、祝福增伤；Enemy真实HP伤害与精英护盾；公式/设计源/盒子补兵、实际两秒整波；魂球/钱包、单件品质及RARE上限、独立赏金/禁魂、临时钥匙、地图类型、撤离剩余与真实移速。Tower在Autoload就绪后加载编译通过。",
+    "not_executed":"完整Tower路线、真实渲染/输入、Engine/Bridge尚未改造的正式抽卡端到端、跨进程世界命运存档",
+    "failed_attempts":"initial脚本ItemRegistry静态调用错误；second测试TriggerConfig字段误写；third真实断言捕获精英append缩进错误并已修正；一次候选验证被合法五次开箱奖励干扰，专项隔离后通过。tower_parse.log为--script --check-only未加载Autoload导致编译失败，改用正式场景启动后load验证通过，不计为运行通过证据。",
+    "documentation_gate":"退出1：既有CHANGELOG断链、7个未登记专项（含世界/武器/角色）与python缺openpyxl；见world/documentation_gate.log。未越权修文档。",
+    "diff_check":"授权文件git diff --check退出0"
+  },
+  "remaining": [
+    "Engine/Bridge必须按以上完整卡命令切换后再做端到端测试；当前仅世界消费者验收，不能宣称14卡正式抽卡全闭环。",
+    "精英名册冲突：唯一正式身份elite_rift_boar_armed仅seed选定98/97/96某层且不可重复预约。皇帝/王牌逆位不可用时明确拒绝；专项成功路径使用真实符合投放层的预约，并验证不符合层的拒绝。要任意层保证增援须另裁定非唯一命运精英或名册投放，未改Enemy/Catalog。",
+    "世界运行内状态新增但跨进程快照未扩展；主助手需统一角色/世界/Bridge持卡与待用规则存档，避免读档只恢复敌与地面物而丢未来规则。",
+    "太阳每3件覆盖统一奖励地面出口（搜索/击杀/清房等），未把剧情直刷、起始补给、玩家掉回地面计为新奖励；若剧情掉落也应计件需明确来源分类后接入。",
+    "新增专项与开发记录由主助手登记；文档门禁未通过，不提升整个项目验收状态。"
+  ],
+  "commit":"未提交，未修改禁改owner文件，未回退既有工作区改动"
+}
