@@ -75,19 +75,55 @@ func _ready() -> void:
 	):
 		failures.append("换弹环没有挂在角色下方的独立锚点上（会随瞄准朝向立起来 / 挂回头顶）")
 	# 环面必须正对镜头：相机基的 +Z 指向观察者，环网格正面法线也是 +Z ⇒ 点积 = 1。
-	# ⚠️ 判据的量级要说清楚：本作相机离竖直只有 25°，所以「平铺地面」（法线朝上）
-	# 也有 cos(25°) ≈ 0.906 —— 这条断言区分的是 1.000 / 0.906，不是 1 / 0。
-	# 阈值取 0.999：容得下浮点误差，容不下那 25° 的倾角。
+	# ⚠️ 判据的量级要说清楚：本作相机离竖直只有 29.42°
+	# （相机在玩家系 (0, 10.269009, 4.787671)、注视点 (0, 0.45, -0.75)，
+	# 相机→焦点 = (0, -9.819009, -5.537671)，atan(5.537671/9.819009)），
+	# 所以「平铺地面」（法线朝上）也有 cos(29.42°) ≈ 0.871 ——
+	# 这条断言区分的是 1.000 / 0.871，不是 1 / 0。
+	# 阈值取 0.999：容得下浮点误差，容不下那 29.42° 的倾角。
 	var ring_alignment := _ring_camera_alignment(player.avatar, camera)
 	if ring_alignment < 0.999:
 		failures.append(
-			"换弹环没有正对镜头（环面法线与相机视轴点积 %.4f；平铺地面时约 0.906）" % ring_alignment
+			"换弹环没有正对镜头（环面法线与相机视轴点积 %.4f；平铺地面时约 0.871）" % ring_alignment
 		)
 	# 快照里那份对齐度必须与实测对得上，否则它就是个没人维护的摆设。
 	var reported_alignment := float(avatar_snapshot.get("reload_ring_camera_alignment", -1.0))
 	if absf(reported_alignment - ring_alignment) > 0.001:
 		failures.append(
 			"快照里的换弹环朝向与实测不一致（快照 %.4f / 实测 %.4f）" % [reported_alignment, ring_alignment]
+		)
+	# 2026-10-08：环要「贴到角色右边、别压人」。方向和大小**都要**验 ——
+	# 只验大小会放过「让到了角色左边」，只验方向会放过「让得太远/太近」。
+	var lateral_world := avatar_snapshot.get("reload_ring_lateral_offset_world", Vector3.ZERO) as Vector3
+	var expected_lateral := (
+		float(avatar_snapshot.get("reload_ring_lateral_offset_m", 0.0))
+		* float(avatar_snapshot.get("runtime_scale_multiplier", 1.0))
+	)
+	if absf(lateral_world.length() - expected_lateral) > 0.01:
+		failures.append(
+			"换弹环的横向让位量对不上标定值（实测 %.4f m，期望 %.4f m = 设计值 × 体型倍率）"
+			% [lateral_world.length(), expected_lateral]
+		)
+	var camera_right := camera.global_transform.basis.x
+	camera_right.y = 0.0
+	camera_right = camera_right.normalized()
+	if lateral_world.length() > 0.001 and lateral_world.normalized().dot(camera_right) < 0.999:
+		failures.append(
+			"换弹环没有让到角色的屏幕右侧（让位方向与相机基 +X 点积 %.4f）"
+			% lateral_world.normalized().dot(camera_right)
+		)
+	# 「别压人」的**可测代理**：在相机平面里判环与角色轮廓有没有相交（见下面对该
+	# 判据的说明）。带 headless 也测得了，因为 AABB 不需要渲染；环居中时环心投影 ≈ 0，
+	# 这条必然为负 —— 它就是那次返工的钉子。
+	# 真实观感（线宽、颜色、有没有真的"贴边站"）由 preview_reload_ring 出图兜底，
+	# 那台探针不参与自动验收。
+	var ring_clearance := _ring_clearance_from_character(
+		player.avatar, camera, float(avatar_snapshot.get("reload_ring_outer_radius_m", 0.0))
+		* float(avatar_snapshot.get("runtime_scale_multiplier", 1.0))
+	)
+	if ring_clearance < 0.0:
+		failures.append(
+			"换弹环压在角色身上（在相机平面里与角色轮廓相交 %.4f m）" % -ring_clearance
 		)
 	# 「层级还是在角色上方」：环心在角色下半身，不关深度测试就会被腿切掉半圈。
 	if not bool(avatar_snapshot.get("reload_ring_draws_over_character", false)):
@@ -251,7 +287,7 @@ func _ready() -> void:
 	player.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("3D_RELOAD_STATE_FLOW_OK: reload overlay, real timer, weapon-class grip animation, camera-facing under-character ring progress, completion and cancellation pass")
+		print("3D_RELOAD_STATE_FLOW_OK: reload overlay, real timer, weapon-class grip animation, camera-facing ring offset to the right of the character (clear of its silhouette), completion and cancellation pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -321,3 +357,59 @@ func _ring_anchor_scale(avatar: PlayerAvatar3D) -> float:
 	if anchor == null:
 		return 0.0
 	return anchor.global_transform.basis.get_scale().x
+
+
+## 「环没压在角色身上」的余量（米，正数 = 让开了，≤ 0 表示压上了）。
+##
+## 判据走**相机平面**，不是单轴投影：
+## 把角色**本体**（VisualRoot 下的网格，**排除手持武器** —— 枪管伸得比身体远得多）
+## 每个网格的 AABB 八顶点投到相机的 (right, up) 两个基向量上，得到它在屏幕平面里的
+## 2D 包围盒；再算环心到这个盒子的最近距离，与环世界半径比。
+##
+## ⚠️ 只投一条轴（right）是不够的 —— 第一版就这么写的，结果**误报**：
+## 换弹那把枪横在角色右上，它的横向投影天然越线，纵向却离环很远，屏幕上压根没重叠。
+## 2D 判定把"横越线但纵不搭界"这种情况正确放行了。
+##
+## 为什么要排除武器而不是靠 2D 判定：枪是**手持道具**，它会随换弹动画大幅摆动，
+## 算进去这条断言就变成了"枪的动画有没有跑偏"，而不是"环有没有压人"。
+func _ring_clearance_from_character(
+	avatar: PlayerAvatar3D, camera: Camera3D, ring_radius_world: float
+) -> float:
+	var ring := avatar.get_node_or_null("ReloadProgress3D") as Node3D
+	var visual := avatar.get_node_or_null("VisualRoot") as Node3D
+	if ring == null or visual == null:
+		return -999.0
+	var basis := camera.global_transform.basis
+	var right := basis.x
+	right.y = 0.0
+	right = right.normalized()
+	var up := basis.y
+	up.y = 0.0
+	up = up.normalized()
+	var ring_center := Vector2(ring.global_position.dot(right), ring.global_position.dot(up))
+	var weapon_socket := avatar.get_node_or_null("VisualRoot/BunnyRig/WeaponSocket") as Node3D
+	var closest := 999.0
+	var found := false
+	for entry in visual.find_children("*", "MeshInstance3D", true, false):
+		var mesh := entry as MeshInstance3D
+		if weapon_socket != null and weapon_socket.is_ancestor_of(mesh):
+			continue
+		# 必须滤掉**不可见**网格：bunny01 是叠在旧胶囊化身之上的，旧那套
+		# Body/Head/Scarf/StateVFX 网格仍在树里、却全被藏起来（实测一次能列出 24 个）。
+		# 不滤的话量到的是"隐藏的装饰环" —— LockRing / LowHealthRing / Scarf 领圈
+		# 都是半径 0.5~0.67 m 的对称环，任何贴边的进度环都会被判成"压在角色身上"。
+		if not mesh.is_visible_in_tree():
+			continue
+		found = true
+		var box := mesh.get_aabb()
+		var lo := Vector2(INF, INF)
+		var hi := Vector2(-INF, -INF)
+		for index in range(8):
+			var corner := mesh.global_transform * box.get_endpoint(index)
+			var point := Vector2(corner.dot(right), corner.dot(up))
+			lo = lo.min(point)
+			hi = hi.max(point)
+		closest = minf(closest, ring_center.distance_to(ring_center.clamp(lo, hi)))
+	if not found:
+		return -999.0
+	return closest - ring_radius_world

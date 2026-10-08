@@ -494,6 +494,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"insurance_slots": _insurance.get_slots_snapshot(),
 		"equipped_weapon_items": weapon_items,
 		"active_weapon_slot": player.get_active_weapon_slot(),
+		"weapon_holstered": player.weapon_holstered,
 		"equipped_backpack_item": player.get_equipped_backpack_item(),
 		"flashlight_module_id": flashlight.get_module_id() if flashlight != null else "basic",
 		"flashlight_charge_ratio": flashlight.get_charge_ratio() if flashlight != null else 1.0,
@@ -677,6 +678,7 @@ func _restore_carried_ownership(snapshot: Dictionary, restore_location := true) 
 	var active_slot := clampi(int(snapshot.get("active_weapon_slot", 0)), 0, 1)
 	if not player.get_equipped_weapon_item_for_slot(active_slot).is_empty():
 		player.switch_weapon_slot(active_slot)
+	player.set_weapon_holstered(bool(snapshot.get("weapon_holstered", false)))
 	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
 	if flashlight != null:
 		player.restore_flashlight_module(str(snapshot.get("flashlight_module_id", "basic")))
@@ -5837,12 +5839,15 @@ func _ensure_hud_quick_item_icon(quick_index: int) -> ItemModelIcon3D:
 
 
 func _select_weapon_slot(slot_index: int) -> bool:
-	if player == null or not player.has_method("switch_weapon_slot"):
+	if player == null or not player.has_method("request_weapon_slot"):
 		return false
-	var result := player.call("switch_weapon_slot", slot_index) as Dictionary
+	var result := player.call("request_weapon_slot", slot_index) as Dictionary
 	if not bool(result.get("success", false)):
 		status_label.text = str(result.get("reason", "武器切换失败"))
 		return false
+	if bool(result.get("pending", false)):
+		status_label.text = "正在收起武器" if bool(result.get("holstering", false)) else "正在取出[%d]武器" % (slot_index + 1)
+		return true
 	var snapshot := result.get("snapshot", player.get_weapon_presentation_snapshot()) as Dictionary
 	status_label.text = "已切换至[%d] %s #%s" % [
 		slot_index + 1, snapshot.get("display_name", "武器"), snapshot.get("instance_suffix", "------"),
