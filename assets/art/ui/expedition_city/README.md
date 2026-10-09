@@ -10,6 +10,7 @@
 | hologram_block.gdshader | 实体 Box 楼块：实例化、延迟生长、波浪与扫描 |
 | hologram_wire.gdshader | 悬浮线框 Box：延迟生长与透明轮廓 |
 | hologram_field.gdshader | 背景星云，随部署渐显 |
+| hologram_frame.gdshader | 入口边框：常亮描边与悬停环流 |
 | ../../../../src/ui/HologramCity3D.gd | 确定性城市生成、径向密度、楼顶入口、分阶段装饰及升降粒子 |
 | ../../../../scenes/RogueMapSelectMenu.gd | 镜头、压暗、输入、生命周期与原有出发交接 |
 
@@ -21,3 +22,5 @@
 验收：tests/verification/verify_expedition_hologram_city.tscn；--tower 验证实际设施路径。
 截图输出位于 _scratch/hologram_city_*.png，不属于发行资产。
 表现修订 r3：主体楼群横向约 3.1m，外围追加 42 座不同高度建筑。城市起始由 1.54 秒前移至 0.54 秒，保持原展开速度；继承玩法环境至 1.936 秒后渐变，3.168 秒完成压暗。真实出发可追加 --tower --enter-01 或 --tower --enter-99，验证到达场景而非仅记录按钮 ID。
+
+表现修订 r4：入口标记悬停倍率 1.09 → 1.32，并以 14/s 的收敛率平滑过渡，挪开即复原；四条边框加粗至 0.05 并改用 hologram_frame.gdshader，按各自周长占比分配流光相位、以 0.42 圈/秒绕框环流，光头约占周长三分之一并向后拖出长尾。点击入口时触发 0.34 倍脉冲，随后按 5/s 衰减回弹，并保留 0.18 秒展示窗口再交接出发。Esc 关闭改为从按下瞬间起播（关闭曲线回落指数 1.35 / 1.6），消除原 opening 映射反向时相机 1.62 秒、楼群 0.82 秒的静止段。

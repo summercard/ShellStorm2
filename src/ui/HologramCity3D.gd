@@ -3,16 +3,32 @@ extends Node3D
 const BLOCK_SHADER = preload("res://assets/art/ui/expedition_city/hologram_block.gdshader")
 const WIRE_SHADER = preload("res://assets/art/ui/expedition_city/hologram_wire.gdshader")
 const FIELD_SHADER = preload("res://assets/art/ui/expedition_city/hologram_field.gdshader")
+const FRAME_SHADER = preload("res://assets/art/ui/expedition_city/hologram_frame.gdshader")
 const CITY_LAYER := 1 << 18
 const CYAN := Color(0.02, 0.72, 1.0)
 const PINK := Color(1.0, 0.025, 0.55)
+# 入口标记的世界比例与交互反馈强度。悬停倍率由 1.09 提到 1.32，让"放大感"一眼可辨；
+# 倍率与响应率都写在这里，方便按手感调，不散落在 face_markers 里。
+const MARKER_SCALE := 0.09
+const HOVER_SCALE := 1.32
+const PUNCH_SCALE := 0.34
+const HOVER_RESPONSE := 14.0
+const PUNCH_DECAY := 5.0
+const BORDER_FLOW_SPEED := 0.42
+# 边框线宽：0.032 在近景下只有一两像素，流光跑起来看不出光带，故加粗到 0.05。
+const BORDER_WIDTH := 0.05
 var deployment := 0.0
 var elapsed := 0.0
-var selected := 0
+# 视觉焦点（-1 = 无）。必须与"选中项"分开：选中项是 Enter 的确认目标，光标移开时故意保留；
+# 焦点才决定放大/流光/高亮，光标离开入口即置 -1，让入口自己缩回去，而不是等悬停到另一个。
+var focus := -1
 var sites: Array[Node3D] = []
 var markers: Array[Node3D] = []
 var labels: Array[Label3D] = []
 var materials: Array[ShaderMaterial] = []
+var border_materials: Array[Array] = []
+var _hover: Array[float] = []
+var _punch: Array[float] = []
 var status: Label3D
 var return_marker: Node3D
 var block_count := 0
@@ -113,6 +129,9 @@ func _build() -> void:
 		_line(self, Vector3(-extent, 0, z), Vector3(extent, 0, z), CYAN * 0.12, 0.012)
 	for i in 2:
 		_stage_delay = -1.0
+		_hover.append(0.0)
+		_punch.append(0.0)
+		border_materials.append([])
 		var site := Node3D.new()
 		site.name = "Expedition01" if i == 0 else "Test99"
 		site.position = Vector3(-5, 2.7, 2) if i == 0 else Vector3(5, 2.9, 1)
@@ -129,9 +148,27 @@ func _build() -> void:
 		site.add_child(marker)
 		markers.append(marker)
 		_box(marker, Vector3.ZERO, Vector3(3.2, 2.2, 0.12), Color(0.006, 0.015, 0.04), 0.1)
-		for side in [-1, 1]:
-			_line(marker, Vector3(side * 1.62, -1.1, 0.09), Vector3(side * 1.62, 1.1, 0.09), color, 0.032)
-			_line(marker, Vector3(-1.62, side * 1.1, 0.09), Vector3(1.62, side * 1.1, 0.09), color, 0.032)
+		# 顺时针四角连成边框；每条边按自身周长占比分配流光相位，四条合起来是一整圈环流。
+		var frame_corners := [Vector3(-1.62, 1.1, 0.09), Vector3(1.62, 1.1, 0.09), Vector3(1.62, -1.1, 0.09), Vector3(-1.62, -1.1, 0.09)]
+		var perimeter := 0.0
+		for corner in 4:
+			perimeter += frame_corners[corner].distance_to(frame_corners[(corner + 1) % 4])
+		var running := 0.0
+		for corner in 4:
+			var from: Vector3 = frame_corners[corner]
+			var to: Vector3 = frame_corners[(corner + 1) % 4]
+			var segment := from.distance_to(to)
+			var border := _line(marker, from, to, color, BORDER_WIDTH)
+			var flow := ShaderMaterial.new()
+			flow.shader = FRAME_SHADER
+			flow.set_shader_parameter("tint", color)
+			flow.set_shader_parameter("line_length", segment)
+			flow.set_shader_parameter("arc_span", segment / perimeter)
+			flow.set_shader_parameter("flow_offset", running / perimeter)
+			flow.set_shader_parameter("flow_speed", BORDER_FLOW_SPEED)
+			border.material_override = flow
+			border_materials[i].append(flow)
+			running += segment
 		var id := "expedition_01" if i == 0 else "99"
 		var entry: Dictionary = GameDesignConfig.expedition_level(id)
 		labels.append(_label(marker, str(entry.get("display_name", id)), Vector3(0, 0.22, 0.11), 65, 0.0065, Color.WHITE))
@@ -200,11 +237,23 @@ func _process(delta: float) -> void:
 		sites[i].scale.y = maxf(0.001, rise)
 		sites[i].position.y = (2.7 if i == 0 else 2.9) * rise
 		markers[i].position.y = 1.3 + sin(elapsed * 1.6 + i) * 0.09
-		labels[i].modulate = Color.WHITE if i == selected else Color(0.65, 0.78, 0.9)
+		labels[i].modulate = Color.WHITE if i == focus else Color(0.65, 0.78, 0.9)
+		# 悬停强度平滑收敛到焦点：焦点为 -1 时全部回落到静止尺寸，即"光标移开就复原"。
+		_hover[i] = lerpf(_hover[i], 1.0 if i == focus else 0.0, 1.0 - exp(-HOVER_RESPONSE * delta))
+		_punch[i] = maxf(0.0, _punch[i] - PUNCH_DECAY * delta)
+		for flow in border_materials[i]:
+			flow.set_shader_parameter("clock", elapsed)
+			flow.set_shader_parameter("hover", _hover[i])
 
 func face_markers(camera: Camera3D) -> void:
 	for i in markers.size():
-		markers[i].global_basis = camera.global_basis.scaled(Vector3.ONE * 0.09 * maxf(0.001, site_reveal(i)) * (1.09 if i == selected else 1.0))
+		var emphasis := 1.0 + (HOVER_SCALE - 1.0) * _hover[i] + PUNCH_SCALE * pow(_punch[i], 0.7)
+		markers[i].global_basis = camera.global_basis.scaled(Vector3.ONE * MARKER_SCALE * maxf(0.001, site_reveal(i)) * emphasis)
+
+func punch_marker(index: int) -> void:
+	# 点击弹性反馈：脉冲置满后由 _process 逐帧衰减回落，形成放大再回弹的手感。
+	if index >= 0 and index < _punch.size():
+		_punch[index] = 1.0
 
 func site_reveal(index: int) -> float:
 	return smoothstep(0.24 + index * 0.22, 0.46 + index * 0.22, deployment)
@@ -290,9 +339,10 @@ func _box(parent: Node3D, pos: Vector3, size: Vector3, color: Color, energy: flo
 		_staged.append({"node": node, "position": pos, "delay": _stage_delay})
 	return node
 
-func _line(parent: Node3D, a: Vector3, b: Vector3, color: Color, width: float) -> void:
+func _line(parent: Node3D, a: Vector3, b: Vector3, color: Color, width: float) -> MeshInstance3D:
 	var node := _box(parent, (a + b) * 0.5, Vector3(width, width, a.distance_to(b)), color, 2.0)
 	node.basis = Basis.looking_at((b - a).normalized(), Vector3.RIGHT if absf((b - a).normalized().dot(Vector3.UP)) > 0.99 else Vector3.UP)
+	return node
 
 func _octagon(parent: Node3D, y: float, radius: float, color: Color, width: float) -> void:
 	for i in 8:

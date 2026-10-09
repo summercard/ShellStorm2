@@ -14,8 +14,18 @@
   "city_start_seconds": 0.54,
   "environment_fade_seconds": [1.936, 3.168],
   "outer_buildings": 42,
-  "visual_revision": "r3",
+  "visual_revision": "r4",
   "closing_seconds": 3.6,
+  "interaction_feedback": {
+    "hover_scale": 1.32,
+    "hover_response_per_second": 14.0,
+    "punch_scale": 0.34,
+    "punch_decay_per_second": 5.0,
+    "punch_hold_seconds": 0.18,
+    "border_flow_revolutions_per_second": 0.42,
+    "close_eased_falloff": 1.35,
+    "close_deploy_falloff": 1.6
+  },
   "transition_particles": "six instanced cubes per construction front; hidden at rest",
   "verification": "res://tests/verification/verify_expedition_hologram_city.tscn",
   "reference_acceptance": "pending_user_visual_review"
