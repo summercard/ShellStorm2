@@ -2,71 +2,72 @@
   "asset_id": "ENM-MELEE-FUNGBOAR01",
   "display_name": "小僵尸",
   "status": "active",
-  "model": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v002.blend",
-  "animation": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v003.blend",
-  "skeleton_signature": "96d86b7b2d125053898ef4431d5f03809f931c228f1532f27376fe330ab865aa",
+  "model": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v003.blend",
+  "animation": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v004.blend",
+  "skeleton_signature": "b22411f12ac9951333a33a35f2e5d66989d894d5d948a78a0cd78ea40ccce005",
   "clips": [
     {
       "id": "idle",
-      "action": "anim_melee_fungboar01_idle_v002",
+      "action": "idle",
       "frames": 96,
       "duration": 3.2,
       "loop": true,
-      "scene": "01_待机_驼背晃身"
+      "scene": "MeleeZombieActions"
     },
     {
       "id": "walking",
-      "action": "anim_melee_fungboar01_walking_v002",
+      "action": "walking",
       "frames": 48,
       "duration": 1.6,
       "loop": true,
-      "scene": "02_慢走_跛脚拖步"
+      "scene": "MeleeZombieActions"
     },
     {
       "id": "running",
-      "action": "anim_melee_fungboar01_running_v003",
+      "action": "running",
       "frames": 24,
       "duration": 0.8,
       "loop": true,
-      "scene": "03_跑步_失衡前冲"
+      "scene": "MeleeZombieActions"
     },
     {
       "id": "attack",
-      "action": "anim_melee_fungboar01_attack_v003",
+      "action": "attack",
       "frames": 51,
       "duration": 1.7,
       "loop": false,
-      "scene": "04_近战_挥臂迟缓收势"
+      "scene": "MeleeZombieActions"
     },
     {
       "id": "hurt",
-      "action": "anim_melee_fungboar01_hurt_v002",
+      "action": "hurt",
       "frames": 24,
       "duration": 0.8,
       "loop": false,
-      "scene": "05_受击_踉跄回神"
+      "scene": "MeleeZombieActions"
     },
     {
       "id": "dead",
-      "action": "anim_melee_fungboar01_dead_v002",
+      "action": "dead",
       "frames": 72,
       "duration": 2.4,
       "loop": false,
-      "scene": "06_死亡_后躺砸地回弹"
+      "scene": "MeleeZombieActions"
     }
   ],
   "outputs": {
-    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\components\\enm_melee_fungboar01_visual_top3d.glb": "c111dcbaf7ccb3b4d7989a82017d550cc77f03541c4dd4c9776d765c283a0e5d"
+    "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb": "6a55fc2f737b528efe53b604ad17f31a7ac173cddc8313c2f53a49361efdc0fe"
   },
   "limitations": [
     "源跑步亚帧约1.3mm穿地；未完成全程自穿插/支撑脚滑移质量审查",
-    "basecolor 已于 2026-10-08 由 2048 降为 512（包体优化，模型/骨架/6段动作未改动）；2K 原件与改动前 blend/GLB 备份于 ShellStorm2/_scratch/melee_chaser_tex2k_backup/（gitignore 覆盖的本地回滚副本，不入库）"
+    "basecolor 已于 2026-10-08 由 2048 降为 512（包体优化，模型/骨架/6段动作未改动）；2K 原件与改动前 blend/GLB 备份于 ShellStorm2/_scratch/melee_chaser_tex2k_backup/（gitignore 覆盖的本地回滚副本，不入库）",
+    "v004按用户要求删除手指独立变形，固定自然弯曲轮廓；近景存在减面造成的局部轮廓简化。"
   ],
   "source_sha256": {
-    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v002.blend": "3fa2f442174069869797fd959eaa5725126093893725f5bc9eb33c644d6daecb",
-    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v003.blend": "482f68bf6ec634a2856479ce1e1f3c6043661a8bd9031eb1f651931df2051707"
+    "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend": "3bc447b046c45e9e5b499b6ee3bd6f7b65d1525d91fe991ac4c0add384b5a2aa",
+    "assets/art/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend": "bb95bcc3e60b9b0e458934adc3107179097df2dc71a07f67a22f780d372020b7"
   },
-  "asset_version": "v003",
+  "asset_version": "v004",
   "presentation_only": true,
   "collision_owner": "Enemy3D",
   "forward_contract": {
@@ -81,9 +82,14 @@
   "runtime_base_scale": 0.7,
   "files": [
     {
-      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v002.blend",
-      "sha256": "3fa2f442174069869797fd959eaa5725126093893725f5bc9eb33c644d6daecb",
-      "bytes": 1383607
+      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/enm_melee_fungboar01_model_v003.blend",
+      "sha256": "3bc447b046c45e9e5b499b6ee3bd6f7b65d1525d91fe991ac4c0add384b5a2aa",
+      "bytes": 980208
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v004.blend",
+      "sha256": "bb95bcc3e60b9b0e458934adc3107179097df2dc71a07f67a22f780d372020b7",
+      "bytes": 2991693
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/model/textures/enm_melee_fungboar01_basecolor_v002.png",
@@ -91,24 +97,29 @@
       "bytes": 295265
     },
     {
-      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/source/animation/enm_melee_fungboar01_animation_v003.blend",
-      "sha256": "482f68bf6ec634a2856479ce1e1f3c6043661a8bd9031eb1f651931df2051707",
-      "bytes": 4422328
+      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb",
+      "sha256": "6a55fc2f737b528efe53b604ad17f31a7ac173cddc8313c2f53a49361efdc0fe",
+      "bytes": 537872
     },
     {
-      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb",
-      "sha256": "c111dcbaf7ccb3b4d7989a82017d550cc77f03541c4dd4c9776d765c283a0e5d",
-      "bytes": 710660
+      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb.import",
+      "sha256": "3c43b34a24bd77764f907f281a1fb97c0eeeabd3f04be51e87fe66ea005f709f",
+      "bytes": 1252
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/melee_chaser_post_import.gd",
+      "sha256": "608c8fffabce8d312c8fb9b07c70ee552f9203f11fed1301d70a2eb05119f425",
+      "bytes": 334
     }
   ],
   "runtime_files": [
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
-      "sha256": "6a007c3c220ecbd78bb697f58bf2ba073b3ac8828d283e7d0a81f69f53d57884"
+      "sha256": "6b88f60e398a204cc3d31719550138c7dad8866d0477fa41094ecb0c228b07c0"
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/melee_chaser_formal_visual.gd",
-      "sha256": "2e24460b9e0ed1c60fe7762beef2b1c4795b0842500269e9e899b1fd7944080f"
+      "sha256": "2caeff88608fb2a6ce6e3a3f62d09e53bd8cbc6674ba24999f282c7656eaf1bc"
     }
   ],
   "validation_status": "passed",
@@ -135,6 +146,15 @@
       "log": "outputs/enemy_pipeline/validation/verify_3d_enemy_behavior_flow.log",
       "baseline_log": "outputs/enemy_pipeline/validation/verify_3d_enemy_behavior_flow.BASELINE.log",
       "note": "七类敌人 3D 飘字缺失为改动前既有红项，已用 HEAD 版 Prefab 做基线对照复现，与本资产无关。"
+    },
+    {
+      "test": "reduction_reskin_20261009",
+      "passed": true,
+      "source": "outputs/melee_zombie_reduction/source_report.json",
+      "reopen": "outputs/melee_zombie_reduction/reopen.json",
+      "runtime_log": "outputs/melee_zombie_reduction/runtime.log",
+      "render_log": "outputs/melee_zombie_reduction/death_render.log",
+      "negative_budget_expected_exit": 1
     }
   ],
   "registered_ledger": {
@@ -148,10 +168,35 @@
     "贴图仅 basecolor，无法线贴图。"
   ],
   "duplicate_gate": {
-    "classification": "child_variant",
+    "classification": "version_increment",
     "passed": true,
     "report": "outputs\\asset_guard\\ENM-MELEE-FUNGBOAR01_melee_chaser.json",
     "same_asset_id_count": 0,
     "identical_registered_file_count": 0
+  },
+  "version": "v004",
+  "skeleton_id": "SKEL-MELEE-ZOMBIE01-003",
+  "geometry": {
+    "triangles": 1790,
+    "vertices": 897,
+    "bones": 20,
+    "removed_bones": [
+      "L_Thumb1",
+      "L_Thumb2",
+      "L_Index1",
+      "L_Index2",
+      "L_Middle1",
+      "L_Middle2",
+      "L_Pinky1",
+      "L_Pinky2",
+      "R_Thumb1",
+      "R_Thumb2",
+      "R_Index1",
+      "R_Index2",
+      "R_Middle1",
+      "R_Middle2",
+      "R_Pinky1",
+      "R_Pinky2"
+    ]
   }
 }

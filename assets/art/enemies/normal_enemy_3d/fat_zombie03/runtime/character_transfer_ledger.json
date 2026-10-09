@@ -3,11 +3,11 @@
   "asset_id": "ENM-NORMAL-FAT-ZOMBIE03",
   "content_id": "fat_zombie03",
   "source_number": "03",
-  "version": "v011",
+  "version": "v012",
   "status": "active",
   "validation_scope": "source_and_godot_13_clips; Enemy3D_12_states; spawning_combat_death; real_forward_plus_render",
-  "model_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v003.blend",
-  "animation_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
+  "model_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v004.blend",
+  "animation_source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
   "skeleton_signature": "e5d43d75f0b15522430838db1242c3fc2bd586c8b6dae11367ca0d60146bb1db",
   "clips": [
     {
@@ -19,8 +19,8 @@
         96
       ],
       "loop": true,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -32,8 +32,8 @@
         60
       ],
       "loop": true,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -45,8 +45,8 @@
         36
       ],
       "loop": true,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -58,8 +58,8 @@
         75
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -71,8 +71,8 @@
         24
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -84,8 +84,8 @@
         78
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -97,8 +97,8 @@
         36
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -110,8 +110,8 @@
         18
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -123,8 +123,8 @@
         24
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -136,8 +136,8 @@
         24
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -149,8 +149,8 @@
         12
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -162,8 +162,8 @@
         18
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     },
     {
@@ -175,8 +175,8 @@
         9
       ],
       "loop": false,
-      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "source_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/validation.json",
+      "source": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "source_validation": "outputs/fat_zombie03_reduction/source_comparison.json",
       "godot_validation": "assets/art/enemies/normal_enemy_3d/fat_zombie03/previews/belly_v008/godot_validation.json"
     }
   ],
@@ -184,46 +184,55 @@
   "files": [
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/textures/enm_normal_fat_zombie03_basecolor_v002.png",
-      "sha256": "019f80e6a4e38253c730c1385734030b9a1ca172d6ed86abc102473e42d5913c"
+      "sha256": "019f80e6a4e38253c730c1385734030b9a1ca172d6ed86abc102473e42d5913c",
+      "bytes": 481176
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb",
-      "sha256": "858a82485d983362f181adaa2762805f28c85d6aef29c4e6300636aa7c8b5234"
+      "sha256": "a0f0e6a94caa1cd0be3bf2575453221257b0006f6122dbe173b9cda92bae73fc",
+      "bytes": 1509672
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_root_top3d.tscn",
-      "sha256": "946f406f5f9faee0387576fd46888eb314e9c70e294c7eb0bb0111e434edd704"
+      "sha256": "9d1eb25f47914d2ca3db3bef1174ec1b470940206228f3da49091ed4e5faa649",
+      "bytes": 972
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/components/enm_normal_fat_zombie03_visual_top3d.glb.import",
-      "sha256": "819fb8e9ea0e47edbf9df6d4391e0a0a48d602cbf9dc2709dc9210e032a7f6dc"
+      "sha256": "819fb8e9ea0e47edbf9df6d4391e0a0a48d602cbf9dc2709dc9210e032a7f6dc",
+      "bytes": 904449
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/enm_normal_fat_zombie03_post_import.gd",
-      "sha256": "697beabdd342f1c791c73ce7eaa53a1baa9b59ca474be143add4fabd8faa511c"
-    },
-    {
-      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v003.blend",
-      "sha256": "068269fbb18c634df45fe2e185e1c61fafc5a162a6e606e1a71698bb8abb71ab"
-    },
-    {
-      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v008.blend",
-      "sha256": "e0bc8159d698de7c5b4dc3e1c122285c87a944dd49df43c55c078c3003a380d6"
+      "sha256": "697beabdd342f1c791c73ce7eaa53a1baa9b59ca474be143add4fabd8faa511c",
+      "bytes": 853
     },
     {
       "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/runtime/fat_zombie03_formal_visual.gd",
-      "sha256": "429f517183d0a81c80822e5a7df553d3ae8ac24f6a9e34ea39d30126f6fa21b4"
+      "sha256": "429f517183d0a81c80822e5a7df553d3ae8ac24f6a9e34ea39d30126f6fa21b4",
+      "bytes": 6405
     },
     {
       "path": "scenes/enemies/fat_zombie03.tscn",
-      "sha256": "dcdf8978eff0ca32050161282a8500318201daa133078818836ef522c7578a41"
+      "sha256": "dcdf8978eff0ca32050161282a8500318201daa133078818836ef522c7578a41",
+      "bytes": 236
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/model/enm_normal_fat_zombie03_model_v004.blend",
+      "sha256": "bbffa339022e6820feee62e11c6f7721b1128af602e655ab16f4b6fe9657da31",
+      "bytes": 1334354
+    },
+    {
+      "path": "assets/art/enemies/normal_enemy_3d/fat_zombie03/source/animation/enm_normal_fat_zombie03_animation_v009.blend",
+      "sha256": "c80af584c1e01ac822f10f22dd6019dc2708cdb275371e70b9e8f50af2e4ec5a",
+      "bytes": 25846305
     }
   ],
   "source_zip": "I:/工作项目/桌面文件备份/僵尸_项目素材_20260922/胖子僵尸.zip",
   "source_zip_sha256": "89a36a545512fc0de9ef63d4fd034fcdb40177b86da1c6b54792995f10ee5db5",
   "consumer": "EnemyAvatar3D formal-normal routing; MonsterInjector explicit type / fixed waves / triggers",
   "rollback": "source model v002 retained; _scratch/fat_zombie03/belly_v008_backup contains pre-attack GLB/import/ledger/baseline/transfer",
-  "notes": "编号03；v011正式绑定Enemy3D共用12态与13段动画，独立类型fat_zombie03；标准2.2m/512贴图，生命696伤害19，巡逻0.30/追击0.60m/s；F36拍合单次命中、F30锁朝向、视线/范围/扇区判定；普通命中仅上半身，死亡2.6s保留腹部压扁及回弹。专项152项、负向循环故障检出及真实Forward+四图通过。",
+  "notes": "2026-10-09 v012减面：5690→1979三角（减少65.22%）；脸手特征加权保留，512贴图/66骨/13段动画保留；死亡接地形态键重新拟合。模型v004/动作v009；Godot153项及死亡视野真实渲染通过。",
   "skeleton_id": "SKEL-FAT-ZOMBIE03-002",
   "planned_clips": [
     {
@@ -406,6 +415,15 @@
       "logic": "outputs\\fat_zombie03_death_fix\\logic.json",
       "render": "outputs\\fat_zombie03_death_fix\\render.json",
       "negative_expected_exit": 1
+    },
+    {
+      "test": "reduction_20261009",
+      "passed": true,
+      "checks": 153,
+      "source": "outputs/fat_zombie03_reduction/source_comparison.json",
+      "export": "outputs/fat_zombie03_reduction/export.json",
+      "runtime_log": "outputs/fat_zombie03_reduction/runtime.log",
+      "render_log": "outputs/fat_zombie03_reduction/death_render.log"
     }
   ],
   "remaining_work": [
@@ -423,5 +441,11 @@
       "abyss_archive"
     ],
     "validation": "outputs/fat_zombie03_retirement/runtime.json"
+  },
+  "geometry": {
+    "triangles": 1979,
+    "vertices": 1009,
+    "previous_triangles": 5690,
+    "reduction_percent": 65.22
   }
 }

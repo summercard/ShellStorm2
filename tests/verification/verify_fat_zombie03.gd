@@ -36,6 +36,11 @@ func _ready() -> void:
 	check(waves.size() == 1 and waves[0].size() == 2 and waves[0][0].enemy_type == "fat_zombie03", "fixed wave spawn")
 	var visual = e.avatar._formal_normal_root
 	visual.set_process(false)
+	var triangle_count := 0
+	for mesh_instance in visual._meshes:
+		for surface in range(mesh_instance.mesh.get_surface_count()):
+			triangle_count += mesh_instance.mesh.surface_get_array_index_len(surface) / 3
+	check(triangle_count > 0 and triangle_count < 2000, "fat zombie triangle budget below 2000")
 	var durations := {"idle":3.2,"walking":2.0,"running":1.2,"attack":2.5,"hurt":0.8,"dead":2.6,"awaken":1.2,"alert":0.6,"turn_l":0.8,"turn_r":0.8,"move_start":0.4,"move_stop":0.6,"hit_light":0.3}
 	if OS.get_cmdline_user_args().has("--negative-loop"):
 		visual._player.get_animation("attack").loop_mode = Animation.LOOP_LINEAR

@@ -73,4 +73,4 @@ func get_presentation_snapshot() -> Dictionary:
 	return {"state": _state, "clip": _clip, "sample_time": _sample,
 		"visual_height": VISUAL_HEIGHT, "death_duration": DEATH_DURATION,
 		"animations": Array(_player.get_animation_list()) if _player != null else [],
-		"source": "blender_v003", "collision_owned": false, "procedural_pose": false}
+		"source": "blender_v004", "collision_owned": false, "procedural_pose": false}

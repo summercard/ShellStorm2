@@ -1,0 +1,1 @@
+^ERROR: small zombie triangle budget below 1800$
