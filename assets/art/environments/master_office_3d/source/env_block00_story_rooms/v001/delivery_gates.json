@@ -1,0 +1,29 @@
+{
+  "registry_structure": {
+    "exit_code": 0,
+    "log": "registry_structure.log"
+  },
+  "ledger_split": {
+    "exit_code": 0,
+    "log": "ledger_split.log"
+  },
+  "documentation": {
+    "exit_code": 1,
+    "log": "documentation.log"
+  },
+  "runtime_naming": {
+    "exit_code": 1,
+    "log": "runtime_naming.log"
+  },
+  "scene_full": {
+    "exit_code": 1,
+    "issue_counts": {
+      "sha_mismatch": 466
+    },
+    "new_asset_issues": 0,
+    "log": "outputs/block00_story_rooms_20261009/registry_full.json"
+  },
+  "source_sha256": "9a7e18f4cccfc1b0ca381a0b5364d40e8fa83396435c34930d30e623ea9958b9",
+  "ledger_row": 838,
+  "runtime_imported": false
+}

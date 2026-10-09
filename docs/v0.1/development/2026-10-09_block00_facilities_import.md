@@ -1,0 +1,34 @@
+# 98F 四房设施导入与废墟复用
+
+用户要求沿用现有墙与地砖，把办公室、会议室、第三间走廊及第四间门厅的美术按设施导入；办公室北侧破墙单独作为组件，办公室倒柜和石块复用至第三、第四间，会议室增加两块独立石头。此前批准的第三、第四间拆门贯通一并接入。
+
+## 正式输出与所有权
+
+- 29 个独立 GLB / Prefab：28 件设施与装饰、1 件破墙组件。排除原始源的普通墙、门墙、完整地砖、破损地砖；地毯保留。
+- 稳定组件目录：`assets/art/environments/master_office_3d/components/`；稳定包装目录：`assets/art/environments/master_office_3d/runtime/`。
+- 四份正式、可手调设施布局：`runtime/room_instances/<master_office|meeting_room|corridor|lobby>/<room>_facilities.tscn`。实例数量依次 246 / 29 / 25 / 28，共 328。仅初始化一次；构建脚本遇已有正式房间文件会拒绝覆盖。
+- 普通墙与 49 格地砖继续使用原有组件。办公室两块北墙保留逻辑边界碰撞，隐藏旧视觉，使用一件10m破墙替换。第三、第四房之间5m门槽取消门墙与门实体，房间编号、拓扑连接和存档布局ID保留；旧存档关闭状态不能重新封锁该通道。
+- 大件设施由 Prefab 拥有贴合实体的盒碰撞；雕塑仅底座有碰撞；碎石、纸片、断线等装饰无交互、无碰撞，会议室中央6m通道保留。
+- 第三间倒柜纵向贴边摆放，第四间倒柜贴南边；两间各复用5块大石与7块小石。会议室另加恰好2块独立大石，位于中央净空带外。
+
+## 源保护与导入证据
+
+优化清单：[import_manifest.json](../../../assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/import_manifest.json)。
+
+原始办公室v002与四房v001均保持SHA不变。持久优化文件位于 `assets/art/environments/master_office_3d/source/env_block00_story_rooms/export/v001/block00_facilities_optimized_v001.blend`；独立化输出网格与材质，逐件执行无效几何清理和按UV/硬边/材质边界限定的共面溶解，保存、重开后才逐件导出。组件总三角数 71,541 → 71,411，减少130（0.182%）；没有对全库固定比例减面，也没有以三角化冒充减面。未命中安全简化的组件记录零变化并保留底面、背面与可复用表面。
+
+正面、背面、侧面、游戏角度8张优化前后对照已检查，29件包围盒保持。非平面石块端面三角化后呈棱角分面，保留要求的低模风格。GLB均不含图片与纹理，Godot正式导入后由公共色盘后处理脚本绑定材质。公共色盘导入改为无损、禁用MipMap；29份 `.glb.import` 与公共色盘 `.png.import` 纳入可复现导入规则。
+
+主工程全量扫描受到大量工作区文件影响，改用 `scripts/import_block00_godot_isolated.py` 在受限内容的独立项目执行正式 `--editor --import`，保持相同res路径、公共色盘UID与后处理脚本，再同步本批导入缓存及契约；未用运行时临时材质覆盖冒充正式导入。
+
+## 验收与账本
+
+`tests/verification/verify_block00_facilities.tscn`：独立加载29 Prefab、公共色盘与采样、导出面数、包围盒、单位缩放、四房实例数、49格旧地砖、5m开口射线、会议室中路射线、完整TowerDescent98F接入、拆门两端及旧存档关门状态检查，共253项通过。真实Forward+渲染另通过236项，并生成办公室/会议室/通道/总览截图；截图采用剖视隐藏部分墙体，物理验证在完整结构上执行。
+
+场景分账本新增29组件及4布局资产，两个原始源条目的备注同步接入事实，保留其源文件路径与SHA。`资产主表`与`3D-设施`/`3D-场景通用`分两次事务登记并定点更新基线；其他资产原内容逐格保持。资产主表路径通过 `ledger_index.json` 解析。
+
+新增入口为 `Block00MasterOfficeLayout3D.facility_scene_path()`，运行时 `DungeonRoom3D` 加载正式设施TSCN；无JSON运行时回灌。旧98F装配验收中的门墙期望同步批准的拆除差异，其余壳体和楼梯口契约保持。
+
+完整门禁结果记录在 `outputs/block00_story_rooms_20261009/runtime_gates.json`。公共色盘旧缓存存在历史UID回退警告，能按文本路径加载；不批量改写其他资产哈希或重导其模型。源与优化文件同时保留，运行资产回滚由版本控制处理；未创建提交。
+
+原98F装配回归 `verify_block00_floor98_assembly` 228项通过：同步拆门后的26墙、5个普通门端点样本，并在测试中先确认预载无怪、再清理首访缓存以覆盖首次进房分支。两项专项运行没有脚本错误或ERROR；塔楼退出仍报告ObjectDB泄漏警告。

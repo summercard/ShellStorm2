@@ -1,0 +1,9 @@
+facilities/sculpture_foundry 铸造者纪念雕塑
+facilities/sculpture_turbine 涡轮与钢翼雕塑
+facilities/sculpture_pylon 工业之峰雕塑
+decoration/debris_slab 破碎楼板残片
+decoration/debris_cluster 边缘混凝土废墟
+support/cable_floor 地面断裂电缆束
+support/cable_hanging 垂落断线
+architecture/portal_damage 拆门残留断框
+decoration/constructivist_mural 工业时代构成主义壁画

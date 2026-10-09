@@ -1,0 +1,433 @@
+[
+  {
+    "slug": "sculpture_foundry",
+    "name_zh": "铸造者纪念雕塑",
+    "component_family": "sculpture",
+    "category": "facilities",
+    "component_id": "ENV-BLOCK00-SCULPTURE-FOUNDRY",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_MEETING"
+    ],
+    "variant_axis": "sculpture_theme",
+    "variant_value": "sculpture_foundry",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_铸造者纪念雕塑",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      3.799999952316284,
+      2.5999999046325684,
+      6.420620441436768
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "铸造者纪念雕塑_主体输出"
+    ],
+    "triangles": 436,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 4
+  },
+  {
+    "slug": "sculpture_turbine",
+    "name_zh": "涡轮与钢翼雕塑",
+    "component_family": "sculpture",
+    "category": "facilities",
+    "component_id": "ENV-BLOCK00-SCULPTURE-TURBINE",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_MEETING"
+    ],
+    "variant_axis": "sculpture_theme",
+    "variant_value": "sculpture_turbine",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_涡轮与钢翼雕塑",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      3.799999952316284,
+      2.5999999046325684,
+      5.949999809265137
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "涡轮与钢翼雕塑_主体输出"
+    ],
+    "triangles": 892,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 4
+  },
+  {
+    "slug": "sculpture_pylon",
+    "name_zh": "工业之峰雕塑",
+    "component_family": "sculpture",
+    "category": "facilities",
+    "component_id": "ENV-BLOCK00-SCULPTURE-PYLON",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_MEETING"
+    ],
+    "variant_axis": "sculpture_theme",
+    "variant_value": "sculpture_pylon",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_工业之峰雕塑",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      3.799999952316284,
+      2.5999999046325684,
+      6.199999809265137
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "工业之峰雕塑_主体输出"
+    ],
+    "triangles": 416,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 4
+  },
+  {
+    "slug": "debris_slab",
+    "name_zh": "破碎楼板残片",
+    "component_family": "debris",
+    "category": "decoration",
+    "component_id": "ENV-BLOCK00-DEBRIS-SLAB",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_MEETING",
+      "STORY_CORRIDOR",
+      "STORY_LOBBY"
+    ],
+    "variant_axis": "structure_state",
+    "variant_value": "debris_slab",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_破碎楼板残片",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      2.5299999713897705,
+      1.614448070526123,
+      0.429999977350235
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "破碎楼板残片_主体输出"
+    ],
+    "triangles": 100,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 5
+  },
+  {
+    "slug": "debris_cluster",
+    "name_zh": "边缘混凝土废墟",
+    "component_family": "debris",
+    "category": "decoration",
+    "component_id": "ENV-BLOCK00-DEBRIS-CLUSTER",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_MEETING",
+      "STORY_CORRIDOR",
+      "STORY_LOBBY"
+    ],
+    "variant_axis": "structure_state",
+    "variant_value": "debris_cluster",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_边缘混凝土废墟",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      1.9595527648925781,
+      1.0093307495117188,
+      0.5911928415298462
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "边缘混凝土废墟_主体输出"
+    ],
+    "triangles": 288,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 23
+  },
+  {
+    "slug": "cable_floor",
+    "name_zh": "地面断裂电缆束",
+    "component_family": "cable",
+    "category": "support",
+    "component_id": "ENV-BLOCK00-CABLE-FLOOR",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_MEETING",
+      "STORY_CORRIDOR",
+      "STORY_LOBBY"
+    ],
+    "variant_axis": "structure_state",
+    "variant_value": "cable_floor",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_地面断裂电缆束",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      0.4305870532989502,
+      3.3966736793518066,
+      0.11844754219055176
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "地面断裂电缆束_主体输出"
+    ],
+    "triangles": 980,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 8
+  },
+  {
+    "slug": "cable_hanging",
+    "name_zh": "垂落断线",
+    "component_family": "cable",
+    "category": "support",
+    "component_id": "ENV-BLOCK00-CABLE-HANGING",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_MEETING",
+      "STORY_CORRIDOR",
+      "STORY_LOBBY"
+    ],
+    "variant_axis": "structure_state",
+    "variant_value": "cable_hanging",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_垂落断线",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      0.8519139885902405,
+      0.3799999952316284,
+      3.1262872219085693
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "垂落断线_主体输出"
+    ],
+    "triangles": 252,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 3
+  },
+  {
+    "slug": "portal_damage",
+    "name_zh": "拆门残留断框",
+    "component_family": "portal_damage",
+    "category": "architecture",
+    "component_id": "ENV-BLOCK00-PORTAL-DAMAGE",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_LOBBY"
+    ],
+    "variant_axis": "structure_state",
+    "variant_value": "portal_damage",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_拆门残留断框",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      0.4699999988079071,
+      0.4775002896785736,
+      2.799999952316284
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "拆门残留断框_主体输出"
+    ],
+    "triangles": 880,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 2
+  },
+  {
+    "slug": "constructivist_mural",
+    "name_zh": "工业时代构成主义壁画",
+    "component_family": "mural",
+    "category": "decoration",
+    "component_id": "ENV-BLOCK00-CONSTRUCTIVIST-MURAL",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "STORY_LOBBY"
+    ],
+    "variant_axis": "structure_state",
+    "variant_value": "constructivist_mural",
+    "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collection": "组件_工业时代构成主义壁画",
+    "version": "v001",
+    "source_blend": "env_block00_story_rooms_source_v001.blend",
+    "bounds_size_m": [
+      10.300000190734863,
+      0.3700000047683716,
+      6.280000686645508
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "objects": [
+      "工业时代构成主义壁画_主体输出"
+    ],
+    "triangles": 392,
+    "exported": false,
+    "collision_owner": "future_godot_wrapper",
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+    "instance_count": 1
+  }
+]

@@ -104,6 +104,20 @@ const FLOOR_TILE_SLOT_ROLE := "floor_tile"
 ## ⚠️ 门策略（requires_clear/key/fate）由 `Dungeon3D._door_policies_for_record` 统一覆盖，
 ## 不在 `_door_policy_for_edge` 里按 room_id 逐边列举 —— 那样每加一扇门都要改一趟。
 const PEACEFUL_ZONE := true
+## 区块00四房不放搜索设施，但仍保留普通美术家具。
+## 这是独立于和平区门/刷怪/钥匙规则的显式内容开关，避免把家具整体误删。
+const SEARCH_FACILITIES_ENABLED := false
+
+## 用户批准的第三/第四房拆门通道；保留房间与存档编号。
+static func is_removed_door_pair(a: String, b: String) -> bool:
+	return (a == "floor_01_entry" and b == "floor_01_hub") or (a == "floor_01_hub" and b == "floor_01_entry")
+
+
+static func facility_scene_path(authored_room: String) -> String:
+	for binding in ROOM_BINDINGS:
+		if str(binding["authored_room_id"]) == authored_room:
+			return "res://assets/art/environments/master_office_3d/runtime/room_instances/%s/%s_facilities.tscn" % [authored_room, authored_room]
+	return ""
 
 
 ## 读摆位源。失败一律返回空字典 + 报错，由调用方回退内置房表（绝不静默换布局）。
@@ -250,6 +264,7 @@ static func build_plan_override(base_plan: Dictionary) -> Dictionary:
 			"authored_layout_version": LAYOUT_VERSION,
 			"authored_layout_room_id": room_id,
 			"authored_layout_peaceful": PEACEFUL_ZONE,
+			"search_facilities_enabled": SEARCH_FACILITIES_ENABLED,
 			# 开局第一间房 = 主人办公室（binding key `exit`）：灯**默认打开**，
 			# 玩家在开场演出里一睁眼就不是黑的。其余三间仍要手动按开关。
 			"authored_room_light_on": str(binding["key"]) == "exit",
@@ -287,6 +302,7 @@ static func build_plan_override(base_plan: Dictionary) -> Dictionary:
 	result["authored_layout_version"] = LAYOUT_VERSION
 	# 整层和平区：探针按这条断言「本层不刷怪、门策略全放行」，不必逐房去问。
 	result["authored_layout_peaceful"] = PEACEFUL_ZONE
+	result["search_facilities_enabled"] = SEARCH_FACILITIES_ENABLED
 	result["authored_layout_planar_z_shift_m"] = float(shifts[0])
 	return result
 

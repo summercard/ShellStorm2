@@ -1,0 +1,50 @@
+{
+  "slug": "sculpture_foundry",
+  "name_zh": "铸造者纪念雕塑",
+  "component_family": "sculpture",
+  "category": "facilities",
+  "component_id": "ENV-BLOCK00-SCULPTURE-FOUNDRY",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "STORY_MEETING"
+  ],
+  "variant_axis": "sculpture_theme",
+  "variant_value": "sculpture_foundry",
+  "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collection": "组件_铸造者纪念雕塑",
+  "version": "v001",
+  "source_blend": "env_block00_story_rooms_source_v001.blend",
+  "bounds_size_m": [
+    3.799999952316284,
+    2.5999999046325684,
+    6.420620441436768
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "objects": [
+    "铸造者纪念雕塑_主体输出"
+  ],
+  "triangles": 436,
+  "exported": false,
+  "collision_owner": "future_godot_wrapper",
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+  "component_blend": "assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/component_packages/facilities/sculpture_foundry/env_block00_sculpture_foundry_source_v001.blend",
+  "instance_count": 4,
+  "parent_asset_id": "ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE",
+  "status": "Blender源已完成"
+}

@@ -1,0 +1,62 @@
+{
+  "component_id": "ENV-FATHER-OFFICE-THROW",
+  "slug": "throw",
+  "name_zh": "垂落织物",
+  "category": "decoration",
+  "component_family": "throw",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "FATHER_OFFICE"
+  ],
+  "variant_axis": null,
+  "variant_value": "intact",
+  "variant_reason": "参考图可见破损状态",
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "future_godot_wrapper",
+  "pickup": false,
+  "version": "v002",
+  "source_blend": "env_father_office_source_v002.blend",
+  "collection": "组件_垂落织物",
+  "root_object": null,
+  "objects": [
+    "垂落织物_主体输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "authoring_anchor": [
+    0.3999999761581421,
+    0.0,
+    0.06821954995393753
+  ],
+  "bounds_size_m": [
+    2.799999952316284,
+    1.600000023841858,
+    1.6665568351745605
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette_uv_layer": "PaletteUV",
+  "exported": false,
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "component_blend": "assets/art/environments/master_office_3d/source/env_father_office/v002/component_packages/decoration/throw/env_father_office_throw_source_v002.blend",
+  "instance_count": 1,
+  "parent_asset_id": "ENV-BATTLE-FATHER-OFFICE-SOURCE",
+  "status": "Blender源已完成"
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "shellstorm2.source_art.approved_layout_delta",
+  "floor_number": 98,
+  "scope": "blender_source_only",
+  "source_layout": "source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json",
+  "removed_reference_instances": ["DOORWALL_east_xp20_p2.5", "DOORLEAF_east_xp20_p2.5"],
+  "opening": {"x_m": 20, "y_range_m": [0, 5], "clear_width_m": 5},
+  "meeting_center_clear_lane": {"x_range_m": [-25, 15], "y_range_m": [-0.5, 5.5], "width_m": 6},
+  "runtime_modified": false,
+  "runtime_import_status": "not_started",
+  "note": "用户授权本美术源拆除第三与第四房之间的门墙和门扇。此清单为源验收差异说明，不是运行时自动回灌命令。"
+}

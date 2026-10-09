@@ -1,0 +1,50 @@
+{
+  "slug": "constructivist_mural",
+  "name_zh": "工业时代构成主义壁画",
+  "component_family": "mural",
+  "category": "decoration",
+  "component_id": "ENV-BLOCK00-CONSTRUCTIVIST-MURAL",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "STORY_LOBBY"
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "constructivist_mural",
+  "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collection": "组件_工业时代构成主义壁画",
+  "version": "v001",
+  "source_blend": "env_block00_story_rooms_source_v001.blend",
+  "bounds_size_m": [
+    10.300000190734863,
+    0.3700000047683716,
+    6.280000686645508
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "objects": [
+    "工业时代构成主义壁画_主体输出"
+  ],
+  "triangles": 392,
+  "exported": false,
+  "collision_owner": "future_godot_wrapper",
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+  "component_blend": "assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/component_packages/decoration/constructivist_mural/env_block00_constructivist_mural_source_v001.blend",
+  "instance_count": 1,
+  "parent_asset_id": "ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE",
+  "status": "Blender源已完成"
+}

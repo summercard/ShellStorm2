@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "packages": [
+    {
+      "slug": "sculpture_foundry",
+      "reopened": true,
+      "mesh_count": 18,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "sculpture_turbine",
+      "reopened": true,
+      "mesh_count": 19,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "sculpture_pylon",
+      "reopened": true,
+      "mesh_count": 17,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "debris_slab",
+      "reopened": true,
+      "mesh_count": 6,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "debris_cluster",
+      "reopened": true,
+      "mesh_count": 13,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "cable_floor",
+      "reopened": true,
+      "mesh_count": 12,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "cable_hanging",
+      "reopened": true,
+      "mesh_count": 12,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "portal_damage",
+      "reopened": true,
+      "mesh_count": 6,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "constructivist_mural",
+      "reopened": true,
+      "mesh_count": 27,
+      "uv_pass": true,
+      "errors": []
+    }
+  ]
+}

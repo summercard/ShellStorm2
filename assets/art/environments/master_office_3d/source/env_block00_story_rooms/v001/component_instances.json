@@ -1,0 +1,9107 @@
+{
+  "coordinate_space": "blender_block_world",
+  "instances": [
+    {
+      "instance_id": "floor_panel_实例",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "master_office",
+      "position_m": [
+        -37.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -37.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.001",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -37.5,
+        2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.001",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "master_office",
+      "position_m": [
+        -37.5,
+        7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.002",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -32.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.003",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -32.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.002",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "master_office",
+      "position_m": [
+        -32.5,
+        2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.004",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -32.5,
+        7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.005",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -27.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.003",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "master_office",
+      "position_m": [
+        -27.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.006",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -27.5,
+        2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.007",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "master_office",
+      "position_m": [
+        -27.5,
+        7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -40.0,
+        -7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.001",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -40.0,
+        -2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.002",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -40.0,
+        2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.003",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -40.0,
+        7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.004",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -37.5,
+        10.0,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_fractured_实例",
+      "slug": "wall_fractured",
+      "component_collection": "组件_坍塌墙体",
+      "room_id": "master_office",
+      "position_m": [
+        -30.0,
+        10.0,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.005",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -37.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.006",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -32.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.007",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -27.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.008",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -25.0,
+        -7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.009",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -25.0,
+        -2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_door_实例",
+      "slug": "wall_door",
+      "component_collection": "组件_入口门墙",
+      "room_id": "master_office",
+      "position_m": [
+        -25.0,
+        2.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.010",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "master_office",
+      "position_m": [
+        -25.0,
+        7.5,
+        0.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "sofa_实例",
+      "slug": "sofa",
+      "component_collection": "组件_长条软包沙发",
+      "room_id": "master_office",
+      "position_m": [
+        -37.33000183105469,
+        -0.699999988079071,
+        0.10499999672174454
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rug_实例",
+      "slug": "rug",
+      "component_collection": "组件_磨损蓝色地毯",
+      "room_id": "master_office",
+      "position_m": [
+        -33.060001373291016,
+        -0.5,
+        0.1080000028014183
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "shelf_ledge_实例",
+      "slug": "shelf_ledge",
+      "component_collection": "组件_沙发后窄置物架",
+      "room_id": "master_office",
+      "position_m": [
+        -39.15999984741211,
+        -0.4000000059604645,
+        0.10499999672174454
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_mural_实例",
+      "slug": "wall_mural",
+      "component_collection": "组件_墙面浮雕与灯带",
+      "room_id": "master_office",
+      "position_m": [
+        -39.630001068115234,
+        -0.25,
+        3.6500000953674316
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "pillow_实例",
+      "slug": "pillow",
+      "component_collection": "组件_蓝色靠枕",
+      "room_id": "master_office",
+      "position_m": [
+        -37.400001525878906,
+        -4.599999904632568,
+        1.75
+      ],
+      "rotation_euler_rad": [
+        0.18000000715255737,
+        0.0,
+        1.2217304706573486
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "pillow_实例.001",
+      "slug": "pillow",
+      "component_collection": "组件_蓝色靠枕",
+      "room_id": "master_office",
+      "position_m": [
+        -37.400001525878906,
+        -1.7000000476837158,
+        1.75
+      ],
+      "rotation_euler_rad": [
+        0.18000000715255737,
+        0.0,
+        1.483529806137085
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "pillow_实例.002",
+      "slug": "pillow",
+      "component_collection": "组件_蓝色靠枕",
+      "room_id": "master_office",
+      "position_m": [
+        -37.400001525878906,
+        2.299999952316284,
+        1.75
+      ],
+      "rotation_euler_rad": [
+        0.18000000715255737,
+        0.0,
+        1.1344640254974365
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "pillow_实例.003",
+      "slug": "pillow",
+      "component_collection": "组件_蓝色靠枕",
+      "room_id": "master_office",
+      "position_m": [
+        -37.400001525878906,
+        3.4000000953674316,
+        1.75
+      ],
+      "rotation_euler_rad": [
+        0.18000000715255737,
+        0.0,
+        1.832595705986023
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "throw_实例",
+      "slug": "throw",
+      "component_collection": "组件_垂落织物",
+      "room_id": "master_office",
+      "position_m": [
+        -37.099998474121094,
+        -4.75,
+        0.4000000059604645
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "display_case_实例",
+      "slug": "display_case",
+      "component_collection": "组件_奖杯植物展示柜",
+      "room_id": "master_office",
+      "position_m": [
+        -37.7400016784668,
+        8.720000267028809,
+        0.10499999672174454
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "plant_specimen_实例",
+      "slug": "plant_specimen",
+      "component_collection": "组件_培养植物",
+      "room_id": "master_office",
+      "position_m": [
+        -36.95000076293945,
+        8.600000381469727,
+        0.699999988079071
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "trophy_实例",
+      "slug": "trophy",
+      "component_collection": "组件_螺旋奖杯",
+      "room_id": "master_office",
+      "position_m": [
+        -38.5,
+        8.579999923706055,
+        3.1600000858306885
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "trophy_实例.001",
+      "slug": "trophy",
+      "component_collection": "组件_螺旋奖杯",
+      "room_id": "master_office",
+      "position_m": [
+        -38.5,
+        8.579999923706055,
+        0.6899999976158142
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "side_table_实例",
+      "slug": "side_table",
+      "component_collection": "组件_圆形边桌",
+      "room_id": "master_office",
+      "position_m": [
+        -35.290000915527344,
+        -6.150000095367432,
+        0.10499999672174454
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "trophy_实例.002",
+      "slug": "trophy",
+      "component_collection": "组件_螺旋奖杯",
+      "room_id": "master_office",
+      "position_m": [
+        -35.290000915527344,
+        -6.150000095367432,
+        1.2100000381469727
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "display_console_实例",
+      "slug": "display_console",
+      "component_collection": "组件_低矮展示终端",
+      "room_id": "master_office",
+      "position_m": [
+        -26.360000610351562,
+        -1.100000023841858,
+        0.10499999672174454
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "plant_specimen_实例.001",
+      "slug": "plant_specimen",
+      "component_collection": "组件_培养植物",
+      "room_id": "master_office",
+      "position_m": [
+        -26.3700008392334,
+        -1.100000023841858,
+        1.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "plant_withered_实例",
+      "slug": "plant_withered",
+      "component_collection": "组件_枯萎盆栽",
+      "room_id": "master_office",
+      "position_m": [
+        -38.459999084472656,
+        -6.900000095367432,
+        0.11999999731779099
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.20943951606750488
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "plant_withered_实例.001",
+      "slug": "plant_withered",
+      "component_collection": "组件_枯萎盆栽",
+      "room_id": "master_office",
+      "position_m": [
+        -38.25,
+        5.699999809265137,
+        0.11999999731779099
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.4434609413146973
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "plant_withered_实例.002",
+      "slug": "plant_withered",
+      "component_collection": "组件_枯萎盆栽",
+      "room_id": "master_office",
+      "position_m": [
+        -26.75,
+        -3.0999999046325684,
+        0.11999999731779099
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -0.5235987901687622
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "bookcase_fallen_实例",
+      "slug": "bookcase_fallen",
+      "component_collection": "组件_倒塌书柜",
+      "room_id": "master_office",
+      "position_m": [
+        -36.45000076293945,
+        -8.050000190734863,
+        0.11999999731779099
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -0.20943951606750488
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "bookcase_fallen_实例.001",
+      "slug": "bookcase_fallen",
+      "component_collection": "组件_倒塌书柜",
+      "room_id": "master_office",
+      "position_m": [
+        -28.170000076293945,
+        -6.900000095367432,
+        0.11999999731779099
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.186823844909668
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "book_stack_实例",
+      "slug": "book_stack",
+      "component_collection": "组件_固定旧书堆",
+      "room_id": "master_office",
+      "position_m": [
+        -39.150001525878906,
+        -3.700000047683716,
+        1.5299999713897705
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "book_stack_实例.001",
+      "slug": "book_stack",
+      "component_collection": "组件_固定旧书堆",
+      "room_id": "master_office",
+      "position_m": [
+        -39.150001525878906,
+        0.800000011920929,
+        1.5299999713897705
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "book_stack_实例.002",
+      "slug": "book_stack",
+      "component_collection": "组件_固定旧书堆",
+      "room_id": "master_office",
+      "position_m": [
+        -39.150001525878906,
+        2.5999999046325684,
+        1.5299999713897705
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "trophy_实例.003",
+      "slug": "trophy",
+      "component_collection": "组件_螺旋奖杯",
+      "room_id": "master_office",
+      "position_m": [
+        -39.130001068115234,
+        -4.699999809265137,
+        1.5299999713897705
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "trophy_实例.004",
+      "slug": "trophy",
+      "component_collection": "组件_螺旋奖杯",
+      "room_id": "master_office",
+      "position_m": [
+        -39.130001068115234,
+        3.9000000953674316,
+        1.5299999713897705
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "monitor_fallen_实例",
+      "slug": "monitor_fallen",
+      "component_collection": "组件_脱落显示屏",
+      "room_id": "master_office",
+      "position_m": [
+        -26.989999771118164,
+        7.590000152587891,
+        0.49000000953674316
+      ],
+      "rotation_euler_rad": [
+        0.6000000238418579,
+        0.0,
+        0.4363323152065277
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "metal_brace_实例",
+      "slug": "metal_brace",
+      "component_collection": "组件_断裂斜撑",
+      "room_id": "master_office",
+      "position_m": [
+        -33.900001525878906,
+        9.460000038146973,
+        4.300000190734863
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        -0.41999998688697815,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "metal_brace_实例.001",
+      "slug": "metal_brace",
+      "component_collection": "组件_断裂斜撑",
+      "room_id": "master_office",
+      "position_m": [
+        -29.700000762939453,
+        9.449999809265137,
+        1.7000000476837158
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.3499999940395355,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "metal_brace_实例.002",
+      "slug": "metal_brace",
+      "component_collection": "组件_断裂斜撑",
+      "room_id": "master_office",
+      "position_m": [
+        -28.200000762939453,
+        9.460000038146973,
+        4.900000095367432
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.4300000071525574,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.27378463745117,
+        7.128284454345703,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.5179046988487244
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.001",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.984464645385742,
+        9.283746719360352,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.726754665374756
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.002",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.185842514038086,
+        8.648027420043945,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.1674652099609375
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.003",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.069698333740234,
+        7.8739213943481445,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3084838390350342
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.004",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.317623138427734,
+        6.833682060241699,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.262939453125
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.005",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.117671966552734,
+        8.138798713684082,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.307504653930664
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.006",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.05524826049805,
+        8.469066619873047,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.32124137878418
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.007",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.174962997436523,
+        7.623993396759033,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.167027473449707
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.008",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.18007278442383,
+        7.376399040222168,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.7561657428741455
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.009",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.64715576171875,
+        8.58551025390625,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.7854801416397095
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.010",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.482481002807617,
+        8.401434898376465,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.792435169219971
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.011",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.31369400024414,
+        7.869316577911377,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.034117579460144
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.012",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.51691436767578,
+        7.483696937561035,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.1948933601379395
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.013",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.668977737426758,
+        8.900559425354004,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.171689748764038
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.014",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.207290649414062,
+        7.0075459480285645,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.257834434509277
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.015",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.810903549194336,
+        9.032441139221191,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.552976608276367
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.016",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.475181579589844,
+        9.126187324523926,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.0632500648498535
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.017",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.4298210144043,
+        8.858428001403809,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1466937065124512
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.018",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.092695236206055,
+        8.317045211791992,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.0250163078308105
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.019",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.036710739135742,
+        6.886116981506348,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.238144397735596
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.020",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.61393165588379,
+        7.284273147583008,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.2218897342681885
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.021",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.205135345458984,
+        7.05400276184082,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3711779117584229
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.022",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.08521270751953,
+        7.564422130584717,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.3582329750061035
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.023",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -25.9644832611084,
+        9.117270469665527,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.640264511108398
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.01667785644531,
+        7.497097015380859,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.399423837661743
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.001",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.14976119995117,
+        9.229823112487793,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.39043939113616943
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.002",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -25.98418617248535,
+        8.126875877380371,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.176805019378662
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.003",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.74907302856445,
+        7.429622650146484,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.680295467376709
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.004",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.101543426513672,
+        9.30785083770752,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.2937920093536377
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.005",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.6643180847168,
+        6.898033618927002,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.15886206924915314
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.006",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.043649673461914,
+        8.161688804626465,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.848196983337402
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.007",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -25.82562828063965,
+        7.304454803466797,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.166489601135254
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.008",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.72827911376953,
+        8.377801895141602,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.254306316375732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.009",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.654937744140625,
+        8.617246627807617,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.4543862342834473
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.010",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.074731826782227,
+        9.095283508300781,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.212705612182617
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.011",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.34294319152832,
+        9.222062110900879,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.280211448669434
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.012",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.650646209716797,
+        6.831218719482422,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.0760654211044312
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.013",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.52586555480957,
+        9.057035446166992,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.2998006343841553
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.014",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.18032455444336,
+        8.852764129638672,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.274322032928467
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.015",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.3551139831543,
+        8.89543628692627,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.8688001036643982
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.016",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.96904182434082,
+        8.580424308776855,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.285634517669678
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.017",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.479467391967773,
+        7.340989112854004,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.954273223876953
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.018",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.206769943237305,
+        7.079978942871094,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.56337308883667
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.019",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.607810974121094,
+        7.014861583709717,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3006436824798584
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.020",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.04488754272461,
+        8.943602561950684,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.762218475341797
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.021",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.136653900146484,
+        8.062872886657715,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.478460311889648
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.022",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.301197052001953,
+        7.983242988586426,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.6542770862579346
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.023",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.361587524414062,
+        7.703073978424072,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.804906964302063
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.024",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.26088523864746,
+        8.588737487792969,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3079094886779785
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.025",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.698747634887695,
+        8.89533519744873,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9399077892303467
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.026",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.711416244506836,
+        7.8750457763671875,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1217987537384033
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.027",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.51140594482422,
+        8.09070110321045,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.934976100921631
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.028",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.24616241455078,
+        6.813432693481445,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.4605542421340942
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.029",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.65702438354492,
+        7.653231620788574,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.8452630043029785
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.030",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.926467895507812,
+        8.427053451538086,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.110353469848633
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.031",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.48334884643555,
+        8.324800491333008,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.9540271759033203
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.032",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.35845184326172,
+        7.773892879486084,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.825817584991455
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.033",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.48673439025879,
+        9.342307090759277,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.2216639518737793
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.034",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.667396545410156,
+        9.016101837158203,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.121697425842285
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.035",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.07982063293457,
+        9.05717658996582,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.101231575012207
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.036",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.160785675048828,
+        7.909759998321533,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.5320582389831543
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.037",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.430221557617188,
+        8.402008056640625,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.6028664112091064
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.038",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.113801956176758,
+        8.143278121948242,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.179740905761719
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.039",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.52654266357422,
+        7.871186256408691,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3778107166290283
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.040",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.50556945800781,
+        8.691091537475586,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5691070556640625
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.041",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.30137252807617,
+        7.756621837615967,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.1761274337768555
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.042",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.21714782714844,
+        8.094435691833496,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.256723403930664
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.043",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.23942947387695,
+        7.567819595336914,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.15052305161952972
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.044",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.291601181030273,
+        6.886409759521484,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9270061254501343
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.045",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.363746643066406,
+        8.097465515136719,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.6213033199310303
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.046",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.315744400024414,
+        8.528456687927246,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.632433891296387
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.047",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.393342971801758,
+        8.347312927246094,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.506169080734253
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.048",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.067386627197266,
+        7.738657474517822,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.161858558654785
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.049",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.114784240722656,
+        7.66646671295166,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.15956635773181915
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.050",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.425621032714844,
+        9.178747177124023,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.489163398742676
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.051",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.482704162597656,
+        8.631635665893555,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.03847074508667
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.052",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.777803421020508,
+        8.609448432922363,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.317373752593994
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.053",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.0298957824707,
+        7.659268379211426,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.1536552906036377
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.054",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.04362678527832,
+        7.474381923675537,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.5758316516876221
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.055",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.038105010986328,
+        9.164753913879395,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.16752520203590393
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.056",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.98799133300781,
+        7.890214920043945,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1840238571166992
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.057",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.33671760559082,
+        8.739171981811523,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.947955131530762
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.058",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.6274528503418,
+        9.064756393432617,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.070511817932129
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.059",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.432823181152344,
+        7.975541114807129,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.036149263381958
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.060",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.455467224121094,
+        7.733691692352295,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.3176307678222656
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.061",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.298736572265625,
+        8.0864896774292,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.2712687253952026
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.062",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.373525619506836,
+        7.49885892868042,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.84507942199707
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.063",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.407047271728516,
+        9.148970603942871,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9221007823944092
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.064",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.74613571166992,
+        7.166717529296875,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.980006456375122
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.065",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.583465576171875,
+        8.412480354309082,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.9164991974830627
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.066",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.889741897583008,
+        7.7558135986328125,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.3808886408805847
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.067",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.57810401916504,
+        9.019031524658203,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.132893085479736
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.068",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.701019287109375,
+        8.837621688842773,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.312466561794281
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.069",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.38842010498047,
+        8.885074615478516,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.317434310913086
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.070",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.782184600830078,
+        7.036787033081055,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.4100706577301025
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.071",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -25.8625431060791,
+        6.812083721160889,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.788435697555542
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.072",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.140504837036133,
+        8.054389953613281,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.0651750564575195
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.073",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.77742004394531,
+        8.512591361999512,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.081607341766357
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.074",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.7120475769043,
+        9.120040893554688,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1982264518737793
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.075",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.873001098632812,
+        9.01550006866455,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.2152860164642334
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.024",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -36.7202033996582,
+        -7.142966270446777,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.7808165550231934
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.076",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.893844604492188,
+        -7.674368858337402,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.552666664123535
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.077",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -38.15458679199219,
+        -7.066006183624268,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.1608502864837646
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.078",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.0925178527832,
+        -7.206249713897705,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.4534478187561035
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.025",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.39403533935547,
+        -8.471291542053223,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.9303998947143555
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.079",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.25886917114258,
+        -9.271191596984863,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.380598545074463
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.080",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.81025314331055,
+        -7.775372505187988,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.301860809326172
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.081",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.44358825683594,
+        -6.910358428955078,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.744148254394531
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.026",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.384441375732422,
+        -8.230493545532227,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.9483069181442261
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.082",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.825775146484375,
+        -7.528347969055176,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.4442937672138214
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.083",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -38.72640609741211,
+        -8.747818946838379,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.587067604064941
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.084",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -38.84910583496094,
+        -6.731927871704102,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.2647385597229
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.027",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.5458984375,
+        -9.191372871398926,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.02099558897316456
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.085",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.132667541503906,
+        -8.599675178527832,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9064961671829224
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.086",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.700727462768555,
+        -6.862998008728027,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.033194065093994
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.087",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.95530319213867,
+        -7.869190216064453,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.064168930053711
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.028",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.611446380615234,
+        -6.709095001220703,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.6203887462615967
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.088",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.86207962036133,
+        -7.981950283050537,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.135725498199463
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.089",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.202882766723633,
+        -7.993781566619873,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1424773931503296
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.090",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.63967514038086,
+        -7.274125576019287,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.7774403095245361
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.029",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.137420654296875,
+        -7.462323188781738,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0690356120467186
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.091",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.031801223754883,
+        -8.448957443237305,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1922799348831177
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.092",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.338138580322266,
+        -8.352741241455078,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.749143600463867
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.093",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.196678161621094,
+        -8.762484550476074,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.3955181837081909
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.030",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.20853042602539,
+        -8.506153106689453,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.581596612930298
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.094",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.74635314941406,
+        -8.030765533447266,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.090246677398682
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.095",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.174896240234375,
+        -8.75993537902832,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.792037010192871
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.096",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.68625259399414,
+        -8.190434455871582,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.8990020751953125
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.031",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -36.40990447998047,
+        -7.324114799499512,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.507412433624268
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.097",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -32.245750427246094,
+        -7.1628570556640625,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.8302900791168213
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.098",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.956707000732422,
+        -9.131035804748535,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5919262170791626
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.099",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.84526824951172,
+        -7.516769886016846,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.9918713569641113
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.032",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.005409240722656,
+        -6.714340686798096,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.392908096313477
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.100",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.136999130249023,
+        -8.871377944946289,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.148037433624268
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.101",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.65340042114258,
+        -7.12323522567749,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.7100721597671509
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.102",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.961273193359375,
+        -8.800416946411133,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.764309883117676
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.033",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.824344635009766,
+        -8.030055046081543,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.774794340133667
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.103",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.520347595214844,
+        -7.212967872619629,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.865400493144989
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.104",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.536457061767578,
+        -7.129604339599609,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.8719654679298401
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.105",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.54987716674805,
+        -7.758235454559326,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.057864665985107
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.034",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.253753662109375,
+        -8.046126365661621,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.1279971599578857
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.106",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.017635345458984,
+        -7.346948623657227,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3183557987213135
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.107",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.34416961669922,
+        -8.93973159790039,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.3860409259796143
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.108",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -38.545650482177734,
+        -8.709790229797363,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.9690096378326416
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.035",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.452865600585938,
+        -7.576853275299072,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.634067058563232
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.109",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.870248794555664,
+        -8.837944030761719,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.63818359375
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.110",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -38.47635269165039,
+        -7.220399856567383,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.40360951423645
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.111",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -36.185394287109375,
+        -8.67493724822998,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.029616953805088997
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.036",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.91962432861328,
+        -8.093244552612305,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1545240879058838
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.112",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.433982849121094,
+        -8.427785873413086,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.6044445037841797
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.113",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.191247940063477,
+        -9.010159492492676,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.004720687866211
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.114",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.461463928222656,
+        -8.331188201904297,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3912639617919922
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.037",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -38.25050735473633,
+        -8.693990707397461,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.835552930831909
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.115",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.108108520507812,
+        -6.661807537078857,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.801884651184082
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.116",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.512855529785156,
+        -7.7960076332092285,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.07661537826061249
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.117",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.737001419067383,
+        -8.249199867248535,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.361999273300171
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.038",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.71763610839844,
+        -8.359811782836914,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.008097358979284763
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.118",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.105836868286133,
+        -7.2397284507751465,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.1309309005737305
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.119",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -29.94178581237793,
+        -8.892580032348633,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.60455322265625
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.120",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.98165512084961,
+        -7.329758644104004,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.8623384237289429
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.039",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.72042465209961,
+        -7.238430023193359,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.5631486177444458
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.121",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.67599868774414,
+        -7.455953121185303,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.575838327407837
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.122",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.14699935913086,
+        -7.99099063873291,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.40738844871521
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.123",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.95917320251465,
+        -9.292551040649414,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.027321457862854
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.040",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.16770935058594,
+        -7.942819118499756,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.761533260345459
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.124",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.58675003051758,
+        -6.798950672149658,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.044756889343262
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.125",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.9635009765625,
+        -7.984686851501465,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.7739610075950623
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.126",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.80742645263672,
+        -7.179027080535889,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.1649093627929688
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.041",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.95832633972168,
+        -6.95559549331665,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.9996209144592285
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.127",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -37.66315841674805,
+        -9.108109474182129,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.676811933517456
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.128",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -35.530181884765625,
+        -9.266864776611328,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.3288266360759735
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.129",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.537412643432617,
+        -7.602517127990723,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3822747468948364
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.042",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -30.60843276977539,
+        -8.066554069519043,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.7061461210250854
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.130",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.42741775512695,
+        -8.921853065490723,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.603481292724609
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.131",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -34.05258560180664,
+        -7.124151706695557,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1422619819641113
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.132",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -38.78300476074219,
+        -6.816826343536377,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.328336477279663
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.043",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -26.903156280517578,
+        -8.6428861618042,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.6403809785842896
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.133",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.08401107788086,
+        -7.751122951507568,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.48092374205589294
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.134",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.95206642150879,
+        -8.906099319458008,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.0174291133880615
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.135",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -31.55375099182129,
+        -9.073400497436523,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.8204688429832458
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_large_实例.044",
+      "slug": "rubble_large",
+      "component_collection": "组件_混凝土大碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -33.1681022644043,
+        -9.126795768737793,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.917208671569824
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.136",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.503589630126953,
+        -7.103058338165283,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.6065069437026978
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -34.04618835449219,
+        1.3317440748214722,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.199117183685303
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.001",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -33.846065521240234,
+        -1.6505465507507324,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.5240302085876465
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.002",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -28.954561233520508,
+        5.018438816070557,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3158013820648193
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.003",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -32.58174133300781,
+        -3.8335788249969482,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.651331901550293
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.004",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -29.867664337158203,
+        -0.06053932383656502,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.1778054237365723
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.005",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -29.752046585083008,
+        5.738513469696045,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.349562644958496
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.006",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -30.597911834716797,
+        5.157690525054932,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.348737955093384
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.007",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -33.55308532714844,
+        4.493718147277832,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.785684585571289
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.008",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -29.029876708984375,
+        -1.7014176845550537,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.0986721515655518
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.009",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -28.85224723815918,
+        -6.311559200286865,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.000502586364746
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.010",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -32.94189453125,
+        3.2168400287628174,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.2565921545028687
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.011",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -30.495227813720703,
+        1.136344075202942,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.169407367706299
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.012",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -29.452224731445312,
+        -5.191928863525391,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.6866075992584229
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.013",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -29.382774353027344,
+        3.168933391571045,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5695834159851074
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.014",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -33.622554779052734,
+        1.2628148794174194,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.2545887231826782
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.015",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -31.50899887084961,
+        4.362381935119629,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.79707670211792
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.016",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -33.56328582763672,
+        1.510350227355957,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.082672595977783
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.017",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -32.19490432739258,
+        -3.7566139698028564,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.205607891082764
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.018",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -33.56341552734375,
+        3.755418539047241,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.582813739776611
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.019",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -29.494861602783203,
+        -3.5289993286132812,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.228691339492798
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.020",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -29.179039001464844,
+        0.9052022099494934,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.7850658893585205
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "paper_实例.021",
+      "slug": "paper",
+      "component_collection": "组件_散落纸张",
+      "room_id": "master_office",
+      "position_m": [
+        -32.98393249511719,
+        -4.133418083190918,
+        0.25
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.863471031188965
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.137",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.524770736694336,
+        4.957001209259033,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.834847450256348
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.138",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.45455551147461,
+        3.91342830657959,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3900766372680664
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.139",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.503049850463867,
+        -4.364252090454102,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3804471492767334
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.140",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.052608489990234,
+        5.862305641174316,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.251835346221924
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.141",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.074939727783203,
+        3.0571606159210205,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.7534332275390625
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.142",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.812671661376953,
+        3.531632661819458,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.3369009494781494
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.143",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.874462127685547,
+        1.8130661249160767,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.119154930114746
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.144",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -28.081886291503906,
+        5.009566307067871,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3979583978652954
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.145",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.608505249023438,
+        0.666728675365448,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.098407745361328
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "rubble_small_实例.146",
+      "slug": "rubble_small",
+      "component_collection": "组件_混凝土小碎块",
+      "room_id": "master_office",
+      "position_m": [
+        -27.668601989746094,
+        0.8491923809051514,
+        0.10999999940395355
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.8444907665252686
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.004",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "corridor",
+      "position_m": [
+        17.5,
+        -7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.008",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "corridor",
+      "position_m": [
+        17.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.009",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "corridor",
+      "position_m": [
+        17.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.005",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "corridor",
+      "position_m": [
+        17.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.011",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        15.0,
+        -7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.012",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        15.0,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_door_实例.001",
+      "slug": "wall_door",
+      "component_collection": "组件_入口门墙",
+      "room_id": "corridor",
+      "position_m": [
+        15.0,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.013",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        15.0,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.014",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        20.0,
+        -7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.015",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        20.0,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.016",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        20.0,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.017",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        17.5,
+        -10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.018",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "corridor",
+      "position_m": [
+        17.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.006",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -22.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.010",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -22.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.011",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -22.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.012",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -17.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.013",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -17.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.007",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -17.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.014",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -12.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.008",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -12.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.015",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -12.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.009",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -7.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.016",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -7.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.017",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -7.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.018",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.019",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.010",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.020",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        2.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.011",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        2.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.021",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        2.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.012",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        7.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.022",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        7.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.023",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        7.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.024",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        12.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.025",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        12.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.013",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "meeting_room",
+      "position_m": [
+        12.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.019",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -22.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.020",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -17.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.021",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -12.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.022",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -7.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.023",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.024",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        2.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.025",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        7.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.026",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        12.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.027",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -22.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.028",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -17.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.029",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -12.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.030",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -7.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.031",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.032",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        2.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.033",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        7.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.034",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "meeting_room",
+      "position_m": [
+        12.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.014",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "lobby",
+      "position_m": [
+        22.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.026",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "lobby",
+      "position_m": [
+        22.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.027",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "lobby",
+      "position_m": [
+        22.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.028",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "lobby",
+      "position_m": [
+        27.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.029",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "lobby",
+      "position_m": [
+        27.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.015",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "lobby",
+      "position_m": [
+        27.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.030",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "lobby",
+      "position_m": [
+        32.5,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_panel_实例.016",
+      "slug": "floor_panel",
+      "component_collection": "组件_地面金属砖",
+      "room_id": "lobby",
+      "position_m": [
+        32.5,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "floor_fractured_实例.031",
+      "slug": "floor_fractured",
+      "component_collection": "组件_开裂地砖",
+      "room_id": "lobby",
+      "position_m": [
+        32.5,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.035",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        35.0,
+        -2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_door_实例.002",
+      "slug": "wall_door",
+      "component_collection": "组件_入口门墙",
+      "room_id": "lobby",
+      "position_m": [
+        35.0,
+        2.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.036",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        35.0,
+        7.5,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.037",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        22.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.038",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        27.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.039",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        32.5,
+        -5.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.040",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        22.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.041",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        27.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "wall_panel_实例.042",
+      "slug": "wall_panel",
+      "component_collection": "组件_装甲墙板",
+      "room_id": "lobby",
+      "position_m": [
+        32.5,
+        10.0,
+        0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "linked_office"
+    },
+    {
+      "instance_id": "sculpture_foundry_实例",
+      "slug": "sculpture_foundry",
+      "component_collection": "组件_铸造者纪念雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -21.5,
+        -2.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_turbine_实例",
+      "slug": "sculpture_turbine",
+      "component_collection": "组件_涡轮与钢翼雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -15,
+        -2.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_pylon_实例",
+      "slug": "sculpture_pylon",
+      "component_collection": "组件_工业之峰雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -8.5,
+        -2.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_foundry_实例.001",
+      "slug": "sculpture_foundry",
+      "component_collection": "组件_铸造者纪念雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2,
+        -2.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_turbine_实例.001",
+      "slug": "sculpture_turbine",
+      "component_collection": "组件_涡轮与钢翼雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        4.5,
+        -2.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_pylon_实例.001",
+      "slug": "sculpture_pylon",
+      "component_collection": "组件_工业之峰雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        11,
+        -2.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_turbine_实例.002",
+      "slug": "sculpture_turbine",
+      "component_collection": "组件_涡轮与钢翼雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -21.5,
+        7.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_pylon_实例.002",
+      "slug": "sculpture_pylon",
+      "component_collection": "组件_工业之峰雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -15,
+        7.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_foundry_实例.002",
+      "slug": "sculpture_foundry",
+      "component_collection": "组件_铸造者纪念雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -8.5,
+        7.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_turbine_实例.003",
+      "slug": "sculpture_turbine",
+      "component_collection": "组件_涡轮与钢翼雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2,
+        7.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_pylon_实例.003",
+      "slug": "sculpture_pylon",
+      "component_collection": "组件_工业之峰雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        4.5,
+        7.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "sculpture_foundry_实例.003",
+      "slug": "sculpture_foundry",
+      "component_collection": "组件_铸造者纪念雕塑",
+      "room_id": "meeting_room",
+      "position_m": [
+        11,
+        7.95,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -23,
+        -4.15,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.001",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -23,
+        9.1,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.002",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -16,
+        -4.15,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.003",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -16,
+        9.1,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.004",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -9,
+        -4.15,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.005",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -9,
+        9.1,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.006",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2,
+        -4.15,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.007",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        -2,
+        9.1,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.008",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        5,
+        -4.15,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.009",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        5,
+        9.1,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.010",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        12,
+        -4.15,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.011",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "meeting_room",
+      "position_m": [
+        12,
+        9.1,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "meeting_room",
+      "position_m": [
+        -19,
+        9.45,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例.001",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "meeting_room",
+      "position_m": [
+        -6,
+        9.45,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例.002",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "meeting_room",
+      "position_m": [
+        7,
+        9.45,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.012",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "corridor",
+      "position_m": [
+        16.0,
+        -8.3,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_slab_实例",
+      "slug": "debris_slab",
+      "component_collection": "组件_破碎楼板残片",
+      "room_id": "corridor",
+      "position_m": [
+        16.0,
+        -8.3,
+        0.14
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.013",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "corridor",
+      "position_m": [
+        18.8,
+        -5.8,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.014",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "corridor",
+      "position_m": [
+        16.0,
+        7.9,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_slab_实例.001",
+      "slug": "debris_slab",
+      "component_collection": "组件_破碎楼板残片",
+      "room_id": "corridor",
+      "position_m": [
+        16.0,
+        7.9,
+        0.14
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.015",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "corridor",
+      "position_m": [
+        19.1,
+        8.3,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.016",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "lobby",
+      "position_m": [
+        22,
+        -3.75,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_slab_实例.002",
+      "slug": "debris_slab",
+      "component_collection": "组件_破碎楼板残片",
+      "room_id": "lobby",
+      "position_m": [
+        22,
+        -3.75,
+        0.14
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -0.1745329201221466
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.017",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "lobby",
+      "position_m": [
+        27,
+        -3.75,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.018",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "lobby",
+      "position_m": [
+        32,
+        -3.75,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_slab_实例.003",
+      "slug": "debris_slab",
+      "component_collection": "组件_破碎楼板残片",
+      "room_id": "lobby",
+      "position_m": [
+        32,
+        -3.75,
+        0.14
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -0.1745329201221466
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.019",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "lobby",
+      "position_m": [
+        22,
+        8.8,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.020",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "lobby",
+      "position_m": [
+        27,
+        8.8,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_slab_实例.004",
+      "slug": "debris_slab",
+      "component_collection": "组件_破碎楼板残片",
+      "room_id": "lobby",
+      "position_m": [
+        27,
+        8.8,
+        0.14
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -0.1745329201221466
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.021",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "lobby",
+      "position_m": [
+        32,
+        8.8,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例.003",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "corridor",
+      "position_m": [
+        15.7,
+        -6.8,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例.004",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "corridor",
+      "position_m": [
+        19.35,
+        7.4,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例.005",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "lobby",
+      "position_m": [
+        23,
+        -4.4,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例.006",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "lobby",
+      "position_m": [
+        29,
+        9.3,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_floor_实例.007",
+      "slug": "cable_floor",
+      "component_collection": "组件_地面断裂电缆束",
+      "room_id": "lobby",
+      "position_m": [
+        32,
+        -4.3,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_hanging_实例",
+      "slug": "cable_hanging",
+      "component_collection": "组件_垂落断线",
+      "room_id": "corridor",
+      "position_m": [
+        15.48,
+        -5.9,
+        2.4
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_hanging_实例.001",
+      "slug": "cable_hanging",
+      "component_collection": "组件_垂落断线",
+      "room_id": "lobby",
+      "position_m": [
+        34.47,
+        7.1,
+        2.0
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "portal_damage_实例",
+      "slug": "portal_damage",
+      "component_collection": "组件_拆门残留断框",
+      "room_id": "corridor",
+      "position_m": [
+        20,
+        -0.5,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "portal_damage_实例.001",
+      "slug": "portal_damage",
+      "component_collection": "组件_拆门残留断框",
+      "room_id": "corridor",
+      "position_m": [
+        20,
+        5.5,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "cable_hanging_实例.002",
+      "slug": "cable_hanging",
+      "component_collection": "组件_垂落断线",
+      "room_id": "lobby",
+      "position_m": [
+        20,
+        5.75,
+        3.1
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "debris_cluster_实例.022",
+      "slug": "debris_cluster",
+      "component_collection": "组件_边缘混凝土废墟",
+      "room_id": "corridor",
+      "position_m": [
+        20,
+        -0.92,
+        0.12
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    },
+    {
+      "instance_id": "constructivist_mural_实例",
+      "slug": "constructivist_mural",
+      "component_collection": "组件_工业时代构成主义壁画",
+      "room_id": "lobby",
+      "position_m": [
+        27.5,
+        9.61,
+        3.55
+      ],
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false,
+      "source": "new_component"
+    }
+  ],
+  "door_removal": {
+    "rooms": [
+      "corridor",
+      "lobby"
+    ],
+    "wall_x": 20,
+    "opening_y": [
+      0,
+      5
+    ],
+    "remove": [
+      "door_wall",
+      "door_leaf"
+    ],
+    "clear_width_m": 5,
+    "source_only": true
+  }
+}

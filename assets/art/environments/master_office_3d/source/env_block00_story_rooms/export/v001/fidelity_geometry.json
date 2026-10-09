@@ -1,0 +1,156 @@
+{
+  "components": [
+    {
+      "slug": "wall_fractured",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "sofa",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "pillow",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "throw",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "rug",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "display_case",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "display_console",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "side_table",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "bookcase_fallen",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "plant_withered",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "plant_specimen",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "trophy",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "rubble_large",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "rubble_small",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "paper",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "book_stack",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "wall_mural",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "metal_brace",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "monitor_fallen",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "shelf_ledge",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "sculpture_foundry",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "sculpture_turbine",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "sculpture_pylon",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "debris_slab",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "debris_cluster",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "cable_floor",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "cable_hanging",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "portal_damage",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    },
+    {
+      "slug": "constructivist_mural",
+      "bbox_delta_m": 0.0,
+      "origin_unchanged": true
+    }
+  ],
+  "views": [
+    "front",
+    "back",
+    "side",
+    "game"
+  ],
+  "review": "rendered_pending_visual_review"
+}

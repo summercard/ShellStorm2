@@ -1,0 +1,1422 @@
+[
+  {
+    "component_id": "ENV-FATHER-OFFICE-FLOOR-PANEL",
+    "slug": "floor_panel",
+    "name_zh": "地面金属砖",
+    "category": "floor",
+    "component_family": "floor_panel",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": "damage_state",
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_地面金属砖",
+    "root_object": null,
+    "objects": [
+      "地面金属砖_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      5.0,
+      5.0,
+      0.11400000005960464
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 4
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+    "slug": "floor_fractured",
+    "name_zh": "开裂地砖",
+    "category": "floor",
+    "component_family": "floor_panel",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": "damage_state",
+    "variant_value": "fractured",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_开裂地砖",
+    "root_object": null,
+    "objects": [
+      "开裂地砖_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      5.0,
+      5.0,
+      0.11525833606719971
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 8
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+    "slug": "wall_panel",
+    "name_zh": "装甲墙板",
+    "category": "architecture",
+    "component_family": "wall_panel",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": "damage_state",
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_装甲墙板",
+    "root_object": null,
+    "objects": [
+      "装甲墙板_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0949999988079071,
+      0.0
+    ],
+    "bounds_size_m": [
+      5.0,
+      0.49000000953674316,
+      11.899999618530273
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 11
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-WALL-FRACTURED",
+    "slug": "wall_fractured",
+    "name_zh": "坍塌墙体",
+    "category": "architecture",
+    "component_family": "wall_panel",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": "damage_state",
+    "variant_value": "fractured",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_坍塌墙体",
+    "root_object": null,
+    "objects": [
+      "坍塌墙体_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.2833843231201172,
+      0.044445767998695374,
+      -0.4535740613937378
+    ],
+    "bounds_size_m": [
+      10.773674964904785,
+      0.9116277694702148,
+      12.3535737991333
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-WALL-DOOR",
+    "slug": "wall_door",
+    "name_zh": "入口门墙",
+    "category": "architecture",
+    "component_family": "wall_door",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_入口门墙",
+    "root_object": null,
+    "objects": [
+      "入口门墙_主体输出",
+      "入口门墙_自发光输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.09450000524520874,
+      0.0
+    ],
+    "bounds_size_m": [
+      5.0,
+      0.48900002241134644,
+      11.899999618530273
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-SOFA",
+    "slug": "sofa",
+    "name_zh": "长条软包沙发",
+    "category": "facilities",
+    "component_family": "sofa",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_长条软包沙发",
+    "root_object": null,
+    "objects": [
+      "长条软包沙发_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      -0.0753169059753418,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      2.7706336975097656,
+      12.0,
+      3.0519325733184814
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-PILLOW",
+    "slug": "pillow",
+    "name_zh": "蓝色靠枕",
+    "category": "decoration",
+    "component_family": "pillow",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_蓝色靠枕",
+    "root_object": null,
+    "objects": [
+      "蓝色靠枕_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      -0.001999996602535248,
+      0.0
+    ],
+    "bounds_size_m": [
+      1.1299999952316284,
+      0.4440000057220459,
+      1.1200000047683716
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 4
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-THROW",
+    "slug": "throw",
+    "name_zh": "垂落织物",
+    "category": "decoration",
+    "component_family": "throw",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_垂落织物",
+    "root_object": null,
+    "objects": [
+      "垂落织物_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.07821955531835556
+    ],
+    "bounds_size_m": [
+      1.600000023841858,
+      2.299999952316284,
+      1.986556887626648
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-RUG",
+    "slug": "rug",
+    "name_zh": "磨损蓝色地毯",
+    "category": "floor",
+    "component_family": "rug",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_磨损蓝色地毯",
+    "root_object": null,
+    "objects": [
+      "磨损蓝色地毯_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      6.699999809265137,
+      12.399999618530273,
+      0.11999999731779099
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-DISPLAY-CASE",
+    "slug": "display_case",
+    "name_zh": "奖杯植物展示柜",
+    "category": "facilities",
+    "component_family": "display_case",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_奖杯植物展示柜",
+    "root_object": null,
+    "objects": [
+      "奖杯植物展示柜_主体输出",
+      "奖杯植物展示柜_自发光输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.019999995827674866
+    ],
+    "bounds_size_m": [
+      3.4000000953674316,
+      1.75,
+      5.710000038146973
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-DISPLAY-CONSOLE",
+    "slug": "display_console",
+    "name_zh": "低矮展示终端",
+    "category": "facilities",
+    "component_family": "display_console",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_低矮展示终端",
+    "root_object": null,
+    "objects": [
+      "低矮展示终端_主体输出",
+      "低矮展示终端_自发光输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      2.25,
+      1.350000023841858,
+      2.440000057220459
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-SIDE-TABLE",
+    "slug": "side_table",
+    "name_zh": "圆形边桌",
+    "category": "facilities",
+    "component_family": "side_table",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_圆形边桌",
+    "root_object": null,
+    "objects": [
+      "圆形边桌_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      1.6399999856948853,
+      1.6399999856948853,
+      1.1075000762939453
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-BOOKCASE-FALLEN",
+    "slug": "bookcase_fallen",
+    "name_zh": "倒塌书柜",
+    "category": "facilities",
+    "component_family": "bookcase_fallen",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_倒塌书柜",
+    "root_object": null,
+    "objects": [
+      "倒塌书柜_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.16161692142486572,
+      0.0,
+      0.04999999701976776
+    ],
+    "bounds_size_m": [
+      5.123233795166016,
+      1.899999976158142,
+      1.520926594734192
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 2
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-PLANT-WITHERED",
+    "slug": "plant_withered",
+    "name_zh": "枯萎盆栽",
+    "category": "decoration",
+    "component_family": "plant_withered",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_枯萎盆栽",
+    "root_object": null,
+    "objects": [
+      "枯萎盆栽_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.1644914746284485,
+      0.019458502531051636,
+      0.0
+    ],
+    "bounds_size_m": [
+      2.6362080574035645,
+      2.027402877807617,
+      3.4977524280548096
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 3
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-PLANT-SPECIMEN",
+    "slug": "plant_specimen",
+    "name_zh": "培养植物",
+    "category": "decoration",
+    "component_family": "plant_specimen",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_培养植物",
+    "root_object": null,
+    "objects": [
+      "培养植物_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      1.559999942779541,
+      1.559999942779541,
+      2.102083206176758
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 2
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-TROPHY",
+    "slug": "trophy",
+    "name_zh": "螺旋奖杯",
+    "category": "decoration",
+    "component_family": "trophy",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_螺旋奖杯",
+    "root_object": null,
+    "objects": [
+      "螺旋奖杯_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      0.6000000238418579,
+      0.6000000238418579,
+      1.7325000762939453
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 5
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+    "slug": "rubble_large",
+    "name_zh": "混凝土大碎块",
+    "category": "decoration",
+    "component_family": "rubble",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_混凝土大碎块",
+    "root_object": null,
+    "objects": [
+      "混凝土大碎块_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      -0.0068204402923583984,
+      0.0014287084341049194,
+      0.006592482328414917
+    ],
+    "bounds_size_m": [
+      0.9523839950561523,
+      0.6875015497207642,
+      0.8332934379577637
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 45
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+    "slug": "rubble_small",
+    "name_zh": "混凝土小碎块",
+    "category": "decoration",
+    "component_family": "rubble",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_混凝土小碎块",
+    "root_object": null,
+    "objects": [
+      "混凝土小碎块_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      -0.003346391022205353,
+      0.0007144361734390259,
+      -0.002726823091506958
+    ],
+    "bounds_size_m": [
+      0.3221445679664612,
+      0.30165883898735046,
+      0.25730159878730774
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 147
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-PAPER",
+    "slug": "paper",
+    "name_zh": "散落纸张",
+    "category": "decoration",
+    "component_family": "paper",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_散落纸张",
+    "root_object": null,
+    "objects": [
+      "散落纸张_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.019999995827674866,
+      0.004999995231628418,
+      0.012000000104308128
+    ],
+    "bounds_size_m": [
+      0.5399999618530273,
+      0.6700000166893005,
+      0.08799999952316284
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 19
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-BOOK-STACK",
+    "slug": "book_stack",
+    "name_zh": "固定旧书堆",
+    "category": "decoration",
+    "component_family": "book_stack",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_固定旧书堆",
+    "root_object": null,
+    "objects": [
+      "固定旧书堆_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.007482051849365234,
+      0.0,
+      0.030000001192092896
+    ],
+    "bounds_size_m": [
+      0.7049117088317871,
+      0.8814278841018677,
+      0.6499999761581421
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 3
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-WALL-MURAL",
+    "slug": "wall_mural",
+    "name_zh": "墙面浮雕与灯带",
+    "category": "decoration",
+    "component_family": "wall_mural",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_墙面浮雕与灯带",
+    "root_object": null,
+    "objects": [
+      "墙面浮雕与灯带_主体输出",
+      "墙面浮雕与灯带_自发光输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.07000000029802322,
+      0.07999999821186066
+    ],
+    "bounds_size_m": [
+      11.449999809265137,
+      0.23999999463558197,
+      5.850000381469727
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-METAL-BRACE",
+    "slug": "metal_brace",
+    "name_zh": "断裂斜撑",
+    "category": "architecture",
+    "component_family": "metal_brace",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_断裂斜撑",
+    "root_object": null,
+    "objects": [
+      "断裂斜撑_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      0.5099999904632568,
+      0.5,
+      5.599999904632568
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 3
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-MONITOR-FALLEN",
+    "slug": "monitor_fallen",
+    "name_zh": "脱落显示屏",
+    "category": "decoration",
+    "component_family": "monitor_fallen",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_脱落显示屏",
+    "root_object": null,
+    "objects": [
+      "脱落显示屏_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      1.899999976158142,
+      1.3200000524520874,
+      0.35039231181144714
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  },
+  {
+    "component_id": "ENV-FATHER-OFFICE-SHELF-LEDGE",
+    "slug": "shelf_ledge",
+    "name_zh": "沙发后窄置物架",
+    "category": "facilities",
+    "component_family": "shelf_ledge",
+    "scope": "room_type_local",
+    "serves_room_types": [
+      "FATHER_OFFICE"
+    ],
+    "variant_axis": null,
+    "variant_value": "intact",
+    "variant_reason": "参考图可见破损状态",
+    "front_axis": "+Y",
+    "allowed_rotations_y_deg": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "collision_owner": "future_godot_wrapper",
+    "pickup": false,
+    "version": "v001",
+    "source_blend": "env_father_office_source_v001.blend",
+    "collection": "组件_沙发后窄置物架",
+    "root_object": null,
+    "objects": [
+      "沙发后窄置物架_主体输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "authoring_anchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "bounds_size_m": [
+      0.6600000262260437,
+      10.800000190734863,
+      1.4200000762939453
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "palette_uv_layer": "PaletteUV",
+    "exported": false,
+    "block_id": "master_office",
+    "floor_range": [
+      98,
+      98
+    ],
+    "instance_count": 1
+  }
+]

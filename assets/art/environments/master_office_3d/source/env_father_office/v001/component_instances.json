@@ -1,0 +1,7219 @@
+{
+  "room_frame_origin_m": [
+    -32.5,
+    0,
+    0
+  ],
+  "coordinate_space": "blender_room_local",
+  "instances": [
+    {
+      "instance_id": "地面金属砖_实例",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-PANEL",
+      "slug": "floor_panel",
+      "position_m": [
+        -5,
+        -7.5,
+        0
+      ],
+      "world_position_m": [
+        -37.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        -5,
+        -2.5,
+        0
+      ],
+      "world_position_m": [
+        -37.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        -5,
+        2.5,
+        0
+      ],
+      "world_position_m": [
+        -37.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "地面金属砖_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-PANEL",
+      "slug": "floor_panel",
+      "position_m": [
+        -5,
+        7.5,
+        0
+      ],
+      "world_position_m": [
+        -37.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        0,
+        -7.5,
+        0
+      ],
+      "world_position_m": [
+        -32.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        0,
+        -2.5,
+        0
+      ],
+      "world_position_m": [
+        -32.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "地面金属砖_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-PANEL",
+      "slug": "floor_panel",
+      "position_m": [
+        0,
+        2.5,
+        0
+      ],
+      "world_position_m": [
+        -32.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例.004",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        0,
+        7.5,
+        0
+      ],
+      "world_position_m": [
+        -32.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例.005",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        5,
+        -7.5,
+        0
+      ],
+      "world_position_m": [
+        -27.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "地面金属砖_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-PANEL",
+      "slug": "floor_panel",
+      "position_m": [
+        5,
+        -2.5,
+        0
+      ],
+      "world_position_m": [
+        -27.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例.006",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        5,
+        2.5,
+        0
+      ],
+      "world_position_m": [
+        -27.5,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "开裂地砖_实例.007",
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "position_m": [
+        5,
+        7.5,
+        0
+      ],
+      "world_position_m": [
+        -27.5,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "装甲墙板_实例",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        -7.5,
+        -7.5,
+        0
+      ],
+      "world_position_m": [
+        -40.0,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": -90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "装甲墙板_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        -7.5,
+        -2.5,
+        0
+      ],
+      "world_position_m": [
+        -40.0,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "装甲墙板_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        -7.5,
+        2.5,
+        0
+      ],
+      "world_position_m": [
+        -40.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": -90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "装甲墙板_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        -7.5,
+        7.5,
+        0
+      ],
+      "world_position_m": [
+        -40.0,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": -90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "装甲墙板_实例.004",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        -5,
+        10,
+        0
+      ],
+      "world_position_m": [
+        -37.5,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "坍塌墙体_实例",
+      "component_id": "ENV-FATHER-OFFICE-WALL-FRACTURED",
+      "slug": "wall_fractured",
+      "position_m": [
+        2.5,
+        10,
+        0
+      ],
+      "world_position_m": [
+        -30.0,
+        10.0,
+        0.0
+      ],
+      "rotation_z_deg": 180,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1415927410125732
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "装甲墙板_实例.005",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        -5,
+        -10,
+        0
+      ],
+      "world_position_m": [
+        -37.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true
+    },
+    {
+      "instance_id": "装甲墙板_实例.006",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        0,
+        -10,
+        0
+      ],
+      "world_position_m": [
+        -32.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true
+    },
+    {
+      "instance_id": "装甲墙板_实例.007",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        5,
+        -10,
+        0
+      ],
+      "world_position_m": [
+        -27.5,
+        -10.0,
+        0.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true
+    },
+    {
+      "instance_id": "装甲墙板_实例.008",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        7.5,
+        -7.5,
+        0
+      ],
+      "world_position_m": [
+        -25.0,
+        -7.5,
+        0.0
+      ],
+      "rotation_z_deg": 90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true
+    },
+    {
+      "instance_id": "装甲墙板_实例.009",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        7.5,
+        -2.5,
+        0
+      ],
+      "world_position_m": [
+        -25.0,
+        -2.5,
+        0.0
+      ],
+      "rotation_z_deg": 90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true
+    },
+    {
+      "instance_id": "入口门墙_实例",
+      "component_id": "ENV-FATHER-OFFICE-WALL-DOOR",
+      "slug": "wall_door",
+      "position_m": [
+        7.5,
+        2.5,
+        0
+      ],
+      "world_position_m": [
+        -25.0,
+        2.5,
+        0.0
+      ],
+      "rotation_z_deg": 90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true
+    },
+    {
+      "instance_id": "装甲墙板_实例.010",
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "position_m": [
+        7.5,
+        7.5,
+        0
+      ],
+      "world_position_m": [
+        -25.0,
+        7.5,
+        0.0
+      ],
+      "rotation_z_deg": 90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": true
+    },
+    {
+      "instance_id": "长条软包沙发_实例",
+      "component_id": "ENV-FATHER-OFFICE-SOFA",
+      "slug": "sofa",
+      "position_m": [
+        -4.83,
+        -0.7,
+        0.105
+      ],
+      "world_position_m": [
+        -37.33000183105469,
+        -0.699999988079071,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "磨损蓝色地毯_实例",
+      "component_id": "ENV-FATHER-OFFICE-RUG",
+      "slug": "rug",
+      "position_m": [
+        -0.56,
+        -0.5,
+        0.108
+      ],
+      "world_position_m": [
+        -33.060001373291016,
+        -0.5,
+        0.1080000028014183
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "沙发后窄置物架_实例",
+      "component_id": "ENV-FATHER-OFFICE-SHELF-LEDGE",
+      "slug": "shelf_ledge",
+      "position_m": [
+        -6.66,
+        -0.4,
+        0.105
+      ],
+      "world_position_m": [
+        -39.15999984741211,
+        -0.4000000059604645,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "墙面浮雕与灯带_实例",
+      "component_id": "ENV-FATHER-OFFICE-WALL-MURAL",
+      "slug": "wall_mural",
+      "position_m": [
+        -7.13,
+        -0.25,
+        3.65
+      ],
+      "world_position_m": [
+        -39.630001068115234,
+        -0.25,
+        3.6500000953674316
+      ],
+      "rotation_z_deg": -90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "蓝色靠枕_实例",
+      "component_id": "ENV-FATHER-OFFICE-PILLOW",
+      "slug": "pillow",
+      "position_m": [
+        -4.9,
+        -4.6,
+        1.75
+      ],
+      "world_position_m": [
+        -37.400001525878906,
+        -4.599999904632568,
+        1.75
+      ],
+      "rotation_z_deg": -38,
+      "rotation_euler_rad": [
+        0.0,
+        -0.1899999976158142,
+        -0.6632251143455505
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "蓝色靠枕_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-PILLOW",
+      "slug": "pillow",
+      "position_m": [
+        -4.9,
+        -1.7,
+        1.75
+      ],
+      "world_position_m": [
+        -37.400001525878906,
+        -1.7000000476837158,
+        1.75
+      ],
+      "rotation_z_deg": -18,
+      "rotation_euler_rad": [
+        0.0,
+        -0.1899999976158142,
+        -0.3141592741012573
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "蓝色靠枕_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-PILLOW",
+      "slug": "pillow",
+      "position_m": [
+        -4.9,
+        2.3,
+        1.75
+      ],
+      "world_position_m": [
+        -37.400001525878906,
+        2.299999952316284,
+        1.75
+      ],
+      "rotation_z_deg": -28,
+      "rotation_euler_rad": [
+        0.0,
+        -0.1899999976158142,
+        -0.48869219422340393
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "蓝色靠枕_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-PILLOW",
+      "slug": "pillow",
+      "position_m": [
+        -4.9,
+        3.4,
+        1.75
+      ],
+      "world_position_m": [
+        -37.400001525878906,
+        3.4000000953674316,
+        1.75
+      ],
+      "rotation_z_deg": 18,
+      "rotation_euler_rad": [
+        0.0,
+        -0.1899999976158142,
+        0.3141592741012573
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "垂落织物_实例",
+      "component_id": "ENV-FATHER-OFFICE-THROW",
+      "slug": "throw",
+      "position_m": [
+        -4.55,
+        -5.92,
+        0.12
+      ],
+      "world_position_m": [
+        -37.04999923706055,
+        -5.920000076293945,
+        0.11999999731779099
+      ],
+      "rotation_z_deg": 90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "奖杯植物展示柜_实例",
+      "component_id": "ENV-FATHER-OFFICE-DISPLAY-CASE",
+      "slug": "display_case",
+      "position_m": [
+        -5.24,
+        8.72,
+        0.105
+      ],
+      "world_position_m": [
+        -37.7400016784668,
+        8.720000267028809,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "培养植物_实例",
+      "component_id": "ENV-FATHER-OFFICE-PLANT-SPECIMEN",
+      "slug": "plant_specimen",
+      "position_m": [
+        -4.45,
+        8.6,
+        0.7
+      ],
+      "world_position_m": [
+        -36.95000076293945,
+        8.600000381469727,
+        0.699999988079071
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "螺旋奖杯_实例",
+      "component_id": "ENV-FATHER-OFFICE-TROPHY",
+      "slug": "trophy",
+      "position_m": [
+        -6.0,
+        8.58,
+        3.16
+      ],
+      "world_position_m": [
+        -38.5,
+        8.579999923706055,
+        3.1600000858306885
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "螺旋奖杯_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-TROPHY",
+      "slug": "trophy",
+      "position_m": [
+        -6.0,
+        8.58,
+        0.69
+      ],
+      "world_position_m": [
+        -38.5,
+        8.579999923706055,
+        0.6899999976158142
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "圆形边桌_实例",
+      "component_id": "ENV-FATHER-OFFICE-SIDE-TABLE",
+      "slug": "side_table",
+      "position_m": [
+        -2.79,
+        -6.15,
+        0.105
+      ],
+      "world_position_m": [
+        -35.290000915527344,
+        -6.150000095367432,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "螺旋奖杯_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-TROPHY",
+      "slug": "trophy",
+      "position_m": [
+        -2.79,
+        -6.15,
+        1.21
+      ],
+      "world_position_m": [
+        -35.290000915527344,
+        -6.150000095367432,
+        1.2100000381469727
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "低矮展示终端_实例",
+      "component_id": "ENV-FATHER-OFFICE-DISPLAY-CONSOLE",
+      "slug": "display_console",
+      "position_m": [
+        6.14,
+        -1.1,
+        0.105
+      ],
+      "world_position_m": [
+        -26.360000610351562,
+        -1.100000023841858,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": 90,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5707963705062866
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "培养植物_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-PLANT-SPECIMEN",
+      "slug": "plant_specimen",
+      "position_m": [
+        6.13,
+        -1.1,
+        1.0
+      ],
+      "world_position_m": [
+        -26.3700008392334,
+        -1.100000023841858,
+        1.0
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "枯萎盆栽_实例",
+      "component_id": "ENV-FATHER-OFFICE-PLANT-WITHERED",
+      "slug": "plant_withered",
+      "position_m": [
+        -6.5,
+        -6.9,
+        0.105
+      ],
+      "world_position_m": [
+        -39.0,
+        -6.900000095367432,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": 12,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.20943951606750488
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "枯萎盆栽_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-PLANT-WITHERED",
+      "slug": "plant_withered",
+      "position_m": [
+        -6.35,
+        5.7,
+        0.105
+      ],
+      "world_position_m": [
+        -38.849998474121094,
+        5.699999809265137,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": 140,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.4434609413146973
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "枯萎盆栽_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-PLANT-WITHERED",
+      "slug": "plant_withered",
+      "position_m": [
+        5.95,
+        -3.1,
+        0.105
+      ],
+      "world_position_m": [
+        -26.549999237060547,
+        -3.0999999046325684,
+        0.10499999672174454
+      ],
+      "rotation_z_deg": -30,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -0.5235987901687622
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "倒塌书柜_实例",
+      "component_id": "ENV-FATHER-OFFICE-BOOKCASE-FALLEN",
+      "slug": "bookcase_fallen",
+      "position_m": [
+        -3.95,
+        -8.05,
+        0.11
+      ],
+      "world_position_m": [
+        -36.45000076293945,
+        -8.050000190734863,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": -12,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        -0.20943951606750488
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "倒塌书柜_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-BOOKCASE-FALLEN",
+      "slug": "bookcase_fallen",
+      "position_m": [
+        4.33,
+        -7.35,
+        0.11
+      ],
+      "world_position_m": [
+        -28.170000076293945,
+        -7.349999904632568,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 68,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.186823844909668
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "固定旧书堆_实例",
+      "component_id": "ENV-FATHER-OFFICE-BOOK-STACK",
+      "slug": "book_stack",
+      "position_m": [
+        -6.65,
+        -3.7,
+        1.53
+      ],
+      "world_position_m": [
+        -39.150001525878906,
+        -3.700000047683716,
+        1.5299999713897705
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "固定旧书堆_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-BOOK-STACK",
+      "slug": "book_stack",
+      "position_m": [
+        -6.65,
+        0.8,
+        1.53
+      ],
+      "world_position_m": [
+        -39.150001525878906,
+        0.800000011920929,
+        1.5299999713897705
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "固定旧书堆_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-BOOK-STACK",
+      "slug": "book_stack",
+      "position_m": [
+        -6.65,
+        2.6,
+        1.53
+      ],
+      "world_position_m": [
+        -39.150001525878906,
+        2.5999999046325684,
+        1.5299999713897705
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "螺旋奖杯_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-TROPHY",
+      "slug": "trophy",
+      "position_m": [
+        -6.63,
+        -4.7,
+        1.53
+      ],
+      "world_position_m": [
+        -39.130001068115234,
+        -4.699999809265137,
+        1.5299999713897705
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "螺旋奖杯_实例.004",
+      "component_id": "ENV-FATHER-OFFICE-TROPHY",
+      "slug": "trophy",
+      "position_m": [
+        -6.63,
+        3.9,
+        1.53
+      ],
+      "world_position_m": [
+        -39.130001068115234,
+        3.9000000953674316,
+        1.5299999713897705
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "脱落显示屏_实例",
+      "component_id": "ENV-FATHER-OFFICE-MONITOR-FALLEN",
+      "slug": "monitor_fallen",
+      "position_m": [
+        5.51,
+        7.59,
+        0.28
+      ],
+      "world_position_m": [
+        -26.989999771118164,
+        7.590000152587891,
+        0.2800000011920929
+      ],
+      "rotation_z_deg": 25,
+      "rotation_euler_rad": [
+        0.6000000238418579,
+        0.0,
+        0.4363323152065277
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "断裂斜撑_实例",
+      "component_id": "ENV-FATHER-OFFICE-METAL-BRACE",
+      "slug": "metal_brace",
+      "position_m": [
+        -1.4,
+        9.46,
+        4.3
+      ],
+      "world_position_m": [
+        -33.900001525878906,
+        9.460000038146973,
+        4.300000190734863
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        -0.41999998688697815,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "断裂斜撑_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-METAL-BRACE",
+      "slug": "metal_brace",
+      "position_m": [
+        2.8,
+        9.45,
+        1.7
+      ],
+      "world_position_m": [
+        -29.700000762939453,
+        9.449999809265137,
+        1.7000000476837158
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.3499999940395355,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "断裂斜撑_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-METAL-BRACE",
+      "slug": "metal_brace",
+      "position_m": [
+        4.3,
+        9.46,
+        4.9
+      ],
+      "world_position_m": [
+        -28.200000762939453,
+        9.460000038146973,
+        4.900000095367432
+      ],
+      "rotation_z_deg": 0,
+      "rotation_euler_rad": [
+        0.0,
+        0.4300000071525574,
+        0.0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        0.8407813798349655,
+        7.0820582134365,
+        0.11
+      ],
+      "world_position_m": [
+        -31.659217834472656,
+        7.082058429718018,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 254.28408075103533,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.438094615936279
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -0.14445311225250324,
+        8.13008016929308,
+        0.11
+      ],
+      "world_position_m": [
+        -32.64445495605469,
+        8.130080223083496,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 353.2012730188927,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.164525032043457
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -1.045003002486912,
+        7.822046871838488,
+        0.11
+      ],
+      "world_position_m": [
+        -33.54500198364258,
+        7.822046756744385,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 23.460251531484175,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.40945863723754883
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        6.699895499333039,
+        9.317349166744956,
+        0.11
+      ],
+      "world_position_m": [
+        -25.80010414123535,
+        9.317349433898926,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 115.11590157859129,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.0091514587402344
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.004",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        1.2479110890527942,
+        8.058841587482792,
+        0.11
+      ],
+      "world_position_m": [
+        -31.25208854675293,
+        8.058841705322266,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 63.285329730067815,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1045373678207397
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.005",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -3.5149112968148444,
+        7.503645719725797,
+        0.11
+      ],
+      "world_position_m": [
+        -36.01491165161133,
+        7.503645896911621,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 26.515055655856248,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.46277502179145813
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.006",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -1.7537692398762057,
+        7.5256646787151755,
+        0.11
+      ],
+      "world_position_m": [
+        -34.25376892089844,
+        7.525664806365967,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 237.97438038288945,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.153436660766602
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.007",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        4.395480958560116,
+        7.916811978309313,
+        0.11
+      ],
+      "world_position_m": [
+        -28.10451889038086,
+        7.916811943054199,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 113.5578030194862,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9819575548171997
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.008",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.171554980902467,
+        8.121484259390892,
+        0.11
+      ],
+      "world_position_m": [
+        -27.328445434570312,
+        8.12148380279541,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 93.00915961364727,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.6233160495758057
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.009",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.517101953566007,
+        9.165555587422594,
+        0.11
+      ],
+      "world_position_m": [
+        -26.982898712158203,
+        9.165555953979492,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 12.432269133361107,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.21698403358459473
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.010",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        3.31368369424874,
+        6.869956662835478,
+        0.11
+      ],
+      "world_position_m": [
+        -29.186315536499023,
+        6.8699564933776855,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 27.87599022894952,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.48652780055999756
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.011",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        1.6655198553847455,
+        7.83595045787967,
+        0.11
+      ],
+      "world_position_m": [
+        -30.83448028564453,
+        7.8359503746032715,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 224.40857740738,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.916668653488159
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.012",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -3.5404292154963932,
+        6.869712548702033,
+        0.11
+      ],
+      "world_position_m": [
+        -36.040428161621094,
+        6.8697123527526855,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 350.38855940465044,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.115434169769287
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.013",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        3.13065824000712,
+        8.639291526054013,
+        0.11
+      ],
+      "world_position_m": [
+        -29.369340896606445,
+        8.639291763305664,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 119.8047937937854,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.0909881591796875
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.014",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -2.887222850298886,
+        9.290427025567503,
+        0.11
+      ],
+      "world_position_m": [
+        -35.38722229003906,
+        9.290427207946777,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 314.63176999891783,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.491360187530518
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.015",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.100081631397645,
+        8.234698269791728,
+        0.11
+      ],
+      "world_position_m": [
+        -27.399917602539062,
+        8.234698295593262,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 124.31501643869143,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.169706344604492
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.016",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        0.908326205461464,
+        7.621401145485238,
+        0.11
+      ],
+      "world_position_m": [
+        -31.591672897338867,
+        7.621401309967041,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 43.59912577166929,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.7609483003616333
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.017",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        1.913968456605876,
+        7.168239710694059,
+        0.11
+      ],
+      "world_position_m": [
+        -30.586030960083008,
+        7.168239593505859,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 349.409778812859,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.098351001739502
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.018",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        3.62410982394413,
+        7.815409548336181,
+        0.11
+      ],
+      "world_position_m": [
+        -28.875890731811523,
+        7.8154096603393555,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 122.17721506257683,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.132394790649414
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.019",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        0.9558086500614134,
+        7.847910628160027,
+        0.11
+      ],
+      "world_position_m": [
+        -31.544191360473633,
+        7.847910404205322,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 51.48032846845436,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.8985012173652649
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.020",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.61857163576817,
+        7.98038070763371,
+        0.11
+      ],
+      "world_position_m": [
+        -26.881427764892578,
+        7.980380535125732,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 26.44113089122174,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.46148478984832764
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.021",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        0.9141525818730671,
+        6.85031184421784,
+        0.11
+      ],
+      "world_position_m": [
+        -31.585847854614258,
+        6.850311756134033,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 282.0378275510895,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.922488689422607
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.022",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        1.3446099842108565,
+        7.747220181345633,
+        0.11
+      ],
+      "world_position_m": [
+        -31.1553897857666,
+        7.747220039367676,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 296.7244602941458,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.178818702697754
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.023",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        1.477519561792088,
+        9.265935984356778,
+        0.11
+      ],
+      "world_position_m": [
+        -31.022480010986328,
+        9.265935897827148,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 120.56127551875853,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.104191303253174
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.43231395248081,
+        7.4085229752424056,
+        0.11
+      ],
+      "world_position_m": [
+        -34.932315826416016,
+        7.408523082733154,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 137.05024367546795,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3919780254364014
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.05706010223973257,
+        9.25978818269824,
+        0.11
+      ],
+      "world_position_m": [
+        -32.44293975830078,
+        9.259788513183594,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 200.23659187851055,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.4947876930236816
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.7052985249333705,
+        7.872568896727805,
+        0.11
+      ],
+      "world_position_m": [
+        -27.794700622558594,
+        7.8725690841674805,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 60.840189383771,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.0618616342544556
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.07441996379583227,
+        7.413212148075829,
+        0.11
+      ],
+      "world_position_m": [
+        -32.57442092895508,
+        7.413212299346924,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 99.8912592028474,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.7434313297271729
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.004",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.1183443471513264,
+        8.780626539275811,
+        0.11
+      ],
+      "world_position_m": [
+        -29.381654739379883,
+        8.78062629699707,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 85.43399822749508,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.4911046028137207
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.005",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.941769683625843,
+        7.062992198204112,
+        0.11
+      ],
+      "world_position_m": [
+        -26.558229446411133,
+        7.062992095947266,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 304.0085196235596,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.305949687957764
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.006",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.5116723051753325,
+        7.776458323402644,
+        0.11
+      ],
+      "world_position_m": [
+        -30.988327026367188,
+        7.776458263397217,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 19.17464099985407,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.3346606194972992
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.007",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.908080243105759,
+        8.972816960034464,
+        0.11
+      ],
+      "world_position_m": [
+        -30.5919189453125,
+        8.972817420959473,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 306.3133601726697,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.346176624298096
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.008",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.331100920053798,
+        7.944857368774049,
+        0.11
+      ],
+      "world_position_m": [
+        -26.168899536132812,
+        7.944857597351074,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 100.27816510145729,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.750184178352356
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.009",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.929289960261611,
+        8.369202388636456,
+        0.11
+      ],
+      "world_position_m": [
+        -26.570709228515625,
+        8.369202613830566,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 137.32142442791292,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3967108726501465
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.010",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.8397993807128596,
+        8.132441714791248,
+        0.11
+      ],
+      "world_position_m": [
+        -33.33979797363281,
+        8.132441520690918,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 200.047833493598,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.4914934635162354
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.011",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.4181836709670557,
+        7.949688380453717,
+        0.11
+      ],
+      "world_position_m": [
+        -29.081815719604492,
+        7.94968843460083,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 44.96568941999626,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.784799337387085
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.012",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.3285043033307433,
+        6.870899369860447,
+        0.11
+      ],
+      "world_position_m": [
+        -32.1714973449707,
+        6.870899200439453,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 268.3434106936286,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.683475971221924
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.013",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.10861597685477564,
+        8.565571662869178,
+        0.11
+      ],
+      "world_position_m": [
+        -32.60861587524414,
+        8.565571784973145,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 270.8577380057709,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.727359294891357
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.014",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.006625009281274519,
+        9.339708002721295,
+        0.11
+      ],
+      "world_position_m": [
+        -32.49337387084961,
+        9.33970832824707,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 4.076765848968926,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.07115298509597778
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.015",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.9947257041096775,
+        8.275924293090991,
+        0.11
+      ],
+      "world_position_m": [
+        -35.49472427368164,
+        8.275924682617188,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 17.004296747243902,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.2967809736728668
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.016",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.700053737928409,
+        7.70609717479128,
+        0.11
+      ],
+      "world_position_m": [
+        -26.799945831298828,
+        7.70609712600708,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 49.89014144342052,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.8707472085952759
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.017",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.9398521569250984,
+        7.799308569068507,
+        0.11
+      ],
+      "world_position_m": [
+        -31.560148239135742,
+        7.799308776855469,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 238.9588537148519,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.170619010925293
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.018",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.2006279290097872,
+        7.098600648138468,
+        0.11
+      ],
+      "world_position_m": [
+        -32.299373626708984,
+        7.0986008644104,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 3.207043980054305,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.05597347766160965
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.019",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.5358309166417943,
+        9.21198660381821,
+        0.11
+      ],
+      "world_position_m": [
+        -34.035831451416016,
+        9.211986541748047,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 109.76924760055003,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9158347845077515
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.020",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.1943895409952106,
+        8.12153911155138,
+        0.11
+      ],
+      "world_position_m": [
+        -35.69438934326172,
+        8.121539115905762,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 176.21395353139553,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.0755136013031006
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.021",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.8970478421438237,
+        8.634847077039309,
+        0.11
+      ],
+      "world_position_m": [
+        -35.39704895019531,
+        8.634846687316895,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 304.73368804782297,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.318606376647949
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.022",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.497455698434761,
+        8.454420177662058,
+        0.11
+      ],
+      "world_position_m": [
+        -27.002544403076172,
+        8.45442008972168,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 198.51102941539668,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.4646711349487305
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.023",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        2.1422953598894074,
+        8.4114716659757,
+        0.11
+      ],
+      "world_position_m": [
+        -30.357704162597656,
+        8.411471366882324,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 288.3453591259318,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.032576084136963
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.024",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        2.1386713600920424,
+        9.14383639108707,
+        0.11
+      ],
+      "world_position_m": [
+        -30.361328125,
+        9.14383602142334,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 208.43617496186468,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.637897491455078
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.025",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.1616394219165977,
+        7.815130266141382,
+        0.11
+      ],
+      "world_position_m": [
+        -35.66164016723633,
+        7.815130233764648,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 299.9051160192034,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.2343316078186035
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.026",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.635987940333043,
+        7.402308244256949,
+        0.11
+      ],
+      "world_position_m": [
+        -30.864011764526367,
+        7.402308464050293,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 19.19363642441013,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.3349921405315399
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.027",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.3554461724240219,
+        7.215959341250111,
+        0.11
+      ],
+      "world_position_m": [
+        -31.144554138183594,
+        7.215959548950195,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 238.7795733134337,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.167489528656006
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.028",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.04334428711679772,
+        7.550557176454092,
+        0.11
+      ],
+      "world_position_m": [
+        -32.45665740966797,
+        7.5505571365356445,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 88.43339216440799,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5434538125991821
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.029",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.742405322560188,
+        8.70729120715189,
+        0.11
+      ],
+      "world_position_m": [
+        -27.75759506225586,
+        8.707291603088379,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 310.72868725520937,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.423238754272461
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.030",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.4897844726604723,
+        9.088924868059543,
+        0.11
+      ],
+      "world_position_m": [
+        -32.010215759277344,
+        9.088924407958984,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 284.38920108126774,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.963527679443359
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.031",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.623086941741004,
+        8.811093133473973,
+        0.11
+      ],
+      "world_position_m": [
+        -25.87691307067871,
+        8.8110933303833,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 359.19407638007425,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.2691192626953125
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.032",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.5259368552514636,
+        7.074617139409195,
+        0.11
+      ],
+      "world_position_m": [
+        -31.974063873291016,
+        7.0746169090271,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 243.52206452046386,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.2502617835998535
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.033",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.8473854888367907,
+        8.511047452575642,
+        0.11
+      ],
+      "world_position_m": [
+        -35.34738540649414,
+        8.51104736328125,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 9.778899043375734,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.17067398130893707
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.034",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.1617980331237785,
+        9.277473631428652,
+        0.11
+      ],
+      "world_position_m": [
+        -32.66179656982422,
+        9.277473449707031,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 340.48754514407676,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.942628860473633
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.035",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.361705184926437,
+        8.046418502414747,
+        0.11
+      ],
+      "world_position_m": [
+        -27.138294219970703,
+        8.046418190002441,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 301.07323620297745,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.254719257354736
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.036",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.517532154022232,
+        7.92489318054883,
+        0.11
+      ],
+      "world_position_m": [
+        -25.982467651367188,
+        7.924893379211426,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 135.7234305591892,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3688206672668457
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.037",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.1331635330260887,
+        7.777219916179065,
+        0.11
+      ],
+      "world_position_m": [
+        -33.63316345214844,
+        7.777219772338867,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 353.333970398474,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.16684103012085
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.038",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.918852949702913,
+        7.198053651689974,
+        0.11
+      ],
+      "world_position_m": [
+        -26.581146240234375,
+        7.19805383682251,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 317.49522549997835,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.541337013244629
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.039",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.386459724909667,
+        8.10040495722267,
+        0.11
+      ],
+      "world_position_m": [
+        -27.113540649414062,
+        8.100404739379883,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 138.9377174799067,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.4249205589294434
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.040",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.2393601886858625,
+        8.300126410964367,
+        0.11
+      ],
+      "world_position_m": [
+        -31.260639190673828,
+        8.300126075744629,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 283.9789961398672,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.956368446350098
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.041",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.8715859771241128,
+        7.3995163501964365,
+        0.11
+      ],
+      "world_position_m": [
+        -33.371585845947266,
+        7.399516582489014,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 176.64596333698967,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.0830535888671875
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.042",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.034494329786034,
+        7.060304006997245,
+        0.11
+      ],
+      "world_position_m": [
+        -29.465505599975586,
+        7.060304164886475,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 184.3847951369546,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.2181217670440674
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.043",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.30946264161967685,
+        7.500756456128757,
+        0.11
+      ],
+      "world_position_m": [
+        -32.80946350097656,
+        7.50075626373291,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 358.5822845360231,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.25844144821167
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.044",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.2191709881422406,
+        8.733986601230225,
+        0.11
+      ],
+      "world_position_m": [
+        -35.71916961669922,
+        8.733986854553223,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 278.14470328926296,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.854540824890137
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.045",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.175619409431665,
+        7.886355587998938,
+        0.11
+      ],
+      "world_position_m": [
+        -27.32438087463379,
+        7.886355400085449,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 187.52064311538246,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.272852659225464
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.046",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.094778367213401,
+        9.34968723810549,
+        0.11
+      ],
+      "world_position_m": [
+        -26.405221939086914,
+        9.349687576293945,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 194.75235191299225,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.3990697860717773
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.047",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.555325430712742,
+        9.33978882376983,
+        0.11
+      ],
+      "world_position_m": [
+        -36.05532455444336,
+        9.339788436889648,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 49.23343029254235,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.8592854738235474
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.048",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.515829133791857,
+        7.893593712209986,
+        0.11
+      ],
+      "world_position_m": [
+        -36.015830993652344,
+        7.893593788146973,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 110.52538452238002,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9290318489074707
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.049",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.007111786419504,
+        8.855237347690407,
+        0.11
+      ],
+      "world_position_m": [
+        -27.492887496948242,
+        8.855237007141113,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 233.1486819162629,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.069211959838867
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.050",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.9838550502735957,
+        8.31786032165,
+        0.11
+      ],
+      "world_position_m": [
+        -35.483856201171875,
+        8.31786060333252,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 180.33593381774713,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.1474556922912598
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.051",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        2.923745067292955,
+        8.019105668220915,
+        0.11
+      ],
+      "world_position_m": [
+        -29.576255798339844,
+        8.019105911254883,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 229.29637602504187,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.001976490020752
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.052",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.1147149938005523,
+        7.37282441796303,
+        0.11
+      ],
+      "world_position_m": [
+        -34.614715576171875,
+        7.372824192047119,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 240.71381008197812,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.201248645782471
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.053",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.2425563980248215,
+        8.746789767667202,
+        0.11
+      ],
+      "world_position_m": [
+        -34.742557525634766,
+        8.746789932250977,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 83.75428583217658,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.4617880582809448
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.054",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.625048689585759,
+        8.322389199003137,
+        0.11
+      ],
+      "world_position_m": [
+        -25.874950408935547,
+        8.322389602661133,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 154.8403058728773,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.7024731636047363
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.055",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.9068125424459659,
+        7.899480911437663,
+        0.11
+      ],
+      "world_position_m": [
+        -33.40681076049805,
+        7.899480819702148,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 149.76694512659824,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.613926410675049
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.056",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.290586971025352,
+        7.824634708470525,
+        0.11
+      ],
+      "world_position_m": [
+        -26.209413528442383,
+        7.824634552001953,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 83.80527331064866,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.4626779556274414
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.057",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.822790980997079,
+        7.917063449220075,
+        0.11
+      ],
+      "world_position_m": [
+        -28.677209854125977,
+        7.917063236236572,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 127.69526857393735,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.2287027835845947
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.058",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        2.639859268683326,
+        8.655049869825636,
+        0.11
+      ],
+      "world_position_m": [
+        -29.860139846801758,
+        8.655050277709961,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 143.57907787664206,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.505927562713623
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.059",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.427552622420176,
+        8.652753586045272,
+        0.11
+      ],
+      "world_position_m": [
+        -26.072446823120117,
+        8.652753829956055,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 101.29433392213815,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.767919659614563
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.060",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.5559360761641514,
+        7.767912914829104,
+        0.11
+      ],
+      "world_position_m": [
+        -36.05593490600586,
+        7.767912864685059,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 307.98541840870746,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.375359535217285
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.061",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.7880315638952893,
+        6.912846590472983,
+        0.11
+      ],
+      "world_position_m": [
+        -31.71196937561035,
+        6.912846565246582,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 18.970861079583692,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.33110398054122925
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.062",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.3828098851246189,
+        7.19717026060649,
+        0.11
+      ],
+      "world_position_m": [
+        -33.882808685302734,
+        7.197170257568359,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 180.17187892843245,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.144592523574829
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.063",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.203772101913959,
+        6.835300560561879,
+        0.11
+      ],
+      "world_position_m": [
+        -26.296228408813477,
+        6.835300445556641,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 90.45857687505337,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5787999629974365
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.064",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.5533746943448214,
+        8.436885493642514,
+        0.11
+      ],
+      "world_position_m": [
+        -25.946624755859375,
+        8.436885833740234,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 325.6514764092436,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.683690547943115
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.065",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.0308961150864775,
+        9.236856897384024,
+        0.11
+      ],
+      "world_position_m": [
+        -28.469104766845703,
+        9.236856460571289,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 70.83961362475958,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.2363845109939575
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.066",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.488083199768566,
+        7.766187417516051,
+        0.11
+      ],
+      "world_position_m": [
+        -28.011917114257812,
+        7.7661871910095215,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 70.55923046926844,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.2314908504486084
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.067",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.894597372916463,
+        7.191892533931136,
+        0.11
+      ],
+      "world_position_m": [
+        -27.60540199279785,
+        7.191892623901367,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 202.25169432042838,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.5299580097198486
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.068",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.344199806615273,
+        8.31818269160678,
+        0.11
+      ],
+      "world_position_m": [
+        -34.844200134277344,
+        8.318182945251465,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 265.5788866049509,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.635225772857666
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.069",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.222075446662968,
+        7.652418438038836,
+        0.11
+      ],
+      "world_position_m": [
+        -28.277925491333008,
+        7.652418613433838,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 168.35017529397714,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.938264846801758
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.070",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.8347976208782333,
+        7.569383743191365,
+        0.11
+      ],
+      "world_position_m": [
+        -35.33479690551758,
+        7.56938362121582,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 277.2926955839568,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.839670658111572
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.071",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.4855422044527917,
+        7.33529300189247,
+        0.11
+      ],
+      "world_position_m": [
+        -32.01445770263672,
+        7.335292816162109,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 71.15968119937958,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.2419707775115967
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.072",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.061547232032522,
+        9.042329540018697,
+        0.11
+      ],
+      "world_position_m": [
+        -26.438453674316406,
+        9.042329788208008,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 50.22231269810097,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.876544713973999
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.073",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.59717963864234,
+        8.860604567220925,
+        0.11
+      ],
+      "world_position_m": [
+        -25.902820587158203,
+        8.860604286193848,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 243.22735281575277,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.245118141174316
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.074",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.344106724426508,
+        8.621636093715031,
+        0.11
+      ],
+      "world_position_m": [
+        -35.84410858154297,
+        8.621636390686035,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 340.88895599601045,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.949634552001953
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.075",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.9003301272350543,
+        8.975822796749947,
+        0.11
+      ],
+      "world_position_m": [
+        -30.59967041015625,
+        8.975822448730469,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 292.3561493875792,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.102577209472656
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.024",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -0.7695675670982869,
+        -8.45986811174529,
+        0.11
+      ],
+      "world_position_m": [
+        -33.269569396972656,
+        -8.459868431091309,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 314.7940429614015,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.494192600250244
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.076",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.655740655875585,
+        -8.202219216077118,
+        0.11
+      ],
+      "world_position_m": [
+        -36.155738830566406,
+        -8.202219009399414,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 96.02481800309296,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.675949215888977
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.077",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.5665632806509766,
+        -8.454825484798933,
+        0.11
+      ],
+      "world_position_m": [
+        -28.93343734741211,
+        -8.454825401306152,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 118.24503085311929,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.063765048980713
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.078",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.6193398266888872,
+        -7.694109402043576,
+        0.11
+      ],
+      "world_position_m": [
+        -33.11933898925781,
+        -7.6941094398498535,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 204.55740504981577,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.570200204849243
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.025",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        1.1563885843456374,
+        -7.564948955538606,
+        0.11
+      ],
+      "world_position_m": [
+        -31.343610763549805,
+        -7.564949035644531,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 130.45777508808396,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.2769176959991455
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.079",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.938473713299694,
+        -7.853051432007198,
+        0.11
+      ],
+      "world_position_m": [
+        -37.438472747802734,
+        -7.853051662445068,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 2.303749022671786,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.04020800441503525
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.080",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.0605952112609653,
+        -6.80722977618167,
+        0.11
+      ],
+      "world_position_m": [
+        -31.43940544128418,
+        -6.807229995727539,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 271.0599931477381,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.730889320373535
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.081",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.844723423541768,
+        -8.667607506933248,
+        0.11
+      ],
+      "world_position_m": [
+        -31.655277252197266,
+        -8.667607307434082,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 275.4908833083063,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.808222770690918
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.026",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -5.471038444481239,
+        -7.5836387087652355,
+        0.11
+      ],
+      "world_position_m": [
+        -37.971038818359375,
+        -7.583638668060303,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 56.08760922406581,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.978913426399231
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.082",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.713525869236177,
+        -8.500846030020352,
+        0.11
+      ],
+      "world_position_m": [
+        -35.21352767944336,
+        -8.500845909118652,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 112.78711186849488,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9685064554214478
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.083",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.213084844724415,
+        -8.690641134664506,
+        0.11
+      ],
+      "world_position_m": [
+        -27.286914825439453,
+        -8.690641403198242,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 216.47101717518325,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.7781319618225098
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.084",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.0262509457433797,
+        -7.690333396951793,
+        0.11
+      ],
+      "world_position_m": [
+        -33.52625274658203,
+        -7.690333366394043,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 323.7972572152087,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.651328086853027
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.027",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        0.28135729285683286,
+        -6.9731150820304855,
+        0.11
+      ],
+      "world_position_m": [
+        -32.21864318847656,
+        -6.973114967346191,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 196.13492899110574,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.4232003688812256
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.085",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.7880643910702236,
+        -8.24972954594868,
+        0.11
+      ],
+      "world_position_m": [
+        -28.71193504333496,
+        -8.24972915649414,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 245.3085372004348,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.281441688537598
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.086",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.6392019230788604,
+        -7.508350332090858,
+        0.11
+      ],
+      "world_position_m": [
+        -34.13920211791992,
+        -7.508350372314453,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 105.32237526815753,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.8382222652435303
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.087",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.89124282612892,
+        -9.06688936542307,
+        0.11
+      ],
+      "world_position_m": [
+        -28.60875701904297,
+        -9.066889762878418,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 184.22384450889402,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.2153127193450928
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.028",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -6.213261245826269,
+        -6.5890559268370215,
+        0.11
+      ],
+      "world_position_m": [
+        -38.713260650634766,
+        -6.589056015014648,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 169.87237987353132,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.964832305908203
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.088",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -5.391336372915049,
+        -9.008433381973287,
+        0.11
+      ],
+      "world_position_m": [
+        -37.891334533691406,
+        -9.00843334197998,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 7.267493378309733,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.1268416941165924
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.089",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.0646431160372378,
+        -7.982681045767352,
+        0.11
+      ],
+      "world_position_m": [
+        -33.56464385986328,
+        -7.9826812744140625,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 283.8325508788177,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.953812599182129
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.090",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.2753481177275976,
+        -7.6584460268436665,
+        0.11
+      ],
+      "world_position_m": [
+        -32.77534866333008,
+        -7.658445835113525,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 38.744011467735426,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.6762105822563171
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.029",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        2.8365852595376833,
+        -6.770875168650905,
+        0.11
+      ],
+      "world_position_m": [
+        -29.663414001464844,
+        -6.770874977111816,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 29.944168248634632,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.5226243138313293
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.091",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -5.463572164739676,
+        -9.10057386689448,
+        0.11
+      ],
+      "world_position_m": [
+        -37.96357345581055,
+        -9.100573539733887,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 179.02483414842263,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.12457275390625
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.092",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.44488628802310437,
+        -6.787308519987709,
+        0.11
+      ],
+      "world_position_m": [
+        -32.94488525390625,
+        -6.787308692932129,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 203.60263880690667,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.5535364151000977
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.093",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.899660022199475,
+        -8.892586030127983,
+        0.11
+      ],
+      "world_position_m": [
+        -26.600339889526367,
+        -8.892585754394531,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 161.41752601820028,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.817267417907715
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.030",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.903223201640442,
+        -6.573778809432799,
+        0.11
+      ],
+      "world_position_m": [
+        -26.596776962280273,
+        -6.5737786293029785,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 84.27883517569316,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.4709432125091553
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.094",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.4051992995813,
+        -8.797596528366828,
+        0.11
+      ],
+      "world_position_m": [
+        -36.90520095825195,
+        -8.79759693145752,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 180.81343982035614,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.155789852142334
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.095",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.5526801881477308,
+        -7.611212278373877,
+        0.11
+      ],
+      "world_position_m": [
+        -34.05268096923828,
+        -7.611212253570557,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 118.42355362995995,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.066880941390991
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.096",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -6.405755002004154,
+        -7.040486599029766,
+        0.11
+      ],
+      "world_position_m": [
+        -38.90575408935547,
+        -7.040486812591553,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 68.56846984221154,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.19674551486969
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.031",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        2.109062451052557,
+        -6.994384127154071,
+        0.11
+      ],
+      "world_position_m": [
+        -30.39093780517578,
+        -6.994384288787842,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 357.51058123331853,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.239736557006836
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.097",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -5.450995681134044,
+        -8.888189429153732,
+        0.11
+      ],
+      "world_position_m": [
+        -37.95099639892578,
+        -8.888189315795898,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 268.70416601538176,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.689772605895996
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.098",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        2.210026914066633,
+        -8.553819861992787,
+        0.11
+      ],
+      "world_position_m": [
+        -30.28997230529785,
+        -8.55381965637207,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 91.33049965994174,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5940179824829102
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.099",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.3414595200469615,
+        -7.684428333601918,
+        0.11
+      ],
+      "world_position_m": [
+        -36.841461181640625,
+        -7.6844282150268555,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 231.9743370460118,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.048716068267822
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.032",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        6.378312115876801,
+        -7.710370652431197,
+        0.11
+      ],
+      "world_position_m": [
+        -26.121686935424805,
+        -7.7103705406188965,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 210.3454323772322,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.671220302581787
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.100",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.703715369081878,
+        -8.422590569451332,
+        0.11
+      ],
+      "world_position_m": [
+        -36.20371627807617,
+        -8.422590255737305,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 246.87109022739756,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.308713436126709
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.101",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.902145255219269,
+        -6.754561069702117,
+        0.11
+      ],
+      "world_position_m": [
+        -28.597854614257812,
+        -6.754560947418213,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 44.84853077543189,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.7827545404434204
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.102",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.270120152845685,
+        -7.421981512334683,
+        0.11
+      ],
+      "world_position_m": [
+        -36.770118713378906,
+        -7.421981334686279,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 166.85738015285082,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.912210702896118
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.033",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        1.3550451451505454,
+        -8.287462142210284,
+        0.11
+      ],
+      "world_position_m": [
+        -31.144954681396484,
+        -8.28746223449707,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 239.41027714975814,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.178497791290283
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.103",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.8990782130169341,
+        -7.282742140099357,
+        0.11
+      ],
+      "world_position_m": [
+        -33.399078369140625,
+        -7.282742023468018,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 18.20194923603495,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.3176839351654053
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.104",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.975685907495544,
+        -6.756140486407482,
+        0.11
+      ],
+      "world_position_m": [
+        -33.475685119628906,
+        -6.75614070892334,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 237.57963860739775,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.146546840667725
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.105",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.015940104475714,
+        -8.259884307962283,
+        0.11
+      ],
+      "world_position_m": [
+        -29.484060287475586,
+        -8.259883880615234,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 88.03415635537033,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5364859104156494
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.034",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.992184848775185,
+        -7.0600295341396615,
+        0.11
+      ],
+      "world_position_m": [
+        -26.507814407348633,
+        -7.06002950668335,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 43.90326418111839,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.7662565112113953
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.106",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.4933861177744792,
+        -8.74020762970019,
+        0.11
+      ],
+      "world_position_m": [
+        -31.006614685058594,
+        -8.74020767211914,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 236.04951682793745,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.1198410987854
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.107",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.275551806324014,
+        -7.752336332814574,
+        0.11
+      ],
+      "world_position_m": [
+        -36.775550842285156,
+        -7.752336502075195,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 232.2049437601897,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.052740573883057
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.108",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        2.035747778819701,
+        -7.45762016696984,
+        0.11
+      ],
+      "world_position_m": [
+        -30.464252471923828,
+        -7.457620143890381,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 165.32620537761693,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.885486602783203
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.035",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        4.8138583667788915,
+        -7.324711268583228,
+        0.11
+      ],
+      "world_position_m": [
+        -27.686141967773438,
+        -7.324711322784424,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 225.02848320332478,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.927487850189209
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.109",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.0028266190430726,
+        -7.204555250993826,
+        0.11
+      ],
+      "world_position_m": [
+        -33.50282669067383,
+        -7.204555034637451,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 134.33177481841733,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.344531774520874
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.110",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.991234505537941,
+        -7.902780929282848,
+        0.11
+      ],
+      "world_position_m": [
+        -37.491233825683594,
+        -7.902781009674072,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 239.4406577228295,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.179028034210205
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.111",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -1.416435980496785,
+        -9.255563377502302,
+        0.11
+      ],
+      "world_position_m": [
+        -33.91643524169922,
+        -9.255563735961914,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 266.30406157142227,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.647882461547852
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.036",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.341550114313344,
+        -9.292235790404158,
+        0.11
+      ],
+      "world_position_m": [
+        -27.158449172973633,
+        -9.292235374450684,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 133.16962313503876,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.3242483139038086
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.112",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -5.293768933627885,
+        -8.634190601056783,
+        0.11
+      ],
+      "world_position_m": [
+        -37.79376983642578,
+        -8.634190559387207,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 170.1014994625964,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.9688313007354736
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.113",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.20393400620870228,
+        -7.271515041255195,
+        0.11
+      ],
+      "world_position_m": [
+        -32.29606628417969,
+        -7.271514892578125,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 138.6364973161521,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.419663429260254
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.114",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.7319769798821145,
+        -9.170183515397568,
+        0.11
+      ],
+      "world_position_m": [
+        -28.768022537231445,
+        -9.170183181762695,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 92.50201689963322,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.6144647598266602
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.037",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -6.0899444596571755,
+        -9.120405323392712,
+        0.11
+      ],
+      "world_position_m": [
+        -38.589942932128906,
+        -9.120405197143555,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 113.43499868767988,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.9798141717910767
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.115",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.135825132480038,
+        -6.520064420267856,
+        0.11
+      ],
+      "world_position_m": [
+        -28.36417579650879,
+        -6.520064353942871,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 134.4543014913358,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.346670150756836
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.116",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        6.194978769843775,
+        -7.558293344131848,
+        0.11
+      ],
+      "world_position_m": [
+        -26.305021286010742,
+        -7.558293342590332,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 68.22296652968355,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1907154321670532
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.117",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.7062021626558135,
+        -7.511999600517051,
+        0.11
+      ],
+      "world_position_m": [
+        -27.793798446655273,
+        -7.511999607086182,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 323.11063744087176,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.639344692230225
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.038",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -2.5393608065605173,
+        -8.854100703271497,
+        0.11
+      ],
+      "world_position_m": [
+        -35.03936004638672,
+        -8.854100227355957,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 19.3206202899693,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.33720844984054565
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.118",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -5.511129348668313,
+        -8.81745249838699,
+        0.11
+      ],
+      "world_position_m": [
+        -38.01112747192383,
+        -8.817452430725098,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 93.33140046723318,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.628940224647522
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.119",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.842440635717841,
+        -8.943872076864023,
+        0.11
+      ],
+      "world_position_m": [
+        -30.65755844116211,
+        -8.943872451782227,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 299.7424836415302,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.2314934730529785
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.120",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.453724225758905,
+        -8.732687477050304,
+        0.11
+      ],
+      "world_position_m": [
+        -36.9537239074707,
+        -8.732687950134277,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 171.3594993151113,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.9907875061035156
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.039",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -3.225326106265371,
+        -8.916363077962123,
+        0.11
+      ],
+      "world_position_m": [
+        -35.72532653808594,
+        -8.916362762451172,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 185.5388402328911,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.2382636070251465
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.121",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.6176309971147407,
+        -8.435357793749333,
+        0.11
+      ],
+      "world_position_m": [
+        -36.11763000488281,
+        -8.435358047485352,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 310.901876336413,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.4262614250183105
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.122",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.2054469797309,
+        -8.969876467072897,
+        0.11
+      ],
+      "world_position_m": [
+        -35.705448150634766,
+        -8.969876289367676,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 198.1911110924722,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.459087371826172
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.123",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -2.8711530575964437,
+        -6.517697982979486,
+        0.11
+      ],
+      "world_position_m": [
+        -35.37115478515625,
+        -6.517697811126709,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 283.3936781456097,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.946152687072754
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.040",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -4.782321159229006,
+        -6.881464606586424,
+        0.11
+      ],
+      "world_position_m": [
+        -37.28232192993164,
+        -6.88146448135376,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 52.82656006807915,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.9219974279403687
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.124",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -0.4848257769746418,
+        -8.683750920263138,
+        0.11
+      ],
+      "world_position_m": [
+        -32.984825134277344,
+        -8.683751106262207,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 31.903631270370187,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.5568234324455261
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.125",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.7379053814332455,
+        -6.857702480868792,
+        0.11
+      ],
+      "world_position_m": [
+        -28.762094497680664,
+        -6.857702255249023,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 166.70906544368708,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.9096221923828125
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.126",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.49237305164281,
+        -8.077313726677206,
+        0.11
+      ],
+      "world_position_m": [
+        -27.007627487182617,
+        -8.077313423156738,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 146.21603241536664,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.5519511699676514
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.041",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        3.6965820990835745,
+        -6.9759297257148205,
+        0.11
+      ],
+      "world_position_m": [
+        -28.803417205810547,
+        -6.9759297370910645,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 330.4874721741983,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.768094539642334
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.127",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        0.046995275975009854,
+        -7.8912822652435075,
+        0.11
+      ],
+      "world_position_m": [
+        -32.4530029296875,
+        -7.891282081604004,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 333.32086865676513,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.817546844482422
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.128",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -5.519440984316203,
+        -7.3006812355696,
+        0.11
+      ],
+      "world_position_m": [
+        -38.019439697265625,
+        -7.300681114196777,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 349.56455148548616,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.101052284240723
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.129",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.9280659433522835,
+        -9.244032407862475,
+        0.11
+      ],
+      "world_position_m": [
+        -27.57193374633789,
+        -9.244032859802246,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 190.89798930504426,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.331798553466797
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.042",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -1.3688281156084763,
+        -9.09544191000939,
+        0.11
+      ],
+      "world_position_m": [
+        -33.86882781982422,
+        -9.095441818237305,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 146.16568748421088,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.551072597503662
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.130",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        2.0384369999990906,
+        -8.980186082132738,
+        0.11
+      ],
+      "world_position_m": [
+        -30.461563110351562,
+        -8.980186462402344,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 101.52470960891786,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.7719404697418213
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.131",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -4.639373233379606,
+        -6.5694290227394445,
+        0.11
+      ],
+      "world_position_m": [
+        -37.139373779296875,
+        -6.56942892074585,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 69.60082384118236,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.2147635221481323
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.132",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.204480546086019,
+        -8.791846227777478,
+        0.11
+      ],
+      "world_position_m": [
+        -27.29551887512207,
+        -8.79184627532959,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 174.57714462071877,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.0469460487365723
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.043",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        -4.341543914869703,
+        -7.028419809794469,
+        0.11
+      ],
+      "world_position_m": [
+        -36.84154510498047,
+        -7.0284199714660645,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 226.80215533573994,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.958444356918335
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.133",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        1.3729859322617246,
+        -8.73123468700016,
+        0.11
+      ],
+      "world_position_m": [
+        -31.12701416015625,
+        -8.731234550476074,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 299.4713144174537,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.226760387420654
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.134",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -5.851707426915417,
+        -8.902388358334933,
+        0.11
+      ],
+      "world_position_m": [
+        -38.351707458496094,
+        -8.902388572692871,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 197.07435811954747,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.43959641456604
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.135",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -6.113707857540222,
+        -8.960487689550035,
+        0.11
+      ],
+      "world_position_m": [
+        -38.61370849609375,
+        -8.960487365722656,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 112.95923904130963,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.971510648727417
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土大碎块_实例.044",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "position_m": [
+        5.254447083484898,
+        -7.523814048435534,
+        0.11
+      ],
+      "world_position_m": [
+        -27.24555206298828,
+        -7.5238142013549805,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 21.157968248427828,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.3692761957645416
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.136",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        -3.529893350626129,
+        -7.694762708089159,
+        0.11
+      ],
+      "world_position_m": [
+        -36.02989196777344,
+        -7.694762706756592,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 231.0887398593483,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.033259391784668
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        2.900280089992826,
+        -0.36096910190529563,
+        0.25
+      ],
+      "world_position_m": [
+        -29.599720001220703,
+        -0.36096909642219543,
+        0.25
+      ],
+      "rotation_z_deg": 154.2157949628248,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.69157338142395
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.001",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        2.7719689571936588,
+        0.8970483576637323,
+        0.25
+      ],
+      "world_position_m": [
+        -29.728031158447266,
+        0.8970483541488647,
+        0.25
+      ],
+      "rotation_z_deg": 78.66479063907636,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.3729596138000488
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.002",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        0.6730707003938794,
+        2.906020152844725,
+        0.25
+      ],
+      "world_position_m": [
+        -31.826929092407227,
+        2.906020164489746,
+        0.25
+      ],
+      "rotation_z_deg": 146.35824508888908,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.5544333457946777
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.003",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        3.434667066666284,
+        0.6844328362453886,
+        0.25
+      ],
+      "world_position_m": [
+        -29.065332412719727,
+        0.684432864189148,
+        0.25
+      ],
+      "rotation_z_deg": 306.1999091407395,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.344196796417236
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.004",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        2.638656053820771,
+        5.591432056135881,
+        0.25
+      ],
+      "world_position_m": [
+        -29.861343383789062,
+        5.591432094573975,
+        0.25
+      ],
+      "rotation_z_deg": 118.64972378081492,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.070828437805176
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.005",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        -0.5213850026007607,
+        -1.1314563858292255,
+        0.25
+      ],
+      "world_position_m": [
+        -33.021385192871094,
+        -1.1314563751220703,
+        0.25
+      ],
+      "rotation_z_deg": 327.37055720666467,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.713694095611572
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.006",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        -0.22240165064329842,
+        1.4571362112574047,
+        0.25
+      ],
+      "world_position_m": [
+        -32.7224006652832,
+        1.4571361541748047,
+        0.25
+      ],
+      "rotation_z_deg": 129.25305866003092,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        2.2558913230895996
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.007",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        -0.5975939741995013,
+        -6.440614262916806,
+        0.25
+      ],
+      "world_position_m": [
+        -33.09759521484375,
+        -6.440614223480225,
+        0.25
+      ],
+      "rotation_z_deg": 12.061684510002838,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.21051611006259918
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.008",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        1.0318878043809283,
+        -2.913608342871461,
+        0.25
+      ],
+      "world_position_m": [
+        -31.46811294555664,
+        -2.9136083126068115,
+        0.25
+      ],
+      "rotation_z_deg": 268.4341461268924,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.685059547424316
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.009",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        -0.9077817247565871,
+        1.0017799419306215,
+        0.25
+      ],
+      "world_position_m": [
+        -33.40778350830078,
+        1.0017799139022827,
+        0.25
+      ],
+      "rotation_z_deg": 83.3249657893158,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.454295039176941
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.010",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        2.3431027284864534,
+        0.18177464714871316,
+        0.25
+      ],
+      "world_position_m": [
+        -30.156896591186523,
+        0.18177464604377747,
+        0.25
+      ],
+      "rotation_z_deg": 259.71537997913265,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.532888412475586
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.011",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        0.06750113017768333,
+        -3.8243604608189385,
+        0.25
+      ],
+      "world_position_m": [
+        -32.432498931884766,
+        -3.8243603706359863,
+        0.25
+      ],
+      "rotation_z_deg": 84.83849861410476,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.4807111024856567
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.012",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        -0.9782082091864572,
+        1.1195699110977024,
+        0.25
+      ],
+      "world_position_m": [
+        -33.478206634521484,
+        1.1195698976516724,
+        0.25
+      ],
+      "rotation_z_deg": 76.7956417624339,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.340336799621582
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.013",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        3.6925208236691454,
+        -0.1829020563981043,
+        0.25
+      ],
+      "world_position_m": [
+        -28.807479858398438,
+        -0.18290205299854279,
+        0.25
+      ],
+      "rotation_z_deg": 216.4625804733403,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.777984619140625
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.014",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        2.05708104191784,
+        2.590546606978858,
+        0.25
+      ],
+      "world_position_m": [
+        -30.44291877746582,
+        2.5905466079711914,
+        0.25
+      ],
+      "rotation_z_deg": 201.89318406820473,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.523700714111328
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.015",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        2.2094980018840236,
+        0.8180280031147973,
+        0.25
+      ],
+      "world_position_m": [
+        -30.290502548217773,
+        0.8180280327796936,
+        0.25
+      ],
+      "rotation_z_deg": 331.37888731787046,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.7836527824401855
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.016",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        0.0017968341730862925,
+        5.248330200048374,
+        0.25
+      ],
+      "world_position_m": [
+        -32.49820327758789,
+        5.248330116271973,
+        0.25
+      ],
+      "rotation_z_deg": 282.58462392053633,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.932032108306885
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.017",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        3.1297321340347155,
+        -4.0742183047544245,
+        0.25
+      ],
+      "world_position_m": [
+        -29.370267868041992,
+        -4.074218273162842,
+        0.25
+      ],
+      "rotation_z_deg": 295.7918238428718,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.162541389465332
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "散落纸张_实例.018",
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "position_m": [
+        0.613075894309492,
+        5.470633260190322,
+        0.25
+      ],
+      "world_position_m": [
+        -31.886924743652344,
+        5.470633029937744,
+        0.25
+      ],
+      "rotation_z_deg": 198.73109497850675,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.4685118198394775
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.137",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.520178419641448,
+        4.703109393991754,
+        0.11
+      ],
+      "world_position_m": [
+        -27.979822158813477,
+        4.703109264373779,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 89.03863140446968,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.5540173053741455
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.138",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.480007021992842,
+        -4.110953699306877,
+        0.11
+      ],
+      "world_position_m": [
+        -28.01999282836914,
+        -4.1109538078308105,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 357.50262806248827,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        6.239597797393799
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.139",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        5.0861110803953515,
+        1.4327168896434062,
+        0.11
+      ],
+      "world_position_m": [
+        -27.413888931274414,
+        1.4327168464660645,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 224.58345688599877,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        3.9197206497192383
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.140",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.4497460971251215,
+        4.638781010919164,
+        0.11
+      ],
+      "world_position_m": [
+        -28.050254821777344,
+        4.6387810707092285,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 270.4176700903585,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.71967887878418
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.141",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.850682288413687,
+        -1.132456320322154,
+        0.11
+      ],
+      "world_position_m": [
+        -28.649316787719727,
+        -1.1324563026428223,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 55.01193331980508,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        0.9601393938064575
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.142",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.997980523366741,
+        0.20304830697959808,
+        0.11
+      ],
+      "world_position_m": [
+        -28.50201988220215,
+        0.20304830372333527,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 284.1479897185135,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        4.959318161010742
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.143",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.5846343812082515,
+        1.7383045023928094,
+        0.11
+      ],
+      "world_position_m": [
+        -28.91536521911621,
+        1.7383044958114624,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 315.36943920753214,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.50423526763916
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.144",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.200402778999918,
+        -1.6577324122371682,
+        0.11
+      ],
+      "world_position_m": [
+        -28.299596786499023,
+        -1.657732367515564,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 102.78495658495139,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.7939358949661255
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.145",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        3.6807156026306695,
+        1.9095880434047734,
+        0.11
+      ],
+      "world_position_m": [
+        -28.819284439086914,
+        1.909588098526001,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 331.51028705277497,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        5.785945892333984
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    },
+    {
+      "instance_id": "混凝土小碎块_实例.146",
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "position_m": [
+        4.603832202262586,
+        -3.6166315217384346,
+        0.11
+      ],
+      "world_position_m": [
+        -27.896167755126953,
+        -3.616631507873535,
+        0.10999999940395355
+      ],
+      "rotation_z_deg": 68.05713292005753,
+      "rotation_euler_rad": [
+        0.0,
+        0.0,
+        1.1878210306167603
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "cutaway_hidden": false
+    }
+  ]
+}

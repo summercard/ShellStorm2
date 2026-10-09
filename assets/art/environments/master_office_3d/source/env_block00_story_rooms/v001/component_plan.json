@@ -1,0 +1,354 @@
+{
+  "asset_id": "ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE",
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "design_scope": "scene_art_source_only",
+  "whitebox_source": "source\\art\\blender\\master_office_layout\\source\\block_00_master_office_layout_v002.layout.json",
+  "whitebox_sha256": "48277c4872793f40b6483b4c43690c79b0e644cda5dea9a579dafadc19a2df8f",
+  "rooms": [
+    {
+      "room_id": "corridor",
+      "name_zh": "走廊",
+      "bounds_x_m": [
+        15.0,
+        20.0
+      ],
+      "bounds_y_m": [
+        -10.0,
+        10.0
+      ],
+      "size_m": [
+        5.0,
+        20.0
+      ],
+      "plane_priority": 0,
+      "use_corner_l": false,
+      "doors": {
+        "west": 2.5,
+        "east": 2.5
+      },
+      "exits": {}
+    },
+    {
+      "room_id": "meeting_room",
+      "name_zh": "会议室",
+      "bounds_x_m": [
+        -25.0,
+        15.0
+      ],
+      "bounds_y_m": [
+        -5.0,
+        10.0
+      ],
+      "size_m": [
+        40.0,
+        15.0
+      ],
+      "plane_priority": 1,
+      "use_corner_l": true,
+      "doors": {
+        "west": 2.5,
+        "east": 2.5
+      },
+      "exits": {}
+    },
+    {
+      "room_id": "master_office",
+      "name_zh": "办公室",
+      "bounds_x_m": [
+        -40.0,
+        -25.0
+      ],
+      "bounds_y_m": [
+        -10.0,
+        10.0
+      ],
+      "size_m": [
+        15.0,
+        20.0
+      ],
+      "plane_priority": 2,
+      "use_corner_l": true,
+      "doors": {
+        "east": 2.5
+      },
+      "exits": {}
+    },
+    {
+      "room_id": "lobby",
+      "name_zh": "门厅",
+      "bounds_x_m": [
+        20.0,
+        35.0
+      ],
+      "bounds_y_m": [
+        -5.0,
+        10.0
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "plane_priority": 3,
+      "use_corner_l": true,
+      "doors": {
+        "west": 2.5
+      },
+      "exits": {
+        "east": 2.5
+      }
+    }
+  ],
+  "source_office": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\env_father_office_source_v002.blend",
+  "source_office_sha256": "f6c1a768c1ea53a56fa9466e4dd1e98098865d6a8876a786f6fa388ffffb6aef",
+  "components": [
+    {
+      "slug": "sculpture_foundry",
+      "name_zh": "铸造者纪念雕塑",
+      "component_family": "sculpture",
+      "category": "facilities",
+      "component_id": "ENV-BLOCK00-SCULPTURE-FOUNDRY",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_MEETING"
+      ],
+      "variant_axis": "sculpture_theme",
+      "variant_value": "sculpture_foundry",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "sculpture_turbine",
+      "name_zh": "涡轮与钢翼雕塑",
+      "component_family": "sculpture",
+      "category": "facilities",
+      "component_id": "ENV-BLOCK00-SCULPTURE-TURBINE",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_MEETING"
+      ],
+      "variant_axis": "sculpture_theme",
+      "variant_value": "sculpture_turbine",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "sculpture_pylon",
+      "name_zh": "工业之峰雕塑",
+      "component_family": "sculpture",
+      "category": "facilities",
+      "component_id": "ENV-BLOCK00-SCULPTURE-PYLON",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_MEETING"
+      ],
+      "variant_axis": "sculpture_theme",
+      "variant_value": "sculpture_pylon",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "debris_slab",
+      "name_zh": "破碎楼板残片",
+      "component_family": "debris",
+      "category": "decoration",
+      "component_id": "ENV-BLOCK00-DEBRIS-SLAB",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_MEETING",
+        "STORY_CORRIDOR",
+        "STORY_LOBBY"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "debris_slab",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "debris_cluster",
+      "name_zh": "边缘混凝土废墟",
+      "component_family": "debris",
+      "category": "decoration",
+      "component_id": "ENV-BLOCK00-DEBRIS-CLUSTER",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_MEETING",
+        "STORY_CORRIDOR",
+        "STORY_LOBBY"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "debris_cluster",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "cable_floor",
+      "name_zh": "地面断裂电缆束",
+      "component_family": "cable",
+      "category": "support",
+      "component_id": "ENV-BLOCK00-CABLE-FLOOR",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_MEETING",
+        "STORY_CORRIDOR",
+        "STORY_LOBBY"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cable_floor",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "cable_hanging",
+      "name_zh": "垂落断线",
+      "component_family": "cable",
+      "category": "support",
+      "component_id": "ENV-BLOCK00-CABLE-HANGING",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_MEETING",
+        "STORY_CORRIDOR",
+        "STORY_LOBBY"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "cable_hanging",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "portal_damage",
+      "name_zh": "拆门残留断框",
+      "component_family": "portal_damage",
+      "category": "architecture",
+      "component_id": "ENV-BLOCK00-PORTAL-DAMAGE",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_LOBBY"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "portal_damage",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "slug": "constructivist_mural",
+      "name_zh": "工业时代构成主义壁画",
+      "component_family": "mural",
+      "category": "decoration",
+      "component_id": "ENV-BLOCK00-CONSTRUCTIVIST-MURAL",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "STORY_LOBBY"
+      ],
+      "variant_axis": "structure_state",
+      "variant_value": "constructivist_mural",
+      "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ]
+    }
+  ],
+  "component_plan_frozen": true,
+  "unique_new_components": 9,
+  "linked_components": 24,
+  "total_unique_components": 33,
+  "sculpture_triangle_budget_each": 1500,
+  "meeting_clear_lane": {
+    "x": [
+      -25,
+      15
+    ],
+    "y": [
+      -0.5,
+      5.5
+    ],
+    "z": [
+      0.3,
+      4.0
+    ]
+  },
+  "door_removal": {
+    "rooms": [
+      "corridor",
+      "lobby"
+    ],
+    "wall_x": 20,
+    "opening_y": [
+      0,
+      5
+    ],
+    "remove": [
+      "door_wall",
+      "door_leaf"
+    ],
+    "clear_width_m": 5,
+    "source_only": true
+  },
+  "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+  "scene_design_docs": [
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+    "src/world3d/Block00MasterOfficeLayout3D.gd"
+  ],
+  "notes": [
+    "用户要求会议室中间无阻挡，上下两侧按南北两侧解释，各排6尊大型雕塑。",
+    "第三间为corridor，第四间为lobby；背面墙取门厅北墙Y=10。",
+    "只修改本次Blender源中的第三/第四房连接，不覆盖旧运行时JSON或Godot场景。",
+    "现有办公室以Library Link引用，自持网格0。"
+  ]
+}

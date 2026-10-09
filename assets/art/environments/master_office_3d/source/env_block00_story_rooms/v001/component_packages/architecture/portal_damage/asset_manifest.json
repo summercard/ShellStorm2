@@ -1,0 +1,50 @@
+{
+  "slug": "portal_damage",
+  "name_zh": "拆门残留断框",
+  "component_family": "portal_damage",
+  "category": "architecture",
+  "component_id": "ENV-BLOCK00-PORTAL-DAMAGE",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "STORY_LOBBY"
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "portal_damage",
+  "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collection": "组件_拆门残留断框",
+  "version": "v001",
+  "source_blend": "env_block00_story_rooms_source_v001.blend",
+  "bounds_size_m": [
+    0.4699999988079071,
+    0.4775002896785736,
+    2.799999952316284
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "objects": [
+    "拆门残留断框_主体输出"
+  ],
+  "triangles": 880,
+  "exported": false,
+  "collision_owner": "future_godot_wrapper",
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+  "component_blend": "assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/component_packages/architecture/portal_damage/env_block00_portal_damage_source_v001.blend",
+  "instance_count": 2,
+  "parent_asset_id": "ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE",
+  "status": "Blender源已完成"
+}

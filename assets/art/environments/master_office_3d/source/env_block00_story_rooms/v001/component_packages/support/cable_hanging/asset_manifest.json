@@ -1,0 +1,52 @@
+{
+  "slug": "cable_hanging",
+  "name_zh": "垂落断线",
+  "component_family": "cable",
+  "category": "support",
+  "component_id": "ENV-BLOCK00-CABLE-HANGING",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "STORY_MEETING",
+    "STORY_CORRIDOR",
+    "STORY_LOBBY"
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "cable_hanging",
+  "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collection": "组件_垂落断线",
+  "version": "v001",
+  "source_blend": "env_block00_story_rooms_source_v001.blend",
+  "bounds_size_m": [
+    0.8519139885902405,
+    0.3799999952316284,
+    3.1262872219085693
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "objects": [
+    "垂落断线_主体输出"
+  ],
+  "triangles": 252,
+  "exported": false,
+  "collision_owner": "future_godot_wrapper",
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+  "component_blend": "assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/component_packages/support/cable_hanging/env_block00_cable_hanging_source_v001.blend",
+  "instance_count": 3,
+  "parent_asset_id": "ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE",
+  "status": "Blender源已完成"
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "sculpture_foundry",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\facilities\\sculpture_foundry\\env_block00_sculpture_foundry_source_v001.blend",
+    "bytes": 314190
+  },
+  {
+    "slug": "sculpture_turbine",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\facilities\\sculpture_turbine\\env_block00_sculpture_turbine_source_v001.blend",
+    "bytes": 363817
+  },
+  {
+    "slug": "sculpture_pylon",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\facilities\\sculpture_pylon\\env_block00_sculpture_pylon_source_v001.blend",
+    "bytes": 306630
+  },
+  {
+    "slug": "debris_slab",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\decoration\\debris_slab\\env_block00_debris_slab_source_v001.blend",
+    "bytes": 217164
+  },
+  {
+    "slug": "debris_cluster",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\decoration\\debris_cluster\\env_block00_debris_cluster_source_v001.blend",
+    "bytes": 272999
+  },
+  {
+    "slug": "cable_floor",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\support\\cable_floor\\env_block00_cable_floor_source_v001.blend",
+    "bytes": 340207
+  },
+  {
+    "slug": "cable_hanging",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\support\\cable_hanging\\env_block00_cable_hanging_source_v001.blend",
+    "bytes": 266583
+  },
+  {
+    "slug": "portal_damage",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\architecture\\portal_damage\\env_block00_portal_damage_source_v001.blend",
+    "bytes": 259728
+  },
+  {
+    "slug": "constructivist_mural",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_block00_story_rooms\\v001\\component_packages\\decoration\\constructivist_mural\\env_block00_constructivist_mural_source_v001.blend",
+    "bytes": 365209
+  }
+]

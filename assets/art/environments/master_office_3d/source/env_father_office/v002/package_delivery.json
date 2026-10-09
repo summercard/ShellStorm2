@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "floor_panel",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\floor\\floor_panel\\env_father_office_floor_panel_source_v002.blend",
+    "bytes": 512472
+  },
+  {
+    "slug": "floor_fractured",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\floor\\floor_fractured\\env_father_office_floor_fractured_source_v002.blend",
+    "bytes": 719440
+  },
+  {
+    "slug": "wall_panel",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\architecture\\wall_panel\\env_father_office_wall_panel_source_v002.blend",
+    "bytes": 394730
+  },
+  {
+    "slug": "wall_fractured",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\architecture\\wall_fractured\\env_father_office_wall_fractured_source_v002.blend",
+    "bytes": 1726654
+  },
+  {
+    "slug": "wall_door",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\architecture\\wall_door\\env_father_office_wall_door_source_v002.blend",
+    "bytes": 427003
+  },
+  {
+    "slug": "sofa",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\facilities\\sofa\\env_father_office_sofa_source_v002.blend",
+    "bytes": 1576683
+  },
+  {
+    "slug": "pillow",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\pillow\\env_father_office_pillow_source_v002.blend",
+    "bytes": 322506
+  },
+  {
+    "slug": "throw",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\throw\\env_father_office_throw_source_v002.blend",
+    "bytes": 357867
+  },
+  {
+    "slug": "rug",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\floor\\rug\\env_father_office_rug_source_v002.blend",
+    "bytes": 2390379
+  },
+  {
+    "slug": "display_case",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\facilities\\display_case\\env_father_office_display_case_source_v002.blend",
+    "bytes": 593332
+  },
+  {
+    "slug": "display_console",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\facilities\\display_console\\env_father_office_display_console_source_v002.blend",
+    "bytes": 422553
+  },
+  {
+    "slug": "side_table",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\facilities\\side_table\\env_father_office_side_table_source_v002.blend",
+    "bytes": 389064
+  },
+  {
+    "slug": "bookcase_fallen",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\facilities\\bookcase_fallen\\env_father_office_bookcase_fallen_source_v002.blend",
+    "bytes": 855354
+  },
+  {
+    "slug": "plant_withered",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\plant_withered\\env_father_office_plant_withered_source_v002.blend",
+    "bytes": 960805
+  },
+  {
+    "slug": "plant_specimen",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\plant_specimen\\env_father_office_plant_specimen_source_v002.blend",
+    "bytes": 443750
+  },
+  {
+    "slug": "trophy",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\trophy\\env_father_office_trophy_source_v002.blend",
+    "bytes": 435285
+  },
+  {
+    "slug": "rubble_large",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\rubble_large\\env_father_office_rubble_large_source_v002.blend",
+    "bytes": 283190
+  },
+  {
+    "slug": "rubble_small",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\rubble_small\\env_father_office_rubble_small_source_v002.blend",
+    "bytes": 281492
+  },
+  {
+    "slug": "paper",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\paper\\env_father_office_paper_source_v002.blend",
+    "bytes": 285620
+  },
+  {
+    "slug": "book_stack",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\book_stack\\env_father_office_book_stack_source_v002.blend",
+    "bytes": 326492
+  },
+  {
+    "slug": "wall_mural",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\wall_mural\\env_father_office_wall_mural_source_v002.blend",
+    "bytes": 791314
+  },
+  {
+    "slug": "metal_brace",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\architecture\\metal_brace\\env_father_office_metal_brace_source_v002.blend",
+    "bytes": 474766
+  },
+  {
+    "slug": "monitor_fallen",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\decoration\\monitor_fallen\\env_father_office_monitor_fallen_source_v002.blend",
+    "bytes": 332019
+  },
+  {
+    "slug": "shelf_ledge",
+    "path": "assets\\art\\environments\\master_office_3d\\source\\env_father_office\\v002\\component_packages\\facilities\\shelf_ledge\\env_father_office_shelf_ledge_source_v002.blend",
+    "bytes": 326488
+  }
+]

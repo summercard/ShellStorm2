@@ -1,0 +1,58 @@
+{
+  "component_id": "ENV-FATHER-OFFICE-MONITOR-FALLEN",
+  "slug": "monitor_fallen",
+  "name_zh": "脱落显示屏",
+  "category": "decoration",
+  "component_family": "monitor_fallen",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "FATHER_OFFICE"
+  ],
+  "variant_axis": null,
+  "variant_value": "intact",
+  "variant_reason": "参考图可见破损状态",
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "future_godot_wrapper",
+  "pickup": false,
+  "version": "v001",
+  "source_blend": "env_father_office_source_v001.blend",
+  "collection": "组件_脱落显示屏",
+  "root_object": null,
+  "objects": [
+    "脱落显示屏_主体输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "authoring_anchor": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "bounds_size_m": [
+    1.899999976158142,
+    1.3200000524520874,
+    0.35039231181144714
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette_uv_layer": "PaletteUV",
+  "exported": false,
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ]
+}

@@ -1,0 +1,631 @@
+{
+  "asset_id": "ENV-BATTLE-FATHER-OFFICE-SOURCE",
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "design_scope": "scene_art_source_only",
+  "room_id": "master_office",
+  "runtime_room_id": "floor_01_exit",
+  "room_type": "FATHER_OFFICE",
+  "dimensions_m": [
+    15,
+    20,
+    11.9
+  ],
+  "logical_wall_height_m": 12,
+  "wall_thickness_m": 0.3,
+  "room_frame_origin_m": [
+    -32.5,
+    0,
+    0
+  ],
+  "whitebox_source": "source\\art\\blender\\master_office_layout\\source\\block_00_master_office_layout_v002.layout.json",
+  "whitebox_sha256": "48277c4872793f40b6483b4c43690c79b0e644cda5dea9a579dafadc19a2df8f",
+  "reference_sha256": "d118fa7a4ea8bb880478ed1c61dd20363ecd2a988466f39a5ef06497852d0090",
+  "room_contract": {
+    "room_id": "master_office",
+    "name_zh": "办公室",
+    "bounds_x_m": [
+      -40.0,
+      -25.0
+    ],
+    "bounds_y_m": [
+      -10.0,
+      10.0
+    ],
+    "size_m": [
+      15.0,
+      20.0
+    ],
+    "plane_priority": 2,
+    "use_corner_l": true,
+    "doors": {
+      "east": 2.5
+    },
+    "exits": {}
+  },
+  "door_clearance_local": {
+    "x": [
+      5.8,
+      7.7
+    ],
+    "y": [
+      1.1,
+      3.9
+    ],
+    "z": [
+      0,
+      3
+    ]
+  },
+  "scene_design_docs": [
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/05.2_关卡版图白盒与生成规范.md",
+    "src/world3d/Block00MasterOfficeLayout3D.gd"
+  ],
+  "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+  "component_plan_frozen": true,
+  "unique_component_count": 24,
+  "components": [
+    {
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-PANEL",
+      "slug": "floor_panel",
+      "name_zh": "地面金属砖",
+      "category": "floor",
+      "component_family": "floor_panel",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": "damage_state",
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-FLOOR-FRACTURED",
+      "slug": "floor_fractured",
+      "name_zh": "开裂地砖",
+      "category": "floor",
+      "component_family": "floor_panel",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": "damage_state",
+      "variant_value": "fractured",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-WALL-PANEL",
+      "slug": "wall_panel",
+      "name_zh": "装甲墙板",
+      "category": "architecture",
+      "component_family": "wall_panel",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": "damage_state",
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-WALL-FRACTURED",
+      "slug": "wall_fractured",
+      "name_zh": "坍塌墙体",
+      "category": "architecture",
+      "component_family": "wall_panel",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": "damage_state",
+      "variant_value": "fractured",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-WALL-DOOR",
+      "slug": "wall_door",
+      "name_zh": "入口门墙",
+      "category": "architecture",
+      "component_family": "wall_door",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-SOFA",
+      "slug": "sofa",
+      "name_zh": "长条软包沙发",
+      "category": "facilities",
+      "component_family": "sofa",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-PILLOW",
+      "slug": "pillow",
+      "name_zh": "蓝色靠枕",
+      "category": "decoration",
+      "component_family": "pillow",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-THROW",
+      "slug": "throw",
+      "name_zh": "垂落织物",
+      "category": "decoration",
+      "component_family": "throw",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-RUG",
+      "slug": "rug",
+      "name_zh": "磨损蓝色地毯",
+      "category": "floor",
+      "component_family": "rug",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-DISPLAY-CASE",
+      "slug": "display_case",
+      "name_zh": "奖杯植物展示柜",
+      "category": "facilities",
+      "component_family": "display_case",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-DISPLAY-CONSOLE",
+      "slug": "display_console",
+      "name_zh": "低矮展示终端",
+      "category": "facilities",
+      "component_family": "display_console",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-SIDE-TABLE",
+      "slug": "side_table",
+      "name_zh": "圆形边桌",
+      "category": "facilities",
+      "component_family": "side_table",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-BOOKCASE-FALLEN",
+      "slug": "bookcase_fallen",
+      "name_zh": "倒塌书柜",
+      "category": "facilities",
+      "component_family": "bookcase_fallen",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-PLANT-WITHERED",
+      "slug": "plant_withered",
+      "name_zh": "枯萎盆栽",
+      "category": "decoration",
+      "component_family": "plant_withered",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-PLANT-SPECIMEN",
+      "slug": "plant_specimen",
+      "name_zh": "培养植物",
+      "category": "decoration",
+      "component_family": "plant_specimen",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-TROPHY",
+      "slug": "trophy",
+      "name_zh": "螺旋奖杯",
+      "category": "decoration",
+      "component_family": "trophy",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-LARGE",
+      "slug": "rubble_large",
+      "name_zh": "混凝土大碎块",
+      "category": "decoration",
+      "component_family": "rubble",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-RUBBLE-SMALL",
+      "slug": "rubble_small",
+      "name_zh": "混凝土小碎块",
+      "category": "decoration",
+      "component_family": "rubble",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-PAPER",
+      "slug": "paper",
+      "name_zh": "散落纸张",
+      "category": "decoration",
+      "component_family": "paper",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-BOOK-STACK",
+      "slug": "book_stack",
+      "name_zh": "固定旧书堆",
+      "category": "decoration",
+      "component_family": "book_stack",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-WALL-MURAL",
+      "slug": "wall_mural",
+      "name_zh": "墙面浮雕与灯带",
+      "category": "decoration",
+      "component_family": "wall_mural",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-METAL-BRACE",
+      "slug": "metal_brace",
+      "name_zh": "断裂斜撑",
+      "category": "architecture",
+      "component_family": "metal_brace",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-MONITOR-FALLEN",
+      "slug": "monitor_fallen",
+      "name_zh": "脱落显示屏",
+      "category": "decoration",
+      "component_family": "monitor_fallen",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    },
+    {
+      "component_id": "ENV-FATHER-OFFICE-SHELF-LEDGE",
+      "slug": "shelf_ledge",
+      "name_zh": "沙发后窄置物架",
+      "category": "facilities",
+      "component_family": "shelf_ledge",
+      "scope": "room_type_local",
+      "serves_room_types": [
+        "FATHER_OFFICE"
+      ],
+      "variant_axis": null,
+      "variant_value": "intact",
+      "variant_reason": "参考图可见破损状态",
+      "front_axis": "+Y",
+      "allowed_rotations_y_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "future_godot_wrapper",
+      "pickup": false
+    }
+  ],
+  "notes": [
+    "仅制作源，不修改正式房间布局或玩法。",
+    "所有展示附件为固定不可拾取几何。",
+    "东墙与南墙保存在完整结构场景；参考剖视场景隐藏面向相机的两墙。",
+    "北墙破损为视觉形态，逻辑墙边界与12米碰撞契约仍保留。"
+  ]
+}

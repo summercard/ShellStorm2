@@ -1,0 +1,52 @@
+{
+  "slug": "debris_cluster",
+  "name_zh": "边缘混凝土废墟",
+  "component_family": "debris",
+  "category": "decoration",
+  "component_id": "ENV-BLOCK00-DEBRIS-CLUSTER",
+  "scope": "room_type_local",
+  "serves_room_types": [
+    "STORY_MEETING",
+    "STORY_CORRIDOR",
+    "STORY_LOBBY"
+  ],
+  "variant_axis": "structure_state",
+  "variant_value": "debris_cluster",
+  "variant_reason": "用户要求的三种棱角工业雕塑或不同废墟形态",
+  "front_axis": "+Y",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collection": "组件_边缘混凝土废墟",
+  "version": "v001",
+  "source_blend": "env_block00_story_rooms_source_v001.blend",
+  "bounds_size_m": [
+    1.9595527648925781,
+    1.0093307495117188,
+    0.5911928415298462
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "objects": [
+    "边缘混凝土废墟_主体输出"
+  ],
+  "triangles": 288,
+  "exported": false,
+  "collision_owner": "future_godot_wrapper",
+  "block_id": "master_office",
+  "floor_range": [
+    98,
+    98
+  ],
+  "asset_ledger": "assets/registry/ledger_index.json::scenes::资产主表",
+  "component_blend": "assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/component_packages/decoration/debris_cluster/env_block00_debris_cluster_source_v001.blend",
+  "instance_count": 23,
+  "parent_asset_id": "ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE",
+  "status": "Blender源已完成"
+}

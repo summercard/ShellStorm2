@@ -1,0 +1,130 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_cable_floor/prp_block00_cable_floor_root.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_debris_cluster/prp_block00_debris_cluster_root.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_rubble_large/prp_block00_rubble_large_root.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_sculpture_foundry/prp_block00_sculpture_foundry_root.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_sculpture_pylon/prp_block00_sculpture_pylon_root.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_sculpture_turbine/prp_block00_sculpture_turbine_root.tscn" id="6"]
+
+[node name="AuthoredFacilities" type="Node3D"]
+metadata/asset_id = "ENV-BLOCK00-MEETING-ROOM-FACILITY-LAYOUT"
+metadata/asset_version = "v001"
+metadata/room_id = "meeting_room"
+metadata/facility_count = 29
+
+[node name="sculpture_foundry_000" parent="." instance=ExtResource("4")]
+transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, -16.5000000, 0.1200000, 5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_turbine_001" parent="." instance=ExtResource("6")]
+transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, -10.0000000, 0.1200000, 5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_pylon_002" parent="." instance=ExtResource("5")]
+transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, -3.5000000, 0.1200000, 5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_foundry_003" parent="." instance=ExtResource("4")]
+transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, 3.0000000, 0.1200000, 5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_turbine_004" parent="." instance=ExtResource("6")]
+transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, 9.5000000, 0.1200000, 5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_pylon_005" parent="." instance=ExtResource("5")]
+transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, 16.0000000, 0.1200000, 5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_turbine_006" parent="." instance=ExtResource("6")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -16.5000000, 0.1200000, -5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_pylon_007" parent="." instance=ExtResource("5")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -10.0000000, 0.1200000, -5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_foundry_008" parent="." instance=ExtResource("4")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -3.5000000, 0.1200000, -5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_turbine_009" parent="." instance=ExtResource("6")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 3.0000000, 0.1200000, -5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_pylon_010" parent="." instance=ExtResource("5")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 9.5000000, 0.1200000, -5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="sculpture_foundry_011" parent="." instance=ExtResource("4")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 16.0000000, 0.1200000, -5.4500000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_012" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -18.0000000, 0.1200000, 6.6500000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_013" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -18.0000000, 0.1200000, -6.6000000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_014" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -11.0000000, 0.1200000, 6.6500000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_015" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -11.0000000, 0.1200000, -6.6000000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_016" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -4.0000000, 0.1200000, 6.6500000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_017" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -4.0000000, 0.1200000, -6.6000000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_018" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 3.0000000, 0.1200000, 6.6500000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_019" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 3.0000000, 0.1200000, -6.6000000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_020" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 10.0000000, 0.1200000, 6.6500000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_021" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 10.0000000, 0.1200000, -6.6000000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_022" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 17.0000000, 0.1200000, 6.6500000)
+metadata/placement_source = "new_component"
+
+[node name="debris_cluster_023" parent="." instance=ExtResource("2")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 17.0000000, 0.1200000, -6.6000000)
+metadata/placement_source = "new_component"
+
+[node name="cable_floor_024" parent="." instance=ExtResource("1")]
+transform = Transform3D(-0.0000000, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, -0.0000000, -14.0000000, 0.1200000, -6.9500000)
+metadata/placement_source = "new_component"
+
+[node name="cable_floor_025" parent="." instance=ExtResource("1")]
+transform = Transform3D(-0.0000000, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, -0.0000000, -1.0000000, 0.1200000, -6.9500000)
+metadata/placement_source = "new_component"
+
+[node name="cable_floor_026" parent="." instance=ExtResource("1")]
+transform = Transform3D(-0.0000000, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, -0.0000000, 12.0000000, 0.1200000, -6.9500000)
+metadata/placement_source = "new_component"
+
+[node name="rubble_large_027" parent="." instance=ExtResource("3")]
+transform = Transform3D(0.9553365, 0.0000000, -0.2955202, 0.0000000, 1.0000000, 0.0000000, 0.2955202, 0.0000000, 0.9553365, -14.0000000, 0.0800000, 3.8000000)
+metadata/placement_source = "user_requested_reuse"
+
+[node name="rubble_large_028" parent="." instance=ExtResource("3")]
+transform = Transform3D(-0.1288445, 0.0000000, -0.9916648, 0.0000000, 1.0000000, 0.0000000, 0.9916648, 0.0000000, -0.1288445, 13.0000000, 0.0800000, -3.9000000)
+metadata/placement_source = "user_requested_reuse"

@@ -69,7 +69,8 @@ const EXPECTED_ENTRY_EAST_DOOR_WORLD := Vector3(35.0, -24.0, 2.5)
 const EXPECTED_PLANAR_Z_SHIFT := 5.0
 
 const EXPECTED_TOTAL_CORNER_L := 11
-const EXPECTED_TOTAL_WALLS := 27
+## 2026-10-09 用户批准拆除第三/第四间共墙门槽；其余26墙与49地砖保留。
+const EXPECTED_TOTAL_WALLS := 26
 const EXPECTED_TOTAL_TILES := 49
 const EXPECTED_ROOM_COUNT := 4
 
@@ -99,7 +100,7 @@ const EXPECTED_ROOM_DOORS := {
 ##   master_office.east(x=−25) 归 meeting_room.west
 const EXPECTED_DELEGATED_DOOR_SIDES := {
 	"floor_01_entry": ["west"],
-	"floor_01_hub": [],
+	"floor_01_hub": ["east"],
 	"floor_01_main_02": ["east"],
 	"floor_01_exit": ["east"],
 }
@@ -454,6 +455,8 @@ func _expected_roles_by_room(manifest: Dictionary) -> Dictionary:
 	var result: Dictionary = {}
 	for value in manifest.get("instances", []):
 		var instance := value as Dictionary
+		if str(instance.get("instance_id", "")) == "DOORWALL_east_xp20_p2.5":
+			continue
 		var role := str(instance.get("slot_role", ""))
 		if role == "door_leaf_preview":
 			continue
@@ -744,6 +747,10 @@ func _check_peaceful_zone(rooms: Dictionary, snapshots: Dictionary, tower: Node)
 			bool(snapshot.get("authored_layout_peaceful", false)),
 			"房间 %s 未标和平区" % room_id
 		)
+		_check(
+			not bool(snapshot.get("search_facilities_enabled", true)),
+			"房间 %s 仍允许生成搜索设施" % room_id
+		)
 		var door_snapshots := snapshot.get("door_snapshots", []) as Array
 		_check(not door_snapshots.is_empty(), "房间 %s 没有任何门（门策略断言空跑）" % room_id)
 		for value in door_snapshots:
@@ -785,12 +792,29 @@ func _check_peaceful_zone(rooms: Dictionary, snapshots: Dictionary, tower: Node)
 		var room_id := str(room_id_value)
 		var room := rooms[room_id] as DungeonRoom3D
 		# 首访标记要在进房**之前**读：进房会把它写掉，之后读不出来。
+		# 拆门后相邻房会预载；先核实没有刷怪，再清首访缓存以实际覆盖首次进房分支。
+		_check(int(alive_by_room.get(room_id, 0)) == 0, "和平区预载不能刷怪: %s" % room_id)
+		spawned_rooms.erase(room_id)
 		var first_visit := not spawned_rooms.has(room_id)
 		tower.call("force_enter_room_for_test", room_id)
 		# 波次是延迟生成的（首波经 `_spawn_next_room_wave` 落到 `$ActiveEnemies`），
 		# 只等一帧会读到「登记有敌人、节点还没入树」的中间态 —— 那样断言在
 		# 改动前也照样绿，等于空跑。必须等够帧数。
 		await _settle()
+		var searchable_count := 0
+		var furniture_count := 0
+		for prop_value in get_tree().get_nodes_in_group("room_prop_3d"):
+			if not room.is_ancestor_of(prop_value):
+				continue
+			furniture_count += 1
+			if prop_value.is_in_group("searchable_prop_3d"):
+				searchable_count += 1
+		_check(searchable_count == 0, "和平区房间 %s 搜索设施=%d 期望 0" % [room_id, searchable_count])
+		var room_key_count := 0
+		for key_value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+			if room.is_ancestor_of(key_value) and not key_value.is_queued_for_deletion():
+				room_key_count += 1
+		_check(room_key_count == 0, "和平区房间 %s 房间钥匙=%d 期望 0" % [room_id, room_key_count])
 		# ⚠️ 不要数敌人节点：敌人挂 `$ActiveEnemies`，其存活由**流送**裁决
 		# （`_update_room_streaming` 按玩家实际位置算，非 ACTIVE 即回收）。本探针
 		# 不挪玩家（玩家人还在塔楼入口），98F 房恒非 ACTIVE ⇒ 节点数恒 0，
@@ -861,6 +885,9 @@ func _check_plain_doors(tower: Node) -> void:
 				room_id == STAIR_DOOR_OWNER_ROOM and target_id == STAIR_DOOR_TARGET_ROOM
 			)
 			var door := room.get_door_node(side)
+			if Block00MasterOfficeLayout3D.is_removed_door_pair(room_id, target_id):
+				_check(door == null, "第三/第四房已拆门，不能再生成门扇")
+				continue
 			if not _check(door != null, "%s.%s 门为 null" % [room_id, side]):
 				continue
 			var snapshot := door.get_snapshot()
@@ -894,8 +921,8 @@ func _check_plain_doors(tower: Node) -> void:
 				stair_door = door
 				stair_owner = room
 	_check(
-		plain_samples == 7,
-		"哨兵：普通门样本=%d 期望 7（四房 6 扇水平门 + 98↔99 楼梯间门）" % plain_samples
+		plain_samples == 5,
+		"哨兵：普通门样本=%d 期望 5（两条水平门边的4个端点 + 98↔99 楼梯间门；第三第四间无门）" % plain_samples
 	)
 	if not _check(
 		stair_door != null and stair_owner != null,

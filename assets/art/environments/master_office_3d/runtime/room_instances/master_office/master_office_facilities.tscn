@@ -1,0 +1,1012 @@
+[gd_scene load_steps=21 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_book_stack/prp_block00_book_stack_root.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_bookcase_fallen/prp_block00_bookcase_fallen_root.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_display_case/prp_block00_display_case_root.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_display_console/prp_block00_display_console_root.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_metal_brace/prp_block00_metal_brace_root.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_monitor_fallen/prp_block00_monitor_fallen_root.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_paper/prp_block00_paper_root.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_pillow/prp_block00_pillow_root.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_plant_specimen/prp_block00_plant_specimen_root.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_plant_withered/prp_block00_plant_withered_root.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_rubble_large/prp_block00_rubble_large_root.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_rubble_small/prp_block00_rubble_small_root.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_rug/prp_block00_rug_root.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_shelf_ledge/prp_block00_shelf_ledge_root.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_side_table/prp_block00_side_table_root.tscn" id="15"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_sofa/prp_block00_sofa_root.tscn" id="16"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_throw/prp_block00_throw_root.tscn" id="17"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_trophy/prp_block00_trophy_root.tscn" id="18"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/env_block00_wall_fractured/env_block00_wall_fractured_root.tscn" id="19"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/runtime/prp_block00_wall_mural/prp_block00_wall_mural_root.tscn" id="20"]
+
+[node name="AuthoredFacilities" type="Node3D"]
+metadata/asset_id = "ENV-BLOCK00-MASTER-OFFICE-FACILITY-LAYOUT"
+metadata/asset_version = "v001"
+metadata/room_id = "master_office"
+metadata/facility_count = 246
+
+[node name="wall_fractured_000" parent="." instance=ExtResource("19")]
+transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, 2.5000000, 0.0000000, -10.0000000)
+metadata/placement_source = "linked_office"
+
+[node name="sofa_001" parent="." instance=ExtResource("16")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -4.8300018, 0.1050000, 0.7000000)
+metadata/placement_source = "linked_office"
+
+[node name="rug_002" parent="." instance=ExtResource("13")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -0.5600014, 0.1080000, 0.5000000)
+metadata/placement_source = "linked_office"
+
+[node name="shelf_ledge_003" parent="." instance=ExtResource("14")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.6599998, 0.1050000, 0.4000000)
+metadata/placement_source = "linked_office"
+
+[node name="wall_mural_004" parent="." instance=ExtResource("20")]
+transform = Transform3D(-0.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, -1.0000000, 0.0000000, -0.0000000, -7.1300011, 3.6500001, 0.2500000)
+metadata/placement_source = "linked_office"
+
+[node name="pillow_005" parent="." instance=ExtResource("8")]
+transform = Transform3D(0.3420201, 0.0000000, -0.9396926, 0.1682328, 0.9838437, 0.0612317, 0.9245107, -0.1790296, 0.3364944, -4.9000015, 1.7500000, 4.5999999)
+metadata/placement_source = "linked_office"
+
+[node name="pillow_006" parent="." instance=ExtResource("8")]
+transform = Transform3D(0.0871558, 0.0000000, -0.9961947, 0.1783483, 0.9838437, 0.0156035, 0.9800999, -0.1790296, 0.0857477, -4.9000015, 1.7500000, 1.7000000)
+metadata/placement_source = "linked_office"
+
+[node name="pillow_007" parent="." instance=ExtResource("8")]
+transform = Transform3D(0.4226183, 0.0000000, -0.9063078, 0.1622559, 0.9838437, 0.0756612, 0.8916652, -0.1790296, 0.4157903, -4.9000015, 1.7500000, -2.3000000)
+metadata/placement_source = "linked_office"
+
+[node name="pillow_008" parent="." instance=ExtResource("8")]
+transform = Transform3D(-0.2588190, 0.0000000, -0.9659258, 0.1729293, 0.9838437, -0.0463363, 0.9503200, -0.1790296, -0.2546375, -4.9000015, 1.7500000, -3.4000001)
+metadata/placement_source = "linked_office"
+
+[node name="throw_009" parent="." instance=ExtResource("17")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -4.5999985, 0.4000000, 4.7500000)
+metadata/placement_source = "linked_office"
+
+[node name="display_case_010" parent="." instance=ExtResource("3")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -5.2400017, 0.1050000, -8.7200003)
+metadata/placement_source = "linked_office"
+
+[node name="plant_specimen_011" parent="." instance=ExtResource("9")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -4.4500008, 0.7000000, -8.6000004)
+metadata/placement_source = "linked_office"
+
+[node name="trophy_012" parent="." instance=ExtResource("18")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.0000000, 3.1600001, -8.5799999)
+metadata/placement_source = "linked_office"
+
+[node name="trophy_013" parent="." instance=ExtResource("18")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.0000000, 0.6900000, -8.5799999)
+metadata/placement_source = "linked_office"
+
+[node name="side_table_014" parent="." instance=ExtResource("15")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -2.7900009, 0.1050000, 6.1500001)
+metadata/placement_source = "linked_office"
+
+[node name="trophy_015" parent="." instance=ExtResource("18")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -2.7900009, 1.2100000, 6.1500001)
+metadata/placement_source = "linked_office"
+
+[node name="display_console_016" parent="." instance=ExtResource("4")]
+transform = Transform3D(-0.0000000, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, -0.0000000, 6.1399994, 0.1050000, 1.1000000)
+metadata/placement_source = "linked_office"
+
+[node name="plant_specimen_017" parent="." instance=ExtResource("9")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 6.1299992, 1.0000000, 1.1000000)
+metadata/placement_source = "linked_office"
+
+[node name="plant_withered_018" parent="." instance=ExtResource("10")]
+transform = Transform3D(0.9781476, 0.0000000, -0.2079117, 0.0000000, 1.0000000, 0.0000000, 0.2079117, 0.0000000, 0.9781476, -5.9599991, 0.1200000, 6.9000001)
+metadata/placement_source = "linked_office"
+
+[node name="plant_withered_019" parent="." instance=ExtResource("10")]
+transform = Transform3D(-0.7660444, 0.0000000, -0.6427876, 0.0000000, 1.0000000, 0.0000000, 0.6427876, 0.0000000, -0.7660444, -5.7500000, 0.1200000, -5.6999998)
+metadata/placement_source = "linked_office"
+
+[node name="plant_withered_020" parent="." instance=ExtResource("10")]
+transform = Transform3D(0.8660254, 0.0000000, 0.5000000, 0.0000000, 1.0000000, 0.0000000, -0.5000000, 0.0000000, 0.8660254, 5.7500000, 0.1200000, 3.0999999)
+metadata/placement_source = "linked_office"
+
+[node name="bookcase_fallen_021" parent="." instance=ExtResource("2")]
+transform = Transform3D(0.9781476, 0.0000000, 0.2079117, 0.0000000, 1.0000000, 0.0000000, -0.2079117, 0.0000000, 0.9781476, -3.9500008, 0.1200000, 8.0500002)
+metadata/placement_source = "linked_office"
+
+[node name="bookcase_fallen_022" parent="." instance=ExtResource("2")]
+transform = Transform3D(0.3746066, 0.0000000, -0.9271838, 0.0000000, 1.0000000, 0.0000000, 0.9271838, 0.0000000, 0.3746066, 4.3299999, 0.1200000, 6.9000001)
+metadata/placement_source = "linked_office"
+
+[node name="book_stack_023" parent="." instance=ExtResource("1")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.6500015, 1.5300000, 3.7000000)
+metadata/placement_source = "linked_office"
+
+[node name="book_stack_024" parent="." instance=ExtResource("1")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.6500015, 1.5300000, -0.8000000)
+metadata/placement_source = "linked_office"
+
+[node name="book_stack_025" parent="." instance=ExtResource("1")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.6500015, 1.5300000, -2.5999999)
+metadata/placement_source = "linked_office"
+
+[node name="trophy_026" parent="." instance=ExtResource("18")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.6300011, 1.5300000, 4.6999998)
+metadata/placement_source = "linked_office"
+
+[node name="trophy_027" parent="." instance=ExtResource("18")]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -6.6300011, 1.5300000, -3.9000001)
+metadata/placement_source = "linked_office"
+
+[node name="monitor_fallen_028" parent="." instance=ExtResource("6")]
+transform = Transform3D(0.9063078, 0.0000000, -0.4226183, 0.2386282, 0.8253356, 0.5117399, 0.3488019, -0.5646425, 0.7480081, 5.5100002, 0.4900000, -7.5900002)
+metadata/placement_source = "linked_office"
+
+[node name="metal_brace_029" parent="." instance=ExtResource("5")]
+transform = Transform3D(0.9130889, 0.4077604, 0.0000000, -0.4077604, 0.9130889, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -1.4000015, 4.3000002, -9.4600000)
+metadata/placement_source = "linked_office"
+
+[node name="metal_brace_030" parent="." instance=ExtResource("5")]
+transform = Transform3D(0.9393727, -0.3428978, 0.0000000, 0.3428978, 0.9393727, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 2.7999992, 1.7000000, -9.4499998)
+metadata/placement_source = "linked_office"
+
+[node name="metal_brace_031" parent="." instance=ExtResource("5")]
+transform = Transform3D(0.9089657, -0.4168708, 0.0000000, 0.4168708, 0.9089657, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 4.2999992, 4.9000001, -9.4600000)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_032" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.8688584, 0.0000000, -0.4950607, 0.0000000, 1.0000000, 0.0000000, 0.4950607, 0.0000000, 0.8688584, -1.7737846, 0.1100000, -7.1282845)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_033" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.8491457, 0.0000000, 0.5281587, 0.0000000, 1.0000000, 0.0000000, -0.5281587, 0.0000000, 0.8491457, 4.5155354, 0.1100000, -9.2837467)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_034" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.5183529, 0.0000000, 0.8551668, 0.0000000, 1.0000000, 0.0000000, -0.8551668, 0.0000000, -0.5183529, 2.3141575, 0.1100000, -8.6480274)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_035" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.2593146, 0.0000000, -0.9657929, 0.0000000, 1.0000000, 0.0000000, 0.9657929, 0.0000000, 0.2593146, 0.4303017, 0.1100000, -7.8739214)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_036" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9997951, 0.0000000, 0.0202445, 0.0000000, 1.0000000, 0.0000000, -0.0202445, 0.0000000, 0.9997951, 1.1823769, 0.1100000, -6.8336821)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_037" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.3939124, 0.0000000, 0.9191480, 0.0000000, 1.0000000, 0.0000000, -0.9191480, 0.0000000, -0.3939124, -1.6176720, 0.1100000, -8.1387987)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_038" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.5719265, 0.0000000, 0.8203049, 0.0000000, 1.0000000, 0.0000000, -0.8203049, 0.0000000, 0.5719265, -2.5552483, 0.1100000, -8.4690666)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_039" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9932613, 0.0000000, 0.1158968, 0.0000000, 1.0000000, 0.0000000, -0.1158968, 0.0000000, 0.9932613, 3.3250370, 0.1100000, -7.6239934)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_040" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.9266380, 0.0000000, -0.3759548, 0.0000000, 1.0000000, 0.0000000, 0.3759548, 0.0000000, -0.9266380, -0.6800728, 0.1100000, -7.3763990)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_041" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.2130385, 0.0000000, -0.9770438, 0.0000000, 1.0000000, 0.0000000, 0.9770438, 0.0000000, -0.2130385, -0.1471558, 0.1100000, -8.5855103)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_042" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.8819796, 0.0000000, 0.4712876, 0.0000000, 1.0000000, 0.0000000, -0.4712876, 0.0000000, 0.8819796, 5.0175190, 0.1100000, -8.4014349)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_043" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.5112845, 0.0000000, -0.8594115, 0.0000000, 1.0000000, 0.0000000, 0.8594115, 0.0000000, 0.5112845, 6.1863060, 0.1100000, -7.8693166)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_044" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.5843648, 0.0000000, -0.8114911, 0.0000000, 1.0000000, 0.0000000, 0.8114911, 0.0000000, -0.5843648, 0.9830856, 0.1100000, -7.4836969)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_045" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.9995471, 0.0000000, 0.0300926, 0.0000000, 1.0000000, 0.0000000, -0.0300926, 0.0000000, -0.9995471, 4.8310223, 0.1100000, -8.9005594)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_046" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.4390621, 0.0000000, 0.8984567, 0.0000000, 1.0000000, 0.0000000, -0.8984567, 0.0000000, -0.4390621, 2.2927094, 0.1100000, -7.0075459)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_047" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.9165683, 0.0000000, 0.3998782, 0.0000000, 1.0000000, 0.0000000, -0.3998782, 0.0000000, -0.9165683, 5.6890965, 0.1100000, -9.0324411)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_048" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.6045007, 0.0000000, 0.7966046, 0.0000000, 1.0000000, 0.0000000, -0.7966046, 0.0000000, -0.6045007, 2.0248184, 0.1100000, -9.1261873)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_049" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.4115031, 0.0000000, -0.9114084, 0.0000000, 1.0000000, 0.0000000, 0.9114084, 0.0000000, 0.4115031, -0.9298210, 0.1100000, -8.8584280)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_050" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9668591, 0.0000000, 0.2553107, 0.0000000, 1.0000000, 0.0000000, -0.2553107, 0.0000000, 0.9668591, 3.4073048, 0.1100000, -8.3170452)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_051" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.4566665, 0.0000000, 0.8896379, 0.0000000, 1.0000000, 0.0000000, -0.8896379, 0.0000000, -0.4566665, 6.4632893, 0.1100000, -6.8861170)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_052" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.6060565, 0.0000000, -0.7954216, 0.0000000, 1.0000000, 0.0000000, 0.7954216, 0.0000000, -0.6060565, 2.8860683, 0.1100000, -7.2842731)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_053" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.1982953, 0.0000000, -0.9801423, 0.0000000, 1.0000000, 0.0000000, 0.9801423, 0.0000000, 0.1982953, 1.2948647, 0.1100000, -7.0540028)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_054" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.3467989, 0.0000000, 0.9379395, 0.0000000, 1.0000000, 0.0000000, -0.9379395, 0.0000000, -0.3467989, 4.4147873, 0.1100000, -7.5644221)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_055" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.8003481, 0.0000000, 0.5995356, 0.0000000, 1.0000000, 0.0000000, -0.5995356, 0.0000000, 0.8003481, 6.5355167, 0.1100000, -9.1172705)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_056" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9669453, 0.0000000, 0.2549840, 0.0000000, 1.0000000, 0.0000000, -0.2549840, 0.0000000, -0.9669453, -2.5166779, 0.1100000, -7.4970970)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_057" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9247419, 0.0000000, -0.3805948, 0.0000000, 1.0000000, 0.0000000, 0.3805948, 0.0000000, 0.9247419, -0.6497612, 0.1100000, -9.2298231)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_058" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9993801, 0.0000000, 0.0352051, 0.0000000, 1.0000000, 0.0000000, -0.0352051, 0.0000000, -0.9993801, 6.5158138, 0.1100000, -8.1268759)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_059" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.8954759, 0.0000000, -0.4451101, 0.0000000, 1.0000000, 0.0000000, 0.4451101, 0.0000000, -0.8954759, -0.2490730, 0.1100000, -7.4296227)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_060" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9884400, 0.0000000, 0.1516124, 0.0000000, 1.0000000, 0.0000000, -0.1516124, 0.0000000, -0.9884400, 3.3984566, 0.1100000, -9.3078508)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_061" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9874079, 0.0000000, -0.1581947, 0.0000000, 1.0000000, 0.0000000, 0.1581947, 0.0000000, 0.9874079, -3.1643181, 0.1100000, -6.8980336)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_062" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9068750, 0.0000000, 0.4213998, 0.0000000, 1.0000000, 0.0000000, -0.4213998, 0.0000000, 0.9068750, 4.4563503, 0.1100000, -8.1616888)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_063" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4386543, 0.0000000, 0.8986559, 0.0000000, 1.0000000, 0.0000000, -0.8986559, 0.0000000, 0.4386543, 6.6743717, 0.1100000, -7.3044548)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_064" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.4422293, 0.0000000, 0.8969020, 0.0000000, 1.0000000, 0.0000000, -0.8969020, 0.0000000, -0.4422293, -3.2282791, 0.1100000, -8.3778019)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_065" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9514776, 0.0000000, 0.3077179, 0.0000000, 1.0000000, 0.0000000, -0.3077179, 0.0000000, -0.9514776, -3.1549377, 0.1100000, -8.6172466)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_066" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9975173, 0.0000000, 0.0704214, 0.0000000, 1.0000000, 0.0000000, -0.0704214, 0.0000000, 0.9975173, 4.4252682, 0.1100000, -9.0952835)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_067" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.5377975, 0.0000000, 0.8430740, 0.0000000, 1.0000000, 0.0000000, -0.8430740, 0.0000000, 0.5377975, 1.1570568, 0.1100000, -9.2220621)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_068" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4747948, 0.0000000, -0.8800965, 0.0000000, 1.0000000, 0.0000000, 0.8800965, 0.0000000, 0.4747948, 4.8493538, 0.1100000, -6.8312187)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_069" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9553954, 0.0000000, -0.2953297, 0.0000000, 1.0000000, 0.0000000, 0.2953297, 0.0000000, 0.9553954, 2.9741344, 0.1100000, -9.0570354)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_070" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.4241897, 0.0000000, 0.9055733, 0.0000000, 1.0000000, 0.0000000, -0.9055733, 0.0000000, -0.4241897, 6.3196754, 0.1100000, -8.8527641)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_071" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.6457432, 0.0000000, -0.7635547, 0.0000000, 1.0000000, 0.0000000, 0.7635547, 0.0000000, 0.6457432, -2.8551140, 0.1100000, -8.8954363)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_072" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.5423616, 0.0000000, 0.8401451, 0.0000000, 1.0000000, 0.0000000, -0.8401451, 0.0000000, 0.5423616, 3.5309582, 0.1100000, -8.5804243)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_073" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.2395324, 0.0000000, 0.9708884, 0.0000000, 1.0000000, 0.0000000, -0.9708884, 0.0000000, 0.2395324, 2.0205326, 0.1100000, -7.3409891)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_074" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.7519295, 0.0000000, 0.6592435, 0.0000000, 1.0000000, 0.0000000, -0.6592435, 0.0000000, 0.7519295, 4.2932301, 0.1100000, -7.0799789)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_075" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.2668785, 0.0000000, -0.9637302, 0.0000000, 1.0000000, 0.0000000, 0.9637302, 0.0000000, 0.2668785, -2.1078110, 0.1100000, -7.0148616)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_076" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.0498089, 0.0000000, 0.9987588, 0.0000000, 1.0000000, 0.0000000, -0.9987588, 0.0000000, 0.0498089, 4.4551125, 0.1100000, -8.9436026)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_077" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.2318010, 0.0000000, 0.9727632, 0.0000000, 1.0000000, 0.0000000, -0.9727632, 0.0000000, -0.2318010, 1.3633461, 0.1100000, -8.0628729)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_078" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.8714309, 0.0000000, 0.4905183, 0.0000000, 1.0000000, 0.0000000, -0.4905183, 0.0000000, -0.8714309, 4.1988029, 0.1100000, -7.9832430)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_079" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.2319780, 0.0000000, -0.9727210, 0.0000000, 1.0000000, 0.0000000, 0.9727210, 0.0000000, -0.2319780, 5.1384125, 0.1100000, -7.7030740)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_080" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.6721533, 0.0000000, -0.7404120, 0.0000000, 1.0000000, 0.0000000, 0.7404120, 0.0000000, -0.6721533, 2.2391148, 0.1100000, -8.5887375)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_081" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.3607869, 0.0000000, -0.9326483, 0.0000000, 1.0000000, 0.0000000, 0.9326483, 0.0000000, -0.3607869, 2.8012524, 0.1100000, -8.8953352)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_082" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4340627, 0.0000000, -0.9008827, 0.0000000, 1.0000000, 0.0000000, 0.9008827, 0.0000000, 0.4340627, 3.7885838, 0.1100000, -7.8750458)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_083" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9399853, 0.0000000, 0.3412150, 0.0000000, 1.0000000, 0.0000000, -0.3412150, 0.0000000, 0.9399853, -3.0114059, 0.1100000, -8.0907011)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_084" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1100189, 0.0000000, -0.9939295, 0.0000000, 1.0000000, 0.0000000, 0.9939295, 0.0000000, 0.1100189, -0.7461624, 0.1100000, -6.8134327)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_085" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9056347, 0.0000000, 0.4240587, 0.0000000, 1.0000000, 0.0000000, -0.4240587, 0.0000000, 0.9056347, -0.1570244, 0.1100000, -7.6532316)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_086" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.3875427, 0.0000000, 0.9218518, 0.0000000, 1.0000000, 0.0000000, -0.9218518, 0.0000000, 0.3875427, 1.5735321, 0.1100000, -8.4270535)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_087" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9824611, 0.0000000, -0.1864676, 0.0000000, 1.0000000, 0.0000000, 0.1864676, 0.0000000, -0.9824611, -1.9833488, 0.1100000, -8.3248005)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_088" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.7749092, 0.0000000, 0.6320726, 0.0000000, 1.0000000, 0.0000000, -0.6320726, 0.0000000, -0.7749092, -0.8584518, 0.1100000, -7.7738929)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_089" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9967960, 0.0000000, 0.0799858, 0.0000000, 1.0000000, 0.0000000, -0.0799858, 0.0000000, -0.9967960, 1.0132656, 0.1100000, -9.3423071)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_090" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9998021, 0.0000000, -0.0198939, 0.0000000, 1.0000000, 0.0000000, 0.0198939, 0.0000000, -0.9998021, 5.8326035, 0.1100000, -9.0161018)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_091" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9834920, 0.0000000, 0.1809514, 0.0000000, 1.0000000, 0.0000000, -0.1809514, 0.0000000, 0.9834920, 2.4201794, 0.1100000, -9.0571766)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_092" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.8199146, 0.0000000, -0.5724858, 0.0000000, 1.0000000, 0.0000000, 0.5724858, 0.0000000, -0.8199146, 6.3392143, 0.1100000, -7.9097600)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_093" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.8583629, 0.0000000, -0.5130431, 0.0000000, 1.0000000, 0.0000000, 0.5130431, 0.0000000, -0.8583629, 4.0697784, 0.1100000, -8.4020081)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_094" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4505238, 0.0000000, 0.8927644, 0.0000000, 1.0000000, 0.0000000, -0.8927644, 0.0000000, 0.4505238, 6.3861980, 0.1100000, -8.1432781)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_095" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1917899, 0.0000000, -0.9814360, 0.0000000, 1.0000000, 0.0000000, 0.9814360, 0.0000000, 0.1917899, 2.9734573, 0.1100000, -7.8711863)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_096" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.0016893, 0.0000000, -0.9999986, 0.0000000, 1.0000000, 0.0000000, 0.9999986, 0.0000000, 0.0016893, -1.0055695, 0.1100000, -8.6910915)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_097" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9942748, 0.0000000, 0.1068535, 0.0000000, 1.0000000, 0.0000000, -0.1068535, 0.0000000, 0.9942748, -0.8013725, 0.1100000, -7.7566218)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_098" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.3089349, 0.0000000, -0.9510832, 0.0000000, 1.0000000, 0.0000000, 0.9510832, 0.0000000, 0.3089349, -1.7171478, 0.1100000, -8.0944357)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_099" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9886928, 0.0000000, -0.1499553, 0.0000000, 1.0000000, 0.0000000, 0.1499553, 0.0000000, 0.9886928, 0.2605705, 0.1100000, -7.5678196)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_100" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.3487245, 0.0000000, -0.9372253, 0.0000000, 1.0000000, 0.0000000, 0.9372253, 0.0000000, -0.3487245, 3.2083988, 0.1100000, -6.8864098)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_101" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.8871285, 0.0000000, 0.4615225, 0.0000000, 1.0000000, 0.0000000, -0.4615225, 0.0000000, -0.8871285, 6.1362534, 0.1100000, -8.0974655)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_102" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.0798699, 0.0000000, 0.9968053, 0.0000000, 1.0000000, 0.0000000, -0.9968053, 0.0000000, -0.0798699, 5.1842556, 0.1100000, -8.5284567)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_103" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9342749, 0.0000000, 0.3565536, 0.0000000, 1.0000000, 0.0000000, -0.3565536, 0.0000000, -0.9342749, 3.1066570, 0.1100000, -8.3473129)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_104" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.5231394, 0.0000000, 0.8522472, 0.0000000, 1.0000000, 0.0000000, -0.8522472, 0.0000000, -0.5231394, -1.5673866, 0.1100000, -7.7386575)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_105" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9872963, 0.0000000, -0.1588901, 0.0000000, 1.0000000, 0.0000000, 0.1588901, 0.0000000, 0.9872963, 5.3852158, 0.1100000, -7.6664667)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_106" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.7009827, 0.0000000, 0.7131783, 0.0000000, 1.0000000, 0.0000000, -0.7131783, 0.0000000, 0.7009827, -2.9256210, 0.1100000, -9.1787472)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_107" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9702065, 0.0000000, 0.2422794, 0.0000000, 1.0000000, 0.0000000, -0.2422794, 0.0000000, 0.9702065, 3.0172958, 0.1100000, -8.6316357)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_108" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9845902, 0.0000000, 0.1748773, 0.0000000, 1.0000000, 0.0000000, -0.1748773, 0.0000000, -0.9845902, 3.7221966, 0.1100000, -8.6094484)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_109" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.5504131, 0.0000000, -0.8348925, 0.0000000, 1.0000000, 0.0000000, 0.8348925, 0.0000000, -0.5504131, 0.4701042, 0.1100000, -7.6592684)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_110" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.8387397, 0.0000000, -0.5445325, 0.0000000, 1.0000000, 0.0000000, 0.5445325, 0.0000000, 0.8387397, 6.4563732, 0.1100000, -7.4743819)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_111" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9860004, 0.0000000, -0.1667427, 0.0000000, 1.0000000, 0.0000000, 0.1667427, 0.0000000, 0.9860004, 5.4618950, 0.1100000, -9.1647539)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_112" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.3772013, 0.0000000, -0.9261313, 0.0000000, 1.0000000, 0.0000000, 0.9261313, 0.0000000, 0.3772013, -2.4879913, 0.1100000, -7.8902149)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_113" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.2333935, 0.0000000, 0.9723824, 0.0000000, 1.0000000, 0.0000000, -0.9723824, 0.0000000, 0.2333935, 5.1632824, 0.1100000, -8.7391720)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_114" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.3505168, 0.0000000, 0.9365565, 0.0000000, 1.0000000, 0.0000000, -0.9365565, 0.0000000, 0.3505168, -2.1274529, 0.1100000, -9.0647564)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_115" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.4487382, 0.0000000, -0.8936632, 0.0000000, 1.0000000, 0.0000000, 0.8936632, 0.0000000, -0.4487382, 3.0671768, 0.1100000, -7.9755411)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_116" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9845453, 0.0000000, 0.1751303, 0.0000000, 1.0000000, 0.0000000, -0.1751303, 0.0000000, -0.9845453, 0.0445328, 0.1100000, -7.7336917)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_117" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.2950689, 0.0000000, -0.9554760, 0.0000000, 1.0000000, 0.0000000, 0.9554760, 0.0000000, 0.2950689, -0.7987366, 0.1100000, -8.0864897)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_118" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9055568, 0.0000000, 0.4242250, 0.0000000, 1.0000000, 0.0000000, -0.4242250, 0.0000000, 0.9055568, 2.1264744, 0.1100000, -7.4988589)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_119" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.3441229, 0.0000000, -0.9389246, 0.0000000, 1.0000000, 0.0000000, 0.9389246, 0.0000000, -0.3441229, -2.9070473, 0.1100000, -9.1489706)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_120" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.6686431, 0.0000000, 0.7435835, 0.0000000, 1.0000000, 0.0000000, -0.7435835, 0.0000000, -0.6686431, -0.2461357, 0.1100000, -7.1667175)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_121" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.6086017, 0.0000000, -0.7934759, 0.0000000, 1.0000000, 0.0000000, 0.7934759, 0.0000000, 0.6086017, -1.0834656, 0.1100000, -8.4124804)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_122" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9283347, 0.0000000, -0.3717456, 0.0000000, 1.0000000, 0.0000000, 0.3717456, 0.0000000, 0.9283347, 4.6102581, 0.1100000, -7.7558136)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_123" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.5476022, 0.0000000, 0.8367388, 0.0000000, 1.0000000, 0.0000000, -0.8367388, 0.0000000, -0.5476022, 2.9218960, 0.1100000, -9.0190315)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_124" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9515782, 0.0000000, -0.3074067, 0.0000000, 1.0000000, 0.0000000, 0.3074067, 0.0000000, 0.9515782, -0.2010193, 0.1100000, -8.8376217)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_125" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.3847663, 0.0000000, 0.9230140, 0.0000000, 1.0000000, 0.0000000, -0.9230140, 0.0000000, -0.3847663, -0.8884201, 0.1100000, -8.8850746)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_126" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.7441586, 0.0000000, -0.6680030, 0.0000000, 1.0000000, 0.0000000, 0.6680030, 0.0000000, -0.7441586, 3.7178154, 0.1100000, -7.0367870)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_127" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9382855, 0.0000000, -0.3458617, 0.0000000, 1.0000000, 0.0000000, 0.3458617, 0.0000000, -0.9382855, 6.6374569, 0.1100000, -6.8120837)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_128" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9763297, 0.0000000, 0.2162874, 0.0000000, 1.0000000, 0.0000000, -0.2162874, 0.0000000, 0.9763297, 5.3594952, 0.1100000, -8.0543900)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_129" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.5897762, 0.0000000, 0.8075668, 0.0000000, 1.0000000, 0.0000000, -0.8075668, 0.0000000, -0.5897762, -2.2774200, 0.1100000, -8.5125914)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_130" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9983967, 0.0000000, 0.0566035, 0.0000000, 1.0000000, 0.0000000, -0.0566035, 0.0000000, -0.9983967, -0.2120476, 0.1100000, -9.1200409)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_131" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9972859, 0.0000000, 0.0736267, 0.0000000, 1.0000000, 0.0000000, -0.0736267, 0.0000000, -0.9972859, 4.6269989, 0.1100000, -9.0155001)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_132" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.8025590, 0.0000000, 0.5965728, 0.0000000, 1.0000000, 0.0000000, -0.5965728, 0.0000000, -0.8025590, -4.2202034, 0.1100000, 7.1429663)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_133" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.7448284, 0.0000000, 0.6672560, 0.0000000, 1.0000000, 0.0000000, -0.6672560, 0.0000000, 0.7448284, 5.6061554, 0.1100000, 7.6743689)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_134" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.5564059, 0.0000000, -0.8309107, 0.0000000, 1.0000000, 0.0000000, 0.8309107, 0.0000000, -0.5564059, -5.6545868, 0.1100000, 7.0660062)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_135" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9517660, 0.0000000, 0.3068248, 0.0000000, 1.0000000, 0.0000000, -0.3068248, 0.0000000, -0.9517660, -4.5925179, 0.1100000, 7.2062497)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_136" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.2162880, 0.0000000, 0.9763296, 0.0000000, 1.0000000, 0.0000000, -0.9763296, 0.0000000, 0.2162880, 0.1059647, 0.1100000, 8.4712915)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_137" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.7241508, 0.0000000, -0.6896417, 0.0000000, 1.0000000, 0.0000000, 0.6896417, 0.0000000, -0.7241508, -4.7588692, 0.1100000, 9.2711916)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_138" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.3990937, 0.0000000, 0.9169102, 0.0000000, 1.0000000, 0.0000000, -0.9169102, 0.0000000, -0.3990937, -5.3102531, 0.1100000, 7.7753725)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_139" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.0317539, 0.0000000, 0.9994957, 0.0000000, 1.0000000, 0.0000000, -0.9994957, 0.0000000, 0.0317539, -0.9435883, 0.1100000, 6.9103584)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_140" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.5830594, 0.0000000, -0.8124295, 0.0000000, 1.0000000, 0.0000000, 0.8124295, 0.0000000, 0.5830594, 2.1155586, 0.1100000, 8.2304935)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_141" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9029144, 0.0000000, -0.4298203, 0.0000000, 1.0000000, 0.0000000, 0.4298203, 0.0000000, 0.9029144, -1.3257751, 0.1100000, 7.5283480)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_142" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.1249936, 0.0000000, 0.9921575, 0.0000000, 1.0000000, 0.0000000, -0.9921575, 0.0000000, -0.1249936, -6.2264061, 0.1100000, 8.7478189)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_143" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.4328487, 0.0000000, 0.9014666, 0.0000000, 1.0000000, 0.0000000, -0.9014666, 0.0000000, -0.4328487, -6.3491058, 0.1100000, 6.7319279)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_144" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9997796, 0.0000000, -0.0209940, 0.0000000, 1.0000000, 0.0000000, 0.0209940, 0.0000000, 0.9997796, -0.0458984, 0.1100000, 9.1913729)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_145" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.3294300, 0.0000000, -0.9441800, 0.0000000, 1.0000000, 0.0000000, 0.9441800, 0.0000000, -0.3294300, 2.3673325, 0.1100000, 8.5996752)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_146" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9689146, 0.0000000, 0.2473955, 0.0000000, 1.0000000, 0.0000000, -0.2473955, 0.0000000, 0.9689146, 4.7992725, 0.1100000, 6.8629980)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_147" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9970043, 0.0000000, -0.0773464, 0.0000000, 1.0000000, 0.0000000, 0.0773464, 0.0000000, -0.9970043, -2.4553032, 0.1100000, 7.8691902)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_148" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.8875502, 0.0000000, 0.4607110, 0.0000000, 1.0000000, 0.0000000, -0.4607110, 0.0000000, -0.8875502, 3.8885536, 0.1100000, 6.7090950)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_149" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4108047, 0.0000000, 0.9117234, 0.0000000, 1.0000000, 0.0000000, -0.9117234, 0.0000000, 0.4108047, -1.3620796, 0.1100000, 7.9819503)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_150" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4153422, 0.0000000, -0.9096653, 0.0000000, 1.0000000, 0.0000000, 0.9096653, 0.0000000, 0.4153422, 4.2971172, 0.1100000, 7.9937816)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_151" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.7127114, 0.0000000, -0.7014574, 0.0000000, 1.0000000, 0.0000000, 0.7014574, 0.0000000, 0.7127114, 3.8603249, 0.1100000, 7.2741256)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_152" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9976180, 0.0000000, -0.0689808, 0.0000000, 1.0000000, 0.0000000, 0.0689808, 0.0000000, 0.9976180, 0.3625793, 0.1100000, 7.4623232)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_153" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.3695423, 0.0000000, -0.9292139, 0.0000000, 1.0000000, 0.0000000, 0.9292139, 0.0000000, 0.3695423, 5.4681988, 0.1100000, 8.4489574)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_154" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9239752, 0.0000000, -0.3824524, 0.0000000, 1.0000000, 0.0000000, 0.3824524, 0.0000000, -0.9239752, -4.8381386, 0.1100000, 8.3527412)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_155" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9227970, 0.0000000, -0.3852864, 0.0000000, 1.0000000, 0.0000000, 0.3852864, 0.0000000, 0.9227970, -4.6966782, 0.1100000, 8.7624846)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_156" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.8472572, 0.0000000, -0.5311828, 0.0000000, 1.0000000, 0.0000000, 0.5311828, 0.0000000, -0.8472572, -0.7085304, 0.1100000, 8.5061531)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_157" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.3689301, 0.0000000, 0.9294571, 0.0000000, 1.0000000, 0.0000000, -0.9294571, 0.0000000, 0.3689301, -3.2463531, 0.1100000, 8.0307655)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_158" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.8817919, 0.0000000, 0.4716388, 0.0000000, 1.0000000, 0.0000000, -0.4716388, 0.0000000, 0.8817919, 0.3251038, 0.1100000, 8.7599354)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_159" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1855319, 0.0000000, 0.9826382, 0.0000000, 1.0000000, 0.0000000, -0.9826382, 0.0000000, 0.1855319, -1.1862526, 0.1100000, 8.1904345)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_160" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.7138800, 0.0000000, 0.7002680, 0.0000000, 1.0000000, 0.0000000, -0.7002680, 0.0000000, 0.7138800, -3.9099045, 0.1100000, 7.3241148)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_161" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9519354, 0.0000000, -0.3062989, 0.0000000, 1.0000000, 0.0000000, 0.3062989, 0.0000000, -0.9519354, 0.2542496, 0.1100000, 7.1628571)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_162" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.0211283, 0.0000000, -0.9997768, 0.0000000, 1.0000000, 0.0000000, 0.9997768, 0.0000000, -0.0211283, 5.5432930, 0.1100000, 9.1310358)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_163" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9888127, 0.0000000, -0.1491626, 0.0000000, 1.0000000, 0.0000000, 0.1491626, 0.0000000, -0.9888127, 3.6547318, 0.1100000, 7.5167699)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_164" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.3140738, 0.0000000, 0.9493986, 0.0000000, 1.0000000, 0.0000000, -0.9493986, 0.0000000, -0.3140738, -4.5054092, 0.1100000, 6.7143407)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_165" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4219984, 0.0000000, 0.9065966, 0.0000000, 1.0000000, 0.0000000, -0.9065966, 0.0000000, 0.4219984, 5.3630009, 0.1100000, 8.8713779)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_166" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.1388260, 0.0000000, -0.9903168, 0.0000000, 1.0000000, 0.0000000, 0.9903168, 0.0000000, -0.1388260, -2.1534004, 0.1100000, 7.1232352)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_167" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.0518976, 0.0000000, 0.9986524, 0.0000000, 1.0000000, 0.0000000, -0.9986524, 0.0000000, 0.0518976, -2.4612732, 0.1100000, 8.8004169)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_168" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.2025861, 0.0000000, -0.9792645, 0.0000000, 1.0000000, 0.0000000, 0.9792645, 0.0000000, -0.2025861, 1.6756554, 0.1100000, 8.0300550)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_169" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.6483353, 0.0000000, -0.7613550, 0.0000000, 1.0000000, 0.0000000, 0.7613550, 0.0000000, 0.6483353, 2.9796524, 0.1100000, 7.2129679)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_170" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.6433230, 0.0000000, -0.7655948, 0.0000000, 1.0000000, 0.0000000, 0.7655948, 0.0000000, 0.6433230, 5.9635429, 0.1100000, 7.1296043)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_171" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.6087819, 0.0000000, 0.7933376, 0.0000000, 1.0000000, 0.0000000, -0.7933376, 0.0000000, -0.6087819, -1.0498772, 0.1100000, 7.7582355)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_172" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.5288125, 0.0000000, -0.8487387, 0.0000000, 1.0000000, 0.0000000, 0.8487387, 0.0000000, -0.5288125, 6.2462463, 0.1100000, 8.0461264)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_173" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.6798510, 0.0000000, -0.7333502, 0.0000000, 1.0000000, 0.0000000, 0.7333502, 0.0000000, -0.6798510, -1.5176353, 0.1100000, 7.3469486)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_174" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9702710, 0.0000000, 0.2420210, 0.0000000, 1.0000000, 0.0000000, -0.2420210, 0.0000000, -0.9702710, 6.1558304, 0.1100000, 8.9397316)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_175" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.6767796, 0.0000000, 0.7361857, 0.0000000, 1.0000000, 0.0000000, -0.7361857, 0.0000000, -0.6767796, -6.0456505, 0.1100000, 8.7097902)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_176" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.7966171, 0.0000000, 0.6044842, 0.0000000, 1.0000000, 0.0000000, -0.6044842, 0.0000000, 0.7966171, 1.0471344, 0.1100000, 7.5768533)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_177" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.7990987, 0.0000000, 0.6011998, 0.0000000, 1.0000000, 0.0000000, -0.6011998, 0.0000000, 0.7990987, 0.6297512, 0.1100000, 8.8379440)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_178" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.7398270, 0.0000000, -0.6727972, 0.0000000, 1.0000000, 0.0000000, 0.6727972, 0.0000000, -0.7398270, -5.9763527, 0.1100000, 7.2203999)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_179" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9995615, 0.0000000, -0.0296126, 0.0000000, 1.0000000, 0.0000000, 0.0296126, 0.0000000, 0.9995615, -3.6853943, 0.1100000, 8.6749372)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_180" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.4043539, 0.0000000, -0.9146026, 0.0000000, 1.0000000, 0.0000000, 0.9146026, 0.0000000, 0.4043539, 0.5803757, 0.1100000, 8.0932446)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_181" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.0336418, 0.0000000, -0.9994340, 0.0000000, 1.0000000, 0.0000000, 0.9994340, 0.0000000, -0.0336418, 3.0660172, 0.1100000, 8.4277859)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_182" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.2881858, 0.0000000, 0.9575745, 0.0000000, 1.0000000, 0.0000000, -0.9575745, 0.0000000, 0.2881858, 4.3087521, 0.1100000, 9.0101595)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_183" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1785695, 0.0000000, -0.9839273, 0.0000000, 1.0000000, 0.0000000, 0.9839273, 0.0000000, 0.1785695, -4.9614639, 0.1100000, 8.3311882)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_184" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.9535342, 0.0000000, -0.3012847, 0.0000000, 1.0000000, 0.0000000, 0.3012847, 0.0000000, -0.9535342, -5.7505074, 0.1100000, 8.6939907)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_185" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.0893762, 0.0000000, 0.9959979, 0.0000000, 1.0000000, 0.0000000, -0.9959979, 0.0000000, 0.0893762, 5.3918915, 0.1100000, 6.6618075)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_186" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9970665, 0.0000000, -0.0765404, 0.0000000, 1.0000000, 0.0000000, 0.0765404, 0.0000000, 0.9970665, 4.9871445, 0.1100000, 7.7960076)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_187" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9758086, 0.0000000, 0.2186264, 0.0000000, 1.0000000, 0.0000000, -0.2186264, 0.0000000, -0.9758086, 1.7629986, 0.1100000, 8.2491999)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_188" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9999672, 0.0000000, -0.0080973, 0.0000000, 1.0000000, 0.0000000, 0.0080973, 0.0000000, 0.9999672, -2.2176361, 0.1100000, 8.3598118)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_189" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4064287, 0.0000000, 0.9136825, 0.0000000, 1.0000000, 0.0000000, -0.9136825, 0.0000000, 0.4064287, 1.3941631, 0.1100000, 7.2397285)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_190" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.1076269, 0.0000000, 0.9941914, 0.0000000, 1.0000000, 0.0000000, -0.9941914, 0.0000000, -0.1076269, 2.5582142, 0.1100000, 8.8925800)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_191" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.2874296, 0.0000000, -0.9578018, 0.0000000, 1.0000000, 0.0000000, 0.9578018, 0.0000000, -0.2874296, -1.4816551, 0.1100000, 7.3297586)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_192" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.8455784, 0.0000000, -0.5338512, 0.0000000, 1.0000000, 0.0000000, 0.5338512, 0.0000000, 0.8455784, -5.2204247, 0.1100000, 7.2384300)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_193" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9071877, 0.0000000, 0.4207262, 0.0000000, 1.0000000, 0.0000000, -0.4207262, 0.0000000, -0.9071877, 4.8240013, 0.1100000, 7.4559531)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_194" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1626816, 0.0000000, -0.9866786, 0.0000000, 1.0000000, 0.0000000, 0.9866786, 0.0000000, 0.1626816, 6.3530006, 0.1100000, 7.9909906)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_195" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.5171133, 0.0000000, -0.8559170, 0.0000000, 1.0000000, 0.0000000, 0.8559170, 0.0000000, 0.5171133, 5.5408268, 0.1100000, 9.2925510)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_196" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.9286426, 0.0000000, -0.3709756, 0.0000000, 1.0000000, 0.0000000, 0.3709756, 0.0000000, -0.9286426, -2.6677094, 0.1100000, 7.9428191)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_197" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9717103, 0.0000000, 0.2361758, 0.0000000, 1.0000000, 0.0000000, -0.2361758, 0.0000000, 0.9717103, -3.0867500, 0.1100000, 6.7989507)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_198" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.7151476, 0.0000000, -0.6989734, 0.0000000, 1.0000000, 0.0000000, 0.6989734, 0.0000000, 0.7151476, 3.5364990, 0.1100000, 7.9846869)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_199" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.5597740, 0.0000000, -0.8286453, 0.0000000, 1.0000000, 0.0000000, 0.8286453, 0.0000000, -0.5597740, 0.6925735, 0.1100000, 7.1790271)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_200" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9600643, 0.0000000, 0.2797795, 0.0000000, 1.0000000, 0.0000000, -0.2797795, 0.0000000, 0.9600643, 3.5416737, 0.1100000, 6.9555955)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_201" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.8601568, 0.0000000, 0.5100297, 0.0000000, 1.0000000, 0.0000000, -0.5100297, 0.0000000, -0.8601568, -5.1631584, 0.1100000, 9.1081095)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_202" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.9464219, 0.0000000, -0.3229328, 0.0000000, 1.0000000, 0.0000000, 0.3229328, 0.0000000, 0.9464219, -3.0301819, 0.1100000, 9.2668648)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_203" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1874069, 0.0000000, -0.9822824, 0.0000000, 1.0000000, 0.0000000, 0.9822824, 0.0000000, 0.1874069, 4.9625874, 0.1100000, 7.6025171)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_204" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.1349369, 0.0000000, -0.9908542, 0.0000000, 1.0000000, 0.0000000, 0.9908542, 0.0000000, -0.1349369, 1.8915672, 0.1100000, 8.0665541)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_205" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.7777588, 0.0000000, 0.6285628, 0.0000000, 1.0000000, 0.0000000, -0.6285628, 0.0000000, 0.7777588, -0.9274178, 0.1100000, 8.9218531)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_206" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.4155381, 0.0000000, -0.9095758, 0.0000000, 1.0000000, 0.0000000, 0.9095758, 0.0000000, 0.4155381, -1.5525856, 0.1100000, 7.1241517)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_207" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.6871364, 0.0000000, -0.7265285, 0.0000000, 1.0000000, 0.0000000, 0.7265285, 0.0000000, -0.6871364, -6.2830048, 0.1100000, 6.8168263)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_208" parent="." instance=ExtResource("11")]
+transform = Transform3D(-0.0695285, 0.0000000, -0.9975800, 0.0000000, 1.0000000, 0.0000000, 0.9975800, 0.0000000, -0.0695285, 5.5968437, 0.1100000, 8.6428862)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_209" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.8865680, 0.0000000, -0.4625983, 0.0000000, 1.0000000, 0.0000000, 0.4625983, 0.0000000, 0.8865680, 4.4159889, 0.1100000, 7.7511230)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_210" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9923016, 0.0000000, -0.1238448, 0.0000000, 1.0000000, 0.0000000, 0.1238448, 0.0000000, -0.9923016, 3.5479336, 0.1100000, 8.9060993)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_211" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.6818783, 0.0000000, -0.7314656, 0.0000000, 1.0000000, 0.0000000, 0.7314656, 0.0000000, 0.6818783, 0.9462490, 0.1100000, 9.0734005)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_large_212" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9337747, 0.0000000, 0.3578614, 0.0000000, 1.0000000, 0.0000000, -0.3578614, 0.0000000, 0.9337747, -0.6681023, 0.1100000, 9.1267958)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_213" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.0357030, 0.0000000, -0.9993624, 0.0000000, 1.0000000, 0.0000000, 0.9993624, 0.0000000, -0.0357030, 4.9964104, 0.1100000, 7.1030583)
+metadata/placement_source = "linked_office"
+
+[node name="paper_214" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.4910301, 0.0000000, 0.8711426, 0.0000000, 1.0000000, 0.0000000, -0.8711426, 0.0000000, -0.4910301, -1.5461884, 0.2500000, -1.3317441)
+metadata/placement_source = "linked_office"
+
+[node name="paper_215" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.7254178, 0.0000000, 0.6883088, 0.0000000, 1.0000000, 0.0000000, -0.6883088, 0.0000000, 0.7254178, -1.3460655, 0.2500000, 1.6505466)
+metadata/placement_source = "linked_office"
+
+[node name="paper_216" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.6779755, 0.0000000, -0.7350845, 0.0000000, 1.0000000, 0.0000000, 0.7350845, 0.0000000, -0.6779755, 3.5454388, 0.2500000, -5.0184388)
+metadata/placement_source = "linked_office"
+
+[node name="paper_217" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.0610191, 0.0000000, 0.9981366, 0.0000000, 1.0000000, 0.0000000, -0.9981366, 0.0000000, -0.0610191, -0.0817413, 0.2500000, 3.8335788)
+metadata/placement_source = "linked_office"
+
+[node name="paper_218" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.5704134, 0.0000000, -0.8213577, 0.0000000, 1.0000000, 0.0000000, 0.8213577, 0.0000000, -0.5704134, 2.6323357, 0.2500000, 0.0605393)
+metadata/placement_source = "linked_office"
+
+[node name="paper_219" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.3549180, 0.0000000, 0.9348974, 0.0000000, 1.0000000, 0.0000000, -0.9348974, 0.0000000, -0.3549180, 2.7479534, 0.2500000, -5.7385135)
+metadata/placement_source = "linked_office"
+
+[node name="paper_220" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.7018146, 0.0000000, -0.7123596, 0.0000000, 1.0000000, 0.0000000, 0.7123596, 0.0000000, -0.7018146, 1.9020882, 0.2500000, -5.1576905)
+metadata/placement_source = "linked_office"
+
+[node name="paper_221" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.2132383, 0.0000000, -0.9770002, 0.0000000, 1.0000000, 0.0000000, 0.9770002, 0.0000000, -0.2132383, -1.0530853, 0.2500000, -4.4937181)
+metadata/placement_source = "linked_office"
+
+[node name="paper_222" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.9990791, 0.0000000, -0.0429073, 0.0000000, 1.0000000, 0.0000000, 0.0429073, 0.0000000, -0.9990791, 3.4701233, 0.2500000, 1.7014177)
+metadata/placement_source = "linked_office"
+
+[node name="paper_223" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.2841441, 0.0000000, 0.9587816, 0.0000000, 1.0000000, 0.0000000, -0.9587816, 0.0000000, 0.2841441, 3.6477528, 0.2500000, 6.3115592)
+metadata/placement_source = "linked_office"
+
+[node name="paper_224" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.3090597, 0.0000000, -0.9510426, 0.0000000, 1.0000000, 0.0000000, 0.9510426, 0.0000000, 0.3090597, -0.4418945, 0.2500000, -3.2168400)
+metadata/placement_source = "linked_office"
+
+[node name="paper_225" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.9996132, 0.0000000, 0.0278111, 0.0000000, 1.0000000, 0.0000000, -0.0278111, 0.0000000, -0.9996132, 2.0047722, 0.2500000, -1.1363441)
+metadata/placement_source = "linked_office"
+
+[node name="paper_226" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.1155526, 0.0000000, -0.9933014, 0.0000000, 1.0000000, 0.0000000, 0.9933014, 0.0000000, -0.1155526, 3.0477753, 0.2500000, 5.1919289)
+metadata/placement_source = "linked_office"
+
+[node name="paper_227" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.0012129, 0.0000000, -0.9999993, 0.0000000, 1.0000000, 0.0000000, 0.9999993, 0.0000000, 0.0012129, 3.1172256, 0.2500000, -3.1689334)
+metadata/placement_source = "linked_office"
+
+[node name="paper_228" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.3109644, 0.0000000, -0.9504216, 0.0000000, 1.0000000, 0.0000000, 0.9504216, 0.0000000, 0.3109644, -1.1225548, 0.2500000, -1.2628149)
+metadata/placement_source = "linked_office"
+
+[node name="paper_229" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.8841576, 0.0000000, 0.4671888, 0.0000000, 1.0000000, 0.0000000, -0.4671888, 0.0000000, 0.8841576, 0.9910011, 0.2500000, -4.3623819)
+metadata/placement_source = "linked_office"
+
+[node name="paper_230" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.3618798, 0.0000000, 0.9322247, 0.0000000, 1.0000000, 0.0000000, -0.9322247, 0.0000000, 0.3618798, -1.0632858, 0.2500000, -1.5103502)
+metadata/placement_source = "linked_office"
+
+[node name="paper_231" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.4734636, 0.0000000, 0.8808134, 0.0000000, 1.0000000, 0.0000000, -0.8808134, 0.0000000, 0.4734636, 0.3050957, 0.2500000, 3.7566140)
+metadata/placement_source = "linked_office"
+
+[node name="paper_232" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.1292130, 0.0000000, 0.9916169, 0.0000000, 1.0000000, 0.0000000, -0.9916169, 0.0000000, -0.1292130, -1.0634155, 0.2500000, -3.7554185)
+metadata/placement_source = "linked_office"
+
+[node name="paper_233" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.9962093, 0.0000000, 0.0869886, 0.0000000, 1.0000000, 0.0000000, -0.0869886, 0.0000000, -0.9962093, 3.0051384, 0.2500000, 3.5289993)
+metadata/placement_source = "linked_office"
+
+[node name="paper_234" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.7073417, 0.0000000, -0.7068718, 0.0000000, 1.0000000, 0.0000000, 0.7068718, 0.0000000, 0.7073417, 3.3209610, 0.2500000, -0.9052022)
+metadata/placement_source = "linked_office"
+
+[node name="paper_235" parent="." instance=ExtResource("7")]
+transform = Transform3D(-0.9615728, 0.0000000, -0.2745499, 0.0000000, 1.0000000, 0.0000000, 0.2745499, 0.0000000, -0.9615728, -0.4839325, 0.2500000, 4.1334181)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_236" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1221526, 0.0000000, 0.9925113, 0.0000000, 1.0000000, 0.0000000, -0.9925113, 0.0000000, 0.1221526, 4.9752293, 0.1100000, -4.9570012)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_237" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1797376, 0.0000000, -0.9837146, 0.0000000, 1.0000000, 0.0000000, 0.9837146, 0.0000000, 0.1797376, 4.0454445, 0.1100000, -3.9134283)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_238" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.7240464, 0.0000000, -0.6897513, 0.0000000, 1.0000000, 0.0000000, 0.6897513, 0.0000000, -0.7240464, 4.9969501, 0.1100000, 4.3642521)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_239" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9939294, 0.0000000, 0.1100195, 0.0000000, 1.0000000, 0.0000000, -0.1100195, 0.0000000, -0.9939294, 4.4473915, 0.1100000, -5.8623056)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_240" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.0410327, 0.0000000, 0.9991578, 0.0000000, 1.0000000, 0.0000000, -0.9991578, 0.0000000, 0.0410327, 4.4250603, 0.1100000, -3.0571606)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_241" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9809879, 0.0000000, 0.1940690, 0.0000000, 1.0000000, 0.0000000, -0.1940690, 0.0000000, -0.9809879, 3.6873283, 0.1100000, -3.5316327)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_242" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.5590454, 0.0000000, 0.8291370, 0.0000000, 1.0000000, 0.0000000, -0.8291370, 0.0000000, -0.5590454, 3.6255379, 0.1100000, -1.8130661)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_243" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.1719787, 0.0000000, -0.9851007, 0.0000000, 1.0000000, 0.0000000, 0.9851007, 0.0000000, 0.1719787, 4.4181137, 0.1100000, -5.0095663)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_244" parent="." instance=ExtResource("12")]
+transform = Transform3D(0.3765031, 0.0000000, 0.9264153, 0.0000000, 1.0000000, 0.0000000, -0.9264153, 0.0000000, 0.3765031, 4.8914948, 0.1100000, -0.6667287)
+metadata/placement_source = "linked_office"
+
+[node name="rubble_small_245" parent="." instance=ExtResource("12")]
+transform = Transform3D(-0.9561889, 0.0000000, -0.2927503, 0.0000000, 1.0000000, 0.0000000, 0.2927503, 0.0000000, -0.9561889, 4.8313980, 0.1100000, -0.8491924)
+metadata/placement_source = "linked_office"

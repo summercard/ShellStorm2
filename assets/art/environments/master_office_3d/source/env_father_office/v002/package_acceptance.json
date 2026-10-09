@@ -1,0 +1,173 @@
+{
+  "passed": true,
+  "packages": [
+    {
+      "slug": "floor_panel",
+      "reopened": true,
+      "mesh_count": 17,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "floor_fractured",
+      "reopened": true,
+      "mesh_count": 33,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "wall_panel",
+      "reopened": true,
+      "mesh_count": 9,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "wall_fractured",
+      "reopened": true,
+      "mesh_count": 78,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "wall_door",
+      "reopened": true,
+      "mesh_count": 10,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "sofa",
+      "reopened": true,
+      "mesh_count": 43,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "pillow",
+      "reopened": true,
+      "mesh_count": 4,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "throw",
+      "reopened": true,
+      "mesh_count": 2,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "rug",
+      "reopened": true,
+      "mesh_count": 326,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "display_case",
+      "reopened": true,
+      "mesh_count": 17,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "display_console",
+      "reopened": true,
+      "mesh_count": 8,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "side_table",
+      "reopened": true,
+      "mesh_count": 4,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "bookcase_fallen",
+      "reopened": true,
+      "mesh_count": 36,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "plant_withered",
+      "reopened": true,
+      "mesh_count": 102,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "plant_specimen",
+      "reopened": true,
+      "mesh_count": 26,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "trophy",
+      "reopened": true,
+      "mesh_count": 6,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "rubble_large",
+      "reopened": true,
+      "mesh_count": 2,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "rubble_small",
+      "reopened": true,
+      "mesh_count": 2,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "paper",
+      "reopened": true,
+      "mesh_count": 5,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "book_stack",
+      "reopened": true,
+      "mesh_count": 5,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "wall_mural",
+      "reopened": true,
+      "mesh_count": 19,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "metal_brace",
+      "reopened": true,
+      "mesh_count": 10,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "monitor_fallen",
+      "reopened": true,
+      "mesh_count": 4,
+      "uv_pass": true,
+      "errors": []
+    },
+    {
+      "slug": "shelf_ledge",
+      "reopened": true,
+      "mesh_count": 5,
+      "uv_pass": true,
+      "errors": []
+    }
+  ]
+}

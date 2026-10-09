@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/components/prp_block00_sculpture_pylon/prp_block00_sculpture_pylon_visual.glb" id="1"]
+
+[sub_resource type="BoxShape3D" id="Box"]
+size = Vector3(3.8000000, 0.5500000, 2.6000000)
+
+[node name="sculpture_pylon" type="Node3D"]
+metadata/asset_id = "PRP-BLOCK00-SCULPTURE-PYLON"
+metadata/asset_version = "v001"
+metadata/collision_policy = "pedestal_box"
+metadata/source_blend = "res://assets/art/environments/master_office_3d/source/env_block00_story_rooms/v001/env_block00_story_rooms_source_v001.blend"
+metadata/semantic_type = "facility_decoration"
+
+[node name="Visual" parent="." instance=ExtResource("1")]
+
+[node name="Collision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Collision"]
+position = Vector3(0.0000000, 0.2750000, 0.0000000)
+shape = SubResource("Box")

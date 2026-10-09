@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/master_office_3d/components/prp_block00_bookcase_fallen/prp_block00_bookcase_fallen_visual.glb" id="1"]
+
+[sub_resource type="BoxShape3D" id="Box"]
+size = Vector3(5.1232338, 1.5209266, 1.9000000)
+
+[node name="bookcase_fallen" type="Node3D"]
+metadata/asset_id = "PRP-BLOCK00-BOOKCASE-FALLEN"
+metadata/asset_version = "v002"
+metadata/collision_policy = "fitted_box"
+metadata/source_blend = "res://assets/art/environments/master_office_3d/source/env_father_office/v002/env_father_office_source_v002.blend"
+metadata/semantic_type = "facility_decoration"
+
+[node name="Visual" parent="." instance=ExtResource("1")]
+
+[node name="Collision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="Collision"]
+position = Vector3(0.0000000, 0.7604633, -0.0000000)
+shape = SubResource("Box")
