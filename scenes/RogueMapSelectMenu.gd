@@ -294,6 +294,29 @@ func _enter_level(level_id: String) -> void:
 	if _depart_countdown <= 0.0:
 		_commit_departure()
 
+## 出发收拢的圆心：把主角投影到屏幕归一化坐标，做到"黑圈往角色中间收进去"。
+## 任何一步拿不到可信数据就回退屏幕中心 —— 只影响观感，不影响任何判定。
+func _iris_center() -> Vector2:
+	var fallback := Vector2(0.5, 0.5)
+	if _camera == null or not is_instance_valid(_camera):
+		return fallback
+	if _player == null or not is_instance_valid(_player):
+		return fallback
+	var viewport := _camera.get_viewport()
+	if viewport == null:
+		return fallback
+	var size := viewport.get_visible_rect().size
+	if size.x <= 0.0 or size.y <= 0.0:
+		return fallback
+	var focus := _player.global_position + Vector3(0.0, 0.75, 0.0)
+	if _camera.is_position_behind(focus):
+		return fallback
+	var screen := _camera.unproject_position(focus)
+	return Vector2(
+		clampf(screen.x / size.x, 0.0, 1.0),
+		clampf(screen.y / size.y, 0.0, 1.0)
+	)
+
 func _commit_departure() -> void:
 	if _state != "entering" or _pending_level_id == "":
 		return
@@ -315,6 +338,13 @@ func _commit_departure() -> void:
 			_departure_failed("出发交接失败，请重试")
 			return
 	var request_id := GameEntryFlow.request_gameplay_entry(GameEntryFlow.REASON_MISSION_OPERATIONS_TELEPORT, GameEntryFlow.SPAWN_SAVED_PROGRESS)
+	# 出发过场：黑圈往屏幕中心收拢，把整屏压到全黑之后再切读取界面。
+	# 读取界面的纯黑底正好接手（它在 _ready 里放开遮罩），视觉上无缝。
+	# 无头验收跳过：保持"读条结束即同步 change_scene"这条既有门禁时序。
+	# 🔴 本函数因此在真实运行时成为协程 —— `_state` 已在 await 之前置为 "departing"，
+	# `_process` 的重复调用会被 `_state != "entering"` 挡掉，不会重入。
+	if DisplayServer.get_name() != "headless" and IrisTransition != null:
+		await IrisTransition.iris_close(IrisTransition.CLOSE_SECONDS, _iris_center())
 	var error := get_tree().change_scene_to_file(LOADING_SCENE)
 	if error != OK:
 		if request_id > 0:

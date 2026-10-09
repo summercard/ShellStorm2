@@ -90,6 +90,7 @@ SceneParticleToggle3D="*res://src/world3d/SceneParticleToggle3D.gd"
 MusicManager="*res://src/audio/MusicManager.gd"
 DialogueUI="*res://src/ui/dialogue/DialogueUI.gd"
 NarrativeDirector="*res://src/narrative/NarrativeDirector3D.gd"
+IrisTransition="*res://src/ui/IrisTransition.gd"
 
 [display]
 
