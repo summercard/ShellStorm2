@@ -25,7 +25,18 @@ signal flashlight_module_changed(snapshot: Dictionary)
 signal debug_scale_changed(snapshot: Dictionary)
 signal death_animation_finished()
 
-const SPEED := 4.6
+const SPEED := 4.5
+## 持枪移速惩罚（m/s，对基础速度的减法项）。三类枪械动画族与
+## 16.1 §移动四方向与持枪姿态设计冻结 的 sidearm / longgun / machinegun 同口径。
+## 生效顺序：v = (SPEED - 惩罚) × 命运/词条移速倍率 —— 先扣武器重量，再乘百分比加成。
+## 当前梯度 4.0 / 3.7 / 3.4 全部高于表现层慢走阈值 3.2，三类枪都播正常移动动画。
+const WEAPON_FAMILY_MOVE_PENALTY := {
+	"sidearm": 0.5,
+	"longgun": 0.8,
+	"machinegun": 1.1,
+}
+## 持枪减速后的速度下限，避免后续调大惩罚或叠加减速时速度归零或为负。
+const MIN_MOVE_SPEED_MPS := 0.5
 const DASH_SPEED := 16.5
 const DASH_DURATION := 0.204
 const DASH_COOLDOWN := 2.2
@@ -298,6 +309,14 @@ func get_interaction_focus_snapshot() -> Dictionary:
 		if interaction_controller != null
 		else {}
 	)
+
+
+## 地面物收集表现的唯一目标点：角色身体中心略上方，不使用整个人体碰撞体作为目标。
+## 掉落物飞行期间角色可以移动，每帧重新读取这个点，避免飞到旧位置。
+func get_loot_collection_target_position() -> Vector3:
+	if avatar != null and avatar.body != null and is_instance_valid(avatar.body):
+		return avatar.body.global_position + Vector3.UP * 0.28
+	return global_position + Vector3.UP * 0.65
 
 
 func _is_debug_scale_up_key(event: InputEventKey) -> bool:
@@ -818,8 +837,39 @@ func get_avatar_customization_options() -> Dictionary:
 	return PlayerAvatar3D.CUSTOMIZATION_OPTIONS.duplicate(true)
 
 
+## 武器装配 ID → 持枪动画族。这是「枪械内容 ID → 动画类型」映射的唯一来源，
+## PlayerAvatar3D 表现层与 get_weapon_transition_snapshot 必须复用同一口径，
+## 新增枪械只改这里。空串（无枪）按 longgun 兜底，与既有表现层默认一致。
+static func weapon_family_for_gun(gun_id: String) -> String:
+	if gun_id == "bp_pistol":
+		return "sidearm"
+	if gun_id in ["bp_machinegun", "bp_sprinkler"]:
+		return "machinegun"
+	return "longgun"
+
+
+## 当前手持武器的装配 ID；空手或槽未同步时为空串。
+func get_active_weapon_gun_id() -> String:
+	var instance := equipped_weapon_slots[active_weapon_slot] as WeaponInstance
+	return instance.assembly_id if instance != null else ""
+
+
+## 当前手持武器带来的移速惩罚；空手或已收起武器时为 0。
+## 判据用「手上确有可见武器模型」（`weapon != null`）而非武器槽是否非空 ——
+## `_ensure_weapon_tree()` 无论 `start_with_weapon` 开关都会把出厂枪实例写进
+## `equipped_weapon_slots`，只看槽会把空手玩家也当成持枪。
+func get_weapon_move_penalty() -> float:
+	if weapon == null or weapon_holstered:
+		return 0.0
+	var gun_id := get_active_weapon_gun_id()
+	if gun_id.is_empty():
+		return 0.0
+	return float(WEAPON_FAMILY_MOVE_PENALTY.get(weapon_family_for_gun(gun_id), 0.0))
+
+
 func get_move_speed() -> float:
-	return SPEED * float(_character_fate.get("move_speed_multiplier", 1.0))
+	var base := maxf(MIN_MOVE_SPEED_MPS, SPEED - get_weapon_move_penalty())
+	return base * float(_character_fate.get("move_speed_multiplier", 1.0))
 
 
 func get_dash_cooldown_duration() -> float:
@@ -2105,7 +2155,7 @@ func get_weapon_transition_snapshot() -> Dictionary:
 	var slot := active_weapon_slot
 	var instance := equipped_weapon_slots[slot] as WeaponInstance
 	var gun := instance.assembly_id if instance != null else ""
-	var family := "sidearm" if gun == "bp_pistol" else "machinegun" if gun in ["bp_machinegun", "bp_sprinkler"] else "longgun"
+	var family := weapon_family_for_gun(gun)
 	return {"active": not _weapon_transition_phase.is_empty(), "phase": _weapon_transition_phase,
 		"progress": clampf(_weapon_transition_elapsed / WEAPON_TRANSITION_SECONDS, 0.0, 1.0),
 		"slot": slot, "family": family, "target_slot": _weapon_transition_target}

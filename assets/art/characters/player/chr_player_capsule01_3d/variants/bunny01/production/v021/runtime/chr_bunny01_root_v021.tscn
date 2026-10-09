@@ -14,8 +14,8 @@
 
 [node name="CapsuleAvatar3D" instance=ExtResource("1_base")]
 metadata/assembly_version = "v021"
-metadata/asset_version = "v033"
-metadata/motion_library_version = "v033"
+metadata/asset_version = "v037"
+metadata/motion_library_version = "v037"
 
 [node name="Body" parent="VisualRoot" index="0"]
 visible = false

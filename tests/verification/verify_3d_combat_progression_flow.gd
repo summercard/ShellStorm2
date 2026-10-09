@@ -121,7 +121,31 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 	if not (weapon_loot_snapshot.get("visual_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE * expected_weapon_scale):
 		failures.append("Dropped weapon did not migrate from the legacy visual scale to the current 70% baseline")
 	weapon_loot.queue_free()
-	loot.accept_pickup()
+	# 新掉落必须在二次落地前锁住拾取；落完两次后才开放。
+	var animated_loot := GroundLootPickup3D.new()
+	animated_loot.configure(ItemRegistry.get_instance().get_item("item_health_potion"), Color(0.38, 0.88, 0.72))
+	dungeon.add_child(animated_loot)
+	await get_tree().process_frame
+	animated_loot.begin_spawn_animation()
+	await get_tree().create_timer(0.12).timeout
+	var airborne_snapshot := animated_loot.get_model_snapshot()
+	if not bool(airborne_snapshot.get("spawn_animating", false)) or bool(airborne_snapshot.get("pickup_unlocked", true)):
+		failures.append("Ground loot becomes pickable before the two-bounce landing animation finishes")
+	if animated_loot.is_pickup_available():
+		failures.append("Ground loot reports pickup availability while the launch animation is still running")
+	var airborne_y := float((airborne_snapshot.get("visual_world_position", Vector3.ZERO) as Vector3).y)
+	if airborne_y <= animated_loot.global_position.y + 0.46:
+		failures.append("Ground loot launch animation does not visibly rise above the landing height")
+	await get_tree().create_timer(0.92).timeout
+	await get_tree().process_frame
+	var settled_snapshot := animated_loot.get_model_snapshot()
+	if bool(settled_snapshot.get("spawn_animating", true)) or not bool(settled_snapshot.get("pickup_unlocked", false)):
+		failures.append("Ground loot does not unlock pickup after the second bounce")
+	animated_loot.queue_free()
+	loot.accept_pickup(dungeon.player)
+	var loot_after_accept := loot.get_model_snapshot()
+	if not bool(loot_after_accept.get("collecting", false)):
+		failures.append("Ground loot pickup did not enter the player-collection animation")
 	var loot_snapshot := loot.get_model_snapshot()
 	if not bool(loot_snapshot.get("accepted", false)) or loot.is_queued_for_deletion():
 		failures.append("Ground loot disappears immediately instead of playing pickup feedback")

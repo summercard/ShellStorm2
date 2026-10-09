@@ -42,7 +42,7 @@ func _ready() -> void:
 		"正式开场剧本声明了与持久化一致的刷物键、物品和房间",
 	)
 	var origin := room.global_position + TowerDescent3D.NEW_GAME_OPENING_DROP_OFFSET
-	_check(first.narrative_spawn_item(ROOM_ID, ITEM_ID, 1, origin, false, SPAWN_KEY) == 1,
+	_check(first.narrative_spawn_item(ROOM_ID, ITEM_ID, 1, origin, false, SPAWN_KEY, true) == 1,
 		"剧情命令可通过奖励服务刷正式地面枪")
 	_check(_ground_count(first) == 1, "开场枪只有一件")
 	_check(first.narrative_spawn_item(ROOM_ID, ITEM_ID, 1, origin, false, SPAWN_KEY) == 1
@@ -50,6 +50,8 @@ func _ready() -> void:
 	var original_drop := _ground_pickup(first)
 	var original_instance_id := str(original_drop.item_data.get("weapon_instance_id", "")) if original_drop != null else ""
 	_check(not original_instance_id.is_empty(), "开场枪有稳定武器实例 ID")
+	_check(original_drop != null and bool(original_drop.item_data.get("narrative_auto_equip", false)),
+		"开场枪地面实体保留自动装备标记")
 	_move_to_base(first)
 	_check(BaseManager.flush_runtime_checkpoint("new_save_base_logout"), "99F 下线快照写盘成功")
 	var saved := BaseManager.get_active_run_checkpoint()
@@ -82,12 +84,44 @@ func _ready() -> void:
 		_check(second.narrative_spawn_item(ROOM_ID, ITEM_ID, 1, origin, false, SPAWN_KEY) == 1
 			and _ground_count(second) == 1, "剧本中断重播不复制已恢复的枪")
 		if restored_drop != null:
+			_check(bool(restored_drop.item_data.get("narrative_auto_equip", false)),
+				"开场枪跨重载保留自动装备标记")
 			second.call("_on_ground_loot_requested", restored_drop, restored_drop.item_data.duplicate(true))
-			_check(second.get_inventory_module().has_item(ITEM_ID), "拾取后枪进入背包")
+			var equipped_primary := second.player.get_equipped_weapon_item_for_slot(0)
+			_check(str(equipped_primary.get("id", "")) == ITEM_ID, "拾取后枪进入主武器槽")
+			_check(not second.get_inventory_module().has_item(ITEM_ID), "自动装备枪不重复进入背包")
 			_check(_saved_ground_count(second.build_runtime_save_snapshot()) == 0,
 				"拾取动画未结束时快照也不再记地面枪")
 			_check(second.narrative_spawn_item(ROOM_ID, ITEM_ID, 1, origin, false, SPAWN_KEY) == 1
 				and _ground_count(second) == 0, "已拾取后剧本重播不能再刷枪")
+			var primary_instance_id := str(equipped_primary.get("weapon_instance_id", ""))
+			var inventory := second.get_inventory_module()
+			var inventory_before_full := inventory.get_slots_snapshot()
+			var fill_index := 0
+			while inventory.get_free_slots() > 0:
+				_check(inventory.add_item({
+					"id": "probe_full_slot_%02d" % fill_index,
+					"name": "probe_full_slot_%02d" % fill_index,
+					"type": "item",
+					"stack_max": 1,
+				}, 1) == 1, "满背包测试填充第 %d 格" % fill_index)
+				fill_index += 1
+			_check(inventory.get_used_slots() == inventory.get_capacity(), "满背包测试确实占满背包")
+			var replacement_key := "verify_new_save_handoff:full_backpack_replacement"
+			_check(second.narrative_spawn_item(ROOM_ID, "weapon_rifle", 1, origin, false, replacement_key, true) == 1,
+				"满背包测试生成自动装备替换枪")
+			var replacement_drop := _ground_pickup(second)
+			if replacement_drop != null:
+				_check(bool(replacement_drop.item_data.get("narrative_auto_equip", false)),
+					"替换枪保留自动装备标记")
+				second.call("_on_ground_loot_requested", replacement_drop, replacement_drop.item_data.duplicate(true))
+				_check(not replacement_drop.is_pickup_accepted(), "满背包替换失败时地面枪不消失")
+				_check(str(second.player.get_equipped_weapon_item_for_slot(0).get("weapon_instance_id", "")) == primary_instance_id,
+					"满背包替换失败时主武器仍为原枪")
+				_check(inventory.get_used_slots() == inventory.get_capacity(), "满背包替换失败不改变背包")
+				replacement_drop.queue_free()
+			inventory.restore_slots_snapshot(inventory_before_full)
+		await get_tree().process_frame
 	_move_to_base(second)
 	_check(BaseManager.flush_runtime_checkpoint("new_save_pickup_logout"), "拾取后基地快照写盘成功")
 	await _dispose(second)
@@ -96,7 +130,8 @@ func _ready() -> void:
 	var third := await _create_tower()
 	if third != null:
 		_check(str(third.get("_current_room_id")) == "facility", "再次重登仍落 99F")
-		_check(third.get_inventory_module().has_item(ITEM_ID), "已拾取枪跨基地重登归背包")
+		_check(str(third.player.get_equipped_weapon_item_for_slot(0).get("id", "")) == ITEM_ID,
+			"已拾取枪跨基地重登仍在主武器槽")
 		_check(_saved_ground_count(third.build_runtime_save_snapshot()) == 0,
 			"已拾取枪不会同时留在 98F 地面")
 		_check(not third.call("_snapshot_matches_runtime_map", {"runtime_map_id": "expedition_01"}),

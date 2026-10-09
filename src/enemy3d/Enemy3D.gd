@@ -104,7 +104,10 @@ const PROFILES := {
 	"shielded": {"hp": 112, "speed": 2.0, "damage": 17, "range": 2.05, "cooldown": 1.55},
 	"exploder": {"hp": 42, "speed": 3.1, "damage": 30, "range": 2.85, "cooldown": 3.0},
 	"ambusher": {"hp": 50, "speed": 4.65, "damage": 18, "range": 2.15, "cooldown": 1.9},
-	"boss": {"hp": 520, "speed": 1.72, "damage": 24, "range": 9.5, "cooldown": 1.45},
+	# Boss 基础生命 = hp × BOSS_HP_MULTIPLIER(10) = 5200 × 10 = 52000（第1层实测值）；
+	# 更高楼层由 MonsterInjector 的 FLOOR_SCALING.hp_mult 与 boss_scale 通过
+	# configure_from_enemy_data 的比例还原继续放大。改这一处 = 全楼层等比例放大。
+	"boss": {"hp": 5200, "speed": 1.72, "damage": 24, "range": 9.5, "cooldown": 1.45},
 }
 
 # MonsterInjector 的旧 2D 基线只用于还原楼层、主题、精英与小怪倍率；

@@ -35,7 +35,32 @@ const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props
 const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
 const NEON_FRAME_SCRIPT := preload("res://src/ui/NeonFrameControl.gd")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
+const HUD_RELOAD_RING_SCRIPT := preload("res://src/ui/HudReloadRing.gd")
 const HUD_UI_SCALE := 0.80
+## —— HUD 换弹环（2026-10-08，`0.2-PLAYER-001` 追记五）——
+## 主人原话：「就是我换子弹的那个提示圈，帮我换到图片中的枪械图标的位置来，然后大小跟我红圈一样大」。
+## 环从**世界空间**（角色身侧）搬到**右下角武器图标**上，实现是 2D 画布控件 `HudReloadRing`
+## ——`CanvasLayer` 恒在 3D 之上，3D 环摆在图标的屏幕位置上也会被图标本体（不透明网格）压住，
+## 做不到"套在图标上"。世界环那套由 `PlayerAvatar3D.RELOAD_RING_IN_WORLD = false` 退役。
+##
+## 外径：主人标注图（1280×720，该窗口下缩放因子 1.0 ⇒ canvas px == 屏幕 px）红圈实测 **75 px**。
+## 本文件所有 HUD 尺寸都写成「设计 px × `HUD_UI_SCALE`」⇒ 75 / 0.8 = **93.75**，
+## 于是这个数跟后面那排 `_hud_size(...)` 是同一个口径，改 HUD_UI_SCALE 时不会只剩它不跟着缩。
+const HUD_RELOAD_RING_OUTER_DIAMETER_DESIGN := 93.75
+## 环心对齐到武器图标控件（`_hud_weapon_model_icon`）的矩形中心。取**结构量**而不是手绘像素坐标：
+## 标注图上红圈圈心 (1066.0, 675.5)、图标矩形中心 (1067.2, 676.4)，差 1.2 px，取后者。
+## 好处是换分辨率、挪面板、改图标尺寸时环自动跟随，不会脱钩。
+##
+## 武器图标「弹一下」：时长与峰值放大倍率。主人要求「枪械的图标要放大缩小的弹一下」。
+## 0.42 s 比一次换弹（2 s 上下）短一档 —— 它标的是"扣下换弹键"那一下，不是整个装填过程。
+const HUD_WEAPON_ICON_POP_DURATION := 0.42
+const HUD_WEAPON_ICON_POP_PEAK := 0.30
+## 弹跳曲线三段在归一化时间轴上的宽度，**三者之和必须 = 1.0**（`hud_weapon_icon_pop_scale`
+## 的 else 分支就是按这个前提写的）：起跳 22% / 回落 40% / 收尾 38%。
+## 高峰落在 t ≈ 0.22 × 0.42 s ≈ 0.09 s —— "扣下换弹键"那一下的即时反馈。
+const HUD_WEAPON_ICON_POP_RISE_SPAN := 0.22
+const HUD_WEAPON_ICON_POP_FALL_SPAN := 0.40
+const HUD_WEAPON_ICON_POP_SETTLE_SPAN := 0.38
 const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
 const ENEMY_PREACTIVATION_RANGE := 38.0
@@ -188,6 +213,7 @@ var _pending_fate_currency_choice := -1
 var _pending_fate_door_from_id := ""
 var _pending_fate_door_target_id := ""
 var _fate_overlay: Control
+var _fate_choice_buttons: Array[Button] = []
 var _fate_feedback_label: Label = null
 var _map_fate_triggers: MapFateTriggers
 # 模态浮窗（雷达 / 背包）的 ESC 关闭按钮
@@ -234,6 +260,11 @@ var _reference_hud_root: Control = null
 var _hud_weapon_meta_label: Label = null
 var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
+## HUD 换弹环（套在武器图标上）。见 HUD_RELOAD_RING_* 一族常量。
+var _hud_reload_ring: HudReloadRing = null
+var _hud_reload_ring_active := false
+## 图标弹跳的已用时长；< 0 表示没在弹（负数不用 0 是因为 t=0 本身是合法采样点）。
+var _hud_weapon_icon_pop_elapsed := -1.0
 var _hud_presenter: HUDPresenter3D = HUD_PRESENTER_SCRIPT.new()
 var _hud_quick_item_icons: Array = [null, null]
 var _hud_quick_item_icon_hosts: Array[Control] = []
@@ -351,6 +382,10 @@ func _ready() -> void:
 		FateCardGameBridge.scope_state_changed.connect(_on_fate_scope_state_changed)
 	player.hp_changed.connect(_on_player_hp_changed)
 	player.ammo_changed.connect(_on_ammo_changed)
+	# 换弹环的驱动源：武器换弹进度 → Player3D 透传 → 本 HUD 环（2026-10-08）。
+	# 只听不写：环的进度与显隐完全由武器换弹计时器决定，HUD 不反向影响换弹时长。
+	player.reload_progress_changed.connect(_on_player_reload_progress_changed)
+	player.reload_ended.connect(_on_player_reload_ended)
 	player.presentation_state_changed.connect(_on_player_state_changed)
 	player.death_animation_finished.connect(_on_player_death_animation_finished)
 	player.debug_scale_changed.connect(_on_player_debug_scale_changed)
@@ -988,6 +1023,102 @@ func _process(delta: float) -> void:
 				_get_offscreen_enemy_positions(),
 				get_viewport().get_camera_3d()
 			)
+	_tick_hud_reload_feedback(delta)
+
+
+## 换弹反馈（HUD 侧）每帧步进：① 把环心对齐到武器图标矩形中心；② 推进图标"弹一下"。
+##
+## 位置放在每帧算而不是建时算：环的锚点是**另一个控件**（武器图标），它的矩形由
+## `HBoxContainer` + `MarginContainer` 布局算出，布局可能在换分辨率、切武器、
+## 图标改尺寸后重跑 —— 建时算一次就会脱钩。
+##
+## 单独成函数（而不是直接写进 `_process`）是为了让验收能**手动步进固定 delta**：
+## `verify_reference_hud_fate_visual` 会在冻结 `set_process(false)` 的场景里直接调它，
+## 否则"图标弹一下"这条动画契约在无渲染/冻结帧的验收里根本取不到采样点。
+func _tick_hud_reload_feedback(delta: float) -> void:
+	_place_hud_reload_ring()
+	_tick_hud_weapon_icon_pop(delta)
+
+
+func _place_hud_reload_ring() -> void:
+	if _hud_reload_ring == null or _hud_weapon_model_icon == null:
+		return
+	if not is_instance_valid(_hud_weapon_model_icon):
+		return
+	var parent := _hud_reload_ring.get_parent() as Control
+	var icon_center := _hud_weapon_model_icon.get_global_rect().get_center()
+	if parent != null:
+		icon_center -= parent.global_position
+	_hud_reload_ring.position = icon_center - _hud_reload_ring.size * 0.5
+
+
+func _tick_hud_weapon_icon_pop(delta: float) -> void:
+	if _hud_weapon_model_icon == null or not is_instance_valid(_hud_weapon_model_icon):
+		return
+	if _hud_weapon_icon_pop_elapsed < 0.0:
+		return
+	if not _hud_weapon_model_icon.visible:
+		# 近战/空手时图标本身被隐藏（clear_model）—— 不弹，也不留下半格缩放与残留枢轴。
+		_hud_weapon_icon_pop_elapsed = -1.0
+		_hud_weapon_model_icon.scale = Vector2.ONE
+		_hud_weapon_model_icon.pivot_offset = Vector2.ZERO
+		return
+	_hud_weapon_icon_pop_elapsed += delta
+	var ratio := _hud_weapon_icon_pop_elapsed / HUD_WEAPON_ICON_POP_DURATION
+	if ratio >= 1.0:
+		_hud_weapon_icon_pop_elapsed = -1.0
+		_hud_weapon_model_icon.scale = Vector2.ONE
+		_hud_weapon_model_icon.pivot_offset = Vector2.ZERO
+		return
+	# 绕控件中心缩放：`scale` 的原点是控件左上角，不设 pivot 会朝右下角"长"出去，
+	# 看着像整个 HUD 在抖，而不是图标在原地弹。
+	_hud_weapon_model_icon.pivot_offset = _hud_weapon_model_icon.size * 0.5
+	_hud_weapon_model_icon.scale = Vector2.ONE * hud_weapon_icon_pop_scale(ratio)
+
+
+## 武器图标「弹一下」的缩放曲线：`t ∈ [0,1]` → 缩放倍率。
+##
+## 三段、写成**纯函数**：起止都精确归 1、冲高到 `1 + HUD_WEAPON_ICON_POP_PEAK`、
+## 回落时略低于 1（回弹感）、收在 1 上不留偏移。
+## 纯函数的意义是这条动画能被**逐点断言**（`verify_reference_hud_fate_visual` 直接调它），
+## 否则"弹得对不对"只能靠人眼看动画 —— 而那正是本项目吃过亏的地方。
+static func hud_weapon_icon_pop_scale(t: float) -> float:
+	var clamped := clampf(t, 0.0, 1.0)
+	var peak := 1.0 + HUD_WEAPON_ICON_POP_PEAK
+	var dip := 1.0 - HUD_WEAPON_ICON_POP_PEAK * 0.35
+	var value := peak
+	if clamped < HUD_WEAPON_ICON_POP_RISE_SPAN:
+		# 起跳到峰值：三次缓出（起步快、到顶慢），不会在 t=0 出现速度突跳。
+		var rise := clamped / HUD_WEAPON_ICON_POP_RISE_SPAN
+		value = lerpf(1.0, peak, 1.0 - pow(1.0 - rise, 3.0))
+	elif clamped < HUD_WEAPON_ICON_POP_RISE_SPAN + HUD_WEAPON_ICON_POP_FALL_SPAN:
+		var fall := (clamped - HUD_WEAPON_ICON_POP_RISE_SPAN) / HUD_WEAPON_ICON_POP_FALL_SPAN
+		value = lerpf(peak, dip, fall * fall * (3.0 - 2.0 * fall))
+	else:
+		var settle := (clamped - HUD_WEAPON_ICON_POP_RISE_SPAN - HUD_WEAPON_ICON_POP_FALL_SPAN) / HUD_WEAPON_ICON_POP_SETTLE_SPAN
+		value = lerpf(dip, 1.0, settle * settle * (3.0 - 2.0 * settle))
+	return value
+
+
+func _on_player_reload_progress_changed(progress: float, _remaining: float) -> void:
+	if _hud_reload_ring == null:
+		return
+	if not _hud_reload_ring_active:
+		# 只有**这一轮换弹的第一次**推送才起弹跳；之后的进度推送不动图标。
+		_hud_reload_ring_active = true
+		_hud_weapon_icon_pop_elapsed = 0.0
+	# 进度 0 也可见：那是一圈"空槽"，与退役的世界环同口径（0 是"刚开始装填"，不是"没在装填"）。
+	_hud_reload_ring.visible = true
+	_hud_reload_ring.progress = progress
+
+
+func _on_player_reload_ended(_completed: bool) -> void:
+	_hud_reload_ring_active = false
+	if _hud_reload_ring == null:
+		return
+	# 取消/切枪/死亡都会走到这里（reload_ended(false)），环一并收干净。
+	_hud_reload_ring.progress = 0.0
+	_hud_reload_ring.visible = false
 
 
 ## HUD 右上、小地图正上方那块「当前所处区域」标签的文案。
@@ -1400,6 +1531,22 @@ func _build_reference_main_hud() -> void:
 	# 撤掉背板后文字直接压在实景上：这两处（弹药数/命运槽）原先靠深色底保证可读，现只靠描边。
 	# 口径与 _outline_labels 的注释一致：不占像素、不改布局。
 	_outline_labels([ammo_label, _hud_weapon_fate_label])
+	# 换弹环：套在武器图标上的 HUD 圆环（2026-10-08，0.2-PLAYER-001 追记五）。
+	# 挂 `_reference_hud_root` 而**不是**图标自己，两条理由：
+	#   ① 图标在换弹"弹一下"时会整体缩放，挂它下面环会跟着一起胀大；
+	#   ② 图标被 `ItemModelIcon3D.clear_model()`（近战/空手）隐藏时会连带隐藏子节点，
+	#      而环的显隐只该由**换弹状态**决定。
+	# 位置每帧从图标矩形现算（`_place_hud_reload_ring()`），此处不写死坐标。
+	# 它是本函数最后一个 add_child ⇒ 画在武器面板之上；z_index 再保一档，防后来者插队。
+	_hud_reload_ring = HUD_RELOAD_RING_SCRIPT.new() as HudReloadRing
+	_hud_reload_ring.name = "HudReloadRing"
+	_hud_reload_ring.z_index = 1
+	_hud_reload_ring.visible = false
+	_hud_reload_ring.size = _hud_size(
+		Vector2(HUD_RELOAD_RING_OUTER_DIAMETER_DESIGN, HUD_RELOAD_RING_OUTER_DIAMETER_DESIGN)
+	)
+	_reference_hud_root.add_child(_hud_reload_ring)
+	_place_hud_reload_ring()
 	for quick_index in range(2):
 		var quick_panel := _make_bare_hud_panel()
 		quick_panel.name = "QuickItemHUD_%d" % quick_index
@@ -1883,6 +2030,7 @@ func _generate_layout() -> void:
 			"authored_layout_version": str(record.get("authored_layout_version", "")),
 			"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
 			"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
+			"search_facilities_enabled": bool(record.get("search_facilities_enabled", true)),
 			"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 			"authored_layout_instances": record.get("authored_layout_instances", []),
 			"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),
@@ -3230,7 +3378,7 @@ func narrative_grant_item(item_id: String, count: int) -> Dictionary:
 ## `spread=false`（默认）时**精确**落在 origin —— 剧本要"转身对着它说"就必须精确。
 func narrative_spawn_item(
 	room_id: String, item_id: String, count: int, origin: Vector3, spread := false,
-	spawn_key: String = ""
+	spawn_key: String = "", auto_equip := false
 ) -> int:
 	if not spawn_key.is_empty() and _narrative_spawned_keys.has(spawn_key):
 		return 1
@@ -3247,7 +3395,12 @@ func narrative_spawn_item(
 		return 0
 	var delivery := REWARD_SINK_SCRIPT.apply_ground(
 		report.get("grants", []),
-		func(items: Array) -> int: return narrative_spawn_loot(room_id, items, origin, spread)
+		func(items: Array) -> int:
+			if auto_equip:
+				for item_value in items:
+					if item_value is Dictionary and str((item_value as Dictionary).get("type", "")) == "weapon":
+						(item_value as Dictionary)["narrative_auto_equip"] = true
+			return narrative_spawn_loot(room_id, items, origin, spread)
 	)
 	var spawned := (delivery.get("granted", []) as Array).size()
 	if spawned > 0:
@@ -4079,7 +4232,12 @@ func _spawn_loot_items(
 		item["count"] = maxi(1, int(item.get("count", 1)))
 		var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
 		var color := ItemModelFactory3D.get_item_color(item)
+		var narrative_auto_equip := bool(item.get("narrative_auto_equip", false))
 		pickup.configure(item, color)
+		# `GroundLootPickup3D.configure()` 会规范化武器实例；剧情标记必须显式
+		# 回写到规范化字典，确保它随地面实体和运行时快照继续存在。
+		if narrative_auto_equip and str(item.get("type", "")) == "weapon":
+			pickup.item_data["narrative_auto_equip"] = true
 		pickup.set_pickup_grace_seconds(pickup_grace_seconds)
 		room.add_child(pickup)
 		var requested_position := world_position
@@ -4090,6 +4248,9 @@ func _spawn_loot_items(
 			world_position
 		)
 		pickup.pickup_requested.connect(_on_ground_loot_requested)
+		# 怪物掉落、搜索产出和主动落地都先经过“抛高→落地→两次弹跳”；
+		# 存档恢复不走这里，避免读档时把已经稳定的物品再次弹起。
+		pickup.begin_spawn_animation()
 		spawned += 1
 	return spawned
 
@@ -4164,22 +4325,56 @@ func _is_loot_landing_clear(landing_world_position: Vector3) -> bool:
 
 
 func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> void:
+	if not is_instance_valid(pickup) or not pickup.is_pickup_available() or not is_instance_valid(player):
+		return
+	var pickup_offset := player.global_position - pickup.global_position
+	pickup_offset.y = 0.0
+	if pickup_offset.length() > GroundLootPickup3D.PICKUP_DISTANCE_M:
+		return
 	if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
 		var granted := _grant_run_currency(int(item.get("count", 1)))
 		if _map_fate_triggers != null:
 			_map_fate_triggers.on_currency_collected(granted)
-		pickup.accept_pickup()
+		pickup.accept_pickup(player)
 		_queue_runtime_autosave("ground_loot_picked_up")
 		status_label.text = "取得 %d 魂" % granted
 		_refresh_loot_label()
 		return
 	var requested := maxi(1, int(item.get("count", 1)))
+	# 开场剧情的武器是专门的"捡起即装备"物品：先完成正式武器实例装备，
+	# 成功后再收掉地面实体，避免出现地面实体消失但武器没有落到槽位的半成功状态。
+	if bool(item.get("narrative_auto_equip", false)) and str(item.get("type", "")) == "weapon":
+		if player == null or not player.has_method("equip_weapon_item_to_slot"):
+			status_label.text = "武器装备失败 · 物品留在地面"
+			return
+		# 先把旧主枪放入背包，再调用装备接口；满包时不会改主槽，装备拒绝时
+		# 只恢复背包快照，不依赖一次可能再次失败的装备回滚。
+		var old_item := player.get_equipped_weapon_item_for_slot(0)
+		var inventory_before: Array = _inventory.get_slots_snapshot()
+		if not old_item.is_empty() and _inventory.add_item(old_item, 1) != 1:
+			_inventory.restore_slots_snapshot(inventory_before)
+			status_label.text = "背包已满 · 无法替换当前武器，物品留在地面"
+			return
+		# 标记只属于这次地面拾取；失败时原实体不变，成功装备后不让
+		# 玩家主动丢出的同一把枪再次触发剧情自动装备。
+		var equipped_item := item.duplicate(true)
+		equipped_item.erase("narrative_auto_equip")
+		var equip_result := player.equip_weapon_item_to_slot(equipped_item, 0)
+		if not bool(equip_result.get("success", false)):
+			_inventory.restore_slots_snapshot(inventory_before)
+			status_label.text = "%s · 物品留在地面" % str(equip_result.get("reason", "武器装备失败"))
+			return
+		pickup.accept_pickup(player)
+		_queue_runtime_autosave("ground_loot_weapon_auto_equipped")
+		status_label.text = "已装备 %s" % item.get("name", item.get("id", "武器"))
+		_refresh_loot_label()
+		return
 	var added := _inventory.add_item(item, requested)
 	if added <= 0:
 		status_label.text = "背包已满 · %s 留在地面" % item.get("name", "物资")
 		return
 	if added >= requested:
-		pickup.accept_pickup()
+		pickup.accept_pickup(player)
 	else:
 		pickup.item_data["count"] = requested - added
 	_queue_runtime_autosave("ground_loot_picked_up")
@@ -5085,10 +5280,7 @@ func _build_door_fate_overlay() -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.add_child(dim)
 
-	var protocol := _make_hud_label("FATE PROTOCOL / SELECT ONE", 13, Color(0.38, 0.74, 0.86))
-	protocol.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_anchor_control(protocol, 0.5, 0.0, 0.5, 0.0, -320, 42, 320, 64)
-	_fate_overlay.add_child(protocol)
+	# 顶部协议提示已移除：三张卡和标题直接成为交互主体。
 	var title := Label.new()
 	title.text = "《  命 运 卡 三 选 一  》"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -5103,68 +5295,124 @@ func _build_door_fate_overlay() -> void:
 	# 三张卡是本弹窗的主体，占据标题与信息条之间的全部纵向空间。
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override("separation", _hud_int(64))
-	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -570, 134, 570, 706)
+	row.add_theme_constant_override("separation", _hud_int(56))
+	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -570, 112, 570, 806)
 	_fate_overlay.add_child(row)
+	_fate_choice_buttons.clear()
 	var card_buttons: Array[Button] = []
 	for choice_index in range(_door_fate_choices.size()):
 		var card := _door_fate_choices[choice_index]
-		var card_button := _create_reference_fate_card(card, choice_index)
-		row.add_child(card_button)
-		card_buttons.append(card_button)
-		_play_reference_tarot_flip(card_button, card, choice_index)
+		var card_view := _create_reference_fate_card_view(card, choice_index)
+		row.add_child(card_view)
+		var card_button := card_view.get_meta("tarot_button") as Button
+		if card_button != null:
+			card_buttons.append(card_button)
+			_fate_choice_buttons.append(card_button)
+			_play_reference_tarot_flip(card_button, card, choice_index)
 	_configure_fate_card_focus_navigation(card_buttons)
 
-	var info_panel := _make_hud_panel(Color(0.23, 0.88, 1.0), Color(0.006, 0.036, 0.055, 0.94))
-	_anchor_control(info_panel, 0.5, 0.0, 0.5, 0.0, -380, 730, 380, 806)
-	_fate_overlay.add_child(info_panel)
-	_add_neon_frame(info_panel, Color(0.23, 0.88, 1.0), 0.52, false)
-	var info_margin := _make_margin(20, 10, 20, 10)
-	info_panel.add_child(info_margin)
-	_fate_feedback_label = _make_hud_label(
-		"当前信息\n请选择一张命运卡强化本次行动 · ESC 可放弃本次选择",
-		15,
-		Color(0.72, 0.91, 0.98),
-	)
-	_fate_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_fate_feedback_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	info_margin.add_child(_fate_feedback_label)
+	# 底部信息条已移除：选择反馈通过卡片的放大/缩小动画和状态栏完成。
+	_fate_feedback_label = null
 
 
-func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
+## 门后三选一的单张命运卡：**塔罗图卡**（卡面贴图 + 卡下功能文字）。
+##
+## 返回「卡片列」容器（卡 + 卡下功能文字）；真正可聚焦的按钮挂在 meta `tarot_button` 上，
+## 供焦点导航与翻转动画复用。卡面图片本身已带边框与圆角，因此不再叠加程序绘制的
+## 品质描边、作用域标签、方位三角、目标预览与页脚。
+## 有对应塔罗美术时用贴图层；缺图时回退到程序卡面，保证补图落地前仍可玩。
+func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Control:
 	var accent := FateCard.scope_color(card.scope)
+	var column := VBoxContainer.new()
+	column.name = "FateChoiceColumn_%d" % choice_index
+	# 三列必须使用同一高度并从同一条顶线开始；否则枪械卡多一行文字时，
+	# VBoxContainer 的居中布局会把整张卡向上顶，造成截图中的卡片错位。
+	column.custom_minimum_size = _hud_size(Vector2(346, 650))
+	column.alignment = BoxContainer.ALIGNMENT_BEGIN
+	column.add_theme_constant_override("separation", _hud_int(12))
+
 	var button := Button.new()
 	button.name = "FateChoiceCard_%d" % choice_index
-	button.custom_minimum_size = _hud_size(Vector2(350, 552))
+	button.custom_minimum_size = _hud_size(Vector2(346, 546))
 	button.text = ""
-	button.clip_contents = false
+	button.clip_contents = true
 	button.focus_mode = Control.FOCUS_ALL
 	button.tooltip_text = "%s · %s\n%s" % [card.card_name, card.orientation_name(), card.description]
 	button.disabled = true
 	button.set_meta("tarot_face_ready", false)
 	button.set_meta("tarot_orientation", card.orientation_name())
-	var normal := _make_hud_style(Color(accent, 0.82), Color(0.008, 0.014, 0.034, 0.97), 2)
-	normal.set_corner_radius_all(8)
-	normal.shadow_color = Color(accent, 0.36)
-	normal.shadow_size = 10
-	var hover := normal.duplicate() as StyleBoxFlat
-	hover.bg_color = Color(0.018, 0.028, 0.060, 0.99)
-	hover.border_color = accent.lightened(0.20)
-	hover.set_border_width_all(3)
-	hover.shadow_color = Color(accent, 0.66)
-	hover.shadow_size = 16
-	var pressed := hover.duplicate() as StyleBoxFlat
-	pressed.bg_color = Color(accent, 0.18)
-	button.add_theme_stylebox_override("normal", normal)
-	button.add_theme_stylebox_override("hover", hover)
-	button.add_theme_stylebox_override("focus", hover)
-	button.add_theme_stylebox_override("pressed", pressed)
+	button.set_meta("tarot_button", button)
+	# 卡身份：供验收把卡面贴图与被抽中的卡牌逐一对上，防止"图装错牌"。
+	button.set_meta("tarot_stable_card_id", card.get_stable_card_id())
 
+	# 卡面自身已经包含完整外框；按钮只承担命中区域，不再绘制紫色背框、焦点框或按下框。
+	var bare_button := StyleBoxEmpty.new()
+	button.add_theme_stylebox_override("normal", bare_button)
+	button.add_theme_stylebox_override("hover", bare_button)
+	button.add_theme_stylebox_override("focus", bare_button)
+	button.add_theme_stylebox_override("pressed", bare_button)
+	column.add_child(button)
+
+	var art := FateCardView.art_for(card)
+	var art_mode := art != null
+	button.set_meta("tarot_art_mode", art_mode)
+	var face_node: Control = null
+	var back_node: Control = null
+	if art_mode:
+		var back_tex := FateCardView.back_texture()
+		if back_tex != null:
+			back_node = FateCardView.build_back_layer(button)
+		face_node = FateCardView.build_art_layer(button, art, card.is_reversed(), "TarotArtFace")
+		if face_node != null:
+			face_node.visible = false
+	else:
+		face_node = _build_programmatic_fate_face(button, card, accent)
+		back_node = _build_programmatic_fate_back(button, accent)
+
+	button.set_meta("tarot_face_node", face_node)
+	button.set_meta("tarot_back_node", back_node)
+	# 枢轴同步用 lambda：静态/实例方法的 Callable 在多张卡 bind 到不同按钮时
+	# 会被引擎判为同一连接而拒绝重复连接，导致翻转绕旧轴心（卡面飞出）。
+	var sync_pivot := func() -> void:
+		if is_instance_valid(button):
+			button.pivot_offset = button.size * 0.5
+	sync_pivot.call()
+	button.resized.connect(sync_pivot)
+	button.mouse_entered.connect(_on_reference_fate_card_hover.bind(button, true))
+	button.mouse_exited.connect(_on_reference_fate_card_hover.bind(button, false))
+	button.pressed.connect(_on_reference_fate_card_pressed.bind(button, choice_index))
+
+	var target_detail := ""
+	if card.scope == FateCard.Scope.WEAPON:
+		var target := FateCardGameBridge.get_target_summary(card)
+		var weapon_name := str(target.get("display_name", "当前枪械"))
+		var used := int(target.get("fate_slot_used", 0))
+		var capacity := int(target.get("fate_slot_capacity", 0))
+		if capacity > 0:
+			target_detail = "%s  %d/%d" % [weapon_name, used, capacity]
+		else:
+			target_detail = weapon_name
+	var caption := FateCardView.build_caption(card, _hud_int(22), _hud_size(Vector2(346, 0)).x, target_detail)
+	# 说明区也统一预留高度：先保证三张卡面和文字基线整齐，再容纳枪械卡的第二行信息。
+	caption.custom_minimum_size = _hud_size(Vector2(346, 92))
+	caption.add_theme_color_override("font_color", accent)
+	caption.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
+	caption.add_theme_constant_override("outline_size", _hud_int(3))
+	caption.add_theme_constant_override("line_spacing", _hud_int(3))
+	column.add_child(caption)
+	# 调用方拿到的是「列」而不是按钮，故在列上也挂一份，避免从列上取不到按钮。
+	column.set_meta("tarot_button", button)
+	return column
+
+
+## 缺图回退：程序绘制的卡面（作用域 + 卡名 + 方位 + 功能）。
+## 塔罗美术补齐后这一支不再被走到。
+func _build_programmatic_fate_face(host: Control, card: FateCard, accent: Color) -> Control:
 	var margin := _make_margin(22, 20, 22, 20)
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	margin.name = "TarotFaceText"
 	margin.visible = false
-	button.add_child(margin)
+	host.add_child(margin)
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_theme_constant_override("separation", _hud_int(8))
@@ -5172,26 +5420,6 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	var scope_label := _make_hud_label(FateCard.scope_display_name(card.scope), 20, accent)
 	scope_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(scope_label)
-	var ornament_holder := Control.new()
-	ornament_holder.custom_minimum_size = _hud_size(Vector2(0, 112))
-	ornament_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vbox.add_child(ornament_holder)
-	var ornament := Control.new()
-	ornament.name = "TarotOrientationOrnament"
-	ornament.set_anchors_preset(Control.PRESET_FULL_RECT)
-	ornament.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ornament_holder.add_child(ornament)
-	var symbol := _make_hud_label(FateCard.scope_symbol(card.scope), 88, accent.lightened(0.10))
-	symbol.set_anchors_preset(Control.PRESET_FULL_RECT)
-	symbol.custom_minimum_size = _hud_size(Vector2(0, 104))
-	symbol.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	symbol.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	symbol.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ornament.add_child(symbol)
-	var direction_mark := _make_hud_label("▲", 14, Color(accent, 0.82))
-	direction_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_anchor_control(direction_mark, 0.5, 0.0, 0.5, 0.0, -24, 0, 24, 20)
-	ornament.add_child(direction_mark)
 	var card_name := _make_hud_label(card.card_name, 28, Color(0.94, 0.96, 1.0))
 	card_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(card_name)
@@ -5203,66 +5431,33 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	orientation_label.name = "TarotOrientationLabel"
 	orientation_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(orientation_label)
-	var rarity := _make_hud_label(
-		"%s · %s" % [FateCard.rarity_name(card.card_rarity), FateCard.type_name(card.card_type)],
-		17,
-		_rarity_color(card.card_rarity),
-	)
-	rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(rarity)
-	var rule := HSeparator.new()
-	rule.add_theme_constant_override("separation", _hud_int(2))
-	vbox.add_child(rule)
-	var target := _make_hud_label(_get_fate_target_preview(card), 16, Color(0.62, 0.84, 0.92))
-	target.custom_minimum_size = _hud_size(Vector2(288, 50))
-	target.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	target.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	target.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vbox.add_child(target)
 	var effect_text := card.short_description if not card.short_description.is_empty() else card.description
 	var effect := _make_hud_label(effect_text, 19, Color(0.91, 0.93, 0.96))
-	effect.custom_minimum_size = _hud_size(Vector2(288, 80))
+	effect.custom_minimum_size = _hud_size(Vector2(280, 120))
 	effect.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	effect.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	effect.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(effect)
-	var footer_text := "本局生效 · 不占枪槽"
-	if card.scope == FateCard.Scope.WEAPON:
-		footer_text = (
-			"命运槽已满 · 再次点击兑魂"
-			if _is_weapon_fate_target_full(card)
-			else "永久刻印 · 不可逆"
-		)
-	var footer := _make_hud_label(
-		footer_text,
-		15,
-		Color(accent, 0.86),
-	)
-	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(footer)
-	_add_neon_frame(button, accent, 1.0, true)
+	_add_neon_frame(host, accent, 1.0, true)
+	return margin
+
+
+func _build_programmatic_fate_back(host: Control, accent: Color) -> Control:
 	var back := Panel.new()
 	back.name = "TarotCardBack"
 	back.set_anchors_preset(Control.PRESET_FULL_RECT)
 	back.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var back_style := _make_hud_style(Color(accent, 0.92), Color(0.006, 0.012, 0.030, 0.99), 3)
-	back_style.set_corner_radius_all(8)
+	back_style.set_corner_radius_all(10)
 	back.add_theme_stylebox_override("panel", back_style)
-	button.add_child(back)
+	host.add_child(back)
 	var back_glyph := _make_hud_label("✦\n命运塔罗\nFATE", 30, Color(accent, 0.92))
 	back_glyph.set_anchors_preset(Control.PRESET_FULL_RECT)
 	back_glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	back_glyph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	back_glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	back.add_child(back_glyph)
-	button.move_child(back, button.get_child_count() - 1)
-	button.set_meta("tarot_face_node", margin)
-	button.set_meta("tarot_back_node", back)
-	button.resized.connect(_center_control_pivot.bind(button))
-	button.mouse_entered.connect(_on_reference_fate_card_hover.bind(button, true))
-	button.mouse_exited.connect(_on_reference_fate_card_hover.bind(button, false))
-	button.pressed.connect(_on_door_fate_selected.bind(choice_index))
-	return button
+	return back
 
 
 func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: int) -> void:
@@ -5270,8 +5465,9 @@ func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: in
 		return
 	button.scale = Vector2.ONE
 	button.pivot_offset = button.size * 0.5
-	var face := button.get_meta("tarot_face_node") as Control
-	var back := button.get_meta("tarot_back_node") as Control
+	# 注意：不能用 get_meta(key, null) 取默认——Godot 在默认值本身为 null 时仍会打错误日志。
+	var face := (button.get_meta("tarot_face_node") if button.has_meta("tarot_face_node") else null) as Control
+	var back := (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
 	var reduce_motion := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
 	var tween := button.create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -5288,10 +5484,15 @@ func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: in
 
 
 func _reveal_reference_tarot_face(button: Control, face: Control, back: Control, is_reversed: bool) -> void:
-	# 逆位保留边框/图案倒置，文字层反向补偿为正向；效果仍读取逆位快照。
+	# 图卡模式：只把**卡面图案**绕中心倒置，按钮与卡下功能文字层都不旋转。
+	# 程序卡面回退：沿用「卡框倒置 + 文字层反向补偿」的旧规则。
 	if button != null and is_instance_valid(button) and face != null:
-		var ornament := face.find_child("TarotOrientationOrnament", true, false) as Control
-		UIStyleFactory.apply_tarot_orientation(button as Button, face, is_reversed, ornament)
+		if bool(button.get_meta("tarot_art_mode", false)):
+			face.pivot_offset = face.size * 0.5
+			face.rotation = PI if is_reversed else 0.0
+		else:
+			var ornament := face.find_child("TarotOrientationOrnament", true, false) as Control
+			UIStyleFactory.apply_tarot_orientation(button as Button, face, is_reversed, ornament)
 	if back != null and is_instance_valid(back):
 		back.visible = false
 	if face != null and is_instance_valid(face):
@@ -5372,8 +5573,25 @@ func _get_fate_target_preview(card: FateCard) -> String:
 	]
 
 
-func _center_control_pivot(control: Control) -> void:
-	control.pivot_offset = control.size * 0.5
+func _start_fate_card_idle_motion(card_view: Control, choice_index: int) -> void:
+	if card_view == null or not is_instance_valid(card_view):
+		return
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		return
+	card_view.pivot_offset = card_view.size * 0.5
+	# 每张卡使用不同相位、幅度与周期，避免三张卡同步摆动。
+	var phase := float(choice_index) * 0.95
+	var lift := 3.0 + float(choice_index % 2) * 1.2
+	var tilt := deg_to_rad(0.55 + float(choice_index) * 0.18)
+	var cycle := 2.8 + float(choice_index) * 0.42
+	var tween := card_view.create_tween().set_loops()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_interval(fmod(phase, 0.85))
+	tween.tween_property(card_view, "position:y", -lift, cycle * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(card_view, "rotation", tilt, cycle * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(card_view, "position:y", 0.0, cycle * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(card_view, "rotation", -tilt, cycle * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(card_view, "rotation", 0.0, cycle * 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 func _on_reference_fate_card_hover(control: Control, hovered: bool) -> void:
@@ -5381,7 +5599,41 @@ func _on_reference_fate_card_hover(control: Control, hovered: bool) -> void:
 		return
 	var tween := control.create_tween()
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(control, "scale", Vector2.ONE * (1.025 if hovered else 1.0), 0.12)
+	tween.tween_property(control, "modulate", Color(1.08, 1.08, 1.08, 1.0) if hovered else Color.WHITE, 0.12)
+
+
+func _on_reference_fate_card_pressed(button: Button, choice_index: int) -> void:
+	if button == null or not is_instance_valid(button) or bool(button.get_meta("fate_selection_feedback", false)):
+		return
+	button.set_meta("fate_selection_feedback", true)
+	var selected_view := button.get_parent() as Control
+	if selected_view == null:
+		_on_door_fate_selected(choice_index)
+		return
+	for index in range(_fate_choice_buttons.size()):
+		var other_button := _fate_choice_buttons[index]
+		if other_button == null or not is_instance_valid(other_button):
+			continue
+		var view := other_button.get_parent() as Control
+		if view == null:
+			continue
+		var target_scale := 1.10 if other_button == button else 0.90
+		var tween := view.create_tween()
+		tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(view, "scale", Vector2.ONE * target_scale, 0.22)
+	# 保持原有选择、满槽二次确认和异步应用逻辑；反馈动画先给玩家一个清晰落点。
+	var feedback := get_tree().create_timer(0.18, true, false, true)
+	feedback.timeout.connect(_apply_fate_choice_after_feedback.bind(choice_index), CONNECT_ONE_SHOT)
+
+
+func _apply_fate_choice_after_feedback(choice_index: int) -> void:
+	if choice_index >= 0 and choice_index < _fate_choice_buttons.size():
+		var button := _fate_choice_buttons[choice_index]
+		if button != null and is_instance_valid(button):
+			button.set_meta("fate_selection_feedback", false)
+	if _door_fate_active:
+		_on_door_fate_selected(choice_index)
 
 
 func _rarity_color(rarity: FateCard.CardRarity) -> Color:
@@ -5463,6 +5715,7 @@ func _close_door_fate_overlay() -> void:
 	_door_fate_active = false
 	_door_fate_choices.clear()
 	_pending_fate_currency_choice = -1
+	_fate_choice_buttons.clear()
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
 		# 先摘除再回收：queue_free() 要等到帧末才真正释放节点。若同一帧内再次
 		# 打开弹窗（连续两次命运卡流程/验收用例），新节点会与仍挂在树上的旧节点
@@ -5548,6 +5801,10 @@ func _refresh_edge_visuals(a: String, b: String, opened: bool) -> void:
 	var room_b := _room_by_id.get(b) as DungeonRoom3D
 	if room_a == null or room_b == null:
 		return
+	# 已拆门的98F固定通道不能被旧存档的关门状态重新封锁。
+	if room_a.authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and Block00MasterOfficeLayout3D.is_removed_door_pair(a, b):
+		opened = true
+		_open_edges[_edge_key(a, b)] = true
 	var direction_a := _direction_between(room_a.global_position, room_b.global_position)
 	room_a.set_door_open(direction_a, opened)
 	room_b.set_door_open(_opposite_direction(direction_a), opened)
@@ -5643,13 +5900,14 @@ func _capture_room_runtime_state(room_id: String) -> void:
 				"position": [pickup.global_position.x, pickup.global_position.y, pickup.global_position.z],
 			})
 	var room_keys: Array[Dictionary] = []
-	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-		if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
-			var key := value as RoomKeyPickup3D
-			room_keys.append({
-				"room_id": key.room_id,
-				"position": [key.global_position.x, key.global_position.y, key.global_position.z],
-			})
+	if _room_produces_room_key(room):
+		for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+			if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
+				var key := value as RoomKeyPickup3D
+				room_keys.append({
+					"room_id": key.room_id,
+					"position": [key.global_position.x, key.global_position.y, key.global_position.z],
+				})
 	var container_states: Dictionary = {}
 	for value in get_tree().get_nodes_in_group("room_prop_3d"):
 		if value is RoomFurniture3D and room.is_ancestor_of(value):
@@ -5794,25 +6052,30 @@ func _restore_room_runtime_state(room_id: String) -> void:
 				)
 			pickup.pickup_requested.connect(_on_ground_loot_requested)
 	var has_live_room_key := false
-	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
-		if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
-			has_live_room_key = true
-			break
-	if not has_live_room_key:
-		for runtime_value in state.get("room_keys", []):
-			var key_state := runtime_value as Dictionary
-			var key := KEY_SCRIPT.new() as RoomKeyPickup3D
-			key.configure(str(key_state.get("room_id", room_id)))
-			room.add_child(key)
-			var saved_position: Variant = key_state.get("position", room.global_position)
-			if saved_position is Array and (saved_position as Array).size() >= 3:
-				key.global_position = Vector3(
-					float((saved_position as Array)[0]),
-					float((saved_position as Array)[1]),
-					float((saved_position as Array)[2])
-				)
-			key.collected.connect(_on_room_key_collected)
-			_spawned_key_rooms[room_id] = true
+	if not _room_produces_room_key(room):
+		for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+			if value is RoomKeyPickup3D and room.is_ancestor_of(value):
+				(value as RoomKeyPickup3D).queue_free()
+	if _room_produces_room_key(room):
+		for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+			if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
+				has_live_room_key = true
+				break
+		if not has_live_room_key:
+			for runtime_value in state.get("room_keys", []):
+				var key_state := runtime_value as Dictionary
+				var key := KEY_SCRIPT.new() as RoomKeyPickup3D
+				key.configure(str(key_state.get("room_id", room_id)))
+				room.add_child(key)
+				var saved_position: Variant = key_state.get("position", room.global_position)
+				if saved_position is Array and (saved_position as Array).size() >= 3:
+					key.global_position = Vector3(
+						float((saved_position as Array)[0]),
+						float((saved_position as Array)[1]),
+						float((saved_position as Array)[2])
+					)
+				key.collected.connect(_on_room_key_collected)
+				_spawned_key_rooms[room_id] = true
 
 
 func get_segment_runtime_snapshot() -> Dictionary:

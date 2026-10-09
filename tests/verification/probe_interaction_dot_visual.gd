@@ -2,7 +2,7 @@ extends Node3D
 ## 交互圆点的**视觉**采样（真渲染器，非 headless）。
 ##
 ## 回答「这套常驻圆点在实际游戏机位下长什么样」：按 TowerDescent3D 的 CAMERA_* 常量
-## 复刻塔内相机（高 10.719m / 后拉 4.038m / FOV 65°），在真实比例的地板、货箱、门旁边
+## 复刻塔内相机（高 9.994m / 后拉 3.700m / FOV 65°），在真实比例的地板、货箱、门旁边
 ## 摆三个距离的圆点，逐状态截图。
 ##
 ## 自带像素断言：截图里必须真的出现亮斑。这一条专治「几何生成了、visible=true、
@@ -16,8 +16,8 @@ const OUTPUT_DIR := "res://outputs/verification"
 const DOT_SCRIPT := preload("res://src/ui/InteractionDot3D.gd")
 
 ## 与 TowerDescent3D 保持一致 —— 探针必须用真机位，否则是在对着假象调参。
-const CAMERA_HEIGHT_M := 10.719009
-const CAMERA_TRAILING_M := 4.037671
+const CAMERA_HEIGHT_M := 9.993940
+const CAMERA_TRAILING_M := 3.699625
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0

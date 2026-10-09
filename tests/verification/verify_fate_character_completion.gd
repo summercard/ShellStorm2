@@ -60,7 +60,9 @@ func _run() -> void:
 		player.remove_damage_buff("verification")
 		reset()
 		apply("fate_moon_stride", reversed)
-		check(is_equal_approx(player.get_move_speed(), Player3D.SPEED * (0.92 if reversed else 1.12)), "隐者移速")
+		# 默认出厂枪为 bp_sprinkler（机枪族），持枪移速惩罚 1.5m/s；移速 =（4.5 - 1.5）× 命运倍率。
+		check(player.get_active_weapon_gun_id() == "bp_sprinkler", "隐者移速前置：默认持出厂机枪")
+		check(is_equal_approx(player.get_move_speed(), (Player3D.SPEED - Player3D.WEAPON_FAMILY_MOVE_PENALTY["machinegun"]) * (0.92 if reversed else 1.12)), "隐者移速")
 		player.begin_fate_dash_invulnerability()
 		check(is_equal_approx(player._invincible_remaining, Player3D.DASH_DURATION + (0.12 if reversed else 0.0)), "隐者无敌")
 		reset()

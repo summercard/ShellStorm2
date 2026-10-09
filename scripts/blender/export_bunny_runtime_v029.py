@@ -9,7 +9,7 @@ R=Path(__file__).resolve().parents[2]
 B=R/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01'
 MODEL=B/'production/v021/source/model/chr_bunny01_model_v021.blend'
 VERSION=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--source-version=')), 'v030' if '--firing-v030' in sys.argv else 'v029')
-assert VERSION in ('v029','v030','v031','v032','v033')
+assert VERSION in ('v029','v030','v031','v032','v033','v034','v035','v036','v037')
 SOURCE=B/f'source/animation/chr_bunny01_animation_{VERSION}.blend'
 OUT=B/'components/chr_bunny01_motion';OUT.mkdir(parents=True,exist_ok=True)
 bpy.ops.wm.open_mainfile(filepath=str(MODEL))
@@ -45,10 +45,20 @@ for s in list(bpy.data.scenes):
     new[state]=dict(duration=float(a['duration']),loop=bool(a['loop']),frames=frames,source_action=a.name)
     spec_key=state.replace('_fire_','_')
     if spec_key in specs:new[state]['reference_speed_mps']=specs[spec_key]['reference_speed_mps']
-expected_count=35 if VERSION=='v029' else 77 if VERSION=='v033' else 74 if VERSION=='v032' else 62
+expected_count=35 if VERSION=='v029' else 77 if VERSION in ('v033','v034','v035','v036','v037') else 74 if VERSION=='v032' else 62
 assert len(new)==expected_count,len(new)
 clips.update(new)
 path=OUT/'anim_bunny01_library.json'
+if VERSION in ('v035','v036','v037'):
+    previous=json.loads(path.read_text(encoding='utf-8'))['clips']
+    retained=[n for n in previous if n!='machinegun_reload']
+    assert len(retained)==90
+    assert all(clips[n]==previous[n] for n in retained),'Unrelated runtime clip changed'
+if VERSION=='v034':
+    previous=json.loads(path.read_text(encoding='utf-8'))['clips']
+    retained=[n for n in previous if n not in ('longgun_reload','machinegun_reload')]
+    assert len(retained)==89
+    assert all(clips[n]==previous[n] for n in retained),'Unrelated runtime clip changed'
 if VERSION=='v033':
     previous=json.loads(path.read_text(encoding='utf-8'))['clips']
     retained=[n for n in previous if not n.endswith('_reload')]
@@ -102,7 +112,7 @@ ledger.update(version=VERSION,new_clip_count=expected_count,glb_clip_count=expec
 if VERSION in ('v030','v031','v032','v033'):
     ledger['missing_actions']=['family_reload','family_charge','heavy_melee']
     ledger['verification']='verify_player3d_firing_motion'
-if VERSION=='v033':
+if VERSION in ('v033','v034','v035','v036','v037'):
     ledger['missing_actions']=['family_charge','heavy_melee']
     ledger['verification']='verify_player3d_reload_motion'
 (B/'character_transfer_ledger.json').write_text(json.dumps(ledger,ensure_ascii=False,indent=2),encoding='utf-8')

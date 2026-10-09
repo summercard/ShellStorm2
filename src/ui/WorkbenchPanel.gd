@@ -29,7 +29,7 @@ func _ready() -> void:
 	gunbody_options = get_node_or_null("PanelContainer/VBox/HBox/GunbodyPanel/VBox")
 	bullet_options = get_node_or_null("PanelContainer/VBox/HBox/BulletPanel/VBox")
 
-	panel_container.custom_minimum_size = Vector2(620, 520)
+	panel_container.custom_minimum_size = Vector2(760, 520)
 	position = Vector2(100, 80)
 
 	if close_button:
@@ -260,39 +260,18 @@ func _show_fate_card_options() -> void:
 		gunbody_options.add_child(empty_lbl)
 		return
 
+	# 命运卡以塔罗图卡横向排布（面板较窄，用小尺寸卡面 + 卡下功能文字）
+	var card_row := HBoxContainer.new()
+	card_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	card_row.add_theme_constant_override("separation", 8)
+	gunbody_options.add_child(card_row)
 	for choice_index in range(choices.size()):
 		var card := choices[choice_index]
-		var btn := Button.new()
-		var rarity_color: Color = FateCard.rarity_color(card.card_rarity)
-		var color_hex := (
-			"#%02X%02X%02X"
-			% [int(rarity_color.r * 255), int(rarity_color.g * 255), int(rarity_color.b * 255)]
-		)
-		btn.text = (
-			"%s · [%s]\n%s\n%s %s · %s"
-			% [
-				FateCard.scope_display_name(card.scope),
-				FateCard.rarity_name(card.card_rarity),
-				card.card_name,
-				card.orientation_symbol(),
-				card.orientation_name(),
-				FateCard.type_name(card.card_type),
-			]
-		)
-		btn.custom_minimum_size = Vector2(240, 80)
-		btn.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
-		# 稀有边框：normal = 稀有色，hover = 白色高亮
-		var card_normal := UIStyleFactory.make_panel_with_border(2, rarity_color, 6, 2)
-		card_normal.bg_color = UIPalette.BG_DARK
-		var card_hover := UIStyleFactory.make_panel_with_border(2, Color(1.0, 1.0, 1.0, 0.8), 6, 2)
-		card_hover.bg_color = UIPalette.BG_MID
-		btn.add_theme_stylebox_override("normal", card_normal)
-		btn.add_theme_stylebox_override("hover", card_hover)
-		btn.add_theme_color_override("font_color", rarity_color)
-		btn.add_theme_font_size_override("font_size", 13)
-		btn.pressed.connect(_on_fate_card_selected.bind(card))
-		gunbody_options.add_child(btn)
-		_play_workbench_tarot_flip(btn, card, choice_index)
+		var card_view := _create_fate_card_view(card)
+		card_row.add_child(card_view)
+		var btn := card_view.get_meta("tarot_button") as Button
+		if btn != null:
+			_play_workbench_tarot_flip(btn, card, choice_index)
 
 	# 右侧显示说明
 	var desc := Label.new()
@@ -304,27 +283,93 @@ func _show_fate_card_options() -> void:
 	bullet_options.add_child(desc)
 
 
+## 工作台的命运卡视图：塔罗卡面 + 卡下功能文字（面板窄，故用紧凑尺寸）。
+func _create_fate_card_view(card: FateCard) -> Control:
+	var column := VBoxContainer.new()
+	column.alignment = BoxContainer.ALIGNMENT_CENTER
+	column.add_theme_constant_override("separation", 6)
+
+	var btn := Button.new()
+	btn.custom_minimum_size = Vector2(112, 175)
+	btn.text = ""
+	btn.clip_contents = true
+	btn.focus_mode = Control.FOCUS_ALL
+	btn.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
+	btn.set_meta("tarot_button", btn)
+	btn.set_meta("tarot_face_ready", false)
+	# 卡身份：供验收把卡面贴图与被抽中的卡牌逐一对上，防止"图装错牌"。
+	btn.set_meta("tarot_stable_card_id", card.get_stable_card_id())
+	btn.pressed.connect(_on_fate_card_selected.bind(card))
+	var hover := StyleBoxFlat.new()
+	hover.bg_color = Color(1.0, 1.0, 1.0, 0.07)
+	hover.set_corner_radius_all(8)
+	hover.set_border_width_all(2)
+	hover.border_color = Color(1.0, 1.0, 1.0, 0.55)
+	btn.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+	btn.add_theme_stylebox_override("hover", hover)
+	btn.add_theme_stylebox_override("focus", hover)
+	btn.add_theme_stylebox_override("pressed", hover)
+	column.add_child(btn)
+
+	var art := FateCardView.art_for(card)
+	btn.set_meta("tarot_art_mode", art != null)
+	if art != null:
+		var back_node: Control = null
+		if FateCardView.back_texture() != null:
+			back_node = FateCardView.build_back_layer(btn)
+		var face := FateCardView.build_art_layer(btn, art, card.is_reversed(), "TarotArtFace")
+		if face != null:
+			face.visible = false
+		btn.set_meta("tarot_face_node", face)
+		btn.set_meta("tarot_back_node", back_node)
+	else:
+		btn.text = "%s\n%s" % [card.card_name, card.short_description]
+		btn.add_theme_font_size_override("font_size", 11)
+		btn.add_theme_color_override("font_color", Color(0.86, 0.90, 0.95))
+		var fallback := UIStyleFactory.make_panel_with_border(2, FateCard.rarity_color(card.card_rarity), 6, 2)
+		fallback.bg_color = UIPalette.BG_DARK
+		btn.add_theme_stylebox_override("normal", fallback)
+
+	column.add_child(FateCardView.build_caption(card, 11, 112))
+	# 调用方拿到的是「列」而不是按钮，故在列上也挂一份，避免从列上取不到按钮。
+	column.set_meta("tarot_button", btn)
+	return column
+
+
 func _play_workbench_tarot_flip(button: Button, card: FateCard, choice_index: int) -> void:
-	var face := UIStyleFactory.make_tarot_button_text(button)
+	var art_mode := bool(button.get_meta("tarot_art_mode", false))
+	# 注意：不能用 get_meta(key, null) 取默认——Godot 在默认值本身为 null 时仍会打错误日志。
+	var face: Control = (button.get_meta("tarot_face_node") if button.has_meta("tarot_face_node") else null) as Control
+	var back: Control = (button.get_meta("tarot_back_node") if button.has_meta("tarot_back_node") else null) as Control
+	if not art_mode:
+		face = UIStyleFactory.make_tarot_button_text(button)
+		button.set_meta("tarot_face_node", face)
 	button.disabled = true
-	button.text = "✦ 命运塔罗"
 	button.set_meta("tarot_face_ready", false)
+	if not art_mode:
+		button.text = "✦ 命运塔罗"
 	button.pivot_offset = button.size * 0.5
 	var tween := button.create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
 		button.modulate.a = 0.0
-		button.text = ""
-		face.visible = true
-		UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
+		if not art_mode:
+			button.text = ""
+			face.visible = true
+			UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
+		else:
+			FateCardView.reveal(face, back, card.is_reversed())
 		tween.tween_property(button, "modulate:a", 1.0, 0.15)
 	else:
 		tween.tween_interval(0.10 + float(choice_index) * 0.08)
 		tween.tween_property(button, "scale:x", 0.04, 0.14)
 		tween.tween_callback(func() -> void:
-			button.text = ""
-			face.visible = true
-			UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
+			if not art_mode:
+				button.text = ""
+				face.visible = true
+				UIStyleFactory.apply_tarot_orientation(button, face, card.is_reversed())
+			else:
+				FateCardView.reveal(face, back, card.is_reversed())
 		)
 		tween.tween_property(button, "scale:x", 1.0, 0.18)
 	tween.tween_callback(func() -> void:

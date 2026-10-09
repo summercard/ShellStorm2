@@ -1,6 +1,7 @@
 class_name GroundLootPickup3D
 extends Area3D
-## 3D 地面物品。先落地，接触时再请求进入 12 格背包；满包时保持在原地。
+## 3D 地面物品。生成后先抛高并在地面弹两次，弹完才开放拾取。
+## 拾取使用角色中心的水平距离，不要求整个人体碰到物品；事务成功后物品飞入角色身体。
 
 signal pickup_requested(pickup: GroundLootPickup3D, item_data: Dictionary)
 
@@ -9,8 +10,25 @@ var _visual: Node3D
 var _accepted := false
 var _label: Label3D
 var _pickup_grace_until_msec := 0
+var _spawn_animating := false
+var _pickup_unlocked := true
+var _pickup_request_cooldown_until_msec := 0
+var _collecting := false
+var _collection_target: Node3D
+var _collection_start := Vector3.ZERO
+var _collection_elapsed := 0.0
+var _collection_start_scale := Vector3.ONE
+var _nearby_player: Node3D
 
 const PICKUP_ANIMATION_DURATION := 0.32
+const SPAWN_LAUNCH_HEIGHT_M := 1.65
+const SPAWN_FIRST_LANDING_S := 0.30
+const SPAWN_RISE_S := 0.12
+const SPAWN_BOUNCE_HEIGHTS_M := [1.02, 0.72]
+const SPAWN_BOUNCE_DURATIONS_S := [0.29, 0.22]
+const PICKUP_DISTANCE_M := 1.20
+const PICKUP_REQUEST_RETRY_S := 0.18
+const COLLECTION_ARC_HEIGHT_M := 0.45
 ## —— 头顶名牌（业主 2026-09-29：俯视镜头读不到名字）——
 ## 原来 Label3D 用的是默认朝向（不 billboard），文字躺在自己的 XY 平面上、
 ## 只朝世界 +Z。俯视镜头看到的是纸片侧面 ⇒ 一个字都读不出来。
@@ -41,6 +59,7 @@ func _ready() -> void:
 	collision_mask = 1
 	monitoring = true
 	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
 
 
 ## 玩家主动从物品栏丢到地面的物品需要短暂拾取保护，
@@ -50,15 +69,55 @@ func set_pickup_grace_seconds(seconds: float) -> void:
 
 
 func _process(delta: float) -> void:
-	if not _accepted and _visual != null:
+	if _collecting:
+		_process_collection(delta)
+		return
+	if not _accepted and _visual != null and not _spawn_animating:
 		_visual.rotation.y += delta * 1.35
 		_visual.position.y = 0.46 + sin(Time.get_ticks_msec() * 0.0035 + float(get_instance_id() % 13)) * 0.07
+	_update_player_distance()
+	if _player_in_range and is_pickup_available() and Time.get_ticks_msec() >= _pickup_request_cooldown_until_msec:
+		_pickup_request_cooldown_until_msec = Time.get_ticks_msec() + int(PICKUP_REQUEST_RETRY_S * 1000.0)
+		pickup_requested.emit(self, item_data.duplicate(true))
 
 
-func accept_pickup() -> void:
+## 生成后的真实掉落表现：先抛高，落地后连续弹两下；第二次落地前不允许拾取。
+## 落点由 Dungeon3D 先做贴地与净空校验，动画只负责表现，不改变存档坐标。
+func begin_spawn_animation() -> void:
+	if _visual == null or _spawn_animating or _accepted:
+		return
+	_spawn_animating = true
+	_pickup_unlocked = false
+	_visual.position.y = 0.46
+	var tween := create_tween()
+	tween.tween_property(_visual, "position:y", 0.46 + SPAWN_LAUNCH_HEIGHT_M, SPAWN_RISE_S).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_visual, "position:y", 0.46, SPAWN_FIRST_LANDING_S - SPAWN_RISE_S).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	for index in range(SPAWN_BOUNCE_HEIGHTS_M.size()):
+		var height := float(SPAWN_BOUNCE_HEIGHTS_M[index])
+		var duration := float(SPAWN_BOUNCE_DURATIONS_S[index])
+		tween.tween_property(_visual, "position:y", 0.46 + height, duration * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(_visual, "position:y", 0.46, duration * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_callback(_finish_spawn_animation)
+
+
+func _finish_spawn_animation() -> void:
+	_spawn_animating = false
+	_pickup_unlocked = true
+	if _player_in_range and not _accepted:
+		_pickup_request_cooldown_until_msec = 0
+
+
+func set_collection_target(target: Node3D) -> void:
+	_collection_target = target
+
+
+func accept_pickup(target: Node3D = null) -> void:
 	if _accepted:
 		return
 	_accepted = true
+	_collecting = false
+	if target != null:
+		_collection_target = target
 	if AudioManager != null:
 		AudioManager.play_sfx(
 			"soul_pickup" if bool(item_data.get("is_currency", false)) else "item_pickup",
@@ -72,6 +131,10 @@ func accept_pickup() -> void:
 	if _visual == null:
 		queue_free()
 		return
+	if _collection_target != null and is_instance_valid(_collection_target):
+		_start_collection_animation()
+		return
+	# 没有目标时保留旧的向上回收兜底，仅供独立表现测试使用；正式拾取总是传玩家目标。
 	var start_scale := _visual.scale
 	var motion := create_tween().set_parallel(true)
 	motion.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -85,18 +148,76 @@ func accept_pickup() -> void:
 	scale_tween.tween_callback(queue_free)
 
 
+func _start_collection_animation() -> void:
+	_collecting = true
+	_collection_elapsed = 0.0
+	_collection_start = _visual.global_position
+	_collection_start_scale = _visual.scale
+	if _label != null:
+		_label.modulate.a = 0.0
+
+
+func _process_collection(delta: float) -> void:
+	if _visual == null:
+		queue_free()
+		return
+	_collection_elapsed += delta
+	var progress := clampf(_collection_elapsed / PICKUP_ANIMATION_DURATION, 0.0, 1.0)
+	var target_position := _get_collection_target_position()
+	var curved := _collection_start.lerp(target_position, progress)
+	curved.y += COLLECTION_ARC_HEIGHT_M * 4.0 * progress * (1.0 - progress)
+	_visual.global_position = curved
+	_visual.rotation.y += delta * TAU * 5.0
+	_visual.scale = _collection_start_scale.lerp(Vector3.ZERO, progress)
+	if progress >= 1.0:
+		queue_free()
+
+
+func _get_collection_target_position() -> Vector3:
+	if _collection_target == null or not is_instance_valid(_collection_target):
+		return _collection_start + Vector3.UP * 0.5
+	if _collection_target.has_method("get_loot_collection_target_position"):
+		return _collection_target.get_loot_collection_target_position()
+	return _collection_target.global_position + Vector3.UP * 0.65
+
+
 func is_pickup_accepted() -> bool:
 	return _accepted
 
 
-func _on_body_entered(body: Node3D) -> void:
-	if (
-		_accepted
-		or Time.get_ticks_msec() < _pickup_grace_until_msec
-		or not body.is_in_group("player_3d")
-	):
+## 发放前的统一前置条件，Dungeon3D 同样校验，避免其他请求路径绕过弹跳和保护期。
+func is_pickup_available() -> bool:
+	return not _accepted and _pickup_unlocked and not _spawn_animating and Time.get_ticks_msec() >= _pickup_grace_until_msec
+
+
+func _update_player_distance() -> void:
+	if not is_instance_valid(_nearby_player) or not _nearby_player.is_inside_tree():
+		_nearby_player = get_tree().get_first_node_in_group("player_3d") as Node3D
+	_player_in_range = false
+	if not is_instance_valid(_nearby_player) or not _nearby_player.is_inside_tree():
 		return
+	var offset := _nearby_player.global_position - global_position
+	offset.y = 0.0
+	_player_in_range = offset.length() <= PICKUP_DISTANCE_M
+
+
+var _player_in_range := false
+
+
+func _on_body_entered(body: Node3D) -> void:
+	if not body.is_in_group("player_3d"):
+		return
+	_nearby_player = body
+	_update_player_distance()
+	if not _player_in_range or not is_pickup_available():
+		return
+	_pickup_request_cooldown_until_msec = Time.get_ticks_msec() + int(PICKUP_REQUEST_RETRY_S * 1000.0)
 	pickup_requested.emit(self, item_data.duplicate(true))
+
+
+func _on_body_exited(body: Node3D) -> void:
+	if body.is_in_group("player_3d"):
+		_player_in_range = false
 
 
 func _build_visual(color: Color) -> void:
@@ -110,7 +231,7 @@ func _build_visual(color: Color) -> void:
 	_visual.scale = Vector3.ONE * legacy_scale * CURRENT_BASE_SIZE_MULTIPLIER
 	add_child(_visual)
 	var shape := SphereShape3D.new()
-	shape.radius = 0.82
+	shape.radius = PICKUP_DISTANCE_M
 	var collision := CollisionShape3D.new()
 	collision.position.y = 0.48
 	collision.shape = shape
@@ -148,11 +269,17 @@ func get_model_snapshot() -> Dictionary:
 		"uses_shared_model_factory": true,
 		"accepted": _accepted,
 		"pickup_animation_duration": PICKUP_ANIMATION_DURATION,
+		"pickup_distance_m": PICKUP_DISTANCE_M,
+		"spawn_animating": _spawn_animating,
+		"pickup_unlocked": _pickup_unlocked,
+		"collecting": _collecting,
+		"collection_target_valid": _collection_target != null and is_instance_valid(_collection_target),
 		"pickup_grace_active": Time.get_ticks_msec() < _pickup_grace_until_msec,
 		"size_baseline_id": "entity_size_baseline_v2",
 		"legacy_visual_scale": legacy_scale,
 		"base_size_multiplier": CURRENT_BASE_SIZE_MULTIPLIER,
 		"visual_scale": _visual.scale if _visual != null else Vector3.ZERO,
+		"visual_world_position": _visual.global_position if _visual != null and _visual.is_inside_tree() else Vector3.ZERO,
 		# 头顶名牌朝向：与 `Enemy3D.overhead_health_camera_billboard` 同一口径，
 		# 让门禁能直接断言「俯视镜头读得到名字」，而不是只靠肉眼。
 		"label_camera_billboard": _label != null and _label.billboard == BaseMaterial3D.BILLBOARD_ENABLED,

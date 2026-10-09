@@ -14,8 +14,8 @@ const OUTPUT_DIR := "I:/工作项目/shellstrom2/outputs/reload_ring_preview"
 ## 与 TowerDescent3D 的 CAMERA_* 逐字一致（玩家本地系）：
 ##   相机 = 玩家 + (0, CAMERA_HEIGHT_M, CAMERA_DEFAULT_TRAILING_M)
 ##   注视点 = 玩家 + (0, CAMERA_LOOK_HEIGHT_M, -CAMERA_LOOK_AHEAD_M)
-## 数值抄自 src/world3d/TowerDescent3D.gd:157-160，改动那边这里要跟着改。
-const CAMERA_LOCAL := Vector3(0.0, 10.719009, 4.037671)
+## 数值抄自 src/world3d/TowerDescent3D.gd:155-162，改动那边这里要跟着改。
+const CAMERA_LOCAL := Vector3(0.0, 9.993940, 3.699625)
 const LOOK_LOCAL := Vector3(0.0, 0.45, -0.75)
 ## 实机视角的放大倍率 —— 1.0 就是游戏里真正的样子。
 const GAME_VIEW_SCALE := 1.0

@@ -45,6 +45,123 @@ func _ready() -> void:
 	_check(absf(minimap.size.x - minimap.size.y) <= 2.0 and minimap.size.x <= 225.0, "Tactical minimap is not circular or 80% scale", failures)
 	_check(minimap.get_snapshot().get("enemy_marker_count", 0) == 2, "Minimap enemy dots are not fed by runtime data", failures)
 	_check(_capture("reference_combat_hud.png"), "Could not capture reference combat HUD", failures)
+	# —— 2026-10-08（`0.2-PLAYER-001` 追记五）：换弹环搬到 HUD 武器图标上 ——
+	# 真源是主人的标注图：红圈**外径 75 px**、**圈心 = 武器图标控件矩形中心**。
+	# 本段逐条量可控件的几何与显隐，再真跑一次换弹验「进度跟武器计时器」与「图标弹一下」。
+	# 世界空间那一版环的退役由 `verify_3d_reload_state_flow` 的反向钉子管，两边不重叠。
+	var reload_ring := hud.find_child("HudReloadRing", true, false) as HudReloadRing
+	var weapon_icon := hud.find_child("CurrentWeaponModelIcon3D", true, false) as Control
+	_check(reload_ring != null, "HUD reload ring is missing", failures)
+	_check(weapon_icon != null, "HUD weapon icon is missing", failures)
+	if reload_ring != null:
+		var ring_snapshot := reload_ring.get_snapshot()
+		_check(
+			absf(float(ring_snapshot.get("outer_diameter_px", 0.0)) - 75.0) <= 0.5,
+			"HUD reload ring is not the annotated 75 px circle: %s" % ring_snapshot.get("outer_diameter_px"),
+			failures
+		)
+		_check(not reload_ring.visible, "HUD reload ring shows while nothing is reloading", failures)
+		# 线宽与发光：2026-10-09 主人返工「太粗了 细一点」⇒ 比例由 0.2226 下调到 0.13。
+		# 0.13 的来源是**主人红笔实测**（核心亮带 5 px ÷ 外半径 37.5 = 0.1333），
+		# 所以这里同时钉住主干（4.875 px）与发光（×1.8 = 8.8 px）两条 —— 只钉主干挡不住
+		# "主干细了、发光还铺 20 px"这种"看着仍然粗"的形态，而那正是返工的原始症状。
+		var ring_thickness := float(ring_snapshot.get("thickness_px", 0.0))
+		_check(
+			ring_thickness >= 4.0 and ring_thickness <= 5.8,
+			"HUD reload ring stroke is not the annotated red-pen weight (%.3f px, expected ~4.875)"
+			% ring_thickness,
+			failures
+		)
+		var ring_glow_width := float(ring_snapshot.get("glow_width_px", 999.0))
+		_check(
+			ring_glow_width <= 10.5,
+			"HUD reload ring glow spreads too wide to read as a thin ring (%.3f px)" % ring_glow_width,
+			failures
+		)
+		_check(
+			float((ring_snapshot.get("glow_color") as Color).a) <= 0.45,
+			"HUD reload ring glow is too opaque to read as a thin ring (alpha %.3f)"
+			% (ring_snapshot.get("glow_color") as Color).a,
+			failures
+		)
+		# 位置是每帧从图标矩形现算的 —— 这里手动推一次 tick（本场景冻结了 dungeon 的 _process）。
+		dungeon.call("_tick_hud_reload_feedback", 0.0)
+		if weapon_icon != null:
+			var ring_center := reload_ring.global_position + reload_ring.size * 0.5
+			var icon_center := weapon_icon.get_global_rect().get_center()
+			_check(
+				ring_center.distance_to(icon_center) <= 1.0,
+				"HUD reload ring is not centred on the weapon icon (offset %s)" % (ring_center - icon_center),
+				failures
+			)
+		# 弹跳曲线是**纯函数**，逐点断言：起止都精确归 1、峰值落在设计带内、
+		# 回落深度不失控。回落下沿 = `1 − 0.35 × PEAK` = 0.895（回弹感），
+		# 所以下界取 0.85 而不是 0.9 —— 0.9 会把设计好的回弹直接判红。
+		_check(is_equal_approx(Dungeon3D.hud_weapon_icon_pop_scale(0.0), 1.0), "Weapon icon pop does not start at 1.0", failures)
+		_check(is_equal_approx(Dungeon3D.hud_weapon_icon_pop_scale(1.0), 1.0), "Weapon icon pop does not settle back to 1.0", failures)
+		var pop_peak := 0.0
+		var pop_low := 99.0
+		for sample in range(101):
+			var value := Dungeon3D.hud_weapon_icon_pop_scale(float(sample) / 100.0)
+			pop_peak = maxf(pop_peak, value)
+			pop_low = minf(pop_low, value)
+		_check(
+			pop_peak >= 1.2 and pop_peak <= 1.5 and pop_low >= 0.85,
+			"Weapon icon pop curve is out of range (peak %.3f low %.3f)" % [pop_peak, pop_low],
+			failures
+		)
+		# 真跑一次换弹：环显形（进度 0 = 空环）→ 图标绕中心弹一下再收回 → 进度跟计时器 → 结束即收。
+		var hud_weapon := dungeon.player.weapon
+		var hud_inventory := dungeon.get("_inventory") as InventoryModule
+		if hud_inventory != null:
+			hud_inventory.add_item(ItemRegistry.get_instance().get_item("item_ammo_pack"), 6)
+		hud_weapon.current_ammo = maxi(0, hud_weapon.magazine_size - 3)
+		if not dungeon.player.request_reload():
+			_check(false, "Cannot start a reload to exercise the HUD reload ring", failures)
+		else:
+			var hud_reload_duration := float(dungeon.player.get_reload_snapshot().get("duration", hud_weapon.reload_time))
+			_check(reload_ring.visible, "HUD reload ring did not appear when the reload started", failures)
+			_check(
+				is_equal_approx(reload_ring.progress, 0.0),
+				"HUD reload ring did not start as an empty ring: %.3f" % reload_ring.progress,
+				failures
+			)
+			var icon_scale_peak := 1.0
+			var icon_scale_low := 99.0
+			var pop_steps := int(ceil(Dungeon3D.HUD_WEAPON_ICON_POP_DURATION / 0.01))
+			for _step in range(pop_steps):
+				dungeon.call("_tick_hud_reload_feedback", 0.01)
+				if weapon_icon != null:
+					icon_scale_peak = maxf(icon_scale_peak, weapon_icon.scale.x)
+					icon_scale_low = minf(icon_scale_low, weapon_icon.scale.x)
+			_check(icon_scale_peak >= 1.2, "Weapon icon did not pop up on reload (peak %.3f)" % icon_scale_peak, failures)
+			_check(icon_scale_low >= 0.85, "Weapon icon shrank too much while popping (low %.3f)" % icon_scale_low, failures)
+			if weapon_icon != null:
+				_check(
+					is_equal_approx(weapon_icon.scale.x, 1.0),
+					"Weapon icon pop did not settle back to 1.0 (%.3f)" % weapon_icon.scale.x,
+					failures
+				)
+				_check(
+					weapon_icon.pivot_offset.is_equal_approx(Vector2.ZERO),
+					"Weapon icon kept a pop pivot after settling",
+					failures
+				)
+			hud_weapon.call("_process", hud_reload_duration * 0.5)
+			dungeon.call("_tick_hud_reload_feedback", 0.0)
+			_check(
+				absf(reload_ring.progress - 0.5) <= 0.02,
+				"HUD reload ring does not follow the weapon timer: %.3f" % reload_ring.progress,
+				failures
+			)
+			# ⚠️ 必须先让引擎画出**新的一帧**再截：`_capture` 直接读视口纹理，
+			# 中间没有 await 时拿到的还是"换弹开始前"那一帧（实测两张 PNG 逐字节相同、
+			# 差异 bbox 为空 —— 一张看不出环的"证据"比没有证据更糟）。
+			await RenderingServer.frame_post_draw
+			_check(_capture("hud_reload_ring.png"), "Could not capture the HUD reload ring", failures)
+			hud_weapon.call("_process", hud_reload_duration)
+			dungeon.call("_tick_hud_reload_feedback", 0.0)
+			_check(not reload_ring.visible, "HUD reload ring stayed visible after the reload finished", failures)
 	dungeon.call("_toggle_full_map")
 	for _frame in 3:
 		await get_tree().process_frame
@@ -69,10 +186,12 @@ func _ready() -> void:
 		await get_tree().process_frame
 	if overlay != null:
 		var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
-		_check(overlay.find_children("*", "TextureRect", true, false).is_empty(), "Fate overlay uses a bitmap TextureRect", failures)
 		var all_text := _collect_label_text(overlay)
-		for required in ["星星命运", "太阳命运", "月亮命运", "当前信息", "命 运 卡 三 选 一", "权杖·王牌", "星币·王牌", "愚者", "正位", "逆位"]:
-			_check(required in all_text, "Fate overlay is missing text: %s" % required, failures)
+		# 卡面已换成塔罗位图：作用域标签/方位标签/卡名不再由文字承载（图里已有）。
+		# 顶部协议提示和底部信息条按最新视觉需求移除，只保留标题。
+		_check("命 运 卡 三 选 一" in all_text, "Fate overlay title is missing", failures)
+		_check("当前信息" not in all_text, "Fate overlay still contains the removed bottom information bar", failures)
+		_check("FATE PROTOCOL / SELECT ONE" not in all_text, "Fate overlay still contains the removed top protocol label", failures)
 		for card in cards:
 			var card_control := card as Control
 			_check(bool(card_control.get_meta("tarot_face_ready", false)), "Tarot face did not finish flipping", failures)
@@ -80,15 +199,17 @@ func _ready() -> void:
 			_check(card_control.size.y > card_control.size.x, "Fate choice is not a vertical card", failures)
 			_check(card_control.size.x >= 250.0 and card_control.size.y >= 420.0, "Fate cards are too small to dominate the choice screen", failures)
 			_check(card_control.size.x <= 300.0 and card_control.size.y <= 500.0, "Fate card exceeds its 80%-scaled layout budget", failures)
+			_check_fate_card_art(card as Button, failures)
 		var reversed_cards := cards.filter(func(value: Node) -> bool: return str(value.get_meta("tarot_orientation", "")) == "逆位")
 		_check(reversed_cards.size() == 1, "Deterministic visual offer does not contain exactly one reversed card", failures)
 		if reversed_cards.size() == 1:
+			# 图卡模式的新契约：**只把卡面图案绕中心倒置**，按钮与卡下功能文字都不旋转。
 			var reversed_card := reversed_cards[0] as Control
-			var ornament := reversed_card.find_child("TarotOrientationOrnament", true, false) as Control
-			_check(absf(absf(reversed_card.rotation) - PI) < 0.01, "Reversed card frame lost its inverted orientation", failures)
-			_check(ornament != null and absf(absf(ornament.get_global_transform().get_rotation()) - PI) < 0.01, "Reversed ornament is no longer inverted", failures)
+			var reversed_face := reversed_card.find_child("TarotArtFace", true, false) as Control
+			_check(reversed_face != null and absf(absf(reversed_face.get_global_transform().get_rotation()) - PI) < 0.01, "Reversed card art layer is no longer inverted", failures)
+			_check(absf(reversed_card.rotation) < 0.01, "Reversed card rotated the whole button instead of only the art layer", failures)
 		for card in cards:
-			_check_tarot_text_upright(card as Button, failures)
+			_check_tarot_caption_upright(card as Button, failures)
 		var reversed_description := FateCardPresets.fate_reinforce()
 		reversed_description.set_orientation(FateCard.Orientation.REVERSED, 0.8)
 		_check(reversed_description.short_description in all_text, "Reversed effect text was replaced by upright text", failures)
@@ -103,7 +224,8 @@ func _ready() -> void:
 	var reduced_overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
 	if reduced_overlay != null:
 		for card in reduced_overlay.find_children("FateChoiceCard_*", "Button", true, false):
-			_check_tarot_text_upright(card as Button, failures)
+			_check_fate_card_art(card as Button, failures)
+			_check_tarot_caption_upright(card as Button, failures)
 	else:
 		_check(false, "Reduced-motion overlay is missing", failures)
 	await _check_simple_tarot_entries(failures)
@@ -126,7 +248,7 @@ func _ready() -> void:
 	_check(_capture("reference_tower_hud_compact.png"), "Could not capture compact tower HUD", failures)
 
 	if failures.is_empty():
-		print("REFERENCE_HUD_FATE_VISUAL_OK: reversed frames/ornaments stay inverted, all face text stays upright; normal/reduced motion and three entry points verified")
+		print("REFERENCE_HUD_FATE_VISUAL_OK: reversed frames/ornaments stay inverted, all face text stays upright; normal/reduced motion and three entry points verified; reload ring sits on the 75 px annotated circle centred on the weapon icon and the icon pops")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -134,8 +256,39 @@ func _ready() -> void:
 	get_tree().quit(1)
 
 
+## 图卡模式契约：每张卡必须有**卡面位图**，且贴图路径必须与这张牌的身份对得上
+## （防「图装错牌」——光看有没有 TextureRect 是查不出装错的）。卡背层必须存在且翻面后隐藏。
+func _check_fate_card_art(button: Button, failures: Array[String]) -> void:
+	_check(bool(button.get_meta("tarot_art_mode", false)), "Fate card fell back to the programmatic face while tarot art exists", failures)
+	var face := button.find_child("TarotArtFace", true, false) as TextureRect
+	_check(face != null, "Fate card is missing its tarot art layer", failures)
+	if face == null:
+		return
+	_check(face.visible, "Fate card art layer never became visible", failures)
+	_check(face.texture != null, "Fate card art layer has no texture", failures)
+	if face.texture != null:
+		var stable_id := str(button.get_meta("tarot_stable_card_id", ""))
+		var expected := "res://assets/art/ui/fate_cards/ui_fate_card_%s_v001.png" % stable_id.trim_prefix("fate_")
+		_check(face.texture.resource_path == expected, "Fate card art does not match its card identity: %s != %s" % [face.texture.resource_path, expected], failures)
+	var back := button.find_child("TarotCardBack", true, false) as TextureRect
+	_check(back != null, "Tarot card back layer is missing", failures)
+	if back != null:
+		_check(not back.visible, "Tarot card back stayed visible after the flip revealed the face", failures)
+
+
+## 卡下功能文字：必须存在、非空、且**正向可读**（不随卡面图案倒置）。
+func _check_tarot_caption_upright(button: Button, failures: Array[String]) -> void:
+	var caption := button.get_parent().find_child("FateFunctionCaption", false, false) as Label
+	_check(caption != null, "Fate card is missing its function caption", failures)
+	if caption == null:
+		return
+	_check(not caption.text.strip_edges().is_empty(), "Fate card function caption is empty", failures)
+	_check(absf(caption.get_global_transform().get_rotation()) < 0.01, "Fate function caption is not upright: %s" % caption.text, failures)
+
+
 func _check_tarot_text_upright(button: Button, failures: Array[String]) -> void:
-	var face := button.get_meta("tarot_face_node", null) as Control
+	# 注意：get_meta 的默认值若为 null，Godot 仍会打错误日志，故用 has_meta 守卫。
+	var face := (button.get_meta("tarot_face_node") if button.has_meta("tarot_face_node") else null) as Control
 	_check(face != null and face.visible, "Tarot readable text layer is missing", failures)
 	if face == null:
 		return

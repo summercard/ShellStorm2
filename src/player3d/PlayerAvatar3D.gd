@@ -193,7 +193,26 @@ var _wearable_nodes: Dictionary = {}
 ## 几何与绕序来自 `src/ui/RingProgressGeometry.gd` —— 与交互圆点（`InteractionDot3D`
 ## 的读条环）共用同一份绘圆口径。`docs/v0.2/PLAN.md` 的 0.2-PLAYER-001 与
 ## 0.2-PRESENTATION-001 是同一套视觉语言，两边各画一份圆必然漂移。
+##
+## —— 2026-10-08（第五轮）：环**离开世界空间** ——
+## 主人原话：「就是我换子弹的那个提示圈，帮我换到图片中的枪械图标的位置来，
+## 然后大小跟我红圈一样大。」环改由 HUD 侧实现（`src/ui/HudReloadRing.gd`，
+## 套在右下角武器图标上），本文件这一整套世界空间环（半径 / 让位 / 朝向 / 深度测试 /
+## mesh 重建）**整体退役**，由 `RELOAD_RING_IN_WORLD = false` 开关关掉。
+##
+## 🔴 为什么不是"把 3D 环挪到图标的屏幕位置上"：`CanvasLayer` 恒在 3D 之上 ——
+## 3D 环即便摆在图标的屏幕坐标上，图标本体（不透明网格）也会把它压在下面，
+## 只有漏在图标外的部分看得见，做不到"套在图标上"。要套在图标上只能画在 HUD 层。
+##
+## 下面这一族常量**保留**而不是删掉：它们是那个开关的另一半。哪天要把环放回世界空间，
+## 把 `RELOAD_RING_IN_WORLD` 改回 true 即可恢复，判据也一并回来
+## （`verify_3d_reload_state_flow` 里保留着**反向钉子**：环一旦又被显示出来就判红）。
 const RING_GEOMETRY := preload("res://src/ui/RingProgressGeometry.gd")
+## 🔴 世界空间换弹环的**总开关**。2026-10-08 起为 `false`：环已搬到 HUD 武器图标上。
+## 置 true 只是"把世界环打开"（下面所有常量一并生效），并不等于 HUD 环会消失 ——
+## 两个环会同时出现，所以 `verify_3d_reload_state_flow` 把"世界环不许再显示"
+## 钉成了一条会失败的断言，而不是只写一句注释。
+const RELOAD_RING_IN_WORLD := false
 ## 环的外半径，单位是**角色母版尺寸下的米**（1.5 m 高的角色所看到的那个大小）。
 ## 真正落到世界里的半径 = 本值 × 角色运行时体型倍率（`Player3D` 会按
 ## `DEFAULT_BASE_SIZE_MULTIPLIER` 给 avatar 再乘一档）—— 环跟着角色一起缩放，
@@ -619,6 +638,11 @@ func get_component_snapshot() -> Dictionary:
 		"melee_combo_count": _melee_combo_count,
 		"action_offset": _action_offset,
 		"action_rotation": _action_rotation,
+		# 换弹表现自 2026-10-08 起归 HUD 武器图标上的 `HudReloadRing`（见 RELOAD_RING_IN_WORLD）。
+		# 下面这一组读数**仍然描述角色身上的世界环**，退役期为常量值/假 ——
+		# 之所以留着而不是删：开关改回 true 时它们立刻恢复意义，且
+		# `reload_bar_visible` 正是"世界环不许再显示"那条反向断言的读数口。
+		"reload_ring_in_world": RELOAD_RING_IN_WORLD,
 		"reload_bar_visible": reload_progress_root.visible,
 		"reload_ring_progress": maxf(0.0, _reload_ring_built_progress),
 		"reload_ring_segments": RELOAD_RING_SEGMENTS,
@@ -1469,6 +1493,13 @@ func _animate_bunny_accessories(
 ## 必须在 `_ready()` 里 `reload_progress_root.scale = BUNNY_LINEAR_SCALE` **之后**调用 ——
 ## mesh 半径是按锚点缩放反算的，早调会算错一档（0.606 倍）。
 func _setup_reload_ring() -> void:
+	if not RELOAD_RING_IN_WORLD:
+		# 已退役（2026-10-08，见 RELOAD_RING_IN_WORLD）：不建 mesh、不摆朝向、永不显示。
+		# prefab 里的 `ReloadProgress3D/Track|Fill` 节点**不删** —— 资产层不动，
+		# 只是没人再驱动它们。
+		if reload_progress_root != null:
+			reload_progress_root.visible = false
+		return
 	if reload_progress_root == null:
 		return
 	# 先落在基准锚点（只定高度）；横向让位在 _face_reload_ring_to_camera() 里加 ——
@@ -1612,6 +1643,14 @@ func _reload_ring_draws_over_character() -> bool:
 
 
 func _update_reload_progress_bar() -> void:
+	if not RELOAD_RING_IN_WORLD:
+		# 换弹表现已搬到 HUD 武器图标上（见 RELOAD_RING_IN_WORLD）：
+		# 本函数每帧被 `_process` 调用，这里把世界环按住不许亮 —— 不是因为"没在换弹"，
+		# 而是因为它已退役。换弹本身的进度照旧由 `_reload_progress` 供
+		# `CharacterMotionLibrary3D`（角色换弹动作）使用，与本环的显隐无关。
+		if reload_progress_root != null:
+			reload_progress_root.visible = false
+		return
 	var visible_state := _reload_animation_active and _state != "dead"
 	reload_progress_root.visible = visible_state
 	if not visible_state:
