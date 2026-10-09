@@ -9,6 +9,51 @@ const _CORE_COLOR := Color(0.92, 0.96, 1.0)
 const _TRAIL_ALPHA := 0.36
 const _LIGHT_ENERGY := 1.2
 const _LIGHT_RANGE := 1.8
+## 引擎侧超距淡出（米，相对当前激活相机）。子弹灯自身范围只有 1.8m：
+## 飞出 55m 后它照亮的地面已是不可分辨的像素，把能量淡到 0 不影响近场观感，
+## 但能省掉远距离子弹的灯光着色。
+const _LIGHT_FADE_BEGIN := 55.0
+const _LIGHT_FADE_LENGTH := 15.0
+
+# ---- 共享几何（零视觉损失）----
+# 同一 Prefab 的弹体几何对所有实例完全相同，且建模后不再改动 ⇒ 跨实例复用同一份
+# mesh 资源（与 src/vfx/ToonVfxGeometry.gd 同口径）。材质仍按实例持有，因为子弹色逐发可变。
+static var _shared_core_mesh_cache: Mesh = null
+static var _shared_shell_mesh_cache: Mesh = null
+static var _shared_trail_mesh_cache: Mesh = null
+
+
+static func _shared_core_mesh() -> Mesh:
+	if _shared_core_mesh_cache == null:
+		var core := CapsuleMesh.new()
+		core.radius = 0.045
+		core.height = 0.20
+		core.radial_segments = 10
+		core.rings = 4
+		_shared_core_mesh_cache = core
+	return _shared_core_mesh_cache
+
+
+static func _shared_shell_mesh() -> Mesh:
+	if _shared_shell_mesh_cache == null:
+		var shell := CapsuleMesh.new()
+		shell.radius = 0.075
+		shell.height = 0.18
+		shell.radial_segments = 12
+		shell.rings = 4
+		_shared_shell_mesh_cache = shell
+	return _shared_shell_mesh_cache
+
+
+static func _shared_trail_mesh() -> Mesh:
+	if _shared_trail_mesh_cache == null:
+		var trail := CylinderMesh.new()
+		trail.top_radius = 0.0
+		trail.bottom_radius = 0.06
+		trail.height = 0.5
+		trail.radial_segments = 12
+		_shared_trail_mesh_cache = trail
+	return _shared_trail_mesh_cache
 
 var _root: Node3D
 var _core: MeshInstance3D
@@ -32,11 +77,7 @@ func _build_visual() -> void:
 	add_child(_root)
 
 	# 白金亮芯：细长胶囊，长轴朝 -Z（前向）。
-	var core_mesh := CapsuleMesh.new()
-	core_mesh.radius = 0.045
-	core_mesh.height = 0.20
-	core_mesh.radial_segments = 10
-	core_mesh.rings = 4
+	var core_mesh := _shared_core_mesh()
 	_core_material = StandardMaterial3D.new()
 	_core_material.albedo_color = _CORE_COLOR
 	_core_material.metallic = 0.0
@@ -54,11 +95,7 @@ func _build_visual() -> void:
 	_root.add_child(_core)
 
 	# 高饱和外壳：略大的胶囊，使用子弹色，半透明发光。
-	var shell_mesh := CapsuleMesh.new()
-	shell_mesh.radius = 0.075
-	shell_mesh.height = 0.18
-	shell_mesh.radial_segments = 12
-	shell_mesh.rings = 4
+	var shell_mesh := _shared_shell_mesh()
 	_shell_material = StandardMaterial3D.new()
 	_shell_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_shell_material.albedo_color = Color(0.45, 0.88, 1.0)
@@ -77,11 +114,7 @@ func _build_visual() -> void:
 
 	# 真正渐缩的锥形拖尾：朝 +Z（后方），宽端贴弹体、尖端拖向尾部。
 	# Godot 4.x 无 ConeMesh；锥体用 CylinderMesh(top_radius=0) 实现：尖端在 +Y，底圆在 -Y。
-	var trail_mesh := CylinderMesh.new()
-	trail_mesh.top_radius = 0.0
-	trail_mesh.bottom_radius = 0.06
-	trail_mesh.height = 0.5
-	trail_mesh.radial_segments = 12
+	var trail_mesh := _shared_trail_mesh()
 	_trail_material = StandardMaterial3D.new()
 	_trail_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_trail_material.albedo_color = Color(0.45, 0.88, 1.0, _TRAIL_ALPHA)
@@ -106,6 +139,16 @@ func _build_visual() -> void:
 	_light.light_energy = _LIGHT_ENERGY
 	_light.omni_range = _LIGHT_RANGE
 	_light.light_color = Color(0.45, 0.88, 1.0)
+	# 零视觉损失收敛①：默认 light_cull_mask 是全部 32 层（引擎默认 4294967295，已实测），
+	# 子弹灯实际只需要照亮世界与玩家。收敛到世界+玩家后近场照明与观感完全一致，
+	# 但每物体光照不再把非世界层（全息城等）拉进计算。口径与房间灯/太阳一致。
+	_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
+	_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
+	# 零视觉损失收敛②：引擎侧超距淡出。子弹飞出可视距离后由引擎把灯光能量淡到 0，
+	# 无逐帧脚本开销，也不改变近场观感。
+	_light.distance_fade_enabled = true
+	_light.distance_fade_begin = _LIGHT_FADE_BEGIN
+	_light.distance_fade_length = _LIGHT_FADE_LENGTH
 	add_child(_light)
 
 

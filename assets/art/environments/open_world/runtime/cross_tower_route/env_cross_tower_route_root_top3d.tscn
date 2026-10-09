@@ -1,5 +1,6 @@
-[gd_scene load_steps=55 format=3]
+[gd_scene load_steps=56 format=3]
 
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/bird_flocks/runtime/flyby/vfx_env_birds_flyby_root_top3d.tscn" id="bird_flyby"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/open_world_landscape_foundation/env_open_world_landscape_foundation_root_top3d.tscn" id="foundation"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/tower_02/env_tower_02_root_top3d.tscn" id="tower2"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/open_world/runtime/skyline_08/env_skyline_08_root_top3d.tscn" id="skyline08"]
@@ -172,6 +173,13 @@ transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, 
 
 [node name="Tower3" parent="." instance=ExtResource("tower3")]
 position = Vector3(-12, -40.15, -173.925626)
+
+[node name="FlybyBirdFlock" parent="." instance=ExtResource("bird_flyby")]
+position = Vector3(20.0, 1.6, -64.5)
+rotation = Vector3(0, 0.2, 0)
+metadata/placement = "above_tower_02_at_bridge_mid_span"
+metadata/route_note = "single_pass_over_bridge_span_0_midpoint"
+metadata/anchor_note = "塔2正上方 + 吊桥第1跨中点(桥面 y≈0, 跨中点 z=-64.5, 塔2足迹 x[5,75] z[-115,-65])。鸟身实测在节点原点上方+2.6m => 飞在桥面上方约4.2m，高于栏杆顶(≈2.75m)。源动画沿本地+X平移18m，rotation_y=0.2rad 自西向东斜掠桥面。"
 
 [node name="lower_rail_0" parent="Tower3/support"]
 visible = false

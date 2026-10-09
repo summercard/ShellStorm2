@@ -87,6 +87,9 @@ enum Phase { FLYING, ROLLING, SETTLED }
 var _body: MeshInstance3D
 var _rim: MeshInstance3D
 var _primer: MeshInstance3D
+var _body_material: StandardMaterial3D
+var _rim_material: StandardMaterial3D
+var _primer_material: StandardMaterial3D
 var _velocity := Vector3.ZERO
 var _spin_axis := Vector3.UP
 var _spin_speed := 0.0
@@ -153,15 +156,19 @@ func _on_activate(_world_pos: Vector3, color: Color, size: float, context: Dicti
 	_settle_to_basis = Basis.IDENTITY
 	_last_tick_elapsed = 0.0
 	visible = true
+	_ensure_materials()
 	if _body != null:
 		_body.visible = true
-		_body.material_override = _make_material(color.darkened(0.12))
+		_body_material.albedo_color = color.darkened(0.12)
+		_body.material_override = _body_material
 	if _rim != null:
 		_rim.visible = true
-		_rim.material_override = _make_material(color.lightened(0.12))
+		_rim_material.albedo_color = color.lightened(0.12)
+		_rim.material_override = _rim_material
 	if _primer != null:
 		_primer.visible = true
-		_primer.material_override = _make_material(Color(0.12, 0.10, 0.07))
+		_primer_material.albedo_color = Color(0.12, 0.10, 0.07)
+		_primer.material_override = _primer_material
 	_apply_visual_scale()
 
 func _on_tick(delta_elapsed: float, _total: float) -> void:
@@ -384,6 +391,20 @@ func _material_float(node: MeshInstance3D, property_name: String) -> float:
 	if material == null:
 		return -1.0
 	return float(material.get(property_name))
+
+## 材质只在实例内首建一次，之后复借仅改 albedo —— 零视觉损失。
+##
+## 原先每次 `_on_activate` 都 `new` 三份 `StandardMaterial3D`：射速 12 发/s 时
+## 每秒 36 次材质分配，是本项目里少数「每发都分配」的热点之一，会带来持续的
+## GC 抖动。金属度/反光度/着色模式与业主 2026-09-22 定档口径完全一致；
+## 验收通过 `material_override` 读取 PBR 真值，缓存后仍读到同一组数值。
+func _ensure_materials() -> void:
+	if _body_material != null:
+		return
+	_body_material = _make_material(Color.WHITE)
+	_rim_material = _make_material(Color.WHITE)
+	_primer_material = _make_material(Color(0.12, 0.10, 0.07))
+
 
 func _make_material(color: Color) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()

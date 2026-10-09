@@ -25,6 +25,10 @@ metadata/model_sha256 = "0b2cf2fcba9832ce8b37b62185e016f294ee834555439b71b11c543
 metadata/model_faces = 599
 metadata/model_triangles = 1190
 metadata/prefab_version = "v005.1"
+metadata/audio_spatial_contract = "single AudioStreamPlayer3D; Music bus; unit_size=18.0m; max_distance=78.0m; attenuation_model=inverse_square; listener inside Rect2(-50,-35,100,80) full source gain; outside edge -18dB then -4dB/m, floor -42dB; no duplicate playback"
+metadata/base99_boundary_contract = "TowerFloorStage3D.TOWER_SHELL_WORLD_RECT = Rect2(-50,-35,100,80)"
+metadata/audio_runtime_spec_version = "v001"
+metadata/audio_max_distance_m = 78.0
 metadata/music_notes_asset_id = "VFX-RADIO-MUSIC-NOTES-3D"
 metadata/music_notes_policy = "radio child; real audio playing; A/B continuous; off/floor off/exit immediate clear; visual only"
 metadata/source_blend = "assets/art/props/base_world_3d/source/base99_radio/prp_base99_radio_source_v005.blend"
@@ -63,7 +67,8 @@ shape = SubResource("ShapeRadioHit")
 position = Vector3(0, 0.411, 0)
 bus = &"Music"
 autoplay = false
-max_distance = 12.0
+unit_size = 18.0
+max_distance = 78.0
 attenuation_model = 1
 
 [node name="Tooltip" type="Label3D" parent="."]

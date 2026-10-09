@@ -65,13 +65,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, -49, -70)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -40, 0)
 
 [node name="open_world_chunk_square_100x105" parent="." index="12" unique_id=822358991 instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -40, -260)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -40, -249.285)
 
 [node name="open_world_chunk_square_100x100" parent="." index="13" unique_id=1502717083 instance=ExtResource("square_100")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, -41, 0)
 
 [node name="open_world_chunk_square_100x104" parent="." index="14" unique_id=1364766163 instance=ExtResource("square_100")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, -39, -150)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -102.15, -39.885, -157.85)
 
 [node name="Tower1FoundationBox" parent="." index="16" unique_id=1791593966 instance=ExtResource("foundation_tower1")]
 transform = Transform3D(1, 0, 0, 0, 1.359066, 0, 0, 0, 1, 0, -62.15, 5)

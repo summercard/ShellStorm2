@@ -7,6 +7,13 @@ const TRACK_PATHS := [
 	"res://assets/audio/music/base_passion/base_passion_b_v001.ogg",
 ]
 const RANGE_M := 2.2
+## 与 TowerFloorStage3D.TOWER_SHELL_WORLD_RECT 同步：99F 正式基地外框。
+const BASE99_WORLD_RECT := Rect2(-50.0, -35.0, 100.0, 80.0)
+const AUDIO_UNIT_SIZE_M := 18.0
+const AUDIO_MAX_DISTANCE_M := 78.0
+const OUTSIDE_BASE_EDGE_DROP_DB := -18.0
+const OUTSIDE_BASE_DISTANCE_DROP_DB_PER_M := 4.0
+const OUTSIDE_BASE_MAX_DROP_DB := -42.0
 
 var radio_state := "off"
 var _floor_active := true
@@ -21,6 +28,10 @@ var _status_materials: Array[BaseMaterial3D] = []
 
 
 func _ready() -> void:
+	audio_player.unit_size = AUDIO_UNIT_SIZE_M
+	audio_player.max_distance = AUDIO_MAX_DISTANCE_M
+	audio_player.attenuation_model = AudioStreamPlayer3D.ATTENUATION_INVERSE_SQUARE_DISTANCE
+	_refresh_spatial_volume()
 	if status_light != null:
 		if status_light is MeshInstance3D:
 			_collect_status_materials(status_light as MeshInstance3D)
@@ -49,11 +60,72 @@ func _exit_tree() -> void:
 
 
 func _process(_delta: float) -> void:
+	_refresh_spatial_volume()
 	_sync_music_notes()
 	var player := _get_player()
 	var hovered := _can_interact(player) and _mouse_hits_radio(get_viewport().get_mouse_position(), player)
 	tooltip.visible = hovered or (_focused and _can_interact(player))
 	tooltip.text = get_next_prompt()
+
+
+func _refresh_spatial_volume() -> void:
+	if audio_player == null:
+		return
+	if not audio_player.playing:
+		audio_player.volume_db = 0.0
+		return
+	var listener_position := _get_audio_listener_position()
+	if _listener_inside_base99(listener_position):
+		audio_player.volume_db = 0.0
+		return
+	var distance_outside := _distance_to_base99(listener_position)
+	audio_player.volume_db = maxf(
+		OUTSIDE_BASE_MAX_DROP_DB,
+		OUTSIDE_BASE_EDGE_DROP_DB - distance_outside * OUTSIDE_BASE_DISTANCE_DROP_DB_PER_M,
+	)
+
+
+func _get_audio_listener_position() -> Vector3:
+	var camera := get_viewport().get_camera_3d()
+	return camera.global_position if camera != null else global_position
+
+
+func _listener_inside_base99(listener_position: Vector3) -> bool:
+	return BASE99_WORLD_RECT.has_point(Vector2(listener_position.x, listener_position.z))
+
+
+func _distance_to_base99(listener_position: Vector3) -> float:
+	var point := Vector2(listener_position.x, listener_position.z)
+	var closest := Vector2(
+		clampf(point.x, BASE99_WORLD_RECT.position.x, BASE99_WORLD_RECT.end.x),
+		clampf(point.y, BASE99_WORLD_RECT.position.y, BASE99_WORLD_RECT.end.y),
+	)
+	return point.distance_to(closest)
+
+
+func get_spatial_audio_snapshot(listener_position: Vector3 = Vector3.INF) -> Dictionary:
+	if not listener_position.is_finite():
+		listener_position = _get_audio_listener_position()
+	var inside := _listener_inside_base99(listener_position)
+	var distance_outside := 0.0 if inside else _distance_to_base99(listener_position)
+	var source_distance := global_position.distance_to(listener_position)
+	var attenuation_gain := 1.0 / (1.0 + pow(source_distance / maxf(AUDIO_UNIT_SIZE_M, 0.001), 2.0))
+	var outside_volume_db := 0.0 if inside else maxf(
+		OUTSIDE_BASE_MAX_DROP_DB,
+		OUTSIDE_BASE_EDGE_DROP_DB - distance_outside * OUTSIDE_BASE_DISTANCE_DROP_DB_PER_M,
+	)
+	return {
+		"listener_position": listener_position,
+		"inside_base99": inside,
+		"distance_to_source_m": source_distance,
+		"distance_outside_base_m": distance_outside,
+		"source_volume_db": outside_volume_db,
+		"inverse_square_gain": attenuation_gain,
+		"effective_gain": attenuation_gain * db_to_linear(outside_volume_db),
+		"unit_size_m": AUDIO_UNIT_SIZE_M,
+		"max_distance_m": AUDIO_MAX_DISTANCE_M,
+		"attenuation_model": audio_player.attenuation_model,
+	}
 
 
 func _input(event: InputEvent) -> void:

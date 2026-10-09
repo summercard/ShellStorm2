@@ -147,6 +147,11 @@ var _visual_root: Node3D
 var _muzzle: Marker3D
 var _ejection: Marker3D
 var _fate_visual_multiplier := DEFAULT_FATE_VISUAL_MULTIPLIER
+# 池引用缓存（零视觉损失）：投射物池与全局 VFX 池在整个战局里都是单例。
+# `get_nodes_in_group` 每次调用都会新建一个数组；散弹一颗弹丸一次调用，高射速下
+# 是每发都在发生的分配。首次解析后缓存，实例失效再重解析。
+var _projectile_pool_cache: ProjectilePool3D
+var _vfx_pool_cache: VfxPool3D
 
 const GUN_NAME_TO_ID := {
 	"GunBody_Pistol": "bp_pistol", "GunBody_Shotgun": "bp_shotgun",
@@ -678,10 +683,28 @@ func _fire_copy_wave(
 	return configs.size()
 
 
-func _acquire_projectile(world: Node, config: Dictionary, world_position: Vector3) -> Projectile3D:
+## 解析投射物池（带缓存）。返回 null 表示当前场景没有池，调用方走新建兜底。
+func _resolve_projectile_pool() -> ProjectilePool3D:
+	if is_instance_valid(_projectile_pool_cache):
+		return _projectile_pool_cache
 	var pools := get_tree().get_nodes_in_group("projectile_pool_3d")
-	if not pools.is_empty() and pools[0] is ProjectilePool3D:
-		return (pools[0] as ProjectilePool3D).acquire(config, world_position)
+	_projectile_pool_cache = pools[0] as ProjectilePool3D if not pools.is_empty() and pools[0] is ProjectilePool3D else null
+	return _projectile_pool_cache
+
+
+## 解析全局 VFX 池（带缓存）。返回 null 表示当前场景没有池，调用方走旧链兜底。
+func _resolve_vfx_pool() -> VfxPool3D:
+	if is_instance_valid(_vfx_pool_cache):
+		return _vfx_pool_cache
+	var vfx_pools := get_tree().get_nodes_in_group("vfx_pool_3d")
+	_vfx_pool_cache = vfx_pools[0] as VfxPool3D if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D else null
+	return _vfx_pool_cache
+
+
+func _acquire_projectile(world: Node, config: Dictionary, world_position: Vector3) -> Projectile3D:
+	var pool := _resolve_projectile_pool()
+	if pool != null:
+		return pool.acquire(config, world_position)
 	var projectile := PROJECTILE_SCRIPT.new() as Projectile3D
 	projectile.configure(config)
 	world.add_child(projectile)
@@ -1024,9 +1047,9 @@ func _spawn_muzzle_effect(world: Node) -> void:
 	# 枪口闪光改走全局 VfxPool（AssetID 路由），传入真实射击方向（-global_basis.z）。
 	# 跟随目标是 muzzle 挂点本身：_visual_root 会被后坐力/换弹位移带动，跟武器根会差一截。
 	var muzzle_world := _muzzle.global_position
-	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
-	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
-		(vfx_pools[0] as VfxPool3D).acquire(
+	var vfx_pool := _resolve_vfx_pool()
+	if vfx_pool != null:
+		vfx_pool.acquire(
 			VfxPool3D.FX01_MUZZLE_FLASH, muzzle_world, bullet_color, MUZZLE_FLASH_EFFECT_SIZE,
 			{"forward": -global_basis.z, "follow": _muzzle}
 		)
@@ -1041,8 +1064,8 @@ func _spawn_muzzle_effect(world: Node) -> void:
 func _spawn_shell_casing(shooter: Node3D) -> void:
 	if _ejection == null or is_melee_weapon():
 		return
-	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
-	if vfx_pools.is_empty() or not (vfx_pools[0] is VfxPool3D):
+	var vfx_pool := _resolve_vfx_pool()
+	if vfx_pool == null:
 		return
 	# 抛壳方向：枪械右侧 + 少量抬升 + 少量枪口前向；不绑定 follow，生成后进入世界空间。
 	# 落地由弹壳自己按 floor_y 程序化模拟（不接物理引擎），故不需传场景根节点。
@@ -1064,7 +1087,7 @@ func _spawn_shell_casing(shooter: Node3D) -> void:
 	var ejection_spin_axis := (
 		right + up * randf_range(0.1, 0.9) + forward * randf_range(-0.4, 0.4)
 	).normalized()
-	(vfx_pools[0] as VfxPool3D).acquire(
+	(vfx_pool).acquire(
 		VfxPool3D.FX01_SHELL_CASING,
 		_ejection.global_position,
 		SHELL_CASING_COLOR,

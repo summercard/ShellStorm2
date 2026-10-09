@@ -1,0 +1,30 @@
+{
+  "asset_id": "ENV-MOBILE-LANDMARK-HOTEL-50M",
+  "logic_id": "mobile_landmark_hotel_50m",
+  "source": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/mobile_landmark_3d/source/env_mobile_landmark_hotel_50m/env_mobile_landmark_hotel_50m_source_v001.blend",
+  "glb": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/mobile_landmark_3d/components/env_mobile_landmark_hotel_50m/env_mobile_landmark_hotel_50m_visual_top3d.glb",
+  "preview": "I:/工作项目/shellstrom2/ShellStorm2/outputs/mobile_landmark_hotel_50m_v001/mobile_landmark_hotel_50m_preview.png",
+  "faces": 8412,
+  "vertices": 7666,
+  "bounds_min": [
+    -25.0,
+    -25.0,
+    0.0
+  ],
+  "bounds_max": [
+    25.0,
+    25.0,
+    97.0
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collections": [
+    "01_制作组件_已统一材质",
+    "02_游戏输出_独立资产包_v001",
+    "90_展示与验收_灯光相机"
+  ]
+}

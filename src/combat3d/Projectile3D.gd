@@ -42,6 +42,11 @@ var _hit_any := false
 var _attached_hit_fired := false
 var _return_hit_ids: Dictionary = {}
 var _tracked_collision_exceptions: Array[PhysicsBody3D] = []
+# 池引用缓存（零视觉损失）：命中特效 / 子投射物每次都要找个池；这三类池在战局里都是单例。
+# `get_nodes_in_group` 每次都会新建数组，命中与炮台连发频率下是持续分配。
+var _vfx_pool_cache: VfxPool3D
+var _projectile_pool_cache: ProjectilePool3D
+var _combat_effect_pool_cache: CombatEffectPool3D
 
 
 func configure(config: Dictionary) -> void:
@@ -500,6 +505,30 @@ func _fire_attached_gun(attached: Dictionary, base_direction: Vector3) -> void:
 		_spawn_child_projectile(base_direction.rotated(Vector3.UP, angle), maxi(1, int(child_damage)), bullet_color.lightened(0.10), child_behavior)
 
 
+func _resolve_projectile_pool() -> ProjectilePool3D:
+	if is_instance_valid(_projectile_pool_cache):
+		return _projectile_pool_cache
+	var pools := get_tree().get_nodes_in_group("projectile_pool_3d")
+	_projectile_pool_cache = pools[0] as ProjectilePool3D if not pools.is_empty() and pools[0] is ProjectilePool3D else null
+	return _projectile_pool_cache
+
+
+func _resolve_vfx_pool() -> VfxPool3D:
+	if is_instance_valid(_vfx_pool_cache):
+		return _vfx_pool_cache
+	var vfx_pools := get_tree().get_nodes_in_group("vfx_pool_3d")
+	_vfx_pool_cache = vfx_pools[0] as VfxPool3D if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D else null
+	return _vfx_pool_cache
+
+
+func _resolve_combat_effect_pool() -> CombatEffectPool3D:
+	if is_instance_valid(_combat_effect_pool_cache):
+		return _combat_effect_pool_cache
+	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
+	_combat_effect_pool_cache = pools[0] as CombatEffectPool3D if not pools.is_empty() and pools[0] is CombatEffectPool3D else null
+	return _combat_effect_pool_cache
+
+
 func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: Color, child_behavior: Dictionary = {}) -> void:
 	child_behavior = child_behavior.duplicate(true)
 	child_behavior["source_weapon_tree"] = source_weapon_tree
@@ -517,9 +546,9 @@ func _spawn_child_projectile(shot_direction: Vector3, shot_damage: int, color: C
 		"shooter": shooter,
 		"behavior": child_behavior,
 	}
-	var pools := get_tree().get_nodes_in_group("projectile_pool_3d")
-	if not pools.is_empty() and pools[0] is ProjectilePool3D:
-		(pools[0] as ProjectilePool3D).acquire(config, global_position + shot_direction * 0.32)
+	var pool := _resolve_projectile_pool()
+	if pool != null:
+		pool.acquire(config, global_position + shot_direction * 0.32)
 		return
 	var projectile := Projectile3D.new()
 	projectile.configure(config)
@@ -572,16 +601,16 @@ func _retire() -> void:
 
 func _spawn_effect(effect_id: StringName, world_position: Vector3, color: Color, size: float, context: Dictionary = {}) -> void:
 	# 已注册 AssetID（FX01-* 战斗反馈）走全局 VfxPool 新体系，按 AssetID 路由。
-	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
-	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D and VfxPool3D.has_effect(effect_id):
-		(vfx_pools[0] as VfxPool3D).acquire(effect_id, world_position, color, size, context)
+	var vfx_pool := _resolve_vfx_pool()
+	if vfx_pool != null and VfxPool3D.has_effect(effect_id):
+		vfx_pool.acquire(effect_id, world_position, color, size, context)
 		return
 	if get_tree().current_scene == null:
 		return
 	# 未注册 AssetID（爆炸等旧链图例）：仍走 CombatEffectPool3D，待 14.6 §6 迁移完成后删除。
-	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
-	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
-		(pools[0] as CombatEffectPool3D).acquire(str(effect_id), color, size, world_position)
+	var effect_pool := _resolve_combat_effect_pool()
+	if effect_pool != null:
+		effect_pool.acquire(str(effect_id), color, size, world_position)
 		return
 	# VfxPool 不在场（异常态）且该 AssetID 已注册：直接从注册表实例化，保留 AssetID 语义。
 	var pooled_effect := VfxPool3D.create_unpooled(effect_id)

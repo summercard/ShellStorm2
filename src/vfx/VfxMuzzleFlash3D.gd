@@ -124,6 +124,10 @@ func _build() -> void:
 	_muzzle_light.name = "MuzzleLight"
 	_muzzle_light.shadow_enabled = false
 	_muzzle_light.light_color = Color(1.0, 0.82, 0.55)
+	# 零视觉损失收敛：枪口灯默认 light_cull_mask 是全部 32 层，实际只需照亮世界与玩家。
+	# 收敛后近场观感不变，但不把非世界层拉进每物体光照计算（口径同房间灯/太阳）。
+	_muzzle_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
+	_muzzle_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
 	add_child(_muzzle_light)
 
 
