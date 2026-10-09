@@ -152,10 +152,13 @@ const STAIR_VISIBLE_GUARD_HALF_WIDTH_M := 2.15
 const STAIR_GUARD_COLLISION_OVERLAP_M := 0.20
 # 楼板边缘阻挡向梯跑扶手中心各搭接少量距离，封住转角缝而不封闭楼梯入口。
 const STAIR_GUARD_CORNER_JOIN_OVERLAP_M := 0.15
-# 原默认镜头在调试模式按15次 '，每次沿相机到焦点的视线轴拉远0.20m。
-# 固化后的精确局部位置为Y=10.719009m、后移Z=4.037671m，保持原俯视角。
-const CAMERA_HEIGHT_M := 10.719009
-const CAMERA_DEFAULT_TRAILING_M := 4.037671
+# 默认镜头史（调试快捷键每按一次沿“相机→焦点”视线轴移动0.20m，`;`拉近、`'`拉远）：
+#   v0.1 初始   = 玩家局部 (0, 8.0, 2.77)
+#   2026-09-13 = 上一版基础上按 `'` 拉远 15 次 → (0, 10.719009, 4.037671)
+#   2026-10-09 = 主人实操认为再按 `;` 拉近 4 次更合适 → (0, 9.993940, 3.699625)
+# 三步都只改“相机→焦点”向量的长度、不碰方向，所以默认俯视角与 FOV 65° 始终不变。
+const CAMERA_HEIGHT_M := 9.993940
+const CAMERA_DEFAULT_TRAILING_M := 3.699625
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
@@ -170,7 +173,8 @@ const CAMERA_LOWER_WALL_LIFT_BLEND_DISTANCE_M := 1.37
 const CAMERA_LOWER_WALL_LIFT_RISE_RATE := 8.0
 const CAMERA_LOWER_WALL_LIFT_FALL_RATE := 4.5
 const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
-# 收镜必须在墙进入新的4.037671m默认镜头通道时触发，不能沿用旧2.77m阈值。
+# 收镜必须在墙进入当前默认镜头通道时触发，不得沿用任何旧阈值；
+# 本常量跟随 CAMERA_DEFAULT_TRAILING_M 自动更新（现为 3.699625m）。
 const CAMERA_LOWER_WALL_RETRACT_TRIGGER_M := CAMERA_DEFAULT_TRAILING_M
 const CAMERA_LOWER_WALL_RETRACT_RATE := 10.0
 const CAMERA_LOWER_WALL_EXTEND_RATE := 4.5
@@ -2038,6 +2042,8 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		# 只在区域声明了才落字段 —— 未声明的楼层一个字段都不多，行为逐字不变。
 		if bool(spec.get("authored_layout_peaceful", false)):
 			record["authored_layout_peaceful"] = true
+		if spec.has("search_facilities_enabled"):
+			record["search_facilities_enabled"] = bool(spec.get("search_facilities_enabled", true))
 		# 初始灯亮：只在房表声明了才落字段，未声明的房间一个字段都不多。
 		if bool(spec.get("authored_room_light_on", false)):
 			record["authored_room_light_on"] = true
@@ -2451,6 +2457,8 @@ func _build_topology() -> void:
 		# 100F↔99F西侧楼梯是固定建筑结构，不存在玩法授权。路线永久连通，
 		# 四扇普通门只控制自己的门板；98F入口及更深路线仍按玩法状态开启。
 		var opens_by_default := edge == _edge_key("start", "facility")
+		if Block00MasterOfficeLayout3D.is_removed_door_pair(parent_id, child_id) and bool(parent.get("authored_layout_peaceful", false)):
+			opens_by_default = true
 		_open_edges[edge] = opens_by_default
 		if str(declaration["kind"]) == "vertical":
 			_vertical_arrival_open[edge] = false
@@ -4799,6 +4807,8 @@ func _register_edge_topology(
 	var b_record := _find_record(b)
 	if a_record.is_empty() or b_record.is_empty():
 		return
+	if Block00MasterOfficeLayout3D.is_removed_door_pair(a, b) and bool(a_record.get("authored_layout_peaceful", false)):
+		_open_edges[edge] = true
 	var a_side := a_door_side
 	var b_side := b_door_side
 	if kind == "vertical":
@@ -4846,6 +4856,8 @@ func _bind_shared_edge_doors() -> void:
 		var peer := _room_by_id.get(peer_id) as DungeonRoom3D
 		if owner == null or peer == null:
 			continue
+		if owner.authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and Block00MasterOfficeLayout3D.is_removed_door_pair(owner_id, peer_id):
+			continue
 		var edge := _edge_key(owner_id, peer_id)
 		var sides := _edge_door_sides_by_key.get(edge, {}) as Dictionary
 		var owner_side := str(sides.get(owner_id, ""))
@@ -4886,6 +4898,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"authored_layout_version": str(record.get("authored_layout_version", "")),
 		"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
 		"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
+		"search_facilities_enabled": bool(record.get("search_facilities_enabled", true)),
 		"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 		"authored_layout_instances": record.get("authored_layout_instances", []),
 		"static_layout_scene_path": str(record.get("static_layout_scene_path", "")),

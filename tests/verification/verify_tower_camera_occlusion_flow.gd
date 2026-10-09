@@ -264,9 +264,13 @@ func _expect_real_wall_cleared(
 		)
 	if bool(snapshot.get("camera_occluded_player", true)):
 		failures.append("%s收镜后仍有黑墙遮住角色" % label)
+	# 抬升区间跟随默认镜头高度（基准 +0.17 ~ 基准 + 最大抬升0.30），
+	# 避免相机高度再调整后这里残留上一次的硬编码阈值（原为 10.89 / 11.020）。
+	var lifted_min_y := TowerDescent3D.CAMERA_HEIGHT_M + 0.17
+	var lifted_max_y := TowerDescent3D.CAMERA_HEIGHT_M + 0.301
 	if (
-		tower.player.camera.position.y <= 10.89
-		or tower.player.camera.position.y > 11.020
+		tower.player.camera.position.y <= lifted_min_y
+		or tower.player.camera.position.y > lifted_max_y
 	):
 		failures.append(
 			"%s镜头抬升高度异常：%.3fm"
@@ -290,8 +294,8 @@ func _expect_non_south_wall_ignored(
 	if bool(snapshot.get("camera_lower_wall_detected", true)):
 		failures.append("%s错误触发了仅限南墙的镜头交互" % label)
 	if (
-		absf(tower.player.camera.position.y - 10.719009) > 0.02
-		or absf(tower.player.camera.position.z - 4.037671) > 0.03
+		absf(tower.player.camera.position.y - 9.993940) > 0.02
+		or absf(tower.player.camera.position.z - 3.699625) > 0.03
 	):
 		failures.append("%s错误改变了固定镜头位置：%s" % [label, tower.player.camera.position])
 

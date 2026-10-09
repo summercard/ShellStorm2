@@ -518,17 +518,26 @@ func _validate_stair_slab_camera_drop(
 	collision.shape = shape
 	slab.add_child(collision)
 	tower.add_child(slab)
-	slab.global_position = tower.player.to_global(Vector3(0.0, 5.0, 4.037671))
+	slab.global_position = tower.player.to_global(Vector3(0.0, 5.0, 3.699625))
 	for _frame in range(4):
 		await get_tree().physics_frame
 	var blocked_snapshot := tower.get_tower_snapshot()
+	# 下压量必须等于“相机期望高度 − 楼板净空”：原写法把默认高度 10.719 时代的
+	# drop≈6.19 硬编码成 6.0 阈值，默认镜头一改就失效。
+	var slab_clearance_m := float(
+		blocked_snapshot.get("camera_stair_slab_clearance_height_m", 0.0)
+	)
+	var expected_slab_drop_m := TowerDescent3D.CAMERA_HEIGHT_M - slab_clearance_m
 	if (
 		not bool(blocked_snapshot.get("camera_stair_slab_detected", false))
 		or str(blocked_snapshot.get("camera_stair_slab_mode", ""))
 			!= "tagged_upper_lower_flight_vertical_clamp"
-		or float(blocked_snapshot.get("camera_stair_slab_drop_current_m", 0.0)) <= 6.0
+		or absf(
+			float(blocked_snapshot.get("camera_stair_slab_drop_current_m", 0.0))
+			- expected_slab_drop_m
+		) > 0.05
 		or tower.player.camera.position.y > 4.53
-		or absf(tower.player.camera.position.z - 4.037671) > 0.03
+		or absf(tower.player.camera.position.z - 3.699625) > 0.03
 	):
 		failures.append(
 			"Tagged stair slab did not clamp camera below collision without changing trailing offset: %s"
@@ -541,7 +550,7 @@ func _validate_stair_slab_camera_drop(
 	if (
 		bool(recovered_snapshot.get("camera_stair_slab_detected", true))
 		or float(recovered_snapshot.get("camera_stair_slab_drop_current_m", 1.0)) > 0.02
-		or absf(tower.player.camera.position.y - 10.719009) > 0.02
+		or absf(tower.player.camera.position.y - 9.993940) > 0.02
 	):
 		failures.append("Camera did not smoothly recover after leaving stair slab")
 
@@ -554,14 +563,14 @@ func _validate_stair_slab_camera_drop(
 	ordinary_collision.shape = shape
 	ordinary_floor.add_child(ordinary_collision)
 	tower.add_child(ordinary_floor)
-	ordinary_floor.global_position = tower.player.to_global(Vector3(0.0, 5.0, 4.037671))
+	ordinary_floor.global_position = tower.player.to_global(Vector3(0.0, 5.0, 3.699625))
 	for _frame in range(6):
 		await get_tree().physics_frame
 	var isolated_snapshot := tower.get_tower_snapshot()
 	if (
 		bool(isolated_snapshot.get("camera_stair_slab_detected", true))
-		or absf(tower.player.camera.position.y - 10.719009) > 0.02
-		or absf(tower.player.camera.position.z - 4.037671) > 0.03
+		or absf(tower.player.camera.position.y - 9.993940) > 0.02
+		or absf(tower.player.camera.position.z - 3.699625) > 0.03
 	):
 		failures.append("Untagged ordinary floor incorrectly triggered stair camera clamp")
 	ordinary_floor.queue_free()
