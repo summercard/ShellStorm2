@@ -64,6 +64,28 @@ func _ready() -> void:
 		check(int(room.get_meta("authored_layout_floor_tile_count",0)) == {"master_office":12,"meeting_room":24,"corridor":4,"lobby":9}[id],"existing_floor_count:"+id)
 		rooms[id]=room
 	var corridor: DungeonRoom3D = rooms["corridor"]
+	var office: DungeonRoom3D = rooms["master_office"]
+	var sofa := office.get_node("AuthoredFacilities/sofa_001") as Node3D
+	check(sofa.scale.distance_to(Vector3(.7,.7,.7)) < .00001,"sofa_user_scale70")
+	var rug := office.get_node("AuthoredFacilities/rug_002") as Node3D
+	var rug_top := -INF
+	for mi in meshes(rug):
+		var box := office.global_transform.affine_inverse() * mi.global_transform * mi.get_aabb()
+		rug_top=maxf(rug_top,box.end.y)
+	check(absf(rug_top-.091)<.001,"rug_surface_8mm_above_visual_floor")
+	corridor.ensure_detail_built()
+	check(corridor.find_children("*","RoomLightSwitch3D",true,false).is_empty(),"third_room_switch_removed")
+	var lobby: DungeonRoom3D=rooms["lobby"]
+	var mural:=lobby.get_node("AuthoredFacilities/constructivist_mural_014") as Node3D
+	var mural_min:=INF
+	for mi in meshes(mural):
+		var local_transform:=lobby.global_transform.affine_inverse()*mi.global_transform
+		for surface in mi.mesh.get_surface_count():
+			var vertices: PackedVector3Array=mi.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+			for vertex in vertices: mural_min=minf(mural_min,(local_transform*vertex).y)
+	print("MURAL_LOWEST=",mural_min)
+	check(absf(mural_min-.091)<.001,"fallen_mural_ground_contact")
+	check(absf(mural.basis.y.z)>.3,"fallen_mural_leans")
 	check(corridor.get_node_or_null("AuthoredLayoutArtRoot/DOORWALL_east_xp20_p2.5") == null,"removed_door_wall")
 	corridor.call("_build_door","east","floor_01_entry",dims["corridor"])
 	check(corridor.get_door_node("east") == null,"removed_door_leaf")
@@ -113,6 +135,8 @@ func _ready() -> void:
 			check(is_equal_approx(room.global_position.y,-24),"tower_floor98:"+str(binding["id"]))
 		var third: DungeonRoom3D=actual.get("floor_01_hub")
 		var fourth: DungeonRoom3D=actual.get("floor_01_entry")
+		third.ensure_detail_built()
+		check(third.find_children("*","RoomLightSwitch3D",true,false).is_empty(),"tower_third_room_no_switch")
 		check(third.get_door_node("east")==null and fourth.get_door_node("west")==null,"tower_removed_door_both_sides")
 		var edges: Dictionary=tower.get("_open_edges")
 		check(bool(edges.get("floor_01_entry|floor_01_hub",false)),"tower_open_edge")

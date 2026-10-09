@@ -11,7 +11,7 @@
 
 [node name="AuthoredFacilities" type="Node3D"]
 metadata/asset_id = "ENV-BLOCK00-LOBBY-FACILITY-LAYOUT"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"
 metadata/room_id = "lobby"
 metadata/facility_count = 28
 
@@ -72,7 +72,7 @@ transform = Transform3D(-0.0000000, 0.0000000, -1.0000000, 0.0000000, 1.0000000,
 metadata/placement_source = "new_component"
 
 [node name="constructivist_mural_014" parent="." instance=ExtResource("4")]
-transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 0.0000000, -0.0000001, 0.0000000, -1.0000000, 0.0000000, 3.5500000, -7.1100000)
+transform = Transform3D(-0.9945219, -0.0969171, 0.0391571, -0.1045285, 0.9221046, -0.3725545, 0.0000000, -0.3746066, -0.9271839, 0.0000000, 0.6814794, -4.7000000)
 metadata/placement_source = "new_component"
 
 [node name="bookcase_fallen_015" parent="." instance=ExtResource("1")]

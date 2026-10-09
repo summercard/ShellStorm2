@@ -4452,6 +4452,10 @@ func _build_content() -> void:
 		# 玩家关灯后离开再回来会看到美术灯（含手摆 OmniLight）自己亮回来。
 		_bind_facility_presentation_light_control(_facility_lights_currently_on())
 		_bind_light_switch_signal()
+	elif authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and authored_layout_room_id == "corridor":
+		# 第三间已拆除墙面灯开关；保留常亮照明，不再生成可交互开关。
+		for light in _room_lights:
+			light.set_light_enabled(true)
 	elif size_class != "rooftop":
 		# 房间声明的「初始灯亮」优先（开局第一间房），其次才是按房型的默认。
 		var starts_on := authored_room_light_on or room_type in ["STAIR_LOBBY", "BOSS"]

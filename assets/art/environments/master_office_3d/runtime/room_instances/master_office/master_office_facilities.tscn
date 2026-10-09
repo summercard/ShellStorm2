@@ -23,7 +23,7 @@
 
 [node name="AuthoredFacilities" type="Node3D"]
 metadata/asset_id = "ENV-BLOCK00-MASTER-OFFICE-FACILITY-LAYOUT"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"
 metadata/room_id = "master_office"
 metadata/facility_count = 246
 
@@ -32,11 +32,11 @@ transform = Transform3D(-1.0000000, 0.0000000, 0.0000001, 0.0000000, 1.0000000, 
 metadata/placement_source = "linked_office"
 
 [node name="sofa_001" parent="." instance=ExtResource("16")]
-transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -4.8300018, 0.1050000, 0.7000000)
+transform = Transform3D(0.7000000, 0.0000000, 0.0000000, 0.0000000, 0.7000000, 0.0000000, 0.0000000, 0.0000000, 0.7000000, -4.8300018, 0.1050000, 0.7000000)
 metadata/placement_source = "linked_office"
 
 [node name="rug_002" parent="." instance=ExtResource("13")]
-transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -0.5600014, 0.1080000, 0.5000000)
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -0.5600014, -0.0290000, 0.5000000)
 metadata/placement_source = "linked_office"
 
 [node name="shelf_ledge_003" parent="." instance=ExtResource("14")]
@@ -48,23 +48,23 @@ transform = Transform3D(-0.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 
 metadata/placement_source = "linked_office"
 
 [node name="pillow_005" parent="." instance=ExtResource("8")]
-transform = Transform3D(0.3420201, 0.0000000, -0.9396926, 0.1682328, 0.9838437, 0.0612317, 0.9245107, -0.1790296, 0.3364944, -4.9000015, 1.7500000, 4.5999999)
+transform = Transform3D(0.2394141, 0.0000000, -0.6577848, 0.1177630, 0.6886906, 0.0428622, 0.6471575, -0.1253207, 0.2355461, -4.8790016, 1.2565000, 3.4299999)
 metadata/placement_source = "linked_office"
 
 [node name="pillow_006" parent="." instance=ExtResource("8")]
-transform = Transform3D(0.0871558, 0.0000000, -0.9961947, 0.1783483, 0.9838437, 0.0156035, 0.9800999, -0.1790296, 0.0857477, -4.9000015, 1.7500000, 1.7000000)
+transform = Transform3D(0.0610091, 0.0000000, -0.6973363, 0.1248438, 0.6886906, 0.0109224, 0.6860699, -0.1253207, 0.0600234, -4.8790016, 1.2565000, 1.4000000)
 metadata/placement_source = "linked_office"
 
 [node name="pillow_007" parent="." instance=ExtResource("8")]
-transform = Transform3D(0.4226183, 0.0000000, -0.9063078, 0.1622559, 0.9838437, 0.0756612, 0.8916652, -0.1790296, 0.4157903, -4.9000015, 1.7500000, -2.3000000)
+transform = Transform3D(0.2958328, 0.0000000, -0.6344155, 0.1135791, 0.6886906, 0.0529628, 0.6241656, -0.1253207, 0.2910532, -4.8790016, 1.2565000, -1.4000000)
 metadata/placement_source = "linked_office"
 
 [node name="pillow_008" parent="." instance=ExtResource("8")]
-transform = Transform3D(-0.2588190, 0.0000000, -0.9659258, 0.1729293, 0.9838437, -0.0463363, 0.9503200, -0.1790296, -0.2546375, -4.9000015, 1.7500000, -3.4000001)
+transform = Transform3D(-0.1811733, 0.0000000, -0.6761481, 0.1210505, 0.6886906, -0.0324354, 0.6652240, -0.1253207, -0.1782462, -4.8790016, 1.2565000, -2.1700001)
 metadata/placement_source = "linked_office"
 
 [node name="throw_009" parent="." instance=ExtResource("17")]
-transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, -4.5999985, 0.4000000, 4.7500000)
+transform = Transform3D(0.7000000, 0.0000000, 0.0000000, 0.0000000, 0.7000000, 0.0000000, 0.0000000, 0.0000000, 0.7000000, -4.6689995, 0.3115000, 3.5350000)
 metadata/placement_source = "linked_office"
 
 [node name="display_case_010" parent="." instance=ExtResource("3")]
