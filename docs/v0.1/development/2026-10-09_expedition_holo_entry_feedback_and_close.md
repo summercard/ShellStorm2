@@ -35,6 +35,21 @@
 
 closing 的计时与释放条件（`_progress` 按 `delta / 3.6` 递减、归零即 `queue_free`）保持不变，因此开场早期取消依旧是快的（`verify_expedition_level01_flow` 只等 0.15 秒即要求释放，该路径不受影响）。
 
+## 四、补修：光标移开就要复原（焦点与选中解耦）
+
+主人复核后追加：「光标离开选中后就要回去变小，而不是选中另一个再变小」。
+
+根因是**把"选中"直接当成悬停来源**：`_input` 里 `_selection` 只在 `_pick` 命中入口时被赋值，移开到空白时不复位；城市的放大、流光、标签高亮又全部读 `selected`。于是移开光标后入口一直保持放大，直到悬停到另一个入口才换人缩小。
+
+修法是把**焦点**从选中项里拆出来：
+
+- `HologramCity3D.selected` 重命名为 `focus`（-1 = 无），它才是放大/流光/标签高亮的唯一来源。
+- `RogueMapSelectMenu` 新增 `_focus`；`_input` 的鼠标移动分支现在**无条件**更新焦点 —— `_pick` 返回 0/1 时同时更新选中项与焦点，返回 2（返回标识）或 -1（空白）时只把焦点置 -1。
+- `_selection` 的语义收窄为"Enter/A 的确认目标"，移开时故意保留，因此"把鼠标挪到一边再按 Enter"仍有目标。
+- 键盘与手柄方向切换统一走新增的 `_shift_selection()`，把焦点一起带过去 —— 否则光标停在空白后按键看不出选中了谁。
+
+二者之所以不能合并成一个变量：选中项**必须**在移开时保留，焦点**必须**在移开时清空，两个需求方向相反。
+
 ## 同步资产与文档
 
 - 新增 `assets/art/ui/expedition_city/hologram_frame.gdshader`。
@@ -53,10 +68,10 @@ closing 的计时与释放条件（`_progress` 按 `delta / 3.6` 递减、归零
 
 左列就是"按下 Esc 没反应"的直接读数：按下后楼群与镜头都完全不动；右列证明关闭已在按下当帧起播。
 
-- 新增探针 `tests/verification/probe_holo_entry_feedback`（不依赖合成输入的派发时序），输出 `HOLOGRAM_ENTRY_FEEDBACK_OK hover=1.32 punch=0.34 borders=4 close_immediate=true`，退出 0；其中还钉住四条边 `arc_span` 合计为 1、`flow_offset` 自 0 沿边框递增、脉冲 0.4 秒内归零。
+- 新增探针 `tests/verification/probe_holo_entry_feedback`（不经 `Input.parse_input_event`，直接把事件喂给 `_input` 的确定性路径），输出 `HOLOGRAM_ENTRY_FEEDBACK_OK hover=1.32 punch=0.34 borders=4 focus_decoupled=true close_immediate=true`，退出 0。除原有四项外，新增断言：光标移开后 `_focus == -1` 而 `_selection` 保留、悬停强度归零、尺寸与静止态一致、`_pick` 对空白取样点确实返回 -1（保证断言前提成立）。比值断言改用相对容差 —— 收敛式插值不会精确落在目标值上，用 `is_equal_approx` 会测成浮点而不是行为。
+- 实机读数（同机位三态连拍）：静止 `0.0900` → 悬停 `0.1188`（比值 **1.320**）→ 光标移回空白 `0.0900`（比值 **1.000**），末态 `focus=-1 selection=0`。截图 `_scratch/holo_leave_rest_a.png` / `_hover_b.png` / `_back_c.png`。
 - 实机读数：静止态标记比例 0.0902、悬停态 0.1188，比值 **1.317**（`HOVER_SCALE = 1.32`，探针容差内一致）。
-- 实机截图 `_scratch/holo_entry_rest.png` 与 `_scratch/holo_entry_hover.png`（同机位连拍，menu 的 `_selection` 从 -1 切到 0）：悬停侧边框明显加粗变亮，且左边缘与下沿出现连成一片的亮带（流光），静止侧为均匀暗描边。
-- 自带 `verify_expedition_hologram_city`：本机**改动前后同样**报 `hover input failed`（合成鼠标事件与 `await get_tree().process_frame` 的派发时序），改动前另有 7 条连锁失败（点击路由、Enter、手柄方向、手柄确认、取消未进入 closing、菜单未释放、镜头/HUD 未恢复），改动后只剩前两条。即本次改动没有引入新的失败项；该场景的输入段在本机不可作为判定依据，判定改用上面的探针与 A/B 对照。
+- 实机截图 `_scratch/holo_entry_rest.png` 与 `_scratch/holo_entry_hover.png`（同机位连拍，menu 的 `_selection` 从 -1 切到 0）：悬停侧边框明显加粗变亮，且左边缘与下沿出现连成一片的亮带（流光），静止侧为均匀暗描边。- 自带 `verify_expedition_hologram_city`：本机**改动前后同样**报 `hover input failed`（合成鼠标事件与 `await get_tree().process_frame` 的派发时序），改动前另有 7 条连锁失败（点击路由、Enter、手柄方向、手柄确认、取消未进入 closing、菜单未释放、镜头/HUD 未恢复），改动后只剩前两条。即本次改动没有引入新的失败项；该场景的输入段在本机不可作为判定依据，判定改用上面的探针与 A/B 对照。
 - 导入与运行日志无 `SCRIPT ERROR` / `ERROR` / `SHADER ERROR`，新着色器编译通过。
 
 ## 已知的既有环境问题（非本次引入）

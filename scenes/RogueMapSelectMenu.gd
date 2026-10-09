@@ -6,6 +6,14 @@ const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
 const CITY_SCENE = preload("res://assets/art/ui/expedition_city/hologram_city.tscn")
 const CITY_LAYER := 1 << 18
 const LEVEL_IDS := ["expedition_01", "99"]
+const OPENING_SECONDS := 4.4
+const CLOSING_SECONDS := 3.6
+# 关闭曲线：q 是"关闭自身归一化进度"（按下瞬间 1 → 完成 0）。指数 > 1 为起步快、收尾慢，
+# 保证按下当帧就有位移；直接用 opening 的映射反向会让相机静止 1.62s、楼群静止 0.82s。
+const CLOSE_EASED_FALLOFF := 1.35
+const CLOSE_DEPLOY_FALLOFF := 1.6
+# 点击弹性反馈的可见窗口：change_scene 会立刻接管画面，不留这段时间就只剩一帧脉冲。
+const PUNCH_HOLD := 0.18
 var _player: Node3D
 var _facility: BaseFacility3D
 var _original_camera: Camera3D
@@ -17,7 +25,13 @@ var _hidden: Array[Node] = []
 var _world_fades: Array[Dictionary] = []
 var _state := "opening"
 var _progress := 0.0
+var _close_from_progress := 1.0
+var _close_deploy_from := 1.0
+var _close_eased_from := 1.0
+var _pending_level_id := ""
+var _depart_countdown := 0.0
 var _selection := 0
+var _focus := 0
 var _axis_latched := false
 var _departing := false
 var _previous_input_lock := false
@@ -115,26 +129,38 @@ func _process(delta: float) -> void:
 	if not is_instance_valid(_city) or not is_instance_valid(_camera):
 		return
 	if _state == "opening":
-		_progress = minf(1.0, _progress + delta / 4.4)
+		_progress = minf(1.0, _progress + delta / OPENING_SECONDS)
 		_apply_transition()
 		if _progress >= 1.0:
 			_state = "active"
 	elif _state == "closing":
-		_progress = maxf(0.0, _progress - delta / 3.6)
+		_progress = maxf(0.0, _progress - delta / CLOSING_SECONDS)
 		_apply_transition()
 		if _progress <= 0.0:
 			queue_free()
-	_city.selected = _selection
+	elif _state == "entering":
+		# 点击后的弹性展示窗口；到点才真正交接出发。
+		_depart_countdown = maxf(0.0, _depart_countdown - delta)
+		if _depart_countdown <= 0.0:
+			_commit_departure()
+	_city.focus = _focus
 	_city.face_markers(_camera)
 	_facility.name_label.hide()
 	_facility.prompt_label.hide()
 
 func _apply_transition() -> void:
 	var eased := smoothstep(0.0, 0.55, _progress)
+	var deployed := clampf((_progress - (0.35 - 1.0 / OPENING_SECONDS)) / 0.65, 0.0, 1.0)
+	if _state == "closing":
+		# 关闭独立起播：q 从按下瞬间的 1 连续收敛到 0，起点等于按下时的真实状态，
+		# 因此途中退出不跳变，而两段平台期（相机 1.62s、楼群 0.82s）不再出现。
+		var q := clampf(_progress / _close_from_progress, 0.0, 1.0)
+		eased = _close_eased_from * pow(q, CLOSE_EASED_FALLOFF)
+		deployed = _close_deploy_from * pow(q, CLOSE_DEPLOY_FALLOFF)
 	_camera.global_transform = _start_transform.interpolate_with(_target_transform, eased)
 	_camera.fov = lerpf(_initial_fov, 48.0, eased)
 	_animate_depth_of_field(eased)
-	_city.deployment = clampf((_progress - (0.35 - 1.0 / 4.4)) / 0.65, 0.0, 1.0)
+	_city.deployment = deployed
 	var fade := smoothstep(0.44, 0.72, _progress)
 	_blend_environment(fade)
 	for item in _world_fades:
@@ -174,7 +200,10 @@ func _input(event: InputEvent) -> void:
 		request_close()
 	elif _state == "active":
 		if event is InputEventMouseMotion:
+			# _pick 返回 0/1 = 入口、2 = 返回标识、-1 = 什么都没命中。
+			# 焦点必须如实反映"当前指着谁"，包括指向空白；只有选中项才在移开时保留。
 			var hovered := _pick(event.position)
+			_focus = hovered if hovered >= 0 and hovered < 2 else -1
 			if hovered >= 0 and hovered < 2:
 				_selection = hovered
 		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -183,22 +212,28 @@ func _input(event: InputEvent) -> void:
 				request_close()
 			elif picked >= 0:
 				_selection = picked
+				_focus = picked
 				confirm_selection()
 		elif event.is_action_pressed("ui_accept"):
 			confirm_selection()
 		elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_up"):
-			_selection = posmod(_selection - 1, 2)
+			_shift_selection(posmod(_selection - 1, 2))
 		elif event.is_action_pressed("ui_right") or event.is_action_pressed("ui_down"):
-			_selection = posmod(_selection + 1, 2)
+			_shift_selection(posmod(_selection + 1, 2))
 		elif event is InputEventKey and event.pressed and not event.echo:
 			if event.physical_keycode in [KEY_A, KEY_W, KEY_D, KEY_S]:
-				_selection = 1 - _selection
+				_shift_selection(1 - _selection)
 		elif event is InputEventJoypadMotion and event.axis in [JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y]:
 			if absf(event.axis_value) < 0.3:
 				_axis_latched = false
 			elif absf(event.axis_value) > 0.65 and not _axis_latched:
 				_axis_latched = true
-				_selection = 1 - _selection
+				_shift_selection(1 - _selection)
+
+func _shift_selection(index: int) -> void:
+	# 键盘/手柄切换时把焦点一起带过去，否则光标停在空白后按键看不出选中了谁。
+	_selection = index
+	_focus = index
 
 func _pick(screen: Vector2) -> int:
 	var origin := _camera.project_ray_origin(screen)
@@ -223,8 +258,13 @@ func _pick(screen: Vector2) -> int:
 	return -1
 
 func request_close() -> void:
-	if _state != "entering":
-		_state = "closing"
+	if _departing or _state == "closing":
+		return
+	# 先记下按下瞬间的真实状态，关闭动画才可能从这一刻起播而不是从平台期之后。
+	_close_from_progress = maxf(_progress, 0.0001)
+	_close_deploy_from = _city.deployment if is_instance_valid(_city) else 1.0
+	_close_eased_from = smoothstep(0.0, 0.55, _progress)
+	_state = "closing"
 
 func _on_close_pressed() -> void:
 	request_close()
@@ -237,6 +277,8 @@ func _on_alternate_level_pressed(level_id: String) -> void:
 
 func confirm_selection() -> void:
 	if _state == "active":
+		if is_instance_valid(_city):
+			_city.punch_marker(_selection)
 		_enter_level(LEVEL_IDS[_selection])
 
 func _enter_level(level_id: String) -> void:
@@ -246,6 +288,16 @@ func _enter_level(level_id: String) -> void:
 		return
 	_departing = true
 	_state = "entering"
+	_pending_level_id = level_id
+	# 弹性反馈先播完这 0.18s 再交接，出发逻辑本身不动。
+	_depart_countdown = PUNCH_HOLD
+	if _depart_countdown <= 0.0:
+		_commit_departure()
+
+func _commit_departure() -> void:
+	if _state != "entering" or _pending_level_id == "":
+		return
+	_state = "departing"
 	var departure: Dictionary = {}
 	if BaseManager != null:
 		_departure_provider = BaseManager.call("_get_runtime_checkpoint_provider")
@@ -275,6 +327,7 @@ func _enter_level(level_id: String) -> void:
 
 func _departure_failed(message: String) -> void:
 	_departing = false
+	_pending_level_id = ""
 	_state = "active"
 	GameDesignConfig.pending_expedition_level_id = ""
 	if is_instance_valid(_city):
