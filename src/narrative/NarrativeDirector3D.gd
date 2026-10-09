@@ -42,6 +42,7 @@ var _dungeon: Node = null
 var _poll_accumulator := 0.0
 var _check_accumulator := 0.0
 var _paused_dialogue_synced := false
+var _waiting_for_flashlight := false
 
 
 func _ready() -> void:
@@ -155,8 +156,15 @@ func _on_node_added(node: Node) -> void:
 	# 场景根进入树 **早于** 它的 _ready（孩子先就位、_ready 后发），
 	# 所以这里接得上「新游戏开场」这一发 room_entered —— 那一发就发生在
 	# TowerDescent3D._ready 里，等第一帧 _process 就已经错过了。
+	#
+	# `room_entered` 属于 Dungeon3D，而 `gameplay_started` 属于 TowerDescent3D，
+	# 两个信号不一定在同一个节点上。旧逻辑只在绑定地牢节点时接 gameplay_started，
+	# 导致真实塔楼里开场页结束后信号无人接收，开场剧情永远不启动且无运行时报错。
 	if node.has_signal("room_entered") and node != _dungeon:
 		_bind_dungeon(node)
+	if node.has_signal("gameplay_started"):
+		if not node.gameplay_started.is_connected(_on_dungeon_gameplay_started):
+			node.gameplay_started.connect(_on_dungeon_gameplay_started)
 
 
 func _bind_dungeon(node: Node) -> void:
@@ -406,6 +414,20 @@ func is_actor_facing_overridden() -> bool:
 	return _adapter.is_actor_facing_overridden()
 
 
+## 第二段开场专用等待：玩家按 F 真实打开手电后才允许剧情收口。
+func is_waiting_for_flashlight() -> bool:
+	return _waiting_for_flashlight and not _active.is_empty()
+
+
+func complete_flashlight_wait() -> void:
+	if not is_waiting_for_flashlight():
+		return
+	_waiting_for_flashlight = false
+	_dispatch_log.append("flashlight.enabled")
+	_dispatch_log.append("flow.end")
+	_finish("flow.end")
+
+
 # =========================================================================
 # 时间轴
 # =========================================================================
@@ -418,6 +440,8 @@ func _process(delta: float) -> void:
 	var script := _active.get("script") as NarrativeScript3D
 	if script == null:
 		_finish("aborted")
+		return
+	if _waiting_for_flashlight:
 		return
 	_active["t"] = float(_active.get("t", 0.0)) + delta
 	var now := float(_active["t"])
@@ -460,6 +484,10 @@ func _dispatch_cue(cue: Dictionary) -> bool:
 	if verb == "flow.mark":
 		_flags[str(params.get("key", ""))] = true
 		_dispatch_log.append("%.2f flow.mark:%s" % [float(cue.get("at", 0.0)), str(params.get("key", ""))])
+		return false
+	if verb == "flow.wait_for_flashlight":
+		_waiting_for_flashlight = true
+		_dispatch_log.append("%.2f flow.wait_for_flashlight" % float(cue.get("at", 0.0)))
 		return false
 	if verb == "grant.flag":
 		_flags[str(params.get("key", ""))] = params.get("value", true)
@@ -532,6 +560,7 @@ func _apply_auto_invulnerability() -> void:
 func _finish(reason: String) -> void:
 	if _active.is_empty():
 		return
+	_waiting_for_flashlight = false
 	var narrative_id := str(_active.get("id", ""))
 	# 先落历史再归还：拿到 id 最保险的时机，且写盘失败也不影响归还路径。
 	_commit_history_if_completed(narrative_id, reason)
@@ -640,6 +669,7 @@ func has_flag(key: String) -> bool:
 func reset_run_state() -> void:
 	abort("new_profile")
 	_flags.clear()
+	_waiting_for_flashlight = false
 	# 先清空再重挂：arm() 会从既有登记里**继承** fired_count，不清空等于没复位。
 	_armed.clear()
 	_diagnostics.clear()
@@ -664,6 +694,22 @@ func reset_for_test() -> void:
 	_scripts.clear()
 	_diagnostics.clear()
 	_dispatch_log.clear()
+	_dungeon = null
+	_adapter.bind_dungeon(null)
+
+
+## 仅供验收：把替身地牢重新注入适配器。
+## 正式运行只通过 _on_node_added 自动认领场景节点；验收在同一进程中会先挂载
+## 绑定链探针，再运行真实剧本，必须显式切回当前最小世界，否则后续 scene.* cue
+## 会被旧替身吞掉，表现为剧情触发了但刷怪/台词/道具都静默降级。
+func bind_dungeon_for_test(node: Node) -> void:
+	if node == null:
+		return
+	_dungeon = node
+	# 测试阶段允许从绑定链探针切回当前最小世界；先清空适配器的保护性绑定，
+	# 再注入真实测试根。正式运行不调用本接口。
+	_adapter.bind_dungeon(null)
+	_adapter.bind_dungeon(node)
 
 
 # =========================================================================

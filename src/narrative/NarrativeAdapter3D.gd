@@ -41,9 +41,10 @@ var _camera_rest_elevation_deg := 0.0  # 接管前那套俯角（度），elevat
 
 # —— 运镜枢轴（2026-09-21）：默认钉在玩家身上，可脱开去拍别处 ——
 var _camera_pivot_channel := {}   # 枢轴通道（Vector3）{from, to, t, duration, value}
-var _camera_pivot_mode := "player"  # player / last_spawn / room_center / point
+var _camera_pivot_mode := "player"  # player / last_spawn / room_center / light_switch / point
 var _camera_pivot_point := Vector3.ZERO  # mode=point（pivot_m）时的显式坐标
-var _camera_pivot_room_id := ""  # mode=room_center 时用哪个房间
+var _camera_pivot_room_id := ""  # mode=room_center / light_switch 时用哪个房间
+var _camera_pivot_preferred_entry := "east"
 var _has_last_spawn := false      # 是否已经有过 scene.spawn
 var _last_spawn_origin := Vector3.ZERO  # 最近一次剧情刷怪的队列中心
 
@@ -63,6 +64,11 @@ var _pose_channel := {}            # {from, to, t, duration, value}（相位 0..
 ## 重算一次 input_locked，它必须问这里（is_player_input_locked），
 ## 否则"角色停住"会被逐帧顶掉，且运行时毫无报错。
 var _player_input_taken := false
+
+# —— 底栏文字占用（2026-10-09）——
+## 剧情最近一次经 `ui.subtitle` / `ui.hint` / `ui.dialogue` 摆上去的 run_id。
+## 收口时据此判断「底栏现在这条还是不是我摆的」⇒ 是才关，不是就不动（见 `_restore_dialogue`）。
+var _narrative_dialogue_run := ""
 
 
 func bind(tree: SceneTree) -> void:
@@ -139,6 +145,9 @@ func player_node() -> Node3D:
 ## 而运行时只有一行降级告警）。2026-09-23 实测踩到。
 func bind_dungeon(node: Node) -> void:
 	if node == null:
+		_dungeon = null
+		_room_index_scene = null
+		_room_index = {}
 		return
 	# **不抢已有的绑定**：验收会自行把替身（假地牢 / 收集器）注入这里，无条件覆盖会把它
 	# 顶掉 —— 实测症状是首帧两条 `actor.say` 全部丢失（B1「同帧两条按书写顺序执行」变红）。
@@ -304,9 +313,10 @@ func is_player_input_locked() -> bool:
 	return _player_input_taken
 
 
-## 朝向是否由叙事接管（actor.face 生效期间）。Player3D 的鼠标瞄准必须问这里让位。
+## 朝向是否由叙事接管。actor.face 期间，以及任何剧情独占输入期间，
+## Player3D 的鼠标瞄准都必须让位；否则 input_locked 只会锁键盘，鼠标仍能改写 aim_yaw。
 func is_actor_facing_overridden() -> bool:
-	return _facing_active
+	return _facing_active or _player_input_taken
 
 
 ## 归还入口：交回独占权，再请游戏侧**重新裁决**一次 —— 模态 / 背包 / 开场页各自的
@@ -504,6 +514,14 @@ func _camera_distance() -> float:
 	return float(_camera_channel.get("value", _camera_rest_offset.length()))
 
 
+func _camera_current_distance_from_pivot(player: Node3D) -> float:
+	if _camera == null or not is_instance_valid(_camera):
+		return _camera_distance()
+	var pivot := _current_camera_pivot(player)
+	var measured := _camera.global_position.distance_to(pivot)
+	return measured if measured > CAMERA_MIN_DISTANCE_M else _camera_distance()
+
+
 func _camera_yaw_deg() -> float:
 	if _camera_yaw_channel.is_empty():
 		return 0.0
@@ -518,8 +536,9 @@ func _camera_elev_deg() -> float:
 
 
 ## 从 cue 里读枢轴声明。三个字段都没给 ⇒ 沿用当前枢轴（默认玩家）。
-##   `pivot`："player"（默认）/ "last_spawn" / "room_center"
-##   `room_id`：仅 "room_center" 用
+##   `pivot`："player"（默认）/ "last_spawn" / "room_center" / "light_switch"
+##   `room_id`：用于 "room_center" / "light_switch"
+##   `preferred_entry`：light_switch 的入口侧偏好，默认 east
 ##   `pivot_m`：[x, y, z] 显式世界坐标（最优先，压过 pivot）
 func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
 	var player := player_node()
@@ -539,15 +558,16 @@ func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
 	if not params.has("pivot"):
 		return
 	var mode := str(params.get("pivot", "player"))
-	if mode not in ["player", "last_spawn", "room_center"]:
+	if mode not in ["player", "last_spawn", "room_center", "light_switch"]:
 		_warn(
-			"camera.pivot『%s』未知（可选 player / last_spawn / room_center，或直接用 pivot_m），本镜头退回玩家。"
+			"camera.pivot『%s』未知（可选 player / last_spawn / room_center / light_switch，或直接用 pivot_m），本镜头退回玩家。"
 			% mode
 		)
 		mode = "player"
 	_camera_pivot_mode = mode
-	if mode == "room_center":
+	if mode in ["room_center", "light_switch"]:
 		_camera_pivot_room_id = str(params.get("room_id", ""))
+		_camera_pivot_preferred_entry = str(params.get("preferred_entry", "east"))
 	_start_camera_pivot_move(player, duration)
 
 
@@ -585,6 +605,15 @@ func _resolve_camera_pivot(player: Node3D) -> Vector3:
 				# 房间节点原点即房间中心（DungeonRoom3D 的 ±dimensions/2 约定）。
 				return room.global_position
 			_warn("camera.pivot=room_center，但找不到房间『%s』，退回玩家。" % _camera_pivot_room_id)
+		"light_switch":
+			var switch_room := room_node(_camera_pivot_room_id)
+			if switch_room != null and switch_room.has_method("get_narrative_light_switch_anchor"):
+				var anchor: Variant = switch_room.call(
+					"get_narrative_light_switch_anchor", _camera_pivot_preferred_entry
+				)
+				if anchor is Dictionary and (anchor as Dictionary).has("position"):
+					return (anchor as Dictionary)["position"]
+			_warn("camera.pivot=light_switch，但房间『%s』没有稳定开关锚点，退回玩家。" % _camera_pivot_room_id)
 	return player.global_position
 
 
@@ -968,28 +997,44 @@ func _ui_instruction(action: String, params: Dictionary) -> Dictionary:
 			var text := str(params.get("text", ""))
 			if text.strip_edges().is_empty():
 				return _failed("ui.subtitle 缺少 text。")
-			DialogueUI.show_message(
+			_narrative_dialogue_run = DialogueUI.show_message(
 				text,
 				str(params.get("speaker", DialogueUI.SPEAKER_SYSTEM)),
 				float(params.get("auto", 3.0))
 			)
-			return _ok()
+			return _done(Callable(self, "_restore_dialogue"))
 		"hint":
 			var hint := str(params.get("text", ""))
 			if hint.strip_edges().is_empty():
 				return _failed("ui.hint 缺少 text。")
-			DialogueUI.announce(hint, float(params.get("auto", 3.0)))
-			return _ok()
+			# `auto = 0` 是**保持型**提示（等玩家动作），它不会自己消失 ——
+			# 必须由收口收掉，否则「按 F 之后那句提示还挂在屏幕上」（08 文档 §5.2 已写明
+			# 「保持到显式交互或剧情收口」，这里补上后半句的实现）。
+			_narrative_dialogue_run = DialogueUI.announce(hint, float(params.get("auto", 3.0)))
+			return _done(Callable(self, "_restore_dialogue"))
 		"dialogue":
 			var lines: Variant = params.get("lines", null)
 			if not (lines is Array) or (lines as Array).is_empty():
 				return _failed("ui.dialogue 缺少 lines。")
-			DialogueUI.show_lines({
+			_narrative_dialogue_run = DialogueUI.show_lines({
 				"lines": lines,
 				"interrupt": bool(params.get("interrupt", true)),
 			})
-			return _ok()
+			return _done(Callable(self, "_restore_dialogue"))
 	return _degraded("ui.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
+
+
+## 收口时收掉剧情摆在底栏上的那条文字。
+## **只关自己摆的那条**：`run_id` 与当前在播的不一致 ⇒ 已被更新的消息替换（可能是别的系统
+## 的播报），剧情不该去关别人的东西。本方法读的是**最近一次** ui cue 记下的 run_id，
+## 因此同一场里连写多条 ui 提示也只有最后一条会在收口被关。
+func _restore_dialogue() -> void:
+	if _narrative_dialogue_run.is_empty():
+		return
+	var still_showing := DialogueUI.current_run_id() == _narrative_dialogue_run
+	_narrative_dialogue_run = ""
+	if still_showing:
+		DialogueUI.close()
 
 
 # -------------------------------------------------------------------------
@@ -1033,6 +1078,9 @@ func _restore_doors(argument: Dictionary) -> void:
 			(door as Object).call("set_open", bool(entry.get("opened", false)), true)
 
 
+## 房间灯光。缺省是**临时策略**：收口按占用清单强制归还（08 文档 §6.1）。
+## `persist: true` = 这条是**世界状态变更**（如「开场把基地设成关灯，等玩家自己按开关」），
+## 收口**不还原**。作者显式写才生效，缺省仍走强制归还 —— 免得把"演到一半就恢复"的效果吞掉。
 func _scene_light(params: Dictionary) -> Dictionary:
 	var room := room_node(str(params.get("room_id", "")))
 	if room == null:
@@ -1040,8 +1088,17 @@ func _scene_light(params: Dictionary) -> Dictionary:
 	var switch_node := _find_in_room(room, "set_light_on")
 	if switch_node == null:
 		return _degraded("scene.light：房间『%s』里没有灯开关。" % str(params.get("room_id", "")))
-	var before := bool(switch_node.get("light_on"))
+	# ⚠️ 开关没有 `light_on` 属性，只有 `is_light_on()` 方法（快照里才有同名字段）。
+	# 早期写成 `get("light_on")` 会拿到 null，`bool(null)` 当场抛
+	# 「Nonexistent 'bool' constructor」——该指令此前从未被真实剧本用过，属潜伏缺陷。
+	var before := false
+	if switch_node.has_method("is_light_on"):
+		before = bool(switch_node.call("is_light_on"))
 	switch_node.call("set_light_on", bool(params.get("on", true)))
+	# `persist: true` = 这条是**世界状态变更**（如「开场把基地设成关灯，等玩家自己按开关」），
+	# 收口**不还原**。作者显式写才生效，缺省仍走强制归还 —— 免得把"演到一半就恢复"的效果吞掉。
+	if bool(params.get("persist", false)):
+		return _ok()
 	return _done(Callable(self, "_restore_light").bind({"node": switch_node, "on": before}))
 
 
@@ -1188,7 +1245,7 @@ func _scene_spawn_item(params: Dictionary) -> Dictionary:
 	var spawned: Variant = dungeon.call(
 		"narrative_spawn_item", str(anchor["room_id"]), item_id, count,
 		anchor["origin"] as Vector3, bool(params.get("spread", false)),
-		str(params.get("spawn_key", ""))
+		str(params.get("spawn_key", "")), bool(params.get("auto_equip", false))
 	)
 	if spawned is int and int(spawned) > 0:
 		return _ok()

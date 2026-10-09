@@ -62,6 +62,10 @@ var _notes: Array[String] = []
 
 
 func _ready() -> void:
+	# 真机探针必须从干净的新本局开始；否则宿主 user:// 中已完成的开场历史
+	# 会按 once=run 正确拦截播放，测试就无法进入输入/相机/拾枪验收。
+	if BaseManager != null and BaseManager.has_method("replace_narrative_history_for_test"):
+		BaseManager.replace_narrative_history_for_test({})
 	await _boot()
 	if _tower == null or _player == null or _entry == null:
 		return
@@ -73,7 +77,8 @@ func _ready() -> void:
 	_phase_f_block00_door_policies()
 	_phase_g_opening_room_light()
 	await _phase_h_no_room_key_in_peaceful()
-	_phase_i_opening_loadout()
+	await _phase_i_opening_loadout()
+	await _phase_j_flashlight_input_and_wait()
 	_report()
 
 
@@ -162,6 +167,8 @@ func _phase_b_runtime() -> void:
 	var samples := 0
 	var lock_violations := 0
 	var first_violation := -1
+	var aim_violations := 0
+	var aim_before := _player.aim_yaw
 	var elev_first := NAN
 	var elev_min := NAN
 	deadline = Time.get_ticks_msec() + FINISH_TIMEOUT_MS
@@ -178,6 +185,12 @@ func _phase_b_runtime() -> void:
 			lock_violations += 1
 			if first_violation < 0:
 				first_violation = samples
+		# 模拟鼠标移动：直接调用玩家真实瞄准更新；剧情期间 aim_yaw 必须保持接管前值，
+		# 否则鼠标会在 face cue 空档把角色转走。收口后的恢复由 C 阶段单独检查。
+		var aim_before_mouse := _player.aim_yaw
+		_player.call("_update_aim_from_mouse")
+		if absf(_player.aim_yaw - aim_before_mouse) > 0.0001:
+			aim_violations += 1
 		var elevation := _camera_elevation_deg()
 		if not is_nan(elevation):
 			if is_nan(elev_first):
@@ -193,6 +206,11 @@ func _phase_b_runtime() -> void:
 		lock_violations == 0,
 		"演出全程玩家输入被锁死：违例 %d / %d 帧（首个违例在第 %s 帧）"
 		% [lock_violations, samples, str(first_violation)],
+	)
+	_check(
+		aim_violations == 0,
+		"演出全程鼠标朝向保持不变：违例 %d / %d 帧"
+		% [aim_violations, samples],
 	)
 	_check(
 		not is_nan(elev_first) and not is_nan(elev_min),
@@ -664,7 +682,15 @@ func _phase_i_opening_loadout() -> void:
 		var gun_type := (
 			str((gun_data as Dictionary).get("type", "")) if gun_data is Dictionary else "?"
 		)
+		var gun_id := (
+			str((gun_data as Dictionary).get("id", "")) if gun_data is Dictionary else "?"
+		)
 		_check(gun_type == "weapon", "地上那件是武器（实际 type=%s）" % gun_type)
+		_check(gun_id == "weapon_sprinkler", "地上那件是剧情目标武器（实际 id=%s）" % gun_id)
+		_check(
+			gun_data is Dictionary and bool((gun_data as Dictionary).get("narrative_auto_equip", false)),
+			"地面武器保留 narrative_auto_equip 一次性标记",
+		)
 		_check(
 			office.contains_world_position(gun.global_position),
 			"那把枪落在办公室内部（world=%.1f, %.1f, %.1f）"
@@ -680,6 +706,29 @@ func _phase_i_opening_loadout() -> void:
 			"I 地上那把枪 = (%.1f, %.1f, %.1f)，离东门 %.2fm"
 			% [gun.global_position.x, gun.global_position.y, gun.global_position.z, to_door.length()]
 		)
+		# 真机拾取：把玩家放到实际掉落物位置，必须走 Area3D -> pickup_requested ->
+		# Dungeon3D 正式装备事务，而不是直接调用 equip 接口。
+		var before_pickup_position := _player.global_position
+		_player.global_position = gun.global_position
+		await _wait_frames(4)
+		var equipped_after_pickup: Variant = _player.call("get_equipped_weapon_item")
+		var equipped_id := (
+			str((equipped_after_pickup as Dictionary).get("id", ""))
+			if equipped_after_pickup is Dictionary else "?"
+		)
+		_check(
+			equipped_id == "weapon_sprinkler",
+			"真实拾取后主武器槽自动装备 weapon_sprinkler（实际 %s）" % equipped_id,
+		)
+		var remaining_opening_drops := 0
+		for value_after in get_tree().get_nodes_in_group("ground_loot_3d"):
+			var node_after := value_after as Node3D
+			if node_after != null and office.is_ancestor_of(node_after):
+				var data_after: Variant = node_after.get("item_data")
+				if data_after is Dictionary and str((data_after as Dictionary).get("id", "")) == "weapon_sprinkler":
+					remaining_opening_drops += 1
+		_check(remaining_opening_drops == 0, "自动装备成功后地面剧情枪被正确接受（剩余 %d）" % remaining_opening_drops)
+		_player.global_position = before_pickup_position
 
 	# ④ 剧本与常量必须同值（剧本是 JSON、常量在 GDScript，两处写死就必须互相咬住）
 	var consts: Dictionary = _tower.get_script().get_script_constant_map()
@@ -744,6 +793,89 @@ func _phase_i_opening_loadout() -> void:
 			hint.contains("手电") and hint.contains("F"),
 			"剧本 02 有「按F开启手电」的系统提示（实际「%s」）" % hint,
 		)
+
+
+## 第二段真机输入链：等待状态只放行物理 F，真实 PlayerFlashlight3D 开灯后由 flow.end 收口。
+func _phase_j_flashlight_input_and_wait() -> void:
+	print("[J] 第二段真实 F 键：等待手电 → 开灯 → flow.end")
+	var flashlight := _player.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
+	_check(flashlight != null, "玩家挂载真实 PlayerFlashlight3D")
+	if flashlight == null:
+		return
+	flashlight.set_light_enabled(false)
+	var point_variant: Variant = NarrativeDirector.point_origin_for_test(ZOMBIES_ID)
+	_check(point_variant is Vector3, "第二段真机触发点可解析（准备真实位置触发）")
+	if not (point_variant is Vector3):
+		return
+	_player.global_position = point_variant as Vector3
+	var deadline := Time.get_ticks_msec() + FINISH_TIMEOUT_MS
+	while (
+		(not NarrativeDirector.is_playing() or not NarrativeDirector.is_waiting_for_flashlight())
+		and Time.get_ticks_msec() < deadline
+	):
+		await get_tree().process_frame
+	_check(NarrativeDirector.is_playing(), "玩家走到会议室触发第二段剧情")
+	_check(NarrativeDirector.is_waiting_for_flashlight(), "提示后真实剧情停在等待手电")
+	_check(not flashlight.is_light_enabled(), "按 F 前真实手电保持关闭")
+	# `ui.hint` 是 auto=0 的**保持型**系统提示：等待期间必须在播，且要能被收口收掉
+	# （2026-10-09 业主：「剧本2 按完 F 后，系统对话框也需要一起关闭」）。
+	_check(DialogueUI.is_active(), "等待手电期间系统提示在播（ui.hint auto=0 保持）")
+	_check(
+		DialogueUI.current_text().contains("手电"),
+		"在播的就是「按F开启手电」那句提示（实际「%s」）" % DialogueUI.current_text(),
+	)
+	if not NarrativeDirector.is_waiting_for_flashlight():
+		return
+	_check(_player.input_locked, "等待手电期间普通玩家输入仍保持锁定")
+	var waiting_time := NarrativeDirector.active_time()
+	await _wait_frames(4)
+	_check(
+		is_equal_approx(waiting_time, NarrativeDirector.active_time()),
+		"等待手电期间时间轴不自动推进（%.2f → %.2f）"
+		% [waiting_time, NarrativeDirector.active_time()],
+	)
+	await _tap_physical_key(KEY_F)
+	_check(flashlight.is_light_enabled(), "真实物理 F 输入开启 PlayerFlashlight3D")
+	var finish_deadline := Time.get_ticks_msec() + 5000
+	while NarrativeDirector.is_playing() and Time.get_ticks_msec() < finish_deadline:
+		await get_tree().process_frame
+	_check(not NarrativeDirector.is_playing(), "真实 F 输入后第二段剧情结束")
+	var log_lines := NarrativeDirector.dispatch_log()
+	var last_line := "<空>"
+	if not log_lines.is_empty():
+		last_line = str(log_lines[log_lines.size() - 1])
+	_check(last_line == "finish:flow.end", "真实 F 输入后的收口原因是 flow.end（末条 %s）" % last_line)
+	_check(not _player.input_locked, "手电开启收口后玩家输入归还")
+	_check(not NarrativeDirector.is_camera_override_active(), "手电开启收口后相机归还")
+	# 收口必须把保持型系统提示一起收掉，否则「按完 F 那句提示还挂在屏幕上」。
+	for _settle_frame in range(4):
+		await get_tree().process_frame
+	_check(
+		not DialogueUI.is_active(),
+		"收口后系统对话框被一起关闭（is_active=%s）" % str(DialogueUI.is_active()),
+	)
+	_check(
+		DialogueUI.current_run_id().is_empty(),
+		"收口后底栏没有残留的在播 run（current_run_id=「%s」）" % DialogueUI.current_run_id(),
+	)
+	_note("J 手电等待 %.2fs，真实 F 后 dispatch_log 末条 = %s" % [waiting_time, last_line])
+
+
+func _tap_physical_key(keycode: Key) -> void:
+	var pressed := InputEventKey.new()
+	pressed.keycode = keycode
+	pressed.physical_keycode = keycode
+	pressed.pressed = true
+	Input.parse_input_event(pressed)
+	Input.flush_buffered_events()
+	await get_tree().process_frame
+	var released := InputEventKey.new()
+	released.keycode = keycode
+	released.physical_keycode = keycode
+	released.pressed = false
+	Input.parse_input_event(released)
+	Input.flush_buffered_events()
+	await get_tree().process_frame
 
 
 func _report() -> void:

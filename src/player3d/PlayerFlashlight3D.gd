@@ -111,9 +111,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and (event as InputEventKey).echo:
 		return
-	if _player == null or _player.input_locked or _player.current_hp <= 0:
+	if _player == null or _player.current_hp <= 0:
 		return
-	toggle_light()
+	var narrative_wait := (
+		NarrativeDirector != null
+		and NarrativeDirector.has_method("is_waiting_for_flashlight")
+		and bool(NarrativeDirector.is_waiting_for_flashlight())
+	)
+	if _player.input_locked and not narrative_wait:
+		return
+	var enabled := toggle_light()
+	if enabled and narrative_wait and NarrativeDirector.has_method("complete_flashlight_wait"):
+		NarrativeDirector.complete_flashlight_wait()
 	get_viewport().set_input_as_handled()
 
 

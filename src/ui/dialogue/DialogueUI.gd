@@ -174,6 +174,13 @@ func is_active() -> bool:
 	return _active
 
 
+## 当前正在播的 run_id；没有在播时为空串。
+## 供调用方（剧情系统收口）判断「底栏现在挂着的这条，还是不是我摆上去的那条」——
+## 已经不是了就不该去关它（那是别人的消息）。
+func current_run_id() -> String:
+	return _run_id
+
+
 func is_typing() -> bool:
 	return _typing
 

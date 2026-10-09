@@ -465,6 +465,9 @@ var authored_layout_room_id := ""
 ## `_spawn_room_enemies()`（不刷怪）、`_door_policies_for_record()`（门策略全放行）、
 ## `_build_door()`（基地门扇）。默认 false = 未声明的区域行为一字不变。
 var authored_layout_peaceful := false
+## 是否允许本房程序生成可搜索设施；false 时仍按 prop_count 生成普通家具。
+## 默认 true 保持未声明房间既有行为不变。
+var search_facilities_enabled := true
 ## 本房**初始灯就亮**（不经玩家按开关、不播启动序列）。给「开局第一间房」用 ——
 ## 玩家一睁眼不该是黑的。默认 false = 老行为（只有 STAIR_LOBBY / BOSS 默认亮）。
 var authored_room_light_on := false
@@ -512,6 +515,7 @@ func configure(config: Dictionary) -> void:
 	authored_layout_version = str(config.get("authored_layout_version", authored_layout_version))
 	authored_layout_room_id = str(config.get("authored_layout_room_id", authored_layout_room_id))
 	authored_layout_peaceful = bool(config.get("authored_layout_peaceful", authored_layout_peaceful))
+	search_facilities_enabled = bool(config.get("search_facilities_enabled", search_facilities_enabled))
 	authored_room_light_on = bool(config.get("authored_room_light_on", authored_room_light_on))
 	static_layout_scene_path = str(config.get("static_layout_scene_path", static_layout_scene_path))
 	connection_ports = (config.get("connection_ports", connection_ports) as Array).duplicate(true)
@@ -591,7 +595,45 @@ func get_dimensions() -> Vector2:
 
 
 func is_room_light_on() -> bool:
-	return _light_switch != null and _light_switch.is_light_on()
+	for light_switch in _all_room_light_switches():
+		if light_switch != null and is_instance_valid(light_switch):
+			return light_switch.is_light_on()
+	return false
+
+
+## 统一控制房间灯光。FACILITY 的两个开关已通过 link_switch 并联，
+## 因此只从一个有效开关发起变更，避免重复播放启动表现；普通房间沿用单开关。
+## 该接口是剧情与房间灯光状态之间的稳定边界，也会同步 Art 自发光。
+func set_room_light_on(enabled: bool) -> bool:
+	var switches := _all_room_light_switches()
+	if switches.is_empty():
+		return false
+	var light_switch := switches[0]
+	if light_switch == null or not is_instance_valid(light_switch):
+		return false
+	return light_switch.set_light_on(enabled)
+
+
+## 返回供剧情相机使用的稳定灯光开关锚点，不暴露节点路径。
+## 新主线从 98F 东侧进入 99F，因此默认优先东侧开关。
+func get_narrative_light_switch_anchor(preferred_entry := "east") -> Variant:
+	var switches := _all_room_light_switches()
+	if switches.is_empty():
+		return null
+	var wanted_direction := "east" if preferred_entry != "west" else "west"
+	for light_switch in switches:
+		if str(light_switch.get_meta("facility_entry_direction", "")).begins_with(wanted_direction + "_"):
+			return {
+				"position": light_switch.get_interaction_dot_anchor(),
+				"room_id": room_id,
+				"side": wanted_direction,
+			}
+	var fallback := switches[0]
+	return {
+		"position": fallback.get_interaction_dot_anchor(),
+		"room_id": room_id,
+		"side": str(fallback.get_meta("facility_entry_direction", "")),
+	}
 
 
 func get_room_snapshot() -> Dictionary:
@@ -601,6 +643,7 @@ func get_room_snapshot() -> Dictionary:
 		"cleared": cleared, "is_main_path": is_main_path,
 		"authored_layout_shell": authored_layout_shell,
 		"authored_layout_peaceful": authored_layout_peaceful,
+		"search_facilities_enabled": search_facilities_enabled,
 		"shell_built": _shell_built, "detail_built": _detail_built, "stream_state": _stream_state,
 		"stream_state_name": get_stream_state_name(),
 		"stream_transition_count": _stream_transition_count,
@@ -815,8 +858,8 @@ func _apply_pending_detail_runtime_state() -> void:
 	var wanted_light_on := bool(
 		_pending_detail_runtime_state.get("room_light_on", authored_room_light_on)
 	)
-	if _light_switch != null and _light_switch.is_light_on() != wanted_light_on:
-		_light_switch.set_light_on(wanted_light_on)
+	if is_room_light_on() != wanted_light_on:
+		set_room_light_on(wanted_light_on)
 	var container_states := _pending_detail_runtime_state.get("containers", {}) as Dictionary
 	for value in get_tree().get_nodes_in_group("room_prop_3d"):
 		if value is RoomFurniture3D and _detail_root != null and _detail_root.is_ancestor_of(value):
@@ -1911,6 +1954,11 @@ func _build_shell() -> void:
 		# 的房间记录两处都置真），走授权路径。
 		if authored_layout_shell:
 			_build_authored_layout_shell(dimensions)
+			if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D":
+				var facilities_path := Block00MasterOfficeLayout3D.facility_scene_path(authored_layout_room_id)
+				var facilities := load(facilities_path) as PackedScene
+				if facilities != null:
+					add_child(facilities.instantiate())
 			return
 		_build_tower_module_shell(dimensions)
 		return
@@ -2432,6 +2480,8 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 		var instance := value as Dictionary
 		var role := str(instance.get("slot_role", ""))
 		var local_position := instance.get("position", Vector3.ZERO) as Vector3
+		if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and str(instance.get("name", "")) == "DOORWALL_east_xp20_p2.5":
+			continue
 		match role:
 			"corner_l":
 				# 复用塔楼正式角件路径（远征四角 L 件也是这条），
@@ -2471,6 +2521,11 @@ func _build_authored_layout_shell(dimensions: Vector2) -> void:
 				):
 					unresolved.append(str(instance.get("name", "")))
 					continue
+				# 两块旧北墙继续拥有边界碰撞，仅替换其视觉为独立破墙组件。
+				if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and str(instance.get("name", "")) in ["WALL_north_yp10_m32.5", "WALL_north_yp10_m27.5"]:
+					for piece in art_root.get_children():
+						if piece is Node3D and (piece as Node3D).position.distance_to(local_position) < 0.1:
+							_hide_replaced_block00_wall_visuals(piece)
 				# 沿墙偏移：南北向墙取局部 x、东西向墙取局部 z —— 与
 				# _authored_wall_door_side() 读 tower_wall_door_offset_<side> 的坐标系一致。
 				var wall_along := local_position.z
@@ -4142,7 +4197,16 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 		_set_camera_lower_wall_on_static_bodies(lintel, true)
 
 
+func _hide_replaced_block00_wall_visuals(node: Node) -> void:
+	if node is GeometryInstance3D:
+		(node as GeometryInstance3D).visible = false
+	for child in node.get_children():
+		_hide_replaced_block00_wall_visuals(child)
+
+
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
+	if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D" and Block00MasterOfficeLayout3D.is_removed_door_pair(room_id, target_room_id):
+		return
 	if not owns_door_endpoint(direction):
 		return
 	var door := DOOR_SCENE.instantiate() as RoomDoor3D
@@ -4427,10 +4491,12 @@ func _build_content() -> void:
 		prop_count = 0
 	if room_type in ["STORAGE", "SCAVENGE", "BASEMENT"]:
 		prop_count += 2
+	if authored_layout_asset_id == "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D":
+		prop_count = 0
 	for index in range(prop_count):
 		# 可搜完全随机：每个 prop 独立 50/50。FACILITY / STAIR_LOBBY 在 prop_count=0
 		# 的分支里就已经退出，此处不再额外排除任何房间类型。
-		var is_search := _rng.randf() < 0.5
+		var is_search := search_facilities_enabled and _rng.randf() < 0.5
 		var prop := (SEARCH_SCENE if is_search else FURNITURE_SCENE).instantiate() as RoomFurniture3D
 		var type_options: Array[String] = theme.furniture_bias.duplicate()
 		if room_type == "STORAGE":

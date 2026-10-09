@@ -13,7 +13,7 @@
     "radius": 2.5,
     "once": "run"
   },
-  "duration": 10.6,
+  "duration": 20.0,
   "cues": [
     {
       "at": 0.0,
@@ -57,14 +57,14 @@
       "hold": 1.8
     },
     {
-      "at": 6.4,
+      "at": 4.6,
       "do": "ui.hint",
       "text": "打开你身上的手电，那里有危险！按F开启手电",
-      "auto": 4.0
+      "auto": 0.0
     },
     {
-      "at": 10.6,
-      "do": "flow.end"
+      "at": 4.6,
+      "do": "flow.wait_for_flashlight"
     }
   ]
 }

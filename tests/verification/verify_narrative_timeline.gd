@@ -120,6 +120,10 @@ func _ready() -> void:
 	await get_tree().process_frame
 	# 导演在 autoload 阶段已自动登记目录剧本；这里重建一次，保证从干净状态起跑。
 	NarrativeDirector.reset_for_test()
+	# 本测试验证的是当前进程的新本局，不应被本机既有 user:// 剧情历史挡住。
+	# 历史写入仍由 C4b 专门断言；这里先清理测试投影，避免 C1/C2 变成空跑。
+	if BaseManager != null and BaseManager.has_method("replace_narrative_history_for_test"):
+		BaseManager.replace_narrative_history_for_test({})
 	NarrativeDirector.arm_all_from_catalog()
 	await get_tree().process_frame
 
@@ -508,6 +512,15 @@ func _phase_c_real_scripts() -> void:
 	print("[C] 端到端：两段真实开场剧本")
 	Engine.time_scale = TIME_SCALE
 	_player.aim_yaw = FACING_BASELINE
+	# A 阶段的绑定链探针会暂时注入 FakeDungeon；真实剧本必须切回当前最小世界，
+	# 否则 scene.* 与 actor.say 会被旧替身吞掉，触发成功但表现全部降级。
+	NarrativeDirector.bind_dungeon_for_test(self)
+	# C1/C2 需要每次从干净的本局开始，避免 reset_for_test 前一次运行的 fired_count
+	# 或 user:// 历史影响真实剧本触发；C4b 会单独验证历史裁决。
+	NarrativeDirector.reset_run_state()
+	if BaseManager != null and BaseManager.has_method("replace_narrative_history_for_test"):
+		BaseManager.replace_narrative_history_for_test({})
+	NarrativeDirector.arm_all_from_catalog()
 
 	# ---- C1 开场：趴着 → 镜头推近 → 起身 → 左右张望 → 「人呢」
 	_spawn_calls.clear()
@@ -659,10 +672,28 @@ func _phase_c_real_scripts() -> void:
 		"C2 构图采样：偏角=%.1f° 深度=%.2fm 峰值 t=%.2f"
 		% [float(framing["angle_deg"]), float(framing["depth"]), float(framing["peak_t"])]
 	)
+	# 第二段现在不是固定时长结束：到达提示后必须停在等待手电状态，
+	# 直到玩家真实打开手电才走 flow.end。先等时间轴跑到 4.6s 的等待 cue。
+	await _wait_until_flashlight_waiting()
+	_check(
+		NarrativeDirector.is_waiting_for_flashlight(),
+		"提示后剧情停在等待手电状态（不会自动结束）",
+	)
+	_check(
+		NarrativeDirector.active_time() >= 4.6,
+		"等待手电时剧情时间至少推进到提示时刻（实际 %.2fs）" % NarrativeDirector.active_time(),
+	)
+	var waiting_time := NarrativeDirector.active_time()
+	await _wait_frames(6)
+	_check(
+		is_equal_approx(waiting_time, NarrativeDirector.active_time()),
+		"等待手电时剧情时间轴冻结（%.2f 保持为 %.2f）" % [waiting_time, NarrativeDirector.active_time()],
+	)
+	NarrativeDirector.complete_flashlight_wait()
+	await _wait_frames(2)
 	# 把假玩家/相机放回原点：触发点就在房间中心附近，玩家一直站在上面会让后续用例
 	# （尤其 C5 复位存档后 `once` 归零的那一次轮询）被它误触发。
 	_place_player_and_camera(Vector3.ZERO)
-	await _wait_until_finished()
 	_check(
 		_finish_reasons.size() == 1 and _finish_reasons[0] == "flow.end",
 		"第二段按 flow.end 收口（%s）" % str(_finish_reasons),
@@ -956,6 +987,16 @@ func _scripted_elevation_deg(script: NarrativeScript3D) -> float:
 func _wait_until_finished() -> void:
 	var deadline := Time.get_ticks_msec() + FINISH_TIMEOUT_MS
 	while NarrativeDirector.is_playing() and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+
+
+func _wait_until_flashlight_waiting() -> void:
+	var deadline := Time.get_ticks_msec() + FINISH_TIMEOUT_MS
+	while (
+		NarrativeDirector.is_playing()
+		and not NarrativeDirector.is_waiting_for_flashlight()
+		and Time.get_ticks_msec() < deadline
+	):
 		await get_tree().process_frame
 
 

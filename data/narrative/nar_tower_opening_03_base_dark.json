@@ -1,0 +1,62 @@
+{
+  "narrative_id": "nar_tower_opening_03_base_dark",
+  "schema_version": 1,
+  "priority": 10,
+  "trigger": {
+    "kind": "point",
+    "point_room": "facility",
+    "point_offset": [
+      10.0,
+      0.0,
+      -2.5
+    ],
+    "radius": 2.5,
+    "once": "run"
+  },
+  "duration": 8.4,
+  "cues": [
+    {
+      "at": 0.0,
+      "do": "player.lock_input",
+      "locked": true
+    },
+    {
+      "at": 0.0,
+      "do": "scene.light",
+      "room_id": "facility",
+      "on": false,
+      "persist": true
+    },
+    {
+      "at": 0.3,
+      "do": "actor.say",
+      "text": "这是哪里？",
+      "hold": 1.8
+    },
+    {
+      "at": 3.6,
+      "do": "camera.focus",
+      "pivot": "light_switch",
+      "room_id": "facility",
+      "preferred_entry": "east",
+      "distance": 7.5,
+      "duration": 1.4
+    },
+    {
+      "at": 5.2,
+      "do": "ui.subtitle",
+      "speaker": "系统",
+      "text": "打开房间的灯光",
+      "auto": 2.6
+    },
+    {
+      "at": 7.0,
+      "do": "camera.restore",
+      "duration": 0.9
+    },
+    {
+      "at": 8.4,
+      "do": "flow.end"
+    }
+  ]
+}
