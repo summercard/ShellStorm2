@@ -156,6 +156,13 @@ isolated_userdata/
 # 重新导出前的旧组件副本（内容与 HEAD 里那份逐字节相同，纯对照用，重导出完即弃）
 _scratch/*_old_import/
 
+# 产线过程日志与迭代截图目录。注意它**不在 _scratch/ 下**（是同级目录 `_scratch_logs/`），
+# 因此上面那一大族 `_scratch/*` 规则一条都命中不了 —— 实测 46 文件 / 1.4 MB 全是
+# 过程产物：hud_probe_r4/r5、hud_reg_r4/r5 这类反复迭代的验收日志，加一批
+# loading_iris_shot_*.png 分帧截图（附 22 个 Godot 生成的 .png.import）。
+# 需要留档的验收截图按项目既有约定放 outputs/verification/，不进这个目录。
+_scratch_logs/
+
 # 云海烘焙的中间体：由 source/v00X/build_*.py 按固定种子确定性生成（rng seed 写在脚本里），
 # 运行时真正吃的是烘焙产物 cloud_keepout.res / cloud_noise.res。布局变化本来就要重烘焙。
 assets/art/vfx/environment_3d/cloud_sea/source/**/*.raw
