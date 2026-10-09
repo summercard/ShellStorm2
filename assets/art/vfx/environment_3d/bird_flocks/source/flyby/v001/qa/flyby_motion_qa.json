@@ -1,0 +1,13 @@
+{
+  "kind": "flyby",
+  "mesh_count": 7,
+  "rig_count": 7,
+  "material_count": 1,
+  "frames": 361,
+  "min_floor_z": 100,
+  "min_bird_spacing": 0.7264447116741631,
+  "max_root_step": 0.054443281795356624,
+  "nonfinite": 0,
+  "all_keyframes_baked": true,
+  "passed": true
+}

@@ -1,0 +1,43 @@
+{
+  "asset_id": "VFX-ENV-BIRDS-FLYBY-3D",
+  "name_zh": "01_七鸟空中掠过",
+  "category": "特效",
+  "subcategory": "场景特效",
+  "version": "v001",
+  "status": "正式美术已接入",
+  "source_blend": "assets\\art\\vfx\\environment_3d\\bird_flocks\\source\\flyby\\v001\\vfx_env_birds_flyby_source_v001.blend",
+  "bird_count": 7,
+  "fps": 30,
+  "frame_range": [
+    1,
+    361
+  ],
+  "duration_seconds": 12.0,
+  "material": "02_细腻哑光_青绿大面",
+  "material_source": "assets\\art\\environments\\tower_zones\\shared\\source\\common_components\\v001\\generic_scene_components_source_v001.blend",
+  "palette": "assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+  "palette_cell": "R10C10",
+  "palette_rgb": [
+    197,
+    206,
+    216
+  ],
+  "loop": false,
+  "root": "鸟群_整体移动缩放控制",
+  "collection": "02_游戏输出_鸟群资产包",
+  "collision": "none",
+  "runtime_integrated": true,
+  "exported": true,
+  "mesh_count": 7,
+  "bones_per_bird": 11,
+  "triangles_per_bird": 296,
+  "source_sha256": "103915fcbef914b93651fe450ace2465cb825c97309349e9ca52b6e48a47efa6",
+  "optimized_blend": "assets/art/vfx/environment_3d/bird_flocks/source/flyby/v001/export/v001/vfx_env_birds_flyby_optimized_v001.blend",
+  "component_glb": "assets/art/vfx/environment_3d/bird_flocks/components/flyby/vfx_env_birds_flyby_visual.glb",
+  "runtime_prefab": "assets/art/vfx/environment_3d/bird_flocks/runtime/flyby/vfx_env_birds_flyby_root_top3d.tscn",
+  "placement": "cross_tower_route_bridge_span_0_mid_above_tower_02",
+  "runtime_anchor_world": [20.0, 1.6, -64.5],
+  "runtime_anchor_note": "塔2正上方 + 吊桥第1跨中点(z=-64.5)；鸟身实测在节点原点+2.6m，故飞在桥面上方约4.2m。源动画沿本地+X平移18m，rotation_y=0.2rad 自西向东斜掠桥面。",
+  "lifecycle": "ambient_repeat",
+  "cycle_seconds": 32.0
+}

@@ -1,0 +1,1 @@
+C:\Users\zhuangmenghong\.workbuddy\binaries\python\versions\3.13.12\python.exe: can't open file 'I:\\工作项目\\shellstrom2\\ShellStorm2\\tools\\xlsx_read.py': [Errno 2] No such file or directory

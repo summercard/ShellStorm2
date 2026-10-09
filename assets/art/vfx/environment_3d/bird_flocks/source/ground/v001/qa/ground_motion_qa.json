@@ -1,0 +1,17 @@
+{
+  "kind": "ground",
+  "mesh_count": 7,
+  "rig_count": 7,
+  "material_count": 1,
+  "frames": 721,
+  "min_floor_z": 0.0,
+  "min_bird_spacing": 0.7813099408996944,
+  "max_root_step": 0.16565808082111347,
+  "nonfinite": 0,
+  "all_keyframes_baked": true,
+  "floor_min_at": [
+    118,
+    "\u9e1f05_\u767d\u8272\u526a\u5f71"
+  ],
+  "passed": true
+}

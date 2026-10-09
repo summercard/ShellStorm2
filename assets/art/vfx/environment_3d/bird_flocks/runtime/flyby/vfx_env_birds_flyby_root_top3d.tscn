@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/art/vfx/environment_3d/bird_flocks/runtime/flyby/vfx_env_birds_flyby_root_top3d.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/bird_flocks/components/flyby/vfx_env_birds_flyby_visual.glb" id="2_visual"]
+
+[node name="VfxEnvBirdsFlyby3D" type="Node3D"]
+script = ExtResource("1_script")
+metadata/asset_id = "VFX-ENV-BIRDS-FLYBY-3D"
+metadata/asset_version = "v001"
+metadata/collision = "none"
+metadata/visual_only = true
+
+[node name="Visual" parent="." instance=ExtResource("2_visual")]

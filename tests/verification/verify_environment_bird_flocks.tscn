@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_environment_bird_flocks.gd" id="1_verify"]
+
+[node name="VerifyEnvironmentBirdFlocks" type="Node"]
+script = ExtResource("1_verify")

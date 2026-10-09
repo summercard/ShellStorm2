@@ -117,6 +117,9 @@ const FACADE_OUTER_WINDOW_SCENE: PackedScene = preload(
 # 100F 天台 Blender 布局重放：只接入房屋与装饰层；地砖、女儿墙、外立面和碰撞
 # 继续由本脚本的程序化壳体拥有，避免重复承重和重复边界碰撞。
 const ROOFTOP_DECOR_LAYOUT_PATH := "res://assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json"
+const ROOFTOP_GROUND_BIRD_SCENE: PackedScene = preload(
+	"res://assets/art/vfx/environment_3d/bird_flocks/runtime/ground/vfx_env_birds_ground_root_top3d.tscn"
+)
 const ROOFTOP_ROOM_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_rooftop_room_wall_5x12.tscn"
 )
@@ -326,6 +329,24 @@ func _ready() -> void:
 	_build_support()
 	if _uses_rooftop_profile():
 		_build_rooftop_authored_layout()
+		_build_rooftop_ground_birds()
+
+
+func _build_rooftop_ground_birds() -> void:
+	var birds := ROOFTOP_GROUND_BIRD_SCENE.instantiate() as Node3D
+	if birds == null:
+		push_error("VFX-ENV-BIRDS-GROUND-3D instantiate failed")
+		return
+	birds.name = "RooftopGroundBirdFlock"
+	# 100F 承重面为 Y=0。源动画轨迹实测：落地停留段（t≈4~16s）相对节点原点偏移
+	# x −1.6~+1.8 / z +0.5~−1.9（脚底 y=0），随后朝本地 (+x,−z) 爬升飞离。
+	# 锚点取 (25, 0, −31)：吊桥北出口（x=20）以东、离北沿约 4m 的开放天台 ⇒
+	# 落地与走动全程在屋面内，起飞段直接越过北女儿墙飞向城市，不会踩空。
+	birds.position = Vector3(25.0, 0.0, -31.0)
+	birds.set_meta("placement", "main_tower_100f_rooftop_east_of_bridge")
+	birds.set_meta("ground_y", 0.0)
+	birds.set_meta("collision_policy", "visual_only")
+	add_child(birds)
 
 
 func _build_rooftop_authored_layout() -> void:
