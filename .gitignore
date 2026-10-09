@@ -1,6 +1,7 @@
 # Godot 4.x specific
 .godot/
 *.import
+!assets/art/enemies/normal_enemy_3d/melee_chaser/components/*.glb.import
 # Scene/facility GLB import contracts carry the shared-palette post-import hook.
 # 规则族：**每个组件库分区各一条**（<zone>/components/**/*.glb.import）。新增分区
 # （如 tower_zones/expedition）时必须同步加一条，否则该区 GLB 的 .import 会被上面的
@@ -190,3 +191,7 @@ _scratch/**/*localdata*/
 # v025/v026/v027 不受影响，仍入库。
 assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v02[89].blend
 assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/animation/chr_bunny01_animation_v0[3-9]*.blend
+
+# 98F facilities reproducible palette import contracts
+!assets/art/environments/master_office_3d/components/**/*.glb.import
+!assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import

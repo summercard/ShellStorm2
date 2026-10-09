@@ -54,7 +54,7 @@ func _ready() -> void:
 	check(not tower._try_open_room_door("extraction"), "战斗未清时撤离方向门拒绝开启")
 	if not bosses.is_empty():
 		var boss := bosses[0]
-		check(boss.max_hp == 5200, "正式刷怪生命为5200")
+		check(boss.max_hp == 52000, "正式刷怪生命为52000")
 		check(Vector2(boss.global_position.x, boss.global_position.z).distance_to(Vector2(room.global_position.x, room.global_position.z)) < 0.01, "Boss出生在房间中心")
 		check((-boss.global_basis.z).dot(Vector3.BACK) > 0.999, "Boss初始面向南边+Z")
 		check(is_equal_approx(boss.move_speed, 3.612), "Boss移速为原1.204的三倍")
@@ -90,9 +90,12 @@ func _ready() -> void:
 		boss._physics_process(0.02)
 		check(boss.monitor_combat.activation_completed and boss.ai_state == "idle","完整出场结束才开放正常战斗")
 		check(tower._boss_panel.visible, "Boss出场动画结束时才显示血条")
-		boss.take_damage(1800)
+		# 阶段阈值是最大生命的 66% / 33%（见 verify_3d_parity_core 的同一口径）。
+		# 用与 max_hp 成比例的实伤推进阶段，避免血量数值再调整时这条断言复发。
+		var boss_hp := boss.max_hp
+		boss.take_damage(int(ceil(boss_hp * 0.35)))
 		check(boss.boss_phase == 2, "实伤进入第二阶段")
-		boss.take_damage(1800)
+		boss.take_damage(int(ceil(boss_hp * 0.34)))
 		check(boss.boss_phase == 3, "实伤进入第三阶段")
 		boss.take_damage(100000)
 		check(boss.ai_state == "dead", "实伤触发正式死亡状态")

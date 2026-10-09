@@ -1,5 +1,11 @@
 # v0.1 模块、功能与工程契约索引
 
+ASSET-PIPELINE / WORLD-BLOCKS：[98F父亲办公室原始源v002](development/2026-10-09_father_office_blender_source.md)。24组件/270实例，四材质、尺寸与PaletteUV专项通过，已登记Blender源，未接入Godot。
+
+ASSET-PIPELINE / WORLD-BLOCKS：[98F会议室与走廊门厅源v001](development/2026-10-09_block00_story_rooms_blender_source.md)。12尊低面雕塑、中央6m净空，源内三四房5m贯通、废墟断线及壁画；9新组件/24外链组件，已登记Blender源，未接入Godot。
+
+PLAYER-STATE / ASSET-PIPELINE：[机枪换弹左前斜向v037](development/2026-10-08_player_motion_reload_v037.md)。按参考图顶视左前约45°、枪口上抬、近身不前伸；其余90条及计时保持。专项证据与限制见记录。[v036历史](development/2026-10-08_player_motion_reload_v036.md)。
+
 PLAYER-STATE / ASSET-PIPELINE：[三类换弹v033](development/2026-10-08_player_motion_reload_v033.md)。三类各一条换弹，直接按真实换弹进度采样，移动下肢/耳朵独立；专项174检查和真实渲染通过。完整项目/移动端未验。
 
 PLAYER-STATE / ASSET-PIPELINE / SAVE-PROFILE：[无枪摆臂与双槽收取枪v032](development/2026-10-08_player_motion_switch_v032.md)。无枪前后交替摆臂、侧移保持；1/2重复当前槽收枪并双背负，换槽先收后取；动画88条，专项96检查通过，完整续档及全局套件未验。
@@ -100,7 +106,7 @@ ASSET-PIPELINE [塔4周边五组景观建筑当前v003](development/2026-10-03_t
 | POWER-SYSTEM | 基地电力、手电电力、恢复舱与未来基地负载 | [15.1](15.1_技术施工_电力系统.md) | BaseEnergyService/BaseManager；PlayerFlashlight3D/ItemUseHandler | `verify_3d_flashlight_charge_flow`、`verify_base_overhaul_flow` | **开发中**：现有两条能源链已记录；基地灯光/设施用电待接入 |
 | ENTRY-AVATAR | 启动分流、外观、衣柜、脱困 | [16](16_技术施工_主页面与角色换装.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[09](09_技术施工_存档结算与复活.md) | GameEntryFlow→Tower新档98F办公室/已有档99F基地→AvatarCustomizationPersistence | `verify_game_entry_flow`、`verify_avatar_return_persistence_flow`、`verify_block00_floor98_assembly`、`verify_new_save_handoff`、`verify_electronic_mask_flow`、`verify_character_expression_flow` | 新档98F、基地重登99F和未拾取地面枪跨重启已通过；开场枪由剧情生成。[电子面饰v005柔和自发光](development/2026-10-01_character_expression_soft_emission.md)8种饱满无嘴部网格、状态事件随机调用、眨眼/闪烁和真实渲染通过。独立展示相机/视觉代理目标仍未满足 |
 | UI-HUD | HUD、地图与模态输入 | [玩法设计](design/对话与战斗信息呈现设计.md)；[04](04_技术施工_战斗与局内成长.md) | HUDPresenter3D/DungeonMinimap3D/InventoryUI | `verify_hud_presenter_3d`、`verify_tactical_inventory_minimap_flow` | Presenter可独立；其他UI仍直接读写多域 |
-| VFX-POOL | Prefab注册、借出、回收；场景常驻室外云海 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_outdoor_clouds`（v002品质/实际玩家渲染通过，建筑变动局部避让及楼角可见修复30209项通过；[设计](design/outdoor_cloud_sea.md)）、`verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow`、`verify_base99_radio_music_notes` | 收音机音符为独立纯视觉持续附件，由radio持有、不进池，真实播放驱动且off/离层即时清空；近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役 |
+| VFX-POOL | Prefab注册、借出、回收；场景常驻室外云海 | [14.6](14.6_特效系统与制作规范.md) | VfxPool3D/CombatEffectPool3D→战斗调用者 | `verify_outdoor_clouds`（v002品质/实际玩家渲染通过，建筑变动局部避让及楼角可见修复30209项通过；[设计](design/outdoor_cloud_sea.md)）、`verify_vfx_pool_lifecycle`、`verify_combat_vfx_toon_v002`、`verify_3d_melee_feedback_flow`、`verify_3d_enemy_behavior_flow`、`verify_base99_radio_music_notes` | 收音机音符为独立纯视觉持续附件，由radio持有、不进池，真实播放驱动且off/离层即时清空；近战和伤害飘字验收已迁正式 `VfxPool3D` AssetID；explosion 兼容链仍保留旧池，尚未完全退役；[鸟群双套Blender源](development/2026-10-09_bird_flock_blender_sources.md)已完成，未接入运行时 |
 | AUDIO-MUSIC | 音效和场景音乐切换 | [10](10_资产与内容规范.md)、[14.8](14.8_音乐系统与配乐资产.md) | AudioManager/MusicCatalog/MusicManager/MusicTrigger | `verify_music_system`、`verify_requested_experience_upgrade_flow` | UI/音效/音乐已拆独立账本、Skill与验收链；功能层仍保持AudioManager与MusicManager边界，不合并播放生命周期 |
 | GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [玩法设计](design/时间日夜与画质设计.md)；[13.1](13.1_技术施工_画质设置与后处理.md)、[13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`、`verify_postfx_autopersist`、`verify_graphics_settings_visual` | 设计与施工已分层；调参转正范围待裁决，保存失败结果、UI与3D像素隔离、正式画面/性能仍未闭环，旧7/9口径失配不能只凭文档关闭 |
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
@@ -146,3 +152,9 @@ ASSET-PIPELINE / ENEMY-AI [胖子僵尸03](design/胖子僵尸03动作设计.md)
 ENEMY-AI / ASSET-PIPELINE [壳甲卫兵退役](development/2026-10-03_shielded_retirement.md)：现行刷怪由03胖子接替，旧存档及历史设计保留；独立验收verify_shielded_retirement。
 
 ENEMY-AI / ASSET-PIPELINE [死亡视野修复](development/2026-10-04_fat_zombie03_death_visibility.md)：死亡退出AI后仍由独立组参与视野遮挡，表现帧推进倒地至回收；真实Player3D视野与渲染、原失踪条件负向验证。
+
+ENEMY-AI / ASSET-PIPELINE [胖子僵尸减面](development/2026-10-09_fat_zombie03_reduction.md)：1979三角，保留13段动作，重新导入与死亡渲染通过。
+
+ENEMY-AI / ASSET-PIPELINE [小僵尸减面减骨](development/2026-10-09_melee_zombie_reduction.md)：1790三角/20骨，每手一骨，重新蒙皮与六段动作、死亡渲染验收通过。
+
+98F四房设施已正式接入：29组件、4份Godot设施布局、328实例，沿用旧墙地砖，第三第四房拆门贯通。验收 erify_block00_facilities（manual）；详见[导入记录](development/2026-10-09_block00_facilities_import.md)。

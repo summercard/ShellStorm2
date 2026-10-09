@@ -313,6 +313,7 @@ core_scenes=(
   verify_melee_zombie_presentation
   verify_fat_zombie03
   verify_fat_zombie03_death_visibility
+  verify_melee_zombie_death_visibility
   verify_shielded_retirement
   verify_music_system
   verify_player3d_diy_flow
@@ -379,6 +380,7 @@ visual_scenes=(
 
 # 必须由人工操控/观察才能得出可靠结论；登记但不进入自动套件。
 manual_scenes=(
+  verify_block00_facilities
   verify_debug_camera_hotkeys
 )
 

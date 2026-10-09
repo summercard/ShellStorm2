@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "source": "assets/registry/ledgers (current runtime-truth reconciliation)",
- "captured_at": "2026-10-08",
+ "captured_at": "2026-10-09T16:12:00",
  "sheet": "资产主表",
  "columns": [
   "AssetID",
@@ -35,7 +35,7 @@
   19
  ],
  "derived_note": "R=查重键 / S=查重结果 为逐行派生公式，不进内容指纹；由门禁的公式形状断言把关。",
- "asset_count": 1022,
+ "asset_count": 1061,
  "assets": {
   "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE": {
    "v": "1d441c35ed1b2bc15d15a858b776c192f312dc0039ec1fb90d1a40c7462d88b9",
@@ -902,6 +902,51 @@
    "c": "角色",
    "d": "characters"
   },
+  "CHR-PLY-BUNNY01-EXPR-ALERT": {
+   "v": "d6246245164e4154a61317ba09a725133012bbe15d3c27178f0a9c8ecb14ba03",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-EXPR-ANGRY": {
+   "v": "0254d7224532f2f454eb285527c794c20ed67ae4d666f4ad0a9f31e7b85e9f4f",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-EXPR-HAPPY": {
+   "v": "ce620c0b9ffd77c25c44a6535e7a363ff360a1226d6cdeff74262f340a6ef043",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-EXPR-LOVE": {
+   "v": "e8c5422b584533060109d55c62dfe7bd127510886be2075abd620ebae09af2e2",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-EXPR-NEUTRAL": {
+   "v": "4bab32524be405658cb8fa7c92e99af0e5ece6d8b25f8cec30fed0dd80f782c3",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-EXPR-QUESTION": {
+   "v": "b60481410f404d0b66430af14a3cad1c09547094adec30fdba6578e65709cccc",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-EXPR-SAD": {
+   "v": "e1bf8fb5251904c40330e0817054dd6ca46ee0d4382e2ac4f5544847a3baf2cc",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-EXPR-SURPRISED": {
+   "v": "900456ec9c907947619556a96cd8154a51bfdf4c32c9364b70464785d701c12e",
+   "c": "角色",
+   "d": "characters"
+  },
+  "CHR-PLY-BUNNY01-FACE-ELECTRONIC-MASK": {
+   "v": "edb7f9d6685d513f36eedc60006f60ba88c9740ff2a0903e9f9b889182e5f931",
+   "c": "角色",
+   "d": "characters"
+  },
   "CHR-PLY-BUNNY01-HEAD-CHIBI-ANIME-3D": {
    "v": "20639b786089747b5641e228f8e8ceee5ee27b25fd6ed505b4c29e2bf389b3e6",
    "c": "角色",
@@ -913,7 +958,7 @@
    "d": "characters"
   },
   "CHR-PLY-CAPSULE01-3D-BUNNY01": {
-   "v": "da5d25319d4b82642cb23f40f7a96d874d3458e79edead5ca4b1f35f94d94a23",
+   "v": "8a66d4990ac5c37da4820ddc3ea686744202ad1f80e393782668ecf9782ca3bc",
    "c": "角色",
    "d": "characters"
   },
@@ -1007,6 +1052,11 @@
    "c": "敌人",
    "d": "enemies"
   },
+  "ENM-BOSS-MONITOR002-3D": {
+   "v": "dd8f96466c0ab0892c3c3947c905f952b1bd64a41dcb88fd25c6dbdaad4377d3",
+   "c": "敌人",
+   "d": "enemies"
+  },
   "ENM-ECOSYSTEM-KIT-3D": {
    "v": "94d450dedfc7bf7811835e418e495e677bb6426cb74a0d2f4a97ed87e4db09ac",
    "c": "敌人",
@@ -1018,7 +1068,12 @@
    "d": "enemies"
   },
   "ENM-MELEE-FUNGBOAR01": {
-   "v": "f04b1051a35705d602a0a2a970d8d9efe1e5f1d11d19f2415a175d2d60570a72",
+   "v": "9369c7cd9a68e71688e996587536498e9db2fc065d3e40f2870ee6f59eafbd5c",
+   "c": "敌人",
+   "d": "enemies"
+  },
+  "ENM-NORMAL-FAT-ZOMBIE03": {
+   "v": "9f97a6c2be73323a3be9dcfa493c5b1ab93ff6a29ccd0223f3fbfc5923018b5e",
    "c": "敌人",
    "d": "enemies"
   },
@@ -1164,6 +1219,11 @@
   },
   "ENV-BASE99-WALL-WINDOW-5X12": {
    "v": "172a94519e5cd2c0276f7215e5cddfe4386a11c68cceb8d1d58fe340027b0f02",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BATTLE-FATHER-OFFICE-SOURCE": {
+   "v": "82647462cce9fc4ffb0dc2ba674e48dda6a8e88ec6b273752da78d3860ee1a44",
    "c": "场景",
    "d": "scenes"
   },
@@ -1352,8 +1412,93 @@
    "c": "场景",
    "d": "scenes"
   },
+  "ENV-MOBILE-LANDMARK-HOTEL-50M": {
+   "v": "0cc98d2892eb1304a997ab6d9281ffd0f73d50b1e620ad4f45360e893e44d2a0",
+   "c": "场景",
+   "d": "scenes"
+  },
   "ENV-OPENWORLD-CROSS-TOWER-ROUTE": {
    "v": "4c433bac97acbe4ad8c03d6dc4c8097ac4cd9b917349da6671a8b300f13e3ba3",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-FOUNDATION": {
+   "v": "7463656b1f4b4d5a691c3e4aebf84489dfd7093e7c2779f33bbbbb8632e1edbe",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20": {
+   "v": "62bd01f4ae629ae133bdc84c776beafbc53a68bdb723ae7fc4512c258ae5bd6e",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD": {
+   "v": "a98c1b3a90c49fa5b43b7effc028e03247d2fd1b5ab23ed3a54940994fe7889b",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT": {
+   "v": "1803d99e31e2167c11a1ad78802314fff287d87bbae612b98ab66a84398ded07",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE": {
+   "v": "da8e628dd18195440adc94655f774a8afaef1693ac429c014fd63e3cbabd0059",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-GUARDRAIL-KIT": {
+   "v": "c8f94a0e7368b7439bb42ed18221ee08eed950f51244c979f34d8916efe82104",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT": {
+   "v": "990aca8b33c8e0fed556ef56f425519571192a50b7586d03b7779b5d68b6972b",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SATELLITE-DISH": {
+   "v": "fed4200a48c47d9904265c20933b63c3c338a9ff107d363ec0fc8677bf9e4b14",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT": {
+   "v": "70fa8ded7dcdd39bebfe19ea0b54d6a864226420f7454dfa6cab957713cb98e7",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER": {
+   "v": "4e2f57479d654a63751dc0e4482b5495bb98567a523c0d6f6f6b25f9f52ccd5e",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE04-01": {
+   "v": "9bcca4237008234372a8ef6e6cad261bae7e5a02efb82c663a4c77677ab5c2e8",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE04-02": {
+   "v": "dfb3b97ced745012c32fc444cd4325c53eda926818ea37346a57363f0f7b0bf2",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE04-03": {
+   "v": "de8ea469fec13ff38d37625e2382e0a07f67a36fded2c45b71a22ea973fe97ed",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE04-04": {
+   "v": "97ca6fb15699a0b86c32f1debf59428f3aa21dd522cd85b30d2bf9472b9a9850",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LANDSCAPE04-05": {
+   "v": "4e2f80c1376b99cf2096f58f4ba596a04017f96f960839d746cfad93a9c80bd6",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-LOGISTICS07": {
+   "v": "48fa4558e8eae1a17c78f2de3fdd8080ade13a1d098da2a940efd1e3900b7c93",
    "c": "场景",
    "d": "scenes"
   },
@@ -4192,6 +4337,21 @@
    "c": "场景",
    "d": "scenes"
   },
+  "ENV-OPENWORLD-TOWER04": {
+   "v": "0c12e7aff44fc8f912d612de7d62f108d26da191dc0758ade769faf03cfea592",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-TOWER04-2": {
+   "v": "4ce628adba36f0d48a8241ade5f143e7b1a6e7a1d0459f5d3d27dc880c96d3c0",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-OPENWORLD-TOWER04-FAR": {
+   "v": "358baf23a927059b9a356b0eb1706cb378c539195ca40d9252ad5615b0093402",
+   "c": "场景",
+   "d": "scenes"
+  },
   "ENV-ROOFTOP-DECOR-LAYOUT-100F": {
    "v": "c08e15c568e1a4db0e1a9747ed30d7c3314f3d75fb9c25cdf318f77aab6aa2c1",
    "c": "场景",
@@ -4432,6 +4592,21 @@
    "c": "道具",
    "d": "props"
   },
+  "ITM-EQUIPMENT-BACKPACK-LARGE-3D": {
+   "v": "ccb555158077c5c73fca36197b4461f5c164f1fbc4bc1b991cd8ef5030915974",
+   "c": "道具",
+   "d": "props"
+  },
+  "ITM-EQUIPMENT-BACKPACK-MEDIUM-3D": {
+   "v": "d2e68f38b5050805a51593a70b271bb41e1f1fa523217b9e225578c331d2e9e5",
+   "c": "道具",
+   "d": "props"
+  },
+  "ITM-EQUIPMENT-BACKPACK-SMALL-3D": {
+   "v": "e0c55274a68fd2b61c9c0e2719ef260332840a6fe87f15a27e1913228e7194df",
+   "c": "道具",
+   "d": "props"
+  },
   "ITM-KEY-ITEM-ROOM-KEY": {
    "v": "a6896919119d6036058f833a4ce884846a36fdd6293cb13cd0f52f2108e1d17b",
    "c": "道具",
@@ -4557,6 +4732,11 @@
    "c": "道具",
    "d": "props"
   },
+  "PRP-BASE99-RADIO-3D": {
+   "v": "e16a7466c454370b7ec4094af3a666bd1c162954b9a46ae2eb982a15a5e01dc1",
+   "c": "道具",
+   "d": "props"
+  },
   "PRP-BASE99-TELESCOPIC-LADDER-3D": {
    "v": "31b3b40f8238242d6d3fec7f2ebd31e4d20d56e6fde97a51eb1c0ea157a5ab55",
    "c": "道具",
@@ -4584,6 +4764,11 @@
   },
   "PRP-EXTRACTION-BEACON-3D": {
    "v": "478dd06d0bba5a16692ef3b7ac21d0440afcdadc0e3191a5e6e24b929c7be38b",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-ROOFTOP-COURTYARD-3D": {
+   "v": "34c61b55822d14e36134a2212bbc7d8f12f2fbfbd87d07f945f73343b9a07994",
    "c": "场景道具",
    "d": "scenes"
   },
@@ -4621,6 +4806,11 @@
    "v": "1a6d944774802402af0d67a23bffc491d7d38140d1b7a0249035fd370ff13233",
    "c": "场景道具",
    "d": "scenes"
+  },
+  "UI-ATLAS-FATE-CARD": {
+   "v": "396815986e150722ff9688cda3dc528507bd523b2925fa869d4cc1e50b00e446",
+   "c": "UI",
+   "d": "ui"
   },
   "UI-ICON-ITEM-MODEL-3D": {
    "v": "d70d8a1fcc2dee810643efb3823d1338441fc65f4e3fd13dac90863459f79ea0",
@@ -4712,6 +4902,16 @@
    "c": "特效",
    "d": "vfx"
   },
+  "VFX-ENV-BIRDS-FLYBY-3D": {
+   "v": "fa70ece3f6a642466abae96f776aeea137aa961bdbba67df7bb9332b9e0c0da4",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-ENV-BIRDS-GROUND-3D": {
+   "v": "39c387bafeac5075b6a6a3ba8afe3f8f031ed58bc040651ba58360874213f036",
+   "c": "特效",
+   "d": "vfx"
+  },
   "VFX-ENV-CLOUD-SEA-3D": {
    "v": "73756e895aa0bce36a5d8cbb3da682f069dad189b40627da4d2e873885db5dfc",
    "c": "特效",
@@ -4759,6 +4959,11 @@
   },
   "VFX-PLY-SILENCED-RING": {
    "v": "2b613856a7e5e388dd4304d0710a175e0564fe25d8d51f7be8c9d249a3141624",
+   "c": "特效",
+   "d": "vfx"
+  },
+  "VFX-RADIO-MUSIC-NOTES-3D": {
+   "v": "b0173a74c78587df41937e04204a67b022683cf7ed2e3bb2de426e961cbb6c5a",
    "c": "特效",
    "d": "vfx"
   },
@@ -4967,240 +5172,230 @@
    "c": "武器",
    "d": "weapons"
   },
-  "ENV-OPENWORLD-TOWER04": {
-   "v": "0c12e7aff44fc8f912d612de7d62f108d26da191dc0758ade769faf03cfea592",
+  "ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE": {
+   "v": "bd1935f31bbceb25ad9d4ec8fd92d110aa3e4c8cbcc4c9b2067ddfc5ca72a035",
    "c": "场景",
    "d": "scenes"
   },
-  "CHR-PLY-BUNNY01-FACE-ELECTRONIC-MASK": {
-   "v": "edb7f9d6685d513f36eedc60006f60ba88c9740ff2a0903e9f9b889182e5f931",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-NEUTRAL": {
-   "v": "4bab32524be405658cb8fa7c92e99af0e5ece6d8b25f8cec30fed0dd80f782c3",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-HAPPY": {
-   "v": "ce620c0b9ffd77c25c44a6535e7a363ff360a1226d6cdeff74262f340a6ef043",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-SAD": {
-   "v": "e1bf8fb5251904c40330e0817054dd6ca46ee0d4382e2ac4f5544847a3baf2cc",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-ANGRY": {
-   "v": "0254d7224532f2f454eb285527c794c20ed67ae4d666f4ad0a9f31e7b85e9f4f",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-SURPRISED": {
-   "v": "900456ec9c907947619556a96cd8154a51bfdf4c32c9364b70464785d701c12e",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-LOVE": {
-   "v": "e8c5422b584533060109d55c62dfe7bd127510886be2075abd620ebae09af2e2",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-QUESTION": {
-   "v": "b60481410f404d0b66430af14a3cad1c09547094adec30fdba6578e65709cccc",
-   "c": "角色",
-   "d": "characters"
-  },
-  "CHR-PLY-BUNNY01-EXPR-ALERT": {
-   "v": "d6246245164e4154a61317ba09a725133012bbe15d3c27178f0a9c8ecb14ba03",
-   "c": "角色",
-   "d": "characters"
-  },
-  "ENV-OPENWORLD-TOWER04-2": {
-   "v": "4ce628adba36f0d48a8241ade5f143e7b1a6e7a1d0459f5d3d27dc880c96d3c0",
+  "ENV-BLOCK00-WALL-FRACTURED": {
+   "v": "d33acf39798aff4a179cc7f27da65c5d0238bd12ce0b98a5fd2d0d49ce0b8ab5",
    "c": "场景",
    "d": "scenes"
   },
-  "ENV-OPENWORLD-TOWER04-FAR": {
-   "v": "358baf23a927059b9a356b0eb1706cb378c539195ca40d9252ad5615b0093402",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE04-01": {
-   "v": "9bcca4237008234372a8ef6e6cad261bae7e5a02efb82c663a4c77677ab5c2e8",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE04-02": {
-   "v": "dfb3b97ced745012c32fc444cd4325c53eda926818ea37346a57363f0f7b0bf2",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE04-03": {
-   "v": "de8ea469fec13ff38d37625e2382e0a07f67a36fded2c45b71a22ea973fe97ed",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE04-04": {
-   "v": "97ca6fb15699a0b86c32f1debf59428f3aa21dd522cd85b30d2bf9472b9a9850",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE04-05": {
-   "v": "4e2f80c1376b99cf2096f58f4ba596a04017f96f960839d746cfad93a9c80bd6",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LOGISTICS07": {
-   "v": "48fa4558e8eae1a17c78f2de3fdd8080ade13a1d098da2a940efd1e3900b7c93",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENM-NORMAL-FAT-ZOMBIE03": {
-   "v": "08840b6118d6b9fe414079635d25b72378498e64a72df05a3ed376ba5761b992",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-FOUNDATION": {
-   "v": "7463656b1f4b4d5a691c3e4aebf84489dfd7093e7c2779f33bbbbb8632e1edbe",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENM-BOSS-MONITOR002-3D": {
-   "v": "dd8f96466c0ab0892c3c3947c905f952b1bd64a41dcb88fd25c6dbdaad4377d3",
-   "c": "敌人",
-   "d": "enemies"
-  },
-  "PRP-BASE99-RADIO-3D": {
-   "v": "9ea9c8b18895b4c9f3bbb814af4ed80c280add4b8c7307d8eb5f4bb7daf1715c",
-   "c": "道具",
-   "d": "props"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20": {
-   "v": "62bd01f4ae629ae133bdc84c776beafbc53a68bdb723ae7fc4512c258ae5bd6e",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FLOOR-FACADE-MODULE": {
-   "v": "da8e628dd18195440adc94655f774a8afaef1693ac429c014fd63e3cbabd0059",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-HVAC-UNIT": {
-   "v": "1803d99e31e2167c11a1ad78802314fff287d87bbae612b98ab66a84398ded07",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-GUARDRAIL-KIT": {
-   "v": "c8f94a0e7368b7439bb42ed18221ee08eed950f51244c979f34d8916efe82104",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SERVICE-HUT": {
-   "v": "70fa8ded7dcdd39bebfe19ea0b54d6a864226420f7454dfa6cab957713cb98e7",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-HVAC-UNIT": {
-   "v": "990aca8b33c8e0fed556ef56f425519571192a50b7586d03b7779b5d68b6972b",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-SATELLITE-DISH": {
-   "v": "fed4200a48c47d9904265c20933b63c3c338a9ff107d363ec0fc8677bf9e4b14",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-ROOF-TRUSS-TOWER": {
-   "v": "4e2f57479d654a63751dc0e4482b5495bb98567a523c0d6f6f6b25f9f52ccd5e",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "ENV-OPENWORLD-LANDSCAPE-SKYLINE20-FACADE-BILLBOARD": {
-   "v": "a98c1b3a90c49fa5b43b7effc028e03247d2fd1b5ab23ed3a54940994fe7889b",
-   "c": "场景",
-   "d": "scenes"
-  },
-  "PRP-ROOFTOP-COURTYARD-3D": {
-   "v": "34c61b55822d14e36134a2212bbc7d8f12f2fbfbd87d07f945f73343b9a07994",
+  "PRP-BLOCK00-SOFA": {
+   "v": "29d29ce25975cc7c71d4e590b28afb929b78716bf359dac7bd152c55c36ff3d1",
    "c": "场景道具",
    "d": "scenes"
   },
-  "VFX-RADIO-MUSIC-NOTES-3D": {
-   "v": "b0173a74c78587df41937e04204a67b022683cf7ed2e3bb2de426e961cbb6c5a",
-   "c": "特效",
-   "d": "vfx"
+  "PRP-BLOCK00-PILLOW": {
+   "v": "1e8050a2023af410ea851a75597f1288f987762b8820b90da70103419375e4c4",
+   "c": "场景道具",
+   "d": "scenes"
   },
-  "ITM-EQUIPMENT-BACKPACK-SMALL-3D": {
-   "v": "e0c55274a68fd2b61c9c0e2719ef260332840a6fe87f15a27e1913228e7194df",
-   "c": "道具",
-   "d": "props"
+  "PRP-BLOCK00-THROW": {
+   "v": "20a2fff5d9009db1e9fa752e7256132d79f6b7705cd7b7191f11820cd342c7b4",
+   "c": "场景道具",
+   "d": "scenes"
   },
-  "ITM-EQUIPMENT-BACKPACK-MEDIUM-3D": {
-   "v": "d2e68f38b5050805a51593a70b271bb41e1f1fa523217b9e225578c331d2e9e5",
-   "c": "道具",
-   "d": "props"
+  "PRP-BLOCK00-RUG": {
+   "v": "0fc331e39fabcae23674260e782b31d255d6c7383f09c699b1e80fee0075a11b",
+   "c": "场景道具",
+   "d": "scenes"
   },
-  "ITM-EQUIPMENT-BACKPACK-LARGE-3D": {
-   "v": "ccb555158077c5c73fca36197b4461f5c164f1fbc4bc1b991cd8ef5030915974",
-   "c": "道具",
-   "d": "props"
+  "PRP-BLOCK00-DISPLAY-CASE": {
+   "v": "eb351aeea4cb868984872fb6b8aab49765920c5877ca5a040960ed5cfc313dc9",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-DISPLAY-CONSOLE": {
+   "v": "873eade52e54e937f5c18665df204ded5c9fa4b5ad4fe597c18de394c1809a7c",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-SIDE-TABLE": {
+   "v": "b742ac10b7edffb2ee5de1b968de21cdb97c04ea13221456c709105d59628632",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-BOOKCASE-FALLEN": {
+   "v": "4c7cde0144ed893ece8e3f063e8f1127f8dfa8fd78f005a63a92d6bba3f40cc4",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-PLANT-WITHERED": {
+   "v": "93fb8d943243426190665771b3da1f186d5da905c64f26a3233e41a1f94ffc9a",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-PLANT-SPECIMEN": {
+   "v": "c172f891a791e2a16dc70182df5fbba9c9ed25bd9a5f492cdd265a5f2f31fd60",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-TROPHY": {
+   "v": "69deabe88bd1c8b5cc5d0df07df0edcf1dded967507317309b61a2c6167b8a4c",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-RUBBLE-LARGE": {
+   "v": "4c98b4ee47a2569d5434651d03e237d63ea378365e98e72275741705dfdaa86f",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-RUBBLE-SMALL": {
+   "v": "2aa80e5824dee312eec03475bbf1c439be61b6fcf154e1f709612308fd496468",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-PAPER": {
+   "v": "835f3b816b63c4e39c201ed7716c48418ac368a3df06320763d969d825de0cb1",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-BOOK-STACK": {
+   "v": "fda0c6c84d399588f6e9bd596de6a1188280860b69d32ad84e93a1d1f227bb1a",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-WALL-MURAL": {
+   "v": "554fe99571b68f94e3e3b28cc8da5dd16a5af3ab62240970c76b646967b79b69",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-METAL-BRACE": {
+   "v": "a5d531f06b8a94dfb9dc657bd8d399c72f6dabbb4077d8b6f453980b31ec38f2",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-MONITOR-FALLEN": {
+   "v": "d58225d8862e92c0fd9a159eee79317c30fede7629cd31d0aa1f040106775073",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-SHELF-LEDGE": {
+   "v": "a65e8877412ee30ca6620234538de76c9fd5331685b37155ac3624d80bed9f4e",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-SCULPTURE-FOUNDRY": {
+   "v": "5483e4bf6d5aebc6e6dc414d5a88e8968f9b74cdf4db8676bbe8fe5f52beb56d",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-SCULPTURE-TURBINE": {
+   "v": "765e7d5c52a66416674182d5f7e20ae504d6e95e748a7bdd66c87ef8400d91e7",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-SCULPTURE-PYLON": {
+   "v": "32e991366c416ffdbf2e10c62a33013acd4d07f0f560191e2f997ddf689aa216",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-DEBRIS-SLAB": {
+   "v": "1e997fbdb8d00aa5e127114f8f98f3660b6c90477a4c436907cc08d5fd82236d",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-DEBRIS-CLUSTER": {
+   "v": "332c92020b59c570ef99213031965a3b48795a72ae97acb526a665d3c4f50fbe",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-CABLE-FLOOR": {
+   "v": "70483dcdcaea276f5ee5f365044271b5d799eb6c6ec2c37f355caad99e4927fa",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-CABLE-HANGING": {
+   "v": "06d6f9fc55fe57a540e0419f3e83b8887768465a472b9537bd73b088f72934d9",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-PORTAL-DAMAGE": {
+   "v": "61638805a5034342882cd00f2c360f59d3bb853bb56aff5d6044157f017c951a",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "PRP-BLOCK00-CONSTRUCTIVIST-MURAL": {
+   "v": "3c12296903b97aee5d3f1777ae81fd19f6de5d1cd2704279f3eb607bd30d026c",
+   "c": "场景道具",
+   "d": "scenes"
+  },
+  "ENV-BLOCK00-MASTER-OFFICE-FACILITY-LAYOUT": {
+   "v": "7055a348ec2dda30f1a12d43e98c525b5d7835e7752fc4057d4a83e6188a0073",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BLOCK00-MEETING-ROOM-FACILITY-LAYOUT": {
+   "v": "b8e8a004f5cf6c0e23e6e7b67e797f0df024005de0e834698c129dda5a5bf223",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BLOCK00-CORRIDOR-FACILITY-LAYOUT": {
+   "v": "9392fe8b3d2129d42abcad62ff0cba6f79181bde77cf37308be69a867e6903c6",
+   "c": "场景",
+   "d": "scenes"
+  },
+  "ENV-BLOCK00-LOBBY-FACILITY-LAYOUT": {
+   "v": "e87bd1d69ce7b4d59552a80d325688806cc68478ea124a6d2ea855e0a2a88330",
+   "c": "场景",
+   "d": "scenes"
   }
  },
  "column_digests": {
-  "1": "9324127c5803992e62b9e8cdb2698d45c3d3689cd824e05de80c52901d295ce4",
-  "2": "110f91176efe0019a1eff090f4dfd153db59d5b4f28730918682965912cef66e",
-  "3": "5eb245c8a5dfd08f3818891a8171fa65a3c266f3a2d717796536ddd36e7230c8",
-  "4": "b1fbd8d2d8f19552782e6b694fa70f7e86038b8a641eb357420c3c45e89b3b8f",
-  "5": "571b2e2293c6df0b40e5abfc1e9a26f370186ccdf1420c04f5c717182b20059c",
-  "6": "f72bf6f9b8637ffcd2962d636907b47776f19059a7dcc636a60fa4f759b61e89",
-  "7": "64eb4da34caf915d07733066a4930fdb66a015d5dcb79cf0b67f4ab53afa5b64",
-  "8": "eff2ceba14b0410a7c148c36fae1931ba1c8a82e3fd8f57d40717e4c0180b0e5",
-  "9": "ace3898bbf458b19eb423ebeb2324e90bd9335e25c4335ada2f1a309cac782ce",
-  "10": "29a5562063d1c65350574c70aa31d68a04d3a89cbd74758f6222eacb94137ee3",
-  "11": "422cf1e92f4c500de5cef8152e824f2414231ea57b04af19894a4b2415bcefb9",
-  "12": "eca9b846262a809754e0b2dbbe9e86d6539319fb365ca999b47656ae1be32c08",
-  "13": "75d95824c92cabc8cb5bfc7d44d67da80e35be11e65174180c74bd277afb5741",
-  "14": "0a9aa63b0685f36e5b2bc55d0f0db7d968af38ba2518689181a5ac18442f16aa",
-  "15": "af924502e4ba6e37b3d0e66bee78b5a77707bc80cb5cbde4c2672ffc57a61e6b",
-  "16": "bbfa2c20132562a1a5e8e67ce198d1ddefcb5c01da04a9b69bb61326dacbd057",
-  "17": "5bcb2c64242be0be3df7b4851ee136d95373106b8ea01bbbf76788d3332d6dc8",
-  "20": "4f8dcb16b12ca5013a36ef71fbbdbd7c21f7fd59023b7e3bdb631c9622a0e4bf",
-  "21": "4277765f0b270dc74cf8e74af81f3d08d9b799bdba574827803fee03473d9795",
-  "22": "fab083add38eff6394040d930a0ba94dbee817b9d484ddba9bc763c77de780fa",
-  "23": "4c819bef3158189aa82eaac53de3fa09e0799c4e322310bc7d8cb3dd42e88e3a",
-  "24": "49c97cf7825fa161341c5205f299175482885b4b459ce6706c4662bd132e4df3",
-  "25": "9ecbfd7e0399837c9b2c846d46267a6c83d5a4939bf3defa3bd76679e6b843aa"
+  "1": "65bbb4f32a38f587595a38ce732d0a526c28308c7e21715e8e7644fe0dc8dd40",
+  "2": "f8cb40ec3d3b8762683e27dfb3894d224a97a9d6f5bbca143034b15e25aa0699",
+  "3": "ef2c5ee05186c468d7fecfbf7d0e4ab3d6100ed7a2263da4368d88eb5959d117",
+  "4": "638807abe8d6f802ec9501a0a25abec95b26ffb9668c34463837cba074ccbc77",
+  "5": "f20cffb338ce58ec21f2397bfc891d94cde593cc3cd439f2424db43ed1cb1333",
+  "6": "9a2a97e47604f920960483d53c2e28cfaee494704b5ef796823c43408772c27f",
+  "7": "54a79cf0ba69010c5e5edbf53306483b3b51e080a191fbb61ecda625cb94f8b0",
+  "8": "ae50d300d193bd521e38b93a8dae5b32084f617488441e94f8db342fa42bea0d",
+  "9": "02eb336400a93664d20ed2c593136536754f3608e1638f77bb80154353429a57",
+  "10": "c7f0675f29999f664c1cb4038fc9085f59a2fab3620767e7695c91774d02893f",
+  "11": "e8a73412666c55cec89af1c02810d76fb68ab00dd1dd0c5d1703d59676d0a38b",
+  "12": "416d5fc7cfa6e39122bd49cc651b30e3b61298b73e69812aafbeb5991217a648",
+  "13": "c71df5714124b1fd850289fde8ea065699a50705f9621cd9a207667e1eee2f87",
+  "14": "8623f31222e1cbfead3dfacde65502e5c2df6e4f6bf4a57ed9ae066e1d76b70c",
+  "15": "2fb6c5c4600ad50b86c0f7a50c1efd0b4fcb52ccaaa32424a719d974a9f6b96a",
+  "16": "0c7d50c8de4ec7f27108c1cbc2daf0617061c429f799b2f6a469fd845c1195a3",
+  "17": "1cc91c2cddc54797e8205498d75cd893c7a0439d1ba94a9ea08315bbaf518816",
+  "20": "9236ad82be9df1205af015d304ecf6396eb7b79f64155bfa7670bc04df410abe",
+  "21": "d870efbc8b11ca0a2964dd17b0bcf449ce79ece43e80f905aa43cafc23e3900a",
+  "22": "1578f560e7aa20f68f03e5957b9614d5958934a843e2f22e8d3eb4e7fd68cbea",
+  "23": "4964186c736f355a99bfc0fc3cca578a36639edac25255043041321c7bc1eeec",
+  "24": "890fcf646fdcac0a1ec236cfa61a8a2c86739e5ea90ab17b7b379c89d4289fa4",
+  "25": "e24317ffa308a946d43295e7c9ac8ba0746bec0cab86cd0c08239ba55aad8591"
  },
  "sheet_digests": {
   "角色组件": "e2294fcf2deb1bd04fa2858dbb1acbf26e0537f5daa634421f0f82b52d54083b",
-  "动画与状态": "c6e39d12732a0c22fa086d72f01b4f2d15f95763e996acee233d882921b7b848",
+  "动画与状态": "e22d4882d9e9de8ac88c2b397f69cfa50e022c458b1b67ab3fd72030a7322280",
   "原型角色": "9aa866ffb00159e580b4ba2da9c9856da9d1941a965035ebf07eaa77ea62c132",
-  "角色中转记录": "26d146bf8f8a16405649be1485884c5d4a768973ce773a1480b2368ba4b959bf",
-  "3D-角色": "80b3ca6255e546729cf4201fa7eef404765871ba0769e8c9257853c66b349b01",
-  "敌人动画与状态": "7d5bdcf171acebd12e65b5f1586ad2bfa3fa5d753a49a3ebe22710c86216618e",
-  "3D-敌人": "85ab914e08cc9de2a1f54f243ddcd2c3c25c9599629faf0f536399f03e73fb10",
-  "3D-场景通用": "422b04f0e0110236ac33b930b8c582199435548ac1080fc5b1cc6fe9b9ead99f",
-  "3D-设施": "1dfd2cd7f359a0ebeadaf04c00af843003cf221b9806daf832c6673f9fc25546",
+  "角色中转记录": "30cbe9e736a86a372862080c5911448ec739914bfc3bfd1a2a747066118d4ddb",
+  "3D-角色": "189f9bd9b416af7628869554459659bbb1620ea22e6a91d12cf874bf55231ee3",
+  "敌人动画与状态": "dab43c43354a0b2340ceb8173b1e7bd0912da5e21fa023e8ff2faf15e3b05058",
+  "3D-敌人": "1674a0f11aab65ed2190fe25a5f5193a379b5b73112d4e0a893526e0c02d1a1b",
+  "3D-场景通用": "290f44c956caaef32adb82f77e0ded953e526ced88357aecebe352a8078e46b7",
+  "3D-设施": "d0d052601647701ef2636455dac369601c5beee4ee3d789da1726a5951919394",
   "3D-其他": "02fac4143f5262ebc5fdf43b73b9ca059119e1fe75848052df871f23ac4b3d54",
-  "3D-道具": "e8f6334abf31209c707fbbdcdf852ebf44cc706a07fb0e1c0139e7f2ed6d5278",
+  "3D-道具": "6b6d9c96240c5eda9e49b05044c49411df6343fe4321313a95944d8f2e6580fe",
   "3D-物品": "0452814d5cb92584234efa695b388cfcc4a42b0172d746981149bf4eca611390",
   "3D-武器": "0ed7c67c14253417622d401d958ac8a4ed51e9aba0db25935010ac3811fec21d",
   "3D-特效": "ffd3a855a5507fd131af823980e5b31163122b50b4fe1ce67c750694719060c0"
  },
  "category_counts": {
-  "UI": 16,
-  "场景": 695,
-  "场景道具": 21,
-  "基地资产包": 114,
-  "敌人": 15,
-  "武器": 36,
-  "特效": 18,
   "角色": 25,
+  "敌人": 15,
+  "场景": 703,
+  "场景道具": 49,
+  "基地资产包": 114,
   "道具": 25,
-  "音乐": 9,
-  "音效": 48
+  "武器": 36,
+  "特效": 20,
+  "UI": 17,
+  "音效": 48,
+  "音乐": 9
  },
  "targeted_updates": [
   {
@@ -5257,6 +5452,25 @@
    "asset_id": "ENM-BOSS-MONITOR002-3D",
    "version": "v035",
    "scope": "Screen assembly forward clearance only"
+  },
+  {
+   "date": "2026-10-09",
+   "asset_id": "VFX-ENV-BIRDS-FLYBY-3D, VFX-ENV-BIRDS-GROUND-3D",
+   "version": "v001",
+   "status": "active",
+   "scope": "两套环境鸟群运行时摆位与播放修正后刷新行指纹（第22列更新时间、第25列备注、第20列运行时PackedScene SHA）。仅这两行内容变化；其余1024行指纹与基线逐行一致，列级漂移仅限 20/25 两列。",
+   "old_row_digests": {
+    "VFX-ENV-BIRDS-FLYBY-3D": "d1347fed9d8a51c08e501450ba0e885ec9a4b807872bc61543538ac73af95670",
+    "VFX-ENV-BIRDS-GROUND-3D": "53f759cd7ae8b73e0234546dad9ab3a52a06fbc1055175ed86de64f8e52ad8b4"
+   },
+   "new_row_digests": {
+    "VFX-ENV-BIRDS-FLYBY-3D": "fa70ece3f6a642466abae96f776aeea137aa961bdbba67df7bb9332b9e0c0da4",
+    "VFX-ENV-BIRDS-GROUND-3D": "39c387bafeac5075b6a6a3ba8afe3f8f031ed58bc040651ba58360874213f036"
+   },
+   "refreshed_columns": [
+    "20",
+    "25"
+   ]
   }
  ]
 }
