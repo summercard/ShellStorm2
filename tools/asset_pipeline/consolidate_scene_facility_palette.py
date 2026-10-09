@@ -26,6 +26,8 @@ COMPONENT_ROOTS = (
 )
 LEGACY_SOURCE_TEXTURE_ROOT = PROJECT_ROOT / "assets/art/environments/base_facility_3d/source/env_base99_modular_room/textures"
 POST_IMPORT = "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+DOOR_POST_IMPORT = "res://tools/asset_pipeline/scene_facility_door_visual_post_import.gd"
+ALLOWED_POST_IMPORTS = (POST_IMPORT, DOOR_POST_IMPORT)
 SHARED_PALETTE = PROJECT_ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 PALETTE_TOKENS = ("多巴胺色盘", "palette_dopamine")
 JSON_CHUNK = 0x4E4F534A
@@ -176,7 +178,7 @@ def verify(glbs: list[Path]) -> None:
             failures.append("missing import file: %s" % import_path)
             continue
         text = import_path.read_text(encoding="utf-8")
-        if 'import_script/path="%s"' % POST_IMPORT not in text or "gltf/embedded_image_handling=0" not in text:
+        if not any('import_script/path="%s"' % script in text for script in ALLOWED_POST_IMPORTS) or "gltf/embedded_image_handling=0" not in text:
             failures.append("shared import contract missing: %s" % import_path)
     leftovers = duplicate_palette_files()
     failures.extend("duplicate PNG remains: %s" % path for path in leftovers)

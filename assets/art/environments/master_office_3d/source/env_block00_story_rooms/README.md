@@ -37,3 +37,5 @@
 预览：`preview_overview.png`、`preview_meeting.png`、`preview_meeting_top.png`、`preview_passage.png`、`preview_sculpture.png`、`preview_lobby.png`。
 
 账本登记：`ENV-BATTLE-BLOCK00-STORY-ROOMS-SOURCE`，Blender源已完成。未导出GLB、未创建Prefab、未接入Godot。全局场景账本仍有466条其他资产SHA不一致，本资产无该问题；未刷新其他资产哈希。
+
+后续状态：已按用户要求完成29组件独立优化导入与4房设施TSCN接入。源Blend不变；正式摆位及同日70%沙发/地毯/拆开关/落地壁画调整以Godot runtime/room_instances为准，详见项目docs/v0.1/development/2026-10-09_block00_facilities_import.md。

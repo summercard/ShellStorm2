@@ -7,6 +7,8 @@ const PALETTE_IMPORT_CONTRACT := {
 	"mipmaps/generate": "false",
 }
 const SHARED_PALETTE_POST_IMPORT_SCRIPT := "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+const DOOR_PALETTE_POST_IMPORT_SCRIPT := "res://tools/asset_pipeline/scene_facility_door_visual_post_import.gd"
+const ALLOWED_PALETTE_POST_IMPORT_SCRIPTS := [SHARED_PALETTE_POST_IMPORT_SCRIPT, DOOR_PALETTE_POST_IMPORT_SCRIPT]
 const MINIMUM_GLB_COUNT := 44
 const COMPONENT_ROOTS := [
 	"res://assets/art/environments/base_facility_3d/components",
@@ -19,16 +21,6 @@ const COMPONENT_ROOTS := [
 const PALETTE_CONTRACT_ROOTS := [
 	"res://assets/art/environments/tower_zones/battle/components/common_components",
 ]
-## 历史欠账：这两件资产出自 v003 之前的流水线，材质至今未绑定公共色盘。
-## 把整个验证场景长期挂在红灯上等于没有验证，所以这里用「精确路径欠账表」显式登记它们，
-## 而不是放宽整个目录的检查——新增的违规资产不会被豁免，仍会点亮红灯；
-## 欠账还清（资产合规了）或路径消失也会报错，逼迫这张表随现实一起更新。
-const LEGACY_PALETTE_EXEMPT_GLBS := [
-	"res://assets/art/environments/base_facility_3d/components/env_base99_structural/northwest_l_stair/northwest_l_stair_visual_top3d.glb",
-	"res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d.glb",
-]
-
-
 func _ready() -> void:
 	var failures: Array[String] = []
 	_validate_palette_import_contract(failures)
@@ -49,14 +41,7 @@ func _ready() -> void:
 		var asset_failures: Array[String] = []
 		material_count += _validate_materials(instance, path, asset_failures)
 		instance.free()
-		if path in LEGACY_PALETTE_EXEMPT_GLBS:
-			if asset_failures.is_empty():
-				failures.append("色盘欠账已还清，请从 LEGACY_PALETTE_EXEMPT_GLBS 移除: %s" % path)
-		else:
-			failures.append_array(asset_failures)
-	for exempt in LEGACY_PALETTE_EXEMPT_GLBS:
-		if not glbs.has(exempt):
-			failures.append("色盘欠账表指向了不存在的GLB: %s" % exempt)
+		failures.append_array(asset_failures)
 	_expect(contract_glbs.size() > 0, "没有可校验导入契约的组件GLB", failures)
 	for path in contract_glbs:
 		_validate_glb_import_contract(path, failures)
@@ -64,7 +49,7 @@ func _ready() -> void:
 		_validate_no_duplicate_png(root, failures)
 	_expect(material_count > 0, "没有找到可验证的场景/设施材质", failures)
 	if failures.is_empty():
-		print("SCENE_FACILITY_SHARED_PALETTE_OK: glbs=%d materials=%d shared_texture=1 lossless_no_mipmap=1 legacy_exempt=%d" % [glbs.size(), material_count, LEGACY_PALETTE_EXEMPT_GLBS.size()])
+		print("SCENE_FACILITY_SHARED_PALETTE_OK: glbs=%d materials=%d shared_texture=1 lossless_no_mipmap=1 legacy_exempt=0" % [glbs.size(), material_count])
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -99,7 +84,7 @@ func _validate_glb_import_contract(glb_path: String, failures: Array[String]) ->
 	if params.is_empty():
 		failures.append("GLB 导入契约无法解析: %s" % import_path)
 		return
-	if str(params.get("import_script/path", "")) != SHARED_PALETTE_POST_IMPORT_SCRIPT:
+	if not ALLOWED_PALETTE_POST_IMPORT_SCRIPTS.has(str(params.get("import_script/path", ""))):
 		failures.append("GLB 未绑定公共色盘后处理: %s" % import_path)
 	if str(params.get("gltf/embedded_image_handling", "")) != "0":
 		failures.append("GLB 仍内嵌图片（embedded_image_handling=%s）: %s" % [params.get("gltf/embedded_image_handling", "?"), import_path])

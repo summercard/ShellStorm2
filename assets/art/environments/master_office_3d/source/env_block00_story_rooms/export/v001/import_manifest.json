@@ -3096,7 +3096,7 @@
       "room_id": "master_office",
       "scene_path": "assets/art/environments/master_office_3d/runtime/room_instances/master_office/master_office_facilities.tscn",
       "instances": 246,
-      "scene_sha256": "e9fa353ef8d5823911cc4657941ede2b5b7e41d144308bcb63c3693e477f752d"
+      "scene_sha256": "ab721c5718362bcbef153b6f4ff0ee0255e2a8d18371db6bb4486230d5cd94d1"
     },
     {
       "room_id": "meeting_room",
@@ -3114,7 +3114,7 @@
       "room_id": "lobby",
       "scene_path": "assets/art/environments/master_office_3d/runtime/room_instances/lobby/lobby_facilities.tscn",
       "instances": 28,
-      "scene_sha256": "e1b2f79392c74e6d2536e762210e44576c269f6a30fa34d1e7025bee39c21e5d"
+      "scene_sha256": "af6946f4d23cfb4f33a412075d9c5bc7139d3efd8835127b35a051e41e492dea"
     }
   ],
   "placements": [
@@ -10468,7 +10468,7 @@
     }
   ],
   "acceptance": {
-    "checks": 253,
+    "checks": 259,
     "errors": [],
     "passed": true,
     "renderer": "forward_plus"
@@ -10507,5 +10507,10 @@
     "ENV-BLOCK00-MEETING-ROOM-FACILITY-LAYOUT",
     "ENV-BLOCK00-CORRIDOR-FACILITY-LAYOUT",
     "ENV-BLOCK00-LOBBY-FACILITY-LAYOUT"
-  ]
+  ],
+  "authored_layout_adjustments": {
+    "ENV-BLOCK00-MASTER-OFFICE-FACILITY-LAYOUT": "沙发及抱枕/毯子按沙发基点缩放70%；地毯顶面0.091m，距旧地砖可视顶面8mm，无碰撞。",
+    "ENV-BLOCK00-LOBBY-FACILITY-LAYOUT": "壁画移至地面，向后倾斜22度并侧倾6度；实测网格最低点0.091m，不穿地。",
+    "ENV-BLOCK00-CORRIDOR-FACILITY-LAYOUT": "第三间取消墙面灯开关，保留常亮照明；通道和设施摆位不变。"
+  }
 }

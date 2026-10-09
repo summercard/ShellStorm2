@@ -24,3 +24,5 @@
 此交付仅为 Blender 源；未导出GLB、未创建PackedScene、未接入Godot。资产主表登记 `ENV-BATTLE-FATHER-OFFICE-SOURCE`，状态为“Blender源已完成”。组件为该源的组成部分，无虚构Prefab登记。
 
 v001为初次构建历史，存在越界与破墙高度问题，仅用于回溯；正式使用v002。两个版本的旧源均保留。
+
+后续状态：已按用户要求完成29组件独立优化导入与4房设施TSCN接入。源Blend不变；正式摆位及同日70%沙发/地毯/拆开关/落地壁画调整以Godot runtime/room_instances为准，详见项目docs/v0.1/development/2026-10-09_block00_facilities_import.md。
