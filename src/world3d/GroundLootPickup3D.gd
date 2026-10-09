@@ -19,6 +19,7 @@ var _collection_start := Vector3.ZERO
 var _collection_elapsed := 0.0
 var _collection_start_scale := Vector3.ONE
 var _nearby_player: Node3D
+var _pickup_collision_shape: CollisionShape3D
 
 const PICKUP_ANIMATION_DURATION := 0.32
 const SPAWN_LAUNCH_HEIGHT_M := 1.65
@@ -26,7 +27,12 @@ const SPAWN_FIRST_LANDING_S := 0.30
 const SPAWN_RISE_S := 0.12
 const SPAWN_BOUNCE_HEIGHTS_M := [1.02, 0.72]
 const SPAWN_BOUNCE_DURATIONS_S := [0.29, 0.22]
-const PICKUP_DISTANCE_M := 1.20
+## 默认获取距离；实际运行值由 `pickup_distance_m` 持有，可通过
+## `set_pickup_distance_m()` 动态调整，后续调手感不需要改判定逻辑。
+const DEFAULT_PICKUP_DISTANCE_M := 2.00
+## 兼容旧探针和外部读取；正式逻辑统一读取实例的动态距离。
+const PICKUP_DISTANCE_M := DEFAULT_PICKUP_DISTANCE_M
+@export_range(0.25, 5.0, 0.05) var pickup_distance_m: float = DEFAULT_PICKUP_DISTANCE_M
 const PICKUP_REQUEST_RETRY_S := 0.18
 const COLLECTION_ARC_HEIGHT_M := 0.45
 ## —— 头顶名牌（业主 2026-09-29：俯视镜头读不到名字）——
@@ -66,6 +72,20 @@ func _ready() -> void:
 ## 否则玩家胶囊与新掉落物同帧重叠时会立即自动拾回背包。
 func set_pickup_grace_seconds(seconds: float) -> void:
 	_pickup_grace_until_msec = Time.get_ticks_msec() + int(maxf(0.0, seconds) * 1000.0)
+
+
+## 动态调节地面物获取距离。范围同步更新到 Area3D 的碰撞球，
+## 距离判定和物理触发始终使用同一个运行时数值。
+func set_pickup_distance_m(distance_m: float) -> void:
+	pickup_distance_m = clampf(distance_m, 0.25, 5.0)
+	if _pickup_collision_shape != null and is_instance_valid(_pickup_collision_shape):
+		var sphere := _pickup_collision_shape.shape as SphereShape3D
+		if sphere != null:
+			sphere.radius = pickup_distance_m
+
+
+func get_pickup_distance_m() -> float:
+	return pickup_distance_m
 
 
 func _process(delta: float) -> void:
@@ -198,7 +218,7 @@ func _update_player_distance() -> void:
 		return
 	var offset := _nearby_player.global_position - global_position
 	offset.y = 0.0
-	_player_in_range = offset.length() <= PICKUP_DISTANCE_M
+	_player_in_range = offset.length() <= pickup_distance_m
 
 
 var _player_in_range := false
@@ -231,11 +251,11 @@ func _build_visual(color: Color) -> void:
 	_visual.scale = Vector3.ONE * legacy_scale * CURRENT_BASE_SIZE_MULTIPLIER
 	add_child(_visual)
 	var shape := SphereShape3D.new()
-	shape.radius = PICKUP_DISTANCE_M
-	var collision := CollisionShape3D.new()
-	collision.position.y = 0.48
-	collision.shape = shape
-	add_child(collision)
+	shape.radius = pickup_distance_m
+	_pickup_collision_shape = CollisionShape3D.new()
+	_pickup_collision_shape.position.y = 0.48
+	_pickup_collision_shape.shape = shape
+	add_child(_pickup_collision_shape)
 	_label = Label3D.new()
 	_label.name = "LootLabel"
 	_label.position = Vector3(0, LABEL_HEIGHT_M, 0)
@@ -269,7 +289,8 @@ func get_model_snapshot() -> Dictionary:
 		"uses_shared_model_factory": true,
 		"accepted": _accepted,
 		"pickup_animation_duration": PICKUP_ANIMATION_DURATION,
-		"pickup_distance_m": PICKUP_DISTANCE_M,
+		"pickup_distance_m": pickup_distance_m,
+		"pickup_distance_dynamic": true,
 		"spawn_animating": _spawn_animating,
 		"pickup_unlocked": _pickup_unlocked,
 		"collecting": _collecting,

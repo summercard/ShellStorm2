@@ -91,6 +91,14 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 	dungeon.add_child(loot)
 	await get_tree().process_frame
 	var loot_size_snapshot := loot.get_model_snapshot()
+	if not is_equal_approx(float(loot_size_snapshot.get("pickup_distance_m", 0.0)), 2.0):
+		failures.append("Ground loot pickup distance did not use the new 2.0m default")
+	if not bool(loot_size_snapshot.get("pickup_distance_dynamic", false)):
+		failures.append("Ground loot pickup distance is not marked as dynamically adjustable")
+	loot.set_pickup_distance_m(2.25)
+	if not is_equal_approx(loot.get_pickup_distance_m(), 2.25):
+		failures.append("Ground loot pickup distance runtime adjustment did not take effect")
+	loot.set_pickup_distance_m(2.0)
 	var expected_item_scale := (
 		GroundLootPickup3D.LEGACY_ITEM_VISUAL_SCALE
 		* GroundLootPickup3D.CURRENT_BASE_SIZE_MULTIPLIER
@@ -161,9 +169,9 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 
 ## —— 地面掉落的散布与名牌朝向（业主 2026-09-29）——
 ## 两条诉求各自对应一组判据：
-## ① 「太集中」：半径必须逐件张开、最外件超过旧螺旋的 1.6 m 上限 ⇒ 曲线与范围都真变了；
+## ① 「太集中」：6 件应覆盖接近 2m × 2m 的方形范围，且点之间不能重叠；
 ## ② 「别掉进阻挡里」：真实生成的 6 件必须全部落在房间足迹内、且落点净空为真。
-## 反向对照：把 `_loot_scatter_offset` 换回 `0.7 + index * 0.18`（旧螺旋）⇒ ① 必红；
+## 反向对照：把 `_loot_scatter_offset` 的方形映射换回旧圆形螺旋 ⇒ ① 的方形边界/覆盖判据应红；
 ## 把 `_resolve_loot_spawn_position` 换回直接 `_find_supported_spawn_position` ⇒ ② 仍有概率绿，
 ## 所以 ② 只作为「不回归」的护栏，不是本次改动的独立证据。
 func _verify_ground_loot_scatter(dungeon: Dungeon3D, failures: Array[String]) -> void:
@@ -177,23 +185,20 @@ func _verify_ground_loot_scatter(dungeon: Dungeon3D, failures: Array[String]) ->
 	if scatter_radius < Dungeon3D.LOOT_SCATTER_MIN_RADIUS_M:
 		failures.append("Loot scatter outer radius collapsed below the single-item floor (%.3f)" % scatter_radius)
 
-	var previous_radius := -1.0
 	var min_pair_distance := INF
-	var radii: Array[float] = []
+	var max_abs_x := 0.0
+	var max_abs_z := 0.0
 	for index in range(item_count):
 		var offset := dungeon.call("_loot_scatter_offset", index, item_count, scatter_radius) as Vector3
-		var radius := Vector2(offset.x, offset.z).length()
-		radii.append(radius)
-		if radius < Dungeon3D.LOOT_SCATTER_MIN_RADIUS_M - 0.001:
-			failures.append("Loot scatter entry %d sits closer than the single-item radius (%.3f)" % [index, radius])
-		if radius <= previous_radius:
-			failures.append("Loot scatter radius curve is not strictly widening at entry %d (%.3f <= %.3f)" % [index, radius, previous_radius])
-		previous_radius = radius
+		max_abs_x = maxf(max_abs_x, absf(offset.x))
+		max_abs_z = maxf(max_abs_z, absf(offset.z))
+		if absf(offset.x) > scatter_radius + 0.001 or absf(offset.z) > scatter_radius + 0.001:
+			failures.append("Loot scatter entry %d exceeds the %.2fm x %.2fm square boundary at (%.3f, %.3f)" % [index, scatter_radius * 2.0, scatter_radius * 2.0, offset.x, offset.z])
 		for other_index in range(index):
 			var other := dungeon.call("_loot_scatter_offset", other_index, item_count, scatter_radius) as Vector3
 			min_pair_distance = minf(min_pair_distance, (offset - other).length())
-	if radii[item_count - 1] < 1.8:
-		failures.append("Loot scatter stays inside the old 1.6 m spiral (outermost=%.3f)" % radii[item_count - 1])
+	if scatter_radius < 0.95 or max_abs_x < 0.85 or max_abs_z < 0.65:
+		failures.append("Loot scatter does not use the expanded 2m x 2m area (half_extent=%.3f, max_abs=(%.3f, %.3f))" % [scatter_radius, max_abs_x, max_abs_z])
 	if min_pair_distance < 0.5:
 		failures.append("Loot scatter entries stack on each other (closest pair=%.3f m)" % min_pair_distance)
 
@@ -220,16 +225,20 @@ func _verify_ground_loot_scatter(dungeon: Dungeon3D, failures: Array[String]) ->
 			landings.append((value as GroundLootPickup3D).global_position)
 	if landings.size() != item_count:
 		failures.append("Ground loot batch did not leave %d world pickups (got %d)" % [item_count, landings.size()])
-	var farthest := 0.0
+	var landing_max_abs_x := 0.0
+	var landing_max_abs_z := 0.0
 	for landing in landings:
 		var local := room.to_local(landing)
 		if absf(local.x) > dimensions.x * 0.5 - 0.5 or absf(local.z) > dimensions.y * 0.5 - 0.5:
 			failures.append("Ground loot landed outside the room footprint at (%.2f, %.2f)" % [local.x, local.z])
 		if not bool(dungeon.call("_is_loot_landing_clear", landing)):
 			failures.append("Ground loot landed inside a blocker at (%.2f, %.2f)" % [local.x, local.z])
-		farthest = maxf(farthest, Vector2(local.x, local.z).length())
-	if farthest < 1.9:
-		failures.append("Ground loot batch stayed concentrated in the world (farthest=%.3f m)" % farthest)
+		landing_max_abs_x = maxf(landing_max_abs_x, absf(local.x))
+		landing_max_abs_z = maxf(landing_max_abs_z, absf(local.z))
+	if landing_max_abs_x > 1.001 or landing_max_abs_z > 1.001:
+		failures.append("Ground loot batch exceeded the 2m x 2m scatter area (max_abs=(%.3f, %.3f))" % [landing_max_abs_x, landing_max_abs_z])
+	if landing_max_abs_x < 0.85 or landing_max_abs_z < 0.65:
+		failures.append("Ground loot batch did not visibly use the expanded scatter area (max_abs=(%.3f, %.3f))" % [landing_max_abs_x, landing_max_abs_z])
 
 
 func _find_eligible_room(dungeon: Dungeon3D, rooms_by_id: Dictionary, prefer_large: bool) -> DungeonRoom3D:

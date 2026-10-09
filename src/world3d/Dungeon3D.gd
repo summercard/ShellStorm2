@@ -36,6 +36,7 @@ const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
 const NEON_FRAME_SCRIPT := preload("res://src/ui/NeonFrameControl.gd")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 const HUD_RELOAD_RING_SCRIPT := preload("res://src/ui/HudReloadRing.gd")
+const FATE_CARD_FEEDBACK_SCRIPT := preload("res://src/ui/FateCardFeedback.gd")
 const HUD_UI_SCALE := 0.80
 ## —— HUD 换弹环（2026-10-08，`0.2-PLAYER-001` 追记五）——
 ## 主人原话：「就是我换子弹的那个提示圈，帮我换到图片中的枪械图标的位置来，然后大小跟我红圈一样大」。
@@ -71,11 +72,12 @@ const ENEMY_FILL_ATTEMPT_LIMIT := 4
 ## —— 地面掉落的散布（业主 2026-09-29：原来的落点太集中，但要散得开又不能不进墙）——
 ## 半径曲线按「等面积」取 sqrt：落点铺满圆面，而不是件数越多越往外稀、中心却空一圈。
 ## 外半径随件数按 sqrt 抬：`r_max = clamp(单件基准半径 × sqrt(件数), 下限, 上限)`。
-## 三个数就是可调旋钮：嫌挤抬 `LOOT_SCATTER_UNIT_RADIUS_M` / `LOOT_SCATTER_MAX_RADIUS_M`，
-## 要求「至少有间距」抬 `LOOT_SCATTER_MIN_RADIUS_M`（单件也保证不压在原点上）。
-const LOOT_SCATTER_MIN_RADIUS_M := 0.85
-const LOOT_SCATTER_UNIT_RADIUS_M := 0.95
-const LOOT_SCATTER_MAX_RADIUS_M := 2.60
+## 掉落散布使用以落点为中心的方形范围，而不是无限扩大的圆。
+## `LOOT_SCATTER_HALF_EXTENT_M = 1.0` 表示 X/Z 各自 [-1.0m, +1.0m]，
+## 即总范围 2m × 2m；后续可在 Inspector 内把它调小，但不会超过设计上限。
+@export_range(0.5, 1.0, 0.05) var loot_scatter_half_extent_m: float = 1.0
+const LOOT_SCATTER_HALF_EXTENT_M := 1.0
+const LOOT_SCATTER_MIN_RADIUS_M := 0.30
 ## 黄金角：逐件错开、件数少时也不会连成一条同向螺旋线。
 const LOOT_SCATTER_GOLDEN_ANGLE := 2.399963
 ## 落点水平净空：贴地后在这个高度上用这个半径探一次，撞到层 1 的墙/家具就换候选点。
@@ -215,6 +217,11 @@ var _pending_fate_door_target_id := ""
 var _fate_overlay: Control
 var _fate_choice_buttons: Array[Button] = []
 var _fate_feedback_label: Label = null
+var _fate_feedback_tweens: Dictionary = {}
+var _fate_feedback_locked := false
+var _fate_feedback_selected_index := -1
+var _fate_feedback_dispatch: Tween = null
+var _fate_initializing_focus := false
 var _map_fate_triggers: MapFateTriggers
 # 模态浮窗（雷达 / 背包）的 ESC 关闭按钮
 var _radar_close_button: Button = null
@@ -4209,7 +4216,7 @@ func _deliver_ground_rewards(
 ## 单件、且落点要被别处（如剧本的朝向目标点）精确引用时传 `false` ——
 ## 散布在 index=0 时也至少有 `LOOT_SCATTER_MIN_RADIUS_M` 的偏移，
 ## 会让「指那个常量点」与「枪实际在哪」对不上（2026-09-22 开场那把枪）。
-## 散开范围与曲线见 `LOOT_SCATTER_*` 常量；落点仍逐件过贴地校位 + 净空校验，
+## 散开范围与曲线见 `loot_scatter_half_extent_m`；落点仍逐件过贴地校位 + 净空校验，
 ## 目的是「散得开」，不是「散进墙里」。
 func _spawn_loot_items(
 	room: DungeonRoom3D,
@@ -4255,30 +4262,30 @@ func _spawn_loot_items(
 	return spawned
 
 
-## 本次掉落的散布外半径：件数越多越开，但受房间尺寸与全局上限双重夹紧。
-## 房间侧留 1.2 m 给墙厚与贴墙家具；房间再小也不会小于单件下限。
+## 本次掉落的散布半边长：件数越多越接近 2m × 2m，但受房间尺寸夹紧。
+## 返回值仍沿用旧函数名，避免已有调用方和探针改动；它现在表示方形半边长。
 func _loot_scatter_max_radius(room: DungeonRoom3D, item_count: int) -> float:
 	var dimensions := room.get_dimensions()
-	var room_half_min := maxf(0.0, minf(dimensions.x, dimensions.y) * 0.5)
-	var count_radius := LOOT_SCATTER_UNIT_RADIUS_M * sqrt(float(maxi(1, item_count)))
+	var room_half_min := maxf(0.0, minf(dimensions.x, dimensions.y) * 0.5 - 1.2)
+	var count_ratio := sqrt(float(maxi(1, item_count)) / 6.0)
 	return clampf(
-		minf(count_radius, room_half_min - 1.2),
+		minf(loot_scatter_half_extent_m * count_ratio, room_half_min),
 		LOOT_SCATTER_MIN_RADIUS_M,
-		LOOT_SCATTER_MAX_RADIUS_M
+		LOOT_SCATTER_HALF_EXTENT_M
 	)
 
 
-## 第 `index` 件的水平偏移（确定性，不掷骰）：半径按等面积曲线、角度按黄金角。
-## 半径曲线 `r = lerp(内半径, 外半径, sqrt(格心比例))` —— 这就是「落点铺满圆面」的那条曲线：
-## 直接线性取半径会让内圈密、外圈空；取 sqrt 后单位面积上的件数才均匀。
-## index=0 也落在 `sqrt(0.5/件数)` 处而不是圆心，所以单件掉落不会压在原点。
+## 第 `index` 件的水平偏移（确定性，不掷骰）：按黄金角取方向，
+## 再把圆形半径映射到正方形边界。这样每个候选点都满足
+## `abs(x) <= half_extent` 且 `abs(z) <= half_extent`，总散布范围严格为 2m × 2m 内。
 func _loot_scatter_offset(index: int, item_count: int, max_radius: float) -> Vector3:
-	var inner := LOOT_SCATTER_MIN_RADIUS_M
-	var outer := maxf(inner, max_radius)
+	var half_extent := clampf(max_radius, LOOT_SCATTER_MIN_RADIUS_M, LOOT_SCATTER_HALF_EXTENT_M)
 	var unit := clampf((float(index) + 0.5) / float(maxi(1, item_count)), 0.0, 1.0)
-	var radius := lerpf(inner, outer, sqrt(unit))
 	var angle := float(index) * LOOT_SCATTER_GOLDEN_ANGLE + 0.35
-	return Vector3(cos(angle), 0.0, sin(angle)) * radius
+	var direction := Vector2(cos(angle), sin(angle))
+	var square_boundary_radius := half_extent / maxf(absf(direction.x), absf(direction.y))
+	var radius := square_boundary_radius * sqrt(unit)
+	return Vector3(direction.x, 0.0, direction.y) * radius
 
 
 ## 把「想要的落点」变成「真能站人的落点」：
@@ -4329,7 +4336,7 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 		return
 	var pickup_offset := player.global_position - pickup.global_position
 	pickup_offset.y = 0.0
-	if pickup_offset.length() > GroundLootPickup3D.PICKUP_DISTANCE_M:
+	if pickup_offset.length() > pickup.get_pickup_distance_m():
 		return
 	if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
 		var granted := _grant_run_currency(int(item.get("count", 1)))
@@ -5335,7 +5342,7 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	button.name = "FateChoiceCard_%d" % choice_index
 	button.custom_minimum_size = _hud_size(Vector2(346, 546))
 	button.text = ""
-	button.clip_contents = true
+	button.clip_contents = false
 	button.focus_mode = Control.FOCUS_ALL
 	button.tooltip_text = "%s · %s\n%s" % [card.card_name, card.orientation_name(), card.description]
 	button.disabled = true
@@ -5344,6 +5351,7 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 	button.set_meta("tarot_button", button)
 	# 卡身份：供验收把卡面贴图与被抽中的卡牌逐一对上，防止"图装错牌"。
 	button.set_meta("tarot_stable_card_id", card.get_stable_card_id())
+	button.set_meta("tarot_scope_color", accent)
 
 	# 卡面自身已经包含完整外框；按钮只承担命中区域，不再绘制紫色背框、焦点框或按下框。
 	var bare_button := StyleBoxEmpty.new()
@@ -5371,15 +5379,31 @@ func _create_reference_fate_card_view(card: FateCard, choice_index: int) -> Cont
 
 	button.set_meta("tarot_face_node", face_node)
 	button.set_meta("tarot_back_node", back_node)
+	button.set_meta("fate_feedback_view", column)
+	button.set_meta("fate_feedback_hovered", false)
+	var feedback: Control = FATE_CARD_FEEDBACK_SCRIPT.new() as Control
+	feedback.name = "FateCardFeedback"
+	feedback.set_anchors_preset(Control.PRESET_FULL_RECT)
+	feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	feedback.setup(accent)
+	button.add_child(feedback)
+	button.set_meta("fate_feedback_node", feedback)
 	# 枢轴同步用 lambda：静态/实例方法的 Callable 在多张卡 bind 到不同按钮时
-	# 会被引擎判为同一连接而拒绝重复连接，导致翻转绕旧轴心（卡面飞出）。
+	# 会被引擎判为同一连接，导致翻转绕旧轴心（卡面飞出）。
 	var sync_pivot := func() -> void:
 		if is_instance_valid(button):
 			button.pivot_offset = button.size * 0.5
 	sync_pivot.call()
 	button.resized.connect(sync_pivot)
+	var sync_column_pivot := func() -> void:
+		if is_instance_valid(column):
+			column.pivot_offset = column.size * 0.5
+	sync_column_pivot.call()
+	column.resized.connect(sync_column_pivot)
 	button.mouse_entered.connect(_on_reference_fate_card_hover.bind(button, true))
 	button.mouse_exited.connect(_on_reference_fate_card_hover.bind(button, false))
+	button.focus_entered.connect(_on_reference_fate_card_focus.bind(button, true))
+	button.focus_exited.connect(_on_reference_fate_card_focus.bind(button, false))
 	button.pressed.connect(_on_reference_fate_card_pressed.bind(button, choice_index))
 
 	var target_detail := ""
@@ -5530,7 +5554,15 @@ func _maybe_focus_fate_card(button: Button) -> void:
 	var viewport := get_viewport()
 	if viewport != null and viewport.gui_get_focus_owner() != null:
 		return
+	_fate_initializing_focus = true
 	button.grab_focus()
+	_fate_initializing_focus = false
+	# 默认焦点只服务键盘/手柄导航，不制造一次假的鼠标悬停放大。
+	button.set_meta("fate_feedback_focused", false)
+	_tween_fate_card_scale(button, 1.0, 0.0)
+	var feedback := (button.get_meta("fate_feedback_node") if button.has_meta("fate_feedback_node") else null) as Control
+	if feedback != null and is_instance_valid(feedback):
+		feedback.call("set_hovered", bool(button.get_meta("fate_feedback_hovered", false)))
 
 
 ## 三张命运卡横向排布，显式指定左右邻居并首尾环绕。
@@ -5594,46 +5626,134 @@ func _start_fate_card_idle_motion(card_view: Control, choice_index: int) -> void
 	tween.tween_property(card_view, "rotation", 0.0, cycle * 0.22).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
-func _on_reference_fate_card_hover(control: Control, hovered: bool) -> void:
-	if control == null or not is_instance_valid(control):
+func _on_reference_fate_card_hover(button: Button, hovered: bool) -> void:
+	_set_fate_card_pointer_state(button, hovered, false)
+
+
+func _on_reference_fate_card_focus(button: Button, focused: bool) -> void:
+	# 焦点反馈走独立状态，不伪造 mouse_entered，避免初始化焦点把鼠标态锁死。
+	if _fate_initializing_focus:
 		return
-	var tween := control.create_tween()
-	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(control, "modulate", Color(1.08, 1.08, 1.08, 1.0) if hovered else Color.WHITE, 0.12)
+	_set_fate_card_pointer_state(button, focused, true)
+
+
+func _set_fate_card_pointer_state(button: Button, active: bool, from_focus: bool) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	button.set_meta("fate_feedback_focused" if from_focus else "fate_feedback_hovered", active)
+	var hovered := bool(button.get_meta("fate_feedback_hovered", false))
+	var focused := bool(button.get_meta("fate_feedback_focused", false))
+	if _fate_feedback_locked or not bool(button.get_meta("tarot_face_ready", false)):
+		return
+	var target := 1.045 if hovered or focused else 1.0
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		target = 1.0
+	_tween_fate_card_scale(button, target, 0.18)
+	var feedback := (button.get_meta("fate_feedback_node") if button.has_meta("fate_feedback_node") else null) as Control
+	if feedback != null and is_instance_valid(feedback):
+		feedback.call("set_hovered", hovered or focused)
+
+
+func _kill_fate_feedback_tween(button: Control) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var key := button.get_instance_id()
+	var previous: Variant = _fate_feedback_tweens.get(key, null)
+	if previous != null and is_instance_valid(previous):
+		(previous as Tween).kill()
+	_fate_feedback_tweens.erase(key)
+
+
+func _tween_fate_card_scale(button: Button, target: float, duration: float) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var view: Control = button.get_meta("fate_feedback_view") as Control
+	view.pivot_offset = view.size * 0.5
+	_kill_fate_feedback_tween(button)
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)) or duration <= 0.0:
+		view.scale = Vector2.ONE * target
+		return
+	var tween := view.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(view, "scale", Vector2.ONE * target, duration)
+	_fate_feedback_tweens[button.get_instance_id()] = tween
 
 
 func _on_reference_fate_card_pressed(button: Button, choice_index: int) -> void:
-	if button == null or not is_instance_valid(button) or bool(button.get_meta("fate_selection_feedback", false)):
+	if button == null or not is_instance_valid(button) or _fate_feedback_locked:
 		return
-	button.set_meta("fate_selection_feedback", true)
-	var selected_view := button.get_parent() as Control
-	if selected_view == null:
-		_on_door_fate_selected(choice_index)
+	if not bool(button.get_meta("tarot_face_ready", false)):
 		return
-	for index in range(_fate_choice_buttons.size()):
-		var other_button := _fate_choice_buttons[index]
+	_fate_feedback_locked = true
+	_fate_feedback_selected_index = choice_index
+	_set_fate_feedback_buttons_disabled(true)
+	for other_button in _fate_choice_buttons:
 		if other_button == null or not is_instance_valid(other_button):
 			continue
-		var view := other_button.get_parent() as Control
-		if view == null:
+		var target := 1.10 if other_button == button else 0.92
+		if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+			target = 1.0
+		_tween_fate_card_scale(other_button, target, 0.25)
+	var feedback := (button.get_meta("fate_feedback_node") if button.has_meta("fate_feedback_node") else null) as Control
+	if feedback != null and is_instance_valid(feedback):
+		feedback.call("trigger_flash")
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		_apply_fate_choice_after_feedback(choice_index)
+		return
+	# 短促的按下回弹先于选中放大，所有 tween 都由共享表统一 kill，快进快出不会竞态。
+	_kill_fate_feedback_tween(button)
+	var view: Control = button.get_meta("fate_feedback_view") as Control
+	var impact := view.create_tween()
+	impact.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	impact.tween_property(view, "scale", Vector2.ONE * 0.965, 0.055).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	impact.tween_property(view, "scale", Vector2.ONE * 1.055, 0.09).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	impact.tween_property(view, "scale", Vector2.ONE * 1.10, 0.17).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_fate_feedback_tweens[button.get_instance_id()] = impact
+	_fate_feedback_dispatch = _fate_overlay.create_tween()
+	_fate_feedback_dispatch.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_fate_feedback_dispatch.tween_interval(0.36)
+	_fate_feedback_dispatch.tween_callback(_apply_fate_choice_after_feedback.bind(choice_index))
+
+
+func _set_fate_feedback_buttons_disabled(disabled: bool) -> void:
+	for button in _fate_choice_buttons:
+		if button == null or not is_instance_valid(button):
 			continue
-		var target_scale := 1.10 if other_button == button else 0.90
-		var tween := view.create_tween()
-		tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-		tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.tween_property(view, "scale", Vector2.ONE * target_scale, 0.22)
-	# 保持原有选择、满槽二次确认和异步应用逻辑；反馈动画先给玩家一个清晰落点。
-	var feedback := get_tree().create_timer(0.18, true, false, true)
-	feedback.timeout.connect(_apply_fate_choice_after_feedback.bind(choice_index), CONNECT_ONE_SHOT)
+		button.disabled = disabled if disabled else not bool(button.get_meta("tarot_face_ready", false))
+
+
+func _reset_fate_feedback(immediate := false) -> void:
+	if _fate_feedback_dispatch != null and _fate_feedback_dispatch.is_valid():
+		_fate_feedback_dispatch.kill()
+	_fate_feedback_dispatch = null
+	var focus_index := _fate_feedback_selected_index
+	_fate_feedback_locked = false
+	_fate_feedback_selected_index = -1
+	for button in _fate_choice_buttons:
+		if button == null or not is_instance_valid(button):
+			continue
+		_tween_fate_card_scale(button, 1.0, 0.0 if immediate else 0.18)
+		button.set_meta("fate_feedback_hovered", false)
+		button.set_meta("fate_feedback_focused", false)
+		var feedback := (button.get_meta("fate_feedback_node") if button.has_meta("fate_feedback_node") else null) as Control
+		if feedback != null and is_instance_valid(feedback):
+			feedback.call("reset_feedback")
+	_set_fate_feedback_buttons_disabled(false)
+	if not immediate and focus_index >= 0 and focus_index < _fate_choice_buttons.size():
+		_fate_initializing_focus = true
+		_fate_choice_buttons[focus_index].grab_focus()
+		_fate_initializing_focus = false
+	if immediate:
+		_fate_feedback_tweens.clear()
 
 
 func _apply_fate_choice_after_feedback(choice_index: int) -> void:
-	if choice_index >= 0 and choice_index < _fate_choice_buttons.size():
-		var button := _fate_choice_buttons[choice_index]
-		if button != null and is_instance_valid(button):
-			button.set_meta("fate_selection_feedback", false)
-	if _door_fate_active:
-		_on_door_fate_selected(choice_index)
+	if not _door_fate_active or not _fate_feedback_locked or choice_index != _fate_feedback_selected_index:
+		return
+	_on_door_fate_selected(choice_index)
+	if _door_fate_active and _pending_fate_currency_choice == choice_index:
+		_reset_fate_feedback()
 
 
 func _rarity_color(rarity: FateCard.CardRarity) -> Color:
@@ -5685,6 +5805,7 @@ func _on_door_fate_selected(choice_index: int) -> void:
 	if not is_inside_tree() or not _door_fate_active:
 		return
 	if not bool(result.get("success", false)):
+		_reset_fate_feedback()
 		var failure := str(result.get("message", result.get("reason", "当前目标无法承载该命运")))
 		status_label.text = "%s：%s" % [card.card_name, failure]
 		if _fate_feedback_label != null:
@@ -5712,6 +5833,7 @@ func _fate_currency_value(card: FateCard) -> int:
 
 
 func _close_door_fate_overlay() -> void:
+	_reset_fate_feedback(true)
 	_door_fate_active = false
 	_door_fate_choices.clear()
 	_pending_fate_currency_choice = -1

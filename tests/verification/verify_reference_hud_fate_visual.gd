@@ -170,6 +170,8 @@ func _ready() -> void:
 	_check(_capture("full_floor_explored_map.png"), "Could not capture full-floor map", failures)
 	dungeon.call("_close_full_map")
 
+	var initial_reduce_motion: Variant = ProjectSettings.get_setting("accessibility/reduce_motion", false)
+	ProjectSettings.set_setting("accessibility/reduce_motion", false)
 	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not open deterministic fate overlay", failures)
 	for _frame in 2:
 		await get_tree().process_frame
@@ -194,9 +196,36 @@ func _ready() -> void:
 		_check("FATE PROTOCOL / SELECT ONE" not in all_text, "Fate overlay still contains the removed top protocol label", failures)
 		for card in cards:
 			var card_control := card as Control
+			var card_button := card_control as Button
 			_check(bool(card_control.get_meta("tarot_face_ready", false)), "Tarot face did not finish flipping", failures)
-			_check(not (card_control as Button).disabled, "Tarot card stayed disabled after flip", failures)
+			_check(not card_button.disabled, "Tarot card stayed disabled after flip", failures)
 			_check(card_control.size.y > card_control.size.x, "Fate choice is not a vertical card", failures)
+			var card_view := card_button.get_meta("fate_feedback_view") as Control
+			var feedback := card_button.find_child("FateCardFeedback", true, false) as Control
+			_check(card_view != null, "Fate card visual column is missing", failures)
+			_check(feedback != null, "Fate card feedback layer is missing", failures)
+			_check(feedback != null and feedback.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Fate feedback layer blocks card input", failures)
+			_check(card_view.scale.is_equal_approx(Vector2.ONE), "Fate card is not at neutral scale after reveal", failures)
+			# 手柄/键盘焦点与鼠标共用视觉反馈，但焦点不写入鼠标态。
+			dungeon.call("_on_reference_fate_card_focus", card_button, true)
+			_check(bool(card_button.get_meta("fate_feedback_focused", false)), "Fate card focus feedback did not activate", failures)
+			_check(not bool(card_button.get_meta("fate_feedback_hovered", false)), "Focus feedback forged mouse hover state", failures)
+			dungeon.call("_on_reference_fate_card_focus", card_button, false)
+			if feedback != null:
+				var expected_scope_color: Color = card_button.get_meta("tarot_scope_color") as Color
+				_check((feedback.get("accent_color") as Color).is_equal_approx(expected_scope_color), "Fate feedback particle color does not match scope color", failures)
+			# 真跑悬停进入/退出，并立即反向切换，确保共享 tween 不留下残余缩放。
+			dungeon.call("_on_reference_fate_card_hover", card_button, true)
+			await get_tree().create_timer(0.1).timeout
+			_check(card_view.scale.x > 1.0, "Fate card hover did not enlarge the card", failures)
+			if card_button.name == "FateChoiceCard_0":
+				await RenderingServer.frame_post_draw
+				_check(_capture("fate_feedback_hover.png"), "Could not capture fate feedback hover", failures)
+			dungeon.call("_on_reference_fate_card_hover", card_button, false)
+			dungeon.call("_on_reference_fate_card_hover", card_button, true)
+			dungeon.call("_on_reference_fate_card_hover", card_button, false)
+			await get_tree().create_timer(0.2).timeout
+			_check(card_view.scale.is_equal_approx(Vector2.ONE), "Fate card hover tween did not recover after rapid enter/exit", failures)
 			_check(card_control.size.x >= 250.0 and card_control.size.y >= 420.0, "Fate cards are too small to dominate the choice screen", failures)
 			_check(card_control.size.x <= 300.0 and card_control.size.y <= 500.0, "Fate card exceeds its 80%-scaled layout budget", failures)
 			_check_fate_card_art(card as Button, failures)
@@ -213,10 +242,25 @@ func _ready() -> void:
 		var reversed_description := FateCardPresets.fate_reinforce()
 		reversed_description.set_orientation(FateCard.Orientation.REVERSED, 0.8)
 		_check(reversed_description.short_description in all_text, "Reversed effect text was replaced by upright text", failures)
+		# 点击反馈锁住整组三列：第二张直调也不能穿透；关闭来源/弹窗后必须恢复。
+		var locked_first := cards[0] as Button
+		var locked_second := cards[1] as Button
+		dungeon.call("_on_reference_fate_card_pressed", locked_first, 0)
+		_check(bool(dungeon.get("_fate_feedback_locked")), "Fate card feedback did not lock after click", failures)
+		_check(locked_first.disabled and locked_second.disabled, "Click feedback did not disable all fate cards", failures)
+		dungeon.call("_on_reference_fate_card_pressed", locked_second, 1)
+		_check(int(dungeon.get("_fate_feedback_selected_index")) == 0, "Second card changed the locked selection", failures)
+		await get_tree().create_timer(0.08).timeout
+		await RenderingServer.frame_post_draw
+		_check(_capture("fate_feedback_impact.png"), "Could not capture fate feedback impact", failures)
+		dungeon.call("_close_door_fate_overlay")
+		_check(not bool(dungeon.get("_fate_feedback_locked")), "Fate card feedback lock was not cleared on close", failures)
+		_check(dungeon.get_node_or_null("HUD/DoorFateOverlay3D") == null, "Fate overlay was not cleaned up after close", failures)
+		_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen fate overlay after feedback close", failures)
+		await get_tree().create_timer(0.5).timeout
 	_check(_capture("reference_fate_three_choice.png"), "Could not capture reference tarot overlay", failures)
 
 	# 减少动效同样保留逆位框/图案与正向文字。
-	var old_reduce_motion: Variant = ProjectSettings.get_setting("accessibility/reduce_motion", false)
 	ProjectSettings.set_setting("accessibility/reduce_motion", true)
 	dungeon.call("_close_door_fate_overlay")
 	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not reopen reduced-motion offer", failures)
@@ -229,7 +273,7 @@ func _ready() -> void:
 	else:
 		_check(false, "Reduced-motion overlay is missing", failures)
 	await _check_simple_tarot_entries(failures)
-	ProjectSettings.set_setting("accessibility/reduce_motion", old_reduce_motion)
+	ProjectSettings.set_setting("accessibility/reduce_motion", initial_reduce_motion)
 
 	dungeon.queue_free()
 	await get_tree().process_frame

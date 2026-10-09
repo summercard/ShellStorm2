@@ -2,9 +2,9 @@
 
 主人原话：「怪物掉落的物品和搜索出来的东西要弹出来，跳高点然后地板上弹两下，弹弹完之后才可以捡，弹的位置可以随机一些，然后那个角色接近，不要整个人接近那个物品的时候，那个呃才可以获得物品。可以有一个获取物品的距离，然后这个掉落地板上的东西要飞到角色的这个身体里面去，改完之后要调整那个设计文档。」
 
-**实现**：`GroundLootPickup3D` 增加先上抛再落地、两次弹跳、拾取锁定、`1.20m` 水平距离判定、每帧距离复核和向 `Player3D` 身体目标点飞入的生命周期；`Dungeon3D` 在统一安全落点生成后启动动画，并在货币、自动装备、普通背包三条成功事务路径传入玩家目标，失败仍保留地面物。掉落位置继续复用房间边界、贴地、净空和阻挡收缩重试。
+**实现**：`GroundLootPickup3D` 增加先上抛再落地、两次弹跳、拾取锁定、默认 `2.00m` 水平距离判定、每帧距离复核和向 `Player3D` 身体目标点飞入的生命周期。获取距离由导出字段 `pickup_distance_m` 持有，支持 `0.25m..5.0m` 运行时动态调整，并同步更新 Area3D 球形碰撞范围；`Dungeon3D` 在统一安全落点生成后启动动画，并在货币、自动装备、普通背包三条成功事务路径传入玩家目标，失败仍保留地面物。掉落散布改为默认 `2m × 2m` 方形候选区（X/Z 各 `±1.0m`），仍复用房间边界、贴地、净空和阻挡收缩重试。另将 `FateCardFeedback.gd` 中 Godot 4.6 不接受的浮点 `%` 改为 `fmod()`，仅用于恢复依赖脚本解析。
 
-**验收**：直接运行 `verify_3d_combat_progression_flow.tscn`，退出 0，输出 `3D_COMBAT_PROGRESSION_FLOW_OK`；日志门禁退出 0。直接运行 `verify_reward_ground_handoff.tscn`，退出 0，输出 `REWARD_GROUND_HANDOFF_OK`。`export_monster_drop_table.py --check` 输出 `MONSTER_DROP_TABLE_CHECK_OK levels=1 rows=16 changed=0`。`git diff --check` 无空白错误。验证套件包装器因本机残留隔离工作区含 reparse point 且清理阶段长时间阻塞，本轮未以套件包装器签署结果；真实渲染验收与 `RoomKeyPickup3D` 同类表现扩展仍待后续专项。
+**验收**：直接运行 `verify_3d_combat_progression_flow.tscn`，退出 0，输出 `3D_COMBAT_PROGRESSION_FLOW_OK`；日志门禁退出 0，覆盖动态距离、2m × 2m 候选范围和实际安全落点。直接运行 `verify_reward_ground_handoff.tscn`，退出 0，输出 `REWARD_GROUND_HANDOFF_OK`，日志门禁退出 0。`git diff --check` 无空白错误。验证套件包装器因本机残留隔离工作区含 reparse point 且清理阶段长时间阻塞，本轮未以套件包装器签署结果；真实渲染验收与 `RoomKeyPickup3D` 同类表现扩展仍待后续专项。
 
 **关联文件**：`src/world3d/GroundLootPickup3D.gd`、`src/world3d/Dungeon3D.gd`、`src/player3d/Player3D.gd`、`tests/verification/verify_3d_combat_progression_flow.gd`、`docs/v0.1/design/战斗奖励与物品流转设计.md`、`docs/v0.1/04_技术施工_战斗与局内成长.md`。
 
