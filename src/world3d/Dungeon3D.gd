@@ -5581,10 +5581,29 @@ func _configure_fate_card_focus_navigation(buttons: Array[Button]) -> void:
 			continue
 		var previous := buttons[(index - 1 + count) % count]
 		var following := buttons[(index + 1) % count]
-		button.focus_neighbor_left = button.get_path_to(previous)
-		button.focus_neighbor_right = button.get_path_to(following)
-		button.focus_neighbor_top = button.get_path_to(previous)
-		button.focus_neighbor_bottom = button.get_path_to(following)
+		var previous_path := _safe_fate_focus_neighbor_path(button, previous)
+		var following_path := _safe_fate_focus_neighbor_path(button, following)
+		# Empty paths deliberately fall back to Godot's automatic neighbor search.
+		# More importantly, we never call get_path_to() across detached trees: doing
+		# so emits "common_parent is null" while the fate overlay is being rebuilt.
+		button.focus_neighbor_left = previous_path
+		button.focus_neighbor_right = following_path
+		button.focus_neighbor_top = previous_path
+		button.focus_neighbor_bottom = following_path
+
+
+func _safe_fate_focus_neighbor_path(source: Control, target: Control) -> NodePath:
+	if source == null or target == null:
+		return NodePath()
+	if not is_instance_valid(source) or not is_instance_valid(target):
+		return NodePath()
+	if not source.is_inside_tree() or not target.is_inside_tree():
+		return NodePath()
+	var source_tree := source.get_tree()
+	var target_tree := target.get_tree()
+	if source_tree == null or target_tree == null or source_tree != target_tree:
+		return NodePath()
+	return source.get_path_to(target)
 
 
 func _get_fate_target_preview(card: FateCard) -> String:
