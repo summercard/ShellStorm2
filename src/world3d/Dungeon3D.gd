@@ -5311,6 +5311,9 @@ func _build_door_fate_overlay() -> void:
 		var card := _door_fate_choices[choice_index]
 		var card_view := _create_reference_fate_card_view(card, choice_index)
 		row.add_child(card_view)
+		# 设计契约：三张卡持续做轻微错相漂浮与透视感旋转。
+		# 作用于列容器，和卡面翻牌、悬停缩放分层，避免相互覆盖。
+		_start_fate_card_idle_motion(card_view, choice_index)
 		var card_button := card_view.get_meta("tarot_button") as Button
 		if card_button != null:
 			card_buttons.append(card_button)
