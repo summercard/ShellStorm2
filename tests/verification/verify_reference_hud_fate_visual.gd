@@ -310,6 +310,12 @@ func _check_fate_card_art(button: Button, failures: Array[String]) -> void:
 		return
 	_check(face.visible, "Fate card art layer never became visible", failures)
 	_check(face.texture != null, "Fate card art layer has no texture", failures)
+	var scan_material := face.material as ShaderMaterial
+	_check(scan_material != null and scan_material.shader != null, "Fate card art layer is missing the scan-light shader", failures)
+	if scan_material != null and scan_material.shader != null:
+		var shader_code := scan_material.shader.code
+		_check("visible_mask" in shader_code and "smoothstep(0.045, 0.16, luminance)" in shader_code, "Scan-light shader has no luminance gate for black regions", failures)
+		_check("scan_strength" in shader_code and "scan_width" in shader_code, "Scan-light shader tuning uniforms are missing", failures)
 	if face.texture != null:
 		var stable_id := str(button.get_meta("tarot_stable_card_id", ""))
 		var expected := "res://assets/art/ui/fate_cards/ui_fate_card_%s_v001.png" % stable_id.trim_prefix("fate_")

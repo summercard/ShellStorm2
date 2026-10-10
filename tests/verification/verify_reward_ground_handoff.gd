@@ -120,6 +120,19 @@ func _ready() -> void:
 				failures.append("表驱动击杀的地面物内容不正确：%s" % str(table_ids))
 			if physical_positions.size() == 2 and physical_positions[0].distance_to(physical_positions[1]) < 0.1:
 				failures.append("表驱动的多件实物叠在同一落点，没有按索引散开")
+			# 地面名牌策略（业主 2026-10-10「把掉落的金币上面的文字『魂』隐藏掉」）：
+			# 货币（__currency__）默认不挂名牌，实物仍须挂。期望值由真源
+			# GroundLootPickup3D.should_show_name_label_for() 现算 ⇒ 改策略只改一处。
+			for drop in table_drops:
+				var loot := drop as GroundLootPickup3D
+				var snapshot := loot.get_model_snapshot()
+				var is_currency_loot := bool(snapshot.get("is_currency", false))
+				var label_shown := bool(snapshot.get("label_shown", false))
+				if label_shown != GroundLootPickup3D.should_show_name_label_for(loot.item_data):
+					failures.append(
+						"地面名牌策略未生效：is_currency=%s label_shown=%s policy=%s"
+						% [str(is_currency_loot), str(label_shown), str(snapshot.get("label_display_policy", ""))]
+					)
 		table_enemy.queue_free()
 
 		var grants := [{

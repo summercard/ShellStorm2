@@ -24,10 +24,11 @@ func _on_activate(_world_pos: Vector3, color: Color, _size: float, context: Dict
 	# 解析 context.text_value
 	var text_value: String = str(context.get("text_value", "0"))
 	_label.text = text_value
-	# 颜色：调用方传入（红/橙/暴击金）
-	_label.modulate = color
-	# 初始 alpha 0
-	_label.modulate.a = 0.0
+	# 颜色：调用方传入（红/橙/暴击金）。基色 alpha 归一为 1，透明度全部由 transparency 承载
+	# —— Label3D 淡出必须走 transparency：描边不吃 modulate 的 alpha，只淡正文会留下黑描边
+	#    （业主 2026-10-10）。`transparency = 1 - alpha` 与旧 `modulate.a = alpha` 逐值等价。
+	_label.modulate = Color(color.r, color.g, color.b, 1.0)
+	_label.transparency = 1.0
 	# 初始位置 = world_pos（基类已设 global_position）
 	# 初始缩放略小（后续放大）
 	_label.scale = Vector3.ONE * 0.85
@@ -47,7 +48,7 @@ func _on_tick(elapsed: float, total: float) -> void:
 		alpha = 1.0
 	else:
 		alpha = 1.0 - (elapsed - 0.50) / 0.22
-	_label.modulate.a = clamp(alpha, 0.0, 1.0)
+	_label.transparency = 1.0 - clamp(alpha, 0.0, 1.0)
 
 func ease_out_quad(t: float) -> float:
 	return 1.0 - (1.0 - t) * (1.0 - t)

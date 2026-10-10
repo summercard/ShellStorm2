@@ -598,4 +598,19 @@ case "${suite}" in
     ;;
 esac
 
+# 静态门禁：Label3D 的淡出必须走 transparency（业主 2026-10-10「物品拾取后残留黑字」）。
+# Godot 的 Label3D 把描边与正文当两条独立着色路径，`modulate.a` 只作用于正文，
+# 只淡正文会让描边原地留下。退出码 1 = 存在违规。
+case "${suite}" in
+  core|aggregate|full)
+    fade_status=0
+    python3 "${project_root}/scripts/check_label3d_fade.py" --quiet || fade_status=$?
+    if (( fade_status != 0 )); then
+      printf '\nVERIFICATION_SUITE_FAILED suite=%s reason=label3d_fade_modulate_alpha\n' \
+        "${suite}" >&2
+      exit 1
+    fi
+    ;;
+esac
+
 printf '\nVERIFICATION_SUITE_OK suite=%s count=%d\n' "${suite}" "${#scenes[@]}"

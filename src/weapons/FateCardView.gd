@@ -15,6 +15,29 @@ class_name FateCardView
 const ART_DIR := "res://assets/art/ui/fate_cards"
 const ART_FMT := ART_DIR + "/ui_fate_card_%s_v001.png"
 const BACK_PATH := ART_DIR + "/ui_fate_card_back_v001.png"
+const FACE_SCAN_SHADER_CODE := """
+shader_type canvas_item;
+
+// A restrained diagonal sheen for face art only. The luminance gate keeps
+// black card background from receiving any highlight.
+uniform float scan_speed = 0.22;
+uniform float scan_width = 0.075;
+uniform float scan_strength = 0.16;
+
+void fragment() {
+    vec4 base = texture(TEXTURE, UV);
+    float luminance = dot(base.rgb, vec3(0.2126, 0.7152, 0.0722));
+    float visible_mask = smoothstep(0.045, 0.16, luminance) * step(0.02, base.a);
+    float phase = fract(TIME * scan_speed);
+    float center = mix(-0.30, 1.30, phase);
+    float diagonal = UV.x + UV.y * 0.18;
+    float distance_to_band = abs(diagonal - center);
+    float band = 1.0 - smoothstep(scan_width * 0.35, scan_width, distance_to_band);
+    float sheen_mask = band * visible_mask * base.a;
+    vec3 sheen = vec3(1.0, 0.98, 0.90) * (sheen_mask * scan_strength);
+    COLOR = vec4(base.rgb + sheen, base.a);
+}
+"""
 
 ## 贴图缓存：stable_card_id -> Texture2D（null 表示确认无图，避免反复探测磁盘）
 static var _art_cache: Dictionary = {}
@@ -76,6 +99,12 @@ static func build_art_layer(
 	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if layer_name == "TarotArtFace":
+		var scan_shader := Shader.new()
+		scan_shader.code = FACE_SCAN_SHADER_CODE
+		var scan_material := ShaderMaterial.new()
+		scan_material.shader = scan_shader
+		rect.material = scan_material
 	host.add_child(rect)
 	# 枢轴同步用 lambda 而不是静态 Callable：静态方法的 Callable 在 bind 到不同
 	# 控件时会被引擎判为「同一连接」而拒绝重复连接，导致只有首帧设对了枢轴，

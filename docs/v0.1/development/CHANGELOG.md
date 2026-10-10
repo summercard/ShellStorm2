@@ -1,3 +1,40 @@
+## 2026-10-10 Godot Window 输入生命周期红错修复与验收
+
+**症状**：正式流程曾出现 `ERROR: _push_unhandled_input_internal: Condition "!is_inside_tree()" is true`（`scene/main/viewport.cpp:3573`）。此前基地交互、暂停返回、读取界面和普通 `SubViewport` 路径已有延迟/输入隔离，但命运来源选择仍是独立 `Window` 的高风险边界。
+
+**根因链**：`FateSourceSelectionPanel` 的 ESC、按钮和关窗回调原先同步执行 `hide()` 与 `completed.emit()`；`FateCardGameBridge` 在 `await panel.completed` 恢复后又同步 `remove_child(panel)`。这会让 Window 自带 Viewport 在原始输入派发尚未完全收口时离树，触发 Godot 的 `_push_unhandled_input_internal`。
+
+**修复**：
+- `src/ui/FateSourceSelectionPanel.gd`：`_finish()` 只设置幂等锁，并通过 `call_deferred("_finish_deferred", result)` 延迟隐藏 Window 和发完成信号；
+- `src/game/FateCardGameBridge.gd`：收到完成信号后等待一帧，再断开宿主回调、摘除并释放 Window；清理前检查实例有效性和入树状态；
+- `tests/verification/verify_fate_integration_completion.gd`：来源按钮遍历统一用 `has_meta()` 守卫；待领奖励的第二层来源选择等待旧 Window 清理并确认新 Window 出现，避免验收脚本自身制造 `get_meta` 红错或误读旧按钮。
+
+**排除项**：复核 `Dungeon3D._use_quick_item()`、`ItemUseHandler` 电池恢复、`PlayerFlashlight3D.restore_charge()` 与 `ItemModelIcon3D`。电池链路只更新电量、HUD、音效、存档和图标模型，不释放 Window/SubViewport，也不切场景；未对该链路追加无证据的全局延迟补丁。
+
+**验收**：
+- Fate Window 多入口矩阵（无头）：ESC、来源确认、回车确认、取消按钮、原生关窗、重复取消、宿主退出、带 3D 图标 ESC，`PROBE_FATE_WINDOW_INPUT_OK failed=0`，日志门禁=0；
+- Fate Window 多入口矩阵（真实 OpenGL Compatibility 渲染器）：同 8 类入口全部通过，未出现 `viewport.cpp:3573`；仅有 Compatibility 下 TAA 不可用提示，不是错误；
+- 命运来源面板图标探针：`PROBE_FATE_SOURCE_PANEL_OK failed=0`；
+- 命运正式集成：`FATE_INTEGRATION_COMPLETION checks=729 failures=0`、`FATE_INTEGRATION_COMPLETION_OK`，日志门禁=0；
+- 统一玩家交互、3D视觉输入、暂停存档复位、基地设施持久化均通过；
+- 上述日志均未出现 `_push_unhandled_input_internal`、`common_parent`、`file_access.cpp:1002` 或 `SCRIPT ERROR`。本次正式集成最终日志无 `ERROR:`、无 ObjectDB 泄漏、无资源泄漏。
+
+**当前状态**：目标红错的已定位链路已修复并通过真实渲染器专项回归；仍建议在主人下一次完整实际游戏流程中观察正式日志，若再次出现同一签名再继续抓取具体输入序列，不扩大到全局禁用输入。
+
+## 2026-10-10 命运来源选择面板改为图标卡片
+
+主人原话：「我游戏过程中选择命运卡片的时候跳出这个是什么意思？我的卡片无效吗？」—— 面板本身是正常流程（来源快照必须由玩家指认，取消即保留卡片），但旧版只有一列纯文字按钮：单枪玩家的两个名字恰好相同（`GunBody_Sprinkler / GunBody_Sprinkler · #000493`），面板内又只把标题重复了一遍，玩家读不出「为什么要选、取消会不会吞卡」。本轮把面板改为图标卡片。
+
+**面板**：`FateSourceSelectionPanel.open_choices()` 新增可选 `hint`（正文说明与窗口标题分离）；条目带 `icon_item` 时渲染图标卡片 —— 左 96×96 投影图标 + 右三行（名称／来源位置与实例号／命运槽占用或警示），不带则回退纯文字行；弹窗 `560×360` → `620×470`，卡片描边在 `apply_tactical_tree` **之后**按稀有度重设（早于它会被通用青色样式覆盖）。取消／Esc／关窗三路语义不变（卡片保留）。
+
+**桥接**：`get_source_candidates()` 为每个来源根记录所属 `WeaponInstance.to_item_dictionary()`（含装配快照与命运改装）与来源位置；候选字典保留旧字段 `source/supported/label`，新增 `icon_item/title/subtitle/badge/accent`。显示名改取 `ItemRegistry` 中文名（如「花洒机枪」），不再把 `GunBody_*` 内部节点名当玩家文案；机型映射走内容注册表链，UI 侧不另抄表。
+
+**启动期陷阱（本轮踩到并修掉）**：首版让启动期 autoload `FateCardGameBridge` 静态引用 `WeaponModel3D.GUN_NAME_TO_ID`，面板又在 `const` 里 `preload` 图标场景并强类型 `as ItemModelIcon3D` —— 编译期把 `ItemModelIcon3D → ItemModelFactory3D → WeaponModel3D → autoload BlueprintRegistry` 整条链拉到注册表就绪之前，链加载失败，连带 `Dungeon3D` 的 HUD 武器图标一起变空（`Failed to instantiate scene state of "", node count is 0`）。回退这两个文件后同一命令两条错误均消失，判定为首版引入。修法：图标场景改运行时 `load()`（缓存一次）、面板改鸭子类型调 `configure()`、机型映射改走 `WeaponInstance.assembly_id_for_root()`。
+
+**验收**：`godot --headless --path . --quit-after 5`（隔离 `APPDATA`）EXIT=0，日志与回退对照一致、无 `SCRIPT ERROR`；`check_asset_registry --scope structure` EXIT=0（`assets=1062 ledgers=9`）；`verify_ledger_split` EXIT=0（`failure_count=0`）。运行期探针 `probe_fate_source_panel` 全绿（`PROBE_FATE_SOURCE_PANEL_OK failed=0`）：`icon_item` 驱动出 `model_kind=weapon`、`mesh_count=1`、`fit_ratio=0.880`、居中偏差 < 0.001px，无 `icon_item` 时正确回退文字行。UI 域 full 的 5 条 `sha_mismatch`、命名门禁 6 处债务、媒体域计数与文档契约红项，经 `git status` 反向对照确认均为**既有**（涉及文件本次全未修改）。真实窗口输入与整局视觉 QA 未签署；上述探针留在 `_scratch/` 未注册进套件，属遗留项。
+
+**关联文件**：`src/ui/FateSourceSelectionPanel.gd`、`src/game/FateCardGameBridge.gd`、`assets/registry/ledgers/ShellStorm2_UI账本_v001.xlsx`（新增 `UI-PANEL-FATE-SOURCE`）、`assets/registry/ledger_split_baseline.json`、`docs/v0.1/14_技术施工_命运塔罗牌组.md` §3.4。见[交付记录](2026-10-10_fate_source_panel_icons.md)。
+
 ### 2026-10-09 地面掉落抛出、距离拾取与飞入角色
 
 主人原话：「怪物掉落的物品和搜索出来的东西要弹出来，跳高点然后地板上弹两下，弹弹完之后才可以捡，弹的位置可以随机一些，然后那个角色接近，不要整个人接近那个物品的时候，那个呃才可以获得物品。可以有一个获取物品的距离，然后这个掉落地板上的东西要飞到角色的这个身体里面去，改完之后要调整那个设计文档。」

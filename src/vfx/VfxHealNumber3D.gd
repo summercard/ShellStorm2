@@ -25,7 +25,8 @@ func _on_activate(_world_pos: Vector3, _color: Color, _size: float, context: Dic
 	_label.text = text_value
 	# 治疗色（不依赖调用方颜色，独立绿调 + 白描边）
 	_label.modulate = Color(0.4, 1.0, 0.55, 1.0)
-	_label.modulate.a = 0.0
+	# Label3D 的淡出必须走 transparency（描边不吃 modulate 的 alpha），口径同 VfxDamageNumber3D。
+	_label.transparency = 1.0
 	_label.scale = Vector3.ONE * 0.85
 
 func _on_tick(elapsed: float, total: float) -> void:
@@ -40,4 +41,4 @@ func _on_tick(elapsed: float, total: float) -> void:
 		alpha = 1.0
 	else:
 		alpha = 1.0 - (elapsed - 0.50) / 0.22
-	_label.modulate.a = clamp(alpha, 0.0, 1.0)
+	_label.transparency = 1.0 - clamp(alpha, 0.0, 1.0)

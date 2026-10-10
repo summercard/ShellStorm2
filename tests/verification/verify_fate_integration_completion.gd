@@ -172,6 +172,8 @@ func _select_button_deferred(source: AssemblyNode) -> void:
 func _select_button(source: AssemblyNode) -> void:
 	var panel := FateCardGameBridge.get_node("FateSourceSelectionPanel")
 	for button in panel.find_children("*", "Button", true, false):
+		if not button.has_meta("fate_source"):
+			continue
 		if button.get_meta("fate_source", null) == source:
 			check(true, "来源按钮绑定真实节点")
 			button.pressed.emit()
@@ -183,13 +185,27 @@ func _cancel_panel() -> void:
 	FateCardGameBridge.get_node("FateSourceSelectionPanel").cancel()
 
 func _claim_pending() -> void:
-	var panel := FateCardGameBridge.get_node("FateSourceSelectionPanel")
+	var panel := FateCardGameBridge.get_node("FateSourceSelectionPanel") as Window
 	var buttons := panel.find_children("*", "Button", true, false)
-	buttons[0].pressed.emit()
-	await get_tree().process_frame
-	var source_panel := FateCardGameBridge.get_node("FateSourceSelectionPanel")
+	if buttons.is_empty():
+		check(false, "待领命运选择按钮存在")
+		return
+	var old_panel_id := panel.get_instance_id()
+	(buttons[0] as Button).pressed.emit()
+	var source_panel: Window = null
+	for _attempt in range(8):
+		await get_tree().process_frame
+		var candidate := FateCardGameBridge.get_node_or_null("FateSourceSelectionPanel") as Window
+		if candidate != null and candidate.get_instance_id() != old_panel_id:
+			source_panel = candidate
+			break
+	check(source_panel != null, "待领奖励来源窗口在旧窗口清理后出现")
+	if source_panel == null:
+		return
 	for button in source_panel.find_children("*", "Button", true, false):
+		if not button.has_meta("fate_source"):
+			continue
 		if button.get_meta("fate_source", null) != null:
-			button.pressed.emit()
+			(button as Button).pressed.emit()
 			return
 	source_panel.cancel()

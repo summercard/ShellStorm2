@@ -43,6 +43,19 @@ const COLLECTION_ARC_HEIGHT_M := 0.45
 ##   嫌小 → 抬 LABEL_FONT_SIZE（字号）或 LABEL_PIXEL_SIZE（世界尺寸/像素比）
 ##   嫌高/嫌低 → 改 LABEL_HEIGHT_M（相对物品原点的米数）
 ##   嫌糊 → 抬 LABEL_OUTLINE_SIZE（黑描边宽度）
+## ⚠️ 淡出硬约束（业主 2026-10-10）：Label3D 的描边不吃 modulate 的 alpha。
+##    只把 `modulate.a` 归零，正文没了、**描边原地留下** —— 表现就是「物品被捡走后
+##    地上还压着一块黑色字」。淡出必须走 `GeometryInstance3D.transparency`
+##    （0=不透明 / 1=全透明）：它由渲染器统一相乘，正文与描边一起走，且可连续插值。
+##    静态门禁：`scripts/check_label3d_fade.py`，违反会红。
+##
+## —— 名牌显示策略（业主 2026-10-10「把掉落的金币上面的文字『魂』隐藏掉」）——
+## 货币是高频掉落 + 拾取后 HUD 已有「取得 N 魂」提示 ⇒ 地面再挂一个「魂」字既冗余又密集。
+## 改这一个常量即可切换，别去别处复刻判定：
+##   "all"         —— 所有掉落都显示名字（原行为）
+##   "no_currency" —— 只有货币不显示（当前）
+##   "none"        —— 所有掉落都不显示
+const LABEL_DISPLAY_POLICY := "no_currency"
 const LABEL_HEIGHT_M := 1.05
 const LABEL_FONT_SIZE := 30
 const LABEL_PIXEL_SIZE := 0.010
@@ -161,7 +174,9 @@ func accept_pickup(target: Node3D = null) -> void:
 	motion.tween_property(_visual, "position", _visual.position + Vector3(0, 1.18, 0), PICKUP_ANIMATION_DURATION)
 	motion.tween_property(_visual, "rotation:y", _visual.rotation.y + TAU * 1.65, PICKUP_ANIMATION_DURATION)
 	if _label != null:
-		motion.tween_property(_label, "modulate:a", 0.0, PICKUP_ANIMATION_DURATION * 0.72)
+		# 名牌淡出必须走 transparency（见上方淡出硬约束）：描边不吃 modulate 的 alpha，
+		# 只淡正文会让黑描边单独留在原地。
+		motion.tween_property(_label, "transparency", 1.0, PICKUP_ANIMATION_DURATION * 0.72)
 	var scale_tween := create_tween()
 	scale_tween.tween_property(_visual, "scale", start_scale * 1.18, 0.09).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	scale_tween.tween_property(_visual, "scale", start_scale * 0.04, PICKUP_ANIMATION_DURATION - 0.09).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -174,7 +189,7 @@ func _start_collection_animation() -> void:
 	_collection_start = _visual.global_position
 	_collection_start_scale = _visual.scale
 	if _label != null:
-		_label.modulate.a = 0.0
+		_label.transparency = 1.0
 
 
 func _process_collection(delta: float) -> void:
@@ -256,6 +271,8 @@ func _build_visual(color: Color) -> void:
 	_pickup_collision_shape.position.y = 0.48
 	_pickup_collision_shape.shape = shape
 	add_child(_pickup_collision_shape)
+	if not _should_show_name_label():
+		return
 	_label = Label3D.new()
 	_label.name = "LootLabel"
 	_label.position = Vector3(0, LABEL_HEIGHT_M, 0)
@@ -274,6 +291,33 @@ func _build_visual(color: Color) -> void:
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.no_depth_test = true
 	add_child(_label)
+
+
+## 货币判定。`__currency__` 与 `is_currency` 是同一口径，与
+## Dungeon3D._on_ground_loot_requested / ItemModelFactory3D.get_model_kind 保持一致。
+## 做成 static：验收场景直接调它取期望值，不必把策略复刻到测试里。
+static func is_currency_item_data(data: Dictionary) -> bool:
+	return bool(data.get("is_currency", false)) or str(data.get("id", "")) == "__currency__"
+
+
+## 指定掉落是否挂头顶名牌。策略见 LABEL_DISPLAY_POLICY。
+## 这是**唯一真源** —— 运行时与验收场景都调这里，别在别处再写一份判定。
+static func should_show_name_label_for(data: Dictionary) -> bool:
+	match LABEL_DISPLAY_POLICY:
+		"none":
+			return false
+		"no_currency":
+			return not is_currency_item_data(data)
+		_:
+			return true
+
+
+func _is_currency_item() -> bool:
+	return is_currency_item_data(item_data)
+
+
+func _should_show_name_label() -> bool:
+	return should_show_name_label_for(item_data)
 
 
 func get_model_snapshot() -> Dictionary:
@@ -301,8 +345,13 @@ func get_model_snapshot() -> Dictionary:
 		"base_size_multiplier": CURRENT_BASE_SIZE_MULTIPLIER,
 		"visual_scale": _visual.scale if _visual != null else Vector3.ZERO,
 		"visual_world_position": _visual.global_position if _visual != null and _visual.is_inside_tree() else Vector3.ZERO,
-		# 头顶名牌朝向：与 `Enemy3D.overhead_health_camera_billboard` 同一口径，
+		# 名牌朝向：与 `Enemy3D.overhead_health_camera_billboard` 同一口径，
 		# 让门禁能直接断言「俯视镜头读得到名字」，而不是只靠肉眼。
+		# 注意：`label_shown == false`（如货币）时，下面三项一律为 false/""，
+		# 那是「根本没挂名牌」，不是「挂了但没 billboard」。
+		"label_shown": _label != null,
+		"label_display_policy": LABEL_DISPLAY_POLICY,
+		"is_currency": _is_currency_item(),
 		"label_camera_billboard": _label != null and _label.billboard == BaseMaterial3D.BILLBOARD_ENABLED,
 		"label_no_depth_test": _label != null and _label.no_depth_test,
 		"label_height_m": LABEL_HEIGHT_M,

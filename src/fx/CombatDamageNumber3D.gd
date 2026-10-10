@@ -67,5 +67,6 @@ func _start_animation(amount: int, critical: bool) -> void:
 	tween.set_parallel(true)
 	tween.tween_property(self, "position", target_position, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "scale", Vector3.ONE * 0.82, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(_label, "modulate:a", 0.0, duration).set_delay(duration * 0.42).set_trans(Tween.TRANS_SINE)
+	# Label3D 淡出必须走 transparency：只淡 modulate.a 会留下冷青描边残影（业主 2026-10-10）。
+	tween.tween_property(_label, "transparency", 1.0, duration).set_delay(duration * 0.42).set_trans(Tween.TRANS_SINE)
 	tween.chain().tween_callback(queue_free)

@@ -49,7 +49,9 @@ func _on_body_entered(body: Node3D) -> void:
 	motion.tween_property(_visual, "position", _visual.position + Vector3(0, 1.24, 0), PICKUP_ANIMATION_DURATION)
 	motion.tween_property(_visual, "rotation:y", _visual.rotation.y + TAU * 1.8, PICKUP_ANIMATION_DURATION)
 	if _label != null:
-		motion.tween_property(_label, "modulate:a", 0.0, PICKUP_ANIMATION_DURATION * 0.72)
+		# Label3D 淡出必须走 transparency：描边不吃 modulate 的 alpha，
+		# 只淡正文会让黑描边留在原地。口径同 GroundLootPickup3D（业主 2026-10-10）。
+		motion.tween_property(_label, "transparency", 1.0, PICKUP_ANIMATION_DURATION * 0.72)
 	var scale_tween := create_tween()
 	scale_tween.tween_property(_visual, "scale", start_scale * 1.20, 0.09).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	scale_tween.tween_property(_visual, "scale", start_scale * 0.04, PICKUP_ANIMATION_DURATION - 0.09).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
