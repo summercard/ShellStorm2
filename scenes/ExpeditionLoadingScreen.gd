@@ -354,6 +354,8 @@ func _build_showcase() -> void:
 	_showcase_viewport.size = SHOWCASE_SIZE
 	_showcase_viewport.transparent_bg = true
 	_showcase_viewport.own_world_3d = true
+	# 该视口只负责读取界面的视觉展示，不应接收键盘/手柄输入。
+	_showcase_viewport.gui_disable_input = true
 	_showcase_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_showcase_viewport.msaa_3d = Viewport.MSAA_2X
 	container.add_child(_showcase_viewport)

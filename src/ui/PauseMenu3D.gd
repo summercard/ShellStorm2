@@ -58,6 +58,7 @@ const DEVICE_MODE_LABELS := ["自动跟随", "锁定键鼠", "锁定手柄"]
 var _toggle_nodes: Dictionary = {}
 var _syncing_controls := false
 var _reset_in_progress := false
+var _return_to_base_request_in_progress := false
 var _main_entry_request_id := -1
 ## 是否以「主页设置」上下文复用本覆盖层（主代理临时 reparent 到主页 CanvasLayer）。
 var _entry_settings_context := false
@@ -75,7 +76,8 @@ func _ready() -> void:
 	resume_button.pressed.connect(resume_game)
 	graphics_button.pressed.connect(_show_graphics_page)
 	controls_button.pressed.connect(_show_controls_page)
-	return_to_base_button.pressed.connect(_request_return_to_base)
+	# 失败态返城会替换整个场景；等 GUI 输入派发结束后再执行。
+	return_to_base_button.pressed.connect(_request_return_to_base, CONNECT_DEFERRED)
 	reset_game_save_button.pressed.connect(_request_game_save_reset)
 	reset_game_save_dialog.confirmed.connect(_confirm_game_save_reset)
 	back_button.pressed.connect(_show_main_page)
@@ -389,12 +391,21 @@ func get_return_to_base_availability() -> Dictionary:
 
 
 func _request_return_to_base() -> void:
+	if _return_to_base_request_in_progress:
+		return
+	_return_to_base_request_in_progress = true
+	return_to_base_button.disabled = true
 	return_to_base_requested.emit()
 	var result := ReturnAction.request(_get_game_root())
+	if not is_inside_tree():
+		return
 	return_to_base_resolved.emit(result)
 	if bool(result.get("success", false)):
+		_return_to_base_request_in_progress = false
 		resume_game()
 		return
+	_return_to_base_request_in_progress = false
+	return_to_base_button.disabled = false
 	return_to_base_hint.text = str(result.get("reason", "返回基地中心失败"))
 	return_to_base_hint.modulate = Color(1.0, 0.48, 0.34)
 

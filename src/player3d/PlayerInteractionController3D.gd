@@ -53,11 +53,14 @@ func _exit_tree() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("interact"):
 		return
-	if request_interaction():
+	request_interaction(true)
+
+
+func request_interaction(consume_input: bool = false) -> bool:
+	if consume_input and is_inside_tree():
+		# provider 可能在当前调用栈内同步切换场景；必须先消费输入，
+		# 避免旧场景被摘除后仍把同一个事件继续送入旧 Viewport。
 		get_viewport().set_input_as_handled()
-
-
-func request_interaction() -> bool:
 	if not _can_player_interact():
 		_clear_focus()
 		return false
@@ -69,8 +72,9 @@ func request_interaction() -> bool:
 	var performed := bool(_focused_provider.call(
 		"perform_interaction", player, _focused_candidate.duplicate()
 	))
-	if performed:
+	if performed and is_inside_tree() and is_instance_valid(_focused_provider):
 		# 交互成功的一次性反馈：圆点放大脉冲。读条类交互由进度环触顶自己触发。
+		# provider 可能在上面的同步调用中切换场景；脱离树后不要再触碰旧圆点。
 		pulse_dot(_focused_provider)
 	return performed
 

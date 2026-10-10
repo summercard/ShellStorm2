@@ -16,6 +16,7 @@ const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
 @onready var status_label: Label = $HUD/StatusPanel/StatusLabel
 
 var _active_menu: CanvasLayer = null
+var _scene_transitioning := false
 
 
 func _ready() -> void:
@@ -27,10 +28,12 @@ func _ready() -> void:
 
 	for facility in get_tree().get_nodes_in_group("base_facility"):
 		if facility is BaseFacility3D and is_ancestor_of(facility):
-			facility.activated.connect(_on_facility_activated)
+			# 设施可能换场景，延迟到本次输入派发结束后处理。
+			facility.activated.connect(_on_facility_activated, CONNECT_DEFERRED)
 	for entrance in get_tree().get_nodes_in_group("dungeon_entrance"):
 		if entrance is DungeonEntrance3D and is_ancestor_of(entrance):
-			entrance.activated.connect(_on_dungeon_entrance_activated)
+			# 入口也会直接替换整棵场景树；不要在 unhandled_input 调用栈内同步摘除旧 Viewport。
+			entrance.activated.connect(_on_dungeon_entrance_activated, CONNECT_DEFERRED)
 	_refresh_base_status()
 	_refresh_facilities()
 	_restore_world_position()
@@ -97,25 +100,33 @@ func _open_menu(scene_path: String, facility: BaseFacility3D = null) -> void:
 
 
 func _load_scene(scene_path: String, floor: int = 0) -> void:
+	if _scene_transitioning:
+		return
 	if scene_path.is_empty() or not ResourceLoader.exists(scene_path, "PackedScene"):
 		status_label.text = "目标地图尚未配置。"
 		return
+	_scene_transitioning = true
 	if floor > 0:
 		LevelSelect.selected_floor = floor
 		LevelSelect.selection_made = true
 	var change_error := get_tree().change_scene_to_file(scene_path)
 	if change_error != OK:
+		_scene_transitioning = false
 		push_error("[BaseWorld3D] Scene transition failed: %s" % error_string(change_error))
 
 
 func _on_dungeon_entrance_activated(entrance: DungeonEntrance3D) -> void:
+	if _scene_transitioning:
+		return
 	if entrance.target_scene_path.is_empty() or not ResourceLoader.exists(entrance.target_scene_path, "PackedScene"):
 		status_label.text = "这个入口仍被封锁。"
 		return
+	_scene_transitioning = true
 	LevelSelect.prepare_dungeon_entry(entrance.target_floor, entrance.entrance_id)
 	status_label.text = "进入 %s……" % entrance.display_name
 	var change_error := get_tree().change_scene_to_file(entrance.target_scene_path)
 	if change_error != OK:
+		_scene_transitioning = false
 		push_error("[BaseWorld3D] Dungeon transition failed: %s" % error_string(change_error))
 
 
