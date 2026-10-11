@@ -1,0 +1,43 @@
+{
+  "narrative_id": "nar_tower_opening_02_lobby",
+  "schema_version": 1,
+  "priority": 0,
+  "trigger": {
+    "kind": "event",
+    "on": "room_entered",
+    "filter": {
+      "room_id": "floor_01_entry"
+    },
+    "once": "run"
+  },
+  "duration": 3.5,
+  "cues": [
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "floor_01_entry",
+      "kind": "ranged_caster",
+      "count": 3,
+      "spawn_key": "nar_tower_opening_02_lobby:police",
+      "axis": "z",
+      "spread": 3.0,
+      "stagger_m": 2.8,
+      "point_room": "floor_01_entry",
+      "point_offset": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "at": 0.1,
+      "do": "actor.say",
+      "text": "天啊！",
+      "hold": 3.4
+    },
+    {
+      "at": 3.5,
+      "do": "flow.end"
+    }
+  ]
+}

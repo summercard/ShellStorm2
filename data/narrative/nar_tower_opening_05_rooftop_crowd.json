@@ -1,0 +1,259 @@
+{
+  "narrative_id": "nar_tower_opening_05_rooftop_crowd",
+  "schema_version": 1,
+  "priority": 0,
+  "trigger": {
+    "kind": "point",
+    "point_anchor": "rooftop_stair_exit",
+    "radius": 3,
+    "height_tolerance": 1.2,
+    "once": "run"
+  },
+  "duration": 0.3,
+  "cues": [
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "ranged_caster",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:police_0",
+      "point_room": "start",
+      "point_offset": [
+        -20,
+        0,
+        -5
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "ranged_caster",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:police_1",
+      "point_room": "start",
+      "point_offset": [
+        -10,
+        0,
+        -12
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "ranged_caster",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:police_2",
+      "point_room": "start",
+      "point_offset": [
+        0,
+        0,
+        -12
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "ranged_caster",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:police_3",
+      "point_room": "start",
+      "point_offset": [
+        10,
+        0,
+        -18
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "ranged_caster",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:police_4",
+      "point_room": "start",
+      "point_offset": [
+        19,
+        0,
+        -18
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_0",
+      "point_room": "start",
+      "point_offset": [
+        -25,
+        0,
+        -2
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_1",
+      "point_room": "start",
+      "point_offset": [
+        -20,
+        0,
+        -12
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_2",
+      "point_room": "start",
+      "point_offset": [
+        -15,
+        0,
+        -4
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_3",
+      "point_room": "start",
+      "point_offset": [
+        -9,
+        0,
+        -19
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_4",
+      "point_room": "start",
+      "point_offset": [
+        -3,
+        0,
+        -6
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_5",
+      "point_room": "start",
+      "point_offset": [
+        3,
+        0,
+        -19
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_6",
+      "point_room": "start",
+      "point_offset": [
+        8,
+        0,
+        -8
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_7",
+      "point_room": "start",
+      "point_offset": [
+        13,
+        0,
+        -14
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_8",
+      "point_room": "start",
+      "point_offset": [
+        24,
+        0,
+        -14
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_rooftop_crowd:small_9",
+      "point_room": "start",
+      "point_offset": [
+        28,
+        0,
+        -21
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0.3,
+      "do": "flow.end"
+    }
+  ]
+}

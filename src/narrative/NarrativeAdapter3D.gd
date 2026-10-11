@@ -69,6 +69,11 @@ var _player_input_taken := false
 ## 剧情最近一次经 `ui.subtitle` / `ui.hint` / `ui.dialogue` 摆上去的 run_id。
 ## 收口时据此判断「底栏现在这条还是不是我摆的」⇒ 是才关，不是就不动（见 `_restore_dialogue`）。
 var _narrative_dialogue_run := ""
+var _shake_camera: Camera3D = null
+var _shake_rest := Vector2.ZERO
+var _shake_time := 0.0
+var _shake_duration := 0.0
+var _shake_amplitude := 0.0
 
 
 func bind(tree: SceneTree) -> void:
@@ -77,6 +82,7 @@ func bind(tree: SceneTree) -> void:
 
 ## 导演每帧调用：推进相机与朝向的过渡并落到场景上。
 func tick(delta: float) -> void:
+	_tick_camera_shake(delta)
 	if _camera_override_active:
 		_advance_channel(_camera_channel, delta)
 		_advance_channel(_camera_yaw_channel, delta)
@@ -171,6 +177,13 @@ func dungeon_node() -> Node:
 ## 房间索引：按 `room_id` 属性在场景树里反射式收集，按**地牢根**缓存。
 ## 用遍历而不是路径字面量 —— 楼层/房间是运行时生成的，路径本来就不稳定。
 ## 收集根优先用已绑定的地牢（见 `bind_dungeon`），拿不到才退回 `current_scene`。
+func scene_anchor(anchor_id: String) -> Variant:
+	var dungeon := dungeon_node()
+	if dungeon != null and dungeon.has_method("narrative_anchor"):
+		return dungeon.call("narrative_anchor", anchor_id)
+	return null
+
+
 func room_node(room_id: String) -> Node3D:
 	if room_id.is_empty():
 		return null
@@ -286,6 +299,8 @@ func _player_instruction(action: String, params: Dictionary) -> Dictionary:
 			return _player_invulnerable(params)
 		"teleport":
 			return _player_teleport(params)
+		"walk_to":
+			return _player_walk_to(params)
 	return _degraded("player.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
 
 
@@ -322,6 +337,7 @@ func is_actor_facing_overridden() -> bool:
 ## 归还入口：交回独占权，再请游戏侧**重新裁决**一次 —— 模态 / 背包 / 开场页各自的
 ## 需求都要重新算进去。绝不写回快照值：写回快照 = 替别的系统做决定。
 func _release_player_input() -> void:
+	_stop_player_walk()
 	_player_input_taken = false
 	var dungeon := dungeon_node()
 	if dungeon != null and dungeon.has_method("refresh_player_input_lock"):
@@ -354,6 +370,24 @@ func _player_invulnerable(params: Dictionary) -> Dictionary:
 	var before := bool(player.get("is_invincible"))
 	player.set("is_invincible", enabled)
 	return _done(Callable(self, "_player_invulnerable").bind({"enabled": before}))
+
+
+func _player_walk_to(params: Dictionary) -> Dictionary:
+	var player := player_node()
+	var target: Variant = _resolve_face_point(params)
+	if not _player_input_taken or player == null or not player.has_method("begin_narrative_walk"):
+		return _degraded("player.walk_to 需要剧情输入独占与玩家步行接口。")
+	if not (target is Vector3):
+		return _degraded("player.walk_to 目标锚点不可用。")
+	if not bool(player.call("begin_narrative_walk", target, float(params.get("duration", 2.4)), float(params.get("speed", 2.8)))):
+		return _failed("player.walk_to 被玩家状态拒绝。")
+	return _done(Callable(self, "_stop_player_walk"))
+
+
+func _stop_player_walk() -> void:
+	var player := player_node()
+	if player != null and player.has_method("end_narrative_walk"):
+		player.call("end_narrative_walk")
 
 
 func _player_teleport(params: Dictionary) -> Dictionary:
@@ -402,7 +436,45 @@ func _camera_instruction(action: String, params: Dictionary) -> Dictionary:
 			return _camera_pan(params)
 		"restore":
 			return _camera_restore(params)
+		"shake":
+			return _camera_shake(params)
 	return _degraded("camera.%s 尚未接通（见 08 文档 §5.2 指令表）。" % action)
+
+
+func _camera_shake(params: Dictionary) -> Dictionary:
+	var player := player_node()
+	if player == null:
+		return _degraded("camera.shake 找不到玩家。")
+	var camera := player.get("camera") as Camera3D
+	if camera == null:
+		return _degraded("camera.shake 找不到相机。")
+	if _shake_camera == null:
+		_shake_camera = camera
+		_shake_rest = Vector2(camera.h_offset, camera.v_offset)
+	_shake_time = 0.0
+	_shake_duration = maxf(0.01, float(params.get("duration", 0.65)))
+	_shake_amplitude = clampf(float(params.get("amplitude", 0.12)), 0.0, 0.5)
+	return _done(Callable(self, "_stop_camera_shake"))
+
+
+func _tick_camera_shake(delta: float) -> void:
+	if _shake_camera == null or not is_instance_valid(_shake_camera):
+		_shake_camera = null
+		return
+	_shake_time += delta
+	if _shake_time >= _shake_duration:
+		_stop_camera_shake()
+		return
+	var envelope := 1.0 - _shake_time / _shake_duration
+	_shake_camera.h_offset = _shake_rest.x + sin(_shake_time * 83.0) * _shake_amplitude * envelope
+	_shake_camera.v_offset = _shake_rest.y + sin(_shake_time * 107.0) * _shake_amplitude * 0.7 * envelope
+
+
+func _stop_camera_shake() -> void:
+	if _shake_camera != null and is_instance_valid(_shake_camera):
+		_shake_camera.h_offset = _shake_rest.x
+		_shake_camera.v_offset = _shake_rest.y
+	_shake_camera = null
 
 
 func _ensure_camera_override() -> bool:
@@ -544,6 +616,15 @@ func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
 	var player := player_node()
 	if player == null:
 		return
+	if params.has("pivot_anchor"):
+		var anchor: Variant = scene_anchor(str(params["pivot_anchor"]))
+		if anchor is Vector3:
+			_camera_pivot_point = anchor
+			_camera_pivot_mode = "point"
+			_start_camera_pivot_move(player, duration)
+		else:
+			_warn("camera.pivot_anchor 不可用，保持原枢轴。")
+		return
 	if params.has("pivot_m"):
 		var raw: Variant = params.get("pivot_m")
 		if raw is Array and (raw as Array).size() == 3:
@@ -637,10 +718,18 @@ func _apply_camera_pose() -> void:
 		return
 	var distance := maxf(CAMERA_MIN_DISTANCE_M, _camera_distance())
 	var center := _current_camera_pivot(player)
-	_camera.global_transform = Transform3D(
+	var desired := Transform3D(
 		orbit * elev_pivot * _camera_rest_basis,
 		center + offset.normalized() * distance
 	)
+	_camera.global_transform = _constrain_camera_pose(desired, center)
+
+
+func _constrain_camera_pose(desired: Transform3D, center: Vector3) -> Transform3D:
+	var dungeon := dungeon_node()
+	if dungeon != null and dungeon.has_method("constrain_narrative_camera_pose"):
+		return dungeon.call("constrain_narrative_camera_pose", desired, center) as Transform3D
+	return desired
 
 
 ## 「接管前俯角 → 目标俯角」的旋转。没有仰角需求时是单位阵（= 老行为）。
@@ -657,7 +746,11 @@ func _camera_elevation_pivot() -> Basis:
 ## 归还相机：先还原到接管前的精确位姿，再放权给玩法镜头。
 func release_camera_override() -> void:
 	if _camera != null and is_instance_valid(_camera) and _camera.is_inside_tree():
-		_camera.global_transform = _camera_rest_global
+		var player := player_node()
+		if player != null:
+			_camera.global_transform = _constrain_camera_pose(Transform3D(_camera_rest_basis, player.global_position + _camera_rest_offset), player.global_position)
+		else:
+			_camera.global_transform = _camera_rest_global
 	_camera_override_active = false
 	_camera = null
 	_camera_channel = {}
@@ -725,6 +818,8 @@ func _actor_say(params: Dictionary) -> Dictionary:
 ## 为什么要有这条：「对着地上的某件东西说」不能写死相对角度 ——
 ## 玩家出生朝向由鼠标决定、不确定，只有目标点反解出来的绝对方位才稳。
 func _resolve_face_point(params: Dictionary) -> Variant:
+	if params.has("to_anchor"):
+		return scene_anchor(str(params["to_anchor"]))
 	var raw_point: Variant = params.get("point_m", null)
 	if raw_point is Array and (raw_point as Array).size() == 3:
 		var point: Array = raw_point
@@ -1147,12 +1242,15 @@ func _scene_spawn(params: Dictionary) -> Dictionary:
 	var axis: Vector3 = layout["axis"]
 	var result: Variant = dungeon.call(
 		"narrative_spawn_enemies", room_id, kind, count, origin, axis,
-		float(params.get("spread", 1.5)), layout.get("stagger", Vector3.ZERO)
+		float(params.get("spread", 1.5)), layout.get("stagger", Vector3.ZERO),
+		{"spawn_key": str(params.get("spawn_key", "")), "stationary": bool(params.get("stationary", false)),
+		"placement": str(params.get("placement", "")), "max_adjustment_m": float(params.get("max_adjustment_m", 12.0))}
 	)
 	if result is int and int(result) > 0:
 		# 记下队列中心：相机枢轴 `pivot: "last_spawn"` 用它（作者不用写坐标）。
-		_has_last_spawn = true
-		_last_spawn_origin = origin
+		if bool(params.get("camera_target", true)):
+			_has_last_spawn = true
+			_last_spawn_origin = dungeon.call("narrative_spawn_origin", str(params.get("spawn_key", "")), origin) if dungeon.has_method("narrative_spawn_origin") else origin
 		# 刷新出来的怪是**已发生的效果**，收口时不回滚（08 文档 §6.4）：
 		# 玩家看完这句就要自己动手清场，怪在这里消失才是 bug。
 		return _ok()
@@ -1182,7 +1280,12 @@ func _spawn_layout(params: Dictionary) -> Dictionary:
 	var right := forward.cross(Vector3.UP).normalized()
 	var origin := Vector3.ZERO
 	var anchor_room := str(params.get("point_room", ""))
-	if not anchor_room.is_empty():
+	if params.has("point_anchor"):
+		var anchor: Variant = scene_anchor(str(params["point_anchor"]))
+		if not (anchor is Vector3):
+			return {}
+		origin = anchor
+	elif not anchor_room.is_empty():
 		var room := room_node(anchor_room)
 		if room == null:
 			return {}

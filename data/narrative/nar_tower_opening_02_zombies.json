@@ -34,7 +34,62 @@
       ],
       "axis": "z",
       "spread": 1.6,
-      "stagger_m": 1.4
+      "stagger_m": 1.4,
+      "spawn_key": "nar_tower_opening_02_zombies:original_five"
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "floor_01_main_02",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_02_zombies:stationary_0",
+      "stationary": true,
+      "camera_target": false,
+      "point_room": "floor_01_main_02",
+      "point_offset": [
+        13,
+        0,
+        3.8
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 6.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "floor_01_main_02",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_02_zombies:stationary_1",
+      "stationary": true,
+      "camera_target": false,
+      "point_room": "floor_01_main_02",
+      "point_offset": [
+        15,
+        0,
+        -3.8
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 6.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "floor_01_main_02",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_02_zombies:stationary_2",
+      "stationary": true,
+      "camera_target": false,
+      "point_room": "floor_01_main_02",
+      "point_offset": [
+        8.5,
+        0,
+        -5
+      ],
+      "placement": "room_floor",
+      "max_adjustment_m": 6.0
     },
     {
       "at": 0.1,

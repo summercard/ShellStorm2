@@ -1,0 +1,61 @@
+{
+  "narrative_id": "nar_tower_opening_05_bridge_fat",
+  "schema_version": 1,
+  "priority": 10,
+  "trigger": {
+    "kind": "point",
+    "point_anchor": "rooftop_bridge_approach",
+    "radius": 3,
+    "height_tolerance": 1.2,
+    "once": "run"
+  },
+  "duration": 3.5,
+  "cues": [
+    {
+      "at": 0,
+      "do": "player.lock_input",
+      "locked": true
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "ranged_caster",
+      "count": 5,
+      "spawn_key": "nar_tower_opening_05_bridge_fat:police",
+      "axis": "x",
+      "spread": 2.4,
+      "stagger_m": 5.0,
+      "point_anchor": "rooftop_bridge_guard",
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "start",
+      "kind": "fat_zombie03",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_05_bridge_fat:fat",
+      "point_anchor": "rooftop_bridge_guard",
+      "placement": "room_floor",
+      "max_adjustment_m": 12.0
+    },
+    {
+      "at": 0.1,
+      "do": "camera.focus",
+      "pivot": "last_spawn",
+      "distance": 9.5,
+      "duration": 1.2
+    },
+    {
+      "at": 2.3,
+      "do": "camera.restore",
+      "duration": 1.2
+    },
+    {
+      "at": 3.5,
+      "do": "flow.end"
+    }
+  ]
+}

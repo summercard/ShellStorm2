@@ -97,6 +97,9 @@ var dash_cooldown_timer := 0.0
 var is_dashing := false
 var is_invincible := false
 var input_locked := false
+var _narrative_walk_target := Vector3.ZERO
+var _narrative_walk_remaining := 0.0
+var _narrative_walk_speed := 2.8
 var _presentation_state := "idle"
 var _last_damage_amount := 0
 var _last_hit_direction := Vector3.ZERO
@@ -772,6 +775,40 @@ func _collect_aim_assist_candidates(aim_dir: Vector3) -> Array[Dictionary]:
 
 func set_test_move_direction(direction: Variant) -> void:
 	_test_move_direction = direction
+
+
+func begin_narrative_walk(target: Vector3, duration: float, speed: float) -> bool:
+	if not input_locked or current_hp <= 0 or not target.is_finite():
+		return false
+	_narrative_walk_target = target
+	_narrative_walk_remaining = maxf(0.1, duration)
+	_narrative_walk_speed = clampf(speed, 0.1, get_move_speed())
+	_set_presentation_state("moving")
+	return true
+
+
+func end_narrative_walk() -> void:
+	_narrative_walk_remaining = 0.0
+	velocity.x = 0.0
+	velocity.z = 0.0
+	if input_locked and current_hp > 0:
+		_set_presentation_state("locked")
+
+
+func tick_narrative_walk(delta: float) -> bool:
+	if _narrative_walk_remaining <= 0.0:
+		return false
+	_narrative_walk_remaining = maxf(0.0, _narrative_walk_remaining - delta)
+	var offset := _narrative_walk_target - global_position
+	offset.y = 0.0
+	if offset.length() <= 0.12 or _narrative_walk_remaining <= 0.0:
+		end_narrative_walk()
+		return false
+	var direction := offset.normalized()
+	last_move_direction = direction
+	aim_yaw = atan2(-direction.x, -direction.z)
+	move_grounded(direction * minf(_narrative_walk_speed, offset.length() / maxf(delta, 0.001)), delta, false)
+	return true
 
 
 func set_input_locked(locked: bool) -> void:

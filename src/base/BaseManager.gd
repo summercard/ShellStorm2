@@ -514,6 +514,11 @@ func get_facility_snapshots() -> Array[Dictionary]:
 
 ## — 权威世界时钟 / 基地能源 —
 
+func get_world_time_start_unix_seconds() -> int:
+	_ensure_data()
+	return data.world_time_start_unix_seconds
+
+
 func get_world_time_elapsed_game_seconds() -> float:
 	_ensure_data()
 	return maxf(0.0, data.world_time_elapsed_game_seconds)
@@ -745,7 +750,7 @@ func commit_run_settlement(request: Dictionary) -> Dictionary:
 				"insurance_slot": maxi(0, int(entry.get("insurance_slot", data.pending_insurance_slots.size()))),
 				"insured_at": int(entry.get("insured_at", Time.get_unix_time_from_system())),
 			})
-	data.active_run_snapshot.clear()
+	data.active_run_snapshot = (request.get("return_checkpoint", {}) as Dictionary).duplicate(true)
 	ShopService.append_completed(data.completed_transaction_ids, transaction_id)
 	if save_base("run_settlement:%s" % ("success" if success else "death")):
 		return {

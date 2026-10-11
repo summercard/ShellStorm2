@@ -93,7 +93,7 @@ func get_elapsed_game_seconds() -> float:
 
 
 func get_time_snapshot() -> Dictionary:
-	return Domain.get_snapshot(_elapsed_game_seconds)
+	return Domain.get_snapshot(_elapsed_game_seconds, BaseManager.get_world_time_start_unix_seconds())
 
 
 func get_solar_snapshot() -> Dictionary:
@@ -103,6 +103,7 @@ func get_solar_snapshot() -> Dictionary:
 func get_persistence_snapshot() -> Dictionary:
 	return {
 		"elapsed_game_seconds": _elapsed_game_seconds,
+		"world_time_start_unix_seconds": BaseManager.get_world_time_start_unix_seconds(),
 		"clock_running": clock_running,
 		"real_seconds_per_game_day": Domain.REAL_SECONDS_PER_GAME_DAY,
 	}

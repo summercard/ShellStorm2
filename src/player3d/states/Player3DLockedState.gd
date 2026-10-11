@@ -13,6 +13,8 @@ func physics_update(delta: float) -> void:
 		_go("dead")
 		return
 	_tick_dash_cooldown(delta)
+	if bool(player.call("tick_narrative_walk", delta)):
+		return
 	if _move_grounded(Vector3.ZERO, delta):
 		return
 	if not bool(player.get("input_locked")):

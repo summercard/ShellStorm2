@@ -3279,11 +3279,14 @@ func narrative_player_bark() -> CharacterBark3D:
 func narrative_spawn_enemies(
 	room_id: String, kind: String, count: int, origin: Vector3,
 	axis: Vector3 = Vector3.RIGHT, spread: float = 1.6,
-	stagger: Vector3 = Vector3.ZERO
+	stagger: Vector3 = Vector3.ZERO, options: Dictionary = {}
 ) -> int:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or count <= 0:
 		return 0
+	var spawn_key := str(options.get("spawn_key", ""))
+	if not spawn_key.is_empty() and _narrative_spawned_keys.has(spawn_key):
+		return count # 已刷/已死均视作已完成，镜头仍可按该锚点复演。
 	var base_type: Dictionary = MonsterInjector.BASE_ENEMY_TYPES.get(kind, {})
 	if base_type.is_empty():
 		push_warning("[Dungeon3D] 剧情刷怪：未知怪物 kind『%s』。" % kind)
@@ -3304,14 +3307,56 @@ func narrative_spawn_enemies(
 			"damage": int(base_type.get("damage_base", 5)),
 			"speed": float(base_type.get("speed", 60.0)),
 			"narrative_spawned": true,
+			"narrative_stationary": bool(options.get("stationary", false)),
+			"narrative_placement": str(options.get("placement", "")),
+			"persistent_id": "%s:%d" % [spawn_key if not spawn_key.is_empty() else "narrative:%s:%d" % [room_id, (_enemy_nodes_by_room.get(room_id, []) as Array).size()], index],
 		})
 		# 交错：相邻两只沿垂直方向往两边让开一点，别站成一条笔直的队。
 		var lateral_stagger := stagger * (0.5 if index % 2 == 1 else -0.5)
 		positions.append(
 			origin + flat_axis * ((float(index) - row) * spread) + lateral_stagger
 		)
+	if str(options.get("placement", "")) == "room_floor":
+		var requested: Array[Vector3] = []
+		requested.assign(positions)
+		var occupied: Array[Vector3] = []
+		for enemy in _enemy_nodes_by_room.get(room_id, []) as Array:
+			if is_instance_valid(enemy) and enemy is Enemy3D and enemy.ai_state != "dead":
+				occupied.append(enemy.global_position)
+		var safe := room.resolve_narrative_floor_positions(requested, occupied, maxf(0.0, float(options.get("max_adjustment_m", 12.0))))
+		if safe.size() != count:
+			push_warning("[Dungeon3D] 剧情刷怪没有同层安全落点：%s / %s" % [room_id, spawn_key])
+			return 0
+		positions.assign(safe)
 	# additive=true：剧情刷的怪**加**在房间原有敌人之上，不覆盖存活账。
-	return maxi(0, _spawn_enemy_batch(room, configs, true, false, positions))
+	var before_nodes: Array = (_enemy_nodes_by_room.get(room_id, []) as Array).duplicate()
+	var spawned := maxi(0, _spawn_enemy_batch(room, configs, true, false, positions))
+	if spawned == count:
+		if not spawn_key.is_empty():
+			_narrative_spawned_keys[spawn_key] = true
+		_capture_room_runtime_state(room_id)
+		return spawned
+	# 原子批次：失败不留半批，重试不会复制已成功的几只。
+	for enemy in _enemy_nodes_by_room.get(room_id, []) as Array:
+		if enemy not in before_nodes and is_instance_valid(enemy):
+			enemy.queue_free()
+	_enemy_nodes_by_room[room_id] = before_nodes
+	_alive_by_room[room_id] = maxi(0, int(_alive_by_room.get(room_id, 0)) - spawned)
+	return 0
+
+
+## 镜头目标取实际生成的批次中心，避免安全落点调整后镜头仍对着旧坐标。
+func narrative_spawn_origin(spawn_key: String, fallback: Vector3) -> Vector3:
+	if spawn_key.is_empty():
+		return fallback
+	var total := Vector3.ZERO
+	var count := 0
+	for nodes in _enemy_nodes_by_room.values():
+		for enemy in nodes as Array:
+			if is_instance_valid(enemy) and enemy is Enemy3D and enemy.get_persistent_id().begins_with(spawn_key + ":"):
+				total += enemy.global_position
+				count += 1
+	return total / float(count) if count > 0 else fallback
 
 
 ## 剧情撤怪：清掉本房**剧情生成**的怪。按 `narrative_spawned` 元数据认领，
@@ -6151,10 +6196,12 @@ func _restore_room_runtime_state(room_id: String) -> void:
 				if str(enemy_state.get("persistent_id", "")) == persistent_id:
 					(value as Enemy3D).import_runtime_state(enemy_state)
 					break
-	if live_enemies.is_empty() and not room.cleared:
+	if live_enemies.is_empty():
 		for runtime_value in state.get("enemies", []):
 			var enemy_state := runtime_value as Dictionary
 			var enemy_data := (enemy_state.get("enemy_data", {}) as Dictionary).duplicate(true)
+			if room.cleared and not bool(enemy_data.get("narrative_spawned", false)):
+				continue
 			if enemy_data.is_empty():
 				enemy_data = {
 					"enemy_type": str(enemy_state.get("enemy_kind", "melee_chaser")),
@@ -6167,6 +6214,8 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			enemy.room_id = room_id
 			$ActiveEnemies.add_child(enemy)
 			enemy.configure_from_enemy_data(enemy_data)
+			if bool(enemy_data.get("narrative_spawned", false)):
+				enemy.set_meta("narrative_spawned", true)
 			enemy.set_meta("fate_kill_currency", int(enemy_data.get("fate_kill_currency", 0)))
 			enemy.state_changed.connect(_on_fate_enemy_state_changed.bind(enemy))
 			enemy.killed.connect(_on_enemy_killed)
@@ -6180,7 +6229,30 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			if enemy.enemy_kind == "boss":
 				_show_boss_hud(enemy)
 	_enemy_nodes_by_room[room_id] = live_enemies
+	# 仅修复存活剧情怪的非法主层落点；兼容修复前原地怪/天台怪的快照。
+	# 已合法的怪、血量与持久ID保持原值，快照里不存在的死怪不会被补回。
+	var repaired_narrative_position := false
+	for value in live_enemies:
+		var enemy := value as Enemy3D
+		if not bool(enemy.enemy_data.get("narrative_spawned", false)):
+			continue
+		var uses_room_floor := str(enemy.enemy_data.get("narrative_placement", "")) == "room_floor" or bool(enemy.enemy_data.get("narrative_stationary", false)) or room_id == "start"
+		if not uses_room_floor or room.is_narrative_floor_position_valid(enemy.global_position):
+			continue
+		var occupied: Array[Vector3] = []
+		for other in live_enemies:
+			if other != enemy:
+				occupied.append((other as Enemy3D).global_position)
+		var safe := room.resolve_narrative_floor_positions([enemy.global_position], occupied)
+		if not safe.is_empty():
+			enemy.global_position = safe[0]
+			enemy.velocity = Vector3.ZERO
+			repaired_narrative_position = true
+		else:
+			push_warning("[Dungeon3D] 无法修复剧情怪快照落点：%s" % enemy.get_persistent_id())
 	_alive_by_room[room_id] = live_enemies.size() + _reserved_spawn_count(room_id)
+	if repaired_narrative_position:
+		_capture_room_runtime_state(room_id)
 	call_deferred("_flush_reserved_room_spawns", room_id)
 	if room_id == _current_room_id and not room.cleared:
 		_schedule_room_wave_intermission(room_id)
@@ -7432,13 +7504,13 @@ func _show_death_confirmation_dialog() -> void:
 	title.add_theme_color_override("font_color", Color(1.0, 0.34, 0.28))
 	box.add_child(title)
 	var detail := Label.new()
-	detail.text = "未保险物资将按死亡规则结算。确认后返回 99F 基地中点。"
+	detail.text = "未保险物资将按死亡规则结算。确认后返回 %s。" % _death_return_location_text()
 	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	detail.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
 	box.add_child(detail)
 	var confirm := Button.new()
-	confirm.text = "确认结算并返回基地"
+	confirm.text = _death_return_button_text()
 	confirm.custom_minimum_size = Vector2(0, 52)
 	UIStyleFactory.apply_button_style(
 		confirm,
@@ -7450,6 +7522,14 @@ func _show_death_confirmation_dialog() -> void:
 	_death_dialog = overlay
 	confirm.grab_focus()
 	_sync_player_input_lock()
+
+
+func _death_return_location_text() -> String:
+	return "99F 基地中点"
+
+
+func _death_return_button_text() -> String:
+	return "确认结算并返回基地"
 
 
 func _confirm_death_return() -> void:
@@ -7502,6 +7582,7 @@ func _finish_run(success: bool) -> void:
 			"extraction_points": _run_value if success else 0,
 			"extraction_loot": _run_loot if success else [],
 			"insurance_saved": settlement.get("insurance_saved", []) if not success else [],
+			"return_checkpoint": _build_settlement_return_checkpoint(),
 		}) as Dictionary
 		if _absorb_duplicate_settlement(commit):
 			# 本次行动已经结算过：内存里刚做的那套改动必须整体撤销，
@@ -7573,6 +7654,10 @@ func _absorb_duplicate_settlement(commit: Dictionary) -> bool:
 func _hold_player_after_settlement() -> void:
 	if player != null and is_instance_valid(player):
 		player.hold_post_settlement_invulnerability()
+
+
+func _build_settlement_return_checkpoint() -> Dictionary:
+	return {}
 
 
 func _request_return_entry_context(success: bool) -> int:

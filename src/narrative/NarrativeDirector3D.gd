@@ -223,6 +223,8 @@ func _evaluate_event(event_name: String, room_id: String) -> void:
 ## **惰性解析**：房间是运行时生成的，`arm()` 那一刻它还不存在 —— 解出后缓存进登记表。
 ## 解不出（房间还没建/房间 id 写错）就返回 null，本轮跳过，不误触发。
 func _resolve_point_origin(entry: Dictionary) -> Variant:
+	if entry.has("point_anchor"):
+		return _adapter.scene_anchor(str(entry["point_anchor"]))
 	if entry.has("point"):
 		return entry.get("point")
 	var room_id := str(entry.get("point_room", ""))
@@ -521,6 +523,8 @@ func _occupancy_label(verb: String) -> String:
 			return "player.invulnerable"
 		"fx.music", "fx.music_push":
 			return "music"
+	if verb == "camera.shake":
+		return "camera.shake"
 	if verb.begins_with("camera."):
 		return "camera"
 	if verb.begins_with("actor.face"):

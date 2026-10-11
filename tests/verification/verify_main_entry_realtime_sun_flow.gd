@@ -87,7 +87,7 @@ func _verify_entry_mouse_aim(failures: Array[String]) -> void:
 
 
 func _elapsed_from_start_hour(hour: float) -> float:
-	return fposmod(hour - 17.0, 24.0) * 3600.0
+	return fposmod(hour - 9.0, 24.0) * 3600.0
 
 
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:

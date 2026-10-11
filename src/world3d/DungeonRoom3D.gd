@@ -371,6 +371,8 @@ const SPAWN_BOX_WALL_RECESS_TILES := 1
 var _spawn_candidates: Array[Vector3] = []
 var _spawn_edge_candidates: Array[bool] = []
 var _spawn_blockers: Array[AABB] = []
+var _narrative_spawn_probe_frame := -1
+var _narrative_spawn_detail_id := 0
 var _spawn_available: Array[int] = []
 # 区块壳体地砖格心（5m 模数格）的半宽与命中容差。非矩形房（L / U / 工字桥）的凹口在
 # 摆位阶段就被 `point_in_polygon` 剔掉了砖，「格心集合」因此就是房内可用点的真源；
@@ -4930,6 +4932,86 @@ func _spawn_obstacle_free(point: Vector3) -> bool:
 	var radius := _spawn_clearance()
 	for bounds in _spawn_blockers:
 		if Rect2(Vector2(bounds.position.x, bounds.position.z), Vector2(bounds.size.x, bounds.size.z)).grow(radius).has_point(Vector2(point.x, point.z)):
+			return false
+	return true
+
+
+## 剧情主层落点：复用地砖覆盖和实际设施障碍，额外验证同层物理承重。
+## 搜索仅在请求附近进行；绝不把楼下地面或房间中心当作兜底。
+func resolve_narrative_floor_positions(
+	requested: Array[Vector3], occupied: Array[Vector3], max_adjustment_m: float = 12.0
+) -> Array[Vector3]:
+	_prepare_narrative_spawn_space()
+	var result: Array[Vector3] = []
+	var used := occupied.duplicate()
+	for requested_world in requested:
+		var origin := to_local(requested_world)
+		origin.y = 0.0
+		var candidates: Array[Vector3] = [origin]
+		var nearby: Array[Vector3] = []
+		for candidate in _spawn_candidates:
+			if candidate.distance_squared_to(origin) <= max_adjustment_m * max_adjustment_m:
+				nearby.append(candidate)
+		nearby.sort_custom(func(a: Vector3, b: Vector3) -> bool:
+			return a.distance_squared_to(origin) < b.distance_squared_to(origin))
+		candidates.append_array(nearby)
+		var chosen := Vector3.INF
+		for candidate in candidates:
+			if not _spawn_floor_contains(candidate, _spawn_clearance()) or not _spawn_obstacle_free(candidate):
+				continue
+			var world_point := to_global(candidate)
+			var separated := true
+			for previous in used:
+				if absf(previous.y - world_point.y) < 1.0 and Vector2(previous.x - world_point.x, previous.z - world_point.z).length() < _spawn_clearance() * 2.0 + .1:
+					separated = false
+					break
+			if not separated:
+				continue
+			if not _narrative_floor_supported(world_point):
+				continue
+			chosen = world_point + Vector3.UP * .05
+			break
+		if not chosen.is_finite():
+			return [] # 整批拒绝，调用方不得记生成幂等键。
+		result.append(chosen)
+		used.append(chosen)
+	return result
+
+
+func _prepare_narrative_spawn_space() -> void:
+	ensure_shell_built()
+	ensure_detail_built()
+	var frame := Engine.get_physics_frames()
+	var detail_id := _detail_root.get_instance_id() if is_instance_valid(_detail_root) else 0
+	if _narrative_spawn_probe_frame != frame or _narrative_spawn_detail_id != detail_id:
+		_collect_spawn_blockers()
+		_narrative_spawn_probe_frame = frame
+		_narrative_spawn_detail_id = detail_id
+
+
+func is_narrative_floor_position_valid(world_point: Vector3) -> bool:
+	_prepare_narrative_spawn_space()
+	var local := to_local(world_point)
+	if absf(local.y) > .15:
+		return false
+	local.y = 0.0
+	return _spawn_floor_contains(local, _spawn_clearance()) and _spawn_obstacle_free(local) and _narrative_floor_supported(to_global(local))
+
+
+func _narrative_floor_supported(world_point: Vector3) -> bool:
+	var world := get_world_3d()
+	if world == null:
+		return false
+	var radius := _spawn_clearance()
+	for offset in [Vector3.ZERO, Vector3(radius, 0, radius), Vector3(radius, 0, -radius), Vector3(-radius, 0, radius), Vector3(-radius, 0, -radius)]:
+		var point: Vector3 = world_point + offset
+		var query := PhysicsRayQueryParameters3D.create(point + Vector3.UP * .35, point + Vector3.DOWN * .35, 1)
+		query.collide_with_areas = false
+		query.hit_back_faces = true
+		var hit := world.direct_space_state.intersect_ray(query)
+		if hit.is_empty() or (hit.get("normal", Vector3.ZERO) as Vector3).y < .7:
+			return false
+		if absf((hit["position"] as Vector3).y - world_point.y) > .15:
 			return false
 	return true
 

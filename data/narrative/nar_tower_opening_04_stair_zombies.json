@@ -1,0 +1,52 @@
+{
+  "narrative_id": "nar_tower_opening_04_stair_zombies",
+  "schema_version": 1,
+  "priority": 0,
+  "trigger": {
+    "kind": "point",
+    "point_anchor": "base_west_exit",
+    "radius": 1.5,
+    "height_tolerance": 1.2,
+    "once": "run"
+  },
+  "duration": 3.5,
+  "cues": [
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "facility",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_04_stair_zombies:stair_a_bottom",
+      "point_anchor": "stair_a_bottom"
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "facility",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_04_stair_zombies:stair_a_middle",
+      "point_anchor": "stair_a_middle"
+    },
+    {
+      "at": 0,
+      "do": "scene.spawn",
+      "room_id": "facility",
+      "kind": "melee_chaser",
+      "count": 1,
+      "spawn_key": "nar_tower_opening_04_stair_zombies:stair_a_upper",
+      "point_anchor": "stair_a_upper"
+    },
+    {
+      "at": 0.1,
+      "do": "actor.say",
+      "text": "这么多！",
+      "hold": 3.4
+    },
+    {
+      "at": 3.5,
+      "do": "flow.end"
+    }
+  ]
+}

@@ -219,8 +219,15 @@ func _validate_point_trigger(declared: Dictionary, source_label: String) -> Dict
 	# 两种写法二选一：绝对世界坐标 `point`，或**房间相对** `point_room` + `point_offset`。
 	# 房间相对的世界坐标由导演在运行期解出 —— 房间/楼层是运行时生成的，把世界坐标写死
 	# 在换布局后会**静默失效**（表现为「剧情永不触发」）。
+	var point_anchor := str(declared.get("point_anchor", ""))
+	if not point_anchor.is_empty():
+		declared["point_anchor"] = point_anchor
+		declared.erase("point")
+		declared.erase("point_room")
 	var point_room_id := str(declared.get("point_room", ""))
-	if not point_room_id.is_empty():
+	if not point_anchor.is_empty():
+		pass # 真实场景建好后解析；仍执行下方半径/垂直带校验。
+	elif not point_room_id.is_empty():
 		declared["point_room"] = point_room_id
 		declared.erase("point")
 		var offset_raw: Variant = declared.get("point_offset", [0.0, 0.0, 0.0])
@@ -244,6 +251,8 @@ func _validate_point_trigger(declared: Dictionary, source_label: String) -> Dict
 			declared["point"] = Vector3(
 				float(coordinates[0]), float(coordinates[1]), float(coordinates[2])
 			)
+	if not point_anchor.is_empty():
+		declared.erase("point_room")
 	var radius := float(declared.get("radius", MIN_POINT_RADIUS_M))
 	if radius < MIN_POINT_RADIUS_M:
 		errors.append(

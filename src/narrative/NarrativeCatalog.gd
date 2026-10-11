@@ -26,6 +26,12 @@ const ENTRIES := {
 	# 开场第三段：从 98F 门厅东门上行、走进 99F 归航基地（facility）东门内侧时触发。
 	# 基地起始为关灯状态，演出把镜头转向东墙灯开关并提示玩家开灯。
 	"nar_tower_opening_03_base_dark": ROOT + "nar_tower_opening_03_base_dark.json",
+	"nar_tower_opening_02_lobby": ROOT + "nar_tower_opening_02_lobby.json",
+	"nar_tower_opening_02_1_find_owner": ROOT + "nar_tower_opening_02_1_find_owner.json",
+	"nar_tower_opening_02_2_outside_boom": ROOT + "nar_tower_opening_02_2_outside_boom.json",
+	"nar_tower_opening_04_stair_zombies": ROOT + "nar_tower_opening_04_stair_zombies.json",
+	"nar_tower_opening_05_rooftop_crowd": ROOT + "nar_tower_opening_05_rooftop_crowd.json",
+	"nar_tower_opening_05_bridge_fat": ROOT + "nar_tower_opening_05_bridge_fat.json",
 }
 
 

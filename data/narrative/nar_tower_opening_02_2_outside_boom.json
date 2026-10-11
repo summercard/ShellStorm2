@@ -1,0 +1,45 @@
+{
+  "narrative_id": "nar_tower_opening_02_2_outside_boom",
+  "schema_version": 1,
+  "priority": 0,
+  "trigger": {
+    "kind": "point",
+    "point_anchor": "stair_b_middle",
+    "radius": 2.5,
+    "height_tolerance": 1.2,
+    "once": "run"
+  },
+  "duration": 4.4,
+  "cues": [
+    {
+      "at": 0,
+      "do": "fx.sfx",
+      "name": "boss_phase",
+      "pitch": 0.65,
+      "volume_db": 0
+    },
+    {
+      "at": 0,
+      "do": "ui.subtitle",
+      "speaker": "系统",
+      "text": "轰！",
+      "auto": 0.8
+    },
+    {
+      "at": 0,
+      "do": "camera.shake",
+      "duration": 0.65,
+      "amplitude": 0.12
+    },
+    {
+      "at": 0.8,
+      "do": "actor.say",
+      "text": "外面发生什么事情了？",
+      "hold": 3.5
+    },
+    {
+      "at": 4.4,
+      "do": "flow.end"
+    }
+  ]
+}

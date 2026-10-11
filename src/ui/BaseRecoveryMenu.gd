@@ -75,7 +75,7 @@ func _build_interface() -> void:
 	energy_panel.add_child(energy_box)
 	_energy_label = _make_label("基地电量 --/--", 24, Color(0.54, 1.0, 0.74))
 	energy_box.add_child(_energy_label)
-	_time_label = _make_label("2075-01-01  17:00", 16, Color(0.48, 0.78, 0.86))
+	_time_label = _make_label("2075-01-01  09:00", 16, Color(0.48, 0.78, 0.86))
 	energy_box.add_child(_time_label)
 
 	var state_panel := PanelContainer.new()
@@ -146,7 +146,7 @@ func _refresh(status_override := "") -> void:
 	if time_source != null and time_source.has_method("get_time_snapshot"):
 		var time_snapshot := time_source.call("get_time_snapshot") as Dictionary
 		_time_label.text = "%s  ·  +%.1f电量/游戏时" % [
-			str(time_snapshot.get("display_text", "2075-01-01  17:00")),
+			str(time_snapshot.get("display_text", "2075-01-01  09:00")),
 			float(energy.get("regen_per_game_hour", 0.0)),
 		]
 

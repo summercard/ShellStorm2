@@ -1,0 +1,69 @@
+{
+  "narrative_id": "nar_tower_opening_02_1_find_owner",
+  "schema_version": 1,
+  "priority": 10,
+  "trigger": {
+    "kind": "point",
+    "point_anchor": "stair_b_entry",
+    "radius": 1.2,
+    "height_tolerance": 1.2,
+    "once": "run"
+  },
+  "duration": 10.5,
+  "cues": [
+    {
+      "at": 0,
+      "do": "player.lock_input",
+      "locked": true
+    },
+    {
+      "at": 0,
+      "do": "camera.focus",
+      "distance": 8.0,
+      "elevation_deg": 42.0,
+      "duration": 1.2
+    },
+    {
+      "at": 1.2,
+      "do": "player.walk_to",
+      "to_anchor": "stair_b_bottom",
+      "duration": 2.4,
+      "speed": 2.8
+    },
+    {
+      "at": 3.8,
+      "do": "actor.face",
+      "relative": true,
+      "yaw_deg": 38,
+      "duration": 0.6
+    },
+    {
+      "at": 4.5,
+      "do": "actor.face",
+      "relative": true,
+      "yaw_deg": -38,
+      "duration": 0.8
+    },
+    {
+      "at": 5.4,
+      "do": "actor.face",
+      "to_anchor": "stair_b_up",
+      "duration": 0.6
+    },
+    {
+      "at": 6.0,
+      "do": "actor.say",
+      "text": "我得找到主人",
+      "hold": 3.5
+    },
+    {
+      "at": 9.5,
+      "do": "camera.restore",
+      "duration": 1.0
+    },
+    {
+      "at": 10.5,
+      "do": "flow.end"
+    }
+  ]
+}

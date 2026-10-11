@@ -737,6 +737,17 @@ func _physics_process(delta: float) -> void:
 	if _elite_escape_active:
 		_tick_elite_escape(delta)
 		return
+	if bool(enemy_data.get("narrative_stationary", false)):
+		_target = null
+		if MonsterAIManager != null:
+			MonsterAIManager.update_enemy_spatial(self)
+		if ai_state != "idle":
+			transition_to("idle")
+		velocity.x = 0.0
+		velocity.z = 0.0
+		_apply_gravity(delta)
+		move_and_slide()
+		return
 	if monitor_combat != null:
 		var activation_was_completed := monitor_combat.activation_completed
 		var activation_blocks_ai := monitor_combat.tick_activation(delta)
@@ -1177,6 +1188,8 @@ func take_projectile_damage(
 
 
 func notify_attacked_by(attacker: Node3D) -> void:
+	if bool(enemy_data.get("narrative_stationary", false)):
+		return
 	if MonsterAIManager == null or attacker == null:
 		return
 	if not _runtime_ai_active:

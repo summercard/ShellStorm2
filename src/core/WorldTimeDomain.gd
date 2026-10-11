@@ -3,7 +3,8 @@ extends RefCounted
 ## 无节点依赖的世界时钟算法。所有日期、HUD文本、太阳轨迹与周期接口都从
 ## elapsed_game_seconds 推导，避免场景各自维护互相漂移的“当前小时”。
 
-const START_UNIX_SECONDS := 3313587600
+const START_UNIX_SECONDS := 3313558800 # 新档：2075-01-01 09:00 UTC
+const LEGACY_START_UNIX_SECONDS := 3313587600 # 未登记起点的旧档：17:00
 const GAME_SECONDS_PER_DAY := 86_400.0
 const REAL_SECONDS_PER_GAME_DAY := 20.0 * 60.0
 const GAME_SECONDS_PER_REAL_SECOND := GAME_SECONDS_PER_DAY / REAL_SECONDS_PER_GAME_DAY
@@ -28,22 +29,24 @@ static func elapsed_from_real_seconds(real_seconds: float) -> float:
 	return maxf(0.0, real_seconds) * GAME_SECONDS_PER_REAL_SECOND
 
 
-static func get_snapshot(elapsed_game_seconds: float) -> Dictionary:
+static func get_snapshot(elapsed_game_seconds: float, start_unix_seconds: int = START_UNIX_SECONDS) -> Dictionary:
 	var elapsed := maxf(0.0, elapsed_game_seconds)
-	var unix_seconds := START_UNIX_SECONDS + int(floor(elapsed))
+	var unix_seconds := start_unix_seconds + int(floor(elapsed))
 	var date_time := Time.get_datetime_dict_from_unix_time(unix_seconds)
-	var second_of_day := fmod(17.0 * 3600.0 + elapsed, GAME_SECONDS_PER_DAY)
+	var start_second_of_day := float(start_unix_seconds % int(GAME_SECONDS_PER_DAY))
+	var second_of_day := fmod(start_second_of_day + elapsed, GAME_SECONDS_PER_DAY)
 	var hour_float := second_of_day / 3600.0
-	var day_index := int(floor((17.0 * 3600.0 + elapsed) / GAME_SECONDS_PER_DAY))
+	var day_index := int(floor((start_second_of_day + elapsed) / GAME_SECONDS_PER_DAY))
 	var solar := get_solar_snapshot(hour_float)
 	return {
 		"elapsed_game_seconds": elapsed,
+		"start_unix_seconds": start_unix_seconds,
 		"unix_seconds": unix_seconds,
 		"day_index": day_index,
 		"year": int(date_time.get("year", 2075)),
 		"month": int(date_time.get("month", 1)),
 		"day": int(date_time.get("day", 1)),
-		"hour": int(date_time.get("hour", 17)),
+		"hour": int(date_time.get("hour", 9)),
 		"minute": int(date_time.get("minute", 0)),
 		"second": int(date_time.get("second", 0)),
 		"hour_float": hour_float,
@@ -53,17 +56,17 @@ static func get_snapshot(elapsed_game_seconds: float) -> Dictionary:
 			int(date_time.get("day", 1)),
 		],
 		"clock_text": "%02d:%02d" % [
-			int(date_time.get("hour", 17)),
+			int(date_time.get("hour", 9)),
 			int(date_time.get("minute", 0)),
 		],
 		"display_text": "%04d-%02d-%02d  %02d:%02d" % [
 			int(date_time.get("year", 2075)),
 			int(date_time.get("month", 1)),
 			int(date_time.get("day", 1)),
-			int(date_time.get("hour", 17)),
+			int(date_time.get("hour", 9)),
 			int(date_time.get("minute", 0)),
 		],
-		"minute_key": int(floor((float(START_UNIX_SECONDS) + elapsed) / 60.0)),
+		"minute_key": int(floor((float(start_unix_seconds) + elapsed) / 60.0)),
 		"solar": solar,
 	}
 

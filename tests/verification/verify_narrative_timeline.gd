@@ -197,7 +197,7 @@ func narrative_player_bark() -> Node:
 func narrative_spawn_enemies(
 	room_id: String, kind: String, count: int,
 	origin: Vector3, axis: Vector3 = Vector3.RIGHT, spread: float = 1.6,
-	stagger: Vector3 = Vector3.ZERO
+	stagger: Vector3 = Vector3.ZERO, _options: Dictionary = {}
 ) -> int:
 	_spawn_calls.append({
 		"room_id": room_id, "kind": kind, "count": count,
@@ -599,7 +599,7 @@ func _phase_c_real_scripts() -> void:
 	)
 	_check(_player.input_locked, "第二段同样先停住角色")
 	_check(NarrativeDirector.is_camera_override_active(), "第二段接管了摄影机（只平移不改变构图距离）")
-	_check(_spawn_calls.size() == 1, "刷怪正门被调用 1 次（实际 %d）" % _spawn_calls.size())
+	_check(_spawn_calls.size() == 4, "刷怪正门被调用 4 次（原5只＋3个原地站位，实际 %d）" % _spawn_calls.size())
 	if not _spawn_calls.is_empty():
 		var call: Dictionary = _spawn_calls[0]
 		_check(int(call.get("count", 0)) == 5, "刷 5 只（实际 %s）" % str(call.get("count")))
