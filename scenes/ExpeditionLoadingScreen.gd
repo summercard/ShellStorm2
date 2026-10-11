@@ -4,7 +4,7 @@ class_name ExpeditionLoadingScreen
 ##
 ## 职责刻意保持单一：不提交运行态检查点、不消费入口意图、不改动任何存档。
 ## 基地落盘与入口登记由 RogueMapSelectMenu 在切场景前完成；本界面只负责
-## 把"正在读取关卡"这件事显式地画给玩家看，进度走满后切到正式关卡场景。
+## 展示真实资源与场景装配进度，并跨场景保留遮罩直到 Tower 就绪。
 ##
 ## 视觉（2026-10-09 主人指定，黑白极简）：
 ##   · 纯黑底；右下角主角小兔子的**纯白正侧面剪影**原地跑动；
@@ -13,7 +13,7 @@ class_name ExpeditionLoadingScreen
 ##   · 进/出各由全局光圈过场 IrisTransition 负责：进来时黑圈往中心收拢，
 ##     读条走满后黑圈从中心往外展开、露出关卡。
 ##
-## 无头/编辑器环境直接跳过等待，保证验收脚本不会被过场拖住。
+## 无头环境只跳过渲染收尾的 post_draw 等待；资源加载和场景就绪仍然走真实流程。
 ##
 ## 🔴 验收契约：本界面的 `_build_ui()` 会被 `verify_expedition_level01_flow` /
 ## `verify_test_level_99_flow` 在**不入树**的情况下直接调用，并断言
@@ -25,7 +25,7 @@ class_name ExpeditionLoadingScreen
 ## 本常量只是**默认终点**（远征关卡01）；实际去向由选关菜单写入的待进入关卡 id 决定，
 ## 见 `_destination_level_id()`。
 const LEVEL_SCENE := GameDesignConfig.EXPEDITION_LEVEL_SCENE_3D
-## 过场总时长。只影响观感，不影响关卡数据；全部真实生成发生在关卡场景的 _ready()。
+## 保留旧探针常量；真实进度与此时长无关。
 const TOTAL_DURATION_S := 1.35
 const STEP_TEXTS: Array[String] = [
 	"正在同步远征情报…",
@@ -64,8 +64,18 @@ const PAPER := Color(1.0, 1.0, 1.0, 1.0)
 const BAR_TRACK_COLOR := Color(1.0, 1.0, 1.0, 0.16)
 
 var _elapsed := 0.0
+## 兼容旧截图/探针；不再作为真实进度或切场景条件。
 var _advanced := false
 var _level_id := ""
+var _target_scene := ""
+var _target_name := ""
+var _resource_request_active := false
+var _scene_change_started: bool = false
+var _scene_changed_seen: bool = false
+var _requires_loading_scene_ready_contract: bool = true
+var _finalizing: bool = false
+var _failure_kind := ""
+var _intro_tween: Tween
 
 # 既有验收依赖的节点（Root/Center/{Breadcrumb,Title,Progress,Step}）——保留但视觉隐藏。
 var _progress: ProgressBar
@@ -75,6 +85,8 @@ var _root: Control
 var _content: Control
 var _bar_track: ColorRect
 var _bar_fill: ColorRect
+var _status_label: Label
+var _retry_button: Button
 var _wave_slots: Array[Dictionary] = []
 var _wave_time := 0.0
 var _showcase_viewport: SubViewport
@@ -83,71 +95,339 @@ var _bunny_motion: CharacterMotionLibrary3D
 
 
 func _ready() -> void:
-	layer = 128
+	layer = 220
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	# 一次性取走菜单登记的关卡：取值即清空，上一次的选择不会泄漏到下一次传送。
-	# 验收脚本只 `_build_ui()` 不入树，那时本函数不跑，待进入态保持默认 —— 因此
-	# 「默认关卡01」这条既有断言不受影响。
-	_level_id = GameDesignConfig.peek_pending_expedition_level_id()
-	_build_ui()
-	# 上一场景的黑圈收拢已经把整屏压到全黑；此处放开遮罩，让本界面的黑底接手，
-	# 视觉上是"黑 → 黑底 + 内容淡入"，没有跳变。
+	_capture_destination()
+	if _root == null:
+		_build_ui()
+	_set_loading_contract()
 	if IrisTransition != null:
 		IrisTransition.clear_now()
-	if _should_skip_delay():
-		_enter_level()
-		return
-	_build_showcase()
+	if not _should_skip_delay() and not Engine.is_editor_hint():
+		_build_showcase()
 	_play_intro()
+	_start_resource_request()
 
 
 func _process(delta: float) -> void:
-	if _advanced:
-		return
 	_elapsed += delta
 	_wave_time += delta
 	_drive_bunny(delta)
 	_animate_wave()
-	var ratio := clampf(_elapsed / TOTAL_DURATION_S, 0.0, 1.0)
-	_apply_progress(ratio)
-	if ratio >= 1.0:
-		_enter_level()
+	if _resource_request_active:
+		_poll_resource_request()
+	elif _scene_change_started and not _finalizing:
+		_poll_target_scene()
 
 
-## 无头验收与编辑器内不播放过场：直接进入关卡，避免慢测试与编辑器卡帧。
+## 只跳过截图收尾的 post_draw；绝不跳过真实 ResourceLoader 或场景 ready。
 func _should_skip_delay() -> bool:
+	return DisplayServer.get_name() == "headless"
+
+
+## 旧调用方仍可安全调用；真实流程由资源状态和目标场景 ready 驱动。
+func _enter_level() -> void:
+	if not is_inside_tree() or _scene_change_started or _finalizing:
+		return
+	if _resource_request_active:
+		_poll_resource_request()
+	elif _failure_kind.is_empty():
+		if _target_scene.is_empty():
+			_capture_destination()
+			_set_loading_contract()
+		_start_resource_request()
+
+
+func _capture_destination() -> void:
+	var destination_scene := str(_iris_value("loading_destination_scene", ""))
+	var destination_name := str(_iris_value("loading_destination_name", ""))
+	if IrisTransition != null:
+		_iris_set("loading_destination_scene", "")
+		_iris_set("loading_destination_name", "")
+	if not destination_scene.is_empty():
+		_target_scene = destination_scene
+		_target_name = destination_name if not destination_name.is_empty() else destination_scene.get_file().get_basename()
+	else:
+		# 读取页是唯一消费点；peek 不能让上一次选关意图泄漏。
+		_level_id = GameDesignConfig.consume_pending_expedition_level_id()
+		_target_scene = GameDesignConfig.expedition_level_scene(_level_id)
+		_target_name = GameDesignConfig.expedition_level_display_name(_level_id)
+	_requires_loading_scene_ready_contract = not _is_base_destination(_target_scene)
+
+
+func _is_base_destination(scene_path: String) -> bool:
 	return (
-		DisplayServer.get_name() == "headless"
-		or Engine.is_editor_hint()
+		scene_path == GameDesignConfig.MAIN_SCENE
+		or scene_path == GameDesignConfig.BASE_SCENE_3D
 	)
 
 
-func _enter_level() -> void:
-	if _advanced:
+func _set_loading_contract() -> void:
+	_requires_loading_scene_ready_contract = not _is_base_destination(_target_scene)
+	if IrisTransition == null:
 		return
-	_advanced = true
-	_finish_and_change_scene()
+	_iris_set("loading_target_scene", _target_scene)
+	_iris_set("loading_progress", 0.0)
+	_iris_set("loading_status", "正在读取 %s" % _destination_display_name())
+	_iris_set("loading_scene_ready", false)
+	_iris_set("loading_scene_failed", false)
+	_report_loading(0.0, "正在读取 %s" % _destination_display_name())
 
 
-## 收尾：内容淡回黑底 → 遮罩盖满 → 切场景 → 在新场景上开圈。
-## 🔴 全过程只在**真实运行时**发生；无头/编辑器分支一步都不多做，
-## 保持"读条结束即同步 change_scene"这条既有验收时序。
-func _finish_and_change_scene() -> void:
-	var use_iris := not _should_skip_delay() and IrisTransition != null
-	if use_iris:
-		if _content != null:
-			var fade := create_tween()
-			fade.tween_property(_content, "modulate:a", 0.0, 0.16)
-			await fade.finished
-		IrisTransition.cover_now()
-	var error := get_tree().change_scene_to_file(_destination_scene())
+func _iris_value(property_name: String, fallback: Variant) -> Variant:
+	if IrisTransition == null:
+		return fallback
+	var value = IrisTransition.get(property_name)
+	return fallback if value == null else value
+
+
+func _iris_set(property_name: String, value: Variant) -> void:
+	if IrisTransition == null:
+		return
+	IrisTransition.set(property_name, value)
+
+
+func _report_loading(progress: float, status: String) -> void:
+	if IrisTransition != null and IrisTransition.has_method("report_loading"):
+		IrisTransition.report_loading(progress, status)
+	else:
+		_iris_set("loading_progress", progress)
+		_iris_set("loading_status", status)
+
+
+func _start_resource_request() -> void:
+	if _target_scene.is_empty():
+		_show_failure("resource", "目标场景为空，无法读取")
+		return
+	_resource_request_active = true
+	_failure_kind = ""
+	_set_status("正在读取 %s" % _destination_display_name())
+	var error := ResourceLoader.load_threaded_request(_target_scene, "PackedScene")
 	if error != OK:
-		push_error(
-			"[ExpeditionLoadingScreen] 进入远征关卡失败: %s" % error_string(error)
-		)
+		_resource_request_active = false
+		_show_failure("resource", "资源读取失败：%s" % error_string(error))
+
+
+func _poll_resource_request() -> void:
+	var load_progress: Array = []
+	var status := ResourceLoader.load_threaded_get_status(_target_scene, load_progress)
+	var actual := 0.0
+	if not load_progress.is_empty():
+		actual = clampf(float(load_progress[0]), 0.0, 1.0)
+	var mapped := actual * 0.70
+	_apply_progress(mapped)
+	_report_loading(mapped, "正在读取 %s" % _destination_display_name())
+	match status:
+		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			return
+		ResourceLoader.THREAD_LOAD_LOADED:
+			var packed := ResourceLoader.load_threaded_get(_target_scene) as PackedScene
+			_resource_request_active = false
+			if packed == null:
+				_show_failure("resource", "资源读取完成但不是 PackedScene")
+			else:
+				_apply_progress(0.70)
+				_report_loading(0.70, "正在启动关卡")
+				_begin_scene_change(packed)
+			return
+		_:
+			_resource_request_active = false
+			_show_failure("resource", "资源读取失败：%s" % _target_scene)
+
+
+func _begin_scene_change(packed: PackedScene) -> void:
+	if _scene_change_started or packed == null or not is_inside_tree():
 		return
-	if use_iris:
+	var tree := get_tree()
+	_scene_change_started = true
+	_scene_changed_seen = false
+	if not tree.scene_changed.is_connected(_on_tree_scene_changed):
+		tree.scene_changed.connect(_on_tree_scene_changed)
+	var previous_scene := tree.current_scene
+	var previous_parent := get_parent()
+	# 缓存 SceneTree：remove_child 后 get_tree() 会返回 null；读取页本来就在 root 时不必重挂。
+	if previous_parent != tree.root:
+		reparent(tree.root)
+	if previous_scene == self:
+		tree.current_scene = null
+	var error := tree.change_scene_to_packed(packed)
+	if error != OK:
+		# change_scene_to_packed 返回错误时尚未移除旧场景；恢复原归属，不猜测异步失败。
+		if is_instance_valid(previous_parent) and get_parent() != previous_parent:
+			reparent(previous_parent)
+		if is_instance_valid(previous_scene):
+			tree.current_scene = previous_scene
+		else:
+			tree.current_scene = self
+		_scene_change_started = false
+		_disconnect_scene_changed()
+		_show_failure("resource", "进入关卡失败：%s" % error_string(error))
+
+
+func _on_tree_scene_changed() -> void:
+	if _scene_change_started:
+		_scene_changed_seen = true
+
+
+func _poll_target_scene() -> void:
+	var status := str(_iris_value("loading_status", "正在生成关卡"))
+	_set_status(status)
+	var target := get_tree().current_scene
+	if bool(_iris_value("loading_scene_failed", false)):
+		_scene_change_started = false
+		_disconnect_scene_changed()
+		_show_failure("map_bootstrap", status if not status.is_empty() else "关卡生成失败")
+		return
+	# complete_loading 可能上报 1；正式显示 100% 仍须经过 Tower ready 和渲染门禁。
+	_apply_progress(clampf(float(_iris_value("loading_progress", 0.70)), 0.70, 0.96))
+	if not _target_is_ready(target):
+		return
+	_finalizing = true
+	if not _requires_loading_scene_ready_contract:
+		await _wait_for_basic_scene_ready(target)
+		if get_tree().current_scene != target or not is_instance_valid(target):
+			_finalizing = false
+			return
+		_apply_progress(0.88)
+		_report_loading(0.88, "基地场景已就绪")
+	await _finish_loaded_scene(target)
+
+
+func _target_is_ready(target: Node) -> bool:
+	if not _scene_changed_seen or not _is_loading_scene(target):
+		return false
+	if bool(_iris_value("loading_scene_failed", false)):
+		return false
+	if not _requires_loading_scene_ready_contract:
+		return true
+	return (
+		bool(_iris_value("loading_scene_ready", false))
+		# 父类 generation_completed/Node.ready 都早于 Tower 装配末尾，不能作为完成依据。
+		and bool(target.get_meta("loading_scene_ready", false))
+	)
+
+
+func _is_loading_scene(node: Node) -> bool:
+	if node == null or not is_instance_valid(node):
+		return false
+	if IrisTransition != null and IrisTransition.has_method("is_loading_scene"):
+		return bool(IrisTransition.is_loading_scene(node))
+	return str(node.scene_file_path) == _target_scene
+
+
+func _wait_for_basic_scene_ready(target: Node) -> void:
+	var tree: SceneTree = get_tree()
+	for _i: int in 2:
+		await tree.process_frame
+		if not _should_skip_delay():
+			await RenderingServer.frame_post_draw
+		if tree.current_scene != target:
+			return
+
+
+func _finish_loaded_scene(target: Node) -> void:
+	var tree: SceneTree = get_tree()
+	var settle_frames: int = 2 if _requires_loading_scene_ready_contract else 0
+	for _i: int in settle_frames:
+		await tree.process_frame
+		if not _should_skip_delay():
+			await RenderingServer.frame_post_draw
+		if tree.current_scene != target or not _target_is_ready(target):
+			_finalizing = false
+			return
+	_apply_progress(1.0)
+	_report_loading(1.0, "读取完成")
+	_set_status("读取完成")
+	if _intro_tween != null and _intro_tween.is_valid():
+		_intro_tween.kill()
+	if _content != null and not _should_skip_delay():
+		var fade := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		fade.tween_property(_content, "modulate:a", 0.0, 0.16)
+		await fade.finished
+	if tree.current_scene != target or not _target_is_ready(target):
+		_finalizing = false
+		if _content != null:
+			_content.modulate.a = 1.0
+		return
+	if IrisTransition != null:
+		IrisTransition.cover_now()
+	_disconnect_scene_changed()
+	# 通过统一交接点恢复目标处理并清理读取契约；通知会让 Tower 恢复输入/子树。
+	if IrisTransition != null:
+		IrisTransition.release_loading_scene(target)
+	else:
+		target.process_mode = Node.PROCESS_MODE_INHERIT
+	_scene_change_started = false
+	if IrisTransition != null:
 		IrisTransition.open_after_scene()
+	# 先把开圈协程交给 autoload，再撤掉持久读取页；不在 free() 后继续执行。
+	hide()
+	queue_free()
+
+
+func _disconnect_scene_changed() -> void:
+	if get_tree() != null and get_tree().scene_changed.is_connected(_on_tree_scene_changed):
+		get_tree().scene_changed.disconnect(_on_tree_scene_changed)
+
+
+func _show_failure(kind: String, message: String) -> void:
+	_failure_kind = kind
+	_resource_request_active = false
+	_finalizing = false
+	_iris_set("loading_scene_ready", false)
+	_iris_set("loading_scene_failed", true)
+	_set_status(message)
+	if _intro_tween != null and _intro_tween.is_valid():
+		_intro_tween.kill()
+	if _content != null:
+		_content.modulate.a = 1.0
+	if IrisTransition != null:
+		IrisTransition.clear_now()
+	if _retry_button != null:
+		_retry_button.visible = true
+		_retry_button.text = "返回基地" if kind == "map_bootstrap" else "重试读取"
+		_retry_button.grab_focus()
+		# 目标场景可能捕获了鼠标；失败页必须能实际点到按钮。
+		if not _should_skip_delay():
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	push_warning("[ExpeditionLoadingScreen] " + message)
+
+
+func _set_status(message: String) -> void:
+	if _status_label != null:
+		_status_label.text = message
+	if _step_label != null:
+		_step_label.text = message
+	_iris_set("loading_status", message)
+
+
+func _on_retry_pressed() -> void:
+	if _failure_kind == "map_bootstrap":
+		_return_to_base()
+		return
+	if _scene_change_started:
+		return
+	if _retry_button != null:
+		_retry_button.visible = false
+	_failure_kind = ""
+	_iris_set("loading_scene_failed", false)
+	_apply_progress(0.0)
+	_start_resource_request()
+
+
+func _return_to_base() -> void:
+	# 只登记内存入口意图；不结算、不改存档，避免基地按旧行动检查点再次跳回坏图。
+	GameEntryFlow.request_gameplay_entry(
+		GameEntryFlow.REASON_ABORT_RETURN_99F, GameEntryFlow.SPAWN_BASE_99F
+	)
+	_failure_kind = ""
+	_target_scene = GameDesignConfig.MAIN_SCENE
+	_target_name = "基地"
+	_set_loading_contract()
+	if _retry_button != null:
+		_retry_button.visible = false
+	_apply_progress(0.0)
+	_start_resource_request()
 
 
 ## 本次要去的关卡 id。`_level_id` 为真源（_ready 时取），空则回退默认关卡。
@@ -159,11 +439,15 @@ func _destination_level_id() -> String:
 
 ## 本次要去的关卡场景。
 func _destination_scene() -> String:
+	if not _target_scene.is_empty():
+		return _target_scene
 	return GameDesignConfig.expedition_level_scene(_destination_level_id())
 
 
 ## 本次要去的关卡展示名。关卡清单里没有该 id 时返回 id 本身，至少不说谎。
 func _destination_display_name() -> String:
+	if not _target_name.is_empty():
+		return _target_name
 	var level_id := _destination_level_id()
 	var display_name := GameDesignConfig.expedition_level_display_name(level_id)
 	if display_name.is_empty():
@@ -175,12 +459,13 @@ func _play_intro() -> void:
 	if _content == null:
 		return
 	_content.modulate.a = 0.0
-	var tween := create_tween()
-	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(_content, "modulate:a", 1.0, 0.28)
+	_intro_tween = create_tween()
+	_intro_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_intro_tween.tween_property(_content, "modulate:a", 1.0, 0.28)
 
 
 func _apply_progress(ratio: float) -> void:
+	ratio = clampf(ratio, 0.0, 1.0)
 	# 既有验收节点（隐藏）：保持真实推进，探针若读取不会拿到死值。
 	if _progress != null:
 		_progress.value = ratio * 100.0
@@ -222,6 +507,7 @@ func _build_ui() -> void:
 
 	_build_wave_text(content)
 	_build_progress_bar(content)
+	_build_status_controls(content)
 
 
 ## 保留旧的"面包屑 + 标题 + 步骤 + 进度"节点树（含文本），但整体隐藏。
@@ -266,6 +552,35 @@ func _build_legacy_readout(root: Control) -> void:
 
 	# 视觉隐藏：新版是纯黑极简，旧彩色文案不上屏。
 	center.visible = false
+
+
+func _build_status_controls(content: Control) -> void:
+	_status_label = Label.new()
+	_status_label.name = "LoadingStatus"
+	_status_label.text = "正在读取…"
+	_status_label.add_theme_font_size_override("font_size", 18)
+	_status_label.add_theme_color_override("font_color", PAPER)
+	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_status_label.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	_status_label.offset_left = -520.0
+	_status_label.offset_top = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 42.0)
+	_status_label.offset_right = -SHOWCASE_RIGHT_MARGIN
+	_status_label.offset_bottom = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 12.0)
+	_status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_child(_status_label)
+
+	_retry_button = Button.new()
+	_retry_button.name = "RetryButton"
+	_retry_button.text = "重试读取"
+	_retry_button.visible = false
+	_retry_button.add_theme_font_size_override("font_size", 18)
+	_retry_button.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	_retry_button.offset_left = -250.0
+	_retry_button.offset_top = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 96.0)
+	_retry_button.offset_right = -SHOWCASE_RIGHT_MARGIN
+	_retry_button.offset_bottom = -(BAR_BOTTOM_MARGIN + BAR_HEIGHT + 52.0)
+	_retry_button.pressed.connect(_on_retry_pressed)
+	content.add_child(_retry_button)
 
 
 func _build_progress_bar(content: Control) -> void:

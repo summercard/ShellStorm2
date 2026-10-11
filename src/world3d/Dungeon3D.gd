@@ -7516,12 +7516,17 @@ func _finish_run(success: bool) -> void:
 	run_completed.emit(success, summary)
 	if not test_mode:
 		await get_tree().create_timer(0.18 if not success else 1.6).timeout
-		var entry_request_id := _request_return_entry_context(success)
-		var change_error := get_tree().change_scene_to_file(return_scene_path)
-		if change_error != OK:
-			if entry_request_id > 0:
-				GameEntryFlow.cancel_request(entry_request_id)
-			push_error("行动结算后的场景返回失败：%s" % error_string(change_error))
+		var entry_request_id: int = _request_return_entry_context(success)
+		await _return_to_scene_after_settlement(entry_request_id)
+
+
+## 结算完成后的统一返航入口。子类可覆写读取页过场，但不能改变上层结算顺序。
+func _return_to_scene_after_settlement(entry_request_id: int) -> void:
+	var change_error: Error = get_tree().change_scene_to_file(return_scene_path)
+	if change_error != OK:
+		if entry_request_id > 0:
+			GameEntryFlow.cancel_request(entry_request_id)
+		push_error("行动结算后的场景返回失败：%s" % error_string(change_error))
 
 
 func _get_run_settlement_transaction_id(_success: bool) -> String:

@@ -24,8 +24,9 @@ func _ready() -> void:
 	await _shot("01b_loading_t082")
 	await _wait(0.13)
 	await _shot("01c_loading_t095")
-	# 冻住读取界面自身推进（避免它在 1.35s 处 change_scene 把探针场景换掉）。
-	_screen.set("_advanced", true)
+	# 冻住读取页自身推进（视觉探针只验证画面，不让真实目标场景切换打断后续 Iris 截图）。
+	# `_advanced` 只是历史兼容字段，不能阻止真实 ResourceLoader 流程；这里必须停掉节点处理。
+	_screen.set_process(false)
 
 	# —— 收拢：黑圈从四边往中心合 ——
 	IrisTransition.clear_now()

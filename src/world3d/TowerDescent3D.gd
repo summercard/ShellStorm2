@@ -299,6 +299,12 @@ var _initial_loop_gate_sealed := false
 var _initial_loop_retreat_overlay: Control = null
 var _expedition_exit_overlay: Control = null
 var _expedition_bootstrap_failed: bool = false
+var _expedition_loading_active: bool = false
+var _expedition_loading_completed: bool = false
+var _expedition_loading_process_modes: Dictionary = {}
+var _expedition_loading_player_input_locked := false
+var _expedition_loading_player_combat_enabled := false
+var _expedition_loading_player_state_saved := false
 
 # 远征关卡01：独立单层关卡，复用 Dungeon3D 的战斗/命运/掉落/撤离管线，
 # 但不含 100F 天台与 99F 基地，也不生成任何楼梯与电梯。
@@ -455,6 +461,7 @@ func get_runtime_resume_scene_path(snapshot: Dictionary) -> String:
 
 func _ready() -> void:
 	process_physics_priority = 100
+	_begin_expedition_loading_if_active()
 	if is_expedition():
 		# 远征的退出/结算落点 = 玩家出发点 = 塔楼 99F 基地主场景。
 		# 刻意在代码里钉死、不靠各关卡场景文件自己写：BaseWorld3D 是历史「兼容基地」，
@@ -493,6 +500,7 @@ func _ready() -> void:
 	if is_expedition() and _expedition_bootstrap_failed:
 		_fail_expedition_bootstrap("远征规划无效，拒绝启动")
 		return
+	_report_expedition_loading(0.75, "远征资源与规划已完成")
 	# 新游戏开场要在 98F 最里面的房间落位，而那间房由 FloorBundle 创建 —— 现在就得提交。
 	var new_game_opening := _should_open_new_game_in_master_office()
 	var opening_ready := false
@@ -514,6 +522,7 @@ func _ready() -> void:
 		"expedition_bootstrap" if is_expedition() else "rooftop_bootstrap"
 	)
 	_build_floor_stages()
+	_report_expedition_loading(0.88, "远征房间与碰撞装配已完成")
 	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
 	_apply_indoor_camera_pose()
 	player.camera.fov = CAMERA_FOV_DEG
@@ -584,6 +593,102 @@ func _ready() -> void:
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
 	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
+	if _expedition_loading_active:
+		_freeze_expedition_loading_subtree(self)
+		_lock_expedition_loading_player()
+		# 父类已延迟调用 _activate_runtime_persistence；就绪通知必须等该初始化完成。
+
+
+func _begin_expedition_loading_if_active() -> void:
+	if test_mode or not is_expedition() or IrisTransition == null:
+		return
+	if not _is_expedition_loading_active():
+		return
+	_expedition_loading_active = true
+	set_meta("loading_previous_process_mode", process_mode)
+	set_meta("loading_scene_ready", false)
+	set_meta("loading_scene_failed", false)
+	set_meta("loading_status", "正在生成远征地图…")
+	IrisTransition.set("loading_scene_ready", false)
+	IrisTransition.set("loading_scene_failed", false)
+	IrisTransition.set("loading_status", "正在生成远征地图…")
+	if player != null and is_instance_valid(player):
+		_expedition_loading_player_input_locked = player.input_locked
+		_expedition_loading_player_combat_enabled = player.combat_enabled
+		_expedition_loading_player_state_saved = true
+		player.velocity = Vector3.ZERO
+		player.set_input_locked(true)
+		player.set_combat_enabled(false)
+	# 同时冻结玩家输入状态，完成后由读取页释放时恢复原值。
+	process_mode = Node.PROCESS_MODE_DISABLED
+	_freeze_expedition_loading_subtree(self)
+
+
+func _is_expedition_loading_active() -> bool:
+	return IrisTransition.has_method("is_loading_active") and IrisTransition.is_loading_active()
+
+
+func _lock_expedition_loading_player() -> void:
+	if player != null and is_instance_valid(player):
+		player.velocity = Vector3.ZERO
+		player.set_input_locked(true)
+		player.set_combat_enabled(false)
+
+
+func _freeze_expedition_loading_subtree(node: Node) -> void:
+	for child in node.get_children():
+		# 显式 ALWAYS/PAUSABLE 等模式会越过根节点的禁用；改成继承，释放时再还原。
+		if child.process_mode not in [Node.PROCESS_MODE_INHERIT, Node.PROCESS_MODE_DISABLED]:
+			_expedition_loading_process_modes[child] = child.process_mode
+			child.process_mode = Node.PROCESS_MODE_INHERIT
+		_freeze_expedition_loading_subtree(child)
+
+
+func _report_expedition_loading(progress: float, status: String) -> void:
+	if not _expedition_loading_active or _expedition_loading_completed or _expedition_bootstrap_failed:
+		return
+	set_meta("loading_status", status)
+	if IrisTransition.has_method("report_loading"):
+		IrisTransition.report_loading(progress, status)
+	else:
+		IrisTransition.set("loading_progress", progress)
+		IrisTransition.set("loading_status", status)
+
+
+func _complete_expedition_loading(failed: bool, status: String) -> void:
+	if not _expedition_loading_active or _expedition_loading_completed:
+		return
+	_expedition_loading_completed = true
+	set_meta("loading_scene_ready", not failed)
+	set_meta("loading_scene_failed", failed)
+	set_meta("loading_status", status)
+	IrisTransition.set("loading_scene_ready", not failed)
+	IrisTransition.set("loading_scene_failed", failed)
+	IrisTransition.set("loading_status", status)
+	if IrisTransition.has_method("complete_loading"):
+		IrisTransition.complete_loading(failed)
+	# 此处绝不恢复 process_mode；读取页开圈前释放根节点才会触发 NOTIFICATION_ENABLED。
+
+
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_ENABLED or not _expedition_loading_active:
+		return
+	if not _expedition_loading_completed or _expedition_bootstrap_failed:
+		return
+	# 兼容读取页只恢复根节点；也兼容 IrisTransition.release_loading_scene(self)。
+	# 先撤销 loading 状态，再恢复子节点模式：恢复过程中 Godot 可能递归派发
+	# NOTIFICATION_ENABLED，必须让重入通知直接返回，避免重复恢复同一节点。
+	_expedition_loading_active = false
+	var saved_process_modes := _expedition_loading_process_modes.duplicate()
+	_expedition_loading_process_modes.clear()
+	for node in saved_process_modes:
+		if is_instance_valid(node):
+			node.process_mode = saved_process_modes[node]
+	process_mode = get_meta("loading_previous_process_mode", Node.PROCESS_MODE_INHERIT)
+	if _expedition_loading_player_state_saved and player != null and is_instance_valid(player):
+		player.set_input_locked(_expedition_loading_player_input_locked)
+		player.set_combat_enabled(_expedition_loading_player_combat_enabled)
+	_expedition_loading_player_state_saved = false
 
 
 func _mark_expedition_bootstrap_failed(reason: String) -> void:
@@ -607,6 +712,7 @@ func _fail_expedition_bootstrap(reason: String) -> void:
 	if status_label != null:
 		status_label.text = "远征启动失败：%s。请通过暂停界面退出当前场景。" % reason
 		_show_expedition_failure_label(status_label)
+	_complete_expedition_loading(true, "远征启动失败：%s" % reason)
 
 
 func _show_expedition_failure_label(label: Label) -> void:
@@ -626,6 +732,11 @@ func _activate_runtime_persistence() -> void:
 	if _expedition_bootstrap_failed:
 		return
 	super()
+	if _expedition_loading_active:
+		_freeze_expedition_loading_subtree(self)
+		_lock_expedition_loading_player()
+		_report_expedition_loading(0.96, "远征灯光、敌人与撤离信标初始化已完成")
+		_complete_expedition_loading(false, "远征地图已就绪")
 
 
 func _sync_player_input_lock() -> void:
@@ -1032,13 +1143,28 @@ func _finish_expedition_successful_extraction() -> void:
 	if test_mode:
 		return
 	await get_tree().create_timer(0.8).timeout
-	var entry_request_id := _request_return_entry_context(true)
-	var change_error := get_tree().change_scene_to_file(return_scene_path)
+	var entry_request_id: int = _request_return_entry_context(true)
+	await _return_to_scene_after_settlement(entry_request_id)
+
+
+## 远征返航统一经过读取页，保证死亡、成功撤离和主动退出都使用同一套交接。
+func _return_to_scene_after_settlement(entry_request_id: int) -> void:
+	if not is_expedition():
+		super(entry_request_id)
+		return
+	if IrisTransition != null:
+		IrisTransition.loading_destination_scene = return_scene_path
+		IrisTransition.loading_destination_name = "99F基地"
+		if DisplayServer.get_name() != "headless":
+			await IrisTransition.iris_close(IrisTransition.CLOSE_SECONDS)
+	var change_error: Error = get_tree().change_scene_to_file(
+		"res://scenes/ExpeditionLoadingScreen.tscn"
+	)
 	if change_error != OK:
 		if entry_request_id > 0:
 			GameEntryFlow.cancel_request(entry_request_id)
 		push_error(
-			"[TowerDescent3D] Expedition return scene failed: %s" % error_string(change_error)
+			"[TowerDescent3D] Expedition loading scene failed: %s" % error_string(change_error)
 		)
 
 
@@ -3874,11 +4000,7 @@ func _confirm_expedition_exit() -> void:
 	if test_mode:
 		return
 	await get_tree().create_timer(0.8).timeout
-	var change_error := get_tree().change_scene_to_file(return_scene_path)
-	if change_error != OK:
-		if entry_request_id > 0:
-			GameEntryFlow.cancel_request(entry_request_id)
-		push_error("[TowerDescent3D] Standalone retreat scene return failed: %s" % error_string(change_error))
+	await _return_to_scene_after_settlement(entry_request_id)
 
 
 func _reset_initial_loop_world_after_retreat() -> void:
