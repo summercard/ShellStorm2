@@ -202,3 +202,11 @@ assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/source/ani
 # 98F facilities reproducible palette import contracts
 !assets/art/environments/master_office_3d/components/**/*.glb.import
 !assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import
+
+# 临时工作区统一到上层 ShellStorm2-work；兜住旧脚本的遗留输出。
+_scratch/
+.tmp/
+.tmp_plan/
+output/
+Godot/
+NVIDIA Corporation/
