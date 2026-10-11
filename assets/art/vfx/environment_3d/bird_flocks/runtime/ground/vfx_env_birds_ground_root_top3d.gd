@@ -23,7 +23,7 @@ var _cycling := false
 
 func _ready() -> void:
 	set_meta("asset_id", "VFX-ENV-BIRDS-GROUND-3D")
-	set_meta("asset_version", "v001")
+	set_meta("asset_version", "v003")
 	set_meta("lifecycle", "rooftop_100f_ambient_repeat")
 	set_meta("cycle_seconds", DURATION_SECONDS + AMBIENT_GAP_SECONDS)
 	set_meta("collision", "none")

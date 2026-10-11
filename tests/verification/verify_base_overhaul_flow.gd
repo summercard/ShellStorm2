@@ -18,9 +18,9 @@ func _ready() -> void:
 
 func _verify_time_energy_and_persistence(failures: Array[String]) -> void:
 	var start := TimeDomain.get_snapshot(0.0)
-	_expect(str(start.get("display_text", "")) == "2075-01-01  17:00", "世界时间起点错误", failures)
+	_expect(str(start.get("display_text", "")) == "2075-01-01  09:00", "世界时间起点错误", failures)
 	var next_day := TimeDomain.get_snapshot(TimeDomain.elapsed_from_real_seconds(1200.0))
-	_expect(str(next_day.get("display_text", "")) == "2075-01-02  17:00", "20现实分钟没有推进一个游戏日", failures)
+	_expect(str(next_day.get("display_text", "")) == "2075-01-02  09:00", "20现实分钟没有推进一个游戏日", failures)
 	var noon := TimeDomain.get_solar_snapshot(12.0)
 	_expect(is_equal_approx(float(noon.get("energy", 0.0)), 1.0), "太阳峰值亮度不是1", failures)
 	var dusk_17 := TimeDomain.get_solar_snapshot(17.0)
@@ -125,11 +125,11 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	await get_tree().process_frame
 	var atmosphere := tower.get("_atmosphere") as Node
 	if atmosphere != null:
-		atmosphere.call("_on_world_time_advanced", 0.0, TimeDomain.get_snapshot(0.0))
+		atmosphere.call("_on_world_time_advanced", 0.0, TimeDomain.get_snapshot(8.0 * 3600.0))
 		var runtime_sun_17_rotation := tower.key_light.rotation_degrees
 		var runtime_sun_17_energy := tower.key_light.light_energy
 		var runtime_sun_17_color := tower.key_light.light_color
-		atmosphere.call("_on_world_time_advanced", 3600.0, TimeDomain.get_snapshot(3600.0))
+		atmosphere.call("_on_world_time_advanced", 3600.0, TimeDomain.get_snapshot(9.0 * 3600.0))
 		_expect(
 			not tower.key_light.rotation_degrees.is_equal_approx(runtime_sun_17_rotation),
 			"塔楼DirectionalLight3D角度没有接收世界时间更新",

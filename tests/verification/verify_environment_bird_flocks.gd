@@ -41,7 +41,7 @@ func _ready() -> void:
 	await _verify_flyby(failures)
 	await _verify_ground(failures)
 	if failures.is_empty():
-		print("ENVIRONMENT_BIRD_FLOCKS_OK flocks=2 birds=%d" % EXPECTED_BIRDS)
+		print("ENVIRONMENT_BIRD_FLOCKS_OK flocks=3 birds=%d" % EXPECTED_BIRDS)
 		get_tree().quit(0)
 		return
 	print("ENVIRONMENT_BIRD_FLOCKS_FAILED count=%d" % failures.size())
@@ -66,6 +66,25 @@ func _verify_flyby(failures: Array[String]) -> void:
 	if placement != "above_tower_02_at_bridge_mid_span":
 		failures.append("flyby: placement meta=%s" % placement)
 	await _check_flock(failures, "flyby", host, EXPECTED_FLYBY_WORLD)
+	_check_presentation(failures, host, true)
+	var lower := route.get_node_or_null("LowerFlybyBirdFlock") as Node3D
+	if lower == null:
+		failures.append("lower flyby missing")
+	else:
+		if not lower.global_position.is_equal_approx(Vector3(20.0, -9.0, -70.0)):
+			failures.append("lower flyby anchor changed")
+		if lower.visible:
+			failures.append("lower flyby did not delay its first pass")
+		await get_tree().create_timer(3.0).timeout
+		await _check_flock(failures, "lower_flyby", lower, lower.global_position)
+		_check_presentation(failures, lower, true)
+		var root := lower.find_child(SKELETON_ROOT, true, false)
+		for bird in root.get_children():
+			if bird is Node3D and (bird.global_position.y >= 0.0 or bird.global_position.y <= -12.3):
+				failures.append("lower bird outside airspace between roof and bridge")
+	await get_tree().create_timer(2.5).timeout
+	if not host.visible:
+		failures.append("flyby disappeared before ten seconds")
 	route.queue_free()
 
 
@@ -82,8 +101,66 @@ func _verify_ground(failures: Array[String]) -> void:
 	if not host.position.is_equal_approx(EXPECTED_GROUND_LOCAL):
 		failures.append("ground: local anchor=%s expected=%s" % [str(host.position), str(EXPECTED_GROUND_LOCAL)])
 	await _check_flock(failures, "ground", host, host.global_position)
+	_check_presentation(failures, host, false)
 	await _check_ground_containment(failures, host)
 	stage.queue_free()
+
+
+func _check_presentation(failures: Array[String], host: Node3D, flyby: bool) -> void:
+	var players := host.find_children("*", "AnimationPlayer", true, false)
+	var primary := players[0] as AnimationPlayer
+	var checked_scale := 0
+	var visual_path := "res://assets/art/vfx/environment_3d/bird_flocks/components/%s/vfx_env_birds_%s_visual.glb" % ["flyby" if flyby else "ground", "flyby" if flyby else "ground"]
+	var original_visual := (load(visual_path) as PackedScene).instantiate()
+	var original_root := original_visual.find_child(SKELETON_ROOT, true, false)
+	var resized_root := host.find_child(SKELETON_ROOT, true, false)
+	var expected_variations := [0.90, 1.06, 0.97, 1.10, 0.94, 1.02, 1.01]
+	for original_bird in original_root.get_children():
+		var resized_bird := resized_root.get_node(NodePath(str(original_bird.name))) as Node3D
+		var expected_size: float = 0.75 * expected_variations[original_bird.get_index()]
+		if not resized_bird.scale.is_equal_approx((original_bird as Node3D).scale * expected_size):
+			failures.append("bird scale must be 150 percent of previous size with +/-10 percent variation")
+		checked_scale += 1
+	original_visual.free()
+	var checked_travel := 0
+	var wing_tracks := 0
+	for node in players:
+		var player := node as AnimationPlayer
+		var animation := player.get_animation(player.current_animation)
+		if animation == null:
+			failures.append("presentation player is not playing")
+			continue
+		var source_name := player.current_animation.trim_prefix("birds/").trim_suffix("__pruned")
+		var source := primary.get_animation(source_name)
+		for track in animation.get_track_count():
+			var path := animation.track_get_path(track)
+			var kind := animation.track_get_type(track)
+			if ":" not in str(path) and kind == Animation.TYPE_SCALE_3D:
+				var original_track := source.find_track(path, kind)
+				var original := source.track_get_key_value(original_track, 0) as Vector3
+				var resized := animation.track_get_key_value(track, 0) as Vector3
+				if resized.x / original.x < 0.675 or resized.x / original.x > 0.825:
+					failures.append("animated scale exceeds +/-10 percent size range")
+			if flyby and ":" not in str(path) and kind == Animation.TYPE_POSITION_3D:
+				var first := animation.track_get_key_value(track, 0) as Vector3
+				var last := animation.track_get_key_value(track, animation.track_get_key_count(track) - 1) as Vector3
+				if absf(last.x - first.x - 200.0) > 0.1 or not is_equal_approx(animation.length, 24.0):
+					failures.append("flyby path must cover 200m in 24s at half previous speed")
+				var p0 := animation.position_track_interpolate(track, 10.0)
+				var p1 := animation.position_track_interpolate(track, 12.0)
+				if absf((p1.x - p0.x) / 2.0 - 200.0 / 24.0) > 0.02:
+					failures.append("sampled flyby speed is not 8.33m/s")
+				checked_travel += 1
+			if flyby and (":wing_" in str(path) or ":tip_" in str(path)) and kind == Animation.TYPE_ROTATION_3D:
+				var original_track := source.find_track(path, kind)
+				var sample := animation.rotation_track_interpolate(track, 1.0)
+				var accelerated := source.rotation_track_interpolate(original_track, 1.35)
+				if sample.angle_to(accelerated) > 0.015:
+					failures.append("wing rotation does not sample at 135 percent speed")
+				wing_tracks += 1
+	if checked_scale != EXPECTED_BIRDS or (flyby and (checked_travel != EXPECTED_BIRDS or wing_tracks != 28)):
+		failures.append("presentation track coverage scale=%d travel=%d wings=%d" % [checked_scale, checked_travel, wing_tracks])
+	print("BIRD_PRESENTATION_CHECK scales=%d travel=%d wings=%d" % [checked_scale, checked_travel, wing_tracks])
 
 
 ## Assert "every bird actually moves" -- this is the check that was missing.

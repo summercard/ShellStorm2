@@ -14,19 +14,25 @@ extends Node3D
 ## 直接引全局类名会报 "Identifier not declared"。
 
 const PLAYBACK := preload("res://assets/art/vfx/environment_3d/bird_flocks/runtime/vfx_env_birds_playback.gd")
-const DURATION_SECONDS := 12.0
+const DURATION_SECONDS := PLAYBACK.FLYBY_DURATION_SECONDS
 ## 两次掠过之间的静默间隔（秒）。隐藏期间重置动画。
 const AMBIENT_GAP_SECONDS := 20.0
+@export var start_delay_seconds := 0.0
+@export var formation_variant := 0
 
 var _cycling := false
 
 
 func _ready() -> void:
 	set_meta("asset_id", "VFX-ENV-BIRDS-FLYBY-3D")
-	set_meta("asset_version", "v001")
+	set_meta("asset_version", "v003")
 	set_meta("lifecycle", "cross_tower_route_ambient_repeat")
 	set_meta("cycle_seconds", DURATION_SECONDS + AMBIENT_GAP_SECONDS)
 	set_meta("collision", "none")
+	set_meta("bird_size_multiplier", PLAYBACK.BIRD_SIZE_MULTIPLIER)
+	set_meta("travel_m", PLAYBACK.FLYBY_TRAVEL_M)
+	set_meta("wing_speed_multiplier", PLAYBACK.WING_SPEED_MULTIPLIER)
+	visible = false
 	_start_cycling.call_deferred()
 
 
@@ -34,6 +40,8 @@ func _start_cycling() -> void:
 	if _cycling:
 		return
 	_cycling = true
+	if start_delay_seconds > 0.0:
+		await get_tree().create_timer(start_delay_seconds).timeout
 	while is_inside_tree():
 		visible = true
 		if not PLAYBACK.play_all(self):

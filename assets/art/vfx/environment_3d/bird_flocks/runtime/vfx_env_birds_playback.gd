@@ -24,6 +24,18 @@ const EXTRA_PLAYER_PREFIX := "BirdAnimPlayer_"
 const PRUNED_LIBRARY := "birds"
 ## 判定「鸟分组有位移」的最小跨度（米）。低于此值视为静止关键帧，不认。
 const MOTION_EPSILON_M := 0.01
+const BIRD_SIZE_MULTIPLIER := 0.75
+const BIRD_SIZE_VARIATIONS := [0.90, 1.06, 0.97, 1.10, 0.94, 1.02, 1.01]
+const FLYBY_DURATION_SECONDS := 24.0
+const FLYBY_TRAVEL_M := 200.0
+const WING_SPEED_MULTIPLIER := 1.35
+## Independent longitudinal/lateral/height offsets; deliberately no V formation.
+const FLYBY_OFFSETS := [
+	Vector3(-3.7, 0.15, -1.8), Vector3(1.2, -0.35, 2.3),
+	Vector3(-0.4, 0.55, -0.3), Vector3(4.6, 0.05, 1.0),
+	Vector3(-5.1, 0.4, 0.8), Vector3(2.8, -0.15, -2.6),
+	Vector3(-1.8, -0.1, 2.0),
+]
 
 
 ## 播放全部鸟的动画；返回是否至少播成一条。
@@ -44,10 +56,12 @@ static func _apply(host: Node, should_play: bool) -> bool:
 	if source_names.is_empty():
 		return false
 	var players := _ensure_players(primary, source_names.size())
+	_resize_birds(host)
 	var played := false
 	for index in players.size():
 		var player := players[index]
-		var playable := _prepare_track(primary, player, source_names[index])
+		var playable := _prepare_track(primary, player, source_names[index], index,
+			int(host.get("formation_variant")) if "formation_variant" in host else 0)
 		if playable == "":
 			continue
 		player.stop()
@@ -55,6 +69,23 @@ static func _apply(host: Node, should_play: bool) -> bool:
 			player.play(playable)
 			played = true
 	return played
+
+
+static func _resize_birds(host: Node) -> void:
+	var root := host.find_child("鸟群_整体移动缩放控制", true, false)
+	if root == null:
+		return
+	for child in root.get_children():
+		var bird := child as Node3D
+		if bird == null:
+			continue
+		if not bird.has_meta("original_bird_scale"):
+			bird.set_meta("original_bird_scale", bird.scale)
+		bird.scale = (bird.get_meta("original_bird_scale") as Vector3) * bird_size_multiplier(bird.get_index())
+
+
+static func bird_size_multiplier(index: int) -> float:
+	return BIRD_SIZE_MULTIPLIER * float(BIRD_SIZE_VARIATIONS[posmod(index, BIRD_SIZE_VARIATIONS.size())])
 
 
 static func _primary_player(host: Node) -> AnimationPlayer:
@@ -100,7 +131,8 @@ static func _ensure_players(primary: AnimationPlayer, count: int) -> Array[Anima
 ## 裁剪库（`birds/`），返回可直接 `play()` 的完整名；失败返回空串。
 ## 注意源动画一律从 primary 取 —— 新建的播放器不持有 GLB 默认库。
 static func _prepare_track(
-	source_player: AnimationPlayer, player: AnimationPlayer, source_name: String
+	source_player: AnimationPlayer, player: AnimationPlayer, source_name: String,
+	bird_index: int, formation_variant: int
 ) -> String:
 	var playable := "%s/%s" % [PRUNED_LIBRARY, "%s__pruned" % source_name]
 	if player.has_animation(playable):
@@ -114,8 +146,63 @@ static func _prepare_track(
 	else:
 		library = AnimationLibrary.new()
 		player.add_animation_library(PRUNED_LIBRARY, library)
-	library.add_animation("%s__pruned" % source_name, _prune_to_own_bird(source))
+	var animation := _prune_to_own_bird(source)
+	var group := _dominant_moving_group(source)
+	var bird := source_player.get_node(source_player.root_node).find_child(group, true, false) as Node3D
+	var original_scale := (bird.get_meta("original_bird_scale", Vector3.ONE) as Vector3).x if bird != null else 1.0
+	var flyby := source_name.begins_with("flyby")
+	var time_scale := FLYBY_DURATION_SECONDS / animation.length if flyby else 1.0
+	if flyby:
+		for track in animation.get_track_count():
+			for key in range(animation.track_get_key_count(track) - 1, -1, -1):
+				animation.track_set_key_time(track, key, animation.track_get_key_time(track, key) * time_scale)
+		animation.length = FLYBY_DURATION_SECONDS
+	var size := bird_size_multiplier(bird.get_index() if bird != null else bird_index)
+	_apply_presentation(animation, flyby, bird_index, formation_variant, original_scale, size, time_scale)
+	library.add_animation("%s__pruned" % source_name, animation)
 	return playable
+
+
+## Edit only instance-owned copies. Mesh size and flight travel have separate controls.
+static func _apply_presentation(animation: Animation, flyby: bool, bird_index: int, variant: int, root_scale: float, size: float, time_scale: float) -> void:
+	var offset: Vector3 = FLYBY_OFFSETS[posmod(bird_index + variant * 3, FLYBY_OFFSETS.size())]
+	for track in animation.get_track_count():
+		var path := str(animation.track_get_path(track))
+		if ":" not in path and animation.track_get_type(track) == Animation.TYPE_SCALE_3D:
+			for key in animation.track_get_key_count(track):
+				animation.track_set_key_value(track, key,
+					(animation.track_get_key_value(track, key) as Vector3) * size)
+	for track in animation.get_track_count():
+		var path := str(animation.track_get_path(track))
+		if ":" not in path and animation.track_get_type(track) == Animation.TYPE_POSITION_3D:
+			for key in animation.track_get_key_count(track):
+				var value := animation.track_get_key_value(track, key) as Vector3
+				if flyby:
+					var t := animation.track_get_key_time(track, key) / animation.length
+					var phase := float(bird_index) * 1.73 + float(variant)
+					value.x = -FLYBY_TRAVEL_M * 0.5 + FLYBY_TRAVEL_M * t + offset.x
+					value.y = 2.6 + offset.y + 0.22 * sin(TAU * t * 2.0 + phase)
+					value.z = offset.z + 0.65 * sin(TAU * t * 1.5 + phase)
+				else:
+					# Body origin is above the feet: preserve roof contact after resizing.
+					value.y -= 0.179 * root_scale * (1.0 - size)
+				animation.track_set_key_value(track, key, value)
+		if flyby and animation.track_get_type(track) == Animation.TYPE_ROTATION_3D \
+				and (":wing_" in path or ":tip_" in path):
+			var source := animation.duplicate(true) as Animation
+			# Re-bake wings at 30Hz; stretching their key spacing would undersample fast flaps.
+			for key in range(animation.track_get_key_count(track) - 1, -1, -1):
+				animation.track_remove_key(track, key)
+			for frame in range(int(round(animation.length * 30.0)) + 1):
+				var time := float(frame) / 30.0
+				var sample := fposmod(time * WING_SPEED_MULTIPLIER * time_scale, animation.length)
+				var pose := source.rotation_track_interpolate(track, sample)
+				# Smooth the source's non-looping end into its beginning before wrapping.
+				var blend_seconds := 0.2 * time_scale
+				if sample > animation.length - blend_seconds:
+					pose = pose.slerp(source.rotation_track_interpolate(track, 0.0),
+						smoothstep(animation.length - blend_seconds, animation.length, sample))
+				animation.rotation_track_insert_key(track, time, pose)
 
 
 ## 找出动画里「位移跨度最大」的鸟分组，删掉不属于它的全部轨道。

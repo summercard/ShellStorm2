@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "version": "0.1.0",
-  "updated_at": "2026-09-24",
+  "updated_at": "2026-10-12",
   "source_index": "docs/v0.1/MODULE_INDEX.md",
   "note": "功能级机器可追溯真源；Owner 表示当前状态事实所有者，不等于完成度或人员分工。",
   "features": [
@@ -204,17 +204,20 @@
     },
     {
       "feature_id": "WORLD-ENTRY",
-      "owner": "BaseFacilityCatalog.mission_operations",
+      "owner": "TowerDescent3D",
       "design_docs": [
         "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
         "docs/v0.1/07_技术施工_基地设施.md",
         "docs/v0.1/09_技术施工_存档结算与复活.md",
-        "docs/v0.1/design/远征全息城市交互设计.md"
+        "docs/v0.1/design/远征全息城市交互设计.md",
+        "docs/v0.1/design/rooftop_cross_tower_route.md",
+        "docs/v0.1/design/远征关卡01设计.md"
       ],
       "development_records": [
         "docs/v0.1/development/2026-09-18_level_teleport_entry_and_standalone_map.md",
         "docs/v0.1/development/2026-09-19_expedition_level01_buildout.md",
-        "docs/v0.1/development/2026-09-29_expedition_hologram_city.md"
+        "docs/v0.1/development/2026-09-29_expedition_hologram_city.md",
+        "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md"
       ],
       "verification": [
         {
@@ -232,6 +235,10 @@
         {
           "kind": "scene",
           "id": "verify_expedition_hologram_city"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_tower03_expedition_entry"
         }
       ],
       "status": "complete"
@@ -650,10 +657,12 @@
       "feature_id": "NARRATIVE-TRIGGER",
       "owner": "NarrativeDirector3D",
       "design_docs": [
+        "docs/v0.1/design/主线剧情剧本.md",
         "docs/v0.1/08_技术施工_剧情触发.md"
       ],
       "development_records": [
         "docs/v0.1/development/CHANGELOG.md",
+        "docs/v0.1/development/2026-10-12_main_story_documentation.md",
         "docs/v0.1/development/2026-09-23_new_save_handoff_and_scene_isolation.md"
       ],
       "verification": [
@@ -963,7 +972,8 @@
         "docs/v0.1/development/2026-10-03_fat_zombie03_belly_contact.md",
         "docs/v0.1/development/2026-10-03_fat_zombie03_runtime_binding.md",
         "docs/v0.1/development/2026-10-03_shielded_retirement.md",
-        "docs/v0.1/development/2026-10-04_fat_zombie03_death_visibility.md"
+        "docs/v0.1/development/2026-10-04_fat_zombie03_death_visibility.md",
+        "docs/v0.1/development/2026-10-12_tower03_expedition_entry.md"
       ],
       "verification": [
         {
@@ -1000,6 +1010,10 @@
         {
           "kind": "scene",
           "id": "verify_fat_zombie03_death_visibility"
+        },
+        {
+          "kind": "scene",
+          "id": "verify_tower03_expedition_entry"
         }
       ],
       "status": "partial"

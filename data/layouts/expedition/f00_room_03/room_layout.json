@@ -13,7 +13,7 @@
   "whitebox_source": "source/art/whitebox/tower_zones/expedition_01/v001/data/floors/floor_00.json",
   "component_source": "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_catalog.json",
   "component_source_version": "v009",
-  "base_layout": "assets/art/environments/tower_zones/expedition/source/common_components/v009/component_instances.json",
+  "base_layout": "res://data/layouts/expedition/v009/component_instances.json",
   "source_blend": null,
   "coordinate_contract": {
     "source": "Blender room-local XY (Z up)",

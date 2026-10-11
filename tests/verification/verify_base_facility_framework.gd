@@ -83,11 +83,12 @@ func _verify_world_and_terminal(failures: Array[String]) -> void:
 			failures.append("3D 设施牌没有显示实时摘要：%s" % facility.facility_id)
 		# 2026-09-29 业主口径：头顶常驻名字牌退役（节点与快照文字保留），
 		# 黄色交互提示放大后接管设施头顶位置。把这两条钉住，改回去必红。
+		# 字号下界 2026-10-12 随业主「放大一倍」口径从 34 抬到 68。
 		if facility.name_label.visible:
 			failures.append("设施头顶常驻名字牌未退役：%s" % facility.facility_id)
-		if facility.prompt_label.font_size < 34:
+		if facility.prompt_label.font_size < 68:
 			failures.append(
-				"黄色交互提示字号未按 2026-09-29 口径放大：%s（%d < 34）"
+				"黄色交互提示字号未按 2026-10-12 口径放大：%s（%d < 68）"
 				% [facility.facility_id, facility.prompt_label.font_size]
 			)
 	if (

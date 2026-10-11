@@ -36,8 +36,48 @@
   "component_glb": "assets/art/vfx/environment_3d/bird_flocks/components/flyby/vfx_env_birds_flyby_visual.glb",
   "runtime_prefab": "assets/art/vfx/environment_3d/bird_flocks/runtime/flyby/vfx_env_birds_flyby_root_top3d.tscn",
   "placement": "cross_tower_route_bridge_span_0_mid_above_tower_02",
-  "runtime_anchor_world": [20.0, 1.6, -64.5],
-  "runtime_anchor_note": "塔2正上方 + 吊桥第1跨中点(z=-64.5)；鸟身实测在节点原点+2.6m，故飞在桥面上方约4.2m。源动画沿本地+X平移18m，rotation_y=0.2rad 自西向东斜掠桥面。",
+  "runtime_anchor_world": [
+    20.0,
+    1.6,
+    -64.5
+  ],
+  "runtime_anchor_note": "第二组移近吊桥玩家视野：世界(20,-9,-70)，鸟身y约-6.4；穿过吊桥两侧标注空域，200m/24s西向东掠过。",
   "lifecycle": "ambient_repeat",
-  "cycle_seconds": 32.0
+  "cycle_seconds": 44,
+  "runtime_version": "v003",
+  "runtime_bird_size_multiplier": 0.75,
+  "runtime_travel_m": 200,
+  "runtime_wing_speed_multiplier": 1.35,
+  "runtime_formation": "irregular_individual_offsets_and_drift",
+  "runtime_instances": [
+    {
+      "node": "FlybyBirdFlock",
+      "anchor_world": [
+        20,
+        1.6,
+        -64.5
+      ],
+      "start_delay_seconds": 0
+    },
+    {
+      "node": "LowerFlybyBirdFlock",
+      "anchor_world": [
+        20,
+        -9,
+        -70
+      ],
+      "start_delay_seconds": 5
+    }
+  ],
+  "runtime_bird_size_variations": [
+    0.9,
+    1.06,
+    0.97,
+    1.1,
+    0.94,
+    1.02,
+    1.01
+  ],
+  "runtime_duration_seconds": 24,
+  "runtime_speed_m_per_second": 8.333333333333334
 }

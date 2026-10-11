@@ -184,7 +184,7 @@
     {
       "source": "art_source/environments/tower_zones/expedition/source/room_instances/f00_room_03/v001/room_layout.json",
       "runtime": "data/layouts/expedition/f00_room_03/room_layout.json",
-      "sha256": "2d6fd0726e7ffdab387282dd7280456511070848ec6308fce0cd479dfdc53e1b"
+      "sha256": "98bdc33a7f15132835070265fe410ae0aa69225a99c27e2e95e02b40e21b9098"
     },
     {
       "source": "art_source/environments/tower_zones/expedition/source/room_instances/f00_room_04/v001/room_layout.json",

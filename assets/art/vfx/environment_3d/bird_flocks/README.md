@@ -1,11 +1,11 @@
 # 鸟群场景特效 · Blender 源 v001
 
-本批交付仅为 Blender 源动画，归属特效域 environment。两套各 7 只，Lowpoly 冷白剪影，共用项目场景哑光材质。已导出 GLB、创建稳定 PackedScene 并接入游戏运行场景。
+制作母版为 Blender 源v001，运行包装为v003，归属特效域 environment。两套各 7 只，Lowpoly 冷白剪影，共用项目场景哑光材质。已导出 GLB、创建稳定 PackedScene 并接入游戏运行场景。
 
 | 套装 | Blender 文件 | 时长 | 内容 |
 |---|---|---|---|
-| 空中掠过 | [flyby](source/flyby/v001/vfx_env_birds_flyby_source_v001.blend) | 12 秒，1–361 帧 | 松散队形、独立拍翼相位、翼尖滞后、间歇滑翔、轻微侧倾 |
-| 落地停留再飞走 | [ground](source/ground/v001/vfx_env_birds_ground_source_v001.blend) | 24 秒，1–721 帧 | 错峰减速落地、收翼、三段短距离走动、两轮啄地、转头张望、部分理羽、警觉蹬地、先后离开 |
+| 空中掠过 | [flyby](../../../../../art_source/vfx/environment_3d/bird_flocks/source/flyby/v001/vfx_env_birds_flyby_source_v001.blend) | 12 秒，1–361 帧 | 松散队形、独立拍翼相位、翼尖滞后、间歇滑翔、轻微侧倾 |
+| 落地停留再飞走 | [ground](../../../../../art_source/vfx/environment_3d/bird_flocks/source/ground/v001/vfx_env_birds_ground_source_v001.blend) | 24 秒，1–721 帧 | 错峰减速落地、收翼、三段短距离走动、两轮啄地、转头张望、部分理羽、警觉蹬地、先后离开 |
 
 Blender 4.5，30fps。直接打开并按空格播放，无驱动器、Python handler 或外部动画依赖。每鸟一个可编辑网格和 11 骨骼，共 296 三角面。动作已烘焙为普通关键帧，各鸟独立 Action。
 
@@ -17,19 +17,20 @@ Blender 4.5，30fps。直接打开并按空格播放，无驱动器、Python han
 
 | AssetID | 播放时长 | 静默间隔 | 周期 |
 |---|---|---|---|
-| `VFX-ENV-BIRDS-FLYBY-3D` | 12s | 20s | 32s |
+| `VFX-ENV-BIRDS-FLYBY-3D` | 24s | 20s | 44s |
 | `VFX-ENV-BIRDS-GROUND-3D` | 24s | 30s | 54s |
 
-### 运行时摆位（2026-10-09）
+### 运行时摆位（v003）
 
 | AssetID | 宿主 | 锚点 | 说明 |
 |---|---|---|---|
 | `VFX-ENV-BIRDS-FLYBY-3D` | `env_cross_tower_route_root_top3d.tscn` 的 `FlybyBirdFlock` | 世界 `(20.0, 1.6, -64.5)`，`rotation_y = 0.2rad` | 塔2正上方 + 吊桥第 1 跨中点（桥面 y≈0，跨中点 z=−64.5；塔2 足迹 x[5,75] z[−115,−65]） |
+| `VFX-ENV-BIRDS-FLYBY-3D` | `env_cross_tower_route_root_top3d.tscn` 的 `LowerFlybyBirdFlock` | 世界 `(20, -9, -70)`，`rotation_y = 0.2rad` | 吊桥下方、塔2屋顶上方；延迟5秒，另一错落编队 |
 | `VFX-ENV-BIRDS-GROUND-3D` | `TowerFloorStage3D._build_rooftop_ground_birds()` | 100F 天台局部 `(25.0, 0.0, −31.0)` | 吊桥北出口（x=20）以东、离北沿约 4m 的开放天台 |
 
 两条锚点都由**源动画轨迹实测**反推，不是拍脑袋定的：
 
-- 飞行组：鸟身实测在节点原点上方 `+2.6m`（源「地面 Z=0」），故节点 `y=1.6` ⇒ 鸟群飞在桥面上方约 `4.2m`，高于栏杆顶（≈`2.75m`），不会被桥体遮挡。源动画沿本地 `+X` 平移 `18m`，`rotation_y=0.2rad` ⇒ 自西向东斜掠桥面，横向过画最容易被看见。
+- 飞行组：鸟身实测在节点原点上方 `+2.6m`（源「地面 Z=0」），故节点 `y=1.6` ⇒ 鸟群飞在桥面上方约 `4.2m`，高于栏杆顶（≈`2.75m`），不会被桥体遮挡。运行裁剪动画沿本地 `+X` 平移 `200m`（从−100至+100，24秒），`rotation_y=0.2rad` ⇒ 自西向东斜掠桥面，横向过画最容易被看见。
 - 停留组：落地停留段（t≈4~16s）相对原点偏移 x `−1.6~+1.8` / z `+0.5~−1.9`（脚底 y=0），之后才朝本地 `(+x,−z)` 爬升飞离。因此原点摆在北沿内侧 ⇒ 落地与走动都在屋面，起飞段越过北女儿墙飞向城市，不会踩空。
 
 ### 播放器接线（2026-10-09，两处必须同时满足）
@@ -56,7 +57,8 @@ Blender 4.5，30fps。直接打开并按空格播放，无驱动器、Python han
 `tests/verification/verify_environment_bird_flocks.tscn`（headless 约 75s，成功标记
 `ENVIRONMENT_BIRD_FLOCKS_OK`）逐只鸟断言位移：
 
-- 两套各 7 只，且**每只**在 2.5s 内位移 ≥ 1.0m（专盯「只有一只在动」）；
+- 三个实例各7只（两组空中、一组地面），且**每只**在 2.5s 内位移 ≥ 1.0m（专盯「只有一只在动」）；
+- 每鸟尺度是导入原始尺度的0.75倍，并按每鸟0.90–1.10固定系数错落；空中200m/24s、翼速135%、10秒仍可见，桥下组错峰5秒且处于桥面与屋面之间；
 - 锚点等于本 README 记录值；无碰撞节点；`lifecycle` 以 `ambient_repeat` 结尾；
 - 停留组：整段 24s 采样里，凡出屋面者必须已高于 `1.2m`（否则判踩空/穿女儿墙）。
 
@@ -77,4 +79,8 @@ Blender 4.5，30fps。直接打开并按空格播放，无驱动器、Python han
 
 材质从场景组件源继承 `02_细腻哑光_青绿大面`；所有面的 `PaletteUV` 为非零面积小岛，位于公共色盘 **R10C10**。该项目最亮区块实际为冷白 **#C5CED8**，没有修改公共色盘。图片通过相对路径外链 `assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png`，迁移文件请保留项目目录关系。
 
-预览与QA位于项目 `outputs/bird_flocks_v001/`，源资产清单分别位于两份 blend 同目录。AssetID：`VFX-ENV-BIRDS-FLYBY-3D`、`VFX-ENV-BIRDS-GROUND-3D`。账本通过 `ledger_index.json` 的 vfx 域定位，状态为 `正式美术已接入`；运行时归类为场景特效。
+当前运行渲染与QA位于工程外 `ShellStorm2-work/sessions/2026-10-12_bird_flocks/`，源资产清单分别位于两份 blend 同目录。AssetID：`VFX-ENV-BIRDS-FLYBY-3D`、`VFX-ENV-BIRDS-GROUND-3D`。账本通过 `ledger_index.json` 的 vfx 域定位，状态为 `正式美术已接入`；运行时归类为场景特效。
+
+运行时以七鸟独立纵横/高度偏移和轻微起伏代替源编队；缩放不改变编队间距与飞行距离。脚底补偿只作用于地面组。GLB与制作母版不改写，实例动画库每个宿主独立；调整参数入口 `runtime/vfx_env_birds_playback.gd`。
+
+当前v003：基准尺寸相对v002放大50%，额外±10%大小错落；空中速度减半，200米24秒。源动画12秒不改写，运行时复制动画延长时间轴，翼速单独保持135%；地面演出保持24秒。

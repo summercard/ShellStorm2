@@ -8,9 +8,14 @@ const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 ## 头顶唯一的文字。NameLabel 节点仍保留在场景里 —— 快照 text/modulate 契约与
 ## 离线验收仍读它 —— 但运行时一律不显示。
 const NAME_LABEL_VISIBLE := false
-## 黄色交互提示接管原名字牌的位置：字号放大到 34（原资产 26），
-## 锚点整体抬高 0.6 米。业主 2026-09-29：「那个黄色的字体放大一点，位置高一点」。
-const PROMPT_LABEL_FONT_SIZE := 34
+## 黄色交互提示接管原名字牌的位置：字号放大到 68（原资产 24 / 26），
+## 锚点整体抬高 0.6 米。两轮业主口径叠加：
+##   2026-09-29「那个黄色的字体放大一点，位置高一点」→ 26 → 34；
+##   2026-10-12「基地内所有设施头顶上的这个黄字，放大一倍」→ 34 × 2 = 68。
+## 描边**不**跟着字号走：素材 `outline_size = 8` 保持不变，在 68 号字上相当于
+## 34 号配 4px —— 比此前更清爽，与项目既有的「34/8 偏粗」判断
+## （见 RoomKeyPickup3D 的注释）方向一致。要跟着粗就再补一个 outline 常量。
+const PROMPT_LABEL_FONT_SIZE := 68
 const PROMPT_LABEL_HEIGHT_LIFT_M := 0.6
 
 signal activated(facility: BaseFacility3D)

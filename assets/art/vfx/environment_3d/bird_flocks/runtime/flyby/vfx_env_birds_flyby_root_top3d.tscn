@@ -6,7 +6,7 @@
 [node name="VfxEnvBirdsFlyby3D" type="Node3D"]
 script = ExtResource("1_script")
 metadata/asset_id = "VFX-ENV-BIRDS-FLYBY-3D"
-metadata/asset_version = "v001"
+metadata/asset_version = "v003"
 metadata/collision = "none"
 metadata/visual_only = true
 

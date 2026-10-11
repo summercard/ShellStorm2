@@ -36,8 +36,23 @@
   "component_glb": "assets/art/vfx/environment_3d/bird_flocks/components/ground/vfx_env_birds_ground_visual.glb",
   "runtime_prefab": "assets/art/vfx/environment_3d/bird_flocks/runtime/ground/vfx_env_birds_ground_root_top3d.tscn",
   "placement": "tower_100f_rooftop_east_of_bridge",
-  "runtime_anchor_local": [25.0, 0.0, -31.0],
+  "runtime_anchor_local": [
+    25.0,
+    0.0,
+    -31.0
+  ],
   "runtime_anchor_note": "100F 天台局部坐标；吊桥北出口 x=20 以东、离北沿约 4m 的开放天台。源动画落地停留段(t≈4~16s)相对原点偏移 x -1.6~+1.8 / z +0.5~-1.9(脚底 y=0)，起飞段朝本地(+x,-z)爬升越北女儿墙飞离。",
   "lifecycle": "ambient_repeat",
-  "cycle_seconds": 54.0
+  "cycle_seconds": 54.0,
+  "runtime_version": "v003",
+  "runtime_bird_size_multiplier": 0.75,
+  "runtime_bird_size_variations": [
+    0.9,
+    1.06,
+    0.97,
+    1.1,
+    0.94,
+    1.02,
+    1.01
+  ]
 }
